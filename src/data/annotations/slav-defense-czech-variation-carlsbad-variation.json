@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn, controlling the important e5 and h4 squares, and preparing to castle kingside. This move is more flexible than immediate alternatives like Nc3, as it doesn't block the c-pawn and keeps our options open for different pawn structures. The knight on f3 also prepares potential tactical ideas involving Ne5 or Nh4, depending on how Black develops. From f3, our knight can quickly redeploy to support various plans, whether that's central pressure, kingside attack, or queenside operations."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn, controlling the important e5 and h4 squares, and preparing to castle kingside. This move is more flexible than immediate alternatives like Nc3, as it doesn't block the c-pawn and keeps our options open for different pawn structures. The knight on f3 also prepares potential tactical ideas involving Ne5 or Nh4, depending on how Black develops. From f3, our knight can quickly redeploy to support various plans, whether that's central pressure, kingside attack, or queenside operations."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their knight to its most active square, mirroring our development while attacking our c4 pawn and adding another defender to the d5 pawn. This natural developing move is the hallmark of the Slav Defense, as Black gets their pieces out quickly while maintaining central tension. The knight on f6 also prepares potential ...e5 breaks in the future and supports Black's kingside development. However, this knight can become a target for our pieces later, particularly if we can establish a knight on e5 or create pressure along the e-file."
+      "annotation": "Our opponent develops their knight to its most active square, mirroring our development while attacking our c4 pawn and adding another defender to the d5 pawn. This active move is the hallmark of the Slav Defense, as Black gets their pieces out quickly while maintaining central tension. The knight on f6 also prepares potential ...e5 breaks in the future and supports Black's kingside development. However, this knight can become a target for our pieces later, particularly if we can establish a knight on e5 or create pressure along the e-file."
     },
     {
       "san": "Nc3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "a4",
-      "annotation": "We immediately strike at Black's pawn structure with this key move, preventing ...b5 which would consolidate Black's extra pawn and give them a safe haven for the c4 pawn. This move is essential in the Czech Variation because it maintains the tension and doesn't allow Black to simply hold onto the material advantage. The a4 pawn also prepares potential tactics involving a5 and supports our queenside expansion. While this might look like a slow move, it's actually quite forcing because it puts immediate pressure on Black to find the best way to defend the c4 pawn while maintaining their position."
+      "annotation": "We immediately strike at Black's pawn structure with this critical move, preventing ...b5 which would consolidate Black's extra pawn and give them a safe haven for the c4 pawn. This move is essential in the Czech Variation because it maintains the tension and doesn't allow Black to simply hold onto the material advantage. The a4 pawn also prepares potential tactics involving a5 and supports our queenside expansion. While this might look like a slow move, it's actually quite forcing because it puts immediate pressure on Black to find the best way to defend the c4 pawn while maintaining their position."
     },
     {
       "san": "Bf5",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Our opponent brings their second knight into play, developing with tempo while preparing to challenge our centralized knight on e5. This natural developing move also clears the back rank and prepares potential ...Qc7 ideas to coordinate Black's pieces. The knight on d7 can support various plans - it can go to b6 to attack our pieces, to f6 to reinforce the center, or to e5 to trade off our strong knight. Black is following sound opening principles by developing pieces quickly while keeping the position flexible, though they'll need to be careful about tactical threats in this sharp position."
+      "annotation": "Our opponent brings their second knight into play, developing with tempo while preparing to challenge our centralized knight on e5. This active move also clears the back rank and prepares potential ...Qc7 ideas to coordinate Black's pieces. The knight on d7 can support various plans - it can go to b6 to attack our pieces, to f6 to reinforce the center, or to e5 to trade off our strong knight. Black is following sound opening principles by developing pieces quickly while keeping the position flexible, though they'll need to be careful about tactical threats in this sharp position."
     },
     {
       "san": "Nxc4",

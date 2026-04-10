@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and adds additional pressure to Black's d5 stronghold in the center. This knight placement is extremely flexible, as it keeps our options open for various pawn structures and piece configurations that might arise. The knight from c3 can later jump to e4, a5, or even b5 in certain tactical sequences, making it a key piece in many Queen's Gambit formations. By developing this knight early, we're also preparing to castle kingside and bring our other pieces into active play."
+      "annotation": "We're developing our knight to its ideal square, where it supports our c4 pawn and adds additional pressure to Black's d5 stronghold in the center. This knight placement is extremely flexible, as it keeps our options open for various pawn structures and piece configurations that might arise. The knight from c3 can later jump to e4, a5, or even b5 in certain tactical sequences, making it a key piece in many Queen's Gambit formations. By developing this knight early, we're also preparing to castle kingside and bring our other pieces into active play."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preparing to castle kingside while maintaining maximum flexibility in the position. This natural developing move is nearly universal in Slav setups, as the knight from f6 supports Black's central control and prepares harmonious piece coordination. Our opponent is following classical opening principles by developing pieces toward the center and preparing to secure the king's safety. The knight on f6 also keeps an eye on important central squares and can later support various pawn breaks like ...e5 or ...c5."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preparing to castle kingside while maintaining maximum flexibility in the position. This active move is nearly universal in Slav setups, as the knight from f6 supports Black's central control and prepares harmonious piece coordination. Our opponent is following classical opening principles by developing pieces toward the center and preparing to secure the king's safety. The knight on f6 also keeps an eye on important central squares and can later support various pawn breaks like ...e5 or ...c5."
     },
     {
       "san": "e3",

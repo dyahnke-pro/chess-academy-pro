@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queenside knight to its most natural square, supporting our d4 pawn and preparing to meet Black's central challenges. This knight controls important squares like e4, d5, and b5, while keeping our options open for different pawn structures depending on how Black continues. The Nc3 development is particularly important because it prepares to recapture on d4 with the knight if Black plays ...cxd4, maintaining central presence. However, we should be aware that this knight placement allows Black's signature Nimzo-Indian pin with ...Bb4, which is exactly what our opponent is preparing."
+      "annotation": "We develop our queenside knight to its ideal square, supporting our d4 pawn and preparing to meet Black's central challenges. This knight controls important squares like e4, d5, and b5, while keeping our options open for different pawn structures depending on how Black continues. The Nc3 development is particularly important because it prepares to recapture on d4 with the knight if Black plays ...cxd4, maintaining central presence. However, we should be aware that this knight placement allows Black's signature Nimzo-Indian pin with ...Bb4, which is exactly what our opponent is preparing."
     },
     {
       "san": "Bb4",
@@ -39,11 +39,11 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their queenside knight with tempo, attacking our d4 pawn and increasing the pressure on our central stronghold. This natural developing move supports the c5 pawn while preparing to potentially challenge our center with moves like ...cxd4 or maintain the tension for tactical opportunities. Our opponent's knight also controls important squares like e5 and d4, while keeping options open for various pawn breaks and piece maneuvers. The Nc6 development fits perfectly with Black's hypermodern strategy, attacking our center from the flanks while maintaining maximum piece activity and flexibility."
+      "annotation": "Black develops their queenside knight with tempo, attacking our d4 pawn and increasing the pressure on our central stronghold. This active move supports the c5 pawn while preparing to potentially challenge our center with moves like ...cxd4 or maintain the tension for tactical opportunities. Our opponent's knight also controls important squares like e5 and d4, while keeping options open for various pawn breaks and piece maneuvers. The Nc6 development fits perfectly with Black's hypermodern strategy, attacking our center from the flanks while maintaining maximum piece activity and flexibility."
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our kingside development by placing the knight on its most natural square, where it supports our center and prepares for quick castling. This move controls the important e5 and h4 squares while adding another defender to our d4 pawn, helping us maintain central stability against Black's growing pressure. The Nf3 development also prepares tactical ideas involving Ne5 or Ng5, depending on how the position develops, and supports potential pawn breaks like e4. Our knight placement keeps our position solid while maintaining all our strategic options, from kingside attacks to central pawn advances."
+      "annotation": "We complete our kingside development by placing the knight on its ideal square, where it supports our center and prepares for quick castling. This move controls the important e5 and h4 squares while adding another defender to our d4 pawn, helping us maintain central stability against Black's growing pressure. The Nf3 development also prepares tactical ideas involving Ne5 or Ng5, depending on how the position develops, and supports potential pawn breaks like e4. Our knight placement keeps our position solid while maintaining all our strategic options, from kingside attacks to central pawn advances."
     },
     {
       "san": "Bxc3+",
@@ -63,7 +63,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black mirrors our castling, bringing their king to safety and completing the basic developmental phase of this opening. This natural move connects Black's rooks and prepares to contest the center or kingside with coordinated piece play. Our opponent has successfully navigated the opening complications and reached a solid middlegame position where both sides have completed their development safely. With both kings castled, the real battle begins as we enter typical Nimzo-Indian middlegame themes: our bishop pair and central pawns versus Black's solid structure and active piece coordination."
+      "annotation": "Black mirrors our castling, bringing their king to safety and completing the basic developmental phase of this opening. this move connects Black's rooks and prepares to contest the center or kingside with coordinated piece play. Our opponent has successfully navigated the opening complications and reached a solid middlegame position where both sides have completed their development safely. With both kings castled, the real battle begins as we enter typical Nimzo-Indian middlegame themes: our bishop pair and central pawns versus Black's solid structure and active piece coordination."
     }
   ]
 }

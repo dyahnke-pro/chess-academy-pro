@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center immediately. This is a hypermodern approach - instead of occupying the center with pawns right away, our opponent is pressuring our central pawn with pieces. The knight on f6 also prepares to support an eventual ...e6 or ...g6 setup, keeping options open for both King's Indian and Benoni pawn structures. By challenging our d4 pawn early, Black is trying to prevent us from establishing a comfortable pawn center with e2-e4."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center immediately. This is a hypermodern approach - instead of occupying the center with pawns right away, our opponent is pressuring our central pawn with pieces. The knight on f6 also prepares to support an eventual ...e6 or ...g6 setup, keeping options open for both King's Indian and Benoni pawn structures. By challenging our d4 pawn early, Black is trying to prevent us from establishing a comfortable pawn center with e2-e4."
     },
     {
       "san": "c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d5 pawn and preparing to continue our development harmoniously. The knight on c3 also eyes important central squares like e4 and d5, and can potentially reroute to b5 to pressure Black's position. This move fits perfectly with our opening strategy of maintaining our space advantage while developing pieces to active squares. By developing the knight before recapturing on d5, we're keeping maximum flexibility in our pawn structure and piece coordination."
+      "annotation": "We're developing our knight to its ideal square, supporting our d5 pawn and preparing to continue our development harmoniously. The knight on c3 also eyes important central squares like e4 and d5, and can potentially reroute to b5 to pressure Black's position. This move fits perfectly with our opening strategy of maintaining our space advantage while developing pieces to active squares. By developing the knight before recapturing on d5, we're keeping maximum flexibility in our pawn structure and piece coordination."
     },
     {
       "san": "exd5",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our d4 pawn, controls the important e5 and g5 squares, and prepares to castle kingside. This move is almost universal in Queen's Gambit positions because the knight is perfectly placed on f3 to support our central strategy while keeping maximum flexibility for our other pieces. From f3, our knight can potentially jump to e5 (a powerful outpost), support a future e4 advance, or even redeploy to d2-e4 in some variations. We're following the fundamental opening principle of developing knights before bishops, as knights generally have fewer good squares and should be committed to their best posts first."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our d4 pawn, controls the important e5 and g5 squares, and prepares to castle kingside. This move is almost universal in Queen's Gambit positions because the knight is perfectly placed on f3 to support our central strategy while keeping maximum flexibility for our other pieces. From f3, our knight can potentially jump to e5 (a powerful outpost), support a future e4 advance, or even redeploy to d2-e4 in some variations. We're following the fundamental opening principle of developing knights before bishops, as knights generally have fewer good squares and should be committed to their best posts first."
     },
     {
       "san": "Nf6",

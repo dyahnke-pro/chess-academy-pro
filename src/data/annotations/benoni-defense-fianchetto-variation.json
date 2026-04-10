@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to contest the center from the very first move. This is one of the most principled responses to 1.d4, as our opponent develops a piece while simultaneously putting pressure on our pawn structure. The knight on f6 also prepares kingside castling and keeps options open for various pawn breaks like ...e6, ...g6, or even ...c5. We need to be ready for Black's active piece play and central counterplay that typically follows this developing move."
+      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to contest the center from the very first move. This is one of the most principled responses to 1.d4, as our opponent develops a piece while simultaneously putting pressure on our pawn structure. The knight on f6 also prepares kingside castling and keeps options open for various pawn breaks like ...e6, ...g6, or even ...c5. We need to be ready for Black's active piece play and central counterplay that typically follows this move."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d5 pawn while preparing for further piece development and potential central advances. The knight on c3 controls important squares like e4, b5, and a4, giving us flexibility for both kingside and queenside operations. This move also prepares potential pawn advances like e4 or f4, which could give us attacking chances on the kingside. Our development is proceeding smoothly, and we're maintaining the initiative while keeping our positional advantages intact in this typical Benoni structure."
+      "annotation": "We're developing our knight to its ideal square, supporting the d5 pawn while preparing for further piece development and potential central advances. The knight on c3 controls important squares like e4, b5, and a4, giving us flexibility for both kingside and queenside operations. This move also prepares potential pawn advances like e4 or f4, which could give us attacking chances on the kingside. Our development is proceeding smoothly, and we're maintaining the initiative while keeping our positional advantages intact in this typical Benoni structure."
     },
     {
       "san": "g6",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development by placing the knight on its ideal square, where it controls central squares and prepares castling. The knight on f3 supports our e4 advance if desired and provides additional defense for our king position. This natural developing move also keeps our options open for various middlegame plans, including kingside attacks or central pawn advances. Our piece coordination is excellent now, with all our pieces working harmoniously to support our space advantage and maintain pressure on Black's somewhat cramped position."
+      "annotation": "We're completing our kingside development by placing the knight on its ideal square, where it controls central squares and prepares castling. The knight on f3 supports our e4 advance if desired and provides additional defense for our king position. This active move also keeps our options open for various middlegame plans, including kingside attacks or central pawn advances. Our piece coordination is excellent now, with all our pieces working harmoniously to support our space advantage and maintain pressure on Black's somewhat cramped position."
     },
     {
       "san": "O-O",

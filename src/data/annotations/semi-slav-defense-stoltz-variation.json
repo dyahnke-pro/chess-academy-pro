@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This flexible move doesn't commit us to any particular pawn structure yet, keeping our options open for various setups including the London System, Queen's Gambit, or other d4 systems. The knight on f3 also prepares kingside castling and puts pressure on Black's position by eyeing potential tactics. From f3, our knight can later jump to more active squares like e5 or d2, depending on how the position develops."
+      "annotation": "We develop our kingside knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This flexible move doesn't commit us to any particular pawn structure yet, keeping our options open for various setups including the London System, Queen's Gambit, or other d4 systems. The knight on f3 also prepares kingside castling and puts pressure on Black's position by eyeing potential tactics. From f3, our knight can later jump to more active squares like e5 or d2, depending on how the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development by bringing their knight to f6, where it attacks our d4 pawn and controls the central e4 and d5 squares. This natural developing move follows the opening principle of developing pieces toward the center while creating counterplay. Our opponent is also preparing to castle kingside and keeping their options open for various defensive setups. The knight on f6 supports potential ...e6 or ...c6 moves that would help Black establish their own pawn chain and piece coordination."
+      "annotation": "Black mirrors our development by bringing their knight to f6, where it attacks our d4 pawn and controls the central e4 and d5 squares. This active move follows the opening principle of developing pieces toward the center while creating counterplay. Our opponent is also preparing to castle kingside and keeping their options open for various defensive setups. The knight on f6 supports potential ...e6 or ...c6 moves that would help Black establish their own pawn chain and piece coordination."
     },
     {
       "san": "c4",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Bd6",
-      "annotation": "Black develops their dark-squared bishop to the active d6 square, where it controls important central squares and prepares to castle kingside. This natural developing move puts the bishop on a strong diagonal pointing toward our king, though our solid pawn structure limits immediate tactical threats. Our opponent's bishop placement also supports potential ...e5 advances and maintains good piece coordination. The bishop on d6 is well-placed for middlegame piece play, though it can sometimes become a target for our advancing pawns or piece attacks."
+      "annotation": "Black develops their dark-squared bishop to the active d6 square, where it controls important central squares and prepares to castle kingside. This active move puts the bishop on a strong diagonal pointing toward our king, though our solid pawn structure limits immediate tactical threats. Our opponent's bishop placement also supports potential ...e5 advances and maintains good piece coordination. The bishop on d6 is well-placed for middlegame piece play, though it can sometimes become a target for our advancing pawns or piece attacks."
     },
     {
       "san": "b3",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black completes their kingside development by castling, getting their king to safety while connecting their rooks. This natural move is almost mandatory before Black can consider any central action or piece regrouping. Our opponent now has a solid position with their king safe, but they still need to find active piece play to counter our growing initiative on the queenside. The castling move also prepares to potentially advance ...e5 or reroute pieces to more active squares without worrying about king safety."
+      "annotation": "Black completes their kingside development by castling, getting their king to safety while connecting their rooks. this move is almost mandatory before Black can consider any central action or piece regrouping. Our opponent now has a solid position with their king safe, but they still need to find active piece play to counter our growing initiative on the queenside. The castling move also prepares to potentially advance ...e5 or reroute pieces to more active squares without worrying about king safety."
     },
     {
       "san": "Bb2",

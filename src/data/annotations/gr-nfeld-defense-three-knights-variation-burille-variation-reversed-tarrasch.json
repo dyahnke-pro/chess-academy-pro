@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, supporting the d4 pawn and preparing to contest the center more actively. This knight placement is flexible, as it can later jump to e4, e2, or even b5 depending on how the position develops. The knight on c3 also supports a potential d4-d5 advance and prepares to recapture on d4 if Black exchanges pawns. Additionally, this development move brings us closer to castling and maintains pressure on Black's setup while keeping our options open for various pawn structures."
+      "annotation": "We're developing our queen's knight to its ideal square, supporting the d4 pawn and preparing to contest the center more actively. This knight placement is flexible, as it can later jump to e4, e2, or even b5 depending on how the position develops. The knight on c3 also supports a potential d4-d5 advance and prepares to recapture on d4 if Black exchanges pawns. Additionally, this development move brings us closer to castling and maintains pressure on Black's setup while keeping our options open for various pawn structures."
     },
     {
       "san": "Bg7",

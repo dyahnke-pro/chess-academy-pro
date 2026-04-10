@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and supporting our central pawn while preparing to castle kingside safely. This move fits perfectly with our opening strategy of controlling the center and developing pieces to active squares before committing to any particular pawn breaks. The knight on f3 also prepares potential tactical motifs involving the e5 and g5 squares, and keeps our options open for various pawn structures that might arise. By developing pieces before making further pawn moves, we're following classical opening principles and maintaining maximum flexibility in our position."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and supporting our central pawn while preparing to castle kingside safely. This move fits perfectly with our opening strategy of controlling the center and developing pieces to active squares before committing to any particular pawn breaks. The knight on f3 also prepares potential tactical motifs involving the e5 and g5 squares, and keeps our options open for various pawn structures that might arise. By developing pieces before making further pawn moves, we're following classical opening principles and maintaining maximum flexibility in our position."
     },
     {
       "san": "Nf6",
-      "annotation": "Black finally develops their kingside knight, directly challenging our control of the e4 square and preparing to complete their kingside development with moves like Be7 and O-O. This natural developing move also adds another defender to the d5 pawn, making it harder for us to win material immediately. Our opponent is now ready to consider capturing on c4 with dxc4, as the knight provides excellent support for holding onto the extra pawn if they choose to accept our gambit. The knight on f6 also eyes several important central squares and gives Black good piece coordination for the middlegame."
+      "annotation": "Black finally develops their kingside knight, directly challenging our control of the e4 square and preparing to complete their kingside development with moves like Be7 and O-O. This active move also adds another defender to the d5 pawn, making it harder for us to win material immediately. Our opponent is now ready to consider capturing on c4 with dxc4, as the knight provides excellent support for holding onto the extra pawn if they choose to accept our gambit. The knight on f6 also eyes several important central squares and gives Black good piece coordination for the middlegame."
     },
     {
       "san": "cxd5",

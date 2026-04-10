@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 pawn and preparing to fianchetto the king's bishop with ...g6. This is the signature move of the Pirc Defense, where Black immediately puts pressure on our center rather than matching it with pawns. The knight on f6 also prepares to support a future ...e5 break when the time is right. We need to be ready to defend our e4 pawn, and this is where the Austrian Attack with f4 becomes particularly effective since it provides additional support."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing to fianchetto the king's bishop with ...g6. This is the signature move of the Pirc Defense, where Black immediately puts pressure on our center rather than matching it with pawns. The knight on f6 also prepares to support a future ...e5 break when the time is right. We need to be ready to defend our e4 pawn, and this is where the Austrian Attack with f4 becomes particularly effective since it provides additional support."
     },
     {
       "san": "Nc3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, completing our basic development while maintaining flexibility in our attacking setup. This move supports our central pawns, controls important squares like e5 and h4, and prepares to castle kingside if needed for safety. The knight on f3 also keeps our options open for various attacking plans - it can later jump to e5, g5, or h4 depending on how the position evolves. By completing this development move, we're ready to start our kingside pawn storm while maintaining solid piece coordination."
+      "annotation": "We're developing our knight to its ideal square, completing our basic development while maintaining flexibility in our attacking setup. This move supports our central pawns, controls important squares like e5 and h4, and prepares to castle kingside if needed for safety. The knight on f3 also keeps our options open for various attacking plans - it can later jump to e5, g5, or h4 depending on how the position evolves. By completing this development move, we're ready to start our kingside pawn storm while maintaining solid piece coordination."
     },
     {
       "san": "c5",

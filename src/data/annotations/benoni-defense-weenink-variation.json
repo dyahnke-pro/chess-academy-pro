@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening setup, expanding our control over the center by targeting the d5 and b5 squares while preparing to support our d4 pawn. This move creates the foundation for many Queen's Gambit and Indian Defense systems, giving us tremendous flexibility in our development. The c4 pawn also restricts Black's ...d5 advance, potentially forcing them into more cramped positions or Indian-style setups with ...e6 or ...g6. This is a key move in establishing what chess players call the 'Maróczy Bind' structure in some variations, where we control the center with pawns on c4 and d4."
+      "annotation": "We're playing the English Opening setup, expanding our control over the center by targeting the d5 and b5 squares while preparing to support our d4 pawn. This move creates the foundation for many Queen's Gambit and Indian Defense systems, giving us tremendous flexibility in our development. The c4 pawn also restricts Black's ...d5 advance, potentially forcing them into more cramped positions or Indian-style setups with ...e6 or ...g6. This is a critical move in establishing what chess players call the 'Maróczy Bind' structure in some variations, where we control the center with pawns on c4 and d4."
     },
     {
       "san": "c5",
@@ -23,7 +23,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays the key move of the Weenink Variation, preparing to recapture the c5 pawn with the light-squared bishop while also supporting a future ...d5 advance. This move is more positional than the sharp ...Qa5+ or ...Na6 alternatives, showing that our opponent wants to regain the pawn through piece activity rather than immediate tactics. The e6 pawn also prepares kingside development with ...Be7 and castling, while keeping the center flexible for either ...d6 or ...d5 depending on how we continue. We now need to decide whether to defend the c5 pawn with b4 or Qc2, or allow Black to regain it while focusing on our development advantage."
+      "annotation": "Black plays the central idea of the Weenink Variation, preparing to recapture the c5 pawn with the light-squared bishop while also supporting a future ...d5 advance. This move is more positional than the sharp ...Qa5+ or ...Na6 alternatives, showing that our opponent wants to regain the pawn through piece activity rather than immediate tactics. The e6 pawn also prepares kingside development with ...Be7 and castling, while keeping the center flexible for either ...d6 or ...d5 depending on how we continue. We now need to decide whether to defend the c5 pawn with b4 or Qc2, or allow Black to regain it while focusing on our development advantage."
     }
   ]
 }

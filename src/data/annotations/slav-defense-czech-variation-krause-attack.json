@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square just as we challenged theirs on e5. This is one of the most natural and sound responses to 1.d4, as it follows the opening principle of fighting for the center with pawns. Our opponent is signaling their intention to play a solid, classical setup rather than allowing us to establish a broad pawn center with a quick e2-e4. This move also opens lines for Black's dark-squared bishop and queen, beginning their piece development while maintaining the central tension."
+      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square just as we challenged theirs on e5. This is one of the most natural and sound responses to 1.d4, as it follows the opening principle of contesting central control with pawns. Our opponent is signaling their intention to play a solid, classical setup rather than allowing us to establish a broad pawn center with a quick e2-e4. This move also opens lines for Black's dark-squared bishop and queen, beginning their piece development while maintaining the central tension."
     },
     {
       "san": "c4",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our potential e2-e4 advance. This move follows the fundamental opening principles of developing pieces toward the center and preparing to castle kingside for safety. The knight on f3 also adds another defender to our d4 pawn, which could become important if Black continues to pressure our center. By developing this knight first, we maintain maximum flexibility in how we continue our development – we can still play our other knight to d2 or c3 depending on how the position evolves. This is the most natural and principled continuation in the Queen's Gambit system."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our potential e2-e4 advance. This move follows the fundamental opening principles of developing pieces toward the center and preparing to castle kingside for safety. The knight on f3 also adds another defender to our d4 pawn, which could become important if Black continues to pressure our center. By developing this knight first, we maintain maximum flexibility in how we continue our development – we can still play our other knight to d2 or c3 depending on how the position evolves. This is the most natural and principled continuation in the Queen's Gambit system."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development by bringing the kingside knight to its most active square, where it attacks our e4 square and prepares to support Black's own central ambitions. This is the hallmark of the Slav Defense – symmetrical development that maintains the solid pawn structure while developing pieces to active squares. The knight on f6 also prepares kingside castling and keeps an eye on important central squares like e4 and d5. Our opponent is following the same sound opening principles we are: develop knights before bishops, control the center, and prepare for safety. This natural developing move maintains the tension in the position while keeping all of Black's options open."
+      "annotation": "Black mirrors our development by bringing the kingside knight to its most active square, where it attacks our e4 square and prepares to support Black's own central ambitions. This is the hallmark of the Slav Defense – symmetrical development that maintains the solid pawn structure while developing pieces to active squares. The knight on f6 also prepares kingside castling and keeps an eye on important central squares like e4 and d5. Our opponent is following the same sound opening principles we are: develop knights before bishops, control the center, and prepare for safety. This active move maintains the tension in the position while keeping all of Black's options open."
     },
     {
       "san": "Nc3",

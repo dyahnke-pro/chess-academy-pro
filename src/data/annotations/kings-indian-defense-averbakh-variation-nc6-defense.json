@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding another defender to our d4 pawn while preparing to support our advancing e-pawn. This knight will play a crucial role in our central strategy, potentially supporting e4-e5 advances or helping to maintain our space advantage. From c3, the knight also eyes important squares like d5 and b5, giving us tactical and positional options. The knight development fits perfectly with our plan to build a strong pawn center, as it provides the necessary support for our central pawns while keeping our pieces actively placed."
+      "annotation": "We develop our knight to its ideal square, adding another defender to our d4 pawn while preparing to support our advancing e-pawn. This knight will play a crucial role in our central strategy, potentially supporting e4-e5 advances or helping to maintain our space advantage. From c3, the knight also eyes important squares like d5 and b5, giving us tactical and positional options. The knight development fits perfectly with our plan to build a strong pawn center, as it provides the necessary support for our central pawns while keeping our pieces actively placed."
     },
     {
       "san": "Bg7",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black brings the knight to a central square where it supports the crucial ...e5 pawn break while developing with tempo against our position. This is the key move of the Nc6 Defense within the Averbakh Variation, as the knight from c6 adds extra support to the e5 square and puts pressure on our d4 pawn. The knight also eyes important squares like d4, e5, and b4, giving Black more tactical possibilities. Now we need to be especially careful about our pawn structure, as Black is building up maximum pressure against our center and preparing to challenge our space advantage with well-supported pawn advances."
+      "annotation": "Black brings the knight to a central square where it supports the crucial ...e5 pawn break while developing with tempo against our position. This is the central idea of the Nc6 Defense within the Averbakh Variation, as the knight from c6 adds extra support to the e5 square and puts pressure on our d4 pawn. The knight also eyes important squares like d4, e5, and b4, giving Black more tactical possibilities. Now we need to be especially careful about our pawn structure, as Black is building up maximum pressure against our center and preparing to challenge our space advantage with well-supported pawn advances."
     }
   ]
 }

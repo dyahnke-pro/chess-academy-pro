@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our central d4 pawn and prepares to castle kingside safely. This knight on f3 is a cornerstone of the Colle System, as it will later support our planned e3-e4 pawn break that's central to our attacking ideas. The knight also keeps an eye on the important e5 square and can later jump to e5 or g5 in attacking variations. By developing pieces before committing to further pawn moves, we're following sound opening principles while maintaining maximum flexibility in our setup."
+      "annotation": "We develop our knight to its ideal square, where it supports our central d4 pawn and prepares to castle kingside safely. This knight on f3 is a cornerstone of the Colle System, as it will later support our planned e3-e4 pawn break that's central to our attacking ideas. The knight also keeps an eye on the important e5 square and can later jump to e5 or g5 in attacking variations. By developing pieces before committing to further pawn moves, we're following sound opening principles while maintaining maximum flexibility in our setup."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to the mirror square, attacking our e4 square and preparing their own kingside development. This is the most natural developing move, following the principle of developing knights before bishops while maintaining central pressure. Our opponent is also preparing to castle and could potentially support a future ...e6-e5 pawn break. We should note that this knight placement allows for various pawn structures depending on how the center evolves, giving Black good flexibility in their setup."
+      "annotation": "Black develops their knight to the mirror square, attacking our e4 square and preparing their own kingside development. This is the most active move, following the principle of developing knights before bishops while maintaining central pressure. Our opponent is also preparing to castle and could potentially support a future ...e6-e5 pawn break. We should note that this knight placement allows for various pawn structures depending on how the center evolves, giving Black good flexibility in their setup."
     },
     {
       "san": "e3",

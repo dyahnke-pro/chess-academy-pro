@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, immediately attacking Black's e5 pawn and forcing our opponent to make a decision about the center. This move is far superior to premature attacks like Qh5, as it follows the classical principle of developing pieces toward the center while creating concrete threats. Our knight on f3 also prepares to support a future d4 advance, which would give us even more central control. Additionally, this knight will help protect our king once we castle kingside, making it a move that serves both offensive and defensive purposes."
+      "annotation": "We develop our knight to its ideal square, immediately attacking Black's e5 pawn and forcing our opponent to make a decision about the center. This move is far superior to premature attacks like Qh5, as it follows the classical principle of developing pieces toward the center while creating concrete threats. Our knight on f3 also prepares to support a future d4 advance, which would give us even more central control. Additionally, this knight will help protect our king once we castle kingside, making it a move that serves both offensive and defensive purposes."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight toward the center where it exerts maximum influence. Our opponent's knight now controls important central squares like d4 and b4, while also preparing for further piece development. This is the most principled response, as it maintains the central tension rather than weakening the pawn structure with moves like d6 or f5. Black's development is proceeding smoothly, and we need to continue with our own plan to maintain any opening advantage."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight toward the center where it exerts maximum influence. Our opponent's knight now controls important central squares like d4 and b4, while also preparing for further piece development. This is the most principled response, as it maintains the central tension rather than weakening the pawn structure with moves like d6 or f5. Black's development is proceeding smoothly, and we need to continue with our own plan to maintain any opening advantage."
     },
     {
       "san": "Bb5",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Be6",
-      "annotation": "Black develops the light-squared bishop to an active central square, immediately challenging our bishop on b3 and preparing to contest important light squares. This natural developing move also supports Black's central pawn on d5 and keeps the king's escape route open for castling. Our opponent's bishop is well-placed on e6, where it can potentially support queenside counterplay or help coordinate Black's pieces for tactical operations. However, this bishop can also become a target for future tactical operations, and we need to consider how to best exploit the slight lead in development we maintain."
+      "annotation": "Black develops the light-squared bishop to an active central square, immediately challenging our bishop on b3 and preparing to contest important light squares. This active move also supports Black's central pawn on d5 and keeps the king's escape route open for castling. Our opponent's bishop is well-placed on e6, where it can potentially support queenside counterplay or help coordinate Black's pieces for tactical operations. However, this bishop can also become a target for future tactical operations, and we need to consider how to best exploit the slight lead in development we maintain."
     },
     {
       "san": "c3",

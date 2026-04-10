@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, supporting the e4 advance and preparing kingside castling while keeping maximum flexibility in our setup. The knight on f3 controls the crucial e5 square and prepares to support a potential e2-e4 pawn center, which is our main strategic goal in this opening. This development also allows our light-squared bishop to potentially come to e2 or d3, and keeps our options open for various pawn structures depending on how the central tension resolves. From f3, our knight is perfectly placed to support our central ambitions."
+      "annotation": "We're developing our king's knight to its ideal square, supporting the e4 advance and preparing kingside castling while keeping maximum flexibility in our setup. The knight on f3 controls the crucial e5 square and prepares to support a potential e2-e4 pawn center, which is our main strategic goal in this opening. This development also allows our light-squared bishop to potentially come to e2 or d3, and keeps our options open for various pawn structures depending on how the central tension resolves. From f3, our knight is perfectly placed to support our central ambitions."
     },
     {
       "san": "Bg7",
@@ -55,7 +55,7 @@
     },
     {
       "san": "Na6",
-      "annotation": "Black brings the queen's knight into play via an unusual route, heading for the more active c5 square where it can pressure our d4 pawn and support central counterplay. While Na6 looks awkward, it's actually a key move in the Grünfeld setup - the knight avoids the more natural d7 square to keep options open for the light-squared bishop and prepares to jump to c5 with tempo against our queen. This knight maneuver is part of Black's hypermodern strategy, using pieces rather than pawns to contest our central dominance. From a6, the knight also eyes potential outposts on b4 and c5, where it can create maximum pressure against our position."
+      "annotation": "Black brings the queen's knight into play via an unusual route, heading for the more active c5 square where it can pressure our d4 pawn and support central counterplay. While Na6 looks awkward, it's actually a critical move in the Grünfeld setup - the knight avoids the more natural d7 square to keep options open for the light-squared bishop and prepares to jump to c5 with tempo against our queen. This knight maneuver is part of Black's hypermodern strategy, using pieces rather than pawns to contest our central dominance. From a6, the knight also eyes potential outposts on b4 and c5, where it can create maximum pressure against our position."
     }
   ]
 }

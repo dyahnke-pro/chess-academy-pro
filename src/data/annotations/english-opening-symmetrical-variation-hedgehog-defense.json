@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important e5 and d4 squares while supporting a potential d4 advance later. This flexible move keeps all our options open – we can still transpose into Queen's Gambit structures with d4, play for a King's Indian Attack setup with g3 and Bg2, or even consider systems with e3 and d4. The knight on f3 also prepares kingside castling and will often be a key piece in supporting our central pawn advances. By developing a piece rather than immediately grabbing more space with d4, we're following the principle of piece development first while maintaining maximum flexibility."
+      "annotation": "We develop our knight to its ideal square, controlling the important e5 and d4 squares while supporting a potential d4 advance later. This flexible move keeps all our options open – we can still transpose into Queen's Gambit structures with d4, play for a King's Indian Attack setup with g3 and Bg2, or even consider systems with e3 and d4. The knight on f3 also prepares kingside castling and will often be a key piece in supporting our central pawn advances. By developing a piece rather than immediately grabbing more space with d4, we're following the principle of piece development first while maintaining maximum flexibility."
     },
     {
       "san": "Nf6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside, bringing our king to safety and connecting our rooks while maintaining all our positional advantages. This natural developing move completes our basic setup and prepares us to focus on the central battle and potential pawn advances like d4 or e4. With our king safely tucked away, we can now consider more aggressive plans without worrying about our king's safety. The castling also brings our rook closer to the center, where it can support our future pawn advances or control important files."
+      "annotation": "We castle kingside, bringing our king to safety and connecting our rooks while maintaining all our positional advantages. This active move completes our basic setup and prepares us to focus on the central battle and potential pawn advances like d4 or e4. With our king safely tucked away, we can now consider more aggressive plans without worrying about our king's safety. The castling also brings our rook closer to the center, where it can support our future pawn advances or control important files."
     },
     {
       "san": "Be7",

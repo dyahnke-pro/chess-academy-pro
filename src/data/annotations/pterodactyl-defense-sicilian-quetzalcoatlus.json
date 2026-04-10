@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing for further piece development. This knight controls important central squares like e4 and d5 while keeping our options open for various pawn structures. Against Black's setup, we want to maintain our central pawns and develop pieces that support our space advantage. The knight on c3 also prepares potential expansion with f2-f3 and e4-e5, or supports tactical ideas if Black tries to challenge our center prematurely."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing for further piece development. This knight controls important central squares like e4 and d5 while keeping our options open for various pawn structures. Against Black's setup, we want to maintain our central pawns and develop pieces that support our space advantage. The knight on c3 also prepares potential expansion with f2-f3 and e4-e5, or supports tactical ideas if Black tries to challenge our center prematurely."
     },
     {
       "san": "c5",

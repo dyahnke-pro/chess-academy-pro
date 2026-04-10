@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn while developing toward the center. This is one of the most flexible responses to d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. Our opponent is following classical development principles by bringing out a piece that immediately puts pressure on our center. This move is a key component of many Indian Defense systems, where Black allows us to build a pawn center while preparing to strike back later."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn while developing toward the center. This is one of the most flexible responses to d4, as it doesn't commit to any particular pawn structure yet and keeps options open for various defensive setups. Our opponent is following classical development principles by bringing out a piece that immediately puts pressure on our center. This move is a key component of many Indian Defense systems, where Black allows us to build a pawn center while preparing to strike back later."
     },
     {
       "san": "Nf3",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to c3, supporting the d4 pawn and controlling important central squares like e4, d5, and b5. This natural developing move also prepares potential pawn advances in the center while maintaining flexibility in our setup. The knight on c3 can later be repositioned to more active squares like e4 or d5 if the position allows, and it supports our queenside expansion with moves like b4. We're building a solid foundation while keeping pressure on Black to find the right moment for counterplay against our growing space advantage."
+      "annotation": "We develop our knight to c3, supporting the d4 pawn and controlling important central squares like e4, d5, and b5. This active move also prepares potential pawn advances in the center while maintaining flexibility in our setup. The knight on c3 can later be repositioned to more active squares like e4 or d5 if the position allows, and it supports our queenside expansion with moves like b4. We're building a solid foundation while keeping pressure on Black to find the right moment for counterplay against our growing space advantage."
     },
     {
       "san": "O-O",

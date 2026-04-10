@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing for quick development of our remaining pieces. This move also invites the Nimzo-Indian Defense with ...Bb4, which is exactly what many strong players want as Black since it leads to rich, complex positions. Our knight on c3 controls important central squares like e4 and d5, and we're keeping our options open for various pawn advances in the center. The knight also clears the b1 square for our light-squared bishop or prepares queenside castling in some variations."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing for quick development of our remaining pieces. This move also invites the Nimzo-Indian Defense with ...Bb4, which is exactly what many strong players want as Black since it leads to rich, complex positions. Our knight on c3 controls important central squares like e4 and d5, and we're keeping our options open for various pawn advances in the center. The knight also clears the b1 square for our light-squared bishop or prepares queenside castling in some variations."
     },
     {
       "san": "Bb4",

@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our central pawns while preparing for kingside castling. The knight on f3 defends our e5 pawn, controls important central squares like d4 and e5, and keeps our development on track. This move also prepares us to meet Black's potential dxe5 capture - if Black takes on e5, we can recapture with the knight, maintaining central control. Additionally, from f3 our knight can later jump to more aggressive squares like g5 or e4, depending on how the position develops, making this a flexible and principled developing move."
+      "annotation": "We develop our knight to its ideal square, supporting our central pawns while preparing for kingside castling. The knight on f3 defends our e5 pawn, controls important central squares like d4 and e5, and keeps our development on track. This move also prepares us to meet Black's potential dxe5 capture - if Black takes on e5, we can recapture with the knight, maintaining central control. Additionally, from f3 our knight can later jump to more aggressive squares like g5 or e4, depending on how the position develops, making this a flexible and principled choice."
     },
     {
       "san": "Bg4",

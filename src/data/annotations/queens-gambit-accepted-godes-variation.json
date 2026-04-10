@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important e5 and d4 squares while supporting our plan to recapture on c4 or advance e2-e4. This move is more flexible than the immediate 3.e3 or 3.e4, as it allows us to adapt our setup based on Black's response while maintaining all our central options. The knight on f3 also prepares potential kingside castling and supports various pawn breaks in the center. From f3, our knight can later jump to e5 or g5 in some variations, making it a key piece in our attacking schemes and central control."
+      "annotation": "We develop our knight to its ideal square, where it controls the important e5 and d4 squares while supporting our plan to recapture on c4 or advance e2-e4. This move is more flexible than the immediate 3.e3 or 3.e4, as it allows us to adapt our setup based on Black's response while maintaining all our central options. The knight on f3 also prepares potential kingside castling and supports various pawn breaks in the center. From f3, our knight can later jump to e5 or g5 in some variations, making it a key piece in our attacking schemes and central control."
     },
     {
       "san": "Nd7",

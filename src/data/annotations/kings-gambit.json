@@ -560,7 +560,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the king's knight to its most natural square, attacking the f4 pawn immediately while developing toward the center.",
+          "annotation": "White develops the king's knight to its ideal square, attacking the f4 pawn immediately while developing toward the center.",
           "plans": [
             "Continue with Bc4 to develop the bishop with tempo",
             "Consider d4 to establish a strong pawn center"
@@ -643,7 +643,7 @@
         },
         {
           "san": "Bg7",
-          "annotation": "Black develops the dark-squared bishop to its most natural square, completing the fianchetto and adding defense to the kingside.",
+          "annotation": "Black develops the dark-squared bishop to its ideal square, completing the fianchetto and adding defense to the kingside.",
           "plans": [
             "Castle kingside when safe",
             "Develop the queen's knight to c6"
@@ -804,7 +804,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black develops the queen's knight to its most natural square, adding support to the center and preparing for further piece coordination.",
+          "annotation": "Black develops the queen's knight to its ideal square, adding support to the center and preparing for further piece coordination.",
           "plans": [
             "Develop the king's knight to f6",
             "Consider castling when the position allows"
@@ -913,7 +913,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "The King's Gambit: Fischer Defense is an important variation of the King's Gambit. Bobby Fischer's recommendation — 3...d6. This solid move prepares ...g5 without allowing Bc4 tricks."
+          "annotation": "The King's Gambit: Fischer Defense is an important variation of the King's Gambit. Bobby Fischer's recommendation — 3...d6. this stabilizing move prepares ...g5 without allowing Bc4 tricks."
         },
         {
           "san": "e5",

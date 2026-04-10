@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance e4 for a massive pawn center. This move is almost automatic in these positions because the knight controls important central squares like e4, d5, b5, and a4. From c3, our knight is perfectly placed to support our central ambitions and can later jump to attractive squares like e4 or d5 if the opportunity arises. We're also maintaining maximum flexibility in our setup, keeping options open for both Nf3 followed by e4, or g3 and Bg2 for a more positional approach."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance e4 for a massive pawn center. This move is almost automatic in these positions because the knight controls important central squares like e4, d5, b5, and a4. From c3, our knight is perfectly placed to support our central ambitions and can later jump to attractive squares like e4 or d5 if the opportunity arises. We're also maintaining maximum flexibility in our setup, keeping options open for both Nf3 followed by e4, or g3 and Bg2 for a more positional approach."
     },
     {
       "san": "d5",

@@ -174,7 +174,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to f6, the most natural square. It controls d5 and e4, pressuring White's center, and prepares kingside castling.",
+      "annotation": "Black develops the knight to f6, the ideal square. It controls d5 and e4, pressuring White's center, and prepares kingside castling.",
       "plans": [
         "Continue with ...Bf5 to develop the light-squared bishop actively",
         "Prepare ...e6 and ...Bb4 or ...Be7 for a solid setup"
@@ -559,7 +559,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "White develops the queen's knight with tempo, attacking the Black queen and forcing it to move. This natural developing move also controls important central squares like d5 and e4.",
+          "annotation": "White develops the queen's knight with tempo, attacking the Black queen and forcing it to move. This active move also controls important central squares like d5 and e4.",
           "plans": [
             "Continue developing pieces",
             "Castle kingside after more development"
@@ -637,7 +637,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the kingside knight to its most natural square, attacking the central e4 square and preparing kingside development.",
+          "annotation": "Black develops the kingside knight to its ideal square, attacking the central e4 square and preparing kingside development.",
           "plans": [
             "Develop the light-squared bishop",
             "Prepare castling kingside"
@@ -743,7 +743,7 @@
         },
         {
           "san": "e6",
-          "annotation": "Black solidifies the pawn structure with this key move, supporting the center and preparing to complete kingside development.",
+          "annotation": "Black solidifies the pawn structure with this critical move, supporting the center and preparing to complete kingside development.",
           "pawnStructure": "Black creates a solid pawn structure with pawns on c7, e6, and f7, controlling key central squares.",
           "plans": [
             "Develop the dark-squared bishop",
@@ -4298,7 +4298,7 @@
         },
         {
           "san": "Bb4",
-          "annotation": "Black pins the c3 knight to the king, increasing pressure on White's center. This is a key move in the ...Qa5 Scandinavian — the pin on c3 restricts White's options.",
+          "annotation": "Black pins the c3 knight to the king, increasing pressure on White's center. This is a critical move in the ...Qa5 Scandinavian — the pin on c3 restricts White's options.",
           "arrows": [
             {
               "from": "b4",

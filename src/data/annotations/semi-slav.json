@@ -643,7 +643,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the kingside knight to its most natural square, where it controls key central squares and supports the center.",
+          "annotation": "White develops the kingside knight to its ideal square, where it controls key central squares and supports the center.",
           "plans": [
             "Continue with Nc3 to increase central pressure",
             "Prepare e3 and Bd3 for solid development"
@@ -746,7 +746,7 @@
         },
         {
           "san": "e3",
-          "annotation": "White reinforces the center and prepares to develop the light-squared bishop to d3. This modest but solid move supports the d4 pawn and creates a secure foundation for White's pieces.",
+          "annotation": "White reinforces the center and prepares to develop the light-squared bishop to d3. This modest but well-grounded move supports the d4 pawn and creates a secure foundation for White's pieces.",
           "plans": [
             "Develop Bd3 to eye the kingside",
             "Complete development before pushing for central advances"

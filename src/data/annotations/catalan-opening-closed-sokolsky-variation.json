@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central pawn and preparing to contest the center. This flexible move doesn't commit Black to any particular setup yet - they could transpose into various Indian defenses, the Queen's Gambit, or other systems depending on our next moves. The knight on f6 also supports a future ...e5 central break and prepares kingside castling. From f6, the knight eyes important central squares like e4 and d5, making it a key piece in Black's opening development."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central pawn and preparing to contest the center. This flexible move doesn't commit Black to any particular setup yet - they could transpose into various Indian defenses, the Queen's Gambit, or other systems depending on our next moves. The knight on f6 also supports a future ...e5 central break and prepares kingside castling. From f6, the knight eyes important central squares like e4 and d5, making it a key piece in Black's opening development."
     },
     {
       "san": "c4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes back in the center immediately, challenging our c4 pawn and establishing their own central presence. This natural move leads to the main Catalan structures where the central tension becomes the defining feature of the position. Black's pawn on d5 is now under indirect pressure from our future bishop on g2, which is the key strategic element of the Catalan system. Our opponent is essentially accepting the challenge of the Catalan, where they'll need to prove they can maintain their central pawn or get adequate compensation if they eventually lose it."
+      "annotation": "Black strikes back in the center immediately, challenging our c4 pawn and establishing their own central presence. this move leads to the main Catalan structures where the central tension becomes the defining feature of the position. Black's pawn on d5 is now under indirect pressure from our future bishop on g2, which is the key strategic element of the Catalan system. Our opponent is essentially accepting the challenge of the Catalan, where they'll need to prove they can maintain their central pawn or get adequate compensation if they eventually lose it."
     },
     {
       "san": "Bg2",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, supporting the center while preparing kingside castling and maintaining maximum flexibility in our setup. The knight on f3 controls important central squares like e5 and d4, while also eyeing potential outposts on e5 or g5 in certain variations. This natural developing move keeps all our options open regarding how we'll handle the central tension - we could play cxd5, support the center with e3, or maintain the tension while completing our development. The knight also adds another defender to our kingside, which will be important once we castle."
+      "annotation": "We develop our knight to its ideal square, supporting the center while preparing kingside castling and maintaining maximum flexibility in our setup. The knight on f3 controls important central squares like e5 and d4, while also eyeing potential outposts on e5 or g5 in certain variations. This active move keeps all our options open regarding how we'll handle the central tension - we could play cxd5, support the center with e3, or maintain the tension while completing our development. The knight also adds another defender to our kingside, which will be important once we castle."
     },
     {
       "san": "O-O",
@@ -63,7 +63,7 @@
     },
     {
       "san": "b6",
-      "annotation": "Black begins their queenside development with this natural move, preparing to fianchetto the light-squared bishop on b7 or place it actively on a6 to challenge our c4 pawn. This move supports the solid, classical setup that Black has been pursuing, creating potential for long-term counterplay on the queenside while maintaining their central presence. The pawn on b6 also prepares ...c5 in some variations, giving Black central counterplay possibilities. However, this move does create some long-term weaknesses on the queenside light squares, which our fianchettoed bishop and queen can potentially exploit later in the game."
+      "annotation": "Black begins their queenside development with this move, preparing to fianchetto the light-squared bishop on b7 or place it actively on a6 to challenge our c4 pawn. This move supports the solid, classical setup that Black has been pursuing, creating potential for long-term counterplay on the queenside while maintaining their central presence. The pawn on b6 also prepares ...c5 in some variations, giving Black central counterplay possibilities. However, this move does create some long-term weaknesses on the queenside light squares, which our fianchettoed bishop and queen can potentially exploit later in the game."
     },
     {
       "san": "b3",

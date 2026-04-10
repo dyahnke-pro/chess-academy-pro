@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. The knight on f3 controls important central squares like e5 and d4, while also preparing potential tactical ideas involving a future e4 advance. This move is slightly more flexible than 3.Nc3, which would allow Black to play the sharper Nimzo-Indian Defense with ...Bb4, so we're keeping our options open for different pawn structures. By choosing Nf3 over more aggressive alternatives, we're showing we're comfortable with a positional battle where proper piece development and central control will determine the outcome."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. The knight on f3 controls important central squares like e5 and d4, while also preparing potential tactical ideas involving a future e4 advance. This move is slightly more flexible than 3.Nc3, which would allow Black to play the sharper Nimzo-Indian Defense with ...Bb4, so we're keeping our options open for different pawn structures. By choosing Nf3 over more aggressive alternatives, we're showing we're comfortable with a positional battle where proper piece development and central control will determine the outcome."
     },
     {
       "san": "Bb4+",

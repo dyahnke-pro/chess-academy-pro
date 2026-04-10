@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, where it supports the d4 pawn and prepares to control key central squares like e4 and d5. This knight placement is flexible and doesn't commit us to any particular pawn structure yet - we can still choose between various setups like the Fianchetto Variation (with g3 and Bg2) or the Classical Variation (with e4). The knight on c3 also keeps an eye on the b5 square, which could become important if Black tries to expand on the queenside with moves like ...a6 and ...b5. From c3, this knight coordinates beautifully with our other pieces and maintains maximum flexibility for our future plans."
+      "annotation": "We're developing our queenside knight to its ideal square, where it supports the d4 pawn and prepares to control key central squares like e4 and d5. This knight placement is flexible and doesn't commit us to any particular pawn structure yet - we can still choose between various setups like the Fianchetto Variation (with g3 and Bg2) or the Classical Variation (with e4). The knight on c3 also keeps an eye on the b5 square, which could become important if Black tries to expand on the queenside with moves like ...a6 and ...b5. From c3, this knight coordinates beautifully with our other pieces and maintains maximum flexibility for our future plans."
     },
     {
       "san": "Bg7",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its optimal square, where it controls the crucial e5 and d4 squares while preparing kingside castling. The knight on f3 is perfectly placed to support our central pawn structure and can later be repositioned to more aggressive squares like e4 or d2 depending on how the position develops. This natural developing move also keeps our options open - we haven't committed to the immediate e4 advance, which means we can choose between different setups like the Fianchetto Variation or maintaining more flexibility in our pawn structure. The Nf3 also prevents any immediate ...e5 breaks from Black, since we'd be able to recapture with the knight and maintain central control."
+      "annotation": "We're developing our kingside knight to its optimal square, where it controls the crucial e5 and d4 squares while preparing kingside castling. The knight on f3 is perfectly placed to support our central pawn structure and can later be repositioned to more aggressive squares like e4 or d2 depending on how the position develops. This active move also keeps our options open - we haven't committed to the immediate e4 advance, which means we can choose between different setups like the Fianchetto Variation or maintaining more flexibility in our pawn structure. The Nf3 also prevents any immediate ...e5 breaks from Black, since we'd be able to recapture with the knight and maintain central control."
     },
     {
       "san": "d6",

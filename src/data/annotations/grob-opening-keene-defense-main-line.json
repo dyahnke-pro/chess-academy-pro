@@ -39,11 +39,11 @@
     },
     {
       "san": "Bd6",
-      "annotation": "Black develops actively while supporting the e5 pawn and preparing potential threats along the long diagonal. The bishop on d6 also eyes the h2 square in some lines and coordinates with Black's center. This is a natural developing move that keeps Black's pieces coordinated and maintains flexibility in how the center will be resolved."
+      "annotation": "Black develops actively while supporting the e5 pawn and preparing potential threats along the long diagonal. The bishop on d6 also eyes the h2 square in some lines and coordinates with Black's center. This is a active move that keeps Black's pieces coordinated and maintains flexibility in how the center will be resolved."
     },
     {
       "san": "Nc3",
-      "annotation": "We bring our knight into the game, defending the d4 pawn and reinforcing our control of the center while opening lines for our other pieces. The knight on c3 is perfectly placed to support our central pawns and can later jump to strong squares like e2, d5, or b5 depending on Black's play. This move completes the first phase of our development with a natural developing move that strengthens our position."
+      "annotation": "We bring our knight into the game, defending the d4 pawn and reinforcing our control of the center while opening lines for our other pieces. The knight on c3 is perfectly placed to support our central pawns and can later jump to strong squares like e2, d5, or b5 depending on Black's play. This move completes the first phase of our development with a active move that strengthens our position."
     },
     {
       "san": "Ne7",

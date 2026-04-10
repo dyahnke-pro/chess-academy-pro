@@ -15,15 +15,15 @@
     },
     {
       "san": "c6",
-      "annotation": "Black chooses the Slav Defense setup, supporting the d5 pawn with the c-pawn rather than accepting or declining the gambit immediately. This solid move maintains Black's central pawn while keeping options open for piece development. The c6 pawn also prepares ...b5 in some lines, potentially challenging our c4 pawn later. However, this move does block the natural development square for Black's queenside knight, which will need to find an alternative path to active play, often via d7-f6 or d7-b6."
+      "annotation": "Black chooses the Slav Defense setup, supporting the d5 pawn with the c-pawn rather than accepting or declining the gambit immediately. this stabilizing move maintains Black's central pawn while keeping options open for piece development. The c6 pawn also prepares ...b5 in some lines, potentially challenging our c4 pawn later. However, this move does block the natural development square for Black's queenside knight, which will need to find an alternative path to active play, often via d7-f6 or d7-b6."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our central d4 pawn and controls important squares like e5 and g5. This move also prepares kingside castling and doesn't commit us to any particular pawn structure yet. The knight on f3 is perfectly placed to support various plans - it can jump to e5 for an outpost, move to d2 to make room for the e-pawn advance, or relocate to other squares based on how the position develops. This flexible development move is almost universal in queen's pawn openings."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our central d4 pawn and controls important squares like e5 and g5. This move also prepares kingside castling and doesn't commit us to any particular pawn structure yet. The knight on f3 is perfectly placed to support various plans - it can jump to e5 for an outpost, move to d2 to make room for the e-pawn advance, or relocate to other squares based on how the position develops. This flexible development move is almost universal in queen's pawn openings."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight symmetrically, putting immediate pressure on our e4 square and preventing us from easily advancing our e-pawn. This natural developing move also prepares kingside castling and supports potential central breaks. The knight on f6 is well-placed to contest the center and can potentially jump to squares like e4 or d5 if the opportunity arises. Black is following sound opening principles by developing pieces toward the center while maintaining flexibility in their pawn structure."
+      "annotation": "Black develops their kingside knight symmetrically, putting immediate pressure on our e4 square and preventing us from easily advancing our e-pawn. This active move also prepares kingside castling and supports potential central breaks. The knight on f6 is well-placed to contest the center and can potentially jump to squares like e4 or d5 if the opportunity arises. Black is following sound opening principles by developing pieces toward the center while maintaining flexibility in their pawn structure."
     },
     {
       "san": "Nc3",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops their queenside knight to d7, breaking the pin on the f6 knight while preparing to support the center and potentially reroute the knight to more active squares. This move allows the f6 knight to move freely and also prepares moves like ...c5 or ...e5 to challenge our center. The knight on d7 can later jump to squares like b6, c5, or e5 depending on how the position develops. While this knight isn't as actively placed as it might be on c6, it's a solid developing move that fits well with Black's overall defensive scheme in the Queen's Gambit Declined."
+      "annotation": "Black develops their queenside knight to d7, breaking the pin on the f6 knight while preparing to support the center and potentially reroute the knight to more active squares. This move allows the f6 knight to move freely and also prepares moves like ...c5 or ...e5 to challenge our center. The knight on d7 can later jump to squares like b6, c5, or e5 depending on how the position develops. While this knight isn't as actively placed as it might be on c6, it's a constructive move that fits well with Black's overall defensive scheme in the Queen's Gambit Declined."
     },
     {
       "san": "e3",

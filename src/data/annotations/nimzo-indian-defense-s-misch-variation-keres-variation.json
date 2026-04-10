@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking the d4 pawn while bringing the knight to its most active square. This move embodies the hypermodern principle of controlling the center with pieces rather than occupying it with pawns immediately. Our opponent is keeping their options open - they can still play ...e6 for a Queen's Indian or Nimzo-Indian setup, ...g6 for a King's Indian structure, or even ...d5 for a Queen's Gambit Declined. The knight on f6 also prevents us from advancing e2-e4 immediately, forcing us to make a decision about how to support our d4 pawn."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking the d4 pawn while bringing the knight to its most active square. This move embodies the hypermodern principle of controlling the center with pieces rather than occupying it with pawns immediately. Our opponent is keeping their options open - they can still play ...e6 for a Queen's Indian or Nimzo-Indian setup, ...g6 for a King's Indian structure, or even ...d5 for a Queen's Gambit Declined. The knight on f6 also prevents us from advancing e2-e4 immediately, forcing us to make a decision about how to support our d4 pawn."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to meet Black's likely ...d5 with additional central pressure. This move also opens up the possibility of playing e2-e4 later, as our d4 pawn now has adequate support from both the c4 pawn and the knight. However, we need to be aware that this knight placement allows Black to play the Nimzo-Indian Defense with ...Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 eyes important central squares like e4 and d5, and can potentially jump to e4 or a4 depending on how the position develops."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing to meet Black's likely ...d5 with additional central pressure. This move also opens up the possibility of playing e2-e4 later, as our d4 pawn now has adequate support from both the c4 pawn and the knight. However, we need to be aware that this knight placement allows Black to play the Nimzo-Indian Defense with ...Bb4, pinning our knight and creating immediate tactical complications. The knight on c3 eyes important central squares like e4 and d5, and can potentially jump to e4 or a4 depending on how the position develops."
     },
     {
       "san": "Bb4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "a3",
-      "annotation": "We're implementing a key move in the Sämisch system, immediately challenging Black's active bishop and forcing a decision that will shape the entire middlegame structure. This move gives Black a choice: retreat the bishop to a5 or e7, or exchange it for our knight, doubling our c-pawns but giving us the two bishops and potential central dominance. The a3 advance also prepares to expand on the queenside with b4, and in some lines, we might even consider a4-a5 to create attacking chances on that wing. By forcing Black's hand with the bishop, we're taking control of the strategic direction of the game and preparing to launch our planned central and kingside expansion."
+      "annotation": "We're implementing a critical move in the Sämisch system, immediately challenging Black's active bishop and forcing a decision that will shape the entire middlegame structure. This move gives Black a choice: retreat the bishop to a5 or e7, or exchange it for our knight, doubling our c-pawns but giving us the two bishops and potential central dominance. The a3 advance also prepares to expand on the queenside with b4, and in some lines, we might even consider a4-a5 to create attacking chances on that wing. By forcing Black's hand with the bishop, we're taking control of the strategic direction of the game and preparing to launch our planned central and kingside expansion."
     },
     {
       "san": "Bxc3+",

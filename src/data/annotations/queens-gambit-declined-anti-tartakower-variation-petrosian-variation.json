@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its ideal square where it attacks our d4 pawn and controls important central squares like e4 and d5. This is the starting move of many solid defensive systems in the Queen's Pawn openings. Our opponent is following classical opening principles by developing pieces toward the center while immediately putting pressure on our pawn structure. We'll need to decide how to support our d4 pawn - either with pieces or by advancing c2-c4 to create the famous 'Queen's Gambit' pawn structure."
+      "annotation": "Black responds with the most active move, bringing the knight to its ideal square where it attacks our d4 pawn and controls important central squares like e4 and d5. This is the starting move of many solid defensive systems in the Queen's Pawn openings. Our opponent is following classical opening principles by developing pieces toward the center while immediately putting pressure on our pawn structure. We'll need to decide how to support our d4 pawn - either with pieces or by advancing c2-c4 to create the famous 'Queen's Gambit' pawn structure."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our d4 pawn, controls the important e5 square, and prepares kingside castling. This piece placement is incredibly flexible - the knight can later jump to e5, d2, or even h4 depending on how the position develops. By developing this knight, we're also preparing to castle kingside and get our king to safety before the middlegame complications begin. The knight on f3 also prevents any annoying back-rank tricks and supports our central control beautifully."
+      "annotation": "We develop our knight to its ideal square, where it supports our d4 pawn, controls the important e5 square, and prepares kingside castling. This piece placement is incredibly flexible - the knight can later jump to e5, d2, or even h4 depending on how the position develops. By developing this knight, we're also preparing to castle kingside and get our king to safety before the middlegame complications begin. The knight on f3 also prevents any annoying back-rank tricks and supports our central control beautifully."
     },
     {
       "san": "d5",

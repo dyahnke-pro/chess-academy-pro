@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most principled developing move, immediately challenging our central pawn and preparing to castle kingside. This knight attacks our d4 pawn, forcing us to make a decision about how to defend it - we can support it with pieces or advance our pawn center further. The knight on f6 is perfectly placed to support Black's typical counterplay in Queen's Pawn openings, often involving moves like ...d6, ...e6, or even ...c5 to challenge our center. This move also keeps Black's options completely open regarding pawn structure and piece placement."
+      "annotation": "Black responds with the most principled developing choice, immediately challenging our central pawn and preparing to castle kingside. This knight attacks our d4 pawn, forcing us to make a decision about how to defend it - we can support it with pieces or advance our pawn center further. The knight on f6 is perfectly placed to support Black's typical counterplay in Queen's Pawn openings, often involving moves like ...d6, ...e6, or even ...c5 to challenge our center. This move also keeps Black's options completely open regarding pawn structure and piece placement."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding crucial support to our d4 pawn and preparing to contest central squares like e4 and d5. This knight placement is typical of most Queen's Pawn openings, as it develops toward the center while maintaining flexibility in our pawn structure. The knight on c3 also prepares potential advances like e4 or supports queenside expansion with moves like a3 and b4. However, we should be aware that this knight can become a target if Black plays ...Bb4, pinning it to our king and creating the famous Nimzo-Indian Defense setup that leads to rich positional battles."
+      "annotation": "We develop our knight to its ideal square, adding crucial support to our d4 pawn and preparing to contest central squares like e4 and d5. This knight placement is typical of most Queen's Pawn openings, as it develops toward the center while maintaining flexibility in our pawn structure. The knight on c3 also prepares potential advances like e4 or supports queenside expansion with moves like a3 and b4. However, we should be aware that this knight can become a target if Black plays ...Bb4, pinning it to our king and creating the famous Nimzo-Indian Defense setup that leads to rich positional battles."
     },
     {
       "san": "Bb4",

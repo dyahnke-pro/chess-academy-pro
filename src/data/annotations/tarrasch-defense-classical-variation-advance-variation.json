@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while increasing the pressure on Black's d5 pawn. This move supports a potential recapture on c4 if Black takes our pawn, and the knight from c3 can potentially jump to excellent squares like e4 or b5 later in the game. The knight also guards the e4 square, preventing Black from advancing their e-pawn and gaining space in the center. This development fits perfectly with our Queen's Gambit setup, as we're bringing pieces into active positions while maintaining central pressure."
+      "annotation": "We're developing our knight to its ideal square while increasing the pressure on Black's d5 pawn. This move supports a potential recapture on c4 if Black takes our pawn, and the knight from c3 can potentially jump to excellent squares like e4 or b5 later in the game. The knight also guards the e4 square, preventing Black from advancing their e-pawn and gaining space in the center. This development fits perfectly with our Queen's Gambit setup, as we're bringing pieces into active positions while maintaining central pressure."
     },
     {
       "san": "c5",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most natural square, completing the basic development of minor pieces while adding another defender to the d5 pawn. This knight also controls important central squares and prepares castling to ensure king safety. The placement on f6 is particularly good because it can potentially support future central advances or tactical operations involving the isolated pawn. Our opponent is following sound developmental principles while maintaining the tension inherent in the Tarrasch Defense structure."
+      "annotation": "Black develops their kingside knight to its ideal square, completing the basic development of minor pieces while adding another defender to the d5 pawn. This knight also controls important central squares and prepares castling to ensure king safety. The placement on f6 is particularly good because it can potentially support future central advances or tactical operations involving the isolated pawn. Our opponent is following sound developmental principles while maintaining the tension inherent in the Tarrasch Defense structure."
     },
     {
       "san": "Bg2",

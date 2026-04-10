@@ -78,7 +78,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends e5 with the most natural developing move. The knight on c6 also pressures d4, making it harder for White to seize the full center. This sets the stage for the Four Knights Game.",
+      "annotation": "Black defends e5 with the most active move. The knight on c6 also pressures d4, making it harder for White to seize the full center. This sets the stage for the Four Knights Game.",
       "plans": [
         "Defend e5 and control d4",
         "Prepare Nf6 for a symmetrical setup"
@@ -136,7 +136,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black completes the four-knight formation! All four knights are developed to their most natural squares. The knight on f6 attacks e4, creating immediate central tension.",
+      "annotation": "Black completes the four-knight formation! All four knights are developed to their ideal squares. The knight on f6 attacks e4, creating immediate central tension.",
       "plans": [
         "Attack e4 to force White to commit",
         "Develop bishops and castle quickly"
@@ -532,7 +532,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the kingside knight to its most natural square, attacking Black's e5 pawn while supporting White's own e4 advance.",
+          "annotation": "White develops the kingside knight to its ideal square, attacking Black's e5 pawn while supporting White's own e4 advance.",
           "plans": [
             "Castle kingside for king safety",
             "Support the e4 pawn and prepare potential d2-d4 pawn break"

@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, attacking the black e5 pawn while supporting our own central presence. This move is far superior to premature attacks like 2.f4 or 2.Bc4, as it develops with tempo and maintains maximum flexibility for our setup. The knight on f3 also prepares castling kingside and keeps options open for various pawn structures, whether we play d3 for a solid setup or d4 for immediate central confrontation."
+      "annotation": "We develop our kingside knight to its ideal square, attacking the black e5 pawn while supporting our own central presence. This move is far superior to premature attacks like 2.f4 or 2.Bc4, as it develops with tempo and maintains maximum flexibility for our setup. The knight on f3 also prepares castling kingside and keeps options open for various pawn structures, whether we play d3 for a solid setup or d4 for immediate central confrontation."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight toward the center where it influences important squares like d4 and b4. This move is virtually forced, as alternatives like 2...d6 or 2...f5 would either be too passive or create serious weaknesses. Our opponent is following sound opening principles by developing pieces while maintaining the central tension, setting the stage for the classical Ruy Lopez if we continue with 3.Bb5."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight toward the center where it influences important squares like d4 and b4. This move is virtually forced, as alternatives like 2...d6 or 2...f5 would either be too passive or create serious weaknesses. Our opponent is following sound opening principles by developing pieces while maintaining the central tension, setting the stage for the classical Ruy Lopez if we continue with 3.Bb5."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight, attacking our e4 pawn and preparing to castle kingside for safety. This natural developing move also supports the e5 pawn from another angle and prepares potential counterplay in the center. Our opponent is following the most classical approach to the Ruy Lopez, prioritizing piece development and king safety before committing to any particular pawn structure."
+      "annotation": "Black develops the kingside knight, attacking our e4 pawn and preparing to castle kingside for safety. This active move also supports the e5 pawn from another angle and prepares potential counterplay in the center. Our opponent is following the most classical approach to the Ruy Lopez, prioritizing piece development and king safety before committing to any particular pawn structure."
     },
     {
       "san": "O-O",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the light-squared bishop to its most natural square, preparing to castle while maintaining flexibility in the center. This solid move breaks the pin on the knight and allows Black to complete kingside development safely. The bishop on e7 also supports the important f6 knight and can potentially be redeployed to f6 or g5 later depending on how the center develops."
+      "annotation": "Black develops the light-squared bishop to its ideal square, preparing to castle while maintaining flexibility in the center. this stabilizing move breaks the pin on the knight and allows Black to complete kingside development safely. The bishop on e7 also supports the important f6 knight and can potentially be redeployed to f6 or g5 later depending on how the center develops."
     },
     {
       "san": "d4",

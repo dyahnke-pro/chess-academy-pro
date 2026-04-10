@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn while preparing to castle kingside and keeping our options open for the center. This knight on f3 serves multiple purposes: it supports a future e2-e4 advance, controls important central squares like e5 and d4, and can potentially reroute to more active squares later in the game. The move also follows the opening principle of developing knights before bishops, since knights generally have fewer good squares and we want to place them optimally first. Against the Slav, this development is particularly useful because it puts more pressure on Black's position and forces them to make concrete decisions about their pawn structure."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to the d5 pawn while preparing to castle kingside and keeping our options open for the center. This knight on f3 serves multiple purposes: it supports a future e2-e4 advance, controls important central squares like e5 and d4, and can potentially reroute to more active squares later in the game. The move also follows the opening principle of developing knights before bishops, since knights generally have fewer good squares and we want to place them optimally first. Against the Slav, this development is particularly useful because it puts more pressure on Black's position and forces them to make concrete decisions about their pawn structure."
     },
     {
       "san": "Nf6",

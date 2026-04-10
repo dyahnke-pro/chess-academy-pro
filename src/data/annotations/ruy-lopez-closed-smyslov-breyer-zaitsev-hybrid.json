@@ -15,7 +15,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight to its ideal square where it controls important central territory. Our opponent is following sound opening principles by developing pieces toward the center while solving the immediate tactical problem of the attacked pawn. The knight on c6 also eyes potential outposts on d4 and b4, giving Black active piece play. This sets up the classic Ruy Lopez position where we'll challenge this knight's strong position with our light-squared bishop."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight to its ideal square where it controls important central territory. Our opponent is following sound opening principles by developing pieces toward the center while solving the immediate tactical problem of the attacked pawn. The knight on c6 also eyes potential outposts on d4 and b4, giving Black active piece play. This sets up the classic Ruy Lopez position where we'll challenge this knight's strong position with our light-squared bishop."
     },
     {
       "san": "Bb5",
@@ -79,7 +79,7 @@
     },
     {
       "san": "Re8",
-      "annotation": "Black reinforces the e5 pawn with the rook, maintaining the central tension while improving piece coordination. This natural move prepares for potential complications in the center, as the rook supports both the e5 pawn and potential counterplay on the e-file. Our opponent is avoiding the immediate resolution of tension with exd4, preferring to maintain the pawn on e5 as long as possible. The rook on e8 also coordinates well with the bishop on e7, creating a solid defensive setup that's difficult for us to break down immediately."
+      "annotation": "Black reinforces the e5 pawn with the rook, maintaining the central tension while improving piece coordination. this move prepares for potential complications in the center, as the rook supports both the e5 pawn and potential counterplay on the e-file. Our opponent is avoiding the immediate resolution of tension with exd4, preferring to maintain the pawn on e5 as long as possible. The rook on e8 also coordinates well with the bishop on e7, creating a solid defensive setup that's difficult for us to break down immediately."
     },
     {
       "san": "Nbd2",

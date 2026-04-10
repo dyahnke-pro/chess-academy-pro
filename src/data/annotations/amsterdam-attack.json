@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports a future d4 advance and maintains maximum flexibility for our piece placement. This knight on c3 is perfectly placed in the Amsterdam Attack system - it can later jump to d5 or e4, supports our central pawn breaks, and doesn't interfere with our planned bishop fianchetto on b2. The knight also adds pressure to Black's position by eyeing important central squares and preparing tactical possibilities in the center. By developing this piece before our bishops, we maintain the option to transpose into various favorable setups depending on how Black continues - we might play d3 and Nge2, or perhaps go for the more aggressive d4 directly."
+      "annotation": "We're developing our knight to its ideal square, where it supports a future d4 advance and maintains maximum flexibility for our piece placement. This knight on c3 is perfectly placed in the Amsterdam Attack system - it can later jump to d5 or e4, supports our central pawn breaks, and doesn't interfere with our planned bishop fianchetto on b2. The knight also adds pressure to Black's position by eyeing important central squares and preparing tactical possibilities in the center. By developing this piece before our bishops, we maintain the option to transpose into various favorable setups depending on how Black continues - we might play d3 and Nge2, or perhaps go for the more aggressive d4 directly."
     },
     {
       "san": "Nc6",

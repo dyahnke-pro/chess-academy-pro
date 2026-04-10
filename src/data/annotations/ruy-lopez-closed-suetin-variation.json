@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and controlling important central squares like d4 and e5. This move follows the opening principle of developing knights before bishops, as knights generally have fewer good squares available to them. The knight on f3 also supports a future d2-d4 pawn break and guards against potential back-rank tactics. Most importantly, this move begins the Ruy Lopez, one of the most respected and deeply analyzed openings in chess history, named after the 16th-century Spanish priest who wrote about it."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and controlling important central squares like d4 and e5. This move follows the opening principle of developing knights before bishops, as knights generally have fewer good squares available to them. The knight on f3 also supports a future d2-d4 pawn break and guards against potential back-rank tactics. Most importantly, this move begins the Ruy Lopez, one of the most respected and deeply analyzed openings in chess history, named after the 16th-century Spanish priest who wrote about it."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight to its ideal central square. The knight on c6 controls important squares like d4, e5, a5, and b4, while supporting Black's central pawn structure. This is virtually the only good way to defend e5, as moving the pawn to d6 would be too passive and f6 would seriously weaken the kingside. Our opponent is following sound opening principles by developing pieces and maintaining the central tension."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight to its ideal central square. The knight on c6 controls important squares like d4, e5, a5, and b4, while supporting Black's central pawn structure. This is virtually the only good way to defend e5, as moving the pawn to d6 would be too passive and f6 would seriously weaken the kingside. Our opponent is following sound opening principles by developing pieces and maintaining the central tension."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn and preparing to castle kingside. This natural developing move follows the principle of bringing pieces toward the center while creating immediate threats. The knight on f6 also supports a potential d6 knight move and controls important central squares like d5, e4, and h5. Our opponent is methodically developing pieces while keeping the central tension, preparing for a complex middlegame where both sides will have active piece play."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn and preparing to castle kingside. This active move follows the principle of bringing pieces toward the center while creating immediate threats. The knight on f6 also supports a potential d6 knight move and controls important central squares like d5, e4, and h5. Our opponent is methodically developing pieces while keeping the central tension, preparing for a complex middlegame where both sides will have active piece play."
     },
     {
       "san": "O-O",
@@ -67,7 +67,7 @@
     },
     {
       "san": "a3",
-      "annotation": "We play the Suetin Variation with this subtle but important move, preventing Black from playing Na5 to attack our bishop on b3 and preparing our own queenside expansion. This seemingly modest pawn move controls the b4 square permanently and supports a potential b2-b4 advance that would give us significant queenside space. The move also has a psychological element - we're showing that we're in no hurry to play d4, instead choosing to improve our position methodically. This variation, named after Soviet grandmaster Alexey Suetin, represents a patient approach to the Ruy Lopez where we build up our position slowly before launching our central break."
+      "annotation": "We play the Suetin Variation with this subtle but purposeful move, preventing Black from playing Na5 to attack our bishop on b3 and preparing our own queenside expansion. This seemingly modest pawn move controls the b4 square permanently and supports a potential b2-b4 advance that would give us significant queenside space. The move also has a psychological element - we're showing that we're in no hurry to play d4, instead choosing to improve our position methodically. This variation, named after Soviet grandmaster Alexey Suetin, represents a patient approach to the Ruy Lopez where we build up our position slowly before launching our central break."
     }
   ]
 }

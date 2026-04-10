@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're expanding in the center with the English Attack formation, controlling the crucial d5 and b5 squares while supporting our d4 pawn. This move creates what's known as the 'Maróczy bind' when combined with d4, giving us excellent control over the central light squares. The c4 advance also opens lines for our queen and light-squared bishop, while preparing to meet Black's central counterplay with d5. This is a key move in many queen's pawn openings, and it signals our intention to maintain a strong grip on the center throughout the opening and middlegame."
+      "annotation": "We're expanding in the center with the English Attack formation, controlling the crucial d5 and b5 squares while supporting our d4 pawn. This move creates what's known as the 'Maróczy bind' when combined with d4, giving us excellent control over the central light squares. The c4 advance also opens lines for our queen and light-squared bishop, while preparing to meet Black's central counterplay with d5. This is a critical move in many queen's pawn openings, and it signals our intention to maintain a strong grip on the center throughout the opening and middlegame."
     },
     {
       "san": "g6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to recapture on d5 if Black plays that central break. This move also keeps our options open for different setups - we could continue with e4 for a King's Indian structure, or as we'll see, play more modestly with e3. The knight on c3 controls important central squares like e4 and d5, and it's perfectly placed to support our central pawn structure. From c3, the knight also has good mobility and can potentially jump to other squares like e4, b5, or even a4 in certain lines."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing to recapture on d5 if Black plays that central break. This move also keeps our options open for different setups - we could continue with e4 for a King's Indian structure, or as we'll see, play more modestly with e3. The knight on c3 controls important central squares like e4 and d5, and it's perfectly placed to support our central pawn structure. From c3, the knight also has good mobility and can potentially jump to other squares like e4, b5, or even a4 in certain lines."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're choosing the Pachman Variation with this modest but solid move, supporting our d4 pawn while preparing to develop our light-squared bishop. This is less aggressive than the main line 4.Nf3 or 4.cxd5, but it leads to solid, positional play where we maintain our pawn center without rushing into tactical complications. The e3 move also prepares Qb3, putting immediate pressure on Black's d5 pawn and potentially winning material if Black isn't careful. This system is particularly good against players who know the sharp main lines of the Grünfeld but might be less familiar with these quieter setups."
+      "annotation": "We're choosing the Pachman Variation with this modest but well-grounded move, supporting our d4 pawn while preparing to develop our light-squared bishop. This is less aggressive than the main line 4.Nf3 or 4.cxd5, but it leads to solid, positional play where we maintain our pawn center without rushing into tactical complications. The e3 move also prepares Qb3, putting immediate pressure on Black's d5 pawn and potentially winning material if Black isn't careful. This system is particularly good against players who know the sharp main lines of the Grünfeld but might be less familiar with these quieter setups."
     },
     {
       "san": "Bg7",
@@ -47,11 +47,11 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black wisely gets the king to safety with castling, addressing the immediate threats against f7 while connecting the rooks. This move is practically forced given our pressure on the kingside, and it's a good example of how tactical threats often dictate the move order in chess openings. By castling, Black also brings the rook on f8 into play, which can later support important moves like c5 or even defensive moves like Re8. However, Black is still behind in development and needs to catch up quickly before our lead becomes overwhelming. The king on g8 is relatively safe, but we still maintain some initiative due to our better piece coordination."
+      "annotation": "Black wisely gets the king to safety with castling, addressing the immediate threats against f7 while connecting the rooks. This move is practically forced given our pressure on the kingside, and it's a good example of how tactical threats often dictate the move order in chess openings. By castling, Black also brings the rook on f8 into play, which can later support purposeful moves like c5 or even defensive moves like Re8. However, Black is still behind in development and needs to catch up quickly before our lead becomes overwhelming. The king on g8 is relatively safe, but we still maintain some initiative due to our better piece coordination."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, supporting our center while preparing to complete our own kingside development. This move adds another defender to our d4 pawn and also prepares potential tactics involving the e5 square or even sacrificial ideas on f7 in certain lines. The knight on f3 is perfectly placed to support our pawn center and can later jump to more active squares like e5 or g5. By developing this knight, we're also preparing to castle ourselves, though we might delay castling to maintain maximum pressure on Black's position. This is good, solid development that maintains our initiative while improving our position."
+      "annotation": "We're developing our kingside knight to its ideal square, supporting our center while preparing to complete our own kingside development. This move adds another defender to our d4 pawn and also prepares potential tactics involving the e5 square or even sacrificial ideas on f7 in certain lines. The knight on f3 is perfectly placed to support our pawn center and can later jump to more active squares like e5 or g5. By developing this knight, we're also preparing to castle ourselves, though we might delay castling to maintain maximum pressure on Black's position. This is good, solid development that maintains our initiative while improving our position."
     },
     {
       "san": "Nbd7",

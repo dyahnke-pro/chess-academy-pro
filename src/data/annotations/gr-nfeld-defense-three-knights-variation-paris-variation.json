@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, supporting our d4 pawn and preparing to meet Black's eventual ...d5 with maximum pressure. The knight on c3 controls important central squares like e4 and d5, and it's ready to support our central pawn advances or piece development. This move is almost universal in Queen's Pawn openings because it harmonizes so well with our pawn structure and development plans. We're also keeping our options open for various setups, whether we want to play e3 for a solid positional game or e4 for a more aggressive King's Indian Attack formation."
+      "annotation": "We're developing our queenside knight to its ideal square, supporting our d4 pawn and preparing to meet Black's eventual ...d5 with maximum pressure. The knight on c3 controls important central squares like e4 and d5, and it's ready to support our central pawn advances or piece development. This move is almost universal in Queen's Pawn openings because it harmonizes so well with our pawn structure and development plans. We're also keeping our options open for various setups, whether we want to play e3 for a solid positional game or e4 for a more aggressive King's Indian Attack formation."
     },
     {
       "san": "d5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black safely castles kingside, getting the king to safety before the position becomes too tactical and connecting the rooks for potential central or queenside operations. This natural move also allows Black to consider various pawn breaks like ...c5 or ...dxc4 without worrying about king safety issues. The king on g8 is well-protected by the fianchettoed bishop and the pawn shelter, and Black can now focus on creating counterplay in the center. Castling also frees up the f8 square for potential rook maneuvers and prepares Black's position for the coming middlegame battles where piece activity will be crucial."
+      "annotation": "Black safely castles kingside, getting the king to safety before the position becomes too tactical and connecting the rooks for potential central or queenside operations. this move also allows Black to consider various pawn breaks like ...c5 or ...dxc4 without worrying about king safety issues. The king on g8 is well-protected by the fianchettoed bishop and the pawn shelter, and Black can now focus on creating counterplay in the center. Castling also frees up the f8 square for potential rook maneuvers and prepares Black's position for the coming middlegame battles where piece activity will be crucial."
     },
     {
       "san": "Bd3",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance e4 to establish a classical pawn center. This move also keeps our options open for various setups - we might continue with e4, or perhaps fianchetto our own king's bishop with g3 and Bg2. The knight on c3 controls important central squares and will support our space advantage while remaining flexible enough to redeploy if needed. This is a principled developing move that maintains the tension while building our position systematically."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance e4 to establish a classical pawn center. This move also keeps our options open for various setups - we might continue with e4, or perhaps fianchetto our own king's bishop with g3 and Bg2. The knight on c3 controls important central squares and will support our space advantage while remaining flexible enough to redeploy if needed. This is a purposeful move that maintains the tension while building our position systematically."
     },
     {
       "san": "Bg7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its optimal square, controlling the center while supporting our e4 pawn and preparing to castle kingside. This natural developing move also prevents Black from advancing ...e5 immediately, since our knight controls that square. The knight on f3 is perfectly placed in this structure - it supports our central pawns, can jump to various strong squares like e5 or g5, and maintains flexibility for our kingside development. This move demonstrates classical opening principles: develop pieces toward the center, support your pawns, and prepare for king safety."
+      "annotation": "We're developing our knight to its optimal square, controlling the center while supporting our e4 pawn and preparing to castle kingside. This active move also prevents Black from advancing ...e5 immediately, since our knight controls that square. The knight on f3 is perfectly placed in this structure - it supports our central pawns, can jump to various strong squares like e5 or g5, and maintains flexibility for our kingside development. This move demonstrates classical opening principles: develop pieces toward the center, support your pawns, and prepare for king safety."
     },
     {
       "san": "O-O",

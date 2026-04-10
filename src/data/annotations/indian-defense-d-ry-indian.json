@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent responds with the Indian Defense setup, developing the knight to its most natural square while immediately putting pressure on our central d4 pawn. This flexible approach allows Black to delay committing to a specific pawn structure in the center, keeping options open for both ...e6 and ...g6 setups. The knight on f6 also prepares to support a potential ...e5 advance later, challenging our central dominance. This is a hallmark of modern opening theory - developing pieces before committing pawns to fixed positions."
+      "annotation": "Our opponent responds with the Indian Defense setup, developing the knight to its ideal square while immediately putting pressure on our central d4 pawn. This flexible approach allows Black to delay committing to a specific pawn structure in the center, keeping options open for both ...e6 and ...g6 setups. The knight on f6 also prepares to support a potential ...e5 advance later, challenging our central dominance. This is a hallmark of modern opening theory - developing pieces before committing pawns to fixed positions."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square, supporting our d4 pawn while preparing to castle kingside for safety. This knight controls important central squares like e5 and d4, and from f3 it can potentially reroute to more aggressive posts like g5 or h4 depending on how the position develops. The knight development also keeps our options open - we haven't yet committed to whether we'll fianchetto our light-squared bishop or develop it more actively. This natural developing move maintains maximum flexibility while solidifying our grip on the center."
+      "annotation": "We're developing our knight to its most active square, supporting our d4 pawn while preparing to castle kingside for safety. This knight controls important central squares like e5 and d4, and from f3 it can potentially reroute to more aggressive posts like g5 or h4 depending on how the position develops. The knight development also keeps our options open - we haven't yet committed to whether we'll fianchetto our light-squared bishop or develop it more actively. This active move maintains maximum flexibility while solidifying our grip on the center."
     },
     {
       "san": "Ne4",

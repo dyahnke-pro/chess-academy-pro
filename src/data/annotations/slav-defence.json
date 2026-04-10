@@ -132,7 +132,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to f6, defending d5 and controlling e4. This is the most natural move in almost any d-pawn opening. The knight also prepares kingside castling. Black is building up defenders around the d5 point before deciding how to develop the bishops.",
+      "annotation": "Black develops the knight to f6, defending d5 and controlling e4. This is the most principled response in almost any d-pawn opening. The knight also prepares kingside castling. Black is building up defenders around the d5 point before deciding how to develop the bishops.",
       "plans": [
         "Defend d5, prepare to develop bishops"
       ],
@@ -554,7 +554,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black responds symmetrically in the center, challenging White's control of e4 and c4. This solid move is the foundation of many classical defenses and leads to rich strategic middlegames. By placing the pawn on d5, Black ensures equal central presence and prepares to develop pieces to active squares.",
+          "annotation": "Black responds symmetrically in the center, challenging White's control of e4 and c4. this stabilizing move is the foundation of many classical defenses and leads to rich strategic middlegames. By placing the pawn on d5, Black ensures equal central presence and prepares to develop pieces to active squares.",
           "pawnStructure": "The central tension is established with pawns facing off on d4 and d5, creating a balanced pawn structure that will define the opening's character.",
           "plans": [
             "Support the d5 pawn with pieces or additional pawns",
@@ -642,7 +642,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the knight to its most active square, supporting the d4 pawn and preparing to castle kingside. The knight on f3 also eyes the central e5 square and can later support a potential e4 advance. This natural developing move maintains pressure on Black's position while improving White's piece coordination.",
+          "annotation": "White develops the knight to its most active square, supporting the d4 pawn and preparing to castle kingside. The knight on f3 also eyes the central e5 square and can later support a potential e4 advance. This active move maintains pressure on Black's position while improving White's piece coordination.",
           "plans": [
             "Continue with Nc3 to increase pressure on d5",
             "Prepare e3 or e4 to strengthen the pawn center"
@@ -783,7 +783,7 @@
         },
         {
           "san": "Bf5",
-          "annotation": "The key move of the Slav Defense! Black develops the light-squared bishop to its most active square before playing ...e6, which would permanently block it. The bishop on f5 controls important central squares and puts pressure on White's kingside. This move demonstrates the main strategic point of the Slav - keeping the light-squared bishop active.",
+          "annotation": "the central idea of the Slav Defense! Black develops the light-squared bishop to its most active square before playing ...e6, which would permanently block it. The bishop on f5 controls important central squares and puts pressure on White's kingside. This move demonstrates the main strategic point of the Slav - keeping the light-squared bishop active.",
           "plans": [
             "Follow up with ...e6 to complete the pawn structure",
             "Consider ...Bb4 to pin the knight and create tactical threats"
@@ -894,7 +894,7 @@
         },
         {
           "san": "Bb4",
-          "annotation": "An excellent developing move that pins the knight on c3 to the king, creating immediate tactical pressure. The bishop on b4 is actively placed and forces White to make decisions about the pinned knight. This move also prepares potential exchanges that can lead to doubled pawns for White, giving Black long-term compensation for any temporary inconveniences.",
+          "annotation": "An excellent developing choice that pins the knight on c3 to the king, creating immediate tactical pressure. The bishop on b4 is actively placed and forces White to make decisions about the pinned knight. This move also prepares potential exchanges that can lead to doubled pawns for White, giving Black long-term compensation for any temporary inconveniences.",
           "plans": [
             "Maintain the pin and look for opportunities to exchange favorably",
             "Complete development with moves like Nbd7 and 0-0"

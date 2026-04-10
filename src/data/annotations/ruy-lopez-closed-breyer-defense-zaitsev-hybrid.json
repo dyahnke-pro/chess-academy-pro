@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it attacks the enemy e5 pawn and controls the important central squares d4 and e5. This move is far superior to immediate tactics like 2.f4 (King's Gambit) because we develop with tempo while maintaining pressure. The knight on f3 also supports a future d4 push and keeps our king safe by not weakening the kingside pawn structure. This is the starting move of the Ruy Lopez, setting up our next move Bb5 to put immediate pressure on Black's position."
+      "annotation": "We're developing our knight to its ideal square, where it attacks the enemy e5 pawn and controls the important central squares d4 and e5. This move is far superior to immediate tactics like 2.f4 (King's Gambit) because we develop with tempo while maintaining pressure. The knight on f3 also supports a future d4 push and keeps our king safe by not weakening the kingside pawn structure. This is the starting move of the Ruy Lopez, setting up our next move Bb5 to put immediate pressure on Black's position."
     },
     {
       "san": "Nc6",
@@ -63,7 +63,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, prioritizing king safety before the center potentially opens up with our planned d4 advance. This natural move completes Black's basic development and brings the rook to f8, where it can support the f7 square and potentially the f-file later. Our opponent is following sound opening principles by ensuring the king is safe before engaging in central complications. With both kings castled, the real strategic battle of the Ruy Lopez is about to begin, as both sides will now focus on central pawn breaks and piece maneuvering."
+      "annotation": "Black castles kingside, prioritizing king safety before the center potentially opens up with our planned d4 advance. this move completes Black's basic development and brings the rook to f8, where it can support the f7 square and potentially the f-file later. Our opponent is following sound opening principles by ensuring the king is safe before engaging in central complications. With both kings castled, the real strategic battle of the Ruy Lopez is about to begin, as both sides will now focus on central pawn breaks and piece maneuvering."
     },
     {
       "san": "h3",

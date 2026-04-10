@@ -11,7 +11,7 @@
     },
     {
       "san": "e4",
-      "annotation": "Here's the key move that transforms a quiet Queen's Pawn opening into the sharp Blackmar-Diemer Gambit! We're immediately challenging Black's central pawn and offering it as a target, knowing that if they capture, we'll get explosive piece activity in return. This advance opens up our king's bishop diagonal to c4 and creates immediate central tension. The move embodies the gambit's philosophy: we're willing to invest material for rapid development, open lines, and attacking chances against the enemy king."
+      "annotation": "Here's the critical move that transforms a quiet Queen's Pawn opening into the sharp Blackmar-Diemer Gambit! We're immediately challenging Black's central pawn and offering it as a target, knowing that if they capture, we'll get explosive piece activity in return. This advance opens up our king's bishop diagonal to c4 and creates immediate central tension. The move embodies the gambit's philosophy: we're willing to invest material for rapid development, open lines, and attacking chances against the enemy king."
     },
     {
       "san": "dxe4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, defending the e4 pawn while simultaneously developing toward the center and preparing kingside castling. This is a solid, principled move that develops with a purpose - the knight on f6 also helps control the crucial e4 and d5 central squares. However, our opponent should be aware that this knight will become a target for our aggressive piece play, and they'll need to be ready to relocate it if we create too much pressure. The knight on f6 also blocks the f7 pawn, which could become important for Black's king safety later."
+      "annotation": "Black develops their knight to its ideal square, defending the e4 pawn while simultaneously developing toward the center and preparing kingside castling. This is a solid, principled move that develops with a purpose - the knight on f6 also helps control the crucial e4 and d5 central squares. However, our opponent should be aware that this knight will become a target for our aggressive piece play, and they'll need to be ready to relocate it if we create too much pressure. The knight on f6 also blocks the f7 pawn, which could become important for Black's king safety later."
     },
     {
       "san": "f3",

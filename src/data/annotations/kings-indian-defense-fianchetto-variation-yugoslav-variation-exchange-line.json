@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our d4 pawn and prepares to castle kingside safely. The knight on f3 also controls the important e5 and h4 squares, preventing Black from establishing pieces there immediately. This move fits perfectly with our fianchetto setup, as the knight doesn't block any of our pieces and maintains maximum flexibility in our development. We're also keeping the option open to later play Nd2-e4 or Ne5, depending on how Black arranges their pieces."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our d4 pawn and prepares to castle kingside safely. The knight on f3 also controls the important e5 and h4 squares, preventing Black from establishing pieces there immediately. This move fits perfectly with our fianchetto setup, as the knight doesn't block any of our pieces and maintains maximum flexibility in our development. We're also keeping the option open to later play Nd2-e4 or Ne5, depending on how Black arranges their pieces."
     },
     {
       "san": "Bg7",

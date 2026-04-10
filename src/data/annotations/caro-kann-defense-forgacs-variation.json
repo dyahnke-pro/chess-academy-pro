@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, defending the e4 pawn and maintaining the central tension. This is the most popular continuation in the Caro-Kann, as it keeps our options open - we can still recapture with the knight if Black takes on e4, or we might play f3 to reinforce the center. The knight on c3 also eyes the important d5 and e4 squares while preparing for potential expansion with moves like f4-f5 later. This development is more flexible than immediately playing exd5, which would relieve the central tension too early."
+      "annotation": "We develop our knight to its ideal square, defending the e4 pawn and maintaining the central tension. This is the most popular continuation in the Caro-Kann, as it keeps our options open - we can still recapture with the knight if Black takes on e4, or we might play f3 to reinforce the center. The knight on c3 also eyes the important d5 and e4 squares while preparing for potential expansion with moves like f4-f5 later. This development is more flexible than immediately playing exd5, which would relieve the central tension too early."
     },
     {
       "san": "dxe4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our centralized knight and preparing to complete development. This move is virtually automatic in the Caro-Kann, as it forces us to make a decision about our knight while Black prepares ...Bg4 or ...Bf5 to develop the bishops. Our opponent is following classical development principles by bringing out knights before bishops. The knight on f6 also supports Black's kingside and prepares for eventual castling, making this a very logical developing move."
+      "annotation": "Black develops the knight to its ideal square, attacking our centralized knight and preparing to complete development. This move is virtually automatic in the Caro-Kann, as it forces us to make a decision about our knight while Black prepares ...Bg4 or ...Bf5 to develop the bishops. Our opponent is following classical development principles by bringing out knights before bishops. The knight on f6 also supports Black's kingside and prepares for eventual castling, making this a purposeful developing choice."
     },
     {
       "san": "Nxf6+",

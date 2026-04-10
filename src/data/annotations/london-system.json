@@ -90,7 +90,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, attacking the e4 square and preparing kingside castling. This is a standard developing move that keeps all of Black's options open.",
+      "annotation": "Black develops the king's knight to its ideal square, attacking the e4 square and preparing kingside castling. This is a standard developing choice that keeps all of Black's options open.",
       "pawnStructure": "No change. The d4-d5 tension remains.",
       "plans": [
         "Continue development with ...e6 and ...Be7 or ...Bd6",
@@ -3353,7 +3353,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black develops the queenside knight to its most natural square, adding pressure to d4 and preparing to complete development.",
+          "annotation": "Black develops the queenside knight to its ideal square, adding pressure to d4 and preparing to complete development.",
           "arrows": [
             {
               "from": "b8",
@@ -3582,7 +3582,7 @@
         },
         {
           "san": "Qb3",
-          "annotation": "The key move! We meet the queen with our own queen, offering a trade. If Black takes on b3, we recapture with axb3 and our rook opens on the a-file — great for us. Most players will decline the trade.",
+          "annotation": "the critical move! We meet the queen with our own queen, offering a trade. If Black takes on b3, we recapture with axb3 and our rook opens on the a-file — great for us. Most players will decline the trade.",
           "arrows": [
             {
               "from": "d1",
@@ -3736,7 +3736,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the knight to f6, the most natural square. It controls e4 and prepares kingside castling. Nothing surprising here.",
+          "annotation": "Black develops the knight to f6, the ideal square. It controls e4 and prepares kingside castling. Nothing surprising here.",
           "arrows": [
             {
               "from": "g8",
@@ -3881,7 +3881,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black develops the knight to c6, adding pressure to d4. A natural and standard developing move in this structure."
+          "annotation": "Black develops the knight to c6, adding pressure to d4. A natural and standard developing choice in this structure."
         },
         {
           "san": "Nbd2",

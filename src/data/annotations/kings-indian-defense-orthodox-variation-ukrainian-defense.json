@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance e2-e4 to build our ideal pawn center. This knight will often reroute later in the game - sometimes to d5 as an outpost, sometimes to e2 to support f2-f4 advances, or to a4 to pressure Black's queenside. From c3, the knight also eyes important squares like e4 and b5, giving us tactical options as the position develops. This is a key piece in our setup because it allows us to maintain central control while keeping our development flexible."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance e2-e4 to build our ideal pawn center. This knight will often reroute later in the game - sometimes to d5 as an outpost, sometimes to e2 to support f2-f4 advances, or to a4 to pressure Black's queenside. From c3, the knight also eyes important squares like e4 and b5, giving us tactical options as the position develops. This is a key piece in our setup because it allows us to maintain central control while keeping our development flexible."
     },
     {
       "san": "Bg7",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Be2",
-      "annotation": "We're developing our light-squared bishop to a flexible square where it supports our king's safety while staying out of the way of our central pawns. From e2, this bishop can later reroute to more active squares like h5 or d3 depending on how the position develops, and it doesn't block our f-pawn if we want to play f2-f4 later. The bishop also adds an extra defender to our kingside, which will be important since King's Indian positions often feature sharp attacks on both sides. This quiet developing move prepares our castling while keeping our options open for different pawn structures."
+      "annotation": "We're developing our light-squared bishop to a flexible square where it supports our king's safety while staying out of the way of our central pawns. From e2, this bishop can later reroute to more active squares like h5 or d3 depending on how the position develops, and it doesn't block our f-pawn if we want to play f2-f4 later. The bishop also adds an extra defender to our kingside, which will be important since King's Indian positions often feature sharp attacks on both sides. This quiet developing choice prepares our castling while keeping our options open for different pawn structures."
     },
     {
       "san": "e5",

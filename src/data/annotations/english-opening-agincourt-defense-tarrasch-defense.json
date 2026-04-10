@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important central squares e5 and d4 while preparing kingside castling. This flexible move supports multiple setups—we could transpose into a Réti Opening, King's Indian Attack, or maintain pure English structures depending on how Black responds. The knight on f3 also puts subtle pressure on Black's position, as it eyes potential tactical opportunities and supports our central control. From f3, our knight is perfectly placed to support a future e4 advance or to reroute via e1-d3 if needed in certain pawn structures."
+      "annotation": "We develop our knight to its ideal square, controlling the important central squares e5 and d4 while preparing kingside castling. This flexible move supports multiple setups—we could transpose into a Réti Opening, King's Indian Attack, or maintain pure English structures depending on how Black responds. The knight on f3 also puts subtle pressure on Black's position, as it eyes potential tactical opportunities and supports our central control. From f3, our knight is perfectly placed to support a future e4 advance or to reroute via e1-d3 if needed in certain pawn structures."
     },
     {
       "san": "d5",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our c4 pawn and preparing to castle kingside. This natural developing move also supports Black's central pawn on d5 and contests our control of the important e4 square. Our opponent is following classical principles—develop knights before bishops, control the center, and prepare for safety. The knight on f6 also creates potential tactical opportunities, as it could jump to e4 or d7 depending on how the position evolves, and it maintains flexibility in Black's pawn structure."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our c4 pawn and preparing to castle kingside. This active move also supports Black's central pawn on d5 and contests our control of the important e4 square. Our opponent is following classical principles—develop knights before bishops, control the center, and prepare for safety. The knight on f6 also creates potential tactical opportunities, as it could jump to e4 or d7 depending on how the position evolves, and it maintains flexibility in Black's pawn structure."
     },
     {
       "san": "Bg2",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the queenside knight to its most natural square, supporting the advanced c5 pawn and preparing further piece development. This move follows sound opening principles while maintaining the central tension that's characteristic of this opening system. The knight on c6 also controls important dark squares like b4 and d4, potentially limiting our piece placement and pawn advances. From c6, the knight could potentially reroute to more active squares like d4 or a5, depending on how the middlegame unfolds, giving Black tactical flexibility."
+      "annotation": "Black develops the queenside knight to its ideal square, supporting the advanced c5 pawn and preparing further piece development. This move follows sound opening principles while maintaining the central tension that's characteristic of this opening system. The knight on c6 also controls important dark squares like b4 and d4, potentially limiting our piece placement and pawn advances. From c6, the knight could potentially reroute to more active squares like d4 or a5, depending on how the middlegame unfolds, giving Black tactical flexibility."
     },
     {
       "san": "O-O",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black completes kingside development by placing the bishop on its most flexible square, preparing to castle and maintaining options for future piece placement. The bishop on e7 supports the f6 knight, controls some important central light squares, and keeps the option of ...Bh4 or ...Bd6 depending on how the position develops. This solid developing move follows the principle of completing development before embarking on concrete plans, and it prepares Black to castle on the next move. The Be7 setup is particularly sound because it doesn't commit the bishop to a specific plan too early, allowing Black to adapt to our middlegame strategy while maintaining a solid position."
+      "annotation": "Black completes kingside development by placing the bishop on its most flexible square, preparing to castle and maintaining options for future piece placement. The bishop on e7 supports the f6 knight, controls some important central light squares, and keeps the option of ...Bh4 or ...Bd6 depending on how the position develops. This solid developing choice follows the principle of completing development before embarking on concrete plans, and it prepares Black to castle on the next move. The Be7 setup is particularly sound because it doesn't commit the bishop to a specific plan too early, allowing Black to adapt to our middlegame strategy while maintaining a solid position."
     }
   ]
 }

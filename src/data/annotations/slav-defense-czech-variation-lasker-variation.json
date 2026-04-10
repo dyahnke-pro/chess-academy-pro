@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, attacking the e5 square and supporting our central control. This move is part of our systematic development plan, bringing pieces into the game while maintaining pressure on Black's position. The knight on f3 also prepares potential kingside castling and can later jump to various outposts like e5 or g5 depending on how the position develops. Additionally, this move prevents any immediate ...e5 breaks from Black and keeps our options open for different pawn structures."
+      "annotation": "We develop our kingside knight to its ideal square, attacking the e5 square and supporting our central control. This move is part of our systematic development plan, bringing pieces into the game while maintaining pressure on Black's position. The knight on f3 also prepares potential kingside castling and can later jump to various outposts like e5 or g5 depending on how the position develops. Additionally, this move prevents any immediate ...e5 breaks from Black and keeps our options open for different pawn structures."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development with their own kingside knight, developing actively while putting pressure on our e4 square. This natural developing move also prepares Black's kingside castling and supports potential central breaks like ...e6 or ...e5 in the future. Our opponent is following sound opening principles by developing pieces toward the center and maintaining the tension in the position. The knight on f6 also defends the d5 pawn indirectly and gives Black more piece coordination in the center."
+      "annotation": "Black mirrors our development with their own kingside knight, developing actively while putting pressure on our e4 square. This active move also prepares Black's kingside castling and supports potential central breaks like ...e6 or ...e5 in the future. Our opponent is following sound opening principles by developing pieces toward the center and maintaining the tension in the position. The knight on f6 also defends the d5 pawn indirectly and gives Black more piece coordination in the center."
     },
     {
       "san": "Nc3",

@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important central squares e5 and d4 while preparing to support our kingside development. This move keeps maximum flexibility in our position since we haven't committed to any particular pawn structure yet - we could still play d4 for a Queen's Gambit setup, or continue with g3 for a more hypermodern approach. The knight on f3 also eyes the weakened h7 square after we castle kingside, and it's perfectly placed to support a future e4 advance if we choose to expand in the center. Most importantly, this development move brings us closer to castling safety while maintaining pressure on Black's position."
+      "annotation": "We develop our knight to its ideal square, controlling the important central squares e5 and d4 while preparing to support our kingside development. This move keeps maximum flexibility in our position since we haven't committed to any particular pawn structure yet - we could still play d4 for a Queen's Gambit setup, or continue with g3 for a more hypermodern approach. The knight on f3 also eyes the weakened h7 square after we castle kingside, and it's perfectly placed to support a future e4 advance if we choose to expand in the center. Most importantly, this development move brings us closer to castling safety while maintaining pressure on Black's position."
     },
     {
       "san": "d5",

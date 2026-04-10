@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. This move controls the important e5 and g5 squares, preventing Black from establishing pieces on these key outposts. We're keeping our options open for c4 (transposing to various Indian Defense systems), Bg5 (pinning the knight), or even e3 followed by a more solid development scheme. The knight on f3 is a cornerstone piece in most d4 openings, and from here it can later jump to e5, d2, or even h4 in some tactical sequences."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. This move controls the important e5 and g5 squares, preventing Black from establishing pieces on these key outposts. We're keeping our options open for c4 (transposing to various Indian Defense systems), Bg5 (pinning the knight), or even e3 followed by a more solid development scheme. The knight on f3 is a cornerstone piece in most d4 openings, and from here it can later jump to e5, d2, or even h4 in some tactical sequences."
     },
     {
       "san": "b5",

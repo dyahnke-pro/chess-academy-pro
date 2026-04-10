@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central e4 square and preventing us from easily establishing a classical pawn center with e2-e4. This move keeps Black's options completely open - they can still transpose into a King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or several other systems based on our next move. The knight on f6 also supports potential central breaks with ...d6 and ...e5, or ...c5 depending on the pawn structure that develops. This flexible approach is why ...Nf6 is one of the most popular responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central e4 square and preventing us from easily establishing a classical pawn center with e2-e4. This move keeps Black's options completely open - they can still transpose into a King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or several other systems based on our next move. The knight on f6 also supports potential central breaks with ...d6 and ...e5, or ...c5 depending on the pawn structure that develops. This flexible approach is why ...Nf6 is one of the most popular responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet."
     },
     {
       "san": "c4",

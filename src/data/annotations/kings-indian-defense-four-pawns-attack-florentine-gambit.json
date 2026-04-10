@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our central pawn and preparing to fianchetto the king's bishop. This is the hallmark move of the King's Indian Defense - Black isn't directly challenging our center yet, but is developing pieces harmoniously while keeping flexible options. The knight on f6 also prepares kingside castling and can later support central breaks like ...e5 or ...c5. We need to be ready for Black's hypermodern approach of attacking our center from the sides rather than occupying it directly."
+      "annotation": "Black develops the knight to its ideal square, attacking our central pawn and preparing to fianchetto the king's bishop. This is the hallmark move of the King's Indian Defense - Black isn't directly challenging our center yet, but is developing pieces harmoniously while keeping flexible options. The knight on f6 also prepares kingside castling and can later support central breaks like ...e5 or ...c5. We need to be ready for Black's hypermodern approach of attacking our center from the sides rather than occupying it directly."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to an excellent central square, supporting our powerful pawn chain and preparing to castle kingside ourselves. This knight controls key squares like e5 and g5, while also preparing potential tactical shots and supporting our central formation. The Nf3 is also essential for our king safety - we need to castle soon to avoid becoming targets of Black's counterplay. This natural developing move maintains all our options while keeping maximum pressure on Black's cramped position."
+      "annotation": "We're developing our knight to an excellent central square, supporting our powerful pawn chain and preparing to castle kingside ourselves. This knight controls key squares like e5 and g5, while also preparing potential tactical shots and supporting our central formation. The Nf3 is also essential for our king safety - we need to castle soon to avoid becoming targets of Black's counterplay. This active move maintains all our options while keeping maximum pressure on Black's cramped position."
     },
     {
       "san": "c5",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Be2",
-      "annotation": "We're developing our light-squared bishop to a flexible square, maintaining our options while preparing to castle and keeping our powerful pawn structure intact. This bishop move supports our central formation, keeps an eye on the important a6-f1 diagonal, and prepares kingside castling for safety. The Be2 also allows us to maintain maximum pressure while staying flexible - we can later consider moves like Bh5 or other aggressive setups. This solid developing move shows we're confident in our position and ready to meet Black's counterplay head-on."
+      "annotation": "We're developing our light-squared bishop to a flexible square, maintaining our options while preparing to castle and keeping our powerful pawn structure intact. This bishop move supports our central formation, keeps an eye on the important a6-f1 diagonal, and prepares kingside castling for safety. The Be2 also allows us to maintain maximum pressure while staying flexible - we can later consider moves like Bh5 or other aggressive setups. This solid developing choice shows we're confident in our position and ready to meet Black's counterplay head-on."
     },
     {
       "san": "exd5",

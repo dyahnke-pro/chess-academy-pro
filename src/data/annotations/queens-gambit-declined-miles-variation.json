@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its ideal square where it controls the central e4 and d5 squares while developing toward the kingside. This move is the hallmark of the Indian Defense systems, where Black allows White to build a pawn center while preparing to challenge it later with pieces rather than pawns. Our opponent is keeping maximum flexibility - they haven't yet committed to a specific pawn structure and can still choose between setups like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. The knight on f6 also prepares castling kingside, which is typically Black's first priority in these openings."
+      "annotation": "Black responds with the most active move, bringing the knight to its ideal square where it controls the central e4 and d5 squares while developing toward the kingside. This move is the hallmark of the Indian Defense systems, where Black allows White to build a pawn center while preparing to challenge it later with pieces rather than pawns. Our opponent is keeping maximum flexibility - they haven't yet committed to a specific pawn structure and can still choose between setups like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. The knight on f6 also prepares castling kingside, which is typically Black's first priority in these openings."
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, but more importantly, we're offering the Queen's Gambit by attacking Black's future d5 pawn and controlling the crucial d5 and b5 squares. This move supports our central strategy by making it harder for Black to maintain a pawn on d5, and if they do play d5, we'll have the option to capture and deflect their c-pawn from the center. The c4 advance also opens lines for our queen and supports a future Nc3, while giving us excellent control over the light squares on the queenside. This is the key move that transforms the opening from a simple development game into the rich positional struggles characteristic of the Queen's Gambit complex."
+      "annotation": "We're playing the English Opening move order, but more importantly, we're offering the Queen's Gambit by attacking Black's future d5 pawn and controlling the crucial d5 and b5 squares. This move supports our central strategy by making it harder for Black to maintain a pawn on d5, and if they do play d5, we'll have the option to capture and deflect their c-pawn from the center. The c4 advance also opens lines for our queen and supports a future Nc3, while giving us excellent control over the light squares on the queenside. This is the critical move that transforms the opening from a simple development game into the rich positional struggles characteristic of the Queen's Gambit complex."
     },
     {
       "san": "e6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most active square, controlling the central e5 and d4 squares while supporting our future e4 advance and preparing kingside castling. This natural developing move also prevents any back-rank tricks and keeps pressure on Black's position without committing to any specific plan yet. The knight on f3 works beautifully with our pawn on d4, creating a strong grip on the central light squares and making it difficult for Black to achieve comfortable equality. From f3, our knight can later jump to e5, g5, or h4 depending on how the middlegame develops, giving us excellent tactical and positional flexibility."
+      "annotation": "We develop our knight to its most active square, controlling the central e5 and d4 squares while supporting our future e4 advance and preparing kingside castling. This active move also prevents any back-rank tricks and keeps pressure on Black's position without committing to any specific plan yet. The knight on f3 works beautifully with our pawn on d4, creating a strong grip on the central light squares and making it difficult for Black to achieve comfortable equality. From f3, our knight can later jump to e5, g5, or h4 depending on how the middlegame develops, giving us excellent tactical and positional flexibility."
     },
     {
       "san": "d5",

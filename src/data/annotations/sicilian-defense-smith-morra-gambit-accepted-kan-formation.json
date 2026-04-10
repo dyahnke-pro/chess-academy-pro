@@ -27,15 +27,15 @@
     },
     {
       "san": "Nxc3",
-      "annotation": "We recapture with our knight, immediately developing a piece to an excellent central square while eyeing important squares like d5, e4, and b5. This knight on c3 becomes a cornerstone of our attacking setup, supporting advances in the center and potentially participating in kingside attacks. Our development advantage is becoming concrete - we have a knight actively placed while Black's pieces are still on their starting squares. The knight also maintains pressure on Black's position and prepares for our next developing moves like Nf3 and Bc4."
+      "annotation": "We recapture with our knight, immediately developing a piece to an excellent central square while eyeing important squares like d5, e4, and b5. This knight on c3 becomes a cornerstone of our attacking setup, supporting advances in the center and potentially participating in kingside attacks. Our development advantage is becoming concrete - we have a knight actively placed while Black's pieces are still on their starting squares. The knight also maintains pressure on Black's position and prepares for our next developing choices like Nf3 and Bc4."
     },
     {
       "san": "e6",
-      "annotation": "Black chooses a solid developing move that prepares to fianchetto the king's bishop and supports the important d5 square. This move signals that our opponent is likely heading for a Kan Formation setup with ...a6, ...b5, and potentially ...Bb7. While e6 is less ambitious than alternatives like ...d6 or ...Nc6, it's a reliable way to develop while keeping the position flexible. Our opponent is prioritizing safety and piece coordination over rapid counterplay, which means we need to increase the pressure before Black consolidates."
+      "annotation": "Black chooses a constructive move that prepares to fianchetto the king's bishop and supports the important d5 square. This move signals that our opponent is likely heading for a Kan Formation setup with ...a6, ...b5, and potentially ...Bb7. While e6 is less ambitious than alternatives like ...d6 or ...Nc6, it's a reliable way to develop while keeping the position flexible. Our opponent is prioritizing safety and piece coordination over rapid counterplay, which means we need to increase the pressure before Black consolidates."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, controlling the crucial e5 and d4 squares while preparing to castle kingside. This knight works beautifully with our c3 knight to control central territory and support potential pawn advances. From f3, our knight can later jump to more aggressive squares like e5 or g5 if the position calls for it. We're maintaining the initiative by developing with purpose - each piece comes out with a clear role in our attacking scheme while Black is still organizing their position."
+      "annotation": "We develop our king's knight to its ideal square, controlling the crucial e5 and d4 squares while preparing to castle kingside. This knight works beautifully with our c3 knight to control central territory and support potential pawn advances. From f3, our knight can later jump to more aggressive squares like e5 or g5 if the position calls for it. We're maintaining the initiative by developing with purpose - each piece comes out with a clear role in our attacking scheme while Black is still organizing their position."
     },
     {
       "san": "a6",

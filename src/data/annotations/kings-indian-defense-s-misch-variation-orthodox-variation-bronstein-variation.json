@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, supporting the d4 pawn and preparing to advance e4. This move is part of the classical approach against the King's Indian, where we build a broad pawn center before Black can organize counterplay. The knight from c3 also eyes the important e4 and d5 squares, and it can potentially jump to d5 or e4 later in the game. We're following the main line theory here, developing pieces while maintaining maximum pressure on Black's setup."
+      "annotation": "We're developing our queenside knight to its ideal square, supporting the d4 pawn and preparing to advance e4. This move is part of the classical approach against the King's Indian, where we build a broad pawn center before Black can organize counterplay. The knight from c3 also eyes the important e4 and d5 squares, and it can potentially jump to d5 or e4 later in the game. We're following the main line theory here, developing pieces while maintaining maximum pressure on Black's setup."
     },
     {
       "san": "Bg7",

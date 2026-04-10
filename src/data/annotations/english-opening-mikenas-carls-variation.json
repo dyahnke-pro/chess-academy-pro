@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding pressure to the d5 square and preparing to support our central pawn advances. This knight placement is incredibly flexible - it can later jump to e4, d5, or even b5 in some lines, and it doesn't commit us to any particular pawn structure yet. The knight on c3 also prepares potential expansion with d4, which would give us a strong pawn center. This move keeps all our options open while developing a piece toward the center, embodying the English Opening's philosophy of gradual, purposeful development."
+      "annotation": "We develop our knight to its ideal square, adding pressure to the d5 square and preparing to support our central pawn advances. This knight placement is incredibly flexible - it can later jump to e4, d5, or even b5 in some lines, and it doesn't commit us to any particular pawn structure yet. The knight on c3 also prepares potential expansion with d4, which would give us a strong pawn center. This move keeps all our options open while developing a piece toward the center, embodying the English Opening's philosophy of gradual, purposeful development."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn (if we were to play it) and controlling the important central squares d5 and e4. This is a principled developing move that follows classical opening guidelines while keeping Black's position flexible. Our opponent is preparing to castle kingside and potentially support the d5 advance we've been expecting. The knight on f6 also eyes potential outposts on e4 and g4 in future positions, making it a key piece in Black's strategic plans."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn (if we were to play it) and controlling the important central squares d5 and e4. This is a purposeful move that follows classical opening guidelines while keeping Black's position flexible. Our opponent is preparing to castle kingside and potentially support the d5 advance we've been expecting. The knight on f6 also eyes potential outposts on e4 and g4 in future positions, making it a key piece in Black's strategic plans."
     },
     {
       "san": "e4",

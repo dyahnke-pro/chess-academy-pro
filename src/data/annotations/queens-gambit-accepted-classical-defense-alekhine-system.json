@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while attacking the h7 square near Black's king. This is a principled developing move that doesn't immediately chase the c4 pawn, showing we're more interested in rapid development than immediate material recovery. The knight on f3 also supports a potential e3-e4 pawn advance and prepares kingside castling. By not playing 3.e3 immediately, we keep our options open and put pressure on Black to find the best way to defend while maintaining the extra pawn."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and d4 squares while attacking the h7 square near Black's king. This is a purposeful move that doesn't immediately chase the c4 pawn, showing we're more interested in rapid development than immediate material recovery. The knight on f3 also supports a potential e3-e4 pawn advance and prepares kingside castling. By not playing 3.e3 immediately, we keep our options open and put pressure on Black to find the best way to defend while maintaining the extra pawn."
     },
     {
       "san": "Nf6",
@@ -55,7 +55,7 @@
     },
     {
       "san": "b5",
-      "annotation": "Black executes the thematic queenside expansion, gaining space and potentially preparing to challenge our bishop with b4 ideas later. This is the key move of the Alekhine System - our opponent creates active counterplay on the queenside while maintaining central tension with the c5 pawn. The b5 advance also opens up potential tactical ideas and gives Black's pieces more breathing room on the queenside. However, this move also creates some weaknesses, particularly the c6 and a6 squares, which we might be able to exploit later. Our opponent is playing ambitiously, seeking active counterplay rather than passive defense, which makes for a more complex and interesting middlegame ahead."
+      "annotation": "Black executes the thematic queenside expansion, gaining space and potentially preparing to challenge our bishop with b4 ideas later. This is the central idea of the Alekhine System - our opponent creates active counterplay on the queenside while maintaining central tension with the c5 pawn. The b5 advance also opens up potential tactical ideas and gives Black's pieces more breathing room on the queenside. However, this move also creates some weaknesses, particularly the c6 and a6 squares, which we might be able to exploit later. Our opponent is playing ambitiously, seeking active counterplay rather than passive defense, which makes for a more complex and interesting middlegame ahead."
     }
   ]
 }

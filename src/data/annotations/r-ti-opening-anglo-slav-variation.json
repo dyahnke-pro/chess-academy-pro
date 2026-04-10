@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our potential central advance with d4 and preparing to contest the center. This is one of the most principled responses to 1.c4, as it develops with tempo while keeping Black's options flexible - they can still choose between various pawn structures like ...e6 and ...d5, or ...g6 and ...d6 setups. The knight on f6 also supports a potential ...e5 advance, which would give Black excellent central control. We need to be aware that Black is preparing to challenge our opening strategy with active piece development rather than passive pawn moves."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our potential central advance with d4 and preparing to contest the center. This is one of the most principled responses to 1.c4, as it develops with tempo while keeping Black's options flexible - they can still choose between various pawn structures like ...e6 and ...d5, or ...g6 and ...d6 setups. The knight on f6 also supports a potential ...e5 advance, which would give Black excellent central control. We need to be aware that Black is preparing to challenge our opening strategy with active piece development rather than passive pawn moves."
     },
     {
       "san": "g3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its optimal square, where it controls the central e5 and d4 squares while supporting our future central advances. This natural developing move also prepares to castle kingside and adds another defender to our potentially vulnerable h2 square once we fianchetto our bishop. The knight on f3 is perfectly placed to support both central pawn breaks like d4 and to participate in kingside attacking schemes if the position calls for it. We're building our position methodically, developing pieces to their best squares while maintaining maximum flexibility in our setup."
+      "annotation": "We develop our knight to its optimal square, where it controls the central e5 and d4 squares while supporting our future central advances. This active move also prepares to castle kingside and adds another defender to our potentially vulnerable h2 square once we fianchetto our bishop. The knight on f3 is perfectly placed to support both central pawn breaks like d4 and to participate in kingside attacking schemes if the position calls for it. We're building our position methodically, developing pieces to their best squares while maintaining maximum flexibility in our setup."
     },
     {
       "san": "d5",

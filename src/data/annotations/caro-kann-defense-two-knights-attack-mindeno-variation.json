@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while adding extra pressure to the d5 square that Black wants to occupy. This knight placement supports our central ambitions and prepares for various pawn advances like d4 or f4 depending on how the position develops. The knight on c3 also keeps our options open for different setups - we might later play d3 and f4 for a King's Indian Attack formation, or go for the more direct d4. By developing this knight first, we're avoiding some of Black's main line defenses and steering the game toward the Two Knights variation."
+      "annotation": "We're developing our knight to its ideal square while adding extra pressure to the d5 square that Black wants to occupy. This knight placement supports our central ambitions and prepares for various pawn advances like d4 or f4 depending on how the position develops. The knight on c3 also keeps our options open for different setups - we might later play d3 and f4 for a King's Indian Attack formation, or go for the more direct d4. By developing this knight first, we're avoiding some of Black's main line defenses and steering the game toward the Two Knights variation."
     },
     {
       "san": "d5",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Bg4",
-      "annotation": "Black develops the light-squared bishop with tempo, pinning our knight to the queen and creating immediate tactical complications. This aggressive move is the hallmark of the Mindeno Variation, where Black seeks active piece play rather than the more solid ...Nf6 or ...e6 setups. The bishop on g4 puts pressure on our position and makes it difficult for us to play natural developing moves like Be2 or h3 without careful consideration. We now need to decide how to handle this pin - we can break it with h3, defend the knight with Be2, or even ignore it temporarily while continuing our development, each approach leading to different middlegame structures."
+      "annotation": "Black develops the light-squared bishop with tempo, pinning our knight to the queen and creating immediate tactical complications. This aggressive move is the hallmark of the Mindeno Variation, where Black seeks active piece play rather than the more solid ...Nf6 or ...e6 setups. The bishop on g4 puts pressure on our position and makes it difficult for us to play active moves like Be2 or h3 without careful consideration. We now need to decide how to handle this pin - we can break it with h3, defend the knight with Be2, or even ignore it temporarily while continuing our development, each approach leading to different middlegame structures."
     }
   ]
 }

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to Black's d5 pawn and preparing to complete our development. This knight supports our central control and keeps maximum pressure on Black's pawn structure, making it harder for Black to maintain the tension. The knight from c3 also supports a potential e4 advance later in the game, which would give us a powerful pawn center. This is the most principled continuation, maintaining our opening advantage through active piece development."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to Black's d5 pawn and preparing to complete our development. This knight supports our central control and keeps maximum pressure on Black's pawn structure, making it harder for Black to maintain the tension. The knight from c3 also supports a potential e4 advance later in the game, which would give us a powerful pawn center. This is the most principled continuation, maintaining our opening advantage through active piece development."
     },
     {
       "san": "c5",
@@ -59,7 +59,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We're castling kingside to ensure our king's safety while connecting our rooks for potential central or queenside operations. This natural move completes our basic development and allows us to focus on improving our piece placement and creating concrete threats. With our king safe, we can now consider more aggressive plans like Rc1, Qb3, or even central advances. Our position is harmonious and slightly preferable due to the potential weakness of Black's isolated d-pawn and our superior piece coordination."
+      "annotation": "We're castling kingside to ensure our king's safety while connecting our rooks for potential central or queenside operations. this move completes our basic development and allows us to focus on improving our piece placement and creating concrete threats. With our king safe, we can now consider more aggressive plans like Rc1, Qb3, or even central advances. Our position is harmonious and slightly preferable due to the potential weakness of Black's isolated d-pawn and our superior piece coordination."
     },
     {
       "san": "O-O",

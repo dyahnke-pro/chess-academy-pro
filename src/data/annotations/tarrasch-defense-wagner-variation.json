@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most natural square, adding additional pressure to Black's d5 pawn and preparing for further central operations. This move fits perfectly with our Queen's Gambit strategy - we're not just offering a pawn, but building up concrete threats against Black's central structure. The knight on c3 also prepares potential advances like e4 or supports the recapture on d5 if Black decides to trade pawns. From c3, our knight controls important central squares and maintains flexibility for future maneuvers."
+      "annotation": "We develop our queen's knight to its ideal square, adding additional pressure to Black's d5 pawn and preparing for further central operations. This move fits perfectly with our Queen's Gambit strategy - we're not just offering a pawn, but building up concrete threats against Black's central structure. The knight on c3 also prepares potential advances like e4 or supports the recapture on d5 if Black decides to trade pawns. From c3, our knight controls important central squares and maintains flexibility for future maneuvers."
     },
     {
       "san": "c5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its ideal square, reinforcing our control over the central e5 square and preparing to castle kingside. This natural developing move also adds flexibility to our position - the knight can potentially jump to e5 or support a future e4 advance. From f3, our knight is perfectly placed to support our central strategy while keeping our king safe through rapid castling. The move also prepares to meet any Black piece activity in the center with solid defensive resources."
+      "annotation": "We develop our king's knight to its ideal square, reinforcing our control over the central e5 square and preparing to castle kingside. This active move also adds flexibility to our position - the knight can potentially jump to e5 or support a future e4 advance. From f3, our knight is perfectly placed to support our central strategy while keeping our king safe through rapid castling. The move also prepares to meet any Black piece activity in the center with solid defensive resources."
     },
     {
       "san": "Nc6",

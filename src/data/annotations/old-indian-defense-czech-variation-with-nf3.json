@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing kingside castling and keeping our options open for various pawn structures. The knight on f3 also prevents any immediate ...e5 breaks from Black, as we would simply capture and maintain our central control. This move fits perfectly with our flexible approach - we're not committing to any specific pawn structure yet, but we're improving our position and preparing for whatever setup Black chooses. The knight from f3 can later jump to e5, g5, or even reroute via e2-d4 if needed, giving us excellent flexibility in our piece coordination."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing kingside castling and keeping our options open for various pawn structures. The knight on f3 also prevents any immediate ...e5 breaks from Black, as we would simply capture and maintain our central control. This move fits perfectly with our flexible approach - we're not committing to any specific pawn structure yet, but we're improving our position and preparing for whatever setup Black chooses. The knight from f3 can later jump to e5, g5, or even reroute via e2-d4 if needed, giving us excellent flexibility in our piece coordination."
     },
     {
       "san": "c6",

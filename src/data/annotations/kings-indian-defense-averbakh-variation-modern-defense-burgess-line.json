@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn while adding pressure to the central e5 and d5 squares. This move also prepares various pawn advances like e4, which would give us the ideal pawn center that the King's Indian Defense often allows White to achieve. The knight on c3 is perfectly placed to support our queenside expansion with moves like a4-a5 or to reroute to more active squares like e2-f4 if needed. By developing this knight early, we're maintaining maximum flexibility in our setup while keeping the pressure on Black's central aspirations."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn while adding pressure to the central e5 and d5 squares. This move also prepares various pawn advances like e4, which would give us the ideal pawn center that the King's Indian Defense often allows White to achieve. The knight on c3 is perfectly placed to support our queenside expansion with moves like a4-a5 or to reroute to more active squares like e2-f4 if needed. By developing this knight early, we're maintaining maximum flexibility in our setup while keeping the pressure on Black's central aspirations."
     },
     {
       "san": "Bg7",

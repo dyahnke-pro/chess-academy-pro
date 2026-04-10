@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent chooses the Indian Defense setup, developing the knight to its most natural square while attacking our d4 pawn. This move signals that Black is comfortable entering the complex world of Indian defenses rather than accepting a Queen's Gambit or playing the classical ...d5. The knight on f6 also controls the important central squares e4 and d5, and prepares to support Black's kingside development. This is one of the most principled responses to 1.d4, leading to rich, strategic middlegames."
+      "annotation": "Our opponent chooses the Indian Defense setup, developing the knight to its ideal square while attacking our d4 pawn. This move signals that Black is comfortable entering the complex world of Indian defenses rather than accepting a Queen's Gambit or playing the classical ...d5. The knight on f6 also controls the important central squares e4 and d5, and prepares to support Black's kingside development. This is one of the most principled responses to 1.d4, leading to rich, strategic middlegames."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn while maintaining maximum flexibility in our setup. This move prevents any immediate ...e5 advance from Black and prepares to meet the Queen's Indian Defense with various systems. The knight on f3 also supports a potential e4 advance later and keeps open the possibility of playing systems like the Catalan with g3 and Bg2. This is the most principled development, maintaining our central control while preparing to adapt to Black's defensive setup."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn while maintaining maximum flexibility in our setup. This move prevents any immediate ...e5 advance from Black and prepares to meet the Queen's Indian Defense with various systems. The knight on f3 also supports a potential e4 advance later and keeps open the possibility of playing systems like the Catalan with g3 and Bg2. This is the most principled development, maintaining our central control while preparing to adapt to Black's defensive setup."
     },
     {
       "san": "b6",

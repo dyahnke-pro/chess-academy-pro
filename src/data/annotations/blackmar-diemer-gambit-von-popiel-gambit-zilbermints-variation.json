@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. This is the most natural and principled response, as our opponent is following fundamental opening principles by fighting for central control. Black's pawn on d5 stakes out important central territory and prepares to develop pieces harmoniously. However, by playing this solid move, Black is walking right into our gambit preparation, as we're about to sacrifice a pawn to blow open the center and create attacking chances."
+      "annotation": "Black responds classically by occupying the center and challenging our d4 pawn directly. This is the most natural and principled response, as our opponent is following fundamental opening principles by fighting for central control. Black's pawn on d5 stakes out important central territory and prepares to develop pieces harmoniously. However, by playing this stabilizing move, Black is walking right into our gambit preparation, as we're about to sacrifice a pawn to blow open the center and create attacking chances."
     },
     {
       "san": "e4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, defending against our threats while preparing to castle kingside. This is a sensible developing move that follows opening principles, as the knight on f6 controls important central squares like e4 and d5. However, by placing the knight on f6, Black is also walking into one of our main tactical ideas in the Blackmar-Diemer Gambit. The knight on f6 will become a target for our light-squared bishop, and Black needs to be prepared for the coming pin that could create weaknesses in the kingside pawn structure."
+      "annotation": "Black develops the knight to its ideal square, defending against our threats while preparing to castle kingside. This is a purposeful move that follows opening principles, as the knight on f6 controls important central squares like e4 and d5. However, by placing the knight on f6, Black is also walking into one of our main tactical ideas in the Blackmar-Diemer Gambit. The knight on f6 will become a target for our light-squared bishop, and Black needs to be prepared for the coming pin that could create weaknesses in the kingside pawn structure."
     },
     {
       "san": "Bg5",

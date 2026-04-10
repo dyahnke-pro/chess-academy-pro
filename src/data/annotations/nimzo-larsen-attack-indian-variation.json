@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "b3",
-      "annotation": "We open with 1.b3, a flexible first move that immediately supports our light-squared bishop on the long diagonal. This is the Nimzo-Larsen Attack, a hypermodern approach that avoids central commitments while preparing to fianchetto our bishop on b2—a powerful piece that will control the critical a1-h8 diagonal. You'll notice we're not fighting for the center immediately like in 1.e4 or 1.d4; instead, we're preparing to control it from afar with pieces, which gives us flexibility and can catch unprepared opponents off guard."
+      "annotation": "We open with 1.b3, a flexible first move that immediately supports our light-squared bishop on the long diagonal. This is the Nimzo-Larsen Attack, a hypermodern approach that avoids central commitments while preparing to fianchetto our bishop on b2—a powerful piece that will control the critical a1-h8 diagonal. You'll notice we're not contesting central control immediately like in 1.e4 or 1.d4; instead, we're preparing to control it from afar with pieces, which gives us flexibility and can catch unprepared opponents off guard."
     },
     {
       "san": "Nf6",

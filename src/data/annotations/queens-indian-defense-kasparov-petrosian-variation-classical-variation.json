@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this natural developing move, targeting the d4 square while bringing the knight to its most active square. This is one of the most principled responses to 1.d4, as it prevents us from easily establishing a big pawn center with e2-e4. The knight on f6 also prepares kingside castling and keeps Black's options open for various defensive setups. Black is essentially saying 'I won't let you dominate the center without a fight' and is preparing to contest key central squares."
+      "annotation": "Black immediately challenges our central pawn with this active move, targeting the d4 square while bringing the knight to its most active square. This is one of the most principled responses to 1.d4, as it prevents us from easily establishing a big pawn center with e2-e4. The knight on f6 also prepares kingside castling and keeps Black's options open for various defensive setups. Black is essentially saying 'I won't let you dominate the center without a fight' and is preparing to contest key central squares."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, adding another defender to our d4 pawn while preparing kingside castling. This move also controls the important e5 and h4 squares, preventing Black from establishing pieces on these key outposts. The knight on f3 is perfectly placed to support our central pawn structure and can potentially jump to more active squares like e5 or g5 later in the game. This development fits perfectly with our plan of building a solid, flexible position before committing to any specific pawn structure."
+      "annotation": "We develop our knight to its ideal square, adding another defender to our d4 pawn while preparing kingside castling. This move also controls the important e5 and h4 squares, preventing Black from establishing pieces on these key outposts. The knight on f3 is perfectly placed to support our central pawn structure and can potentially jump to more active squares like e5 or g5 later in the game. This development fits perfectly with our plan of building a solid, flexible position before committing to any specific pawn structure."
     },
     {
       "san": "b6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "a3",
-      "annotation": "We play the Kasparov-Petrosian Variation, a subtle but important move that prevents Black's light-squared bishop from reaching b4, where it could pin our knight and create tactical complications. This seemingly quiet move also prepares potential queenside expansion with b2-b4 and ensures our pawn on c3 won't be harassed by checks or pins. The move fits into a long-term plan of maintaining maximum flexibility while slowly improving our position. Many strong players favor this approach because it avoids the sharper lines that arise when Black can immediately develop the bishop to b4."
+      "annotation": "We play the Kasparov-Petrosian Variation, a subtle but purposeful move that prevents Black's light-squared bishop from reaching b4, where it could pin our knight and create tactical complications. This seemingly quiet move also prepares potential queenside expansion with b2-b4 and ensures our pawn on c3 won't be harassed by checks or pins. The move fits into a long-term plan of maintaining maximum flexibility while slowly improving our position. Many strong players favor this approach because it avoids the sharper lines that arise when Black can immediately develop the bishop to b4."
     },
     {
       "san": "Bb7",

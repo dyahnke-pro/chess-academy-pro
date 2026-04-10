@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Black chooses to support the d5 pawn rather than accept the gambit, creating the classical French Defense pawn structure within the Queen's Gambit framework. This solid move maintains Black's central pawn but comes with the drawback of restricting the dark-squared bishop on c8, which will need to find a way to develop actively. Black is prioritizing central control and solid pawn structure over immediate piece activity. The e6 move also prepares potential breaks like ...c5 to challenge our center, and keeps the option of ...dxc4 available for later if circumstances become favorable."
+      "annotation": "Black chooses to support the d5 pawn rather than accept the gambit, creating the classical French Defense pawn structure within the Queen's Gambit framework. this stabilizing move maintains Black's central pawn but comes with the drawback of restricting the dark-squared bishop on c8, which will need to find a way to develop actively. Black is prioritizing central control and solid pawn structure over immediate piece activity. The e6 move also prepares potential breaks like ...c5 to challenge our center, and keeps the option of ...dxc4 available for later if circumstances become favorable."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while increasing the pressure on Black's d5 pawn, which is now attacked twice and only defended once. This forces Black to make a concrete decision about the central tension - they must either defend the pawn again, trade it off, or find a way to counter-attack our position. The knight on c3 also controls important central squares like e4 and d5, and supports potential advances like e4 or f4 in some variations. From c3, our knight has excellent scope and supports our overall strategy of maintaining central pressure while developing our pieces actively."
+      "annotation": "We're developing our knight to its ideal square while increasing the pressure on Black's d5 pawn, which is now attacked twice and only defended once. This forces Black to make a concrete decision about the central tension - they must either defend the pawn again, trade it off, or find a way to counter-attack our position. The knight on c3 also controls important central squares like e4 and d5, and supports potential advances like e4 or f4 in some variations. From c3, our knight has excellent scope and supports our overall strategy of maintaining central pressure while developing our pieces actively."
     },
     {
       "san": "c5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, where it controls the important e5 and d4 squares while supporting our overall development plan. This natural developing move also prepares to castle kingside and puts additional pressure on Black's isolated d-pawn from a distance. The knight on f3 is perfectly placed to support both our kingside development and our central control, and it can easily redeploy to e5 or d4 if tactical opportunities arise. From f3, our knight also helps control the dark squares around our king position, which will become important once we castle."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important e5 and d4 squares while supporting our overall development plan. This active move also prepares to castle kingside and puts additional pressure on Black's isolated d-pawn from a distance. The knight on f3 is perfectly placed to support both our kingside development and our central control, and it can easily redeploy to e5 or d4 if tactical opportunities arise. From f3, our knight also helps control the dark squares around our king position, which will become important once we castle."
     },
     {
       "san": "Nc6",

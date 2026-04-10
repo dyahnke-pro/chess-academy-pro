@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding pressure to Black's d5 pawn and preparing to support our central ambitions. This knight placement is flexible - it can later jump to e4, b5, or support pawn advances like e4 or f4 depending on how the position develops. The knight also clears the way for potential pawn advances on the queenside and maintains the tension in the center. From c3, the knight coordinates beautifully with our other pieces and supports multiple strategic plans."
+      "annotation": "We develop our knight to its ideal square, adding pressure to Black's d5 pawn and preparing to support our central ambitions. This knight placement is flexible - it can later jump to e4, b5, or support pawn advances like e4 or f4 depending on how the position develops. The knight also clears the way for potential pawn advances on the queenside and maintains the tension in the center. From c3, the knight coordinates beautifully with our other pieces and supports multiple strategic plans."
     },
     {
       "san": "Nf6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black breaks the pin with the most natural move, developing the dark-squared bishop and preparing to castle kingside. This bishop placement is solid and flexible - it defends the knight on f6, controls the important d6 square, and can later be repositioned if needed. The move also completes Black's kingside development and removes the immediate tactical threats from our bishop on g5. While some players prefer the sharper ...h6 to challenge our bishop directly, Be7 leads to more positional play and keeps Black's options open."
+      "annotation": "Black breaks the pin with the most principled response, developing the dark-squared bishop and preparing to castle kingside. This bishop placement is solid and flexible - it defends the knight on f6, controls the important d6 square, and can later be repositioned if needed. The move also completes Black's kingside development and removes the immediate tactical threats from our bishop on g5. While some players prefer the sharper ...h6 to challenge our bishop directly, Be7 leads to more positional play and keeps Black's options open."
     },
     {
       "san": "e3",

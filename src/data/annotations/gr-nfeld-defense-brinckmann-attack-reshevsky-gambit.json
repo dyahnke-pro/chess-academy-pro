@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to meet Black's likely ...d5 thrust. This knight placement is incredibly flexible - it can later jump to e4, a4, or b5 depending on the position's requirements. The knight also adds pressure to the e4 square, potentially supporting a future e2-e4 pawn advance to create a classical pawn center. From c3, our knight is perfectly placed to recapture on d5 if Black plays the thematic ...dxc4, helping us maintain central control."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing to meet Black's likely ...d5 thrust. This knight placement is incredibly flexible - it can later jump to e4, a4, or b5 depending on the position's requirements. The knight also adds pressure to the e4 square, potentially supporting a future e2-e4 pawn advance to create a classical pawn center. From c3, our knight is perfectly placed to recapture on d5 if Black plays the thematic ...dxc4, helping us maintain central control."
     },
     {
       "san": "d5",

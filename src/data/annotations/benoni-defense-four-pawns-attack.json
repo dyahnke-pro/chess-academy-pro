@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent establishes a solid pawn chain and prepares to develop the dark-squared bishop to its most natural square on g7. This move supports the c5 pawn and gives Black's king more escape squares while preparing to castle kingside safely. Black is following classical Benoni principles - solid development, king safety first, and then looking for pawn breaks like b5 and f5 to create counterplay. The d6 pawn also prepares moves like Nbd7 and potentially Re8 to support the e-file pressure that Black often gets in these structures."
+      "annotation": "Our opponent establishes a solid pawn chain and prepares to develop the dark-squared bishop to its ideal square on g7. This move supports the c5 pawn and gives Black's king more escape squares while preparing to castle kingside safely. Black is following classical Benoni principles - solid development, king safety first, and then looking for pawn breaks like b5 and f5 to create counterplay. The d6 pawn also prepares moves like Nbd7 and potentially Re8 to support the e-file pressure that Black often gets in these structures."
     },
     {
       "san": "e4",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting the e5 advance and preparing to castle kingside for king safety. This move develops with tempo since the knight attacks the e5 square and supports our central pawn structure while preparing normal development. Our knight on f3 also keeps an eye on potential tactics involving the h7 square and supports a potential g2-g3 and Bg2 setup if needed. With our massive pawn center established, we need to focus on piece development and king safety before Black's pieces become too active and start creating threats against our extended position."
+      "annotation": "We develop our knight to its ideal square, supporting the e5 advance and preparing to castle kingside for king safety. This move develops with tempo since the knight attacks the e5 square and supports our central pawn structure while preparing normal development. Our knight on f3 also keeps an eye on potential tactics involving the h7 square and supports a potential g2-g3 and Bg2 setup if needed. With our massive pawn center established, we need to focus on piece development and king safety before Black's pieces become too active and start creating threats against our extended position."
     },
     {
       "san": "O-O",

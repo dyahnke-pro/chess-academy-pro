@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while bringing a piece toward the center. This is one of the most flexible responses to 1.d4, as the knight on f6 fits into virtually every Black defensive setup. Our opponent is keeping maximum options open - they could transpose into the King's Indian, Nimzo-Indian, Queen's Indian, or various other systems depending on how we continue. The knight also prepares potential ...e6 or ...g6 setups, giving Black excellent piece coordination possibilities."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while bringing a piece toward the center. This is one of the most flexible responses to 1.d4, as the knight on f6 fits into virtually every Black defensive setup. Our opponent is keeping maximum options open - they could transpose into the King's Indian, Nimzo-Indian, Queen's Indian, or various other systems depending on how we continue. The knight also prepares potential ...e6 or ...g6 setups, giving Black excellent piece coordination possibilities."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most active square, supporting our d4 pawn while preparing kingside castling. The knight on f3 also controls the important e5 and h4 squares, preventing Black from establishing pieces on these key central and kingside posts. This natural developing move keeps all our options open - we can still play systems with Nc3, or go for setups with g3 and Bg2. Our knight is perfectly placed to support our central pawns while maintaining flexibility in our piece coordination."
+      "annotation": "We develop our knight to its most active square, supporting our d4 pawn while preparing kingside castling. The knight on f3 also controls the important e5 and h4 squares, preventing Black from establishing pieces on these key central and kingside posts. This active move keeps all our options open - we can still play systems with Nc3, or go for setups with g3 and Bg2. Our knight is perfectly placed to support our central pawns while maintaining flexibility in our piece coordination."
     },
     {
       "san": "b6",

@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, supporting our central pawns and preparing kingside castling. This move attacks the e5 square and prepares to support an eventual e4 advance, which would give us a strong pawn center. The knight on f3 is perfectly placed to coordinate with our other pieces and can potentially jump to e5 or g5 in tactical sequences. This is the most flexible development move, keeping all our strategic options open while maintaining pressure on Black's position."
+      "annotation": "We develop our kingside knight to its ideal square, supporting our central pawns and preparing kingside castling. This move attacks the e5 square and prepares to support an eventual e4 advance, which would give us a strong pawn center. The knight on f3 is perfectly placed to coordinate with our other pieces and can potentially jump to e5 or g5 in tactical sequences. This is the most flexible development move, keeping all our strategic options open while maintaining pressure on Black's position."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development, bringing their kingside knight to f6 where it attacks our e4 square and prepares kingside development. This natural move prevents us from easily playing e4 and gives Black good central control while supporting their own pawn structure. The knight on f6 is Black's most active piece in the early stages of this opening, and it can later support various pawn breaks or piece maneuvers. This move shows Black is committed to active piece play rather than passive defense."
+      "annotation": "Black mirrors our development, bringing their kingside knight to f6 where it attacks our e4 square and prepares kingside development. this move prevents us from easily playing e4 and gives Black good central control while supporting their own pawn structure. The knight on f6 is Black's most active piece in the early stages of this opening, and it can later support various pawn breaks or piece maneuvers. This move shows Black is committed to active piece play rather than passive defense."
     },
     {
       "san": "Nc3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We develop our dark-squared bishop aggressively, pinning Black's knight on f6 and creating immediate tactical pressure. This move is a key characteristic of the Botvinnik Variation, where we're willing to trade our bishop for Black's knight to damage their pawn structure and gain attacking chances. The pin on f6 makes it difficult for Black to play natural developing moves and forces them to make crucial decisions about their piece coordination. This aggressive approach signals our intention to create practical problems for Black rather than simply complete quiet development."
+      "annotation": "We develop our dark-squared bishop aggressively, pinning Black's knight on f6 and creating immediate tactical pressure. This move is a key characteristic of the Botvinnik Variation, where we're willing to trade our bishop for Black's knight to damage their pawn structure and gain attacking chances. The pin on f6 makes it difficult for Black to play active moves and forces them to make crucial decisions about their piece coordination. This aggressive approach signals our intention to create practical problems for Black rather than simply complete quiet development."
     },
     {
       "san": "dxc4",

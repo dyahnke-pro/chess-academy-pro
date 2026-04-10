@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting a future d2-d4 advance while keeping our options open. This move is the hallmark of the Closed Sicilian system, where we'll often castle kingside and launch a kingside pawn storm rather than immediately challenging the center with d4. The knight on c3 also eyes the important d5 and e4 squares, and can potentially jump to d5 or b5 in the future. We're signaling our intention to play a more positional, less theoretical approach to the Sicilian compared to the sharp Open Sicilian lines."
+      "annotation": "We're developing our knight to its ideal square, supporting a future d2-d4 advance while keeping our options open. This move is the hallmark of the Closed Sicilian system, where we'll often castle kingside and launch a kingside pawn storm rather than immediately challenging the center with d4. The knight on c3 also eyes the important d5 and e4 squares, and can potentially jump to d5 or b5 in the future. We're signaling our intention to play a more positional, less theoretical approach to the Sicilian compared to the sharp Open Sicilian lines."
     },
     {
       "san": "Nc6",

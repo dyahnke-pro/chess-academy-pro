@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to potentially support ...e6 or ...g6 setups later. This is one of the most flexible and popular responses to 1.d4, as it doesn't commit to any particular pawn structure yet while developing a piece toward the center. Our opponent is keeping maximum options open - they could transpose into a King's Indian, Nimzo-Indian, Queen's Indian, or various other systems depending on how we continue. The knight on f6 also prepares to support central advances like ...d6 and ...e5, or ...c5 in some variations, making this a truly multi-purpose developing move."
+      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to potentially support ...e6 or ...g6 setups later. This is one of the most flexible and popular responses to 1.d4, as it doesn't commit to any particular pawn structure yet while developing a piece toward the center. Our opponent is keeping maximum options open - they could transpose into a King's Indian, Nimzo-Indian, Queen's Indian, or various other systems depending on how we continue. The knight on f6 also prepares to support central advances like ...d6 and ...e5, or ...c5 in some variations, making this a truly multi-purpose move."
     },
     {
       "san": "c4",

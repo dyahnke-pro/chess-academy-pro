@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while adding additional pressure to the d5 pawn, following classical opening principles of rapid piece development. This knight placement supports our central pawn structure and prepares to meet Black's potential b7-b5 advance with tactical complications. The knight on c3 also keeps open the possibility of advancing e2-e4 in one move if Black ever captures on c4, allowing us to establish an ideal pawn center. From c3, our knight controls important central squares and coordinates well with our other pieces in the upcoming middlegame."
+      "annotation": "We're developing our knight to its ideal square while adding additional pressure to the d5 pawn, following classical opening principles of rapid piece development. This knight placement supports our central pawn structure and prepares to meet Black's potential b7-b5 advance with tactical complications. The knight on c3 also keeps open the possibility of advancing e2-e4 in one move if Black ever captures on c4, allowing us to establish an ideal pawn center. From c3, our knight controls important central squares and coordinates well with our other pieces in the upcoming middlegame."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to an excellent central square, attacking our hypothetical e4 advance and preparing to castle kingside. This natural developing move follows the principle of controlling the center with pieces while keeping the pawn structure flexible. Our opponent is also preparing to potentially transpose into other Slav variations depending on how we continue, maintaining maximum options. The knight on f6 is well-placed to support Black's central control and can later relocate to more active squares like e4 or d7 depending on the position's requirements."
+      "annotation": "Black develops their knight to an excellent central square, attacking our hypothetical e4 advance and preparing to castle kingside. This active move follows the principle of controlling the center with pieces while keeping the pawn structure flexible. Our opponent is also preparing to potentially transpose into other Slav variations depending on how we continue, maintaining maximum options. The knight on f6 is well-placed to support Black's central control and can later relocate to more active squares like e4 or d7 depending on the position's requirements."
     },
     {
       "san": "Nf3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent plays a key move that defines the Semi-Slav Defense, supporting the d5 pawn from another angle while preparing to develop the dark-squared bishop. This move creates a solid pawn chain on d5-e6 but also slightly restricts Black's light-squared bishop, which is a typical trade-off in this opening system. Black is preparing to develop their pieces harmoniously while maintaining central stability, though they must be careful about potential weaknesses on the light squares. The e6 advance also prepares Black for potential piece exchanges in the center while keeping their king safe for castling."
+      "annotation": "Our opponent plays a critical move that defines the Semi-Slav Defense, supporting the d5 pawn from another angle while preparing to develop the dark-squared bishop. This move creates a solid pawn chain on d5-e6 but also slightly restricts Black's light-squared bishop, which is a typical trade-off in this opening system. Black is preparing to develop their pieces harmoniously while maintaining central stability, though they must be careful about potential weaknesses on the light squares. The e6 advance also prepares Black for potential piece exchanges in the center while keeping their king safe for castling."
     },
     {
       "san": "e3",

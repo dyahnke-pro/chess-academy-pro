@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and preparing to castle kingside. This move supports our central control by putting additional pressure on e5, forcing Black to defend or make a decision about the center. The knight on f3 also controls important central squares like d4 and e5, while keeping our options open for various pawn structures. From f3, our knight can later jump to more active squares like d4 or e5, depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and preparing to castle kingside. This move supports our central control by putting additional pressure on e5, forcing Black to defend or make a decision about the center. The knight on f3 also controls important central squares like d4 and e5, while keeping our options open for various pawn structures. From f3, our knight can later jump to more active squares like d4 or e5, depending on how the position develops."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight, attacking our e4 pawn and preparing to castle. This natural developing move puts immediate pressure on our center while bringing another piece into play. The knight on f6 also supports Black's central control and can later jump to active squares like d5 or g4. Black is following sound opening principles by developing pieces quickly while maintaining central tension, though the knight may need to be careful about potential discoveries if our bishop captures on c6."
+      "annotation": "Black develops the kingside knight, attacking our e4 pawn and preparing to castle. This active move puts immediate pressure on our center while bringing another piece into play. The knight on f6 also supports Black's central control and can later jump to active squares like d5 or g4. Black is following sound opening principles by developing pieces quickly while maintaining central tension, though the knight may need to be careful about potential discoveries if our bishop captures on c6."
     },
     {
       "san": "O-O",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the dark-squared bishop to its most natural square, preparing to castle and completing the basic kingside development. The bishop on e7 defends along the long diagonal and supports the center, while also maintaining flexibility for various pawn structures. This solid development move is preferred over more aggressive setups like Bc5, as it keeps Black's position compact and ready for the typical Ruy Lopez middlegame plans. Black is now ready to castle and complete the opening phase safely."
+      "annotation": "Black develops the dark-squared bishop to its ideal square, preparing to castle and completing the basic kingside development. The bishop on e7 defends along the long diagonal and supports the center, while also maintaining flexibility for various pawn structures. This solid development move is preferred over more aggressive setups like Bc5, as it keeps Black's position compact and ready for the typical Ruy Lopez middlegame plans. Black is now ready to castle and complete the opening phase safely."
     },
     {
       "san": "Re1",
@@ -55,7 +55,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays the solid move that defines the Closed Defense, supporting the e5 pawn and preparing to develop the light-squared bishop. This move creates a solid pawn chain and gives Black's position more stability, though it does restrict the development of the c8 bishop. The d6 advance is part of Black's plan to maintain central control while preparing for piece development and potential counterplay. This leads to the characteristic closed pawn structure where both sides maneuver for optimal piece placement and long-term advantages."
+      "annotation": "Black plays the well-grounded move that defines the Closed Defense, supporting the e5 pawn and preparing to develop the light-squared bishop. This move creates a solid pawn chain and gives Black's position more stability, though it does restrict the development of the c8 bishop. The d6 advance is part of Black's plan to maintain central control while preparing for piece development and potential counterplay. This leads to the characteristic closed pawn structure where both sides maneuver for optimal piece placement and long-term advantages."
     },
     {
       "san": "c3",
@@ -83,11 +83,11 @@
     },
     {
       "san": "d4",
-      "annotation": "We finally execute our central break, the key move we've been preparing throughout the opening! This advance creates maximum central tension and forces Black to make critical decisions about the pawn structure. Our d4 move supports the e4 pawn, attacks Black's c5 pawn, and opens lines for our pieces while fighting for central supremacy. This pawn break is the culmination of our opening strategy and leads to the rich middlegame positions characteristic of the Closed Ruy Lopez, where both sides have active piece play and clear strategic goals."
+      "annotation": "We finally execute our central break, the critical move we've been preparing throughout the opening! This advance creates maximum central tension and forces Black to make critical decisions about the pawn structure. Our d4 move supports the e4 pawn, attacks Black's c5 pawn, and opens lines for our pieces while fighting for central supremacy. This pawn break is the culmination of our opening strategy and leads to the rich middlegame positions characteristic of the Closed Ruy Lopez, where both sides have active piece play and clear strategic goals."
     },
     {
       "san": "Nd7",
-      "annotation": "Black develops the knight from f6 to d7, a key move in the Keres Defense that prepares to support the center and create counterplay. This knight retreat allows Black to maintain the f6 square for other pieces while supporting both the e5 and c5 pawns. The knight from d7 can later jump to more active squares like f6, b6, or even c4, depending on how the position develops. This flexible development completes Black's opening setup and prepares for the complex middlegame battles typical of this variation, where both sides have rich strategic and tactical possibilities."
+      "annotation": "Black develops the knight from f6 to d7, a critical move in the Keres Defense that prepares to support the center and create counterplay. This knight retreat allows Black to maintain the f6 square for other pieces while supporting both the e5 and c5 pawns. The knight from d7 can later jump to more active squares like f6, b6, or even c4, depending on how the position develops. This flexible development completes Black's opening setup and prepares for the complex middlegame battles typical of this variation, where both sides have rich strategic and tactical possibilities."
     }
   ]
 }

@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move begins one of the most principled openings in chess, as we're fighting for the center from move one and preparing to develop our pieces with maximum activity. The d4 opening typically leads to rich positional games where we'll aim to build a strong pawn center and coordinate our pieces harmoniously. Unlike 1.e4 openings that often lead to sharp tactical battles, queen's pawn games usually reward deep strategic understanding and long-term planning."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while opening lines for our dark-squared bishop and queen. This move begins one of the most principled openings in chess, as we're contesting central control from move one and preparing to develop our pieces with maximum activity. The d4 opening typically leads to rich positional games where we'll aim to build a strong pawn center and coordinate our pieces harmoniously. Unlike 1.e4 openings that often lead to sharp tactical battles, queen's pawn games usually reward deep strategic understanding and long-term planning."
     },
     {
       "san": "Nf6",
@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while controlling the central e5 and g5 squares and preparing to castle kingside. This flexible move keeps all our options open - we can still transpose into numerous opening systems including the Queen's Gambit with c4, the London System with Bf4, or the Catalan with g3. The knight on f3 also prevents any immediate ...e5 breaks by Black, maintaining our central space advantage for now. By developing pieces before committing to a specific pawn structure, we're following classical opening principles while keeping maximum flexibility in our setup."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while controlling the central e5 and g5 squares and preparing to castle kingside. This flexible move keeps all our options open - we can still transpose into numerous opening systems including the Queen's Gambit with c4, the London System with Bf4, or the Catalan with g3. The knight on f3 also prevents any immediate ...e5 breaks by Black, maintaining our central space advantage for now. By developing pieces before committing to a specific pawn structure, we're following classical opening principles while keeping maximum flexibility in our setup."
     },
     {
       "san": "g6",

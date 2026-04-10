@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding extra pressure to the d5 pawn while preparing to support our central ambitions. This knight on c3 eyes the important e4 and e2 squares, and will often play a key role in our middlegame plans by potentially rerouting to more active squares like e4 or b5. The knight development also prepares us to meet Black's potential ...c5 break by maintaining solid control over the center."
+      "annotation": "We develop our knight to its ideal square, adding extra pressure to the d5 pawn while preparing to support our central ambitions. This knight on c3 eyes the important e4 and e2 squares, and will often play a key role in our middlegame plans by potentially rerouting to more active squares like e4 or b5. The knight development also prepares us to meet Black's potential ...c5 break by maintaining solid control over the center."
     },
     {
       "san": "Be7",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their kingside knight, adding another defender to the d5 pawn while contesting our control of the central e4 square. This natural developing move prepares kingside castling and gives Black's pieces more coordination around their central strongpoint. The knight on f6 also eyes potential outposts on e4 or g4 and can support tactical ideas involving ...Ne4 if we're not careful with our piece coordination."
+      "annotation": "Our opponent develops their kingside knight, adding another defender to the d5 pawn while contesting our control of the central e4 square. This active move prepares kingside castling and gives Black's pieces more coordination around their central strongpoint. The knight on f6 also eyes potential outposts on e4 or g4 and can support tactical ideas involving ...Ne4 if we're not careful with our piece coordination."
     },
     {
       "san": "Bg5",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our c4 pawn and preparing to build the ideal pawn center with e2-e4. This knight placement is flexible and doesn't commit us to any particular setup yet, while maintaining pressure on Black's position. The knight on c3 also eyes important central squares like d5 and e4, and can potentially reroute to e2 or d5 in some variations. From c3, this knight coordinates well with our other pieces and maintains the option of playing f2-f3 and e2-e4 to establish the classical pawn center that's characteristic of anti-King's Indian systems."
+      "annotation": "We're developing our knight to its ideal square, supporting our c4 pawn and preparing to build the ideal pawn center with e2-e4. This knight placement is flexible and doesn't commit us to any particular setup yet, while maintaining pressure on Black's position. The knight on c3 also eyes important central squares like d5 and e4, and can potentially reroute to e2 or d5 in some variations. From c3, this knight coordinates well with our other pieces and maintains the option of playing f2-f3 and e2-e4 to establish the classical pawn center that's characteristic of anti-King's Indian systems."
     },
     {
       "san": "Bg7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our e4 pawn and preparing to castle kingside ourselves. This knight placement is crucial because it defends our central pawn and can potentially support a future f2-f3 advance if we want to further bolster our center. The knight on f3 also controls important squares like e5 and g5, and maintains flexibility for various plans including Be2 followed by castling. From f3, our knight is well-placed to support both defensive and offensive operations, and this is considered one of the most solid ways to handle the King's Indian Defense setup."
+      "annotation": "We're developing our knight to its ideal square, supporting our e4 pawn and preparing to castle kingside ourselves. This knight placement is crucial because it defends our central pawn and can potentially support a future f2-f3 advance if we want to further bolster our center. The knight on f3 also controls important squares like e5 and g5, and maintains flexibility for various plans including Be2 followed by castling. From f3, our knight is well-placed to support both defensive and offensive operations, and this is considered one of the most solid ways to handle the King's Indian Defense setup."
     },
     {
       "san": "O-O",

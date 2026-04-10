@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "Nf3",
-      "annotation": "We're opening with the Réti, a hypermodern opening that prioritizes piece development and central control from a distance rather than immediate pawn occupation. This move develops our knight to its most natural square, controlling the important central squares e5 and d4 while keeping maximum flexibility in our pawn structure. Unlike 1.e4 or 1.d4, the Réti allows us to see how our opponent responds before committing to a specific pawn structure, making it an excellent choice for positional players who like to adapt their plans based on the opponent's setup. The knight on f3 also prepares for a potential kingside castle and supports a future e4 or d4 advance when the time is right."
+      "annotation": "We're opening with the Réti, a hypermodern opening that prioritizes piece development and central control from a distance rather than immediate pawn occupation. This move develops our knight to its ideal square, controlling the important central squares e5 and d4 while keeping maximum flexibility in our pawn structure. Unlike 1.e4 or 1.d4, the Réti allows us to see how our opponent responds before committing to a specific pawn structure, making it an excellent choice for positional players who like to adapt their plans based on the opponent's setup. The knight on f3 also prepares for a potential kingside castle and supports a future e4 or d4 advance when the time is right."
     },
     {
       "san": "Nf6",
@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're now transitioning into the English Opening territory, staking our claim on the important d5 square and beginning to reveal our strategic intentions. This move controls d5 and b5, preventing Black from easily establishing a pawn on d5 while preparing to support our own central expansion with moves like d3 and e4. The c4 pawn also opens up the possibility of playing b3 and Bb2, developing our light-squared bishop on the long diagonal where it can exert pressure toward Black's kingside. This is the key move that gives the opening its Anglo-Slav character, as we're inviting Black to choose between various pawn structures while maintaining our flexibility."
+      "annotation": "We're now transitioning into the English Opening territory, staking our claim on the important d5 square and beginning to reveal our strategic intentions. This move controls d5 and b5, preventing Black from easily establishing a pawn on d5 while preparing to support our own central expansion with moves like d3 and e4. The c4 pawn also opens up the possibility of playing b3 and Bb2, developing our light-squared bishop on the long diagonal where it can exert pressure toward Black's kingside. This is the critical move that gives the opening its Anglo-Slav character, as we're inviting Black to choose between various pawn structures while maintaining our flexibility."
     },
     {
       "san": "c6",

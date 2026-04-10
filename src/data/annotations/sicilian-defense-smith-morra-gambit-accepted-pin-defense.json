@@ -31,7 +31,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the queen's knight to its most natural square, challenging our central knight and preparing to complete their kingside development. This move contests the d4 and e5 squares while keeping Black's options open for various defensive setups in the Smith-Morra. The knight on c6 also prepares potential counterplay with moves like d6 and Nf6, while maintaining flexibility in Black's pawn structure. However, this natural development also allows us to continue with our aggressive plan, as Black hasn't yet addressed the growing pressure we're building in the center and on the kingside."
+      "annotation": "Black develops the queen's knight to its ideal square, challenging our central knight and preparing to complete their kingside development. This move contests the d4 and e5 squares while keeping Black's options open for various defensive setups in the Smith-Morra. The knight on c6 also prepares potential counterplay with moves like d6 and Nf6, while maintaining flexibility in Black's pawn structure. However, this natural development also allows us to continue with our aggressive plan, as Black hasn't yet addressed the growing pressure we're building in the center and on the kingside."
     },
     {
       "san": "Nf3",
@@ -39,7 +39,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays a solid developing move that supports the d5 square and prepares to develop the dark-squared bishop, typically to e7 or d6. This move creates a solid pawn chain and helps Black prepare for castling kingside, which is essential for king safety in these sharp tactical positions. However, e6 also creates some potential weaknesses - the d6 and f6 squares become slightly weaker, and Black's kingside development is somewhat constrained. We can use this information to plan our bishop development, likely to c4 where it will target the f7 square that has been weakened by Black's pawn structure."
+      "annotation": "Black plays a constructive move that supports the d5 square and prepares to develop the dark-squared bishop, typically to e7 or d6. This move creates a solid pawn chain and helps Black prepare for castling kingside, which is essential for king safety in these sharp tactical positions. However, e6 also creates some potential weaknesses - the d6 and f6 squares become slightly weaker, and Black's kingside development is somewhat constrained. We can use this information to plan our bishop development, likely to c4 where it will target the f7 square that has been weakened by Black's pawn structure."
     },
     {
       "san": "Bc4",

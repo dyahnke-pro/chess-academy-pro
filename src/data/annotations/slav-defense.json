@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square while adding another attacker to Black's d5 pawn, increasing the central pressure significantly. This natural developing move also prepares various strategic ideas - we might support a future e2-e4 advance, or we could continue building pressure on d5 with moves like Nf3 and Bg5. The knight on c3 also supports potential pawn advances on the queenside should Black capture on c4, allowing us to recapture with the knight and maintain central influence. Our development is proceeding smoothly while keeping maximum flexibility in how we'll continue our opening strategy."
+      "annotation": "We're developing our knight to its most active square while adding another attacker to Black's d5 pawn, increasing the central pressure significantly. This active move also prepares various strategic ideas - we might support a future e2-e4 advance, or we could continue building pressure on d5 with moves like Nf3 and Bg5. The knight on c3 also supports potential pawn advances on the queenside should Black capture on c4, allowing us to recapture with the knight and maintain central influence. Our development is proceeding smoothly while keeping maximum flexibility in how we'll continue our opening strategy."
     },
     {
       "san": "dxc4",

@@ -854,7 +854,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside, securing the king's safety and connecting the rooks. This natural move removes the king from the center where tactical threats were building and places it behind a protective.",
+          "annotation": "Black castles kingside, securing the king's safety and connecting the rooks. this move removes the king from the center where tactical threats were building and places it behind a protective.",
           "plans": [
             "Bring rooks into active play",
             "Consider central pawn advances like d6"
@@ -2070,7 +2070,7 @@
         },
         {
           "san": "e5",
-          "annotation": "Pushing e5, kicking the knight from f6 and seizing space. This is the key move in this system — White grabs a big central presence and forces Black to react.",
+          "annotation": "Pushing e5, kicking the knight from f6 and seizing space. This is the critical move in this system — White grabs a big central presence and forces Black to react.",
           "arrows": [
             {
               "from": "e4",

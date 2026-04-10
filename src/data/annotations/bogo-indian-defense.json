@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to contest our control of the center. This is one of the most principled responses to 1.d4, as the knight develops to its most natural square while simultaneously putting pressure on our position. Black's strategy here is to avoid allowing us to establish an unchallenged pawn center, and the knight on f6 can later support moves like ...d5 or ...e5 depending on how the position develops. This move also prepares kingside castling and keeps Black's options open for various defensive setups."
+      "annotation": "Black immediately challenges our central pawn with the knight, attacking d4 and preparing to contest our control of the center. This is one of the most principled responses to 1.d4, as the knight develops to its ideal square while simultaneously putting pressure on our position. Black's strategy here is to avoid allowing us to establish an unchallenged pawn center, and the knight on f6 can later support moves like ...d5 or ...e5 depending on how the position develops. This move also prepares kingside castling and keeps Black's options open for various defensive setups."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, where it controls the important e5 and h4 squares while preparing kingside castling. This move also adds extra support to our d4 pawn and prevents Black from playing ...e5, which would give them excellent central control. The knight on f3 is perfectly placed for most opening systems and keeps our options open for various setups, whether we want to fianchetto our king's bishop with g3 or develop it more actively to d3 or e2. This flexible development move is almost always the right choice in these positions, as it improves our position without committing to any specific plan too early."
+      "annotation": "We're developing our king's knight to its ideal square, where it controls the important e5 and h4 squares while preparing kingside castling. This move also adds extra support to our d4 pawn and prevents Black from playing ...e5, which would give them excellent central control. The knight on f3 is perfectly placed for most opening systems and keeps our options open for various setups, whether we want to fianchetto our king's bishop with g3 or develop it more actively to d3 or e2. This flexible development move is almost always the right choice in these positions, as it improves our position without committing to any specific plan too early."
     },
     {
       "san": "Bb4+",

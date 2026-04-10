@@ -27,11 +27,11 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the key move of the Four Pawns Attack, creating our impressive pawn front and attacking the centralized knight. This move completes our 'four pawns abreast' formation (d4-e5-f4 coming next), giving us maximum central space but also creating potential targets. The c4 pawn forces Black's knight to make a decision, and most commonly it will go to b6 where it eyes our queenside. Our pawn center looks imposing, but we must develop our pieces quickly before Black can organize effective counterplay against our extended pawns."
+      "annotation": "We're playing the central idea of the Four Pawns Attack, creating our impressive pawn front and attacking the centralized knight. This move completes our 'four pawns abreast' formation (d4-e5-f4 coming next), giving us maximum central space but also creating potential targets. The c4 pawn forces Black's knight to make a decision, and most commonly it will go to b6 where it eyes our queenside. Our pawn center looks imposing, but we must develop our pieces quickly before Black can organize effective counterplay against our extended pawns."
     },
     {
       "san": "Nb6",
-      "annotation": "Black's knight retreats to b6, where it attacks our c4 pawn and prepares to potentially reroute via d7 or a4. This is the most natural square for the knight, as it maintains some central influence while getting out of the way of our advancing pawns. From b6, the knight also supports potential queenside counterplay and keeps an eye on the important d5 square. Black's strategy is starting to take shape: the knight will pressure our queenside while Black prepares central counterstrikes with moves like dxe5 or f6."
+      "annotation": "Black's knight retreats to b6, where it attacks our c4 pawn and prepares to potentially reroute via d7 or a4. This is the ideal square for the knight, as it maintains some central influence while getting out of the way of our advancing pawns. From b6, the knight also supports potential queenside counterplay and keeps an eye on the important d5 square. Black's strategy is starting to take shape: the knight will pressure our queenside while Black prepares central counterstrikes with moves like dxe5 or f6."
     },
     {
       "san": "f4",
@@ -51,15 +51,15 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most natural square, supporting our d4 pawn and preparing for further development. The knight on c3 also eyes the important e4 and d5 squares while supporting potential advances of our pawn chain. This move allows us to continue with our development plan of Nf3 and Be2, getting our king to safety quickly. However, we must be aware that Black's bishop on f5 is eyeing our future knight on f3, so we may need to consider moves like h3 or g4 to challenge the bishop or simply accept a trade that reduces material on the board."
+      "annotation": "We develop our queen's knight to its ideal square, supporting our d4 pawn and preparing for further development. The knight on c3 also eyes the important e4 and d5 squares while supporting potential advances of our pawn chain. This move allows us to continue with our development plan of Nf3 and Be2, getting our king to safety quickly. However, we must be aware that Black's bishop on f5 is eyeing our future knight on f3, so we may need to consider moves like h3 or g4 to challenge the bishop or simply accept a trade that reduces material on the board."
     },
     {
       "san": "e6",
-      "annotation": "Black plays a solid developing move that supports the center and prepares to complete kingside development with Be7 and castling. This move also prevents any potential e6 advance from us and gives Black's king a flight square on f7 if needed. The e6 move fits with Black's plan to create a solid position while maintaining pressure on our extended pawns. By controlling the d5 and f5 squares, Black is ensuring that our pieces don't get ideal outposts, while also preparing to complete development and coordinate pieces for the coming middlegame battle."
+      "annotation": "Black plays a constructive move that supports the center and prepares to complete kingside development with Be7 and castling. This move also prevents any potential e6 advance from us and gives Black's king a flight square on f7 if needed. The e6 move fits with Black's plan to create a solid position while maintaining pressure on our extended pawns. By controlling the d5 and f5 squares, Black is ensuring that our pieces don't get ideal outposts, while also preparing to complete development and coordinate pieces for the coming middlegame battle."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its ideal square, supporting our e5 pawn and preparing to castle kingside. The knight on f3 controls important central squares like d4, e5, g5, and h4, while also defending against potential back-rank tactics. This natural developing move brings us closer to castling and maintains our space advantage in the center. However, we should note that Black's bishop on f5 can now exchange itself for our knight, which would reduce our attacking potential but also eliminate one of Black's active pieces."
+      "annotation": "We develop our king's knight to its ideal square, supporting our e5 pawn and preparing to castle kingside. The knight on f3 controls important central squares like d4, e5, g5, and h4, while also defending against potential back-rank tactics. This active move brings us closer to castling and maintains our space advantage in the center. However, we should note that Black's bishop on f5 can now exchange itself for our knight, which would reduce our attacking potential but also eliminate one of Black's active pieces."
     },
     {
       "san": "Be7",

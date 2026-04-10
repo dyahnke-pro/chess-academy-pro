@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, supporting our central pawns while preparing kingside castling and maintaining maximum flexibility in our setup. This knight on f3 controls the crucial e5 and g5 squares, preventing Black from easily advancing in the center or launching immediate kingside attacks. The move also keeps our options open for various pawn structures – we can still play e3 for a solid setup, e4 for more aggressive central play, or even g3 followed by Bg2 for a fianchetto system. By developing this knight before committing to a specific pawn structure, we maintain the initiative while forcing Black to reveal more of their intentions before we decide on our optimal piece coordination."
+      "annotation": "We're developing our kingside knight to its ideal square, supporting our central pawns while preparing kingside castling and maintaining maximum flexibility in our setup. This knight on f3 controls the crucial e5 and g5 squares, preventing Black from easily advancing in the center or launching immediate kingside attacks. The move also keeps our options open for various pawn structures – we can still play e3 for a solid setup, e4 for more aggressive central play, or even g3 followed by Bg2 for a fianchetto system. By developing this knight before committing to a specific pawn structure, we maintain the initiative while forcing Black to reveal more of their intentions before we decide on our optimal piece coordination."
     },
     {
       "san": "b6",

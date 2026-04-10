@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our e4 pawn and prepares to meet Black's coming d7-d5 advance. This move keeps our options open - we can still play d2-d4 to build a classical pawn center, or we might choose more aggressive setups depending on how Black continues. The knight on c3 also eyes important central squares like d5 and e4, and it's perfectly placed to support various pawn advances or piece maneuvers in the middlegame. Some players prefer 2.d4 here to immediately establish a broad pawn center, but our knight development is perfectly sound and maintains flexibility in our setup."
+      "annotation": "We're developing our knight to its ideal square, where it supports our e4 pawn and prepares to meet Black's coming d7-d5 advance. This move keeps our options open - we can still play d2-d4 to build a classical pawn center, or we might choose more aggressive setups depending on how Black continues. The knight on c3 also eyes important central squares like d5 and e4, and it's perfectly placed to support various pawn advances or piece maneuvers in the middlegame. Some players prefer 2.d4 here to immediately establish a broad pawn center, but our knight development is perfectly sound and maintains flexibility in our setup."
     },
     {
       "san": "d5",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're bringing our kingside knight into the game, developing it to its most active square where it controls the important central squares e5 and d4. This natural developing move also prepares to castle kingside and keeps all our options open for the next phase of the game. The knight on f3 is beautifully placed to support various pawn advances and can potentially jump to more aggressive squares later in the game. However, we're also setting up for the Hector Gambit, which involves a surprising knight sacrifice that most Caro-Kann players won't expect - this seemingly quiet development is actually the calm before the storm!"
+      "annotation": "We're bringing our kingside knight into the game, developing it to its most active square where it controls the important central squares e5 and d4. This active move also prepares to castle kingside and keeps all our options open for the next phase of the game. The knight on f3 is beautifully placed to support various pawn advances and can potentially jump to more aggressive squares later in the game. However, we're also setting up for the Hector Gambit, which involves a surprising knight sacrifice that most Caro-Kann players won't expect - this seemingly quiet development is actually the calm before the storm!"
     },
     {
       "san": "dxe4",

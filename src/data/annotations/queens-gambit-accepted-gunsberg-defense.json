@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and supporting our central d4 pawn while preparing to recapture on c4 if needed. This move is more flexible than the immediate 3.e3 or 3.e4 because it doesn't commit our pawn structure yet and allows us to see how Black continues. Our knight on f3 also eyes the important e5 and g5 squares, potentially supporting a future e2-e4 advance or kingside attacking chances. From f3, the knight can also reroute to e5 or g5 in many variations, giving us excellent piece activity and central control."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and supporting our central d4 pawn while preparing to recapture on c4 if needed. This move is more flexible than the immediate 3.e3 or 3.e4 because it doesn't commit our pawn structure yet and allows us to see how Black continues. Our knight on f3 also eyes the important e5 and g5 squares, potentially supporting a future e2-e4 advance or kingside attacking chances. From f3, the knight can also reroute to e5 or g5 in many variations, giving us excellent piece activity and central control."
     },
     {
       "san": "c5",

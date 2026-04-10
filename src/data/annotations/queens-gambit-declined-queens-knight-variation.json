@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center with their own pawn, directly challenging our control of the e4 square. This solid move prevents us from playing e4 next move and establishes Black's own central foothold. Our opponent is signaling they want a symmetrical pawn structure and are prepared to fight for central control rather than allowing us to dominate the center freely. This leads us naturally into Queen's Gambit territory, where we'll likely offer the c-pawn to disrupt Black's central pawn chain."
+      "annotation": "Black responds classically by occupying the center with their own pawn, directly challenging our control of the e4 square. this stabilizing move prevents us from playing e4 next move and establishes Black's own central foothold. Our opponent is signaling they want a symmetrical pawn structure and are prepared to fight for central control rather than allowing us to dominate the center freely. This leads us naturally into Queen's Gambit territory, where we'll likely offer the c-pawn to disrupt Black's central pawn chain."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most natural square, adding another attacker to Black's d5 pawn and preparing to support a future e4 advance. This move fits perfectly with our opening strategy of pressuring Black's center while bringing pieces into active positions. The knight on c3 also eyes important central squares like e4 and d5, and can later support pawn advances or piece maneuvers depending on how the position develops. This is the defining move of the Queen's Knight Variation, as opposed to other setups like Nf3 first or the Exchange Variation with cxd5, and it often leads to rich middlegame positions where we have slightly more space and development chances."
+      "annotation": "We develop our queen's knight to its ideal square, adding another attacker to Black's d5 pawn and preparing to support a future e4 advance. This move fits perfectly with our opening strategy of pressuring Black's center while bringing pieces into active positions. The knight on c3 also eyes important central squares like e4 and d5, and can later support pawn advances or piece maneuvers depending on how the position develops. This is the defining move of the Queen's Knight Variation, as opposed to other setups like Nf3 first or the Exchange Variation with cxd5, and it often leads to rich middlegame positions where we have slightly more space and development chances."
     }
   ]
 }

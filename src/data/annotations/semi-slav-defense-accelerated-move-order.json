@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent declines the gambit and instead reinforces the d5 pawn with this solid move, maintaining central tension while preparing to develop the kingside pieces. This move controls the important f5 and d7 squares and opens the f8-a3 diagonal for Black's dark-squared bishop, though it also slightly restricts this bishop's scope. Black is choosing a more positional approach, keeping the center closed and preparing to complete development before deciding how to resolve the central tension. This leads us into Semi-Slav territory, where both sides will need to carefully coordinate their piece development with their central pawn strategy."
+      "annotation": "Our opponent declines the gambit and instead reinforces the d5 pawn with this stabilizing move, maintaining central tension while preparing to develop the kingside pieces. This move controls the important f5 and d7 squares and opens the f8-a3 diagonal for Black's dark-squared bishop, though it also slightly restricts this bishop's scope. Black is choosing a more positional approach, keeping the center closed and preparing to complete development before deciding how to resolve the central tension. This leads us into Semi-Slav territory, where both sides will need to carefully coordinate their piece development with their central pawn strategy."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central d4 pawn and adds additional pressure to Black's d5 pawn. This move also prepares potential advances like e4 (if Black captures on c4) and keeps our options open for various pawn structures depending on how Black responds. The knight on c3 is beautifully centralized, controlling important squares like e4, d5, a4, and b5, while maintaining flexibility in our setup. From c3, our knight coordinates well with potential moves like Nf3, Bg5, or even Ne4 in certain variations, making this development both natural and purposeful."
+      "annotation": "We're developing our knight to its ideal square, where it supports our central d4 pawn and adds additional pressure to Black's d5 pawn. This move also prepares potential advances like e4 (if Black captures on c4) and keeps our options open for various pawn structures depending on how Black responds. The knight on c3 is beautifully centralized, controlling important squares like e4, d5, a4, and b5, while maintaining flexibility in our setup. From c3, our knight coordinates well with potential moves like Nf3, Bg5, or even Ne4 in certain variations, making this development both natural and purposeful."
     },
     {
       "san": "c6",

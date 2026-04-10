@@ -27,11 +27,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, from where it eyes the central e4 and d5 squares while supporting potential advances in the center. This knight placement is almost automatic in queen's pawn openings, as it develops toward the center and prepares to support our other pieces. The knight on c3 also keeps pressure on Black's d5 pawn, which could become important if Black tries to advance it later or if we organize pieces to attack it. From c3, our knight coordinates well with moves like e4 (if we can achieve it) or supports advances like e3 and f3 to build a strong pawn chain."
+      "annotation": "We develop our knight to its ideal square, from where it eyes the central e4 and d5 squares while supporting potential advances in the center. This knight placement is almost automatic in queen's pawn openings, as it develops toward the center and prepares to support our other pieces. The knight on c3 also keeps pressure on Black's d5 pawn, which could become important if Black tries to advance it later or if we organize pieces to attack it. From c3, our knight coordinates well with moves like e4 (if we can achieve it) or supports advances like e3 and f3 to build a strong pawn chain."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to f6, attacking our e4 square and preventing us from easily advancing our e-pawn to dominate the center. This is the most natural developing move, as the knight controls key central squares and prepares to support Black's kingside development. Our opponent is following sound opening principles by developing pieces toward the center while maintaining flexibility in their pawn structure. The knight on f6 also supports potential ...e6 or ...e5 advances later, depending on how the position develops."
+      "annotation": "Black develops their knight to f6, attacking our e4 square and preventing us from easily advancing our e-pawn to dominate the center. This is the most active move, as the knight controls key central squares and prepares to support Black's kingside development. Our opponent is following sound opening principles by developing pieces toward the center while maintaining flexibility in their pawn structure. The knight on f6 also supports potential ...e6 or ...e5 advances later, depending on how the position develops."
     },
     {
       "san": "f3",

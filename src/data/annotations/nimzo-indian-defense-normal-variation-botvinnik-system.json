@@ -7,11 +7,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central d4 pawn with this natural developing move, following one of the fundamental opening principles of developing knights before bishops. This knight attacks our d4 pawn and controls the important central squares e4 and g4, while also preparing to support Black's own central advances. By playing Nf6, our opponent is steering the game toward one of the Indian Defense systems, where Black allows White to occupy the center with pawns initially but plans to undermine and challenge this central control later. This is a more sophisticated approach than the classical ...d5 or ...e5, showing that Black understands modern opening theory."
+      "annotation": "Black immediately challenges our central d4 pawn with this active move, following one of the fundamental opening principles of developing knights before bishops. This knight attacks our d4 pawn and controls the important central squares e4 and g4, while also preparing to support Black's own central advances. By playing Nf6, our opponent is steering the game toward one of the Indian Defense systems, where Black allows White to occupy the center with pawns initially but plans to undermine and challenge this central control later. This is a more sophisticated approach than the classical ...d5 or ...e5, showing that Black understands modern opening theory."
     },
     {
       "san": "c4",
-      "annotation": "We're expanding our central control with this key move that defines the Queen's Gambit and English Opening structures, immediately putting pressure on Black's potential ...d5 advance. This pawn controls the crucial d5 and b5 squares, while also preparing to support a potential e4 advance later in the opening. The c4 move is particularly strong because it gives us more space and makes it difficult for Black to achieve the freeing ...d5 break without careful preparation. We're now threatening to establish a powerful pawn center with d4-c4, and Black will need to decide how to respond to our growing central influence."
+      "annotation": "We're expanding our central control with this critical move that defines the Queen's Gambit and English Opening structures, immediately putting pressure on Black's potential ...d5 advance. This pawn controls the crucial d5 and b5 squares, while also preparing to support a potential e4 advance later in the opening. The c4 move is particularly strong because it gives us more space and makes it difficult for Black to achieve the freeing ...d5 break without careful preparation. We're now threatening to establish a powerful pawn center with d4-c4, and Black will need to decide how to respond to our growing central influence."
     },
     {
       "san": "e6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn and prepares for various central advances like e4 or f3. This knight on c3 is perfectly placed to support our pawn center and can quickly redeploy to e4, e2, or a4 depending on how the position develops. The knight also adds pressure to the d5 square, making it more difficult for Black to achieve the liberating ...d5 break. From c3, our knight coordinates beautifully with our other pieces and maintains maximum flexibility for the upcoming middlegame phase."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn and prepares for various central advances like e4 or f3. This knight on c3 is perfectly placed to support our pawn center and can quickly redeploy to e4, e2, or a4 depending on how the position develops. The knight also adds pressure to the d5 square, making it more difficult for Black to achieve the liberating ...d5 break. From c3, our knight coordinates beautifully with our other pieces and maintains maximum flexibility for the upcoming middlegame phase."
     },
     {
       "san": "Bb4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black sensibly castles kingside, ensuring king safety before the middlegame complications begin in earnest. This natural move gets the king out of the center where it could become a target, while also connecting the rooks and preparing for active piece play. By castling, our opponent is following sound opening principles and avoiding the tactical dangers that can arise when the king remains in the center too long. The castled king position also allows Black to consider more aggressive central operations like ...d5 or ...c5 without worrying about immediate king safety."
+      "annotation": "Black sensibly castles kingside, ensuring king safety before the middlegame complications begin in earnest. this move gets the king out of the center where it could become a target, while also connecting the rooks and preparing for active piece play. By castling, our opponent is following sound opening principles and avoiding the tactical dangers that can arise when the king remains in the center too long. The castled king position also allows Black to consider more aggressive central operations like ...d5 or ...c5 without worrying about immediate king safety."
     },
     {
       "san": "Bd3",

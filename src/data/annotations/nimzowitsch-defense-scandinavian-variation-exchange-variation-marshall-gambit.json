@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn advance, claiming central space and freeing our light-squared bishop and queen for development. This classical move controls the d5 and f5 squares, preventing Black from establishing a pawn on these key central squares. The move follows opening principles by fighting for the center immediately, and it leads to sharp, tactical games where both sides have chances for active piece play. We're setting the stage for rapid development and potential central control, which is exactly what we want in the opening phase."
+      "annotation": "We're opening with the king's pawn advance, claiming central space and freeing our light-squared bishop and queen for development. This classical move controls the d5 and f5 squares, preventing Black from establishing a pawn on these key central squares. The move follows opening principles by contesting central control immediately, and it leads to sharp, tactical games where both sides have chances for active piece play. We're setting the stage for rapid development and potential central control, which is exactly what we want in the opening phase."
     },
     {
       "san": "Nc6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight with a purpose, attacking Black's exposed queen and forcing it to move again, gaining tempo in our development. This natural developing move also controls important squares like b5, d5, and e4, while preparing to castle kingside and bring our other pieces into play. The knight on c3 is ideally placed in most opening systems, supporting potential pawn advances like d5 or b5 and coordinating well with our other pieces. By attacking the queen, we're making Black's early queen sortie look questionable, as they'll have to spend another move relocating it while we continue developing our pieces with threats."
+      "annotation": "We develop our knight with a purpose, attacking Black's exposed queen and forcing it to move again, gaining tempo in our development. This active move also controls important squares like b5, d5, and e4, while preparing to castle kingside and bring our other pieces into play. The knight on c3 is ideally placed in most opening systems, supporting potential pawn advances like d5 or b5 and coordinating well with our other pieces. By attacking the queen, we're making Black's early queen sortie look questionable, as they'll have to spend another move relocating it while we continue developing our pieces with threats."
     }
   ]
 }

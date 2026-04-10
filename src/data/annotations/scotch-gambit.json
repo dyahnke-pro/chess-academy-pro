@@ -594,7 +594,7 @@
     },
     {
       "san": "Re8",
-      "annotation": "Black places the rook on the open e-file, a natural and good move. The rook is active on e8 and can create counterplay down the e-file.",
+      "annotation": "Black places the rook on the open e-file, a strong choice. The rook is active on e8 and can create counterplay down the e-file.",
       "plans": [
         "Control the e-file for counterplay",
         "Develop the queenside pieces",
@@ -679,7 +679,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "White develops the bishop to g5 with tempo, harassing Black's queen on f6. The queen must move, giving White another developing move for free. The bishop on g5 controls the dark squares and can later move to h6 to target the weakened kingside.",
+      "annotation": "White develops the bishop to g5 with tempo, harassing Black's queen on f6. The queen must move, giving White another developing choice for free. The bishop on g5 controls the dark squares and can later move to h6 to target the weakened kingside.",
       "plans": [
         "Gain a tempo by attacking the queen",
         "Reposition the bishop to h6 to target the kingside",

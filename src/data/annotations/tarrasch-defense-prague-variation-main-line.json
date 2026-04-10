@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses to support the d5 pawn rather than capture on c4, entering the Queen's Gambit Declined family of openings. This solid move reinforces the central pawn and prepares to develop the dark-squared bishop, but it does come at the cost of slightly restricting the light-squared bishop on c8. Black is showing they want to maintain their central foothold and is willing to accept a slightly more cramped position in exchange for solidity. This move also prepares potential counterplay with moves like c5, striking at our pawn center from the side."
+      "annotation": "Our opponent chooses to support the d5 pawn rather than capture on c4, entering the Queen's Gambit Declined family of openings. this stabilizing move reinforces the central pawn and prepares to develop the dark-squared bishop, but it does come at the cost of slightly restricting the light-squared bishop on c8. Black is showing they want to maintain their central foothold and is willing to accept a slightly more cramped position in exchange for solidity. This move also prepares potential counterplay with moves like c5, striking at our pawn center from the side."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding another attacker to the d5 pawn and continuing to pressure Black's center. This move supports our c4 pawn and prepares for the recapture on c4 if Black ever takes there with cxd4. The knight on c3 also eyes important central squares like e4 and d5, and can potentially jump to outpost squares later in the game. By developing this piece, we're following the opening principle of improving our pieces while maintaining pressure on our opponent's position."
+      "annotation": "We develop our knight to its ideal square, adding another attacker to the d5 pawn and continuing to pressure Black's center. This move supports our c4 pawn and prepares for the recapture on c4 if Black ever takes there with cxd4. The knight on c3 also eyes important central squares like e4 and d5, and can potentially jump to outpost squares later in the game. By developing this piece, we're following the opening principle of improving our pieces while maintaining pressure on our opponent's position."
     },
     {
       "san": "c5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, controlling important central squares and preparing to castle kingside for safety. This move attacks Black's advanced c5 pawn while simultaneously preparing our king's castle and supporting our d4 pawn. The knight on f3 also controls the e5 square, which is particularly important in Tarrasch Defense structures where Black often seeks to establish a knight outpost there. By developing this piece, we're following sound opening principles while keeping pressure on Black's position and maintaining flexibility in our pawn structure."
+      "annotation": "We develop our kingside knight to its ideal square, controlling important central squares and preparing to castle kingside for safety. This move attacks Black's advanced c5 pawn while simultaneously preparing our king's castle and supporting our d4 pawn. The knight on f3 also controls the e5 square, which is particularly important in Tarrasch Defense structures where Black often seeks to establish a knight outpost there. By developing this piece, we're following sound opening principles while keeping pressure on Black's position and maintaining flexibility in our pawn structure."
     },
     {
       "san": "Nc6",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their kingside knight to its most active square, completing basic development while preparing to castle and adding support to their central pawns. This natural developing move also prepares potential tactics involving the isolated d-pawn, as the knight can potentially support pawn advances or piece activity in the center. Black is following sound opening principles by developing pieces quickly and efficiently while maintaining flexibility in their position. The knight on f6 also supports potential future breaks like ...e5 or ...Re8 followed by ...e5, which are common themes for generating counterplay in the Tarrasch Defense."
+      "annotation": "Our opponent develops their kingside knight to its most active square, completing basic development while preparing to castle and adding support to their central pawns. This active move also prepares potential tactics involving the isolated d-pawn, as the knight can potentially support pawn advances or piece activity in the center. Black is following sound opening principles by developing pieces quickly and efficiently while maintaining flexibility in their position. The knight on f6 also supports potential future breaks like ...e5 or ...Re8 followed by ...e5, which are common themes for generating counterplay in the Tarrasch Defense."
     },
     {
       "san": "Bg2",

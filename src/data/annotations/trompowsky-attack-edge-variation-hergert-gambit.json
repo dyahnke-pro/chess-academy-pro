@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our central pawn and preparing to castle kingside. This is Black's most popular response, as the knight on f6 controls important central squares like e4 and d5 while supporting Black's own central ambitions. Our opponent is following classical opening principles by developing pieces toward the center, but this natural move actually walks right into our Trompowsky setup. We should be pleased to see this move because it allows us to execute our planned bishop sortie to g5, where it will create immediate tactical and positional threats."
+      "annotation": "Black develops the knight to its ideal square, attacking our central pawn and preparing to castle kingside. This is Black's most popular response, as the knight on f6 controls important central squares like e4 and d5 while supporting Black's own central ambitions. Our opponent is following classical opening principles by developing pieces toward the center, but this move actually walks right into our Trompowsky setup. We should be pleased to see this move because it allows us to execute our planned bishop sortie to g5, where it will create immediate tactical and positional threats."
     },
     {
       "san": "Bg5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We unleash the key move of the Hergert Gambit, sacrificing the d4 pawn to blast open the center and create immediate attacking chances. This pawn advance is the point of our entire opening setup – we're offering material in exchange for rapid piece development, central control, and dangerous attacking prospects. The e4 move attacks Black's bishop and creates a powerful pawn center, while opening lines for our pieces to create threats against Black's king. This gambit epitomizes the aggressive spirit of the Trompowsky system, where we prefer dynamic play and practical chances over material equality, putting our opponent under intense pressure from the very opening."
+      "annotation": "We unleash the central idea of the Hergert Gambit, sacrificing the d4 pawn to blast open the center and create immediate attacking chances. This pawn advance is the point of our entire opening setup – we're offering material in exchange for rapid piece development, central control, and dangerous attacking prospects. The e4 move attacks Black's bishop and creates a powerful pawn center, while opening lines for our pieces to create threats against Black's king. This gambit epitomizes the aggressive spirit of the Trompowsky system, where we prefer dynamic play and practical chances over material equality, putting our opponent under intense pressure from the very opening."
     }
   ]
 }

@@ -588,7 +588,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black responds symmetrically, placing a pawn in the center and fighting for equal space. This solid move controls key central squares and prepares natural piece development.",
+          "annotation": "Black responds symmetrically, placing a pawn in the center and fighting for equal space. this stabilizing move controls key central squares and prepares natural piece development.",
           "pawnStructure": "The position now features symmetrical central pawns, with both sides controlling key central squar.",
           "plans": [
             "Prepare to deal with White's coming c4 advance",
@@ -707,7 +707,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the king's knight to its most natural square, controlling the central e4 and d5 squares while preparing to castle kingside.",
+          "annotation": "Black develops the king's knight to its ideal square, controlling the central e4 and d5 squares while preparing to castle kingside.",
           "plans": [
             "Support ...e6 to develop the light-squared bishop",
             "Prepare castling kingside for king safety"
@@ -853,7 +853,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "White castles kingside, bringing the king to safety while connecting the rooks. This natural move also prepares to bring the rook to d1, putting pressure on Black's central pawns.",
+          "annotation": "White castles kingside, bringing the king to safety while connecting the rooks. this move also prepares to bring the rook to d1, putting pressure on Black's central pawns.",
           "plans": [
             "Bring the rook to d1 to pressure the d-file",
             "Coordinate pieces for central pressure"
@@ -1056,7 +1056,7 @@
         },
         {
           "san": "Nbd7",
-          "annotation": "Black develops the queen's knight to its most natural square, supporting the center and preparing to contest White's pressure.",
+          "annotation": "Black develops the queen's knight to its ideal square, supporting the center and preparing to contest White's pressure.",
           "plans": [
             "Bring the knight to more active squares like b6 or c5",
             "Complete development and challenge White's center"

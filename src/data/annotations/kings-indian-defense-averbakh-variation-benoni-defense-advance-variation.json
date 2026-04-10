@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our central pawns and preparing for the e4 advance that will give us a classical pawn center. This knight controls important squares like d5 and e4, and it's perfectly placed to support our kingside attack plans that are typical in positions where Black has fianchettoed their king's bishop. The knight on c3 also keeps our options open for various setups - we might play f3 and Be3 for a solid approach, or Be2 and h3 for a more flexible system. From c3, this knight can also potentially reroute to e2 or d5 depending on how the position develops."
+      "annotation": "We're developing our knight to its ideal square, supporting our central pawns and preparing for the e4 advance that will give us a classical pawn center. This knight controls important squares like d5 and e4, and it's perfectly placed to support our kingside attack plans that are typical in positions where Black has fianchettoed their king's bishop. The knight on c3 also keeps our options open for various setups - we might play f3 and Be3 for a solid approach, or Be2 and h3 for a more flexible system. From c3, this knight can also potentially reroute to e2 or d5 depending on how the position develops."
     },
     {
       "san": "Bg7",

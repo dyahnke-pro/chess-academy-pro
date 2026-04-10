@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, supporting our d4 pawn and preparing to castle kingside. This move is extremely flexible, as it doesn't commit us to any particular pawn structure yet and keeps our options open for both e3 and g3 setups. The knight on f3 also eyes the important e5 square and can later jump to d2 or e1 in some variations to support our central pawns. By developing pieces before making further pawn moves, we're following classical opening principles while maintaining maximum flexibility."
+      "annotation": "We develop our king's knight to its ideal square, supporting our d4 pawn and preparing to castle kingside. This move is extremely flexible, as it doesn't commit us to any particular pawn structure yet and keeps our options open for both e3 and g3 setups. The knight on f3 also eyes the important e5 square and can later jump to d2 or e1 in some variations to support our central pawns. By developing pieces before making further pawn moves, we're following classical opening principles while maintaining maximum flexibility."
     },
     {
       "san": "b6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "a3",
-      "annotation": "We're playing the Petrosian Variation, a subtle but important move that prevents Black's bishop from going to b4 and gives us control over the b4 square for our own pieces. This seemingly quiet move is actually quite committal, as we're planning to meet ...Bb7 with b4, gaining space on the queenside and potentially preparing a minority attack later. The move also prepares to expand with b4 at the right moment, which can cramp Black's queenside and give us long-term pressure. While it may look slow, this variation has been used by many top players because it leads to rich positional battles where White maintains a slight but lasting initiative."
+      "annotation": "We're playing the Petrosian Variation, a subtle but purposeful move that prevents Black's bishop from going to b4 and gives us control over the b4 square for our own pieces. This seemingly quiet move is actually quite committal, as we're planning to meet ...Bb7 with b4, gaining space on the queenside and potentially preparing a minority attack later. The move also prepares to expand with b4 at the right moment, which can cramp Black's queenside and give us long-term pressure. While it may look slow, this variation has been used by many top players because it leads to rich positional battles where White maintains a slight but lasting initiative."
     }
   ]
 }

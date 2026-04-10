@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to contest the central dark squares. This knight placement is almost mandatory in these pawn structures, as it defends our center while preparing further development. The knight on c3 also supports potential advances like d4-d5 and keeps pressure on Black's position. However, we should be aware that this knight can become a target for Black's light-squared bishop, which is about to make its appearance in typical Nimzo-Indian fashion."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to contest the central dark squares. This knight placement is almost mandatory in these pawn structures, as it defends our center while preparing further development. The knight on c3 also supports potential advances like d4-d5 and keeps pressure on Black's position. However, we should be aware that this knight can become a target for Black's light-squared bishop, which is about to make its appearance in typical Nimzo-Indian fashion."
     },
     {
       "san": "Bb4",

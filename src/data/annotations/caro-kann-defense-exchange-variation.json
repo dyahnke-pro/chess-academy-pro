@@ -23,7 +23,7 @@
     },
     {
       "san": "cxd5",
-      "annotation": "Black recaptures toward the center, maintaining material balance and keeping the position symmetrical for now. This recapture is almost forced since taking with the queen would be premature and allow us to gain time with developing moves that attack the centralized queen. By recapturing with the c-pawn, Black maintains a central pawn presence and keeps the position relatively closed, which suits the defensive nature of the Caro-Kann. Our opponent now has a solid central pawn on d5 but has also opened the c-file, which we might be able to use for our rook later in the game."
+      "annotation": "Black recaptures toward the center, maintaining material balance and keeping the position symmetrical for now. This recapture is almost forced since taking with the queen would be premature and allow us to gain time with developing choices that attack the centralized queen. By recapturing with the c-pawn, Black maintains a central pawn presence and keeps the position relatively closed, which suits the defensive nature of the Caro-Kann. Our opponent now has a solid central pawn on d5 but has also opened the c-file, which we might be able to use for our rook later in the game."
     },
     {
       "san": "Nf3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, defending the attacked d5 pawn and completing the basic development of the queenside pieces. This move follows the opening principle of developing pieces toward the center while solving the immediate tactical problem of the attacked pawn. The knight on c6 also prepares potential future moves like Nb4 or Ne5, giving Black active piece play to compensate for the slightly passive pawn structure. Our opponent is staying true to the Caro-Kann philosophy: solid development, secure king safety, and then gradually equalizing through piece activity rather than sharp tactical play."
+      "annotation": "Black develops the knight to its ideal square, defending the attacked d5 pawn and completing the basic development of the queenside pieces. This move follows the opening principle of developing pieces toward the center while solving the immediate tactical problem of the attacked pawn. The knight on c6 also prepares potential future moves like Nb4 or Ne5, giving Black active piece play to compensate for the slightly passive pawn structure. Our opponent is staying true to the Caro-Kann philosophy: solid development, secure king safety, and then gradually equalizing through piece activity rather than sharp tactical play."
     }
   ]
 }

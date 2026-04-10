@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important e5 and d4 central squares while preparing to castle kingside. This move also adds indirect pressure to Black's d5 pawn, as the knight can potentially jump to e5 or support a future e4 advance. From f3, our knight has excellent scope and can later redeploy to more active squares like e5, d4, or even g5 depending on how the position develops. The development of this knight is almost automatic in Queen's Gambit positions, as it supports our central strategy while maintaining maximum flexibility."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important e5 and d4 central squares while preparing to castle kingside. This move also adds indirect pressure to Black's d5 pawn, as the knight can potentially jump to e5 or support a future e4 advance. From f3, our knight has excellent scope and can later redeploy to more active squares like e5, d4, or even g5 depending on how the position develops. The development of this knight is almost automatic in Queen's Gambit positions, as it supports our central strategy while maintaining maximum flexibility."
     },
     {
       "san": "Nf6",

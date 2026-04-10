@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our central pawn and controls the important e5 and h4 squares. This move keeps our options completely open - we haven't committed to any particular pawn structure yet and can still transpose into many different openings. The knight on f3 also prepares kingside castling and puts pressure on Black's position without being overly committal. This is the starting point for systems like the Torre Attack, Colle System, or even a delayed Queen's Gambit, giving us maximum flexibility in our setup."
+      "annotation": "We're developing our knight to its ideal square, where it supports our central pawn and controls the important e5 and h4 squares. This move keeps our options completely open - we haven't committed to any particular pawn structure yet and can still transpose into many different openings. The knight on f3 also prepares kingside castling and puts pressure on Black's position without being overly committal. This is the starting point for systems like the Torre Attack, Colle System, or even a delayed Queen's Gambit, giving us maximum flexibility in our setup."
     },
     {
       "san": "Nf6",

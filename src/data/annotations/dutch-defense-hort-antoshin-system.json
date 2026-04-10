@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to support the center with moves like ...e6 or ...d6. This knight placement is typical in Dutch Defense setups, where it often jumps to e4 or d5 to create central pressure. The knight on f6 also supports potential kingside attacking ideas and helps Black maintain control over key central squares. We need to be mindful that this knight, combined with the f5 pawn, gives Black good control over the e4 square, which is why our next moves should focus on solid development and maintaining our central influence."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to support the center with moves like ...e6 or ...d6. This knight placement is typical in Dutch Defense setups, where it often jumps to e4 or d5 to create central pressure. The knight on f6 also supports potential kingside attacking ideas and helps Black maintain control over key central squares. We need to be mindful that this knight, combined with the f5 pawn, gives Black good control over the e4 square, which is why our next moves should focus on solid development and maintaining our central influence."
     },
     {
       "san": "g3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding more pressure to the center and preparing to support our d4 pawn or advance with e4 when the time is right. This knight development also keeps our options open for various pawn breaks and piece maneuvers in the middlegame. The knight on c3 works well with our bishop on g2 and gives us good control over key central squares. We're building up our position methodically, and after castling, we'll be ready to start more active operations either in the center or on the queenside where we have a space advantage."
+      "annotation": "We develop our knight to its ideal square, adding more pressure to the center and preparing to support our d4 pawn or advance with e4 when the time is right. This knight development also keeps our options open for various pawn breaks and piece maneuvers in the middlegame. The knight on c3 works well with our bishop on g2 and gives us good control over key central squares. We're building up our position methodically, and after castling, we'll be ready to start more active operations either in the center or on the queenside where we have a space advantage."
     },
     {
       "san": "Qc7",

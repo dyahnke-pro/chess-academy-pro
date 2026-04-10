@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square and preparing to support central control. This is a hypermodern response that doesn't immediately occupy the center with pawns, instead controlling key squares from the side. Our opponent is keeping flexible options - they might follow up with ...g6 for a King's Indian setup, ...e6 for a Queen's Indian structure, or even ...d6 and ...e5 for a more classical approach. This knight on f6 will be a key piece in Black's setup, often supporting central pawn breaks or piece activity."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preparing to support central control. This is a hypermodern response that doesn't immediately occupy the center with pawns, instead controlling key squares from the side. Our opponent is keeping flexible options - they might follow up with ...g6 for a King's Indian setup, ...e6 for a Queen's Indian structure, or even ...d6 and ...e5 for a more classical approach. This knight on f6 will be a key piece in Black's setup, often supporting central pawn breaks or piece activity."
     },
     {
       "san": "Nf3",
@@ -39,7 +39,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Black strikes back in the center with this key move, creating the symmetrical pawn structure that gives this variation its name. This advance challenges our control of the d4 square and creates a complex central tension where both sides have pawn chains pointing at each other. The move also opens up possibilities for Black's pieces - the queen gets more scope along the c-file and ranks, while the pawn on c6 (if it comes) will be well-supported. This symmetrical structure often leads to rich middlegame positions where small advantages in piece coordination or pawn breaks can become decisive."
+      "annotation": "Black strikes back in the center with this critical move, creating the symmetrical pawn structure that gives this variation its name. This advance challenges our control of the d4 square and creates a complex central tension where both sides have pawn chains pointing at each other. The move also opens up possibilities for Black's pieces - the queen gets more scope along the c-file and ranks, while the pawn on c6 (if it comes) will be well-supported. This symmetrical structure often leads to rich middlegame positions where small advantages in piece coordination or pawn breaks can become decisive."
     },
     {
       "san": "Nc3",
@@ -51,7 +51,7 @@
     },
     {
       "san": "d3",
-      "annotation": "We play this solid developing move to support our center and prepare for piece coordination, marking the transition into what's known as the Duchamp Variation. This modest pawn advance supports a potential e4 advance while also giving our light-squared bishop on g2 additional support and opening up the possibility of Be3 to challenge Black's kingside setup. The move d3 also prepares to bring our pieces into more active coordination - our queen can potentially come to c2, our rooks can occupy central files, and we maintain maximum flexibility for how to proceed in the middlegame. While it looks quiet, this move sets up the foundation for rich positional play where small improvements in piece coordination can lead to lasting advantages in the complex symmetrical structure that's emerged."
+      "annotation": "We play this solid developing choice to support our center and prepare for piece coordination, marking the transition into what's known as the Duchamp Variation. This modest pawn advance supports a potential e4 advance while also giving our light-squared bishop on g2 additional support and opening up the possibility of Be3 to challenge Black's kingside setup. The move d3 also prepares to bring our pieces into more active coordination - our queen can potentially come to c2, our rooks can occupy central files, and we maintain maximum flexibility for how to proceed in the middlegame. While it looks quiet, this move sets up the foundation for rich positional play where small improvements in piece coordination can lead to lasting advantages in the complex symmetrical structure that's emerged."
     }
   ]
 }

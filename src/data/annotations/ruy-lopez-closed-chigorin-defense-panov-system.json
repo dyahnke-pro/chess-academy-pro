@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and adding another defender to our own e4 pawn. This move also prepares to castle kingside while keeping our options open for various pawn structures. The knight on f3 controls important central squares like d4 and e5, and supports potential future advances like d2-d4. By attacking the e5 pawn immediately, we force Black to make a decision about how to defend it, often leading them into the main lines of the Ruy Lopez."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and adding another defender to our own e4 pawn. This move also prepares to castle kingside while keeping our options open for various pawn structures. The knight on f3 controls important central squares like d4 and e5, and supports potential future advances like d2-d4. By attacking the e5 pawn immediately, we force Black to make a decision about how to defend it, often leading them into the main lines of the Ruy Lopez."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the attacked e5 pawn with the most natural developing move, bringing the knight to an active square where it controls important central territory. The knight on c6 also supports potential future breaks like d7-d5 or f7-f5, while maintaining flexibility in Black's pawn structure. This is the most principled response, as it develops a piece while solving the immediate tactical problem of the attacked pawn. From c6, the knight also eyes important squares like d4 and b4, where it might jump later to create counterplay."
+      "annotation": "Black defends the attacked e5 pawn with the most active move, bringing the knight to an active square where it controls important central territory. The knight on c6 also supports potential future breaks like d7-d5 or f7-f5, while maintaining flexibility in Black's pawn structure. This is the most principled response, as it develops a piece while solving the immediate tactical problem of the attacked pawn. From c6, the knight also eyes important squares like d4 and b4, where it might jump later to create counterplay."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our e4 pawn and preparing to castle kingside. This move follows excellent opening principles by developing with tempo while putting pressure on our center. The knight on f6 also supports important central squares and prepares Black's kingside for safety. By attacking our e4 pawn, Black forces us to make a decision about how to maintain our central presence, often leading to the typical Ruy Lopez pawn structures we'll see develop."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our e4 pawn and preparing to castle kingside. This move follows excellent opening principles by developing with tempo while putting pressure on our center. The knight on f6 also supports important central squares and prepares Black's kingside for safety. By attacking our e4 pawn, Black forces us to make a decision about how to maintain our central presence, often leading to the typical Ruy Lopez pawn structures we'll see develop."
     },
     {
       "san": "O-O",
@@ -63,7 +63,7 @@
     },
     {
       "san": "h3",
-      "annotation": "We play the useful move h3, preventing Black's pieces (particularly a knight or bishop) from reaching the g4 square where they could pin our f3 knight or create other tactical problems. This quiet but important move also prepares potential kingside expansion with g2-g4 in appropriate circumstances, giving our king a flight square on h2. The move fits perfectly with the slow maneuvering nature of the Closed Ruy Lopez, where small improvements to our position accumulate into meaningful advantages. Additionally, h3 can support a future f2-f4 advance by controlling the g4 square and preventing Black's pieces from interfering with our kingside plans."
+      "annotation": "We play the useful move h3, preventing Black's pieces (particularly a knight or bishop) from reaching the g4 square where they could pin our f3 knight or create other tactical problems. this purposeful move also prepares potential kingside expansion with g2-g4 in appropriate circumstances, giving our king a flight square on h2. The move fits perfectly with the slow maneuvering nature of the Closed Ruy Lopez, where small improvements to our position accumulate into meaningful advantages. Additionally, h3 can support a future f2-f4 advance by controlling the g4 square and preventing Black's pieces from interfering with our kingside plans."
     },
     {
       "san": "Na5",
@@ -79,7 +79,7 @@
     },
     {
       "san": "d4",
-      "annotation": "We advance our central pawn to d4, the key move in the Closed Ruy Lopez that opens the position and activates our pieces. This advance challenges Black's central pawn chain and opens diagonals for our bishops while preparing to recapture with our c-pawn to maintain central control. The pawn on d4 also supports potential advances like f2-f4 and gives our pieces more scope for activity. This move transforms the position from maneuvering to more concrete tactical and strategic themes, where central control becomes paramount."
+      "annotation": "We advance our central pawn to d4, the critical move in the Closed Ruy Lopez that opens the position and activates our pieces. This advance challenges Black's central pawn chain and opens diagonals for our bishops while preparing to recapture with our c-pawn to maintain central control. The pawn on d4 also supports potential advances like f2-f4 and gives our pieces more scope for activity. This move transforms the position from maneuvering to more concrete tactical and strategic themes, where central control becomes paramount."
     },
     {
       "san": "Qc7",

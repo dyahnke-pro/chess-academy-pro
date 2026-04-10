@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, supporting the advance of the e-pawn to e5 and maintaining flexibility in the center. This knight placement is crucial in the Dutch Defense as it helps Black control the important e4 square and prevents us from immediately establishing a strong pawn center. The knight on f6 also supports Black's typical Dutch plans of playing moves like e5 or potentially Nh5 in some variations to target our kingside. From f6, the knight is well-placed to support both central and kingside operations."
+      "annotation": "Black develops their knight to its ideal square, supporting the advance of the e-pawn to e5 and maintaining flexibility in the center. This knight placement is crucial in the Dutch Defense as it helps Black control the important e4 square and prevents us from immediately establishing a strong pawn center. The knight on f6 also supports Black's typical Dutch plans of playing moves like e5 or potentially Nh5 in some variations to target our kingside. From f6, the knight is well-placed to support both central and kingside operations."
     },
     {
       "san": "Bg2",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it performs multiple important functions in our setup. The knight on f3 helps control the critical e5 and h4 squares, preventing Black from advancing e5 immediately and limiting some of their kingside attacking options. This knight also supports a potential e4 pawn break, which is one of our main strategic goals in this position. Additionally, Nf3 improves our king safety by providing protection along the first rank and preparing for castling, which is essential before Black's attack gains momentum."
+      "annotation": "We develop our knight to its ideal square, where it performs multiple important functions in our setup. The knight on f3 helps control the critical e5 and h4 squares, preventing Black from advancing e5 immediately and limiting some of their kingside attacking options. This knight also supports a potential e4 pawn break, which is one of our main strategic goals in this position. Additionally, Nf3 improves our king safety by providing protection along the first rank and preparing for castling, which is essential before Black's attack gains momentum."
     },
     {
       "san": "Bg7",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding pressure to the d5 square and preparing to support our central pawn advances. The knight on c3 is perfectly placed to support a future e4 push, which remains our primary strategic goal in this position. This knight also eyes potential outposts on d5 and b5, and can potentially reroute to e2 or d5 if tactical opportunities arise. By developing Nc3, we've now coordinated our pieces well and are ready to begin more concrete action in the center, while maintaining solid control over key squares and keeping Black's expansion limited."
+      "annotation": "We develop our knight to its ideal square, adding pressure to the d5 square and preparing to support our central pawn advances. The knight on c3 is perfectly placed to support a future e4 push, which remains our primary strategic goal in this position. This knight also eyes potential outposts on d5 and b5, and can potentially reroute to e2 or d5 if tactical opportunities arise. By developing Nc3, we've now coordinated our pieces well and are ready to begin more concrete action in the center, while maintaining solid control over key squares and keeping Black's expansion limited."
     },
     {
       "san": "c6",

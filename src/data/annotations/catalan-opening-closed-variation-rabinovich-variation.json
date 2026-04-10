@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn and preparing to castle kingside. This flexible move keeps many options open - we can still play e3 for a solid setup, or potentially e4 if circumstances allow. The knight on f3 also prevents any immediate ...e5 central break by Black, maintaining our space advantage. From f3, our knight can potentially jump to e5 or g5 later, depending on how the position develops, making this a highly principled developing move."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn and preparing to castle kingside. This flexible move keeps many options open - we can still play e3 for a solid setup, or potentially e4 if circumstances allow. The knight on f3 also prevents any immediate ...e5 central break by Black, maintaining our space advantage. From f3, our knight can potentially jump to e5 or g5 later, depending on how the position develops, making this a highly principled developing choice."
     },
     {
       "san": "Nf6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops their dark-squared bishop to a safe square, completing the kingside development and preparing to castle. This natural move keeps the bishop flexible - it can potentially reroute to d6 or f6 later if needed, or support kingside defense from e7. Our opponent is following sound developmental principles, though the bishop on e7 is somewhat passive compared to more active placements. Black's setup is solid but gives us good chances to maintain a slight space advantage and long-term pressure."
+      "annotation": "Black develops their dark-squared bishop to a safe square, completing the kingside development and preparing to castle. this move keeps the bishop flexible - it can potentially reroute to d6 or f6 later if needed, or support kingside defense from e7. Our opponent is following sound developmental principles, though the bishop on e7 is somewhat passive compared to more active placements. Black's setup is solid but gives us good chances to maintain a slight space advantage and long-term pressure."
     },
     {
       "san": "g3",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, bringing the king to safety and connecting the rooks, which is essential before the position opens up. This natural move completes Black's basic development, though their position remains somewhat cramped with limited space for piece improvement. Our opponent is preparing for the middlegame battles ahead, but they'll need to find active piece play to avoid being slowly outplayed. The castled king position is generally safe, but Black needs to be careful about potential kingside attacks if we can coordinate our pieces effectively."
+      "annotation": "Black castles kingside, bringing the king to safety and connecting the rooks, which is essential before the position opens up. this move completes Black's basic development, though their position remains somewhat cramped with limited space for piece improvement. Our opponent is preparing for the middlegame battles ahead, but they'll need to find active piece play to avoid being slowly outplayed. The castled king position is generally safe, but Black needs to be careful about potential kingside attacks if we can coordinate our pieces effectively."
     },
     {
       "san": "O-O",

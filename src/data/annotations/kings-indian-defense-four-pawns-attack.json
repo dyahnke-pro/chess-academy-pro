@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn and preparing to advance in the center with e2-e4. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us excellent piece coordination. This move fits perfectly with our plan to establish a broad pawn center - once we play e4, we'll have pawns on c4, d4, and e4, creating maximum central space. We're also preparing to meet Black's king's Indian setup with the aggressive Four Pawns Attack, where we'll push f2-f4 to create tremendous central pressure."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing to advance in the center with e2-e4. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us excellent piece coordination. This move fits perfectly with our plan to establish a broad pawn center - once we play e4, we'll have pawns on c4, d4, and e4, creating maximum central space. We're also preparing to meet Black's king's Indian setup with the aggressive Four Pawns Attack, where we'll push f2-f4 to create tremendous central pressure."
     },
     {
       "san": "Bg7",
@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent solidifies the position by supporting the potential ...e5 advance and preparing to complete development with ...O-O and ...Nbd7. The d6 pawn also provides crucial support for pieces on e5 and c5, making it a key move in the King's Indian structure. Black is showing patience - rather than immediately challenging our center, they're building a solid foundation from which to launch counterplay later. This move also prevents our potential e4-e5 advance from being immediately devastating, as the d6 pawn controls e5 and supports Black's pieces."
+      "annotation": "Our opponent solidifies the position by supporting the potential ...e5 advance and preparing to complete development with ...O-O and ...Nbd7. The d6 pawn also provides crucial support for pieces on e5 and c5, making it a critical move in the King's Indian structure. Black is showing patience - rather than immediately challenging our center, they're building a solid foundation from which to launch counterplay later. This move also prevents our potential e4-e5 advance from being immediately devastating, as the d6 pawn controls e5 and supports Black's pieces."
     },
     {
       "san": "O-O",

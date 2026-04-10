@@ -15,11 +15,11 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, attacking our advanced e5 pawn and preparing rapid piece development. This move exemplifies the Englund Gambit's philosophy: Black prioritizes piece activity and central pressure over material, hoping to create immediate tactical threats. The knight on c6 also supports a potential ...d6 advance to further challenge our pawn center and opens up possibilities for moves like ...Bg4 or ...f6 to increase the pressure. We need to be ready to defend our extra pawn while continuing our own development, always keeping an eye out for Black's tactical possibilities."
+      "annotation": "Black develops the knight to its ideal square, attacking our advanced e5 pawn and preparing rapid piece development. This move exemplifies the Englund Gambit's philosophy: Black prioritizes piece activity and central pressure over material, hoping to create immediate tactical threats. The knight on c6 also supports a potential ...d6 advance to further challenge our pawn center and opens up possibilities for moves like ...Bg4 or ...f6 to increase the pressure. We need to be ready to defend our extra pawn while continuing our own development, always keeping an eye out for Black's tactical possibilities."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its best square, defending the e5 pawn while simultaneously preparing to castle kingside and maintaining excellent central control. This natural developing move also prevents any potential ...Qh4+ checks and keeps our position solid and harmonious. The knight on f3 supports a future e2-e4 advance if needed and maintains flexibility in our piece coordination. It's crucial in gambit positions like this to combine material consolidation with sound development, and Nf3 accomplishes both goals perfectly while avoiding the tactical complications Black is hoping to create."
+      "annotation": "We develop our knight to its best square, defending the e5 pawn while simultaneously preparing to castle kingside and maintaining excellent central control. This active move also prevents any potential ...Qh4+ checks and keeps our position solid and harmonious. The knight on f3 supports a future e2-e4 advance if needed and maintains flexibility in our piece coordination. It's crucial in gambit positions like this to combine material consolidation with sound development, and Nf3 accomplishes both goals perfectly while avoiding the tactical complications Black is hoping to create."
     },
     {
       "san": "Qe7",

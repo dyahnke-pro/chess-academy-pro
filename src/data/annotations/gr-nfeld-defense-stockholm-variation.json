@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn and prepares to contest the central e5 and d5 squares. This knight placement is extremely flexible, as it can later support pawn advances like e2-e4 or jump to more aggressive squares like e4 or b5 depending on how the position develops. The knight on c3 also adds pressure to Black's potential d5 pawn break, which is a key thematic move in the Grünfeld Defense. By completing this natural development, we maintain all our options while keeping our central pawn structure solid and well-supported."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn and prepares to contest the central e5 and d5 squares. This knight placement is extremely flexible, as it can later support pawn advances like e2-e4 or jump to more aggressive squares like e4 or b5 depending on how the position develops. The knight on c3 also adds pressure to Black's potential d5 pawn break, which is a key thematic move in the Grünfeld Defense. By completing this natural development, we maintain all our options while keeping our central pawn structure solid and well-supported."
     },
     {
       "san": "d5",

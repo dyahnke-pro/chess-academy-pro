@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, adding another defender to our d4 pawn while controlling the central e5 square. This flexible move keeps all our options open - we can still transpose into various systems like the Queen's Gambit, English Opening setups, or even Indian Defense formations depending on Black's response. The knight on f3 also prepares our kingside castling and puts subtle pressure on Black's position by eyeing potential tactical motifs. From f3, our knight can later jump to e5, g5, or h4 depending on the pawn structure that develops."
+      "annotation": "We develop our kingside knight to its ideal square, adding another defender to our d4 pawn while controlling the central e5 square. This flexible move keeps all our options open - we can still transpose into various systems like the Queen's Gambit, English Opening setups, or even Indian Defense formations depending on Black's response. The knight on f3 also prepares our kingside castling and puts subtle pressure on Black's position by eyeing potential tactical motifs. From f3, our knight can later jump to e5, g5, or h4 depending on the pawn structure that develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their kingside knight, mirroring our setup and immediately attacking our d4 pawn while controlling the central e4 square. This natural developing move fits perfectly with Black's Slav-Indian hybrid system, preparing to challenge our center with moves like ...d5 or ...d6. Black is essentially saying 'I'll develop my pieces actively while keeping my options open for various pawn breaks.' The knight on f6 also supports potential ...e5 advances and keeps the position highly flexible, which is characteristic of modern defensive systems."
+      "annotation": "Our opponent develops their kingside knight, mirroring our setup and immediately attacking our d4 pawn while controlling the central e4 square. This active move fits perfectly with Black's Slav-Indian hybrid system, preparing to challenge our center with moves like ...d5 or ...d6. Black is essentially saying 'I'll develop my pieces actively while keeping my options open for various pawn breaks.' The knight on f6 also supports potential ...e5 advances and keeps the position highly flexible, which is characteristic of modern defensive systems."
     },
     {
       "san": "c4",

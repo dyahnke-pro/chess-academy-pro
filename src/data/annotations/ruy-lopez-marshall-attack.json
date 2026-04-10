@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 pawn and preparing to castle kingside. This move also controls the important d4 and h4 squares, giving us flexibility in our pawn structure. The knight on f3 is perfectly placed to support a future d2-d4 advance or to reroute via g5 or h4 if needed. By attacking e5 immediately, we force Black to make a decision about how to defend their central pawn, which will help determine the opening's direction."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 pawn and preparing to castle kingside. This move also controls the important d4 and h4 squares, giving us flexibility in our pawn structure. The knight on f3 is perfectly placed to support a future d2-d4 advance or to reroute via g5 or h4 if needed. By attacking e5 immediately, we force Black to make a decision about how to defend their central pawn, which will help determine the opening's direction."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight, attacking our e4 pawn and preparing to castle. This natural developing move also opens up the possibility of ...d7-d6 or even ...d7-d5 in some variations. Our opponent is correctly prioritizing piece development and king safety over trying to immediately resolve the pin on the c6 knight. The knight on f6 also controls important central squares like d5 and e4, giving Black good central influence despite the pressure on their position."
+      "annotation": "Black develops their kingside knight, attacking our e4 pawn and preparing to castle. This active move also opens up the possibility of ...d7-d6 or even ...d7-d5 in some variations. Our opponent is correctly prioritizing piece development and king safety over trying to immediately resolve the pin on the c6 knight. The knight on f6 also controls important central squares like d5 and e4, giving Black good central influence despite the pressure on their position."
     },
     {
       "san": "O-O",

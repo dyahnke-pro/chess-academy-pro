@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it attacks Black's e5 pawn and controls the crucial central squares d4 and e5. This move also prepares our kingside castling by clearing the path between our king and rook. The knight on f3 is perfectly placed to support a future d2-d4 advance, and it can later jump to more aggressive squares like g5 or e5 depending on how the position develops. This is the most principled continuation, developing with tempo by attacking the e5 pawn."
+      "annotation": "We develop our knight to its ideal square, where it attacks Black's e5 pawn and controls the crucial central squares d4 and e5. This move also prepares our kingside castling by clearing the path between our king and rook. The knight on f3 is perfectly placed to support a future d2-d4 advance, and it can later jump to more aggressive squares like g5 or e5 depending on how the position develops. This is the most principled continuation, developing with tempo by attacking the e5 pawn."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight to a square where it controls important central territory. The knight on c6 defends e5 while also eyeing the d4 and b4 squares, and it can potentially jump to more active squares like d4 or e7 later in the game. This is Black's most popular response because it develops a piece while maintaining the central tension. However, we should note that this knight might become a target later when we play our light-squared bishop to b5."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight to a square where it controls important central territory. The knight on c6 defends e5 while also eyeing the d4 and b4 squares, and it can potentially jump to more active squares like d4 or e7 later in the game. This is Black's most popular response because it develops a piece while maintaining the central tension. However, we should note that this knight might become a target later when we play our light-squared bishop to b5."
     },
     {
       "san": "Bb5",

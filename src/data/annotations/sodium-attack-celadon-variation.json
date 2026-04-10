@@ -23,7 +23,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black expands the center aggressively, controlling the entire middle of the board and gaining space. This natural move challenges our setup and prevents us from easily maneuvering; Black is building a strong pawn presence that we'll need to respect or challenge directly. The move commits Black's center, which will be important if we can generate an attack later."
+      "annotation": "Black expands the center aggressively, controlling the entire middle of the board and gaining space. this move challenges our setup and prevents us from easily maneuvering; Black is building a strong pawn presence that we'll need to respect or challenge directly. The move commits Black's center, which will be important if we can generate an attack later."
     },
     {
       "san": "e3",

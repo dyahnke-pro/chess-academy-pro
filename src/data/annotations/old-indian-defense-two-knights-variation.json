@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, supporting the d4 pawn and preparing for the coming central tension. This knight placement is extremely flexible, as it can later jump to e4, d5, or b5 depending on the position's requirements. The knight on c3 also supports a potential e4 advance, helping us build the ideal pawn center. With this development, we're preparing to meet Black's likely ...e5 with either dxe5 or by maintaining the tension, and we're keeping all our options open for piece development and central expansion."
+      "annotation": "We're developing our queenside knight to its ideal square, supporting the d4 pawn and preparing for the coming central tension. This knight placement is extremely flexible, as it can later jump to e4, d5, or b5 depending on the position's requirements. The knight on c3 also supports a potential e4 advance, helping us build the ideal pawn center. With this development, we're preparing to meet Black's likely ...e5 with either dxe5 or by maintaining the tension, and we're keeping all our options open for piece development and central expansion."
     },
     {
       "san": "e5",

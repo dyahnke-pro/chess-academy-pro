@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing for potential e4 expansion. The knight on c3 controls important central squares like e4 and d5, and can later jump to more active posts like d5 or e4 depending on the position. This move also maintains maximum flexibility in our setup, keeping options open for both Be2 and Bd3 bishop deployments. From c3, our knight supports various pawn advances and can participate in both central and kingside operations."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing for potential e4 expansion. The knight on c3 controls important central squares like e4 and d5, and can later jump to more active posts like d5 or e4 depending on the position. This move also maintains maximum flexibility in our setup, keeping options open for both Be2 and Bd3 bishop deployments. From c3, our knight supports various pawn advances and can participate in both central and kingside operations."
     },
     {
       "san": "Bg7",

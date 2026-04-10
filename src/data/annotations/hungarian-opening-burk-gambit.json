@@ -3,11 +3,11 @@
   "moveAnnotations": [
     {
       "san": "g3",
-      "annotation": "We're playing the Hungarian Opening, an unusual first move that immediately prepares to fianchetto our kingside bishop on g2. This setup is unconventional but solid—we're not fighting for the center immediately but instead building a flexible, positional structure. By playing g3, we control the critical f4 and h4 squares while keeping our position compact and hard to crack. You'll find this opening favors patient players who want to outmaneuver their opponent rather than engage in tactical complications."
+      "annotation": "We're playing the Hungarian Opening, an unusual first move that immediately prepares to fianchetto our kingside bishop on g2. This setup is unconventional but solid—we're not contesting central control immediately but instead building a flexible, positional structure. By playing g3, we control the critical f4 and h4 squares while keeping our position compact and hard to crack. You'll find this opening favors patient players who want to outmaneuver their opponent rather than engage in tactical complications."
     },
     {
       "san": "e5",
-      "annotation": "Black stakes a claim in the center with this classical response, occupying the e5 square and gaining space. This is a natural move that fights for control of d4 and f4, the two key central squares we were eyeing with our fianchetto setup. Black is correctly taking the initiative in the opening, forcing us to respond thoughtfully to their central presence."
+      "annotation": "Black stakes a claim in the center with this classical response, occupying the e5 square and gaining space. This is a logical choice that fights for control of d4 and f4, the two key central squares we were eyeing with our fianchetto setup. Black is correctly taking the initiative in the opening, forcing us to respond thoughtfully to their central presence."
     },
     {
       "san": "a3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We bring our knight into play with tempo, attacking the e5 pawn and controlling key squares like d4 and h4. Nf3 is a natural developing move that starts to harmonize with our fianchetto plan—the knight supports our center while our bishop on g2 will soon exert pressure along the long diagonal. This move also prepares to support our kingside structure and keeps our position flexible for future plans like d3-e4."
+      "annotation": "We bring our knight into play with tempo, attacking the e5 pawn and controlling key squares like d4 and h4. Nf3 is a active move that starts to harmonize with our fianchetto plan—the knight supports our center while our bishop on g2 will soon exert pressure along the long diagonal. This move also prepares to support our kingside structure and keeps our position flexible for future plans like d3-e4."
     },
     {
       "san": "e4",

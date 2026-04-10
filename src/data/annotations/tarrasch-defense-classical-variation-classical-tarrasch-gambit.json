@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports the d4 pawn and adds pressure to Black's d5 pawn. This move is almost automatic in Queen's Gambit positions because the knight controls key central squares like e4 and b5 while maintaining maximum flexibility. From c3, our knight can later jump to e4 if Black's d5 pawn disappears, or support various pawn advances like b4 or e4. The knight development also keeps all our options open regarding when and how to resolve the central pawn tension."
+      "annotation": "We're developing our knight to its ideal square, where it supports the d4 pawn and adds pressure to Black's d5 pawn. This move is almost automatic in Queen's Gambit positions because the knight controls key central squares like e4 and b5 while maintaining maximum flexibility. From c3, our knight can later jump to e4 if Black's d5 pawn disappears, or support various pawn advances like b4 or e4. The knight development also keeps all our options open regarding when and how to resolve the central pawn tension."
     },
     {
       "san": "c5",
-      "annotation": "Black plays the key move of the Tarrasch Defense, immediately striking at our d4 pawn to create central counterplay. This active approach shows our opponent is willing to accept some positional concessions (like potential isolated pawns) in exchange for piece activity and central influence. The c5 move opens the c-file for Black's rook and prepares to develop the knight to c6 with tempo. While this creates tactical complications and gives Black good piece play, it also allows us to potentially create weaknesses in Black's pawn structure that we can exploit in the middlegame."
+      "annotation": "Black plays the central idea of the Tarrasch Defense, immediately striking at our d4 pawn to create central counterplay. This active approach shows our opponent is willing to accept some positional concessions (like potential isolated pawns) in exchange for piece activity and central influence. The c5 move opens the c-file for Black's rook and prepares to develop the knight to c6 with tempo. While this creates tactical complications and gives Black good piece play, it also allows us to potentially create weaknesses in Black's pawn structure that we can exploit in the middlegame."
     },
     {
       "san": "cxd5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our basic development by bringing the knight to its ideal square, where it controls the central e5 square and supports our d4 pawn. This natural developing move also prepares to castle kingside while maintaining flexibility in our setup. The knight on f3 is perfectly placed to support various pawn advances or piece maneuvers, and it doesn't commit us to any particular plan just yet. From f3, our knight also eyes the h4 square for potential attacking chances later in the game, while supporting both central and kingside operations."
+      "annotation": "We're completing our basic development by bringing the knight to its ideal square, where it controls the central e5 square and supports our d4 pawn. This active move also prepares to castle kingside while maintaining flexibility in our setup. The knight on f3 is perfectly placed to support various pawn advances or piece maneuvers, and it doesn't commit us to any particular plan just yet. From f3, our knight also eyes the h4 square for potential attacking chances later in the game, while supporting both central and kingside operations."
     },
     {
       "san": "Nc6",
@@ -43,11 +43,11 @@
     },
     {
       "san": "g3",
-      "annotation": "We're preparing to fianchetto our dark-squared bishop, creating a powerful diagonal battery aimed at Black's kingside while supporting our center from a distance. This flexible developing move allows our bishop to control important central squares like d5 and e4 while maintaining excellent scope across the long diagonal. The fianchetto setup is particularly effective in Tarrasch positions because it helps control the light squares that can become weak after pawn exchanges. The g3 move also prepares a safe haven for our king while keeping our position flexible and avoiding premature commitments."
+      "annotation": "We're preparing to fianchetto our dark-squared bishop, creating a powerful diagonal battery aimed at Black's kingside while supporting our center from a distance. This flexible developing choice allows our bishop to control important central squares like d5 and e4 while maintaining excellent scope across the long diagonal. The fianchetto setup is particularly effective in Tarrasch positions because it helps control the light squares that can become weak after pawn exchanges. The g3 move also prepares a safe haven for our king while keeping our position flexible and avoiding premature commitments."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent completes kingside development with the most natural move, developing the knight to its ideal square where it controls central territory. This move prepares castling while maintaining pressure on our center and keeping Black's pieces actively placed. The knight on f6 also supports Black's central pawn structure and prepares potential piece coordination with the bishops. Black is following sound opening principles by developing pieces quickly while maintaining the central tension, setting up a position where both sides will have good piece activity once development is complete."
+      "annotation": "Our opponent completes kingside development with the most principled response, developing the knight to its ideal square where it controls central territory. This move prepares castling while maintaining pressure on our center and keeping Black's pieces actively placed. The knight on f6 also supports Black's central pawn structure and prepares potential piece coordination with the bishops. Black is following sound opening principles by developing pieces quickly while maintaining the central tension, setting up a position where both sides will have good piece activity once development is complete."
     },
     {
       "san": "Bg2",

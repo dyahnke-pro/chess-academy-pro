@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to recapture with the knight if Black plays ...dxc4. However, this move also walks directly into Black's main idea in the Nimzo-Indian - the pin with ...Bb4 that will soon follow. The knight on c3 controls important central squares like e4 and d5, and later we'll often reroute it via e2 to support our pawn center or challenge Black's pieces. This move is practically forced in our setup, as we need this knight to support our central pawn chain, even though we know the pin is coming."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to recapture with the knight if Black plays ...dxc4. However, this move also walks directly into Black's main idea in the Nimzo-Indian - the pin with ...Bb4 that will soon follow. The knight on c3 controls important central squares like e4 and d5, and later we'll often reroute it via e2 to support our pawn center or challenge Black's pieces. This move is practically forced in our setup, as we need this knight to support our central pawn chain, even though we know the pin is coming."
     },
     {
       "san": "Bb4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "We're developing our light-squared bishop to its ideal square, where it supports our kingside and prepares castling while also eyeing the potentially weak h7 square. This bishop on d3 is perfectly placed in the Nimzo-Indian structure, as it can support central advances, defend our kingside, and potentially create threats along the b1-h7 diagonal. The bishop also supports our f5 square, which can become important in middlegame attacks, and coordinates beautifully with a future knight on f3. This natural developing move maintains our slight space advantage while preparing to complete our development with Nf3 and castling."
+      "annotation": "We're developing our light-squared bishop to its ideal square, where it supports our kingside and prepares castling while also eyeing the potentially weak h7 square. This bishop on d3 is perfectly placed in the Nimzo-Indian structure, as it can support central advances, defend our kingside, and potentially create threats along the b1-h7 diagonal. The bishop also supports our f5 square, which can become important in middlegame attacks, and coordinates beautifully with a future knight on f3. This active move maintains our slight space advantage while preparing to complete our development with Nf3 and castling."
     },
     {
       "san": "d5",

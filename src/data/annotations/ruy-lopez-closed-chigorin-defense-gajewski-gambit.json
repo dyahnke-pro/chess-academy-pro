@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 pawn and controlling the important central squares d4 and e5. This move also prepares kingside castling and keeps our options open for various pawn structures. The knight on f3 is perfectly placed to support our center and will often play a key role in both attack and defense throughout the middlegame."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 pawn and controlling the important central squares d4 and e5. This move also prepares kingside castling and keeps our options open for various pawn structures. The knight on f3 is perfectly placed to support our center and will often play a key role in both attack and defense throughout the middlegame."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops with tempo, attacking our e4 pawn and forcing us to make a decision about how to defend it. This natural developing move also prepares kingside castling and fights for central control by putting pressure on d5 and e4. Our opponent is following sound opening principles by developing with purpose, creating threats while improving their position."
+      "annotation": "Black develops with tempo, attacking our e4 pawn and forcing us to make a decision about how to defend it. This active move also prepares kingside castling and fights for central control by putting pressure on d5 and e4. Our opponent is following sound opening principles by developing with purpose, creating threats while improving their position."
     },
     {
       "san": "O-O",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the light-squared bishop to a safe square, preparing to castle and breaking the pin on the knight. This solid move is preferred over more adventurous options like Bc5 because it doesn't allow us any tactical shots and maintains a flexible pawn structure. Our opponent is prioritizing king safety and sound development, knowing that premature activity can be punished in the sharp tactical world of the Ruy Lopez."
+      "annotation": "Black develops the light-squared bishop to a safe square, preparing to castle and breaking the pin on the knight. this stabilizing move is preferred over more adventurous options like Bc5 because it doesn't allow us any tactical shots and maintains a flexible pawn structure. Our opponent is prioritizing king safety and sound development, knowing that premature activity can be punished in the sharp tactical world of the Ruy Lopez."
     },
     {
       "san": "Re1",
@@ -55,7 +55,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays this solid move to support the e5 pawn and prepare central expansion with moves like c5 or the immediate d5. This creates a solid pawn chain and opens the dark-squared bishop's diagonal, while also preparing to complete development. Our opponent is building a flexible pawn structure that can support various middlegame plans, though the slightly passive nature of this move gives us chances to maintain a slight initiative."
+      "annotation": "Black plays this stabilizing move to support the e5 pawn and prepare central expansion with moves like c5 or the immediate d5. This creates a solid pawn chain and opens the dark-squared bishop's diagonal, while also preparing to complete development. Our opponent is building a flexible pawn structure that can support various middlegame plans, though the slightly passive nature of this move gives us chances to maintain a slight initiative."
     },
     {
       "san": "c3",
@@ -63,7 +63,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, completing their basic development and ensuring king safety before the position becomes more complex. This natural move prepares for the coming middlegame battles while getting the king away from the center where tactical complications often arise. Our opponent has now completed their essential development tasks and can start thinking about more active plans in the center and on the queenside."
+      "annotation": "Black castles kingside, completing their basic development and ensuring king safety before the position becomes more complex. this move prepares for the coming middlegame battles while getting the king away from the center where tactical complications often arise. Our opponent has now completed their essential development tasks and can start thinking about more active plans in the center and on the queenside."
     },
     {
       "san": "h3",

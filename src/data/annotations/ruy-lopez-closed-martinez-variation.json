@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn and preparing to castle kingside. This move supports our central pawn while developing toward the center, and the knight on f3 will later support advances like d4 or help control key central squares. From f3, our knight also eyes the important e5 and d4 squares, and it clears the way for our kingside development. This is a more forcing approach than quiet moves like d3, as we immediately put pressure on Black's position and force them to defend or clarify their central intentions."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn and preparing to castle kingside. This move supports our central pawn while developing toward the center, and the knight on f3 will later support advances like d4 or help control key central squares. From f3, our knight also eyes the important e5 and d4 squares, and it clears the way for our kingside development. This is a more forcing approach than quiet moves like d3, as we immediately put pressure on Black's position and force them to defend or clarify their central intentions."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight to an active central square. This knight on c6 not only protects e5 but also eyes important squares like d4 and b4, while supporting potential future advances like d5. Our opponent is following classical development principles by bringing pieces toward the center while solving immediate tactical problems. The knight placement also prepares for Black's typical setups in the Spanish Opening, where this piece often plays an important role in central pawn breaks or piece maneuvers."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight to an active central square. This knight on c6 not only protects e5 but also eyes important squares like d4 and b4, while supporting potential future advances like d5. Our opponent is following classical development principles by bringing pieces toward the center while solving immediate tactical problems. The knight placement also prepares for Black's typical setups in the Spanish Opening, where this piece often plays an important role in central pawn breaks or piece maneuvers."
     },
     {
       "san": "Bb5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "d3",
-      "annotation": "We're playing the Martinez Variation of the Closed Spanish by supporting our e4 pawn with this quiet but solid move. This approach prioritizes positional build-up over immediate central tension, giving us a flexible pawn structure that supports our pieces without committing to sharp tactical complications. The d3 move also prepares potential expansions like c3-d4 or supports our bishop's retreat to c2 if needed, while maintaining our central pawn and allowing for gradual piece improvement. This variation often leads to strategic middlegame positions where both sides maneuver their pieces to optimal squares before engaging in decisive action, making it ideal for players who prefer positional understanding over sharp tactical battles."
+      "annotation": "We're playing the Martinez Variation of the Closed Spanish by supporting our e4 pawn with this stabilizing move. This approach prioritizes positional build-up over immediate central tension, giving us a flexible pawn structure that supports our pieces without committing to sharp tactical complications. The d3 move also prepares potential expansions like c3-d4 or supports our bishop's retreat to c2 if needed, while maintaining our central pawn and allowing for gradual piece improvement. This variation often leads to strategic middlegame positions where both sides maneuver their pieces to optimal squares before engaging in decisive action, making it ideal for players who prefer positional understanding over sharp tactical battles."
     }
   ]
 }

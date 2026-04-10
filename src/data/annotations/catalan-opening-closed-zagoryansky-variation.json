@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our e4 square and preparing to support the central advance d5. This is a principled developing move that doesn't commit Black to any particular pawn structure yet. Our opponent is keeping maximum flexibility while developing a piece toward the center and preparing to castle kingside. We should note that Black can still transpose into various Indian Defense systems depending on how the position develops, making this a very sound and flexible choice."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our e4 square and preparing to support the central advance d5. This is a purposeful move that doesn't commit Black to any particular pawn structure yet. Our opponent is keeping maximum flexibility while developing a piece toward the center and preparing to castle kingside. We should note that Black can still transpose into various Indian Defense systems depending on how the position develops, making this a very sound and flexible choice."
     },
     {
       "san": "d5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Bg2",
-      "annotation": "We complete our fianchetto, placing the bishop on its dream square where it controls the entire long diagonal and creates lasting positional pressure. This bishop is the cornerstone of our Catalan strategy, eyeing the Black queenside and making it very difficult for our opponent to maintain the d5 pawn if they capture on c4. The bishop also provides excellent support for our kingside and will often become a dominant force in the middlegame. From g2, our bishop coordinates beautifully with potential moves like Qc2, Rd1, and the eventual regaining of material if Black captures our c-pawn, making this one of the most important moves in the entire Catalan system."
+      "annotation": "We complete our fianchetto, placing the bishop on its dream square where it controls the entire long diagonal and creates lasting positional pressure. This bishop is the cornerstone of our Catalan strategy, eyeing the Black queenside and making it very difficult for our opponent to maintain the d5 pawn if they capture on c4. The bishop also provides excellent support for our kingside and will often become a dominant force in the middlegame. From g2, our bishop coordinates beautifully with potential moves like Qc2, Rd1, and the eventual regaining of material if Black captures our c-pawn, making this one of the most purposeful moves in the entire Catalan system."
     },
     {
       "san": "O-O",

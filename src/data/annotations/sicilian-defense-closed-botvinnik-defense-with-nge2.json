@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while keeping our options open regarding pawn structure. This move supports a future d4 advance if we want to transpose to Open Sicilian lines, but it also prepares the Closed Sicilian setup we're actually heading for. The knight on c3 eyes important central squares like e4, d5, and b5, and will often support our typical kingside pawn storm with f4-f5. By not committing to d4 immediately, we're signaling a positional approach where piece coordination and long-term planning take precedence over sharp tactical battles."
+      "annotation": "We're developing our knight to its ideal square while keeping our options open regarding pawn structure. This move supports a future d4 advance if we want to transpose to Open Sicilian lines, but it also prepares the Closed Sicilian setup we're actually heading for. The knight on c3 eyes important central squares like e4, d5, and b5, and will often support our typical kingside pawn storm with f4-f5. By not committing to d4 immediately, we're signaling a positional approach where piece coordination and long-term planning take precedence over sharp tactical battles."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Bg7",
-      "annotation": "Black completes their own fianchetto setup, developing the dark-squared bishop to its most natural square where it becomes the cornerstone of their defensive setup. This bishop controls crucial dark squares along the long diagonal, particularly helping to defend against our attacking intentions on the kingside. The bishop on g7 also supports Black's central control and will often be involved in counterplay ideas, especially if Black can advance their central pawns effectively. This symmetric development maintains the balance and shows Black is prepared for the typical Closed Sicilian middlegame themes."
+      "annotation": "Black completes their own fianchetto setup, developing the dark-squared bishop to its ideal square where it becomes the cornerstone of their defensive setup. This bishop controls crucial dark squares along the long diagonal, particularly helping to defend against our attacking intentions on the kingside. The bishop on g7 also supports Black's central control and will often be involved in counterplay ideas, especially if Black can advance their central pawns effectively. This symmetric development maintains the balance and shows Black is prepared for the typical Closed Sicilian middlegame themes."
     },
     {
       "san": "d3",

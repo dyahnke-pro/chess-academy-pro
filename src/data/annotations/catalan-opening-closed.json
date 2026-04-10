@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and controlling the central e4 square. This is the most principled response, as it immediately challenges our central pawn and begins Black's own piece development. Our opponent is following sound opening principles by developing knights before bishops and contesting the center early. This move also prepares potential pawn breaks like ...e6 and ...d5, which are typical in many Indian Defense systems."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and controlling the central e4 square. This is the most principled response, as it immediately challenges our central pawn and begins Black's own piece development. Our opponent is following sound opening principles by developing knights before bishops and contesting the center early. This move also prepares potential pawn breaks like ...e6 and ...d5, which are typical in many Indian Defense systems."
     },
     {
       "san": "c4",
@@ -39,7 +39,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, prioritizing king safety while connecting the rooks. This is a perfectly natural move that follows sound opening principles of getting the king to safety early. Our opponent completes the basic requirements of opening development: knights and bishops out, king castled. The castled king position also prepares for potential middlegame operations on either flank, as Black now has a secure base from which to launch counterplay."
+      "annotation": "Black castles kingside, prioritizing king safety while connecting the rooks. This is a perfectly logical choice that follows sound opening principles of getting the king to safety early. Our opponent completes the basic requirements of opening development: knights and bishops out, king castled. The castled king position also prepares for potential middlegame operations on either flank, as Black now has a secure base from which to launch counterplay."
     },
     {
       "san": "O-O",

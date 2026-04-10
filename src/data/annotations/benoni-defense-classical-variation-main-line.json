@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center. This is a principled developing move that doesn't commit to any particular pawn structure yet. Our opponent is following the opening principle of developing pieces toward the center and creating immediate pressure on our central pawn. Black is keeping maximum flexibility, as this knight can support various pawn breaks like ...e6, ...d6, or ...c5 depending on how we continue."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center. This is a purposeful move that doesn't commit to any particular pawn structure yet. Our opponent is following the opening principle of developing pieces toward the center and creating immediate pressure on our central pawn. Black is keeping maximum flexibility, as this knight can support various pawn breaks like ...e6, ...d6, or ...c5 depending on how we continue."
     },
     {
       "san": "c4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the e4 advance and preparing to complete our kingside development. This move follows the opening principle of developing toward the center while maintaining flexibility in our pawn structure. Our knight on c3 also eyes important squares like d5 and b5, giving us tactical possibilities. We're preparing to establish a strong pawn center with e4, which will give us excellent space and attacking chances."
+      "annotation": "We're developing our knight to its ideal square, supporting the e4 advance and preparing to complete our kingside development. This move follows the opening principle of developing toward the center while maintaining flexibility in our pawn structure. Our knight on c3 also eyes important squares like d5 and b5, giving us tactical possibilities. We're preparing to establish a strong pawn center with e4, which will give us excellent space and attacking chances."
     },
     {
       "san": "d6",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight while defending the attacked e4 pawn, maintaining our strong pawn center intact. This natural developing move also prepares potential advances like e4-e5 or supports the center if Black captures on e4. The knight on c3 aims toward the kingside and can potentially jump to d5 or f5 later in the game. By keeping our pawn center together, we maintain maximum space advantage and keep Black's pieces somewhat cramped, though we must be ready for Black's next challenge to our center."
+      "annotation": "We're developing our knight while defending the attacked e4 pawn, maintaining our strong pawn center intact. This active move also prepares potential advances like e4-e5 or supports the center if Black captures on e4. The knight on c3 aims toward the kingside and can potentially jump to d5 or f5 later in the game. By keeping our pawn center together, we maintain maximum space advantage and keep Black's pieces somewhat cramped, though we must be ready for Black's next challenge to our center."
     },
     {
       "san": "e5",

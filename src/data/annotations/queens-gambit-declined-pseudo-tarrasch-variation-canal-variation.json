@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and adds additional pressure to Black's d5 strongpoint. This knight placement is extremely flexible, as it can later jump to various squares like e4, b5, or a4 depending on the position's requirements. The knight on c3 also prepares potential advances like e4 if Black's d5 pawn ever moves, and it works harmoniously with our other pieces in typical Queen's Gambit setups. This development follows classical opening principles while keeping maximum options open for our middlegame plans."
+      "annotation": "We're developing our knight to its ideal square, where it supports our c4 pawn and adds additional pressure to Black's d5 strongpoint. This knight placement is extremely flexible, as it can later jump to various squares like e4, b5, or a4 depending on the position's requirements. The knight on c3 also prepares potential advances like e4 if Black's d5 pawn ever moves, and it works harmoniously with our other pieces in typical Queen's Gambit setups. This development follows classical opening principles while keeping maximum options open for our middlegame plans."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We're pinning Black's knight to their queen, creating immediate tactical pressure and forcing our opponent to deal with this annoying pin before completing development. This bishop move is a classical idea in the Queen's Gambit, as it develops a piece while creating concrete problems for Black to solve. The pin makes it harder for Black to play natural moves like ...Be7 or ...Nbd7, since the knight on f6 becomes increasingly difficult to defend. This move also prepares potential tactics involving capturing the knight or maintaining long-term pressure, while our dark-squared bishop finds an active post outside the pawn chain."
+      "annotation": "We're pinning Black's knight to their queen, creating immediate tactical pressure and forcing our opponent to deal with this annoying pin before completing development. This bishop move is a classical idea in the Queen's Gambit, as it develops a piece while creating concrete problems for Black to solve. The pin makes it harder for Black to play logical choices like ...Be7 or ...Nbd7, since the knight on f6 becomes increasingly difficult to defend. This move also prepares potential tactics involving capturing the knight or maintaining long-term pressure, while our dark-squared bishop finds an active post outside the pawn chain."
     },
     {
       "san": "c5",

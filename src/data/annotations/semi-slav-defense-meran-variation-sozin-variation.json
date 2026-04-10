@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our d-pawn. This flexible move keeps multiple opening systems available - we could transpose into a Queen's Gambit, King's Indian Attack, or various other setups depending on how Black continues. The knight on f3 also prepares kingside castling and doesn't commit us to any particular pawn structure yet."
+      "annotation": "We develop our kingside knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our d-pawn. This flexible move keeps multiple opening systems available - we could transpose into a Queen's Gambit, King's Indian Attack, or various other setups depending on how Black continues. The knight on f3 also prepares kingside castling and doesn't commit us to any particular pawn structure yet."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our knight development, developing with tempo by attacking our d4 pawn and controlling the key central squares e4 and d5. This natural developing move is the hallmark of many solid defensive systems and shows that Black wants to maintain central tension rather than resolve it immediately. Our opponent is following classical opening principles: develop pieces toward the center and create threats while improving the position."
+      "annotation": "Black mirrors our knight development, developing with tempo by attacking our d4 pawn and controlling the key central squares e4 and d5. This active move is the hallmark of many solid defensive systems and shows that Black wants to maintain central tension rather than resolve it immediately. Our opponent is following classical opening principles: develop pieces toward the center and create threats while improving the position."
     },
     {
       "san": "c4",
@@ -27,11 +27,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queenside knight to its most active square, adding another attacker to the d5 pawn and preparing to recapture on c4 with the knight if needed. This natural developing move maintains pressure in the center while keeping our options open for various pawn breaks like e2-e4. The knight on c3 also supports potential advances like d4-d5 or controls important squares like e4 and b5. By increasing the pressure on d5, we're forcing Black to make concrete decisions about the pawn structure."
+      "annotation": "We develop our queenside knight to its most active square, adding another attacker to the d5 pawn and preparing to recapture on c4 with the knight if needed. This active move maintains pressure in the center while keeping our options open for various pawn breaks like e2-e4. The knight on c3 also supports potential advances like d4-d5 or controls important squares like e4 and b5. By increasing the pressure on d5, we're forcing Black to make concrete decisions about the pawn structure."
     },
     {
       "san": "e6",
-      "annotation": "Our opponent creates the Semi-Slav formation by supporting the d5 pawn from another angle while opening a diagonal for the dark-squared bishop. This solid move gives Black's position great flexibility - the light-squared bishop can potentially develop via d6, e7, or even b4 in some lines. However, the downside is that the light-squared bishop on c8 becomes somewhat restricted, which is a key strategic theme in Semi-Slav positions. Black is building a solid but slightly passive setup that can become very dynamic with proper piece coordination."
+      "annotation": "Our opponent creates the Semi-Slav formation by supporting the d5 pawn from another angle while opening a diagonal for the dark-squared bishop. this stabilizing move gives Black's position great flexibility - the light-squared bishop can potentially develop via d6, e7, or even b4 in some lines. However, the downside is that the light-squared bishop on c8 becomes somewhat restricted, which is a key strategic theme in Semi-Slav positions. Black is building a solid but slightly passive setup that can become very dynamic with proper piece coordination."
     },
     {
       "san": "e3",
@@ -99,7 +99,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside to ensure our king's safety in this sharp position where tactics are flying and material is roughly equal. This natural move gets our king away from the center where tactics are most dangerous and connects our rooks for better coordination. Castling also brings our rook to f1, where it can potentially support attacks on the f-file or defend our position as needed. Given the tactical nature of the position, king safety becomes paramount, and this move allows us to focus on our attacking chances without worrying about our own king's security."
+      "annotation": "We castle kingside to ensure our king's safety in this sharp position where tactics are flying and material is roughly equal. this move gets our king away from the center where tactics are most dangerous and connects our rooks for better coordination. Castling also brings our rook to f1, where it can potentially support attacks on the f-file or defend our position as needed. Given the tactical nature of the position, king safety becomes paramount, and this move allows us to focus on our attacking chances without worrying about our own king's security."
     }
   ]
 }

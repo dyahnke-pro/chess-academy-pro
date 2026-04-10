@@ -45,7 +45,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to attack the e5 pawn while controlling the center. This is the most natural developing move, preparing for the Ruy Lopez, Italian Game, or Scotch Game depending on White's next moves.",
+      "annotation": "White develops the knight to attack the e5 pawn while controlling the center. This is the most active move, preparing for the Ruy Lopez, Italian Game, or Scotch Game depending on White's next moves.",
       "plans": [
         "Attack e5 and prepare Bb5 for the Ruy Lopez",
         "Develop pieces with tempo"
@@ -71,7 +71,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the knight, developing a piece to its most natural square. The knight on c6 controls important central squares and prepares for various defense systems.",
+      "annotation": "Black defends the e5 pawn with the knight, developing a piece to its ideal square. The knight on c6 controls important central squares and prepares for various defense systems.",
       "plans": [
         "Defend e5 and develop harmoniously",
         "Prepare ...a6 and ...b5 for the Marshall Attack setup"
@@ -249,7 +249,7 @@
     },
     {
       "san": "Re1",
-      "annotation": "White places the rook behind the e4 pawn, the most natural square. The rook defends e4 and prepares for the eventual opening of the e-file. This is a standard Ruy Lopez move that strengthens White's central control.",
+      "annotation": "White places the rook behind the e4 pawn, the ideal square. The rook defends e4 and prepares for the eventual opening of the e-file. This is a standard Ruy Lopez move that strengthens White's central control.",
       "plans": [
         "Support e4 and prepare d4 central advance",
         "Keep the center stable while completing development"
@@ -576,7 +576,7 @@
     },
     {
       "san": "Bd6",
-      "annotation": "The bishop attacks the rook on e5, forcing it to make a decision. From d6, the bishop also eyes the kingside, particularly the h2 pawn. This is a critical developing move that both attacks and prepares the kingside assault.",
+      "annotation": "The bishop attacks the rook on e5, forcing it to make a decision. From d6, the bishop also eyes the kingside, particularly the h2 pawn. This is a critical developing choice that both attacks and prepares the kingside assault.",
       "plans": [
         "Drive the rook from e5",
         "Set up ...Qh4 for a direct attack on the kingside",

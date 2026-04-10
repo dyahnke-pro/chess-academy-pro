@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately attacking our d4 pawn and preparing to contest the center from a flexible position. This move is the hallmark of hypermodern openings like the King's Indian Defense and Nimzo-Indian, where Black allows White to occupy the center with pawns while preparing to undermine it later with pieces and pawn breaks. Our opponent is keeping maximum options open, as this knight can support both ...e6 setups (leading to Queen's Indian or Nimzo-Indian territory) and ...g6 fianchetto systems. The knight on f6 also prepares potential central breaks like ...e5 or ...c5, giving Black dynamic counterplay possibilities."
+      "annotation": "Black develops the knight to its ideal square, immediately attacking our d4 pawn and preparing to contest the center from a flexible position. This move is the hallmark of hypermodern openings like the King's Indian Defense and Nimzo-Indian, where Black allows White to occupy the center with pawns while preparing to undermine it later with pieces and pawn breaks. Our opponent is keeping maximum options open, as this knight can support both ...e6 setups (leading to Queen's Indian or Nimzo-Indian territory) and ...g6 fianchetto systems. The knight on f6 also prepares potential central breaks like ...e5 or ...c5, giving Black dynamic counterplay possibilities."
     },
     {
       "san": "c4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're declining the Benko Gambit with this solid developing move, choosing to maintain our material advantage rather than face Black's dangerous long-term compensation. This move develops our knight to its best square, supporting our central pawn chain while preparing to castle kingside and complete our development safely. By declining the gambit, we're essentially saying we believe we can handle Black's pressure while keeping our extra pawn, though this does allow Black to maintain tension and keep some initiative in the position. The knight on f3 also prepares potential moves like Nc3, Bg5, or even h3 and g4 in some lines, giving us multiple ways to continue our development and meet Black's upcoming pressure on the queenside."
+      "annotation": "We're declining the Benko Gambit with this solid developing choice, choosing to maintain our material advantage rather than face Black's dangerous long-term compensation. This move develops our knight to its best square, supporting our central pawn chain while preparing to castle kingside and complete our development safely. By declining the gambit, we're essentially saying we believe we can handle Black's pressure while keeping our extra pawn, though this does allow Black to maintain tension and keep some initiative in the position. The knight on f3 also prepares potential moves like Nc3, Bg5, or even h3 and g4 in some lines, giving us multiple ways to continue our development and meet Black's upcoming pressure on the queenside."
     }
   ]
 }

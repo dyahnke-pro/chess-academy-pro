@@ -19,15 +19,15 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding more pressure to Black's d5 pawn and preparing to recapture on c4 if needed. This knight placement supports our central strategy while keeping maximum flexibility in our pawn structure. The knight from c3 can later jump to e4, e2, or b5 depending on how the position develops. We're also preparing to potentially push e3 and develop our kingside pieces harmoniously."
+      "annotation": "We're developing our knight to its ideal square, adding more pressure to Black's d5 pawn and preparing to recapture on c4 if needed. This knight placement supports our central strategy while keeping maximum flexibility in our pawn structure. The knight from c3 can later jump to e4, e2, or b5 depending on how the position develops. We're also preparing to potentially push e3 and develop our kingside pieces harmoniously."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most active square, attacking our e4 square and preparing to castle kingside. This natural developing move also prepares to potentially support the center with moves like ...e6 or challenge our pieces. Our opponent is following sound opening principles by developing pieces quickly while maintaining the central tension. The knight on f6 will be well-placed to support Black's central strategy and can later move to more active squares like e4 or d7."
+      "annotation": "Black develops their kingside knight to its most active square, attacking our e4 square and preparing to castle kingside. This active move also prepares to potentially support the center with moves like ...e6 or challenge our pieces. Our opponent is following sound opening principles by developing pieces quickly while maintaining the central tension. The knight on f6 will be well-placed to support Black's central strategy and can later move to more active squares like e4 or d7."
     },
     {
       "san": "e3",
-      "annotation": "We're preparing to develop our dark-squared bishop while supporting a potential d4-d5 pawn advance in the future. This move creates a solid pawn triangle that controls important central squares and prevents Black from easily establishing pieces on d4. While e3 might seem passive, it's actually a key move in many queen's pawn structures, providing crucial support for our central strategy. The move also opens the diagonal for our light-squared bishop and keeps our king safe."
+      "annotation": "We're preparing to develop our dark-squared bishop while supporting a potential d4-d5 pawn advance in the future. This move creates a solid pawn triangle that controls important central squares and prevents Black from easily establishing pieces on d4. While e3 might seem passive, it's actually a critical move in many queen's pawn structures, providing crucial support for our central strategy. The move also opens the diagonal for our light-squared bishop and keeps our king safe."
     },
     {
       "san": "e6",

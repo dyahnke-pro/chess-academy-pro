@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center. This is the starting move of the Indian Defense systems, where Black delays committing the central pawns and focuses on piece development first. The knight on f6 also prepares kingside castling and keeps options open for various pawn breaks like ...e6, ...g6, or ...d6. Black is following sound opening principles by developing pieces toward the center and maintaining flexibility."
+      "annotation": "Our opponent develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center. This is the starting move of the Indian Defense systems, where Black delays committing the central pawns and focuses on piece development first. The knight on f6 also prepares kingside castling and keeps options open for various pawn breaks like ...e6, ...g6, or ...d6. Black is following sound opening principles by developing pieces toward the center and maintaining flexibility."
     },
     {
       "san": "c4",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, supporting our central pawns and preparing kingside castling. This move also prevents Black from playing ...Nh5 ideas and maintains control over important central squares like e5. The knight on f3 works well with our central pawn structure and prepares to support further advances or piece maneuvers. We're following natural development principles while maintaining our central advantages and preparing to complete our kingside development."
+      "annotation": "We're developing our kingside knight to its ideal square, supporting our central pawns and preparing kingside castling. This move also prevents Black from playing ...Nh5 ideas and maintains control over important central squares like e5. The knight on f3 works well with our central pawn structure and prepares to support further advances or piece maneuvers. We're following natural development principles while maintaining our central advantages and preparing to complete our kingside development."
     },
     {
       "san": "Bg7",

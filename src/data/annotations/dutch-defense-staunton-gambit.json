@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while immediately attacking Black's extra e4 pawn, forcing Black to make a decision about how to defend it. This knight development also supports our central control and prepares to recapture on e4 if needed, while keeping our options open for castling queenside later. The knight on c3 is perfectly placed for the middlegame, where it can support advances like d4-d5 or jump to more active squares like e2 or b5. By developing with tempo (attacking the e4 pawn), we're ensuring that Black can't consolidate their extra material easily."
+      "annotation": "We're developing our knight to its ideal square while immediately attacking Black's extra e4 pawn, forcing Black to make a decision about how to defend it. This knight development also supports our central control and prepares to recapture on e4 if needed, while keeping our options open for castling queenside later. The knight on c3 is perfectly placed for the middlegame, where it can support advances like d4-d5 or jump to more active squares like e2 or b5. By developing with tempo (attacking the e4 pawn), we're ensuring that Black can't consolidate their extra material easily."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight, defending the e4 pawn while bringing a piece toward the center and preparing for eventual kingside castling. This is Black's most natural developing move, as the knight on f6 controls important central squares like e4 and d5 while supporting Black's overall defensive setup. However, this knight placement also walks into our next tactical shot, as we can now pin the knight to the Black queen with our dark-squared bishop. Black's king is still in the center, making rapid development crucial, but our next move will create immediate pressure."
+      "annotation": "Black develops their kingside knight, defending the e4 pawn while bringing a piece toward the center and preparing for eventual kingside castling. This is Black's most active move, as the knight on f6 controls important central squares like e4 and d5 while supporting Black's overall defensive setup. However, this knight placement also walks into our next tactical shot, as we can now pin the knight to the Black queen with our dark-squared bishop. Black's king is still in the center, making rapid development crucial, but our next move will create immediate pressure."
     },
     {
       "san": "Bg5",

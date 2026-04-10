@@ -11,7 +11,7 @@
     },
     {
       "san": "exd5",
-      "annotation": "We're accepting the pawn trade, which is virtually forced since declining would leave us with a passive position and no advantage from the opening. By capturing on d5, we maintain material balance but invite Black's queen to enter the game very early, which goes against traditional opening principles. However, we're confident that we can gain time by attacking the exposed queen with our developing moves, and we'll have better central control with our d-pawn ready to advance."
+      "annotation": "We're accepting the pawn trade, which is virtually forced since declining would leave us with a passive position and no advantage from the opening. By capturing on d5, we maintain material balance but invite Black's queen to enter the game very early, which goes against traditional opening principles. However, we're confident that we can gain time by attacking the exposed queen with our developing choices, and we'll have better central control with our d-pawn ready to advance."
     },
     {
       "san": "Qxd5",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight with tempo, attacking Black's centralized queen and forcing it to move again. This natural developing move also increases our control over the central d5 and e4 squares while preparing to castle kingside. The knight on c3 will be well-placed for the middlegame, potentially supporting a future d4-d5 advance or helping to control key squares around Black's position. Most importantly, we're gaining time in development since Black must respond to the queen attack."
+      "annotation": "We're developing our knight with tempo, attacking Black's centralized queen and forcing it to move again. This active move also increases our control over the central d5 and e4 squares while preparing to castle kingside. The knight on c3 will be well-placed for the middlegame, potentially supporting a future d4-d5 advance or helping to control key squares around Black's position. Most importantly, we're gaining time in development since Black must respond to the queen attack."
     },
     {
       "san": "Qa5",

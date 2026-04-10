@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our central d4 pawn while preparing to castle kingside and keeping our options open for various pawn structures. This knight controls important central squares like e5 and d4, and doesn't commit us to any particular plan yet - we can still play e3 for a solid setup or e4 for more aggressive central play. The knight also prepares potential tactics involving Nd2-e4 or Ne5 depending on how Black develops. Most importantly, this move follows classical opening principles by developing a piece while maintaining maximum flexibility in our position."
+      "annotation": "We develop our knight to its ideal square, supporting our central d4 pawn while preparing to castle kingside and keeping our options open for various pawn structures. This knight controls important central squares like e5 and d4, and doesn't commit us to any particular plan yet - we can still play e3 for a solid setup or e4 for more aggressive central play. The knight also prepares potential tactics involving Nd2-e4 or Ne5 depending on how Black develops. Most importantly, this move follows classical opening principles by developing a piece while maintaining maximum flexibility in our position."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development with the most natural move, developing the knight to its optimal square where it attacks our e4 square and supports Black's central control. This knight development is consistent with the Slav Defense philosophy of active piece play, and it prepares kingside castling while keeping pressure on our center. Our opponent is also preparing potential tactics like ...Ne4 if we're not careful, and this piece will be well-placed for both defense and counterplay. Black is following sound opening principles while maintaining the central tension that characterizes the Slav Defense."
+      "annotation": "Black mirrors our development with the most principled response, developing the knight to its optimal square where it attacks our e4 square and supports Black's central control. This knight development is consistent with the Slav Defense philosophy of active piece play, and it prepares kingside castling while keeping pressure on our center. Our opponent is also preparing potential tactics like ...Ne4 if we're not careful, and this piece will be well-placed for both defense and counterplay. Black is following sound opening principles while maintaining the central tension that characterizes the Slav Defense."
     },
     {
       "san": "Nc3",
@@ -47,7 +47,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent supports the center with this solid move, preparing to complete development while maintaining the extra pawn on c4 for now. Black is also opening lines for the dark-squared bishop and preparing to castle, while creating a solid pawn chain that supports the pawn on f6. However, this move does have the drawback of potentially blocking in Black's light-squared bishop if it retreats, which is why getting Bf5 in first was so important. Black is following a classical developmental approach while keeping the material advantage, but we now have good central control and active pieces that should provide compensation. The position is entering a complex middlegame where our piece activity will compete against Black's solid structure and extra pawn."
+      "annotation": "Our opponent supports the center with this stabilizing move, preparing to complete development while maintaining the extra pawn on c4 for now. Black is also opening lines for the dark-squared bishop and preparing to castle, while creating a solid pawn chain that supports the pawn on f6. However, this move does have the drawback of potentially blocking in Black's light-squared bishop if it retreats, which is why getting Bf5 in first was so important. Black is following a classical developmental approach while keeping the material advantage, but we now have good central control and active pieces that should provide compensation. The position is entering a complex middlegame where our piece activity will compete against Black's solid structure and extra pawn."
     }
   ]
 }

@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the c4 pawn and adding pressure to the central d5 square. This move is almost automatic in the English Opening as it prepares flexible development while keeping our options open for both kingside and queenside play. The knight on c3 also supports potential pawn breaks like d4 or b4, depending on how the position develops. Additionally, this development keeps the option of playing f4 later to challenge Black's central pawn chain directly."
+      "annotation": "We're developing our knight to its ideal square, supporting the c4 pawn and adding pressure to the central d5 square. This move is almost automatic in the English Opening as it prepares flexible development while keeping our options open for both kingside and queenside play. The knight on c3 also supports potential pawn breaks like d4 or b4, depending on how the position develops. Additionally, this development keeps the option of playing f4 later to challenge Black's central pawn chain directly."
     },
     {
       "san": "Nc6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're making a subtle but important move that supports our central control and prepares to complete our development. This pawn move strengthens our grip on the d4 square and prepares to develop our dark-squared bishop, likely to d2 or e2. The move e3 also creates a solid pawn chain and prevents Black from placing pieces on d4, which could become annoying. While this might seem slow, it's actually preparing for more active piece placement and maintains the flexibility that characterizes the English Opening."
+      "annotation": "We're making a subtle but purposeful move that supports our central control and prepares to complete our development. This pawn move strengthens our grip on the d4 square and prepares to develop our dark-squared bishop, likely to d2 or e2. The move e3 also creates a solid pawn chain and prevents Black from placing pieces on d4, which could become annoying. While this might seem slow, it's actually preparing for more active piece placement and maintains the flexibility that characterizes the English Opening."
     },
     {
       "san": "d6",

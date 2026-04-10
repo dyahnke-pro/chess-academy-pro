@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, where it supports our d4 pawn, controls the important e5 square, and prepares kingside castling. This knight development is extremely flexible, as it doesn't commit us to any particular pawn structure while maintaining maximum options for our setup. The knight on f3 also prepares various tactical motifs involving Ne5 or Nh4 in certain positions, and it supports potential pawn advances like e4. Most importantly, this move continues our classical development while keeping all strategic options open - we can still choose between systems with g3 and Bg2, or e3 and Be2, depending on how Black continues."
+      "annotation": "We're developing our king's knight to its ideal square, where it supports our d4 pawn, controls the important e5 square, and prepares kingside castling. This knight development is extremely flexible, as it doesn't commit us to any particular pawn structure while maintaining maximum options for our setup. The knight on f3 also prepares various tactical motifs involving Ne5 or Nh4 in certain positions, and it supports potential pawn advances like e4. Most importantly, this move continues our classical development while keeping all strategic options open - we can still choose between systems with g3 and Bg2, or e3 and Be2, depending on how Black continues."
     },
     {
       "san": "b6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops the light-squared bishop to a safe square where it supports kingside castling while maintaining flexibility for future plans. This modest but solid move prepares ...O-O and keeps the bishop out of harm's way while preserving options for later repositioning to more active squares. The Be7 also supports Black's kingside defense and can potentially support pawn advances like ...d5 or ...f5 in certain variations. While not the most ambitious square for the bishop, e7 represents a practical choice that prioritizes safety and development over immediate activity, which is very much in the spirit of the Queen's Indian Defense."
+      "annotation": "Black develops the light-squared bishop to a safe square where it supports kingside castling while maintaining flexibility for future plans. This modest but well-grounded move prepares ...O-O and keeps the bishop out of harm's way while preserving options for later repositioning to more active squares. The Be7 also supports Black's kingside defense and can potentially support pawn advances like ...d5 or ...f5 in certain variations. While not the most ambitious square for the bishop, e7 represents a practical choice that prioritizes safety and development over immediate activity, which is very much in the spirit of the Queen's Indian Defense."
     },
     {
       "san": "O-O",
@@ -47,7 +47,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black mirrors our castling move, bringing their king to safety and completing their basic development while preparing to contest the center more actively. This natural move connects Black's rooks and frees up the f8 square for potential piece maneuvers, particularly allowing the rook to potentially support ...d5 or ...f5 pawn advances. With both kings castled, the position is entering a more complex middlegame phase where both sides will look for ways to improve their piece coordination and create favorable pawn structures. Black's solid setup with the fianchettoed bishop on b7 and the safely castled king gives them a sound foundation for the coming strategic battle."
+      "annotation": "Black mirrors our castling move, bringing their king to safety and completing their basic development while preparing to contest the center more actively. this move connects Black's rooks and frees up the f8 square for potential piece maneuvers, particularly allowing the rook to potentially support ...d5 or ...f5 pawn advances. With both kings castled, the position is entering a more complex middlegame phase where both sides will look for ways to improve their piece coordination and create favorable pawn structures. Black's solid setup with the fianchettoed bishop on b7 and the safely castled king gives them a sound foundation for the coming strategic battle."
     },
     {
       "san": "Nc3",

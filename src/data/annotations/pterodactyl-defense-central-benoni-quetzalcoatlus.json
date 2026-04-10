@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our central pawn chain and preparing for further development. This knight controls important central squares like e4 and d5, while also preparing potential advances or piece maneuvers on either side of the board. From c3, our knight can potentially jump to e4 or d5 (if we can trade our central pawn), and it also supports queenside operations if we choose to expand with moves like b4. In Benoni structures like this, the knight on c3 is crucial for maintaining central control and supporting our space advantage while keeping multiple strategic options open for the middlegame."
+      "annotation": "We're developing our knight to its ideal square, supporting our central pawn chain and preparing for further development. This knight controls important central squares like e4 and d5, while also preparing potential advances or piece maneuvers on either side of the board. From c3, our knight can potentially jump to e4 or d5 (if we can trade our central pawn), and it also supports queenside operations if we choose to expand with moves like b4. In Benoni structures like this, the knight on c3 is crucial for maintaining central control and supporting our space advantage while keeping multiple strategic options open for the middlegame."
     },
     {
       "san": "Qa5",

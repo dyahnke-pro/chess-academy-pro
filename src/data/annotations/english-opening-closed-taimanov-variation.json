@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our c4 pawn, eyes the central d5 square, and prepares to support further central advances like d2-d4. This knight placement is fundamental to most English Opening setups because it gives us maximum flexibility - we can still play d3 or d4, and the knight can later jump to d5 or b5 depending on the position. The move also keeps all our options open regarding our kingside development, as we haven't committed to any particular pawn structure yet. From c3, our knight works beautifully with a future fianchettoed bishop on g2, creating a powerful battery aimed at the long diagonal."
+      "annotation": "We develop our knight to its ideal square, where it supports our c4 pawn, eyes the central d5 square, and prepares to support further central advances like d2-d4. This knight placement is fundamental to most English Opening setups because it gives us maximum flexibility - we can still play d3 or d4, and the knight can later jump to d5 or b5 depending on the position. The move also keeps all our options open regarding our kingside development, as we haven't committed to any particular pawn structure yet. From c3, our knight works beautifully with a future fianchettoed bishop on g2, creating a powerful battery aimed at the long diagonal."
     },
     {
       "san": "Nc6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nge2",
-      "annotation": "We develop our kingside knight to e2, which is a key move in the Botvinnik System that supports our central pawns while preparing to castle and potentially advance f2-f4 later. This knight placement might look awkward compared to f3, but it's actually quite sophisticated - from e2, the knight can jump to d4, f4, or g3, and it doesn't block our f-pawn's advance. The move also prepares h2-h4-h5 attacking ideas in some lines while maintaining excellent piece coordination with our fianchettoed bishop. This setup gives us tremendous flexibility in the middlegame, as we can choose between central advances, kingside attacks, or positional maneuvering depending on how Black continues."
+      "annotation": "We develop our kingside knight to e2, which is a critical move in the Botvinnik System that supports our central pawns while preparing to castle and potentially advance f2-f4 later. This knight placement might look awkward compared to f3, but it's actually quite sophisticated - from e2, the knight can jump to d4, f4, or g3, and it doesn't block our f-pawn's advance. The move also prepares h2-h4-h5 attacking ideas in some lines while maintaining excellent piece coordination with our fianchettoed bishop. This setup gives us tremendous flexibility in the middlegame, as we can choose between central advances, kingside attacks, or positional maneuvering depending on how Black continues."
     },
     {
       "san": "Nh6",

@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the king's pawn, immediately claiming central space and freeing both our bishop and queen for development. This classical first move stakes out the important e4 square and puts immediate pressure on Black's position, forcing them to respond to our central presence. The move follows opening principles perfectly by fighting for the center from move one, and it leads to sharp, tactical games where we can often launch quick kingside attacks. Against the Caro-Kann that's coming, this will create interesting pawn tension in the center where Black will challenge our e4 pawn directly."
+      "annotation": "We're opening with the king's pawn, immediately claiming central space and freeing both our bishop and queen for development. This classical first move stakes out the important e4 square and puts immediate pressure on Black's position, forcing them to respond to our central presence. The move follows opening principles perfectly by contesting central control from move one, and it leads to sharp, tactical games where we can often launch quick kingside attacks. Against the Caro-Kann that's coming, this will create interesting pawn tension in the center where Black will challenge our e4 pawn directly."
     },
     {
       "san": "c6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nd2",
-      "annotation": "We're developing our knight to d2, which might look passive at first glance, but this move serves several important strategic purposes in the Caro-Kann. The knight supports our e4 pawn from d2 and can later jump to the strong outpost on f3, where it would eye the kingside and support central operations. This development also keeps our options open regarding the c1-bishop, since we're not blocking its development path as we would with Nc3. The knight on d2 also prepares potential advances like f2-f3 and e4-e5 in some variations, making this a flexible developing move that maintains tension in the center."
+      "annotation": "We're developing our knight to d2, which might look passive at first glance, but this move serves several important strategic purposes in the Caro-Kann. The knight supports our e4 pawn from d2 and can later jump to the strong outpost on f3, where it would eye the kingside and support central operations. This development also keeps our options open regarding the c1-bishop, since we're not blocking its development path as we would with Nc3. The knight on d2 also prepares potential advances like f2-f3 and e4-e5 in some variations, making this a flexible developing choice that maintains tension in the center."
     },
     {
       "san": "Qb6",

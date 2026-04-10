@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "We're opening with the classical king's pawn move, immediately seizing control of the central d5 and f5 squares while freeing our bishop and queen for development. This move follows fundamental opening principles by fighting for the center with a pawn and creating immediate threats in the position. Against the upcoming St. George Defense, this central pawn will become a key asset that we'll need to support and advance when possible. The move also allows us to develop our pieces rapidly, which will be crucial since Black is about to embark on an unconventional setup that delays normal development."
+      "annotation": "We're opening with the classical king's pawn move, immediately seizing control of the central d5 and f5 squares while freeing our bishop and queen for development. This move follows fundamental opening principles by contesting central control with a pawn and creating immediate threats in the position. Against the upcoming St. George Defense, this central pawn will become a key asset that we'll need to support and advance when possible. The move also allows us to develop our pieces rapidly, which will be crucial since Black is about to embark on an unconventional setup that delays normal development."
     },
     {
       "san": "a6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our e4 pawn and controls important central squares like d4, e5, g5, and h4. This move also prepares castling kingside while keeping our options open for how to handle Black's unusual queenside expansion. The knight on f3 will be perfectly placed to support a future f2-f3 and e4-e5 pawn advance, which is often a key plan against the St. George Defense. By developing naturally, we're maintaining our advantage while avoiding any premature commitments that might allow Black to equalize through tactical means."
+      "annotation": "We develop our knight to its ideal square, where it supports our e4 pawn and controls important central squares like d4, e5, g5, and h4. This move also prepares castling kingside while keeping our options open for how to handle Black's unusual queenside expansion. The knight on f3 will be perfectly placed to support a future f2-f3 and e4-e5 pawn advance, which is often a key plan against the St. George Defense. By developing naturally, we're maintaining our advantage while avoiding any premature commitments that might allow Black to equalize through tactical means."
     },
     {
       "san": "Bb7",
@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays a solid developing move that prepares to bring the king's bishop into play, most likely to g7 where it will form part of a fianchetto setup. This move also supports the e7-e5 advance at some point, though Black's unusual pawn structure makes this less effective than in normal openings. Our opponent is trying to complete development while maintaining the integrity of their position, but this somewhat passive approach allows us to maintain our space advantage. The move does help Black's king safety by preparing to castle, which is becoming increasingly important as we develop our pieces with attacking potential."
+      "annotation": "Black plays a constructive move that prepares to bring the king's bishop into play, most likely to g7 where it will form part of a fianchetto setup. This move also supports the e7-e5 advance at some point, though Black's unusual pawn structure makes this less effective than in normal openings. Our opponent is trying to complete development while maintaining the integrity of their position, but this somewhat passive approach allows us to maintain our space advantage. The move does help Black's king safety by preparing to castle, which is becoming increasingly important as we develop our pieces with attacking potential."
     },
     {
       "san": "O-O",

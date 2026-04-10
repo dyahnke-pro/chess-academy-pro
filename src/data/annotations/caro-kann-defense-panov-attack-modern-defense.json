@@ -27,11 +27,11 @@
     },
     {
       "san": "c4",
-      "annotation": "We're immediately attacking Black's central d5 pawn with our c-pawn, which is the key move that defines the Panov Attack. This aggressive advance puts immediate pressure on Black's position and forces our opponent to make a critical decision about the d5 pawn. The move also opens the c-file for our queen and rook, and allows our queen to potentially reach an active square on a4 or b3. This is why the Panov Attack is considered so dangerous for Black - we're not giving our opponent time to consolidate, but instead maintaining constant pressure on the central pawn structure."
+      "annotation": "We're immediately attacking Black's central d5 pawn with our c-pawn, which is the critical advance that defines the Panov Attack. This aggressive advance puts immediate pressure on Black's position and forces our opponent to make a critical decision about the d5 pawn. The move also opens the c-file for our queen and rook, and allows our queen to potentially reach an active square on a4 or b3. This is why the Panov Attack is considered so dangerous for Black - we're not giving our opponent time to consolidate, but instead maintaining constant pressure on the central pawn structure."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, defending the d5 pawn and preparing for quick kingside development. This is considered the most flexible and sound response to our c4 advance, as the knight on f6 controls important central squares like e4 and d5 while preparing to castle kingside. Our opponent is also keeping options open for the light-squared bishop, which could go to e7 or potentially to more active squares like g4 or f5. The knight on f6 fits perfectly with Black's plan of developing pieces quickly while maintaining the central pawn on d5 as long as possible."
+      "annotation": "Black develops the knight to its ideal square, defending the d5 pawn and preparing for quick kingside development. This is considered the most flexible and sound response to our c4 advance, as the knight on f6 controls important central squares like e4 and d5 while preparing to castle kingside. Our opponent is also keeping options open for the light-squared bishop, which could go to e7 or potentially to more active squares like g4 or f5. The knight on f6 fits perfectly with Black's plan of developing pieces quickly while maintaining the central pawn on d5 as long as possible."
     },
     {
       "san": "Nc3",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while maintaining maximum pressure on Black's d5 pawn. This move supports our central pawn structure and prepares several interesting continuations, including the aggressive Nxe4 if Black captures on e4. The knight on c3 also eyes important central squares like e4 and d5, while keeping our options open for different pawn structures. By developing before recapturing, we're following the principle of improving our position with tempo rather than just reacting to Black's moves."
+      "annotation": "We're developing our knight to its ideal square while maintaining maximum pressure on Black's d5 pawn. This move supports our central pawn structure and prepares several interesting continuations, including the aggressive Nxe4 if Black captures on e4. The knight on c3 also eyes important central squares like e4 and d5, while keeping our options open for different pawn structures. By developing before recapturing, we're following the principle of improving our position with tempo rather than just reacting to Black's moves."
     },
     {
       "san": "dxe4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, attacking our centralized knight and preparing to castle kingside. This move follows sound opening principles by developing toward the center while creating immediate threats against our position. The knight on f6 also supports Black's kingside and prepares potential pawn breaks like e6 and Be7. However, by attacking our knight, Black is allowing us to consider aggressive continuations that might disrupt their smooth development."
+      "annotation": "Black develops their knight to its ideal square, attacking our centralized knight and preparing to castle kingside. This move follows sound opening principles by developing toward the center while creating immediate threats against our position. The knight on f6 also supports Black's kingside and prepares potential pawn breaks like e6 and Be7. However, by attacking our knight, Black is allowing us to consider aggressive continuations that might disrupt their smooth development."
     },
     {
       "san": "Ng5",

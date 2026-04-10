@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This move fits perfectly into our London System structure, as the knight on f3 will work harmoniously with our upcoming Bf4 and e3 setup. The knight also prevents any immediate ...e5 breaks from Black, since we'd simply capture on e5. From f3, our knight can later jump to e5 or g5 in the middlegame, creating attacking chances against Black's potentially weakened kingside after the fianchetto."
+      "annotation": "We develop our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This move fits perfectly into our London System structure, as the knight on f3 will work harmoniously with our upcoming Bf4 and e3 setup. The knight also prevents any immediate ...e5 breaks from Black, since we'd simply capture on e5. From f3, our knight can later jump to e5 or g5 in the middlegame, creating attacking chances against Black's potentially weakened kingside after the fianchetto."
     },
     {
       "san": "Bg7",

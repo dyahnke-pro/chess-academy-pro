@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 and c4 pawns while preparing to advance our central pawns further. This knight placement is part of our typical plan to build a strong pawn center with moves like e2-e4, creating what's known as a 'classical center.' The knight on c3 also keeps our options open for various pawn breaks and piece maneuvers, and it can potentially jump to more active squares like e4 or d5 later in the game. From c3, the knight also supports our queenside expansion plans and helps control key central squares."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 and c4 pawns while preparing to advance our central pawns further. This knight placement is part of our typical plan to build a strong pawn center with moves like e2-e4, creating what's known as a 'classical center.' The knight on c3 also keeps our options open for various pawn breaks and piece maneuvers, and it can potentially jump to more active squares like e4 or d5 later in the game. From c3, the knight also supports our queenside expansion plans and helps control key central squares."
     },
     {
       "san": "d6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to f3, where it supports our d4 pawn, controls key central squares like e5, and prepares to castle kingside. This is a natural developing move that fits perfectly with our opening strategy - the knight from f3 can later jump to more active squares or support central pawn advances. The knight also helps prevent Black from playing ...e5 immediately by adding extra support to that central square. By placing the knight on f3, we're maintaining maximum flexibility while completing our basic development before committing to more concrete plans."
+      "annotation": "We're developing our knight to f3, where it supports our d4 pawn, controls key central squares like e5, and prepares to castle kingside. This is a active move that fits perfectly with our opening strategy - the knight from f3 can later jump to more active squares or support central pawn advances. The knight also helps prevent Black from playing ...e5 immediately by adding extra support to that central square. By placing the knight on f3, we're maintaining maximum flexibility while completing our basic development before committing to more concrete plans."
     },
     {
       "san": "Nc6",

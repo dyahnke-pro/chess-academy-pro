@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our e4 pawn. This is the most flexible and popular choice against the Caro-Kann, keeping all our options open for the next few moves. The knight on f3 also prevents any early tactics involving Qh4+ and prepares us to castle kingside safely. From f3, our knight can later jump to more active squares like e5 or g5 depending on how the position develops."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our e4 pawn. This is the most flexible and popular choice against the Caro-Kann, keeping all our options open for the next few moves. The knight on f3 also prevents any early tactics involving Qh4+ and prepares us to castle kingside safely. From f3, our knight can later jump to more active squares like e5 or g5 depending on how the position develops."
     },
     {
       "san": "d5",

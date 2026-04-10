@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center immediately. This is one of the most flexible responses to 1.d4, as the knight on f6 supports central advances like ...e5 or ...d5 while keeping multiple opening systems available. Our opponent is following sound opening principles by developing a piece that creates immediate pressure, forcing us to make a decision about defending our central pawn. The knight on f6 also prepares castling kingside and supports potential pawn breaks in the center."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center immediately. This is one of the most flexible responses to 1.d4, as the knight on f6 supports central advances like ...e5 or ...d5 while keeping multiple opening systems available. Our opponent is following sound opening principles by developing a piece that creates immediate pressure, forcing us to make a decision about defending our central pawn. The knight on f6 also prepares castling kingside and supports potential pawn breaks in the center."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and maintain maximum flexibility in our setup. This natural developing move also controls the important e5 and g5 squares, preventing Black from advancing aggressively in the center or launching early kingside attacks. The knight on f3 fits perfectly with our c4 and d4 pawn structure, creating a solid foundation for various pawn formations including the Maróczy Bind or a classical Queen's Pawn setup. We're keeping our options open for moves like g3 and Bg2 (fianchetto), e3 and Be2 (classical), or even Nc3 and e4 (aggressive central play), depending on how Black continues."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and maintain maximum flexibility in our setup. This active move also controls the important e5 and g5 squares, preventing Black from advancing aggressively in the center or launching early kingside attacks. The knight on f3 fits perfectly with our c4 and d4 pawn structure, creating a solid foundation for various pawn formations including the Maróczy Bind or a classical Queen's Pawn setup. We're keeping our options open for moves like g3 and Bg2 (fianchetto), e3 and Be2 (classical), or even Nc3 and e4 (aggressive central play), depending on how Black continues."
     },
     {
       "san": "c5",

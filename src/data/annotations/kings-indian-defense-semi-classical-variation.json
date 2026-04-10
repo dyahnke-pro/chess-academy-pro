@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, where it supports our d4 pawn and controls key central squares like e4 and d5. This knight development is completely harmonious with our pawn structure and prepares further piece development. The knight on c3 also keeps pressure on Black's position by maintaining our central pawn duo and preparing potential advances like e4. From c3, our knight can later jump to more active squares like e4 or d5 if the position allows."
+      "annotation": "We're developing our queenside knight to its ideal square, where it supports our d4 pawn and controls key central squares like e4 and d5. This knight development is completely harmonious with our pawn structure and prepares further piece development. The knight on c3 also keeps pressure on Black's position by maintaining our central pawn duo and preparing potential advances like e4. From c3, our knight can later jump to more active squares like e4 or d5 if the position allows."
     },
     {
       "san": "Bg7",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're bringing our king's knight to its ideal square, where it controls the crucial e5 and d4 squares while supporting our center. This development is essential for preparing kingside castling and maintaining flexibility in our position. The knight on f3 also prevents any immediate ...e5 advance by Black, at least temporarily controlling this key central break. This natural developing move keeps all our options open and maintains the solid, classical setup that characterizes our approach to this opening."
+      "annotation": "We're bringing our king's knight to its ideal square, where it controls the crucial e5 and d4 squares while supporting our center. This development is essential for preparing kingside castling and maintaining flexibility in our position. The knight on f3 also prevents any immediate ...e5 advance by Black, at least temporarily controlling this key central break. This active move keeps all our options open and maintains the solid, classical setup that characterizes our approach to this opening."
     },
     {
       "san": "O-O",

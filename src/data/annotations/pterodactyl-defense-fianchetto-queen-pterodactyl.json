@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn and controlling the important e5 square. This move also prepares us to castle kingside and keeps our options open for different pawn structures. Against the Pterodactyl setup, it's crucial to develop our pieces actively while maintaining our central advantage - we don't want to allow Black to equalize easily with their unorthodox approach. The knight on f3 also eyes potential tactics involving the h4-d8 diagonal if Black becomes too ambitious with their setup."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn and controlling the important e5 square. This move also prepares us to castle kingside and keeps our options open for different pawn structures. Against the Pterodactyl setup, it's crucial to develop our pieces actively while maintaining our central advantage - we don't want to allow Black to equalize easily with their unorthodox approach. The knight on f3 also eyes potential tactics involving the h4-d8 diagonal if Black becomes too ambitious with their setup."
     },
     {
       "san": "Bg7",
@@ -19,7 +19,7 @@
     },
     {
       "san": "g3",
-      "annotation": "We mirror Black's fianchetto plan, preparing to develop our light-squared bishop to g2 where it will dominate the long diagonal and support our central pawns. This move creates a solid, flexible pawn structure and prepares castling while maintaining excellent central control. The fianchettoed bishop will be particularly effective against Black's setup, as it can pressure the b7 and f7 squares while supporting our center. This quiet but strong developing move shows we're not intimidated by Black's unusual opening choice and are building a solid foundation for the middlegame."
+      "annotation": "We mirror Black's fianchetto plan, preparing to develop our light-squared bishop to g2 where it will dominate the long diagonal and support our central pawns. This move creates a solid, flexible pawn structure and prepares castling while maintaining excellent central control. The fianchettoed bishop will be particularly effective against Black's setup, as it can pressure the b7 and f7 squares while supporting our center. This quiet but strong developing choice shows we're not intimidated by Black's unusual opening choice and are building a solid foundation for the middlegame."
     },
     {
       "san": "c5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Bg2",
-      "annotation": "We complete our fianchetto development, placing our light-squared bishop on its most powerful square where it controls the entire long diagonal. This bishop now supports our d4 pawn, eyes Black's kingside, and gives us excellent piece coordination with our other developed pieces. The bishop on g2 is perfectly placed to handle the central tension that Black has created with c5, and it also prepares us to castle safely. This natural developing move maintains our solid advantage while keeping all our options open for dealing with Black's central challenge."
+      "annotation": "We complete our fianchetto development, placing our light-squared bishop on its most powerful square where it controls the entire long diagonal. This bishop now supports our d4 pawn, eyes Black's kingside, and gives us excellent piece coordination with our other developed pieces. The bishop on g2 is perfectly placed to handle the central tension that Black has created with c5, and it also prepares us to castle safely. This active move maintains our solid advantage while keeping all our options open for dealing with Black's central challenge."
     },
     {
       "san": "Qa5+",

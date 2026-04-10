@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Black declines the Queen's Gambit and instead supports their d5 pawn with this solid move, entering the Orthodox Defense system. This pawn move creates a strong pawn chain on d5-e6 but does restrict the development of Black's light-squared bishop, which is now blocked by its own pawn. Our opponent is choosing a classical, positional approach rather than the more dynamic lines that arise after accepting the gambit. The e6 pawn also prepares potential breaks with ...c5 or ...f5 later in the game, giving Black strategic flexibility."
+      "annotation": "Black declines the Queen's Gambit and instead supports their d5 pawn with this stabilizing move, entering the Orthodox Defense system. This pawn move creates a strong pawn chain on d5-e6 but does restrict the development of Black's light-squared bishop, which is now blocked by its own pawn. Our opponent is choosing a classical, positional approach rather than the more dynamic lines that arise after accepting the gambit. The e6 pawn also prepares potential breaks with ...c5 or ...f5 later in the game, giving Black strategic flexibility."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and adds more pressure to Black's central d5 pawn. This knight placement is incredibly flexible, as from c3 it can later jump to e4, a5, or b5 depending on how the position develops. The knight also controls important central squares like e4 and d5, contributing to our overall central control. This move fits perfectly with our Queen's Gambit setup, maintaining pressure while developing our pieces to active squares."
+      "annotation": "We're developing our knight to its ideal square, where it supports our c4 pawn and adds more pressure to Black's central d5 pawn. This knight placement is incredibly flexible, as from c3 it can later jump to e4, a5, or b5 depending on how the position develops. The knight also controls important central squares like e4 and d5, contributing to our overall central control. This move fits perfectly with our Queen's Gambit setup, maintaining pressure while developing our pieces to active squares."
     },
     {
       "san": "c6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their king's knight to its most natural square, attacking our e4 square and preventing us from establishing a strong pawn center with e2-e4. This is the most principled development, as the knight on f6 is actively placed and contributes to Black's central control. The knight also prepares kingside castling and can later support pawn breaks like ...e5 or ...c5. Our opponent is following sound developmental principles, bringing pieces out to squares where they control the center and prepare coordinated action."
+      "annotation": "Black develops their king's knight to its ideal square, attacking our e4 square and preventing us from establishing a strong pawn center with e2-e4. This is the most principled development, as the knight on f6 is actively placed and contributes to Black's central control. The knight also prepares kingside castling and can later support pawn breaks like ...e5 or ...c5. Our opponent is following sound developmental principles, bringing pieces out to squares where they control the center and prepare coordinated action."
     },
     {
       "san": "e3",

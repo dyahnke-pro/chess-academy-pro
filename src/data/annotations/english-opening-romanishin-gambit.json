@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our potential e4 advance while preparing to castle kingside. This is one of the most flexible responses to the English Opening, as the knight on f6 supports both ...e5 and ...d5 central breaks depending on how the position develops. Our opponent is keeping maximum options open, which is exactly what experienced players do against the English - they wait to see our setup before committing to a specific pawn structure. The knight also eyes important central squares like e4 and d5, making it harder for us to establish a dominant pawn center immediately."
+      "annotation": "Black develops the knight to its ideal square, attacking our potential e4 advance while preparing to castle kingside. This is one of the most flexible responses to the English Opening, as the knight on f6 supports both ...e5 and ...d5 central breaks depending on how the position develops. Our opponent is keeping maximum options open, which is exactly what experienced players do against the English - they wait to see our setup before committing to a specific pawn structure. The knight also eyes important central squares like e4 and d5, making it harder for us to establish a dominant pawn center immediately."
     },
     {
       "san": "Nf3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "g3",
-      "annotation": "We commit to the hypermodern fianchetto setup, preparing to place our bishop on the long diagonal where it will exert tremendous pressure on Black's kingside and central squares. This move signals our intention to play the Romanishin system, which combines flexible piece development with potential tactical surprises. The fianchetto bishop will control key squares like d5, e6, f7, and h8, giving us long-term positional pressure while supporting various pawn breaks like d4 or e4. By choosing g3 over d4, we're indicating that we prefer to build our position gradually rather than immediately fighting for the center with pawns."
+      "annotation": "We commit to the hypermodern fianchetto setup, preparing to place our bishop on the long diagonal where it will exert tremendous pressure on Black's kingside and central squares. This move signals our intention to play the Romanishin system, which combines flexible piece development with potential tactical surprises. The fianchetto bishop will control key squares like d5, e6, f7, and h8, giving us long-term positional pressure while supporting various pawn breaks like d4 or e4. By choosing g3 over d4, we're indicating that we prefer to build our position gradually rather than immediately contesting central control with pawns."
     },
     {
       "san": "a6",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight toward the center while immediately putting pressure on our d4 pawn. This knight attacks d4 and controls the important central squares e4 and d5, preventing us from easily advancing our pawns there. Black is signaling an intention to challenge our central control rather than allowing us to build an unchallenged pawn center. This move is flexible and can transpose into many different defense systems depending on how the position develops."
+      "annotation": "Black responds with the most active move, bringing the knight toward the center while immediately putting pressure on our d4 pawn. This knight attacks d4 and controls the important central squares e4 and d5, preventing us from easily advancing our pawns there. Black is signaling an intention to challenge our central control rather than allowing us to build an unchallenged pawn center. This move is flexible and can transpose into many different defense systems depending on how the position develops."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it supports our d4 pawn and controls the important e5 square. This knight development is almost universal in queen's pawn openings because it prepares kingside castling while maintaining central control. The knight on f3 also prevents Black from playing an early e5 advance, which would challenge our central pawn. From f3, our knight can later jump to e5 (if that square becomes available) or support a kingside attack, making this development both flexible and purposeful."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our d4 pawn and controls the important e5 square. This knight development is almost universal in queen's pawn openings because it prepares kingside castling while maintaining central control. The knight on f3 also prevents Black from playing an early e5 advance, which would challenge our central pawn. From f3, our knight can later jump to e5 (if that square becomes available) or support a kingside attack, making this development both flexible and purposeful."
     },
     {
       "san": "d5",

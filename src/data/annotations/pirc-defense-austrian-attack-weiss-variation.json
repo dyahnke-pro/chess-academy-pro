@@ -15,11 +15,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most active square, attacking our e4 pawn and preparing to support central counterplay with moves like ...e5. This is a key move in the Pirc system, as the knight on f6 can later retreat to d7 or h5 depending on how we continue our attack. Our opponent is also keeping the option of ...c5 or ...e5 to challenge our pawn center when the time is right. The knight on f6 will be an important defender of Black's kingside, which becomes crucial as we prepare our Austrian Attack formation."
+      "annotation": "Black develops the knight to its most active square, attacking our e4 pawn and preparing to support central counterplay with moves like ...e5. This is a critical move in the Pirc system, as the knight on f6 can later retreat to d7 or h5 depending on how we continue our attack. Our opponent is also keeping the option of ...c5 or ...e5 to challenge our pawn center when the time is right. The knight on f6 will be an important defender of Black's kingside, which becomes crucial as we prepare our Austrian Attack formation."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, defending the e4 pawn and preparing to support our central advance or kingside attack. This move also keeps our options open for both f2-f4 (the Austrian Attack) or Be2 followed by h2-h4 (the 150 Attack). The knight on c3 controls important central squares like d5 and e4, while also supporting a potential d4-d5 advance later in the game. From c3, our knight is perfectly placed to support the aggressive pawn storm we're planning on the kingside."
+      "annotation": "We're developing our knight to its ideal square, defending the e4 pawn and preparing to support our central advance or kingside attack. This move also keeps our options open for both f2-f4 (the Austrian Attack) or Be2 followed by h2-h4 (the 150 Attack). The knight on c3 controls important central squares like d5 and e4, while also supporting a potential d4-d5 advance later in the game. From c3, our knight is perfectly placed to support the aggressive pawn storm we're planning on the kingside."
     },
     {
       "san": "g6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most active square, where it supports our pawn center and prepares to join the kingside attack. This knight can later jump to powerful outposts like e5 or g5, or support a pawn advance with h2-h4-h5. The knight on f3 also provides additional defense for our king while maintaining flexibility for our attacking plans. This move keeps all our attacking options open - we can still play Qd2, Be3, h4, or even 0-0-0 depending on how Black continues, making it a perfect developing move in the Austrian Attack system."
+      "annotation": "We're developing our king's knight to its most active square, where it supports our pawn center and prepares to join the kingside attack. This knight can later jump to powerful outposts like e5 or g5, or support a pawn advance with h2-h4-h5. The knight on f3 also provides additional defense for our king while maintaining flexibility for our attacking plans. This move keeps all our attacking options open - we can still play Qd2, Be3, h4, or even 0-0-0 depending on how Black continues, making it a perfect developing choice in the Austrian Attack system."
     },
     {
       "san": "Bd3",

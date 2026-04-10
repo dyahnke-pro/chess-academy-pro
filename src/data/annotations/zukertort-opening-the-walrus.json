@@ -15,7 +15,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black brings another piece into the game while attacking our knight on e5, forcing our hand. This natural developing move is Black's most common response, since abandoning the center with a move like ...a5 would be too passive. We're now forced to make a critical decision about whether to capture."
+      "annotation": "Black brings another piece into the game while attacking our knight on e5, forcing our hand. This active move is Black's most common response, since abandoning the center with a move like ...a5 would be too passive. We're now forced to make a critical decision about whether to capture."
     },
     {
       "san": "Nxc6",

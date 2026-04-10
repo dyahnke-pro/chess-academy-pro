@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing to support their own central advance with ...d5 or ...e5. This knight on f6 also controls the important central squares e4 and h5, limiting our piece placement options. Black is following classical opening principles by developing pieces toward the center and creating immediate threats. This move signals Black's intention to contest the center directly rather than allowing us to establish a broad pawn center unopposed."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn while preparing to support their own central advance with ...d5 or ...e5. This knight on f6 also controls the important central squares e4 and h5, limiting our piece placement options. Black is following classical opening principles by developing pieces toward the center and creating immediate threats. This move signals Black's intention to contest the center directly rather than allowing us to establish a broad pawn center unopposed."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its optimal square, where it supports our d4 pawn, controls the important e5 square, and prepares kingside castling. This natural developing move also keeps our options open regarding the central pawn tension - we can still recapture with the knight if Black takes on c4. The knight on f3 is perfectly placed to support various pawn advances like e4 or to reroute to other squares like e5 or h4 depending on how the game develops. This move follows the principle of developing pieces before making further pawn moves, ensuring our pieces have good coordination."
+      "annotation": "We're developing our kingside knight to its optimal square, where it supports our d4 pawn, controls the important e5 square, and prepares kingside castling. This active move also keeps our options open regarding the central pawn tension - we can still recapture with the knight if Black takes on c4. The knight on f3 is perfectly placed to support various pawn advances like e4 or to reroute to other squares like e5 or h4 depending on how the game develops. This move follows the principle of developing pieces before making further pawn moves, ensuring our pieces have good coordination."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, where it adds another defender to our d4 pawn and increases the pressure on Black's d5 pawn. This knight placement is crucial in the Queen's Gambit because it supports our central pawn structure while preparing various strategic ideas like e4 or f4 advances later in the game. The knight on c3 also controls important squares like b5, d5, and e4, limiting Black's piece activity. This move maintains the central tension while improving our piece coordination, and we're now threatening to win Black's d5 pawn if it's not adequately defended."
+      "annotation": "We're developing our queenside knight to its ideal square, where it adds another defender to our d4 pawn and increases the pressure on Black's d5 pawn. This knight placement is crucial in the Queen's Gambit because it supports our central pawn structure while preparing various strategic ideas like e4 or f4 advances later in the game. The knight on c3 also controls important squares like b5, d5, and e4, limiting Black's piece activity. This move maintains the central tension while improving our piece coordination, and we're now threatening to win Black's d5 pawn if it's not adequately defended."
     },
     {
       "san": "Be7",

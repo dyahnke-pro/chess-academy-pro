@@ -15,15 +15,15 @@
     },
     {
       "san": "c6",
-      "annotation": "Black declines the gambit and instead reinforces the d5 pawn with the Slav Defense setup. This solid move maintains the central tension while preparing potential counterplay with moves like dxc4 followed by b5. Our opponent is choosing a more conservative approach that leads to rich strategic battles rather than tactical complications. The c6 pawn also prepares to support a future b5 advance, which is a key theme in Slav structures. This defense is particularly popular because it avoids some of the more forcing lines of the Queen's Gambit Accepted while maintaining excellent long-term prospects."
+      "annotation": "Black declines the gambit and instead reinforces the d5 pawn with the Slav Defense setup. this stabilizing move maintains the central tension while preparing potential counterplay with moves like dxc4 followed by b5. Our opponent is choosing a more conservative approach that leads to rich strategic battles rather than tactical complications. The c6 pawn also prepares to support a future b5 advance, which is a key theme in Slav structures. This defense is particularly popular because it avoids some of the more forcing lines of the Queen's Gambit Accepted while maintaining excellent long-term prospects."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports the c4 pawn and adds another attacker to Black's d5 strongpoint. This move is completely principled, bringing a piece into active play while maintaining all our central options. The knight from c3 also eyes important squares like e4 and b5, giving us flexibility in our future plans. From c3, this knight can potentially redeploy to e4 or a4 depending on how the position develops. We're following classical opening principles by developing pieces quickly while keeping maximum pressure on Black's position."
+      "annotation": "We develop our knight to its ideal square, where it supports the c4 pawn and adds another attacker to Black's d5 strongpoint. This move is completely principled, bringing a piece into active play while maintaining all our central options. The knight from c3 also eyes important squares like e4 and b5, giving us flexibility in our future plans. From c3, this knight can potentially redeploy to e4 or a4 depending on how the position develops. We're following classical opening principles by developing pieces quickly while keeping maximum pressure on Black's position."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the kingside knight to its most active square, where it attacks our e4 square and prepares kingside castling. This natural developing move is almost universal in these positions because the knight is perfectly placed on f6. Black is also preparing to support the center while keeping all options open for the light-squared bishop. The knight on f6 fits perfectly with the Slav structure, as it doesn't block the c8-bishop like it would in some other defenses. This development also prepares Black to castle kingside and complete the basic setup."
+      "annotation": "Our opponent develops the kingside knight to its most active square, where it attacks our e4 square and prepares kingside castling. This active move is almost universal in these positions because the knight is perfectly placed on f6. Black is also preparing to support the center while keeping all options open for the light-squared bishop. The knight on f6 fits perfectly with the Slav structure, as it doesn't block the c8-bishop like it would in some other defenses. This development also prepares Black to castle kingside and complete the basic setup."
     },
     {
       "san": "e3",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops the queenside knight to d7, which is the most flexible square in the Semi-Slav structure. This move supports potential central advances like c5 while keeping the c8-h3 diagonal available for the light-squared bishop. Our opponent is also preparing to potentially reroute this knight to more active squares via f8-g6 or b6 depending on circumstances. The knight on d7 doesn't block any pieces and maintains all of Black's strategic options. This is a key move in the Semi-Slav because it prepares the characteristic freeing moves that Black will need to achieve equality."
+      "annotation": "Black develops the queenside knight to d7, which is the most flexible square in the Semi-Slav structure. This move supports potential central advances like c5 while keeping the c8-h3 diagonal available for the light-squared bishop. Our opponent is also preparing to potentially reroute this knight to more active squares via f8-g6 or b6 depending on circumstances. The knight on d7 doesn't block any pieces and maintains all of Black's strategic options. This is a critical move in the Semi-Slav because it prepares the characteristic freeing moves that Black will need to achieve equality."
     },
     {
       "san": "Bd3",

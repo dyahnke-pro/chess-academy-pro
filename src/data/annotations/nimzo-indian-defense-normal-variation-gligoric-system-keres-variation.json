@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Attack setup within our queen's pawn opening, supporting our d4 pawn while simultaneously attacking Black's potential ...d5 advance. This move gives us excellent control over the crucial d5 and b5 squares, and it opens up possibilities for our queen's bishop to develop actively. The c4 pawn also prepares potential expansion on the queenside with moves like b4, giving us long-term attacking chances on that wing. This is a key move that transforms our opening from a simple queen's pawn game into the more complex English Opening structure."
+      "annotation": "We're playing the English Attack setup within our queen's pawn opening, supporting our d4 pawn while simultaneously attacking Black's potential ...d5 advance. This move gives us excellent control over the crucial d5 and b5 squares, and it opens up possibilities for our queen's bishop to develop actively. The c4 pawn also prepares potential expansion on the queenside with moves like b4, giving us long-term attacking chances on that wing. This is a critical move that transforms our opening from a simple queen's pawn game into the more complex English Opening structure."
     },
     {
       "san": "e6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "We're developing our light-squared bishop to its ideal square, where it eyes the Black king and supports potential kingside attacking ideas. This bishop placement is a key component of our setup, as it works beautifully with a potential knight on f3 to create threats against h7. The bishop on d3 also supports our center and can later participate in middlegame battles for control of the e4 and f5 squares. This natural developing move prepares castling while maintaining flexibility in our position - we can still decide whether to push f4 for attack or maintain the solid structure."
+      "annotation": "We're developing our light-squared bishop to its ideal square, where it eyes the Black king and supports potential kingside attacking ideas. This bishop placement is a key component of our setup, as it works beautifully with a potential knight on f3 to create threats against h7. The bishop on d3 also supports our center and can later participate in middlegame battles for control of the e4 and f5 squares. This active move prepares castling while maintaining flexibility in our position - we can still decide whether to push f4 for attack or maintain the solid structure."
     },
     {
       "san": "d5",

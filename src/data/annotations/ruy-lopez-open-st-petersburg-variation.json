@@ -15,7 +15,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight to an active square where it eyes the d4 and b4 squares. This is the most common and logical response, as it maintains the central tension while developing a piece toward the center. Our opponent could have chosen alternatives like d6 or f5, but Nc6 keeps more options open and doesn't commit to a specific pawn structure yet. The knight on c6 will become a key piece in Black's defensive setup, often supporting the ...d6-d5 pawn break or retreating to defend if we increase the pressure."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight to an active square where it eyes the d4 and b4 squares. This is the most common and logical response, as it maintains the central tension while developing a piece toward the center. Our opponent could have chosen alternatives like d6 or f5, but Nc6 keeps more options open and doesn't commit to a specific pawn structure yet. The knight on c6 will become a key piece in Black's defensive setup, often supporting the ...d6-d5 pawn break or retreating to defend if we increase the pressure."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn while preparing for kingside castling. This natural developing move puts immediate pressure on our center and forces us to address the threat to our pawn. The knight on f6 also controls important central squares like d5 and h5, contributing to Black's piece activity. Our opponent is following sound opening principles by developing pieces with tempo, and this move prepares several defensive setups including ...Be7 and castling kingside. The knight on f6 will become a key defender in Black's position, often supporting central pawn breaks or tactical defensive resources."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn while preparing for kingside castling. This active move puts immediate pressure on our center and forces us to address the threat to our pawn. The knight on f6 also controls important central squares like d5 and h5, contributing to Black's piece activity. Our opponent is following sound opening principles by developing pieces with tempo, and this move prepares several defensive setups including ...Be7 and castling kingside. The knight on f6 will become a key defender in Black's position, often supporting central pawn breaks or tactical defensive resources."
     },
     {
       "san": "O-O",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Be6",
-      "annotation": "Black develops the light-squared bishop to an active square, challenging our bishop on b3 while supporting the advanced d5 pawn. This natural developing move also prepares for potential exchanges that would ease Black's slightly cramped position. Our opponent's bishop on e6 controls important central squares and creates the possibility of trading off our strong bishop on b3. The move also brings Black closer to completing development, which is crucial given the tactical nature of the position. However, the bishop on e6 can become a target for future attacks, and Black must be careful about potential tactical shots involving this piece."
+      "annotation": "Black develops the light-squared bishop to an active square, challenging our bishop on b3 while supporting the advanced d5 pawn. This active move also prepares for potential exchanges that would ease Black's slightly cramped position. Our opponent's bishop on e6 controls important central squares and creates the possibility of trading off our strong bishop on b3. The move also brings Black closer to completing development, which is crucial given the tactical nature of the position. However, the bishop on e6 can become a target for future attacks, and Black must be careful about potential tactical shots involving this piece."
     },
     {
       "san": "c3",
@@ -75,7 +75,7 @@
     },
     {
       "san": "Nbd2",
-      "annotation": "We develop our queenside knight to d2, where it supports the center while preparing to challenge Black's strong knight on e4. This developing move follows the principle of bringing all pieces into the game while avoiding the more passive Nd2 squares that would block our pieces. The knight on d2 can potentially advance to f3 or e4, creating tactical opportunities and supporting our central control. Our knight also prepares to support the f2-f3 advance, which would drive away Black's annoying knight from e4. This move completes another stage of our development while maintaining pressure on Black's centralized pieces, setting up potential tactical sequences in the middlegame."
+      "annotation": "We develop our queenside knight to d2, where it supports the center while preparing to challenge Black's strong knight on e4. this move follows the principle of bringing all pieces into the game while avoiding the more passive Nd2 squares that would block our pieces. The knight on d2 can potentially advance to f3 or e4, creating tactical opportunities and supporting our central control. Our knight also prepares to support the f2-f3 advance, which would drive away Black's annoying knight from e4. This move completes another stage of our development while maintaining pressure on Black's centralized pieces, setting up potential tactical sequences in the middlegame."
     }
   ]
 }

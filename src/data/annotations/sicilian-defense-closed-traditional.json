@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while keeping our options open in the Sicilian. This move characterizes the Closed Sicilian system, where we avoid the immediate d4 breakthrough and instead focus on building a solid position with moves like f4, Bb5, and potentially g3 with Bg2. Our knight on c3 supports a future d4 advance if we choose to transpose later, while also eyeing the important d5 and e4 squares. The Closed Sicilian often leads to kingside attacks with f4-f5, and this knight will support that plan while maintaining flexibility in our setup."
+      "annotation": "We're developing our knight to its ideal square while keeping our options open in the Sicilian. This move characterizes the Closed Sicilian system, where we avoid the immediate d4 breakthrough and instead focus on building a solid position with moves like f4, Bb5, and potentially g3 with Bg2. Our knight on c3 supports a future d4 advance if we choose to transpose later, while also eyeing the important d5 and e4 squares. The Closed Sicilian often leads to kingside attacks with f4-f5, and this knight will support that plan while maintaining flexibility in our setup."
     },
     {
       "san": "Nc6",

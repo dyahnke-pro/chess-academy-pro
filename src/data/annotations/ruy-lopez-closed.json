@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the black e5 pawn while supporting our own central presence. This move is the hallmark of the Spanish Opening approach - we're not rushing to trade in the center but instead developing with threats. The knight on f3 also prepares kingside castling and controls important central squares like d4 and e5. From f3, our knight can later jump to more active squares like d4 or g5, depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, attacking the black e5 pawn while supporting our own central presence. This move is the hallmark of the Spanish Opening approach - we're not rushing to trade in the center but instead developing with threats. The knight on f3 also prepares kingside castling and controls important central squares like d4 and e5. From f3, our knight can later jump to more active squares like d4 or g5, depending on how the position develops."
     },
     {
       "san": "Nc6",
@@ -59,11 +59,11 @@
     },
     {
       "san": "c3",
-      "annotation": "We support our center and prepare the important d2-d4 pawn advance, which is one of our key strategic goals in the Spanish Opening. This move also controls the b4 and d4 squares, preventing Black from placing pieces there while building our pawn chain. The c3 pawn supports our long-term plan of achieving d4 and opening the position when it's favorable for our better-placed pieces. This quiet but important move exemplifies the Spanish approach - building up pressure gradually rather than forcing immediate tactics."
+      "annotation": "We support our center and prepare the important d2-d4 pawn advance, which is one of our key strategic goals in the Spanish Opening. This move also controls the b4 and d4 squares, preventing Black from placing pieces there while building our pawn chain. The c3 pawn supports our long-term plan of achieving d4 and opening the position when it's favorable for our better-placed pieces. this purposeful move exemplifies the Spanish approach - building up pressure gradually rather than forcing immediate tactics."
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, bringing their king to safety while activating the h8 rook and completing their basic development. This natural move follows opening principles perfectly and prepares Black to focus on improving their piece positions in the middlegame. With the king castled, our opponent can now consider moves like Re8, Bf8, or even h6 to improve their position gradually. The black king is now relatively safe, but our pieces are better coordinated and we maintain pressure on both the center and kingside."
+      "annotation": "Black castles kingside, bringing their king to safety while activating the h8 rook and completing their basic development. this move follows opening principles perfectly and prepares Black to focus on improving their piece positions in the middlegame. With the king castled, our opponent can now consider moves like Re8, Bf8, or even h6 to improve their position gradually. The black king is now relatively safe, but our pieces are better coordinated and we maintain pressure on both the center and kingside."
     },
     {
       "san": "h3",

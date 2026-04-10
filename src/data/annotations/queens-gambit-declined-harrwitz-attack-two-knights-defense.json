@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most active square, where it controls the important central squares e5 and d4 while preparing to castle kingside. This natural developing move also adds another defender to our d4 pawn, making it more solid as Black prepares to strike with ...d5. The knight on f3 fits perfectly into our Queen's Gambit setup, and from here it can potentially jump to e5 later in the middlegame if the opportunity arises. This move maintains flexibility in our pawn structure while keeping all our major opening options available."
+      "annotation": "We're developing our king's knight to its most active square, where it controls the important central squares e5 and d4 while preparing to castle kingside. This active move also adds another defender to our d4 pawn, making it more solid as Black prepares to strike with ...d5. The knight on f3 fits perfectly into our Queen's Gambit setup, and from here it can potentially jump to e5 later in the middlegame if the opportunity arises. This move maintains flexibility in our pawn structure while keeping all our major opening options available."
     },
     {
       "san": "d5",

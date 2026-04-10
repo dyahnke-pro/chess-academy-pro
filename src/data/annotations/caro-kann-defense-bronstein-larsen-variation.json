@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, defending the attacked e4 pawn while maintaining maximum flexibility in our position. This move is far more flexible than alternatives like e5 (which blocks the position) or f3 (which weakens our kingside), as it keeps all our strategic options open. From c3, our knight eyes important central squares like d5 and e4, while also preparing potential future jumps to b5 or a4 depending on how the position develops. The knight development also follows classical opening principles by bringing a piece toward the center early in the game, and it avoids committing to any particular pawn structure until we see more of Black's setup."
+      "annotation": "We develop our knight to its ideal square, defending the attacked e4 pawn while maintaining maximum flexibility in our position. This move is far more flexible than alternatives like e5 (which blocks the position) or f3 (which weakens our kingside), as it keeps all our strategic options open. From c3, our knight eyes important central squares like d5 and e4, while also preparing potential future jumps to b5 or a4 depending on how the position develops. The knight development also follows classical opening principles by bringing a piece toward the center early in the game, and it avoids committing to any particular pawn structure until we see more of Black's setup."
     },
     {
       "san": "dxe4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our centralized knight and forcing us to make an important decision about how to handle this challenge. This move follows sound opening principles by developing toward the center while creating immediate threats, and it prepares kingside castling. The knight on f6 also contests the important e4 and d5 squares, preventing us from maintaining our piece in the center without a fight. Black is steering the game toward the main lines of the Caro-Kann where piece exchanges lead to simplified positions, but our next move will determine whether we allow this simplification or try to maintain more tension in the position."
+      "annotation": "Black develops the knight to its ideal square, attacking our centralized knight and forcing us to make an important decision about how to handle this challenge. This move follows sound opening principles by developing toward the center while creating immediate threats, and it prepares kingside castling. The knight on f6 also contests the important e4 and d5 squares, preventing us from maintaining our piece in the center without a fight. Black is steering the game toward the main lines of the Caro-Kann where piece exchanges lead to simplified positions, but our next move will determine whether we allow this simplification or try to maintain more tension in the position."
     },
     {
       "san": "Nxf6+",

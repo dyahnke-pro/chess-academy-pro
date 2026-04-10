@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to meet Black's central counterplay. This move is almost automatic in most Queen's Pawn openings, as the knight controls important central squares like e4, d5, and b5. From c3, our knight also supports a potential e2-e4 advance, which would give us the ideal two-pawn center that Black is trying to prevent. We're staying flexible while maintaining maximum pressure on Black's position."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to meet Black's central counterplay. This move is almost automatic in most Queen's Pawn openings, as the knight controls important central squares like e4, d5, and b5. From c3, our knight also supports a potential e2-e4 advance, which would give us the ideal two-pawn center that Black is trying to prevent. We're staying flexible while maintaining maximum pressure on Black's position."
     },
     {
       "san": "d5",

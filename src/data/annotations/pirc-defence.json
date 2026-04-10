@@ -120,7 +120,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to protect e4 and control d5. This is the natural developing move — the knight on c3 is the backbone of White's center, defending e4 and preparing to support f4 if White go.",
+      "annotation": "White develops the knight to protect e4 and control d5. This is the active move — the knight on c3 is the backbone of White's center, defending e4 and preparing to support f4 if White go.",
       "pawnStructure": "The center is fully supported. Nc3 makes e4 rock-solid and prepares expansive setups.",
       "plans": [
         "Play f4 for the Austrian Attack — the most aggressive option",
@@ -285,7 +285,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "White develops the bishop to d3, the most natural square in the Austrian Attack. From d3, the bishop eyes the kingside (particularly h7), supports e4, and can facilitate a later e5 push.",
+      "annotation": "White develops the bishop to d3, the ideal square in the Austrian Attack. From d3, the bishop eyes the kingside (particularly h7), supports e4, and can facilitate a later e5 push.",
       "pawnStructure": "No structural change. The bishop supports the central pawns and prepares for kingside operations.",
       "plans": [
         "Castle and then launch a kingside attack with e5 or f5",

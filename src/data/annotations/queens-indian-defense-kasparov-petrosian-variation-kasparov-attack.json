@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking the d4 pawn while bringing the knight to its most active square. This is the hallmark of the Indian Defense systems - rather than occupying the center with pawns like ...d5 or ...e5, Black develops pieces that put pressure on our central pawns. The knight on f6 also prepares castling kingside and keeps Black's options open for various pawn structures depending on how we continue. This flexible approach allows Black to react to our setup rather than committing to a specific pawn structure immediately."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking the d4 pawn while bringing the knight to its most active square. This is the hallmark of the Indian Defense systems - rather than occupying the center with pawns like ...d5 or ...e5, Black develops pieces that put pressure on our central pawns. The knight on f6 also prepares castling kingside and keeps Black's options open for various pawn structures depending on how we continue. This flexible approach allows Black to react to our setup rather than committing to a specific pawn structure immediately."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and d4 squares while preparing kingside castling. This move also supports a potential e4 advance, which would give us a classical two-pawn center and maximum space advantage. The knight on f3 is perfectly placed to support our central ambitions while maintaining flexibility - it can potentially reroute to e5, d2, or h4 depending on how the position develops. By developing this knight before committing to other moves, we keep our options open and maintain pressure on Black's position."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and d4 squares while preparing kingside castling. This move also supports a potential e4 advance, which would give us a classical two-pawn center and maximum space advantage. The knight on f3 is perfectly placed to support our central ambitions while maintaining flexibility - it can potentially reroute to e5, d2, or h4 depending on how the position develops. By developing this knight before committing to other moves, we keep our options open and maintain pressure on Black's position."
     },
     {
       "san": "b6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "a3",
-      "annotation": "We're playing the Kasparov-Petrosian Variation, a subtle but important move that serves multiple strategic purposes in this opening. First, it prevents Black from playing ...Bb4, pinning our knight and creating immediate tactical complications. Second, it prepares b4, potentially gaining space on the queenside and supporting our c4 pawn structure. Most importantly, this move allows us to develop more harmoniously without worrying about annoying pins or tactics, giving us time to complete our development and decide on our central pawn strategy. While it may look slow, this prophylactic thinking is characteristic of modern opening theory."
+      "annotation": "We're playing the Kasparov-Petrosian Variation, a subtle but purposeful move that serves multiple strategic purposes in this opening. First, it prevents Black from playing ...Bb4, pinning our knight and creating immediate tactical complications. Second, it prepares b4, potentially gaining space on the queenside and supporting our c4 pawn structure. Most importantly, this move allows us to develop more harmoniously without worrying about annoying pins or tactics, giving us time to complete our development and decide on our central pawn strategy. While it may look slow, this prophylactic thinking is characteristic of modern opening theory."
     },
     {
       "san": "Bb7",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting the c4 pawn while adding pressure to the center and preparing for the tactical complications that will arise from Black's central challenge. This natural developing move keeps our options open - we can still recapture on d5 with the c-pawn or allow Black to take on c4, leading to different pawn structures and strategic themes. The knight on c3 also eyes important central squares like e4 and d5, and supports potential queenside expansion or tactical operations. By completing our minor piece development, we're preparing for the critical decisions about how to handle the central tension."
+      "annotation": "We develop our knight to its most active square, supporting the c4 pawn while adding pressure to the center and preparing for the tactical complications that will arise from Black's central challenge. This active move keeps our options open - we can still recapture on d5 with the c-pawn or allow Black to take on c4, leading to different pawn structures and strategic themes. The knight on c3 also eyes important central squares like e4 and d5, and supports potential queenside expansion or tactical operations. By completing our minor piece development, we're preparing for the critical decisions about how to handle the central tension."
     },
     {
       "san": "cxd5",

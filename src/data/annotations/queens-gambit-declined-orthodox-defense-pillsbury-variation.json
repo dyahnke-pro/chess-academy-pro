@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, immediately putting pressure on our central d4 pawn and preparing to castle kingside. This is one of the most principled responses to 1.d4, as the knight not only develops with tempo by attacking our center, but also prepares various defenses like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. Our opponent is following classical opening principles by developing pieces quickly while maintaining flexibility in pawn structure. The knight on f6 also supports a potential ...e5 break in many variations, giving Black dynamic counterplay in the center."
+      "annotation": "Black develops the king's knight to its ideal square, immediately putting pressure on our central d4 pawn and preparing to castle kingside. This is one of the most principled responses to 1.d4, as the knight not only develops with tempo by attacking our center, but also prepares various defenses like the King's Indian, Nimzo-Indian, or Queen's Gambit Declined. Our opponent is following classical opening principles by developing pieces quickly while maintaining flexibility in pawn structure. The knight on f6 also supports a potential ...e5 break in many variations, giving Black dynamic counterplay in the center."
     },
     {
       "san": "c4",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Our opponent develops the queen's knight to its most natural square in this structure, preparing to reroute it to more active posts like f6 or e5 while maintaining central control. This development is typical of the Orthodox Defense - the knight doesn't have an immediately strong square, but d7 offers good flexibility and supports various pawn breaks like ...c6 or ...c5. The knight placement also prepares potential regrouping via ...Re8 and ...Nf8, heading toward the kingside where it can support Black's defensive setup. While the knight appears somewhat passive on d7, it's actually quite useful for supporting Black's solid structure and preparing gradual improvement of the position."
+      "annotation": "Our opponent develops the queen's knight to its ideal square in this structure, preparing to reroute it to more active posts like f6 or e5 while maintaining central control. This development is typical of the Orthodox Defense - the knight doesn't have an immediately strong square, but d7 offers good flexibility and supports various pawn breaks like ...c6 or ...c5. The knight placement also prepares potential regrouping via ...Re8 and ...Nf8, heading toward the kingside where it can support Black's defensive setup. While the knight appears somewhat passive on d7, it's actually quite useful for supporting Black's solid structure and preparing gradual improvement of the position."
     },
     {
       "san": "Rc1",

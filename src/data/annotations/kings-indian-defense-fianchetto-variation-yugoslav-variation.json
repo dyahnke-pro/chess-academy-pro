@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the King's Indian setup, developing the knight to its most natural square while attacking our d4 pawn. This move signals Black's intention to fianchetto the king's bishop and create a hypermodern pawn structure, allowing us to occupy the center while preparing counterplay later. The knight on f6 also prepares kingside castling and keeps options open for both ...e6 (transposing to other defenses) or the typical King's Indian structure with ...g6. Black is embracing a slightly passive but very solid and counterattacking-oriented approach."
+      "annotation": "Black responds with the King's Indian setup, developing the knight to its ideal square while attacking our d4 pawn. This move signals Black's intention to fianchetto the king's bishop and create a hypermodern pawn structure, allowing us to occupy the center while preparing counterplay later. The knight on f6 also prepares kingside castling and keeps options open for both ...e6 (transposing to other defenses) or the typical King's Indian structure with ...g6. Black is embracing a slightly passive but very solid and counterattacking-oriented approach."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its optimal square, where it controls the central e5 and d4 squares while supporting our kingside development. This natural developing move also prepares kingside castling and keeps pressure on Black's central aspirations, particularly preventing ...e5 for the moment. The knight on f3 is perfectly placed to support both our central pawn structure and coordinate with our other pieces in the coming middlegame. We're following classical development principles while maintaining maximum flexibility in our setup."
+      "annotation": "We're developing our knight to its optimal square, where it controls the central e5 and d4 squares while supporting our kingside development. This active move also prepares kingside castling and keeps pressure on Black's central aspirations, particularly preventing ...e5 for the moment. The knight on f3 is perfectly placed to support both our central pawn structure and coordinate with our other pieces in the coming middlegame. We're following classical development principles while maintaining maximum flexibility in our setup."
     },
     {
       "san": "Bg7",

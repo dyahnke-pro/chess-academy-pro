@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to support our central ambitions. This move also indirectly puts pressure on Black's position by preparing to recapture the c4 pawn with our pieces rather than pawns. The knight on f3 is perfectly placed for most Queen's Gambit structures, supporting both e5 and d4 while keeping our options open for kingside castling. From f3, our knight can also potentially jump to stronger squares like e5 or d4 in the middlegame."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and preparing to support our central ambitions. This move also indirectly puts pressure on Black's position by preparing to recapture the c4 pawn with our pieces rather than pawns. The knight on f3 is perfectly placed for most Queen's Gambit structures, supporting both e5 and d4 while keeping our options open for kingside castling. From f3, our knight can also potentially jump to stronger squares like e5 or d4 in the middlegame."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're preparing to recapture the c4 pawn with our dark-squared bishop, supporting this plan by giving the bishop a safe retreat square on e2. This modest but solid move also opens the f1-a6 diagonal for our bishop and supports our d4 pawn from behind. While e3 looks passive, it's actually a key move in the Queen's Gambit Accepted, allowing us to complete our development harmoniously while maintaining central control. The pawn on e3 also prepares potential f2-f4 advances in some lines, supporting our kingside ambitions."
+      "annotation": "We're preparing to recapture the c4 pawn with our dark-squared bishop, supporting this plan by giving the bishop a safe retreat square on e2. This modest but well-grounded move also opens the f1-a6 diagonal for our bishop and supports our d4 pawn from behind. While e3 looks passive, it's actually a critical move in the Queen's Gambit Accepted, allowing us to complete our development harmoniously while maintaining central control. The pawn on e3 also prepares potential f2-f4 advances in some lines, supporting our kingside ambitions."
     },
     {
       "san": "e6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside, bringing our king to safety while connecting our rooks and preparing for the coming middlegame battles. This natural developing move also puts our king away from the central tension that's building around the d4-c5 pawn clash. By castling, we're essentially saying that our development is proceeding so smoothly that we can afford to make this consolidating move before dealing with Black's central pressure. Our rook on f1 is now connected to the rook on a1, and we're ready to meet Black's active play with superior piece coordination and the safer king position that often proves decisive in Queen's Gambit structures."
+      "annotation": "We castle kingside, bringing our king to safety while connecting our rooks and preparing for the coming middlegame battles. This active move also puts our king away from the central tension that's building around the d4-c5 pawn clash. By castling, we're essentially saying that our development is proceeding so smoothly that we can afford to make this consolidating move before dealing with Black's central pressure. Our rook on f1 is now connected to the rook on a1, and we're ready to meet Black's active play with superior piece coordination and the safer king position that often proves decisive in Queen's Gambit structures."
     }
   ]
 }

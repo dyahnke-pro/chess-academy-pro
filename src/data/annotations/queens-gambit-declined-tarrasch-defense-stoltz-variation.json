@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This move also prepares for kingside castling and keeps our options open regarding the central pawn tension - we can still recapture on d5 if Black takes our c4 pawn. The knight on f3 is perfectly placed to support various pawn advances and provides flexibility for our piece coordination. By developing a piece rather than immediately resolving the central tension, we maintain maximum options while improving our position according to opening principles."
+      "annotation": "We develop our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This move also prepares for kingside castling and keeps our options open regarding the central pawn tension - we can still recapture on d5 if Black takes our c4 pawn. The knight on f3 is perfectly placed to support various pawn advances and provides flexibility for our piece coordination. By developing a piece rather than immediately resolving the central tension, we maintain maximum options while improving our position according to opening principles."
     },
     {
       "san": "c5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, where it supports the d5 pawn and controls important central squares like e5 and d4. This move is part of Black's logical development plan in the Tarrasch Defense, bringing pieces into active positions while maintaining central control. The knight on c6 also prepares for potential queenside expansion and supports the advance of the c5 pawn if needed. However, the knight may need to be repositroned later if we apply pressure to the d5 pawn, as it could become overloaded defending multiple targets."
+      "annotation": "Black develops the knight to its ideal square, where it supports the d5 pawn and controls important central squares like e5 and d4. This move is part of Black's logical development plan in the Tarrasch Defense, bringing pieces into active positions while maintaining central control. The knight on c6 also prepares for potential queenside expansion and supports the advance of the c5 pawn if needed. However, the knight may need to be repositroned later if we apply pressure to the d5 pawn, as it could become overloaded defending multiple targets."
     },
     {
       "san": "Bg2",

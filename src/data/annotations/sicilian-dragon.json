@@ -162,7 +162,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its best square, putting immediate pressure on e4. This is the most natural developing move — the knight on f6 fights for the center, prepares kingside development, and.",
+      "annotation": "Black develops the knight to its best square, putting immediate pressure on e4. This is the most active move — the knight on f6 fights for the center, prepares kingside development, and.",
       "plans": [
         "Pressure e4",
         "Prepare ...g6 for the Dragon fianchetto"
@@ -188,7 +188,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White protects e4 with a developing move, bringing the knight to its ideal square. The knight on c3 supports the center, eyes d5, and is essential in virtually every Open Sicilian structure.",
+      "annotation": "White protects e4 with a developing choice, bringing the knight to its ideal square. The knight on c3 supports the center, eyes d5, and is essential in virtually every Open Sicilian structure.",
       "plans": [
         "Maintain central control",
         "Choose between various anti-Dragon systems"
@@ -281,7 +281,7 @@
     },
     {
       "san": "f3",
-      "annotation": "A key move in the Yugoslav Attack setup. The pawn on f3 reinforces e4 (freeing the Nc3 from guard duty), prevents ...Ng4 harassing the Be3, and prepares the g4-h4 pawn storm.",
+      "annotation": "a critical move in the Yugoslav Attack setup. The pawn on f3 reinforces e4 (freeing the Nc3 from guard duty), prevents ...Ng4 harassing the Be3, and prepares the g4-h4 pawn storm.",
       "pawnStructure": "The e4-f3 pawn chain creates a fortress-like center.",
       "plans": [
         "Complete the Yugoslav setup with Qd2, Bc4/Be2, and O-O-O",
@@ -460,7 +460,7 @@
     },
     {
       "san": "Rc8",
-      "annotation": "Black seizes the open c-file — the single most important move in Black's counterattacking plan.",
+      "annotation": "Black seizes the open c-file — the single most purposeful move in Black's counterattacking plan.",
       "plans": [
         "Pressure c3 and the queenside",
         "Prepare ...Ne5 hitting Bc4 with tempo"
@@ -549,7 +549,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the knight to its most natural square, supporting the e4 pawn and preparing the central advance d4.",
+          "annotation": "White develops the knight to its ideal square, supporting the e4 pawn and preparing the central advance d4.",
           "plans": [
             "Prepare d4 advance",
             "Support the e4 pawn"

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central d4 pawn with this hypermodern developing move, embodying the Indian Defense philosophy of controlling the center with pieces rather than occupying it with pawns. This knight move attacks our d4 pawn and prepares to fianchetto the king's bishop on g7, where it will exert tremendous pressure along the long diagonal. Our opponent is signaling an intention to play dynamically, often allowing us to build a pawn center before striking back with moves like ...d5 or ...c5. This is a much more complex and double-edged approach than classical moves like 1...d5 or 1...e6."
+      "annotation": "Black immediately challenges our central d4 pawn with this hypermodern developing choice, embodying the Indian Defense philosophy of controlling the center with pieces rather than occupying it with pawns. This knight move attacks our d4 pawn and prepares to fianchetto the king's bishop on g7, where it will exert tremendous pressure along the long diagonal. Our opponent is signaling an intention to play dynamically, often allowing us to build a pawn center before striking back with moves like ...d5 or ...c5. This is a much more complex and double-edged approach than classical moves like 1...d5 or 1...e6."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn, controls important central squares like e4 and b5, and prepares for various pawn advances. This knight placement is crucial in our setup as it allows us to maintain our pawn center while keeping maximum flexibility for our other pieces. The Nc3 also prepares potential tactics involving a discovered attack if our d-pawn advances, and it supports a future e4 advance that would give us a classical pawn center. From c3, the knight can also jump to powerful outposts like d5 or e4 if the opportunity arises."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn, controls important central squares like e4 and b5, and prepares for various pawn advances. This knight placement is crucial in our setup as it allows us to maintain our pawn center while keeping maximum flexibility for our other pieces. The Nc3 also prepares potential tactics involving a discovered attack if our d-pawn advances, and it supports a future e4 advance that would give us a classical pawn center. From c3, the knight can also jump to powerful outposts like d5 or e4 if the opportunity arises."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development with this natural move that develops the knight to an excellent central square while maintaining maximum flexibility in our position. The Nf3 supports our d4 pawn, controls the important e5 and h4 squares, and prepares kingside castling to get our king to safety. This move also keeps our options open regarding how to handle Black's central challenge - we could recapture on d5 immediately, or we might allow Black to take on c4 and recapture with the knight. The knight on f3 is perfectly placed to support various pawn advances and can easily redeploy to squares like e5, g5, or h4 depending on the tactical requirements of the position."
+      "annotation": "We're completing our kingside development with this move that develops the knight to an excellent central square while maintaining maximum flexibility in our position. The Nf3 supports our d4 pawn, controls the important e5 and h4 squares, and prepares kingside castling to get our king to safety. This move also keeps our options open regarding how to handle Black's central challenge - we could recapture on d5 immediately, or we might allow Black to take on c4 and recapture with the knight. The knight on f3 is perfectly placed to support various pawn advances and can easily redeploy to squares like e5, g5, or h4 depending on the tactical requirements of the position."
     },
     {
       "san": "Bg7",

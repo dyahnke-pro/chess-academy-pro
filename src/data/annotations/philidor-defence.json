@@ -136,7 +136,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to f6, the most natural square. It attacks e4, prepares castling, and keeps the position flexible.",
+      "annotation": "Black develops the knight to f6, the ideal square. It attacks e4, prepares castling, and keeps the position flexible.",
       "pawnStructure": "The tension in the center remains. Black's knight on f6 pressures e4, adding to the central fight.",
       "plans": [
         "Complete development with ...Be7 and ...O-O",

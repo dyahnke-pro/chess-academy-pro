@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the kingside knight to its most natural square, immediately attacking our d4 pawn and preparing to castle kingside. This is one of the most principled responses to 1.d4, as Black contests the center right away while developing a piece toward its optimal square. The knight on f6 also supports potential ...e6 or ...e5 advances later, giving Black flexibility in choosing their pawn structure. From f6, the knight eyes important central squares like e4 and d5, and this move is seen in many major opening systems including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined."
+      "annotation": "Our opponent develops the kingside knight to its ideal square, immediately attacking our d4 pawn and preparing to castle kingside. This is one of the most principled responses to 1.d4, as Black contests the center right away while developing a piece toward its optimal square. The knight on f6 also supports potential ...e6 or ...e5 advances later, giving Black flexibility in choosing their pawn structure. From f6, the knight eyes important central squares like e4 and d5, and this move is seen in many major opening systems including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined."
     },
     {
       "san": "c4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Ne5",
-      "annotation": "Black retreats the attacked knight to the active e5 square, where it becomes a strong centralized piece that can't easily be driven away. This is the key move that defines the Mexican Defense - instead of retreating passively to a8 or d8, Black places the knight on an excellent central outpost. From e5, the knight controls important squares like d3, f3, c4, and g4, potentially disrupting our development and creating tactical opportunities. The knight also supports a potential ...f7-f5 advance later, which could challenge our kingside and create counterplay, making this a surprisingly active defense despite the initial retreat."
+      "annotation": "Black retreats the attacked knight to the active e5 square, where it becomes a strong centralized piece that can't easily be driven away. This is the defining move of the Mexican Defense - instead of retreating passively to a8 or d8, Black places the knight on an excellent central outpost. From e5, the knight controls important squares like d3, f3, c4, and g4, potentially disrupting our development and creating tactical opportunities. The knight also supports a potential ...f7-f5 advance later, which could challenge our kingside and create counterplay, making this a surprisingly active defense despite the initial retreat."
     },
     {
       "san": "f4",

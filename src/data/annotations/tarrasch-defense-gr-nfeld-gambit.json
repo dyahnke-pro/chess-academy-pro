@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding pressure to the d5 pawn and preparing to support our central expansion with e4. This knight placement is incredibly flexible, as it can later jump to various squares like e4, b5, or a4 depending on how the position develops. From c3, the knight also supports potential pawn advances on both the kingside and queenside. The move maintains maximum tension in the position, as we're not yet committing to any particular pawn structure while keeping all our options open for the middlegame."
+      "annotation": "We're developing our knight to its ideal square, adding pressure to the d5 pawn and preparing to support our central expansion with e4. This knight placement is incredibly flexible, as it can later jump to various squares like e4, b5, or a4 depending on how the position develops. From c3, the knight also supports potential pawn advances on both the kingside and queenside. The move maintains maximum tension in the position, as we're not yet committing to any particular pawn structure while keeping all our options open for the middlegame."
     },
     {
       "san": "c5",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our kingside development. This natural developing move also prepares to castle kingside and keeps our options open for various pawn breaks and piece maneuvers. The knight on f3 is perfectly placed to support both defensive and offensive operations, and it can later relocate to more active squares like e5 or g5 if the position calls for it. This move follows classical development principles while maintaining flexibility in our pawn structure and piece coordination."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our kingside development. This active move also prepares to castle kingside and keeps our options open for various pawn breaks and piece maneuvers. The knight on f3 is perfectly placed to support both defensive and offensive operations, and it can later relocate to more active squares like e5 or g5 if the position calls for it. This move follows classical development principles while maintaining flexibility in our pawn structure and piece coordination."
     },
     {
       "san": "Nc6",
@@ -55,7 +55,7 @@
     },
     {
       "san": "b5",
-      "annotation": "Black plays the key move of the Grünfeld Gambit, attacking our knight and forcing it to move again while gaining valuable tempo in the development race. This pawn advance opens the b-file for the black rook and creates potential tactical motifs involving the b4 square and queenside expansion. Our opponent is demonstrating the point of their pawn sacrifice: by forcing our pieces to awkward squares and gaining time for development, they're seeking to create attacking chances that outweigh the material deficit. We now face a critical decision about where to place our knight, as each retreat square has different positional consequences for the resulting middlegame battle."
+      "annotation": "Black plays the central idea of the Grünfeld Gambit, attacking our knight and forcing it to move again while gaining valuable tempo in the development race. This pawn advance opens the b-file for the black rook and creates potential tactical motifs involving the b4 square and queenside expansion. Our opponent is demonstrating the point of their pawn sacrifice: by forcing our pieces to awkward squares and gaining time for development, they're seeking to create attacking chances that outweigh the material deficit. We now face a critical decision about where to place our knight, as each retreat square has different positional consequences for the resulting middlegame battle."
     }
   ]
 }

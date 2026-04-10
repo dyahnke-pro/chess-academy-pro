@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center and challenging our control of the e4 square, which is exactly what we want to see in the Blackmar-Diemer setup. This natural developing move allows Black to contest the center immediately and prepares to develop the light-squared bishop to f5 or g4. Our opponent is following sound opening principles by fighting for central control, but they're walking directly into our gambit preparation. Black's pawn on d5 will soon become the target of our pawn sacrifice, and this symmetrical pawn structure is temporary as we're about to dramatically alter the position's character."
+      "annotation": "Black responds classically by occupying the center and challenging our control of the e4 square, which is exactly what we want to see in the Blackmar-Diemer setup. This active move allows Black to contest the center immediately and prepares to develop the light-squared bishop to f5 or g4. Our opponent is following sound opening principles by fighting for central control, but they're walking directly into our gambit preparation. Black's pawn on d5 will soon become the target of our pawn sacrifice, and this symmetrical pawn structure is temporary as we're about to dramatically alter the position's character."
     },
     {
       "san": "e4",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square while immediately attacking Black's extra pawn on e4, forcing our opponent to deal with this pressure right away. This knight development is crucial because it supports our central control, eyes the important d5 and e4 squares, and prepares to recapture on e4 if Black moves the pawn. From c3, our knight also supports the advance f2-f3, which is often a key move in Blackmar-Diemer structures to challenge Black's pawn chain and open lines. The knight move exemplifies our gambit philosophy: every developing move should create threats and maintain the initiative, keeping Black constantly on the defensive."
+      "annotation": "We develop our knight to its most active square while immediately attacking Black's extra pawn on e4, forcing our opponent to deal with this pressure right away. This knight development is crucial because it supports our central control, eyes the important d5 and e4 squares, and prepares to recapture on e4 if Black moves the pawn. From c3, our knight also supports the advance f2-f3, which is often a critical move in Blackmar-Diemer structures to challenge Black's pawn chain and open lines. The knight move exemplifies our gambit philosophy: every developing choice should create threats and maintain the initiative, keeping Black constantly on the defensive."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, defending the e4 pawn while also developing toward the center and preparing to castle kingside. This is one of the most solid responses to our gambit, as the knight on f6 not only protects the extra material but also controls important central squares like d5 and e4. Our opponent is trying to consolidate their material advantage while completing development, which is a perfectly reasonable plan, but it also allows us to continue building pressure in the center. Black's knight on f6 will become an important defensive piece, but it can also become a target for our future pawn advances like g4-g5 or our pieces attacking along the f-file and long diagonal."
+      "annotation": "Black develops their knight to its ideal square, defending the e4 pawn while also developing toward the center and preparing to castle kingside. This is one of the most solid responses to our gambit, as the knight on f6 not only protects the extra material but also controls important central squares like d5 and e4. Our opponent is trying to consolidate their material advantage while completing development, which is a perfectly reasonable plan, but it also allows us to continue building pressure in the center. Black's knight on f6 will become an important defensive piece, but it can also become a target for our future pawn advances like g4-g5 or our pieces attacking along the f-file and long diagonal."
     }
   ]
 }

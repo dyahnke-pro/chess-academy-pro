@@ -65,7 +65,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop the queen's knight to its most natural square, reinforcing our grip on d5 and preparing to expand. The knight on c3 is a multi-purpose piece: it supports a future d4 push, pressures d5 and e4, and works beautifully with a kingside fianchetto. Notice we develop knights before bishops — a classical principle that lets us see where the bishops belong based on the pawn structure that emerges.",
+      "annotation": "We develop the queen's knight to its ideal square, reinforcing our grip on d5 and preparing to expand. The knight on c3 is a multi-purpose piece: it supports a future d4 push, pressures d5 and e4, and works beautifully with a kingside fianchetto. Notice we develop knights before bishops — a classical principle that lets us see where the bishops belong based on the pawn structure that emerges.",
       "pawnStructure": "Still c4 vs e5. White keeps central flexibility, not committing to d3 or d4 yet.",
       "plans": [
         "Follow up with Nf3 and g3 to fianchetto the bishop",
@@ -154,7 +154,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends e5 with the most natural developing move. The knight on c6 does triple duty: it protects the e5 pawn, controls d4, and prepares to support a future ...d5 advance. We now have a Four Knights English structure, which is one of the main theoretical battlegrounds of the English Opening. Both sides have developed logically and the real strategic decisions are about to begin.",
+      "annotation": "Black defends e5 with the most active move. The knight on c6 does triple duty: it protects the e5 pawn, controls d4, and prepares to support a future ...d5 advance. We now have a Four Knights English structure, which is one of the main theoretical battlegrounds of the English Opening. Both sides have developed logically and the real strategic decisions are about to begin.",
       "pawnStructure": "c4 vs e5 remains. The pawn tension is latent — neither side is forced to resolve it yet.",
       "plans": [
         "Support the e5 pawn and develop the dark-squared bishop actively",
@@ -275,7 +275,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, getting the king to safety and connecting the rooks. This is the right moment — the bishop on b4 has done its job of creating tension, and now Black completes development. With the king safe, Black can focus on the middlegame battle: fighting for the center with ...d6 or ...d5, and potentially repositioning the b4-bishop.",
+      "annotation": "Black castles kingside, getting the king to safety and connecting the rooks. This is the right moment — the bishop on b4 has done its job of creating tension, and now Black completes development. With the king safe, Black can focus on the middlegame battle: contesting central control with ...d6 or ...d5, and potentially repositioning the b4-bishop.",
       "pawnStructure": "No change. Black's king is now safe and the rooks are connected.",
       "plans": [
         "Consolidate the kingside and prepare central play with ...d6 or ...d5",

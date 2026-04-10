@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most active square, where it supports our central pawns and prepares kingside castling. The knight on f3 controls important central squares like e5 and d4, while also preventing Black from playing disruptive moves like ...Ng4 or ...Ne4. This natural developing move fits perfectly with our positional approach, as it prepares to fianchetto our king's bishop with g3 and Bg2, creating a powerful diagonal battery. The knight also serves as a defender of our kingside, ensuring that our king will be safe once we castle, while maintaining pressure on Black's position without committing to any particular pawn structure yet."
+      "annotation": "We're developing our king's knight to its most active square, where it supports our central pawns and prepares kingside castling. The knight on f3 controls important central squares like e5 and d4, while also preventing Black from playing disruptive moves like ...Ng4 or ...Ne4. This active move fits perfectly with our positional approach, as it prepares to fianchetto our king's bishop with g3 and Bg2, creating a powerful diagonal battery. The knight also serves as a defender of our kingside, ensuring that our king will be safe once we castle, while maintaining pressure on Black's position without committing to any particular pawn structure yet."
     },
     {
       "san": "b6",

@@ -15,11 +15,11 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight with tempo, attacking our e4 pawn and forcing us to respond to this central pressure. This is a key move in the Pirc Defense system, as the knight on f6 not only challenges our center but also prepares to support the typical ...e5 break later in the game. The knight also controls important central squares and can potentially jump to more active squares like e4 or g4 in certain tactical sequences. We'll need to defend our e4 pawn, and the most natural way is with our knight to c3, maintaining our central dominance while developing with purpose."
+      "annotation": "Black develops their knight with tempo, attacking our e4 pawn and forcing us to respond to this central pressure. This is a critical move in the Pirc Defense system, as the knight on f6 not only challenges our center but also prepares to support the typical ...e5 break later in the game. The knight also controls important central squares and can potentially jump to more active squares like e4 or g4 in certain tactical sequences. We'll need to defend our e4 pawn, and the most natural way is with our knight to c3, maintaining our central dominance while developing with purpose."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, defending the e4 pawn while preparing to support our central expansion or kingside attack. This knight placement is ideal because it controls key central squares like d5 and b5, and it doesn't block our f-pawn if we want to play f4-f5 for a kingside pawn storm later. In the Pirc Defense, this knight often plays a crucial role in maintaining our space advantage and can later support moves like f4-f5 or jump to d5 in favorable circumstances. Our development is proceeding smoothly, and we should expect Black to continue with their typical fianchetto setup on the kingside."
+      "annotation": "We develop our knight to its ideal square, defending the e4 pawn while preparing to support our central expansion or kingside attack. This knight placement is ideal because it controls key central squares like d5 and b5, and it doesn't block our f-pawn if we want to play f4-f5 for a kingside pawn storm later. In the Pirc Defense, this knight often plays a crucial role in maintaining our space advantage and can later support moves like f4-f5 or jump to d5 in favorable circumstances. Our development is proceeding smoothly, and we should expect Black to continue with their typical fianchetto setup on the kingside."
     },
     {
       "san": "g6",

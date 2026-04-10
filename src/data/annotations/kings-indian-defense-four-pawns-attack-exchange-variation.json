@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central pawn on d4. This is one of the most flexible responses to 1.d4, keeping multiple opening systems available including the King's Indian Defense, Nimzo-Indian, and Queen's Gambit Declined. Our opponent is following sound opening principles by developing pieces quickly while challenging our central control. Black is also preparing to castle kingside and hasn't committed to any particular pawn structure yet."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central pawn on d4. This is one of the most flexible responses to 1.d4, keeping multiple opening systems available including the King's Indian Defense, Nimzo-Indian, and Queen's Gambit Declined. Our opponent is following sound opening principles by developing pieces quickly while challenging our central control. Black is also preparing to castle kingside and hasn't committed to any particular pawn structure yet."
     },
     {
       "san": "c4",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight with tempo, attacking our centralized knight and forcing us to make a decision about where to place it. This natural developing move also increases pressure on our d4 knight while preparing to potentially challenge our e4 pawn with moves like ...Nd4 or ...Ne5. Our opponent is following classic King's Indian principles by developing pieces quickly and creating immediate tactical threats. The knight on c6 also supports potential pawn breaks like ...b5 or ...d5 and adds to Black's growing piece activity in the center."
+      "annotation": "Black develops the knight with tempo, attacking our centralized knight and forcing us to make a decision about where to place it. This active move also increases pressure on our d4 knight while preparing to potentially challenge our e4 pawn with moves like ...Nd4 or ...Ne5. Our opponent is following classic King's Indian principles by developing pieces quickly and creating immediate tactical threats. The knight on c6 also supports potential pawn breaks like ...b5 or ...d5 and adds to Black's growing piece activity in the center."
     },
     {
       "san": "Be3",

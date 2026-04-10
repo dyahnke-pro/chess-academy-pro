@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance e2-e4. The knight on c3 also eyes important central squares like e4, d5, and b5, while preparing to support our pawn center. This move is almost automatic in most d4 openings when Black hasn't challenged our center directly. We're following classical development principles - pieces before pawns, control the center, and prepare castling. The knight also keeps pressure on Black to make a decision about how they want to structure their pawn center."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance e2-e4. The knight on c3 also eyes important central squares like e4, d5, and b5, while preparing to support our pawn center. This move is almost automatic in most d4 openings when Black hasn't challenged our center directly. We're following classical development principles - pieces before pawns, control the center, and prepare castling. The knight also keeps pressure on Black to make a decision about how they want to structure their pawn center."
     },
     {
       "san": "Bg7",

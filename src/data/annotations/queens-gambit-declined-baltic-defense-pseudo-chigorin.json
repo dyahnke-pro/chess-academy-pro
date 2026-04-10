@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting our c4 pawn and preparing to recapture there if needed. This knight placement is almost universal in Queen's Gambit positions because it controls key central squares like e4 and d5 while maintaining flexibility for our pawn structure. The knight on c3 also eyes the a4-e8 diagonal indirectly and can potentially reroute to more active squares like e4 or b5 depending on how the position develops. By developing this knight, we maintain pressure on Black's center and keep all our options open for the next phase of the opening."
+      "annotation": "We develop our knight to its ideal square, supporting our c4 pawn and preparing to recapture there if needed. This knight placement is almost universal in Queen's Gambit positions because it controls key central squares like e4 and d5 while maintaining flexibility for our pawn structure. The knight on c3 also eyes the a4-e8 diagonal indirectly and can potentially reroute to more active squares like e4 or b5 depending on how the position develops. By developing this knight, we maintain pressure on Black's center and keep all our options open for the next phase of the opening."
     },
     {
       "san": "e6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our kingside development by bringing the knight to f3, where it controls the central e5 and d4 squares while preparing to castle kingside. This natural developing move is almost always correct in Queen's Gambit positions because it supports our center, prepares rapid castling, and maintains maximum flexibility. The knight on f3 also eyes potential outposts on e5 and g5, and can support a future e4 pawn advance if the position allows it. With this move, we're following classical opening principles while keeping all our strategic options open for the middlegame."
+      "annotation": "We complete our kingside development by bringing the knight to f3, where it controls the central e5 and d4 squares while preparing to castle kingside. This active move is almost always correct in Queen's Gambit positions because it supports our center, prepares rapid castling, and maintains maximum flexibility. The knight on f3 also eyes potential outposts on e5 and g5, and can support a future e4 pawn advance if the position allows it. With this move, we're following classical opening principles while keeping all our strategic options open for the middlegame."
     },
     {
       "san": "Nc6",

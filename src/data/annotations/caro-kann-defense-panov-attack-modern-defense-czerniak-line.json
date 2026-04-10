@@ -23,7 +23,7 @@
     },
     {
       "san": "cxd5",
-      "annotation": "Black recaptures toward the center, maintaining material balance while keeping the position relatively symmetrical. This recapture keeps Black's pawn structure solid and maintains central presence, though it does allow us to gain a space advantage with our next move. The pawn on d5 will become a focal point of the position - we'll likely attack it with c2-c4, while Black will need to defend it carefully. Black's recapture is more principled than Qxd5, which would bring the queen out too early and allow us to gain time with developing moves that attack the queen."
+      "annotation": "Black recaptures toward the center, maintaining material balance while keeping the position relatively symmetrical. This recapture keeps Black's pawn structure solid and maintains central presence, though it does allow us to gain a space advantage with our next move. The pawn on d5 will become a focal point of the position - we'll likely attack it with c2-c4, while Black will need to defend it carefully. Black's recapture is more principled than Qxd5, which would bring the queen out too early and allow us to gain time with developing choices that attack the queen."
     },
     {
       "san": "c4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, defending the d5 pawn while preparing to castle kingside. This knight placement follows classical development principles by developing toward the center and supporting Black's pawn structure. The knight on f6 also eyes important central squares like e4 and d5, giving Black good central control. However, Black must be careful because this knight can sometimes become a target for our pieces, particularly if we develop our bishop to g5 to pin it against the black queen."
+      "annotation": "Black develops the kingside knight to its ideal square, defending the d5 pawn while preparing to castle kingside. This knight placement follows classical development principles by developing toward the center and supporting Black's pawn structure. The knight on f6 also eyes important central squares like e4 and d5, giving Black good central control. However, Black must be careful because this knight can sometimes become a target for our pieces, particularly if we develop our bishop to g5 to pin it against the black queen."
     },
     {
       "san": "Nc3",

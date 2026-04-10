@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting a future d4 advance and maintaining maximum flexibility in our setup. This move is part of the Four Knights system in the English, where both sides develop their knights harmoniously before committing to more concrete pawn structures. The knight on c3 also prepares potential piece sacrifices on d5 or e4 in tactical sequences, while keeping the option open to support a central pawn storm with d4 and e4. From c3, our knight can also reroute to more active squares like e4 or d5 depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, supporting a future d4 advance and maintaining maximum flexibility in our setup. This move is part of the Four Knights system in the English, where both sides develop their knights harmoniously before committing to more concrete pawn structures. The knight on c3 also prepares potential piece sacrifices on d5 or e4 in tactical sequences, while keeping the option open to support a central pawn storm with d4 and e4. From c3, our knight can also reroute to more active squares like e4 or d5 depending on how the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops with tempo, attacking our undefended e4 square and preventing us from playing e4 immediately. This natural developing move also prepares to castle kingside and supports potential central advances like d6-d5 or maintains pressure on our central ambitions. Our opponent is following sound opening principles by developing pieces toward the center while creating concrete threats that we must address. The knight on f6 is perfectly placed to support Black's central pawn on e5 and can potentially hop to more active squares like d4 or g4 in tactical sequences."
+      "annotation": "Black develops with tempo, attacking our undefended e4 square and preventing us from playing e4 immediately. This active move also prepares to castle kingside and supports potential central advances like d6-d5 or maintains pressure on our central ambitions. Our opponent is following sound opening principles by developing pieces toward the center while creating concrete threats that we must address. The knight on f6 is perfectly placed to support Black's central pawn on e5 and can potentially hop to more active squares like d4 or g4 in tactical sequences."
     },
     {
       "san": "Nf3",

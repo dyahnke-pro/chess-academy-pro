@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds by developing the kingside knight to its most natural square, immediately putting pressure on our d4 pawn and contesting control of the center. This move is the starting point for several major defenses including the King's Indian, Nimzo-Indian, and Queen's Indian. By attacking d4 right away, Black prevents us from simply continuing with e4 to establish a big pawn center. The knight on f6 also prepares kingside castling and keeps Black's options open for the next few moves."
+      "annotation": "Black responds by developing the kingside knight to its ideal square, immediately putting pressure on our d4 pawn and contesting control of the center. This move is the starting point for several major defenses including the King's Indian, Nimzo-Indian, and Queen's Indian. By attacking d4 right away, Black prevents us from simply continuing with e4 to establish a big pawn center. The knight on f6 also prepares kingside castling and keeps Black's options open for the next few moves."
     },
     {
       "san": "c4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside to safety, completing the most urgent part of development and preparing to contest the center more actively. This natural move gets the king away from potential central tactics and connects the rooks, which is essential before engaging in serious central battles. With the king safe, Black can now consider moves like d6 and e5, or even the thematic c5 pawn break. Castling also prepares Black's rooks for potential activity on the e-file or d-file, depending on how the pawn structure develops."
+      "annotation": "Black castles kingside to safety, completing the most urgent part of development and preparing to contest the center more actively. this move gets the king away from potential central tactics and connects the rooks, which is essential before engaging in serious central battles. With the king safe, Black can now consider moves like d6 and e5, or even the thematic c5 pawn break. Castling also prepares Black's rooks for potential activity on the e-file or d-file, depending on how the pawn structure develops."
     },
     {
       "san": "a3",

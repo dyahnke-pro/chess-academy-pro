@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while adding another attacker to the d5 pawn, increasing the central tension. This knight controls important central squares like e4 and d5, and supports our future pawn advances in the center. The knight on c3 is perfectly placed for the middlegame battles ahead, where it can jump to e4 or support our queenside expansion with moves like a4-a5. This development also prepares us to recapture on c4 with the knight if Black ever takes our gambit pawn, maintaining our central influence."
+      "annotation": "We're developing our knight to its ideal square while adding another attacker to the d5 pawn, increasing the central tension. This knight controls important central squares like e4 and d5, and supports our future pawn advances in the center. The knight on c3 is perfectly placed for the middlegame battles ahead, where it can jump to e4 or support our queenside expansion with moves like a4-a5. This development also prepares us to recapture on c4 with the knight if Black ever takes our gambit pawn, maintaining our central influence."
     },
     {
       "san": "c6",
@@ -27,11 +27,11 @@
     },
     {
       "san": "e3",
-      "annotation": "We're solidifying our position with this modest but important developing move that supports our d4 pawn and prepares to bring our light-squared bishop into play. While less aggressive than alternatives like Nf3 or f3, this move creates a solid pawn chain and ensures our center won't be easily undermined. The e3 pawn also controls the crucial d4 and f4 squares, preventing Black from establishing pieces there. This leads us into the typical Semi-Slav structures where careful maneuvering and strategic understanding become paramount."
+      "annotation": "We're solidifying our position with this modest but important developing choice that supports our d4 pawn and prepares to bring our light-squared bishop into play. While less aggressive than alternatives like Nf3 or f3, this move creates a solid pawn chain and ensures our center won't be easily undermined. The e3 pawn also controls the crucial d4 and f4 squares, preventing Black from establishing pieces there. This leads us into the typical Semi-Slav structures where careful maneuvering and strategic understanding become paramount."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their knight to its most active square, where it attacks our e4 square and prepares to support their central pawn structure. This is the most natural developing move in the position, bringing a piece toward the center while maintaining flexibility for future plans. The knight on f6 will play a crucial role in Black's middlegame strategy, potentially jumping to e4 or supporting tactical operations on the kingside. We should note that this knight also prepares Black's kingside castling while keeping pressure on our central ambitions."
+      "annotation": "Our opponent develops their knight to its most active square, where it attacks our e4 square and prepares to support their central pawn structure. This is the most active move in the position, bringing a piece toward the center while maintaining flexibility for future plans. The knight on f6 will play a crucial role in Black's middlegame strategy, potentially jumping to e4 or supporting tactical operations on the kingside. We should note that this knight also prepares Black's kingside castling while keeping pressure on our central ambitions."
     },
     {
       "san": "Nf3",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding a third attacker to the d5 pawn and preparing to support our central advance with e4 if the opportunity arises. The knight on c3 is beautifully placed, controlling important central squares like e4 and b5 while supporting potential pawn breaks. This move also prepares to recapture on c4 if Black takes our gambit pawn, maintaining material balance. From c3, our knight can potentially jump to more active squares like e4 or b5 later in the game, depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, adding a third attacker to the d5 pawn and preparing to support our central advance with e4 if the opportunity arises. The knight on c3 is beautifully placed, controlling important central squares like e4 and b5 while supporting potential pawn breaks. This move also prepares to recapture on c4 if Black takes our gambit pawn, maintaining material balance. From c3, our knight can potentially jump to more active squares like e4 or b5 later in the game, depending on how the position develops."
     },
     {
       "san": "Nf6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our kingside development by bringing the knight to its most natural square, from where it controls important central territory and supports our pawn structure. The knight on f3 defends our h2 pawn, controls the e5 and g5 squares, and prepares us to castle on the next move. This move also increases the pressure on Black's center and gives us more tactical possibilities in the position. With both knights developed and our bishop actively placed, we're building up significant pressure while maintaining excellent piece coordination."
+      "annotation": "We complete our kingside development by bringing the knight to its ideal square, from where it controls important central territory and supports our pawn structure. The knight on f3 defends our h2 pawn, controls the e5 and g5 squares, and prepares us to castle on the next move. This move also increases the pressure on Black's center and gives us more tactical possibilities in the position. With both knights developed and our bishop actively placed, we're building up significant pressure while maintaining excellent piece coordination."
     },
     {
       "san": "h6",
@@ -71,7 +71,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black retreats the knight to f6, returning to the solid defensive setup but maintaining central influence. Our opponent chooses the most natural square, where the knight defends the kingside and supports the central pawn structure while avoiding immediate tactical problems. This retreat shows Black is prioritizing solid piece coordination over maintaining the active knight on e4, which is a reasonable practical decision. The knight on f6 still performs important defensive and central functions, even though it's less aggressively placed than it was on e4."
+      "annotation": "Black retreats the knight to f6, returning to the solid defensive setup but maintaining central influence. Our opponent chooses the ideal square, where the knight defends the kingside and supports the central pawn structure while avoiding immediate tactical problems. This retreat shows Black is prioritizing solid piece coordination over maintaining the active knight on e4, which is a reasonable practical decision. The knight on f6 still performs important defensive and central functions, even though it's less aggressively placed than it was on e4."
     },
     {
       "san": "Bd3",

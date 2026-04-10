@@ -27,7 +27,7 @@
     },
     {
       "san": "Bxc4",
-      "annotation": "We're finally recapturing our sacrificed pawn while simultaneously developing our light-squared bishop to an active square where it eyes Black's kingside. This natural developing move restores material equality and places immediate pressure on the f7 square, Black's traditional weakness. Our bishop on c4 also supports potential tactical ideas involving our queen and other pieces, and it's perfectly placed to support central advances like d4-d5 if the opportunity arises. The timing is perfect since Black's e5 advance has opened up tactical possibilities that make this bishop particularly dangerous."
+      "annotation": "We're finally recapturing our sacrificed pawn while simultaneously developing our light-squared bishop to an active square where it eyes Black's kingside. This active move restores material equality and places immediate pressure on the f7 square, Black's traditional weakness. Our bishop on c4 also supports potential tactical ideas involving our queen and other pieces, and it's perfectly placed to support central advances like d4-d5 if the opportunity arises. The timing is perfect since Black's e5 advance has opened up tactical possibilities that make this bishop particularly dangerous."
     },
     {
       "san": "exd4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Qb3",
-      "annotation": "We're bringing our queen into the attack with a powerful developing move that targets multiple weaknesses in Black's position, particularly the b7 pawn and indirectly the f7 square. This aggressive queen placement is the hallmark of the Novikov Gambit - we're not just trying to regain material but seeking to create immediate threats that put pressure on Black's underdeveloped position. Our queen from b3 also supports potential tactical ideas involving our bishop on c4, creating a battery that eyes Black's kingside. The queen also prepares to support the recapture of our pawn on d4 while maintaining maximum pressure on our opponent."
+      "annotation": "We're bringing our queen into the attack with a powerful developing choice that targets multiple weaknesses in Black's position, particularly the b7 pawn and indirectly the f7 square. This aggressive queen placement is the hallmark of the Novikov Gambit - we're not just trying to regain material but seeking to create immediate threats that put pressure on Black's underdeveloped position. Our queen from b3 also supports potential tactical ideas involving our bishop on c4, creating a battery that eyes Black's kingside. The queen also prepares to support the recapture of our pawn on d4 while maintaining maximum pressure on our opponent."
     },
     {
       "san": "Qe7",

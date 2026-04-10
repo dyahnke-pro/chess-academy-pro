@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it attacks Black's e5 pawn and controls key central squares like d4 and e5. This move is the hallmark of classical opening play - we develop with tempo by creating an immediate threat that Black must address. The knight on f3 also prepares potential discoveries if we later move our e4 pawn, and it supports a future d4 pawn advance. Most importantly, this move signals our intention to play the Ruy Lopez if Black responds with the natural Nc6, leading us into one of chess's most analyzed and strategically rich openings."
+      "annotation": "We're developing our knight to its ideal square, where it attacks Black's e5 pawn and controls key central squares like d4 and e5. This move is the hallmark of classical opening play - we develop with tempo by creating an immediate threat that Black must address. The knight on f3 also prepares potential discoveries if we later move our e4 pawn, and it supports a future d4 pawn advance. Most importantly, this move signals our intention to play the Ruy Lopez if Black responds with the natural Nc6, leading us into one of chess's most analyzed and strategically rich openings."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 pawn and completing the basic development of the minor pieces. This knight controls key central squares like d5 and e4, and our opponent is following the classical principle of developing pieces toward the center with maximum activity. The knight on f6 also prepares kingside castling and keeps Black's position flexible for various pawn structures. Our opponent is maintaining the central tension and forcing us to make decisions about how to protect our e4 pawn while continuing our own development."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and completing the basic development of the minor pieces. This knight controls key central squares like d5 and e4, and our opponent is following the classical principle of developing pieces toward the center with maximum activity. The knight on f6 also prepares kingside castling and keeps Black's position flexible for various pawn structures. Our opponent is maintaining the central tension and forcing us to make decisions about how to protect our e4 pawn while continuing our own development."
     },
     {
       "san": "O-O",
@@ -55,7 +55,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays the solid move that defines the Closed Ruy Lopez, supporting the e5 pawn while preparing to complete development with moves like ...0-0 and ...Bg4 or ...Be6. This pawn move closes the center and signals that our opponent is willing to engage in the typical slow maneuvering battle that characterizes these positions. The move also prepares to bring the light-squared bishop into the game via e6 or g4, while keeping the center stable. We've now reached a typical Closed Ruy Lopez position where both sides will maneuver their pieces, improve their positions gradually, and look for the right moment to create pawn breaks or tactical opportunities."
+      "annotation": "Black plays the well-grounded move that defines the Closed Ruy Lopez, supporting the e5 pawn while preparing to complete development with moves like ...0-0 and ...Bg4 or ...Be6. This pawn move closes the center and signals that our opponent is willing to engage in the typical slow maneuvering battle that characterizes these positions. The move also prepares to bring the light-squared bishop into the game via e6 or g4, while keeping the center stable. We've now reached a typical Closed Ruy Lopez position where both sides will maneuver their pieces, improve their positions gradually, and look for the right moment to create pawn breaks or tactical opportunities."
     }
   ]
 }

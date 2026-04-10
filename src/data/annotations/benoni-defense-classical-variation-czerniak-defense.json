@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn while controlling the important e5 and g5 squares and preparing to castle kingside. This move fits perfectly with our opening setup, as the knight doesn't block any of our pawns and maintains maximum flexibility for our piece development. We're also preparing to meet Black's potential central advances with solid piece support while keeping our options open for systems like the King's Indian Attack or more aggressive setups. The knight on f3 is a key defender of our kingside and often supports later advances like e4 or g3 followed by Bg2."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn while controlling the important e5 and g5 squares and preparing to castle kingside. This move fits perfectly with our opening setup, as the knight doesn't block any of our pawns and maintains maximum flexibility for our piece development. We're also preparing to meet Black's potential central advances with solid piece support while keeping our options open for systems like the King's Indian Attack or more aggressive setups. The knight on f3 is a key defender of our kingside and often supports later advances like e4 or g3 followed by Bg2."
     },
     {
       "san": "c5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, where it supports our d5 pawn while preparing for our central advance e4, which is the key move in our Benoni attacking setup. This knight also eyes important squares like b5 and e4, and it's perfectly placed to support our typical kingside attack with moves like f4 and potential piece sacrifices. Our development is now proceeding smoothly toward the characteristic Benoni middlegame where we'll have more space and attacking chances on the kingside. The knight on c3 also prepares potential queenside expansion with moves like a4 and b4, giving us options on both sides of the board."
+      "annotation": "We're developing our knight to its most active square, where it supports our d5 pawn while preparing for our central advance e4, which is the critical advance in our Benoni attacking setup. This knight also eyes important squares like b5 and e4, and it's perfectly placed to support our typical kingside attack with moves like f4 and potential piece sacrifices. Our development is now proceeding smoothly toward the characteristic Benoni middlegame where we'll have more space and attacking chances on the kingside. The knight on c3 also prepares potential queenside expansion with moves like a4 and b4, giving us options on both sides of the board."
     },
     {
       "san": "g6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We're playing the key move of our Benoni setup, advancing in the center to gain more space while preparing for our characteristic kingside attack with moves like f4, h4, and potentially g4-g5. This pawn advance gives us excellent central control and supports our pieces' activity, while also preparing to bring our light-squared bishop into the game via c4 or d3. Our e4 pawn works together with our d5 pawn to create a powerful central pawn duo that restricts Black's pieces and supports our attacking ambitions. This move also opens up possibilities for our dark-squared bishop development and prepares the ground for the typical Benoni middlegame where we'll seek a kingside attack while Black pursues queenside counterplay."
+      "annotation": "We're playing the central idea of our Benoni setup, advancing in the center to gain more space while preparing for our characteristic kingside attack with moves like f4, h4, and potentially g4-g5. This pawn advance gives us excellent central control and supports our pieces' activity, while also preparing to bring our light-squared bishop into the game via c4 or d3. Our e4 pawn works together with our d5 pawn to create a powerful central pawn duo that restricts Black's pieces and supports our attacking ambitions. This move also opens up possibilities for our dark-squared bishop development and prepares the ground for the typical Benoni middlegame where we'll seek a kingside attack while Black pursues queenside counterplay."
     },
     {
       "san": "Bg7",

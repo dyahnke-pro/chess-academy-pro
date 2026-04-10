@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own foothold in the middle of the board. This natural developing move shows that our opponent wants to fight for central space rather than allow us to dominate with our pawns. The d5 pawn also opens lines for Black's pieces, particularly giving the dark-squared bishop a potential escape route via f5 or g4. This move sets up the possibility for us to play c4, offering the famous Queen's Gambit where we'll offer to trade our c-pawn for Black's central d-pawn."
+      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own foothold in the middle of the board. This active move shows that our opponent wants to fight for central space rather than allow us to dominate with our pawns. The d5 pawn also opens lines for Black's pieces, particularly giving the dark-squared bishop a potential escape route via f5 or g4. This move sets up the possibility for us to play c4, offering the famous Queen's Gambit where we'll offer to trade our c-pawn for Black's central d-pawn."
     },
     {
       "san": "c4",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important central squares e5 and d4 while preparing to support our pawn recapture on c4. This move follows classical opening principles by developing toward the center with a threat – we're now attacking Black's e5 square and preparing to castle kingside. The knight on f3 also supports a future e4 advance, which would give us the ideal pawn center we've been working toward. Rather than rushing to recapture our pawn immediately, we're developing with purpose and keeping maximum flexibility in our position."
+      "annotation": "We develop our knight to its ideal square, where it controls the important central squares e5 and d4 while preparing to support our pawn recapture on c4. This move follows classical opening principles by developing toward the center with a threat – we're now attacking Black's e5 square and preparing to castle kingside. The knight on f3 also supports a future e4 advance, which would give us the ideal pawn center we've been working toward. Rather than rushing to recapture our pawn immediately, we're developing with purpose and keeping maximum flexibility in our position."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development by bringing their knight to f6, where it controls key central squares and prepares for rapid piece development. This natural move defends against any future e4-e5 pawn advances while keeping the position flexible for Black's pieces. The knight on f6 also supports Black's kingside and prepares for castling, showing that our opponent is following sound developmental principles. From f6, the knight eyes important central squares and can later jump to more active posts like e4 or d5 if circumstances allow, making this a multi-purpose developing move."
+      "annotation": "Black mirrors our development by bringing their knight to f6, where it controls key central squares and prepares for rapid piece development. this move defends against any future e4-e5 pawn advances while keeping the position flexible for Black's pieces. The knight on f6 also supports Black's kingside and prepares for castling, showing that our opponent is following sound developmental principles. From f6, the knight eyes important central squares and can later jump to more active posts like e4 or d5 if circumstances allow, making this a multi-purpose developing choice."
     },
     {
       "san": "e3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays the classical setup, supporting their pawn on f6 and preparing to develop the dark-squared bishop, typically to e7 or d6. This solid move creates a strong pawn chain from e6 to f6 via the knight, making it difficult for us to achieve the e4-e5 pawn advance that would give us maximum central control. The e6 pawn also prepares Black's kingside development and keeps their position flexible for various piece placements. While this move may seem passive, it's part of a well-established system where Black aims for solid development before seeking counterplay in the center or on the queenside."
+      "annotation": "Black plays the classical setup, supporting their pawn on f6 and preparing to develop the dark-squared bishop, typically to e7 or d6. this stabilizing move creates a strong pawn chain from e6 to f6 via the knight, making it difficult for us to achieve the e4-e5 pawn advance that would give us maximum central control. The e6 pawn also prepares Black's kingside development and keeps their position flexible for various piece placements. While this move may seem passive, it's part of a well-established system where Black aims for solid development before seeking counterplay in the center or on the queenside."
     },
     {
       "san": "Bxc4",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black completes their classical development by bringing the queen's knight to c6, where it supports the c5 pawn advance and adds more pressure to our central d4 pawn. This natural developing move follows the same principles we've been applying – piece development, central control, and preparation for castling. The knight on c6 also keeps Black's options open for various pawn breaks and piece maneuvers, particularly supporting potential advances like b5 or further pressure with moves like Qb6. We've now reached a critical juncture in the Classical Defense where both sides have developed harmoniously, and the real strategic battle for central control and piece activity is about to begin."
+      "annotation": "Black completes their classical development by bringing the queen's knight to c6, where it supports the c5 pawn advance and adds more pressure to our central d4 pawn. This active move follows the same principles we've been applying – piece development, central control, and preparation for castling. The knight on c6 also keeps Black's options open for various pawn breaks and piece maneuvers, particularly supporting potential advances like b5 or further pressure with moves like Qb6. We've now reached a critical juncture in the Classical Defense where both sides have developed harmoniously, and the real strategic battle for central control and piece activity is about to begin."
     }
   ]
 }

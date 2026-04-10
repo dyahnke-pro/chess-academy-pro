@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding extra pressure to the d5 pawn while preparing to support our central advance with e4 if the opportunity arises. This knight placement is incredibly flexible - it can later jump to e4, b5, or even a4 depending on how the position develops. The knight from c3 also supports a potential d5 pawn break if Black ever captures on c4, giving us excellent central control. By developing with purpose, we're maintaining maximum options while keeping pressure on Black's position."
+      "annotation": "We develop our knight to its ideal square, adding extra pressure to the d5 pawn while preparing to support our central advance with e4 if the opportunity arises. This knight placement is incredibly flexible - it can later jump to e4, b5, or even a4 depending on how the position develops. The knight from c3 also supports a potential d5 pawn break if Black ever captures on c4, giving us excellent central control. By developing with purpose, we're maintaining maximum options while keeping pressure on Black's position."
     },
     {
       "san": "c5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops their knight with tempo, attacking our centralized queen while bringing a piece into active play. This natural developing move shows good opening principles - our opponent is trying to catch up in development while creating threats against our advanced pieces. The knight on c6 also eyes important central squares and prepares to support Black's overall coordination. However, by forcing our queen to move, Black is helping us relocate it to an even better square while we maintain our developmental advantage."
+      "annotation": "Black develops their knight with tempo, attacking our centralized queen while bringing a piece into active play. This active move shows good opening principles - our opponent is trying to catch up in development while creating threats against our advanced pieces. The knight on c6 also eyes important central squares and prepares to support Black's overall coordination. However, by forcing our queen to move, Black is helping us relocate it to an even better square while we maintain our developmental advantage."
     },
     {
       "san": "Qd1",

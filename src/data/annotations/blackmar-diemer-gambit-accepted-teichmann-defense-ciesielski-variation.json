@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds classically by occupying the center and challenging our control of the e4 square. This is the most natural and principled response, as our opponent establishes their own central presence and prepares to develop the light-squared bishop. From Black's perspective, this solid move maintains the balance and doesn't fall into any immediate tactical traps. However, by playing so conventionally, Black is about to walk into the main line of our gambit where we'll offer material for dynamic compensation."
+      "annotation": "Black responds classically by occupying the center and challenging our control of the e4 square. This is the most natural and principled response, as our opponent establishes their own central presence and prepares to develop the light-squared bishop. From Black's perspective, this stabilizing move maintains the balance and doesn't fall into any immediate tactical traps. However, by playing so conventionally, Black is about to walk into the main line of our gambit where we'll offer material for dynamic compensation."
     },
     {
       "san": "e4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most natural square, simultaneously defending the e4 pawn and preparing kingside castling. This is a very reasonable move that develops a piece while maintaining material advantage, and it's one of the main defenses in the accepted Blackmar-Diemer Gambit. Our opponent is following sound opening principles by developing pieces and not trying to hold onto the extra pawn at all costs. However, this knight will soon become a target for our advancing pawns, and Black needs to be ready for the tactical complications that are about to explode in the center."
+      "annotation": "Black develops their kingside knight to its ideal square, simultaneously defending the e4 pawn and preparing kingside castling. This is a very reasonable move that develops a piece while maintaining material advantage, and it's one of the main defenses in the accepted Blackmar-Diemer Gambit. Our opponent is following sound opening principles by developing pieces and not trying to hold onto the extra pawn at all costs. However, this knight will soon become a target for our advancing pawns, and Black needs to be ready for the tactical complications that are about to explode in the center."
     },
     {
       "san": "f3",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays a solid move that supports their central position and prepares to develop the queenside, while also potentially preparing ...Qc7 to challenge our active queen. This move shows that our opponent is playing sensibly by not panicking under pressure and continuing with logical development. The advance to c6 also gives Black's king additional escape squares and supports a potential ...b5 advance to challenge our pieces. However, this relatively slow move allows us to continue building our attack, and Black still needs to solve the problem of their uncastled king facing our active pieces."
+      "annotation": "Black plays a well-grounded move that supports their central position and prepares to develop the queenside, while also potentially preparing ...Qc7 to challenge our active queen. This move shows that our opponent is playing sensibly by not panicking under pressure and continuing with logical development. The advance to c6 also gives Black's king additional escape squares and supports a potential ...b5 advance to challenge our pieces. However, this relatively slow move allows us to continue building our attack, and Black still needs to solve the problem of their uncastled king facing our active pieces."
     },
     {
       "san": "Qf2",

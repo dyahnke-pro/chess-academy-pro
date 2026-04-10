@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 pawn while controlling the important d4 and g5 squares, and this move marks the beginning of the Ruy Lopez system. The knight on f3 serves multiple purposes: it develops with tempo by threatening Black's central pawn, supports our own e4 pawn, and prepares for quick kingside castling. This is far superior to the immediate 2.d3 or 2.Bc4, because developing the knight with an attack forces our opponent to respond to our threat rather than allowing them to seize the initiative."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 pawn while controlling the important d4 and g5 squares, and this move marks the beginning of the Ruy Lopez system. The knight on f3 serves multiple purposes: it develops with tempo by threatening Black's central pawn, supports our own e4 pawn, and prepares for quick kingside castling. This is far superior to the immediate 2.d3 or 2.Bc4, because developing the knight with an attack forces our opponent to respond to our threat rather than allowing them to seize the initiative."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the attacked e5 pawn with the most natural developing move, bringing the knight to its ideal central square where it controls d4 and b4. This knight development is practically forced, as other defenses like 2...d6 or 2...f5 would lead to inferior pawn structures or weakened king safety. Our opponent is following sound opening principles by developing pieces while maintaining central control, and the knight on c6 will soon support Black's typical freeing moves like ...d6 and potentially ...f5 in many Ruy Lopez variations."
+      "annotation": "Black defends the attacked e5 pawn with the most active move, bringing the knight to its ideal central square where it controls d4 and b4. This knight development is practically forced, as other defenses like 2...d6 or 2...f5 would lead to inferior pawn structures or weakened king safety. Our opponent is following sound opening principles by developing pieces while maintaining central control, and the knight on c6 will soon support Black's typical freeing moves like ...d6 and potentially ...f5 in many Ruy Lopez variations."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our e4 pawn while preparing to castle kingside and complete basic development. This knight move is the most principled response, as it challenges our central pawn and forces us to make concrete decisions about how to maintain our space advantage. Our opponent is following the classical development scheme in the Ruy Lopez, where Black aims to complete kingside development quickly, potentially challenge our center with ...d6 and ...Be7, and then look for counterplay with moves like ...b5 or central breaks."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our e4 pawn while preparing to castle kingside and complete basic development. This knight move is the most principled response, as it challenges our central pawn and forces us to make concrete decisions about how to maintain our space advantage. Our opponent is following the classical development scheme in the Ruy Lopez, where Black aims to complete kingside development quickly, potentially challenge our center with ...d6 and ...Be7, and then look for counterplay with moves like ...b5 or central breaks."
     },
     {
       "san": "Qe2",
@@ -39,11 +39,11 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black completes the kingside development with the most solid move, preparing to castle while keeping the position flexible for different pawn structure setups. The bishop on e7 supports the f6 knight, prepares kingside castling, and maintains the option to later reroute to d6 or c5 depending on how the center develops. Our opponent is following a classical development pattern that prioritizes piece safety and king security over immediate counterplay, though Black is also preparing to potentially support central advances like ...d6 or even ...d5 in some lines."
+      "annotation": "Black completes the kingside development with the most well-grounded move, preparing to castle while keeping the position flexible for different pawn structure setups. The bishop on e7 supports the f6 knight, prepares kingside castling, and maintains the option to later reroute to d6 or c5 depending on how the center develops. Our opponent is following a classical development pattern that prioritizes piece safety and king security over immediate counterplay, though Black is also preparing to potentially support central advances like ...d6 or even ...d5 in some lines."
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside, securing our king's safety while bringing the rook into potential central play, and this natural move maintains all our options for the middlegame ahead. Castling completes our basic development tasks and prepares us to increase the pressure in the center or on the kingside, depending on how Black continues. Our king is now safely tucked away behind pawns, and the f1 rook is ready to support central advances or join in a kingside attack, while we maintain the central tension that's characteristic of the Ruy Lopez."
+      "annotation": "We castle kingside, securing our king's safety while bringing the rook into potential central play, and this move maintains all our options for the middlegame ahead. Castling completes our basic development tasks and prepares us to increase the pressure in the center or on the kingside, depending on how Black continues. Our king is now safely tucked away behind pawns, and the f1 rook is ready to support central advances or join in a kingside attack, while we maintain the central tension that's characteristic of the Ruy Lopez."
     },
     {
       "san": "b5",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, completing the essential development tasks and bringing the king to safety while activating the rook for potential central or kingside defense. This natural move mirrors our own castling and maintains the strategic balance, as both sides now have their kings secured and can focus on the central battle ahead. Our opponent has now completed the basic development in this line of the Ruy Lopez and is prepared to engage in the typical middlegame themes of central control, piece maneuvering, and the fight for key squares like d5 and f5."
+      "annotation": "Black castles kingside, completing the essential development tasks and bringing the king to safety while activating the rook for potential central or kingside defense. this move mirrors our own castling and maintains the strategic balance, as both sides now have their kings secured and can focus on the central battle ahead. Our opponent has now completed the basic development in this line of the Ruy Lopez and is prepared to engage in the typical middlegame themes of central control, piece maneuvering, and the fight for key squares like d5 and f5."
     },
     {
       "san": "c3",

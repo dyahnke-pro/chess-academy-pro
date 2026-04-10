@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the central e5 and d4 squares while supporting our d4 pawn from potential attacks. This knight placement is incredibly flexible, as it can later jump to e5, d2, or even h4 in some tactical sequences. The knight on f3 also prevents Black from playing ...e5 immediately, maintaining our central pawn duo's integrity. Additionally, this move prepares for kingside castling and keeps our options open for both the fianchetto setup with g3 or the classical development with Be2."
+      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 and d4 squares while supporting our d4 pawn from potential attacks. This knight placement is incredibly flexible, as it can later jump to e5, d2, or even h4 in some tactical sequences. The knight on f3 also prevents Black from playing ...e5 immediately, maintaining our central pawn duo's integrity. Additionally, this move prepares for kingside castling and keeps our options open for both the fianchetto setup with g3 or the classical development with Be2."
     },
     {
       "san": "b6",

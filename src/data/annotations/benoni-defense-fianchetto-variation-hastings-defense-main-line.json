@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 and preparing to contest the center. This is the starting move of several major defensive systems including the King's Indian, Nimzo-Indian, and as we'll see, the Benoni Defense. By developing the knight to its most active square, Black also prepares kingside castling while keeping maximum flexibility in the position. The knight on f6 is perfectly placed to support central advances like ...e6 or ...d6, and it can later jump to more active squares like e4 or g4 depending on the pawn structure that emerges."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 and preparing to contest the center. This is the starting move of several major defensive systems including the King's Indian, Nimzo-Indian, and as we'll see, the Benoni Defense. By developing the knight to its most active square, Black also prepares kingside castling while keeping maximum flexibility in the position. The knight on f6 is perfectly placed to support central advances like ...e6 or ...d6, and it can later jump to more active squares like e4 or g4 depending on the pawn structure that emerges."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d5 pawn and preparing to contest Black's control of key central squares. The knight on c3 is perfectly placed to support our pawn structure while also eyeing potential outposts on b5 and e4 if the position opens up. This development is also flexible - the knight can later jump to e4, b5, or even a4 depending on how the position evolves. By developing the knight before completing our kingside development, we're ensuring that our central structure remains solid while keeping maximum options for our piece coordination."
+      "annotation": "We develop our knight to its ideal square, supporting the d5 pawn and preparing to contest Black's control of key central squares. The knight on c3 is perfectly placed to support our pawn structure while also eyeing potential outposts on b5 and e4 if the position opens up. This development is also flexible - the knight can later jump to e4, b5, or even a4 depending on how the position evolves. By developing the knight before completing our kingside development, we're ensuring that our central structure remains solid while keeping maximum options for our piece coordination."
     },
     {
       "san": "g6",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our last minor piece to its most natural square, completing our basic development and supporting our central control. The knight on f3 controls important squares like e5 and d4, prevents Black from playing ...e5 to challenge our center, and maintains flexibility for future plans. This knight can potentially jump to more active squares like e4, d4, or h4 depending on how the position develops, and it supports both our defensive setup and potential attacking ideas. By completing our kingside development, we're also preparing to castle and get our king to safety before beginning more concrete plans."
+      "annotation": "We develop our last minor piece to its ideal square, completing our basic development and supporting our central control. The knight on f3 controls important squares like e5 and d4, prevents Black from playing ...e5 to challenge our center, and maintains flexibility for future plans. This knight can potentially jump to more active squares like e4, d4, or h4 depending on how the position develops, and it supports both our defensive setup and potential attacking ideas. By completing our kingside development, we're also preparing to castle and get our king to safety before beginning more concrete plans."
     },
     {
       "san": "O-O",

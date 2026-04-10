@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while adding another attacker to Black's d5 pawn, increasing the central pressure significantly. This move is part of classical Queen's Gambit development, preparing to potentially capture on d5 and forcing Black to make decisions about how to maintain their central pawn. The knight on c3 also eyes important squares like e4 and d5, and supports potential pawn advances like e2-e4 later in the game. From c3, our knight is perfectly placed to support our central strategy while maintaining flexibility for future piece coordination and tactical opportunities."
+      "annotation": "We're developing our knight to its ideal square while adding another attacker to Black's d5 pawn, increasing the central pressure significantly. This move is part of classical Queen's Gambit development, preparing to potentially capture on d5 and forcing Black to make decisions about how to maintain their central pawn. The knight on c3 also eyes important squares like e4 and d5, and supports potential pawn advances like e2-e4 later in the game. From c3, our knight is perfectly placed to support our central strategy while maintaining flexibility for future piece coordination and tactical opportunities."
     },
     {
       "san": "c5",
@@ -79,7 +79,7 @@
     },
     {
       "san": "h6",
-      "annotation": "Our opponent challenges our bishop with this natural move, forcing us to make an important decision about whether to retreat, exchange, or maintain the pin by moving to h4. This move is almost automatic in such positions because the pin is quite annoying for Black and restricts their piece development significantly. The h6 advance also slightly weakens Black's kingside pawn structure, potentially giving us long-term attacking chances along the h-file or on the dark squares. Black is essentially saying 'I need to resolve this pin before I can proceed with my development plans,' which shows that our bishop placement has achieved its goal of disrupting Black's coordination."
+      "annotation": "Our opponent challenges our bishop with this move, forcing us to make an important decision about whether to retreat, exchange, or maintain the pin by moving to h4. This move is almost automatic in such positions because the pin is quite annoying for Black and restricts their piece development significantly. The h6 advance also slightly weakens Black's kingside pawn structure, potentially giving us long-term attacking chances along the h-file or on the dark squares. Black is essentially saying 'I need to resolve this pin before I can proceed with my development plans,' which shows that our bishop placement has achieved its goal of disrupting Black's coordination."
     },
     {
       "san": "Be3",

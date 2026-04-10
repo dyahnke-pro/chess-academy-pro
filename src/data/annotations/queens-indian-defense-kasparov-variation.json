@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn, controls the crucial e5 square, and keeps our options open for castling kingside. This natural developing move also prepares us to meet Black's potential central break with d5, as our knight will be well-placed to support or contest that advance. The knight on f3 fits perfectly into our plan of gradual central control and piece development, while avoiding any committal pawn moves that might limit our flexibility. From f3, our knight can potentially reroute to e5, d2, or even h4 in certain variations, making it a key piece in our positional arsenal."
+      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn, controls the crucial e5 square, and keeps our options open for castling kingside. This active move also prepares us to meet Black's potential central break with d5, as our knight will be well-placed to support or contest that advance. The knight on f3 fits perfectly into our plan of gradual central control and piece development, while avoiding any committal pawn moves that might limit our flexibility. From f3, our knight can potentially reroute to e5, d2, or even h4 in certain variations, making it a key piece in our positional arsenal."
     },
     {
       "san": "b6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, supporting the d4 pawn and preparing to meet Black's potential d5 advance with strong central control. This move also opens up the possibility of advancing e4 at some point, giving us a powerful pawn duo in the center. However, we must be aware that Black's upcoming Bb7 will create some pressure on this knight, potentially forcing us to make difficult decisions about our piece placement. The knight on c3 also supports future queenside expansion and keeps our position flexible, though we'll need to be mindful of tactical shots along the a1-h8 diagonal."
+      "annotation": "We're developing our queen's knight to its ideal square, supporting the d4 pawn and preparing to meet Black's potential d5 advance with strong central control. This move also opens up the possibility of advancing e4 at some point, giving us a powerful pawn duo in the center. However, we must be aware that Black's upcoming Bb7 will create some pressure on this knight, potentially forcing us to make difficult decisions about our piece placement. The knight on c3 also supports future queenside expansion and keeps our position flexible, though we'll need to be mindful of tactical shots along the a1-h8 diagonal."
     },
     {
       "san": "Bb4",

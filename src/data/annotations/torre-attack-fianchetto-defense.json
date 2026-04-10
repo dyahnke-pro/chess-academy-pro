@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center with moves like d5 or e6. This is one of the most flexible responses to 1.d4, as Black isn't committing to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also supports a potential e5 advance later, and importantly, it prevents us from playing e4 immediately since the knight would simply capture it. Black is following classical opening principles by developing pieces toward the center while maintaining maximum flexibility - we'll need to be prepared for several possible continuations including the King's Indian, Nimzo-Indian, or Queen's Gambit Declined depending on our next moves."
+      "annotation": "Our opponent develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center with moves like d5 or e6. This is one of the most flexible responses to 1.d4, as Black isn't committing to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also supports a potential e5 advance later, and importantly, it prevents us from playing e4 immediately since the knight would simply capture it. Black is following classical opening principles by developing pieces toward the center while maintaining maximum flexibility - we'll need to be prepared for several possible continuations including the King's Indian, Nimzo-Indian, or Queen's Gambit Declined depending on our next moves."
     },
     {
       "san": "Nf3",

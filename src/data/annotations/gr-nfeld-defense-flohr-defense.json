@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another attacker to the d5 pawn and increasing the central tension. This knight supports our d4 pawn and prepares to recapture on d4 if needed, while also keeping our options open for various pawn breaks in the center. From c3, our knight can potentially jump to e4 or b5 in the future, depending on how the position develops. We're following classical opening principles by developing pieces toward the center while maintaining pressure on Black's position."
+      "annotation": "We're developing our knight to its ideal square, adding another attacker to the d5 pawn and increasing the central tension. This knight supports our d4 pawn and prepares to recapture on d4 if needed, while also keeping our options open for various pawn breaks in the center. From c3, our knight can potentially jump to e4 or b5 in the future, depending on how the position develops. We're following classical opening principles by developing pieces toward the center while maintaining pressure on Black's position."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're choosing a more restrained approach with this solid developing move that supports our d4 pawn while preparing to develop our light-squared bishop. This move creates a small pawn chain (d4-e3) and opens the diagonal for our dark-squared bishop, while keeping our position flexible for various setups. Although less aggressive than alternatives like e4 or f3, this move maintains our central control while avoiding early complications. We're preparing to complete our kingside development with moves like Nf3, Be2, and castling."
+      "annotation": "We're choosing a more restrained approach with this solid developing choice that supports our d4 pawn while preparing to develop our light-squared bishop. This move creates a small pawn chain (d4-e3) and opens the diagonal for our dark-squared bishop, while keeping our position flexible for various setups. Although less aggressive than alternatives like e4 or f3, this move maintains our central control while avoiding early complications. We're preparing to complete our kingside development with moves like Nf3, Be2, and castling."
     },
     {
       "san": "g6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its ideal square, controlling the central e5 and d4 squares while preparing to castle kingside. This natural developing move also prevents any immediate ...e5 advance by Black and supports our central pawn structure. From f3, our knight can potentially relocate to e5 or d2 depending on how the position develops, maintaining excellent flexibility. We're following sound opening principles by completing our minor piece development before committing to any particular pawn structure changes."
+      "annotation": "We're developing our kingside knight to its ideal square, controlling the central e5 and d4 squares while preparing to castle kingside. This active move also prevents any immediate ...e5 advance by Black and supports our central pawn structure. From f3, our knight can potentially relocate to e5 or d2 depending on how the position develops, maintaining excellent flexibility. We're following sound opening principles by completing our minor piece development before committing to any particular pawn structure changes."
     },
     {
       "san": "Bg7",

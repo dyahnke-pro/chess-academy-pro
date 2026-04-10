@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, attacking our e4 square and preparing to fianchetto the king's bishop on g7 in many lines. This knight move is the hallmark of hypermodern openings like the King's Indian Defense - instead of occupying the center with pawns immediately, Black is preparing to control it with pieces from a distance. Our opponent is keeping maximum flexibility here, as this knight can support various pawn structures and doesn't commit Black to any particular setup yet. The knight on f6 will often become a key piece in Black's kingside attacking chances later in the game."
+      "annotation": "Black responds with the most active move, attacking our e4 square and preparing to fianchetto the king's bishop on g7 in many lines. This knight move is the hallmark of hypermodern openings like the King's Indian Defense - instead of occupying the center with pawns immediately, Black is preparing to control it with pieces from a distance. Our opponent is keeping maximum flexibility here, as this knight can support various pawn structures and doesn't commit Black to any particular setup yet. The knight on f6 will often become a key piece in Black's kingside attacking chances later in the game."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, supporting our d4 pawn and preparing to advance e2-e4 to establish a classical pawn center. This knight placement gives us tremendous flexibility - it can jump to various outposts like e4, d5, or b5 depending on how the position develops. The Nc3 also prepares us to meet Black's typical King's Indian pawn breaks with ...c5 or ...e5 more effectively, as we'll have additional pieces supporting our central pawns. From c3, our knight eyes important central squares and doesn't block any of our pawns, making this the most principled developing move in our setup."
+      "annotation": "We're developing our knight to its most active square, supporting our d4 pawn and preparing to advance e2-e4 to establish a classical pawn center. This knight placement gives us tremendous flexibility - it can jump to various outposts like e4, d5, or b5 depending on how the position develops. The Nc3 also prepares us to meet Black's typical King's Indian pawn breaks with ...c5 or ...e5 more effectively, as we'll have additional pieces supporting our central pawns. From c3, our knight eyes important central squares and doesn't block any of our pawns, making this the most principled developing choice in our setup."
     },
     {
       "san": "Bg7",

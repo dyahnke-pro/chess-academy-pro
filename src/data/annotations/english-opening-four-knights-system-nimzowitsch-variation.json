@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports the c4 pawn and eyes the central e4 and d5 squares. This move also prepares for potential piece play on the kingside while maintaining flexibility in our pawn structure. The knight on c3 is perfectly placed to support a future d4 advance or to participate in kingside attacks. By developing pieces before committing to further pawn moves, we're following sound opening principles while keeping maximum options available."
+      "annotation": "We develop our knight to its ideal square, where it supports the c4 pawn and eyes the central e4 and d5 squares. This move also prepares for potential piece play on the kingside while maintaining flexibility in our pawn structure. The knight on c3 is perfectly placed to support a future d4 advance or to participate in kingside attacks. By developing pieces before committing to further pawn moves, we're following sound opening principles while keeping maximum options available."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight, attacking our potential e4 advance and preparing for quick kingside castling. This is the most natural developing move, following the principle of developing knights before bishops. Our opponent is also preparing to complete development efficiently while maintaining central pressure. The knight on f6 supports Black's e5 pawn and controls important central squares like d5 and e4, making it harder for us to establish a strong pawn center immediately."
+      "annotation": "Black develops the kingside knight, attacking our potential e4 advance and preparing for quick kingside castling. This is the most active move, following the principle of developing knights before bishops. Our opponent is also preparing to complete development efficiently while maintaining central pressure. The knight on f6 supports Black's e5 pawn and controls important central squares like d5 and e4, making it harder for us to establish a strong pawn center immediately."
     },
     {
       "san": "Nf3",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, completing the symmetrical Four Knights setup. This knight supports the central pawn structure while preparing for potential piece activity on the queenside or center. Our opponent is following classical development principles, bringing pieces toward the center while maintaining the pawn tension. The position remains balanced, but both sides are building up pressure in the center and preparing for the critical moment when the pawn structure will be determined."
+      "annotation": "Black defends the e5 pawn with the most active move, completing the symmetrical Four Knights setup. This knight supports the central pawn structure while preparing for potential piece activity on the queenside or center. Our opponent is following classical development principles, bringing pieces toward the center while maintaining the pawn tension. The position remains balanced, but both sides are building up pressure in the center and preparing for the critical moment when the pawn structure will be determined."
     },
     {
       "san": "e4",

@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, even though it means accepting the pin from Black's bishop on g4. This move supports our central pawns, prepares kingside castling, and maintains our development advantage despite the tactical inconvenience of the pin. The knight on f3 also eyes important central squares like e5 and d4, and we can always break the pin later with moves like Be2 or h3 depending on the position. By continuing with natural development rather than immediately trying to kick the bishop away, we're staying true to opening principles while maintaining our extra pawn and central space advantage."
+      "annotation": "We're developing our knight to its ideal square, even though it means accepting the pin from Black's bishop on g4. This move supports our central pawns, prepares kingside castling, and maintains our development advantage despite the tactical inconvenience of the pin. The knight on f3 also eyes important central squares like e5 and d4, and we can always break the pin later with moves like Be2 or h3 depending on the position. By continuing with natural development rather than immediately trying to kick the bishop away, we're staying true to opening principles while maintaining our extra pawn and central space advantage."
     }
   ]
 }

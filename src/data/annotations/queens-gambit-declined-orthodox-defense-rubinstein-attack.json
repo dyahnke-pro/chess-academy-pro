@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our future e4 advance. This move also prepares to castle kingside and keeps our options open for various pawn structures. The knight on f3 is particularly well-placed in Queen's Gambit positions because it can later jump to e5 or d4 in many variations. By developing before playing c4, we're following classical opening principles of piece development, though we could also play the immediate 2.c4 Queen's Gambit."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our future e4 advance. This move also prepares to castle kingside and keeps our options open for various pawn structures. The knight on f3 is particularly well-placed in Queen's Gambit positions because it can later jump to e5 or d4 in many variations. By developing before playing c4, we're following classical opening principles of piece development, though we could also play the immediate 2.c4 Queen's Gambit."
     },
     {
       "san": "Nf6",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "Black breaks the pin by developing the queen's knight, which can now support the kingside and prepare central counterplay with moves like ...c5 or ...e5. This natural developing move also opens the possibility of ...Re8 and ...Nf8-e6 regroupings in some variations. The knight on d7 isn't as actively placed as it might be on c6, but it serves the important function of supporting the center and keeping the king safe. Our opponent has now neutralized our pin and can focus on creating counterplay, so we need to maintain the initiative through active piece play and central pressure."
+      "annotation": "Black breaks the pin by developing the queen's knight, which can now support the kingside and prepare central counterplay with moves like ...c5 or ...e5. This active move also opens the possibility of ...Re8 and ...Nf8-e6 regroupings in some variations. The knight on d7 isn't as actively placed as it might be on c6, but it serves the important function of supporting the center and keeping the king safe. Our opponent has now neutralized our pin and can focus on creating counterplay, so we need to maintain the initiative through active piece play and central pressure."
     },
     {
       "san": "Rc1",

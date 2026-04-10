@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, where it attacks our d4 pawn and controls key central squares like e4 and d5. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prepares potential central breaks with ...e6 and ...d5, or ...g6 and ...Bg7 in Indian-style defenses. We need to be aware that this knight will often become a key defensive piece for Black, so understanding how to challenge or trade it will be important in our middlegame plans."
+      "annotation": "Black develops the knight to its ideal square, where it attacks our d4 pawn and controls key central squares like e4 and d5. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prepares potential central breaks with ...e6 and ...d5, or ...g6 and ...Bg7 in Indian-style defenses. We need to be aware that this knight will often become a key defensive piece for Black, so understanding how to challenge or trade it will be important in our middlegame plans."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most active square, where it controls the important e5 and d4 squares while supporting our central pawn structure. This natural developing move also prepares potential tactics along the a2-g8 diagonal and keeps our options open for various pawn structures. The knight on f3 will often play a crucial role in supporting a future e4 advance or helping to maintain control over key central squares. Additionally, this move avoids some of Black's more aggressive responses like the Albin Counter-Gambit (...e5), since our knight now supports the d4 pawn and makes such advances less effective."
+      "annotation": "We develop our knight to its most active square, where it controls the important e5 and d4 squares while supporting our central pawn structure. This active move also prepares potential tactics along the a2-g8 diagonal and keeps our options open for various pawn structures. The knight on f3 will often play a crucial role in supporting a future e4 advance or helping to maintain control over key central squares. Additionally, this move avoids some of Black's more aggressive responses like the Albin Counter-Gambit (...e5), since our knight now supports the d4 pawn and makes such advances less effective."
     },
     {
       "san": "d5",

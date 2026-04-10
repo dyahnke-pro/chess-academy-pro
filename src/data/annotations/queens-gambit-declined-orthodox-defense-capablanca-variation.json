@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "Nf3",
-      "annotation": "We're opening with the Réti Opening move, which is a flexible and hypermodern approach that avoids committing our central pawns immediately. This knight develops to its most natural square, controlling the important e5 and d4 central squares while keeping our options open for how we'll structure our pawn center. Unlike 1.e4 or 1.d4, this move allows us to transpose into many different openings based on how our opponent responds, giving us maximum flexibility in the opening phase. The knight on f3 also prepares to support a future d4 advance while maintaining pressure on Black's central ambitions."
+      "annotation": "We're opening with the Réti Opening move, which is a flexible and hypermodern approach that avoids committing our central pawns immediately. This knight develops to its ideal square, controlling the important e5 and d4 central squares while keeping our options open for how we'll structure our pawn center. Unlike 1.e4 or 1.d4, this move allows us to transpose into many different openings based on how our opponent responds, giving us maximum flexibility in the opening phase. The knight on f3 also prepares to support a future d4 advance while maintaining pressure on Black's central ambitions."
     },
     {
       "san": "d5",
@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most active square, attacking our e4 square and preventing us from advancing e2-e4 to create an ideal pawn center. This knight move is the most natural and principled development, as it controls important central squares and prepares to support Black's d5 pawn if we capture it. The knight on f6 also begins Black's kingside development and prepares for castling, following the fundamental opening principles of rapid piece development and king safety. This is a key move in the Queen's Gambit Declined, as it signals Black's intention to maintain the central pawn tension rather than allowing us to dominate the center unchallenged."
+      "annotation": "Black develops the king's knight to its most active square, attacking our e4 square and preventing us from advancing e2-e4 to create an ideal pawn center. This knight move is the most natural and principled development, as it controls important central squares and prepares to support Black's d5 pawn if we capture it. The knight on f6 also begins Black's kingside development and prepares for castling, following the fundamental opening principles of rapid piece development and king safety. This is a critical move in the Queen's Gambit Declined, as it signals Black's intention to maintain the central pawn tension rather than allowing us to dominate the center unchallenged."
     },
     {
       "san": "c4",
@@ -43,11 +43,11 @@
     },
     {
       "san": "e3",
-      "annotation": "We make a solid developing move that supports our d4 pawn, opens the diagonal for our light-squared bishop on f1, and prepares to complete our development with moves like Bd3 or Be2. This move may look modest, but it's actually quite important in the Queen's Gambit structure because it gives our position additional solidity and prevents Black from playing disruptive moves like ...Nh5 or ...Ne4. The pawn on e3 also supports potential central advances and gives our king an escape square on e2 if needed. While some players prefer the more aggressive Qc2 or f3 in these positions, e3 is the most classical and solid approach, leading to the rich positional middlegames that make the Queen's Gambit Declined such an enduring opening choice."
+      "annotation": "We make a constructive move that supports our d4 pawn, opens the diagonal for our light-squared bishop on f1, and prepares to complete our development with moves like Bd3 or Be2. This move may look modest, but it's actually quite important in the Queen's Gambit structure because it gives our position additional solidity and prevents Black from playing disruptive moves like ...Nh5 or ...Ne4. The pawn on e3 also supports potential central advances and gives our king an escape square on e2 if needed. While some players prefer the more aggressive Qc2 or f3 in these positions, e3 is the most classical and solid approach, leading to the rich positional middlegames that make the Queen's Gambit Declined such an enduring opening choice."
     },
     {
       "san": "Nbd7",
-      "annotation": "Black develops the queen's knight to d7, which is the most natural square in the Orthodox Defense setup, supporting the center while preparing potential piece regrouping with moves like ...c6 and ...b6. This knight placement is characteristic of the Queen's Gambit Declined Orthodox system, where the knight often reroutes to more active squares via c5 or e5 later in the game. The knight on d7 also supports the important c5 square and can potentially support a ...e5 pawn break if the position allows for it. While the knight appears somewhat passive on d7, it's actually well-placed for the typical pawn structures that arise in these positions, and Black retains good flexibility for piece coordination depending on how the central tension resolves."
+      "annotation": "Black develops the queen's knight to d7, which is the ideal square in the Orthodox Defense setup, supporting the center while preparing potential piece regrouping with moves like ...c6 and ...b6. This knight placement is characteristic of the Queen's Gambit Declined Orthodox system, where the knight often reroutes to more active squares via c5 or e5 later in the game. The knight on d7 also supports the important c5 square and can potentially support a ...e5 pawn break if the position allows for it. While the knight appears somewhat passive on d7, it's actually well-placed for the typical pawn structures that arise in these positions, and Black retains good flexibility for piece coordination depending on how the central tension resolves."
     },
     {
       "san": "Rc1",
@@ -67,7 +67,7 @@
     },
     {
       "san": "Bb5",
-      "annotation": "We develop our dark-squared bishop to an active square where it pins Black's knight on d7 to the king, creating immediate tactical pressure and restricting Black's piece coordination. This bishop move is particularly strong in the current position because it prevents Black from easily playing ...c5, which would be Black's most natural freeing move in the center. The bishop on b5 also eyes the weak a6 square and can potentially create threats against Black's queenside, especially if Black has committed to the b6-Bb7 setup. This is the key move that defines the Capablanca Variation, as we're taking advantage of Black's slightly loosened queenside structure to create concrete pressure that Black must address before completing development."
+      "annotation": "We develop our dark-squared bishop to an active square where it pins Black's knight on d7 to the king, creating immediate tactical pressure and restricting Black's piece coordination. This bishop move is particularly strong in the current position because it prevents Black from easily playing ...c5, which would be Black's most natural freeing move in the center. The bishop on b5 also eyes the weak a6 square and can potentially create threats against Black's queenside, especially if Black has committed to the b6-Bb7 setup. This is the defining move of the Capablanca Variation, as we're taking advantage of Black's slightly loosened queenside structure to create concrete pressure that Black must address before completing development."
     }
   ]
 }

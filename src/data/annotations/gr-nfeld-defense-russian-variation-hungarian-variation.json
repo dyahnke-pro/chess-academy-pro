@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing for various central advances. This knight placement is extremely flexible - it can later jump to e4, d5, or b5 depending on how the position develops. By reinforcing our d4 stronghold, we're maintaining maximum central control while keeping our options open for different pawn structures. The knight also indirectly supports our c4 pawn and prepares potential discoveries if our dark-squared bishop develops to f4 or g5."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing for various central advances. This knight placement is extremely flexible - it can later jump to e4, d5, or b5 depending on how the position develops. By reinforcing our d4 stronghold, we're maintaining maximum central control while keeping our options open for different pawn structures. The knight also indirectly supports our c4 pawn and prepares potential discoveries if our dark-squared bishop develops to f4 or g5."
     },
     {
       "san": "d5",
@@ -55,7 +55,7 @@
     },
     {
       "san": "a6",
-      "annotation": "Black plays the Hungarian Variation, a subtle but important move that prepares ...b5 to gain space on the queenside while preventing our bishop from going to b5 with check. This pawn advance is part of Black's long-term plan to create counterplay on the queenside with moves like ...b5, ...Bb7, and potentially ...c5. The a6 move also gives Black's king an escape square on a7 if needed and supports the advance of the b-pawn. While it might look slow, this move fits perfectly into Black's hypermodern strategy - improving the position incrementally while preparing to strike at our pawn center when the time is right. The Hungarian Variation leads to rich, complex middlegames where both sides have clear plans and active piece play."
+      "annotation": "Black plays the Hungarian Variation, a subtle but purposeful move that prepares ...b5 to gain space on the queenside while preventing our bishop from going to b5 with check. This pawn advance is part of Black's long-term plan to create counterplay on the queenside with moves like ...b5, ...Bb7, and potentially ...c5. The a6 move also gives Black's king an escape square on a7 if needed and supports the advance of the b-pawn. While it might look slow, this move fits perfectly into Black's hypermodern strategy - improving the position incrementally while preparing to strike at our pawn center when the time is right. The Hungarian Variation leads to rich, complex middlegames where both sides have clear plans and active piece play."
     }
   ]
 }

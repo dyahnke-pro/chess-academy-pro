@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting the d4 pawn while preparing to contest the crucial e4 and e5 central squares. This natural developing move also clears the way for our dark-squared bishop and prepares potential pawn advances like e4 or f3. The knight on c3 is perfectly placed to support our central ambitions and can later reposition to e2, a4, or even b5 depending on how the position develops. However, we must be aware that Black can now play the famous Nimzo-Indian setup with Bb4, pinning our knight."
+      "annotation": "We develop our knight to its most active square, supporting the d4 pawn while preparing to contest the crucial e4 and e5 central squares. This active move also clears the way for our dark-squared bishop and prepares potential pawn advances like e4 or f3. The knight on c3 is perfectly placed to support our central ambitions and can later reposition to e2, a4, or even b5 depending on how the position develops. However, we must be aware that Black can now play the famous Nimzo-Indian setup with Bb4, pinning our knight."
     },
     {
       "san": "Bb4",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, supporting our d4 pawn while preparing kingside castling. This move also controls the important e5 and g5 squares, limiting Black's piece activity in the center. The knight on f3 is perfectly placed to support various pawn advances like e4 or to redeploy to other strong squares like e5 or d2 depending on how the position develops. By developing this knight before committing our other pieces, we maintain maximum flexibility in our setup while keeping all our main opening options available."
+      "annotation": "We develop our kingside knight to its ideal square, supporting our d4 pawn while preparing kingside castling. This move also controls the important e5 and g5 squares, limiting Black's piece activity in the center. The knight on f3 is perfectly placed to support various pawn advances like e4 or to redeploy to other strong squares like e5 or d2 depending on how the position develops. By developing this knight before committing our other pieces, we maintain maximum flexibility in our setup while keeping all our main opening options available."
     },
     {
       "san": "b6",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most active square, adding another defender to our d4 pawn while preparing to support the central advance e4. The knight also controls important squares like e4, d5, and b5, increasing our overall piece activity and central influence. This natural developing move fits perfectly with our Petrosian System setup, as we're building up our central forces methodically. With both knights developed and the a3 move preventing pins, we're now ready to consider our central pawn advances and complete our kingside development."
+      "annotation": "We develop our queen's knight to its most active square, adding another defender to our d4 pawn while preparing to support the central advance e4. The knight also controls important squares like e4, d5, and b5, increasing our overall piece activity and central influence. This active move fits perfectly with our Petrosian System setup, as we're building up our central forces methodically. With both knights developed and the a3 move preventing pins, we're now ready to consider our central pawn advances and complete our kingside development."
     },
     {
       "san": "d5",
@@ -51,7 +51,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We make a solid developing move that prepares to complete our kingside development while supporting our d4 pawn and controlling the key f4 square. This move allows our light-squared bishop to enter the game via d2 or e2, and prepares potential central advances like f3 and e4 in favorable circumstances. The pawn on e3 also creates a secure base for our pieces and prevents any tactical shots involving ...Nb4 or other knight jumps. While not the most aggressive continuation, this move fits perfectly with the strategic nature of the Petrosian Attack, where we gradually improve our position and look for long-term advantages rather than immediate tactical complications."
+      "annotation": "We make a constructive move that prepares to complete our kingside development while supporting our d4 pawn and controlling the key f4 square. This move allows our light-squared bishop to enter the game via d2 or e2, and prepares potential central advances like f3 and e4 in favorable circumstances. The pawn on e3 also creates a secure base for our pieces and prevents any tactical shots involving ...Nb4 or other knight jumps. While not the most aggressive continuation, this move fits perfectly with the strategic nature of the Petrosian Attack, where we gradually improve our position and look for long-term advantages rather than immediate tactical complications."
     }
   ]
 }

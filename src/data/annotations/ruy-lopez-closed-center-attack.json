@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn while simultaneously developing toward the center. This move serves multiple purposes: it puts immediate pressure on Black's central pawn, develops a piece with tempo, and prepares to castle kingside. The knight on f3 also controls the important central squares e5 and d4, while supporting our own e4 pawn. This is one of the most principled developing moves in chess, combining development with immediate tactical pressure."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn while simultaneously developing toward the center. This move serves multiple purposes: it puts immediate pressure on Black's central pawn, develops a piece with tempo, and prepares to castle kingside. The knight on f3 also controls the important central squares e5 and d4, while supporting our own e4 pawn. This is one of the most principled developing choices in chess, combining development with immediate tactical pressure."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends their e5 pawn with the most natural developing move, bringing the knight to an excellent central square. Our opponent's knight on c6 not only protects the e5 pawn but also develops with purpose, controlling important central squares like d4 and e5. This move follows the classical principle of defending when attacked rather than moving the attacked piece, maintaining Black's central presence. The knight is also well-placed for future operations and doesn't block any of Black's pawns or pieces."
+      "annotation": "Black defends their e5 pawn with the most active move, bringing the knight to an excellent central square. Our opponent's knight on c6 not only protects the e5 pawn but also develops with purpose, controlling important central squares like d4 and e5. This move follows the classical principle of defending when attacked rather than moving the attacked piece, maintaining Black's central presence. The knight is also well-placed for future operations and doesn't block any of Black's pawns or pieces."
     },
     {
       "san": "Bb5",

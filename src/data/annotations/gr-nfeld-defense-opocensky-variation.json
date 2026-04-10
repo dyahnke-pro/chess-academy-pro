@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to meet Black's eventual ...d5 thrust. The knight on c3 is perfectly placed to recapture on d5 if Black exchanges, and it also eyes important central squares like e4 and b5. This move fits perfectly with our plan to maintain central control and build a strong pawn center. We're also keeping our options open for various pawn breaks like e4 or f3, depending on how Black continues their development."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to meet Black's eventual ...d5 thrust. The knight on c3 is perfectly placed to recapture on d5 if Black exchanges, and it also eyes important central squares like e4 and b5. This move fits perfectly with our plan to maintain central control and build a strong pawn center. We're also keeping our options open for various pawn breaks like e4 or f3, depending on how Black continues their development."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its ideal square, where it supports our central pawns and prepares for kingside castling. The knight on f3 controls important central squares like e5 and d4, while also eyeing potential outposts on e5 or g5 in the future. This natural developing move keeps our position flexible and avoids committing to any particular pawn structure just yet. We're also preparing to complete our kingside development with moves like Be2 or Bd3, followed by castling to safety."
+      "annotation": "We're developing our kingside knight to its ideal square, where it supports our central pawns and prepares for kingside castling. The knight on f3 controls important central squares like e5 and d4, while also eyeing potential outposts on e5 or g5 in the future. This active move keeps our position flexible and avoids committing to any particular pawn structure just yet. We're also preparing to complete our kingside development with moves like Be2 or Bd3, followed by castling to safety."
     },
     {
       "san": "Bg7",

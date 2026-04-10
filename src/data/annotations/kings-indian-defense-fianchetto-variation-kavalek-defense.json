@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, bringing the knight to its most active square. This knight attacks our d4 pawn and prepares to support either ...e5 or ...d5 pawn breaks, depending on how the position develops. Black is also keeping maximum flexibility - this move fits into numerous defensive systems including the King's Indian, Nimzo-Indian, Queen's Indian, and Grünfeld Defense. By developing the knight first, Black avoids committing to a specific pawn structure too early while maintaining excellent piece activity."
+      "annotation": "Black immediately challenges our central pawn with the most active move, bringing the knight to its most active square. This knight attacks our d4 pawn and prepares to support either ...e5 or ...d5 pawn breaks, depending on how the position develops. Black is also keeping maximum flexibility - this move fits into numerous defensive systems including the King's Indian, Nimzo-Indian, Queen's Indian, and Grünfeld Defense. By developing the knight first, Black avoids committing to a specific pawn structure too early while maintaining excellent piece activity."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the central e5 square and prepares to support our pawn center. This knight also adds protection to our d4 pawn and keeps open the possibility of playing e4 later to establish a classical pawn center. From f3, our knight is beautifully placed - it can jump to various outposts like e5 or d2 depending on the position's needs. This move also prepares our own kingside development and maintains maximum flexibility in our piece coordination, which is essential when facing the King's Indian Defense's dynamic potential."
+      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 square and prepares to support our pawn center. This knight also adds protection to our d4 pawn and keeps open the possibility of playing e4 later to establish a classical pawn center. From f3, our knight is beautifully placed - it can jump to various outposts like e5 or d2 depending on the position's needs. This move also prepares our own kingside development and maintains maximum flexibility in our piece coordination, which is essential when facing the King's Indian Defense's dynamic potential."
     },
     {
       "san": "Bg7",
@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent plays the most solid move, preparing to support the typical King's Indian pawn break ...e5 while also opening the diagonal for the light-squared bishop. This move creates a solid pawn triangle with the pawns on d6, e7, and f7, providing excellent king safety while maintaining flexibility for future operations. Black is also preparing potential piece maneuvers - the d6 pawn supports a future pawn on e5 or c5, and clears the d7 square for possible rook or queen development. This is the classical King's Indian structure where Black accepts a somewhat passive position temporarily while building up for dynamic counterplay in the middlegame."
+      "annotation": "Our opponent plays the most well-grounded move, preparing to support the typical King's Indian pawn break ...e5 while also opening the diagonal for the light-squared bishop. This move creates a solid pawn triangle with the pawns on d6, e7, and f7, providing excellent king safety while maintaining flexibility for future operations. Black is also preparing potential piece maneuvers - the d6 pawn supports a future pawn on e5 or c5, and clears the d7 square for possible rook or queen development. This is the classical King's Indian structure where Black accepts a somewhat passive position temporarily while building up for dynamic counterplay in the middlegame."
     },
     {
       "san": "O-O",

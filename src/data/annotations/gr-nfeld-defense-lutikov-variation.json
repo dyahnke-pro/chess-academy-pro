@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to meet Black's central challenges head-on. This knight controls key central squares like e4 and b5, and importantly, it prepares to recapture on d4 if Black ever plays dxc4 followed by attacking our center. The Nc3 also keeps our options open for various pawn formations - we might still play e4 for a classical center or maintain the tension with moves like Nf3 and Be2. This flexible development move puts pressure on Black to declare their intentions more clearly."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing to meet Black's central challenges head-on. This knight controls key central squares like e4 and b5, and importantly, it prepares to recapture on d4 if Black ever plays dxc4 followed by attacking our center. The Nc3 also keeps our options open for various pawn formations - we might still play e4 for a classical center or maintain the tension with moves like Nf3 and Be2. This flexible development move puts pressure on Black to declare their intentions more clearly."
     },
     {
       "san": "d5",

@@ -11,7 +11,7 @@
     },
     {
       "san": "d4",
-      "annotation": "We're establishing a classical pawn center, now controlling the e5 and c5 squares while opening lines for our dark-squared bishop and queen. This natural developing move perfectly complements our e4 pawn, giving us maximum central space and forcing Black to respect our pawn duo. Against the Modern Defense, this central dominance is particularly valuable because we're taking what our opponent is offering us - space and initiative. Our two central pawns will support each other and can potentially advance further with moves like d4-d5, creating serious space advantages."
+      "annotation": "We're establishing a classical pawn center, now controlling the e5 and c5 squares while opening lines for our dark-squared bishop and queen. This active move perfectly complements our e4 pawn, giving us maximum central space and forcing Black to respect our pawn duo. Against the Modern Defense, this central dominance is particularly valuable because we're taking what our opponent is offering us - space and initiative. Our two central pawns will support each other and can potentially advance further with moves like d4-d5, creating serious space advantages."
     },
     {
       "san": "Bg7",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn and preparing to respond to Black's central challenges. This knight on c3 is perfectly placed to support a future d4-d5 advance, and it also eyes important squares like e4 and b5. The knight development follows classical opening principles while maintaining maximum flexibility - we're not committing to any particular pawn structure yet. From c3, our knight can also potentially reroute to e2 or d5 depending on how the position develops, and it supports potential piece play on the kingside."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and preparing to respond to Black's central challenges. This knight on c3 is perfectly placed to support a future d4-d5 advance, and it also eyes important squares like e4 and b5. The knight development follows classical opening principles while maintaining maximum flexibility - we're not committing to any particular pawn structure yet. From c3, our knight can also potentially reroute to e2 or d5 depending on how the position develops, and it supports potential piece play on the kingside."
     },
     {
       "san": "c6",
-      "annotation": "Our opponent plays the Suttles Variation, a solid move that prepares ...d5 while also controlling the b5 square and supporting a potential ...b5 advance. This move is more restrained than the immediate ...d6, as Black wants to keep maximum flexibility in the center before committing the d-pawn. The c6 move also prepares to develop the knight to d7 instead of the more common c6, avoiding some of the tactical tricks that can arise in Modern Defense lines. This setup often leads to a solid but somewhat passive position for Black, though with good defensive resources."
+      "annotation": "Our opponent plays the Suttles Variation, a well-grounded move that prepares ...d5 while also controlling the b5 square and supporting a potential ...b5 advance. This move is more restrained than the immediate ...d6, as Black wants to keep maximum flexibility in the center before committing the d-pawn. The c6 move also prepares to develop the knight to d7 instead of the more common c6, avoiding some of the tactical tricks that can arise in Modern Defense lines. This setup often leads to a solid but somewhat passive position for Black, though with good defensive resources."
     },
     {
       "san": "Nf3",

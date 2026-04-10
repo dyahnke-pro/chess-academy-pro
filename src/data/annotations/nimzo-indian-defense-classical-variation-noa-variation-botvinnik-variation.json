@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, immediately attacking our d4 pawn and preventing us from simply advancing to d5. This is one of the most principled responses to d4, as Black controls the crucial e4 and g4 squares while keeping maximum flexibility in the position. The knight on f6 is perfectly placed to support Black's central counterplay and will often be a key defender of Black's kingside. Black is signaling an intention to fight for the center rather than allow us to dominate it unchallenged."
+      "annotation": "Our opponent develops the knight to its ideal square, immediately attacking our d4 pawn and preventing us from simply advancing to d5. This is one of the most principled responses to d4, as Black controls the crucial e4 and g4 squares while keeping maximum flexibility in the position. The knight on f6 is perfectly placed to support Black's central counterplay and will often be a key defender of Black's kingside. Black is signaling an intention to fight for the center rather than allow us to dominate it unchallenged."
     },
     {
       "san": "c4",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, adding another defender to the d5 pawn while developing with tempo. The knight on c6 controls important squares like a5, b4, d4, and e5, while also preparing potential tactical ideas on the queenside. This move completes Black's basic development plan and prepares to challenge our central dominance with moves like ...dxc4 or ...Re8 followed by ...e5. Our opponent is following sound developing principles while looking for opportunities to create counterplay against our slightly better position, and we need to be ready to deal with Black's central pressure in the coming moves."
+      "annotation": "Black develops the knight to its ideal square, adding another defender to the d5 pawn while developing with tempo. The knight on c6 controls important squares like a5, b4, d4, and e5, while also preparing potential tactical ideas on the queenside. This move completes Black's basic development plan and prepares to challenge our central dominance with moves like ...dxc4 or ...Re8 followed by ...e5. Our opponent is following sound developing principles while looking for opportunities to create counterplay against our slightly better position, and we need to be ready to deal with Black's central pressure in the coming moves."
     }
   ]
 }

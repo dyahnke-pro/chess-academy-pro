@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn and preparing to castle kingside. This is one of the most principled responses to 1.d4, as the knight controls important central squares like e4 and d5 while maintaining maximum flexibility for Black's setup. Our opponent is signaling an intention to fight for central control rather than allowing us a free hand in the center. The knight on f6 also supports potential pawn breaks with ...c5 or ...e5, depending on how the position develops."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn and preparing to castle kingside. This is one of the most principled responses to 1.d4, as the knight controls important central squares like e4 and d5 while maintaining maximum flexibility for Black's setup. Our opponent is signaling an intention to fight for central control rather than allowing us a free hand in the center. The knight on f6 also supports potential pawn breaks with ...c5 or ...e5, depending on how the position develops."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its optimal square, supporting our d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. This natural developing move also prevents any immediate ...e5 pawn break from Black and prepares to meet the coming ...d5 with proper piece support. The knight on f3 eyes important central squares like e5 and d4, and coordinates beautifully with our other pieces in typical Queen's Gambit positions. We're following classical opening principles by developing pieces toward the center while keeping our options open for various pawn structures."
+      "annotation": "We're developing our knight to its optimal square, supporting our d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. This active move also prevents any immediate ...e5 pawn break from Black and prepares to meet the coming ...d5 with proper piece support. The knight on f3 eyes important central squares like e5 and d4, and coordinates beautifully with our other pieces in typical Queen's Gambit positions. We're following classical opening principles by developing pieces toward the center while keeping our options open for various pawn structures."
     },
     {
       "san": "d5",
@@ -39,11 +39,11 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black prioritizes king safety by castling kingside, removing the king from the center and connecting the rooks while breaking the pin on the knight. This natural move follows classical opening principles, though it does allow us to maintain our aggressive bishop on g5 for the moment. Our opponent is completing the basic requirements of the opening - central control, piece development, and king safety - while preparing to address our pin with moves like ...h6. The castled king position also prepares Black for the complex middlegame battles that typically arise in Queen's Gambit Declined structures."
+      "annotation": "Black prioritizes king safety by castling kingside, removing the king from the center and connecting the rooks while breaking the pin on the knight. this move follows classical opening principles, though it does allow us to maintain our aggressive bishop on g5 for the moment. Our opponent is completing the basic requirements of the opening - central control, piece development, and king safety - while preparing to address our pin with moves like ...h6. The castled king position also prepares Black for the complex middlegame battles that typically arise in Queen's Gambit Declined structures."
     },
     {
       "san": "e3",
-      "annotation": "We're supporting our d4 pawn and preparing to complete our kingside development with Bd3 and castling, while maintaining the pressure from our Bg5. This solid move keeps the center stable and prevents any potential ...Ng4 tactics from Black, while also preparing to increase pressure on the kingside. The e3 advance creates a secure pawn chain and opens the diagonal for our dark-squared bishop, though it does somewhat limit our light-squared bishop's scope. We're following the classical Queen's Gambit plan of building up pressure gradually while maintaining excellent piece coordination."
+      "annotation": "We're supporting our d4 pawn and preparing to complete our kingside development with Bd3 and castling, while maintaining the pressure from our Bg5. this stabilizing move keeps the center stable and prevents any potential ...Ng4 tactics from Black, while also preparing to increase pressure on the kingside. The e3 advance creates a secure pawn chain and opens the diagonal for our dark-squared bishop, though it does somewhat limit our light-squared bishop's scope. We're following the classical Queen's Gambit plan of building up pressure gradually while maintaining excellent piece coordination."
     },
     {
       "san": "h6",

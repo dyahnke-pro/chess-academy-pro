@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside. This move also prevents any immediate ...e5 push by Black, as we'd simply capture and maintain our central advantage. The knight on f3 will be perfectly placed to support various pawn advances like e2-e4 or to reroute to other squares like d2 or e5 depending on how the position develops. By developing this knight first, we maintain maximum flexibility in our setup while keeping pressure on Black's central ambitions."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside. This move also prevents any immediate ...e5 push by Black, as we'd simply capture and maintain our central advantage. The knight on f3 will be perfectly placed to support various pawn advances like e2-e4 or to reroute to other squares like d2 or e5 depending on how the position develops. By developing this knight first, we maintain maximum flexibility in our setup while keeping pressure on Black's central ambitions."
     },
     {
       "san": "Bg7",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queenside knight to its most natural square, defending our d4 pawn and preparing various central advances. This knight can support a future e2-e4 push, help control key squares like d5 and e4, or even reroute to other squares depending on how Black continues. The knight development also completes our basic piece coordination, giving us a solid foundation before we decide on more concrete plans. From c3, our knight works harmoniously with our other pieces and maintains the central tension that's characteristic of these positions."
+      "annotation": "We develop our queenside knight to its ideal square, defending our d4 pawn and preparing various central advances. This knight can support a future e2-e4 push, help control key squares like d5 and e4, or even reroute to other squares depending on how Black continues. The knight development also completes our basic piece coordination, giving us a solid foundation before we decide on more concrete plans. From c3, our knight works harmoniously with our other pieces and maintains the central tension that's characteristic of these positions."
     },
     {
       "san": "a6",

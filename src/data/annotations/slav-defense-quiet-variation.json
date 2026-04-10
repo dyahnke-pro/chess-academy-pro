@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the central e5 and d4 squares while supporting our central pawn structure. This flexible development move keeps our options open for various pawn breaks and doesn't commit us to any particular plan yet, which is perfect for the complex middlegame positions that arise from the Slav Defense. The knight on f3 also prepares castling kingside and can later be repositioned to more active squares like e5 or d2 depending on how the position develops. Against the Slav, this natural development is almost always better than more aggressive tries like Nc3 immediately, as we want to see how Black develops before committing to a specific plan."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the central e5 and d4 squares while supporting our central pawn structure. This flexible development move keeps our options open for various pawn breaks and doesn't commit us to any particular plan yet, which is perfect for the complex middlegame positions that arise from the Slav Defense. The knight on f3 also prepares castling kingside and can later be repositioned to more active squares like e5 or d2 depending on how the position develops. Against the Slav, this natural development is almost always better than more aggressive tries like Nc3 immediately, as we want to see how Black develops before committing to a specific plan."
     },
     {
       "san": "Nf6",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with a developing move, putting pressure on d4 and controlling the important e4 square. This is one of the most principled responses to 1.d4, as our opponent develops a piece while simultaneously contesting the center. The knight on f6 also prepares kingside castling and keeps Black's options open for various defensive setups. We need to be ready to support our d4 pawn or consider how to maintain central influence as Black applies this early pressure."
+      "annotation": "Black immediately challenges our central pawn with a developing choice, putting pressure on d4 and controlling the important e4 square. This is one of the most principled responses to 1.d4, as our opponent develops a piece while simultaneously contesting the center. The knight on f6 also prepares kingside castling and keeps Black's options open for various defensive setups. We need to be ready to support our d4 pawn or consider how to maintain central influence as Black applies this early pressure."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our d4 pawn while eyeing important central squares like e4, d5, and b5. This knight development is extremely flexible and fits into virtually every opening system we might transpose into. From c3, our knight also prepares potential advances like e4 or supports future pawn breaks in the center. However, we should be aware that this knight placement allows Black to pin it with ...Bb4, which is exactly what happens in the Nimzo-Indian Defense - a sign that our opponent is steering the game toward this sharp, tactical system."
+      "annotation": "We're developing our knight to its ideal square, where it supports our d4 pawn while eyeing important central squares like e4, d5, and b5. This knight development is extremely flexible and fits into virtually every opening system we might transpose into. From c3, our knight also prepares potential advances like e4 or supports future pawn breaks in the center. However, we should be aware that this knight placement allows Black to pin it with ...Bb4, which is exactly what happens in the Nimzo-Indian Defense - a sign that our opponent is steering the game toward this sharp, tactical system."
     },
     {
       "san": "Bb4",

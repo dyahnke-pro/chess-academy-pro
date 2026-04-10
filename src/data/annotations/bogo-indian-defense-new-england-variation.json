@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, where it controls the central e5 and d4 squares while supporting our d4 pawn and preparing kingside castling. This move also opens up the possibility of various transpositions depending on how Black continues - we could reach a Queen's Indian, Nimzo-Indian, or even Catalan structures. The knight on f3 is perfectly placed to support central operations and can later jump to squares like e5 or d2 depending on the position's requirements. By developing this piece, we're maintaining maximum flexibility while keeping pressure on Black's setup and preparing to complete our development efficiently."
+      "annotation": "We're developing our king's knight to its ideal square, where it controls the central e5 and d4 squares while supporting our d4 pawn and preparing kingside castling. This move also opens up the possibility of various transpositions depending on how Black continues - we could reach a Queen's Indian, Nimzo-Indian, or even Catalan structures. The knight on f3 is perfectly placed to support central operations and can later jump to squares like e5 or d2 depending on the position's requirements. By developing this piece, we're maintaining maximum flexibility while keeping pressure on Black's setup and preparing to complete our development efficiently."
     },
     {
       "san": "Bb4+",

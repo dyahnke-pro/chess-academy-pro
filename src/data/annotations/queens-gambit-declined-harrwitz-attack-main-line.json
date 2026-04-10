@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, supporting our d4 pawn while preparing kingside castling. This knight on f3 controls the important central e5 square and keeps our options open for various pawn structures depending on how Black responds. The knight also eyes the weak h7 square in Black's position and can potentially jump to e5 or g5 in tactical situations. By developing this knight before committing to Nc3, we maintain maximum flexibility in our piece coordination and avoid any potential pins along the a5-d8 diagonal."
+      "annotation": "We develop our king's knight to its ideal square, supporting our d4 pawn while preparing kingside castling. This knight on f3 controls the important central e5 square and keeps our options open for various pawn structures depending on how Black responds. The knight also eyes the weak h7 square in Black's position and can potentially jump to e5 or g5 in tactical situations. By developing this knight before committing to Nc3, we maintain maximum flexibility in our piece coordination and avoid any potential pins along the a5-d8 diagonal."
     },
     {
       "san": "d5",

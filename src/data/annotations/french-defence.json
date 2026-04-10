@@ -97,7 +97,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White defends e4 with the most natural developing move, entering the main line of the French.",
+      "annotation": "White defends e4 with the most active move, entering the main line of the French.",
       "plans": [
         "Maintain the e4 pawn and push e5 if possible",
         "Develop and react to Black's system choice"
@@ -2939,7 +2939,7 @@
         },
         {
           "san": "Bg5",
-          "annotation": "The key move that defines the Burn Variation! White pins the f6 knight against the queen.",
+          "annotation": "the defining move of the Burn Variation! White pins the f6 knight against the queen.",
           "arrows": [
             {
               "from": "g5",
@@ -3042,7 +3042,7 @@
         },
         {
           "san": "Bc4",
-          "annotation": "White places the bishop on the aggressive c4 square, targeting the f7 pawn and the a2-g8 diagonal. This is a natural developing move that also prepares queenside castling.",
+          "annotation": "White places the bishop on the aggressive c4 square, targeting the f7 pawn and the a2-g8 diagonal. This is a active move that also prepares queenside castling.",
           "arrows": [
             {
               "from": "c4",

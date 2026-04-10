@@ -25,7 +25,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, immediately contesting White's control of the center. The knight attacks d5 and e4, discouraging White from playing e4 easily.",
+      "annotation": "Black develops the king's knight to its ideal square, immediately contesting White's control of the center. The knight attacks d5 and e4, discouraging White from playing e4 easily.",
       "plans": [
         "Control e4 and d5 from f6",
         "Prepare kingside castling"
@@ -51,7 +51,7 @@
     },
     {
       "san": "c4",
-      "annotation": "White forms the classic Queen's Gambit pawn duo. The c4 pawn strikes at d5, fighting for the center alongside d4. Together these two pawns control the four key central squares.",
+      "annotation": "White forms the classic Queen's Gambit pawn duo. The c4 pawn strikes at d5, contesting central control alongside d4. Together these two pawns control the four key central squares.",
       "pawnStructure": "The c4-d4 duo is the backbone of the Queen's Gambit complex.",
       "plans": [
         "Challenge Black's center if ...d5 comes",

@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to meet Black's various Indian Defense setups. This move keeps maximum flexibility in our position - we haven't committed to c4 (which would signal the English Opening or various Indian systems), nor have we played Nf3 yet, so we're keeping our opponent guessing about our exact intentions. The knight on c3 eyes important central squares like e4 and d5, and crucially, it prepares us to meet Black's potential ...e5 advance, which is exactly what's coming next. This development also keeps the option of playing e4 ourselves, potentially transposing into different pawn structures depending on how Black responds."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to meet Black's various Indian Defense setups. This move keeps maximum flexibility in our position - we haven't committed to c4 (which would signal the English Opening or various Indian systems), nor have we played Nf3 yet, so we're keeping our opponent guessing about our exact intentions. The knight on c3 eyes important central squares like e4 and d5, and crucially, it prepares us to meet Black's potential ...e5 advance, which is exactly what's coming next. This development also keeps the option of playing e4 ourselves, potentially transposing into different pawn structures depending on how Black responds."
     },
     {
       "san": "e5",

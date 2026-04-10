@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most active square, supporting our c4 pawn and adding another defender to our central d4 pawn. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us additional control over key territory. This natural developing move fits perfectly with our plan to establish a strong pawn center with e4, as the knight will support this advance while maintaining flexibility in our piece coordination. From c3, our knight can also potentially reroute to e2 or a4 depending on how the position develops, giving us tactical and strategic options."
+      "annotation": "We develop our queen's knight to its most active square, supporting our c4 pawn and adding another defender to our central d4 pawn. The knight on c3 also eyes important central squares like e4, d5, and b5, giving us additional control over key territory. This active move fits perfectly with our plan to establish a strong pawn center with e4, as the knight will support this advance while maintaining flexibility in our piece coordination. From c3, our knight can also potentially reroute to e2 or a4 depending on how the position develops, giving us tactical and strategic options."
     },
     {
       "san": "Bg7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We complete our basic development by bringing the king's knight to its most natural square, where it controls important central territory and supports our kingside castle. The knight on f3 defends our e4 pawn while attacking Black's potential ...e5 advance, maintaining the tension in the center. This move also clears the way for short castling and potentially supports future kingside attacking plans with moves like h3, g4, or f4. From f3, our knight is perfectly placed to support both our central pawns and coordinate with our other pieces for the middlegame battle ahead."
+      "annotation": "We complete our basic development by bringing the king's knight to its ideal square, where it controls important central territory and supports our kingside castle. The knight on f3 defends our e4 pawn while attacking Black's potential ...e5 advance, maintaining the tension in the center. This move also clears the way for short castling and potentially supports future kingside attacking plans with moves like h3, g4, or f4. From f3, our knight is perfectly placed to support both our central pawns and coordinate with our other pieces for the middlegame battle ahead."
     },
     {
       "san": "O-O",

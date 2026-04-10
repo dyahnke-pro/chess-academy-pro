@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, where it supports the central e5 pawn while preparing to castle kingside. This knight also eyes important central squares like d5 and e4, and keeps pressure on our position by attacking squares we might want to use later. The move is part of Black's classical development plan and maintains the central tension that makes this opening so strategically rich. Our opponent is developing with purpose, bringing pieces into the game while maintaining the strong pawn center."
+      "annotation": "Black develops the knight to its ideal square, where it supports the central e5 pawn while preparing to castle kingside. This knight also eyes important central squares like d5 and e4, and keeps pressure on our position by attacking squares we might want to use later. The move is part of Black's classical development plan and maintains the central tension that makes this opening so strategically rich. Our opponent is developing with purpose, bringing pieces into the game while maintaining the strong pawn center."
     },
     {
       "san": "Bg2",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our king's knight to its most natural square, where it supports our kingside development while keeping an eye on the center. This knight attacks Black's strong e5 pawn, adding pressure to their central structure and forcing them to consider how to maintain their pawn advance. The move is part of our systematic development plan, preparing to castle kingside while maintaining flexibility in our piece coordination. From f3, our knight also controls important squares like e5, d4, and g5, giving us tactical possibilities as the position develops."
+      "annotation": "We develop our king's knight to its ideal square, where it supports our kingside development while keeping an eye on the center. This knight attacks Black's strong e5 pawn, adding pressure to their central structure and forcing them to consider how to maintain their pawn advance. The move is part of our systematic development plan, preparing to castle kingside while maintaining flexibility in our piece coordination. From f3, our knight also controls important squares like e5, d4, and g5, giving us tactical possibilities as the position develops."
     },
     {
       "san": "Nc6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "d3",
-      "annotation": "We play a quiet but important move that supports our center while preparing to complete our kingside development. This pawn move prevents any potential ...Ne3 tactics from Black's knight and creates a solid foundation for our position. The move also opens up the possibility of developing our light-squared bishop to e3 or f4 later, where it could be very active. While it looks modest, d3 is a key part of our setup, providing stability and flexibility as we continue to improve our position."
+      "annotation": "We play a quiet but purposeful move that supports our center while preparing to complete our kingside development. This pawn move prevents any potential ...Ne3 tactics from Black's knight and creates a solid foundation for our position. The move also opens up the possibility of developing our light-squared bishop to e3 or f4 later, where it could be very active. While it looks modest, d3 is a key part of our setup, providing stability and flexibility as we continue to improve our position."
     },
     {
       "san": "Be7",

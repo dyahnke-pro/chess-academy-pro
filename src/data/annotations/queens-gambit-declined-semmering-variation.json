@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds by occupying the center with their own pawn, creating immediate tension in the heart of the board. This solid move prevents us from advancing to e4 and establishes Black's own central presence, leading to the classical pawn structure we see in Queen's Pawn games. Our opponent is choosing a principled defense, meeting our central challenge head-on rather than allowing us free rein in the center. This sets up the fundamental tension that will define the opening - we'll soon offer the c4 gambit to try to deflect this central pawn."
+      "annotation": "Black responds by occupying the center with their own pawn, creating immediate tension in the heart of the board. this stabilizing move prevents us from advancing to e4 and establishes Black's own central presence, leading to the classical pawn structure we see in Queen's Pawn games. Our opponent is choosing a principled defense, meeting our central challenge head-on rather than allowing us free rein in the center. This sets up the fundamental tension that will define the opening - we'll soon offer the c4 gambit to try to deflect this central pawn."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most active square, attacking Black's d5 pawn and preparing to castle kingside quickly. This natural developing move increases the pressure on the center while preparing to support our central pawn breaks or piece development. The knight on f3 also controls important central squares like e5 and g5, and works well with our planned piece coordination. We're following opening principles by developing pieces toward the center and creating multiple threats that Black must address."
+      "annotation": "We're developing our kingside knight to its most active square, attacking Black's d5 pawn and preparing to castle kingside quickly. This active move increases the pressure on the center while preparing to support our central pawn breaks or piece development. The knight on f3 also controls important central squares like e5 and g5, and works well with our planned piece coordination. We're following opening principles by developing pieces toward the center and creating multiple threats that Black must address."
     },
     {
       "san": "Nf6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "We're developing our light-squared bishop to an excellent central square, pointing toward Black's kingside and controlling important central squares. This bishop development completes our kingside piece coordination and prepares for castling while maintaining pressure on the center. The bishop on d3 supports potential central advances and creates tactical possibilities involving sacrifices on h7 if Black castles kingside. This natural developing move follows the opening principle of developing pieces toward the center while keeping maximum flexibility for our pawn structure and piece placement."
+      "annotation": "We're developing our light-squared bishop to an excellent central square, pointing toward Black's kingside and controlling important central squares. This bishop development completes our kingside piece coordination and prepares for castling while maintaining pressure on the center. The bishop on d3 supports potential central advances and creates tactical possibilities involving sacrifices on h7 if Black castles kingside. This active move follows the opening principle of developing pieces toward the center while keeping maximum flexibility for our pawn structure and piece placement."
     },
     {
       "san": "c5",

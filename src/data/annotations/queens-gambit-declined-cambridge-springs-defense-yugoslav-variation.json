@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the kingside knight to its most natural square, mirroring our development while adding another defender to the d5 pawn. This move follows sound opening principles by developing toward the center and preparing kingside castling. The knight on f6 also prevents us from advancing e4 immediately, which would be a strong central thrust if allowed. Black is building a solid, symmetrical position that aims to equalize through careful development rather than seeking immediate counterplay."
+      "annotation": "Our opponent develops the kingside knight to its ideal square, mirroring our development while adding another defender to the d5 pawn. This move follows sound opening principles by developing toward the center and preparing kingside castling. The knight on f6 also prevents us from advancing e4 immediately, which would be a strong central thrust if allowed. Black is building a solid, symmetrical position that aims to equalize through careful development rather than seeking immediate counterplay."
     },
     {
       "san": "Nc3",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We're supporting our d4 pawn and preparing to complete our kingside development with Bd3 and castling. This solid move also opens a retreat square for our bishop on g5 if it comes under attack, particularly after Black plays the thematic ...h6. The e3 pawn controls the important f4 and d4 squares, preventing Black from establishing pieces on these key central outposts. While this move is somewhat passive, it's a necessary foundation move that prepares our position for the tactical complications that are about to arise with Black's next move."
+      "annotation": "We're supporting our d4 pawn and preparing to complete our kingside development with Bd3 and castling. this stabilizing move also opens a retreat square for our bishop on g5 if it comes under attack, particularly after Black plays the thematic ...h6. The e3 pawn controls the important f4 and d4 squares, preventing Black from establishing pieces on these key central outposts. While this move is somewhat passive, it's a necessary foundation move that prepares our position for the tactical complications that are about to arise with Black's next move."
     },
     {
       "san": "Qa5",

@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 pawn and preparing to castle kingside. This move is far superior to premature attacks like 2.f4 because it follows the opening principle of developing pieces before pawns, while simultaneously creating concrete threats. The knight on f3 also supports a future d4 advance and guards the important h4 square, preventing Black from launching early attacks with Qh4. From f3, our knight can later jump to powerful outposts like e5, g5, or h4 depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 pawn and preparing to castle kingside. This move is far superior to premature attacks like 2.f4 because it follows the opening principle of developing pieces before pawns, while simultaneously creating concrete threats. The knight on f3 also supports a future d4 advance and guards the important h4 square, preventing Black from launching early attacks with Qh4. From f3, our knight can later jump to powerful outposts like e5, g5, or h4 depending on how the position develops."
     },
     {
       "san": "Nc6",
-      "annotation": "Our opponent develops the knight to its most active square, defending the e5 pawn while preparing further development. This natural move puts the knight on an excellent central square where it influences both sides of the board and prepares moves like Nf6 or f5. Black's knight also eyes important squares like d4 and e7, and can potentially reroute to d4 via e7 in some variations. However, by placing the knight on c6, Black commits to a setup where the c-pawn cannot advance to c6, which might become relevant in pawn endgames much later."
+      "annotation": "Our opponent develops the knight to its most active square, defending the e5 pawn while preparing further development. this move puts the knight on an excellent central square where it influences both sides of the board and prepares moves like Nf6 or f5. Black's knight also eyes important squares like d4 and e7, and can potentially reroute to d4 via e7 in some variations. However, by placing the knight on c6, Black commits to a setup where the c-pawn cannot advance to c6, which might become relevant in pawn endgames much later."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the kingside knight to its most natural square, attacking our e4 pawn while preparing to castle. This move shows Black's commitment to rapid development and creates counter-threats against our center. The knight on f6 also adds another defender to the h5-e8 diagonal, making it harder for us to create immediate attacking chances. However, by developing to f6, Black's knight can potentially become a target for our advance h3 and g4 in some variations, and it also blocks the f-pawn which might want to advance to f5 later in the game."
+      "annotation": "Our opponent develops the kingside knight to its ideal square, attacking our e4 pawn while preparing to castle. This move shows Black's commitment to rapid development and creates counter-threats against our center. The knight on f6 also adds another defender to the h5-e8 diagonal, making it harder for us to create immediate attacking chances. However, by developing to f6, Black's knight can potentially become a target for our advance h3 and g4 in some variations, and it also blocks the f-pawn which might want to advance to f5 later in the game."
     },
     {
       "san": "O-O",

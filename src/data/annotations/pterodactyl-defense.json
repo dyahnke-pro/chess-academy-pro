@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We block the check with our most natural developing move, bringing the knight to its ideal central square where it supports our pawn structure and prepares further piece coordination. This knight on c3 defends our e4 pawn, controls important squares like d5 and b5, and keeps our development momentum going. The move also prevents Black's queen from capturing anything material while developing with tempo. From c3, our knight can potentially jump to more active squares like d5 or support tactical operations in the center, maintaining the pressure while consolidating our position safely."
+      "annotation": "We block the check with our most active move, bringing the knight to its ideal central square where it supports our pawn structure and prepares further piece coordination. This knight on c3 defends our e4 pawn, controls important squares like d5 and b5, and keeps our development momentum going. The move also prevents Black's queen from capturing anything material while developing with tempo. From c3, our knight can potentially jump to more active squares like d5 or support tactical operations in the center, maintaining the pressure while consolidating our position safely."
     },
     {
       "san": "d6",

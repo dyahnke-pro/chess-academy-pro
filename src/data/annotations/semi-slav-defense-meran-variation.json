@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding additional pressure to the d5 pawn while preparing to recapture on c4 if Black ever takes our gambit pawn. This move is extremely flexible, supporting our central strategy while keeping multiple plans available - we can still transpose to various systems depending on Black's setup. The knight on c3 also prepares to support a potential e2-e4 advance, which would give us an impressive pawn center and excellent piece activity in the middlegame."
+      "annotation": "We're developing our knight to its ideal square, adding additional pressure to the d5 pawn while preparing to recapture on c4 if Black ever takes our gambit pawn. This move is extremely flexible, supporting our central strategy while keeping multiple plans available - we can still transpose to various systems depending on Black's setup. The knight on c3 also prepares to support a potential e2-e4 advance, which would give us an impressive pawn center and excellent piece activity in the middlegame."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its ideal square, attacking our e4 square and preventing us from immediately advancing our e-pawn to dominate the center. This natural developing move fits perfectly with the Slav Defense philosophy of solid, principled development while maintaining central control. Our opponent is also preparing to castle kingside and potentially support their center with moves like Nbd7, creating a solid pawn structure that can withstand our central pressure while preparing counterplay."
+      "annotation": "Black develops their kingside knight to its ideal square, attacking our e4 square and preventing us from immediately advancing our e-pawn to dominate the center. This active move fits perfectly with the Slav Defense philosophy of solid, principled development while maintaining central control. Our opponent is also preparing to castle kingside and potentially support their center with moves like Nbd7, creating a solid pawn structure that can withstand our central pressure while preparing counterplay."
     },
     {
       "san": "e3",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our second knight to its optimal square, controlling the important e5 and h4 squares while supporting our central pawn structure. This natural developing move prepares to castle kingside and maintains maximum flexibility in our position, keeping pressure on Black's setup without committing to any particular plan yet. The knight on f3 also provides additional support for a potential e3-e4 advance later, which would give us excellent central control and open lines for our pieces to become more active."
+      "annotation": "We're developing our second knight to its optimal square, controlling the important e5 and h4 squares while supporting our central pawn structure. This active move prepares to castle kingside and maintains maximum flexibility in our position, keeping pressure on Black's setup without committing to any particular plan yet. The knight on f3 also provides additional support for a potential e3-e4 advance later, which would give us excellent central control and open lines for our pieces to become more active."
     },
     {
       "san": "Nbd7",
@@ -71,7 +71,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Black launches the final key move of the Meran Variation setup, striking directly at our central d4 pawn and opening the position for maximum tactical complexity. This aggressive advance shows our opponent is ready for the sharp, double-edged play that characterizes this variation, where both sides will have attacking chances and must play with great precision. The move c5 completes Black's strategic plan - they've gained space on the queenside, challenged our center, and are now prepared for the tactical melee that typically follows, with both kings potentially coming under attack as the position opens up rapidly."
+      "annotation": "Black launches the final critical move of the Meran Variation setup, striking directly at our central d4 pawn and opening the position for maximum tactical complexity. This aggressive advance shows our opponent is ready for the sharp, double-edged play that characterizes this variation, where both sides will have attacking chances and must play with great precision. The move c5 completes Black's strategic plan - they've gained space on the queenside, challenged our center, and are now prepared for the tactical melee that typically follows, with both kings potentially coming under attack as the position opens up rapidly."
     }
   ]
 }

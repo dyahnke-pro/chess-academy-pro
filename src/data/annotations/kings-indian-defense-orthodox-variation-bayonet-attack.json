@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance e4 next move. The knight on c3 also eyes important central squares like e4, d5, and b5, while keeping pressure on Black's potential ...d5 break. This move is part of our systematic buildup of the ideal pawn center with pawns on c4, d4, and e4, which will give us maximum space advantage. From c3, our knight can later jump to e4, d5, or support queenside operations, making it a flexible and strong development."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance e4 next move. The knight on c3 also eyes important central squares like e4, d5, and b5, while keeping pressure on Black's potential ...d5 break. This move is part of our systematic buildup of the ideal pawn center with pawns on c4, d4, and e4, which will give us maximum space advantage. From c3, our knight can later jump to e4, d5, or support queenside operations, making it a flexible and strong development."
     },
     {
       "san": "Bg7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development and supporting our e4 pawn, while also preparing to castle kingside for safety. The knight on f3 controls important central squares like e5 and d4, and can later be redeployed to more active squares depending on how the position develops. This natural developing move also keeps Black's ...e5 break under control for now, since our knight supports the d4 pawn. From f3, our knight has multiple options: it can go to d2 to make room for f3 pawn advances, jump to g5 for kingside pressure, or retreat to e1 and redeploy via d3 in some lines."
+      "annotation": "We're completing our kingside development and supporting our e4 pawn, while also preparing to castle kingside for safety. The knight on f3 controls important central squares like e5 and d4, and can later be redeployed to more active squares depending on how the position develops. This active move also keeps Black's ...e5 break under control for now, since our knight supports the d4 pawn. From f3, our knight has multiple options: it can go to d2 to make room for f3 pawn advances, jump to g5 for kingside pressure, or retreat to e1 and redeploy via d3 in some lines."
     },
     {
       "san": "O-O",

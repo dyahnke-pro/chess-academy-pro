@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and supporting our central ambitions. This move is virtually automatic in most d4 openings because the knight on f3 controls key central squares and prepares for kingside castling. From f3, our knight can later jump to e5 for an outpost or support pawn advances in the center. The knight development also keeps our options open for various pawn structures, whether we maintain the tension with d4-c4 or allow some pawn trades."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and supporting our central ambitions. This move is virtually automatic in most d4 openings because the knight on f3 controls key central squares and prepares for kingside castling. From f3, our knight can later jump to e5 for an outpost or support pawn advances in the center. The knight development also keeps our options open for various pawn structures, whether we maintain the tension with d4-c4 or allow some pawn trades."
     },
     {
       "san": "Nf6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent plays the key move that defines the Semi-Slav Defense, supporting the d5 pawn from another angle while preparing to develop the dark-squared bishop. However, this move comes with a significant cost: it blocks in the light-squared bishop on c8, which can become a long-term positional problem. Black is preparing to eventually capture on c4 and support the advanced pawn with ...b5, creating an interesting imbalance. This pawn structure often leads to sharp tactical battles where both sides have chances for initiative."
+      "annotation": "Our opponent plays the defining move of the Semi-Slav Defense, supporting the d5 pawn from another angle while preparing to develop the dark-squared bishop. However, this move comes with a significant cost: it blocks in the light-squared bishop on c8, which can become a long-term positional problem. Black is preparing to eventually capture on c4 and support the advanced pawn with ...b5, creating an interesting imbalance. This pawn structure often leads to sharp tactical battles where both sides have chances for initiative."
     },
     {
       "san": "Bg5",

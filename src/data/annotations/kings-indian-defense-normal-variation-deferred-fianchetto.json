@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn and prepares to support the crucial e4 advance. The knight on c3 also controls important squares like b5, d5, and e4, giving us excellent central influence. This natural developing move fits perfectly with our plan to build a strong pawn center - once we play e4, this knight will be supporting both central pawns. Additionally, the knight on c3 keeps our options open for different pawn structures, as we could potentially support a d5 advance later if the position calls for it."
+      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn and prepares to support the crucial e4 advance. The knight on c3 also controls important squares like b5, d5, and e4, giving us excellent central influence. This active move fits perfectly with our plan to build a strong pawn center - once we play e4, this knight will be supporting both central pawns. Additionally, the knight on c3 keeps our options open for different pawn structures, as we could potentially support a d5 advance later if the position calls for it."
     },
     {
       "san": "Bg7",
@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black supports the eventual e5 advance, which is the thematic pawn break in the King's Indian Defense. This move also opens up the c8-bishop and prepares to complete development with moves like Nbd7 and e5. While d6 might look passive, it's actually the key move that allows Black's counterplay - without this pawn supporting e5, Black would have no way to challenge our imposing center. The pawn on d6 also helps control the c5 and e5 squares, ensuring that when Black does play e5, it will be properly supported."
+      "annotation": "Black supports the eventual e5 advance, which is the thematic pawn break in the King's Indian Defense. This move also opens up the c8-bishop and prepares to complete development with moves like Nbd7 and e5. While d6 might look passive, it's actually the critical move that allows Black's counterplay - without this pawn supporting e5, Black would have no way to challenge our imposing center. The pawn on d6 also helps control the c5 and e5 squares, ensuring that when Black does play e5, it will be properly supported."
     },
     {
       "san": "g3",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central e4 square and preparing kingside development. This move is extremely flexible and can transpose into numerous openings including the King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or various Benoni systems. Our opponent is following classical opening principles by developing pieces toward the center and maintaining maximum options for future play. We should be prepared for Black to challenge our center in various ways, either with ...e6 supporting a later ...d5, or with ...g6 and ...Bg7 in King's Indian style, or even the aggressive ...c5 that's about to come."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central e4 square and preparing kingside development. This move is extremely flexible and can transpose into numerous openings including the King's Indian Defense, Nimzo-Indian, Queen's Gambit Declined, or various Benoni systems. Our opponent is following classical opening principles by developing pieces toward the center and maintaining maximum options for future play. We should be prepared for Black to challenge our center in various ways, either with ...e6 supporting a later ...d5, or with ...g6 and ...Bg7 in King's Indian style, or even the aggressive ...c5 that's about to come."
     },
     {
       "san": "c4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, protecting the b5 pawn while also supporting a potential e2-e4 advance and maintaining flexibility in our piece placement. This move allows us to maintain our material advantage while beginning to coordinate our pieces for both defense and eventual central expansion. The knight on c3 eyes important central squares like e4 and d5, and can potentially reroute to more active squares later in the game. However, we must be aware that this knight can become a target for Black's tactics, particularly with moves like ...Qa5 or ...Ba6 creating pressure on our position."
+      "annotation": "We're developing our knight to its ideal square, protecting the b5 pawn while also supporting a potential e2-e4 advance and maintaining flexibility in our piece placement. This move allows us to maintain our material advantage while beginning to coordinate our pieces for both defense and eventual central expansion. The knight on c3 eyes important central squares like e4 and d5, and can potentially reroute to more active squares later in the game. However, we must be aware that this knight can become a target for Black's tactics, particularly with moves like ...Qa5 or ...Ba6 creating pressure on our position."
     },
     {
       "san": "axb5",

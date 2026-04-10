@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, supporting the d4 pawn and preparing to meet Black's central challenges. The knight on c3 controls important squares like e4, d5, and b5, while also preparing to support an eventual e4 advance to build our ideal pawn center. This move is virtually universal in d4 openings because it combines development with central support so effectively. From c3, our knight can also potentially jump to more active squares like e4 or d5 depending on how the position develops, and it supports tactical ideas involving captures on d5."
+      "annotation": "We're developing our queenside knight to its ideal square, supporting the d4 pawn and preparing to meet Black's central challenges. The knight on c3 controls important squares like e4, d5, and b5, while also preparing to support an eventual e4 advance to build our ideal pawn center. This move is virtually universal in d4 openings because it combines development with central support so effectively. From c3, our knight can also potentially jump to more active squares like e4 or d5 depending on how the position develops, and it supports tactical ideas involving captures on d5."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development while supporting our central pawn structure and preparing to castle short for king safety. The knight on f3 not only supports our d4 pawn but also controls key central squares like e5 and g5, while preventing Black from advancing their e-pawn with tempo. This natural developing move keeps our options open - we can still play cxd5 to liquidate the center, or maintain the tension and see how Black continues. The knight on f3 also prepares potential tactical ideas and supports our overall plan of building pressure in the center while keeping our king safe."
+      "annotation": "We're completing our kingside development while supporting our central pawn structure and preparing to castle short for king safety. The knight on f3 not only supports our d4 pawn but also controls key central squares like e5 and g5, while preventing Black from advancing their e-pawn with tempo. This active move keeps our options open - we can still play cxd5 to liquidate the center, or maintain the tension and see how Black continues. The knight on f3 also prepares potential tactical ideas and supports our overall plan of building pressure in the center while keeping our king safe."
     },
     {
       "san": "Bg7",

@@ -19,7 +19,7 @@
     },
     {
       "san": "d5",
-      "annotation": "We advance our d-pawn to d5, accepting the challenge and creating a space advantage while forcing Black's knight to make a decision about where to retreat. This natural move gains space, restricts Black's pieces, and opens up the possibility of expanding further with moves like e4 later. By pushing d5, we're also preparing to develop our pieces behind our advanced pawn chain, with our light-squared bishop potentially finding a strong home on g2 after a fianchetto setup. The d5 advance puts immediate pressure on Black's position and forces them to show their hand regarding their knight placement."
+      "annotation": "We advance our d-pawn to d5, accepting the challenge and creating a space advantage while forcing Black's knight to make a decision about where to retreat. this move gains space, restricts Black's pieces, and opens up the possibility of expanding further with moves like e4 later. By pushing d5, we're also preparing to develop our pieces behind our advanced pawn chain, with our light-squared bishop potentially finding a strong home on g2 after a fianchetto setup. The d5 advance puts immediate pressure on Black's position and forces them to show their hand regarding their knight placement."
     },
     {
       "san": "Nce7",

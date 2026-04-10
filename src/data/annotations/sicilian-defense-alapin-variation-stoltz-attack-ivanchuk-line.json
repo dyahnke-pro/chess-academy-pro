@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our e4 pawn while preparing to castle kingside. This move also supports a potential ...d6 or ...d5 pawn break, giving Black flexibility in the center. Our opponent is following sound developmental principles—pieces before pawns, knights before bishops—while keeping maximum options open. The knight on f6 will often become a target for our advancing e-pawn, which is exactly what happens in the main line of this variation."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our e4 pawn while preparing to castle kingside. This move also supports a potential ...d6 or ...d5 pawn break, giving Black flexibility in the center. Our opponent is following sound developmental principles—pieces before pawns, knights before bishops—while keeping maximum options open. The knight on f6 will often become a target for our advancing e-pawn, which is exactly what happens in the main line of this variation."
     },
     {
       "san": "e5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its optimal square, supporting our advanced e5 pawn while preparing to castle kingside. The knight on f3 also controls key central squares like d4, e5, g5, and h4, giving us excellent piece coordination. This natural developing move follows the opening principle of developing knights before bishops while maintaining flexibility in our setup. From f3, our knight can later jump to more aggressive squares like g5 or h4 if tactical opportunities arise, and it perfectly complements our space advantage in the center."
+      "annotation": "We develop our knight to its optimal square, supporting our advanced e5 pawn while preparing to castle kingside. The knight on f3 also controls key central squares like d4, e5, g5, and h4, giving us excellent piece coordination. This active move follows the opening principle of developing knights before bishops while maintaining flexibility in our setup. From f3, our knight can later jump to more aggressive squares like g5 or h4 if tactical opportunities arise, and it perfectly complements our space advantage in the center."
     },
     {
       "san": "Nc6",

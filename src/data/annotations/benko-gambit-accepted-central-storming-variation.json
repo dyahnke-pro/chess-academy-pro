@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 and preparing to contest the center. This is the Indian Defense approach - rather than occupying the center with pawns like ...d5 or ...e5, Black uses pieces to pressure our pawn center and maintain flexibility. The knight on f6 also supports potential pawn breaks like ...e6 or ...c5, and prepares kingside castling. We should expect our opponent to follow up with moves like ...g6, ...Bg7, and ...d6, creating a hypermodern setup that can become very dangerous if we're not careful about maintaining our central advantage."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 and preparing to contest the center. This is the Indian Defense approach - rather than occupying the center with pawns like ...d5 or ...e5, Black uses pieces to pressure our pawn center and maintain flexibility. The knight on f6 also supports potential pawn breaks like ...e6 or ...c5, and prepares kingside castling. We should expect our opponent to follow up with moves like ...g6, ...Bg7, and ...d6, creating a hypermodern setup that can become very dangerous if we're not careful about maintaining our central advantage."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d5 pawn and preparing to castle while maintaining control over key central squares. This move is essential for our piece coordination and helps us prepare for Black's coming pressure along the queenside files. The knight on c3 also prepares potential advances like e4 to further strengthen our center, and it can potentially reroute to more active squares like e4 or b5 later in the game. However, we must be aware that this knight can become a target for Black's pieces, particularly if Black gets ...Rb8 and pressure along the b-file, so we need to be prepared to defend it or find it a better square."
+      "annotation": "We're developing our knight to its ideal square, supporting our d5 pawn and preparing to castle while maintaining control over key central squares. This move is essential for our piece coordination and helps us prepare for Black's coming pressure along the queenside files. The knight on c3 also prepares potential advances like e4 to further strengthen our center, and it can potentially reroute to more active squares like e4 or b5 later in the game. However, we must be aware that this knight can become a target for Black's pieces, particularly if Black gets ...Rb8 and pressure along the b-file, so we need to be prepared to defend it or find it a better square."
     },
     {
       "san": "Bxa6",

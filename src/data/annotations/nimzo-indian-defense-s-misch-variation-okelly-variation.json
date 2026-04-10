@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square while immediately putting pressure on our central pawn. This is one of the most flexible responses to 1.d4, as the knight on f6 supports Black's plan to play e6 and challenge our center with moves like d5 or c5 later. The knight also prepares kingside castling and keeps multiple opening systems available - Black could transpose into the Queen's Gambit Declined, Nimzo-Indian, King's Indian, or other setups. We should continue with our plan to occupy the center, most likely with 2.c4."
+      "annotation": "Black develops the knight to its ideal square while immediately putting pressure on our central pawn. This is one of the most flexible responses to 1.d4, as the knight on f6 supports Black's plan to play e6 and challenge our center with moves like d5 or c5 later. The knight also prepares kingside castling and keeps multiple opening systems available - Black could transpose into the Queen's Gambit Declined, Nimzo-Indian, King's Indian, or other setups. We should continue with our plan to occupy the center, most likely with 2.c4."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting the d4 pawn and preparing to recapture on d4 if needed. This natural developing move also opens up the possibility of playing e4 to create a broad pawn center, while keeping pressure on Black's position. However, by playing Nc3, we've also allowed Black to enter the Nimzo-Indian Defense with Bb4, which will pin our knight and create immediate tactical and positional tensions. The knight on c3 is excellently placed for the middlegame, eyeing important central squares like e4, d5, and b5, but we must be prepared for Black's active piece play."
+      "annotation": "We develop our knight to its most active square, supporting the d4 pawn and preparing to recapture on d4 if needed. This active move also opens up the possibility of playing e4 to create a broad pawn center, while keeping pressure on Black's position. However, by playing Nc3, we've also allowed Black to enter the Nimzo-Indian Defense with Bb4, which will pin our knight and create immediate tactical and positional tensions. The knight on c3 is excellently placed for the middlegame, eyeing important central squares like e4, d5, and b5, but we must be prepared for Black's active piece play."
     },
     {
       "san": "Bb4",

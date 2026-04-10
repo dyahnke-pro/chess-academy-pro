@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to build our ideal pawn center with e4. This knight on c3 also controls important central squares like e4, d5, and b5, while keeping our options open for various King's Indian setups. The knight placement allows us to respond flexibly to Black's plans - we can support an eventual e4 advance or pivot to different systems depending on how our opponent develops. This move is practically universal in King's Indian structures and shows why the knight belongs on c3 rather than d2 where it would block our bishop."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to build our ideal pawn center with e4. This knight on c3 also controls important central squares like e4, d5, and b5, while keeping our options open for various King's Indian setups. The knight placement allows us to respond flexibly to Black's plans - we can support an eventual e4 advance or pivot to different systems depending on how our opponent develops. This move is practically universal in King's Indian structures and shows why the knight belongs on c3 rather than d2 where it would block our bishop."
     },
     {
       "san": "Bg7",

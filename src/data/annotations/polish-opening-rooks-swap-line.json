@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops actively, attacking e4 and preparing to support the center or kingside. Nf6 is a developing move that doesn't commit Black to a specific plan yet, keeping options open for both central breaks (like d5) and kingside castling. The knight on f6 is well-placed to support future play on any part of the board."
+      "annotation": "Black develops actively, attacking e4 and preparing to support the center or kingside. Nf6 is a developing choice that doesn't commit Black to a specific plan yet, keeping options open for both central breaks (like d5) and kingside castling. The knight on f6 is well-placed to support future play on any part of the board."
     },
     {
       "san": "b5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at the center, a natural developing move that claims space and opens lines for the light-squared bishop on c8. This pawn advance is one of Black's main counterplay ideas in these simplified positions, asserting that despite accepting trades, they have active play in the center. We now need to decide how to meet this central aggression—whether to trade, advance, or maneuver around it."
+      "annotation": "Black strikes at the center, a active move that claims space and opens lines for the light-squared bishop on c8. This pawn advance is one of Black's main counterplay ideas in these simplified positions, asserting that despite accepting trades, they have active play in the center. We now need to decide how to meet this central aggression—whether to trade, advance, or maneuver around it."
     }
   ]
 }

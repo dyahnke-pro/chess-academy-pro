@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls important central squares like e5 and d4 while supporting our future pawn advances. This move is part of our standard development plan and prepares to castle kingside, getting our king to safety. The knight on f3 also prevents Black from playing ...e5, which would give our opponent too much central activity. Additionally, this move keeps maximum flexibility in our position, as we haven't yet committed to how we'll recapture on c4 if Black takes our gambit pawn."
+      "annotation": "We're developing our knight to its ideal square, where it controls important central squares like e5 and d4 while supporting our future pawn advances. This move is part of our standard development plan and prepares to castle kingside, getting our king to safety. The knight on f3 also prevents Black from playing ...e5, which would give our opponent too much central activity. Additionally, this move keeps maximum flexibility in our position, as we haven't yet committed to how we'll recapture on c4 if Black takes our gambit pawn."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're continuing our classical development by bringing the queen's knight to its best square, where it supports the d4 pawn and adds pressure to Black's d5 pawn. This move is part of our standard Queen's Gambit setup and increases the tension in the center, as we're now attacking the d5 pawn twice. The knight on c3 also prepares potential pawn advances like e4 (after Black captures on c4) and keeps our options open for how to recapture on c4. This natural developing move maintains the central tension that's so characteristic of the Queen's Gambit complex."
+      "annotation": "We're continuing our classical development by bringing the queen's knight to its best square, where it supports the d4 pawn and adds pressure to Black's d5 pawn. This move is part of our standard Queen's Gambit setup and increases the tension in the center, as we're now attacking the d5 pawn twice. The knight on c3 also prepares potential pawn advances like e4 (after Black captures on c4) and keeps our options open for how to recapture on c4. This active move maintains the central tension that's so characteristic of the Queen's Gambit complex."
     },
     {
       "san": "dxc4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "a4",
-      "annotation": "We're playing a key move in the Slav Defense that prevents Black from consolidating the extra pawn with ...b5. This move controls the b5 square and ensures that if Black tries to hold onto the c4 pawn with moves like ...b5, we can capture it and create weaknesses in Black's queenside. The advance a4 is a typical idea in many Queen's Gambit lines where we need to prevent our opponent from safely keeping the gambit pawn. This move also prepares potential piece activity along the a-file and keeps Black's position under pressure."
+      "annotation": "We're playing a critical move in the Slav Defense that prevents Black from consolidating the extra pawn with ...b5. This move controls the b5 square and ensures that if Black tries to hold onto the c4 pawn with moves like ...b5, we can capture it and create weaknesses in Black's queenside. The advance a4 is a typical idea in many Queen's Gambit lines where we need to prevent our opponent from safely keeping the gambit pawn. This move also prepares potential piece activity along the a-file and keeps Black's position under pressure."
     },
     {
       "san": "Bf5",
@@ -47,7 +47,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black consolidates the center with this solid move that supports the light-squared bishop on f5 and prepares to complete kingside development. This move also opens a potential retreat square for the bishop if it comes under attack, which is important for maintaining piece coordination. Our opponent is following the typical Slav plan of developing pieces harmoniously while maintaining a solid pawn structure. The pawn on e6 also controls the important d5 and f5 squares, preventing us from advancing our pieces to these key central outposts."
+      "annotation": "Black consolidates the center with this stabilizing move that supports the light-squared bishop on f5 and prepares to complete kingside development. This move also opens a potential retreat square for the bishop if it comes under attack, which is important for maintaining piece coordination. Our opponent is following the typical Slav plan of developing pieces harmoniously while maintaining a solid pawn structure. The pawn on e6 also controls the important d5 and f5 squares, preventing us from advancing our pieces to these key central outposts."
     },
     {
       "san": "Bxc4",

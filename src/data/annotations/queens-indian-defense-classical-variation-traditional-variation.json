@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn while controlling important central squares like e5 and d2. This natural developing move also prepares castling kingside and keeps our options open for various pawn structures. The knight on f3 is perfectly placed to support our central ambitions and can later jump to more active squares like e5 or d2 depending on how the position develops. From f3, our knight also prevents any early ...e5 pawn breaks by Black, maintaining our central control."
+      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn while controlling important central squares like e5 and d2. This active move also prepares castling kingside and keeps our options open for various pawn structures. The knight on f3 is perfectly placed to support our central ambitions and can later jump to more active squares like e5 or d2 depending on how the position develops. From f3, our knight also prevents any early ...e5 pawn breaks by Black, maintaining our central control."
     },
     {
       "san": "b6",
@@ -43,15 +43,15 @@
     },
     {
       "san": "O-O",
-      "annotation": "We're castling kingside to bring our king to safety while simultaneously activating our rook on the f-file. This natural developing move is almost always correct in these positions, as it completes our basic development and prepares us for the middlegame battles ahead. Castling also connects our rooks, giving us more flexibility in how we deploy our heavy pieces. With our king safe, we can now focus on advancing our central pawns, improving our piece coordination, or launching operations on either flank depending on how Black continues."
+      "annotation": "We're castling kingside to bring our king to safety while simultaneously activating our rook on the f-file. This active move is almost always correct in these positions, as it completes our basic development and prepares us for the middlegame battles ahead. Castling also connects our rooks, giving us more flexibility in how we deploy our heavy pieces. With our king safe, we can now focus on advancing our central pawns, improving our piece coordination, or launching operations on either flank depending on how Black continues."
     },
     {
       "san": "O-O",
-      "annotation": "Black mirrors our kingside castling, bringing the king to safety while activating the rook and completing the basic requirements of opening development. This natural move maintains the symmetrical nature of the position while preparing for the complex middlegame maneuvering that characterizes the Queen's Indian Defense. With both kings castled, the position is now ready for the real strategic battle to begin, where pawn structure, piece coordination, and long-term planning will determine the outcome. Black's solid setup is now complete, with all pieces actively placed and ready to respond to whatever central action we might undertake."
+      "annotation": "Black mirrors our kingside castling, bringing the king to safety while activating the rook and completing the basic requirements of opening development. this move maintains the symmetrical nature of the position while preparing for the complex middlegame maneuvering that characterizes the Queen's Indian Defense. With both kings castled, the position is now ready for the real strategic battle to begin, where pawn structure, piece coordination, and long-term planning will determine the outcome. Black's solid setup is now complete, with all pieces actively placed and ready to respond to whatever central action we might undertake."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our final minor piece to its most natural square, where it supports our central pawn structure while preparing potential advances like d4-d5 or e2-e4. The knight on c3 also eyes important squares like e4, d5, and b5, giving us tactical possibilities in the emerging middlegame. This move completes the Traditional Variation of the Queen's Indian Classical line, where both sides have developed harmoniously and the real strategic battle is about to begin. From c3, our knight coordinates perfectly with our other pieces and supports various pawn advances, making this the most flexible and principled choice in the position."
+      "annotation": "We're developing our final minor piece to its ideal square, where it supports our central pawn structure while preparing potential advances like d4-d5 or e2-e4. The knight on c3 also eyes important squares like e4, d5, and b5, giving us tactical possibilities in the emerging middlegame. This move completes the Traditional Variation of the Queen's Indian Classical line, where both sides have developed harmoniously and the real strategic battle is about to begin. From c3, our knight coordinates perfectly with our other pieces and supports various pawn advances, making this the most flexible and principled choice in the position."
     }
   ]
 }

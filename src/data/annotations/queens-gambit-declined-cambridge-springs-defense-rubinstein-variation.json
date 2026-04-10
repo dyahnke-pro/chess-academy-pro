@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds with the most principled defense, immediately challenging our central pawn and refusing to allow us free reign in the center. This solid move establishes a foothold on the important e4 and c4 squares while preparing to develop the kingside pieces naturally. By playing d5, our opponent signals their intention to maintain central equality rather than allow us the space advantage that comes with accepting the Queen's Gambit. This leads to the Queen's Gambit Declined complex, where Black aims for solid, classical development while seeking counterplay opportunities."
+      "annotation": "Black responds with the most principled defense, immediately challenging our central pawn and refusing to allow us free reign in the center. this stabilizing move establishes a foothold on the important e4 and c4 squares while preparing to develop the kingside pieces naturally. By playing d5, our opponent signals their intention to maintain central equality rather than allow us the space advantage that comes with accepting the Queen's Gambit. This leads to the Queen's Gambit Declined complex, where Black aims for solid, classical development while seeking counterplay opportunities."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the important central e5 and d4 squares while preparing to castle kingside. This move is part of our standard development plan in the Queen's Gambit, bringing pieces into play while maintaining the central tension. The knight on f3 also supports our potential e4 advance in the future and guards against any Black tactics involving ...e5 or ...Ng4. By developing pieces before making further pawn commitments, we're following classical opening principles while keeping our options flexible for the middlegame structure ahead."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the important central e5 and d4 squares while preparing to castle kingside. This move is part of our standard development plan in the Queen's Gambit, bringing pieces into play while maintaining the central tension. The knight on f3 also supports our potential e4 advance in the future and guards against any Black tactics involving ...e5 or ...Ng4. By developing pieces before making further pawn commitments, we're following classical opening principles while keeping our options flexible for the middlegame structure ahead."
     },
     {
       "san": "Nf6",

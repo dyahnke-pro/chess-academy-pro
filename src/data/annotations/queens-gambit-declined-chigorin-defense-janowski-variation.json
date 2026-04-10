@@ -23,7 +23,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it controls important central squares like e4, d5, and b5 while supporting our future plans to recapture the c4 pawn. This knight development is flexible and doesn't commit us to any particular pawn structure yet - we can still play e4 for a center pawn storm, or e3 for a more solid positional approach. The knight on c3 also prepares potential discoveries along the c-file and supports advances like d5 in some variations. By developing pieces before worrying about the c4 pawn, we're following the classical principle of not chasing pawns too early in the opening, instead building up our position systematically."
+      "annotation": "We develop our knight to its ideal square, where it controls important central squares like e4, d5, and b5 while supporting our future plans to recapture the c4 pawn. This knight development is flexible and doesn't commit us to any particular pawn structure yet - we can still play e4 for a center pawn storm, or e3 for a more solid positional approach. The knight on c3 also prepares potential discoveries along the c-file and supports advances like d5 in some variations. By developing pieces before worrying about the c4 pawn, we're following the classical principle of not chasing pawns too early in the opening, instead building up our position systematically."
     },
     {
       "san": "Nf3",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while bringing the knight to its ideal square. This is the starting move of several major opening systems including the King's Indian, Nimzo-Indian, and Queen's Indian defenses. Our opponent is following classical opening principles by developing toward the center and creating immediate tension. We need to decide how to support our d4 pawn - the most common and strongest continuation is 2.c4, leading to the rich family of Indian defenses."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while bringing the knight to its ideal square. This is the starting move of several major opening systems including the King's Indian, Nimzo-Indian, and Queen's Indian defenses. Our opponent is following classical opening principles by developing toward the center and creating immediate tension. We need to decide how to support our d4 pawn - the most common and strongest continuation is 2.c4, leading to the rich family of Indian defenses."
     },
     {
       "san": "c4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development with this natural move that prepares castling while maintaining all our central options. The knight on f3 is perfectly placed to support our center, and it can later jump to excellent squares like e5, d2 (rerouting to better squares), or even g5 in tactical positions. This move keeps maximum flexibility regarding the central tension - we can still play cxd5, support with b3, or even consider a3 to challenge Black's bishop. Our development is now nearly complete, and we're preparing to castle kingside before committing to any particular pawn structure in the center."
+      "annotation": "We're completing our kingside development with this move that prepares castling while maintaining all our central options. The knight on f3 is perfectly placed to support our center, and it can later jump to excellent squares like e5, d2 (rerouting to better squares), or even g5 in tactical positions. This move keeps maximum flexibility regarding the central tension - we can still play cxd5, support with b3, or even consider a3 to challenge Black's bishop. Our development is now nearly complete, and we're preparing to castle kingside before committing to any particular pawn structure in the center."
     },
     {
       "san": "c5",

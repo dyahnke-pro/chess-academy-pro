@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, where it supports our d4 pawn, controls the central e5 square, and prepares kingside castling. This knight placement is incredibly flexible, as it can later jump to e5, d2, or h4 depending on the pawn structure that develops. The knight on f3 also prevents Black from playing ...e5, which would give our opponent excellent central control and space. By developing pieces before pushing more pawns, we're following classical opening principles while maintaining maximum flexibility in our pawn structure and piece coordination."
+      "annotation": "We're developing our king's knight to its ideal square, where it supports our d4 pawn, controls the central e5 square, and prepares kingside castling. This knight placement is incredibly flexible, as it can later jump to e5, d2, or h4 depending on the pawn structure that develops. The knight on f3 also prevents Black from playing ...e5, which would give our opponent excellent central control and space. By developing pieces before pushing more pawns, we're following classical opening principles while maintaining maximum flexibility in our pawn structure and piece coordination."
     },
     {
       "san": "Bb4+",

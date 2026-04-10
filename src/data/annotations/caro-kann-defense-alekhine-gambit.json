@@ -15,11 +15,11 @@
     },
     {
       "san": "d5",
-      "annotation": "Black immediately strikes at our center, which is the main idea behind the Caro-Kann Defense. This move challenges our e4 pawn directly and forces us to make a decision about how to maintain our central presence. Black is following classical opening principles by fighting for the center early, and this move also opens lines for the development of Black's light-squared bishop. We need to decide whether to advance, exchange, or defend our e4 pawn - each choice leads to different pawn structures and middlegame plans."
+      "annotation": "Black immediately strikes at our center, which is the main idea behind the Caro-Kann Defense. This move challenges our e4 pawn directly and forces us to make a decision about how to maintain our central presence. Black is following classical opening principles by contesting central control early, and this move also opens lines for the development of Black's light-squared bishop. We need to decide whether to advance, exchange, or defend our e4 pawn - each choice leads to different pawn structures and middlegame plans."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while defending the attacked e4 pawn, maintaining our central pawn duo for now. This knight placement is flexible and keeps our options open - we can still advance with e5, exchange on d5, or allow the exchange on e4. The knight on c3 also eyes the important d5 and e4 squares, adding pressure to Black's position. This is a principled developing move that doesn't commit us to any particular pawn structure yet, which is wise since we want to see how Black continues before deciding on our central strategy."
+      "annotation": "We're developing our knight to its ideal square while defending the attacked e4 pawn, maintaining our central pawn duo for now. This knight placement is flexible and keeps our options open - we can still advance with e5, exchange on d5, or allow the exchange on e4. The knight on c3 also eyes the important d5 and e4 squares, adding pressure to Black's position. This is a purposeful move that doesn't commit us to any particular pawn structure yet, which is wise since we want to see how Black continues before deciding on our central strategy."
     },
     {
       "san": "dxe4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our centralized knight and forcing us to make another decision about our piece placement. This move follows sound opening principles by developing with tempo (giving check to our knight) and contesting the center. The knight on f6 is excellently placed - it controls important central squares like e4, d5, and h5, while also contributing to kingside safety. Black is essentially challenging us to prove that our advanced knight position is worth more than rapid, harmonious development."
+      "annotation": "Black develops the knight to its ideal square, attacking our centralized knight and forcing us to make another decision about our piece placement. This move follows sound opening principles by developing with tempo (giving check to our knight) and contesting the center. The knight on f6 is excellently placed - it controls important central squares like e4, d5, and h5, while also contributing to kingside safety. Black is essentially challenging us to prove that our advanced knight position is worth more than rapid, harmonious development."
     },
     {
       "san": "Bd3",

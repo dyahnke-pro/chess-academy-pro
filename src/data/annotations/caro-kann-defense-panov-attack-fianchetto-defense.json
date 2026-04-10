@@ -27,11 +27,11 @@
     },
     {
       "san": "c4",
-      "annotation": "We're immediately attacking Black's d5 pawn with this advance, creating the characteristic pawn tension of the Panov Attack. This move gives us excellent central control and forces Black to make an immediate decision about the d-pawn - defend it, advance it, or allow it to be captured. The c4 pawn also supports a potential d4-d5 advance later, giving us space and cramping Black's position. This is the key move that defines the Panov Attack, offering us long-term pressure against Black's pawn structure and excellent piece development prospects."
+      "annotation": "We're immediately attacking Black's d5 pawn with this advance, creating the characteristic pawn tension of the Panov Attack. This move gives us excellent central control and forces Black to make an immediate decision about the d-pawn - defend it, advance it, or allow it to be captured. The c4 pawn also supports a potential d4-d5 advance later, giving us space and cramping Black's position. This is the defining move of the Panov Attack, offering us long-term pressure against Black's pawn structure and excellent piece development prospects."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, where it attacks our d4 pawn and prepares to castle kingside. This move is logical because the knight on f6 supports Black's central d5 pawn while also preparing to complete kingside development with moves like Be7 or g6. Our opponent is following sound development principles by bringing pieces into active positions rather than moving the same piece twice. The knight on f6 also keeps options open for Black's light-squared bishop, which could go to e7, g7, or even d6 depending on how the position develops."
+      "annotation": "Black develops the kingside knight to its ideal square, where it attacks our d4 pawn and prepares to castle kingside. This move is logical because the knight on f6 supports Black's central d5 pawn while also preparing to complete kingside development with moves like Be7 or g6. Our opponent is following sound development principles by bringing pieces into active positions rather than moving the same piece twice. The knight on f6 also keeps options open for Black's light-squared bishop, which could go to e7, g7, or even d6 depending on how the position develops."
     },
     {
       "san": "Nc3",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the central e5 and d4 squares while supporting our d4 pawn. This move also prepares kingside castling and keeps our options open for various pawn structures - we could still play e3 and develop traditionally, or consider more ambitious setups with g3 and Bg2. The knight on f3 is perfectly placed to support our central ambitions and can later reposition to e5 or d2 depending on the pawn structure that emerges. This flexible development maintains pressure on Black's position while keeping our powder dry for the critical decisions ahead."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the central e5 and d4 squares while supporting our d4 pawn. This move also prepares kingside castling and keeps our options open for various pawn structures - we could still play e3 and develop traditionally, or consider more ambitious setups with g3 and Bg2. The knight on f3 is perfectly placed to support our central ambitions and can later reposition to e5 or d2 depending on the pawn structure that emerges. This flexible development maintains pressure on Black's position while keeping our powder dry for the critical decisions ahead."
     },
     {
       "san": "b6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Qa4+",
-      "annotation": "We're unleashing the Rashkovsky Attack, a brutal tactical blow that puts Black in serious trouble right out of the opening! This queen check forces Black's king to move since the c6 square is not available to block with the knight, and after the king moves, we'll continue with devastating pressure. The queen on a4 also attacks the knight on d5, creating a double threat that Black cannot adequately meet with natural moves. This is the point of our entire setup - while Black was developing normally, we were preparing this powerful tactical sequence that gives us a winning advantage with precise play."
+      "annotation": "We're unleashing the Rashkovsky Attack, a brutal tactical blow that puts Black in serious trouble right out of the opening! This queen check forces Black's king to move since the c6 square is not available to block with the knight, and after the king moves, we'll continue with devastating pressure. The queen on a4 also attacks the knight on d5, creating a double threat that Black cannot adequately meet with logical choices. This is the point of our entire setup - while Black was developing normally, we were preparing this powerful tactical sequence that gives us a winning advantage with precise play."
     }
   ]
 }

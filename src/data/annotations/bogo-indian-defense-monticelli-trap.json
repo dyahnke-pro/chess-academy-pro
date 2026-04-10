@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside and maintain control over the crucial e5 square. This move keeps all our options open - we can still transpose into various setups including the Catalan (with g3 and Bg2), the Queen's Gambit (with Nc3 and e3), or other systems. Our knight on f3 also prevents any annoying ...Ng4 jumps and prepares to support a potential e4 advance in the future. We're following the principle of developing knights before bishops while maintaining maximum flexibility in our pawn structure."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and maintain control over the crucial e5 square. This move keeps all our options open - we can still transpose into various setups including the Catalan (with g3 and Bg2), the Queen's Gambit (with Nc3 and e3), or other systems. Our knight on f3 also prevents any annoying ...Ng4 jumps and prepares to support a potential e4 advance in the future. We're following the principle of developing knights before bishops while maintaining maximum flexibility in our pawn structure."
     },
     {
       "san": "b6",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding support to our d4 pawn while preparing to increase central pressure with potential moves like e4. This development move also opens up the possibility of tactical operations in the center, as our knight eyes important squares like e4, e2, and d5. The knight on c3 coordinates beautifully with our other pieces - it supports our central pawns, can jump to aggressive squares, and keeps maximum flexibility in our position. We're also preparing to potentially advance e4 at an opportune moment, which would give us a powerful pawn center and open lines for our pieces."
+      "annotation": "We're developing our knight to its ideal square, adding support to our d4 pawn while preparing to increase central pressure with potential moves like e4. This development move also opens up the possibility of tactical operations in the center, as our knight eyes important squares like e4, e2, and d5. The knight on c3 coordinates beautifully with our other pieces - it supports our central pawns, can jump to aggressive squares, and keeps maximum flexibility in our position. We're also preparing to potentially advance e4 at an opportune moment, which would give us a powerful pawn center and open lines for our pieces."
     },
     {
       "san": "Ne4",

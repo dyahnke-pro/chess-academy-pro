@@ -15,7 +15,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes back in the center immediately, challenging our e4 pawn and forcing us to make a critical decision about the pawn structure. This is the key move of the Caro-Kann - Black has successfully achieved the ...d5 break that was prepared by ...c6. Our opponent is now threatening to capture on e4, which would give Black equality in the center and open lines for piece development. We need to decide whether to advance, exchange, or defend our e4 pawn, each choice leading to different types of positions."
+      "annotation": "Black strikes back in the center immediately, challenging our e4 pawn and forcing us to make a critical decision about the pawn structure. This is the central idea of the Caro-Kann - Black has successfully achieved the ...d5 break that was prepared by ...c6. Our opponent is now threatening to capture on e4, which would give Black equality in the center and open lines for piece development. We need to decide whether to advance, exchange, or defend our e4 pawn, each choice leading to different types of positions."
     },
     {
       "san": "Nd2",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls important central squares and supports our kingside development. This move completes our basic development plan while keeping maximum flexibility for our pieces. The knight on f3 supports a potential e4 pawn advance if we ever get our knight off that square, and also defends our kingside while preparing for castling. This is good, classical development that improves our position without committing to any specific plan just yet."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls important central squares and supports our kingside development. This move completes our basic development plan while keeping maximum flexibility for our pieces. The knight on f3 supports a potential e4 pawn advance if we ever get our knight off that square, and also defends our kingside while preparing for castling. This is good, classical development that improves our position without committing to any specific plan just yet."
     },
     {
       "san": "Nd7",
@@ -79,7 +79,7 @@
     },
     {
       "san": "Ngf6",
-      "annotation": "Black develops the knight to its most natural square, where it controls important central squares and prepares to support the kingside defense. This is excellent development that gets Black's pieces coordinated and challenges our central control. Our opponent is now threatening to potentially challenge our pieces further with moves like ...Qc7 or ...Be7, improving the coordination step by step. The knight on f6 also supports Black's kingside and makes it harder for us to create immediate threats, though our position remains slightly more active."
+      "annotation": "Black develops the knight to its ideal square, where it controls important central squares and prepares to support the kingside defense. This is excellent development that gets Black's pieces coordinated and challenges our central control. Our opponent is now threatening to potentially challenge our pieces further with moves like ...Qc7 or ...Be7, improving the coordination step by step. The knight on f6 also supports Black's kingside and makes it harder for us to create immediate threats, though our position remains slightly more active."
     },
     {
       "san": "Bd2",
@@ -95,7 +95,7 @@
     },
     {
       "san": "Bd6",
-      "annotation": "Black develops the light-squared bishop to d6, where it's actively placed and helps defend the kingside while maintaining central influence. This is an excellent developing move that improves Black's piece coordination and prepares to potentially castle kingside despite our h5 pawn. Our opponent has successfully completed development and created a solid, defensible position that will require careful and precise play from us to break through. The bishop on d6 also supports Black's central control and makes it harder for us to create immediate tactical threats, though our attacking potential remains significant."
+      "annotation": "Black develops the light-squared bishop to d6, where it's actively placed and helps defend the kingside while maintaining central influence. This is an excellent developing choice that improves Black's piece coordination and prepares to potentially castle kingside despite our h5 pawn. Our opponent has successfully completed development and created a solid, defensible position that will require careful and precise play from us to break through. The bishop on d6 also supports Black's central control and makes it harder for us to create immediate tactical threats, though our attacking potential remains significant."
     }
   ]
 }

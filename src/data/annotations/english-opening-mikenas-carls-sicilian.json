@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting our c4 pawn while preparing multiple strategic plans. This knight placement allows us to maintain pressure on d5 and gives us the flexibility to support either a future d4 advance (transposing to Queen's Gambit-like structures) or an e4 push (creating a Maróczy Bind setup). The knight on c3 also eyes important central squares like e4 and d5, and it's perfectly placed to support our thematic pawn breaks. From c3, this knight can later reposition to more active squares like e4 or d5, depending on how the position develops."
+      "annotation": "We develop our knight to its ideal square, supporting our c4 pawn while preparing multiple strategic plans. This knight placement allows us to maintain pressure on d5 and gives us the flexibility to support either a future d4 advance (transposing to Queen's Gambit-like structures) or an e4 push (creating a Maróczy Bind setup). The knight on c3 also eyes important central squares like e4 and d5, and it's perfectly placed to support our thematic pawn breaks. From c3, this knight can later reposition to more active squares like e4 or d5, depending on how the position develops."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most active square, attacking our potential e4 advance while preparing kingside castling. This natural developing move puts immediate pressure on the center and prevents us from casually advancing e2-e4 without consequences. Black's knight on f6 is optimally placed - it can jump to various squares like e4, d5, or g4 depending on the position's requirements. By developing this piece first, Black maintains maximum flexibility while ensuring that any central expansion we attempt will be immediately challenged."
+      "annotation": "Our opponent develops the knight to its most active square, attacking our potential e4 advance while preparing kingside castling. This active move puts immediate pressure on the center and prevents us from casually advancing e2-e4 without consequences. Black's knight on f6 is optimally placed - it can jump to various squares like e4, d5, or g4 depending on the position's requirements. By developing this piece first, Black maintains maximum flexibility while ensuring that any central expansion we attempt will be immediately challenged."
     },
     {
       "san": "e4",

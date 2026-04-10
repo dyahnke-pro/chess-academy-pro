@@ -11,7 +11,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order within our d4 system, supporting our center and preparing to meet Black's eventual d5 with even more central pressure. This pawn controls the crucial d5 and b5 squares, preventing Black from immediately playing d5 without consequences. The move also opens the c-file for our rook eventually and supports a future Nc3. This is the key move that transforms the position into Grünfeld territory, as we're now inviting Black's central counterplay with d5."
+      "annotation": "We're playing the English Opening move order within our d4 system, supporting our center and preparing to meet Black's eventual d5 with even more central pressure. This pawn controls the crucial d5 and b5 squares, preventing Black from immediately playing d5 without consequences. The move also opens the c-file for our rook eventually and supports a future Nc3. This is the critical move that transforms the position into Grünfeld territory, as we're now inviting Black's central counterplay with d5."
     },
     {
       "san": "g6",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn and preparing to meet Black's inevitable d5 thrust. This knight controls important central squares like e4 and d5, while also preparing potential future moves like e4 to build a strong pawn center. The knight on c3 is perfectly placed for the Grünfeld, as it will support our central expansion and can later move to e2 or d5 in some lines. This development also keeps our options open for different pawn structures depending on how Black continues."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and preparing to meet Black's inevitable d5 thrust. This knight controls important central squares like e4 and d5, while also preparing potential future moves like e4 to build a strong pawn center. The knight on c3 is perfectly placed for the Grünfeld, as it will support our central expansion and can later move to e2 or d5 in some lines. This development also keeps our options open for different pawn structures depending on how Black continues."
     },
     {
       "san": "d5",

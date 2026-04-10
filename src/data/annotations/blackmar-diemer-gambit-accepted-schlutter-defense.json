@@ -27,7 +27,7 @@
     },
     {
       "san": "f3",
-      "annotation": "This is the key move of the Blackmar-Diemer Gambit! We're directly attacking the e4 pawn and forcing Black to make a decision about how to maintain the extra material. While f3 looks anti-positional (blocking our own knight's natural development), it serves a crucial tactical purpose in our gambit system. If Black moves the e4 pawn, we recapture with our knight and get excellent central control. If Black takes on f3, we recapture and open the f-file for potential attacking chances against Black's king."
+      "annotation": "This is the central idea of the Blackmar-Diemer Gambit! We're directly attacking the e4 pawn and forcing Black to make a decision about how to maintain the extra material. While f3 looks anti-positional (blocking our own knight's natural development), it serves a crucial tactical purpose in our gambit system. If Black moves the e4 pawn, we recapture with our knight and get excellent central control. If Black takes on f3, we recapture and open the f-file for potential attacking chances against Black's king."
     },
     {
       "san": "exf3",

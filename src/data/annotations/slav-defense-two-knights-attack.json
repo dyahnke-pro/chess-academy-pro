@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, where it supports our central pawns and prepares kingside castling. This knight on f3 controls the important e5 and h4 squares while also preparing potential discoveries if our d4 pawn advances later. The move fits perfectly with our opening strategy of rapid development and central control. From f3, our knight can later jump to e5 or g5 to create threats, or support a future e4 pawn advance to dominate the center completely."
+      "annotation": "We develop our kingside knight to its ideal square, where it supports our central pawns and prepares kingside castling. This knight on f3 controls the important e5 and h4 squares while also preparing potential discoveries if our d4 pawn advances later. The move fits perfectly with our opening strategy of rapid development and central control. From f3, our knight can later jump to e5 or g5 to create threats, or support a future e4 pawn advance to dominate the center completely."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight symmetrically, attacking our e4 square and preparing their own kingside castling. This natural developing move also puts additional pressure on our d4 pawn and prevents us from advancing e2-e4 immediately. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the flexible pawn structure that characterizes the Slav Defense. The knight on f6 will be perfectly placed to support Black's central counterplay and can potentially jump to e4 or g4 later in the game."
+      "annotation": "Black develops their kingside knight symmetrically, attacking our e4 square and preparing their own kingside castling. This active move also puts additional pressure on our d4 pawn and prevents us from advancing e2-e4 immediately. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the flexible pawn structure that characterizes the Slav Defense. The knight on f6 will be perfectly placed to support Black's central counterplay and can potentially jump to e4 or g4 later in the game."
     },
     {
       "san": "Nc3",

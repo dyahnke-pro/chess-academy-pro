@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the center and preparing to reclaim our gambit pawn. The knight on f3 controls the important e5 and d4 squares while supporting our future pawn advances in the center. This move is more flexible than immediate attempts to regain the pawn because it develops a piece and keeps our options open - we can later play moves like e4, Qa4+, or even Nd2 depending on how Black responds. The knight also prepares castling kingside and supports various tactical ideas in the middlegame."
+      "annotation": "We develop our knight to its ideal square, attacking the center and preparing to reclaim our gambit pawn. The knight on f3 controls the important e5 and d4 squares while supporting our future pawn advances in the center. This move is more flexible than immediate attempts to regain the pawn because it develops a piece and keeps our options open - we can later play moves like e4, Qa4+, or even Nd2 depending on how Black responds. The knight also prepares castling kingside and supports various tactical ideas in the middlegame."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to f6, mirroring our development and adding another defender to their kingside. This natural developing move attacks our potential e4 advance and prepares to castle kingside for safety. The knight on f6 is ideally placed to support Black's central operations and can later jump to various squares like e4, d5, or even h5 depending on the position. However, this knight can also become a target for our advancing pawns, particularly if we manage to push e4-e5 later in the game."
+      "annotation": "Black develops their knight to f6, mirroring our development and adding another defender to their kingside. This active move attacks our potential e4 advance and prepares to castle kingside for safety. The knight on f6 is ideally placed to support Black's central operations and can later jump to various squares like e4, d5, or even h5 depending on the position. However, this knight can also become a target for our advancing pawns, particularly if we manage to push e4-e5 later in the game."
     },
     {
       "san": "Nc3",

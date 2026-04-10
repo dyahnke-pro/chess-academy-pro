@@ -527,7 +527,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White develops the knight to its most natural square, attacking the e5 pawn and preparing to castle kingside. This move supports White's central control while developing toward the center. The knight from f3 can later jump to powerful outposts like d4 or g5, and it clears the path for castling.",
+          "annotation": "White develops the knight to its ideal square, attacking the e5 pawn and preparing to castle kingside. This move supports White's central control while developing toward the center. The knight from f3 can later jump to powerful outposts like d4 or g5, and it clears the path for castling.",
           "plans": [
             "Attack the e5 pawn to gain central pressure",
             "Prepare kingside castling for safety"
@@ -739,7 +739,7 @@
         },
         {
           "san": "Qb3",
-          "annotation": "The key move of the Slow Variation! White brings the queen to b3, putting tremendous pressure on f7 and preparing to increase the attack. This move is more forcing than immediate castling because it creates concrete threats that Black must address. The queen eyes both f7 and the b7 pawn, creating multiple targets.",
+          "annotation": "the central idea of the Slow Variation! White brings the queen to b3, putting tremendous pressure on f7 and preparing to increase the attack. This move is more forcing than immediate castling because it creates concrete threats that Black must address. The queen eyes both f7 and the b7 pawn, creating multiple targets.",
           "plans": [
             "Maintain pressure on f7 before castling",
             "Prepare to intensify the attack with piece coordination"

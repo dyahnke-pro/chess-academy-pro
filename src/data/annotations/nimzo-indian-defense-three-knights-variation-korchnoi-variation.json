@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to meet ...d5 with strong central pressure. However, this move also walks into Black's main defensive idea in this opening system - the pin with ...Bb4. The knight on c3 will soon be pinned to our king, creating immediate tactical and positional tension. Despite this drawback, Nc3 is almost mandatory because it's the most efficient way to support our central pawns while developing toward the kingside."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to meet ...d5 with strong central pressure. However, this move also walks into Black's main defensive idea in this opening system - the pin with ...Bb4. The knight on c3 will soon be pinned to our king, creating immediate tactical and positional tension. Despite this drawback, Nc3 is almost mandatory because it's the most efficient way to support our central pawns while developing toward the kingside."
     },
     {
       "san": "Bb4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our basic development by bringing the knight to its ideal central square, where it supports our e5 advance and prepares kingside castling. The knight on f3 also adds another defender to our d4 pawn and contests the important e5 square that Black would love to occupy. This natural developing move fits perfectly with our opening strategy of building a strong center while getting our pieces into active positions. However, we're still dealing with the pin from the Bb4, so we need to be ready for Black's potential pawn break in the center."
+      "annotation": "We're completing our basic development by bringing the knight to its ideal central square, where it supports our e5 advance and prepares kingside castling. The knight on f3 also adds another defender to our d4 pawn and contests the important e5 square that Black would love to occupy. This active move fits perfectly with our opening strategy of building a strong center while getting our pieces into active positions. However, we're still dealing with the pin from the Bb4, so we need to be ready for Black's potential pawn break in the center."
     },
     {
       "san": "c5",

@@ -19,15 +19,15 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports our c4 pawn and adds additional pressure to Black's d5 pawn. This move also prepares to recapture on c4 with the knight if Black ever decides to take our gambit pawn, maintaining central influence. The knight on c3 is perfectly placed for the middlegame, where it can potentially reroute to e4 or support pawn advances on the queenside. We're following classical development principles while keeping maximum flexibility in our pawn structure."
+      "annotation": "We're developing our knight to its ideal square, where it supports our c4 pawn and adds additional pressure to Black's d5 pawn. This move also prepares to recapture on c4 with the knight if Black ever decides to take our gambit pawn, maintaining central influence. The knight on c3 is perfectly placed for the middlegame, where it can potentially reroute to e4 or support pawn advances on the queenside. We're following classical development principles while keeping maximum flexibility in our pawn structure."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its ideal square, where it defends the d5 pawn while also eyeing important central squares like e4. This natural developing move allows Black to castle kingside soon and puts additional pressure on our e4 square, making it harder for us to establish a classical pawn center. The knight on f6 also supports potential counterplay in the center and prepares Black's pieces for active play. Our opponent is following sound opening principles by developing pieces quickly while maintaining their central stronghold."
+      "annotation": "Black develops their kingside knight to its ideal square, where it defends the d5 pawn while also eyeing important central squares like e4. This active move allows Black to castle kingside soon and puts additional pressure on our e4 square, making it harder for us to establish a classical pawn center. The knight on f6 also supports potential counterplay in the center and prepares Black's pieces for active play. Our opponent is following sound opening principles by developing pieces quickly while maintaining their central stronghold."
     },
     {
       "san": "Bg5",
-      "annotation": "We're developing our dark-squared bishop to an active square where it pins Black's knight to the queen, creating immediate tactical pressure. This move is characteristic of many Queen's Gambit systems, as the bishop on g5 can become quite annoying for Black to deal with. The pin restricts Black's options and makes it difficult for them to play natural moves like ...h6 without careful consideration. We're also preparing potential tactical ideas while completing our development, though we must be ready for Black's various ways of dealing with the pin."
+      "annotation": "We're developing our dark-squared bishop to an active square where it pins Black's knight to the queen, creating immediate tactical pressure. This move is characteristic of many Queen's Gambit systems, as the bishop on g5 can become quite annoying for Black to deal with. The pin restricts Black's options and makes it difficult for them to play logical choices like ...h6 without careful consideration. We're also preparing potential tactical ideas while completing our development, though we must be ready for Black's various ways of dealing with the pin."
     },
     {
       "san": "Be7",

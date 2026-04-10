@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center. This is one of the most flexible responses to d4, as it doesn't commit Black to any particular pawn structure yet. The knight on f6 also supports a future ...e5 advance and keeps open the possibility of various defensive setups like the King's Indian, Nimzo-Indian, or Queen's Indian Defense. Black is essentially saying 'show me your setup first, then I'll decide how to respond.'"
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center. This is one of the most flexible responses to d4, as it doesn't commit Black to any particular pawn structure yet. The knight on f6 also supports a future ...e5 advance and keeps open the possibility of various defensive setups like the King's Indian, Nimzo-Indian, or Queen's Indian Defense. Black is essentially saying 'show me your setup first, then I'll decide how to respond.'"
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, where it supports the d4 pawn, controls the important e5 square, and prepares for kingside castling. This natural developing move also keeps our options open for various pawn structures and piece deployments. The knight on f3 is particularly well-placed in positions where Black plays ...e5, as it can potentially reroute to d2 and then to more active squares. By developing pieces before committing to a specific pawn structure, we maintain maximum flexibility in our setup."
+      "annotation": "We develop our knight to its ideal square, where it supports the d4 pawn, controls the important e5 square, and prepares for kingside castling. This active move also keeps our options open for various pawn structures and piece deployments. The knight on f3 is particularly well-placed in positions where Black plays ...e5, as it can potentially reroute to d2 and then to more active squares. By developing pieces before committing to a specific pawn structure, we maintain maximum flexibility in our setup."
     },
     {
       "san": "Bg7",

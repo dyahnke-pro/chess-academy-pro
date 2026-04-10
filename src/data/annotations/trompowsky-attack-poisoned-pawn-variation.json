@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to castle kingside. This is one of the most popular and sound responses to 1.d4, as the knight controls important central squares like e4 and d5. Our opponent is following classical opening principles by developing pieces toward the center and preparing for rapid castling. Black is keeping maximum flexibility, as this knight can support various pawn breaks like ...e6 and ...d6, or ...c5 and ...e6 depending on how we continue."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to castle kingside. This is one of the most popular and sound responses to 1.d4, as the knight controls important central squares like e4 and d5. Our opponent is following classical opening principles by developing pieces toward the center and preparing for rapid castling. Black is keeping maximum flexibility, as this knight can support various pawn breaks like ...e6 and ...d6, or ...c5 and ...e6 depending on how we continue."
     },
     {
       "san": "Bg5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, defending the b2 pawn while preparing to support our central advance with moves like e4. This natural developing move follows sound opening principles and gives us excellent control over key central squares like e4 and d5. The knight on c3 also prepares potential queenside expansion with moves like a4-a5, and it can potentially reroute to more active squares like e4 or b5 depending on how the position develops. By developing pieces rather than immediately defending the b2 pawn with a3 or Rb1, we're maintaining the initiative and keeping our development advantage in this sharp opening system."
+      "annotation": "We're developing our knight to its most active square, defending the b2 pawn while preparing to support our central advance with moves like e4. This active move follows sound opening principles and gives us excellent control over key central squares like e4 and d5. The knight on c3 also prepares potential queenside expansion with moves like a4-a5, and it can potentially reroute to more active squares like e4 or b5 depending on how the position develops. By developing pieces rather than immediately defending the b2 pawn with a3 or Rb1, we're maintaining the initiative and keeping our development advantage in this sharp opening system."
     }
   ]
 }

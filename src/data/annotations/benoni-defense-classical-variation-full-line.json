@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square while defending the d5 pawn and preparing for the recapture on d5. The knight on c3 eyes important central squares and can later jump to e4 or support advances like e4-e5. This natural developing move also prepares castling queenside in some variations and keeps our options flexible. By defending d5, we force Black to decide whether to capture immediately or maintain the tension, each choice leading to different strategic themes in the resulting position."
+      "annotation": "We're developing our knight to its most active square while defending the d5 pawn and preparing for the recapture on d5. The knight on c3 eyes important central squares and can later jump to e4 or support advances like e4-e5. This active move also prepares castling queenside in some variations and keeps our options flexible. By defending d5, we force Black to decide whether to capture immediately or maintain the tension, each choice leading to different strategic themes in the resulting position."
     },
     {
       "san": "exd5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black establishes their pawn structure with this solid move, supporting the c5 pawn and preparing to develop the light-squared bishop to e7 or d7. This creates the typical Benoni pawn chain where Black has pawns on c5 and d6 facing our d5 pawn. The d6 pawn also opens a potential retreat square for the pawn on f6 and prepares kingside development. While this move looks passive, it's actually setting up Black's counterplay strategy - the solid pawn structure will support active piece play and potential breakthroughs with moves like ...b5 or ...f5 later in the game."
+      "annotation": "Black establishes their pawn structure with this stabilizing move, supporting the c5 pawn and preparing to develop the light-squared bishop to e7 or d7. This creates the typical Benoni pawn chain where Black has pawns on c5 and d6 facing our d5 pawn. The d6 pawn also opens a potential retreat square for the pawn on f6 and prepares kingside development. While this move looks passive, it's actually setting up Black's counterplay strategy - the solid pawn structure will support active piece play and potential breakthroughs with moves like ...b5 or ...f5 later in the game."
     },
     {
       "san": "e4",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling important central squares like e5 and d4 while supporting our pawn center and preparing kingside castling. The knight on f3 is perfectly placed to support our e4 pawn and can later jump to more active squares like e5 or g5 depending on the position. This move also prevents any potential ...e5 breaks and keeps our pieces coordinated for both attack and defense. The knight development maintains flexibility in our setup while completing our basic piece development before deciding on more concrete plans in the middlegame."
+      "annotation": "We develop our knight to its ideal square, controlling important central squares like e5 and d4 while supporting our pawn center and preparing kingside castling. The knight on f3 is perfectly placed to support our e4 pawn and can later jump to more active squares like e5 or g5 depending on the position. This move also prevents any potential ...e5 breaks and keeps our pieces coordinated for both attack and defense. The knight development maintains flexibility in our setup while completing our basic piece development before deciding on more concrete plans in the middlegame."
     },
     {
       "san": "Bg7",

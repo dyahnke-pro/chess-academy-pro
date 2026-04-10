@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square while avoiding the main line Nimzo-Indian Defense that would arise after 3.Nc3 Bb4+. This is called the Anti-Nimzo-Indian system because we're deliberately steering clear of Black's most forcing continuation. Our knight on f3 develops with tempo, supports our central control, and keeps our options open for various pawn structures depending on how Black continues. By playing Nf3 instead of Nc3, we maintain flexibility in our setup - we can still play Nc3 later if desired, or we might choose a different knight development like Nbd2, depending on Black's response."
+      "annotation": "We're developing our knight to its ideal square while avoiding the main line Nimzo-Indian Defense that would arise after 3.Nc3 Bb4+. This is called the Anti-Nimzo-Indian system because we're deliberately steering clear of Black's most forcing continuation. Our knight on f3 develops with tempo, supports our central control, and keeps our options open for various pawn structures depending on how Black continues. By playing Nf3 instead of Nc3, we maintain flexibility in our setup - we can still play Nc3 later if desired, or we might choose a different knight development like Nbd2, depending on Black's response."
     }
   ]
 }

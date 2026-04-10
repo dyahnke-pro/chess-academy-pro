@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, where it attacks the black e5 pawn and controls important central squares like d4 and e5. This move is the starting point of the Ruy Lopez, one of the oldest and most respected openings in chess history. By attacking the e5 pawn immediately, we're putting pressure on Black's center and forcing them to make a decision about how to defend it, while simultaneously preparing to castle kingside."
+      "annotation": "We develop our kingside knight to its ideal square, where it attacks the black e5 pawn and controls important central squares like d4 and e5. This move is the starting point of the Ruy Lopez, one of the oldest and most respected openings in chess history. By attacking the e5 pawn immediately, we're putting pressure on Black's center and forcing them to make a decision about how to defend it, while simultaneously preparing to castle kingside."
     },
     {
       "san": "Nc6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn and preparing to castle. This natural developing move also prepares potential central breaks like d7-d6 and d7-d5, while the knight controls important squares like e4, d5, and g4. Our opponent is maintaining the balance between defense and counterplay, developing pieces harmoniously while keeping all options open for the middle game."
+      "annotation": "Black develops the kingside knight to its most active square, attacking our e4 pawn and preparing to castle. This active move also prepares potential central breaks like d7-d6 and d7-d5, while the knight controls important squares like e4, d5, and g4. Our opponent is maintaining the balance between defense and counterplay, developing pieces harmoniously while keeping all options open for the middle game."
     },
     {
       "san": "O-O",
@@ -91,7 +91,7 @@
     },
     {
       "san": "d4",
-      "annotation": "We advance our d-pawn to d4, supporting our rook on e5 while gaining more central space and opening lines for our pieces. This natural move helps us consolidate our position and creates more breathing room for our somewhat cramped pieces. By establishing pawns on c3 and d4, we're creating a solid pawn structure that should help us convert our material advantage if we can survive Black's initial attacking wave."
+      "annotation": "We advance our d-pawn to d4, supporting our rook on e5 while gaining more central space and opening lines for our pieces. this move helps us consolidate our position and creates more breathing room for our somewhat cramped pieces. By establishing pawns on c3 and d4, we're creating a solid pawn structure that should help us convert our material advantage if we can survive Black's initial attacking wave."
     },
     {
       "san": "Bd6",

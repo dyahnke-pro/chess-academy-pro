@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, defending against our potential threats while bringing a piece into active play. This knight on f6 serves multiple purposes: it guards the e4 pawn indirectly, controls important central squares like e4 and d5, and prepares kingside castling. However, our opponent should be wary that this knight can become a target for our advancing pawns later in the game. Black is playing sensibly by developing pieces rather than trying to hold onto the extra pawn with moves like f5, which would seriously compromise the kingside."
+      "annotation": "Black develops the knight to its ideal square, defending against our potential threats while bringing a piece into active play. This knight on f6 serves multiple purposes: it guards the e4 pawn indirectly, controls important central squares like e4 and d5, and prepares kingside castling. However, our opponent should be wary that this knight can become a target for our advancing pawns later in the game. Black is playing sensibly by developing pieces rather than trying to hold onto the extra pawn with moves like f5, which would seriously compromise the kingside."
     },
     {
       "san": "f3",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Bf5",
-      "annotation": "Black develops the light-squared bishop to an active square outside the pawn chain, which is excellent opening technique when you have extra pawns to defend. The bishop on f5 controls important central squares and keeps an eye on our kingside while supporting Black's overall position. However, this bishop placement does have some drawbacks - it can become a target for our advancing g-pawn, and it doesn't directly support kingside castling. Our opponent is making reasonable developing moves but needs to be careful about our increasing piece activity and potential tactical threats."
+      "annotation": "Black develops the light-squared bishop to an active square outside the pawn chain, which is excellent opening technique when you have extra pawns to defend. The bishop on f5 controls important central squares and keeps an eye on our kingside while supporting Black's overall position. However, this bishop placement does have some drawbacks - it can become a target for our advancing g-pawn, and it doesn't directly support kingside castling. Our opponent is making reasonable developing choices but needs to be careful about our increasing piece activity and potential tactical threats."
     },
     {
       "san": "Ne5",

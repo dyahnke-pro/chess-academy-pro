@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight toward the center, controlling key squares like d5 and e4. The knight on c3 is perfectly placed in the English Opening, supporting our future central expansion and preparing to reroute pieces if needed. This natural developing move also keeps the tension flexible—we haven't committed to a specific pawn structure yet, so we can adapt to Black's setup. Notice we're building control rather than immediately occupying the center."
+      "annotation": "We develop our knight toward the center, controlling key squares like d5 and e4. The knight on c3 is perfectly placed in the English Opening, supporting our future central expansion and preparing to reroute pieces if needed. This active move also keeps the tension flexible—we haven't committed to a specific pawn structure yet, so we can adapt to Black's setup. Notice we're building control rather than immediately occupying the center."
     },
     {
       "san": "Bg7",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nge2",
-      "annotation": "We develop our kingside knight to e2, a key move in the Botvinnik System that keeps maximum flexibility and prepares several plans. From e2, the knight can jump to g3 (supporting our center and kingside), f4 (a strong outpost against e5), or d4 (a powerful centralization). By playing Nge2 instead of Nf3, we avoid blocking our f-pawn and maintain more options for piece placement—this flexibility is crucial in positional battles where we want to outmaneuver our opponent rather than force tactical sequences."
+      "annotation": "We develop our kingside knight to e2, a critical move in the Botvinnik System that keeps maximum flexibility and prepares several plans. From e2, the knight can jump to g3 (supporting our center and kingside), f4 (a strong outpost against e5), or d4 (a powerful centralization). By playing Nge2 instead of Nf3, we avoid blocking our f-pawn and maintain more options for piece placement—this flexibility is crucial in positional battles where we want to outmaneuver our opponent rather than force tactical sequences."
     },
     {
       "san": "e5",

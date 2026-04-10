@@ -19,7 +19,7 @@
     },
     {
       "san": "f4",
-      "annotation": "Here's the key move that defines the Kahiko-Hula Gambit - we're directly challenging Black's central pawn with a bold pawn advance that creates immediate tactical tension. This move is both aggressive and risky, as we're potentially weakening our kingside structure in exchange for dynamic play and the initiative. If Black captures with exf4, we'll have opened the e-file and created attacking chances against the black king, while also preparing to recapture with our pieces and maintain central pressure. The name 'Kahiko-Hula' reflects the flowing, dance-like nature of the tactics that can arise from this gambit, where pieces weave in and out of tactical motifs."
+      "annotation": "Here's the defining move of the Kahiko-Hula Gambit - we're directly challenging Black's central pawn with a bold pawn advance that creates immediate tactical tension. This move is both aggressive and risky, as we're potentially weakening our kingside structure in exchange for dynamic play and the initiative. If Black captures with exf4, we'll have opened the e-file and created attacking chances against the black king, while also preparing to recapture with our pieces and maintain central pressure. The name 'Kahiko-Hula' reflects the flowing, dance-like nature of the tactics that can arise from this gambit, where pieces weave in and out of tactical motifs."
     },
     {
       "san": "exf4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the loose pawn on f4 while simultaneously developing toward the center and supporting our kingside. This move is the point of our gambit - we're not just winning back the pawn, but we're doing so while improving our position and maintaining the initiative. The knight on f3 also prepares castling kingside and eyes important central squares like e5 and d4. Most importantly, this move keeps the tactical tension high, as Black must now decide whether to defend the f4 pawn or allow us to recapture it, all while we're rapidly completing our development and preparing to launch an attack."
+      "annotation": "We develop our knight to its ideal square, attacking the loose pawn on f4 while simultaneously developing toward the center and supporting our kingside. This move is the point of our gambit - we're not just winning back the pawn, but we're doing so while improving our position and maintaining the initiative. The knight on f3 also prepares castling kingside and eyes important central squares like e5 and d4. Most importantly, this move keeps the tactical tension high, as Black must now decide whether to defend the f4 pawn or allow us to recapture it, all while we're rapidly completing our development and preparing to launch an attack."
     }
   ]
 }

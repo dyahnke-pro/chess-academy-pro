@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its best central square while immediately attacking our d4 pawn. This forces us to make a decision about how to defend the center, and it's the starting move of many solid defensive systems for Black. The knight on f6 also prepares kingside castling and keeps Black's options open for various pawn structures. By developing this knight first rather than playing d5 immediately, Black maintains flexibility in choosing between different defensive setups like the Queen's Gambit Declined, Nimzo-Indian, or King's Indian Defense."
+      "annotation": "Black responds with the most active move, bringing the knight to its best central square while immediately attacking our d4 pawn. This forces us to make a decision about how to defend the center, and it's the starting move of many solid defensive systems for Black. The knight on f6 also prepares kingside castling and keeps Black's options open for various pawn structures. By developing this knight first rather than playing d5 immediately, Black maintains flexibility in choosing between different defensive setups like the Queen's Gambit Declined, Nimzo-Indian, or King's Indian Defense."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most active square, where it supports our d4 pawn while preparing kingside castling and maintaining flexibility for future plans. The knight on f3 also prevents Black from playing an early Bg4 pin, which could become annoying if we're not careful about our move order. This natural developing move keeps all our options open for how we want to structure our position - we could still transpose to various systems depending on how Black responds. By developing pieces before committing to a specific pawn structure, we're following classical opening principles while keeping maximum pressure on Black to show their hand first."
+      "annotation": "We develop our kingside knight to its most active square, where it supports our d4 pawn while preparing kingside castling and maintaining flexibility for future plans. The knight on f3 also prevents Black from playing an early Bg4 pin, which could become annoying if we're not careful about our move order. This active move keeps all our options open for how we want to structure our position - we could still transpose to various systems depending on how Black responds. By developing pieces before committing to a specific pawn structure, we're following classical opening principles while keeping maximum pressure on Black to show their hand first."
     },
     {
       "san": "d5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "c5",
-      "annotation": "Our opponent plays the key move of the Semi-Tarrasch Defense, immediately striking at our d4 pawn and creating counterplay in the center rather than passively maintaining the tension. This bold pawn break transforms the position from a traditional Queen's Gambit Declined into a more dynamic struggle where both sides have central pawn majorities to work with. Black is accepting some structural weakness (the isolated d5 pawn after exchanges) in exchange for active piece play and central counterplay. The c5 advance also opens lines for Black's pieces, particularly the queen and dark-squared bishop, and creates immediate tactical threats that we must address carefully."
+      "annotation": "Our opponent plays the central idea of the Semi-Tarrasch Defense, immediately striking at our d4 pawn and creating counterplay in the center rather than passively maintaining the tension. This bold pawn break transforms the position from a traditional Queen's Gambit Declined into a more dynamic struggle where both sides have central pawn majorities to work with. Black is accepting some structural weakness (the isolated d5 pawn after exchanges) in exchange for active piece play and central counterplay. The c5 advance also opens lines for Black's pieces, particularly the queen and dark-squared bishop, and creates immediate tactical threats that we must address carefully."
     },
     {
       "san": "cxd5",

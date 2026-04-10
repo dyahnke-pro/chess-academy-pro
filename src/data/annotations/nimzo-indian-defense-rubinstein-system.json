@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn and preparing for various opening systems. This move is almost universal in 1.d4 openings because it develops toward the center while maintaining maximum flexibility for our future plans. The knight on c3 also supports a potential e4 advance and can later jump to excellent squares like e4 or d5. However, we should be aware that this move allows Black to play the Nimzo-Indian Defense with Bb4, pinning our knight and creating immediate tactical complications."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing for various opening systems. This move is almost universal in 1.d4 openings because it develops toward the center while maintaining maximum flexibility for our future plans. The knight on c3 also supports a potential e4 advance and can later jump to excellent squares like e4 or d5. However, we should be aware that this move allows Black to play the Nimzo-Indian Defense with Bb4, pinning our knight and creating immediate tactical complications."
     },
     {
       "san": "Bb4",

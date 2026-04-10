@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds by occupying the center with their own pawn, creating immediate tension and contesting our control of the e4 square. This classical response is perfectly sound and leads to the main lines of the Queen's Gambit, where Black will need to decide whether to maintain the central tension or resolve it by capturing. Our opponent is following fundamental opening principles by fighting for the center early, and this move prepares potential development of the light-squared bishop to f5 or g4. The d5 pawn also supports a future ...c6 or ...e6, giving Black flexible pawn structure options."
+      "annotation": "Black responds by occupying the center with their own pawn, creating immediate tension and contesting our control of the e4 square. This classical response is perfectly sound and leads to the main lines of the Queen's Gambit, where Black will need to decide whether to maintain the central tension or resolve it by capturing. Our opponent is following fundamental opening principles by contesting central control early, and this move prepares potential development of the light-squared bishop to f5 or g4. The d5 pawn also supports a future ...c6 or ...e6, giving Black flexible pawn structure options."
     },
     {
       "san": "c4",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, attacking the e5 square and supporting our central d4 pawn while preparing to castle kingside. This natural developing move is far more important than immediately trying to regain the c4 pawn with moves like Qa4+ or e3-e4, since rapid development is the key to success in the Queen's Gambit Accepted. The knight on f3 also prepares potential tactics involving Ng5 in some variations, and it doesn't block our f-pawn, keeping options open for a later f2-f3 advance if needed. From f3, our knight controls many important central squares and works harmoniously with all our other pieces."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and supporting our central d4 pawn while preparing to castle kingside. This active move is far more important than immediately trying to regain the c4 pawn with moves like Qa4+ or e3-e4, since rapid development is the key to success in the Queen's Gambit Accepted. The knight on f3 also prepares potential tactics involving Ng5 in some variations, and it doesn't block our f-pawn, keeping options open for a later f2-f3 advance if needed. From f3, our knight controls many important central squares and works harmoniously with all our other pieces."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, mirroring our development and contesting the important e4 and d5 central squares. This move is the beginning of Black's classical development plan in the Queen's Gambit Accepted, where pieces come out quickly to complete development before worrying about the extra pawn. The knight on f6 also prepares castling kingside and supports a potential ...e6 advance, which would complete a solid pawn chain. Our opponent is following sound opening principles by developing pieces rather than moving pawns or trying to hold onto material at the expense of development."
+      "annotation": "Black develops their knight to its ideal square, mirroring our development and contesting the important e4 and d5 central squares. This move is the beginning of Black's classical development plan in the Queen's Gambit Accepted, where pieces come out quickly to complete development before worrying about the extra pawn. The knight on f6 also prepares castling kingside and supports a potential ...e6 advance, which would complete a solid pawn chain. Our opponent is following sound opening principles by developing pieces rather than moving pawns or trying to hold onto material at the expense of development."
     },
     {
       "san": "e3",

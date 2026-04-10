@@ -15,7 +15,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at the heart of our position by challenging the e4 pawn directly, which is the key idea behind the Caro-Kann Defense. This central counterstrike aims to either trade off our strong e4 pawn or force us to make a decision about how to maintain our central presence. Our opponent is following classical opening principles by fighting for the center rather than allowing us to maintain our ideal pawn duo unchallenged. Now we must decide whether to defend the e4 pawn, advance it, or trade it off for positional compensation."
+      "annotation": "Black strikes at the heart of our position by challenging the e4 pawn directly, which is the key idea behind the Caro-Kann Defense. This central counterstrike aims to either trade off our strong e4 pawn or force us to make a decision about how to maintain our central presence. Our opponent is following classical opening principles by contesting central control rather than allowing us to maintain our ideal pawn duo unchallenged. Now we must decide whether to defend the e4 pawn, advance it, or trade it off for positional compensation."
     },
     {
       "san": "exd5",
@@ -27,11 +27,11 @@
     },
     {
       "san": "c4",
-      "annotation": "We're launching the characteristic Panov Attack by immediately challenging Black's central d5 pawn with our c-pawn. This aggressive move aims to either win the d5 pawn or force it to advance, creating weaknesses in Black's position that we can exploit. The c4 advance also gives us more space on the queenside and prepares to support our pieces with pawn moves like b3 or c5. This is the key move that transforms the position from a quiet exchange into a sharp, tactical battle where we have good winning chances due to our superior pawn structure and piece activity."
+      "annotation": "We're launching the characteristic Panov Attack by immediately challenging Black's central d5 pawn with our c-pawn. This aggressive move aims to either win the d5 pawn or force it to advance, creating weaknesses in Black's position that we can exploit. The c4 advance also gives us more space on the queenside and prepares to support our pieces with pawn moves like b3 or c5. This is the critical move that transforms the position from a quiet exchange into a sharp, tactical battle where we have good winning chances due to our superior pawn structure and piece activity."
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, attacking our c4 pawn while bringing a piece toward the center of the board. This is Black's most principled response, as the knight on f6 controls important central squares like d5, e4, and h5 while preparing to castle kingside. Black is also keeping options open for how to handle the pressure on the d5 pawn - the knight can potentially support it from e4 or help create counterplay. However, this development doesn't immediately solve the problem of the attacked d5 pawn, so Black will need to make a decision about the center soon."
+      "annotation": "Our opponent develops the knight to its ideal square, attacking our c4 pawn while bringing a piece toward the center of the board. This is Black's most principled response, as the knight on f6 controls important central squares like d5, e4, and h5 while preparing to castle kingside. Black is also keeping options open for how to handle the pressure on the d5 pawn - the knight can potentially support it from e4 or help create counterplay. However, this development doesn't immediately solve the problem of the attacked d5 pawn, so Black will need to make a decision about the center soon."
     },
     {
       "san": "c5",

@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square before we've even played it and preparing to fianchetto the king's bishop on g7. This is the signature move of the King's Indian Defense, where Black allows us to build a strong center while preparing dynamic counterplay. The knight on f6 will be a key piece in Black's kingside defense and potential pawn storms later in the game. Black is essentially saying 'go ahead and build your center - I'll strike back when the time is right.'"
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square before we've even played it and preparing to fianchetto the king's bishop on g7. This is the signature move of the King's Indian Defense, where Black allows us to build a strong center while preparing dynamic counterplay. The knight on f6 will be a key piece in Black's kingside defense and potential pawn storms later in the game. Black is essentially saying 'go ahead and build your center - I'll strike back when the time is right.'"
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn and prepares to support the coming e4 advance. The knight on c3 also eyes important central squares like e4, d5, and b5, while keeping our options open for various pawn structures. This natural developing move is essential in most d4 openings, as it allows us to maintain central control while preparing our pieces for the middlegame. Against the King's Indian, this knight will often play a crucial role in supporting our central pawn advances and kingside attacks."
+      "annotation": "We're developing our knight to its most active square, where it supports our d4 pawn and prepares to support the coming e4 advance. The knight on c3 also eyes important central squares like e4, d5, and b5, while keeping our options open for various pawn structures. This active move is essential in most d4 openings, as it allows us to maintain central control while preparing our pieces for the middlegame. Against the King's Indian, this knight will often play a crucial role in supporting our central pawn advances and kingside attacks."
     },
     {
       "san": "Bg7",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, where it supports our d4 pawn and adds pressure to Black's d5 pawn, which is now attacked twice. This move also prepares us to recapture on c4 if Black takes our gambit pawn, as our knight will have a natural square on c3 to support the center. The knight on c3 eyes important squares like e4 and b5, and we're building up our central influence systematically. Additionally, this development move keeps our options open for how to continue - we might play e3 and Be2, or perhaps go for more aggressive setups depending on how Black continues."
+      "annotation": "We develop our knight to its ideal square, where it supports our d4 pawn and adds pressure to Black's d5 pawn, which is now attacked twice. This move also prepares us to recapture on c4 if Black takes our gambit pawn, as our knight will have a natural square on c3 to support the center. The knight on c3 eyes important squares like e4 and b5, and we're building up our central influence systematically. Additionally, this development move keeps our options open for how to continue - we might play e3 and Be2, or perhaps go for more aggressive setups depending on how Black continues."
     },
     {
       "san": "dxc4",

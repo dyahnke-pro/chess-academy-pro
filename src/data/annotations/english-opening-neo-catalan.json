@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important e5 and d4 central squares while preparing to support a future d2-d4 advance. This flexible development keeps all our options open - we can still transpose into various openings including Queen's Gambit structures, Catalan systems with g3 and Bg2, or maintain pure English formations. The knight on f3 also prepares kingside castling and doesn't commit us to any particular pawn structure yet. By developing pieces before making further pawn commitments, we're following sound opening principles while maintaining maximum positional flexibility."
+      "annotation": "We develop our knight to its ideal square, controlling the important e5 and d4 central squares while preparing to support a future d2-d4 advance. This flexible development keeps all our options open - we can still transpose into various openings including Queen's Gambit structures, Catalan systems with g3 and Bg2, or maintain pure English formations. The knight on f3 also prepares kingside castling and doesn't commit us to any particular pawn structure yet. By developing pieces before making further pawn commitments, we're following sound opening principles while maintaining maximum positional flexibility."
     },
     {
       "san": "d5",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most active square, attacking our e4 square (preventing a future central advance) while preparing to castle kingside. This natural developing move also adds additional support to the d5 pawn, making it harder for us to win it immediately with moves like cxd5. The knight on f6 fits perfectly into Black's setup, coordinating with the e6 and d5 pawns to create a solid yet active position. Our opponent is following sound development principles while keeping options open for various pawn structures - the knight can later jump to e4, g4, or support further central expansion depending on how the position evolves."
+      "annotation": "Black develops the knight to its most active square, attacking our e4 square (preventing a future central advance) while preparing to castle kingside. This active move also adds additional support to the d5 pawn, making it harder for us to win it immediately with moves like cxd5. The knight on f6 fits perfectly into Black's setup, coordinating with the e6 and d5 pawns to create a solid yet active position. Our opponent is following sound development principles while keeping options open for various pawn structures - the knight can later jump to e4, g4, or support further central expansion depending on how the position evolves."
     }
   ]
 }

@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own central presence. This solid move prevents us from simply playing e4 on the next turn and creating an ideal pawn center. Our opponent is signaling their intention to fight for central equality rather than allowing us to dictate the pace with a space advantage. This leads to the rich complex of Queen's Pawn Game positions where both sides will need to carefully coordinate their pieces to gain any meaningful advantage."
+      "annotation": "Black responds symmetrically in the center, immediately challenging our control of the e4 square and establishing their own central presence. this stabilizing move prevents us from simply playing e4 on the next turn and creating an ideal pawn center. Our opponent is signaling their intention to fight for central equality rather than allowing us to dictate the pace with a space advantage. This leads to the rich complex of Queen's Pawn Game positions where both sides will need to carefully coordinate their pieces to gain any meaningful advantage."
     },
     {
       "san": "c4",
@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our c4 pawn and increasing the pressure on Black's d5 point. This knight placement is extremely flexible, as it can later jump to e4, b5, or e2 depending on how the position develops. The knight also eyes important central squares like e4 and b5, while keeping our options open for various pawn breaks like e4 or b4 later in the game. This is one of the most principled developing moves in the Queen's Gambit, preparing to complete our kingside development while maintaining maximum pressure on Black's position."
+      "annotation": "We're developing our knight to its ideal square, supporting our c4 pawn and increasing the pressure on Black's d5 point. This knight placement is extremely flexible, as it can later jump to e4, b5, or e2 depending on how the position develops. The knight also eyes important central squares like e4 and b5, while keeping our options open for various pawn breaks like e4 or b4 later in the game. This is one of the most principled developing choices in the Queen's Gambit, preparing to complete our kingside development while maintaining maximum pressure on Black's position."
     },
     {
       "san": "a6",
-      "annotation": "Black plays the Janowski Variation, a somewhat unusual but perfectly playable move that serves multiple purposes in this position. This pawn move prevents our knight from jumping to b5, where it could create uncomfortable pressure on Black's position and potentially support a future c4-c5 advance. The move also prepares possible expansion with b5, giving Black some queenside counterplay options and potentially challenging our c4 pawn later. While this looks slow compared to normal developing moves like Nf6 or Be7, it's actually quite clever positional preparation that limits our tactical options while keeping Black's position completely sound and flexible."
+      "annotation": "Black plays the Janowski Variation, a somewhat unusual but perfectly playable move that serves multiple purposes in this position. This pawn move prevents our knight from jumping to b5, where it could create uncomfortable pressure on Black's position and potentially support a future c4-c5 advance. The move also prepares possible expansion with b5, giving Black some queenside counterplay options and potentially challenging our c4 pawn later. While this looks slow compared to normal developing choices like Nf6 or Be7, it's actually quite clever positional preparation that limits our tactical options while keeping Black's position completely sound and flexible."
     }
   ]
 }

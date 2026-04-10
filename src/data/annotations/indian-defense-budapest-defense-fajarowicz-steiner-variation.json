@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black chooses the Indian Defense setup, developing the knight to its most natural square where it attacks our d4 pawn and controls the important central squares e4 and g4. This is a hypermodern approach - instead of immediately occupying the center with pawns, Black is developing pieces first and will challenge our central control from the flanks. The knight on f6 is perfectly placed to support either ...e6 (leading to a Queen's Indian or Nimzo-Indian) or ...g6 (heading for a King's Indian Defense). We need to be ready for Black's flexible system that can transpose into many different Indian Defense variations."
+      "annotation": "Black chooses the Indian Defense setup, developing the knight to its ideal square where it attacks our d4 pawn and controls the important central squares e4 and g4. This is a hypermodern approach - instead of immediately occupying the center with pawns, Black is developing pieces first and will challenge our central control from the flanks. The knight on f6 is perfectly placed to support either ...e6 (leading to a Queen's Indian or Nimzo-Indian) or ...g6 (heading for a King's Indian Defense). We need to be ready for Black's flexible system that can transpose into many different Indian Defense variations."
     },
     {
       "san": "c4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Ne4",
-      "annotation": "Black immediately centralizes the knight with a strong developing move that attacks our c4 pawn and eyes several important squares including d6, f6, and potentially c5 or g5. This knight is perfectly placed in the center where it supports Black's aggressive intentions and creates immediate tactical threats. From e4, the knight also supports a future ...f5 advance or ...Qh4+ ideas that could create dangerous attacking chances. We need to deal with this active knight carefully - simply defending c4 might allow Black to build up too much pressure, so we must find an active response that challenges Black's compensation for the pawn."
+      "annotation": "Black immediately centralizes the knight with a strong developing choice that attacks our c4 pawn and eyes several important squares including d6, f6, and potentially c5 or g5. This knight is perfectly placed in the center where it supports Black's aggressive intentions and creates immediate tactical threats. From e4, the knight also supports a future ...f5 advance or ...Qh4+ ideas that could create dangerous attacking chances. We need to deal with this active knight carefully - simply defending c4 might allow Black to build up too much pressure, so we must find an active response that challenges Black's compensation for the pawn."
     },
     {
       "san": "Qc2",

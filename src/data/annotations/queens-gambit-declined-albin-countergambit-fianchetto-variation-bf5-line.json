@@ -27,11 +27,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's advanced d4 pawn while preparing to support our kingside development and castle. This move is flexible and practical - the knight on f3 controls important central squares like e5 and d4, while also preparing potential jumps to e4 or d2. By attacking the d4 pawn, we're forcing Black to make a decision about how to support or advance this dangerous pawn. The knight also prepares to support our kingside pawn structure and provides additional defense for our king position."
+      "annotation": "We develop our knight to its ideal square, attacking Black's advanced d4 pawn while preparing to support our kingside development and castle. This move is flexible and practical - the knight on f3 controls important central squares like e5 and d4, while also preparing potential jumps to e4 or d2. By attacking the d4 pawn, we're forcing Black to make a decision about how to support or advance this dangerous pawn. The knight also prepares to support our kingside pawn structure and provides additional defense for our king position."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight with tempo, adding pressure to our e5 pawn while preparing to support the dangerous d4 pawn advance or other central operations. This natural developing move also prepares potential tactics involving the d4 pawn, as the knight can potentially support a future ...d3 advance or help coordinate an attack. Our opponent is following the logical plan of the Albin Countergambit: rapid piece development to create threats while the advanced d4 pawn cramps our position. We need to be alert for tactical possibilities, as Black's pieces are becoming increasingly active."
+      "annotation": "Black develops the knight with tempo, adding pressure to our e5 pawn while preparing to support the dangerous d4 pawn advance or other central operations. This active move also prepares potential tactics involving the d4 pawn, as the knight can potentially support a future ...d3 advance or help coordinate an attack. Our opponent is following the logical plan of the Albin Countergambit: rapid piece development to create threats while the advanced d4 pawn cramps our position. We need to be alert for tactical possibilities, as Black's pieces are becoming increasingly active."
     },
     {
       "san": "g3",

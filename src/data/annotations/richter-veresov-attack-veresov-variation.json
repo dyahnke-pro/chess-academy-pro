@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn while developing toward the center. This is one of the most common and principled responses to 1.d4, as the knight eyes the important e4 and d5 central squares. Our opponent is following classical development principles by bringing out pieces before pawns and controlling key central territory. From f6, the knight also prepares potential pawn breaks like ...e6 and ...c5, giving Black flexibility in choosing their setup."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn while developing toward the center. This is one of the most common and principled responses to 1.d4, as the knight eyes the important e4 and d5 central squares. Our opponent is following classical development principles by bringing out pieces before pawns and controlling key central territory. From f6, the knight also prepares potential pawn breaks like ...e6 and ...c5, giving Black flexibility in choosing their setup."
     },
     {
       "san": "Nc3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We launch our aggressive dark-squared bishop to g5, pinning Black's knight to the queen and creating immediate tactical tension. This is the defining move of the Richter-Veresov Attack - we're prioritizing piece activity and concrete threats over slower positional maneuvering. The bishop on g5 not only creates the pin but also eyes the important e7 square and h6, potentially supporting future kingside attacks. By playing this aggressive developing move, we're forcing Black to make immediate decisions about how to handle the pin, whether through ...Be7, ...h6, or ...Nbd7, each of which has different strategic implications for the resulting middlegame."
+      "annotation": "We launch our aggressive dark-squared bishop to g5, pinning Black's knight to the queen and creating immediate tactical tension. This is the defining move of the Richter-Veresov Attack - we're prioritizing piece activity and concrete threats over slower positional maneuvering. The bishop on g5 not only creates the pin but also eyes the important e7 square and h6, potentially supporting future kingside attacks. By playing this aggressive developing choice, we're forcing Black to make immediate decisions about how to handle the pin, whether through ...Be7, ...h6, or ...Nbd7, each of which has different strategic implications for the resulting middlegame."
     },
     {
       "san": "Bf5",

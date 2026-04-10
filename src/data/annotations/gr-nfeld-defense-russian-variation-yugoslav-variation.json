@@ -19,15 +19,15 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to build our ideal pawn center with e4. The knight on c3 also controls important central squares like e4, d5, and b5, while keeping our options open for various pawn structures. This development fits perfectly with our central strategy - we're not rushing to play e4 yet because we want to see how Black responds to our setup. The knight placement also supports potential queenside expansion with moves like a4-a5 in some variations, giving us flexibility in our middlegame plans."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to build our ideal pawn center with e4. The knight on c3 also controls important central squares like e4, d5, and b5, while keeping our options open for various pawn structures. This development fits perfectly with our central strategy - we're not rushing to play e4 yet because we want to see how Black responds to our setup. The knight placement also supports potential queenside expansion with moves like a4-a5 in some variations, giving us flexibility in our middlegame plans."
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at the heart of our pawn chain with this central break, immediately challenging our c4 pawn and opening up the position. This is the key move of the Grünfeld Defense - Black is offering to trade the central d-pawn for our c-pawn, which would give us a strong pawn center but also open lines for Black's pieces. The d5 advance activates Black's light-squared bishop and creates immediate tactical complications since our c4 pawn is attacked. Black is essentially saying: 'Take my d5 pawn and get your dream center, but I'll prove it's actually a target I can attack and destroy.'"
+      "annotation": "Black strikes at the heart of our pawn chain with this central break, immediately challenging our c4 pawn and opening up the position. This is the central idea of the Grünfeld Defense - Black is offering to trade the central d-pawn for our c-pawn, which would give us a strong pawn center but also open lines for Black's pieces. The d5 advance activates Black's light-squared bishop and creates immediate tactical complications since our c4 pawn is attacked. Black is essentially saying: 'Take my d5 pawn and get your dream center, but I'll prove it's actually a target I can attack and destroy.'"
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development while supporting our central pawns and preparing to castle. The knight on f3 controls crucial central squares like e5 and d4, while also preparing to support our planned e4 advance. This natural developing move keeps all our options open - we could still recapture on d5 with the knight, play cxd5, or maintain the tension in the center. The knight also adds an extra defender to our kingside, which will be important since Black's fianchettoed bishop will be eyeing our king position once it reaches g7."
+      "annotation": "We're completing our kingside development while supporting our central pawns and preparing to castle. The knight on f3 controls crucial central squares like e5 and d4, while also preparing to support our planned e4 advance. This active move keeps all our options open - we could still recapture on d5 with the knight, play cxd5, or maintain the tension in the center. The knight also adds an extra defender to our kingside, which will be important since Black's fianchettoed bishop will be eyeing our king position once it reaches g7."
     },
     {
       "san": "Bg7",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Be3",
-      "annotation": "We develop our light-squared bishop to a strong central square, supporting our d4 pawn and preparing to complete our development. The bishop on e3 also defends against potential tactical shots and maintains our central control while preparing to castle queenside in some variations. This natural developing move keeps our position solid while maintaining all the advantages of our pawn center. We're also preparing to meet Black's various attempts to undermine our center with solid piece coordination rather than rushing into complications."
+      "annotation": "We develop our light-squared bishop to a strong central square, supporting our d4 pawn and preparing to complete our development. The bishop on e3 also defends against potential tactical shots and maintains our central control while preparing to castle queenside in some variations. This active move keeps our position solid while maintaining all the advantages of our pawn center. We're also preparing to meet Black's various attempts to undermine our center with solid piece coordination rather than rushing into complications."
     },
     {
       "san": "Nfd7",

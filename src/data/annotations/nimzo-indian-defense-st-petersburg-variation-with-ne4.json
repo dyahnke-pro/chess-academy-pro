@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn and preparing to contest the central e4 and e5 squares. This knight placement is almost mandatory in most d4 systems, as it provides crucial support for our pawn center while keeping our options open for piece development. However, we must be aware that this knight can become a target - Black's next move will likely be ...Bb4, pinning our knight to the king and creating immediate tactical complications. The knight on c3 also prepares potential e4 advances and supports queenside expansion with moves like a3 and b4."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn and preparing to contest the central e4 and e5 squares. This knight placement is almost mandatory in most d4 systems, as it provides crucial support for our pawn center while keeping our options open for piece development. However, we must be aware that this knight can become a target - Black's next move will likely be ...Bb4, pinning our knight to the king and creating immediate tactical complications. The knight on c3 also prepares potential e4 advances and supports queenside expansion with moves like a3 and b4."
     },
     {
       "san": "Bb4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're completing our kingside development by placing the knight on its most natural square, where it controls the central e5 and d4 squares while preparing kingside castling. This knight development follows classical opening principles and maintains maximum flexibility in our position - we can still choose between various plans like e4, 0-0, or even h3 and g4 for kingside expansion. The knight on f3 also provides additional defense to our kingside and can potentially reroute to more active squares like e5 or d2 depending on the position's needs. From f3, our knight is well-placed to support both central control and kingside piece coordination."
+      "annotation": "We're completing our kingside development by placing the knight on its ideal square, where it controls the central e5 and d4 squares while preparing kingside castling. This knight development follows classical opening principles and maintains maximum flexibility in our position - we can still choose between various plans like e4, 0-0, or even h3 and g4 for kingside expansion. The knight on f3 also provides additional defense to our kingside and can potentially reroute to more active squares like e5 or d2 depending on the position's needs. From f3, our knight is well-placed to support both central control and kingside piece coordination."
     },
     {
       "san": "Ne4",

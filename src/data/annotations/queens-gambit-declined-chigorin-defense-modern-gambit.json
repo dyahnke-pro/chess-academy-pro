@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding another attacker to the d5 pawn and increasing the pressure on Black's center. This move is consistent with our Queen's Gambit strategy, preparing to recapture on c4 if Black takes, while also supporting a potential e4 pawn advance. The knight on c3 controls important central squares like e4 and b5, and coordinates well with our other pieces. This development also keeps all our options open regarding how to continue building pressure on Black's somewhat stretched position."
+      "annotation": "We develop our knight to its ideal square, adding another attacker to the d5 pawn and increasing the pressure on Black's center. This move is consistent with our Queen's Gambit strategy, preparing to recapture on c4 if Black takes, while also supporting a potential e4 pawn advance. The knight on c3 controls important central squares like e4 and b5, and coordinates well with our other pieces. This development also keeps all our options open regarding how to continue building pressure on Black's somewhat stretched position."
     },
     {
       "san": "dxc4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops their kingside knight to its most active square, challenging our potential e4 advance and preparing to castle kingside for safety. This natural developing move also creates the possibility of ...Ne4, centralizing the knight and adding pressure to our position. Black is following sound opening principles by developing pieces while maintaining the extra pawn, though they must be careful not to fall too far behind in development. The position is becoming increasingly complex, with both sides having reasonable chances for active play despite the material imbalance."
+      "annotation": "Our opponent develops their kingside knight to its most active square, challenging our potential e4 advance and preparing to castle kingside for safety. This active move also creates the possibility of ...Ne4, centralizing the knight and adding pressure to our position. Black is following sound opening principles by developing pieces while maintaining the extra pawn, though they must be careful not to fall too far behind in development. The position is becoming increasingly complex, with both sides having reasonable chances for active play despite the material imbalance."
     }
   ]
 }

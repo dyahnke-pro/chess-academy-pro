@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their kingside knight to its most natural square, attacking our d4 pawn and preparing to support their central control with moves like d6 and e6. This knight on f6 also defends the crucial e4 square that we might try to occupy later, while keeping open the possibility of various pawn breaks like ...e5 or ...c5. Our opponent is following classical development principles by bringing pieces into active positions early, though they must be careful about potential tactics involving our light-squared bishop once it reaches g2. The knight on f6 also supports Black's kingside attacking ambitions, as it can potentially reroute to more aggressive squares like e4, g4, or h5 in the middlegame."
+      "annotation": "Black develops their kingside knight to its ideal square, attacking our d4 pawn and preparing to support their central control with moves like d6 and e6. This knight on f6 also defends the crucial e4 square that we might try to occupy later, while keeping open the possibility of various pawn breaks like ...e5 or ...c5. Our opponent is following classical development principles by bringing pieces into active positions early, though they must be careful about potential tactics involving our light-squared bishop once it reaches g2. The knight on f6 also supports Black's kingside attacking ambitions, as it can potentially reroute to more aggressive squares like e4, g4, or h5 in the middlegame."
     },
     {
       "san": "g3",
@@ -31,11 +31,11 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops their dark-squared bishop to a solid, flexible square that supports kingside castling while maintaining the option to redeploy later. This bishop on e7 doesn't create immediate threats, but it's a sensible developing move that prepares ...O-O and keeps Black's pieces coordinated for potential future operations. Our opponent is following the classical Dutch development pattern, prioritizing safety and solidity over immediate counterplay. However, this bishop placement does mean that Black's pieces are becoming somewhat passively placed, and we should look for ways to maintain the initiative through active piece play and central control."
+      "annotation": "Black develops their dark-squared bishop to a solid, flexible square that supports kingside castling while maintaining the option to redeploy later. This bishop on e7 doesn't create immediate threats, but it's a purposeful move that prepares ...O-O and keeps Black's pieces coordinated for potential future operations. Our opponent is following the classical Dutch development pattern, prioritizing safety and solidity over immediate counterplay. However, this bishop placement does mean that Black's pieces are becoming somewhat passively placed, and we should look for ways to maintain the initiative through active piece play and central control."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, completing our basic development while adding another defender to our d4 pawn and controlling key central squares like e5 and g5. This knight placement supports multiple future plans - it can jump to e5 for active play, reroute to d2 and then to more active squares, or support a central advance with e2-e4. The knight on f3 also prepares castling kingside while maintaining maximum flexibility in our position. From f3, this knight works harmoniously with our fianchettoed bishop on g2, creating a powerful combination that controls many light squares and can support various pawn breaks in the center or on the kingside."
+      "annotation": "We develop our kingside knight to its ideal square, completing our basic development while adding another defender to our d4 pawn and controlling key central squares like e5 and g5. This knight placement supports multiple future plans - it can jump to e5 for active play, reroute to d2 and then to more active squares, or support a central advance with e2-e4. The knight on f3 also prepares castling kingside while maintaining maximum flexibility in our position. From f3, this knight works harmoniously with our fianchettoed bishop on g2, creating a powerful combination that controls many light squares and can support various pawn breaks in the center or on the kingside."
     },
     {
       "san": "O-O",

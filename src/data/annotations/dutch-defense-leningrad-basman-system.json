@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and h4 squares while supporting our overall development scheme. This knight placement is flexible, as the piece can later jump to e5, h4, or support central advances depending on how the position develops. The knight on f3 also provides additional defense for our kingside, which is important given Black's potential attacking chances. This move completes our basic development and prepares us to react to Black's setup with either central advances or piece maneuvering."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and h4 squares while supporting our overall development scheme. This knight placement is flexible, as the piece can later jump to e5, h4, or support central advances depending on how the position develops. The knight on f3 also provides additional defense for our kingside, which is important given Black's potential attacking chances. This move completes our basic development and prepares us to react to Black's setup with either central advances or piece maneuvering."
     },
     {
       "san": "Nh6",

@@ -11,11 +11,11 @@
     },
     {
       "san": "d4",
-      "annotation": "We're establishing a powerful pawn center with this natural developing move, controlling key central squares like e5 and c5. This move supports our e4 pawn and prepares to meet Black's inevitable d5 with multiple options - we can capture, advance, or maintain the tension. The d4 advance also opens the c1-h6 diagonal for our light-squared bishop and gives us excellent central control. By occupying both e4 and d4, we're following the classical principle of controlling the center before focusing on piece development."
+      "annotation": "We're establishing a powerful pawn center with this active move, controlling key central squares like e5 and c5. This move supports our e4 pawn and prepares to meet Black's inevitable d5 with multiple options - we can capture, advance, or maintain the tension. The d4 advance also opens the c1-h6 diagonal for our light-squared bishop and gives us excellent central control. By occupying both e4 and d4, we're following the classical principle of controlling the center before focusing on piece development."
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at our center immediately, challenging our e4 pawn and fighting for space in the center. This is the key move of the Caro-Kann Defense, creating immediate central tension and forcing us to make a decision about our pawn structure. Our opponent is trying to achieve equal central control and avoid being pushed around by our pawn duo. The move also opens lines for Black's light-squared bishop and prepares natural development of the kingside pieces."
+      "annotation": "Black strikes at our center immediately, challenging our e4 pawn and fighting for space in the center. This is the central idea of the Caro-Kann Defense, creating immediate central tension and forcing us to make a decision about our pawn structure. Our opponent is trying to achieve equal central control and avoid being pushed around by our pawn duo. The move also opens lines for Black's light-squared bishop and prepares natural development of the kingside pieces."
     },
     {
       "san": "exd5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, attacking our d4 pawn and preparing kingside castling. This move also defends the isolated d5 pawn indirectly by controlling key central squares and maintaining piece pressure in the center. Our opponent is following sound developmental principles while keeping options open - the knight on f6 supports both ...e6 setups and potential ...Bg4 pins. The move puts immediate pressure on our position, forcing us to defend our d4 pawn and make concrete decisions about our piece development."
+      "annotation": "Black develops the kingside knight to its ideal square, attacking our d4 pawn and preparing kingside castling. This move also defends the isolated d5 pawn indirectly by controlling key central squares and maintaining piece pressure in the center. Our opponent is following sound developmental principles while keeping options open - the knight on f6 supports both ...e6 setups and potential ...Bg4 pins. The move puts immediate pressure on our position, forcing us to defend our d4 pawn and make concrete decisions about our piece development."
     },
     {
       "san": "Nc3",

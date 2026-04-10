@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds by developing the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing kingside castling. This move is flexible and doesn't commit to any particular pawn structure yet, keeping options open for various defensive setups. The knight on f6 also controls important central squares like e4 and d5, preventing us from easily advancing our pawns there. Black is essentially saying 'I'll develop first and see what central pawn structure you're aiming for before committing to my own setup.'"
+      "annotation": "Black responds by developing the knight to its ideal square, immediately putting pressure on our central d4 pawn while preparing kingside castling. This move is flexible and doesn't commit to any particular pawn structure yet, keeping options open for various defensive setups. The knight on f6 also controls important central squares like e4 and d5, preventing us from easily advancing our pawns there. Black is essentially saying 'I'll develop first and see what central pawn structure you're aiming for before committing to my own setup.'"
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, adding pressure to the d5 square and preparing to support our central pawn advances. This knight is perfectly placed to support a future e4 advance or to recapture on d5 if Black takes our c4 pawn. The knight also eyes important squares like e4, b5, and a4, giving us tactical flexibility in the middlegame. This is one of the most natural developing moves in the Queen's Gambit, as it improves our piece coordination while maintaining pressure on Black's position."
+      "annotation": "We develop our knight to its most active square, adding pressure to the d5 square and preparing to support our central pawn advances. This knight is perfectly placed to support a future e4 advance or to recapture on d5 if Black takes our c4 pawn. The knight also eyes important squares like e4, b5, and a4, giving us tactical flexibility in the middlegame. This is one of the most active moves in the Queen's Gambit, as it improves our piece coordination while maintaining pressure on Black's position."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We develop our dark-squared bishop to its most aggressive square, pinning the knight on f6 to the uncastled black king and creating immediate tactical tension. This pin is particularly effective because if Black castles kingside, the knight will be pinned to the queen instead, maintaining the pressure. The bishop on g5 also controls important dark squares and supports potential tactics involving our central pawns. This is a principled developing move that creates problems for Black to solve while improving our piece coordination and preparing for quick kingside castling."
+      "annotation": "We develop our dark-squared bishop to its most aggressive square, pinning the knight on f6 to the uncastled black king and creating immediate tactical tension. This pin is particularly effective because if Black castles kingside, the knight will be pinned to the queen instead, maintaining the pressure. The bishop on g5 also controls important dark squares and supports potential tactics involving our central pawns. This is a purposeful move that creates problems for Black to solve while improving our piece coordination and preparing for quick kingside castling."
     },
     {
       "san": "Be7",
@@ -47,7 +47,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, bringing the king to safety and activating the rook, while also making the pin on the f6 knight even more problematic since it's now pinned to the queen. This natural developing move completes Black's basic king safety but also sets up potential tactical themes involving the pinned knight. The castling also prepares Black's rook to potentially support the d5 pawn or create counterplay on the kingside later in the game. With the king safely tucked away, Black can now consider more active moves like ...Re8 or ...c6 to challenge our central position."
+      "annotation": "Black castles kingside, bringing the king to safety and activating the rook, while also making the pin on the f6 knight even more problematic since it's now pinned to the queen. This active move completes Black's basic king safety but also sets up potential tactical themes involving the pinned knight. The castling also prepares Black's rook to potentially support the d5 pawn or create counterplay on the kingside later in the game. With the king safely tucked away, Black can now consider more active moves like ...Re8 or ...c6 to challenge our central position."
     },
     {
       "san": "Nf3",

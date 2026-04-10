@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center with moves like e6 or g6. This is one of the most common responses to d4, as the knight immediately puts pressure on our central pawn while developing toward the center. Our opponent is keeping their options open - they could transpose into various defenses like the Nimzo-Indian, Queen's Indian, or King's Indian depending on our next moves. The knight on f6 also supports a future e5 central break, which is a key theme in many d4 openings."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center with moves like e6 or g6. This is one of the most common responses to d4, as the knight immediately puts pressure on our central pawn while developing toward the center. Our opponent is keeping their options open - they could transpose into various defenses like the Nimzo-Indian, Queen's Indian, or King's Indian depending on our next moves. The knight on f6 also supports a future e5 central break, which is a key theme in many d4 openings."
     },
     {
       "san": "c4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most active square, where it supports our d4 pawn, controls key central squares like e5 and g5, and prepares for kingside castling. This natural developing move keeps our options open regarding the central pawn tension - we haven't committed to any particular pawn structure yet. The knight on f3 also supports potential tactical themes involving our fianchettoed bishop on g2, as it can sometimes support discoveries or pins along the long diagonal. By developing this knight before resolving the central tension, we maintain maximum flexibility in our position."
+      "annotation": "We develop our knight to its most active square, where it supports our d4 pawn, controls key central squares like e5 and g5, and prepares for kingside castling. This active move keeps our options open regarding the central pawn tension - we haven't committed to any particular pawn structure yet. The knight on f3 also supports potential tactical themes involving our fianchettoed bishop on g2, as it can sometimes support discoveries or pins along the long diagonal. By developing this knight before resolving the central tension, we maintain maximum flexibility in our position."
     },
     {
       "san": "O-O",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays the solid move c6, supporting their d5 pawn while preparing to develop the light-squared bishop to b7 via the b6-Bb7 maneuver. This move creates a solid pawn chain with d5 and c6, making it harder for us to undermine Black's central presence. The c6 pawn also controls the important b5 and d5 squares, preventing us from advancing our b-pawn too quickly. However, this move does create some long-term weaknesses on the queenside light squares, which our fianchettoed bishop can potentially exploit later in the game."
+      "annotation": "Black plays the well-grounded move c6, supporting their d5 pawn while preparing to develop the light-squared bishop to b7 via the b6-Bb7 maneuver. This move creates a solid pawn chain with d5 and c6, making it harder for us to undermine Black's central presence. The c6 pawn also controls the important b5 and d5 squares, preventing us from advancing our b-pawn too quickly. However, this move does create some long-term weaknesses on the queenside light squares, which our fianchettoed bishop can potentially exploit later in the game."
     },
     {
       "san": "b3",

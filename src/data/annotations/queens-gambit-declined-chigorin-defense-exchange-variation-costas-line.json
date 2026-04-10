@@ -23,11 +23,11 @@
     },
     {
       "san": "Qxd5",
-      "annotation": "Black recaptures with the queen, which might look premature since we can attack it with developing moves, but this is actually the most principled recapture in the Chigorin system. The queen centralized on d5 controls many important squares and puts pressure on our position, while Black's knight on c6 provides adequate support. Our opponent is accepting that the queen may be harassed but believes the central activity and rapid piece coordination will provide sufficient compensation. This early queen development is characteristic of the Chigorin Defense - Black embraces sharp, tactical play over classical developmental principles."
+      "annotation": "Black recaptures with the queen, which might look premature since we can attack it with developing choices, but this is actually the most principled recapture in the Chigorin system. The queen centralized on d5 controls many important squares and puts pressure on our position, while Black's knight on c6 provides adequate support. Our opponent is accepting that the queen may be harassed but believes the central activity and rapid piece coordination will provide sufficient compensation. This early queen development is characteristic of the Chigorin Defense - Black embraces sharp, tactical play over classical developmental principles."
     },
     {
       "san": "e3",
-      "annotation": "We're developing our kingside while preparing to challenge Black's centralized queen with moves like Nc3. The e3 pawn supports our d4 pawn, creates a solid pawn chain, and opens a diagonal for our light-squared bishop to eventually reach d3 or c4. This modest but solid move also prepares castling kingside and avoids the more committal Nc3 immediately, which would allow Black's queen to become even more active with checks. Our plan is to complete development smoothly while gradually increasing pressure on Black's somewhat exposed pieces."
+      "annotation": "We're developing our kingside while preparing to challenge Black's centralized queen with moves like Nc3. The e3 pawn supports our d4 pawn, creates a solid pawn chain, and opens a diagonal for our light-squared bishop to eventually reach d3 or c4. This modest but well-grounded move also prepares castling kingside and avoids the more committal Nc3 immediately, which would allow Black's queen to become even more active with checks. Our plan is to complete development smoothly while gradually increasing pressure on Black's somewhat exposed pieces."
     },
     {
       "san": "e5",
@@ -35,15 +35,15 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight with tempo, attacking Black's centralized queen while simultaneously supporting our d4 pawn that's under pressure from the e5 pawn. This natural developing move forces Black to make a decision about the queen while we continue our piece development. The knight on c3 also eyes important squares like e4 and d5, and prepares potential tactics involving the pinned e5 pawn if Black's king remains uncastled. Our development is proceeding smoothly while Black faces the first serious test of the queen's early activity."
+      "annotation": "We're developing our knight with tempo, attacking Black's centralized queen while simultaneously supporting our d4 pawn that's under pressure from the e5 pawn. This active move forces Black to make a decision about the queen while we continue our piece development. The knight on c3 also eyes important squares like e4 and d5, and prepares potential tactics involving the pinned e5 pawn if Black's king remains uncastled. Our development is proceeding smoothly while Black faces the first serious test of the queen's early activity."
     },
     {
       "san": "Bb4",
-      "annotation": "Our opponent plays an excellent developing move that creates a pin on our knight and maintains the tension in the center beautifully. The bishop on b4 pins our knight to the king, making it difficult for us to capture the e5 pawn immediately, while also preparing to potentially exchange on c3 to damage our pawn structure. This move shows the dynamic nature of the Chigorin Defense - Black is willing to give up the bishop pair to create structural damage and maintain piece activity. The pin also supports Black's central pawn on e5 indirectly by making our knight less mobile."
+      "annotation": "Our opponent plays an excellent developing choice that creates a pin on our knight and maintains the tension in the center beautifully. The bishop on b4 pins our knight to the king, making it difficult for us to capture the e5 pawn immediately, while also preparing to potentially exchange on c3 to damage our pawn structure. This move shows the dynamic nature of the Chigorin Defense - Black is willing to give up the bishop pair to create structural damage and maintain piece activity. The pin also supports Black's central pawn on e5 indirectly by making our knight less mobile."
     },
     {
       "san": "Bd2",
-      "annotation": "We're breaking the pin with a solid developing move that prepares to potentially exchange bishops on our terms. The bishop on d2 not only unpins our knight but also prepares to support our queenside development and potentially create threats along the a5-d8 diagonal if Black's king remains in the center. This move avoids the more committal a3, which would weaken our queenside pawn structure, and instead opts for harmonious piece development. Our plan remains focused on solid development while letting Black decide whether to maintain the tension or exchange pieces."
+      "annotation": "We're breaking the pin with a constructive move that prepares to potentially exchange bishops on our terms. The bishop on d2 not only unpins our knight but also prepares to support our queenside development and potentially create threats along the a5-d8 diagonal if Black's king remains in the center. This move avoids the more committal a3, which would weaken our queenside pawn structure, and instead opts for harmonious piece development. Our plan remains focused on solid development while letting Black decide whether to maintain the tension or exchange pieces."
     },
     {
       "san": "Bxc3",

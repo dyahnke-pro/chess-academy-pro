@@ -7,11 +7,11 @@
     },
     {
       "san": "d5",
-      "annotation": "Black immediately challenges our central pawn with the most principled response, creating symmetry in the center and ensuring equal space. This move prevents us from simply advancing d4-d5 and gaining a massive space advantage, while also freeing Black's dark-squared bishop for future development. By occupying d5, our opponent demonstrates classical opening principles - controlling the center with pawns and preparing to develop pieces to their most natural squares. We now face the fundamental decision of how to handle this central tension, whether to maintain it, exchange it, or build around it with moves like c4 or e3."
+      "annotation": "Black immediately challenges our central pawn with the most principled response, creating symmetry in the center and ensuring equal space. This move prevents us from simply advancing d4-d5 and gaining a massive space advantage, while also freeing Black's dark-squared bishop for future development. By occupying d5, our opponent demonstrates classical opening principles - controlling the center with pawns and preparing to develop pieces to their ideal squares. We now face the fundamental decision of how to handle this central tension, whether to maintain it, exchange it, or build around it with moves like c4 or e3."
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it supports our d4 pawn, attacks the e5 square, and prepares to castle kingside. This flexible move keeps our options open - we haven't yet committed to a specific pawn structure in the center, and we can still choose between systems like the London, Catalan, or various Queen's Gambit setups. The knight on f3 also prevents any immediate tactics involving ...Bg4 pinning scenarios that could arise in some lines. From f3, our knight can later jump to e5, g5, or support a future e2-e4 advance, making this development both solid and ambitious."
+      "annotation": "We develop our knight to its ideal square, where it supports our d4 pawn, attacks the e5 square, and prepares to castle kingside. This flexible move keeps our options open - we haven't yet committed to a specific pawn structure in the center, and we can still choose between systems like the London, Catalan, or various Queen's Gambit setups. The knight on f3 also prevents any immediate tactics involving ...Bg4 pinning scenarios that could arise in some lines. From f3, our knight can later jump to e5, g5, or support a future e2-e4 advance, making this development both solid and ambitious."
     },
     {
       "san": "Nf6",

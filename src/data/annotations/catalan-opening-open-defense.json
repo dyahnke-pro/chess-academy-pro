@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately pressuring our d4 pawn while preparing to castle kingside. This flexible move keeps Black's options open - they can still choose between various setups like the King's Indian, Queen's Gambit Declined, or Nimzo-Indian depending on our next moves. The knight on f6 also helps control the important e4 and e5 central squares, preventing us from establishing a dominant pawn center too easily. From f6, the knight can later jump to various outposts like e4, g4, or retreat to defend if needed."
+      "annotation": "Black develops the knight to its ideal square, immediately pressuring our d4 pawn while preparing to castle kingside. This flexible move keeps Black's options open - they can still choose between various setups like the King's Indian, Queen's Gambit Declined, or Nimzo-Indian depending on our next moves. The knight on f6 also helps control the important e4 and e5 central squares, preventing us from establishing a dominant pawn center too easily. From f6, the knight can later jump to various outposts like e4, g4, or retreat to defend if needed."
     },
     {
       "san": "c4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at the center immediately, challenging our c4 pawn and fighting for their fair share of central space. This natural move leads to the critical decision point of the Catalan - whether Black will capture on c4 or maintain the tension. By playing d5, Black opens lines for their light-squared bishop (though it remains temporarily blocked by the e6 pawn) and establishes a foothold in the center. The move also prepares to complete development with moves like Be7, 0-0, and potentially c6 to support the pawn chain, though capturing on c4 is also a major option that leads to sharp theoretical battles."
+      "annotation": "Black strikes at the center immediately, challenging our c4 pawn and fighting for their fair share of central space. this move leads to the critical decision point of the Catalan - whether Black will capture on c4 or maintain the tension. By playing d5, Black opens lines for their light-squared bishop (though it remains temporarily blocked by the e6 pawn) and establishes a foothold in the center. The move also prepares to complete development with moves like Be7, 0-0, and potentially c6 to support the pawn chain, though capturing on c4 is also a major option that leads to sharp theoretical battles."
     },
     {
       "san": "Bg2",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Qa4+",
-      "annotation": "We immediately strike with a forcing check that prevents Black from easily consolidating their extra material. This tactical shot forces Black's hand and typically leads to the knight going to d7, after which we can regain our pawn with interest. The check also prevents Black from playing natural developing moves like Bd7 or c6, disrupting their coordination. Our queen will be perfectly placed on a4 to recapture on c4 while maintaining pressure on Black's queenside, and the move demonstrates the tactical sharpness that often emerges from the Catalan despite its positional appearance."
+      "annotation": "We immediately strike with a forcing check that prevents Black from easily consolidating their extra material. This tactical shot forces Black's hand and typically leads to the knight going to d7, after which we can regain our pawn with interest. The check also prevents Black from playing active moves like Bd7 or c6, disrupting their coordination. Our queen will be perfectly placed on a4 to recapture on c4 while maintaining pressure on Black's queenside, and the move demonstrates the tactical sharpness that often emerges from the Catalan despite its positional appearance."
     },
     {
       "san": "Nbd7",

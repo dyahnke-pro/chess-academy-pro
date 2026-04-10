@@ -15,11 +15,11 @@
     },
     {
       "san": "d5",
-      "annotation": "Black strikes at the center immediately, challenging our e4 pawn and creating the characteristic tension of the Caro-Kann Defense. This move opens the c8-h3 diagonal for Black's light-squared bishop and begins to equalize the central space. Our opponent is following classical opening principles by fighting for the center while maintaining solid pawn structure. We now need to decide whether to maintain the tension, advance with e5, or exchange pawns - each choice leads to different types of middlegame positions."
+      "annotation": "Black strikes at the center immediately, challenging our e4 pawn and creating the characteristic tension of the Caro-Kann Defense. This move opens the c8-h3 diagonal for Black's light-squared bishop and begins to equalize the central space. Our opponent is following classical opening principles by contesting central control while maintaining solid pawn structure. We now need to decide whether to maintain the tension, advance with e5, or exchange pawns - each choice leads to different types of middlegame positions."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, defending the e4 pawn while keeping our options open regarding the central tension. This move prepares several possible continuations: we can still push e4-e5 if desired, exchange on d5, or maintain the tension while developing other pieces. The knight on c3 also eyes important central squares like d5 and e4, and supports potential advances on the queenside. By not committing to any particular pawn structure yet, we maintain maximum flexibility in our approach to this position."
+      "annotation": "We develop our knight to its ideal square, defending the e4 pawn while keeping our options open regarding the central tension. This move prepares several possible continuations: we can still push e4-e5 if desired, exchange on d5, or maintain the tension while developing other pieces. The knight on c3 also eyes important central squares like d5 and e4, and supports potential advances on the queenside. By not committing to any particular pawn structure yet, we maintain maximum flexibility in our approach to this position."
     },
     {
       "san": "b5",

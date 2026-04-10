@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding support to our d4 pawn while preparing to advance e2-e4 for maximum central control. The knight on c3 also eyes important squares like e4, d5, and b5, giving us tactical possibilities in the center and on the queenside. This development fits perfectly with our plan to establish a broad pawn center with e4 and d4, creating the space advantage that's crucial against hypermodern setups. From c3, our knight can also support a future d5 advance or retreat to defend if Black creates threats along the long diagonal."
+      "annotation": "We develop our knight to its ideal square, adding support to our d4 pawn while preparing to advance e2-e4 for maximum central control. The knight on c3 also eyes important squares like e4, d5, and b5, giving us tactical possibilities in the center and on the queenside. This development fits perfectly with our plan to establish a broad pawn center with e4 and d4, creating the space advantage that's crucial against hypermodern setups. From c3, our knight can also support a future d5 advance or retreat to defend if Black creates threats along the long diagonal."
     },
     {
       "san": "c5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays a solid developing move that supports the center and prepares to castle kingside, while also potentially preparing ...e5 or ...f5 pawn breaks later. This move creates a solid foundation for Black's position and prevents any immediate e5 advance from us, giving Black time to complete development safely. The d6 pawn also supports a future ...e6 break that could challenge our advanced d5 pawn directly. While this looks passive, it's actually quite flexible - Black maintains options for both ...e6 and ...e5 depending on how we continue, and the pawn provides crucial support for Black's pieces."
+      "annotation": "Black plays a constructive move that supports the center and prepares to castle kingside, while also potentially preparing ...e5 or ...f5 pawn breaks later. This move creates a solid foundation for Black's position and prevents any immediate e5 advance from us, giving Black time to complete development safely. The d6 pawn also supports a future ...e6 break that could challenge our advanced d5 pawn directly. While this looks passive, it's actually quite flexible - Black maintains options for both ...e6 and ...e5 depending on how we continue, and the pawn provides crucial support for Black's pieces."
     },
     {
       "san": "e4",

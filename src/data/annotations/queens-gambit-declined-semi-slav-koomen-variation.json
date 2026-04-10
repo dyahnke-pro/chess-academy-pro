@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds by occupying the center with their own pawn, directly challenging our control of the e4 square. This solid move is the most principled response to d4, as it maintains central tension and prevents us from simply playing e4 on the next move. Our opponent is setting up the classical pawn structure that defines many d4 openings. Black's plan typically involves solid development while maintaining their central foothold, though they'll need to be careful about potential weaknesses this central commitment might create."
+      "annotation": "Black responds by occupying the center with their own pawn, directly challenging our control of the e4 square. this stabilizing move is the most principled response to d4, as it maintains central tension and prevents us from simply playing e4 on the next move. Our opponent is setting up the classical pawn structure that defines many d4 openings. Black's plan typically involves solid development while maintaining their central foothold, though they'll need to be careful about potential weaknesses this central commitment might create."
     },
     {
       "san": "c4",
@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses the Queen's Gambit Declined, supporting the d5 pawn rather than capturing on c4. This solid move maintains Black's central pawn while preparing to develop the light-squared bishop, typically to d6 or e7. Black is prioritizing piece development and central control over material gain. However, the e6 pawn does restrict Black's dark-squared bishop on c8, which will become a long-term strategic consideration that Black must address carefully in the middlegame."
+      "annotation": "Our opponent chooses the Queen's Gambit Declined, supporting the d5 pawn rather than capturing on c4. this stabilizing move maintains Black's central pawn while preparing to develop the light-squared bishop, typically to d6 or e7. Black is prioritizing piece development and central control over material gain. However, the e6 pawn does restrict Black's dark-squared bishop on c8, which will become a long-term strategic consideration that Black must address carefully in the middlegame."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding additional pressure to the d5 pawn while preparing further piece development. This move supports our central strategy and keeps multiple options open - we can still recapture on c4 if Black takes, or continue building pressure on the center. The knight on c3 also eyes important central squares like e4 and d5, fitting perfectly into our opening strategy. From c3, our knight coordinates well with future moves like Nf3 and supports various pawn breaks in the center."
+      "annotation": "We develop our knight to its ideal square, adding additional pressure to the d5 pawn while preparing further piece development. This move supports our central strategy and keeps multiple options open - we can still recapture on c4 if Black takes, or continue building pressure on the center. The knight on c3 also eyes important central squares like e4 and d5, fitting perfectly into our opening strategy. From c3, our knight coordinates well with future moves like Nf3 and supports various pawn breaks in the center."
     },
     {
       "san": "c6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "b5",
-      "annotation": "Our opponent makes the key move of the Semi-Slav, advancing the b-pawn to support the captured pawn on c4. This bold advance gains space on the queenside and prevents our simple recapture with Bxc4, but it also creates potential weaknesses in Black's pawn structure. Black is committing to a sharp, tactical battle where precise calculation will be essential. The b5 pawn advance is thematic in this opening, as it's Black's main try to justify taking on c4, but it comes with the cost of loosening the queenside pawn structure."
+      "annotation": "Our opponent makes the central idea of the Semi-Slav, advancing the b-pawn to support the captured pawn on c4. This bold advance gains space on the queenside and prevents our simple recapture with Bxc4, but it also creates potential weaknesses in Black's pawn structure. Black is committing to a sharp, tactical battle where precise calculation will be essential. The b5 pawn advance is thematic in this opening, as it's Black's main try to justify taking on c4, but it comes with the cost of loosening the queenside pawn structure."
     },
     {
       "san": "a4",

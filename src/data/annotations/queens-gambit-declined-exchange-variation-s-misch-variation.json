@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central d4 pawn with the most natural developing move, bringing the knight to its ideal square where it attacks our center and prepares kingside castling. This is the Indian Defense approach - rather than immediately occupying the center with pawns like ...d5, Black prefers to control key central squares with pieces first. Our opponent is keeping maximum flexibility, as this knight can later support ...e5 or ...c5 pawn breaks depending on how we continue. The knight on f6 also prevents us from playing an early e4, since the knight would simply capture it."
+      "annotation": "Black immediately challenges our central d4 pawn with the most active move, bringing the knight to its ideal square where it attacks our center and prepares kingside castling. This is the Indian Defense approach - rather than immediately occupying the center with pawns like ...d5, Black prefers to control key central squares with pieces first. Our opponent is keeping maximum flexibility, as this knight can later support ...e5 or ...c5 pawn breaks depending on how we continue. The knight on f6 also prevents us from playing an early e4, since the knight would simply capture it."
     },
     {
       "san": "c4",
@@ -15,11 +15,11 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses the Queen's Gambit Declined, supporting the future ...d5 advance while keeping the gambit pawn. This solid move prepares to establish a pawn on d5 that can't be easily undermined, giving Black a firm foothold in the center. The e6 pawn also opens up the diagonal for Black's light-squared bishop, though it does somewhat restrict the dark-squared bishop on c8. Black is signaling a preference for solid, positional play where the central tension will define the middlegame struggle."
+      "annotation": "Our opponent chooses the Queen's Gambit Declined, supporting the future ...d5 advance while keeping the gambit pawn. this stabilizing move prepares to establish a pawn on d5 that can't be easily undermined, giving Black a firm foothold in the center. The e6 pawn also opens up the diagonal for Black's light-squared bishop, though it does somewhat restrict the dark-squared bishop on c8. Black is signaling a preference for solid, positional play where the central tension will define the middlegame struggle."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most active square, where it supports our d4 pawn and prepares to castle kingside quickly. The knight on f3 also controls important central squares like e5 and d4, while keeping the option to later jump to e5 or g5 for attacking chances. This natural developing move fits perfectly with our Queen's Gambit strategy - we're not rushing to recapture material, but instead focusing on rapid piece development and maintaining central pressure. From f3, our knight can also support a future e4 pawn advance if the position allows it."
+      "annotation": "We're developing our kingside knight to its most active square, where it supports our d4 pawn and prepares to castle kingside quickly. The knight on f3 also controls important central squares like e5 and d4, while keeping the option to later jump to e5 or g5 for attacking chances. This active move fits perfectly with our Queen's Gambit strategy - we're not rushing to recapture material, but instead focusing on rapid piece development and maintaining central pressure. From f3, our knight can also support a future e4 pawn advance if the position allows it."
     },
     {
       "san": "d5",

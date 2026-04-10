@@ -15,11 +15,11 @@
     },
     {
       "san": "c6",
-      "annotation": "Black declines the Queen's Gambit and instead reinforces the d5 pawn, entering what's known as the Slav Defense. This solid move maintains the central tension while preparing ...dxc4 at a more favorable moment. Our opponent is also preparing to develop the queen's knight to d7 (rather than the more common c6 square) and potentially expand with ...b5 later. The Slav is a principled defense that aims for solid development while maintaining central pawn presence."
+      "annotation": "Black declines the Queen's Gambit and instead reinforces the d5 pawn, entering what's known as the Slav Defense. this stabilizing move maintains the central tension while preparing ...dxc4 at a more favorable moment. Our opponent is also preparing to develop the queen's knight to d7 (rather than the more common c6 square) and potentially expand with ...b5 later. The Slav is a principled defense that aims for solid development while maintaining central pawn presence."
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most natural square, adding pressure to Black's d5 pawn and preparing to recapture on c4 if Black takes. This knight development is flexible and supports various pawn breaks like e4 or f4 in the future. Our knight also eyes important central squares like e4 and b5, while staying out of the way of our b-pawn should we want to expand on the queenside. This is a fundamental developing move that maintains all our strategic options while increasing the pressure on Black's position."
+      "annotation": "We develop our queen's knight to its ideal square, adding pressure to Black's d5 pawn and preparing to recapture on c4 if Black takes. This knight development is flexible and supports various pawn breaks like e4 or f4 in the future. Our knight also eyes important central squares like e4 and b5, while staying out of the way of our b-pawn should we want to expand on the queenside. This is a fundamental developing choice that maintains all our strategic options while increasing the pressure on Black's position."
     },
     {
       "san": "Nf6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "We develop our light-squared bishop to its most active diagonal, eyeing the important h7 square near Black's king and preparing to castle kingside. This bishop placement is crucial in many Queen's Gambit structures, as it supports our central control while creating potential attacking chances. Our bishop on d3 also supports the e4 advance should the position open up, and it's perfectly coordinated with our other pieces. This natural developing move maintains pressure on Black's position while completing our kingside development."
+      "annotation": "We develop our light-squared bishop to its most active diagonal, eyeing the important h7 square near Black's king and preparing to castle kingside. This bishop placement is crucial in many Queen's Gambit structures, as it supports our central control while creating potential attacking chances. Our bishop on d3 also supports the e4 advance should the position open up, and it's perfectly coordinated with our other pieces. This active move maintains pressure on Black's position while completing our kingside development."
     },
     {
       "san": "dxc4",

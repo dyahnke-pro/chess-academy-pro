@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, defending against potential threats on the kingside while preparing to castle. This is a solid developing move that also puts pressure on our potential pawn advances in the center. Our opponent is following good opening principles by developing pieces and preparing to get the king to safety. However, Black is still holding onto that extra e4 pawn, which we'll continue to pressure with our next move."
+      "annotation": "Black develops the knight to its ideal square, defending against potential threats on the kingside while preparing to castle. This is a constructive move that also puts pressure on our potential pawn advances in the center. Our opponent is following good opening principles by developing pieces and preparing to get the king to safety. However, Black is still holding onto that extra e4 pawn, which we'll continue to pressure with our next move."
     },
     {
       "san": "f3",
@@ -59,7 +59,7 @@
     },
     {
       "san": "Kh1",
-      "annotation": "This is the key move that defines the Kloss Attack variation! By stepping our king to h1, we accomplish several important goals: we remove the king from potential discoveries along the g1-a7 diagonal, we prepare to advance our h-pawn for attack, and we clear the g1 square for potential piece maneuvers. This prophylactic king move is typical of aggressive gambit play - we secure our king position before launching the final assault. The move also prepares ideas like h4-h5, opening the h-file for our rook, or Ng5 followed by h4-h5 with devastating effect against Black's fianchettoed king position."
+      "annotation": "This is the defining move of the Kloss Attack variation! By stepping our king to h1, we accomplish several important goals: we remove the king from potential discoveries along the g1-a7 diagonal, we prepare to advance our h-pawn for attack, and we clear the g1 square for potential piece maneuvers. This prophylactic king move is typical of aggressive gambit play - we secure our king position before launching the final assault. The move also prepares ideas like h4-h5, opening the h-file for our rook, or Ng5 followed by h4-h5 with devastating effect against Black's fianchettoed king position."
     }
   ]
 }

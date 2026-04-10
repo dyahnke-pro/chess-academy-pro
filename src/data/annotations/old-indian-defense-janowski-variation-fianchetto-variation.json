@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 and preparing to contest the center. This is the starting move of many Indian Defense systems, where Black often allows White to build a big pawn center before counterattacking it later. Our opponent is following sound opening principles by developing a piece toward the center while simultaneously creating pressure on our position. Black's knight on f6 also prepares kingside castling and keeps options open for various pawn structures like ...e6, ...g6, or even ...d6 depending on how we continue."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 and preparing to contest the center. This is the starting move of many Indian Defense systems, where Black often allows White to build a big pawn center before counterattacking it later. Our opponent is following sound opening principles by developing a piece toward the center while simultaneously creating pressure on our position. Black's knight on f6 also prepares kingside castling and keeps options open for various pawn structures like ...e6, ...g6, or even ...d6 depending on how we continue."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to meet Black's potential ...e5 advance. This move also adds pressure to the important d5 square and keeps our options open for various pawn breaks like e4 or f4 depending on how the position develops. Our knight on c3 works beautifully with our pawn structure, and we're following the principle of developing pieces toward the center where they'll have maximum influence. This development also prepares potential tactics involving the d5 square and supports our overall strategy of building pressure in the center."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to meet Black's potential ...e5 advance. This move also adds pressure to the important d5 square and keeps our options open for various pawn breaks like e4 or f4 depending on how the position develops. Our knight on c3 works beautifully with our pawn structure, and we're following the principle of developing pieces toward the center where they'll have maximum influence. This development also prepares potential tactics involving the d5 square and supports our overall strategy of building pressure in the center."
     },
     {
       "san": "Bf5",

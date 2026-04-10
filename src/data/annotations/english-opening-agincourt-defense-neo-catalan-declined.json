@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, mirroring our development and fighting for control of the center. The knight on f6 attacks our potential e4 advance and supports Black's d5 pawn, creating a solid foundation for their position. This move also prepares kingside castling and keeps Black's options open for different pawn structures. Black is following sound opening principles by developing pieces toward the center and maintaining the tension in the position."
+      "annotation": "Black develops their knight to its ideal square, mirroring our development and fighting for control of the center. The knight on f6 attacks our potential e4 advance and supports Black's d5 pawn, creating a solid foundation for their position. This move also prepares kingside castling and keeps Black's options open for different pawn structures. Black is following sound opening principles by developing pieces toward the center and maintaining the tension in the position."
     },
     {
       "san": "Bg2",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black completes their kingside development with this solid move, preparing to castle and keeping the position flexible. The bishop on e7 doesn't block any pawns and maintains good defensive potential while also eyeing the a3-f8 diagonal. This is more flexible than ...Bd6, which would block the d-pawn and potentially become a target. Black's setup is becoming very solid and classical, reminiscent of French Defense or Queen's Gambit Declined structures where Black maintains a strong center and looks for counterplay."
+      "annotation": "Black completes their kingside development with this stabilizing move, preparing to castle and keeping the position flexible. The bishop on e7 doesn't block any pawns and maintains good defensive potential while also eyeing the a3-f8 diagonal. This is more flexible than ...Bd6, which would block the d-pawn and potentially become a target. Black's setup is becoming very solid and classical, reminiscent of French Defense or Queen's Gambit Declined structures where Black maintains a strong center and looks for counterplay."
     },
     {
       "san": "c4",
@@ -51,7 +51,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We support our d4 advance and prepare to complete our development while maintaining flexibility in the center. This move creates a solid pawn triangle (c4-d4-e3) that controls important central squares and gives our pieces excellent support. The e3 pawn also opens a diagonal for our dark-squared bishop and prepares potential central advances. While this looks modest, it's actually a key move in many English Opening systems, providing the foundation for active piece play and central control."
+      "annotation": "We support our d4 advance and prepare to complete our development while maintaining flexibility in the center. This move creates a solid pawn triangle (c4-d4-e3) that controls important central squares and gives our pieces excellent support. The e3 pawn also opens a diagonal for our dark-squared bishop and prepares potential central advances. While this looks modest, it's actually a critical move in many English Opening systems, providing the foundation for active piece play and central control."
     },
     {
       "san": "Nc6",

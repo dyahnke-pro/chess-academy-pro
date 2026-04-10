@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important central squares e5 and d4, while preparing kingside castling. This move also prevents any potential ...Ng4 ideas from Black and maintains pressure on Black's central setup. The knight on f3 is a key piece in most d4 systems, as it can later support pawn advances like e4 or help control key central outposts. By developing this knight before committing our light-squared bishop, we maintain maximum flexibility in our setup and keep Black guessing about our exact system."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4, while preparing kingside castling. This move also prevents any potential ...Ng4 ideas from Black and maintains pressure on Black's central setup. The knight on f3 is a key piece in most d4 systems, as it can later support pawn advances like e4 or help control key central outposts. By developing this knight before committing our light-squared bishop, we maintain maximum flexibility in our setup and keep Black guessing about our exact system."
     },
     {
       "san": "b6",

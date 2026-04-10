@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the hypermodern approach, developing the knight to its most natural square while attacking our d4 pawn. This move signals that our opponent is likely heading for a King's Indian Defense setup, where Black will fianchetto the dark-squared bishop and launch a kingside attack later. The knight on f6 also controls the important central squares e4 and d5, preventing us from easily advancing our pawns there. We should expect Black to continue with moves like g6, Bg7, and castling kingside, building a solid but flexible position."
+      "annotation": "Black responds with the hypermodern approach, developing the knight to its ideal square while attacking our d4 pawn. This move signals that our opponent is likely heading for a King's Indian Defense setup, where Black will fianchetto the dark-squared bishop and launch a kingside attack later. The knight on f6 also controls the important central squares e4 and d5, preventing us from easily advancing our pawns there. We should expect Black to continue with moves like g6, Bg7, and castling kingside, building a solid but flexible position."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our pawn center. This move also prevents Black from playing an immediate Bg4 pin, which could become annoying later. The knight on f3 fits perfectly with our planned fianchetto setup - once we play g3 and Bg2, our pieces will work together harmoniously to control the center and long diagonal. Additionally, this knight can later be redeployed to d2 or e1 if we need to support central pawn advances or prepare for tactical operations."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our pawn center. This move also prevents Black from playing an immediate Bg4 pin, which could become annoying later. The knight on f3 fits perfectly with our planned fianchetto setup - once we play g3 and Bg2, our pieces will work together harmoniously to control the center and long diagonal. Additionally, this knight can later be redeployed to d2 or e1 if we need to support central pawn advances or prepare for tactical operations."
     },
     {
       "san": "Bg7",

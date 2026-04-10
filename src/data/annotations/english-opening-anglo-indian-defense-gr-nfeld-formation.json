@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight toward the center and preparing to contest our control of the e4 square. This is the beginning of the Anglo-Indian Defense, where Black adopts a hypermodern approach by developing pieces first before committing to a specific pawn structure. Our opponent is keeping maximum flexibility - they could later play ...e6 for an Indian setup, ...c5 for a symmetrical structure, or even ...d5 to challenge our center directly. From f6, the knight also supports potential ...e5 advances and keeps an eye on important central squares."
+      "annotation": "Black responds with the most active move, bringing the knight toward the center and preparing to contest our control of the e4 square. This is the beginning of the Anglo-Indian Defense, where Black adopts a hypermodern approach by developing pieces first before committing to a specific pawn structure. Our opponent is keeping maximum flexibility - they could later play ...e6 for an Indian setup, ...c5 for a symmetrical structure, or even ...d5 to challenge our center directly. From f6, the knight also supports potential ...e5 advances and keeps an eye on important central squares."
     },
     {
       "san": "Nf3",
@@ -15,7 +15,7 @@
     },
     {
       "san": "g6",
-      "annotation": "Black signals their intention to fianchetto the dark-squared bishop, preparing ...Bg7 to create a powerful diagonal battery aimed at our queenside. This is a key move in many hypermodern openings, where Black allows us to occupy the center with pawns while preparing to attack that center from the flanks with pieces. The g6-Bg7 setup will give Black excellent long-term pressure against our c4 pawn and potential control over the long diagonal. We should be aware that this setup often leads to sharp tactical possibilities if Black ever gets ...d5 in effectively, so we need to be prepared to either support our center or challenge Black's central ambitions."
+      "annotation": "Black signals their intention to fianchetto the dark-squared bishop, preparing ...Bg7 to create a powerful diagonal battery aimed at our queenside. This is a critical move in many hypermodern openings, where Black allows us to occupy the center with pawns while preparing to attack that center from the flanks with pieces. The g6-Bg7 setup will give Black excellent long-term pressure against our c4 pawn and potential control over the long diagonal. We should be aware that this setup often leads to sharp tactical possibilities if Black ever gets ...d5 in effectively, so we need to be prepared to either support our center or challenge Black's central ambitions."
     },
     {
       "san": "g3",

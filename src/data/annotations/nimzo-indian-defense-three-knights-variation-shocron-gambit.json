@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside and maintaining flexibility in our setup. This move allows Black to play the thematic ...Bb4+, leading us into the Nimzo-Indian Defense, one of the most complex and strategically rich openings in chess. By placing the knight on f3, we're also preventing Black from playing an early ...e5 advance and we're preparing to support a potential e4 pawn break in the future. The knight on f3 coordinates beautifully with our other pieces and gives us excellent control over the central dark squares, particularly e5 and h4."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and maintaining flexibility in our setup. This move allows Black to play the thematic ...Bb4+, leading us into the Nimzo-Indian Defense, one of the most complex and strategically rich openings in chess. By placing the knight on f3, we're also preventing Black from playing an early ...e5 advance and we're preparing to support a potential e4 pawn break in the future. The knight on f3 coordinates beautifully with our other pieces and gives us excellent control over the central dark squares, particularly e5 and h4."
     },
     {
       "san": "Bb4+",

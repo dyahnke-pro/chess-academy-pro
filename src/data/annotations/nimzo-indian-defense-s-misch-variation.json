@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking the d4 pawn while bringing the knight to its most active square. This flexible approach keeps Black's options open for various defensive setups including the King's Indian, Queen's Gambit Declined, or Nimzo-Indian structures. The knight on f6 also prepares kingside castling and maintains pressure on our center, forcing us to make concrete decisions about how to support our d4 pawn. This is one of the most principled responses to 1.d4, as it develops with tempo while challenging White's central ambitions."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking the d4 pawn while bringing the knight to its most active square. This flexible approach keeps Black's options open for various defensive setups including the King's Indian, Queen's Gambit Declined, or Nimzo-Indian structures. The knight on f6 also prepares kingside castling and maintains pressure on our center, forcing us to make concrete decisions about how to support our d4 pawn. This is one of the most principled responses to 1.d4, as it develops with tempo while challenging White's central ambitions."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn while preparing to challenge Black's central control and piece development. This natural developing move puts immediate pressure on Black's setup since we're now threatening to capture on f6 if Black isn't careful with piece coordination. The knight on c3 also supports potential advances like e4 or d5, giving us excellent central flexibility while maintaining solid piece coordination. However, this move does allow Black the opportunity to pin our knight with Bb4, leading to the sharp Nimzo-Indian Defense where Black can create immediate tactical and positional tensions."
+      "annotation": "We're developing our knight to its most active square, supporting the d4 pawn while preparing to challenge Black's central control and piece development. This active move puts immediate pressure on Black's setup since we're now threatening to capture on f6 if Black isn't careful with piece coordination. The knight on c3 also supports potential advances like e4 or d5, giving us excellent central flexibility while maintaining solid piece coordination. However, this move does allow Black the opportunity to pin our knight with Bb4, leading to the sharp Nimzo-Indian Defense where Black can create immediate tactical and positional tensions."
     },
     {
       "san": "Bb4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Bd3",
-      "annotation": "We're developing our light-squared bishop to an excellent central square where it eyes the important h7 square and supports our kingside development while maintaining flexibility in our pawn structure. This natural developing move prepares kingside castling while keeping our central tension intact, forcing Black to decide how to proceed with the c5 advance. The bishop on d3 also supports potential tactical themes around Black's kingside once they castle, and maintains the option to recapture on c3 with the bishop if Black exchanges. However, we must be alert to Black's tactical possibilities, as the bishop could become a target if Black continues with moves like Nc6 and creates further central pressure."
+      "annotation": "We're developing our light-squared bishop to an excellent central square where it eyes the important h7 square and supports our kingside development while maintaining flexibility in our pawn structure. This active move prepares kingside castling while keeping our central tension intact, forcing Black to decide how to proceed with the c5 advance. The bishop on d3 also supports potential tactical themes around Black's kingside once they castle, and maintains the option to recapture on c3 with the bishop if Black exchanges. However, we must be alert to Black's tactical possibilities, as the bishop could become a target if Black continues with moves like Nc6 and creates further central pressure."
     },
     {
       "san": "Nc6",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black wisely secures their king by castling kingside, completing a crucial part of development while preparing to coordinate their pieces for central pressure and potential counterplay. This natural move gets the king to safety before the position opens further, which is essential given the tactical nature of Nimzo-Indian positions. With the king safe, Black can now focus on piece coordination and central breaks like d6-d5 or maintaining pressure on our doubled pawns through moves like Qc7 or Re8. The castling also connects Black's rooks, improving overall piece coordination and preparing for the complex middlegame battles that characterize the Sämisch Nimzo-Indian where both sides will fight for central control and piece activity."
+      "annotation": "Black wisely secures their king by castling kingside, completing a crucial part of development while preparing to coordinate their pieces for central pressure and potential counterplay. this move gets the king to safety before the position opens further, which is essential given the tactical nature of Nimzo-Indian positions. With the king safe, Black can now focus on piece coordination and central breaks like d6-d5 or maintaining pressure on our doubled pawns through moves like Qc7 or Re8. The castling also connects Black's rooks, improving overall piece coordination and preparing for the complex middlegame battles that characterize the Sämisch Nimzo-Indian where both sides will fight for central control and piece activity."
     }
   ]
 }

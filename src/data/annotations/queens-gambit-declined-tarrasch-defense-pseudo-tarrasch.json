@@ -7,7 +7,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Black responds symmetrically in the center, matching our central control and preventing us from immediately advancing to e4. This solid move shows that our opponent wants to maintain central tension and avoid being pushed around in the opening phase. By placing the pawn on d5, Black also prepares potential development of the light-squared bishop and keeps options open for various defensive setups. This is the most natural and principled response, leading us toward Queen's Gambit positions where the central pawn structure will define much of the middlegame strategy."
+      "annotation": "Black responds symmetrically in the center, matching our central control and preventing us from immediately advancing to e4. this stabilizing move shows that our opponent wants to maintain central tension and avoid being pushed around in the opening phase. By placing the pawn on d5, Black also prepares potential development of the light-squared bishop and keeps options open for various defensive setups. This is the most natural and principled response, leading us toward Queen's Gambit positions where the central pawn structure will define much of the middlegame strategy."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most active square, where it supports our central control by attacking e5 and preparing potential advances in the center. This natural developing move also keeps our options open regarding how to recapture on c4 if Black ever takes, since the knight can support a d4-d5 advance or help coordinate with other pieces. The knight on f3 is perfectly placed for most Queen's Gambit structures, supporting both central and kingside operations while maintaining flexibility in our setup. From f3, our knight also eyes key squares like e5 and g5, which may become important tactical or strategic targets later in the game."
+      "annotation": "We're developing our knight to its most active square, where it supports our central control by attacking e5 and preparing potential advances in the center. This active move also keeps our options open regarding how to recapture on c4 if Black ever takes, since the knight can support a d4-d5 advance or help coordinate with other pieces. The knight on f3 is perfectly placed for most Queen's Gambit structures, supporting both central and kingside operations while maintaining flexibility in our setup. From f3, our knight also eyes key squares like e5 and g5, which may become important tactical or strategic targets later in the game."
     },
     {
       "san": "c5",

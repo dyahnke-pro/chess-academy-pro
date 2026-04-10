@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. The knight on f3 controls the important e5 and g5 squares, preventing Black from easily advancing pawns or placing pieces on these key central outposts. This move keeps all of our main system options open – we could still transpose into a King's Indian Attack, various Queen's Gambit setups, or other d4 systems depending on Black's response. By developing pieces before committing to a specific pawn structure, we're following sound opening principles while keeping our opponent guessing about our ultimate strategic intentions."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. The knight on f3 controls the important e5 and g5 squares, preventing Black from easily advancing pawns or placing pieces on these key central outposts. This move keeps all of our main system options open – we could still transpose into a King's Indian Attack, various Queen's Gambit setups, or other d4 systems depending on Black's response. By developing pieces before committing to a specific pawn structure, we're following sound opening principles while keeping our opponent guessing about our ultimate strategic intentions."
     },
     {
       "san": "b6",

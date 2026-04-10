@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while defending the e4 pawn, but this move also sets up the aggressive Spielmann Gambit variation that's about to unfold. The knight on c3 controls important central squares like d5 and e4, and supports our pawn center while preparing rapid development. This move is more flexible than 2.e5, the main line of the Alekhine, because we're waiting to see how Black continues before committing our pawn structure. However, we're also preparing to meet ...d5 with some very sharp tactical ideas, as we'll see on the next move."
+      "annotation": "We're developing our knight to its ideal square while defending the e4 pawn, but this move also sets up the aggressive Spielmann Gambit variation that's about to unfold. The knight on c3 controls important central squares like d5 and e4, and supports our pawn center while preparing rapid development. This move is more flexible than 2.e5, the main line of the Alekhine, because we're waiting to see how Black continues before committing our pawn structure. However, we're also preparing to meet ...d5 with some very sharp tactical ideas, as we'll see on the next move."
     },
     {
       "san": "d5",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nfd7",
-      "annotation": "Black retreats the attacked knight to d7, which is probably the most natural square since it keeps the knight centralized and doesn't block in the other pieces too badly. From d7, the knight can potentially jump to useful squares like c5 or e5 later in the game, and it also supports the advance of the c-pawn. However, this retreat does allow us to continue with our aggressive plan, and the knight is somewhat passively placed for now. Our opponent is essentially accepting that we'll get a strong initiative in return for the material we're about to sacrifice."
+      "annotation": "Black retreats the attacked knight to d7, which is probably the ideal square since it keeps the knight centralized and doesn't block in the other pieces too badly. From d7, the knight can potentially jump to useful squares like c5 or e5 later in the game, and it also supports the advance of the c-pawn. However, this retreat does allow us to continue with our aggressive plan, and the knight is somewhat passively placed for now. Our opponent is essentially accepting that we'll get a strong initiative in return for the material we're about to sacrifice."
     },
     {
       "san": "e6",

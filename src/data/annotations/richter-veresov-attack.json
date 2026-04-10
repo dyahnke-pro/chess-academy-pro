@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center with moves like e6 or c5. This is the most principled response, as the knight controls the important e4 and d5 squares while developing toward the center. Our opponent is following sound opening principles by developing pieces quickly and putting immediate pressure on our central pawn. This move also keeps Black's options open for various pawn structures - they could transpose into a Queen's Gambit Declined setup, play for e6 and Be7, or even consider more aggressive setups with Bg4."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center with moves like e6 or c5. This is the most principled response, as the knight controls the important e4 and d5 squares while developing toward the center. Our opponent is following sound opening principles by developing pieces quickly and putting immediate pressure on our central pawn. This move also keeps Black's options open for various pawn structures - they could transpose into a Queen's Gambit Declined setup, play for e6 and Be7, or even consider more aggressive setups with Bg4."
     },
     {
       "san": "Nc3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "We're unleashing the signature move of the Richter-Veresov Attack, developing our bishop to an aggressive square where it pins the knight and creates immediate tactical threats. This bishop move is the hallmark of our system - it puts pressure on Black's kingside and prepares potential discoveries if the knight moves. The pin along the d8-h4 diagonal becomes particularly dangerous once Black castles kingside, as we can often create mating attacks involving moves like Qd2-h6 and h2-h4-h5. While this seems like a simple developing move, it's actually setting up complex tactical and strategic themes that can persist well into the middlegame, making Black's position uncomfortable and forcing them to find precise defensive moves."
+      "annotation": "We're unleashing the signature move of the Richter-Veresov Attack, developing our bishop to an aggressive square where it pins the knight and creates immediate tactical threats. This bishop move is the hallmark of our system - it puts pressure on Black's kingside and prepares potential discoveries if the knight moves. The pin along the d8-h4 diagonal becomes particularly dangerous once Black castles kingside, as we can often create mating attacks involving moves like Qd2-h6 and h2-h4-h5. While this seems like a simple developing choice, it's actually setting up complex tactical and strategic themes that can persist well into the middlegame, making Black's position uncomfortable and forcing them to find precise defensive moves."
     },
     {
       "san": "Bf5",

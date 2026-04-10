@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to support our central advance or recapture on c4. This move follows the fundamental opening principle of developing knights before bishops, and Nf3 is almost always the best square for our king's knight in queen's pawn openings. The knight controls important central squares like e5 and d4 (supporting our pawn), while also preparing to potentially jump to more active squares like e5 or g5 later. Additionally, this development move brings us one step closer to castling kingside, which will be a key priority in the coming moves."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and preparing to support our central advance or recapture on c4. This move follows the fundamental opening principle of developing knights before bishops, and Nf3 is almost always the best square for our king's knight in queen's pawn openings. The knight controls important central squares like e5 and d4 (supporting our pawn), while also preparing to potentially jump to more active squares like e5 or g5 later. Additionally, this development move brings us one step closer to castling kingside, which will be a key priority in the coming moves."
     },
     {
       "san": "Nf6",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Qe2",
-      "annotation": "We develop our queen to a flexible central square where it supports our e3 pawn, connects our rooks, and prepares to potentially support a central advance or kingside attack. The queen on e2 is well-placed to support both our central pawns and our pieces, while also keeping options open for future piece coordination. This move is part of the classical development scheme in this variation, where we prioritize harmonious piece development over immediate tactical shots. From e2, our queen can potentially support moves like d5, Rd1, or even participate in kingside attacks, making this a flexible and principled developing move."
+      "annotation": "We develop our queen to a flexible central square where it supports our e3 pawn, connects our rooks, and prepares to potentially support a central advance or kingside attack. The queen on e2 is well-placed to support both our central pawns and our pieces, while also keeping options open for future piece coordination. This move is part of the classical development scheme in this variation, where we prioritize harmonious piece development over immediate tactical shots. From e2, our queen can potentially support moves like d5, Rd1, or even participate in kingside attacks, making this a flexible and principled choice."
     },
     {
       "san": "b5",
@@ -63,7 +63,7 @@
     },
     {
       "san": "Bb7",
-      "annotation": "Our opponent develops the dark-squared bishop to its most natural square, adding pressure to our central d4 pawn and completing a harmonious piece development scheme. This move also supports Black's potential central breaks and creates a strong diagonal battery that can become dangerous in the middlegame. The bishop on b7 is well-placed to support both the queenside pawn majority and central operations, while also preparing to potentially support a ...d5 or ...c4 advance. Black's pieces are now working together harmoniously, with the bishop supporting the advanced b5 pawn and creating long-term pressure along the long diagonal."
+      "annotation": "Our opponent develops the dark-squared bishop to its ideal square, adding pressure to our central d4 pawn and completing a harmonious piece development scheme. This move also supports Black's potential central breaks and creates a strong diagonal battery that can become dangerous in the middlegame. The bishop on b7 is well-placed to support both the queenside pawn majority and central operations, while also preparing to potentially support a ...d5 or ...c4 advance. Black's pieces are now working together harmoniously, with the bishop supporting the advanced b5 pawn and creating long-term pressure along the long diagonal."
     },
     {
       "san": "Rd1",
@@ -75,7 +75,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queenside knight to its most natural square, adding support to our d4 pawn and preparing to potentially advance it or create central pressure. This move also improves our piece coordination and prepares to potentially support advances like d5 or create threats in the center and on the kingside. The knight on c3 is actively placed and can potentially jump to more aggressive squares like e4, d5, or a4 depending on how the position develops. Our development is now nearly complete, and we have excellent piece coordination with all our minor pieces actively placed and our king safely castled, giving us good prospects for the middlegame battle."
+      "annotation": "We develop our queenside knight to its ideal square, adding support to our d4 pawn and preparing to potentially advance it or create central pressure. This move also improves our piece coordination and prepares to potentially support advances like d5 or create threats in the center and on the kingside. The knight on c3 is actively placed and can potentially jump to more aggressive squares like e4, d5, or a4 depending on how the position develops. Our development is now nearly complete, and we have excellent piece coordination with all our minor pieces actively placed and our king safely castled, giving us good prospects for the middlegame battle."
     },
     {
       "san": "Bd6",

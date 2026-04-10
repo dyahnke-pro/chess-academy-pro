@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to its most natural square, immediately putting pressure on our central d4 pawn. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prepares to support a potential ...e5 central advance later, while developing with tempo by attacking our pawn. Black is following classical opening principles by developing pieces quickly toward the center."
+      "annotation": "Black develops the kingside knight to its ideal square, immediately putting pressure on our central d4 pawn. This is one of the most flexible responses to 1.d4, as it doesn't commit Black to any particular pawn structure yet and keeps options open for various defensive setups. The knight on f6 also prepares to support a potential ...e5 central advance later, while developing with tempo by attacking our pawn. Black is following classical opening principles by developing pieces quickly toward the center."
     },
     {
       "san": "Nf3",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the queenside knight to its most natural square, adding more pressure to our d4 pawn and supporting the advanced c5 pawn. This knight development is logical and follows opening principles, while also preparing potential tactical ideas in the center. The knight on c6 gives Black good piece coordination and keeps options open for various plans, including ...cxd4 at some point or supporting further central advances. From c6, the knight also eyes important squares like e5 and d4, making it an active participant in the central struggle."
+      "annotation": "Black develops the queenside knight to its ideal square, adding more pressure to our d4 pawn and supporting the advanced c5 pawn. This knight development is logical and follows opening principles, while also preparing potential tactical ideas in the center. The knight on c6 gives Black good piece coordination and keeps options open for various plans, including ...cxd4 at some point or supporting further central advances. From c6, the knight also eyes important squares like e5 and d4, making it an active participant in the central struggle."
     },
     {
       "san": "O-O",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black completes kingside development by castling, securing the king's safety and entering the middlegame phase of the game. This natural move connects Black's rooks and prepares for the complex maneuvering that typically characterizes positions arising from the Rubinstein Opening. With both sides having completed basic development and king safety, the real strategic battle can now begin, with us having slightly more harmonious piece coordination thanks to our bishop on b2 and the solid pawn structure. Black's position is solid but somewhat passive, and we'll be looking to gradually improve our position and create long-term pressure."
+      "annotation": "Black completes kingside development by castling, securing the king's safety and entering the middlegame phase of the game. this move connects Black's rooks and prepares for the complex maneuvering that typically characterizes positions arising from the Rubinstein Opening. With both sides having completed basic development and king safety, the real strategic battle can now begin, with us having slightly more harmonious piece coordination thanks to our bishop on b2 and the solid pawn structure. Black's position is solid but somewhat passive, and we'll be looking to gradually improve our position and create long-term pressure."
     }
   ]
 }

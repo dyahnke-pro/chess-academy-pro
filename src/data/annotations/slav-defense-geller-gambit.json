@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, attacking the e5 square and preparing to castle kingside for safety. This move is completely principled, following opening fundamentals by developing pieces toward the center while maintaining flexibility in our pawn structure. The knight on f3 also supports a potential e4 advance, which could give us an impressive pawn center if the timing is right. From f3, our knight can later jump to e5, g5, or h4 depending on how the position develops, making this piece placement both solid and dynamic."
+      "annotation": "We develop our kingside knight to its ideal square, attacking the e5 square and preparing to castle kingside for safety. This move is completely principled, following opening fundamentals by developing pieces toward the center while maintaining flexibility in our pawn structure. The knight on f3 also supports a potential e4 advance, which could give us an impressive pawn center if the timing is right. From f3, our knight can later jump to e5, g5, or h4 depending on how the position develops, making this piece placement both solid and dynamic."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development with their own kingside knight, attacking our d4 pawn and preparing to castle kingside. This natural developing move puts immediate pressure on our center while following the opening principle of developing knights before bishops. The knight on f6 also controls important central squares like e4 and d5, making it harder for us to establish a dominant pawn center. Black is maintaining the symmetrical nature of the position while keeping their options open for various Slav setups, including the eventual ...Bf5 or ...Bg4 to activate the light-squared bishop."
+      "annotation": "Black mirrors our development with their own kingside knight, attacking our d4 pawn and preparing to castle kingside. This active move puts immediate pressure on our center while following the opening principle of developing knights before bishops. The knight on f6 also controls important central squares like e4 and d5, making it harder for us to establish a dominant pawn center. Black is maintaining the symmetrical nature of the position while keeping their options open for various Slav setups, including the eventual ...Bf5 or ...Bg4 to activate the light-squared bishop."
     },
     {
       "san": "Nc3",

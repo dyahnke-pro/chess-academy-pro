@@ -33,7 +33,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, controlling e4 and d5. This is the hallmark of the Indian defenses — Black refuses to immediately commit pawns to the center, instead developing.",
+      "annotation": "Black develops the knight to its ideal square, controlling e4 and d5. This is the hallmark of the Indian defenses — Black refuses to immediately commit pawns to the center, instead developing.",
       "pawnStructure": "No pawn commitments yet for Black; maximum flexibility retained.",
       "plans": [
         "Control e4 to prevent White from playing e4 freely",
@@ -123,7 +123,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops the knight to c3, the most natural square, defending e4 and pressuring d5.",
+      "annotation": "White develops the knight to c3, the ideal square, defending e4 and pressuring d5.",
       "pawnStructure": "No change; the knight supports a future e4 advance.",
       "plans": [
         "Support e4 to build the ideal center",
@@ -4655,7 +4655,7 @@
         },
         {
           "san": "Ba6",
-          "annotation": "The key move! The bishop lands on a6, attacking the queen on c4 and seizing control of the light squares. This is the payoff of ...b6.",
+          "annotation": "the critical move! The bishop lands on a6, attacking the queen on c4 and seizing control of the light squares. This is the payoff of ...b6.",
           "arrows": [
             {
               "from": "c8",
@@ -4901,7 +4901,7 @@
         },
         {
           "san": "Rd1",
-          "annotation": "White seizes the open d-file with the rook, creating pressure against Black's position. This is an active developing move.",
+          "annotation": "White seizes the open d-file with the rook, creating pressure against Black's position. This is an active developing choice.",
           "arrows": [
             {
               "from": "a1",

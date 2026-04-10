@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important central squares e5 and d4 while preparing to support our kingside development. This move is incredibly flexible and doesn't commit us to any particular pawn structure yet – we could still transpose to various openings depending on Black's response. The knight on f3 also prepares to castle kingside and can potentially jump to more active squares like e5 or g5 later in the game. By developing pieces before committing to further pawn moves, we maintain maximum flexibility while steadily improving our position."
+      "annotation": "We develop our knight to its ideal square, controlling the important central squares e5 and d4 while preparing to support our kingside development. This move is incredibly flexible and doesn't commit us to any particular pawn structure yet – we could still transpose to various openings depending on Black's response. The knight on f3 also prepares to castle kingside and can potentially jump to more active squares like e5 or g5 later in the game. By developing pieces before committing to further pawn moves, we maintain maximum flexibility while steadily improving our position."
     },
     {
       "san": "d5",

@@ -11,7 +11,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We're playing the key move that defines the Blackmar-Diemer Gambit, offering our e-pawn to blast open the center and accelerate our development. This gambit move transforms a quiet Queen's Pawn opening into a sharp tactical battle, as we're willing to sacrifice material to gain tempo and attacking chances. By advancing e4, we're attacking Black's d5 pawn and forcing a decision - Black must either capture and give us the rapid development we're seeking, or try to maintain the pawn with moves like c6 or e6. The philosophy here is that our piece activity and attacking potential will be worth more than the sacrificed pawn, especially if Black isn't well-prepared for the resulting complications."
+      "annotation": "We're playing the critical move that defines the Blackmar-Diemer Gambit, offering our e-pawn to blast open the center and accelerate our development. This gambit move transforms a quiet Queen's Pawn opening into a sharp tactical battle, as we're willing to sacrifice material to gain tempo and attacking chances. By advancing e4, we're attacking Black's d5 pawn and forcing a decision - Black must either capture and give us the rapid development we're seeking, or try to maintain the pawn with moves like c6 or e6. The philosophy here is that our piece activity and attacking potential will be worth more than the sacrificed pawn, especially if Black isn't well-prepared for the resulting complications."
     },
     {
       "san": "dxe4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to its most natural square, defending against potential threats while preparing to castle kingside and complete development. This is a solid, principled move that attacks our e4 pawn (though it's not there anymore) and stakes a claim to important central squares like e4 and d5. Our opponent is trying to develop normally while maintaining their extra pawn, but they need to be careful not to fall behind in development or allow us to build up a dangerous attack. The knight on f6 does provide some defense to Black's kingside, but it can also become a target for our advancing pawns or pieces later in the game."
+      "annotation": "Black develops their knight to its ideal square, defending against potential threats while preparing to castle kingside and complete development. This is a solid, principled move that attacks our e4 pawn (though it's not there anymore) and stakes a claim to important central squares like e4 and d5. Our opponent is trying to develop normally while maintaining their extra pawn, but they need to be careful not to fall behind in development or allow us to build up a dangerous attack. The knight on f6 does provide some defense to Black's kingside, but it can also become a target for our advancing pawns or pieces later in the game."
     },
     {
       "san": "Be3",

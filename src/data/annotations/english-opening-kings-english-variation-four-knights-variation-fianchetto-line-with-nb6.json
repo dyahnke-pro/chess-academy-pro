@@ -11,11 +11,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports the c4 pawn and prepares to contest the center. This knight placement is incredibly flexible—it can later jump to d5, e4, or even b5 depending on how the position develops. From c3, the knight also supports a future d4 pawn break, which is often a key strategic goal in English Opening positions. The knight development follows the opening principle of developing pieces before pawns (when possible) and keeps maximum options open for our pawn structure."
+      "annotation": "We're developing our knight to its ideal square, where it supports the c4 pawn and prepares to contest the center. This knight placement is incredibly flexible—it can later jump to d5, e4, or even b5 depending on how the position develops. From c3, the knight also supports a future d4 pawn break, which is often a key strategic goal in English Opening positions. The knight development follows the opening principle of developing pieces before pawns (when possible) and keeps maximum options open for our pawn structure."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most active square, attacking our e4 square and preparing to support the central e5 pawn. This is the most natural developing move, following classical principles while maintaining pressure in the center. Our opponent is now threatening to continue with moves like Bc5 or Be7, completing kingside development efficiently. We need to be aware that Black's knight on f6 is perfectly placed to support central breaks like ...d6-d5 or to jump to outposts like e4 or g4 later in the game."
+      "annotation": "Black develops the knight to its most active square, attacking our e4 square and preparing to support the central e5 pawn. This is the most active move, following classical principles while maintaining pressure in the center. Our opponent is now threatening to continue with moves like Bc5 or Be7, completing kingside development efficiently. We need to be aware that Black's knight on f6 is perfectly placed to support central breaks like ...d6-d5 or to jump to outposts like e4 or g4 later in the game."
     },
     {
       "san": "Nf3",

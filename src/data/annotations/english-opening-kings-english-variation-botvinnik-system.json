@@ -11,7 +11,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting our c4 pawn and preparing to challenge Black's central presence. This move is part of the King's English Variation, where we're planning to fianchetto our king's bishop and create a harmonious piece setup. The knight on c3 also keeps options open for both d3 (supporting the center modestly) or even f4 in some lines (playing more aggressively). By developing this knight first, we're following classical opening principles while maintaining maximum flexibility in our pawn structure."
+      "annotation": "We develop our knight to its ideal square, supporting our c4 pawn and preparing to challenge Black's central presence. This move is part of the King's English Variation, where we're planning to fianchetto our king's bishop and create a harmonious piece setup. The knight on c3 also keeps options open for both d3 (supporting the center modestly) or even f4 in some lines (playing more aggressively). By developing this knight first, we're following classical opening principles while maintaining maximum flexibility in our pawn structure."
     },
     {
       "san": "Nc6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Bg2",
-      "annotation": "We complete our fianchetto, placing our dark-squared bishop on its ideal square where it dominates the long diagonal and supports our central ambitions. From g2, this bishop eyes the critical d5 square and will be perfectly placed to support a future d4 pawn break, which is one of our main strategic goals. The bishop also provides excellent king safety once we castle, creating a solid defensive foundation. This is a key move in the Botvinnik System, as the dark-squared bishop often becomes our most important attacking piece in the resulting middlegame positions."
+      "annotation": "We complete our fianchetto, placing our dark-squared bishop on its ideal square where it dominates the long diagonal and supports our central ambitions. From g2, this bishop eyes the critical d5 square and will be perfectly placed to support a future d4 pawn break, which is one of our main strategic goals. The bishop also provides excellent king safety once we castle, creating a solid defensive foundation. This is a critical move in the Botvinnik System, as the dark-squared bishop often becomes our most important attacking piece in the resulting middlegame positions."
     },
     {
       "san": "Bg7",

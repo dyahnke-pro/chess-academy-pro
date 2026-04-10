@@ -23,11 +23,11 @@
     },
     {
       "san": "Bf5",
-      "annotation": "Black develops the light-squared bishop to an active square before it gets blocked in by potential moves like e6 or f6. This is a key move in the Caro-Kann because once Black plays e6 (which is often necessary), this bishop would be severely restricted behind the pawn chain. The bishop on f5 also eyes our e4 square (though the pawn has advanced) and puts pressure on our kingside, particularly the h2 square. From f5, this bishop maintains flexibility and can potentially retreat to e6, h5, or even g6 if needed, while staying active in the position."
+      "annotation": "Black develops the light-squared bishop to an active square before it gets blocked in by potential moves like e6 or f6. This is a critical move in the Caro-Kann because once Black plays e6 (which is often necessary), this bishop would be severely restricted behind the pawn chain. The bishop on f5 also eyes our e4 square (though the pawn has advanced) and puts pressure on our kingside, particularly the h2 square. From f5, this bishop maintains flexibility and can potentially retreat to e6, h5, or even g6 if needed, while staying active in the position."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, controlling the important e5 and d4 central squares while preparing kingside castling. This move also prevents any potential Black tactics involving Qb6, hitting both b2 and f2 simultaneously. The knight on f3 supports our advanced e5 pawn and gives us flexibility for future plans - we might consider g3 and Bg2 for a fianchetto setup, or h3 to challenge Black's bishop on f5. This natural development move keeps our options open while maintaining the pressure that our central pawn advance has created."
+      "annotation": "We're developing our kingside knight to its ideal square, controlling the important e5 and d4 central squares while preparing kingside castling. This move also prevents any potential Black tactics involving Qb6, hitting both b2 and f2 simultaneously. The knight on f3 supports our advanced e5 pawn and gives us flexibility for future plans - we might consider g3 and Bg2 for a fianchetto setup, or h3 to challenge Black's bishop on f5. This natural development move keeps our options open while maintaining the pressure that our central pawn advance has created."
     }
   ]
 }

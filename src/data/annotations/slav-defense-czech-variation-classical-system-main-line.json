@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This flexible move also prepares kingside castling and keeps our options open for how we'll continue our development. The knight on f3 is perfectly placed to support various pawn advances in the center, whether we play e3 or e4, and it can potentially reroute to other squares like e5 or d2 depending on how the position develops. By developing pieces before making further pawn moves, we follow classical opening principles while maintaining maximum flexibility for our future plans."
+      "annotation": "We develop our kingside knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our d4 pawn. This flexible move also prepares kingside castling and keeps our options open for how we'll continue our development. The knight on f3 is perfectly placed to support various pawn advances in the center, whether we play e3 or e4, and it can potentially reroute to other squares like e5 or d2 depending on how the position develops. By developing pieces before making further pawn moves, we follow classical opening principles while maintaining maximum flexibility for our future plans."
     },
     {
       "san": "Nf6",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We bring our queenside knight into play, adding another attacker to the d5 pawn and increasing the central pressure. This natural developing move also prepares various pawn breaks like e4 or supports the potential recapture Nxc4 if Black takes our c4 pawn. The knight on c3 works harmoniously with our other pieces, potentially supporting a future e4 advance or helping to control important squares like b5 and d5. By developing both knights toward the center, we're building a solid foundation for our middlegame plans while keeping Black under constant pressure to maintain their central pawn."
+      "annotation": "We bring our queenside knight into play, adding another attacker to the d5 pawn and increasing the central pressure. This active move also prepares various pawn breaks like e4 or supports the potential recapture Nxc4 if Black takes our c4 pawn. The knight on c3 works harmoniously with our other pieces, potentially supporting a future e4 advance or helping to control important squares like b5 and d5. By developing both knights toward the center, we're building a solid foundation for our middlegame plans while keeping Black under constant pressure to maintain their central pawn."
     },
     {
       "san": "dxc4",

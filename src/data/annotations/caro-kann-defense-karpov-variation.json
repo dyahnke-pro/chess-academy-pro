@@ -19,7 +19,7 @@
     },
     {
       "san": "Nd2",
-      "annotation": "We're developing our knight to support the attacked e4 pawn while keeping maximum flexibility in our position. This is a key move in many Caro-Kann variations because it avoids blocking our c-pawn (unlike Nc3) and prepares to recapture on e4 with the knight, maintaining central control. Our knight on d2 will be well-placed after Nxe4, controlling key central squares and supporting our development. This move is slightly slower than the more direct Nc3 or f3, but it leads to rich middlegame positions where we can build long-term pressure."
+      "annotation": "We're developing our knight to support the attacked e4 pawn while keeping maximum flexibility in our position. This is a critical move in many Caro-Kann variations because it avoids blocking our c-pawn (unlike Nc3) and prepares to recapture on e4 with the knight, maintaining central control. Our knight on d2 will be well-placed after Nxe4, controlling key central squares and supporting our development. This move is slightly slower than the more direct Nc3 or f3, but it leads to rich middlegame positions where we can build long-term pressure."
     },
     {
       "san": "dxe4",

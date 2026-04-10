@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 pawn and preparing to support central counterplay with moves like e5. This knight on f6 is a key piece in Black's defensive setup - it can later retreat to d7 or h5 depending on how we continue our attack. The knight also supports Black's kingside and can participate in tactical ideas once the dark-squared bishop reaches g7. We need to be aware that this knight is well-placed to jump to various squares like g4 or h5 if we're not careful with our attacking setup."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing to support central counterplay with moves like e5. This knight on f6 is a key piece in Black's defensive setup - it can later retreat to d7 or h5 depending on how we continue our attack. The knight also supports Black's kingside and can participate in tactical ideas once the dark-squared bishop reaches g7. We need to be aware that this knight is well-placed to jump to various squares like g4 or h5 if we're not careful with our attacking setup."
     },
     {
       "san": "Nc3",
@@ -35,11 +35,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our central pawns while preparing to castle kingside. This knight on f3 is crucial for our attacking setup - it can later jump to g5 or h4 to support our kingside assault, and it also eyes the important e5 square. The knight development also prepares us to castle short, getting our king to safety before launching our pawn storm. By placing the knight on f3, we're following sound opening principles while maintaining maximum flexibility for our attacking plans in the Austrian Attack."
+      "annotation": "We develop our knight to its ideal square, supporting our central pawns while preparing to castle kingside. This knight on f3 is crucial for our attacking setup - it can later jump to g5 or h4 to support our kingside assault, and it also eyes the important e5 square. The knight development also prepares us to castle short, getting our king to safety before launching our pawn storm. By placing the knight on f3, we're following sound opening principles while maintaining maximum flexibility for our attacking plans in the Austrian Attack."
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside, prioritizing king safety but also walking into the area where our Austrian Attack will be most dangerous. This natural move completes Black's basic development, but it also gives us a clear target for our f4-f5 advance and potential h4-h5 pawn storm. Black's king on g8 will be under constant pressure once we start our attacking sequence, especially with moves like Qd2, h4, and the eventual f5 breakthrough. We should now be thinking about completing our own development quickly with moves like Be2 and castling, then launching our characteristic Austrian Attack assault against Black's kingside fortress."
+      "annotation": "Black castles kingside, prioritizing king safety but also walking into the area where our Austrian Attack will be most dangerous. this move completes Black's basic development, but it also gives us a clear target for our f4-f5 advance and potential h4-h5 pawn storm. Black's king on g8 will be under constant pressure once we start our attacking sequence, especially with moves like Qd2, h4, and the eventual f5 breakthrough. We should now be thinking about completing our own development quickly with moves like Be2 and castling, then launching our characteristic Austrian Attack assault against Black's kingside fortress."
     }
   ]
 }

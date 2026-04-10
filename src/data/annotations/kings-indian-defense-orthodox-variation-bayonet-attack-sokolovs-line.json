@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most natural square, supporting the d4 pawn and preparing to advance e2-e4 to establish a classical pawn center. The knight on c3 also eyes important squares like e4, d5, and b5, giving us flexibility in our central strategy. This piece will often support our space advantage and can potentially relocate to d5 or e4 in favorable circumstances. Developing with Nc3 is more flexible than Nf3 first, as it doesn't block our f-pawn and keeps various pawn structure options open."
+      "annotation": "We're developing our queenside knight to its ideal square, supporting the d4 pawn and preparing to advance e2-e4 to establish a classical pawn center. The knight on c3 also eyes important squares like e4, d5, and b5, giving us flexibility in our central strategy. This piece will often support our space advantage and can potentially relocate to d5 or e4 in favorable circumstances. Developing with Nc3 is more flexible than Nf3 first, as it doesn't block our f-pawn and keeps various pawn structure options open."
     },
     {
       "san": "Bg7",
@@ -75,7 +75,7 @@
     },
     {
       "san": "Re1",
-      "annotation": "We're repositioning our rook to the central e-file where it supports our e4 pawn and prepares for potential central operations. This move is Sokolov's refinement of the Bayonet Attack, improving our rook's placement before Black can create serious threats with ...f5. The rook on e1 also provides flexibility for future plans, potentially supporting a later f2-f3 and g2-g4 kingside advance, or defending against Black's central counterplay. This subtle but important move demonstrates the deep preparation required in modern opening theory, as we're optimizing our piece placement before the real tactical battle begins."
+      "annotation": "We're repositioning our rook to the central e-file where it supports our e4 pawn and prepares for potential central operations. This move is Sokolov's refinement of the Bayonet Attack, improving our rook's placement before Black can create serious threats with ...f5. The rook on e1 also provides flexibility for future plans, potentially supporting a later f2-f3 and g2-g4 kingside advance, or defending against Black's central counterplay. This subtle but purposeful move demonstrates the deep preparation required in modern opening theory, as we're optimizing our piece placement before the real tactical battle begins."
     }
   ]
 }

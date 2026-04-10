@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our future pawn recapture plans. This move is much more flexible than the immediate 3.e3, as it doesn't commit our pawn structure yet and keeps multiple options open for regaining the pawn on c4. The knight on f3 also prepares potential tactics involving Qa4+ or other queen moves that can harass Black's position. From f3, our knight can later jump to e5 for a strong central outpost or support an eventual e2-e4 advance to build a powerful pawn center."
+      "annotation": "We develop our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our future pawn recapture plans. This move is much more flexible than the immediate 3.e3, as it doesn't commit our pawn structure yet and keeps multiple options open for regaining the pawn on c4. The knight on f3 also prepares potential tactics involving Qa4+ or other queen moves that can harass Black's position. From f3, our knight can later jump to e5 for a strong central outpost or support an eventual e2-e4 advance to build a powerful pawn center."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to mirror our setup, controlling the central e4 and d5 squares while preparing to support their extra pawn on c4. This natural developing move shows that our opponent wants to complete their development quickly before we can create serious threats against their somewhat exposed position. The knight on f6 also prepares Black's kingside castling and can potentially support a future ...e7-e5 advance to challenge our central control. However, this knight can become a target for our pieces, especially if we can advance e3-e4 and gain space in the center."
+      "annotation": "Black develops their knight to mirror our setup, controlling the central e4 and d5 squares while preparing to support their extra pawn on c4. This active move shows that our opponent wants to complete their development quickly before we can create serious threats against their somewhat exposed position. The knight on f6 also prepares Black's kingside castling and can potentially support a future ...e7-e5 advance to challenge our central control. However, this knight can become a target for our pieces, especially if we can advance e3-e4 and gain space in the center."
     },
     {
       "san": "e3",

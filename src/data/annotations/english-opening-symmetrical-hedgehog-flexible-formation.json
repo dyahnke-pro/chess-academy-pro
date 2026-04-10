@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important e5 and d4 central squares while preparing to castle kingside. This flexible move fits perfectly with the English Opening's philosophy of piece development before committing to a specific pawn structure. The knight on f3 also supports a future e2-e4 advance if we want to transpose into a Sicilian-type position, and it prepares to reroute to d4 or h4 depending on how the position develops. By developing pieces rather than immediately pushing d4, we maintain maximum flexibility while improving our position."
+      "annotation": "We develop our knight to its ideal square, controlling the important e5 and d4 central squares while preparing to castle kingside. This flexible move fits perfectly with the English Opening's philosophy of piece development before committing to a specific pawn structure. The knight on f3 also supports a future e2-e4 advance if we want to transpose into a Sicilian-type position, and it prepares to reroute to d4 or h4 depending on how the position develops. By developing pieces rather than immediately pushing d4, we maintain maximum flexibility while improving our position."
     },
     {
       "san": "c5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We castle kingside to ensure our king's safety before the position becomes more complex and tactical. This natural developing move connects our rooks and prepares to potentially double on the d-file or f-file depending on how the position evolves. Castling also allows our h1 rook to potentially swing into action via f1-f4 or other creative routes that support our middlegame plans. With our king safely tucked away, we can now focus on central operations and piece coordination without worrying about tactical vulnerabilities."
+      "annotation": "We castle kingside to ensure our king's safety before the position becomes more complex and tactical. This active move connects our rooks and prepares to potentially double on the d-file or f-file depending on how the position evolves. Castling also allows our h1 rook to potentially swing into action via f1-f4 or other creative routes that support our middlegame plans. With our king safely tucked away, we can now focus on central operations and piece coordination without worrying about tactical vulnerabilities."
     },
     {
       "san": "Be7",

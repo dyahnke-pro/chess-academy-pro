@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn immediately and controlling the important central squares d4 and e5. This move is far superior to the premature 2.d4, which would lead to tactical complications we're not yet ready for. The knight on f3 also prepares kingside castling and keeps our options open for various pawn structures. By attacking the e5 pawn, we're forcing Black to make a decision about how to defend it, which will influence the character of the entire game."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn immediately and controlling the important central squares d4 and e5. This move is far superior to the premature 2.d4, which would lead to tactical complications we're not yet ready for. The knight on f3 also prepares kingside castling and keeps our options open for various pawn structures. By attacking the e5 pawn, we're forcing Black to make a decision about how to defend it, which will influence the character of the entire game."
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends the e5 pawn with the most natural developing move, bringing the knight to an active square where it controls important central territory. This knight placement supports Black's central pawn chain and prepares potential advances like ...d5 or ...f5 later in the game. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the central tension. The knight on c6 also eyes the important outpost squares d4 and e5, so we need to be mindful of these possibilities as we continue our development."
+      "annotation": "Black defends the e5 pawn with the most active move, bringing the knight to an active square where it controls important central territory. This knight placement supports Black's central pawn chain and prepares potential advances like ...d5 or ...f5 later in the game. Our opponent is following classical opening principles by developing pieces toward the center while maintaining the central tension. The knight on c6 also eyes the important outpost squares d4 and e5, so we need to be mindful of these possibilities as we continue our development."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, attacking our e4 pawn and preparing to castle kingside. This move is consistent with sound opening principles and creates counter-pressure in the center, forcing us to deal with the threat to our king's pawn. The knight on f6 also supports potential central advances like ...d5 and prepares to contest key squares like e4 and d5. Our opponent is following the main line of the Ruy Lopez, where both sides develop their pieces harmoniously while maintaining central tension."
+      "annotation": "Black develops the king's knight to its ideal square, attacking our e4 pawn and preparing to castle kingside. This move is consistent with sound opening principles and creates counter-pressure in the center, forcing us to deal with the threat to our king's pawn. The knight on f6 also supports potential central advances like ...d5 and prepares to contest key squares like e4 and d5. Our opponent is following the main line of the Ruy Lopez, where both sides develop their pieces harmoniously while maintaining central tension."
     },
     {
       "san": "O-O",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Re1",
-      "annotation": "We bring our rook to the e-file, adding crucial support to our e4 pawn and preparing for the central tensions that define the Ruy Lopez middlegame. This move also anticipates the common ...d6 advance by Black, after which our rook will be eyeing potential weaknesses along the e-file. The rook placement on e1 is particularly effective because it supports both our central pawn and prepares tactical possibilities involving the pin on the e-file. This natural developing move keeps our initiative while maintaining all our strategic options in the complex positions that typically arise from the Ruy Lopez."
+      "annotation": "We bring our rook to the e-file, adding crucial support to our e4 pawn and preparing for the central tensions that define the Ruy Lopez middlegame. This move also anticipates the common ...d6 advance by Black, after which our rook will be eyeing potential weaknesses along the e-file. The rook placement on e1 is particularly effective because it supports both our central pawn and prepares tactical possibilities involving the pin on the e-file. This active move keeps our initiative while maintaining all our strategic options in the complex positions that typically arise from the Ruy Lopez."
     },
     {
       "san": "b5",
@@ -59,7 +59,7 @@
     },
     {
       "san": "c3",
-      "annotation": "We prepare the central advance d4, which is one of our main strategic goals in the Ruy Lopez. This move supports our future pawn center while also controlling the important b4 and d4 squares, preventing Black from establishing pieces there. The advance c3 is a key move in many Ruy Lopez systems, as it prepares to challenge Black's central pawn chain and potentially gain space in the center. While this move temporarily blocks our queen's access to the queenside, the strategic benefits of preparing d4 far outweigh this minor inconvenience, as central control is crucial in these positions."
+      "annotation": "We prepare the central advance d4, which is one of our main strategic goals in the Ruy Lopez. This move supports our future pawn center while also controlling the important b4 and d4 squares, preventing Black from establishing pieces there. The advance c3 is a critical move in many Ruy Lopez systems, as it prepares to challenge Black's central pawn chain and potentially gain space in the center. While this move temporarily blocks our queen's access to the queenside, the strategic benefits of preparing d4 far outweigh this minor inconvenience, as central control is crucial in these positions."
     },
     {
       "san": "Na5",

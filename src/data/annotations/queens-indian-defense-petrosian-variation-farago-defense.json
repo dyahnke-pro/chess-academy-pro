@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside and keeping maximum flexibility in our setup. The knight on f3 controls the important e5 and g5 squares, preventing Black from advancing pawns to these key central outposts. This move also keeps our options open regarding our light-squared bishop - we can still play Bg5 to pin the knight, or develop it to e2, d3, or even b5 depending on Black's response. By developing pieces before committing to a specific pawn structure, we're following sound opening principles and maintaining the initiative."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and keeping maximum flexibility in our setup. The knight on f3 controls the important e5 and g5 squares, preventing Black from advancing pawns to these key central outposts. This move also keeps our options open regarding our light-squared bishop - we can still play Bg5 to pin the knight, or develop it to e2, d3, or even b5 depending on Black's response. By developing pieces before committing to a specific pawn structure, we're following sound opening principles and maintaining the initiative."
     },
     {
       "san": "b6",
@@ -39,7 +39,7 @@
     },
     {
       "san": "Bb7",
-      "annotation": "Black completes the fianchetto setup with this natural developing move, placing the bishop on its ideal square where it pressures our central pawns and controls the important long diagonal. This is the Farago Defense within the Petrosian Variation, where Black maintains maximum pressure on our center with both bishops (the dark-squared bishop now on b7 and the light-squared bishop potentially returning to a more active square). The bishop on b7 supports Black's central strategy of undermining our pawn duo with d7-d5 or c7-c5 breaks, while also providing excellent defensive resources for Black's king. Our opponent has now developed both bishops actively and is ready to complete development with moves like Nbd7 or Be7, maintaining excellent piece coordination."
+      "annotation": "Black completes the fianchetto setup with this active move, placing the bishop on its ideal square where it pressures our central pawns and controls the important long diagonal. This is the Farago Defense within the Petrosian Variation, where Black maintains maximum pressure on our center with both bishops (the dark-squared bishop now on b7 and the light-squared bishop potentially returning to a more active square). The bishop on b7 supports Black's central strategy of undermining our pawn duo with d7-d5 or c7-c5 breaks, while also providing excellent defensive resources for Black's king. Our opponent has now developed both bishops actively and is ready to complete development with moves like Nbd7 or Be7, maintaining excellent piece coordination."
     }
   ]
 }

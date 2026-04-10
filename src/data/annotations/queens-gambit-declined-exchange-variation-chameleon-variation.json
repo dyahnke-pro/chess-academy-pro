@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central control by attacking the d4 pawn and preparing to contest the e4 square. This is one of the most principled responses to 1.d4, as the knight develops to its most natural square while putting immediate pressure on our center. Our opponent is signaling their intention to fight for central control rather than allowing us to dominate the board's heart unopposed. This move also keeps Black's options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Gambit Declined."
+      "annotation": "Black immediately challenges our central control by attacking the d4 pawn and preparing to contest the e4 square. This is one of the most principled responses to 1.d4, as the knight develops to its ideal square while putting immediate pressure on our center. Our opponent is signaling their intention to fight for central control rather than allowing us to dominate the board's heart unopposed. This move also keeps Black's options open for various defensive setups including the King's Indian, Nimzo-Indian, or Queen's Gambit Declined."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn and preparing for the central tension that's about to arise. This move also prepares to recapture on d5 with the knight if Black plays the expected d5, maintaining our central presence. The knight on c3 eyes important central squares like e4 and d5, and later can swing to more active posts depending on how the position develops. We're following classical opening principles by developing pieces toward the center while maintaining maximum flexibility for our future plans."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing for the central tension that's about to arise. This move also prepares to recapture on d5 with the knight if Black plays the expected d5, maintaining our central presence. The knight on c3 eyes important central squares like e4 and d5, and later can swing to more active posts depending on how the position develops. We're following classical opening principles by developing pieces toward the center while maintaining maximum flexibility for our future plans."
     },
     {
       "san": "d5",
@@ -47,11 +47,11 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black completes their basic development by castling kingside, bringing the king to safety and connecting the rooks for better coordination. This natural move also prepares to bring the f8 rook into play, potentially along the e-file where it can support central operations. Our opponent is following sound opening principles by securing the king before launching any counterplay in the center or on the wings. The kingside castle also clears the back rank, giving Black more flexibility for piece maneuvering and potential tactical ideas."
+      "annotation": "Black completes their basic development by castling kingside, bringing the king to safety and connecting the rooks for better coordination. this move also prepares to bring the f8 rook into play, potentially along the e-file where it can support central operations. Our opponent is following sound opening principles by securing the king before launching any counterplay in the center or on the wings. The kingside castle also clears the back rank, giving Black more flexibility for piece maneuvering and potential tactical ideas."
     },
     {
       "san": "Bd3",
-      "annotation": "We're developing our light-squared bishop to an excellent central square, eyeing the h7 square near Black's king and maintaining pressure on the kingside. This bishop placement also supports potential central advances and prepares to coordinate with our other pieces for a kingside attack. The bishop on d3 controls important light squares and can quickly be repositioned if needed, while also supporting our overall piece coordination. This natural developing move increases the pressure on Black's position and prepares us for more aggressive continuations."
+      "annotation": "We're developing our light-squared bishop to an excellent central square, eyeing the h7 square near Black's king and maintaining pressure on the kingside. This bishop placement also supports potential central advances and prepares to coordinate with our other pieces for a kingside attack. The bishop on d3 controls important light squares and can quickly be repositioned if needed, while also supporting our overall piece coordination. This active move increases the pressure on Black's position and prepares us for more aggressive continuations."
     },
     {
       "san": "Nbd7",

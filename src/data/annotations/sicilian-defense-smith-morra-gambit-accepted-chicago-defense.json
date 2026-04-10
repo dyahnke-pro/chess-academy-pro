@@ -19,7 +19,7 @@
     },
     {
       "san": "c3",
-      "annotation": "We continue with our gambit theme, offering another pawn to accelerate our development and open lines for our pieces. This move attacks Black's d4 pawn and threatens to recapture with our knight after Black takes, which would give us excellent central control and rapid piece development. The c3 pawn also supports a potential d4 pawn break in the future and prevents Black's pieces from using the b4 and d4 squares. This is the key move that defines the Smith-Morra Gambit - we're willing to sacrifice material to get our pieces into active, attacking positions quickly."
+      "annotation": "We continue with our gambit theme, offering another pawn to accelerate our development and open lines for our pieces. This move attacks Black's d4 pawn and threatens to recapture with our knight after Black takes, which would give us excellent central control and rapid piece development. The c3 pawn also supports a potential d4 pawn break in the future and prevents Black's pieces from using the b4 and d4 squares. This is the defining move of the Smith-Morra Gambit - we're willing to sacrifice material to get our pieces into active, attacking positions quickly."
     },
     {
       "san": "dxc3",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, defending against potential tactics while preparing to contest the center and develop the kingside pieces. This is solid development that follows opening principles, though our opponent must be careful not to allow our pieces to coordinate too powerfully. The knight on c6 does block the c-file temporarily, which can be important in some Smith-Morra lines where rook activity becomes crucial. Black's plan is likely to complete kingside development quickly with moves like Nf6, Be7, and castling, while keeping the extra pawns and trying to neutralize our attacking chances."
+      "annotation": "Black develops the knight to its ideal square, defending against potential tactics while preparing to contest the center and develop the kingside pieces. This is solid development that follows opening principles, though our opponent must be careful not to allow our pieces to coordinate too powerfully. The knight on c6 does block the c-file temporarily, which can be important in some Smith-Morra lines where rook activity becomes crucial. Black's plan is likely to complete kingside development quickly with moves like Nf6, Be7, and castling, while keeping the extra pawns and trying to neutralize our attacking chances."
     },
     {
       "san": "Bc4",
@@ -39,7 +39,7 @@
     },
     {
       "san": "e6",
-      "annotation": "Black plays a solid developing move that supports the center and prepares to develop the dark-squared bishop, likely to e7 or d6. This move blocks our bishop's attack on f7 temporarily, which is an important defensive resource, while also controlling the d5 and f5 squares to limit our knight's mobility. However, this pawn move also slightly weakens Black's kingside, particularly the f6 and d6 squares, which we might be able to exploit later. Black is following a reasonable defensive plan by prioritizing piece development and king safety, but must remain vigilant about our attacking possibilities as we continue to improve our pieces' coordination."
+      "annotation": "Black plays a constructive move that supports the center and prepares to develop the dark-squared bishop, likely to e7 or d6. This move blocks our bishop's attack on f7 temporarily, which is an important defensive resource, while also controlling the d5 and f5 squares to limit our knight's mobility. However, this pawn move also slightly weakens Black's kingside, particularly the f6 and d6 squares, which we might be able to exploit later. Black is following a reasonable defensive plan by prioritizing piece development and king safety, but must remain vigilant about our attacking possibilities as we continue to improve our pieces' coordination."
     },
     {
       "san": "Nf3",

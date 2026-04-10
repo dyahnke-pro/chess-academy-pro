@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds classically by developing the knight to its most natural square, attacking our d4 pawn and controlling the important central squares e4 and d5. This move is completely sound and leads to the main lines of several major openings including the Queen's Gambit Declined, Nimzo-Indian, and our intended Catalan. Our opponent is following fundamental opening principles by developing pieces toward the center while keeping maximum flexibility for future pawn breaks and piece placement. We should be pleased to see this move as it allows us to continue with our Catalan setup."
+      "annotation": "Black responds classically by developing the knight to its ideal square, attacking our d4 pawn and controlling the important central squares e4 and d5. This move is completely sound and leads to the main lines of several major openings including the Queen's Gambit Declined, Nimzo-Indian, and our intended Catalan. Our opponent is following fundamental opening principles by developing pieces toward the center while keeping maximum flexibility for future pawn breaks and piece placement. We should be pleased to see this move as it allows us to continue with our Catalan setup."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. This natural developing move keeps all our options open—we could still transpose to a Queen's Gambit Declined with Be2, or continue with our intended Catalan fianchetto. The knight on f3 also helps control the important e5 square and prepares to support future central advances. Most importantly, this move doesn't commit us to any particular pawn structure yet, allowing us to adapt based on Black's next few moves."
+      "annotation": "We're developing our kingside knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and maintaining maximum flexibility in our setup. This active move keeps all our options open—we could still transpose to a Queen's Gambit Declined with Be2, or continue with our intended Catalan fianchetto. The knight on f3 also helps control the important e5 square and prepares to support future central advances. Most importantly, this move doesn't commit us to any particular pawn structure yet, allowing us to adapt based on Black's next few moves."
     },
     {
       "san": "d5",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Our opponent plays this solid move to support the d5 pawn and prepare potential queenside expansion with b6 and Bb7. This move is very natural in the Catalan as it helps Black maintain central control while preparing to develop the queen's bishop to a more active square. The pawn on c6 also prevents our knight from jumping to b5 and gives Black's position additional solidity. However, this move does create some long-term weaknesses on the queenside light squares, which our Catalan bishop will be perfectly placed to exploit in the middlegame and endgame."
+      "annotation": "Our opponent plays this stabilizing move to support the d5 pawn and prepare potential queenside expansion with b6 and Bb7. This move is very natural in the Catalan as it helps Black maintain central control while preparing to develop the queen's bishop to a more active square. The pawn on c6 also prevents our knight from jumping to b5 and gives Black's position additional solidity. However, this move does create some long-term weaknesses on the queenside light squares, which our Catalan bishop will be perfectly placed to exploit in the middlegame and endgame."
     },
     {
       "san": "Nbd2",

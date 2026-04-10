@@ -15,7 +15,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 pawn and preparing to castle kingside. This move is typical of the Pirc Defense, where Black develops pieces quickly while maintaining flexibility about how to challenge our center. The knight on f6 also supports a future ...e5 break, which would be Black's main way to contest our central dominance. We need to be aware that this knight can also jump to g4 or h5 in some tactical sequences, potentially creating threats against our kingside."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing to castle kingside. This move is typical of the Pirc Defense, where Black develops pieces quickly while maintaining flexibility about how to challenge our center. The knight on f6 also supports a future ...e5 break, which would be Black's main way to contest our central dominance. We need to be aware that this knight can also jump to g4 or h5 in some tactical sequences, potentially creating threats against our kingside."
     },
     {
       "san": "Nc3",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We bring our second knight into the game, developing with a threat to Black's advanced knight while supporting our central pawn structure. This natural developing move also prepares castling and keeps our options open for various pawn advances like h3, f4, or even g4 in aggressive lines. The knight on f3 controls key squares like e5 and g5, which will be important in our kingside attacking plans. By developing this knight, we're also preparing to potentially redeploy it later to more aggressive squares like g5 or h4 depending on how the position develops."
+      "annotation": "We bring our second knight into the game, developing with a threat to Black's advanced knight while supporting our central pawn structure. This active move also prepares castling and keeps our options open for various pawn advances like h3, f4, or even g4 in aggressive lines. The knight on f3 controls key squares like e5 and g5, which will be important in our kingside attacking plans. By developing this knight, we're also preparing to potentially redeploy it later to more aggressive squares like g5 or h4 depending on how the position develops."
     },
     {
       "san": "Bg7",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Be2",
-      "annotation": "We choose the quiet system with this solid developing move, preparing to castle while maintaining flexibility in our setup. The bishop on e2 supports our kingside and doesn't commit to the more aggressive Bc4 or Be3 alternatives just yet, keeping our options open for various pawn advances. This move is part of a positional approach where we'll complete our development, castle safely, then gradually improve our position before launching any direct attacks. While less forcing than alternatives like f4 or Bc4, this system gives us a solid foundation and avoids some of the tactical complications that Black might be hoping for in sharper variations."
+      "annotation": "We choose the quiet system with this solid developing choice, preparing to castle while maintaining flexibility in our setup. The bishop on e2 supports our kingside and doesn't commit to the more aggressive Bc4 or Be3 alternatives just yet, keeping our options open for various pawn advances. This move is part of a positional approach where we'll complete our development, castle safely, then gradually improve our position before launching any direct attacks. While less forcing than alternatives like f4 or Bc4, this system gives us a solid foundation and avoids some of the tactical complications that Black might be hoping for in sharper variations."
     }
   ]
 }

@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the important central squares e5 and d4 while supporting our future kingside development. This flexible move keeps all our options open - we can still transpose to various systems like the Réti Opening or even reach King's Indian Attack formations depending on how the position develops. The knight on f3 also prepares potential kingside castling and supports our control of the center without committing to any particular pawn structure yet. This is exactly the kind of patient, positional development that characterizes the English Opening at its best."
+      "annotation": "We develop our knight to its ideal square, controlling the important central squares e5 and d4 while supporting our future kingside development. This flexible move keeps all our options open - we can still transpose to various systems like the Réti Opening or even reach King's Indian Attack formations depending on how the position develops. The knight on f3 also prepares potential kingside castling and supports our control of the center without committing to any particular pawn structure yet. This is exactly the kind of patient, positional development that characterizes the English Opening at its best."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development with their own knight, controlling the central squares e4 and d5 while preparing to support the ...d5 advance. This natural developing move also opens up possibilities for kingside castling and puts pressure on our e4 square, which means if we ever want to play e4, we'll need to be prepared for the knight to challenge it immediately. Our opponent is following sound opening principles by developing pieces toward the center and maintaining flexibility in the position. This setup often leads to rich middlegame positions where both sides have good piece activity and multiple strategic plans available."
+      "annotation": "Black mirrors our development with their own knight, controlling the central squares e4 and d5 while preparing to support the ...d5 advance. This active move also opens up possibilities for kingside castling and puts pressure on our e4 square, which means if we ever want to play e4, we'll need to be prepared for the knight to challenge it immediately. Our opponent is following sound opening principles by developing pieces toward the center and maintaining flexibility in the position. This setup often leads to rich middlegame positions where both sides have good piece activity and multiple strategic plans available."
     },
     {
       "san": "b3",

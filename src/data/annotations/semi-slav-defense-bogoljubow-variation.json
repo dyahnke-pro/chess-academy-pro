@@ -15,11 +15,11 @@
     },
     {
       "san": "c6",
-      "annotation": "Our opponent chooses the Slav Defense setup, supporting their d5 pawn with the c6 pawn rather than accepting or declining the gambit immediately. This solid move keeps the central tension while preparing to potentially advance with b7-b5 later to kick our c4 pawn. Black maintains their central stronghold and avoids the more complex variations that arise from immediate captures. The c6 pawn also prepares queenside expansion and keeps Black's position flexible - they can still decide later whether to exchange on c4 or maintain the tension."
+      "annotation": "Our opponent chooses the Slav Defense setup, supporting their d5 pawn with the c6 pawn rather than accepting or declining the gambit immediately. this stabilizing move keeps the central tension while preparing to potentially advance with b7-b5 later to kick our c4 pawn. Black maintains their central stronghold and avoids the more complex variations that arise from immediate captures. The c6 pawn also prepares queenside expansion and keeps Black's position flexible - they can still decide later whether to exchange on c4 or maintain the tension."
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our queen's knight to its most natural square, adding another attacker to Black's d5 pawn and increasing the central pressure. This knight placement is incredibly flexible - it can support advances like e4 or f4, and it's perfectly positioned to recapture on c4 if Black ever takes our pawn. The knight on c3 also prepares potential queenside expansion with moves like a4 or b4 later in the game. From c3, our knight exerts influence over key central squares and supports our overall strategy of building pressure in the center."
+      "annotation": "We're developing our queen's knight to its ideal square, adding another attacker to Black's d5 pawn and increasing the central pressure. This knight placement is incredibly flexible - it can support advances like e4 or f4, and it's perfectly positioned to recapture on c4 if Black ever takes our pawn. The knight on c3 also prepares potential queenside expansion with moves like a4 or b4 later in the game. From c3, our knight exerts influence over key central squares and supports our overall strategy of building pressure in the center."
     },
     {
       "san": "Nf6",

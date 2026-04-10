@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square while immediately attacking Black's exposed queen. This move serves multiple purposes: it develops a piece, attacks the queen (forcing it to move again), and prepares to castle kingside. The knight on c3 also supports a future d4 push, which will give us a strong pawn center. By attacking the queen so early, we're already putting pressure on Black and making them spend time moving their most valuable piece rather than developing other pieces - this is exactly what we want in the opening phase."
+      "annotation": "We're developing our knight to its ideal square while immediately attacking Black's exposed queen. This move serves multiple purposes: it develops a piece, attacks the queen (forcing it to move again), and prepares to castle kingside. The knight on c3 also supports a future d4 push, which will give us a strong pawn center. By attacking the queen so early, we're already putting pressure on Black and making them spend time moving their most valuable piece rather than developing other pieces - this is exactly what we want in the opening phase."
     },
     {
       "san": "Qd8",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most active square, attacking our future kingside castling position and preparing to castle themselves. This is a natural developing move that also puts pressure on our center, particularly eyeing the e4 square and preparing potential ...Ng4 ideas in some lines. The knight on f6 is well-placed to support Black's kingside and can later jump to active squares like e4 or g4 depending on how the position develops. Our opponent is following sound opening principles by developing pieces quickly and putting them on squares where they control important central territory."
+      "annotation": "Black develops the knight to its most active square, attacking our future kingside castling position and preparing to castle themselves. This is a active move that also puts pressure on our center, particularly eyeing the e4 square and preparing potential ...Ng4 ideas in some lines. The knight on f6 is well-placed to support Black's kingside and can later jump to active squares like e4 or g4 depending on how the position develops. Our opponent is following sound opening principles by developing pieces quickly and putting them on squares where they control important central territory."
     },
     {
       "san": "Nf3",

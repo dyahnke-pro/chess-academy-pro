@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center. This move is incredibly flexible - it doesn't commit Black to any particular pawn structure yet, keeping options open for setups like ...e6 and ...d5 (Queen's Gambit Declined), ...g6 and ...Bg7 (King's Indian Defense), or even ...c5 (various Indian defenses). The knight on f6 also prepares kingside castling and puts immediate pressure on our central pawn, forcing us to make a decision about how to support it."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center. This move is incredibly flexible - it doesn't commit Black to any particular pawn structure yet, keeping options open for setups like ...e6 and ...d5 (Queen's Gambit Declined), ...g6 and ...Bg7 (King's Indian Defense), or even ...c5 (various Indian defenses). The knight on f6 also prepares kingside castling and puts immediate pressure on our central pawn, forcing us to make a decision about how to support it."
     },
     {
       "san": "c4",

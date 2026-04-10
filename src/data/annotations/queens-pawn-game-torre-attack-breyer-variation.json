@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center with moves like d5 or c5. This knight on f6 also supports a potential e5 advance later and helps control key central squares. The knight placement is extremely flexible, as it can later jump to e4, d5, or support kingside castling. However, by placing the knight on f6 early, Black is walking into our Torre Attack setup where we'll pin this piece with Bg5, creating immediate tactical and positional pressure."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center with moves like d5 or c5. This knight on f6 also supports a potential e5 advance later and helps control key central squares. The knight placement is extremely flexible, as it can later jump to e4, d5, or support kingside castling. However, by placing the knight on f6 early, Black is walking into our Torre Attack setup where we'll pin this piece with Bg5, creating immediate tactical and positional pressure."
     },
     {
       "san": "Nf3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "Here's the key move of the Torre Attack – we pin the knight on f6 to the queen on d8, creating immediate tactical pressure and forcing Black to make difficult decisions about their king safety. This bishop move puts pressure on Black's position by making it harder to castle kingside safely, as the pinned knight cannot defend the h7 square effectively. The pin also supports our central control, as Black's knight can no longer easily challenge our d4 pawn or jump to e4. This signature move of the Torre system often leads to kingside attacking chances, especially if Black castles short despite the pin, giving us excellent practical winning chances against intermediate players."
+      "annotation": "Here's the central idea of the Torre Attack – we pin the knight on f6 to the queen on d8, creating immediate tactical pressure and forcing Black to make difficult decisions about their king safety. This bishop move puts pressure on Black's position by making it harder to castle kingside safely, as the pinned knight cannot defend the h7 square effectively. The pin also supports our central control, as Black's knight can no longer easily challenge our d4 pawn or jump to e4. This signature move of the Torre system often leads to kingside attacking chances, especially if Black castles short despite the pin, giving us excellent practical winning chances against intermediate players."
     },
     {
       "san": "d5",

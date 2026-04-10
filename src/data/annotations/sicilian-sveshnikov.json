@@ -65,7 +65,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most natural square, adding pressure to d4 and preparing the Sveshnikov setup with ...e5.",
+      "annotation": "Black develops the knight to its ideal square, adding pressure to d4 and preparing the Sveshnikov setup with ...e5.",
       "plans": [
         "Prepare ...Nf6 and ...e5, the Sveshnikov signature",
         "Control d4 directly"
@@ -923,7 +923,7 @@
         },
         {
           "san": "Be7",
-          "annotation": "Black develops the bishop while preparing to break the pin on the f6 knight. This natural developing move allows Black to potentially castle kingside while setting up the characteristic Sveshnikov b.",
+          "annotation": "Black develops the bishop while preparing to break the pin on the f6 knight. This active move allows Black to potentially castle kingside while setting up the characteristic Sveshnikov b.",
           "plans": [
             "Prepare to exchange on f6 to get the dark-squared bishop",
             "Castle kingside for safety"
@@ -999,7 +999,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside, bringing the king to safety while connecting the rooks. This natural move is essential before the position becomes too tactical, as Black needs to secure the king before enga.",
+          "annotation": "Black castles kingside, bringing the king to safety while connecting the rooks. this move is essential before the position becomes too tactical, as Black needs to secure the king before enga.",
           "plans": [
             "Secure the king before tactical complications",
             "Activate the rooks for middlegame play"
@@ -2374,7 +2374,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black develops the knight to its most natural square. This is exactly what White wants to see for the Rossolimo."
+          "annotation": "Black develops the knight to its ideal square. This is exactly what White wants to see for the Rossolimo."
         },
         {
           "san": "Bb5",
@@ -2465,7 +2465,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the knight to f6, attacking e4. A natural and strong developing move."
+          "annotation": "Black develops the knight to f6, attacking e4. A natural and strong developing choice."
         },
         {
           "san": "Nc3",

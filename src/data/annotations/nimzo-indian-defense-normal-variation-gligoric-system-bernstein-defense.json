@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, adding another defender to the d4 pawn while preparing potential central advances like e4. This move also opens the door for Black to enter the Nimzo-Indian Defense with ...Bb4, which pins our knight and creates immediate tactical tension. The knight on c3 supports our control of key central squares and maintains flexibility in our pawn structure. From c3, our knight can potentially jump to e4, d5, or support advances on either wing, making it a crucial piece in our opening development."
+      "annotation": "We're developing our knight to its ideal square, adding another defender to the d4 pawn while preparing potential central advances like e4. This move also opens the door for Black to enter the Nimzo-Indian Defense with ...Bb4, which pins our knight and creates immediate tactical tension. The knight on c3 supports our control of key central squares and maintains flexibility in our pawn structure. From c3, our knight can potentially jump to e4, d5, or support advances on either wing, making it a crucial piece in our opening development."
     },
     {
       "san": "Bb4",
@@ -31,11 +31,11 @@
     },
     {
       "san": "O-O",
-      "annotation": "Our opponent completes kingside development by castling, prioritizing king safety while maintaining the pin on our knight for now. This natural developing move also connects the rooks and prepares to bring more pressure to bear on our position. Black's king is now safely tucked away, which allows for more aggressive piece play in the center and queenside. The timing of this castle is excellent because it maintains maximum flexibility while securing the most important piece - Black can now focus on central operations without worrying about king safety."
+      "annotation": "Our opponent completes kingside development by castling, prioritizing king safety while maintaining the pin on our knight for now. This active move also connects the rooks and prepares to bring more pressure to bear on our position. Black's king is now safely tucked away, which allows for more aggressive piece play in the center and queenside. The timing of this castle is excellent because it maintains maximum flexibility while securing the most important piece - Black can now focus on central operations without worrying about king safety."
     },
     {
       "san": "Bd3",
-      "annotation": "We're developing our light-squared bishop to an active diagonal where it aims toward Black's kingside and supports potential central advances. This natural developing move also prepares to castle kingside and brings us closer to completing our development. The bishop on d3 has good scope along the a6-f8 diagonal and can potentially create threats against Black's castled king later in the game. This square is generally preferred over e2 in the Nimzo-Indian because it gives the bishop more active possibilities while still supporting our pawn structure."
+      "annotation": "We're developing our light-squared bishop to an active diagonal where it aims toward Black's kingside and supports potential central advances. This active move also prepares to castle kingside and brings us closer to completing our development. The bishop on d3 has good scope along the a6-f8 diagonal and can potentially create threats against Black's castled king later in the game. This square is generally preferred over e2 in the Nimzo-Indian because it gives the bishop more active possibilities while still supporting our pawn structure."
     },
     {
       "san": "d5",

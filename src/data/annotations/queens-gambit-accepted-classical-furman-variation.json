@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking the e5 square and preparing to support our central ambitions. This move is more flexible than the immediate 3.e3 because it doesn't commit our pawn structure yet and keeps more options open. Our knight from f3 can later jump to e5, g5, or support an eventual e4 advance, making it a key piece in our attacking setup. We're following the opening principle of developing pieces before moving pawns, while also preparing to recapture our gambit pawn."
+      "annotation": "We develop our knight to its ideal square, attacking the e5 square and preparing to support our central ambitions. This move is more flexible than the immediate 3.e3 because it doesn't commit our pawn structure yet and keeps more options open. Our knight from f3 can later jump to e5, g5, or support an eventual e4 advance, making it a key piece in our attacking setup. We're following the opening principle of developing pieces before moving pawns, while also preparing to recapture our gambit pawn."
     },
     {
       "san": "Nf6",
@@ -67,7 +67,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We advance our central pawn, seizing more space in the center and preparing the powerful e4-e5 breakthrough that's characteristic of this variation. This move supports our pieces magnificently, giving our knights better central squares and preparing to drive back Black's pieces with tempo. Our pawn advance also opens up more space for our pieces to maneuver and creates threats against Black's somewhat cramped position. This is the key move that transforms our slight developmental advantage into concrete attacking chances."
+      "annotation": "We advance our central pawn, seizing more space in the center and preparing the powerful e4-e5 breakthrough that's characteristic of this variation. This move supports our pieces magnificently, giving our knights better central squares and preparing to drive back Black's pieces with tempo. Our pawn advance also opens up more space for our pieces to maneuver and creates threats against Black's somewhat cramped position. This is the critical move that transforms our slight developmental advantage into concrete attacking chances."
     },
     {
       "san": "b5",

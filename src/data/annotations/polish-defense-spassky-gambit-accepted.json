@@ -11,11 +11,11 @@
     },
     {
       "san": "e4",
-      "annotation": "We're striking at the center with our king's pawn, creating a strong pawn duo on d4 and e4 that controls crucial central squares like e5 and d5. This advance opens lines for our bishop and queen while challenging Black's unconventional setup by building a classical center. The move also sets up the Spassky Gambit if Black continues with the natural developing move Bb7, as we'll be able to sacrifice material for rapid development and attacking chances. By occupying the center immediately, we're putting pressure on Black to justify their unusual pawn move and forcing them to find concrete solutions to our growing central presence."
+      "annotation": "We're striking at the center with our king's pawn, creating a strong pawn duo on d4 and e4 that controls crucial central squares like e5 and d5. This advance opens lines for our bishop and queen while challenging Black's unconventional setup by building a classical center. The move also sets up the Spassky Gambit if Black continues with the active move Bb7, as we'll be able to sacrifice material for rapid development and attacking chances. By occupying the center immediately, we're putting pressure on Black to justify their unusual pawn move and forcing them to find concrete solutions to our growing central presence."
     },
     {
       "san": "Bb7",
-      "annotation": "Black develops their dark-squared bishop to its most natural square, putting pressure on our central e4 pawn and completing the setup for the Polish Defense. This bishop placement is actually quite logical - it attacks our pawn center from long range and prepares to support Black's queenside expansion with moves like c5. However, this development also walks into our tactical shot on the next move, as the bishop will be somewhat exposed on b7. Black is essentially accepting the complications that come with their opening choice, hoping that the resulting positions will be more favorable for them than traditional symmetrical setups."
+      "annotation": "Black develops their dark-squared bishop to its ideal square, putting pressure on our central e4 pawn and completing the setup for the Polish Defense. This bishop placement is actually quite logical - it attacks our pawn center from long range and prepares to support Black's queenside expansion with moves like c5. However, this development also walks into our tactical shot on the next move, as the bishop will be somewhat exposed on b7. Black is essentially accepting the complications that come with their opening choice, hoping that the resulting positions will be more favorable for them than traditional symmetrical setups."
     },
     {
       "san": "Bxb5",

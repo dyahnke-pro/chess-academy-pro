@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with this natural developing move, attacking the d4 pawn and preparing to contest the center. This is one of the most flexible responses to 1.d4, as the knight on f6 supports both ...e6 and ...g6 setups while keeping Black's options open. Our opponent is following the classical principle of developing pieces toward the center while creating immediate pressure on our pawn structure. The knight on f6 also prepares potential ...e5 or ...c5 breaks depending on how we continue."
+      "annotation": "Black immediately challenges our central pawn with this active move, attacking the d4 pawn and preparing to contest the center. This is one of the most flexible responses to 1.d4, as the knight on f6 supports both ...e6 and ...g6 setups while keeping Black's options open. Our opponent is following the classical principle of developing pieces toward the center while creating immediate pressure on our pawn structure. The knight on f6 also prepares potential ...e5 or ...c5 breaks depending on how we continue."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, attacking Black's e5 square and preparing to support our central pawn structure. This move completes our basic development while keeping maximum flexibility - we can still castle kingside, support our center with moves like e3, or even transpose to various systems. The knight on f3 also prepares potential e4 advances and works harmoniously with our c4-d4 pawn center. This is classical development at its finest, following the principle of developing knights before bishops while maintaining central control."
+      "annotation": "We're developing our knight to its ideal square, attacking Black's e5 square and preparing to support our central pawn structure. This move completes our basic development while keeping maximum flexibility - we can still castle kingside, support our center with moves like e3, or even transpose to various systems. The knight on f3 also prepares potential e4 advances and works harmoniously with our c4-d4 pawn center. This is classical development at its finest, following the principle of developing knights before bishops while maintaining central control."
     },
     {
       "san": "c5",

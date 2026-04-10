@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the center. This is one of the most flexible responses to d4, as the knight on f6 supports both ...e6 and ...e5 pawn breaks while keeping options open for various defensive setups. Our opponent is also preparing to castle kingside and potentially challenge our central pawn with moves like ...d6 and ...e5. The knight on f6 is well-placed to support Black's counterplay in the center and on the kingside."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the center. This is one of the most flexible responses to d4, as the knight on f6 supports both ...e6 and ...e5 pawn breaks while keeping options open for various defensive setups. Our opponent is also preparing to castle kingside and potentially challenge our central pawn with moves like ...d6 and ...e5. The knight on f6 is well-placed to support Black's counterplay in the center and on the kingside."
     },
     {
       "san": "c4",
@@ -23,7 +23,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black plays the key move that defines the Czech Benoni Defense, creating a locked pawn structure in the center and preparing for piece-based counterplay. This advance prevents our e4 push and gives Black's pieces, particularly the dark-squared bishop and knights, excellent squares to operate from. Our opponent is accepting a somewhat cramped position in exchange for very concrete plans: developing the bishop to e7 or d6, potentially playing ...f5 to create kingside counterplay, and using the e5 pawn as a strong outpost. The Czech Benoni is considered one of Black's most solid responses in the Benoni family, as the e5 pawn provides excellent central control and supports Black's pieces while limiting our attacking chances compared to other Benoni variations."
+      "annotation": "Black plays the defining move of the Czech Benoni Defense, creating a locked pawn structure in the center and preparing for piece-based counterplay. This advance prevents our e4 push and gives Black's pieces, particularly the dark-squared bishop and knights, excellent squares to operate from. Our opponent is accepting a somewhat cramped position in exchange for very concrete plans: developing the bishop to e7 or d6, potentially playing ...f5 to create kingside counterplay, and using the e5 pawn as a strong outpost. The Czech Benoni is considered one of Black's most solid responses in the Benoni family, as the e5 pawn provides excellent central control and supports Black's pieces while limiting our attacking chances compared to other Benoni variations."
     }
   ]
 }

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to build our ideal pawn center. This knight controls important central squares like e4 and d5, and later it might support a pawn advance to e4. The knight on c3 is also perfectly placed to recapture on d5 if Black plays the typical Grünfeld exchange. By developing pieces toward the center, we're following the opening principle of rapid development while maintaining pressure on Black's position."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to build our ideal pawn center. This knight controls important central squares like e4 and d5, and later it might support a pawn advance to e4. The knight on c3 is also perfectly placed to recapture on d5 if Black plays the typical Grünfeld exchange. By developing pieces toward the center, we're following the opening principle of rapid development while maintaining pressure on Black's position."
     },
     {
       "san": "d5",
@@ -55,7 +55,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black gets the king to safety, a necessary and natural move that completes the basic development while keeping the king secure. Castling also brings the rook into the game on f8, where it can support the kingside and potentially help defend against any tactical threats we might create. This move shows that Black is following sound opening principles - after challenging our center and developing the key pieces, securing the king is the logical next step. Now Black is ready to begin more concrete plans against our pawn center, having completed the essential developmental tasks."
+      "annotation": "Black gets the king to safety, a necessary and logical choice that completes the basic development while keeping the king secure. Castling also brings the rook into the game on f8, where it can support the kingside and potentially help defend against any tactical threats we might create. This move shows that Black is following sound opening principles - after challenging our center and developing the key pieces, securing the king is the logical next step. Now Black is ready to begin more concrete plans against our pawn center, having completed the essential developmental tasks."
     },
     {
       "san": "Ne2",

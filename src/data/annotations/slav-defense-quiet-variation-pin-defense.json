@@ -19,11 +19,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our kingside knight to its most natural square, controlling the important e5 and g5 squares while supporting our central d4 pawn. This move follows classical development principles by bringing a piece toward the center and preparing for kingside castling. The knight on f3 also prevents any immediate ...e5 breaks by Black and keeps our position flexible for various pawn structures that might arise. From f3, our knight is perfectly placed to support future central advances or to redeploy to other squares like e5 or g5 if tactical opportunities arise."
+      "annotation": "We develop our kingside knight to its ideal square, controlling the important e5 and g5 squares while supporting our central d4 pawn. This move follows classical development principles by bringing a piece toward the center and preparing for kingside castling. The knight on f3 also prevents any immediate ...e5 breaks by Black and keeps our position flexible for various pawn structures that might arise. From f3, our knight is perfectly placed to support future central advances or to redeploy to other squares like e5 or g5 if tactical opportunities arise."
     },
     {
       "san": "Nf6",
-      "annotation": "Black mirrors our development by bringing their kingside knight to f6, where it attacks our c4 pawn and controls key central squares like e4 and d5. This natural developing move also prepares Black for kingside castling and maintains the balance in the position. The knight on f6 is a crucial defender of Black's kingside and supports potential central breaks like ...e5 in the future. By developing the knight before the bishops, Black keeps maximum flexibility in their piece setup and doesn't commit to any particular pawn structure yet."
+      "annotation": "Black mirrors our development by bringing their kingside knight to f6, where it attacks our c4 pawn and controls key central squares like e4 and d5. This active move also prepares Black for kingside castling and maintains the balance in the position. The knight on f6 is a crucial defender of Black's kingside and supports potential central breaks like ...e5 in the future. By developing the knight before the bishops, Black keeps maximum flexibility in their piece setup and doesn't commit to any particular pawn structure yet."
     },
     {
       "san": "e3",

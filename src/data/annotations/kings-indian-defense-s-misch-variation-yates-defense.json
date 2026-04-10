@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance in the center with e4. This knight will often play a key role in our kingside attack, potentially jumping to d5 or supporting a pawn storm later in the game. The knight on c3 also keeps pressure on Black's position by controlling important central squares like e4, d5, and b5."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance in the center with e4. This knight will often play a key role in our kingside attack, potentially jumping to d5 or supporting a pawn storm later in the game. The knight on c3 also keeps pressure on Black's position by controlling important central squares like e4, d5, and b5."
     },
     {
       "san": "Bg7",

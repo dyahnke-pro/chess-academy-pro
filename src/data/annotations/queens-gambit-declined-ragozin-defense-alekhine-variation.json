@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn while preparing kingside castling. This is one of the most principled responses to 1.d4, as it contests the center right away rather than allowing us to build a large pawn center unopposed. The knight on f6 also supports a potential ...e6 or ...g6 setup, keeping Black's options open for various defensive systems. We should note that this move signals Black's intention to fight for central control from the very beginning, so we'll need to be prepared for sharp tactical possibilities as the game develops."
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn while preparing kingside castling. This is one of the most principled responses to 1.d4, as it contests the center right away rather than allowing us to build a large pawn center unopposed. The knight on f6 also supports a potential ...e6 or ...g6 setup, keeping Black's options open for various defensive systems. We should note that this move signals Black's intention to fight for central control from the very beginning, so we'll need to be prepared for sharp tactical possibilities as the game develops."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its optimal square, adding another defender to our d4 pawn while preparing kingside castling and maintaining flexibility in our setup. This natural developing move also eyes the important e5 square, preventing Black from advancing ...e5 and gaining central space too easily. The knight on f3 works beautifully with our planned Nc3, creating a harmonious piece coordination that supports our central pawn advances. Additionally, this move keeps our options open for various Queen's Gambit systems, as we haven't yet committed to any specific pawn structure or piece arrangement beyond the basic central control."
+      "annotation": "We develop our knight to its optimal square, adding another defender to our d4 pawn while preparing kingside castling and maintaining flexibility in our setup. This active move also eyes the important e5 square, preventing Black from advancing ...e5 and gaining central space too easily. The knight on f3 works beautifully with our planned Nc3, creating a harmonious piece coordination that supports our central pawn advances. Additionally, this move keeps our options open for various Queen's Gambit systems, as we haven't yet committed to any specific pawn structure or piece arrangement beyond the basic central control."
     },
     {
       "san": "d5",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most active square, adding crucial support to our d4 pawn while increasing the pressure on Black's d5 pawn. This move completes our basic opening setup and prepares us to meet Black's various defensive systems with appropriate responses. The knight on c3 also eyes important central squares like e4 and b5, giving us tactical possibilities as the position develops. Most importantly, this natural developing move maintains the central tension while improving our piece coordination, keeping maximum flexibility for our upcoming strategic decisions."
+      "annotation": "We develop our queen's knight to its most active square, adding crucial support to our d4 pawn while increasing the pressure on Black's d5 pawn. This move completes our basic opening setup and prepares us to meet Black's various defensive systems with appropriate responses. The knight on c3 also eyes important central squares like e4 and b5, giving us tactical possibilities as the position develops. Most importantly, this active move maintains the central tension while improving our piece coordination, keeping maximum flexibility for our upcoming strategic decisions."
     },
     {
       "san": "Bb4",

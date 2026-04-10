@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our e4 square and preventing us from establishing a classical pawn center with an immediate d4-e4 setup. This is one of the most principled responses to the English Opening, as it develops a piece while immediately challenging our central influence. Our opponent is keeping their options open just as we are - they haven't committed to any particular pawn structure yet and can still transpose into various systems. The knight on f6 also prepares potential central breaks like ...d5 or supports a future ...e5 advance."
+      "annotation": "Black develops the knight to its ideal square, attacking our e4 square and preventing us from establishing a classical pawn center with an immediate d4-e4 setup. This is one of the most principled responses to the English Opening, as it develops a piece while immediately challenging our central influence. Our opponent is keeping their options open just as we are - they haven't committed to any particular pawn structure yet and can still transpose into various systems. The knight on f6 also prepares potential central breaks like ...d5 or supports a future ...e5 advance."
     },
     {
       "san": "Nf3",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black completes the symmetrical development by bringing the final knight into play, creating the characteristic Four Knights setup that gives this variation its name. Our opponent is maintaining perfect balance in the position while preparing to support central pawn breaks like ...d5 or ...e5 depending on how we continue. This knight placement is particularly flexible because it can later jump to various squares like d4, e5, or b4 depending on the tactical and strategic demands of the position. With all four knights now developed to their most natural squares, both sides have excellent piece coordination and the stage is set for the complex middlegame maneuvering that characterizes the English Opening's symmetrical variations."
+      "annotation": "Black completes the symmetrical development by bringing the final knight into play, creating the characteristic Four Knights setup that gives this variation its name. Our opponent is maintaining perfect balance in the position while preparing to support central pawn breaks like ...d5 or ...e5 depending on how we continue. This knight placement is particularly flexible because it can later jump to various squares like d4, e5, or b4 depending on the tactical and strategic demands of the position. With all four knights now developed to their ideal squares, both sides have excellent piece coordination and the stage is set for the complex middlegame maneuvering that characterizes the English Opening's symmetrical variations."
     }
   ]
 }

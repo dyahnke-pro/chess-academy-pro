@@ -15,7 +15,7 @@
     },
     {
       "san": "Nd5",
-      "annotation": "Black's knight retreats to its most natural square, where it remains actively placed and eyes several important central squares. From d5, the knight can potentially jump to various squares like c7, e7, f4, or b4, depending on how the position develops. Our opponent is also keeping options open for moves like c6 or e6 to challenge our pawn center later. The knight on d5 is temporarily safe, but we should consider how to continue building our position while potentially preparing to challenge this centralized piece."
+      "annotation": "Black's knight retreats to its ideal square, where it remains actively placed and eyes several important central squares. From d5, the knight can potentially jump to various squares like c7, e7, f4, or b4, depending on how the position develops. Our opponent is also keeping options open for moves like c6 or e6 to challenge our pawn center later. The knight on d5 is temporarily safe, but we should consider how to continue building our position while potentially preparing to challenge this centralized piece."
     },
     {
       "san": "d4",
@@ -27,7 +27,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, supporting our d4 pawn while preparing to castle kingside for safety. The knight on f3 also eyes the important e5 square, helping to defend our advanced pawn, and controls key central squares like e5 and d4. From f3, our knight is perfectly placed to support both our center and our kingside development. This move also prepares potential tactical ideas involving our pieces working together, and maintains the tension in the center while keeping all our options open for the next phase of the opening."
+      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside for safety. The knight on f3 also eyes the important e5 square, helping to defend our advanced pawn, and controls key central squares like e5 and d4. From f3, our knight is perfectly placed to support both our center and our kingside development. This move also prepares potential tactical ideas involving our pieces working together, and maintains the tension in the center while keeping all our options open for the next phase of the opening."
     }
   ]
 }

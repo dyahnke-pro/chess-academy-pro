@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn and preparing to advance e4 to build our ideal pawn center. The knight on c3 also eyes the important e4 and d5 squares, which will become crucial battlegrounds in the middlegame. This development fits perfectly with our positional strategy - we're methodically building up our position while maintaining maximum flexibility. From c3, our knight can potentially reroute to e2 (supporting f4 advances) or jump to d5 in some lines, making it a key piece in our setup."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn and preparing to advance e4 to build our ideal pawn center. The knight on c3 also eyes the important e4 and d5 squares, which will become crucial battlegrounds in the middlegame. This development fits perfectly with our positional strategy - we're methodically building up our position while maintaining maximum flexibility. From c3, our knight can potentially reroute to e2 (supporting f4 advances) or jump to d5 in some lines, making it a key piece in our setup."
     },
     {
       "san": "Bg7",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our queen's knight to its most active square, where it defends our attacked e4 pawn and eyes important central squares like d5 and e4. This natural developing move also prepares potential advances like f2-f3 or piece sacrifices on d5 later in the game. The knight on c3 fits perfectly with our central strategy, as it can later jump to powerful outposts or support pawn advances. Our development follows the principle of bringing pieces toward the center while maintaining the tension in the position."
+      "annotation": "We develop our queen's knight to its most active square, where it defends our attacked e4 pawn and eyes important central squares like d5 and e4. This active move also prepares potential advances like f2-f3 or piece sacrifices on d5 later in the game. The knight on c3 fits perfectly with our central strategy, as it can later jump to powerful outposts or support pawn advances. Our development follows the principle of bringing pieces toward the center while maintaining the tension in the position."
     },
     {
       "san": "dxe4",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the king's knight to its most natural square, attacking our centralized knight on e4 and preparing to castle kingside. This move follows sound developing principles while creating immediate tactical pressure on our central piece. Our opponent is also opening the possibility of playing Bg4 or Be7 next, completing the kingside development. The knight on f6 is well-placed to support Black's central control and can potentially advance to d5 or e4 later in the game if the opportunity arises."
+      "annotation": "Black develops the king's knight to its ideal square, attacking our centralized knight on e4 and preparing to castle kingside. This move follows sound developing principles while creating immediate tactical pressure on our central piece. Our opponent is also opening the possibility of playing Bg4 or Be7 next, completing the kingside development. The knight on f6 is well-placed to support Black's central control and can potentially advance to d5 or e4 later in the game if the opportunity arises."
     },
     {
       "san": "Nxf6+",

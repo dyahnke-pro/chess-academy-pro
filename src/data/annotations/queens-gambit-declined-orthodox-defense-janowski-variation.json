@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it controls the important central squares e5 and d4, while also preparing to castle kingside for safety. This flexible move doesn't commit us to any particular pawn structure yet, keeping our options open for both c4 (the Queen's Gambit) and other setups. The knight on f3 also supports a potential e4 advance later in the game, giving us multiple strategic directions to choose from. From f3, our knight can later redeploy to e5, d2, or h4 depending on how the position develops, making this one of the most flexible developing moves in chess."
+      "annotation": "We develop our knight to its ideal square, where it controls the important central squares e5 and d4, while also preparing to castle kingside for safety. This flexible move doesn't commit us to any particular pawn structure yet, keeping our options open for both c4 (the Queen's Gambit) and other setups. The knight on f3 also supports a potential e4 advance later in the game, giving us multiple strategic directions to choose from. From f3, our knight can later redeploy to e5, d2, or h4 depending on how the position develops, making this one of the most flexible developing choices in chess."
     },
     {
       "san": "Nf6",
@@ -27,11 +27,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, adding another attacker to Black's d5 pawn while preparing to recapture on c4 if Black ever takes our pawn. This move follows classical principles perfectly - we're developing toward the center and increasing pressure on our opponent's position. The knight on c3 also supports a potential e4 advance, which would give us a powerful pawn center if Black ever removes the d5 pawn. Additionally, this knight can later redeploy to e4, b5, or even a4 in some variations, making it a flexible piece that serves multiple strategic functions in our setup."
+      "annotation": "We develop our knight to its ideal square, adding another attacker to Black's d5 pawn while preparing to recapture on c4 if Black ever takes our pawn. This move follows classical principles perfectly - we're developing toward the center and increasing pressure on our opponent's position. The knight on c3 also supports a potential e4 advance, which would give us a powerful pawn center if Black ever removes the d5 pawn. Additionally, this knight can later redeploy to e4, b5, or even a4 in some variations, making it a flexible piece that serves multiple strategic functions in our setup."
     },
     {
       "san": "Be7",
-      "annotation": "Our opponent develops the dark-squared bishop to a solid square, preparing to castle kingside while keeping the bishop safe from potential attacks. This is the most natural developing move in the Queen's Gambit Declined, as it doesn't block any pawns and allows Black to complete kingside development quickly. The bishop on e7 also prepares potential central breaks like c5 or e5 later in the game, supporting Black's pawn advances. While this bishop isn't as actively placed as it might be on d6 or b4, it's completely safe and maintains flexibility for Black's future plans."
+      "annotation": "Our opponent develops the dark-squared bishop to a solid square, preparing to castle kingside while keeping the bishop safe from potential attacks. This is the most active move in the Queen's Gambit Declined, as it doesn't block any pawns and allows Black to complete kingside development quickly. The bishop on e7 also prepares potential central breaks like c5 or e5 later in the game, supporting Black's pawn advances. While this bishop isn't as actively placed as it might be on d6 or b4, it's completely safe and maintains flexibility for Black's future plans."
     },
     {
       "san": "Bg5",
@@ -43,7 +43,7 @@
     },
     {
       "san": "e3",
-      "annotation": "We play this solid move to support our d4 pawn and prepare to develop our light-squared bishop, typically to d3 where it can eye Black's kingside. This move creates a secure pawn foundation in the center while opening up the diagonal for our bishop development. Although e3 looks modest, it's actually preparing some of the most dangerous attacking setups in the Queen's Gambit, where our bishop on d3 combined with potential h4-h5 advances can create serious kingside threats. The move also prepares potential central advances like e4, giving us multiple strategic options as the game progresses."
+      "annotation": "We play this stabilizing move to support our d4 pawn and prepare to develop our light-squared bishop, typically to d3 where it can eye Black's kingside. This move creates a secure pawn foundation in the center while opening up the diagonal for our bishop development. Although e3 looks modest, it's actually preparing some of the most dangerous attacking setups in the Queen's Gambit, where our bishop on d3 combined with potential h4-h5 advances can create serious kingside threats. The move also prepares potential central advances like e4, giving us multiple strategic options as the game progresses."
     },
     {
       "san": "Nbd7",
@@ -55,7 +55,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays this solid move to support the d5 pawn and prepare potential counterplay with b5, while also giving the king an escape square on c7 in some tactical variations. This creates a solid pawn chain but also somewhat restricts Black's pieces - the queen's knight now has fewer squares available, and the c8 bishop's development is delayed. Our opponent is prioritizing pawn structure stability over piece activity, which is a reasonable approach but gives us some initiative. The c6 pawn also prepares Black to potentially challenge our center with e5 at some point, supported by this pawn foundation."
+      "annotation": "Black plays this stabilizing move to support the d5 pawn and prepare potential counterplay with b5, while also giving the king an escape square on c7 in some tactical variations. This creates a solid pawn chain but also somewhat restricts Black's pieces - the queen's knight now has fewer squares available, and the c8 bishop's development is delayed. Our opponent is prioritizing pawn structure stability over piece activity, which is a reasonable approach but gives us some initiative. The c6 pawn also prepares Black to potentially challenge our center with e5 at some point, supported by this pawn foundation."
     },
     {
       "san": "Bd3",

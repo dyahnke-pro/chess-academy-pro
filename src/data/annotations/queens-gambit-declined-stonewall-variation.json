@@ -15,11 +15,11 @@
     },
     {
       "san": "c6",
-      "annotation": "Black declines the Queen's Gambit and instead supports their d5 pawn with this solid move, creating the characteristic structure of the Queen's Gambit Declined. This move prepares to challenge our c4 pawn while maintaining Black's central pawn on d5, which is often a key defensive piece. The c6 pawn also prepares potential queenside expansion with moves like b5, though this comes at the cost of slightly restricting the development of Black's light-squared bishop. This approach shows Black prefers solid, strategic play over tactical complications."
+      "annotation": "Black declines the Queen's Gambit and instead supports their d5 pawn with this stabilizing move, creating the characteristic structure of the Queen's Gambit Declined. This move prepares to challenge our c4 pawn while maintaining Black's central pawn on d5, which is often a key defensive piece. The c6 pawn also prepares potential queenside expansion with moves like b5, though this comes at the cost of slightly restricting the development of Black's light-squared bishop. This approach shows Black prefers solid, strategic play over tactical complications."
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, where it controls the important central squares e5 and d4 while supporting our eventual e4 pawn break. The knight on f3 also adds another defender to our d4 pawn and prepares kingside castling, contributing to our overall development plan. This move follows classical opening principles by developing a piece toward the center while maintaining flexibility – the knight can later jump to e5, g5, or h4 depending on how the position evolves. From f3, our knight also eyes the weak h7 square in Black's kingside, which could become important in attacking scenarios."
+      "annotation": "We're developing our knight to its ideal square, where it controls the important central squares e5 and d4 while supporting our eventual e4 pawn break. The knight on f3 also adds another defender to our d4 pawn and prepares kingside castling, contributing to our overall development plan. This move follows classical opening principles by developing a piece toward the center while maintaining flexibility – the knight can later jump to e5, g5, or h4 depending on how the position evolves. From f3, our knight also eyes the weak h7 square in Black's kingside, which could become important in attacking scenarios."
     },
     {
       "san": "Nf6",

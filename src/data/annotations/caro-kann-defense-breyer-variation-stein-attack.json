@@ -27,7 +27,7 @@
     },
     {
       "san": "Ngf3",
-      "annotation": "We're completing our kingside development by bringing the knight to its most natural square, where it controls important central squares like e5 and d4. This knight on f3 is a cornerstone of our King's Indian Attack setup, supporting our eventual g3 and Bg2 development while eyeing potential outposts in Black's position. The knight also adds another defender to our e5 square, which could become important if Black tries to advance ...e5 later. From f3, this knight can potentially jump to g5 to create kingside pressure, or to h4 and f5 in some attacking scenarios, making it a very versatile piece in our formation."
+      "annotation": "We're completing our kingside development by bringing the knight to its ideal square, where it controls important central squares like e5 and d4. This knight on f3 is a cornerstone of our King's Indian Attack setup, supporting our eventual g3 and Bg2 development while eyeing potential outposts in Black's position. The knight also adds another defender to our e5 square, which could become important if Black tries to advance ...e5 later. From f3, this knight can potentially jump to g5 to create kingside pressure, or to h4 and f5 in some attacking scenarios, making it a very versatile piece in our formation."
     },
     {
       "san": "Bg7",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Ne7",
-      "annotation": "Black develops the knight to e7, a flexible square that supports the central pawn structure while keeping multiple options open for future deployment. From e7, this knight can jump to several interesting squares: f5 to attack our bishop and control key central squares, d4 to challenge our position, or g6 to support the kingside defense. This development also clears the way for Black to potentially advance the f-pawn later, creating more space on the kingside. The knight on e7 doesn't look particularly active, but it's a solid developing move that maintains Black's position while preparing for more concrete action in the middlegame."
+      "annotation": "Black develops the knight to e7, a flexible square that supports the central pawn structure while keeping multiple options open for future deployment. From e7, this knight can jump to several interesting squares: f5 to attack our bishop and control key central squares, d4 to challenge our position, or g6 to support the kingside defense. This development also clears the way for Black to potentially advance the f-pawn later, creating more space on the kingside. The knight on e7 doesn't look particularly active, but it's a constructive move that maintains Black's position while preparing for more concrete action in the middlegame."
     },
     {
       "san": "O-O",

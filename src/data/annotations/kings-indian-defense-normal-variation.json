@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its most natural square, attacking our d4 pawn and preparing to contest the central e4 square. This is the starting move of several major defenses including the King's Indian, Nimzo-Indian, and Queen's Indian Defense. Black is following hypermodern principles - rather than occupying the center immediately with pawns, they're controlling it from the flanks with pieces. We need to decide how to support our d4 pawn and continue our development, with options like Nc3, Nf3, or even f3 in some lines."
+      "annotation": "Our opponent develops the knight to its ideal square, attacking our d4 pawn and preparing to contest the central e4 square. This is the starting move of several major defenses including the King's Indian, Nimzo-Indian, and Queen's Indian Defense. Black is following hypermodern principles - rather than occupying the center immediately with pawns, they're controlling it from the flanks with pieces. We need to decide how to support our d4 pawn and continue our development, with options like Nc3, Nf3, or even f3 in some lines."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn and preparing for our central expansion with e2-e4. The knight on c3 also eyes important squares like e4, d5, and b5, while keeping pressure on Black's position. This move fits perfectly with our opening strategy of building a strong central presence before Black can fully organize their counterplay. From c3, our knight supports various pawn advances and can potentially reroute to e2 or d5 in certain variations, maintaining maximum flexibility in our setup."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing for our central expansion with e2-e4. The knight on c3 also eyes important squares like e4, d5, and b5, while keeping pressure on Black's position. This move fits perfectly with our opening strategy of building a strong central presence before Black can fully organize their counterplay. From c3, our knight supports various pawn advances and can potentially reroute to e2 or d5 in certain variations, maintaining maximum flexibility in our setup."
     },
     {
       "san": "Bg7",

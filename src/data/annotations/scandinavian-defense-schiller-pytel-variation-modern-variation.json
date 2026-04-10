@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square while immediately attacking Black's centralized queen. This forcing move puts immediate pressure on Black's position, as the queen must move and we gain time in our development. The knight on c3 also supports a future d4 advance and controls important central squares like e4 and d5. This is far superior to moves like d3 or Nf3 because it forces Black to make a decision about the queen right away."
+      "annotation": "We develop our knight to its ideal square while immediately attacking Black's centralized queen. This forcing move puts immediate pressure on Black's position, as the queen must move and we gain time in our development. The knight on c3 also supports a future d4 advance and controls important central squares like e4 and d5. This is far superior to moves like d3 or Nf3 because it forces Black to make a decision about the queen right away."
     },
     {
       "san": "Qd6",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking our d4 pawn while preparing kingside castling. This is a principled developing move that follows the opening rule of 'knights before bishops' and puts immediate pressure on our center. The knight on f6 also supports the important e5 square and prepares ...Bg4 or ...Bf5 to continue development. Black is trying to complete development quickly to compensate for the early queen sortie."
+      "annotation": "Black develops the knight to its ideal square, attacking our d4 pawn while preparing kingside castling. This is a purposeful move that follows the opening rule of 'knights before bishops' and puts immediate pressure on our center. The knight on f6 also supports the important e5 square and prepares ...Bg4 or ...Bf5 to continue development. Black is trying to complete development quickly to compensate for the early queen sortie."
     },
     {
       "san": "Bc4",
@@ -39,7 +39,7 @@
     },
     {
       "san": "c6",
-      "annotation": "Black plays a solid move that supports the center while preparing ...b5 to challenge our active bishop. This pawn move also controls the important d5 and b5 squares, giving Black's pieces more stability in the center. The move prepares potential pawn advances on the queenside and supports Black's development plans with moves like ...Be6 or ...Qb6. While it doesn't directly develop a piece, it's a useful waiting move that improves Black's position structure."
+      "annotation": "Black plays a well-grounded move that supports the center while preparing ...b5 to challenge our active bishop. This pawn move also controls the important d5 and b5 squares, giving Black's pieces more stability in the center. The move prepares potential pawn advances on the queenside and supports Black's development plans with moves like ...Be6 or ...Qb6. While it doesn't directly develop a piece, it's a useful waiting move that improves Black's position structure."
     },
     {
       "san": "Nge2",
@@ -47,7 +47,7 @@
     },
     {
       "san": "Bf5",
-      "annotation": "Black develops the light-squared bishop to an active square outside the pawn chain, following the principle of developing bishops before they get blocked by their own pawns. The bishop on f5 controls important central squares and puts pressure on our position while avoiding the typical problems of a 'bad bishop' trapped behind its own pawns. This natural developing move also prepares castling and maintains good piece coordination. From f5, the bishop eyes our knight on c3 and supports Black's central piece activity."
+      "annotation": "Black develops the light-squared bishop to an active square outside the pawn chain, following the principle of developing bishops before they get blocked by their own pawns. The bishop on f5 controls important central squares and puts pressure on our position while avoiding the typical problems of a 'bad bishop' trapped behind its own pawns. This active move also prepares castling and maintains good piece coordination. From f5, the bishop eyes our knight on c3 and supports Black's central piece activity."
     },
     {
       "san": "Bf4",

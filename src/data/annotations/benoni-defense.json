@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn and develops the kingside knight to its most natural square. This move is perfectly principled - the knight attacks our d4 pawn while developing toward the center and preparing kingside castling. Black is keeping their options open regarding pawn structure, as they could potentially support the knight with moves like e6 or g6 depending on how we continue. This flexible approach is characteristic of many modern opening systems where Black delays committing to a specific pawn structure."
+      "annotation": "Black immediately challenges our central pawn and develops the kingside knight to its ideal square. This move is perfectly principled - the knight attacks our d4 pawn while developing toward the center and preparing kingside castling. Black is keeping their options open regarding pawn structure, as they could potentially support the knight with moves like e6 or g6 depending on how we continue. This flexible approach is characteristic of many modern opening systems where Black delays committing to a specific pawn structure."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, controlling the central e5 and g5 squares while supporting our d4 pawn and preparing kingside castling. The knight on f3 is perfectly placed to support our central pawn structure and can potentially reroute to more active squares like e5 or g5 later in the game. This move also prevents Black from playing ...Ng4, which could be annoying in some variations. From f3, our knight works harmoniously with our other pieces and maintains maximum flexibility for our future plans."
+      "annotation": "We develop our knight to its ideal square, controlling the central e5 and g5 squares while supporting our d4 pawn and preparing kingside castling. The knight on f3 is perfectly placed to support our central pawn structure and can potentially reroute to more active squares like e5 or g5 later in the game. This move also prevents Black from playing ...Ng4, which could be annoying in some variations. From f3, our knight works harmoniously with our other pieces and maintains maximum flexibility for our future plans."
     },
     {
       "san": "c5",
@@ -39,7 +39,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black plays a solid developing move that supports the center, prepares to fianchetto the dark-squared bishop, and creates a solid foundation for their position. The d6 pawn controls important central squares like c5 and e5, while also preparing ...Bg7 where the bishop will put pressure on our long diagonal. This move is more flexible than immediate piece development because it keeps Black's options open regarding knight placement and kingside development. However, the d6 pawn does slightly restrict Black's own pieces, particularly the light-squared bishop's development options."
+      "annotation": "Black plays a constructive move that supports the center, prepares to fianchetto the dark-squared bishop, and creates a solid foundation for their position. The d6 pawn controls important central squares like c5 and e5, while also preparing ...Bg7 where the bishop will put pressure on our long diagonal. This move is more flexible than immediate piece development because it keeps Black's options open regarding knight placement and kingside development. However, the d6 pawn does slightly restrict Black's own pieces, particularly the light-squared bishop's development options."
     },
     {
       "san": "Nc3",

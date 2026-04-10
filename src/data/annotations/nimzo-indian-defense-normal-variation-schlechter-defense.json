@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, supporting the d4 pawn while preparing to castle kingside and keeping pressure on Black's position. This move officially enters us into Nimzo-Indian territory, as Black now has the option to play the characteristic ...Bb4, pinning our knight and creating immediate tension. Our knight on c3 also eyes the important e4 and d5 squares, and later in the game, it might jump to e4 or reroute via e2 to more active posts. We need to be aware that Black's next move might be ...Bb4, which would pin our knight and force us to make some concrete decisions about our pawn structure."
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing to castle kingside and keeping pressure on Black's position. This move officially enters us into Nimzo-Indian territory, as Black now has the option to play the characteristic ...Bb4, pinning our knight and creating immediate tension. Our knight on c3 also eyes the important e4 and d5 squares, and later in the game, it might jump to e4 or reroute via e2 to more active posts. We need to be aware that Black's next move might be ...Bb4, which would pin our knight and force us to make some concrete decisions about our pawn structure."
     },
     {
       "san": "Bb4",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its most natural square, where it controls the crucial e5 and d4 squares while preparing to castle kingside and complete our development. This knight placement is particularly important in the Nimzo-Indian because it helps us maintain central control and prepares various middlegame plans including e3-e4 or supporting a potential f2-f4 advance in some lines. The knight on f3 also provides additional defense to our kingside and can potentially reroute to more active squares like e5 or g5 in the middlegame. With this move, we're following the principle of completing our development quickly and safely, preparing to bring our king to safety while maintaining all our central advantages."
+      "annotation": "We're developing our kingside knight to its ideal square, where it controls the crucial e5 and d4 squares while preparing to castle kingside and complete our development. This knight placement is particularly important in the Nimzo-Indian because it helps us maintain central control and prepares various middlegame plans including e3-e4 or supporting a potential f2-f4 advance in some lines. The knight on f3 also provides additional defense to our kingside and can potentially reroute to more active squares like e5 or g5 in the middlegame. With this move, we're following the principle of completing our development quickly and safely, preparing to bring our king to safety while maintaining all our central advantages."
     },
     {
       "san": "O-O",
@@ -51,7 +51,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "We're following suit by castling kingside, bringing our king to safety while connecting our rooks and preparing for the middlegame battle ahead. This natural developing move also puts our rook on f1, where it can support the crucial f2-f4 advance in some lines or simply provide additional kingside defense. Castling completes our basic development and allows us to focus on more active plans like advancing in the center with e3-e4 or beginning operations on the queenside with moves like a3 and b4. However, we need to be aware that Black's bishop on b7 is now looking directly at our kingside, so we should be careful about opening lines that might expose our king to danger."
+      "annotation": "We're following suit by castling kingside, bringing our king to safety while connecting our rooks and preparing for the middlegame battle ahead. This active move also puts our rook on f1, where it can support the crucial f2-f4 advance in some lines or simply provide additional kingside defense. Castling completes our basic development and allows us to focus on more active plans like advancing in the center with e3-e4 or beginning operations on the queenside with moves like a3 and b4. However, we need to be aware that Black's bishop on b7 is now looking directly at our kingside, so we should be careful about opening lines that might expose our king to danger."
     },
     {
       "san": "d5",

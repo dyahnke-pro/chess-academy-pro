@@ -29,7 +29,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, attacking the d4 pawn and controlling e4. This flexible move keeps options open for various Indian Defense systems including the Benko Gambit.",
+      "annotation": "Black develops the knight to its ideal square, attacking the d4 pawn and controlling e4. This flexible move keeps options open for various Indian Defense systems including the Benko Gambit.",
       "plans": [
         "Control e4 and pressure d5 after White advances",
         "Prepare a kingside fianchetto or classical development"

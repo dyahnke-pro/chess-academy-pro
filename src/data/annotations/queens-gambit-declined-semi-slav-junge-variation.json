@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our king's knight to its most natural square, where it eyes the central e5 square and supports our future kingside castling. This move also prepares to increase pressure on Black's d5 pawn, potentially with moves like Ne5 or Nd2-e4 later. The knight on f3 is incredibly flexible and can jump to many useful squares depending on how the position develops. By developing before recapturing on c4 (if Black takes), we're following the principle of development first, maintaining maximum options for our pieces."
+      "annotation": "We're developing our king's knight to its ideal square, where it eyes the central e5 square and supports our future kingside castling. This move also prepares to increase pressure on Black's d5 pawn, potentially with moves like Ne5 or Nd2-e4 later. The knight on f3 is incredibly flexible and can jump to many useful squares depending on how the position develops. By developing before recapturing on c4 (if Black takes), we're following the principle of development first, maintaining maximum options for our pieces."
     },
     {
       "san": "c6",

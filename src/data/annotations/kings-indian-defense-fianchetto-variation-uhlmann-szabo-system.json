@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to its most natural square, immediately putting pressure on our central d4 pawn and preparing to contest the center. This move is the hallmark of several hypermodern defenses, where Black allows us to occupy the center with pawns while preparing to strike back later with pieces. The knight on f6 also prepares kingside castling and keeps options open for both ...e6 (leading to Nimzo-Indian or Queen's Gambit structures) and ...g6 (leading to King's Indian formations). Black is essentially saying 'take the center for now, but I'll challenge it when the time is right.'"
+      "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our central d4 pawn and preparing to contest the center. This move is the hallmark of several hypermodern defenses, where Black allows us to occupy the center with pawns while preparing to strike back later with pieces. The knight on f6 also prepares kingside castling and keeps options open for both ...e6 (leading to Nimzo-Indian or Queen's Gambit structures) and ...g6 (leading to King's Indian formations). Black is essentially saying 'take the center for now, but I'll challenge it when the time is right.'"
     },
     {
       "san": "c4",
@@ -51,7 +51,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most natural square, supporting the d4 pawn and preparing for central operations. This move fits perfectly with our Fianchetto setup, as the knight on c3 can support advances like e4 or d5 while maintaining excellent central control. The knight also prepares potential tactical motifs involving Nd5 if the position opens up. We're now ready to complete our development with moves like Re1, Bd2, or Qc2, depending on how Black continues, and our pieces are working in perfect harmony to control key central squares."
+      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn and preparing for central operations. This move fits perfectly with our Fianchetto setup, as the knight on c3 can support advances like e4 or d5 while maintaining excellent central control. The knight also prepares potential tactical motifs involving Nd5 if the position opens up. We're now ready to complete our development with moves like Re1, Bd2, or Qc2, depending on how Black continues, and our pieces are working in perfect harmony to control key central squares."
     },
     {
       "san": "e5",

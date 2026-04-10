@@ -19,11 +19,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to an excellent central square, attacking the e4 pawn and forcing Black to make a decision about defending it. This move is part of our systematic approach to reclaiming the gambit pawn while developing with purpose - the knight on c3 controls key central squares like d5 and e4. We're also preparing to support our upcoming f3 thrust, which will be the key move to open lines for our pieces. The knight development follows the opening principle of developing toward the center while maintaining maximum flexibility for our pieces."
+      "annotation": "We develop our knight to an excellent central square, attacking the e4 pawn and forcing Black to make a decision about defending it. This move is part of our systematic approach to reclaiming the gambit pawn while developing with purpose - the knight on c3 controls key central squares like d5 and e4. We're also preparing to support our upcoming f3 thrust, which will be the critical move to open lines for our pieces. The knight development follows the opening principle of developing toward the center while maintaining maximum flexibility for our pieces."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops their knight to a natural square, defending the e4 pawn while bringing a piece toward the center. This is a sensible developing move that follows opening principles, but it doesn't address the core issue of our mounting pressure. Our opponent is trying to consolidate their extra pawn while developing normally, which is a reasonable approach but allows us to continue building our initiative. The knight on f6 does control some important central squares, but it may become a target for our aggressive piece play in the middlegame."
+      "annotation": "Black develops their knight to a natural square, defending the e4 pawn while bringing a piece toward the center. This is a purposeful move that follows opening principles, but it doesn't address the core issue of our mounting pressure. Our opponent is trying to consolidate their extra pawn while developing normally, which is a reasonable approach but allows us to continue building our initiative. The knight on f6 does control some important central squares, but it may become a target for our aggressive piece play in the middlegame."
     },
     {
       "san": "f3",

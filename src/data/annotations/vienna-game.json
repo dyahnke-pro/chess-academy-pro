@@ -538,7 +538,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "White develops the queen's knight to its most natural square, defining the Vienna Game opening.",
+          "annotation": "White develops the queen's knight to its ideal square, defining the Vienna Game opening.",
           "plans": [
             "Prepare f4 gambit to attack e5",
             "Support the center and prepare for piece coordination"
@@ -857,7 +857,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside, bringing the king to safety and activating the rook. This natural move completes Black's basic development and prepares to challenge White's central control.",
+          "annotation": "Black castles kingside, bringing the king to safety and activating the rook. this move completes Black's basic development and prepares to challenge White's central control.",
           "plans": [
             "Develop the queenside pieces",
             "Challenge White's central control"

@@ -11,7 +11,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, attacking Black's e5 pawn while supporting our own e4 pawn. This move embodies classical opening principles by developing with purpose - the knight controls important central squares like d4, e5, and g5 while preparing to castle kingside. From f3, our knight also keeps an eye on potential tactics and supports future central advances like d4. The knight development is flexible, as it doesn't commit us to any particular pawn structure yet, keeping our options open for various setups in the middlegame."
+      "annotation": "We develop our knight to its ideal square, attacking Black's e5 pawn while supporting our own e4 pawn. This move embodies classical opening principles by developing with purpose - the knight controls important central squares like d4, e5, and g5 while preparing to castle kingside. From f3, our knight also keeps an eye on potential tactics and supports future central advances like d4. The knight development is flexible, as it doesn't commit us to any particular pawn structure yet, keeping our options open for various setups in the middlegame."
     },
     {
       "san": "Nc6",
@@ -43,7 +43,7 @@
     },
     {
       "san": "Re1",
-      "annotation": "We place our rook on the central e-file, supporting our e4 pawn while preparing for future central advances. This move serves multiple strategic purposes: it defends our center, prepares d4 (since after ...exd4, we can recapture with the rook), and puts pressure on Black's e5 pawn. The rook on e1 also eyes Black's uncastled king and will become particularly powerful if we can advance d4 and open the center. This is a key move in many Ruy Lopez setups, as central control through rook activity is often more important than immediately advancing pawns, and it maintains flexibility in our position while improving our piece coordination."
+      "annotation": "We place our rook on the central e-file, supporting our e4 pawn while preparing for future central advances. This move serves multiple strategic purposes: it defends our center, prepares d4 (since after ...exd4, we can recapture with the rook), and puts pressure on Black's e5 pawn. The rook on e1 also eyes Black's uncastled king and will become particularly powerful if we can advance d4 and open the center. This is a critical move in many Ruy Lopez setups, as central control through rook activity is often more important than immediately advancing pawns, and it maintains flexibility in our position while improving our piece coordination."
     },
     {
       "san": "b5",
@@ -67,7 +67,7 @@
     },
     {
       "san": "h3",
-      "annotation": "We play the characteristic Ruy Lopez move, preparing to advance our kingside pawns while preventing Black's pieces from occupying g4. This seemingly quiet move serves multiple strategic purposes: it prepares g4 in some lines, prevents ...Ng4 or ...Bg4 tactics, and gives our king a flight square on h2. The move also fits into many typical Ruy Lopez plans where we build up slowly on the kingside while maintaining central control. While h3 might appear slow, it's actually a very useful prophylactic move that improves our position without committing to any particular plan, and it's virtually a standard move in many Closed Ruy Lopez variations."
+      "annotation": "We play the characteristic Ruy Lopez move, preparing to advance our kingside pawns while preventing Black's pieces from occupying g4. This seemingly quiet move serves multiple strategic purposes: it prepares g4 in some lines, prevents ...Ng4 or ...Bg4 tactics, and gives our king a flight square on h2. The move also fits into many typical Ruy Lopez plans where we build up slowly on the kingside while maintaining central control. While h3 might appear slow, it's actually a very useful prophylactic move that improves our position without committing to any particular plan, and it's virtually a typical choice in this structure in many Closed Ruy Lopez variations."
     },
     {
       "san": "Nb8",

@@ -19,7 +19,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We're developing our knight to its most natural square, where it supports the d4 pawn and controls important central squares like e4 and d5. The knight on c3 is also preparing to support a potential d4-d5 pawn advance, which would give us a space advantage. However, this move does have a slight downside - it blocks the c-file for our rook and potentially allows Black to double our pawns if a piece captures on c3. Despite this drawback, the knight is excellently placed here for controlling the center and supporting our strategic plans, making this the most popular choice at the highest level."
+      "annotation": "We're developing our knight to its ideal square, where it supports the d4 pawn and controls important central squares like e4 and d5. The knight on c3 is also preparing to support a potential d4-d5 pawn advance, which would give us a space advantage. However, this move does have a slight downside - it blocks the c-file for our rook and potentially allows Black to double our pawns if a piece captures on c3. Despite this drawback, the knight is excellently placed here for controlling the center and supporting our strategic plans, making this the most popular choice at the highest level."
     },
     {
       "san": "Bb4",
@@ -35,7 +35,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 and d4 squares while supporting our king's safety. The knight on f3 also prepares us to castle kingside and adds another defender to our d4 pawn, which is coming under increasing pressure. This natural developing move fits perfectly with our strategic goals - we're not rushing to resolve the central tension but instead improving our piece coordination. The knight also eyes potential outposts on e5 or d4 if those squares become available, and it supports a future e2-e4 advance once we've adequately prepared it."
+      "annotation": "We're developing our knight to its ideal square, where it controls the central e5 and d4 squares while supporting our king's safety. The knight on f3 also prepares us to castle kingside and adds another defender to our d4 pawn, which is coming under increasing pressure. This active move fits perfectly with our strategic goals - we're not rushing to resolve the central tension but instead improving our piece coordination. The knight also eyes potential outposts on e5 or d4 if those squares become available, and it supports a future e2-e4 advance once we've adequately prepared it."
     },
     {
       "san": "d6",

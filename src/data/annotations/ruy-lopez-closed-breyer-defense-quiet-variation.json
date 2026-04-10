@@ -11,11 +11,11 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We develop our knight to its most natural square, where it attacks Black's e5 pawn and controls the important central squares d4 and e5. This is the hallmark move of the Spanish Opening system, as we're preparing to continue with Bb5, putting immediate pressure on Black's position. The knight on f3 also supports a future d2-d4 advance, which would challenge Black's central pawn directly. From f3, our knight is perfectly placed to support both kingside castling and central pawn breaks, making this one of the most flexible developing moves in chess."
+      "annotation": "We develop our knight to its ideal square, where it attacks Black's e5 pawn and controls the important central squares d4 and e5. This is the hallmark move of the Spanish Opening system, as we're preparing to continue with Bb5, putting immediate pressure on Black's position. The knight on f3 also supports a future d2-d4 advance, which would challenge Black's central pawn directly. From f3, our knight is perfectly placed to support both kingside castling and central pawn breaks, making this one of the most flexible developing choices in chess."
     },
     {
       "san": "Nc6",
-      "annotation": "Black develops the knight to its most active square, defending the e5 pawn that we just attacked with our knight. This natural developing move also prepares Black's own kingside development while keeping options open for various pawn structures. The knight on c6 controls important central squares like d4 and e5, and it's positioned to support Black's central play throughout the opening and middlegame. However, we should note that this knight placement allows us to continue with our Spanish Opening plan of Bb5, putting pressure on this very piece."
+      "annotation": "Black develops the knight to its most active square, defending the e5 pawn that we just attacked with our knight. This active move also prepares Black's own kingside development while keeping options open for various pawn structures. The knight on c6 controls important central squares like d4 and e5, and it's positioned to support Black's central play throughout the opening and middlegame. However, we should note that this knight placement allows us to continue with our Spanish Opening plan of Bb5, putting pressure on this very piece."
     },
     {
       "san": "Bb5",
@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the kingside knight to f6, attacking our e4 pawn and preparing to castle kingside for safety. This natural developing move is crucial for Black's piece coordination, as the knight from f6 can later jump to active squares like d7, g4, or h5 depending on the position's requirements. The knight also adds another defender to the central e5 pawn, solidifying Black's central presence. By developing this knight, Black is following classical opening principles while also preparing the typical ...Be7 and castling sequence that characterizes the main lines of the Spanish Opening."
+      "annotation": "Black develops the kingside knight to f6, attacking our e4 pawn and preparing to castle kingside for safety. This active move is crucial for Black's piece coordination, as the knight from f6 can later jump to active squares like d7, g4, or h5 depending on the position's requirements. The knight also adds another defender to the central e5 pawn, solidifying Black's central presence. By developing this knight, Black is following classical opening principles while also preparing the typical ...Be7 and castling sequence that characterizes the main lines of the Spanish Opening."
     },
     {
       "san": "O-O",

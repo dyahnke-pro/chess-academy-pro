@@ -259,7 +259,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black finally develops a piece! The knight goes to f6, attacking the e4 pawn and preparing castling. This is Black's most natural developing move, but White is already three tempi ahead in development. The knight on f6 will soon be pushed back by e5.",
+      "annotation": "Black finally develops a piece! The knight goes to f6, attacking the e4 pawn and preparing castling. This is Black's most active move, but White is already three tempi ahead in development. The knight on f6 will soon be pushed back by e5.",
       "plans": [
         "Attack e4 and develop quickly",
         "Prepare to castle and consolidate",

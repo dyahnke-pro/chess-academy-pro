@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most natural developing move, bringing the knight to its best square where it attacks our central d4 pawn. This is an excellent choice because the knight on f6 not only pressures our center but also prepares kingside castling and keeps Black's options open for various defensive setups. Our opponent is following sound opening principles by developing pieces toward the center while creating immediate tactical threats. The knight on f6 is also well-placed to support a future ...e5 pawn break or to jump to other strong squares like e4 or d5 later in the game."
+      "annotation": "Black responds with the most active move, bringing the knight to its best square where it attacks our central d4 pawn. This is an excellent choice because the knight on f6 not only pressures our center but also prepares kingside castling and keeps Black's options open for various defensive setups. Our opponent is following sound opening principles by developing pieces toward the center while creating immediate tactical threats. The knight on f6 is also well-placed to support a future ...e5 pawn break or to jump to other strong squares like e4 or d5 later in the game."
     },
     {
       "san": "Nf3",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "Here's the key move of the Torre Attack! We're developing our bishop to an aggressive square where it pins the knight on f6 to the queen, creating immediate tactical pressure on Black's position. This bishop controls important dark squares like h6 and f6, and it's particularly annoying for our opponent because the pinned knight cannot easily move without losing material. The bishop on g5 also supports a potential future e4 pawn advance and keeps Black's king feeling uncomfortable even after castling. This is exactly the kind of piece pressure that makes the Torre Attack so effective - we're creating problems for our opponent to solve while developing naturally."
+      "annotation": "Here's the central idea of the Torre Attack! We're developing our bishop to an aggressive square where it pins the knight on f6 to the queen, creating immediate tactical pressure on Black's position. This bishop controls important dark squares like h6 and f6, and it's particularly annoying for our opponent because the pinned knight cannot easily move without losing material. The bishop on g5 also supports a potential future e4 pawn advance and keeps Black's king feeling uncomfortable even after castling. This is exactly the kind of piece pressure that makes the Torre Attack so effective - we're creating problems for our opponent to solve while developing naturally."
     },
     {
       "san": "Bg7",

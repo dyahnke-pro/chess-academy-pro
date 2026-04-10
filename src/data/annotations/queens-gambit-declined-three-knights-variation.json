@@ -7,7 +7,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most natural developing move, attacking d4 while bringing the knight to its optimal square. This is one of the most principled responses to 1.d4, as it develops a piece, controls important central squares like e4 and d5, and keeps Black's options open for various defensive setups. Our opponent is following the classical principle of challenging the center immediately rather than allowing us to build a massive pawn center unchallenged. This move is the starting point for many solid defenses including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while bringing the knight to its optimal square. This is one of the most principled responses to 1.d4, as it develops a piece, controls important central squares like e4 and d5, and keeps Black's options open for various defensive setups. Our opponent is following the classical principle of challenging the center immediately rather than allowing us to build a massive pawn center unchallenged. This move is the starting point for many solid defenses including the King's Indian, Nimzo-Indian, and Queen's Gambit Declined."
     },
     {
       "san": "c4",
@@ -19,7 +19,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its most natural square, supporting our d4 pawn while preparing kingside castling and maintaining maximum flexibility in our setup. This knight controls key central squares like e5 and d4, and from f3 it can potentially jump to more active squares like e5 or g5 depending on how the position develops. The move also prepares to fianchetto our king's bishop on g2 in some lines, creating a powerful diagonal aimed at Black's kingside. Most importantly, we're following sound opening principles by developing pieces toward the center while keeping our options open for various pawn structures."
+      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn while preparing kingside castling and maintaining maximum flexibility in our setup. This knight controls key central squares like e5 and d4, and from f3 it can potentially jump to more active squares like e5 or g5 depending on how the position develops. The move also prepares to fianchetto our king's bishop on g2 in some lines, creating a powerful diagonal aimed at Black's kingside. Most importantly, we're following sound opening principles by developing pieces toward the center while keeping our options open for various pawn structures."
     },
     {
       "san": "d5",
