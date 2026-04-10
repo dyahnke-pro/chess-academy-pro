@@ -17,7 +17,7 @@ import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { loadSubLineAnnotations, loadAnnotationsForPgn, enhanceWithNarration } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
-import { ArrowRight, Play, Pause } from 'lucide-react';
+import { ArrowRight, Play, Pause, Info } from 'lucide-react';
 
 export interface WalkthroughModeProps {
   opening: OpeningRecord;
@@ -75,13 +75,20 @@ const NARRATE: Record<AutoPlaySpeed, boolean> = {
   drill: false,
 };
 
-/** Trim annotation to first 1-2 sentences for Review speed. */
-function trimAnnotation(text: string): string {
-  // Split on sentence boundaries (period, exclamation, question mark followed by space or end)
+/** Trim annotation to a given max number of sentences. */
+function trimAnnotation(text: string, maxSentences: number = 2): string {
   const sentences = text.match(/[^.!?]+[.!?]+/g);
-  if (!sentences || sentences.length <= 2) return text;
-  return sentences.slice(0, 2).join('').trim();
+  if (!sentences || sentences.length <= maxSentences) return text;
+  return sentences.slice(0, maxSentences).join('').trim();
 }
+
+/** How many sentences to show/speak for each speed. null = full text. */
+const SENTENCE_LIMIT: Record<AutoPlaySpeed, number | null> = {
+  learn: null,     // Full annotation
+  study: 3,        // Slightly trimmed
+  review: 1,       // Just the key point
+  drill: null,     // Hidden entirely
+};
 
 function getAnnotationDelay(text: string | undefined, speed: AutoPlaySpeed): number {
   if (!text) return MIN_DELAY_MS[speed];
@@ -130,6 +137,7 @@ export function WalkthroughMode({
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const isAutoPlayingRef = useRef(false);
   const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('learn');
+  const [showSpeedInfo, setShowSpeedInfo] = useState(false);
 
   // Do NOT auto-load Kokoro here — the 87 MB WASM model causes OOM crashes
   // on iOS Safari. Kokoro only loads when the user explicitly taps
@@ -551,9 +559,9 @@ export function WalkthroughMode({
 
     let cancelled = false;
 
-    // Review speed: trim to first 1-2 sentences for brevity
-    const spokenText = autoPlaySpeed === 'review'
-      ? trimAnnotation(ann.annotation)
+    const limit = SENTENCE_LIMIT[autoPlaySpeed];
+    const spokenText = limit !== null
+      ? trimAnnotation(ann.annotation, limit)
       : ann.annotation;
 
     void voiceService.speak(spokenText).then(() => {
@@ -716,18 +724,59 @@ export function WalkthroughMode({
             </button>
           }
           extraRight={
-            <button
-              onClick={cycleSpeed}
-              className="px-2.5 py-1.5 rounded-lg border text-xs font-medium hover:bg-theme-surface transition-colors"
-              style={{
-                borderColor: 'var(--color-border)',
-                color: 'var(--color-text-muted)',
-              }}
-              aria-label={`Speed: ${autoPlaySpeed}`}
-              data-testid="walkthrough-speed-toggle"
-            >
-              {autoPlaySpeed.charAt(0).toUpperCase() + autoPlaySpeed.slice(1)}
-            </button>
+            <div className="relative flex flex-col items-center">
+              <span className="text-[9px] text-theme-text-muted uppercase tracking-wide leading-none mb-0.5">
+                Voice Narration
+              </span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={cycleSpeed}
+                  className="px-2.5 py-1.5 rounded-lg border text-xs font-medium hover:bg-theme-surface transition-colors"
+                  style={{
+                    borderColor: 'var(--color-border)',
+                    color: 'var(--color-text-muted)',
+                  }}
+                  aria-label={`Speed: ${autoPlaySpeed}`}
+                  data-testid="walkthrough-speed-toggle"
+                >
+                  {autoPlaySpeed.charAt(0).toUpperCase() + autoPlaySpeed.slice(1)}
+                </button>
+                <button
+                  onClick={() => setShowSpeedInfo((v) => !v)}
+                  className="p-1 rounded-full hover:bg-theme-surface transition-colors"
+                  style={{ color: 'var(--color-text-muted)' }}
+                  aria-label="Speed info"
+                  data-testid="walkthrough-speed-info-btn"
+                >
+                  <Info size={13} />
+                </button>
+              </div>
+              {showSpeedInfo && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setShowSpeedInfo(false)}
+                  />
+                  <div
+                    className="absolute bottom-full right-0 mb-2 w-64 rounded-xl border p-3 shadow-xl z-50 text-xs leading-relaxed"
+                    style={{
+                      background: 'var(--color-surface)',
+                      borderColor: 'var(--color-border)',
+                      color: 'var(--color-text)',
+                    }}
+                    data-testid="walkthrough-speed-info-popup"
+                  >
+                    <p className="font-semibold mb-1.5">Voice Narration Speed</p>
+                    <ul className="space-y-1.5">
+                      <li><span className="font-medium">Learn</span> — Slow and thorough. Full explanations read aloud, arrows appear progressively, long pauses to absorb.</li>
+                      <li><span className="font-medium">Study</span> — Same content but faster pacing.</li>
+                      <li><span className="font-medium">Review</span> — Quick refresher. Annotations trimmed, arrows appear all at once, minimal pauses.</li>
+                      <li><span className="font-medium">Drill</span> — Just the moves. No narration, no voice. Pure repetition.</li>
+                    </ul>
+                  </div>
+                </>
+              )}
+            </div>
           }
         />
       </div>
