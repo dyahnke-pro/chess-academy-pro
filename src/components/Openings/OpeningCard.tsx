@@ -2,7 +2,7 @@ import { MasteryRing } from './MasteryRing';
 import { getMasteryPercent, needsReview } from '../../services/openingService';
 import type { OpeningRecord } from '../../types';
 import { Repeat, AlertCircle, Heart } from 'lucide-react';
-import { getNeonColor, scaledShadow, scaledBorder } from '../../utils/neonColors';
+import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import { useSettings } from '../../hooks/useSettings';
 
 interface OpeningCardProps {
@@ -32,7 +32,6 @@ export function OpeningCard({ opening, onClick, onToggleFavorite }: OpeningCardP
 
   const shadow = scaledShadow(neon.rgb, b);
   const shadowHov = scaledShadow(neon.rgb, Math.min(200, b * 1.4));
-  const border = scaledBorder(neon.rgb, b);
   const borderAccent = `rgba(${neon.rgb}, ${Math.min(1, 0.6 * s)})`;
   const borderAccentHov = `rgba(${neon.rgb}, ${Math.min(1, 0.85 * s)})`;
   const borderSubtle = `rgba(${neon.rgb}, ${Math.min(1, 0.1 * s)})`;
