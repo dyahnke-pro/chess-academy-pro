@@ -245,26 +245,26 @@ export function GlobalCoachDrawer(): JSX.Element | null {
     );
   }
 
-  /* Desktop: slide from right */
+  /* Desktop: compact corner popover (bottom-right) */
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           key="coach-drawer"
-          initial={{ x: '100%', opacity: 0.5 }}
+          initial={{ opacity: 0, y: 24, scale: 0.95 }}
           animate={minimized
-            ? { x: 0, opacity: 1, height: 48 }
-            : { x: 0, opacity: 1 }
+            ? { opacity: 1, y: 0, scale: 1, height: 48 }
+            : { opacity: 1, y: 0, scale: 1 }
           }
-          exit={{ x: '100%', opacity: 0 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="fixed right-0 top-0 bottom-0 z-50 flex flex-col"
+          exit={{ opacity: 0, y: 24, scale: 0.95 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+          className="fixed bottom-4 right-4 z-50 flex flex-col rounded-2xl overflow-hidden"
           style={{
-            width: 'min(420px, 35vw)',
-            paddingBottom: minimized ? 0 : undefined,
+            width: 380,
+            height: minimized ? 48 : 500,
             background: 'var(--color-bg)',
-            borderLeft: '1px solid var(--color-border)',
-            boxShadow: '-4px 0 20px rgba(0,0,0,0.15)',
+            border: '1px solid var(--color-border)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08)',
           }}
           data-testid="global-coach-drawer"
         >

@@ -94,7 +94,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
 
     // Auto-scroll to bottom when messages change
     useEffect(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      const el = messagesEndRef.current;
+      if (el && 'scrollIntoView' in el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }, [messages, streamingContent]);
 
     // Expose method for parent to inject assistant messages (hints, takeback msgs)

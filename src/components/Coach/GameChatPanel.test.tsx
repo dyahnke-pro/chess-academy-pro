@@ -58,6 +58,11 @@ describe('GameChatPanel', () => {
     expect(screen.getByText('Game Chat')).toBeInTheDocument();
   });
 
+  it('hides header when hideHeader is true', () => {
+    render(<GameChatPanel {...defaultProps} hideHeader />);
+    expect(screen.queryByText('Game Chat')).not.toBeInTheDocument();
+  });
+
   it('shows Online status when not streaming', () => {
     render(<GameChatPanel {...defaultProps} />);
     expect(screen.getByText('Online')).toBeInTheDocument();

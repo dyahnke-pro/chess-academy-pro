@@ -78,8 +78,17 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
     el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
   }, []);
 
+  const handleSubmit = useCallback((e: React.SyntheticEvent) => {
+    e.preventDefault();
+    handleSend();
+  }, [handleSend]);
+
   return (
-    <div className="flex items-end gap-2 p-3 border-t border-theme-border bg-theme-bg" data-testid="chat-input">
+    <form
+      onSubmit={handleSubmit}
+      className="flex items-end gap-2 p-3 border-t border-theme-border bg-theme-bg"
+      data-testid="chat-input"
+    >
       <textarea
         ref={textareaRef}
         value={text}
@@ -88,7 +97,8 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
         placeholder={placeholder ?? 'Type a message...'}
         disabled={disabled}
         rows={1}
-        className="flex-1 resize-y rounded-xl border border-theme-border bg-theme-surface px-4 py-2.5 text-sm text-theme-text placeholder:text-theme-text-muted focus:outline-none focus:border-theme-accent disabled:opacity-50 min-h-[40px] max-h-[200px]"
+        enterKeyHint="send"
+        className="flex-1 resize-none rounded-xl border border-theme-border bg-theme-surface px-4 py-2.5 text-sm text-theme-text placeholder:text-theme-text-muted focus:outline-none focus:border-theme-accent disabled:opacity-50 min-h-[40px] max-h-[200px]"
         data-testid="chat-text-input"
       />
 
@@ -110,13 +120,13 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
       )}
 
       <button
-        onClick={handleSend}
+        type="submit"
         disabled={disabled || !text.trim()}
         className="p-2.5 rounded-xl bg-theme-accent text-white disabled:opacity-50 hover:opacity-90 transition-opacity"
         data-testid="chat-send-btn"
       >
         <Send size={18} />
       </button>
-    </div>
+    </form>
   );
 }
