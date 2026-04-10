@@ -118,7 +118,7 @@ export function CoachChatPage(): JSX.Element {
   }, [activeProfile, chatMessages, isStreaming, addChatMessage, flushSpeechBuffer, analysisContext]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] pb-16 md:pb-0 max-w-2xl mx-auto w-full" data-testid="coach-chat-page">
+    <div className="flex flex-col h-[calc(100dvh-4rem)] pb-16 md:pb-0 max-w-2xl mx-auto w-full" data-testid="coach-chat-page">
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-theme-border">
         <button
@@ -157,7 +157,7 @@ export function CoachChatPage(): JSX.Element {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y p-4 space-y-4">
         {chatMessages.length === 0 && !isStreaming && (
           <motion.div
             className="flex flex-col items-center gap-4 py-12"

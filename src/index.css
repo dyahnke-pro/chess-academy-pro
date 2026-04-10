@@ -39,6 +39,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100dvh;
+  /* Enable momentum scrolling on iOS for overflow containers */
+  -webkit-overflow-scrolling: touch;
 }
 
 #root {
