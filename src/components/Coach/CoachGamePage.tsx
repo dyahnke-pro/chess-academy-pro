@@ -418,11 +418,22 @@ export function CoachGamePage(): JSX.Element {
   const clearTacticAnimation = useCallback(() => {
     tacticAnimTimersRef.current.forEach(clearTimeout);
     tacticAnimTimersRef.current = [];
+  });
+
+  /** Auto-play interval ref for tactic line step-through */
+  const tacticAutoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearTacticAutoPlay = useCallback(() => {
+    if (tacticAutoPlayRef.current) {
+      clearInterval(tacticAutoPlayRef.current);
+      tacticAutoPlayRef.current = null;
+    }
   }, []);
 
   const showTipBubble = useCallback((text: string, tacticLine?: TacticLineData) => {
     if (tipBubbleTimerRef.current) clearTimeout(tipBubbleTimerRef.current);
     clearTacticAnimation();
+    clearTacticAutoPlay();
     setTipBubbleText(text);
     setTipTacticLine(tacticLine ?? null);
     setShowingTacticLine(false);
@@ -431,9 +442,9 @@ export function CoachGamePage(): JSX.Element {
       setTipTacticLine(null);
       setShowingTacticLine(false);
     }, 12000);
-  }, [clearTacticAnimation]);
+  }, [clearTacticAnimation, clearTacticAutoPlay]);
 
-  /** Show button: build FEN array for step-through navigation */
+  /** Show button: build FEN array and auto-play through the tactic line */
   const handleShowTactic = useCallback(() => {
     if (!tipTacticLine) return;
     // Cancel auto-dismiss — user is actively viewing
@@ -443,6 +454,7 @@ export function CoachGamePage(): JSX.Element {
     }
     setShowingTacticLine(true);
     clearTacticAnimation();
+    clearTacticAutoPlay();
 
     try {
       const chess = new Chess(tipTacticLine.fen);
@@ -459,26 +471,42 @@ export function CoachGamePage(): JSX.Element {
       setShowIndex(0);
       setTemporaryFen(fens[0]);
       setTemporaryLabel('Tactic preview');
+
+      // Auto-play through remaining moves at 800ms intervals
+      if (fens.length > 1) {
+        let step = 1;
+        tacticAutoPlayRef.current = setInterval(() => {
+          if (step >= fens.length) {
+            clearTacticAutoPlay();
+            return;
+          }
+          setShowIndex(step);
+          setTemporaryFen(fens[step]);
+          step++;
+        }, 800);
+      }
     } catch {
       // Fallback: just show the text notation
     }
-  }, [tipTacticLine, clearTacticAnimation]);
+  }, [tipTacticLine, clearTacticAnimation, clearTacticAutoPlay]);
 
   /** Step backward in the shown tactic line */
   const handleShowPrev = useCallback(() => {
+    clearTacticAutoPlay();
     if (showIndex <= 0 || showFens.length === 0) return;
     const newIndex = showIndex - 1;
     setShowIndex(newIndex);
     setTemporaryFen(showFens[newIndex]);
-  }, [showIndex, showFens]);
+  }, [showIndex, showFens, clearTacticAutoPlay]);
 
   /** Step forward in the shown tactic line */
   const handleShowNext = useCallback(() => {
+    clearTacticAutoPlay();
     if (showIndex >= showFens.length - 1) return;
     const newIndex = showIndex + 1;
     setShowIndex(newIndex);
     setTemporaryFen(showFens[newIndex]);
-  }, [showIndex, showFens]);
+  }, [showIndex, showFens, clearTacticAutoPlay]);
 
   /** Enter Explore Ahead mode from the current shown position */
   const handleEnterExplore = useCallback(() => {
@@ -540,10 +568,6 @@ export function CoachGamePage(): JSX.Element {
           { role: 'assistant', content: reaction },
         ]);
         setIsExploreReacting(false);
-        // Auto-scroll to latest message
-        setTimeout(() => {
-          exploreChatRef.current?.scrollTo({ top: exploreChatRef.current.scrollHeight, behavior: 'smooth' });
-        }, 50);
       }).catch(() => {
         setIsExploreReacting(false);
       });
@@ -1691,7 +1715,8 @@ export function CoachGamePage(): JSX.Element {
           )}
         </AnimatePresence>
 
-        {/* ─── Coach Tip Bubble (above board, not covering it) ───────── */}
+        {/* ─── Board + overlaid Tip Bubble ───────────────────────────── */}
+        <div className="relative flex-shrink-0">
         <AnimatePresence>
           {tipBubbleText && gameState.status !== 'blunder_pause' && (
             <motion.div
@@ -1699,7 +1724,7 @@ export function CoachGamePage(): JSX.Element {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25 }}
-              className={`mx-2 mb-1 rounded-xl backdrop-blur-md border px-3 py-2.5 flex-shrink-0 ${
+              className={`absolute top-0 left-0 right-0 z-30 mx-2 mt-1 rounded-xl backdrop-blur-md border px-3 py-2.5 ${
                 isExploreMode
                   ? 'border-purple-500/30'
                   : tipTacticLine && !tipTacticLine.forPlayer
@@ -1862,7 +1887,7 @@ export function CoachGamePage(): JSX.Element {
           )}
         </AnimatePresence>
 
-        {/* Board */}
+        {/* Board — flex-shrink-0 so it never shrinks regardless of content above/below */}
         <div className="px-2 py-1 flex justify-center flex-shrink-0">
           <div className="w-full md:max-w-[420px] relative">
             <ChessBoard
@@ -1948,6 +1973,7 @@ export function CoachGamePage(): JSX.Element {
           {!isExploreMode && showEngineLinesEffective && latestTopLines.length > 0 && (
             <EngineLines lines={latestTopLines} fen={game.fen} className="mt-1" />
           )}
+        </div>
         </div>
 
         {/* Player info bar (bottom) — rating shown in header, omitted here */}
