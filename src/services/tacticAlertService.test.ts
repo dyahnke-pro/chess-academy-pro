@@ -150,7 +150,7 @@ describe('tacticAlertService', () => {
         'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank',
         'hanging_piece', 'promotion', 'deflection', 'overloaded_piece',
         'trapped_piece', 'clearance', 'interference', 'zwischenzug',
-        'x_ray', 'double_check', 'tactical_sequence',
+        'x_ray', 'double_check', 'removing_the_guard', 'tactical_sequence',
       ];
       for (const type of types) {
         for (const tier of ['nudge', 'teach', 'guide'] as const) {

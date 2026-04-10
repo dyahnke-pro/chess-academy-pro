@@ -837,6 +837,7 @@ export type TacticType =
   | 'zwischenzug'
   | 'x_ray'
   | 'double_check'
+  | 'removing_the_guard'
   | 'tactical_sequence';
 
 export interface MissedTactic {

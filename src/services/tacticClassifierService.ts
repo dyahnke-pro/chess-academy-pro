@@ -26,6 +26,7 @@ export const TACTIC_LABELS: Record<TacticType, string> = {
   zwischenzug: 'Zwischenzug',
   x_ray: 'X-Ray',
   double_check: 'Double Check',
+  removing_the_guard: 'Removing the Guard',
   tactical_sequence: 'Combination',
 };
 
@@ -49,7 +50,7 @@ export const LICHESS_THEME_TO_TACTIC: Partial<Record<string, TacticType>> = {
   xRayAttack: 'x_ray',
   doubleCheck: 'double_check',
   attraction: 'deflection',
-  capturingDefender: 'deflection',
+  capturingDefender: 'removing_the_guard',
   discoveredCheck: 'discovered_attack',
   intermezzo: 'zwischenzug',
   sacrifice: 'tactical_sequence',
@@ -309,7 +310,7 @@ export async function getTacticMotifStats(): Promise<TacticMotifStats[]> {
     'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank',
     'hanging_piece', 'promotion', 'deflection', 'overloaded_piece',
     'trapped_piece', 'clearance', 'interference', 'zwischenzug',
-    'x_ray', 'double_check',
+    'x_ray', 'double_check', 'removing_the_guard',
   ];
 
   for (const type of allTypes) {
@@ -452,6 +453,7 @@ function generateExplanation(tacticType: TacticType, bestMove: string, cpLoss: n
     zwischenzug: `Missed zwischenzug with ${bestMove} (${pawns} pawns lost)`,
     x_ray: `Missed x-ray attack with ${bestMove} (${pawns} pawns lost)`,
     double_check: `Missed double check with ${bestMove} (${pawns} pawns lost)`,
+    removing_the_guard: `Missed removing the guard with ${bestMove} (${pawns} pawns lost)`,
     tactical_sequence: `Missed tactic with ${bestMove} (${pawns} pawns lost)`,
   };
   return labels[tacticType];
