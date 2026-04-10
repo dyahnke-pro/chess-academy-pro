@@ -12,14 +12,28 @@ export interface NeonColor {
 function makeNeon(rgb: string, tagBg: string, tagText: string, ecoBadge?: string): NeonColor {
   return {
     rgb,
-    border: `rgba(${rgb}, 0.3)`,
-    borderHover: `rgba(${rgb}, 0.7)`,
-    shadow: `0 0 6px rgba(${rgb}, 0.5), 0 0 14px rgba(${rgb}, 0.3), 0 0 24px rgba(${rgb}, 0.15)`,
-    shadowHover: `0 0 8px rgba(${rgb}, 0.7), 0 0 18px rgba(${rgb}, 0.45), 0 0 30px rgba(${rgb}, 0.25)`,
+    border: `rgba(${rgb}, 0.4)`,
+    borderHover: `rgba(${rgb}, 0.8)`,
+    shadow: `0 0 8px rgba(${rgb}, 0.6), 0 0 16px rgba(${rgb}, 0.35), 0 0 28px rgba(${rgb}, 0.18)`,
+    shadowHover: `0 0 10px rgba(${rgb}, 0.8), 0 0 20px rgba(${rgb}, 0.5), 0 0 34px rgba(${rgb}, 0.3)`,
     tagBg,
     tagText,
     ecoBadge: ecoBadge ?? tagText,
   };
+}
+
+/**
+ * Compute a scaled shadow string for a given rgb and brightness (0–200, 100 = default).
+ * Used by components that respect the global glow dimmer settings.
+ */
+export function scaledShadow(rgb: string, brightness: number): string {
+  const s = brightness / 100;
+  return `0 0 ${Math.round(8 * s)}px rgba(${rgb}, ${Math.min(1, 0.6 * s)}), 0 0 ${Math.round(16 * s)}px rgba(${rgb}, ${Math.min(1, 0.35 * s)}), 0 0 ${Math.round(28 * s)}px rgba(${rgb}, ${Math.min(1, 0.18 * s)})`;
+}
+
+export function scaledBorder(rgb: string, brightness: number): string {
+  const s = brightness / 100;
+  return `rgba(${rgb}, ${Math.min(1, 0.4 * s)})`;
 }
 
 const STYLE_COLORS: Record<string, NeonColor> = {

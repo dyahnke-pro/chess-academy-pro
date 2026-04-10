@@ -15,6 +15,7 @@ import {
 import { voiceService } from '../../services/voiceService';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
+import { useBoardGlow, buildGlowSquareStyles } from '../../hooks/useBoardGlow';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import type { PlayableMiddlegameLine, AnnotationArrow } from '../../types';
@@ -315,15 +316,19 @@ export function PlayableLinePlayer({
     [phase, selectedSquare, legalMoves, showWrongFlash, showCorrectFlash, handleMemoryMoveResult, clearSelection],
   );
 
+  // Board square neon glow
+  const { baseGlow: baseGlowStr, mergeGlow } = useBoardGlow();
+
   // Square styles for memory phase selection/legal-move hints
   const memorySquareStyles = useMemo((): Record<string, React.CSSProperties> => {
-    if (phase !== 'memory') return {};
-    const styles: Record<string, React.CSSProperties> = {};
+    const styles = buildGlowSquareStyles(baseGlowStr);
+    if (phase !== 'memory') return styles;
 
     if (selectedSquare) {
       styles[selectedSquare] = {
+        ...styles[selectedSquare],
         background: 'rgba(0, 229, 255, 0.35)',
-        boxShadow: 'inset 0 0 8px rgba(0, 229, 255, 0.4)',
+        boxShadow: mergeGlow('inset 0 0 8px rgba(0, 229, 255, 0.4)'),
       };
     }
 
@@ -331,12 +336,14 @@ export function PlayableLinePlayer({
       const piece = chessRef.current.get(sq as Square);
       if (piece) {
         styles[sq] = {
+          ...styles[sq],
           background:
             'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0, 229, 255, 0.3) 60%, rgba(0, 229, 255, 0.3) 80%, rgba(0,0,0,0) 80%)',
           cursor: 'pointer',
         };
       } else {
         styles[sq] = {
+          ...styles[sq],
           background: 'radial-gradient(circle, rgba(0, 229, 255, 0.3) 25%, transparent 25%)',
           cursor: 'pointer',
         };
@@ -344,7 +351,7 @@ export function PlayableLinePlayer({
     }
 
     return styles;
-  }, [phase, selectedSquare, legalMoves]);
+  }, [phase, selectedSquare, legalMoves, baseGlowStr, mergeGlow]);
 
   const handleRetryMemory = useCallback((): void => {
     chessRef.current = new Chess(line.fen);
@@ -491,6 +498,7 @@ export function PlayableLinePlayer({
                   animationDurationInMs: 400,
                   darkSquareStyle: { backgroundColor: boardColorScheme.darkSquare },
                   lightSquareStyle: { backgroundColor: boardColorScheme.lightSquare },
+                  squareStyles: buildGlowSquareStyles(baseGlowStr),
                   ...(customPieces ? { pieces: customPieces } : {}),
                 }}
               />

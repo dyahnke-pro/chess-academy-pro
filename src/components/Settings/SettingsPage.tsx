@@ -13,6 +13,7 @@ import { VoiceSettingsPanel } from './VoiceSettingsPanel';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
 
+import { BoardGlowButton, BoardGlowSettings } from './BoardGlowSettings';
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import type { UserProfile, PieceAnimationSpeed, MoveMethod } from '../../types';
 
@@ -190,6 +191,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
 
   const [masterAllOff, setMasterAllOff] = useState(prefs.masterAllOff);
   const [boardSaveStatus, setBoardSaveStatus] = useState<string | null>(null);
+  const [showGlowPanel, setShowGlowPanel] = useState(false);
 
   const handleToggleMasterOff = (): void => {
     const next = !masterAllOff;
@@ -348,6 +350,24 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         onChange={setPieceSet}
         testId="piece-set-select"
       />
+
+      {/* Board Glow */}
+      <SectionHeader title="Neon Glow" />
+      {!showGlowPanel ? (
+        <BoardGlowButton onClick={() => setShowGlowPanel(true)} />
+      ) : (
+        <div className="space-y-3">
+          <BoardGlowSettings />
+          <button
+            onClick={() => setShowGlowPanel(false)}
+            className="w-full py-1.5 text-xs font-medium rounded-lg transition-colors hover:opacity-80"
+            style={{ color: 'var(--color-text-muted)' }}
+            data-testid="collapse-glow-btn"
+          >
+            Collapse
+          </button>
+        </div>
+      )}
 
       {/* Audio */}
       <SectionHeader title="Audio" />

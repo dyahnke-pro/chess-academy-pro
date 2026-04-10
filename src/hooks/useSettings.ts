@@ -28,6 +28,9 @@ export interface EffectiveSettings {
   coachPositionalTips: boolean;
   coachMissedTacticTakeback: boolean;
   coachReviewVoice: boolean;
+  // Neon glow
+  glowBrightness: number;
+  boardGlowColor: string;
 }
 
 export interface UseSettingsReturn {
@@ -74,6 +77,8 @@ const DEFAULT_SETTINGS: EffectiveSettings = {
   coachPositionalTips: true,
   coachMissedTacticTakeback: true,
   coachReviewVoice: true,
+  glowBrightness: 100,
+  boardGlowColor: '0, 229, 255',
 };
 
 export function useSettings(): UseSettingsReturn {
@@ -110,6 +115,8 @@ export function useSettings(): UseSettingsReturn {
       coachPositionalTips: raw.coachPositionalTips ?? true,
       coachMissedTacticTakeback: raw.coachMissedTacticTakeback ?? true,
       coachReviewVoice: raw.coachReviewVoice ?? true,
+      glowBrightness: raw.glowBrightness ?? 100,
+      boardGlowColor: raw.boardGlowColor ?? '0, 229, 255',
     };
 
     if (raw.masterAllOff) {

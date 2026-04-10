@@ -1,5 +1,6 @@
 import type { ProPlayer } from '../../types';
-import { getNeonColor } from '../../utils/neonColors';
+import { getNeonColor, scaledShadow } from '../../utils/neonColors';
+import { useSettings } from '../../hooks/useSettings';
 
 interface ProPlayerCardProps {
   player: ProPlayer;
@@ -9,6 +10,16 @@ interface ProPlayerCardProps {
 
 export function ProPlayerCard({ player, openingCount, onClick }: ProPlayerCardProps): JSX.Element {
   const neon = getNeonColor(player.style);
+  const { settings } = useSettings();
+  const b = settings.glowBrightness;
+  const s = b / 100;
+
+  const shadow = scaledShadow(neon.rgb, b);
+  const shadowHov = scaledShadow(neon.rgb, Math.min(200, b * 1.4));
+  const borderAccent = `rgba(${neon.rgb}, ${Math.min(1, 0.6 * s)})`;
+  const borderAccentHov = `rgba(${neon.rgb}, ${Math.min(1, 0.85 * s)})`;
+  const borderSubtle = `rgba(${neon.rgb}, ${Math.min(1, 0.1 * s)})`;
+  const borderSubtleHov = `rgba(${neon.rgb}, ${Math.min(1, 0.2 * s)})`;
 
   return (
     <div
@@ -23,27 +34,27 @@ export function ProPlayerCard({ player, openingCount, onClick }: ProPlayerCardPr
       }}
       className="w-full text-left bg-theme-surface rounded-xl p-4 transition-all duration-200 cursor-pointer"
       style={{
-        borderTop: `1px solid rgba(${neon.rgb}, 0.1)`,
-        borderRight: `1px solid rgba(${neon.rgb}, 0.1)`,
-        borderLeft: `2px solid rgba(${neon.rgb}, 0.6)`,
-        borderBottom: `2px solid rgba(${neon.rgb}, 0.6)`,
-        boxShadow: neon.shadow,
+        borderTop: `1px solid ${borderSubtle}`,
+        borderRight: `1px solid ${borderSubtle}`,
+        borderLeft: `2px solid ${borderAccent}`,
+        borderBottom: `2px solid ${borderAccent}`,
+        boxShadow: shadow,
       }}
       onMouseEnter={(e) => {
         const el = e.currentTarget;
-        el.style.borderTop = `1px solid rgba(${neon.rgb}, 0.2)`;
-        el.style.borderRight = `1px solid rgba(${neon.rgb}, 0.2)`;
-        el.style.borderLeft = `2px solid rgba(${neon.rgb}, 0.85)`;
-        el.style.borderBottom = `2px solid rgba(${neon.rgb}, 0.85)`;
-        el.style.boxShadow = neon.shadowHover;
+        el.style.borderTop = `1px solid ${borderSubtleHov}`;
+        el.style.borderRight = `1px solid ${borderSubtleHov}`;
+        el.style.borderLeft = `2px solid ${borderAccentHov}`;
+        el.style.borderBottom = `2px solid ${borderAccentHov}`;
+        el.style.boxShadow = shadowHov;
       }}
       onMouseLeave={(e) => {
         const el = e.currentTarget;
-        el.style.borderTop = `1px solid rgba(${neon.rgb}, 0.1)`;
-        el.style.borderRight = `1px solid rgba(${neon.rgb}, 0.1)`;
-        el.style.borderLeft = `2px solid rgba(${neon.rgb}, 0.6)`;
-        el.style.borderBottom = `2px solid rgba(${neon.rgb}, 0.6)`;
-        el.style.boxShadow = neon.shadow;
+        el.style.borderTop = `1px solid ${borderSubtle}`;
+        el.style.borderRight = `1px solid ${borderSubtle}`;
+        el.style.borderLeft = `2px solid ${borderAccent}`;
+        el.style.borderBottom = `2px solid ${borderAccent}`;
+        el.style.boxShadow = shadow;
       }}
       data-testid={`pro-player-card-${player.id}`}
     >
@@ -51,7 +62,7 @@ export function ProPlayerCard({ player, openingCount, onClick }: ProPlayerCardPr
         {/* Initials avatar */}
         <div
           className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${neon.tagBg}`}
-          style={{ border: `1.5px solid ${neon.border}` }}
+          style={{ border: `1.5px solid ${borderAccent}` }}
         >
           <span className={`text-sm font-bold ${neon.ecoBadge}`}>{player.imageInitials}</span>
         </div>

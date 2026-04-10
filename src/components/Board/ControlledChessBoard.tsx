@@ -3,6 +3,7 @@ import { Chessboard } from 'react-chessboard';
 import { RotateCcw, SkipBack, RefreshCw } from 'lucide-react';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
+import { useBoardGlow } from '../../hooks/useBoardGlow';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import { EvalBar } from './EvalBar';
@@ -170,19 +171,34 @@ export function ControlledChessBoard({
   // Square highlight styles
   const { lastMove, checkSquare, selectedSquare, legalMoves, getPiece } = game;
 
+  // Board square neon glow from user settings
+  const { baseGlow: baseGlowStr, mergeGlow } = useBoardGlow();
+
   const customSquareStyles = useMemo((): Record<string, React.CSSProperties> => {
     const styles: Record<string, React.CSSProperties> = {};
 
+    // Apply per-square neon glow outlines
+    const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const ranks = [1, 2, 3, 4, 5, 6, 7, 8];
+    for (const file of files) {
+      for (const rank of ranks) {
+        const sq = `${file}${rank}`;
+        if (baseGlowStr) {
+          styles[sq] = { boxShadow: baseGlowStr };
+        }
+      }
+    }
+
     const centerSquares = ['e4', 'd4', 'e5', 'd5'];
     for (const sq of centerSquares) {
-      styles[sq] = { boxShadow: 'inset 0 0 8px 2px rgba(0, 229, 255, 0.08)' };
+      styles[sq] = { ...styles[sq], boxShadow: mergeGlow('inset 0 0 8px 2px rgba(0, 229, 255, 0.08)') };
     }
 
     if (showLastMoveHighlight) {
       const moveHighlight = lastMove ?? highlightSquares;
       if (moveHighlight) {
-        styles[moveHighlight.from] = { background: 'rgba(0, 229, 255, 0.2)' };
-        styles[moveHighlight.to] = { background: 'rgba(0, 229, 255, 0.25)' };
+        styles[moveHighlight.from] = { ...styles[moveHighlight.from], background: 'rgba(0, 229, 255, 0.2)', boxShadow: mergeGlow('inset 0 0 12px rgba(0, 229, 255, 0.15)') };
+        styles[moveHighlight.to] = { ...styles[moveHighlight.to], background: 'rgba(0, 229, 255, 0.25)', boxShadow: mergeGlow('inset 0 0 12px rgba(0, 229, 255, 0.2)') };
       }
     }
 
@@ -190,32 +206,35 @@ export function ControlledChessBoard({
       for (const h of annotationHighlights) {
         styles[h.square] = {
           ...styles[h.square],
-          boxShadow: `inset 0 0 0 3px ${h.color}`,
+          boxShadow: mergeGlow(`inset 0 0 0 3px ${h.color}`),
         };
       }
     }
 
     if (checkSquare) {
       styles[checkSquare] = {
+        ...styles[checkSquare],
         background:
           'radial-gradient(circle, rgba(255,48,48,0.85) 40%, rgba(255,48,48,0.3) 100%)',
       };
     }
 
     if (selectedSquare) {
-      styles[selectedSquare] = { background: 'rgba(0, 229, 255, 0.35)', boxShadow: 'inset 0 0 8px rgba(0, 229, 255, 0.4)' };
+      styles[selectedSquare] = { ...styles[selectedSquare], background: 'rgba(0, 229, 255, 0.35)', boxShadow: mergeGlow('inset 0 0 8px rgba(0, 229, 255, 0.4)') };
     }
 
     for (const sq of legalMoves) {
       const hasPiece = getPiece(sq);
       if (hasPiece) {
         styles[sq] = {
+          ...styles[sq],
           background:
             'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0, 229, 255, 0.3) 60%, rgba(0, 229, 255, 0.3) 80%, rgba(0,0,0,0) 80%)',
           cursor: 'pointer',
         };
       } else {
         styles[sq] = {
+          ...styles[sq],
           background: 'radial-gradient(circle, rgba(0, 229, 255, 0.3) 25%, transparent 25%)',
           cursor: 'pointer',
         };
@@ -223,7 +242,7 @@ export function ControlledChessBoard({
     }
 
     return styles;
-  }, [lastMove, highlightSquares, checkSquare, selectedSquare, legalMoves, getPiece, showLastMoveHighlight, annotationHighlights]);
+  }, [lastMove, highlightSquares, checkSquare, selectedSquare, legalMoves, getPiece, showLastMoveHighlight, annotationHighlights, baseGlowStr, mergeGlow]);
 
   const hasControls = showFlipButton || showUndoButton || showResetButton || showVoiceMic;
 

@@ -477,6 +477,9 @@ export interface UserPreferences {
   coachPositionalTips?: boolean;
   coachMissedTacticTakeback?: boolean;
   coachReviewVoice?: boolean;
+  // Neon Glow Settings
+  glowBrightness?: number;         // 0–200, default 100 — master dimmer for all glow
+  boardGlowColor?: string;         // rgb string e.g. "0, 229, 255" — single color for all squares
   // Import accounts
   chessComUsername?: string;
   lichessUsername?: string;
