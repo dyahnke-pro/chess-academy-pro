@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Chess } from 'chess.js';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
@@ -395,9 +396,16 @@ export function CoachGamePage(): JSX.Element {
   const [tipTacticLine, setTipTacticLine] = useState<TacticLineData | null>(null);
   const [showingTacticLine, setShowingTacticLine] = useState(false);
   const tipBubbleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tacticAnimTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const clearTacticAnimation = useCallback(() => {
+    tacticAnimTimersRef.current.forEach(clearTimeout);
+    tacticAnimTimersRef.current = [];
+  }, []);
 
   const showTipBubble = useCallback((text: string, tacticLine?: TacticLineData) => {
     if (tipBubbleTimerRef.current) clearTimeout(tipBubbleTimerRef.current);
+    clearTacticAnimation();
     setTipBubbleText(text);
     setTipTacticLine(tacticLine ?? null);
     setShowingTacticLine(false);
@@ -405,8 +413,54 @@ export function CoachGamePage(): JSX.Element {
       setTipBubbleText(null);
       setTipTacticLine(null);
       setShowingTacticLine(false);
-    }, 10000);
-  }, []);
+    }, 12000);
+  }, [clearTacticAnimation]);
+
+  /** Show button: animate the tactic moves on the board */
+  const handleShowTactic = useCallback(() => {
+    if (!tipTacticLine) return;
+    // Cancel auto-dismiss — user is actively viewing
+    if (tipBubbleTimerRef.current) {
+      clearTimeout(tipBubbleTimerRef.current);
+      tipBubbleTimerRef.current = null;
+    }
+    setShowingTacticLine(true);
+    clearTacticAnimation();
+
+    try {
+      const chess = new Chess(tipTacticLine.fen);
+      const fens: string[] = [];
+      for (const uci of tipTacticLine.uciMoves) {
+        const from = uci.slice(0, 2);
+        const to = uci.slice(2, 4);
+        const promotion = uci.length > 4 ? uci[4] : undefined;
+        chess.move({ from, to, promotion });
+        fens.push(chess.fen());
+      }
+
+      setTemporaryLabel('Tactic preview');
+      fens.forEach((f, i) => {
+        const timer = setTimeout(() => setTemporaryFen(f), (i + 1) * 800);
+        tacticAnimTimersRef.current.push(timer);
+      });
+    } catch {
+      // Fallback: just show the text notation
+    }
+  }, [tipTacticLine, clearTacticAnimation]);
+
+  /** Dismiss tip and snap board back to the live position */
+  const handleDismissTip = useCallback(() => {
+    if (tipBubbleTimerRef.current) {
+      clearTimeout(tipBubbleTimerRef.current);
+      tipBubbleTimerRef.current = null;
+    }
+    clearTacticAnimation();
+    setTipBubbleText(null);
+    setTipTacticLine(null);
+    setShowingTacticLine(false);
+    setTemporaryFen(null);
+    setTemporaryLabel(null);
+  }, [clearTacticAnimation]);
 
   // Proactive coach tips (positional awareness, tactics, key moments)
   const handleCoachTip = useCallback((tip: string, tacticLine?: TacticLineData) => {
@@ -1524,12 +1578,23 @@ export function CoachGamePage(): JSX.Element {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25 }}
-              className="mx-2 mb-1 rounded-xl backdrop-blur-md border border-blue-500/30 px-3 py-2.5 flex-shrink-0"
-              style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(59, 130, 246, 0.3))' }}
+              className={`mx-2 mb-1 rounded-xl backdrop-blur-md border px-3 py-2.5 flex-shrink-0 ${
+                tipTacticLine && !tipTacticLine.forPlayer
+                  ? 'border-red-500/30'
+                  : 'border-blue-500/30'
+              }`}
+              style={{
+                background: tipTacticLine && !tipTacticLine.forPlayer
+                  ? 'color-mix(in srgb, var(--color-bg) 85%, rgba(239, 68, 68, 0.3))'
+                  : 'color-mix(in srgb, var(--color-bg) 85%, rgba(59, 130, 246, 0.3))',
+              }}
               data-testid="coach-tip-bubble"
             >
               <div className="flex items-start gap-2">
-                <GraduationCap size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                {tipTacticLine && !tipTacticLine.forPlayer
+                  ? <AlertTriangle size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
+                  : <GraduationCap size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                }
                 <div className="flex-1 min-w-0">
                   <p className="text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--color-text)' }}>
                     {tipBubbleText}
@@ -1544,7 +1609,7 @@ export function CoachGamePage(): JSX.Element {
               <div className="flex items-center gap-2 mt-2">
                 {tipTacticLine && !showingTacticLine && (
                   <button
-                    onClick={(e) => { e.stopPropagation(); setShowingTacticLine(true); }}
+                    onClick={(e) => { e.stopPropagation(); handleShowTactic(); }}
                     className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all duration-200"
                     style={{
                       background: 'rgba(52, 211, 153, 0.15)',
@@ -1559,7 +1624,7 @@ export function CoachGamePage(): JSX.Element {
                   </button>
                 )}
                 <button
-                  onClick={() => { setTipBubbleText(null); setTipTacticLine(null); setShowingTacticLine(false); }}
+                  onClick={handleDismissTip}
                   className="px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-colors"
                   style={{
                     background: 'rgba(148, 163, 184, 0.1)',

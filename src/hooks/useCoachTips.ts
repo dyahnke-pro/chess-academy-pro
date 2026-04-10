@@ -14,6 +14,8 @@ import type { StockfishAnalysis, CoachGameMove, TacticType } from '../types';
 export interface TacticLineData {
   uciMoves: string[];
   fen: string;
+  /** true = player's tactic, false = opponent's tactic */
+  forPlayer: boolean;
 }
 
 export interface UseCoachTipsConfig {
@@ -288,8 +290,8 @@ export function useCoachTips({
           );
           lastTipFenRef.current = fen;
           const bestLine = analysis.topLines[0];
-          const tacticLine: TacticLineData | undefined = bestLine && bestLine.moves.length > 0
-            ? { uciMoves: bestLine.moves, fen }
+          const tacticLine: TacticLineData | undefined = bestLine.moves.length > 0
+            ? { uciMoves: bestLine.moves, fen, forPlayer: true }
             : undefined;
           onTipRef.current(message, tacticLine);
           return;
@@ -306,10 +308,32 @@ export function useCoachTips({
           if (abortController.signal.aborted) return;
 
           const teaching = isWeakness
-            ? `A tactic you've been working on is developing — keep your eyes open in the next ${upcoming.movesAway} move${upcoming.movesAway > 1 ? 's' : ''}.`
-            : `Something tactical is building in this position. Think ${upcoming.movesAway} move${upcoming.movesAway > 1 ? 's' : ''} ahead.`;
+            ? `You have a tactic developing — a pattern you've been working on. Look for it in the next ${upcoming.movesAway} move${upcoming.movesAway > 1 ? 's' : ''}.`
+            : `You have a tactic building in this position. Think ${upcoming.movesAway} move${upcoming.movesAway > 1 ? 's' : ''} ahead.`;
           lastTipFenRef.current = fen;
-          onTipRef.current(teaching);
+          const bestLine = analysis.topLines[0];
+          const tacticLine: TacticLineData | undefined = bestLine.moves.length > 0
+            ? { uciMoves: bestLine.moves, fen, forPlayer: true }
+            : undefined;
+          onTipRef.current(teaching, tacticLine);
+          return;
+        }
+
+        // Third: scan for opponent tactics being set up against the player.
+        // Uses the opponent's color to detect threats the player needs to defend.
+        const opponentColor = playerColor === 'white' ? 'black' : 'white';
+        const opponentTactic = tacticAlerts ? scanUpcomingTactic(fen, analysis, opponentColor, 2) : null;
+        if (opponentTactic) {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (abortController.signal.aborted) return;
+
+          const warning = `Watch out — your opponent is setting up a tactic against you in ${opponentTactic.movesAway} move${opponentTactic.movesAway > 1 ? 's' : ''}. Look for defensive resources.`;
+          lastTipFenRef.current = fen;
+          const bestLine = analysis.topLines[0];
+          const tacticLine: TacticLineData | undefined = bestLine.moves.length > 0
+            ? { uciMoves: bestLine.moves, fen, forPlayer: false }
+            : undefined;
+          onTipRef.current(warning, tacticLine);
           return;
         }
 

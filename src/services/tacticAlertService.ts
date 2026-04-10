@@ -333,19 +333,19 @@ export function buildTacticAlertMessage(
   const isBeginner = playerRating < 1200;
 
   if (mode === 'available') {
-    // Proactive: tactic exists right now
+    // Proactive: tactic exists right now — player's tactic
     if (isBeginner) {
-      return `I see something here! ${teaching.beginnerHint}`;
+      return `You have a tactic here! ${teaching.beginnerHint}`;
     }
     if (isWeakness) {
-      return `This position has a pattern you've been working on. ${teaching.lookFor}`;
+      return `You have a tactic — a pattern you've been working on. ${teaching.lookFor}`;
     }
-    return `There is a tactic available in this position. ${teaching.lookFor}`;
+    return `You have a tactic in this position. ${teaching.lookFor}`;
   }
 
   // Missed: player played a different move
   if (isBeginner) {
-    return `You just missed a tactic! ${teaching.beginnerHint} Take it back and try again.`;
+    return `You missed your tactic! ${teaching.beginnerHint} Take it back and try again.`;
   }
   if (isWeakness) {
     return `You missed a tactic — and it is one of your weaker areas. ${teaching.concept} Take the move back and try to find it.`;

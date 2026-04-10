@@ -249,7 +249,7 @@ describe('tacticAlertService', () => {
   describe('buildTacticAlertMessage', () => {
     it('builds an available alert for beginners', () => {
       const msg = buildTacticAlertMessage('fork', 'available', 800, false);
-      expect(msg).toContain('I see something');
+      expect(msg).toContain('You have a tactic');
     });
 
     it('builds a missed alert with takeback suggestion', () => {
