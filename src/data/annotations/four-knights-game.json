@@ -55,7 +55,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "White develops the knight to f3, attacking e5 and controlling the d4 square. The Nf3 is a standard developing move that prepares both Nc3 (Four Knights) and Bc4/Bb5 (Italian/Ruy Lopez).",
+      "annotation": "White develops the knight to f3, attacking e5 and controlling the d4 square. The Nf3 is a standard developing choice that prepares both Nc3 (Four Knights) and Bc4/Bb5 (Italian/Ruy Lopez).",
       "plans": [
         "Attack e5 to force Black to defend",
         "Prepare castling and d4"

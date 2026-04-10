@@ -132,7 +132,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops the knight to f6, defending d5 and controlling e4. The Nf6 is the most principled developing move — it pressures the center and prepares the ...dxc4 capture at the right moment.",
+      "annotation": "Black develops the knight to f6, defending d5 and controlling e4. The Nf6 is the most principled developing choice — it pressures the center and prepares the ...dxc4 capture at the right moment.",
       "plans": [
         "Defend d5, prepare to develop bishops"
       ],

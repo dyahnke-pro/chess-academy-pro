@@ -259,7 +259,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops Nc3, developing with tempo against the Qd4. The queen must move, and White gains a free developing move.",
+      "annotation": "White develops Nc3, developing with tempo against the Qd4. The queen must move, and White gains a free developing choice.",
       "plans": [
         "Gain tempo on the queen",
         "Develop Bg2 and castle quickly"

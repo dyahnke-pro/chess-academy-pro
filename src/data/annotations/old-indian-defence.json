@@ -32,7 +32,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black plays Nf6, the Indian approach — fighting for the center with a piece. The Nf6 controls e4 and d5.",
+      "annotation": "Black plays Nf6, the Indian approach — contesting central control with a piece. The Nf6 controls e4 and d5.",
       "plans": [
         "Control e4 and react to White's setup",
         "Keep all defensive options open"
@@ -121,7 +121,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops Nc3, reinforcing the center and controlling d5 and e4. The Nc3 is the standard developing move that prepares e4.",
+      "annotation": "White develops Nc3, reinforcing the center and controlling d5 and e4. The Nc3 is the standard developing choice that prepares e4.",
       "plans": [
         "Support e4 to build a massive center",
         "Maintain d5 control"

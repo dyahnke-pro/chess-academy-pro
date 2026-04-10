@@ -315,7 +315,7 @@
     },
     {
       "san": "Na6",
-      "annotation": "Black plays Na6, an unusual-looking but strategically important move. The knight heads for c7, from where it supports both ...b5 and the critical ...c5 break. Going to a6 instead of c6 is key — on c6, the knight would block the c-pawn, preventing Black's most important counterattack.",
+      "annotation": "Black plays Na6, an unusual-looking but strategically purposeful move. The knight heads for c7, from where it supports both ...b5 and the critical ...c5 break. Going to a6 instead of c6 is key — on c6, the knight would block the c-pawn, preventing Black's most important counterattack.",
       "pawnStructure": "Black preserves the ability to play ...c5, which is the most important structural break in the Pirc.",
       "plans": [
         "Reroute the knight via c7 to support ...c5 or reach e6",

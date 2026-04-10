@@ -65,7 +65,7 @@
     },
     {
       "san": "Nc3",
-      "annotation": "White develops Nc3, supporting the c4 pawn and preparing to contest the center. The Nc3 controls d5 and e4, and is the standard developing move in the English.",
+      "annotation": "White develops Nc3, supporting the c4 pawn and preparing to contest the center. The Nc3 controls d5 and e4, and is the standard developing choice in the English.",
       "pawnStructure": "Still c4 vs e5. White keeps central flexibility, not committing to d3 or d4 yet.",
       "plans": [
         "Follow up with Nf3 and g3 to fianchetto the bishop",

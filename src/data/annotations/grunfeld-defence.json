@@ -33,7 +33,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black plays 1...Nf6, the Indian approach. The Nf6 controls e4 and d5, fighting for the center with a piece rather than a pawn.",
+      "annotation": "Black plays 1...Nf6, the Indian approach. The Nf6 controls e4 and d5, contesting central control with a piece rather than a pawn.",
       "plans": [
         "Control e4 to prevent White from achieving the full center easily",
         "Keep options open for the central pawn structure"

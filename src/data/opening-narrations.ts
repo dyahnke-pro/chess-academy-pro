@@ -104,7 +104,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5',
     narrations: [
       'This is the Najdorf Sicilian. Nf6 attacks the e4 pawn directly, forcing White to decide how to defend it — usually with Nc3. The knight on f6 is perfectly placed, controlling d5 and preparing ...a6 to enter the main Najdorf. Look for Nc3 from White, then play ...a6.',
-      'We\'re in the Sicilian Najdorf — Nf6 puts pressure on e4 and is the most active developing move. White typically responds Nc3 to protect e4, after which Black plays the signature ...a6 to prepare queenside expansion with ...b5 and ...Bb7.',
+      'We\'re in the Sicilian Najdorf — Nf6 puts pressure on e4 and is the most active developing choice. White typically responds Nc3 to protect e4, after which Black plays the signature ...a6 to prepare queenside expansion with ...b5 and ...Bb7.',
     ],
     approved: true,
   },

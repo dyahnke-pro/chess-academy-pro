@@ -36,7 +36,7 @@
       "fen": "rnbqkb1r/1p2pppp/p2p1n2/6B1/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - 0 6",
       "wrongMove": "Nbd7",
       "correctMove": "e6",
-      "explanation": "Nbd7 blocks the bishop and is passive. e6 prepares Be7 and keeps flexible development while fighting for the center."
+      "explanation": "Nbd7 blocks the bishop and is passive. e6 prepares Be7 and keeps flexible development while contesting central control."
     }
   ],
   "french-defence": [
@@ -130,7 +130,7 @@
       "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b - - 0 6",
       "wrongMove": "Bg4",
       "correctMove": "e5",
-      "explanation": "Bg4 pins the knight but after Be3 the pin is not effective and Black wastes time. e5 is the key KID break, fighting for the center."
+      "explanation": "Bg4 pins the knight but after Be3 the pin is not effective and Black wastes time. e5 is the key KID break, contesting central control."
     },
     {
       "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N1BN2/PP2BPPP/R2Q1RK1 b - - 0 7",
@@ -410,7 +410,7 @@
       "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
       "wrongMove": "Nf3",
       "correctMove": "h4",
-      "explanation": "Nf3 is a normal developing move but misses the chance to exploit Black's fianchetto. After g6 and Bg7, the h4-h5 push creates an immediate kingside attack. The weakened dark squares around Black's king make h4 far stronger than routine development."
+      "explanation": "Nf3 is a normal developing choice but misses the chance to exploit Black's fianchetto. After g6 and Bg7, the h4-h5 push creates an immediate kingside attack. The weakened dark squares around Black's king make h4 far stronger than routine development."
     },
     {
       "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 4 4",

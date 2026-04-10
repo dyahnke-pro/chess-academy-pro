@@ -451,7 +451,7 @@
       {
         "name": "f4 Gambit Endgame Trick",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6 d4 dxe5",
-        "explanation": "In the Vienna Gambit endgame, White's superior development and active pieces create surprisingly dangerous threats. After the queen exchange, White's pieces flood the center with Nxe5, Bxf4, and O-O-O. The key move is Nd5 attacking the e7 bishop and threatening Nc7, forking the rooks. Black's king is stuck in the center and the rook on h8 is trapped. White's initiative in this queenless position is worth more than the pawn deficit."
+        "explanation": "In the Vienna Gambit endgame, White's superior development and active pieces create surprisingly dangerous threats. After the queen exchange, White's pieces flood the center with Nxe5, Bxf4, and O-O-O. The critical move is Nd5 attacking the e7 bishop and threatening Nc7, forking the rooks. Black's king is stuck in the center and the rook on h8 is trapped. White's initiative in this queenless position is worth more than the pawn deficit."
       },
       {
         "name": "Copycat Qg4 Kingside Attack",
@@ -586,7 +586,7 @@
       {
         "name": "Bishop's Gambit f7 Attack",
         "pgn": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 d6 Nf3 Qh5 d4 Bg4 Bxf4 Nc6 Nc3 Nf6 Nd5 Nxd5 Bxd5 O-O-O h3 Be6 Bxe6+ fxe6 Qd3 d5 exd5 exd5 Re1 Bd6",
-        "explanation": "The Bishop's Gambit with 3.Bc4 targets f7 immediately. After ...Qh4+ Kf1, White accepts the king displacement but gains a powerful center. The d4 and e4 pawns control the board while Bxf4 recovers the gambit pawn. Nd5 is the key move, establishing a dominant knight that forces exchanges. After Bxe6+ fxe6, Black's pawn structure is shattered and the e-file becomes a highway for White's rooks."
+        "explanation": "The Bishop's Gambit with 3.Bc4 targets f7 immediately. After ...Qh4+ Kf1, White accepts the king displacement but gains a powerful center. The d4 and e4 pawns control the board while Bxf4 recovers the gambit pawn. Nd5 is the critical move, establishing a dominant knight that forces exchanges. After Bxe6+ fxe6, Black's pawn structure is shattered and the e-file becomes a highway for White's rooks."
       },
       {
         "name": "h4 Kingside Storm",
@@ -658,7 +658,7 @@
       {
         "name": "Symmetrical Variation: 4.Bb5 Bb4",
         "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Ne2 Ne7 c3 Ba5 Ng3 Ng6 d4 Bb6 Bg5 h6 Be3 Re8 Qd2 c6 Bd3",
-        "explanation": "The Symmetrical Variation features near-mirror play until White finds the right moment to break the symmetry. White repositions the knight via e2-g3 to target the kingside while Black must decide between ...Ba5 retreating the bishop or exchanging on c3. The key move d4 challenges the center at the optimal moment when White's pieces are better coordinated. The Ng3 placement pressures f5 and h5, giving White a subtle kingside initiative, while ...Ng6 is passive and allows White to build with Be3, Qd2, and the central break."
+        "explanation": "The Symmetrical Variation features near-mirror play until White finds the right moment to break the symmetry. White repositions the knight via e2-g3 to target the kingside while Black must decide between ...Ba5 retreating the bishop or exchanging on c3. The critical move d4 challenges the center at the optimal moment when White's pieces are better coordinated. The Ng3 placement pressures f5 and h5, giving White a subtle kingside initiative, while ...Ng6 is passive and allows White to build with Be3, Qd2, and the central break."
       },
       {
         "name": "Italian Four Knights: 4.Bc4",
@@ -957,7 +957,7 @@
     "keyIdeas": [
       "...e5 grabs central space and activates the pieces, even though d5 becomes weak",
       "The dark-squared bishop on f6/g7 is incredibly powerful after ...Bxf6",
-      "...b5 is a key move — expanding on the queenside and challenging White's knight maneuvers",
+      "...b5 is a critical move — expanding on the queenside and challenging White's knight maneuvers",
       "The backward pawn on d6 is not as weak as it looks — Black's pieces are too active to allow a direct attack on it"
     ],
     "traps": [
@@ -1151,7 +1151,7 @@
     "pgn": "e4 e6 d4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 Be7 Qd2 O-O Be2 b6 O-O a5 a3 Ba6 Bxa6 Rxa6",
     "color": "black",
     "style": "Solid, Strategic",
-    "overview": "The French Defence is one of the most rock-solid responses to 1.e4 — you're immediately fighting for the center with ...e6 and ...d5. The pawn structure gives you a clear plan: attack White's d4 pawn with ...c5, develop your pieces behind a strong chain, and aim for counterplay on the queenside. It's a bit cramped at first, but once you break through, the positions are rich and full of strategic ideas.",
+    "overview": "The French Defence is one of the most rock-solid responses to 1.e4 — you're immediately contesting central control with ...e6 and ...d5. The pawn structure gives you a clear plan: attack White's d4 pawn with ...c5, develop your pieces behind a strong chain, and aim for counterplay on the queenside. It's a bit cramped at first, but once you break through, the positions are rich and full of strategic ideas.",
     "keyIdeas": [
       "Attack White's pawn center with ...c5 to undermine d4",
       "Develop the light-squared bishop to b7 or a6 depending on the variation",
@@ -1789,7 +1789,7 @@
       {
         "name": "5.Bd3 Line",
         "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Bd6 O-O O-O c4 c6 Qc2 Na6 a3 Bg4 Nbd2 Nxd2 Bxd2 Bxf3 gxf3 Qh4 Be1 Nc7 f4 f5 Kh1 Ne6 Rg1 Rf6",
-        "explanation": "The 5.Bd3 line is White's most natural developing move, placing the bishop on an active diagonal aimed at the kingside. Black responds with ...Bd6 and ...O-O, creating a solid King's Indian-like structure. After ...c6 and ...Na6, Black prepares to challenge the center with ...Bg4 pinning the f3 knight. The ...Qh4 foray creates real threats against f2 and the weakened kingside after g3. Black maintains equality through active piece play and the threat of ...f5 to open lines against White's king."
+        "explanation": "The 5.Bd3 line is White's most natural developing choice, placing the bishop on an active diagonal aimed at the kingside. Black responds with ...Bd6 and ...O-O, creating a solid King's Indian-like structure. After ...c6 and ...Na6, Black prepares to challenge the center with ...Bg4 pinning the f3 knight. The ...Qh4 foray creates real threats against f2 and the weakened kingside after g3. Black maintains equality through active piece play and the threat of ...f5 to open lines against White's king."
       },
       {
         "name": "Kaufmann Attack",
@@ -3538,7 +3538,7 @@
       {
         "name": "Early e5 Without Support",
         "pgn": "d4 Nf6 c4 d6 Nc3 e5 Nf3 Nbd7 g3 Be7 Bg2 O-O O-O c6 e4 Re8 Re1 Bf8 d5 c5 Nh4 g6 f4 exf4 gxf4",
-        "explanation": "Playing ...e5 too early without full preparation can leave the d6 pawn chronically weak and give White free tempi for expansion. The Nh4 and f4 advance becomes very dangerous when Black has not consolidated. Make sure ...Nbd7 is in place to support the center and complete development before committing to the ...e5 break. Rushing this key move is the most common mistake in the Old Indian."
+        "explanation": "Playing ...e5 too early without full preparation can leave the d6 pawn chronically weak and give White free tempi for expansion. The Nh4 and f4 advance becomes very dangerous when Black has not consolidated. Make sure ...Nbd7 is in place to support the center and complete development before committing to the ...e5 break. Rushing this critical move is the most common mistake in the Old Indian."
       },
       {
         "name": "Ignoring Queenside Play",
@@ -4044,7 +4044,7 @@
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Nf6 Bg5 O-O Nd5 Be6 Rb1 h6 Bh4 Bxd5",
     "color": "white",
     "style": "Gambit, Romantic",
-    "overview": "The Evans Gambit with 4.b4 is one of the most romantic and dangerous openings in all of chess. You sacrifice a pawn to blast open the center and get a massive lead in development. Every developing move comes with a threat, and Black has to find a very narrow path to survive. Kasparov himself revived this gambit at the highest level, proving it's not just for club players.",
+    "overview": "The Evans Gambit with 4.b4 is one of the most romantic and dangerous openings in all of chess. You sacrifice a pawn to blast open the center and get a massive lead in development. Every developing choice comes with a threat, and Black has to find a very narrow path to survive. Kasparov himself revived this gambit at the highest level, proving it's not just for club players.",
     "keyIdeas": [
       "Sacrifice the b-pawn to gain time with c3 and d4, opening the center immediately",
       "The lead in development translates into a powerful initiative with every piece active",

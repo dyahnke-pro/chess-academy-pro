@@ -31,7 +31,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black plays 1...Nf6, the Indian Defense approach — fighting for the center with pieces before committing pawns. The Nf6 controls e4 and d5, preventing White from achieving an easy e4 without preparation.",
+      "annotation": "Black plays 1...Nf6, the Indian Defense approach — contesting central control with pieces before committing pawns. The Nf6 controls e4 and d5, preventing White from achieving an easy e4 without preparation.",
       "plans": [
         "Play ...g6 and ...Bg7 for the King's Indian setup",
         "Let White build the center, then attack it"
