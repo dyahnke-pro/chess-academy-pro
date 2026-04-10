@@ -1918,11 +1918,11 @@
     "openingId": "ruy-lopez",
     "criticalPositionFen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
     "title": "d4 Central Break",
-    "overview": "White prepares d4 to open the center, leveraging better piece coordination. This is the main plan in the Closed Ruy Lopez.",
+    "overview": "This is the d4 Central Break in the Closed Ruy Lopez. White prepares d2-d4 to open the center at the ideal moment when White's pieces are better coordinated — the Bb3 pressures f7, the Nf3 controls d4, and the rooks are ready for open files. The resulting open position favors White's piece activity and central control.",
     "pawnBreaks": [
       {
         "move": "d2-d4",
-        "explanation": "Opens the center when White's pieces are better placed. The bishop on b3 becomes active and the center opens for White's rooks.",
+        "explanation": "The d4 break opens the center at the perfect moment — White's Bb3 is already pressuring f7 on the a2-g8 diagonal, the Nf3 controls the d4 square, and the rooks are prepared to seize the open d-file and e-file. This timing advantage is what makes the Ruy Lopez d4 break so effective.",
         "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8"
       }
     ],
@@ -1930,23 +1930,23 @@
       {
         "piece": "Knight",
         "route": "Nb1-d2-f1-g3-f5",
-        "explanation": "The Ruy Lopez knight maneuver. The knight reroutes to f5, a dominant outpost threatening Black's king."
+        "explanation": "The classic Ruy Lopez knight maneuver — Nb1 reroutes through d2, f1, and g3 to reach the devastating f5 outpost. On f5, the knight attacks e7, g7, d6, and h6, creating enormous pressure near Black's king. This maneuver is one of the most important plans in the entire Ruy Lopez."
       },
       {
         "piece": "Bishop",
         "route": "Bb3 (pressure on f7)",
-        "explanation": "The bishop on b3 pressures f7 and supports the d5 advance."
+        "explanation": "The Bb3 is a cornerstone of the Ruy Lopez attack. It targets f7 — the weakest square in Black's camp — along the a2-g8 diagonal. Combined with a potential d5 advance, the Bb3 can become a devastating attacking piece that threatens both tactical strikes on f7 and positional pressure on the center."
       }
     ],
     "strategicThemes": [
-      "Central control",
-      "Piece activity after d4",
-      "Pressure on f7",
-      "Kingside attack preparation"
+      "Central control is the foundation of the Ruy Lopez d4 plan. With the c4+d4 pawn center (or d4+e4 after exchanges), White dominates the key central squares and restricts Black's pieces from finding active posts.",
+      "After d4 opens the center, White's pieces become dramatically more active. The Bb3 fires along the a2-g8 diagonal, the rooks seize the d-file and e-file, and the knight can maneuver to f5 — all combining for a potent middlegame initiative.",
+      "The Bb3's pressure on f7 is a constant theme in the Ruy Lopez. The f7 pawn is only defended by the king, making it a natural target for tactical blows (Bxf7+ sacrifices) and positional pressure that ties down Black's pieces.",
+      "With the center open and pieces actively placed, White naturally transitions to a kingside attack. The Nf5 maneuver, Bb3 pressure on f7, and rooks on central files combine to create serious threats against Black's castled king."
     ],
     "endgameTransitions": [
-      "Central pawn majority",
-      "Bishop pair in open position"
+      "In simplified positions, White's central pawn majority (d4+e4 vs Black's queenside pawns) provides a structural advantage. The central pawns can advance to create a passed pawn while Black's queenside majority is slower.",
+      "The Ruy Lopez often leads to positions where White retains the bishop pair after exchanges. In open endgames, two bishops outperform bishop+knight, especially when there are pawns on both flanks."
     ],
     "playableLines": [
       {
@@ -1962,14 +1962,14 @@
           "Be6"
         ],
         "annotations": [
-          "White strikes with d4, the key central break leveraging superior piece coordination",
-          "Black captures, opening the center but also the d-file for White's pieces",
-          "White recaptures with the knight, centralizing on d4",
-          "Black exchanges knights to relieve pressure on the c6 square",
-          "The queen recaptures on d4, occupying a powerful central post",
-          "Black plays d6 to solidify, but the center is now open for White",
-          "White develops the last minor piece, completing development with a strong center",
-          "Black develops the bishop to e6, but White has a clear advantage in piece activity"
+          "This is the Closed Ruy Lopez's main central break. White strikes with d4, challenging Black's e5 pawn at the moment when White's Bb3 targets f7 and all pieces are optimally coordinated for the open position that follows.",
+          "Black captures exd4, opening the center. This gives White the open d-file and e-file — exactly what White wanted. The Bb3 now has an unobstructed diagonal and the rooks can immediately contest the central files.",
+          "White recaptures Nxd4, centralizing the knight powerfully on d4. The Nd4 controls c6, e6, f5, and b5, and can later jump to f5 for a direct attack on Black's king.",
+          "Black exchanges Nxd4 to relieve the pressure from the dominant centralized knight. Without the trade, the Nd4 would be too powerful — but the exchange also removes one of Black's defenders.",
+          "The queen recaptures Qxd4, occupying a commanding central post. From d4, the queen controls the long diagonal toward a7, pressures d7, and can swing to the kingside for attacking chances.",
+          "Black plays d6, solidifying the center but conceding that the position is now fully open for White's pieces. The d6 pawn is solid but passive — Black is playing for defense rather than counterplay.",
+          "White develops Nc3, completing minor piece development with a strong central setup. The Nc3 supports d5, eyes the b5 and d5 squares, and keeps all options open for the middlegame.",
+          "Black develops the bishop to e6, trying to challenge the Bb3 and simplify. However, White maintains a clear advantage in piece activity — the open center and diagonal pressure give White a lasting initiative."
         ],
         "arrows": [
           [
@@ -2114,11 +2114,11 @@
     "openingId": "london-system",
     "criticalPositionFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 3",
     "title": "e4 Central Push",
-    "overview": "White prepares e3-e4 to challenge Black's d5 pawn and activate the light-squared bishop. This transforms the quiet London into an active game.",
+    "overview": "This is the e4 Central Push plan in the London System. White prepares e3-e4 to challenge Black's d5 pawn and transform the quiet London into an active, open position. After dxe4 Nxe4, White gains a powerfully centralized knight while the Bf4 and Bd3 spring to life on their diagonals.",
     "pawnBreaks": [
       {
         "move": "e3-e4",
-        "explanation": "Challenges d5 directly. After dxe4, Nxe4 centralizes the knight. If Black maintains d5, White has central tension.",
+        "explanation": "The e4 break challenges Black's d5 pawn directly, the foundation of Black's defensive setup. After dxe4, Nxe4 centralizes the knight on a dominant square controlling d6, f6, c5, and g5. If Black maintains d5, the central tension favors White whose pieces are better positioned to exploit any opening of the position.",
         "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 4"
       }
     ],
@@ -2126,23 +2126,23 @@
       {
         "piece": "Knight",
         "route": "Nb1-d2-e4 (after dxe4)",
-        "explanation": "The knight centralizes on e4 after the pawn exchange, controlling key squares."
+        "explanation": "After dxe4, the Nd2 recaptures on e4 reaching a superb central outpost. The Ne4 controls d6, f6, c5, and g5 — sitting in the heart of the board where it dominates the position. Combined with the Bf4 on the diagonal, this creates a powerful piece setup."
       },
       {
         "piece": "Bishop",
         "route": "Bf1-d3 (after e4)",
-        "explanation": "The bishop activates on d3 targeting h7 and supporting the center."
+        "explanation": "The Bd3 activates after the e4 push, targeting the h7 pawn along the b1-h7 diagonal. Combined with a potential Qc2, this creates the classic b1-h7 battery that threatens Bxh7+ sacrifices — one of the most dangerous attacking motifs in positions with a centralized knight on e4."
       }
     ],
     "strategicThemes": [
-      "Central pawn break",
-      "Piece activation",
-      "Pressure on h7 diagonal",
-      "Active play despite quiet opening"
+      "The e3-e4 central break transforms the London from a quiet system into an active, aggressive position. By challenging d5, White opens the center and activates pieces that were previously blocked behind the e3 pawn.",
+      "After dxe4 Nxe4, all of White's pieces come alive simultaneously. The Ne4 controls key squares, the Bf4 has open diagonals, the Bd3 targets h7, and the rooks can use the open e-file. This coordinated piece activity gives White a strong initiative.",
+      "The Bd3 targeting h7 creates the classic b1-h7 diagonal battery. Combined with Ne4 and Qc2, White threatens the devastating Bxh7+ Greek Gift sacrifice — a tactical motif that wins many games in the London System.",
+      "The beauty of the London e4 plan is that it transforms a quiet, solid opening into a dynamic attacking position. Black often underestimates the danger because the London appears passive — but the e4 break unleashes all of White's latent energy."
     ],
     "endgameTransitions": [
-      "Active pieces in open center",
-      "Central pawn majority"
+      "If the middlegame attack doesn't decide the game, White's actively placed pieces translate into an endgame advantage. The centralized knight, active bishops, and rooks on open files give White superior piece placement in simplified positions.",
+      "White's central pawn majority (d4+potentially e4) provides a structural advantage in the endgame. The central pawns can advance to create a passed pawn that ties down Black's pieces."
     ],
     "playableLines": [
       {
@@ -2158,14 +2158,14 @@
           "dxe4"
         ],
         "annotations": [
-          "White plays e3, preparing to develop the bishop and later push e4",
-          "Black plays e6, reinforcing d5 and preparing bishop development",
-          "The bishop develops to d3, aiming at h7 and supporting the e4 push",
-          "Black challenges the center with c5, striking at White's d4 pawn",
-          "White develops the knight to d2, supporting the e4 break",
-          "Black develops the knight to c6, adding pressure to d4 and e5",
-          "The key e4 break arrives — White challenges d5 directly and opens the position",
-          "Black captures on e4, and after Nxe4 White has a powerfully centralized knight"
+          "This is the London System's e4 plan. White plays e3, the preparatory move that supports the future e4 advance. The e3 pawn also opens the f1-a6 diagonal for the bishop to develop to d3.",
+          "Black plays e6, reinforcing the d5 pawn and preparing to develop the dark-squared bishop. The d5+e6 structure is solid but slightly passive — it locks in the light-squared bishop behind the e6 pawn.",
+          "White develops the bishop to d3, the most aggressive square available. The Bd3 targets h7 along the b1-h7 diagonal, preparing for the e4 break that will unleash its attacking potential. Combined with a future Qc2, this creates the classic Greek Gift battery.",
+          "Black challenges the center with c5, striking at White's d4 pawn. This is Black's most active response — creating central tension and opening lines for counterplay before White can consolidate.",
+          "White develops the knight to d2, a key preparatory move. The Nd2 supports the e4 break directly — after e4 dxe4, the knight recaptures on e4 reaching a dominant central post. The knight also avoids blocking the Bd3's diagonal.",
+          "Black develops the knight to c6, adding pressure to the d4 and e5 squares. The Nc6 develops naturally and prepares to contest the center, but it may need to move again if White pushes d5.",
+          "White plays the key e4 break, challenging Black's d5 pawn directly and opening the position. This transforms the quiet London into a dynamic middlegame — the Bd3 comes alive, the center opens for the rooks, and White's pieces surge into action.",
+          "Black captures dxe4, and after Nxe4 White has a powerfully centralized knight on e4 controlling d6, f6, c5, and g5. The Bd3 now targets h7 unopposed, and White has achieved the ideal London System position."
         ],
         "arrows": [
           [
@@ -2345,16 +2345,16 @@
     "openingId": "sicilian-dragon",
     "criticalPositionFen": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R w KQkq - 0 7",
     "title": "h4-h5 Pawn Storm",
-    "overview": "White castles queenside and launches h4-h5 against Black's fianchettoed king. Opening the h-file creates devastating threats along the h-file and g-file.",
+    "overview": "This is the h4-h5 Pawn Storm plan against the Sicilian Dragon. White castles queenside and hurls the h-pawn at Black's fianchettoed king, aiming to rip open the h-file. Once the h-file opens after h5 gxh5 or hxg6 fxg6, White's rooks and queen flood through with devastating threats against the exposed Black king.",
     "pawnBreaks": [
       {
         "move": "h2-h4",
-        "explanation": "Begins the pawn storm. h4-h5 aims to open the h-file and destroy Black's kingside pawn shelter.",
+        "explanation": "The h4 push begins the direct assault on Black's fianchettoed kingside. The pawn races toward h5 where it will challenge the g6 pawn — the keystone of Black's Dragon formation. This is the most aggressive plan against the Dragon and has scored decisive results at all levels.",
         "fen": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R w KQkq - 0 7"
       },
       {
         "move": "h4-h5",
-        "explanation": "Forces gxh5 or g5. After gxh5, the open h-file is lethal. After g5, Black's kingside is weakened.",
+        "explanation": "The h5 advance forces Black into an impossible choice. After gxh5, the h-file opens and White's Rh1 creates an unstoppable attack down the file. After g5, the f5 square becomes a permanent weakness and the dark squares around Black's king collapse. Either way, the Dragon's kingside is fatally compromised.",
         "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP2P/2N1B3/PPPQBPP1/2KR3R w - - 0 8"
       }
     ],
@@ -2362,22 +2362,22 @@
       {
         "piece": "Bishop",
         "route": "Be2-h5 or Be2-c4-b3",
-        "explanation": "The bishop can go to h5 to pressure f7, or retreat to b3 for long-diagonal pressure."
+        "explanation": "The Be2 has two aggressive paths. On h5, it pressures f7 and g6, adding another attacker to the kingside storm. Alternatively, retreating to c4-b3 shifts pressure to the long a2-g8 diagonal targeting f7 — either way, the bishop contributes directly to the attack."
       },
       {
         "piece": "Rook",
         "route": "Rh1-h4 (rook lift)",
-        "explanation": "After h5 is played, the rook lifts to h4 and can swing to g4 for a double attack."
+        "explanation": "After h5 opens the h-file, the rook lifts from h1 to h4 — a devastating maneuver. From h4, the rook can swing to g4 to double the attack on the g-file, or stay on h4 to create threats along the fourth rank. This rook lift is one of the most common winning themes in the Yugoslav Attack."
       }
     ],
     "strategicThemes": [
-      "Opposite-side castling race",
-      "h-file attack",
-      "Pawn storm destroying kingside shelter",
-      "Piece sacrifice on h5 or g5"
+      "The Dragon creates a classic opposite-side castling race. White storms the kingside with h4-h5-h6 while Black counter-attacks on the queenside with ...a5-a4 or ...Rc8-c4. The side that breaks through first wins — tempo is everything in these razor-sharp positions.",
+      "The h-file attack is White's primary weapon in the Yugoslav Attack against the Dragon. Once h5 forces gxh5, the open h-file becomes a direct highway to Black's king. White's Rh1 and queen create devastating threats that are extremely difficult to defend.",
+      "The h5 advance destroys Black's g6-g7 kingside pawn shelter. Without the g6 pawn guarding the fianchettoed bishop's position, the dark squares around Black's king (f6, g7, h6) become fatally weak and White's pieces pour through.",
+      "White often has tactical sacrifices available on h5 or g5 to accelerate the attack. A piece sacrifice with Nxg5, Bxh5, or even Rxh5 can blow open Black's kingside — these sacrifices are well-known but still win games at every level because the resulting attack is overwhelming."
     ],
     "endgameTransitions": [
-      "Usually decisive in middlegame — endgame rare"
+      "The Yugoslav Attack against the Dragon almost never reaches an endgame. The middlegame is too violent — one side's attack typically breaks through decisively. If it does simplify, the damaged kingside pawn structure usually determines the outcome."
     ],
     "playableLines": [
       {
@@ -2393,14 +2393,14 @@
           "Nxh5"
         ],
         "annotations": [
-          "White castles queenside, getting the king safe and preparing the h-pawn storm",
-          "Black fianchettoes the bishop to g7, the heart of the Dragon formation",
-          "White begins the assault with h4, threatening to rip open the h-file",
-          "Black castles into the storm, but the kingside fianchetto demands this",
-          "h5 arrives, forcing Black to decide about the g6 pawn",
-          "Black captures gxh5, opening the h-file for White's devastating attack",
-          "White recaptures with the bishop on h5, threatening f7",
-          "Black takes the bishop, but the open h-file gives White a winning attack"
+          "This is the Yugoslav Attack against the Sicilian Dragon. White castles queenside, getting the king safe on the opposite flank and freeing the h-pawn to advance. The Rh1 will become a powerful attacking piece once the h-file opens.",
+          "Black fianchettoes the bishop to g7, completing the Dragon formation. The Bg7 is the heart of Black's position — it controls the long a1-h8 diagonal and defends the kingside. White's plan is to destroy the pawns protecting this bishop.",
+          "White launches h4, beginning the direct assault on Black's fianchettoed king. The h-pawn races toward h5 where it will challenge the g6 pawn that anchors Black's entire kingside structure. This is the most critical moment in the Dragon.",
+          "Black castles kingside despite the incoming pawn storm — delaying castling would leave the king in the center where it's even more vulnerable. Black must now generate queenside counterplay with ...Rc8, ...a5, and ...Qa5 before White's attack arrives.",
+          "White pushes h5, directly challenging the g6 pawn. This forces Black into an impossible decision — after gxh5, the h-file opens for White's rook; after Nxh5, the knight leaves f6 weakened; and after g5, the dark squares collapse permanently.",
+          "Black captures gxh5, choosing to open the h-file. While this gives White a direct attacking lane, it's often the lesser evil — allowing h6 or hxg6 would be even worse for Black's structural integrity.",
+          "White recaptures Bxh5, placing the bishop on h5 where it pressures f7 and g6. The bishop on h5 also prevents Black from closing the h-file and adds another piece to the growing kingside attack.",
+          "Black captures Nxh5, removing the bishop but leaving the h-file wide open for White's rook. After Rxh5 or g4, White's attack down the h-file is devastating — the Dragon's fianchetto has been breached."
         ],
         "arrows": [
           [
@@ -2563,11 +2563,11 @@
     "openingId": "ruy-lopez",
     "criticalPositionFen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4PP2/1BN2N2/PPPP2PP/R1BQ1RK1 b - - 0 9",
     "title": "f4 Kingside Expansion",
-    "overview": "White plays f4 to challenge e5 and open the f-file. Combined with the Bb3 pressure on f7, this creates a potent kingside attack.",
+    "overview": "This is the f4 Kingside Expansion plan in the Ruy Lopez. White pushes f2-f4 to challenge Black's e5 pawn and open the f-file, creating a direct attacking highway toward Black's castled king. Combined with the Bb3's pressure on f7 along the a2-g8 diagonal, the open f-file gives White a potent two-pronged kingside attack.",
     "pawnBreaks": [
       {
         "move": "f2-f4",
-        "explanation": "Attacks e5 and opens the f-file. After exf4, Bxf4 activates the bishop and the f-file is open for the rook.",
+        "explanation": "The f4 push attacks Black's e5 pawn and forces a critical decision. After exf4 Bxf4, White gains an active dark-squared bishop and the fully open f-file for the rook. If Black maintains e5 with ...f6, the e5 pawn becomes overextended and the e6 square weakens.",
         "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BN2N2/PPPP1PPP/R1BQ1RK1 w - - 0 9"
       }
     ],
@@ -2575,18 +2575,18 @@
       {
         "piece": "Rook",
         "route": "Rf1 (natural f-file pressure)",
-        "explanation": "The rook is already on f1 and benefits immediately from the opened f-file."
+        "explanation": "The Rf1 is already perfectly placed to exploit the opened f-file after f4 exf4. The rook targets f7 — Black's weakest point — and can double with Qf3 or Rf2 to create unbearable pressure. The Bb3 and Rf1 combine to create a lethal battery on the f7 square."
       }
     ],
     "strategicThemes": [
-      "Open f-file attack",
-      "Pressure on f7",
-      "Kingside piece coordination",
-      "Central tension"
+      "The open f-file after exf4 becomes White's primary attacking weapon. The Rf1 targets f7 directly, and with the Bb3 also pressuring f7 from the diagonal, this square becomes the focal point of White's entire attack.",
+      "The f7 pawn is the weakest point in Black's castled position — it's only defended by the king. The Bb3 and Rf1 combine to create dual pressure on f7 that forces Black to tie down pieces to defense.",
+      "After Bxf4 recapture, White's pieces coordinate beautifully on the kingside. The Bxf4 controls the dark squares, the Rf1 uses the open f-file, the Bb3 targets f7, and the queen can swing to h5 or g3 — a complete attacking setup.",
+      "The f4 push creates central tension that favors White's better-developed pieces. Whether Black captures (opening the f-file) or pushes ...e4 (weakening d4), White benefits from the resulting position."
     ],
     "endgameTransitions": [
-      "Active rooks in open position",
-      "Bishop pair if dark-squared bishop is traded"
+      "If the middlegame attack doesn't decide things, White's active rooks on the open f-file and potentially the e-file give lasting endgame activity. Active rooks on open files always outperform passive defenders.",
+      "The Ruy Lopez f4 plan often leads to positions where White retains the bishop pair after exchanging on f4. In an open endgame with the f-file available, two bishops combined with rook activity create a decisive advantage."
     ],
     "playableLines": [
       {
@@ -2602,14 +2602,14 @@
           "Qg3"
         ],
         "annotations": [
-          "Black captures on f4, opening the f-file which White will exploit",
-          "White plays d3, clearing the c1-f4 diagonal for the bishop recapture",
-          "Black pushes d5, counterattacking in the center while the position is fluid",
-          "White recaptures with the bishop on f4, activating the dark-squared bishop",
-          "Black reroutes the knight to d7, heading for c5",
-          "White lifts the queen to e1, preparing to swing to the kingside via g3",
-          "Black places the knight on c5, an active square attacking b3",
-          "The queen arrives on g3, creating kingside threats along the g-file"
+          "This is the Ruy Lopez f4 Kingside Expansion. Black captures exf4, opening the f-file that White will exploit with the already well-placed Rf1. The trade also gives White the chance to activate the dark-squared bishop.",
+          "White plays d3, a preparatory move clearing the c1-h6 diagonal for the bishop to recapture on f4. The d3 pawn also supports the e4 center and keeps the position solid while White develops the attack.",
+          "Black strikes back with d5, counterattacking in the center while the position is still fluid. This is Black's best response — creating central activity before White consolidates the kingside initiative.",
+          "White recaptures Bxf4, activating the dark-squared bishop on a powerful diagonal. The Bf4 controls the e5 and d6 squares, and from f4 it can later go to g3 or h6 to increase pressure on Black's castled king.",
+          "Black reroutes the knight to d7, heading for the active c5 square where it will attack the Bb3 and contest the center. This regrouping is necessary to generate counterplay against White's growing kingside initiative.",
+          "White lifts the queen to e1, a key preparatory maneuver. From e1, the queen slides to g3 or h4, joining the kingside attack with the Bf4, Rf1, and Bb3 all coordinating against Black's king.",
+          "Black places the knight on c5, reaching its best square where it attacks the Bb3 and controls d3. The Nc5 is Black's most active piece, but White's kingside attack is already building momentum.",
+          "The queen arrives on g3, completing the kingside attacking setup. With Qg3 targeting g7, Bf4 controlling dark squares, Rf1 on the open file, and Bb3 pressuring f7, White's coordinated attack is extremely dangerous."
         ],
         "arrows": [
           [
@@ -2685,11 +2685,11 @@
     "openingId": "scotch-game",
     "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
     "title": "Open Center Activity",
-    "overview": "In the Scotch, White opens the center immediately with d4. The resulting open position favors White's piece development and central control.",
+    "overview": "This is the Open Center Activity plan in the Scotch Game. White opens the center immediately with d2-d4, creating an open position that favors rapid piece development. After exd4 Nxd4, White's centralized knight dominates the board and the open position rewards the side with better-developed pieces — which is White.",
     "pawnBreaks": [
       {
         "move": "d2-d4",
-        "explanation": "Immediately opens the center. After exd4, Nxd4 centralizes the knight and White develops rapidly.",
+        "explanation": "The early d4 push is the defining move of the Scotch Game — it opens the center immediately on move 3 before Black can build a solid defensive setup. After exd4 Nxd4, White gets a centralized knight that controls c6, e6, f5, and b5, and the open position allows rapid deployment of all White's pieces.",
         "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3"
       }
     ],
@@ -2697,23 +2697,23 @@
       {
         "piece": "Knight",
         "route": "Nd4-central outpost",
-        "explanation": "The knight on d4 controls key squares and can jump to f5, b5, or c6."
+        "explanation": "The Nd4 is the star piece of the Scotch Game. It controls c6, e6, f5, and b5 from the center and can jump to any of these squares to create problems. Nxc6 damages Black's pawn structure, Nf5 attacks g7 near the king, and Nb5 threatens Nc7 forking the rook and king."
       },
       {
         "piece": "Bishop",
         "route": "Bf1-c4 or Bf1-b5",
-        "explanation": "Rapid bishop development to an active diagonal pressuring f7 or pinning the knight."
+        "explanation": "White develops the bishop rapidly to an active diagonal. On c4, it pressures f7 (the weakest square near Black's king) and supports a potential d5 advance. On b5, it pins Black's Nc6 to the king, creating immediate tactical pressure and threatening Bxc6 to damage Black's pawn structure."
       }
     ],
     "strategicThemes": [
-      "Rapid development",
-      "Open center piece play",
-      "Central knight dominance",
-      "Initiative through development lead"
+      "The Scotch Game prioritizes rapid piece development over pawn structure. By opening the center on move 3, White ensures that the superior development will translate into active piece play and tactical opportunities before Black can consolidate.",
+      "With the center open, piece activity matters more than pawn structure. White's pieces develop to active squares naturally — Nd4, Bc4, O-O, Re1 — and the lack of central pawns means pieces have maximum mobility and attacking potential.",
+      "The Nd4 is the dominant piece in the Scotch opening. From d4, it controls four key squares (c6, e6, f5, b5) and can jump to create immediate tactical threats. Nxc6 damages pawns, Nf5 attacks the king, and Nb5 threatens Nc7.",
+      "White's development lead creates a natural initiative that must be exploited actively. The Scotch rewards aggressive play — if White doesn't press the advantage, Black will catch up in development and the open position becomes equal."
     ],
     "endgameTransitions": [
-      "Central pawn majority",
-      "Active pieces convert to endgame advantage"
+      "In simplified positions, White's central pawn majority (e4 vs Black's queenside pawns) provides a lasting structural advantage. The e-pawn can advance to create a passed pawn in the endgame.",
+      "White's superior piece activity from the opening carries into the endgame. Actively placed minor pieces and rooks on open files convert the initiative into concrete advantages — winning pawns or creating a passed pawn."
     ],
     "playableLines": [
       {
@@ -2729,14 +2729,14 @@
           "d5"
         ],
         "annotations": [
-          "White opens the center with d4, the defining move of the Scotch Game",
-          "Black captures on d4, accepting the central exchange",
-          "White recaptures with the knight, placing it on a dominant central square",
-          "Black develops the knight to f6, attacking e4 and developing rapidly",
-          "White captures on c6, damaging Black's pawn structure on the queenside",
-          "Black recaptures with the b-pawn, keeping the center but creating doubled c-pawns",
-          "White develops the bishop to d3, eyeing h7 and supporting the center",
-          "Black strikes back with d5, challenging White's e4 pawn"
+          "This is the Scotch Game. White opens the center with d4, the defining move that creates an open position favoring rapid piece development. The early central break prevents Black from building a solid defensive wall.",
+          "Black captures exd4, accepting the central exchange. While this gives Black a symmetrical pawn structure, it also opens lines that favor White's faster-developing pieces.",
+          "White recaptures Nxd4, placing the knight on the dominant central square. The Nd4 controls c6, e6, f5, and b5 — it's the most powerful piece on the board and dictates the flow of the game.",
+          "Black develops the knight to f6, attacking the e4 pawn and getting a piece into the game. The Nf6 is Black's most natural developing move, but it doesn't address the Nd4's central dominance.",
+          "White captures Nxc6, damaging Black's queenside pawn structure. The exchange removes Black's Nc6 defender and forces bxc6, creating doubled c-pawns that weaken Black's queenside long-term.",
+          "Black recaptures bxc6, keeping pawns in the center but accepting the structural damage. The doubled c-pawns on c6 and c7 are a permanent weakness — they can't both advance, and the c6 pawn may become a target.",
+          "White develops the bishop to d3, targeting the h7 pawn along the b1-h7 diagonal. The Bd3 supports the e4 pawn, prepares O-O, and creates the latent threat of Bxh7+ if Black castles kingside without care.",
+          "Black strikes back with d5, challenging White's e4 pawn at the right moment. This central counterblow is necessary — without it, Black would be too passive. After dxe4 Bxe4, the position is sharp with chances for both sides."
         ],
         "arrows": [
           [
@@ -2807,16 +2807,16 @@
     "openingId": "pro-naroditsky-jobava-london",
     "criticalPositionFen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/3BPN2/PPP2PPP/R2QK2R b KQ - 4 7",
     "title": "Central e4 Break",
-    "overview": "The defining strategic ambition of the Jobava London is to establish a powerful pawn on e4. White develops with Nc3, Bf4, and Bd3 before pushing e4, after which Black's position becomes cramped and White's pieces flood into active squares.",
+    "overview": "This is the Central e4 Break plan in the Jobava London. White's entire setup — Nc3, Bf4, Bd3, and Nf3 — is designed to support the e3-e4 advance. Once e4 is achieved with full piece backing, Black's d5 pawn is challenged, White's Bd3 comes alive targeting h7, and the central space advantage cramps Black's entire position.",
     "pawnBreaks": [
       {
         "move": "e3-e4",
-        "explanation": "The key central break. When executed with full piece support, it grants White a lasting space advantage and activates every piece.",
+        "explanation": "The e3-e4 break is the Jobava London's defining move. When executed with full piece support (Nc3, Bd3, Nf3, Bf4 all in place), it challenges Black's d5 pawn and unleashes all of White's pieces simultaneously. After dxe4 Nxe4 or Bxe4, the centralized pieces and open center give White a commanding position.",
         "fen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/3BPN2/PPP2PPP/R2QK2R b KQ - 4 7"
       },
       {
         "move": "f2-f3",
-        "explanation": "A preparatory pawn move that shores up the e4 advance. f3 also adds a second pawn to support the e4 chain and can later participate in a kingside advance with g4.",
+        "explanation": "The f2-f3 push is a preparatory move that adds a second pawn to support the future e4 advance. After e4, the f3 pawn creates a rock-solid e4-f3 chain. Additionally, f3 can later participate in a kingside expansion with g4-g5, giving White another attacking option if the central break is delayed.",
         "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 4 4"
       }
     ],
@@ -2824,23 +2824,23 @@
       {
         "piece": "Knight",
         "route": "Nc3-b5 or Nc3 supporting e4",
-        "explanation": "The c3 knight supports e4 directly and can leap to b5 to menace c7 and force the awkward Na6."
+        "explanation": "The Nc3 plays a dual role in the Jobava London. It directly supports the e4 advance as its primary function, but it can also leap to b5 to menace c7 and force Black's knight to the awkward a6 square. The Nb5 threat is particularly annoying because Black must spend time dealing with it before developing naturally."
       },
       {
         "piece": "Bishop",
         "route": "Bf1-d3",
-        "explanation": "Bd3 develops to an aggressive post aimed at the kingside. After e4, it becomes a serious attacking weapon targeting h7."
+        "explanation": "The Bd3 is the Jobava London's key attacking piece. Before e4, it patiently waits on d3 supporting the advance. After e4, it becomes a lethal weapon — targeting h7 along the b1-h7 diagonal and creating the threat of Bxh7+ sacrifices, especially when combined with Qc2."
       }
     ],
     "strategicThemes": [
-      "Central space advantage",
-      "Piece coordination before the break",
-      "Restricting Black's counterplay",
-      "Bishop pair activity after central opening"
+      "The e4 advance gives White a commanding central space advantage in the Jobava London. With pawns on d4 and e4, White controls c5, d5, e5, and f5 — severely restricting Black's piece mobility and creating a platform for both central and kingside operations.",
+      "The Jobava London's strength lies in coordinating all four minor pieces to support the e4 break. Nc3 guards e4, Bd3 prepares to activate, Nf3 controls the center, and Bf4 commands the dark squares — only when this full coordination is achieved should White push e4.",
+      "Once e4 is achieved, Black's counterplay is heavily restricted. The d5 pawn is challenged, the c7 and d6 squares become potential targets, and Black's minor pieces struggle to find active squares. White controls the tempo of the game.",
+      "After the center opens with e4, the bishop pair (Bf4+Bd3) becomes White's dominant long-term advantage. The bishops work on different color complexes — Bd3 targeting light squares (h7) and Bf4 controlling dark squares (e5, d6) — creating dual threats that are very difficult to defend."
     ],
     "endgameTransitions": [
-      "Superior minor pieces persist into simplified positions",
-      "Space advantage creates targets on d6 and c7"
+      "White's superior minor pieces persist into simplified positions. The active Bd3 and Bf4 outperform Black's pieces that were cramped throughout the middlegame — this piece quality advantage carries into the endgame.",
+      "The space advantage from e4 creates long-term targets on d6 and c7 that Black must defend permanently. In the endgame, these fixed weaknesses become easier to exploit as there are fewer pieces to defend them."
     ],
     "playableLines": [
       {
@@ -2854,12 +2854,12 @@
           "e4"
         ],
         "annotations": [
-          "Black plays c6, kicking the knight from its powerful b5 outpost",
-          "White retreats the knight to a3, heading for c4",
-          "Black reroutes the awkward a6 knight to c7, consolidating",
-          "White castles kingside, completing development and connecting the rooks",
-          "Black expands on the queenside with b5, gaining space",
-          "White strikes with the thematic e4 break, seizing the center and activating the Bd3"
+          "This is the Jobava London Central Break. Black plays c6, kicking the Nb5 from its aggressive outpost. The c6 move is necessary but costs Black a tempo — time White uses to regroup the knight to an even better square.",
+          "White retreats the knight to a3, an unusual but purposeful square. From a3, the knight heads to c4 where it will target d6 and e5 — both critical squares in Black's position. The Na3-c4 maneuver is a key idea in the Jobava London.",
+          "Black reroutes the awkward Na6 to c7, finally getting this misplaced piece to a functional square. The Nc7 supports e6, prepares ...b5, and frees Black's queenside — but this regrouping has cost Black significant time.",
+          "White castles kingside, completing development and connecting the rooks. With all pieces developed and the king safe, White is now ready to execute the thematic e4 central break at the ideal moment.",
+          "Black expands on the queenside with b5, gaining space and challenging White's knight route to c4. The b5 push also opens lines for Black's bishop and creates counterplay — Black must be active before White's central break arrives.",
+          "White strikes with the thematic e4 break, the move the entire Jobava London setup was designed for. The Bd3 comes alive on the b1-h7 diagonal, the center opens for the rooks, and White's pieces surge into active positions with a clear initiative."
         ],
         "arrows": [
           [
@@ -3007,16 +3007,16 @@
     "openingId": "pro-naroditsky-jobava-london",
     "criticalPositionFen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
     "title": "Kingside Pawn Storm vs Fianchetto",
-    "overview": "When Black plays g6 and Bg7, White pivots to h4-h5 to exploit the kingside. White often castles queenside and hurls pawns at the Black king, creating a sharp imbalanced game.",
+    "overview": "This is the Kingside Pawn Storm plan in the Jobava London against Black's fianchetto setup (g6/Bg7). When Black plays g6, White pivots to h4-h5 to exploit the weakened kingside dark squares. White castles queenside and launches pawns at Black's king — the h5 advance challenges g6, the g4-g5 push drives away the Nf6 defender, and the open files create a devastating attack.",
     "pawnBreaks": [
       {
         "move": "h4-h5",
-        "explanation": "The engine of the kingside attack. h5 challenges the g6 pawn and either forces gxh5 (opening the g-file) or h6 (creating a hook for g4-g5).",
+        "explanation": "The h5 advance is the engine of the entire kingside attack. It directly challenges the g6 pawn — the keystone of Black's fianchetto. After gxh5, the g-file opens for White's rooks. After ...Nxh5, the knight leaves f6 undefended. After ...h6, White has a 'hook' for g4-g5 to blow the kingside wide open. Every response weakens Black.",
         "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5"
       },
       {
         "move": "g4-g5",
-        "explanation": "Following h4-h5, g4-g5 drives the f6 knight from its best defensive square. Black's kingside becomes dangerously exposed.",
+        "explanation": "Following h4-h5, the g4-g5 advance delivers the knockout blow. It drives the Nf6 — Black's most important kingside defender — from its post. Without the knight on f6, the squares around Black's king (g7, h7, f7) become fatally exposed and White's pieces crash through.",
         "fen": "rnbqk2r/ppp1ppbp/5np1/3p3P/3P1B1P/2N1P3/PPP2PP1/R2QKBNR b KQkq - 0 6"
       }
     ],
@@ -3024,23 +3024,23 @@
       {
         "piece": "Knight",
         "route": "Nf3-e5",
-        "explanation": "The knight on e5 is a powerful outpost — centralized, aggressive, and difficult to evict. It supports the kingside attack and eyes g4."
+        "explanation": "The Ne5 is a devastating outpost in the Jobava London's kingside attack. Centralized and aggressive, it controls d7, f7, c6, and g4 — all critical squares near Black's king. The knight can't easily be evicted since ...f6 would further weaken Black's kingside, and it supports the pawn storm while eyeing tactical jumps to g4 or f7."
       },
       {
         "piece": "Queen",
         "route": "Qd1-d2",
-        "explanation": "Qd2 prepares O-O-O for opposite-side castling, connects rooks, and supports h4-h5."
+        "explanation": "Qd2 is the essential preparatory move that ties the Jobava London's kingside attack together. It prepares O-O-O for opposite-side castling, connects the rooks for maximum attacking power, and supports both h4-h5 and the Bh6 exchange — removing Black's fianchettoed bishop and leaving the dark squares around Black's king permanently weak."
       }
     ],
     "strategicThemes": [
-      "Opposite-side castling",
-      "Kingside pawn storm",
-      "Exploiting the g6 weakness",
-      "Ne5 outpost domination"
+      "The Jobava London creates a classic opposite-side castling scenario against the fianchetto. White castles queenside and storms the kingside with pawns, while Black must counter-attack on the queenside. The side that breaks through first wins — and White's attack is often faster because h4-h5 is already underway.",
+      "The kingside pawn storm with h4-h5 and g4-g5 is White's primary attacking plan. Each pawn advance weakens Black's kingside further — h5 challenges g6, g5 drives away the Nf6, and the open files give White's rooks direct access to the Black king.",
+      "Black's g6 pawn is the foundation of the fianchetto — and White's h5 advance targets it directly. Whether Black captures (opening the g-file), moves the knight (losing the f6 defender), or pushes h6 (creating a hook for g4-g5), the g6 weakness is exploited to tear apart Black's kingside.",
+      "The Ne5 outpost is a dominant feature of this plan. Centralized on e5, the knight controls key squares on both flanks, can't be easily challenged, and supports the kingside attack while also threatening tactical strikes on f7, d7, and g4."
     ],
     "endgameTransitions": [
-      "Open h-file becomes a highway for rook invasion",
-      "Exposed Black king faces persistent threats even in simplified positions"
+      "If the h-file opens after hxg6 or gxh5, it becomes a permanent highway for rook invasion. Even in simplified positions, White's rook on the h-file can infiltrate to h7 or h8, creating decisive threats that persist into the endgame.",
+      "The structural damage to Black's kingside from the pawn storm creates lasting weaknesses. Even if the attack doesn't mate, Black's exposed king and damaged pawn structure make the endgame very difficult to hold."
     ],
     "playableLines": [
       {
@@ -3055,13 +3055,13 @@
           "O-O-O"
         ],
         "annotations": [
-          "White launches h4, beginning the aggressive kingside pawn storm against Black's fianchetto",
-          "Black castles into the storm, but delaying would leave the king in the center",
-          "h5 arrives, directly challenging the g6 pawn that anchors Black's kingside",
-          "Black captures with the knight, avoiding the immediate opening of the g-file",
-          "White plays Qd2, connecting rooks, preparing O-O-O, and supporting Bh6",
-          "The knight returns to f6, but White has gained significant kingside momentum",
-          "White castles queenside, completing the opposite-side attack setup"
+          "This is the Jobava London's Kingside Pawn Storm against the fianchetto. White launches h4, immediately signaling aggressive intentions against Black's g6+Bg7 setup. The h-pawn will advance to h5 to challenge the foundation of Black's kingside defense.",
+          "Black castles into the storm — but delaying would be even worse, leaving the king stuck in the center where it's vulnerable to both central and flank attacks. Black must now generate queenside counterplay urgently before White's attack arrives.",
+          "White pushes h5, directly challenging the g6 pawn that anchors Black's entire fianchetto structure. This forces Black into an unpleasant choice — every response weakens the kingside in some way.",
+          "Black captures Nxh5, choosing to remove the pawn with the knight rather than open the g-file with gxh5. However, this displaces the Nf6 from its critical defensive post, giving White a tempo to build the attack.",
+          "White plays Qd2, the multi-purpose move that ties the entire attacking plan together. The Qd2 prepares queenside castling, supports Bh6 to trade Black's fianchettoed bishop, and connects the rooks for the coming assault.",
+          "The knight returns to f6, trying to restore the defensive setup. But White has gained significant kingside momentum — the h-pawn is gone, the dark squares are weakened, and White's pieces are perfectly placed for the attack.",
+          "White castles queenside, completing the opposite-side attack setup. With the king safe on c1, both rooks are free to join the kingside assault. The Rh1 has a natural home on the h-file, and the Rd1 supports central operations."
         ],
         "arrows": [
           [
