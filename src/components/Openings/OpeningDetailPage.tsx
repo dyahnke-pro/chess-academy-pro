@@ -12,6 +12,7 @@ import { ModelGamesSection } from './ModelGamesSection';
 import { ModelGameViewer } from './ModelGameViewer';
 import { MiddlegamePlansSection } from './MiddlegamePlansSection';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
+import { MiddlegamePractice } from './MiddlegamePractice';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { SidelineExplainer } from './SidelineExplainer';
@@ -68,7 +69,8 @@ type ViewMode =
   | 'train-traps'
   | 'train-warnings'
   | 'model-game'
-  | 'middlegame-plan';
+  | 'middlegame-plan'
+  | 'middlegame-practice';
 
 function computeFenFromPgn(pgn: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -148,6 +150,11 @@ export function OpeningDetailPage(): JSX.Element {
   const handleSelectMiddlegamePlan = useCallback((plan: MiddlegamePlan): void => {
     setActiveMiddlegamePlan(plan);
     setViewMode('middlegame-plan');
+  }, []);
+
+  const handlePlayMiddlegamePlan = useCallback((plan: MiddlegamePlan): void => {
+    setActiveMiddlegamePlan(plan);
+    setViewMode('middlegame-practice');
   }, []);
 
   const handleStartVariationWalkthrough = useCallback((index: number): void => {
@@ -435,6 +442,17 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
+  // Middlegame practice (direct play)
+  if (viewMode === 'middlegame-practice' && activeMiddlegamePlan) {
+    return (
+      <MiddlegamePractice
+        plan={activeMiddlegamePlan}
+        playerColor={opening.color}
+        onExit={handleExit}
+      />
+    );
+  }
+
   // Detail view
   const mastery = getMasteryPercent(opening);
   const totalLines = getTotalLines(opening);
@@ -595,6 +613,7 @@ export function OpeningDetailPage(): JSX.Element {
       <MiddlegamePlansSection
         openingId={opening.id}
         onSelectPlan={handleSelectMiddlegamePlan}
+        onPlayPlan={handlePlayMiddlegamePlan}
       />
 
       {/* Model Games */}
