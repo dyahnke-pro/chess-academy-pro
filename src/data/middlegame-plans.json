@@ -7225,5 +7225,661 @@
       "The attack aims for checkmate, not an endgame. But if material is won, any simplification is trivially winning.",
       "Without the light-squared bishop, White's endgame prospects are bleak even if the attack doesn't checkmate."
     ]
+  },
+  {
+    "id": "mp-pro-dubov-catalan-Bd2",
+    "openingId": "pro-dubov-catalan",
+    "criticalPositionFen": "r2q1rk1/2p1bppp/p1n1pn2/1p6/3Pb3/5NP1/PP1BPPBP/RNQ2RK1 w - - 6 12",
+    "title": "Creative Queenside Play",
+    "overview": "Dubov's Catalan is characteristically creative. The Bg2 controls the long diagonal, the Bd2 is flexibly placed, and Black's Be4 is active but can be challenged. The plan is Nc3 or Nbd2 to pressure the Be4, then use the Bg2's power to generate queenside pressure with a4 or Qc2.",
+    "pawnBreaks": [
+      {
+        "move": "a2-a4",
+        "explanation": "Typical Catalan queenside pressure. a4 challenges b5 and opens the a-file. After axb5 axb5, White gets the open a-file for the rook and targets on b5.",
+        "fen": "r2q1rk1/2p1bppp/p1n1pn2/1p6/3Pb3/5NP1/PP1BPPBP/RNQ2RK1 w - - 6 12"
+      },
+      {
+        "move": "e2-e3",
+        "explanation": "A solid choice supporting d4 and preparing Nbd2 to challenge the Be4. After e3 and Nbd2, the bishop must retreat and White gains the initiative.",
+        "fen": "r2q1rk1/2p1bppp/p1n1pn2/1p6/3Pb3/5NP1/PP1BPPBP/RNQ2RK1 w - - 6 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2 (challenge Be4)",
+        "explanation": "Nbd2 challenges the Be4, which is Black's most active piece. After Nbd2, the bishop must retreat or be traded, and White's position improves."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qc1-c2 (Bg2 battery)",
+        "explanation": "Qc2 creates a battery with the Bg2 on the long diagonal. It also eyes b3 and supports a4. Classic Catalan technique."
+      }
+    ],
+    "strategicThemes": [
+      "Dubov's Catalan is unorthodox — the Bd2 instead of the typical Bf4 or Bg5 keeps maximum flexibility.",
+      "The Bg2 is the Catalan's soul. Every plan revolves around activating it or using its diagonal pressure.",
+      "Challenging the Be4 is important — it's Black's best piece and removing it tips the balance in White's favor.",
+      "Dubov's creativity shows in the move order — he finds unusual ways to reach favorable positions."
+    ],
+    "endgameTransitions": [
+      "The Catalan Bg2 dominates all endgames. Its long-range power controls both flanks from a single diagonal.",
+      "After removing the Be4, the resulting endgame with Bg2 vs Black's remaining pieces is always favorable for White."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-catalan-e4",
+    "openingId": "pro-dubov-catalan",
+    "criticalPositionFen": "r2q1rk1/2p1bppp/p1n1pn2/1p6/3Pb3/5NP1/PP1BPPBP/RNQ2RK1 w - - 6 12",
+    "title": "Central e4 Advance",
+    "overview": "Dubov can push e3 followed by Nbd2 to challenge the Be4, then follow up with e4 to seize the center. This central advance opens the Bg2 fully and creates a dominant d4+e4 pawn duo. Typical of Dubov's creative approach — he finds dynamic ways to achieve strategic goals.",
+    "pawnBreaks": [
+      {
+        "move": "e2-e3 then e3-e4",
+        "explanation": "A two-step central buildup. e3 first, then after Nbd2 challenges the Be4, e4 opens the center. The Bg2 becomes a long-range weapon and the d4+e4 center dominates.",
+        "fen": "r2q1rk1/2p1bppp/p1n1pn2/1p6/3Pb3/5NP1/PP1BPPBP/RNQ2RK1 w - - 6 12"
+      },
+      {
+        "move": "d4-d5",
+        "explanation": "After e4, d5 is the space-gaining follow-up. It closes the center in White's favor and the Bg2 maintains pressure on the a8 corner. Black's Nc6 is pushed back.",
+        "fen": "r2q1rk1/2p1bppp/p1n1pn2/1p6/3Pb3/5NP1/PP1BPPBP/RNQ2RK1 w - - 6 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rf1-e1 (support e4)",
+        "explanation": "Re1 supports the e4 advance and controls the e-file. After e4, the rook is perfectly placed for any central opening."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nb1-c3 (after Be4 retreats)",
+        "explanation": "Once the Be4 is driven away, Nc3 develops to its natural square. From c3, it supports d5, controls e4, and pressures b5."
+      }
+    ],
+    "strategicThemes": [
+      "Dubov's approach is always about dynamics. The e4 advance creates concrete threats rather than passive positional pressure.",
+      "The Bg2 is maximized by opening the center. After e4 and d5, it controls the entire a8-h1 diagonal.",
+      "Challenging the Be4 first (via Nbd2) then pushing e4 is the correct move order. Premature e4 allows ...Bxg2.",
+      "Dubov's Catalan surprises opponents who expect standard play. The creative setups create unfamiliar problems."
+    ],
+    "endgameTransitions": [
+      "After e4 and central exchanges, the Bg2 guarantees a favorable endgame. Its long diagonal dominance is permanent.",
+      "The d5 space advantage persists in all phases. Black's cramped pieces struggle in endgames."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-antimarshall-d4",
+    "openingId": "pro-dubov-anti-marshall",
+    "criticalPositionFen": "r2q1rk1/1b2bppp/p1np1n2/1pp1p3/4P3/P2P1N1P/BPPN1PP1/R1BQR1K1 w - - 2 13",
+    "title": "d4 Central Break",
+    "overview": "Dubov's Anti-Marshall avoids the Marshall Attack with a3+h3+d3 setup, then aims for d4. The Ba2 maintains pressure on f7, the Re1 supports the center, and after d4, the position opens for White's well-placed pieces. This is a slow but methodical approach — untypical of Dubov, showing his versatility.",
+    "pawnBreaks": [
+      {
+        "move": "d3-d4",
+        "explanation": "The key break. After d4 cxd4 Nxd4, White's knight is centralized and the Ba2 activates fully on the a2-g8 diagonal. Black's e5 pawn becomes a potential weakness.",
+        "fen": "r2q1rk1/1b2bppp/p1np1n2/1pp1p3/4P3/P2P1N1P/BPPN1PP1/R1BQR1K1 w - - 2 13"
+      },
+      {
+        "move": "c2-c3",
+        "explanation": "Supports d4 and prevents ...Nd4. After c3 and d4, White gets a stable center with c3+d4+e4 supporting each other. The position becomes very solid for White.",
+        "fen": "r2q1rk1/1b2bppp/p1np1n2/1pp1p3/4P3/P2P1N1P/BPPN1PP1/R1BQR1K1 w - - 2 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nd2-f1-e3 or Nd2-f1-g3",
+        "explanation": "The Nd2 reroutes to f1, then either e3 (supporting d5 and controlling f5) or g3 (eyeing f5 and h5 for kingside play)."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-d2-c3 (long diagonal)",
+        "explanation": "The bishop develops to d2 then c3, controlling the long dark diagonal. From c3, it eyes g7 and supports the center."
+      }
+    ],
+    "strategicThemes": [
+      "Dubov's Anti-Marshall is surprisingly restrained. He builds up slowly and strikes when the position is ready.",
+      "The Ba2+Re1+d4 plan is the Ruy Lopez's classic recipe. Dubov executes it with precision despite his creative reputation.",
+      "h3 prevents ...Bg4 pins and a3 prevents ...Nb4. These prophylactic moves are the foundation of the Anti-Marshall.",
+      "Black's ...c5+b5+Bb7 setup looks active but lacks concrete threats. White can build up without pressure."
+    ],
+    "endgameTransitions": [
+      "After d4 and exchanges, the Ba2 gives White a lasting endgame advantage. The long diagonal pressure on f7 persists.",
+      "The Anti-Marshall structure often leads to endgames where White's bishop pair is decisive in the open position."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-antimarshall-Nf5",
+    "openingId": "pro-dubov-anti-marshall",
+    "criticalPositionFen": "r2q1rk1/1b2bppp/p1np1n2/1pp1p3/4P3/P2P1N1P/BPPN1PP1/R1BQR1K1 w - - 2 13",
+    "title": "Knight Maneuver to f5",
+    "overview": "The Nf1-g3-f5 maneuver is White's primary kingside plan. The Nf5 is a dream outpost that attacks d6, e7, g7, and h6. Combined with the Ba2 on the a2-g8 diagonal, it creates direct threats against Black's king. Dubov uses this when the center is stable.",
+    "pawnBreaks": [
+      {
+        "move": "g2-g4",
+        "explanation": "After Ng3, g4 supports g5 driving the Nf6 away and opening kingside lines. This is the aggressive follow-up to the knight maneuver, creating a full kingside attack.",
+        "fen": "r2q1rk1/1b2bppp/p1np1n2/1pp1p3/4P3/P2P1N1P/BPPN1PP1/R1BQR1K1 w - - 2 13"
+      },
+      {
+        "move": "d3-d4",
+        "explanation": "Alternatively, d4 can follow the knight maneuver. After Nf5 and d4, the position opens on two fronts — center and kingside — which is overwhelming.",
+        "fen": "r2q1rk1/1b2bppp/p1np1n2/1pp1p3/4P3/P2P1N1P/BPPN1PP1/R1BQR1K1 w - - 2 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nd2-f1-g3-f5",
+        "explanation": "The signature maneuver. Nf1 regroups, Ng3 controls f5 and h5, then Nf5 is devastating. This three-step maneuver is the heart of the Anti-Marshall."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-d2 (supporting Be3 or g4)",
+        "explanation": "Qd2 is flexible — it supports Be3 (after Nf5), g4 advances, and can shift to the kingside via Qf2 or Qg4 if needed."
+      }
+    ],
+    "strategicThemes": [
+      "The Nf5 is the most powerful outpost in the Anti-Marshall. It can't be challenged by Black's pawns and attacks in every direction.",
+      "Dubov's knight maneuvers show that even creative players appreciate classical technique when it works.",
+      "The Ba2+Nf5 duo targeting f7 and g7 creates direct mating threats. Black must always be alert to sacrificial ideas.",
+      "Patience in the Anti-Marshall is rewarded. The Nf5 maneuver takes time but the resulting position is overwhelming."
+    ],
+    "endgameTransitions": [
+      "After Nf5 and piece exchanges, White's superior piece placement gives a lasting endgame advantage.",
+      "The Nf5 persists as a dominant piece in simplified positions. It outperforms any Black piece in the endgame."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-tarrasch-french-IQP",
+    "openingId": "pro-dubov-tarrasch-french",
+    "criticalPositionFen": "r1bq1rk1/pp4pp/2nbpn2/3p4/3P4/3B1N2/PP2NPPP/R1BQ1RK1 w - - 4 12",
+    "title": "IQP Activity with Piece Play",
+    "overview": "Dubov's Tarrasch French reaches a classic IQP position — White has the isolated d4 pawn but excellent piece activity. The Bd3 targets h7, the Nf3 and Ne2 can reroute to kingside squares, and the open c-file gives the rooks scope. The plan is to use the IQP as a dynamic asset for kingside attacks.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "The IQP's signature advance. When Black's pieces are poorly coordinated, d5 blows open the center. After d5 exd5, the open e-file and active pieces create devastating threats.",
+        "fen": "r1bq1rk1/pp4pp/2nbpn2/3p4/3P4/3B1N2/PP2NPPP/R1BQ1RK1 w - - 4 12"
+      },
+      {
+        "move": "b2-b3",
+        "explanation": "A quiet but useful move preparing Bb2, aiming the bishop at the kingside dark squares. After Bb2, the two bishops (Bd3+Bb2) create crossing diagonals that are hard to defend.",
+        "fen": "r1bq1rk1/pp004pp/2nbpn2/3p4/3P4/3B1N2/PP02NPPP/R1BQ1RK1 w - - 4 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Ne2-g3-f5 or Ne2-f4",
+        "explanation": "The Ne2 reroutes to the kingside. Ng3 controls f5 and h5, then Nf5 is the ideal destination. Nf4 directly targets d5 and e6."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-b2 (long diagonal)",
+        "explanation": "Bb2 activates on the long diagonal, adding another piece to the kingside attack. The Bd3+Bb2 duo creates dual-diagonal threats that's classic IQP play."
+      }
+    ],
+    "strategicThemes": [
+      "The IQP is White's strength, not weakness, in the middlegame. Dubov uses its dynamic potential to create attacking chances.",
+      "The Bd3 targeting h7 is the IQP's primary attacking piece. Combined with Nf5 or Ng5, it creates Bxh7+ sacrifice ideas.",
+      "Dubov's creative mind turns the Tarrasch French into a tactical battle. His piece play is always imaginative and forcing.",
+      "Prevent Black from blockading d5 with a knight. If ...Nd5 is achieved, White's position loses its dynamism."
+    ],
+    "endgameTransitions": [
+      "Avoid endgames where the IQP becomes a weakness. Keep pieces on the board to maintain attacking chances.",
+      "If d5 creates a passed pawn, even endgames can be favorable — the passed pawn ties down Black's pieces."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-tarrasch-french-kside",
+    "openingId": "pro-dubov-tarrasch-french",
+    "criticalPositionFen": "r1bq1rk1/pp4pp/2nbpn2/3p4/3P4/3B1N2/PP02NPPP/R1BQ1RK1 w - - 4 12",
+    "title": "Kingside Attack with Ng3-f5",
+    "overview": "The direct attacking approach: White maneuvers the Ne2 to g3 then f5, creating immediate threats. The Nf5 combined with Bd3 and potential Qh5 creates mating threats that Black must address. Dubov loves these forcing positions.",
+    "pawnBreaks": [
+      {
+        "move": "h2-h4",
+        "explanation": "h4 supports Ng5 and prevents ...h6 from being fully effective. It also prepares h5, weakening Black's kingside and opening lines.",
+        "fen": "r1bq1rk1/pp004pp/2nbpn2/3p4/3P4/3B1N2/PP02NPPP/R1BQ1RK1 w - - 4 12"
+      },
+      {
+        "move": "f2-f4",
+        "explanation": "f4 supports Ne5 and prepares f5. After f5, the e6 pawn is attacked and the kingside opens. Combined with Bd3 and Qg4, it creates overwhelming pressure.",
+        "fen": "r1bq1rk1/pp004pp/2nbpn02/3p4/3P4/3B1N2/PP02NPPP/R1BQ1RK1 w - - 4 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-c2 or Qd1-e2",
+        "explanation": "Qc2 creates the classic Bd3+Qc2 battery targeting h7. This is the most dangerous attacking formation in IQP positions."
+      },
+      {
+        "piece": "Knight",
+        "route": "Ne2-g3-f5 (outpost occupation)",
+        "explanation": "The knight's destination is f5. From f5, it attacks d6, e7, g7, h6 — creating tactical threats in every direction."
+      }
+    ],
+    "strategicThemes": [
+      "The Bd3+Qc2 battery is the most dangerous attacking setup against Black's castled king in IQP positions.",
+      "Nf5 is the key piece. Once achieved, the attack practically plays itself — Dubov knows exactly how to exploit it.",
+      "Dubov's Tarrasch French combines creative flair with classical attacking technique. The IQP attack is his bread and butter.",
+      "Speed matters — the attack must arrive before Black consolidates with ...Nd5 blockading the IQP."
+    ],
+    "endgameTransitions": [
+      "The attack should lead to material gains or decisive advantages. Endgames are not the goal.",
+      "If the Nf5 is traded, Bxf5 opens the e-file and the light-square pressure continues in simplified positions."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-sveshnikov-a5",
+    "openingId": "pro-dubov-sveshnikov",
+    "criticalPositionFen": "r1bqk02r/5ppp/2np1b02/p2Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQkq - 0 13",
+    "title": "Queenside Expansion with ...a5 and ...b3",
+    "overview": "Dubov's Sveshnikov features the aggressive ...a5 and ...b4 setup, going further than most with this queenside expansion. The plan is ...a4 and potentially ...b3 to blow open the queenside. The Bf6 controls dark squares, and the Nd5 outpost (if available) supports all operations. Dubov's creativity shines in these unbalanced positions.",
+    "pawnBreaks": [
+      {
+        "move": "a5-a4",
+        "explanation": "Continuing the queenside advance. ...a4 threatens ...a3 which would rip open White's queenside completely. The pressure on b2 and a2 ties down White's pieces to defense.",
+        "fen": "r1bqk02r/5ppp/2np1b02/p2Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQkq - 0 13"
+      },
+      {
+        "move": "b4-b3",
+        "explanation": "The explosive advance. After ...b3, White's a2 or c2 pawn is attacked, opening lines toward White's king (if castled queenside) or creating structural weaknesses.",
+        "fen": "r1bqk02r/5ppp/2np1b02/p2Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQkq - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf6 controls dark squares",
+        "explanation": "The Bf6 is Black's best piece. It controls d4, e5, g5, and the entire a1-h8 diagonal. After ...O-O, it also defends the king while supporting queenside operations."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Ra8-b8 (b-file pressure)",
+        "explanation": "...Rb8 puts the rook on the b-file, targeting b2. After ...b3, the b-file opens fully and the rook becomes a dominant piece."
+      }
+    ],
+    "strategicThemes": [
+      "Dubov's Sveshnikov pushes the queenside expansion further than most. ...a5+b4+a4+b3 is a full pawn storm that creates chaos.",
+      "The Nd5 for White is strong but the queenside counterplay compensates. Dubov accepts the structural imbalance for dynamic play.",
+      "The Bf6 is critical — it prevents White from exploiting the dark squares and supports the entire queenside operation.",
+      "Dubov's creativity and fearlessness make the Sveshnikov his ideal opening. He thrives in complex, unbalanced positions."
+    ],
+    "endgameTransitions": [
+      "If the queenside advance wins material, the endgame is comfortable despite Black's structural weaknesses.",
+      "The Bf6 is an excellent endgame piece. It controls both flanks and compensates for any pawn weaknesses."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-sveshnikov-f5",
+    "openingId": "pro-dubov-sveshnikov",
+    "criticalPositionFen": "r1bqk02r/5ppp/2np1b02/p2Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQkq - 0 13",
+    "title": "Central ...f5 Counterplay",
+    "overview": "Dubov can also challenge White's e4 pawn with ...f5, opening the f-file and activating pieces. After ...f5 exf5, Black gets the open f-file and active piece play. The Bf6+Nc6 duo pressures the center while the f-file provides tactical opportunities.",
+    "pawnBreaks": [
+      {
+        "move": "f7-f5",
+        "explanation": "Challenges e4 directly. After exf5, Black can play ...Bxf5 with an active bishop or ...Rxf5 with rook activity. Either way, the position opens in Black's favor.",
+        "fen": "r1bqk02r/5ppp/2np1b02/p2Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQkq - 0 13"
+      },
+      {
+        "move": "g7-g6",
+        "explanation": "Prepares ...f5 more carefully. After ...g6, ...f5 comes with extra support and the fianchetto structure (Kg8, Bg7) is solid. But this loses the Bf6's active placement.",
+        "fen": "r1bqk02r/5ppp/2np1b02/p2Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQkq - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nc6-e7-g6 or ...Nc6-d4",
+        "explanation": "...Ne7 repositions for the kingside, possibly to g6 supporting ...f5. ...Nd4 is more direct, seizing the central outpost that controls c2, e2, b3, and f3."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Rf8 (after ...O-O and ...f5)",
+        "explanation": "After ...O-O and ...f5, the Rf8 is already on the open f-file. It becomes an immediate attacking asset without needing to move."
+      }
+    ],
+    "strategicThemes": [
+      "The ...f5 break is the Sveshnikov's backup plan. When the queenside is blocked, the center provides counterplay.",
+      "Dubov's flexibility between ...a5-b3 (queenside) and ...f5 (center) keeps White guessing until the last moment.",
+      "The Nd5 for White is powerful but can be dealt with by playing around it. Dubov doesn't try to remove it — he ignores it.",
+      "The Sveshnikov's piece activity compensates for any structural weaknesses. As long as pieces are active, Black is fine."
+    ],
+    "endgameTransitions": [
+      "After ...f5 and exchanges, the resulting position often favors Black's active pieces over White's structural advantages.",
+      "The open f-file gives Black's rooks lasting activity that compensates for the backward d6 pawn."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-tarrasch-def-IQP",
+    "openingId": "pro-dubov-tarrasch-defense",
+    "criticalPositionFen": "r1bqr1k1/pp2bpp1/2n2n1p/3p4/3N4/2N1B1P1/PP2PPBP/R2Q1RK1 w - - 2 12",
+    "title": "IQP Activity and Piece Play",
+    "overview": "Dubov's Tarrasch Defense gives Black an isolated d5 pawn but active piece play. The Nc6 and Nf6 are well-developed, the Be7 and Re8 are natural, and the d5 pawn controls c4 and e4. The plan is to use the IQP as a dynamic weapon — supporting piece activity and creating threats before it becomes a weakness.",
+    "pawnBreaks": [
+      {
+        "move": "d5-d4",
+        "explanation": "The IQP advance! When timed correctly, ...d4 opens the center and creates a passed pawn. After ...d4 Nxd4 (or exd4), Black's pieces flood active squares and the initiative shifts.",
+        "fen": "r1bqr1k1/pp02bpp1/2n02n1p/3p4/3N4/2N1B1P1/PP02PPBP/R2Q1RK1 w - - 2 12"
+      },
+      {
+        "move": "e7-e5 (after ...d4)",
+        "explanation": "After ...d4 and exchanges, ...e5 can follow to gain central space and activate the Be7. The resulting position has open lines for Black's active pieces.",
+        "fen": "r1bqr1k1/pp02bpp1/2n02n1p/3p4/3N4/2N1B1P1/PP02PPBP/R02Q1RK1 w - - 2 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-g4 or ...Bc8-d7-c6",
+        "explanation": "...Bg4 pins the Nd4 (if Qd1 is on d1) and creates tactical pressure. ...Bd7-c6 develops to the long diagonal, pressuring g2 and supporting the center."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nf6-e4 (central outpost)",
+        "explanation": "The Ne4 centralizes powerfully, attacking d2, c3, and f2. In IQP positions, a centralized knight compensates for the isolated pawn."
+      }
+    ],
+    "strategicThemes": [
+      "Dubov loves IQP positions because they create dynamic, unbalanced play. The d5 pawn gives piece activity that he exploits brilliantly.",
+      "The Tarrasch Defense is the perfect Dubov opening — it sacrifices pawn structure for piece play, matching his creative style.",
+      "Keep pieces active and avoid simplification. Every trade makes the IQP more of a weakness. Maintain complexity.",
+      "The IQP advance (...d4) should be timed when White's pieces are poorly coordinated. Premature ...d4 loses the pawn."
+    ],
+    "endgameTransitions": [
+      "Avoid pure endgames where the IQP is a liability. Keep major pieces on the board for attacking chances.",
+      "If ...d4 creates a passed pawn, even endgames can be favorable — the passed pawn ties down White's pieces."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-tarrasch-def-Bg4",
+    "openingId": "pro-dubov-tarrasch-defense",
+    "criticalPositionFen": "r1bqr1k1/pp02bpp1/2n02n1p/3p4/3N4/2N1B1P1/PP02PPBP/R02Q1RK1 w - - 2 12",
+    "title": "Active Development with ...Bg4",
+    "overview": "Rather than rushing ...d4, Dubov completes development with maximum activity. ...Bg4 creates pressure immediately, potentially pinning the queen or knight. Combined with ...Qd7 or ...Qb6, it generates concrete threats that keep White busy defending.",
+    "pawnBreaks": [
+      {
+        "move": "b7-b5",
+        "explanation": "Gaining queenside space and supporting ...Nc5 or ...d4. After ...b5, the c4 square opens for a knight and the queenside expansion adds to Black's active play.",
+        "fen": "r1bqr1k1/pp02bpp1/2n02n1p/3p4/3N4/2N1B1P1/PP02PPBP/R02Q1RK1 w - - 2 12"
+      },
+      {
+        "move": "a7-a5",
+        "explanation": "Prepares ...a4, gaining queenside space. It also prevents b4 from White and secures the queenside for Black's operations.",
+        "fen": "r1bqr1k1/pp02bpp1/2n02n1p/3p4/3N4/2N1B1P1/PP02PPBP/R02Q1RK1 w - - 2 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "...Qd8-b6 or ...Qd8-d7",
+        "explanation": "...Qb6 pressures b2 and the d4 knight. ...Qd7 connects rooks and supports ...Bg4 or ...Rad8. Both are natural developing moves."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Ra8-d8 (d-file control)",
+        "explanation": "...Rad8 doubles rooks on the d-file and d8. This creates maximum pressure on the d4 knight and the d-file in general."
+      }
+    ],
+    "strategicThemes": [
+      "Dubov's piece-first approach means every piece reaches an active square before committing to pawn advances.",
+      "The Bg4 creates concrete threats — pins, pressure on e2, and tactical ideas. It forces White to react.",
+      "The Tarrasch gives Black natural piece activity. Every developing move creates a threat or improves the position.",
+      "Dubov's IQP positions are always dynamic. He never allows the position to become static where the pawn is just a weakness."
+    ],
+    "endgameTransitions": [
+      "Active pieces compensate for the IQP in complex endgames. The Bg4 and centralized knights create lasting pressure.",
+      "If the position simplifies favorably (trading White's best pieces), the IQP becomes less of an issue in the resulting position."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-benoni-b5",
+    "openingId": "pro-dubov-benoni",
+    "criticalPositionFen": "r1bqr1k1/ppn2pbp/3p1np1/2pP4/4P3/2N2P2/PP1NB1PP/R1BQ1RK1 w - - 1 12",
+    "title": "Queenside ...b5 Break",
+    "overview": "Dubov's Modern Benoni features the classic ...b5 break — the Benoni's signature weapon. After ...b5, the queenside opens and Black's Bg7 activates on the long diagonal. The Nc7 supports ...b5 and can reroute to better squares. The plan is to create queenside counterplay while White is focused on the kingside.",
+    "pawnBreaks": [
+      {
+        "move": "b7-b5",
+        "explanation": "The Benoni's defining break. ...b5 challenges White's center and opens the b-file. After cxb5 (or exb5), Black gets an open file and active piece play. The Bg7 activates fully.",
+        "fen": "r1bqr1k1/ppn02pbp/3p1np1/2pP4/4P3/2N02P02/PP1NB1PP/R1BQ1RK1 w - - 1 12"
+      },
+      {
+        "move": "f7-f5",
+        "explanation": "An aggressive alternative. ...f5 challenges e4 directly and opens the f-file. After exf5 gxf5, the g-file and f-file are both available for the rooks. This is Dubov's sharp approach.",
+        "fen": "r1bqr1k1/ppn02pbp/3p1np1/2pP4/4P3/2N02P02/PP1NB1PP/R1BQ1RK1 w - - 1 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nc7-a6-b4 or ...Nc7-e8-d6",
+        "explanation": "...Na6-b4 targets the d3 and c2 squares, creating queenside pressure. ...Ne8-d6 centralizes the knight where it attacks c4 and e4."
+      },
+      {
+        "piece": "Bishop",
+        "route": "...Bg7 controls the long diagonal",
+        "explanation": "The Bg7 is the Benoni's key piece. After ...b5 opens lines, it becomes a devastating weapon on the a1-h8 diagonal, targeting a1 and d4."
+      }
+    ],
+    "strategicThemes": [
+      "The Benoni is Dubov's perfect opening — dynamic, unbalanced, and rewarding creativity.",
+      "The ...b5 break is essential. Without it, Black is cramped and White's central advantage grows.",
+      "The Bg7 is the most important piece. Every plan should activate it or use its long diagonal pressure.",
+      "Dubov's Benoni timing is precise — he plays ...b5 when it creates maximum impact, not a tempo too early or late."
+    ],
+    "endgameTransitions": [
+      "After ...b5 and exchanges, the Bg7 dominates endgames. Its long-range power controls the entire board.",
+      "The Benoni's queenside majority (a and b pawns) can create a passed pawn in endgames — Black's main winning asset."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-benoni-f5",
+    "openingId": "pro-dubov-benoni",
+    "criticalPositionFen": "r1bqr1k1/ppn02pbp/3p1np1/2pP4/4P3/2N02P02/PP1NB1PP/R1BQ1RK1 w - - 1 12",
+    "title": "f5 Kingside Counterplay",
+    "overview": "The ...f5 break is the Benoni's aggressive alternative. Instead of the queenside, Black strikes at the kingside by challenging e4. After ...f5 exf5 gxf5, the g-file opens for the rook and the Bg7's diagonal opens further. Dubov uses this when the queenside is blocked.",
+    "pawnBreaks": [
+      {
+        "move": "f7-f5",
+        "explanation": "The kingside challenge. After exf5 gxf5, Black gets the g-file and f-file for the rooks. The Bg7 becomes a monster and the position becomes very sharp — exactly Dubov's style.",
+        "fen": "r1bqr1k1/ppn02pbp/3p1np1/2pP4/4P3/2N02P02/PP1NB1PP/R1BQ1RK1 w - - 1 12"
+      },
+      {
+        "move": "e7-e6 (after ...f5)",
+        "explanation": "Following ...f5, ...e6 undermines the d5 pawn. After dxe6, the position opens completely and Black's pieces are better coordinated for the resulting tactical battle.",
+        "fen": "r1bqr1k1/ppn02pbp/3p1np1/2pP4/4P3/2N02P02/PP1NB1PP/R1BQ1RK1 w - - 1 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "...Rf8 (after ...f5 exf5 gxf5)",
+        "explanation": "The Rf8 is already on the semi-open f-file after ...f5 exf5 gxf5. Combined with ...Bg4 or ...Bd7, it pressures f3 and White's kingside."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nf6-h5 or ...Nf6-g4",
+        "explanation": "...Nh5 targets f4 and g3 — key attacking squares. ...Ng4 directly attacks f2 and e3. Both moves add pieces to the kingside attack."
+      }
+    ],
+    "strategicThemes": [
+      "The ...f5 break opens the position dynamically. Dubov thrives in open, tactical positions where his calculation shines.",
+      "After ...f5, the g-file becomes a weapon. Combined with ...Nh5 or ...Bg4, it creates mating threats.",
+      "The Benoni's flexibility between ...b5 (queenside) and ...f5 (kingside) keeps White guessing.",
+      "Dubov's fearless approach to the Benoni means he plays the most aggressive option available, regardless of the risks."
+    ],
+    "endgameTransitions": [
+      "After ...f5 and piece exchanges, the open files give Black's rooks lasting activity.",
+      "The Bg7 in an endgame with open diagonals is devastating. It controls the entire board from the long diagonal."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-scotch-Bh4",
+    "openingId": "pro-dubov-scotch",
+    "criticalPositionFen": "r1bqr1k1/p4pp1/2pb1n1p/3p4/7B/2NB1Q2/PPP2PPP/4RRK1 w - - 2 14",
+    "title": "Dark-Square Pressure with Bh4",
+    "overview": "Dubov's Scotch reaches a sharp position with the Bh4 pinning or pressuring the f6 knight, the Bd3 targeting h7, and the Qf3 centralized. White's plan is to exploit the dark-square weaknesses around Black's king (h6 is played, weakening g5/g6). The double bishop attack (Bd3+Bh4) plus Qf3 creates a powerful attacking formation.",
+    "pawnBreaks": [
+      {
+        "move": "e4 (via f2-e3-e4 or directly)",
+        "explanation": "e4 challenges the d5 pawn. If Black takes ...dxe4 Bxe4, the bishop centralizes with tempo and the position opens for White's active pieces.",
+        "fen": "r1bqr1k1/p4pp1/2pb1n1p/3p4/7B/2NB1Q02/PPP02PPP/4RRK1 w - - 2 14"
+      },
+      {
+        "move": "f2-f4",
+        "explanation": "f4 gains kingside space and supports e5. After f4 and e5, the Nf6 is driven away and White's pieces dominate the center and kingside.",
+        "fen": "r1bqr1k1/p4pp1/2pb1n1p/3p4/7B/2NB1Q02/PPP02PPP/4RRK1 w - - 2 14"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-e4 (centralization)",
+        "explanation": "Ne4 is a powerful centralization. It attacks c5, d6, f6, and g5. Combined with Bd3 and Bh4, it creates overwhelming pressure on Black's position."
+      },
+      {
+        "piece": "Rook",
+        "route": "Re1-e3 (rook lift)",
+        "explanation": "Re3 prepares the rook lift to g3 or h3, adding a heavy piece to the kingside attack. This is the classic Scotch Game attacking technique."
+      }
+    ],
+    "strategicThemes": [
+      "Dubov's Scotch features the aggressive bishop pair (Bd3+Bh4) which creates dual-color pressure on Black's kingside.",
+      "The h6 pawn weakens the dark squares permanently. Dubov targets g5, h6, and f6 with his dark-squared bishop and queen.",
+      "The Qf3+Bd3 duo on the b1-h7 diagonal creates latent Bxh7+ sacrifice threats. Black must always be vigilant.",
+      "Dubov's creative approach to the Scotch turns a theoretically quiet opening into a sharp tactical battle."
+    ],
+    "endgameTransitions": [
+      "The bishop pair advantage persists in endgames. After exchanges, the two bishops control all the squares.",
+      "If the attack wins material, any endgame is trivially won. The bishop pair accelerates conversion."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-scotch-Ne4",
+    "openingId": "pro-dubov-scotch",
+    "criticalPositionFen": "r1bqr1k1/p4pp1/2pb1n1p/3p4/7B/2NB1Q02/PPP02PPP/4RRK1 w - - 2 14",
+    "title": "Ne4 Central Dominance",
+    "overview": "The knight jumps to e4, centralizing with maximum impact. From e4, it attacks d6, f6, c5, and g5, creating multiple threats. Combined with the Bh4 and Bd3, the centralized knight makes Black's position very difficult to hold. Dubov loves these positions where every piece contributes to the attack.",
+    "pawnBreaks": [
+      {
+        "move": "g2-g4",
+        "explanation": "After Ne4, g4 prepares g5, driving the Nf6 from its defensive post. With the Bh4 supporting g5 and the Ne4 attacking f6, the kingside caves in.",
+        "fen": "r1bqr1k1/p4pp1/02pb1n1p/3p4/7B/02NB1Q02/PPP02PPP/4RRK1 w - - 2 14"
+      },
+      {
+        "move": "c2-c4",
+        "explanation": "A positional alternative: c4 challenges d5 and opens the c-file. After ...dxc4 Bxc4, the bishop is actively placed and the Nc3 can jump to d5.",
+        "fen": "r1bqr1k1/p4pp1/02pb1n1p/3p4/7B/02NB1Q02/PPP02PPP/4RRK1 w - - 2 14"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-e4-g5 (attacking f7)",
+        "explanation": "Ne4-g5 creates a devastating attack on f7. Combined with Bd3 and Qf3, the trio targets f7 from three directions — creating an inescapable net."
+      },
+      {
+        "piece": "Rook",
+        "route": "Rf1-e1-e3 (rook swing)",
+        "explanation": "The rook activates via e1-e3, ready to swing to g3 or h3. Adding a rook to the attack while maintaining the back rank is key."
+      }
+    ],
+    "strategicThemes": [
+      "The Ne4 is the most dangerous piece in the position. It controls everything and can jump to g5 for the kill.",
+      "Dubov's Scotch is deceptively dangerous. It looks like a quiet opening but his piece play creates sharp attacking chances.",
+      "The bishop pair + centralized knight create an overwhelming force. Black can't defend all the weak squares.",
+      "Timing the Ne4-g5 jump is critical. Dubov waits for the perfect moment when Black can't defend f7 adequately."
+    ],
+    "endgameTransitions": [
+      "If Ne4-g5 wins material (often the f7 pawn), the resulting position is winning. The extra pawn plus active pieces convert easily.",
+      "Even if the attack is repelled, Ne4 gives White lasting pressure. The centralized knight dominates in all phases."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-dutch-e5",
+    "openingId": "pro-dubov-dutch",
+    "criticalPositionFen": "r1bq1r1k/pp02p1bp/2p02np1/3P1p02/2P5/1QN1BBP1/PP02P02P/R4RK1 w - - 0 14",
+    "title": "Central ...e5 Break",
+    "overview": "Dubov's Dutch reaches a Leningrad-type position with ...f5 and the fianchettoed Bg7. The plan is ...e5 to challenge White's center and activate the Bg7 on the long diagonal. After ...e5 dxe6 (en passant doesn't apply here — the d5 pawn already advanced), the center opens and Black's pieces come alive.",
+    "pawnBreaks": [
+      {
+        "move": "e7-e5",
+        "explanation": "The key central break. ...e5 challenges the d5 pawn and activates the Bg7. If dxe6, Black gets open lines and active piece play. If White ignores it, ...e4 gains kingside space.",
+        "fen": "r1bq1r1k/pp02p1bp/2p02np1/3P1p02/2P5/1QN1BBP1/PP02P02P/R4RK1 w - - 0 14"
+      },
+      {
+        "move": "c6xd5",
+        "explanation": "Recapturing on d5 opens the c-file for Black's rook and creates an active center. After ...cxd5 cxd5, the position is open and Black's pieces are well-placed.",
+        "fen": "r1bq1r1k/pp02p1bp/2p02np1/3P1p02/2P5/1QN1BBP1/PP02P02P/R4RK1 w - - 0 14"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bg7 dominates long diagonal",
+        "explanation": "After ...e5 opens the center, the Bg7 becomes the strongest piece on the board. It controls d4, c3, b2, and the entire a1-h8 diagonal."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nf6-e4 or ...Nf6-g4",
+        "explanation": "...Ne4 centralizes powerfully, attacking d2, c3, and f2. ...Ng4 attacks e3 and f2, creating tactical threats against White's kingside."
+      }
+    ],
+    "strategicThemes": [
+      "The Dutch is Dubov's surprise weapon. The ...f5+Bg7 setup creates an unbalanced, fighting position that suits his style.",
+      "The ...e5 break is essential to avoid being cramped. Without it, White's center dominates and Black suffers.",
+      "The Bg7 on the long diagonal is the Leningrad Dutch's best piece. Every plan should aim to activate it fully.",
+      "Dubov's Dutch is about creating chaos. The unbalanced pawn structure and piece play create winning chances for both sides."
+    ],
+    "endgameTransitions": [
+      "After ...e5 and exchanges, the Bg7 dominates endgames. Its control of the long diagonal is a lasting advantage.",
+      "The Dutch's kingside pawn majority (...f5+e5) can create a passed pawn in endgames — Black's main winning try."
+    ]
+  },
+  {
+    "id": "mp-pro-dubov-dutch-f4",
+    "openingId": "pro-dubov-dutch",
+    "criticalPositionFen": "r1bq1r1k/pp02p1bp/2p02np1/3P1p02/2P5/1QN1BBP1/PP02P02P/R4RK1 w - - 0 14",
+    "title": "f5-f4 Kingside Expansion",
+    "overview": "Instead of the central ...e5, Dubov can push ...f4 to gain kingside space and attack. The ...f4 advance pushes back the Be3, opens the f-file for the rook, and prepares ...g5 for a full kingside pawn storm. This is the aggressive Dutch approach — direct kingside play.",
+    "pawnBreaks": [
+      {
+        "move": "f5-f4",
+        "explanation": "Gains kingside space and drives back the Be3. After ...f4, the f-file opens for the rook and the ...g5 advance follows. The Bg7 supports the attack from the long diagonal.",
+        "fen": "r1bq1r1k/pp02p1bp/2p02np1/3P1p02/2P5/1QN1BBP1/PP02P02P/R4RK1 w - - 0 14"
+      },
+      {
+        "move": "g6-g5",
+        "explanation": "After ...f4, ...g5 extends the kingside pawn storm. The pawns march forward while the Bg7 provides cover. Combined with ...Ng4 or ...Nh5, it creates mating threats.",
+        "fen": "r1bq1r1k/pp02p1bp/2p02np1/3P1p02/2P5/1QN1BBP1/PP02P02P/R4RK1 w - - 0 14"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "...Qd8-e8-h5",
+        "explanation": "The queen reroutes to the kingside. ...Qe8 prepares ...Qh5, and from h5 the queen combines with ...Ng4 and ...Rf6-h6 for mating threats."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Rf8-f6-h6 (rook lift)",
+        "explanation": "The rook lifts to f6 then h6, adding a heavy piece to the kingside attack. Combined with the queen on h5, it creates devastating threats on the h-file."
+      }
+    ],
+    "strategicThemes": [
+      "The ...f4+g5 pawn storm is the Leningrad Dutch's most aggressive plan. Dubov plays this with characteristic fearlessness.",
+      "The Kh8 is safely tucked away while the pawns storm forward. The rook lift Rf6-h6 is a classic attacking technique.",
+      "The Bg7 on the long diagonal provides support from the rear — it controls d4 and prevents White from striking back in the center.",
+      "Dubov's Dutch attacks are calculated chaos. He creates positions where his tactical vision gives him an edge."
+    ],
+    "endgameTransitions": [
+      "The kingside attack should be decisive. If it wins material, any endgame is trivially winning.",
+      "If the attack stalls, the advanced f4 pawn can become a weakness. This plan requires full commitment."
+    ]
   }
 ]
