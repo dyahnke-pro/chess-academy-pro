@@ -5913,5 +5913,661 @@
       "A passed d5 pawn in an endgame is a decisive advantage. It advances with support from the Bg2 and becomes a queen.",
       "If the Nd5 is traded and the d5 pawn advances, Black's pieces become passive blockaders — exactly what White wants in an endgame."
     ]
+  },
+  {
+    "id": "mp-pro-caruana-ruylopez-d4",
+    "openingId": "pro-caruana-ruy-lopez",
+    "criticalPositionFen": "r1b2rk1/5ppp/p1pb4/1p1n4/3P4/1BP3Pq/PP3P1P/RNBQR1K1 w - - 1 15",
+    "title": "Central Control and Piece Coordination",
+    "overview": "Caruana's Anti-Marshall reaches a sharp position where Black has an active queen on h3 but White has the central d4 pawn and better piece coordination. The plan is to develop rapidly with Nd2, Be3, and use the central advantage to generate counterplay. The Bb3 targets f7, and once pieces are coordinated, White's central control becomes decisive.",
+    "pawnBreaks": [
+      {
+        "move": "f2-f4",
+        "explanation": "f4 drives back the Bd6 and opens the f-file for the rook. After f4, the Re1 can swing to f1 or the f-file becomes a weapon. It also supports a potential e5 advance.",
+        "fen": "r1b2rk1/5ppp/p1pb4/1p1n4/3P4/1BP3Pq/PP3P1P/RNBQR1K1 w - - 1 15"
+      },
+      {
+        "move": "c3-c4",
+        "explanation": "c4 challenges the Nd5 and gains central space. After ...bxc4 Bxc4, White's bishop is actively placed and the b-file opens for the rook. The centralized bishop pair becomes very strong.",
+        "fen": "r1b2rk1/5ppp/p1pb4/1p1n4/3P4/1BP3Pq/PP3P1P/RNBQR1K1 w - - 1 15"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-f3 or Nb1-d2-e4",
+        "explanation": "The knight develops to d2 then f3 (defending h2 and supporting d4) or e4 (centralizing powerfully). The Ne4 is particularly strong as it attacks c5, d6, and f6."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-e3 supporting d4",
+        "explanation": "Be3 develops and solidifies the d4 pawn. It also prevents ...Nf4 ideas and controls the a7-g1 diagonal. Simple, effective development."
+      }
+    ],
+    "strategicThemes": [
+      "Black's Qh3 looks aggressive but is actually somewhat misplaced — it's far from the center and can become trapped. White should develop calmly and not panic.",
+      "Caruana's approach is precise calculation over flashy attacks. He develops pieces to optimal squares and lets the position's logic work.",
+      "The d4 pawn is White's central anchor. Combined with the Bb3 and developing pieces, it gives White a natural advantage.",
+      "White's piece coordination (Nd2, Be3, Bb3, Re1) creates a harmonious setup that outperforms Black's scattered pieces."
+    ],
+    "endgameTransitions": [
+      "If queens are traded, White's better structure and centralized pieces give a lasting endgame advantage.",
+      "The bishop pair in an open position is White's key endgame asset. Keep both bishops active for maximum impact."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-ruylopez-Nd2",
+    "openingId": "pro-caruana-ruy-lopez",
+    "criticalPositionFen": "r1b2rk1/5ppp/p1pb4/1p1n4/3P4/1BP3Pq/PP3P1P/RNBQR1K1 w - - 1 15",
+    "title": "Rapid Development with Nd2-f3",
+    "overview": "The immediate priority is Nd2-f3, getting the knight to a useful square while defending h2 from the queen's pressure. Once Nf3 is achieved, White's position is completely harmonious and the queen on h3 has nothing to attack. Then White can focus on exploiting the central advantage.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "After developing, d5 closes the center and gains space. It also restricts the Bd6 and fixes targets on c6. White then plays on the queenside with a4 to undermine Black's b5 pawn.",
+        "fen": "r1b2rk1/5ppp/p1pb4/1p1n4/3P4/1BP3Pq/PP3P1P/RNBQR1K1 w - - 1 15"
+      },
+      {
+        "move": "a2-a4",
+        "explanation": "a4 attacks b5 on the queenside, creating structural tension. After axb5 axb5, the a-file opens for White's rook and b5 becomes a permanent weakness.",
+        "fen": "r1b2rk1/5ppp/p1pb4/1p1n4/3P4/1BP3Pq/PP3P1P/RNBQR1K1 w - - 1 15"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-f3 (defend h2, centralize)",
+        "explanation": "Nf3 is the key move. It defends h2, controls e5 and d4, and prepares to jump to g5 or e5 in some lines. Once Nf3 is in, White's position is stable."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-d3 or Qd1-f3",
+        "explanation": "After the knight reaches its destination, the queen can centralize. Qd3 targets h7 via the b1-h7 diagonal, and Qf3 controls the center and supports e4 or d5."
+      }
+    ],
+    "strategicThemes": [
+      "Caruana's philosophy: solve the immediate problem (Qh3 pressure) then exploit the strategic advantage (central control).",
+      "The Nd5 is Black's best piece. Challenge it with c4 or trade it to simplify into a favorable position.",
+      "Don't rush — Black's Qh3 is uncomfortable but not dangerous if White develops correctly. Panic moves create real weaknesses.",
+      "White's position is fundamentally better: more central space, better bishop (Bb3), and better pawn structure."
+    ],
+    "endgameTransitions": [
+      "Trading queens removes all of Black's attacking chances and leaves White with a pleasant structural advantage.",
+      "After c4 and exchanges, an endgame with bishop pair vs knight+bishop heavily favors White in this open position."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-italian-IQP",
+    "openingId": "pro-caruana-italian",
+    "criticalPositionFen": "r1bq1rk1/pp2nppp/2p5/3n4/2BP4/1Q3N2/PP1N1PPP/R3R1K1 w - - 0 13",
+    "title": "IQP Dynamic Play",
+    "overview": "Caruana's Giuoco Piano reaches a classic IQP (isolated queen pawn) position. White's d4 pawn is isolated but provides active piece play — the Bc4 targets f7, the Qb3 adds queenside and central pressure, and the knights can reach e4 or e5. The plan is to keep pieces active and use the IQP as a dynamic asset, not let it become a static weakness.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "The IQP's signature advance. When timed correctly, d5 blows open the center and creates a passed pawn. After d5 cxd5 Bxd5, the bishop dominates the center. Caruana calculates this precisely.",
+        "fen": "r1bq1rk1/pp2nppp/2p5/3n4/2BP4/1Q3N2/PP1N1PPP/R3R1K1 w - - 0 13"
+      },
+      {
+        "move": "e2-e4 (kicking Nd5)",
+        "explanation": "e4 kicks the Nd5 and creates a powerful e4+d4 center. After ...Nb4 or ...Nf6, the central pawns dominate and White's pieces gain scope.",
+        "fen": "r1bq1rk1/pp2nppp/2p5/3n4/2BP4/1Q3N2/PP1N1PPP/R3R1K1 w - - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nd2-e4 (dominant centralization)",
+        "explanation": "Ne4 is the dream square — it attacks d6, c5, f6, and g5. Combined with Bc4 and Qb3, it creates an attacking formation that's hard to handle. This is the IQP player's best maneuver."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nf3-e5 (central outpost)",
+        "explanation": "Ne5 is another powerful centralization. It attacks c6, d7, f7, and g4, creating multiple threats. In IQP positions, centralized knights compensate for the isolated pawn."
+      }
+    ],
+    "strategicThemes": [
+      "The IQP is a dynamic asset when pieces are active. Caruana never lets it become a liability — he keeps the initiative with precise play.",
+      "The Bc4+Qb3 battery creates pressure on f7 and b7 simultaneously. This double threat is hard to defend.",
+      "Black's Nd5 is the key blockader. If White can force it away (with e4 or a trade), the IQP becomes a dangerous passed pawn.",
+      "Caruana's IQP play is the most precise in the world. Every piece serves a purpose, and the d5 advance is timed perfectly."
+    ],
+    "endgameTransitions": [
+      "Avoid pure endgames where the IQP becomes a weakness. Keep at least queens and one pair of rooks on for attacking potential.",
+      "If d5 creates a passed pawn, even endgames can be favorable — the passed pawn ties down Black's pieces to blockading."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-italian-kside",
+    "openingId": "pro-caruana-italian",
+    "criticalPositionFen": "r1bq1rk1/pp2nppp/2p5/3n4/2BP4/1Q3N2/PP1N1PPP/R3R1K1 w - - 0 13",
+    "title": "Kingside Initiative with Ne4-g5",
+    "overview": "Caruana's Italian often features a direct kingside attack using the Ne4-g5 maneuver combined with the Bc4+Qb3 pressure on f7. The idea is to create concrete threats against Black's king while the IQP provides central control. This is one of the most dangerous attacking formations in chess.",
+    "pawnBreaks": [
+      {
+        "move": "h2-h4",
+        "explanation": "h4 supports Ng5 by preventing ...h6. After Ne4-g5, Black can't play ...h6 safely as the h4 pawn supports the knight. It also opens the h-file potential for the rook.",
+        "fen": "r1bq1rk1/pp2nppp/2p5/3n4/2BP4/1Q3N2/PP1N1PPP/R3R1K1 w - - 0 13"
+      },
+      {
+        "move": "f2-f4",
+        "explanation": "f4 supports Ne4 and controls e5. After f4, the knight on e4 is rock-solid and the f4 pawn prepares f5, which would be devastating against Black's kingside.",
+        "fen": "r1bq1rk1/pp2nppp/2p5/3n4/2BP4/1Q3N2/PP1N1PPP/R3R1K1 w - - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Ne4-g5 (threatening Nxf7)",
+        "explanation": "The classic IQP attacking maneuver. Ng5 threatens Nxf7 with a fork. If Black defends with ...h6, Nxf7 is still a possibility and h6 weakens the king shelter permanently."
+      },
+      {
+        "piece": "Rook",
+        "route": "Re1-e3-h3 (rook lift)",
+        "explanation": "The rook swings via e3 to h3, adding a heavy piece to the kingside attack. Combined with Ng5, Bc4, and Qb3, it creates irresistible threats."
+      }
+    ],
+    "strategicThemes": [
+      "The Bc4+Qb3+Ne4 trio targeting f7 is one of the most dangerous formations in the Italian Game.",
+      "Caruana's attacks are calculated, not speculative. He only launches the attack when concrete winning sequences exist.",
+      "The IQP provides central control that supports the kingside attack. Without d4, the pieces couldn't be centralized as effectively.",
+      "Every tempo matters in the attack. Develop pieces to their ideal squares before launching the assault."
+    ],
+    "endgameTransitions": [
+      "The attack should win material or force a decisive advantage. If it does simplify, captured material makes the endgame trivial.",
+      "Keep heavy pieces on the board as long as possible. The attacking potential of queen + rooks compensates for any structural weaknesses."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-antiberlin-f4",
+    "openingId": "pro-caruana-anti-berlin",
+    "criticalPositionFen": "2kr3r/pppnq1pp/2pbbp2/4p3/4P2N/1N1PB3/PPP2PPP/R2Q1RK1 w - - 2 12",
+    "title": "f4 Central Break vs Castled Queenside",
+    "overview": "Caruana's Anti-Berlin avoids the Berlin endgame and creates a position where Black has castled queenside. The Nh4 eyes f5, the Nb3 controls c5 and d4, and the Be3 supports the center. White's plan is f4 to challenge Black's e5 pawn and open lines, exploiting the fact that both kings are on opposite wings for a sharp tactical battle.",
+    "pawnBreaks": [
+      {
+        "move": "f2-f4",
+        "explanation": "f4 attacks e5 and opens the f-file. After fxe5 fxe5, the f-file opens for White's rook aimed at f7. If Black takes ...exf4 Bxf4, White's dark-squared bishop becomes dominant.",
+        "fen": "2kr3r/pppnq1pp/2pbbp2/4p3/4P2N/1N1PB3/PPP2PPP/R2Q1RK1 w - - 2 12"
+      },
+      {
+        "move": "c2-c4",
+        "explanation": "c4 gains queenside space and supports a future d4 break. It also restricts Black's pieces and prepares Nc5 via Na4.",
+        "fen": "2kr3r/pppnq1pp/2pbbp2/4p3/4P2N/1N1PB3/PPP2PPP/R2Q1RK1 w - - 2 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nh4-f5 (dominant outpost)",
+        "explanation": "Nf5 is the dream square. It attacks d6, e7, g7, and can't be dislodged easily. The Nf5 combined with Be3 and the central pawns creates overwhelming pressure."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-f3 or Qd1-g4",
+        "explanation": "Qf3 supports f4 and eyes the f-file and a8-h1 diagonal. Qg4 targets g7 and creates direct threats against Black's castled king."
+      }
+    ],
+    "strategicThemes": [
+      "Opposite-side castling creates a race situation. White attacks the queenside, but actually f4 is attacking BLACK's center, not directly the king.",
+      "The Nf5 outpost is White's strategic goal. Once achieved, the knight dominates and supports all attacking plans.",
+      "Black's doubled c-pawns (c6+c7) are structural weaknesses. After c4 and opening lines, these become targets.",
+      "Caruana's Anti-Berlin is a deep strategic weapon — it avoids the Berlin endgame and creates positions where his calculation dominates."
+    ],
+    "endgameTransitions": [
+      "If the attack leads to exchanges, White's better structure (no doubled pawns) gives a lasting endgame advantage.",
+      "The Nf5 in an endgame dominates — it attacks both flanks and can't be challenged by Black's pawns."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-antiberlin-Nf5",
+    "openingId": "pro-caruana-anti-berlin",
+    "criticalPositionFen": "2kr3r/pppnq1pp/2pbbp2/4p3/4P2N/1N1PB3/PPP2PPP/R2Q1RK1 w - - 2 12",
+    "title": "Nf5 Outpost and Positional Squeeze",
+    "overview": "Rather than the direct f4, White can play for a slower positional squeeze. The Nh4 goes to f5, establishing a permanent outpost. Then White builds pressure with a4, c4, and slow piece improvement. Caruana's patience in these positions is legendary — he improves every piece before striking.",
+    "pawnBreaks": [
+      {
+        "move": "a2-a4",
+        "explanation": "a4 gains queenside space and prepares a5, creating pressure against b7 and c6. Since Black castled queenside, this advance also has direct attacking implications.",
+        "fen": "2kr3r/pppnq1pp/2pbbp2/4p3/4P2N/1N1PB3/PPP2PPP/R2Q1RK1 w - - 2 12"
+      },
+      {
+        "move": "d3-d4",
+        "explanation": "After Nf5, d4 challenges the center. If exd4 Nxd4 or Bxd4, White's pieces pour into the center. The Nf5+Bd4 duo is devastating.",
+        "fen": "2kr3r/pppnq1pp/2pbbp2/4p3/4P2N/1N1PB3/PPP2PPP/R2Q1RK1 w - - 2 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nh4-f5 then stays permanently",
+        "explanation": "Nf5 is permanent — Black can't easily remove it. The knight pressures d6, e7, g7, and h6 from f5, making it the most powerful piece on the board."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nb3-a5 targeting c6/b7",
+        "explanation": "Na5 puts the second knight on an aggressive square targeting c6 and b7. With two knights on active squares (f5+a5), White's piece pressure is overwhelming."
+      }
+    ],
+    "strategicThemes": [
+      "Two powerful knights (Nf5+Na5) create problems everywhere. Black can't defend all the weak squares simultaneously.",
+      "Caruana's positional squeeze is more dangerous than a direct attack. He improves pieces methodically until the position collapses.",
+      "Black's castled queenside is normally safe, but with White's Na5 targeting b7 and Nf5 dominating, the king becomes exposed.",
+      "The anti-Berlin gives Caruana exactly the positions he wants: complex, strategic, and requiring deep calculation."
+    ],
+    "endgameTransitions": [
+      "The Nf5 persists into endgames as a dominant piece. It controls both flanks and gives White a lasting advantage.",
+      "Piece exchanges favor White when the knights are better placed. Every trade highlights Black's structural weaknesses."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-petroff-d5",
+    "openingId": "pro-caruana-petroff",
+    "criticalPositionFen": "r2q1rk1/ppp1bppp/2n5/3p1b2/2PP4/P1P2N2/4BPPP/R1BQ1RK1 w - - 1 13",
+    "title": "Solid ...d5 Center and Piece Activity",
+    "overview": "Caruana's Petroff reaches a solid position where Black has a rock-solid d5 pawn and the active Bf5. White has the c4+d4 center but Black's pieces are well-placed to neutralize it. The plan is to maintain the solid center, activate pieces, and wait for White to overextend. The Petroff is about equality first, then exploiting inaccuracies.",
+    "pawnBreaks": [
+      {
+        "move": "d5xc4",
+        "explanation": "Trading ...dxc4 Bxc4 opens lines and simplifies. Black gets easy development and White's IQP (d4) can become a target. Caruana uses this when the timing neutralizes White's initiative.",
+        "fen": "r2q1rk1/ppp1bppp/2n5/3p1b2/2PP4/P1P2N2/4BPPP/R1BQ1RK1 w - - 1 13"
+      },
+      {
+        "move": "e7-e6 (supporting d5)",
+        "explanation": "If the bishop retreats from f5, ...e6 creates a rock-solid d5+e6 pawn chain. This gives Black an impregnable center and lets the pieces maneuver freely behind it.",
+        "fen": "r2q1rk1/ppp1bppp/2n5/3p1b2/2PP4/P1P2N2/4BPPP/R1BQ1RK1 w - - 1 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf5 stays active (controls b1-h7)",
+        "explanation": "The Bf5 is Black's best piece. It controls the b1-h7 diagonal, prevents Qb3 ideas, and supports the d5 pawn. Keep it active at all costs."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nc6-b4 or ...Nc6-a5",
+        "explanation": "The knight targets c2 via b4 or pressures c4 from a5. Both squares create annoying threats that tie down White's pieces to defense."
+      }
+    ],
+    "strategicThemes": [
+      "The Petroff is about rock-solid defense first, then exploiting White's overextension. Caruana is the master of this style.",
+      "The Bf5 is the key piece. It prevents White from playing comfortably and controls critical light squares.",
+      "Black's position has no weaknesses. The d5 pawn is solid, the pieces are well-placed, and there are no targets for White to attack.",
+      "Patience is essential. The Petroff rewards the defender — White has to work hard just to maintain equality, let alone create an advantage."
+    ],
+    "endgameTransitions": [
+      "The Petroff is one of the best openings for endgames. Black's solid structure and active pieces give excellent drawing chances at minimum, often winning chances.",
+      "After ...dxc4 and simplification, the resulting positions are typically level or slightly better for Black due to the active Bf5."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-petroff-Nc6",
+    "openingId": "pro-caruana-petroff",
+    "criticalPositionFen": "r2q1rk1/ppp1bppp/2n5/3p1b2/2PP4/P1P2N2/4BPPP/R1BQ1RK1 w - - 1 13",
+    "title": "Knight Activity and IQP Targeting",
+    "overview": "Black's Nc6 pressures d4 and prepares active play. If White plays cxd5, ...Nxd5 gives Black a centralized knight. If White maintains c4, the Nc6 can shift to b4 or a5 to target weak squares. Caruana's Petroff is about making White's life difficult with precise piece play.",
+    "pawnBreaks": [
+      {
+        "move": "c7-c5",
+        "explanation": "A more aggressive approach: ...c5 challenges d4 directly. After ...c5 dxc5 Bxc5, Black has active pieces and open lines. The resulting position is dynamic and suits Caruana's style.",
+        "fen": "r2q1rk1/ppp1bppp/2n5/3p1b2/2PP4/P1P2N2/4BPPP/R1BQ1RK1 w - - 1 13"
+      },
+      {
+        "move": "b7-b6",
+        "explanation": "A quiet but effective move. ...b6 prepares ...Bb7 or ...Ba6, adding another piece to the queenside. It also supports ...c5 in the future.",
+        "fen": "r2q1rk1/ppp1bppp/2n5/3p1b2/2PP4/P1P2N2/4BPPP/R1BQ1RK1 w - - 1 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "...Rf8-d8 (pressure on d4)",
+        "explanation": "...Rd8 targets the d4 pawn, adding another attacker. Combined with Nc6 and Bf5, it creates triple pressure on d4 which can become a real weakness."
+      },
+      {
+        "piece": "Queen",
+        "route": "...Qd8-d7 or ...Qd8-c8",
+        "explanation": "...Qd7 connects the rooks and supports ...Rd8 pressure. ...Qc8 prepares ...Ba6 exchanging light-squared bishops, which weakens White's position."
+      }
+    ],
+    "strategicThemes": [
+      "The Petroff rewards precise piece play over pawn pushes. Every piece should reach an optimal square before committing to structural changes.",
+      "The d4 pawn can become isolated after ...dxc4. Targeting it with pieces (Nc6, Rd8, Bf5) creates lasting pressure.",
+      "Caruana's Petroff is deceptively dangerous. It looks quiet but creates concrete problems that require precise calculation to solve.",
+      "Black's piece harmony (Bf5, Nc6, Be7, Rd8, Qd7) is the ideal setup. Once achieved, White struggles to find any advantage."
+    ],
+    "endgameTransitions": [
+      "Trading queens simplifies into comfortable endgames for Black. The Petroff structure has no weaknesses and Black's pieces are well-placed.",
+      "A knight endgame with a solid d5 pawn gives Black excellent chances. The centralized knight and solid structure are very hard to break down."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-qgd-Bb7",
+    "openingId": "pro-caruana-qgd",
+    "criticalPositionFen": "r1bq1rk1/4bppp/pp2pn2/2n5/P1B2B2/2N1PN2/1P3PPP/R2Q1RK1 w - - 0 12",
+    "title": "Piece Harmony with ...Bb7 and ...Nce4",
+    "overview": "Caruana's QGD features the active ...c5 exchange followed by ...dxc4, giving Black free piece play. The Nc5 is excellently placed, and the plan is to complete development with ...Bb7, putting the bishop on the long diagonal where it rakes from a8 to h1. Then ...Nce4 challenges the Nc3 and fights for central control. Black's position has no weaknesses and excellent piece activity.",
+    "pawnBreaks": [
+      {
+        "move": "b6-b5",
+        "explanation": "Once ...Bb7 is achieved, ...b5 challenges the a4 pawn and the Bc4. After axb5 axb5, Black gets an open a-file for the rook and the b5 pawn gains queenside space. The Bc4 must retreat, losing time.",
+        "fen": "r1bq1rk1/4bppp/pp2pn2/2n5/P1B2B2/2N1PN2/1P3PPP/R2Q1RK1 w - - 0 12"
+      },
+      {
+        "move": "e6-e5",
+        "explanation": "A central break that challenges the Bf4. After ...e5, the bishop must move and Black gains central space. The Nc5 supports this advance, and the position opens in Black's favor.",
+        "fen": "r1bq1rk1/4bppp/pp2pn2/2n5/P1B2B2/2N1PN2/1P3PPP/R2Q1RK1 w - - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-b7 (long diagonal activation)",
+        "explanation": "The Bb7 is the key development move. On b7 it controls the a8-h1 diagonal, supports ...b5, and pressures e4. Combined with the Nc5, it creates a harmonious position with no weaknesses."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nc5-e4 (central challenge)",
+        "explanation": "After ...Bb7, the Nc5 can jump to e4 challenging the Nc3. If Nxe4 Nxe4 or ...Bxe4, Black gets active central pieces. The Ne4 attacks d2, c3, f2, and g3."
+      }
+    ],
+    "strategicThemes": [
+      "Caruana's QGD approach exchanges pawns early to gain piece activity. The Nc5 and Bb7 give Black active play without structural weaknesses.",
+      "White's Bc4 is strong but can be challenged by ...b5 or by trading it off. Reducing White's bishop pair equalizes the position.",
+      "The a4 pawn fixes b5, but after ...b5 axb5 axb5, the open a-file benefits Black's rook. White's a4 push can backfire.",
+      "Black's position is fundamentally sound. No weaknesses, active pieces, and multiple plans — this is Caruana's comfort zone."
+    ],
+    "endgameTransitions": [
+      "The QGD with active pieces leads to comfortable endgames for Black. The Bb7 and centralized knights dominate in simplified positions.",
+      "After ...b5 and piece exchanges, Black's queenside majority can create a passed pawn — a real endgame asset."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-qgd-Nd5",
+    "openingId": "pro-caruana-qgd",
+    "criticalPositionFen": "r1bq1rk1/4bppp/pp2pn2/2n5/P1B2B2/2N1PN2/1P3PPP/R2Q1RK1 w - - 0 12",
+    "title": "Knight Centralization on d5",
+    "overview": "A more direct approach: Black plays ...Nfd5 or ...Ncd5 to challenge the Bf4 and seize the d5 outpost. The centralized knight dominates the position from d5, attacking c3, e3, b4, and f4. Caruana uses this when the position calls for immediate central action rather than slow development.",
+    "pawnBreaks": [
+      {
+        "move": "e6-e5 (after ...Nd5)",
+        "explanation": "After ...Nd5 Bg3, ...e5 gains central space. The pawn chain ...e5 with Nd5 creates a powerful central formation that restricts White's pieces. The Bf4 is driven back and Black dominates.",
+        "fen": "r1bq1rk1/4bppp/pp2pn2/2n5/P1B2B2/2N1PN2/1P3PPP/R2Q1RK1 w - - 0 12"
+      },
+      {
+        "move": "f7-f5",
+        "explanation": "A more ambitious choice after central consolidation. ...f5 gains kingside space and prepares ...f4, pushing back the Bf4/Bg3. This is rare but effective in certain setups where Caruana wants to play for a win.",
+        "fen": "r1bq1rk1/4bppp/pp2pn2/2n5/P1B2B2/2N1PN2/1P3PPP/R2Q1RK1 w - - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nf6-d5 (attacking Bf4)",
+        "explanation": "Nd5 attacks the Bf4, the most active White piece. If White trades Nxd5 exd5, Black gets an excellent bishop pair and central pawn majority. If the bishop retreats, the knight dominates."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Rf8-c8 or ...Ra8-c8",
+        "explanation": "A rook on c8 targets the c-file and pressures c3 (the Nc3). Combined with the Nd5 and Nc5, it creates maximum pressure on White's queenside."
+      }
+    ],
+    "strategicThemes": [
+      "The Nd5 is the classical equalizer in the QGD. It challenges White's best piece (Bf4) and controls the center.",
+      "If White trades Nxd5 exd5, Black gets the bishop pair which is excellent in the open position. The d5 pawn is also well-supported.",
+      "Caruana's QGD is about strategic simplicity: centralize, equalize, then press. The Nd5 achieves this efficiently.",
+      "Two active knights (Nc5+Nd5) create problems everywhere. White must trade at least one, and each trade helps Black."
+    ],
+    "endgameTransitions": [
+      "After Nxd5 exd5 and further trades, Black's bishop pair dominates in the endgame. Open diagonals favor the bishops.",
+      "A Nd5 vs bishop endgame is excellent for Black. The knight controls both flanks from its central perch."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-nimzo-c4",
+    "openingId": "pro-caruana-nimzo",
+    "criticalPositionFen": "r1b2rk1/pp3ppp/4pn2/q1n3B1/2p5/P1Q5/1P1NPPPP/3RKB1R w K - 0 12",
+    "title": "Hold the c4 Pawn and Consolidate",
+    "overview": "Caruana's Nimzo has won a pawn (c4) at the cost of the dark-squared bishop. Black's plan is to hold the extra pawn and consolidate. The Nc5 guards c4, the Qa5 is actively placed, and Black needs to develop ...Bd7 or ...b5 to secure the queenside. Once consolidated, the extra pawn becomes decisive.",
+    "pawnBreaks": [
+      {
+        "move": "b7-b5",
+        "explanation": "b5 supports the c4 pawn and gains queenside space. After ...b5, the c4 pawn is rock-solid and Black has a protected passed pawn on c4. This is the key structural move.",
+        "fen": "r1b2rk1/pp3ppp/4pn2/q1n3B1/2p5/P1Q5/1P1NPPPP/3RKB1R w K - 0 12"
+      },
+      {
+        "move": "a7-a5",
+        "explanation": "Secures the b5 advance and prevents any a4 ideas from White. After ...a5 and ...b5, Black's queenside pawn chain (a5-b5-c4) is unbreakable.",
+        "fen": "r1b2rk1/pp3ppp/4pn2/q1n3B1/2p5/P1Q5/1P1NPPPP/3RKB1R w K - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-d7 or ...Bc8-b7",
+        "explanation": "...Bd7 develops the last minor piece and prepares ...Bc6, controlling the a8-h1 diagonal. ...Bb7 is more aggressive, aiming directly at the long diagonal."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Rf8-d8 (challenge d-file)",
+        "explanation": "...Rd8 contests the d-file where White's Rd1 is active. Trading rooks reduces White's tactical potential and makes the extra pawn more significant."
+      }
+    ],
+    "strategicThemes": [
+      "The extra pawn is real compensation. Black should hold it unless trading it gains something more valuable (like full development or a dominant position).",
+      "White's Bg5 pins the Nf6 but after ...h6 Be3, Black has gained time and the bishop is less active on e3.",
+      "Caruana's approach: consolidate the material advantage, develop all pieces, and convert in the endgame. No need for heroics.",
+      "White's uncastled king and undeveloped Bf1 are real weaknesses. Black should keep the position tense to prevent White from consolidating."
+    ],
+    "endgameTransitions": [
+      "An endgame with an extra passed c-pawn is winning for Black. The c4 pawn ties down White's pieces and advances to promotion.",
+      "Every trade favors Black when up material. Simplify into an endgame where the extra pawn decides."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-nimzo-activity",
+    "openingId": "pro-caruana-nimzo",
+    "criticalPositionFen": "r1b2rk1/pp3ppp/4pn2/q1n3B1/2p5/P1Q5/1P1NPPPP/3RKB1R w K - 0 12",
+    "title": "Piece Activity Over Material",
+    "overview": "Rather than clinging to the c4 pawn, Caruana sometimes prioritizes maximum piece activity. The Nc5 is already powerful, and the Qa5 creates threats. The plan is to develop rapidly (...Bd7, ...Rd8, ...Rac8) and create so many threats that White can't exploit the structural issues from the missing dark-squared bishop.",
+    "pawnBreaks": [
+      {
+        "move": "e6-e5",
+        "explanation": "A bold central strike. ...e5 opens the diagonal for the Bc8 and gains central space. After e5, Black's pieces become very active and White's bishop pair is less effective with a closed center.",
+        "fen": "r1b2rk1/pp3ppp/4pn2/q1n3B1/2p5/P1Q5/1P1NPPPP/3RKB1R w K - 0 12"
+      },
+      {
+        "move": "h7-h6",
+        "explanation": "A practical move that challenges the Bg5 immediately. After ...h6 Bxf6 gxf6, Black has doubled f-pawns but the open g-file and active pieces compensate. Or if Bh4, Black plays ...g5 gaining kingside space.",
+        "fen": "r1b2rk1/pp3ppp/4pn2/q1n3B1/2p5/P1Q5/1P1NPPPP/3RKB1R w K - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nc5-d3+ (tactical strike)",
+        "explanation": "If White's king stays on e1, ...Nd3+ is a devastating fork. Even if it's not immediately available, the THREAT of ...Nd3+ restricts White's options and forces defensive moves."
+      },
+      {
+        "piece": "Queen",
+        "route": "...Qa5 creates pins and threats",
+        "explanation": "The Qa5 already pressures a3 and creates a potential pin along the a5-e1 diagonal if the Nd2 moves. It's perfectly placed and shouldn't move unless forced."
+      }
+    ],
+    "strategicThemes": [
+      "The Nimzo with ...Bxc3+ gives up the bishop pair but gains time and structural pressure. Caruana uses this dynamically.",
+      "White's king is stuck in the center — every open file and diagonal toward it becomes a weapon for Black.",
+      "The Nc5 is a monster piece: it defends c4, eyes d3 and e4, and supports queenside play. Don't trade it unless necessary.",
+      "Caruana's Nimzo balances material (c4 pawn) with activity (piece pressure). Both factors create problems for White simultaneously."
+    ],
+    "endgameTransitions": [
+      "Active pieces + extra pawn = winning endgame. Caruana aims to simplify once pieces are optimally placed.",
+      "Even if the c4 pawn is returned, Black's piece activity often gives a lasting edge in the resulting position."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-catalan-f4",
+    "openingId": "pro-caruana-catalan",
+    "criticalPositionFen": "r2q1rk1/1ppn1ppp/p1b1pn2/8/P1QP1P2/2N2N2/1P2PPBP/R4RK1 w - - 1 13",
+    "title": "f4 Central Expansion",
+    "overview": "Caruana's Catalan features an unusual f4 push, gaining kingside space and supporting e5 or d5 advances. The Bg2 controls the long diagonal, the Qc4 pressures the queenside, and the Nc3+Nf3 duo controls the center. The f4 pawn prepares a direct central breakthrough while the queenside is already under positional pressure.",
+    "pawnBreaks": [
+      {
+        "move": "e2-e4",
+        "explanation": "After f4, e4 creates a massive center. The d4+e4+f4 pawn trio dominates the board and cramps Black completely. The Bg2 activates fully on the long diagonal, and White's pieces have maximum scope.",
+        "fen": "r2q1rk1/1ppn1ppp/p1b1pn2/8/P1QP1P2/2N2N2/1P2PPBP/R4RK1 w - - 1 13"
+      },
+      {
+        "move": "f4-f5",
+        "explanation": "f5 attacks e6 and cracks open the kingside. After fxe6 fxe6, the e6 pawn is weak and the f-file opens for White's rook. The Bg2 also eyes the weakened light squares around Black's king.",
+        "fen": "r2q1rk1/1ppn1ppp/p1b1pn2/8/P1QP1P2/2N2N2/1P2PPBP/R4RK1 w - - 1 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5 or Nf3-e5",
+        "explanation": "Nd5 is crushing if achieved — it attacks c7, e7, and dominates the center. Ne5 is equally strong, centralizing the knight and threatening Nxc6 or Nxf7 in some lines."
+      },
+      {
+        "piece": "Rook",
+        "route": "Rf1-f3-h3 (rook lift for attack)",
+        "explanation": "After f4-f5 opens the kingside, the rook swings via f3 to h3, adding heavy piece pressure to the h-file. This rook lift is devastating when combined with the Bg2 and centralized pieces."
+      }
+    ],
+    "strategicThemes": [
+      "Caruana's Catalan with f4 is more aggressive than the traditional grinding approach. It aims for a direct central breakthrough.",
+      "The Bg2 is the position's powerhouse. Every advance (e4, f5, d5) opens its diagonal further and increases its power.",
+      "Black's Bc6 blocks the long diagonal but weakens the queenside. If it moves, the Bg2 becomes dominant.",
+      "The Nc3+Nf3+f4 setup creates a flexible attacking formation that can strike in the center (e4) or kingside (f5)."
+    ],
+    "endgameTransitions": [
+      "If the center opens after e4 or f5, exchanges lead to positions where the Bg2 dominates endgames.",
+      "The f4+d4 center gives White lasting space in endgames. The cramped Black pieces translate into passive defense."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-catalan-press",
+    "openingId": "pro-caruana-catalan",
+    "criticalPositionFen": "r2q1rk1/1ppn1ppp/p1b1pn2/8/P1QP1P2/2N2N2/1P2PPBP/R4RK1 w - - 1 13",
+    "title": "Positional Queenside Squeeze",
+    "overview": "The classic Catalan approach: slow positional pressure on the queenside using the Bg2, Qc4, and a4 pawn. Caruana combines this with the f4 push to control the entire board. The plan is to improve pieces, create targets, and wait for Black to crack under pressure.",
+    "pawnBreaks": [
+      {
+        "move": "a4-a5",
+        "explanation": "a5 fixes Black's queenside and creates targets on b6 and a6. It also restricts Black's pieces from expanding and clamps down on any counterplay.",
+        "fen": "r2q1rk1/1ppn1ppp/p1b1pn2/8/P1QP1P2/2N2N2/1P2PPBP/R4RK1 w - - 1 13"
+      },
+      {
+        "move": "d4-d5",
+        "explanation": "d5 breaks open the center at the ideal moment. After d5 exd5 Nxd5, the knight reaches d5 and the Bg2 opens fully. Black's position collapses from the combined central and diagonal pressure.",
+        "fen": "r2q1rk1/1ppn1ppp/p1b1pn2/8/P1QP1P2/2N2N2/1P2PPBP/R4RK1 w - - 1 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Ra1-d1 (d-file control)",
+        "explanation": "Rd1 controls the d-file and supports d5 when the time comes. It also pressures d7 indirectly and coordinates with the Qc4."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qc4-b3 or Qc4-e2",
+        "explanation": "Qb3 targets b7 and supports a5. Qe2 shifts to support e4 and the kingside. The queen's flexibility lets Caruana adapt to Black's defense."
+      }
+    ],
+    "strategicThemes": [
+      "Caruana's Catalan patience is legendary. He builds pressure on multiple fronts until the position is ready for a decisive break.",
+      "The Bg2+Qc4 duo creates persistent pressure on the c6-f3 diagonal and the a2-g8 diagonal. Black must always be vigilant.",
+      "The f4 pawn adds a kingside dimension to the Catalan. Black must defend both flanks, which is extremely difficult.",
+      "Every piece improvement adds to White's advantage. There's no rush — the position improves naturally with each move."
+    ],
+    "endgameTransitions": [
+      "The Catalan grinding style converts naturally into winning endgames. The Bg2 dominates in all phases of the game.",
+      "After d5 and exchanges, the resulting positions always favor White due to the Bg2's long-range power and Black's structural weaknesses."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-berlin-endgame",
+    "openingId": "pro-caruana-berlin",
+    "criticalPositionFen": "r3k2r/ppp1bpp1/2p1b2p/4Pn2/5B2/2N2N1P/PPP2PP1/3R1RK1 w - - 0 13",
+    "title": "Endgame Technique with Active Pieces",
+    "overview": "Caruana's Berlin is the ultimate endgame weapon. Queens are off, but Black's pieces are actively placed — the Nf5, Be6, and Be7 all serve clear purposes. Caruana's plan is methodical: contest the d-file with ...Rd8, walk the king to safety, and use the active pieces to create targets in White's position. The doubled c-pawns are a minor concern when piece activity is so strong.",
+    "pawnBreaks": [
+      {
+        "move": "c6-c5",
+        "explanation": "The key structural repair. ...c5 undoubles the pawns and challenges the center. After ...c5, Black's pawn structure is healthy and the position simplifies in Black's favor. Caruana times this precisely.",
+        "fen": "r3k2r/ppp1bpp1/2p1b2p/4Pn2/5B2/2N2N1P/PPP2PP1/3R1RK1 w - - 0 13"
+      },
+      {
+        "move": "f7-f6",
+        "explanation": "Challenges the e5 wedge directly. After ...f6 exf6 Bxf6, Black has an excellent bishop on f6 and the open e-file for counterplay. The e5 pawn — White's main asset — disappears.",
+        "fen": "r3k2r/ppp1bpp1/2p1b2p/4Pn2/5B2/2N2N1P/PPP2PP1/3R1RK1 w - - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "...Ra8-d8 (contest d-file immediately)",
+        "explanation": "...Rd8 is Caruana's first priority. Contesting the d-file neutralizes White's only advantage. After ...Rd8 Rxd8+ Kxd8, the king is centralized — a huge endgame asset."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nf5-d4 (dominant outpost)",
+        "explanation": "The Nd4 is untouchable and controls c2, e2, b3, f3. From d4, the knight dominates the position and supports all of Black's plans. Caruana considers this the ideal piece placement."
+      }
+    ],
+    "strategicThemes": [
+      "The Berlin endgame is Caruana's bread and butter. He's drawn (or won) against the world's best from this position repeatedly.",
+      "Piece activity trumps pawn structure. The Nf5/Nd4, Be6, and Be7 are all excellently placed — the doubled c-pawns are irrelevant.",
+      "King centralization is critical. After ...Rd8 Rxd8+ Kxd8, the king walks to d5 or c5, becoming an active piece in the endgame.",
+      "The e5 pawn is White's main asset but also a potential target. Challenge it with ...f6 or ...c5 to eliminate White's only advantage."
+    ],
+    "endgameTransitions": [
+      "This IS the endgame. Caruana's technique here is world-class. The active knight + centralized king + solid structure give real winning chances for Black.",
+      "If all rooks trade, the minor piece endgame is complex but favors the side with the more active knight. Nd4 > any White piece in this structure."
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-berlin-f6",
+    "openingId": "pro-caruana-berlin",
+    "criticalPositionFen": "r3k2r/ppp1bpp1/2p1b2p/4Pn2/5B2/2N2N1P/PPP2PP1/3R1RK1 w - - 0 13",
+    "title": "Challenge the e5 Wedge",
+    "overview": "Caruana's most aggressive Berlin approach: directly challenge the e5 pawn with ...f6 or ...g5. The e5 pawn is White's main positional asset — if it falls, White's advantage evaporates. After ...f6 exf6 Bxf6, Black has an excellent bishop on f6 that controls d4, e5, and the long dark diagonal. The resulting position is dynamically balanced with real winning chances for Black.",
+    "pawnBreaks": [
+      {
+        "move": "g7-g5",
+        "explanation": "The most aggressive option. ...g5 attacks the Bf4 — if it retreats, Black pushes ...g4 attacking the Nf3 and opening the g-file. After Bg3, ...g4 hxg4 Nxg3, Black has eliminated two of White's pieces.",
+        "fen": "r3k2r/ppp1bpp1/2p1b2p/4Pn2/5B2/2N2N1P/PPP2PP1/3R1RK1 w - - 0 13"
+      },
+      {
+        "move": "c7-c5",
+        "explanation": "Challenges the center from the queenside. ...c5 prepares ...c4 to gain queenside space, or after ...c4, the c5 square becomes available for the knight. It also repairs the doubled c-pawns partially.",
+        "fen": "r3k2r/ppp1bpp1/2p1b2p/4Pn2/5B2/2N2N1P/PPP2PP1/3R1RK1 w - - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Be7-f6 (after exf6)",
+        "explanation": "After ...f6 exf6 Bxf6, the bishop is powerfully placed on f6. It controls d4, e5, g5, and the entire a1-h8 diagonal. This is one of the strongest bishop placements in the Berlin."
+      },
+      {
+        "piece": "King",
+        "route": "...Ke8-d7-c6 (king march to queenside)",
+        "explanation": "After the d-file is contested, the king marches via d7 to c6 or c5. A centralized king in the endgame is worth nearly a full piece in activity."
+      }
+    ],
+    "strategicThemes": [
+      "Challenging e5 is the most direct way to equalize. Without the e5 wedge, White has no advantage.",
+      "After ...f6 exf6 Bxf6, the resulting position is dynamically balanced. Black's active bishop and centralized king create winning chances.",
+      "The ...g5 push is a Caruana specialty — it's aggressive and forces concrete responses from White. In speed chess, it creates real problems.",
+      "The Berlin is not a drawing weapon for Caruana — it's a winning weapon. He plays for the full point from these positions."
+    ],
+    "endgameTransitions": [
+      "After eliminating the e5 pawn, the endgame is close to equal or better for Black. The active pieces and king centralization are key.",
+      "In a pure bishop endgame after trading knights, the bishop on f6 (dark squares) vs bishop on f4 (dark squares) leads to complex play where Black's kingside majority can be decisive."
+    ]
   }
 ]
