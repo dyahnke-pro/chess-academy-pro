@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { useChessGame } from '../../hooks/useChessGame';
-import { PlayableLinePlayer } from './PlayableLinePlayer';
+import { MiddlegamePractice } from './MiddlegamePractice';
 import { speechService } from '../../services/speechService';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -12,7 +12,6 @@ import {
   Swords,
   GitBranch,
   Flag,
-  PlayCircle,
   Volume2,
   VolumeX,
   Dumbbell,
@@ -20,7 +19,6 @@ import {
 } from 'lucide-react';
 import type {
   MiddlegamePlan,
-  PlayableMiddlegameLine,
   AnnotationArrow,
   AnnotationHighlight,
   PawnBreak,
@@ -33,7 +31,7 @@ interface MiddlegamePlanStudyProps {
   onExit: () => void;
 }
 
-type PlanSection = 'overview' | 'pawnBreaks' | 'maneuvers' | 'themes' | 'endgames' | 'playLines';
+type PlanSection = 'overview' | 'pawnBreaks' | 'maneuvers' | 'themes' | 'endgames' | 'practice';
 
 const SECTIONS: { key: PlanSection; label: string; icon: typeof Compass }[] = [
   { key: 'overview', label: 'Overview', icon: Compass },
@@ -41,7 +39,7 @@ const SECTIONS: { key: PlanSection; label: string; icon: typeof Compass }[] = [
   { key: 'maneuvers', label: 'Maneuvers', icon: GitBranch },
   { key: 'themes', label: 'Themes', icon: Compass },
   { key: 'endgames', label: 'Endgames', icon: Flag },
-  { key: 'playLines', label: 'Play Lines', icon: PlayCircle },
+  { key: 'practice', label: 'Practice', icon: Dumbbell },
 ];
 
 function arrowsToBoard(
@@ -93,7 +91,7 @@ function getSectionText(
       return plan.endgameTransitions.length > 0
         ? `Favorable endgame transitions. ${plan.endgameTransitions.join('. ')}.`
         : 'No endgame transitions documented.';
-    case 'playLines':
+    case 'practice':
       return '';
   }
 }
@@ -106,12 +104,10 @@ export function MiddlegamePlanStudy({
   const [activeSection, setActiveSection] = useState<PlanSection>('overview');
   const [pawnBreakIndex, setPawnBreakIndex] = useState(0);
   const [maneuverIndex, setManeuverIndex] = useState(0);
-  const [activePlayableLine, setActivePlayableLine] = useState<PlayableMiddlegameLine | null>(null);
+  const [isMiddlegamePracticing, setIsMiddlegamePracticing] = useState(false);
   const [isPracticing, setIsPracticing] = useState(false);
   const [isNarrating, setIsNarrating] = useState(false);
   const narrationActiveRef = useRef(false);
-
-  const playableLines = plan.playableLines ?? [];
 
   // Determine which FEN and arrows to show based on active section
   const { displayFen, displayArrows, displayHighlights } = useMemo(() => {
@@ -215,19 +211,18 @@ export function MiddlegamePlanStudy({
     setManeuverIndex((i) => Math.min(plan.pieceManeuvers.length - 1, i + 1));
   }, [plan.pieceManeuvers.length]);
 
-  // Full-screen playable line player
-  if (activePlayableLine) {
+  // Full-screen middlegame practice mode
+  if (isMiddlegamePracticing) {
     return (
-      <PlayableLinePlayer
-        line={activePlayableLine}
-        boardOrientation={boardOrientation}
-        onComplete={() => setActivePlayableLine(null)}
-        onExit={() => setActivePlayableLine(null)}
+      <MiddlegamePractice
+        plan={plan}
+        playerColor={boardOrientation}
+        onExit={() => setIsMiddlegamePracticing(false)}
       />
     );
   }
 
-  const showBottomBar = activeSection !== 'playLines';
+  const showBottomBar = activeSection !== 'practice';
 
   return (
     <div className="flex flex-col h-full overflow-hidden" data-testid="middlegame-plan-study">
@@ -440,39 +435,48 @@ export function MiddlegamePlanStudy({
             </motion.div>
           )}
 
-          {activeSection === 'playLines' && (
+          {activeSection === 'practice' && (
             <motion.div
-              key="playLines"
+              key="practice"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="space-y-2"
-              data-testid="plan-play-lines"
+              className="space-y-3"
+              data-testid="plan-practice"
             >
-              {playableLines.length > 0 ? (
-                playableLines.map((line, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActivePlayableLine(line)}
-                    className="w-full flex items-center gap-3 p-3 rounded-2xl bg-theme-surface/90 border border-white/15 hover:bg-theme-border/50 transition-colors text-left"
-                    data-testid={`playable-line-${i}`}
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-theme-accent/20 flex items-center justify-center shrink-0">
-                      <PlayCircle size={16} className="text-theme-accent" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-sm font-medium text-theme-text">{line.title}</span>
-                      <p className="text-xs text-theme-text-muted mt-0.5">
-                        {line.moves.length} moves &mdash; Watch &amp; practice
-                      </p>
-                    </div>
-                  </button>
-                ))
-              ) : (
-                <div className="rounded-2xl bg-theme-surface/90 border border-white/15 p-4">
-                  <p className="text-sm text-theme-text-muted">No playable lines available for this plan yet.</p>
-                </div>
-              )}
+              <div className="rounded-2xl bg-theme-surface/90 border border-white/15 p-4">
+                <p className="text-sm text-theme-text leading-relaxed">
+                  Play from the critical position against the engine while your coach guides you through the plan. The coach will praise moves that match the plan&apos;s ideas and suggest alternatives when you stray.
+                </p>
+                {plan.pawnBreaks.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {plan.pawnBreaks.map((pb, i) => (
+                      <span
+                        key={i}
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-theme-accent/15 text-theme-accent font-mono"
+                      >
+                        {pb.move}
+                      </span>
+                    ))}
+                    {plan.pieceManeuvers.map((pm, i) => (
+                      <span
+                        key={`m-${i}`}
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 font-mono"
+                      >
+                        {pm.piece}: {pm.route}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => setIsMiddlegamePracticing(true)}
+                className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl bg-theme-accent text-white font-semibold text-sm hover:bg-theme-accent/90 transition-colors"
+                data-testid="start-practice-btn"
+              >
+                <Dumbbell size={18} />
+                Start Practice
+              </button>
             </motion.div>
           )}
         </AnimatePresence>

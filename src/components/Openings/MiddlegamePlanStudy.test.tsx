@@ -206,9 +206,9 @@ describe('MiddlegamePlanStudy', () => {
     expect(speechService.stop).toHaveBeenCalled();
   });
 
-  it('hides bottom bar on Play Lines tab', async () => {
+  it('hides bottom bar on Practice tab', async () => {
     renderStudy();
-    await userEvent.click(screen.getByTestId('plan-tab-playLines'));
+    await userEvent.click(screen.getByTestId('plan-tab-practice'));
     expect(screen.queryByTestId('plan-bottom-bar')).not.toBeInTheDocument();
   });
 
