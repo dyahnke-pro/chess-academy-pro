@@ -15,7 +15,6 @@ import {
   Volume2,
   VolumeX,
   Dumbbell,
-  BookOpen,
 } from 'lucide-react';
 import type {
   MiddlegamePlan,
@@ -31,7 +30,7 @@ interface MiddlegamePlanStudyProps {
   onExit: () => void;
 }
 
-type PlanSection = 'overview' | 'pawnBreaks' | 'maneuvers' | 'themes' | 'endgames' | 'practice';
+type PlanSection = 'overview' | 'pawnBreaks' | 'maneuvers' | 'themes' | 'endgames';
 
 const SECTIONS: { key: PlanSection; label: string; icon: typeof Compass }[] = [
   { key: 'overview', label: 'Overview', icon: Compass },
@@ -39,7 +38,6 @@ const SECTIONS: { key: PlanSection; label: string; icon: typeof Compass }[] = [
   { key: 'maneuvers', label: 'Maneuvers', icon: GitBranch },
   { key: 'themes', label: 'Themes', icon: Compass },
   { key: 'endgames', label: 'Endgames', icon: Flag },
-  { key: 'practice', label: 'Practice', icon: Dumbbell },
 ];
 
 function arrowsToBoard(
@@ -91,8 +89,6 @@ function getSectionText(
       return plan.endgameTransitions.length > 0
         ? `Favorable endgame transitions. ${plan.endgameTransitions.join('. ')}.`
         : 'No endgame transitions documented.';
-    case 'practice':
-      return '';
   }
 }
 
@@ -105,7 +101,6 @@ export function MiddlegamePlanStudy({
   const [pawnBreakIndex, setPawnBreakIndex] = useState(0);
   const [maneuverIndex, setManeuverIndex] = useState(0);
   const [isMiddlegamePracticing, setIsMiddlegamePracticing] = useState(false);
-  const [isPracticing, setIsPracticing] = useState(false);
   const [isNarrating, setIsNarrating] = useState(false);
   const narrationActiveRef = useRef(false);
 
@@ -144,11 +139,6 @@ export function MiddlegamePlanStudy({
     }
   }, [displayFen, game]);
 
-  // Exit practice mode when switching tabs or carousel items
-  useEffect(() => {
-    setIsPracticing(false);
-  }, [activeSection, pawnBreakIndex, maneuverIndex]);
-
   // Stop narration on tab/carousel change or unmount
   useEffect(() => {
     speechService.stop();
@@ -184,17 +174,6 @@ export function MiddlegamePlanStudy({
     }
   }, [isNarrating, plan, activeSection, pawnBreakIndex, maneuverIndex]);
 
-  // Practice mode toggle
-  const togglePractice = useCallback((): void => {
-    setIsPracticing((prev) => {
-      if (prev) {
-        // Exiting practice: reset board to the study position
-        game.loadFen(displayFen);
-      }
-      return !prev;
-    });
-  }, [game, displayFen]);
-
   const prevPawnBreak = useCallback((): void => {
     setPawnBreakIndex((i) => Math.max(0, i - 1));
   }, []);
@@ -222,8 +201,6 @@ export function MiddlegamePlanStudy({
     );
   }
 
-  const showBottomBar = activeSection !== 'practice';
-
   return (
     <div className="flex flex-col h-full overflow-hidden" data-testid="middlegame-plan-study">
       {/* Header */}
@@ -245,18 +222,19 @@ export function MiddlegamePlanStudy({
       </div>
 
       {/* Section tabs */}
-      <div className="flex gap-1 px-4 overflow-x-auto pb-2 flex-shrink-0">
-        {SECTIONS.map(({ key, label }) => (
+      <div className="flex gap-1.5 px-4 overflow-x-auto pb-2 flex-shrink-0">
+        {SECTIONS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => setActiveSection(key)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
               activeSection === key
-                ? 'bg-theme-accent text-white'
+                ? 'bg-theme-accent text-white shadow-[0_0_10px_rgba(99,102,241,0.4)]'
                 : 'bg-theme-surface text-theme-text-muted hover:bg-theme-border/50'
             }`}
             data-testid={`plan-tab-${key}`}
           >
+            <Icon size={12} />
             {label}
           </button>
         ))}
@@ -267,15 +245,15 @@ export function MiddlegamePlanStudy({
         <div className="w-full max-w-[400px]">
           <ControlledChessBoard
             game={game}
-            interactive={isPracticing}
+            interactive={false}
             showFlipButton={true}
-            showUndoButton={isPracticing}
+            showUndoButton={false}
             showResetButton={false}
             showEvalBar={false}
             showVoiceMic={false}
-            arrows={!isPracticing ? displayArrows : undefined}
-            annotationHighlights={!isPracticing ? displayHighlights : undefined}
-            showLastMoveHighlight={isPracticing}
+            arrows={displayArrows}
+            annotationHighlights={displayHighlights}
+            showLastMoveHighlight={false}
           />
         </div>
       </div>
@@ -435,94 +413,35 @@ export function MiddlegamePlanStudy({
             </motion.div>
           )}
 
-          {activeSection === 'practice' && (
-            <motion.div
-              key="practice"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="space-y-3"
-              data-testid="plan-practice"
-            >
-              <div className="rounded-2xl bg-theme-surface/90 border border-white/15 p-4">
-                <p className="text-sm text-theme-text leading-relaxed">
-                  Play from the critical position against the engine while your coach guides you through the plan. The coach will praise moves that match the plan&apos;s ideas and suggest alternatives when you stray.
-                </p>
-                {plan.pawnBreaks.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-3">
-                    {plan.pawnBreaks.map((pb, i) => (
-                      <span
-                        key={i}
-                        className="text-[10px] px-2 py-0.5 rounded-full bg-theme-accent/15 text-theme-accent font-mono"
-                      >
-                        {pb.move}
-                      </span>
-                    ))}
-                    {plan.pieceManeuvers.map((pm, i) => (
-                      <span
-                        key={`m-${i}`}
-                        className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 font-mono"
-                      >
-                        {pm.piece}: {pm.route}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <button
-                onClick={() => setIsMiddlegamePracticing(true)}
-                className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl bg-theme-accent text-white font-semibold text-sm hover:bg-theme-accent/90 transition-colors"
-                data-testid="start-practice-btn"
-              >
-                <Dumbbell size={18} />
-                Start Practice
-              </button>
-            </motion.div>
-          )}
         </AnimatePresence>
       </div>
 
-      {/* Bottom bar: Practice This Position + Speaker toggle */}
-      {showBottomBar && (
-        <div
-          className="flex items-center gap-3 px-4 py-3 border-t border-theme-border flex-shrink-0 pb-safe-4"
-          data-testid="plan-bottom-bar"
+      {/* Bottom bar */}
+      <div
+        className="flex items-center gap-3 px-4 py-3 border-t border-theme-border flex-shrink-0 pb-safe-4"
+        data-testid="plan-bottom-bar"
+      >
+        <button
+          onClick={() => setIsMiddlegamePracticing(true)}
+          className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm bg-theme-accent text-white shadow-[0_0_16px_rgba(99,102,241,0.5)] hover:shadow-[0_0_24px_rgba(99,102,241,0.7)] transition-all"
+          data-testid="start-practice-btn"
         >
-          <button
-            onClick={togglePractice}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-medium text-sm transition-colors ${
-              isPracticing
-                ? 'bg-theme-accent text-white'
-                : 'bg-theme-surface text-theme-text hover:bg-theme-border/50'
-            }`}
-            data-testid="practice-position-btn"
-          >
-            {isPracticing ? (
-              <>
-                <BookOpen size={16} />
-                Back to Study
-              </>
-            ) : (
-              <>
-                <Dumbbell size={16} />
-                Practice This Position
-              </>
-            )}
-          </button>
-          <button
-            onClick={toggleNarration}
-            className={`p-3 rounded-xl transition-colors ${
-              isNarrating
-                ? 'bg-theme-accent text-white'
-                : 'bg-theme-surface text-theme-text-muted hover:bg-theme-border/50'
-            }`}
-            aria-label={isNarrating ? 'Stop narration' : 'Read aloud'}
-            data-testid="narration-toggle"
-          >
-            {isNarrating ? <VolumeX size={18} /> : <Volume2 size={18} />}
-          </button>
-        </div>
-      )}
+          <Dumbbell size={16} />
+          Practice This Plan
+        </button>
+        <button
+          onClick={toggleNarration}
+          className={`p-3 rounded-xl transition-colors ${
+            isNarrating
+              ? 'bg-theme-accent text-white'
+              : 'bg-theme-surface text-theme-text-muted hover:bg-theme-border/50'
+          }`}
+          aria-label={isNarrating ? 'Stop narration' : 'Read aloud'}
+          data-testid="narration-toggle"
+        >
+          {isNarrating ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </button>
+      </div>
     </div>
   );
 }

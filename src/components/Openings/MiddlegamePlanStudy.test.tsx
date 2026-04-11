@@ -160,24 +160,10 @@ describe('MiddlegamePlanStudy', () => {
     expect(onExit).toHaveBeenCalled();
   });
 
-  it('shows Practice This Position button on study tabs', () => {
+  it('shows Practice This Plan button', () => {
     renderStudy();
-    expect(screen.getByTestId('practice-position-btn')).toBeInTheDocument();
-    expect(screen.getByText('Practice This Position')).toBeInTheDocument();
-  });
-
-  it('toggles practice mode and updates board interactivity', async () => {
-    renderStudy();
-    const board = screen.getByTestId('chess-board');
-    expect(board).toHaveAttribute('data-interactive', 'false');
-
-    await userEvent.click(screen.getByTestId('practice-position-btn'));
-    expect(screen.getByText('Back to Study')).toBeInTheDocument();
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-interactive', 'true');
-
-    await userEvent.click(screen.getByTestId('practice-position-btn'));
-    expect(screen.getByText('Practice This Position')).toBeInTheDocument();
-    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-interactive', 'false');
+    expect(screen.getByTestId('start-practice-btn')).toBeInTheDocument();
+    expect(screen.getByText('Practice This Plan')).toBeInTheDocument();
   });
 
   it('shows narration toggle button', () => {
@@ -206,10 +192,10 @@ describe('MiddlegamePlanStudy', () => {
     expect(speechService.stop).toHaveBeenCalled();
   });
 
-  it('hides bottom bar on Practice tab', async () => {
+  it('always shows bottom bar with practice button', () => {
     renderStudy();
-    await userEvent.click(screen.getByTestId('plan-tab-practice'));
-    expect(screen.queryByTestId('plan-bottom-bar')).not.toBeInTheDocument();
+    expect(screen.getByTestId('plan-bottom-bar')).toBeInTheDocument();
+    expect(screen.getByTestId('start-practice-btn')).toBeInTheDocument();
   });
 
   it('has a scrollable content area', () => {
