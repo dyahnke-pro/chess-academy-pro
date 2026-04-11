@@ -6569,5 +6569,661 @@
       "After eliminating the e5 pawn, the endgame is close to equal or better for Black. The active pieces and king centralization are key.",
       "In a pure bishop endgame after trading knights, the bishop on f6 (dark squares) vs bishop on f4 (dark squares) leads to complex play where Black's kingside majority can be decisive."
     ]
+  },
+  {
+    "id": "mp-pro-firouzja-italian-initiative",
+    "openingId": "pro-firouzja-italian",
+    "criticalPositionFen": "r2qk2r/ppp2ppp/2n1b3/8/2pPR3/B1P2N2/P4PPP/R2Q2K1 b kq - 0 12",
+    "title": "Initiative Against the Uncastled King",
+    "overview": "Firouzja's Italian is wildly aggressive — White has sacrificed a pawn for a massive lead in development. The Re4 is actively placed on the fourth rank, the Ba3 prevents castling, and the Nf3 is ready to jump to g5 or e5. Black's king is stuck in the center with no safe haven. The plan is to open lines and attack before Black can consolidate.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "The central advance rips open the position. After d5, the Nc6 is challenged, the Be6 is attacked, and lines open toward Black's king. After ...Bxd5 or ...Nxd5, White's pieces flood into the center with devastating effect.",
+        "fen": "r2qk2r/ppp2ppp/2n1b3/8/2pPR3/B1P2N2/P4PPP/R2Q2K1 b kq - 0 12"
+      },
+      {
+        "move": "c3-c4 (recapturing)",
+        "explanation": "If the position stabilizes, recapturing on c4 with the pawn gives White a strong c4+d4 center. But typically the initiative is more important than the pawn recovery.",
+        "fen": "r2qk2r/ppp2ppp/2n1b3/8/2pPR3/B1P2N2/P4PPP/R2Q2K1 b kq - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5 or Nf3-e5",
+        "explanation": "Ng5 attacks f7 and e6, creating immediate tactical threats. Ne5 centralizes and attacks c6, d7, and f7. Both squares create forcing moves against the uncastled king."
+      },
+      {
+        "piece": "Rook",
+        "route": "Re4 swings (Re4-h4 or Re4-e1)",
+        "explanation": "The Re4 is incredibly flexible. It can swing to h4 for a kingside attack, or drop back to e1 to double on the e-file. Firouzja uses this rook's mobility to create multiple threats."
+      }
+    ],
+    "strategicThemes": [
+      "Firouzja's Italian is about pure initiative. Material is secondary — piece activity and king safety are what matter.",
+      "The Ba3 is the hidden star: it prevents castling and controls the a3-f8 diagonal. Without it, Black could simply castle and be fine.",
+      "Every tempo counts. Firouzja plays the most forcing moves to maintain the initiative. Passive moves let Black consolidate.",
+      "This is Firouzja at his most creative — fearless sacrifices backed by precise calculation."
+    ],
+    "endgameTransitions": [
+      "This position should NOT reach an endgame. The initiative should convert to material gain or checkmate.",
+      "If forced to simplify, White's active pieces and Ba3 still create problems even in simpler positions."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-italian-d5",
+    "openingId": "pro-firouzja-italian",
+    "criticalPositionFen": "r2qk2r/ppp2ppp/2n1b3/8/2pPR3/B1P2N2/P4PPP/R2Q2K1 b kq - 0 12",
+    "title": "d5 Central Explosion",
+    "overview": "The d5 advance is the tactical key to the position. It attacks both the Be6 and the Nc6 simultaneously, forcing concessions. After d5, the center opens and White's superior development becomes decisive. Firouzja calculates these positions deeply and always finds the forcing continuation.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "After d5 Bxd5 Nxd5, White has a centralized knight and open lines. If ...Nxd5, Rxd5 wins back material with interest. The key is that every capture leads to White getting more active.",
+        "fen": "r2qk2r/ppp2ppp/2n1b3/8/2pPR3/B1P2N2/P4PPP/R2Q2K1 b kq - 0 12"
+      },
+      {
+        "move": "a2-a4",
+        "explanation": "A preparatory move before d5. a4 prevents ...b5 and threatens to win the c4 pawn. It also opens the a-file for the Ra1, adding another piece to the attack.",
+        "fen": "r2qk2r/ppp2ppp/2n1b3/8/2pPR3/B1P2N2/P4PPP/R2Q2K1 b kq - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-d2 or Qd1-c2",
+        "explanation": "The queen activates. Qd2 supports d5 and prepares to swing to the kingside. Qc2 creates a battery on the c-file and supports c3-c4 recapture."
+      },
+      {
+        "piece": "Rook",
+        "route": "Ra1-d1 (d-file support)",
+        "explanation": "Rad1 doubles on the d-file, creating overwhelming central pressure. After d5, two rooks on the d-file is decisive."
+      }
+    ],
+    "strategicThemes": [
+      "The d5 break transforms the position from complex to winning. Every line after d5 favors White's superior development.",
+      "Firouzja's strength is fearless calculation. He sees 15+ moves deep in these tactical positions and always finds the winning path.",
+      "Two rooks + queen + knight vs an uncastled king is a recipe for disaster for the defending side.",
+      "Don't allow Black time to play ...O-O or consolidate. Every move must be forcing or improving."
+    ],
+    "endgameTransitions": [
+      "The tactical complications should lead to decisive material advantage. Any endgame reached will be trivially won.",
+      "Firouzja never lets these positions simplify prematurely. He maintains pressure until the opponent collapses."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-rossolimo-d4",
+    "openingId": "pro-firouzja-rossolimo",
+    "criticalPositionFen": "r1bq1rk1/p2n1pbp/2p3p1/1pp1p3/4P3/2NPBN1P/PPPQ1PP1/2KR3R w - - 0 11",
+    "title": "d4 Central Break",
+    "overview": "Firouzja's Rossolimo after Bxc6 dxc6 reaches a position where White has the bishop pair potential (Be3 is strong) and a solid center. With O-O-O already castled, White plans d3-d4 to open the center. After d4, the position opens favorably for White's better-developed pieces and the e4 pawn controls key central squares.",
+    "pawnBreaks": [
+      {
+        "move": "d3-d4",
+        "explanation": "The key central break. After d4 cxd4 Nxd4, White's knight reaches the dominant d4 outpost (or after exd4 Bxd4 the bishop controls the long diagonal). Either way White's pieces are ideally active.",
+        "fen": "r1bq1rk1/p2n1pbp/2p3p1/1pp1p3/4P3/2NPBN1P/PPPQ1PP1/2KR3R w - - 0 11"
+      },
+      {
+        "move": "g2-g4",
+        "explanation": "A direct kingside pawn storm. Since White has castled queenside, g4-g5 gains kingside space and opens lines. After g5, the h-pawn advance follows. This is Firouzja's aggressive style.",
+        "fen": "r1bq1rk1/p2n1pbp/2p3p1/1pp1p3/4P3/2NPBN1P/PPPQ1PP1/2KR3R w - - 0 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5 (outpost after d4)",
+        "explanation": "After d4 opens the center, Nd5 is a crushing outpost. It attacks c7, e7, and b6, and can't be challenged by Black's pawns (c-pawn is on c6, e-pawn on e5)."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nf3-h4-f5 (kingside attack)",
+        "explanation": "If going for the g4 plan, Nh4 prepares Nf5 — a devastating outpost. The knight on f5 attacks d6, e7, g7, h6 and combines with the queen on d2 for mating threats."
+      }
+    ],
+    "strategicThemes": [
+      "The Rossolimo structure gives White a clear plan: d4 break and piece activity. Black's doubled c-pawns are a structural weakness.",
+      "Firouzja's Rossolimo is aggressive — he uses the opposite-side castling to launch a kingside pawn storm while maintaining central control.",
+      "Black's Bg7 is strong but the e5 pawn blocks its long diagonal. If e5 is eliminated (after d4 exd4), the bishop becomes passive.",
+      "The Be3 is a key piece — it supports d4, controls the a7-g1 diagonal, and can shift to c5 to target weak dark squares."
+    ],
+    "endgameTransitions": [
+      "White's better pawn structure (no doubled pawns) gives a lasting endgame edge. The c6 pawn is a permanent weakness.",
+      "After Nd5 and exchanges, White's structural advantage converts naturally into winning endgames."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-rossolimo-g4",
+    "openingId": "pro-firouzja-rossolimo",
+    "criticalPositionFen": "r1bq1rk1/p2n1pbp/2p3p1/1pp1p3/4P3/2NPBN1P/PPPQ1PP1/2KR3R w - - 0 11",
+    "title": "Kingside Pawn Storm",
+    "overview": "With castling on opposite sides, Firouzja unleashes a kingside pawn storm with g4-g5. This is his natural attacking style — direct, aggressive, and calculated. The h3 pawn already supports g4, and after g5, the h-file and g-file open for the rooks on h1 and d1. Black's ...b5 counterplay is too slow.",
+    "pawnBreaks": [
+      {
+        "move": "g2-g4-g5",
+        "explanation": "The pawn storm: g4 gains space and g5 drives away defenders. After g5, the h-file opens (via hxg5 Bxg5 or the pawn reaches g6). White's rooks on h1 and d1 become devastating.",
+        "fen": "r1bq1rk1/p2n1pbp/2p3p1/1pp1p3/4P3/2NPBN1P/PPPQ1PP1/2KR3R w - - 0 11"
+      },
+      {
+        "move": "h3-h4-h5",
+        "explanation": "An alternative kingside advance. h4-h5 targets the g6 pawn directly. After hxg6 fxg6 (or hxg6), Black's king shelter is shattered and the h-file opens.",
+        "fen": "r1bq1rk1/p2n1pbp/2p3p1/1pp1p3/4P3/2NPBN1P/PPPQ1PP1/2KR3R w - - 0 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rh1-g1 (g-file support)",
+        "explanation": "After g4-g5 and the g-file opens, Rg1 adds firepower. Combined with Qd2-g2 or Qd2-h6, it creates mating threats on the g-file."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd2-h6 (dark square invasion)",
+        "explanation": "Qh6 invades the dark squares around Black's king. Combined with Ng5 or a rook on the g-file, it creates immediate mating threats. ...Bg7 can't defend everything."
+      }
+    ],
+    "strategicThemes": [
+      "Opposite-side castling means a pawn race. Firouzja's kingside attack is faster because Black's ...b5-b4 takes more moves to become dangerous.",
+      "The h3 pawn was prophylactic but now supports g4. Firouzja's preparation is always multi-purpose.",
+      "Black's doubled c-pawns mean the queenside attack (...b5-b4) is less effective — the pawns can't support each other properly.",
+      "Firouzja's attacking speed is unmatched. He pushes pawns without hesitation once the plan is clear."
+    ],
+    "endgameTransitions": [
+      "The kingside attack should be decisive. If it wins material, any endgame is trivially won.",
+      "If the attack stalls, the opened files give White's rooks lasting activity that compensates for any structural issues."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-vienna-d4",
+    "openingId": "pro-firouzja-vienna",
+    "criticalPositionFen": "r2q1rk1/1pp2ppp/1pn2n2/4p3/2B1P1b1/3P1N2/PPP3PP/R1BQ1RK1 w - - 2 11",
+    "title": "d4 Central Challenge",
+    "overview": "Firouzja's Vienna reaches a calm position with the Bc4, Nf3, and e4 pawn. The plan is d3-d4, challenging Black's e5 pawn and opening the center. After d4 exd4 Nxd4, White's knight reaches the dominant d4 outpost and the Bc4 continues to pressure f7. The Bg4 can be challenged with h3 or Be3.",
+    "pawnBreaks": [
+      {
+        "move": "d3-d4",
+        "explanation": "The central break opens the position. After d4 exd4 Nxd4, White's knight is centralized and the Bc4 targets f7 on the open diagonal. White's development advantage becomes concrete.",
+        "fen": "r2q1rk1/1pp2ppp/1pn2n2/4p3/2B1P1b1/3P1N2/PPP003PP/R1BQ1RK1 w - - 2 11"
+      },
+      {
+        "move": "h2-h3",
+        "explanation": "h3 challenges the Bg4 immediately. After ...Bh5 (or ...Bxf3 Qxf3), White gains time and the center becomes easier to open. If ...Bxf3 Qxf3, the queen is actively placed on f3.",
+        "fen": "r2q1rk1/1pp2ppp/1pn2n2/4p3/2B1P1b1/3P1N2/PPP003PP/R1BQ1RK1 w - - 2 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc1-e3 or Bc1-g5",
+        "explanation": "Be3 supports d4 and controls the dark squares. Bg5 pins the Nf6 and creates tactical tension. Firouzja chooses based on concrete calculation."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-d3 or Qd1-e2",
+        "explanation": "Qd3 targets h7 via the b1-h7 diagonal (combined with Bc4) and supports d4. Qe2 is more solid, supporting e4 and preparing Rd1."
+      }
+    ],
+    "strategicThemes": [
+      "Firouzja's Vienna is surprisingly calm compared to his Italian. He builds up patiently before striking in the center.",
+      "The Bc4 is the key piece — targeting f7 and supporting d5. Keep it unless trading gains concrete advantage.",
+      "Black's Bg4 is active but can be challenged with h3. The resulting time gain helps White push d4 sooner.",
+      "The Vienna gives White a natural development advantage that Firouzja converts with precise central play."
+    ],
+    "endgameTransitions": [
+      "After d4 and exchanges, the Bc4 dominates in endgames. The f7 weakness and open center favor White's bishops.",
+      "If ...Bxf3 and queens trade, the resulting position with bishop vs knight often favors White in the open structure."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-vienna-kside",
+    "openingId": "pro-firouzja-vienna",
+    "criticalPositionFen": "r2q1rk1/1pp2ppp/1pn2n2/4p3/2B1P1b1/3P1N2/PPP3PP/R1BQ1RK1 w - - 2 11",
+    "title": "Kingside Play with h3 and g4",
+    "overview": "An aggressive approach: White plays h3 to challenge the Bg4, then follows with g4 to gain kingside space. This is more in Firouzja's creative style — using the kingside pawn advance to create threats while the Bc4 maintains pressure on f7.",
+    "pawnBreaks": [
+      {
+        "move": "h2-h3 then g2-g4",
+        "explanation": "h3 challenges the bishop, and after ...Bh5, g4 drives it further back while gaining kingside space. The g4 advance also prepares g5, kicking the Nf6 and opening the g-file.",
+        "fen": "r2q1rk1/1pp2ppp/1pn2n2/4p3/2B1P1b1/3P1N2/PPP003PP/R1BQ1RK1 w - - 2 11"
+      },
+      {
+        "move": "g4-g5",
+        "explanation": "After g4, g5 attacks the Nf6 and opens kingside lines. The knight must retreat and White's kingside initiative becomes very dangerous.",
+        "fen": "r2q1rk1/1pp2ppp/1pn2n2/4p3/2B1P1b1/3P1N2/PPP003PP/R1BQ1RK1 w - - 2 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-h4-f5",
+        "explanation": "After h3 and g4, the knight reroutes to h4 then f5 — a devastating outpost. The Nf5 attacks d6, e7, g7, and h6 simultaneously."
+      },
+      {
+        "piece": "Rook",
+        "route": "Rf1-g1 (after g-file opens)",
+        "explanation": "After g5 opens lines, Rg1 adds pressure on the g-file. Combined with Qd2 or Qg4, it creates mating threats."
+      }
+    ],
+    "strategicThemes": [
+      "The h3+g4 advance gains space AND time by attacking Black's bishop. This double benefit makes it very effective.",
+      "Firouzja loves creative kingside play. The g4-g5 plan is risky but rewards precise calculation.",
+      "The Bc4+Nf5 combo targeting f7 and g7 is one of the most dangerous attacking setups in chess.",
+      "Black's ...b6 weakens c6 and the dark squares. Firouzja exploits this with dark-square operations."
+    ],
+    "endgameTransitions": [
+      "The kingside attack should create material gains. Any resulting endgame is won with extra material.",
+      "If the attack is repelled, the g4-g5 weaknesses can become a liability. This plan requires commitment."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-najdorf-b4",
+    "openingId": "pro-firouzja-najdorf",
+    "criticalPositionFen": "r2qk2r/4bppp/pn1pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ3P/2KR1B1R w kq - 1 12",
+    "title": "Queenside Storm with ...b4",
+    "overview": "Firouzja's Najdorf faces the English Attack (g4, f3, Be3, O-O-O). Black has already played ...b5 and ...Nb6, ready for the queenside counter. The plan is ...b4 to push the Nc3 away and open lines toward White's king. Combined with ...a5-a4 and ...Nc4, this creates devastating pressure.",
+    "pawnBreaks": [
+      {
+        "move": "b5-b4",
+        "explanation": "Drives the Nc3 from its defensive post. After Na4 or Nd5, Black gets open lines and piece activity. ...b4 is the most forcing way to generate queenside counterplay in the English Attack.",
+        "fen": "r2qk2r/4bppp/pn1pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ003P/2KR1B1R w kq - 1 12"
+      },
+      {
+        "move": "a6-a5-a4",
+        "explanation": "Following ...b4 with ...a5-a4-a3 rips open the queenside completely. After ...a3 bxa3 (or b3), White's king shelter is shattered and Black's pieces invade.",
+        "fen": "r2qk2r/4bppp/pn1pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ003P/2KR1B1R w kq - 1 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nb6-c4 (outpost)",
+        "explanation": "The Nc4 is the ideal piece in the English Attack. It attacks a3, b2, d2, e3 — all near White's king. Firouzja prioritizes this maneuver above all others."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Ra8-b8 (b-file pressure)",
+        "explanation": "...Rb8 targets b2 along the open b-file. After ...b4 opens the file, the rook becomes a battering ram against White's king."
+      }
+    ],
+    "strategicThemes": [
+      "Firouzja's Najdorf is fearless — he races queenside as fast as possible, trusting that his attack arrives first.",
+      "The English Attack is a race. Black's queenside attack with ...b4, ...a5-a4, ...Nc4 is typically faster than White's g4-g5-h4 kingside push.",
+      "The ...Nc4 outpost near White's king is the single most important piece placement. Get the knight there as fast as possible.",
+      "Firouzja's speed chess instincts serve him well — he plays the most natural aggressive moves without overthinking."
+    ],
+    "endgameTransitions": [
+      "The queenside attack should be decisive. If it creates material gains, any endgame is won.",
+      "In a mutual pawn race that both sides survive, Black's queenside majority (passed b or a pawn) is often more dangerous."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-najdorf-d5",
+    "openingId": "pro-firouzja-najdorf",
+    "criticalPositionFen": "r2qk2r/4bppp/pn1pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ003P/2KR1B1R w kq - 1 12",
+    "title": "Central ...d5 Counter-strike",
+    "overview": "Firouzja sometimes opts for the central ...d5 break instead of the queenside storm. When White overcommits to g4-g5, the center becomes vulnerable and ...d5 explodes the position open. After ...d5 exd5 Nfxd5, Black's pieces become incredibly active and White's kingside pawns look silly.",
+    "pawnBreaks": [
+      {
+        "move": "d6-d5",
+        "explanation": "The central counter-punch. After exd5 Nfxd5 or ...Nbxd5, Black gets a powerfully centralized knight and open lines. White's g4 advance looks overextended when the center opens.",
+        "fen": "r2qk2r/4bppp/pn1pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ003P/2KR1B1R w kq - 1 12"
+      },
+      {
+        "move": "b5-b4 (combined with ...d5)",
+        "explanation": "The combination of ...b4 and ...d5 hits White on two fronts simultaneously. This double action is very hard to meet — White can't defend the center and queenside at the same time.",
+        "fen": "r2qk2r/4bppp/pn1pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ003P/2KR1B1R w kq - 1 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nf6-d5 (after exd5)",
+        "explanation": "The Nd5 is the Najdorf's dream piece. It attacks Be3 with tempo, controls c3, b4, f4, and can't be removed. Firouzja uses this centralized knight as the foundation for all operations."
+      },
+      {
+        "piece": "Bishop",
+        "route": "...Be7-c5 or ...Be7-d6",
+        "explanation": "After the center opens, the bishop activates. ...Bc5 targets f2 and pressures White's king. ...Bd6 controls e5 and the b8-h2 diagonal."
+      }
+    ],
+    "strategicThemes": [
+      "Firouzja's ...d5 timing is instinctive. He feels the moment when White's pieces are committed to the kingside and strikes.",
+      "The combination of queenside and central play is what makes the Najdorf so powerful. White can't defend everywhere.",
+      "After ...d5, White's g4 pawn becomes a weakness rather than a strength. The overextension is punished.",
+      "Firouzja's dynamic style makes the Najdorf his perfect weapon — it rewards creativity, calculation, and fearlessness."
+    ],
+    "endgameTransitions": [
+      "A successful ...d5 transforms the position in Black's favor. The resulting active pieces dominate in any phase.",
+      "The centralized Nd5 in an endgame is worth more than a rook — it controls everything and can't be challenged."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-grunfeld-Qa2",
+    "openingId": "pro-firouzja-grunfeld",
+    "criticalPositionFen": "rn3rk1/pp2ppbp/6p1/8/3PP1b1/5N2/q2BBPPP/1R1Q1RK1 w - - 2 13",
+    "title": "Queenside Pressure with ...Qa2",
+    "overview": "Firouzja's Grunfeld is ultra-aggressive. Black has won the a-pawn and has the queen on a2 creating pressure. The Bg7 dominates the long diagonal, and the Bg4 develops actively. The plan is to maintain the material advantage while using the Bg7's diagonal power and piece activity to prevent White from building a winning attack.",
+    "pawnBreaks": [
+      {
+        "move": "e7-e5",
+        "explanation": "Challenges the d4+e4 center. After ...e5 dxe5, Black can play ...Nc6 targeting e5, or ...Bg4xf3 to damage White's structure. Opening the center activates the Bg7 fully.",
+        "fen": "rn3rk1/pp2ppbp/6p1/8/3PP1b1/5N2/q2BBPPP/1R1Q1RK1 w - - 2 13"
+      },
+      {
+        "move": "c7-c5",
+        "explanation": "The classic Grunfeld break. ...c5 challenges d4 and activates the Bg7 further. After dxc5, Black can play ...Nc6 with active piece play and the Bg7 dominates.",
+        "fen": "rn3rk1/pp2ppbp/6p1/8/3PP1b1/5N2/q2BBPPP/1R1Q1RK1 w - - 2 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nb8-c6 (pressure on d4/e5)",
+        "explanation": "The knight develops to c6 pressuring d4 and e5. Combined with the Bg7, it creates double pressure on the center that's hard to maintain."
+      },
+      {
+        "piece": "Queen",
+        "route": "...Qa2 retreats to a5 or c4 if needed",
+        "explanation": "The queen on a2 is active but exposed. If White builds threats, retreat to a5 (pressuring c3/a-file) or c4 (centralized with escape routes)."
+      }
+    ],
+    "strategicThemes": [
+      "Firouzja's Grunfeld is about maximum piece activity. The extra pawn and active queen create chaos that favors the more dynamic player.",
+      "The Bg7 is the Grunfeld's defining piece. Its pressure on the long diagonal supports every plan and restricts White's operations.",
+      "White's d4+e4 center is under constant threat. The Bg7, ...c5, and ...Nc6 all target it from different angles.",
+      "Material is not everything — Firouzja sometimes returns the pawn to get harmonious piece placement. Flexibility is key."
+    ],
+    "endgameTransitions": [
+      "An extra pawn in the endgame with the powerful Bg7 is winning. Simplify when the position is stable.",
+      "The Bg7 dominates all endgames in the Grunfeld. Its long-range power controls both flanks simultaneously."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-grunfeld-center",
+    "openingId": "pro-firouzja-grunfeld",
+    "criticalPositionFen": "rn3rk1/pp2ppbp/6p1/8/3PP1b1/5N2/q2BBPPP/1R1Q1RK1 w - - 2 13",
+    "title": "Counter-attack the d4+e4 Center",
+    "overview": "Rather than just defending, Firouzja actively attacks White's center. The d4+e4 pawn duo looks imposing but is actually a target when Black's pieces are well-placed. The Bg7 hits d4, the Bg4 pins/pressures the Nf3, and ...Nc6 adds another attacker. Destroy the center and White has nothing.",
+    "pawnBreaks": [
+      {
+        "move": "f7-f5",
+        "explanation": "A dynamic challenge to e4. After ...f5 exf5 gxf5, the g-file opens for Black's rook and the e4 pawn is gone. The Bg7 gains even more scope with the center opened.",
+        "fen": "rn3rk1/pp2ppbp/6p1/8/3PP1b1/5N2/q2BBPPP/1R1Q1RK1 w - - 2 13"
+      },
+      {
+        "move": "e7-e6",
+        "explanation": "A more restrained challenge. ...e6 undermines d5 (if White pushes d5) or supports ...c5. It also prepares ...Nc6 with a solid center.",
+        "fen": "rn3rk1/pp2ppbp/6p1/8/3PP1b1/5N2/q2BBPPP/1R1Q1RK1 w - - 2 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bg4xf3 (if tactically sound)",
+        "explanation": "Trading ...Bxf3 Bxf3 removes White's best defender and doubles the f-pawns (or leaves White with a structural weakness). The Bg7 then dominates alone."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Rf8-d8 (targeting d4)",
+        "explanation": "...Rd8 targets the d4 pawn directly. Combined with ...Nc6 and ...Bg7, triple pressure on d4 is hard to defend."
+      }
+    ],
+    "strategicThemes": [
+      "In the Grunfeld, White's center is a liability, not a strength. Black's job is to prove this by attacking it relentlessly.",
+      "Firouzja's approach is maximum dynamism. He creates threats from every angle until White's center collapses.",
+      "The Bg4 pressuring the Nf3 is a key tactical resource. If the knight moves, the bishop can often shift to better diagonals.",
+      "Don't be afraid to sacrifice the extra pawn for initiative. In the Grunfeld, activity is more important than material."
+    ],
+    "endgameTransitions": [
+      "Once the center collapses, Black's Bg7 and active pieces dominate the resulting endgame. White's scattered pawns are easy targets.",
+      "The Grunfeld bishop is the best endgame piece in chess. It controls the entire board from the long diagonal."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-french-c5",
+    "openingId": "pro-firouzja-french",
+    "criticalPositionFen": "r2qk2r/pb1nbp1p/1p2pp2/2p5/2BPN3/5N2/PPP1QPPP/2KR3R w kq - 0 11",
+    "title": "Queenside Counterplay with ...c5",
+    "overview": "Firouzja's French (Burn variation with ...gxf6) reaches a position where Black has doubled f-pawns but active piece play. The Bb7 controls the long diagonal, and ...c5 challenges White's central d4 pawn. With White castled queenside, Black's ...c5 has both positional and direct attacking implications.",
+    "pawnBreaks": [
+      {
+        "move": "c5xd4",
+        "explanation": "When the timing is right, ...cxd4 opens the c-file for the rook and removes White's central anchor. After ...cxd4, the Bb7 opens further and Black's pieces target White's king along the c-file.",
+        "fen": "r2qk2r/pb1nbp1p/1p2pp2/2p5/2BPN3/5N2/PPP1QPPP/2KR3R w kq - 0 11"
+      },
+      {
+        "move": "b6-b5",
+        "explanation": "b5 challenges the Bc4 and gains queenside space. After ...b5 Bd3, Black has gained time and the b-file is semi-open for the rook. This is direct pressure against White's castled king.",
+        "fen": "r2qk2r/pb1nbp1p/1p2pp2/2p5/2BPN3/5N2/PPP1QPPP/2KR3R w kq - 0 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nd7-f6 or ...Nd7-c5",
+        "explanation": "...Nf6 develops actively and challenges the Ne4. After Nxf6+ Bxf6, Black has a strong bishop and the position simplifies favorably. ...Nc5 targets b3 and d3, pressuring White's queenside."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Ra8-c8 (c-file pressure)",
+        "explanation": "...Rc8 targets the c-file, aiming at White's king on c1. Combined with ...b5 and ...cxd4, it creates devastating pressure on the queenside."
+      }
+    ],
+    "strategicThemes": [
+      "The French with ...gxf6 gives Black doubled pawns but the open g-file and active Bb7. Firouzja uses this dynamic imbalance to create counterplay.",
+      "White's O-O-O creates mutual attacking chances. Black's ...b5, ...c5, and ...Rc8 are all aimed at White's king.",
+      "The Bb7 on the long diagonal is Black's most important piece. It pressures g2/f3 and supports all queenside operations.",
+      "Firouzja's French is a surprise weapon. Opponents who expect the standard French are caught off guard by the Burn variation's sharp character."
+    ],
+    "endgameTransitions": [
+      "If the middlegame attacks cancel out, Black's doubled f-pawns can be a liability in endgames. But the active Bb7 compensates.",
+      "Exchange the doubled f-pawns if possible (...f5, ...fxe4). This heals the structure and leaves Black with a clean position."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-french-Nf6",
+    "openingId": "pro-firouzja-french",
+    "criticalPositionFen": "r2qk2r/pb1nbp1p/1p2pp2/2p5/2BPN3/5N2/PPP1QPPP/2KR3R w kq - 0 11",
+    "title": "Simplification with ...Nf6",
+    "overview": "A practical approach: ...Nf6 challenges the powerful Ne4 and forces exchanges. After Nxf6+ Bxf6, Black has an excellent dark-squared bishop and a simplified position. Firouzja uses this when he wants a less risky game — the resulting positions are solid and give Black real chances.",
+    "pawnBreaks": [
+      {
+        "move": "e6-e5",
+        "explanation": "After simplifying with ...Nf6 Nxf6+ Bxf6, ...e5 challenges the center. dxe5 fxe5 gives Black central pawns and an active Bf6. The open e-file also benefits Black's rooks.",
+        "fen": "r2qk2r/pb1nbp1p/1p2pp2/2p5/2BPN3/5N2/PPP1QPPP/2KR3R w kq - 0 11"
+      },
+      {
+        "move": "f6-f5",
+        "explanation": "The doubled f-pawns can advance: ...f5 challenges e4 and gains kingside space. After ...f5, the Bb7 opens up and Black's position becomes very active.",
+        "fen": "r2qk2r/pb1nbp1p/1p2pp2/2p5/2BPN3/5N2/PPP1QPPP/2KR3R w kq - 0 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf6 (after Nxf6+) dominating dark squares",
+        "explanation": "The Bf6 is an excellent piece after the trade. It controls d4, e5, g5, and the entire long dark diagonal. Combined with the Bb7, Black has dual-diagonal control."
+      },
+      {
+        "piece": "King",
+        "route": "...Ke8-f7 or ...O-O (castle short)",
+        "explanation": "Getting the king safe is priority. ...O-O is simplest, putting the rook on the f-file. ...Kf7 keeps options open for both castling directions."
+      }
+    ],
+    "strategicThemes": [
+      "Simplification favors the side with fewer weaknesses. After trades, Black's position is solid and the doubled f-pawns are manageable.",
+      "The Bb7+Bf6 bishop pair is very strong in open positions. They control both diagonals and restrict White's pieces.",
+      "Firouzja's French is versatile — he can play for the attack (...c5, ...b5) or simplify (...Nf6). This flexibility is key.",
+      "After castling and consolidating, Black's position is at minimum equal. The active bishops provide real winning chances."
+    ],
+    "endgameTransitions": [
+      "The bishop pair in endgames is a significant advantage. The Bb7+Bf6 control the entire board and support pawn advances on both flanks.",
+      "If one bishop is traded, the remaining bishop still dominates. The Bb7 in particular is an endgame monster on the long diagonal."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-ruylopez-d5",
+    "openingId": "pro-firouzja-ruy-lopez",
+    "criticalPositionFen": "r2qrbk1/1bp2pp1/p2p1n1p/1p6/Pn1PP3/5N1P/1PBN1PP1/R1BQR1K1 w - - 1 15",
+    "title": "d5 Space Advantage",
+    "overview": "Firouzja's Ruy Lopez reaches a deep mainline with d4+e4 center. Black has the ...Nb4 attacking the Bc2 and ...Bb7 on the long diagonal. White's plan is the d5 advance, closing the center and gaining a lasting space advantage. After d5, the position becomes strategic with White pressing on the kingside while Black's counterplay is on the queenside with ...c6.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "Closes the center and gains permanent space. After d5, the e4 pawn is secure and Black's Bb7 is blocked. White can then maneuver on the kingside with Nf1-g3-f5 while Black struggles to generate counterplay.",
+        "fen": "r2qrbk1/1bp2pp1/p2p1n1p/1p6/Pn1PP3/5N1P/1PBN1PP1/R1BQR1K1 w - - 1 15"
+      },
+      {
+        "move": "a4xb5",
+        "explanation": "Opening the a-file. After axb5 axb5, the a-file opens for White's rook. But more importantly, Black's b5 pawn becomes a target and the Bc2 gains scope along the a4-e8 diagonal.",
+        "fen": "r2qrbk1/1bp2pp1/p2p1n1p/1p6/Pn1PP3/5N1P/1PBN1PP1/R1BQR1K1 w - - 1 15"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nd2-f1-g3-f5",
+        "explanation": "The classic Ruy Lopez knight maneuver. Nf1 regroups, Ng3 controls f5 and h5, then Nf5 is devastating — attacking d6, e7, g7, and h6."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-d2-c3 or Bc1-e3",
+        "explanation": "The dark-squared bishop develops. Bc3 pressures the a1-h8 diagonal (especially strong after d5 closes the center). Be3 is more flexible, supporting d4/d5 and controlling the a7-g1 diagonal."
+      }
+    ],
+    "strategicThemes": [
+      "Firouzja's Ruy Lopez is aggressive even in the positional mainlines. The d5 advance creates a clamp that he exploits with piece maneuvers.",
+      "After d5, the Nf1-g3-f5 maneuver is devastating. The knight on f5 is untouchable and creates mating threats on the kingside.",
+      "Black's ...Bb7 is blocked by the d5 pawn. This effectively gives White a piece advantage on the kingside.",
+      "The Ruy Lopez requires patience but Firouzja's energy keeps the position alive. He finds attacking chances even in quiet structures."
+    ],
+    "endgameTransitions": [
+      "The d5 space advantage persists into endgames. White's pieces have more room and Black's are cramped behind the d5 pawn.",
+      "After Nf5 and exchanges, the structural advantage (space, piece activity) converts naturally into winning endgames."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-ruylopez-f4",
+    "openingId": "pro-firouzja-ruy-lopez",
+    "criticalPositionFen": "r2qrbk1/1bp2pp1/p2p1n1p/1p6/Pn1PP3/5N1P/1PBN1PP1/R1BQR1K1 w - - 1 15",
+    "title": "f4 Kingside Expansion",
+    "overview": "Firouzja's more aggressive option: f4 directly, gaining kingside space and preparing f5. This is typical of his fearless style — attacking even in the Ruy Lopez's positional mainlines. After f4, the center is reinforced (e4+f4+d4) and the kingside attack gains momentum.",
+    "pawnBreaks": [
+      {
+        "move": "f2-f4",
+        "explanation": "f4 gains kingside space and prepares f5. After f5, the g6 and h7 squares are weakened and White's pieces can target them. The e4+f4+d4 trio is a massive central/kingside presence.",
+        "fen": "r2qrbk1/1bp2pp1/p2p1n1p/1p6/Pn1PP3/5N1P/1PBN1PP1/R1BQR1K1 w - - 1 15"
+      },
+      {
+        "move": "f4-f5",
+        "explanation": "After f4, f5 is the follow-up that cracks the kingside open. The Bc2 comes alive (targeting h7 via b1-h7 diagonal) and the f-file opens for the rook.",
+        "fen": "r2qrbk1/1bp2pp1/p2p1n1p/1p6/Pn1PP3/5N1P/1PBN1PP1/R1BQR1K1 w - - 1 15"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-f3 or Qd1-g4",
+        "explanation": "The queen shifts to the kingside. Qf3 supports f5 and eyes the a8-h1 diagonal. Qg4 targets g7 directly and supports h4-h5 advances."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5 (after f4)",
+        "explanation": "After f4 supports the center, Ng5 becomes possible. The knight targets f7 and h7, creating direct threats that combine with the Bc2 battery."
+      }
+    ],
+    "strategicThemes": [
+      "Firouzja's f4 is a statement of intent — he's playing for the kingside attack from the Ruy Lopez, which is rare at top level.",
+      "The e4+f4 duo gives White massive central and kingside space. Black is squeezed on both flanks.",
+      "Black's ...Nb4 is well-placed but the knight doesn't help defend the kingside. Firouzja exploits this misplacement.",
+      "h3 was played prophylactically and now supports g4 or prevents ...Bg4. Firouzja's preparation is always multi-purpose."
+    ],
+    "endgameTransitions": [
+      "The kingside attack should create decisive advantages. If it wins material, the endgame is simple.",
+      "Even if the attack stalls, the f4+e4 center gives White lasting space in endgames."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-kid-g5",
+    "openingId": "pro-firouzja-kid",
+    "criticalPositionFen": "r1bq1rk1/pppnn1bp/3p4/3Pp1p1/2P1Pp2/2N2P2/PP2BBPP/R2QNRK1 w - - 0 13",
+    "title": "g5-g4 Kingside Assault",
+    "overview": "Firouzja's KID is the most aggressive version — he's already pushed ...f4 AND ...g5! The pawn storm is in full swing. The plan is ...g4 to crack open the f3 pawn and create open files for the rooks. The Bg7 is a sleeping giant that awakens when the g-file opens. This is pure aggression.",
+    "pawnBreaks": [
+      {
+        "move": "g5-g4",
+        "explanation": "The decisive advance. After ...g4 fxg4, both the f-file and g-file open. The Rf8 and Bg7 become devastating attackers. White's king position collapses under the combined pressure.",
+        "fen": "r1bq1rk1/pppnn1bp/3p4/3Pp1p1/2P1Pp2/2N2P2/PP2BBPP/R2QNRK1 w - - 0 13"
+      },
+      {
+        "move": "h7-h5",
+        "explanation": "Supporting ...g4 with ...h5 ensures the g-file stays open after fxg4 hxg4. The h-file also opens for the rook. This two-file attack is overwhelming.",
+        "fen": "r1bq1rk1/pppnn1bp/3p4/3Pp1p1/2P1Pp2/2N2P2/PP2BBPP/R2QNRK1 w - - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Ne7-g6-h4 (sacrifice outpost)",
+        "explanation": "The Ne7 goes to g6 then h4, where it threatens Nf3+ or Nxg2 sacrifices. The Nh4 near White's king creates tactical chaos that Firouzja thrives in."
+      },
+      {
+        "piece": "Queen",
+        "route": "...Qd8-e8-g6 or ...Qd8-h4",
+        "explanation": "The queen activates for the attack. ...Qe8 prepares ...Qg6 or ...Qh5. ...Qh4 is more direct, threatening ...Qg3 or ...Qxh2+."
+      }
+    ],
+    "strategicThemes": [
+      "With ...f4 and ...g5 already played, Firouzja has committed fully to the attack. There's no retreat — only forward.",
+      "The Bg7 behind the ...f4+e5 chain is the most powerful attacking piece. When g4 opens lines, it becomes a monster.",
+      "Firouzja's KID attacks are the most feared in modern chess. His calculation speed in these chaotic positions is unmatched.",
+      "White's queenside counterplay with c5 is too slow. Black's kingside attack arrives first with correct execution."
+    ],
+    "endgameTransitions": [
+      "The KID attack should be decisive. Endgames are irrelevant when checkmate is the goal.",
+      "If the attack wins material, any simplification leads to a trivially won position."
+    ]
+  },
+  {
+    "id": "mp-pro-firouzja-kid-Bh3",
+    "openingId": "pro-firouzja-kid",
+    "criticalPositionFen": "r1bq1rk1/pppnn1bp/3p4/3Pp1p1/2P1Pp2/2N2P2/PP2BBPP/R2QNRK1 w - - 0 13",
+    "title": "Bh3 Light-Square Attack",
+    "overview": "Before the pawn storm, Firouzja can play ...Bh3 to remove White's light-squared bishop — the key defender of the kingside light squares. After ...Bh3 Bxh3 (or if the bishop moves, ...Bh3 threatens ...Bxg2), the g2 square is weakened and the kingside attack gains enormous power.",
+    "pawnBreaks": [
+      {
+        "move": "g5-g4 (after ...Bh3)",
+        "explanation": "After removing the Be2, ...g4 is even more devastating. Without a light-squared bishop to defend, White's kingside collapses. The g2 square becomes a fatal weakness.",
+        "fen": "r1bq1rk1/pppnn1bp/3p4/3Pp1p1/2P1Pp2/2N2P2/PP2BBPP/R2QNRK1 w - - 0 13"
+      },
+      {
+        "move": "c7-c5",
+        "explanation": "A positional alternative: ...c5 locks the queenside completely, denying White any counterplay. This gives Black unlimited time for the kingside attack without worrying about the c5 break.",
+        "fen": "r1bq1rk1/pppnn1bp/3p4/3Pp1p1/2P1Pp2/2N2P2/PP2BBPP/R2QNRK1 w - - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-h3 (remove defender)",
+        "explanation": "The ...Bh3 move is a KID classic. It removes the light-squared bishop, weakening g2, f3, and the entire light-square complex around White's king."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nd7-f6-h5 (reinforce attack)",
+        "explanation": "After ...Bh3, the Nd7 returns to f6 then h5, adding another piece to the kingside assault. The Nh5 eyes f4 and g3 — critical attacking squares."
+      }
+    ],
+    "strategicThemes": [
+      "Removing the light-squared bishop is one of the most important KID ideas. Without it, White's king is fatally exposed on the light squares.",
+      "Firouzja's preparation (piece regrouping before pawns) maximizes the attack's power. Every piece contributes before the storm.",
+      "The ...Bh3+...g4+...Ng6 combination creates a critical mass of attackers. Defending against all threats simultaneously is impossible.",
+      "The Bf2 is White's only remaining kingside defender. If it can be neutralized (via ...Ng3 or ...Nh4), the position collapses."
+    ],
+    "endgameTransitions": [
+      "The attack aims for checkmate, not an endgame. But if material is won, any simplification is trivially winning.",
+      "Without the light-squared bishop, White's endgame prospects are bleak even if the attack doesn't checkmate."
+    ]
   }
 ]
