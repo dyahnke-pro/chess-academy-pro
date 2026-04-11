@@ -8619,5 +8619,989 @@
       "The doubled c-pawns are a permanent weakness in endgames. Black's Bg7 targets them relentlessly.",
       "After ...c5 and exchanges, Black's superior pawn structure gives a decisive endgame advantage."
     ]
+  },
+  {
+    "id": "mp-pro-ericrosen-italian-d4",
+    "openingId": "pro-ericrosen-italian",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+    "title": "d4 Central Strike",
+    "overview": "Rosen's Italian at the 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 tabiya. The main plan is c3 followed by d4, seizing the center. After d4 exd4 cxd4, White gets a powerful pawn duo (d4+e4) and the Bc4 targets f7. Rosen's trappy style means he's always looking for tactical shots after the center opens.",
+    "pawnBreaks": [
+      {
+        "move": "c2-c3 then d2-d4",
+        "explanation": "The classical Italian approach. c3 prepares d4, and after d4 exd4 cxd4, White has an imposing center. The Bc4 on the a2-g8 diagonal creates immediate threats against f7.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+      },
+      {
+        "move": "d4-d5 (after d4)",
+        "explanation": "After d4, pushing d5 drives the Nc6 away and gains space. This is aggressive and creates a sharp position where Rosen's tactical eye spots opportunities.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-f1-g3 or Nb1-c3",
+        "explanation": "After d4, the knight develops. Nc3 supports e4 and d5. The longer Nd2-f1-g3 route targets f5 and the kingside."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-g5 (pin Nf6)",
+        "explanation": "After d4 and ...Nf6, Bg5 pins the knight and increases pressure. If ...h6 Bh4, the pin persists."
+      }
+    ],
+    "strategicThemes": [
+      "Rosen's Italian is about setting traps. The c3+d4 center creates tactical opportunities that he exploits brilliantly.",
+      "The Bc4 on the a2-g8 diagonal is the key attacking piece. Combined with Qb3, it creates double pressure on f7 and b7.",
+      "After d4, piece activity is paramount. Every piece should find an active square quickly.",
+      "Rosen's content creator style means entertaining, attacking chess. The Italian provides the perfect framework."
+    ],
+    "endgameTransitions": [
+      "The central space advantage persists in endgames. The d4+e4 duo gives White more room.",
+      "The Bc4 in endgames targets f7 permanently — a lasting positional advantage."
+    ]
+  },
+  {
+    "id": "mp-pro-ericrosen-italian-Qb3",
+    "openingId": "pro-ericrosen-italian",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+    "title": "Bc4+Qb3 Battery",
+    "overview": "Rosen loves the Bc4+Qb3 battery targeting f7 and b7 simultaneously. This setup creates immediate tactical threats even in the early opening. After Qb3, Black must defend both f7 and b7, which is very uncomfortable. Typical Rosen — maximum pressure from the start.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d4 (after Qb3)",
+        "explanation": "After Qb3, d4 opens the center with the battery already in place. The f7 pressure becomes concrete and tactical shots abound.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4"
+      },
+      {
+        "move": "a2-a4",
+        "explanation": "a4 gains queenside space and threatens a5, pushing pieces around. It also supports Qb3 by preventing ...a5 counterplay.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-b3 (targeting f7+b7)",
+        "explanation": "Qb3 creates the devastating Bc4+Qb3 battery. It targets f7 and b7 at the same time, forcing Black into awkward defensive contortions."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5 (targeting f7)",
+        "explanation": "After Qb3, Ng5 adds a third attacker to f7. The triple attack (Bc4+Qb3+Ng5) is often immediately winning if Black isn't careful."
+      }
+    ],
+    "strategicThemes": [
+      "The Bc4+Qb3 battery is one of the most dangerous attacking setups in the Italian. Rosen specializes in it.",
+      "Double attack on f7+b7 forces immediate concessions. Black must weaken their position to defend.",
+      "Rosen's trappy style means opponents face unfamiliar tactical problems from the opening.",
+      "The Italian at this level is about concrete tactics, not deep strategy. Calculate and attack."
+    ],
+    "endgameTransitions": [
+      "The tactical pressure usually wins material, making any endgame trivially won.",
+      "If Black survives, the active Bc4+Qb3 setup transitions into a position with lasting initiative."
+    ]
+  },
+  {
+    "id": "mp-pro-ericrosen-stafford-tricks",
+    "openingId": "pro-ericrosen-stafford",
+    "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n02/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+    "title": "Piece Activity and Tactical Tricks",
+    "overview": "Rosen's Stafford Gambit sacrifices a pawn for rapid piece development and tactical tricks. After 3.Nxe5 Nc6, Black aims to develop pieces aggressively (Bc5, d5, Qh4) creating multiple threats. If White doesn't know the theory, the tricks are devastating. Even in correct play, Black gets active compensation.",
+    "pawnBreaks": [
+      {
+        "move": "d7-d5",
+        "explanation": "The immediate central strike. ...d5 opens the center and develops with tempo (attacking e4). After exd5, ...Nd4 or ...Bc5 creates dangerous threats.",
+        "fen": "r1bqkb1r/pppp1ppp/2n02n02/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4"
+      },
+      {
+        "move": "d7-d6",
+        "explanation": "The more solid approach. ...d6 attacks the Ne5 and regains the pawn. After Nxc6 bxc6, Black has the bishop pair and open b-file.",
+        "fen": "r1bqkb1r/pppp1ppp/2n02n02/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf8-c5 (targeting f2)",
+        "explanation": "...Bc5 targets f2, the weakest point in White's position (only defended by the king). Combined with ...d5, it creates concrete tactical threats."
+      },
+      {
+        "piece": "Queen",
+        "route": "...Qd8-h4 (if Nxc6)",
+        "explanation": "If White plays Nxc6, ...Qh4 creates immediate threats on f2 and e4. This is the Stafford's most famous trick — many games end here."
+      }
+    ],
+    "strategicThemes": [
+      "The Stafford is about tricks and traps, not long-term strategy. Rosen's expertise makes these tricks devastating.",
+      "Rapid piece development is Black's only compensation for the pawn. Every piece must be on an active square immediately.",
+      "If White defends correctly, Black is objectively worse. But the practical difficulties are enormous.",
+      "Rosen's Stafford is his signature — the opening that made him famous. He knows every trap and refutation."
+    ],
+    "endgameTransitions": [
+      "The Stafford should NOT reach an endgame. The tactical complications should decide the game in the middlegame.",
+      "If an endgame is reached, Black is usually a pawn down. Active pieces are the only compensation."
+    ]
+  },
+  {
+    "id": "mp-pro-ericrosen-stafford-d5",
+    "openingId": "pro-ericrosen-stafford",
+    "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n02n02/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+    "title": "...d5 Central Counter-sacrifice",
+    "overview": "The most principled Stafford continuation: ...d5 opens the center immediately and attacks e4. After exd5 Nd4, Black's knight lands on the powerful d4 square with tempo. The position becomes extremely sharp and Rosen thrives in the resulting chaos.",
+    "pawnBreaks": [
+      {
+        "move": "d7-d5",
+        "explanation": "...d5 is the theoretical main line. After exd5, Black gets rapid development and tactical chances. The open center favors Black's piece activity over White's extra pawn.",
+        "fen": "r1bqkb1r/pppp1ppp/2n02n02/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4"
+      },
+      {
+        "move": "f7-f6 (driving the Ne5)",
+        "explanation": "An alternative: ...f6 drives the Ne5 away immediately. After Nc4 or Nf3, Black develops quickly with ...d5 and active piece play.",
+        "fen": "r1bqkb1r/pppp1ppp/2n02n02/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nc6-d4 (after exd5)",
+        "explanation": "...Nd4 is the Stafford's dream square. The knight attacks c2, e2, and threatens ...Nxc2+ forking king and rook. It's the key piece in all Stafford complications."
+      },
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-g4 (pin on Nf3)",
+        "explanation": "After the complications settle, ...Bg4 pins the Nf3 (if it's returned) and develops actively. The pin creates additional tactical threats."
+      }
+    ],
+    "strategicThemes": [
+      "The ...d5 line is theoretically the best for the Stafford. Rosen has analyzed it to extreme depth.",
+      "The Nd4 outpost is the key to Black's compensation. If it lands there with tempo, the position is dynamically balanced.",
+      "Chaos favors the better-prepared player. Rosen's deep Stafford knowledge gives him a huge practical advantage.",
+      "Even if objectively dubious, the Stafford creates problems that are very hard to solve at the board."
+    ],
+    "endgameTransitions": [
+      "The sharp middlegame should be decisive. Endgames are unlikely and usually mean White defended correctly.",
+      "If pieces are traded, Black's activity must compensate for the pawn deficit. Active piece play is essential."
+    ]
+  },
+  {
+    "id": "mp-pro-ericrosen-englund-d6",
+    "openingId": "pro-ericrosen-englund",
+    "criticalPositionFen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+    "title": "Tactical Tricks After dxe5",
+    "overview": "Rosen's Englund Gambit (1.d4 e5?!) is a pure surprise weapon. After 2.dxe5, Black plays ...Nc6, ...Qe7, and ...Nxe5 or other tricky setups. The gambit is objectively dubious but the tricks are real — many opponents fall into devastating traps. Rosen uses this for entertainment and rapid games.",
+    "pawnBreaks": [
+      {
+        "move": "d7-d6",
+        "explanation": "After dxe5, ...d6 challenges the e5 pawn. After exd6 Bxd6, Black has rapid development and the bishops aim at White's king. The open center favors piece activity.",
+        "fen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+      },
+      {
+        "move": "f7-f6",
+        "explanation": "...f6 challenges e5 from the other side. After exf6 Nxf6, Black develops with tempo and gets open lines. This is more aggressive than ...d6.",
+        "fen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nb8-c6 (pressure on e5)",
+        "explanation": "...Nc6 develops and pressures e5. If White defends with Nf3, Black plays ...Qe7 maintaining pressure. The knight on c6 is the Englund's most natural developing move."
+      },
+      {
+        "piece": "Queen",
+        "route": "...Qd8-e7 (pressure on e5)",
+        "explanation": "...Qe7 pins the e5 pawn to the king (if the position is open). It also prepares ...Nxe5 recovering the pawn with an active position."
+      }
+    ],
+    "strategicThemes": [
+      "The Englund is a surprise weapon — it works precisely because nobody expects it. Rosen's content made it famous.",
+      "Rapid development is the only compensation for the pawn. Every piece must be attacking from the first moment.",
+      "The tricks are real: ...Qh4 ideas, bishop development attacks, and knight forks create practical problems.",
+      "This is NOT a serious opening — it's entertainment chess. But in rapid/blitz, the tricks are surprisingly effective."
+    ],
+    "endgameTransitions": [
+      "The Englund should NOT reach an endgame. If it does, Black is simply worse.",
+      "All of Black's chances are in the middlegame. Tactical complications are the only path to success."
+    ]
+  },
+  {
+    "id": "mp-pro-ericrosen-englund-Nc6",
+    "openingId": "pro-ericrosen-englund",
+    "criticalPositionFen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+    "title": "Piece Development and Tricks",
+    "overview": "After 1.d4 e5 2.dxe5, Rosen develops rapidly with ...Nc6, ...Qe7, and aims for tricks. The key patterns involve ...Qb4+ ideas, ...Bg4 pins, and ...Nd4 jumps. Even if White plays accurately, the unfamiliarity of the position gives Black practical chances. This is Rosen at his most creative.",
+    "pawnBreaks": [
+      {
+        "move": "e5xd4 (if White doesn't take)",
+        "explanation": "If White doesn't play dxe5, ...exd4 wins a pawn and opens the center. Black gets a free game with active development. This is actually ideal for Black.",
+        "fen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+      },
+      {
+        "move": "d7-d6 (challenge e5)",
+        "explanation": "After dxe5, ...d6 is the most natural. It attacks e5 and opens the bishop's diagonal. After exd6, ...Bxd6 gives active piece play.",
+        "fen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf8-c5 or ...Bf8-b4+",
+        "explanation": "...Bc5 develops aggressively targeting f2. ...Bb4+ with check creates immediate tactical problems — the check disrupts White's coordination."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Ng8-e7-g6 or ...Ng8-f6",
+        "explanation": "...Nf6 develops naturally and pressures e4 (if played). ...Ne7 is more unusual, preparing ...Ng6 for kingside play."
+      }
+    ],
+    "strategicThemes": [
+      "The Englund relies on opponent surprise. Most players have never faced it and react poorly.",
+      "Rosen's deep knowledge of the trick lines gives him a massive practical advantage in rapid games.",
+      "Piece activity must compensate for the pawn deficit. Every piece should be on an aggressive square.",
+      "Entertainment value is part of the Englund's appeal. Rosen plays it to create exciting, memorable games."
+    ],
+    "endgameTransitions": [
+      "Avoid endgames at all costs. Black is a pawn down with no structural compensation.",
+      "If the tricks work, the middlegame is decisive. If they don't, resign gracefully and try again."
+    ]
+  },
+  {
+    "id": "mp-pro-annacramling-italian-c3d4",
+    "openingId": "pro-annacramling-italian",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+    "title": "c3+d4 Central Buildup",
+    "overview": "Cramling's Italian follows the classical c3+d4 plan. The solid approach: prepare d4 with c3, then push, gaining a strong center. Cramling's positional style means she builds up carefully and looks for steady advantages rather than sharp tactics.",
+    "pawnBreaks": [
+      {
+        "move": "c2-c3 then d2-d4",
+        "explanation": "The classical Italian recipe. c3 prepares d4, and after d4 exd4 cxd4, White has a dominant center with the Bc4 targeting f7.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+      },
+      {
+        "move": "d2-d3 (Slow Italian)",
+        "explanation": "d3 is the modern, slower approach. It avoids early complications and prepares a gradual buildup with O-O, Re1, and a later d4 when conditions are ideal.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-f1-g3",
+        "explanation": "The slow Italian knight maneuver. Nd2-f1-g3 targets f5 and h5, building kingside pressure gradually. Perfect for Cramling's patient style."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc4 stays on a2-g8 diagonal",
+        "explanation": "The Bc4 maintains long-term pressure on f7. Combined with Qb3, it creates the classic double attack on f7+b7."
+      }
+    ],
+    "strategicThemes": [
+      "Cramling's Italian is solid and classical. No risks, steady improvement, and reliable results.",
+      "The Bc4 is the key piece — it gives lasting pressure on f7 that persists throughout the game.",
+      "Develop all pieces before committing to the center. O-O, Re1, then decide between d3 and d4.",
+      "The Italian is ideal for players who prefer positional chess with occasional tactical opportunities."
+    ],
+    "endgameTransitions": [
+      "The central space advantage gives White better endgames. The Bc4 dominates on the open diagonal.",
+      "After d4 and exchanges, White's better development converts into a lasting positional edge."
+    ]
+  },
+  {
+    "id": "mp-pro-annacramling-italian-giuoco",
+    "openingId": "pro-annacramling-italian",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4",
+    "title": "Giuoco Pianissimo (Slow Italian)",
+    "overview": "Cramling can choose the Giuoco Pianissimo with d3 instead of c3. This avoids sharp lines and leads to a slow maneuvering game where White builds up with O-O, c3, Re1, a4, and eventually d4 when fully prepared. This matches Cramling's cautious, positional style perfectly.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d3 then c2-c3 then d3-d4",
+        "explanation": "The three-step process: d3 first for safety, c3 to prepare d4, then d4 when all pieces are ready. This is the most controlled way to achieve the center.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4"
+      },
+      {
+        "move": "a2-a4",
+        "explanation": "a4 gains queenside space and prevents ...b5. It also supports a future Nd2-c4 maneuver and restricts Black's queenside counterplay.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rf1-e1 (supporting e4)",
+        "explanation": "Re1 supports e4 and controls the e-file. A standard developing move that's always useful in the Italian."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-e3 (solid development)",
+        "explanation": "Be3 develops and supports d4. It challenges the Bc5 and creates the option of trading dark-squared bishops."
+      }
+    ],
+    "strategicThemes": [
+      "The Pianissimo is the safest Italian approach. Cramling avoids all traps and builds up methodically.",
+      "Slow and steady wins the race. The Italian's positional advantages grow naturally with proper development.",
+      "The Bc4 is always useful. Even in the slow approach, it maintains pressure on f7 indefinitely.",
+      "Cramling's style is accessible and instructive. Her Italian games show how solid play wins consistently."
+    ],
+    "endgameTransitions": [
+      "The slow Italian leads to endgames where White has a slight but lasting advantage.",
+      "The Bc4 and central pawns give White more space in all endgame configurations."
+    ]
+  },
+  {
+    "id": "mp-pro-annacramling-london-e4",
+    "openingId": "pro-annacramling-london",
+    "criticalPositionFen": "rnbqk02r/ppp1bppp/4pn02/3p4/3P1B02/3BPN02/PPP02PPP/RN1QK02R b KQkq - 3 5",
+    "title": "e4 Central Break",
+    "overview": "Cramling's London at the early stage with Bf4, Bd3, Nf3, and e3. The plan is the thematic e3-e4 break, opening the Bd3 on the b1-h7 diagonal. Cramling builds up systematically: O-O, Nbd2, then e4 when fully prepared. A reliable, easy-to-play setup.",
+    "pawnBreaks": [
+      {
+        "move": "e3-e4",
+        "explanation": "The London's defining break. After e4 dxe4 Nxe4, White's centralized pieces dominate. The Bd3 activates fully on the b1-h7 diagonal.",
+        "fen": "rnbqk02r/ppp1bppp/4pn02/3p4/3P1B02/3BPN02/PPP02PPP/RN1QK02R b KQkq - 3 5"
+      },
+      {
+        "move": "c2-c4",
+        "explanation": "An alternative: c4 challenges d5 from the queenside. After cxd5 exd5, the position opens and White's pieces are better placed.",
+        "fen": "rnbqk02r/ppp1bppp/4pn02/3p4/3P1B02/3BPN02/PPP02PPP/RN1QK02R b KQkq - 3 5"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2 supporting e4",
+        "explanation": "Nd2 develops and directly supports the e4 advance. After Nd2 and e4, the knight can go to e4 itself or support from d2."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-e2 or Qd1-c2",
+        "explanation": "Qe2 supports e4. Qc2 creates the Bd3+Qc2 battery targeting h7 — the London's most dangerous formation."
+      }
+    ],
+    "strategicThemes": [
+      "Cramling's London is the ultimate beginner-friendly system. Clear plans, safe king, systematic development.",
+      "The Bf4+Bd3 duo controls key squares on both color complexes. This dual-color bishop control is the London's strength.",
+      "The e4 break is the goal. Everything else is preparation for this central advance.",
+      "The London is Cramling's recommendation for improving players — reliable, instructive, and effective at all levels."
+    ],
+    "endgameTransitions": [
+      "After e4 and exchanges, the Bd3 gives White a lasting endgame advantage on the b1-h7 diagonal.",
+      "The London's solid structure means White is never worse in endgames. The worst case is a comfortable draw."
+    ]
+  },
+  {
+    "id": "mp-pro-annacramling-london-Qc2",
+    "openingId": "pro-annacramling-london",
+    "criticalPositionFen": "rnbqk02r/ppp1bppp/4pn02/3p4/3P1B02/3BPN02/PPP02PPP/RN1QK02R b KQkq - 3 5",
+    "title": "Bd3+Qc2 Battery",
+    "overview": "The Bd3+Qc2 battery is the London's most dangerous weapon. Cramling sets this up with O-O, Nbd2, and Qc2. The battery targets h7, threatening Bxh7+ sacrifices. If Black plays ...g6 to prevent it, the dark squares (f6, h6) are permanently weakened.",
+    "pawnBreaks": [
+      {
+        "move": "h2-h4 (after Qc2)",
+        "explanation": "After the Qc2 battery is set, h4 can follow for a direct kingside attack. h4-h5 weakens Black's kingside and opens lines for the attack.",
+        "fen": "rnbqk02r/ppp1bppp/4pn02/3p4/3P1B02/3BPN02/PPP02PPP/RN1QK02R b KQkq - 3 5"
+      },
+      {
+        "move": "e3-e4 (with battery in place)",
+        "explanation": "e4 with the Qc2 battery already set is even stronger than e4 alone. The bishop opens on the diagonal where the queen is already waiting.",
+        "fen": "rnbqk02r/ppp1bppp/4pn02/3p4/3P1B02/3BPN02/PPP02PPP/RN1QK02R b KQkq - 3 5"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-c2 (create battery)",
+        "explanation": "Qc2 creates the Bd3+Qc2 battery targeting h7. This is the London's signature attacking formation."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nd2-f3-e5 or Nd2-e4",
+        "explanation": "After Qc2, the knight reroutes to support the attack. Ne5 centralizes with power, Ne4 attacks directly."
+      }
+    ],
+    "strategicThemes": [
+      "The Bd3+Qc2 battery is the most important London idea to learn. Cramling teaches it as the fundamental attacking plan.",
+      "If Black plays ...g6, the dark squares around the king are permanently weakened. The Bf4 exploits this.",
+      "The battery works at every level — from beginners to grandmasters. It's universally strong.",
+      "Cramling's accessible teaching style makes the London easy to learn and effective to play."
+    ],
+    "endgameTransitions": [
+      "The battery often wins material or damages the kingside. Any resulting endgame is favorable.",
+      "After ...g6 and dark-square weaknesses, endgames are very uncomfortable for Black."
+    ]
+  },
+  {
+    "id": "mp-pro-annacramling-sicilian-d6",
+    "openingId": "pro-annacramling-sicilian",
+    "criticalPositionFen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+    "title": "Classical Sicilian with ...d6",
+    "overview": "Cramling's Sicilian at the 1.e4 c5 tabiya. The most common continuation is ...d6, entering the Open Sicilian after 2.Nf3 d6 3.d4 cxd4 4.Nxd4. From there, Black can choose the Najdorf (...a6), Dragon (...g6), or Classical (...Nc6) depending on mood. Cramling recommends the solid, reliable approach.",
+    "pawnBreaks": [
+      {
+        "move": "d7-d6 then c5xd4",
+        "explanation": "...d6 prepares the Open Sicilian. After Nf3 and d4, ...cxd4 Nxd4 gives Black an asymmetric position with queenside pressure. The c-file becomes Black's main weapon.",
+        "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+      },
+      {
+        "move": "e7-e5 (later)",
+        "explanation": "After the Sicilian opens, ...e5 is a common break that gains central space. It drives the Nd4 back and creates a dynamic pawn structure.",
+        "fen": "rnbqkbnr/pp1ppppp/8/02p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nb8-c6 or ...Ng8-f6",
+        "explanation": "...Nc6 develops and pressures d4. ...Nf6 challenges e4 and develops the kingside. Both are natural Sicilian developing moves."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Ra8-c8 (c-file pressure)",
+        "explanation": "After ...cxd4, the c-file is half-open. ...Rc8 exploits this, targeting c2 or c3. The c-file is the Sicilian's primary attacking lane."
+      }
+    ],
+    "strategicThemes": [
+      "The Sicilian is the most dynamic response to 1.e4. Cramling chooses it for fighting chess with Black.",
+      "The half-open c-file is Black's main weapon. Every Sicilian plan involves exploiting this file.",
+      "Asymmetry is the Sicilian's strength — it avoids symmetrical positions and creates imbalances.",
+      "Cramling's Sicilian is accessible: clear plans, natural development, and reliable results."
+    ],
+    "endgameTransitions": [
+      "Sicilian endgames are complex. Black's queenside majority (c-pawn gone, d-pawn remains) can create a passed pawn.",
+      "The half-open c-file gives Black's rooks lasting activity in endgames."
+    ]
+  },
+  {
+    "id": "mp-pro-annacramling-sicilian-e6",
+    "openingId": "pro-annacramling-sicilian",
+    "criticalPositionFen": "rnbqkbnr/pp1ppppp/8/02p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+    "title": "...e6 Solid Approach",
+    "overview": "An alternative: ...e6 leads to the Paulsen/Kan/Taimanov Sicilians, which are more solid than ...d6. After ...e6, Black gets a flexible setup where ...a6, ...Nc6, and ...Nge7 or ...Nf6 are all options. Cramling uses this for a more positional Sicilian battle.",
+    "pawnBreaks": [
+      {
+        "move": "d7-d5 (if possible)",
+        "explanation": "...d5 in one move is the ideal central break. After exd5 exd5, Black has central equality and active pieces. Timing this correctly is the key challenge.",
+        "fen": "rnbqkbnr/pp1ppppp/8/02p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+      },
+      {
+        "move": "b7-b5",
+        "explanation": "...b5 gains queenside space and prepares ...Bb7. The Sicilian queenside expansion is always a useful plan.",
+        "fen": "rnbqkbnr/pp1ppppp/8/02p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf8-c5 or ...Bf8-e7",
+        "explanation": "...Bc5 is aggressive, targeting f2. ...Be7 is solid, preparing ...O-O. Both are valid depending on the position."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nb8-c6 (flexible)",
+        "explanation": "...Nc6 is the most natural development. It pressures d4 and keeps all options open for the pawn structure."
+      }
+    ],
+    "strategicThemes": [
+      "The ...e6 Sicilian is more solid than ...d6. Cramling recommends it for players who prefer positional play.",
+      "Flexibility is the ...e6 Sicilian's main advantage. Black can adapt to any White setup.",
+      "The ...d5 break is the ultimate goal. Achieve it and Black equalizes or gets an advantage.",
+      "Cramling's approach is accessible: solid development, clear plans, no unnecessary risks."
+    ],
+    "endgameTransitions": [
+      "The ...e6 structure leads to solid endgames. No weaknesses means Black is always safe.",
+      "After ...d5 and exchanges, the resulting endgames are comfortable for Black."
+    ]
+  },
+  {
+    "id": "mp-pro-chesswithakeem-italian-c3d4",
+    "openingId": "pro-chesswithakeem-italian",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+    "title": "c3+d4 Central Buildup",
+    "overview": "Akeem's Italian starts at the classical Bc4 Bc5 tabiya. His plan is the standard c3+d4 center grab — preparing d4 with c3, then pushing to seize central space. Akeem's tactical, energetic style means he looks for quick development and sharp play once the center opens. After d4 exd4 cxd4, the Bc4 targets f7 and the d4+e4 duo dominates.",
+    "pawnBreaks": [
+      {
+        "move": "c2-c3 then d2-d4",
+        "explanation": "The classical Italian central buildup. c3 prepares d4. After d4 exd4 cxd4, White has an imposing center and the Bc4 aims at f7 on the open diagonal. Black must react precisely or face immediate tactical threats.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+      },
+      {
+        "move": "e4-e5",
+        "explanation": "After achieving d4, e5 is an aggressive follow-up that drives the Nf6 away and gains more central space. The e5 wedge cramps Black's kingside completely.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-c3 or Nb1-d2",
+        "explanation": "After d4, the knight develops. Nc3 supports e4 and d5. Nd2 is flexible, heading to f1-g3 for the kingside or e4 for central dominance."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-g5 (pin Nf6)",
+        "explanation": "After development, Bg5 pins the Nf6 and increases central tension. Combined with the Bc4 targeting f7, it creates a powerful attacking setup."
+      }
+    ],
+    "strategicThemes": [
+      "Akeem's Italian is tactical and energetic. He aims for quick central control and immediate piece activity.",
+      "The Bc4 on the a2-g8 diagonal creates lasting f7 pressure — the Italian's most important strategic feature.",
+      "After d4, every piece should find an active square rapidly. Speed of development decides these sharp positions.",
+      "The Italian rewards players who combine tactical alertness with sound central play — Akeem's specialty."
+    ],
+    "endgameTransitions": [
+      "The d4+e4 center gives White lasting space in endgames. The Bc4 remains active on the open diagonal.",
+      "After exchanges, the central space advantage translates into better piece mobility and more active rooks."
+    ]
+  },
+  {
+    "id": "mp-pro-chesswithakeem-italian-Qb3",
+    "openingId": "pro-chesswithakeem-italian",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+    "title": "Bc4+Qb3 Double Attack",
+    "overview": "Akeem loves the aggressive Bc4+Qb3 battery targeting f7 and b7 simultaneously. This creates immediate tactical pressure even in the early opening. Black must defend both weaknesses, which is very uncomfortable and often leads to concessions. This setup is perfect for Akeem's tactical, entertaining style.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d4 (after Qb3)",
+        "explanation": "With the Qb3 battery already in place, d4 opens the center with maximum impact. The f7 pressure becomes concrete after the center opens.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+      },
+      {
+        "move": "c2-c3",
+        "explanation": "c3 supports d4 while maintaining the Qb3 pressure. The systematic c3+d4 approach with the battery is extremely strong at club level.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-b3 (double attack f7+b7)",
+        "explanation": "Qb3 creates the devastating double attack. f7 is only defended by the king, and b7 is often undefended. Black must make concessions to deal with both threats."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5 (triple attack on f7)",
+        "explanation": "After Qb3, Ng5 adds a third attacker to f7. The Bc4+Qb3+Ng5 triple attack on f7 is often immediately winning if Black isn't prepared."
+      }
+    ],
+    "strategicThemes": [
+      "The double attack on f7+b7 is the Italian's most dangerous early setup. Akeem uses it to create immediate pressure.",
+      "Ng5 after Qb3 creates a triple attack on f7 that's very hard to defend. Many games end in the opening with this trick.",
+      "Akeem's tactical, entertaining content style translates into aggressive opening choices. The Bc4+Qb3 battery is his signature.",
+      "At club level, these tactical setups win more games than deep positional understanding. Know the tricks and execute them."
+    ],
+    "endgameTransitions": [
+      "The tactical pressure usually wins material early, making any endgame trivially won.",
+      "If the tricks don't work immediately, the active Bc4+Qb3 battery gives lasting positional pressure."
+    ]
+  },
+  {
+    "id": "mp-pro-chesswithakeem-scotch-Nd4",
+    "openingId": "pro-chesswithakeem-scotch",
+    "criticalPositionFen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+    "title": "Nd4 Central Dominance",
+    "overview": "Akeem's Scotch at the early Nxd4 tabiya. The Nd4 is the most powerful piece on the board — it controls c6, e6, f5, b5, and c2. White's plan is to maintain this dominant knight and develop pieces around it with Nc3 or c4 and Bc4/Be2. The open center gives White excellent piece activity from the start.",
+    "pawnBreaks": [
+      {
+        "move": "c2-c4",
+        "explanation": "c4 grabs queenside space and supports the Nd4. It also prepares Nc3 and creates a broad center. The Scotch with c4 resembles a Maroczy Bind where White has permanent space.",
+        "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4"
+      },
+      {
+        "move": "f2-f3 then Be3",
+        "explanation": "f3 supports e4 and prepares Be3, a solid setup. After Be3, the Nd4 is reinforced and White's central control is unshakeable. This is the more positional approach.",
+        "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nd4 stays centralized (or Nxc6)",
+        "explanation": "The Nd4 is ideally placed. After Nxc6 bxc6 or dxc6, White damages Black's pawn structure. Keeping Nd4 maintains central dominance."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4 or Bf1-e2",
+        "explanation": "Bc4 targets f7 aggressively. Be2 is solid, supporting castling and preparing f3+Be3. Akeem prefers Bc4 for its attacking potential."
+      }
+    ],
+    "strategicThemes": [
+      "The Scotch gives White immediate central control. The Nd4 is the most powerful piece in the opening position.",
+      "Akeem's Scotch is open and tactical — exactly his style. The open center creates chances for both sides.",
+      "After Nxc6, damaging Black's pawn structure gives White a lasting structural advantage.",
+      "Quick development (Bc4, O-O, Nc3) is essential. The open center rewards the better-developed side."
+    ],
+    "endgameTransitions": [
+      "After Nxc6 and doubled c-pawns, endgames are very favorable for White. The structural advantage is permanent.",
+      "The open center means rooks are active. White's rooks dominate in endgames with better pawn structure."
+    ]
+  },
+  {
+    "id": "mp-pro-chesswithakeem-scotch-Bc4",
+    "openingId": "pro-chesswithakeem-scotch",
+    "criticalPositionFen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+    "title": "Bc4 Aggressive Development",
+    "overview": "Akeem develops the bishop to c4 immediately, targeting f7. Combined with the Nd4, this creates early pressure on Black's kingside. After O-O and Nc3, White has rapid development and the open center provides tactical opportunities. Akeem's tactical instinct makes this aggressive setup very effective.",
+    "pawnBreaks": [
+      {
+        "move": "e4-e5",
+        "explanation": "After development, e5 gains space and drives Black's knight away. The e5 pawn cramps Black and the Bc4 becomes even more powerful on the opened diagonal.",
+        "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4"
+      },
+      {
+        "move": "d4-d5 (via Nxc6 then d5)",
+        "explanation": "After Nxc6 bxc6 (or dxc6), a later d5 push (from f3+Be3 setup) gains massive space and opens diagonals for both bishops.",
+        "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4 (target f7)",
+        "explanation": "Bc4 creates immediate pressure on f7. Combined with Nd4 and a future Qb3, the triple pressure on f7 is devastating."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nb1-c3 (support e4, control d5)",
+        "explanation": "Nc3 develops and supports the center. It controls d5, b5, and can jump to d5 for a dominant outpost."
+      }
+    ],
+    "strategicThemes": [
+      "Bc4 in the Scotch creates immediate f7 pressure. Akeem combines this with Qb3 for maximum tactical effect.",
+      "The open center is a double-edged sword — both sides have chances. Akeem's tactical skill gives him the edge.",
+      "Rapid development decides open positions. Get all pieces out before committing to pawn advances.",
+      "The Scotch is perfect for players who love open, tactical chess. Akeem demonstrates this in every game."
+    ],
+    "endgameTransitions": [
+      "The Bc4 and central control give White lasting endgame advantages. Active pieces outperform passive ones.",
+      "If the Scotch tactics win material, any endgame is trivially won."
+    ]
+  },
+  {
+    "id": "mp-pro-chesswithakeem-kingsgambit-d4",
+    "openingId": "pro-chesswithakeem-kings-gambit",
+    "criticalPositionFen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+    "title": "d4 Broad Center",
+    "overview": "Akeem's King's Gambit (1.e4 e5 2.f4) is the ultimate romantic opening. After Black takes ...exf4, White plays d4 and Bc4/Nf3, building a massive center and developing rapidly. The plan is to sacrifice the f-pawn for quick development, central control, and a direct kingside attack. This is chess at its most exciting.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d4 (after ...exf4)",
+        "explanation": "After ...exf4, d4 seizes the center completely. White has pawns on d4+e4 controlling everything. The open f-file and missing f-pawn are compensated by the huge center and rapid development.",
+        "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2"
+      },
+      {
+        "move": "e4-e5",
+        "explanation": "After d4 and Nf3, e5 gains even more space. The e5 wedge cramps Black and opens the e4 square for a knight. This is the most aggressive continuation.",
+        "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP02/8/PPPP02PP/RNBQKBNR b KQkq - 0 2"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4 (targeting f7)",
+        "explanation": "Bc4 targets f7, the weakest point in Black's position. Combined with the open f-file (after Black takes f4), it creates immediate threats."
+      },
+      {
+        "piece": "Knight",
+        "route": "Ng1-f3 (develop and attack)",
+        "explanation": "Nf3 develops with tempo (supporting d4 and e5) and prepares to recapture on f4 if needed. The knight also supports Ng5 ideas targeting f7."
+      }
+    ],
+    "strategicThemes": [
+      "The King's Gambit is about initiative over material. White sacrifices a pawn for rapid development and attacking chances.",
+      "The d4+e4 center is the foundation. It gives White space and piece activity that compensates for the missing f-pawn.",
+      "Bc4 targeting f7 is the most dangerous piece in the King's Gambit. Combined with Nf3 and the open f-file, it creates havoc.",
+      "Akeem's King's Gambit is pure entertainment — aggressive, exciting, and rewarding bold play."
+    ],
+    "endgameTransitions": [
+      "The King's Gambit should NOT reach an endgame. The initiative should convert to material or checkmate in the middlegame.",
+      "If an endgame is reached, White may be a pawn down. Active pieces and the central advantage must compensate."
+    ]
+  },
+  {
+    "id": "mp-pro-chesswithakeem-kingsgambit-Bc4",
+    "openingId": "pro-chesswithakeem-kings-gambit",
+    "criticalPositionFen": "rnbqkbnr/pppp1ppp/8/4p3/4PP02/8/PPPP02PP/RNBQKBNR b KQkq - 0 2",
+    "title": "Bc4 King's Bishop Gambit",
+    "overview": "The King's Bishop Gambit (2.f4 exf4 3.Bc4) is the most direct King's Gambit approach. Bc4 develops with tempo by targeting f7 and prepares for a direct kingside assault. Akeem loves this line because it creates immediate tactical complications where his calculation shines.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d4",
+        "explanation": "After Bc4, d4 builds the center. The d4+e4 center with Bc4 on the diagonal creates a classically dominant position. White develops rapidly while Black tries to hold the f4 pawn.",
+        "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP02/8/PPPP02PP/RNBQKBNR b KQkq - 0 2"
+      },
+      {
+        "move": "f4 recovery (Bxf4 or piece pressure)",
+        "explanation": "White doesn't need to recover f4 immediately. The piece activity and central control are worth more than the pawn. If Black tries to hold f4 with ...g5, it weakens the kingside catastrophically.",
+        "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP02/8/PPPP02PP/RNBQKBNR b KQkq - 0 2"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4 then Qd1-h5 (if ...g5)",
+        "explanation": "Bc4 first, then if Black plays ...g5 to hold f4, Qh5 creates immediate threats on f7 and h5. The Bc4+Qh5 duo is devastating."
+      },
+      {
+        "piece": "Knight",
+        "route": "Ng1-f3 (or Ng1-e2 recapturing f4)",
+        "explanation": "Nf3 develops and supports the center. Ne2 is an alternative that aims to recapture on f4 with the knight, maintaining the pawn structure."
+      }
+    ],
+    "strategicThemes": [
+      "The King's Gambit is the most romantic opening in chess. Akeem plays it for the love of attacking chess.",
+      "If Black tries ...g5 to hold f4, it weakens the kingside permanently. White gets a devastating attack with Qh5 and Bc4.",
+      "Development speed is everything. White must develop faster than Black can consolidate the extra pawn.",
+      "Akeem's King's Gambit content shows that attacking chess is alive and well. Bold play creates beautiful games."
+    ],
+    "endgameTransitions": [
+      "The attack should win the game. King's Gambit endgames are rare and usually mean something went wrong.",
+      "If forced to simplify, the central space advantage (d4+e4) gives White compensation even without the f-pawn."
+    ]
+  },
+  {
+    "id": "mp-pro-samayraina-italian-d4",
+    "openingId": "pro-samayraina-italian",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+    "title": "c3+d4 Classical Center",
+    "overview": "Samay's Italian follows the classical c3+d4 plan. The approach is straightforward: prepare d4, seize the center, and use the Bc4's pressure on f7 to create attacking chances. Samay's fun, energetic style means he plays actively once the center is established.",
+    "pawnBreaks": [
+      {
+        "move": "c2-c3 then d2-d4",
+        "explanation": "The Italian's bread and butter. c3 prepares d4, and after d4 exd4 cxd4, White has a commanding d4+e4 center with the Bc4 targeting f7 on the open diagonal.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+      },
+      {
+        "move": "d4-d5",
+        "explanation": "After d4, d5 drives the Nc6 away and gains central space. White gets a space advantage and can maneuver on the kingside.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2 or Nb1-c3",
+        "explanation": "The knight develops to support the center. Nc3 is aggressive, Nd2 is flexible with the f1-g3 rerouting option."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-g5 or Bc1-e3",
+        "explanation": "Bg5 pins the Nf6 for immediate tactical pressure. Be3 is solid, supporting d4."
+      }
+    ],
+    "strategicThemes": [
+      "Samay's Italian is classical and fun. He plays for quick development and central control.",
+      "The Bc4 targeting f7 is always dangerous. Combined with d4+e4, it creates a naturally aggressive position.",
+      "Quick castling and piece development are key. Get all pieces active before launching the attack.",
+      "The Italian is perfect for Samay's entertaining, accessible style — clear plans with tactical opportunities."
+    ],
+    "endgameTransitions": [
+      "The central space advantage gives White better endgames. The active Bc4 persists in all phases.",
+      "After d4 and exchanges, the Bc4 dominates open diagonal endgames."
+    ]
+  },
+  {
+    "id": "mp-pro-samayraina-italian-slow",
+    "openingId": "pro-samayraina-italian",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4",
+    "title": "Slow Italian with d3",
+    "overview": "The d3 Giuoco Pianissimo is a safer alternative. Samay uses this when he wants to avoid sharp theory. After d3, O-O, Re1, and a slow buildup with c3 and eventually d4, White gets a solid position with no risk and gradual pressure.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d3 then c2-c3 then d3-d4",
+        "explanation": "The three-step center: d3 for safety, c3 for support, then d4 when ready. This is the slowest but safest way to achieve the center.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/02B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4"
+      },
+      {
+        "move": "a2-a4",
+        "explanation": "a4 prevents ...b5 and gains queenside space. It also supports a future Na3-c4 maneuver targeting d6 and e5.",
+        "fen": "r1bqk1nr/pppp1ppp/02n5/2b1p3/02B1P3/5N02/PPPP1PPP/RNBQK02R w KQkq - 4 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-f1-g3",
+        "explanation": "The slow Italian knight tour: Nd2, Nf1, Ng3 heading for f5. This is the most methodical way to build kingside pressure."
+      },
+      {
+        "piece": "Rook",
+        "route": "Rf1-e1 (support e4)",
+        "explanation": "Re1 supports e4 and controls the e-file. A standard move that's always useful in the Italian."
+      }
+    ],
+    "strategicThemes": [
+      "The slow Italian is risk-free. Samay uses it to avoid theoretical battles and play a comfortable middlegame.",
+      "Patience pays off in the Pianissimo. The position improves naturally with each developing move.",
+      "The Bc4 remains powerful even in the slow approach. f7 pressure is a constant threat.",
+      "Samay's accessible, fun content style makes the slow Italian an ideal recommendation for improving players."
+    ],
+    "endgameTransitions": [
+      "The solid buildup leads to endgames where White has a slight but lasting edge from better piece placement.",
+      "The Bc4 and central pawns give White more space in all endgame types."
+    ]
+  },
+  {
+    "id": "mp-pro-samayraina-najdorf-e5",
+    "openingId": "pro-samayraina-najdorf",
+    "criticalPositionFen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+    "title": "...e5 Classical Najdorf",
+    "overview": "Samay's Najdorf at the ...a6 tabiya. The plan is ...e5, the classical response that gains central space and creates a fighting game. After ...e5 Nb3, Black develops with ...Be7, ...O-O, and prepares the queenside counter with ...b5. Samay's ambitious, tactical style thrives in the sharp Najdorf positions.",
+    "pawnBreaks": [
+      {
+        "move": "e7-e5",
+        "explanation": "The classical Najdorf move. ...e5 controls d4, gains central space, and activates the dark-squared bishop. It creates the dynamic pawn structure that defines the Najdorf.",
+        "fen": "rnbqkb1r/1p2pppp/p2p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      },
+      {
+        "move": "b7-b5",
+        "explanation": "After ...e5 and development, ...b5 opens the queenside. The ...b5 break creates counterplay with the open b-file and challenges White's control.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf8-e7 then ...O-O",
+        "explanation": "...Be7 and ...O-O complete kingside development. The solid setup prepares queenside counterplay."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nb8-d7 (flexible)",
+        "explanation": "...Nbd7 supports ...e5, prepares ...b5, and gives the knight options to go to b6 (pressure c4) or f8-g6 (kingside)."
+      }
+    ],
+    "strategicThemes": [
+      "The Najdorf is the most ambitious response to 1.e4. Samay chooses it for maximum fighting chances as Black.",
+      "The race between White's kingside attack and Black's queenside counterplay is the heart of the Najdorf.",
+      "The ...e5 pawn is Black's strategic anchor. It controls d4 and f4, limiting White's attacking options.",
+      "Samay's ambitious style makes the Najdorf his natural weapon. He plays for the full point from the opening."
+    ],
+    "endgameTransitions": [
+      "Najdorf endgames are complex. Black's queenside majority can create a passed pawn for winning chances.",
+      "After mutual attacks, Samay's tactical skill helps him navigate complex endgames."
+    ]
+  },
+  {
+    "id": "mp-pro-samayraina-najdorf-d5",
+    "openingId": "pro-samayraina-najdorf",
+    "criticalPositionFen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6",
+    "title": "...d5 Central Counter-strike",
+    "overview": "The ...d5 break is Black's nuclear option in the Najdorf. After preparation (...e6, development, ...O-O), ...d5 blows open the center. After exd5 Nxd5, the knight dominates from d5. Samay uses this when White overcommits to one side and leaves the center vulnerable.",
+    "pawnBreaks": [
+      {
+        "move": "d6-d5 (after ...e6 preparation)",
+        "explanation": "The ultimate central break. After exd5 Nxd5, Black's pieces activate and the centralized knight dominates. This transforms the position in Black's favor.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      },
+      {
+        "move": "e7-e5 (alternative)",
+        "explanation": "If ...d5 isn't feasible, ...e5 is always the reliable backup. The flexibility between the two breaks is the Najdorf's greatest strength.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nf6-d5 (after exd5)",
+        "explanation": "The Nd5 is the most powerful piece placement in the Najdorf. It dominates the center and attacks in every direction."
+      },
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-e6 supporting ...d5",
+        "explanation": "...Be6 supports the ...d5 break and develops actively. It's the natural preparation piece."
+      }
+    ],
+    "strategicThemes": [
+      "The ...d5 break rewards precise timing. Samay waits for the right moment when the break has maximum impact.",
+      "Flexibility between ...e5 and ...d5 keeps White guessing. This strategic uncertainty is Black's main advantage.",
+      "The centralized Nd5 dominates after the break. It's the foundation of Black's middlegame strategy.",
+      "Samay's tactical ambition shines in the sharp positions arising from ...d5."
+    ],
+    "endgameTransitions": [
+      "After a successful ...d5, Black often gets the better endgame due to active pieces and central control.",
+      "The Nd5 persists as a dominant piece in endgames — it controls the entire board."
+    ]
+  },
+  {
+    "id": "mp-pro-samayraina-nimzo-c5",
+    "openingId": "pro-samayraina-nimzo",
+    "criticalPositionFen": "rnbqk2r/pppp1ppp/4pn02/8/1bPP4/2N5/PP02PPPP/R1BQKBNR w KQkq - 2 4",
+    "title": "...c5 Challenging d4",
+    "overview": "Samay's Nimzo-Indian at the early ...Bb4 tabiya. The primary plan is ...c5, directly challenging White's d4 pawn. After ...c5, the center becomes fluid and Black's active bishop on b4 pins the Nc3. The ...Bxc3+ exchange gives Black doubled c-pawns for White but active piece play. Samay's solid, flexible style handles the resulting positions well.",
+    "pawnBreaks": [
+      {
+        "move": "c7-c5",
+        "explanation": "...c5 challenges d4 directly. After d5, Black gets a Benoni-type structure. After dxc5, Black recaptures and has active development. Either way, Black gets a fighting position.",
+        "fen": "rnbqk02r/pppp1ppp/4pn02/8/1bPP4/2N5/PP02PPPP/R1BQKBNR w KQkq - 2 4"
+      },
+      {
+        "move": "d7-d5",
+        "explanation": "...d5 is the solid alternative. After cxd5 exd5, Black gets an IQP but active pieces. After ...d5, the center is contested and Black develops naturally.",
+        "fen": "rnbqk02r/pppp1ppp/4pn02/8/1bPP4/02N5/PP02PPPP/R1BQKBNR w KQkq - 2 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bb4xc3+ (strategic trade)",
+        "explanation": "Trading ...Bxc3+ bxc3 gives White doubled c-pawns. Black loses the bishop pair but gets a permanent structural target. The doubled pawns are weak in endgames."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nb8-c6 or ...Nb8-d7",
+        "explanation": "...Nc6 pressures d4 directly. ...Nd7 is more flexible, supporting ...c5 and keeping the option of ...f5 for a future central challenge."
+      }
+    ],
+    "strategicThemes": [
+      "The Nimzo-Indian is one of the soundest defenses. Samay plays it for solid, reliable positions with fighting chances.",
+      "The ...Bxc3+ trade creates permanent doubled c-pawns for White. This structural weakness is Black's long-term advantage.",
+      "The ...c5 break is the most dynamic approach. It creates immediate central tension and gives Black active counterplay.",
+      "Samay's flexible style adapts to any White response. The Nimzo gives maximum flexibility with minimum risk."
+    ],
+    "endgameTransitions": [
+      "The doubled c-pawns are a permanent weakness that grows in endgames. Black should aim for simplified positions where the structural advantage decides.",
+      "After ...Bxc3+ and eventual piece exchanges, the endgame is inherently favorable for Black due to the better pawn structure."
+    ]
+  },
+  {
+    "id": "mp-pro-samayraina-nimzo-d5",
+    "openingId": "pro-samayraina-nimzo",
+    "criticalPositionFen": "rnbqk02r/pppp1ppp/4pn02/8/1bPP4/02N5/PP02PPPP/R1BQKBNR w KQkq - 2 4",
+    "title": "...d5 Solid Center",
+    "overview": "The ...d5 approach gives Black a classical, solid center. After ...d5 cxd5 exd5, Black gets an IQP position with active pieces. After ...d5 and development, Black's position is harmonious with no weaknesses. Samay uses this when he wants a strategic rather than tactical battle.",
+    "pawnBreaks": [
+      {
+        "move": "d7-d5",
+        "explanation": "...d5 contests the center directly. After cxd5 exd5, Black has an IQP but open lines and active piece play. The resulting positions are well-studied and reliable.",
+        "fen": "rnbqk02r/pppp1ppp/4pn02/8/1bPP4/02N5/PP02PPPP/R1BQKBNR w KQkq - 2 4"
+      },
+      {
+        "move": "c7-c5 (after ...d5)",
+        "explanation": "After ...d5 and development, ...c5 can follow to challenge d4 from both sides. The double challenge to d4 (...d5+c5) creates maximum central pressure.",
+        "fen": "rnbqk02r/pppp1ppp/4pn02/8/1bPP4/02N5/PP02PPPP/R1BQKBNR w KQkq - 2 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bb4 maintains pin (or ...Bxc3+)",
+        "explanation": "The Bb4 pins the Nc3, preventing it from supporting d5 or e4. The pin creates real discomfort for White. Trading ...Bxc3+ is always an option for the structural advantage."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nf6-e4 (central outpost)",
+        "explanation": "After ...d5 and ...Bxc3+, ...Ne4 occupies the ideal central square. The knight attacks c3, d2, and f2, creating maximum pressure."
+      }
+    ],
+    "strategicThemes": [
+      "The ...d5 Nimzo creates a classical, balanced position. Samay's solid style thrives in these strategic battles.",
+      "The Bb4 pin is the Nimzo's signature. It prevents Nc3 from playing its natural role and creates lasting discomfort.",
+      "After ...Bxc3+, the doubled c-pawns give Black a clear strategic target. Every piece should pressure them.",
+      "The Nimzo is one of the most reliable openings in chess. Samay recommends it for its balance of soundness and fighting potential."
+    ],
+    "endgameTransitions": [
+      "Nimzo endgames with doubled c-pawns are structurally favorable for Black. The pawns are permanent targets.",
+      "After ...d5 and exchanges, the resulting positions are comfortable. Black's solid structure and active pieces ensure equality at minimum."
+    ]
   }
 ]
