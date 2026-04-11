@@ -5257,5 +5257,661 @@
       "A successful ...d5 often leads to a position where Black has better pieces and equal or better structure. Endgames are excellent for Black.",
       "After ...d5 and piece exchanges, Black's active bishops and centralized pieces dominate in simplified positions. Carlsen's endgame technique does the rest."
     ]
+  },
+  {
+    "id": "mp-pro-hikaru-kia-kside",
+    "openingId": "pro-hikaru-kia",
+    "criticalPositionFen": "r2q1rk1/3nbppp/b1n1p3/ppppP3/5B2/3P1NP1/PPP2PBP/R2QRNK1 w - - 2 12",
+    "title": "Kingside Attack with Nf1-h2-g4/e3",
+    "overview": "Hikaru's KIA reaches a classic position with the e5 wedge clamping Black's kingside. The Nf1 is ready for the signature KIA knight maneuver — rerouting to h2 and then g4 or e3. The Bg2 controls the long diagonal, and the Bf4 guards e5. White's plan is a systematic kingside buildup while the e5 pawn restricts Black's counterplay.",
+    "pawnBreaks": [
+      {
+        "move": "f2-f4",
+        "explanation": "f4 reinforces e5 and prepares the f5 break. After f5, exf5 opens the e-file and f-file simultaneously, giving White's rooks attacking highways. The f5 push is the KIA's most devastating follow-up.",
+        "fen": "r2q1rk1/3nbppp/b1n1p3/ppppP3/5B2/3P1NP1/PPP2PBP/R2QRNK1 w - - 2 12"
+      },
+      {
+        "move": "h2-h4",
+        "explanation": "h4 prepares h5 to crack open the kingside. After h5, White threatens hxg6 (if Black plays ...g6) or h6 (fixing the g7 pawn as a target). This is the more aggressive kingside approach.",
+        "fen": "r2q1rk1/3nbppp/b1n1p3/ppppP3/5B2/3P1NP1/PPP2PBP/R2QRNK1 w - - 2 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf1-h2-g4",
+        "explanation": "The signature KIA maneuver. The knight goes to h2, then g4 where it attacks e5 (reinforcing the pawn), f6, and h6. From g4, combined with Qd2 or Qf3, it creates mating threats on the kingside."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-e2 or Qd1-d2",
+        "explanation": "Qe2 supports e5 and prepares to swing to h5 or g4. Qd2 connects the rooks and prepares Bh6, trading dark-squared bishops and weakening Black's king."
+      }
+    ],
+    "strategicThemes": [
+      "The e5 wedge is the KIA's defining feature. It restricts Black's Nf6 from its natural square, cramps the kingside, and controls d6 and f6.",
+      "The Bg2 is a long-range sniper. Even though the center is closed, it controls a8 and supports e4/d5 ideas if the center opens.",
+      "Hikaru's KIA is all about the knight maneuver Nf1-h2-g4. This transfers a piece to the kingside without weakening the center.",
+      "Black's ...b5+a5 counterplay is on the queenside but takes time. White's kingside attack should arrive first if executed efficiently."
+    ],
+    "endgameTransitions": [
+      "If the kingside attack wins material, the endgame is simple. The e5 pawn and space advantage make conversion easy.",
+      "In a closed endgame, the Bg2 and knight outperform Black's pieces due to the cramping e5 pawn."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-kia-f5",
+    "openingId": "pro-hikaru-kia",
+    "criticalPositionFen": "r2q1rk1/3nbppp/b1n1p3/ppppP3/5B2/3P1NP1/PPP2PBP/R2QRNK1 w - - 2 12",
+    "title": "f5 Pawn Break",
+    "overview": "The f4-f5 break is the KIA's ultimate weapon. After f5 exf5, the e-file and f-file open for White's rooks, and the Bg2 comes alive on the long diagonal. The Bf4 supports e5 throughout, and the entire position opens in White's favor. Hikaru times this break when Black can't generate sufficient counterplay.",
+    "pawnBreaks": [
+      {
+        "move": "f2-f4-f5",
+        "explanation": "The two-step process: f4 reinforces e5, then f5 tears open the kingside. After f5 exf5, White gets Re1 on the e-file and Rf1 on the f-file. The Bg2 also opens up to target a8 and d5.",
+        "fen": "r2q1rk1/3nbppp/b1n1p3/ppppP3/5B2/3P1NP1/PPP2PBP/R2QRNK1 w - - 2 12"
+      },
+      {
+        "move": "g3-g4",
+        "explanation": "After f4, g4 supports f5 more aggressively. It also prevents ...f5 counterplay from Black and gains even more kingside space. g4+f5 is the full pawn storm.",
+        "fen": "r2q1rk1/3nbppp/b1n1p3/ppppP3/5B2/3P1NP1/PPP2PBP/R2QRNK1 w - - 2 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf1-e3-d5 or Nf1-e3-g4",
+        "explanation": "Via e3, the knight reaches either d5 (a crushing outpost if the center opens) or g4 for the kingside attack. Ne3 is a versatile square that keeps options open."
+      },
+      {
+        "piece": "Rook",
+        "route": "Re1-e3-h3 (rook lift)",
+        "explanation": "The rook lift Re3-h3 adds a heavy piece to the kingside attack. Combined with Qh5 or Ng4, it creates overwhelming force on the h-file and around Black's king."
+      }
+    ],
+    "strategicThemes": [
+      "The f5 break is devastating because it opens BOTH the e-file and f-file simultaneously. White gets two highways to Black's king.",
+      "After f5 exf5, the d5 square becomes available for the knight or bishop. Nd5 in particular is crushing in this position.",
+      "Hikaru's strength is speed — he pushes f5 early and trusts the attacking potential. Slower players who delay f5 often miss the window.",
+      "Black's Ba6 is on the wrong side of the board. While it eyes d3, it does nothing to help the kingside defense. This is a crucial factor in White's attack."
+    ],
+    "endgameTransitions": [
+      "The f5 break should lead to direct attacking chances, not an endgame. If it does simplify, the opened files give White's rooks a decisive activity advantage.",
+      "After f5, even if Black survives, the structural damage to their position makes any endgame favorable for White."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-scotch-Ba3",
+    "openingId": "pro-hikaru-scotch",
+    "criticalPositionFen": "r3k2r/p1pp1pbp/b1p1q1p1/3nP3/2P2P2/BP6/P3Q1PP/RN2KB1R w KQkq - 3 12",
+    "title": "Exploit the Uncastled King",
+    "overview": "Hikaru's Scotch reaches a sharp position where Black's king is stuck in the center. The Ba3 prevents kingside castling, the e5 pawn controls the center, and the f4 pawn supports the wedge. White's plan is to keep the king stuck and open the center with Nc3 or direct piece attacks. The position is extremely tactical — exactly Hikaru's style.",
+    "pawnBreaks": [
+      {
+        "move": "c4-c5",
+        "explanation": "c5 opens diagonals and creates direct threats. After c5, the Ba3 diagonal opens further and the Nd5 is challenged. The position becomes very sharp with the king in the center.",
+        "fen": "r3k2r/p1pp1pbp/b1p1q1p1/3nP3/2P2P2/BP6/P3Q1PP/RN2KB1R w KQkq - 3 12"
+      },
+      {
+        "move": "f4-f5",
+        "explanation": "f5 attacks e6 and opens the f-file. After fxg6 or f5xe6, lines open toward Black's king. The combination of Ba3 preventing castling and f5 opening lines is devastating.",
+        "fen": "r3k2r/p1pp1pbp/b1p1q1p1/3nP3/2P2P2/BP6/P3Q1PP/RN2KB1R w KQkq - 3 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-c3 pressuring Nd5",
+        "explanation": "Nc3 develops the last piece and pressures the Nd5. After Nc3, if Black trades Nxc3, White gets open lines and rapid development. If the knight stays, White has multiple threats."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qe2-e4 or Qe2-d2",
+        "explanation": "Qe4 centralizes with tempo, targeting a8 and supporting both e5 and kingside operations. Qd2 prepares O-O-O with a rook on the d-file aimed at the uncastled king."
+      }
+    ],
+    "strategicThemes": [
+      "The uncastled king is the defining feature. Every move should prevent castling or exploit the exposed king position.",
+      "Ba3 is the key tactical piece — it prevents O-O and controls the a3-f8 diagonal. Without it, Black could simply castle and be fine.",
+      "The e5+f4 pawn duo controls the center and provides a stable base for the attack. Don't trade these pawns.",
+      "Hikaru thrives in tactical chaos. This position has concrete calculation at every turn — exactly where his speed chess skills shine."
+    ],
+    "endgameTransitions": [
+      "This position shouldn't reach an endgame if White plays correctly. The attacking chances should lead to material gain or checkmate.",
+      "If somehow an endgame is reached, White's extra pawn (e5) and better structure give a lasting advantage."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-scotch-center",
+    "openingId": "pro-hikaru-scotch",
+    "criticalPositionFen": "r3k2r/p1pp1pbp/b1p1q1p1/3nP3/2P2P2/BP6/P3Q1PP/RN2KB1R w KQkq - 3 12",
+    "title": "Central Buildup with Nc3 and O-O-O",
+    "overview": "White completes development with Nc3 and castles queenside, putting a rook on the d-file aimed directly at Black's uncastled king. With O-O-O, both rooks become active immediately. The combination of Ba3, e5, and rook on the d-file creates a position where Black can barely move without creating weaknesses.",
+    "pawnBreaks": [
+      {
+        "move": "g2-g4",
+        "explanation": "After O-O-O, g4 launches a pawn storm on the kingside. Since Black's king can't castle, the g4-g5 advance drives away defenders and opens lines for the final assault.",
+        "fen": "r3k2r/p1pp1pbp/b1p1q1p1/3nP3/2P2P2/BP6/P3Q1PP/RN2KB1R w KQkq - 3 12"
+      },
+      {
+        "move": "f4-f5",
+        "explanation": "f5 opens the f-file after O-O-O, pointing the Rf1 at Black's king. Combined with g4 and the centralized pieces, it creates overwhelming attacking force.",
+        "fen": "r3k2r/p1pp1pbp/b1p1q1p1/3nP3/2P2P2/BP6/P3Q1PP/RN2KB1R w KQkq - 3 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "King",
+        "route": "Ke1-O-O-O (queenside castle)",
+        "explanation": "O-O-O completes development with tempo — the Rd1 immediately pressures the d-file. Combined with the Ba3 preventing Black's castling, this is devastating."
+      },
+      {
+        "piece": "Rook",
+        "route": "Rd1-d4 or Rd1-d2 (rook activation)",
+        "explanation": "After O-O-O, the rook on d1 can swing to d4 (centralized, supporting f4 and attacking a4) or remain on d1 pressuring d7."
+      }
+    ],
+    "strategicThemes": [
+      "O-O-O is the natural follow-up. It develops the rook, gets the king safe, and creates immediate d-file pressure.",
+      "After O-O-O, White has both rooks active while Black's rooks are stuck on a8 and h8. This development advantage is crushing.",
+      "The Bg7 is fianchettoed but the e5 pawn blocks its diagonal. It's essentially a tall pawn — useless in the current structure.",
+      "Every tempo matters in this sharp position. Hikaru's trademark rapid development overwhelms slower opponents."
+    ],
+    "endgameTransitions": [
+      "The attack should be decisive before any endgame. If Black survives, White's better development and structure ensure a favorable simplification.",
+      "Material advantage gained from the attack converts trivially in any endgame."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-london-e4",
+    "openingId": "pro-hikaru-london",
+    "criticalPositionFen": "r4rk1/pp1nbppp/1qn1p3/3p1b2/2pP1B2/2P1PN2/PP1NBPPP/R1Q2RK1 w - - 6 12",
+    "title": "e4 Break Through the Locked Center",
+    "overview": "Hikaru's London faces Black's ...c4 push which locks the queenside. But this actually helps White — the closed queenside means Black's Qb6 has no targets, and White can focus entirely on the center and kingside. The e3-e4 break opens the position where White's bishops (Bf4, Be2) are ready to dominate. After e4 dxe4 Nxe4, White's pieces flood the center.",
+    "pawnBreaks": [
+      {
+        "move": "e3-e4",
+        "explanation": "The key break. After e4 dxe4 Nxe4, White's knight on e4 is powerfully centralized, the Bf4 controls the open diagonal, and the Be2 supports the kingside. Black's locked c4 pawn means no queenside counterplay.",
+        "fen": "r4rk1/pp1nbppp/1qn1p3/3p1b2/2pP1B2/2P1PN2/PP1NBPPP/R1Q2RK1 w - - 6 12"
+      },
+      {
+        "move": "g2-g4",
+        "explanation": "A sharp alternative: g4 challenges the Bf5 immediately. After g4 Bg6, White has gained kingside space and the h-file can be leveraged for attack. This is typical of Hikaru's aggressive London style.",
+        "fen": "r4rk1/pp1nbppp/1qn1p3/3p1b2/2pP1B2/2P1PN2/PP1NBPPP/R1Q2RK1 w - - 6 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nd2-f3-e5 or Nd2xe4",
+        "explanation": "After e4, the knight captures on e4 reaching a dominant central square. Alternatively, the Nd2 can go to f3 supporting e5, where a knight on e5 is the London's dream piece."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qc1-c2 (battery with Be2/Bf4)",
+        "explanation": "Qc2 gets out of the corner and supports e4. It also creates a potential battery with the Be2 on the e-file after e4 opens things up."
+      }
+    ],
+    "strategicThemes": [
+      "Black's ...c4 helps White by closing the queenside. Now Black's Qb6 has nothing to attack and White can focus on the center/kingside.",
+      "The Bf5 is Black's most active piece. Challenge it with Nh4 or g4 to reduce Black's counterplay.",
+      "After e4, the position opens in White's favor because White's pieces are better coordinated for central and kingside play.",
+      "The locked pawn structure (c3/c4) creates a permanent asymmetry. White plays in the center; Black is stuck on the queenside with no targets."
+    ],
+    "endgameTransitions": [
+      "After e4 and piece exchanges, White's better bishop (Bf4 vs Black's blocked Nc6) gives a lasting endgame edge.",
+      "The c4 pawn can become a target in endgames — it's advanced and separated from Black's other pawns."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-london-Nh4",
+    "openingId": "pro-hikaru-london",
+    "criticalPositionFen": "r4rk1/pp1nbppp/1qn1p3/3p1b2/2pP1B2/2P1PN2/PP1NBPPP/R1Q2RK1 w - - 6 12",
+    "title": "Nh4 Bishop Challenge",
+    "overview": "Before committing to e4, White can play Nh4 to challenge the Bf5 — Black's most active piece. After Nh4 Bg6 Nxg6 hxg6, Black's kingside is weakened (doubled g-pawns, open h-file) and White can attack down the h-file. This is a classic London technique that Hikaru employs frequently.",
+    "pawnBreaks": [
+      {
+        "move": "f2-f3",
+        "explanation": "After trading on g6, f3 prepares e4 with extra support. The e4 break now comes with a semi-open f-file potential (after fxe4 fxe4 or after e4 dxe4 fxe4).",
+        "fen": "r4rk1/pp1nbppp/1qn1p3/3p1b2/2pP1B2/2P1PN2/PP1NBPPP/R1Q2RK1 w - - 6 12"
+      },
+      {
+        "move": "h2-h4-h5",
+        "explanation": "After ...Bg6 Nxg6 hxg6, White plays h4-h5 to pry open the h-file. After hxg6 fxg6, the h-file is wide open and White's rook on h1 becomes a lethal attacking piece.",
+        "fen": "r4rk1/pp1nbppp/1qn1p3/3p1b2/2pP1B2/2P1PN2/PP1NBPPP/R1Q2RK1 w - - 6 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-h4 (challenge Bf5)",
+        "explanation": "Nh4 forces the trade of Black's best piece. After Nxg6 hxg6, White has weakened Black's kingside pawn structure and opened attacking possibilities on the h-file."
+      },
+      {
+        "piece": "Rook",
+        "route": "Rf1-h1 (after h-file opens)",
+        "explanation": "With the h-file open, Rh1 creates direct threats against Black's king. Combined with Qh5 or Bg5, it forms a devastating attack."
+      }
+    ],
+    "strategicThemes": [
+      "Trading the Bf5 is strategically winning for White. It removes Black's best piece and permanently damages the kingside pawn structure.",
+      "The doubled g-pawns (g6+g7) are weak — they can't protect each other and the g6 pawn is a fixed target.",
+      "The open h-file is White's primary attacking asset after the bishop trade. Rh1+Qh5 creates overwhelming force.",
+      "Hikaru loves this bishop trade technique — it's simple, effective, and leads to positions where speed of execution decides."
+    ],
+    "endgameTransitions": [
+      "Doubled g-pawns are a permanent structural weakness. Even in endgames, the g6 pawn is a target and the open h-file gives White's rook activity.",
+      "After removing Black's good bishop, White's Bf4 is the dominant minor piece in any simplified position."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-najdorf-b4",
+    "openingId": "pro-hikaru-najdorf",
+    "criticalPositionFen": "r2q1rk1/3nbppp/p2pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ3P/2KR1B1R w - - 0 12",
+    "title": "Queenside Storm with ...b4 and ...a5",
+    "overview": "Hikaru's Najdorf faces the English Attack (g4, f3, Be3, O-O-O). Black has already pushed ...b5, the standard queenside counter. The plan is to continue with ...b4, driving away the Nc3 and opening lines toward White's king. This is a pure race — Black attacks the queenside while White storms the kingside.",
+    "pawnBreaks": [
+      {
+        "move": "b5-b4",
+        "explanation": "The critical advance. ...b4 attacks the Nc3, which is White's key defensive piece. After Na4, Black gets ...Nc5 with a powerful centralized knight. After Nd5, Black trades and gets open lines for the rooks on the b-file.",
+        "fen": "r2q1rk1/3nbppp/p2pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ3P/2KR1B1R w - - 0 12"
+      },
+      {
+        "move": "a6-a5",
+        "explanation": "Supports ...b4 and prepares ...a4-a3 to blow open the queenside completely. After ...a3, the b2 pawn is challenged and White's king shelter collapses.",
+        "fen": "r2q1rk1/3nbppp/p2pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ3P/2KR1B1R w - - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nd7-b6-c4 (outpost)",
+        "explanation": "After ...b4 pushes the Nc3 away, the Nb6-c4 maneuver becomes even stronger. The Nc4 attacks a3, b2, d2, e3 — all critical squares near White's king."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Ra8-b8 (pressure on b-file)",
+        "explanation": "...Rb8 puts the rook on the semi-open b-file targeting b2. After ...b4, the b-file opens fully and the rook becomes a battering ram against White's king."
+      }
+    ],
+    "strategicThemes": [
+      "The English Attack is a race: g4-g5 vs ...b5-b4. Hikaru's speed chess instincts make him perfect for these positions — he attacks faster.",
+      "Every queenside tempo counts. ...b4 should come as soon as it's tactically safe. Don't waste time on unnecessary preparatory moves.",
+      "The ...Nc4 outpost is devastating in the English Attack. It's close to White's king and attacks critical squares. Prioritize getting a knight there.",
+      "Black's king is safe on g8 behind the intact kingside pawns. White's g4 advance takes time to become dangerous."
+    ],
+    "endgameTransitions": [
+      "If the queenside attack succeeds, Black wins material or destroys White's king shelter. Any resulting endgame is winning.",
+      "In a race that both sides survive, Black's queenside majority (passed b-pawn) is usually more dangerous than White's kingside majority."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-najdorf-d5",
+    "openingId": "pro-hikaru-najdorf",
+    "criticalPositionFen": "r2q1rk1/3nbppp/p2pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ3P/2KR1B1R w - - 0 12",
+    "title": "Central ...d5 Counter-punch",
+    "overview": "When White commits to g4, the center can become vulnerable. The ...d5 break hits back before White's kingside attack develops fully. After ...d5 exd5 Nxd5, Black gets a centralized knight, active pieces, and the center opens in Black's favor since White's pieces are aimed at the kingside, not the center.",
+    "pawnBreaks": [
+      {
+        "move": "d6-d5",
+        "explanation": "The counter-strike. After exd5 Nxd5 Nxd5 Bxd5, Black has a powerful bishop pair and open center. White's g4 looks overextended and the Bf1 is undeveloped. Black seizes the initiative.",
+        "fen": "r2q1rk1/3nbppp/p2pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ3P/2KR1B1R w - - 0 12"
+      },
+      {
+        "move": "e5xf4 (if f4 is played)",
+        "explanation": "If White pushes f4, ...exf4 Bxf4 opens the e-file for Black's rook. ...Re8 creates immediate threats and the open center neutralizes White's kingside attack.",
+        "fen": "r2q1rk1/3nbppp/p2pbn2/1p2p3/4P1P1/1NN1BP2/PPPQ3P/2KR1B1R w - - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nf6-d5 (central dominance)",
+        "explanation": "After ...d5 exd5 Nxd5, the knight dominates the center. It attacks Be3, controls c3 and f4, and can't be dislodged. This is the Najdorf's strongest piece placement."
+      },
+      {
+        "piece": "Rook",
+        "route": "...Rf8-c8 targeting c2",
+        "explanation": "After the center opens, ...Rc8 targets c2 — the weakest point near White's king. Combined with the open center, it creates dangerous tactical threats."
+      }
+    ],
+    "strategicThemes": [
+      "Hikaru's ...d5 timing is legendary. He feels the moment when White's pieces are overcommitted to the kingside and strikes in the center.",
+      "After ...d5, White's g4 pawn looks silly — it weakened the kingside for nothing and the attacking pieces are scattered.",
+      "The center is king. Opening it when your pieces are better coordinated is the strongest strategic concept in chess.",
+      "Flexibility between ...b4 (queenside) and ...d5 (center) keeps White guessing. Hikaru decides at the last moment based on White's setup."
+    ],
+    "endgameTransitions": [
+      "A successful ...d5 usually leads to Black gaining the initiative. The resulting positions favor Black's better piece coordination.",
+      "The centralized Nd5 in an endgame is a permanent advantage. It dominates the board and can't be challenged."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-kid-g5",
+    "openingId": "pro-hikaru-kid",
+    "criticalPositionFen": "r1bq1rk1/pppnn1bp/3p2p1/3Pp3/2P1Pp2/2NN1P2/PP2B1PP/R1BQ1RK1 w - - 0 12",
+    "title": "g5-g4 Kingside Pawn Storm",
+    "overview": "Hikaru's KID is already in attack mode — the ...f4 pawn has sealed the kingside and Black is ready for ...g5-g4. This is the most aggressive KID plan: the g-pawn charges forward to crack open the f3 pawn and create open files toward White's king. The Bg7 is a monster behind the ...f4+e5 chain, and the knights will reroute to support the assault.",
+    "pawnBreaks": [
+      {
+        "move": "g6-g5-g4",
+        "explanation": "The battering ram. ...g5 prepares ...g4, and after ...g4 fxg4, BOTH the f-file and g-file open. Black's Rf8 and Bg7 become devastating on these open lines. The ...f4 pawn ensures White can't close the position.",
+        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Pp3/2P1Pp2/2NN1P2/PP2B1PP/R1BQ1RK1 w - - 0 12"
+      },
+      {
+        "move": "h7-h5",
+        "explanation": "An alternative: ...h5 prepares ...h4 to attack g3 (if White plays g3) or ...h4-h3 to create a weakness on g2. Combined with ...g5, it creates a two-pronged kingside pawn storm.",
+        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Pp3/2P1Pp2/2NN1P2/PP2B1PP/R1BQ1RK1 w - - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Ne7-g6-h4",
+        "explanation": "The Ne7 reroutes to g6, then h4. On h4, it threatens Nf3+ or Nxg2 sacrifices. The knight on h4 is a direct threat to White's king and forces defensive concessions."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nd7-f6-g4 (after g4 opens)",
+        "explanation": "After ...g4 opens lines, the Nd7 returns to f6 then jumps to g4 via h5. The knight on g4 attacks f2, e3, and h2 — creating devastating tactical threats."
+      }
+    ],
+    "strategicThemes": [
+      "With ...f4 already played, Hikaru has committed to the kingside attack. There's no turning back — the ...g5-g4 storm must be executed efficiently.",
+      "The Bg7 is the strongest piece on the board. After ...g4 opens the g-file, it controls the long diagonal and supports the attack from the rear.",
+      "White's queenside play with c5 is slow. Black's kingside attack arrives first if executed with Hikaru's signature speed.",
+      "The Rf8 is already perfectly placed on the f-file. After ...g4 fxg4, it becomes an attacking piece immediately without needing to move."
+    ],
+    "endgameTransitions": [
+      "The KID attack should lead to checkmate or decisive material gain, not an endgame. Keep attacking.",
+      "If forced to simplify, the ...f4+e5 pawn chain gives Black lasting kingside space that persists in any endgame."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-kid-Nf6",
+    "openingId": "pro-hikaru-kid",
+    "criticalPositionFen": "r1bq1rk1/pppnn1bp/3p2p1/3Pp3/2P1Pp2/2NN1P2/PP2B1PP/R1BQ1RK1 w - - 0 12",
+    "title": "Knight Regrouping for Maximum Force",
+    "overview": "Before pushing ...g5, Hikaru often regroups the knights to their ideal attacking positions. The Ne7 goes to g6 (controlling f4, h4, e5) and the Nd7 returns to f6 (targeting h5, g4, e4). With both knights on aggressive squares and the Bg7 supporting, the attack has maximum firepower.",
+    "pawnBreaks": [
+      {
+        "move": "c7-c5",
+        "explanation": "A positional alternative: ...c5 completely locks the queenside, denying White's c5 break forever. This removes all queenside counterplay and gives Black unlimited time for the kingside attack.",
+        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Pp3/2P1Pp2/2NN1P2/PP2B1PP/R1BQ1RK1 w - - 0 12"
+      },
+      {
+        "move": "b7-b5",
+        "explanation": "A surprising queenside diversion. ...b5 threatens ...b4 attacking the Nc3 and can force White to react on the queenside, giving Black extra time for the kingside buildup.",
+        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Pp3/2P1Pp2/2NN1P2/PP2B1PP/R1BQ1RK1 w - - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-h3 (targeting g2)",
+        "explanation": "...Bh3 is a devastating move in the KID. It attacks g2, and if White's bishop moves, Bh3 creates mating threats with ...Ng4 or ...Qh4. Combined with ...Ng6 and ...Rf6-h6, it's lethal."
+      },
+      {
+        "piece": "Queen",
+        "route": "...Qd8-e8-h5",
+        "explanation": "The queen reroutes via e8 to h5 for the kingside attack. On h5, it combines with ...Bh3, ...Ng6, and ...Rf6 to create a devastating attacking setup."
+      }
+    ],
+    "strategicThemes": [
+      "Piece placement before pawn pushes. Getting the knights, bishop, and queen to ideal squares before committing to ...g5 maximizes the attack's power.",
+      "The ...Bh3 move is a key KID idea. It removes White's light-squared bishop (the main defender of the kingside) and exposes g2.",
+      "Hikaru's KID attacks are precisely calculated. He builds the maximum attacking force before unleashing the pawn storm.",
+      "The closed center (d5 pawn) means White can't strike back in the center. This gives Black a risk-free environment for the kingside attack."
+    ],
+    "endgameTransitions": [
+      "If the attack wins material, the endgame is trivial. The KID attack should be decisive.",
+      "If queens are traded defensively, Black's active minor pieces and kingside space advantage still give practical winning chances."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzo-c5",
+    "openingId": "pro-hikaru-nimzo",
+    "criticalPositionFen": "r2q1rk1/p2n1ppp/bp2pn2/2p3B1/3P4/P3PN2/1PQ2PPP/R3KB1R w KQ - 0 12",
+    "title": "Target the Doubled c-Pawns",
+    "overview": "Hikaru's Nimzo has already achieved the Bxc3+ trade, giving White doubled c-pawns (c2+c3). Black's plan is to pressure these doubled pawns with ...c5, ...Ba6 (preventing easy Be2 development), and piece pressure. The ...c5 break challenges d4 and creates targets in White's pawn structure that persist permanently.",
+    "pawnBreaks": [
+      {
+        "move": "c5xd4",
+        "explanation": "When the timing is right, ...cxd4 exd4 (or cxd4) exposes White's isolated d-pawn or creates backward c-pawns. After ...cxd4, White's pawns on c2 and d4 are both potential targets that Black's pieces can attack.",
+        "fen": "r2q1rk1/p2n1ppp/bp2pn2/2p3B1/3P4/P3PN2/1PQ2PPP/R3KB1R w KQ - 0 12"
+      },
+      {
+        "move": "e6-e5",
+        "explanation": "A central challenge. ...e5 attacks d4 and if dxe5 Nxe5, Black has a powerful centralized knight. If d5, Black gets the e5 square for a knight or bishop permanently.",
+        "fen": "r2q1rk1/p2n1ppp/bp2pn2/2p3B1/3P4/P3PN2/1PQ2PPP/R3KB1R w KQ - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Ba6 stays on a6 (restricting White)",
+        "explanation": "The Ba6 prevents White from playing Be2, making it harder for White to complete development. As long as Ba6 stays, White's Bf1 and Ke1 are awkward. This is a key Nimzo concept."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nd7-e5 or ...Nf6-d5",
+        "explanation": "Both knights aim for central outposts. ...Ne5 is strong after ...cxd4 opens things up. ...Nd5 targets the weakened c3 and e3 squares if the center opens."
+      }
+    ],
+    "strategicThemes": [
+      "The doubled c-pawns are White's permanent weakness. Black should avoid letting White undouble them (don't allow c4 with good compensation).",
+      "The Ba6 is a strategic monster in the Nimzo. It's not just a passive piece — it actively prevents White's development and controls c4.",
+      "Hikaru's approach is to keep the pressure up. Don't let White consolidate — every move should create a new problem.",
+      "White's Bg5 pins the Nf6 but after ...h6 Be3, it's lost time. Hikaru often welcomes the Bg5 pin because challenging it costs White tempo."
+    ],
+    "endgameTransitions": [
+      "The doubled c-pawns are even weaker in endgames. Without piece activity to compensate, they become permanent targets that tie down White's pieces.",
+      "A knight vs bishop endgame with doubled pawns is miserable for White. The knight can attack both c-pawns simultaneously."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzo-d5",
+    "openingId": "pro-hikaru-nimzo",
+    "criticalPositionFen": "r2q1rk1/p2n1ppp/bp2pn2/2p3B1/3P4/P3PN2/1PQ2PPP/R3KB1R w KQ - 0 12",
+    "title": "Central Control with ...d5 Setup",
+    "overview": "Black builds toward ...d5, establishing a solid central pawn structure and potentially creating an IQP for White (after ...cxd4 exd4 ...d5 cxd5 exd5). The resulting position gives Black active piece play against White's isolated d-pawn. This is a more patient approach that Hikaru uses against well-prepared opponents.",
+    "pawnBreaks": [
+      {
+        "move": "d7-d5 (prepared via ...Nd7)",
+        "explanation": "After regrouping with ...Nd7, the ...d5 advance is strong. It stakes a claim in the center and can create an IQP for White after exchanges. The Ba6 prevents the simple Be2 response.",
+        "fen": "r2q1rk1/p2n1ppp/bp2pn2/2p3B1/3P4/P3PN2/1PQ2PPP/R3KB1R w KQ - 0 12"
+      },
+      {
+        "move": "b6-b5",
+        "explanation": "Gaining queenside space. ...b5 supports ...c4 (if desired to fix the doubled pawns as targets) or simply gains space. The Ba6 is already ideally placed to support this advance.",
+        "fen": "r2q1rk1/p2n1ppp/bp2pn2/2p3B1/3P4/P3PN2/1PQ2PPP/R3KB1R w KQ - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "...Rf8-c8 (pressure on c-file)",
+        "explanation": "...Rc8 puts the rook on the c-file, targeting the doubled c-pawns. Combined with ...Qa5 or ...Qc7, it creates a battery against the weak c2 pawn."
+      },
+      {
+        "piece": "Queen",
+        "route": "...Qd8-c7 or ...Qd8-a5",
+        "explanation": "...Qc7 supports the c-file and creates a queen+rook battery on c8/c7. ...Qa5 targets a3 and c3, increasing pressure on White's weakened queenside."
+      }
+    ],
+    "strategicThemes": [
+      "Building ...d5 carefully gives Black a rock-solid center. Combined with ...Ba6, it prevents White from ever getting comfortable.",
+      "The Nimzo is about making White suffer for the doubled pawns. Patient pressure is more effective than wild attacks.",
+      "White's uncastled king is a real issue. The Ba6 prevents Be2+O-O, and White must find an ugly way to get the king safe.",
+      "Hikaru balances tactical alertness with strategic patience in the Nimzo. He'll pounce on any concrete opportunity but is happy to squeeze slowly."
+    ],
+    "endgameTransitions": [
+      "An IQP endgame (White's d4 isolated) is comfortable for Black. The d4 pawn becomes a target and Black's pieces are more active.",
+      "Any endgame where White has the doubled c-pawns is structurally lost. The permanent weakness gives Black a decisive advantage with correct technique."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-benko-ab",
+    "openingId": "pro-hikaru-benko",
+    "criticalPositionFen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 5 12",
+    "title": "a-file and b-file Pressure",
+    "overview": "Hikaru's Benko Gambit has sacrificed a pawn for long-term queenside pressure. The a-file and b-file are the compensation — Black's rooks will dominate these open files while White struggles to develop the queenside. The Bg7 rakes the long diagonal toward a1, and the knights can maneuver to pressure a2, b2, and c4. White's extra pawn is meaningless if Black controls the open files.",
+    "pawnBreaks": [
+      {
+        "move": "e7-e6",
+        "explanation": "Challenges the d5 pawn. After ...e6 dxe6 fxe6, the e-file opens for Black's rook and the d-pawn disappears. Alternatively, if White doesn't take, ...exd5 exd5 gives Black a semi-open e-file and targets on d5.",
+        "fen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 5 12"
+      },
+      {
+        "move": "c5-c4",
+        "explanation": "A positional advance that fixes White's queenside as a target. ...c4 cements Black's space on the queenside and supports ...Nc5-b3 or ...Nd3, invading White's position.",
+        "fen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 5 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "...Ra8-a3 or ...Ra8-b8",
+        "explanation": "...Ra3 invades on the third rank, pressuring a2/b3/c3. ...Rb8 targets the b2 pawn directly. Doubling rooks on the a-file or b-file with Qa8 creates overwhelming pressure."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nd7-b6-a4 or ...Nf6-e8-c7-b5",
+        "explanation": "Knights maneuver to invade White's queenside. Na4 attacks b2 and c3 directly. Nb5 targets a3, c3, and d4 — all key squares. These knight invasions are the Benko's tactical punch."
+      }
+    ],
+    "strategicThemes": [
+      "The Benko is about permanent positional compensation. The open a and b files give Black pressure that lasts the entire game — White can never escape it.",
+      "The Bg7 is a critical piece: it controls the long diagonal and supports the ...Nd4 ideas. After ...Nd4, combined with the bishop, it creates mating threats.",
+      "White's extra pawn means nothing if Black controls the files. Hikaru's Benko is about demonstrating that activity > material.",
+      "White's queenside pieces (Bc1, Ra1) are awkwardly placed. Developing them means moving pawns, which creates more targets."
+    ],
+    "endgameTransitions": [
+      "Benko endgames are often excellent for Black despite being a pawn down. The active rooks and queenside pressure create real winning chances.",
+      "If White returns the pawn to escape the pressure, the resulting endgame is equal or better for Black due to the active pieces."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-benko-d5",
+    "openingId": "pro-hikaru-benko",
+    "criticalPositionFen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 5 12",
+    "title": "Central ...e6 Challenge",
+    "overview": "Beyond pure queenside pressure, Black can challenge the center with ...e6. This undermines White's d5 pawn — the anchor of the position. After ...e6 dxe6 fxe6, Black gets the f-file for the rook and active piece play in the center. Hikaru uses this to combine central and queenside pressure simultaneously.",
+    "pawnBreaks": [
+      {
+        "move": "e7-e6",
+        "explanation": "The central challenge. ...e6 attacks d5 and opens the position. After dxe6 fxe6, Black has open f-file + queenside pressure — overwhelming. If d6 is maintained, Black trades with ...exd5 and targets the isolated d5 pawn.",
+        "fen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 5 12"
+      },
+      {
+        "move": "d6-d5 (if possible)",
+        "explanation": "In some positions, ...d5 directly is even stronger. After ...d5 exd5 Nxd5, the knight dominates the center and the Bg7 opens fully. This is the most aggressive central break.",
+        "fen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 5 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "...Rf8-e8 or ...Rf8-b8",
+        "explanation": "After ...e6, the rook shifts to support the center. ...Re8 supports ...e5 or pressures the e-file. ...Rb8 maintains queenside pressure while the center opens."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nd7-e5 (central outpost)",
+        "explanation": "After the center opens, ...Ne5 is a powerful centralized knight. It attacks c4, d3, f3, and g4 — creating threats in all directions."
+      }
+    ],
+    "strategicThemes": [
+      "The ...e6 break combines central and queenside pressure. White can't handle both simultaneously.",
+      "After ...e6, the Bg7 becomes even stronger as the center opens. The long diagonal becomes a devastating weapon.",
+      "Hikaru's Benko style is aggressive — he doesn't just sit on the queenside. He probes the center to create additional weaknesses.",
+      "The combination of open files (a, b) and an open center is too much for most defenses. The rooks and bishops dominate completely."
+    ],
+    "endgameTransitions": [
+      "After ...e6 and piece exchanges, the resulting positions often leave White with isolated or backward pawns that are easy to target.",
+      "Even a pawn down, Black's active pieces and better structure (after ...exd5) make the endgame very comfortable."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-english-d4",
+    "openingId": "pro-hikaru-english",
+    "criticalPositionFen": "r2q1rk1/ppp1b1pp/1nn1bp2/4p3/8/2NPBNP1/PP2PPBP/2RQ1RK1 w - - 0 11",
+    "title": "Central d4 Advance",
+    "overview": "Hikaru's English mirrors Carlsen's setup but with a more aggressive execution. The d3-d4 break is the primary plan — opening the center when pieces are optimally placed. After d4 exd4 Nxd4, the Bg2 comes alive on the long diagonal and White's centralized pieces dominate. Hikaru plays this more aggressively, looking for quick tactical opportunities.",
+    "pawnBreaks": [
+      {
+        "move": "d3-d4",
+        "explanation": "The central break. After d4 exd4 Nxd4, White's pieces are ideally placed — Nd4 dominates the center, Bg2 opens on the diagonal, and Be3 supports everything. Hikaru times this for maximum impact.",
+        "fen": "r2q1rk1/ppp1b1pp/1nn1bp2/4p3/8/2NPBNP1/PP2PPBP/2RQ1RK1 w - - 0 11"
+      },
+      {
+        "move": "e2-e4",
+        "explanation": "A more ambitious approach. e4 grabs central space and prepares d4 or d5. After e4 d5, White gets a Maroczy Bind-like structure with c4+e4 that restricts Black's piece mobility.",
+        "fen": "r2q1rk1/ppp1b1pp/1nn1bp2/4p3/8/2NPBNP1/PP2PPBP/2RQ1RK1 w - - 0 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5 (after d4 opens center)",
+        "explanation": "Nd5 is the ultimate outpost in the English. After d4 and the center opens, Nd5 attacks c7, e7, b6, and f6. It's nearly impossible to dislodge and dominates the position."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-d2 preparing Bh6",
+        "explanation": "Qd2 prepares the Bh6 exchange of dark-squared bishops. After Bh6 Bxh6 Qxh6, White threatens Nd5 and has pressure on the dark squares around Black's king."
+      }
+    ],
+    "strategicThemes": [
+      "Hikaru's English is more tactical than Carlsen's. He looks for concrete opportunities after d4 rather than slow maneuvering.",
+      "The Bg2 is the position's strongest asset. Every plan should aim to activate it — d4, e4, or Nd5 all open its diagonal.",
+      "Black's ...f6 weakens the e6 pawn and light squares. White should target this with Nd5 or Bg2 pressure.",
+      "Speed of execution matters. Hikaru pushes d4 early and trusts the resulting tactical positions."
+    ],
+    "endgameTransitions": [
+      "After Nd5 and exchanges, White's Bg2 dominates endgames. The long diagonal controls both flanks.",
+      "The English structure gives White a lasting initiative. Even in endgames, the Bg2 and knight outposts provide real winning chances."
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-english-Nd5",
+    "openingId": "pro-hikaru-english",
+    "criticalPositionFen": "r2q1rk1/ppp1b1pp/1nn1bp2/4p3/8/2NPBNP1/PP2PPBP/2RQ1RK1 w - - 0 11",
+    "title": "Nd5 Outpost Occupation",
+    "overview": "Before committing to d4, White can play for Nd5 directly. The Nd5 is devastating in this structure — it attacks c7, e7, b6, and controls the center. If Black trades Nxd5, cxd5 gives White a protected passed pawn. If the knight stays, it paralyzes Black's position.",
+    "pawnBreaks": [
+      {
+        "move": "b2-b4",
+        "explanation": "b4 gains queenside space and prepares b5, pushing Black's knights from c6/b6. This opens lines for the Rc1 and supports the Nd5 by driving away defenders.",
+        "fen": "r2q1rk1/ppp1b1pp/1nn1bp2/4p3/8/2NPBNP1/PP2PPBP/2RQ1RK1 w - - 0 11"
+      },
+      {
+        "move": "a2-a4",
+        "explanation": "a4 supports b5 and prevents ...a5. It also threatens a5 itself, driving the Nb6 from its current square and weakening Black's queenside.",
+        "fen": "r2q1rk1/ppp1b1pp/1nn1bp2/4p3/8/2NPBNP1/PP2PPBP/2RQ1RK1 w - - 0 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5 (outpost occupation)",
+        "explanation": "Jump to d5 immediately when possible. After Nd5 Nxd5 cxd5, White gets a dangerous passed pawn on d5 supported by the Bg2 and Be3."
+      },
+      {
+        "piece": "Rook",
+        "route": "Rc1-c2 (doubling on c-file)",
+        "explanation": "Rc2 prepares to double rooks on the c-file. After Nd5 and exchanges, the c-file becomes a highway for White's rooks to invade."
+      }
+    ],
+    "strategicThemes": [
+      "The Nd5 is the English Opening's strongest idea. It dominates the center and creates problems everywhere.",
+      "After Nxd5 cxd5, the passed d-pawn is a long-term asset. It ties down Black's pieces to blockading duties.",
+      "Hikaru's style in the English is to create concrete threats quickly. Nd5 combined with b4-b5 creates rapid pressure.",
+      "Black's ...f6 weakens e6, making Nd5 even stronger. The knight attacks e7 and supports d5+Be3 pressure on e6."
+    ],
+    "endgameTransitions": [
+      "A passed d5 pawn in an endgame is a decisive advantage. It advances with support from the Bg2 and becomes a queen.",
+      "If the Nd5 is traded and the d5 pawn advances, Black's pieces become passive blockaders — exactly what White wants in an endgame."
+    ]
   }
 ]
