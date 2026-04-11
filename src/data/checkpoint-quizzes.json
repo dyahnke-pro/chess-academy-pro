@@ -7,7 +7,7 @@
       "concept": "Central d4 Break"
     },
     {
-      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 3",
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
       "correctMove": "Bc4",
       "hint": "Develop a piece toward the center and target a weakness.",
       "concept": "Piece Development"
@@ -205,7 +205,7 @@
   ],
   "kings-indian-defence": [
     {
-      "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 7",
+      "fen": "r1bq1rk1/pppnnpbp/3p2p1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 8",
       "correctMove": "f5",
       "hint": "Launch the classic KID kingside counter-attack by challenging e4.",
       "concept": "f5 Pawn Storm"

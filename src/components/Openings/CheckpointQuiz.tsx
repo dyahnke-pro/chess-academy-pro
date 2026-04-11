@@ -64,11 +64,13 @@ export function CheckpointQuiz({
     ({ square }: { square: string }): void => {
       if (state !== 'waiting' || isPlanQuiz) return;
 
+      const chess = new Chess(quiz.fen);
+      const sideToMove = chess.turn(); // 'w' or 'b'
+
       if (selectedSquareRef.current === null) {
-        // First click — select the piece
-        const chess = new Chess(quiz.fen);
+        // First click — select the piece (only allow side to move)
         const piece = chess.get(square);
-        if (piece) {
+        if (piece && piece.color === sideToMove) {
           selectedSquareRef.current = square;
         }
       } else {
@@ -76,6 +78,14 @@ export function CheckpointQuiz({
         const from = selectedSquareRef.current;
         selectedSquareRef.current = null;
         if (from === square) return; // clicked same square, deselect
+
+        // If clicking another own piece, re-select it instead
+        const piece = chess.get(square);
+        if (piece && piece.color === sideToMove) {
+          selectedSquareRef.current = square;
+          return;
+        }
+
         tryMove(from, square);
       }
     },
