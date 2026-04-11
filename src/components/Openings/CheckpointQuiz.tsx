@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
@@ -14,6 +14,12 @@ interface CheckpointQuizProps {
 
 type QuizState = 'waiting' | 'correct' | 'incorrect';
 
+function checkMoveCorrect(san: string, from: string, to: string, lan: string, correctMove: string): boolean {
+  return san === correctMove
+    || `${from}${to}` === correctMove
+    || lan === correctMove;
+}
+
 export function CheckpointQuiz({
   quiz,
   boardOrientation,
@@ -23,28 +29,57 @@ export function CheckpointQuiz({
   const [state, setState] = useState<QuizState>('waiting');
   const [showHint, setShowHint] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
+  const selectedSquareRef = useRef<string | null>(null);
 
   const isPlanQuiz = quiz.type === 'plan' && quiz.choices && quiz.correctIndex !== undefined;
 
-  const handleDrop = useCallback(
-    ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }): boolean => {
-      if (state !== 'waiting' || !targetSquare || isPlanQuiz) return false;
+  const tryMove = useCallback(
+    (from: string, to: string): boolean => {
+      if (state !== 'waiting' || isPlanQuiz) return false;
 
       const chess = new Chess(quiz.fen);
-      const move = chess.move({ from: sourceSquare, to: targetSquare, promotion: 'q' });
+      const move = chess.move({ from, to, promotion: 'q' });
 
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive guard
       if (!move) return false;
 
-      const isCorrect = move.san === quiz.correctMove
-        || `${move.from}${move.to}` === quiz.correctMove
-        || move.lan === quiz.correctMove;
-
+      const isCorrect = checkMoveCorrect(move.san, move.from, move.to, move.lan, quiz.correctMove);
       setState(isCorrect ? 'correct' : 'incorrect');
       setTimeout(() => onComplete(isCorrect), 1500);
       return true;
     },
     [quiz, state, onComplete, isPlanQuiz],
+  );
+
+  const handleDrop = useCallback(
+    ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }): boolean => {
+      if (!targetSquare) return false;
+      selectedSquareRef.current = null;
+      return tryMove(sourceSquare, targetSquare);
+    },
+    [tryMove],
+  );
+
+  const handleSquareClick = useCallback(
+    ({ square }: { square: string }): void => {
+      if (state !== 'waiting' || isPlanQuiz) return;
+
+      if (selectedSquareRef.current === null) {
+        // First click — select the piece
+        const chess = new Chess(quiz.fen);
+        const piece = chess.get(square);
+        if (piece) {
+          selectedSquareRef.current = square;
+        }
+      } else {
+        // Second click — try to move
+        const from = selectedSquareRef.current;
+        selectedSquareRef.current = null;
+        if (from === square) return; // clicked same square, deselect
+        tryMove(from, square);
+      }
+    },
+    [state, isPlanQuiz, quiz.fen, tryMove],
   );
 
   const handleChoiceSelect = useCallback(
@@ -78,6 +113,7 @@ export function CheckpointQuiz({
             options={{
               position: quiz.fen,
               onPieceDrop: handleDrop,
+              onSquareClick: handleSquareClick,
               boardOrientation: boardOrientation,
               allowDragging: state === 'waiting' && !isPlanQuiz,
             }}
