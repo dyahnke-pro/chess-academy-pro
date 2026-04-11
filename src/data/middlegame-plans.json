@@ -8127,5 +8127,497 @@
       "The ...e6 setup leads to solid endgames for Black. The compact structure has no weaknesses to target.",
       "Gukesh's endgame skill means even slightly inferior Najdorf endgames are holdable, while equal ones become winning."
     ]
+  },
+  {
+    "id": "mp-pro-pragg-ruylopez-d4",
+    "openingId": "pro-praggnanandhaa-ruy-lopez",
+    "criticalPositionFen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8",
+    "title": "Central d4 Break",
+    "overview": "Pragg's Ruy Lopez reaches the classic Closed position after 8.O-O. White's plan is c3 followed by d4, challenging Black's e5 pawn and opening the center. The Bb3 remains on the powerful a2-g8 diagonal targeting f7, and after d4, White's pieces gain maximum scope. Pragg plays this with deep preparation and precise calculation.",
+    "pawnBreaks": [
+      {
+        "move": "c2-c3 then d2-d4",
+        "explanation": "The standard Ruy Lopez central buildup. c3 prepares d4 by supporting it with a pawn. After d4 exd4 cxd4, White gets an open center where the Bb3, Re1, and Nf3 are all ideally placed.",
+        "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8"
+      },
+      {
+        "move": "d4-d5",
+        "explanation": "After d4, pushing d5 closes the center and gains space. The Nc6 is driven back and White can maneuver on the kingside with Nbd2-f1-g3-f5. This is the positional squeeze approach.",
+        "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-f1-g3",
+        "explanation": "The classic Ruy Lopez knight tour. The knight reroutes from b1 to g3 via d2 and f1, where it controls f5 and h5. From g3, the knight supports kingside operations and can jump to f5 for a powerful outpost."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-g5 or Bc1-e3",
+        "explanation": "Bg5 pins the Nf6, increasing central pressure. Be3 is more restrained, supporting d4 and preparing Qd2 with potential Bh6 ideas to trade dark-squared bishops."
+      }
+    ],
+    "strategicThemes": [
+      "The Ruy Lopez is a battle for the center. White's c3+d4 plan is the most classical and reliable approach.",
+      "The Bb3 on the a2-g8 diagonal provides lasting pressure on f7. It's one of the strongest positional pieces in chess.",
+      "Pragg's deep preparation means he knows these positions 25+ moves deep. The theoretical knowledge gives him a decisive edge.",
+      "After d5, the Nf1-g3-f5 maneuver creates a kingside attack that's very hard to defend against."
+    ],
+    "endgameTransitions": [
+      "The Ruy Lopez leads to endgames where White's bishop pair and better structure give a lasting edge.",
+      "After d5 and exchanges, White's space advantage and Bb3 dominate in simplified positions."
+    ]
+  },
+  {
+    "id": "mp-pro-pragg-ruylopez-h3",
+    "openingId": "pro-praggnanandhaa-ruy-lopez",
+    "criticalPositionFen": "r1bq1rk1/2ppbppp/p1n2n02/1p2p3/4P3/1B3N02/PPPP1PPP/RNBQR1K1 w - - 2 8",
+    "title": "Prophylactic h3 and Slow Buildup",
+    "overview": "Before committing to d4, Pragg often plays h3 to prevent ...Bg4 pins and keep maximum flexibility. This prophylactic approach allows White to choose between d4 (open center), d3 (closed system), or even a4 (queenside pressure). Pragg's balanced calculating style thrives with this flexible setup.",
+    "pawnBreaks": [
+      {
+        "move": "h2-h3 then d2-d4",
+        "explanation": "h3 prevents ...Bg4 and prepares d4 in ideal conditions. After h3, d4 comes without the risk of a pin on the Nf3. This is the most precise move order.",
+        "fen": "r1bq1rk1/02ppbppp/p1n02n02/1p2p3/4P3/1B3N02/PPPP1PPP/RNBQR1K1 w - - 2 8"
+      },
+      {
+        "move": "a2-a4",
+        "explanation": "a4 pressures b5 on the queenside. After axb5 axb5, the a-file opens for White's rook. This queenside approach is an alternative to the central d4 break.",
+        "fen": "r1bq1rk1/02ppbppp/p1n02n02/1p2p3/4P3/1B3N02/PPPP1PPP/RNBQR1K1 w - - 2 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2 (flexible development)",
+        "explanation": "Nd2 develops and keeps options open. From d2, the knight can go to f1-g3 (kingside), c4 (central), or f3 (supporting the center if the other knight moves)."
+      },
+      {
+        "piece": "Rook",
+        "route": "Re1 already perfectly placed",
+        "explanation": "The Re1 is already on the ideal square, supporting e4 and controlling the e-file. No need to move it — it's perfectly positioned for any plan."
+      }
+    ],
+    "strategicThemes": [
+      "h3 is one of the most important prophylactic moves in the Ruy Lopez. It prevents all ...Bg4 pin ideas permanently.",
+      "Pragg's balanced style means he doesn't commit to one plan too early. Flexibility lets him adapt to Black's choices.",
+      "The Ruy Lopez rewards patience. Pragg builds up slowly and strikes when the position demands it.",
+      "Deep calculation is Pragg's greatest weapon. He sees further than most and finds subtle improvements in standard positions."
+    ],
+    "endgameTransitions": [
+      "The prophylactic approach leads to solid positions where White has a lasting edge. Pragg's endgame technique converts these effortlessly.",
+      "After a4 and queenside opening, the a-file gives White's rook lasting activity in endgames."
+    ]
+  },
+  {
+    "id": "mp-pro-pragg-catalan-O-O",
+    "openingId": "pro-praggnanandhaa-catalan",
+    "criticalPositionFen": "rnbq1rk1/ppp1bppp/4pn02/3p4/02PP4/5NP1/PP02PPBP/RNBQK02R w KQ - 4 6",
+    "title": "Castle and Recover c4",
+    "overview": "Pragg's Catalan at this early stage is about completing development with O-O and then recovering the c4 pawn (after ...dxc4). The Bg2 already controls the long diagonal, and after castling, Qc2 or Qa4 recovers the pawn. The classic Catalan approach: Bg2 pressure, recover material, and grind with the superior bishop.",
+    "pawnBreaks": [
+      {
+        "move": "c4xd5 (or recover after ...dxc4)",
+        "explanation": "After O-O, if Black takes ...dxc4, White recovers with Qc2, Qa4, or Ne5. If Black doesn't take, cxd5 exd5 gives White a favorable IQP position where the Bg2 is powerful.",
+        "fen": "rnbq1rk1/ppp1bppp/4pn02/3p4/02PP4/5NP1/PP02PPBP/RNBQK02R w KQ - 4 6"
+      },
+      {
+        "move": "e2-e4 (after recovery)",
+        "explanation": "After recovering c4, e4 seizes the center. The Bg2 activates fully and the d4+e4 center gives White a commanding position.",
+        "fen": "rnbq1rk1/ppp1bppp/4pn02/3p4/02PP4/5NP1/PP02PPBP/RNBQK02R w KQ - 4 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-c2 or Qd1-a4 (recover c4)",
+        "explanation": "Qc2 recovers the pawn while maintaining the Bg2 battery on the long diagonal. Qa4 is more active, targeting a7 and c4 simultaneously."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nb1-c3 or Nf3-e5",
+        "explanation": "Nc3 develops naturally and supports e4. Ne5 is aggressive, centralizing and threatening Nxc4 or Nxc6."
+      }
+    ],
+    "strategicThemes": [
+      "The Catalan is Pragg's positional weapon. The Bg2's long-term pressure creates advantages that last the entire game.",
+      "O-O first, recover later. The king's safety is more important than the c4 pawn — it can always be recovered.",
+      "Pragg's deep calculation finds the precise moment to recover c4 for maximum advantage.",
+      "The Catalan rewards patience and precision — exactly Pragg's strengths."
+    ],
+    "endgameTransitions": [
+      "The Catalan Bg2 dominates all endgames. Pragg's endgame technique makes even tiny advantages decisive.",
+      "After recovering c4 and simplifying, the Bg2 gives White a lasting edge that grows as pieces come off."
+    ]
+  },
+  {
+    "id": "mp-pro-pragg-catalan-Ne5",
+    "openingId": "pro-praggnanandhaa-catalan",
+    "criticalPositionFen": "rnbq1rk1/ppp1bppp/4pn02/3p4/02PP4/5NP1/PP02PPBP/RNBQK02R w KQ - 4 6",
+    "title": "Ne5 Central Occupation",
+    "overview": "After O-O, Pragg can play an immediate Ne5, occupying the most dominant central square. The Ne5 combines with the Bg2 to create enormous pressure on the queenside and center. If Black takes ...dxc4, Ne5 is already threatening Nxc4 recovering the pawn with interest.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5 (after Ne5)",
+        "explanation": "With the Ne5 in place, d5 is a powerful advance. It closes the center and the Ne5+Bg2 duo creates crushing pressure on the c6 and b7 squares.",
+        "fen": "rnbq1rk1/ppp1bppp/4pn02/3p4/02PP4/5NP1/PP02PPBP/RNBQK02R w KQ - 4 6"
+      },
+      {
+        "move": "b2-b3",
+        "explanation": "After ...dxc4, b3 can recover the pawn on c4 while opening the b-file. The Bg2+Rb1 battery on the b-file creates additional queenside pressure.",
+        "fen": "rnbq1rk1/ppp1bppp/4pn02/3p4/02PP4/5NP1/PP02PPBP/RNBQK02R w KQ - 4 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-e5 (immediate centralization)",
+        "explanation": "Ne5 is aggressive and controlling. It eyes c6, d7, f7, and c4. The knight on e5 is the Catalan's most dangerous piece when combined with the Bg2."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-f4 or Bc1-g5",
+        "explanation": "After Ne5 and O-O, the dark-squared bishop develops. Bf4 controls d6 and e5. Bg5 pins the Nf6, increasing central pressure."
+      }
+    ],
+    "strategicThemes": [
+      "The Ne5 in the Catalan is Pragg's aggressive weapon. It creates immediate pressure and forces Black to react.",
+      "The Bg2+Ne5 duo is one of the strongest piece configurations in the Catalan. They control light and dark squares simultaneously.",
+      "Pragg's calculation allows him to play the aggressive Ne5 line with confidence, knowing he can handle the complications.",
+      "The Catalan's positional pressure builds naturally. Pragg doesn't need to force anything — the position improves itself."
+    ],
+    "endgameTransitions": [
+      "If Ne5 leads to piece exchanges, the Bg2 remains dominant in any endgame.",
+      "The knight on e5 can transition to c4 or d3, maintaining pressure through simplification."
+    ]
+  },
+  {
+    "id": "mp-pro-pragg-najdorf-e5",
+    "openingId": "pro-praggnanandhaa-najdorf",
+    "criticalPositionFen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6",
+    "title": "...e5 Main Line",
+    "overview": "Pragg's Najdorf at the ...a6 tabiya. The primary plan is ...e5, the classical Najdorf move that stakes a claim in the center and drives the Nd4 away. After ...e5 Nb3, Black develops with ...Be7, ...O-O, and prepares the queenside counter with ...b5. Pragg's fighting spirit makes the Najdorf his ideal weapon.",
+    "pawnBreaks": [
+      {
+        "move": "e7-e5",
+        "explanation": "The defining Najdorf move. ...e5 gains central space, controls d4 and f4, and creates a dynamic pawn structure. The Nd4 retreats (usually to b3) giving Black time to develop.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      },
+      {
+        "move": "b7-b5",
+        "explanation": "After ...e5 and development, ...b5 opens the queenside. This is the Najdorf's signature counterplay — gaining space, opening the b-file, and creating threats against White's queenside.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf8-e7 then ...O-O",
+        "explanation": "...Be7 is the standard development, preparing to castle. The bishop defends the kingside and can later activate via d8-c7 or f6."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nb8-d7 (multi-purpose)",
+        "explanation": "...Nbd7 supports ...e5, prepares ...b5, and the knight can reroute to b6 (pressuring c4) or f8-g6 (supporting the kingside)."
+      }
+    ],
+    "strategicThemes": [
+      "The Najdorf with ...e5 creates the most dynamic and fighting positions in chess. Perfect for Pragg's combative style.",
+      "The race between White's kingside attack and Black's queenside counterplay defines the Najdorf. Pragg's calculation decides the winner.",
+      "The ...e5 pawn is Black's central anchor. It restricts White's options and provides a solid foundation for counterplay.",
+      "Pragg's fighting instinct means he always finds counterplay. The Najdorf rewards active defense and creative counter-attacks."
+    ],
+    "endgameTransitions": [
+      "The Najdorf leads to complex endgames where Pragg's calculation gives him an edge.",
+      "Black's queenside majority (after ...b5 exchanges) can create a passed pawn — the main endgame winning try."
+    ]
+  },
+  {
+    "id": "mp-pro-pragg-najdorf-e6",
+    "openingId": "pro-praggnanandhaa-najdorf",
+    "criticalPositionFen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6",
+    "title": "...e6 Scheveningen Setup",
+    "overview": "The ...e6 approach gives Black a Scheveningen-like structure that's more solid than ...e5. Black keeps the center flexible and can later choose between ...b5 (queenside), ...d5 (central break), or ...e5 (after proper preparation). Pragg uses this when he wants a more strategic battle with less immediate tactical risk.",
+    "pawnBreaks": [
+      {
+        "move": "d6-d5",
+        "explanation": "The ultimate central break. After ...e6 and development, ...d5 in one move is devastating. After exd5 Nxd5 or ...exd5, Black gets active pieces and central equality or advantage.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      },
+      {
+        "move": "b7-b5",
+        "explanation": "The standard queenside expansion. ...b5 gains space, opens the b-file, and challenges White's control. After ...b5, ...Bb7 completes development with a harmonious position.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "...Qd8-c7 (multi-purpose)",
+        "explanation": "...Qc7 supports ...e5, ...d5, ...b5, and controls the c-file. It's the most flexible queen placement in the Najdorf/Scheveningen."
+      },
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-b7 (long diagonal)",
+        "explanation": "After ...b5, ...Bb7 develops to the long diagonal. The bishop pressures e4 and supports the eventual ...d5 break."
+      }
+    ],
+    "strategicThemes": [
+      "The ...e6 setup is more flexible than ...e5. Pragg keeps all options open until the last possible moment.",
+      "The choice between ...d5 and ...e5 depends on White's setup. This flexibility makes ...e6 very practical.",
+      "The Scheveningen structure is solid and reliable. It gives Pragg a stable base for creative counterplay.",
+      "Pragg's Najdorf preparation is among the deepest in the world. He knows every subtlety of both ...e5 and ...e6."
+    ],
+    "endgameTransitions": [
+      "The ...e6 structure leads to solid endgames where Black has no weaknesses. Pragg's technique makes these positions very uncomfortable for White.",
+      "After ...d5 and exchanges, Black often gets the better endgame due to active pieces and central control."
+    ]
+  },
+  {
+    "id": "mp-pro-niemann-antimarshall-d5",
+    "openingId": "pro-niemann-anti-marshall",
+    "criticalPositionFen": "r1bq1rk1/2p1bppp/p1n2n02/1p1Pp3/8/1BP02N02/PP1P1PPP/RNBQR1K1 b - - 0 9",
+    "title": "d5 Space Advantage",
+    "overview": "Niemann's Anti-Marshall features the early exd5 push, creating a d5 pawn that gains space and restricts Black's pieces. The Bb3 supports d5 and targets f7. White's plan is to build behind the d5 pawn with Nbd2-f1-g3-f5 and create a kingside attack while Black struggles with the cramped position.",
+    "pawnBreaks": [
+      {
+        "move": "c3-c4",
+        "explanation": "c4 reinforces d5 and creates a broad center. After c4, the d5 pawn is rock-solid and White can focus on piece maneuvering for the kingside attack.",
+        "fen": "r1bq1rk1/2p1bppp/p1n2n02/1p1Pp3/8/1BP02N02/PP1P1PPP/RNBQR1K1 b - - 0 9"
+      },
+      {
+        "move": "f2-f4",
+        "explanation": "f4 supports e5 and prepares f5 to crack open the kingside. Combined with the d5 space advantage, f4-f5 creates overwhelming pressure.",
+        "fen": "r1bq1rk1/02p1bppp/p1n02n02/1p1Pp3/8/1BP02N02/PP1P1PPP/RNBQR1K1 b - - 0 9"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-f1-g3-f5",
+        "explanation": "The signature Ruy Lopez knight tour. Nf5 is a devastating outpost that attacks d6, e7, g7, and h6. Niemann executes this maneuver with precision."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-g5 or Bc1-f4",
+        "explanation": "Bg5 pins the Nf6, increasing pressure. Bf4 supports e5 and controls dark squares. Both develop the bishop actively."
+      }
+    ],
+    "strategicThemes": [
+      "The d5+e5 pawn duo cramps Black's entire position. Black's Nc6 and Bb7 (if played) are both restricted.",
+      "Niemann's Anti-Marshall is deeply prepared. He knows the theoretical nuances and punishes unprepared opponents.",
+      "The Nf5 outpost is the key to the kingside attack. Once achieved, the position is strategically winning for White.",
+      "Black's ...b5 looks active but doesn't create real threats. The queenside is locked and White attacks the kingside freely."
+    ],
+    "endgameTransitions": [
+      "The space advantage persists in endgames. White's pieces have more room and Black's are permanently cramped.",
+      "After Nf5 and exchanges, the structural advantage converts naturally."
+    ]
+  },
+  {
+    "id": "mp-pro-niemann-antimarshall-Nf5",
+    "openingId": "pro-niemann-anti-marshall",
+    "criticalPositionFen": "r1bq1rk1/02p1bppp/p1n02n02/1p1Pp3/8/1BP02N02/PP1P1PPP/RNBQR1K1 b - - 0 9",
+    "title": "Nf1-g3-f5 Maneuver",
+    "overview": "The classic Anti-Marshall plan: reroute the knight to f5 via d2-f1-g3. The Nf5 is one of the strongest outposts in chess — it attacks d6, e7, g7, h6 and can't be removed by Black's pawns. Niemann's competitive style makes this systematic approach his weapon of choice.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d4",
+        "explanation": "After Nf5, d4 opens the center while the knight dominates. If ...exd4 cxd4, White's central majority is powerful. If d4 is maintained, the center supports the kingside attack.",
+        "fen": "r1bq1rk1/02p1bppp/p1n02n02/1p1Pp3/8/1BP02N02/PP1P1PPP/RNBQR1K1 b - - 0 9"
+      },
+      {
+        "move": "g2-g4",
+        "explanation": "After Ng3, g4 supports the knight's journey to f5 and gains kingside space. g4-g5 drives the Nf6 away and opens lines for the attack.",
+        "fen": "r1bq1rk1/02p1bppp/p1n02n02/1p1Pp3/8/1BP02N02/PP1P1PPP/RNBQR1K1 b - - 0 9"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-f1-g3-f5",
+        "explanation": "The three-step maneuver to the dream outpost. Each square improves the knight until f5 where it's the dominant piece on the board."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-f3 or Qd1-g4",
+        "explanation": "The queen shifts to the kingside to support the attack. Qf3 eyes the f-file and a8 diagonal. Qg4 targets g7 directly."
+      }
+    ],
+    "strategicThemes": [
+      "The Nf5 is worth more than a bishop in this position. It controls critical squares and creates permanent pressure.",
+      "Niemann's systematic approach: develop, maneuver, attack. No wasted moves, no unnecessary risks.",
+      "The e5+d5 center restricts all of Black's pieces. Combined with Nf5, the position is strategically overwhelming.",
+      "Black's counterplay with ...c6 is the only hope, but dxc6 opens the d-file for White's rook."
+    ],
+    "endgameTransitions": [
+      "The Nf5 dominates in endgames. It outperforms any Black piece and creates lasting pressure.",
+      "After piece exchanges, the space advantage and Nf5 make the endgame very favorable for White."
+    ]
+  },
+  {
+    "id": "mp-pro-niemann-najdorf-e5",
+    "openingId": "pro-niemann-najdorf",
+    "criticalPositionFen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6",
+    "title": "Aggressive ...e5",
+    "overview": "Niemann's Najdorf is all-out aggression. He plays ...e5 and immediately seeks complications. After ...e5 Nb3, Niemann develops rapidly and looks for ...b5 followed by sharp tactical play. His dynamic, competitive style means he always plays for the win from the Black side.",
+    "pawnBreaks": [
+      {
+        "move": "e7-e5",
+        "explanation": "...e5 stakes a central claim and creates a dynamic position. The Nd4 retreats and Black gains time for development. Niemann's sharp calculation makes this his preferred approach.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      },
+      {
+        "move": "b7-b5",
+        "explanation": "After ...e5, ...b5 opens the queenside. Niemann pushes this aggressively, often playing ...b4 to drive the Nc3 away. The open b-file creates real counterplay.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nb8-d7-b6 or ...Nb8-d7-f8-g6",
+        "explanation": "...Nbd7 is flexible — the knight can go to b6 (queenside pressure) or reroute to g6 (kingside defense and counterplay)."
+      },
+      {
+        "piece": "Bishop",
+        "route": "...Bf8-e7 then ...O-O",
+        "explanation": "...Be7 and ...O-O is the standard development. Quick king safety allows Niemann to focus on aggressive counterplay."
+      }
+    ],
+    "strategicThemes": [
+      "Niemann's Najdorf is dynamic and aggressive. He seeks complications in every game.",
+      "The ...e5+...b5 combination creates counterplay on two fronts — center and queenside.",
+      "Niemann's competitive fire means he finds resources in difficult positions. The Najdorf rewards fighting spirit.",
+      "Speed of development is crucial. Get pieces out, castle, then attack."
+    ],
+    "endgameTransitions": [
+      "The Najdorf's dynamic positions can lead to complex endgames. Niemann's calculating ability gives him an edge.",
+      "Black's queenside majority after ...b5 exchanges provides endgame winning chances."
+    ]
+  },
+  {
+    "id": "mp-pro-niemann-najdorf-d5",
+    "openingId": "pro-niemann-najdorf",
+    "criticalPositionFen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6",
+    "title": "Central ...d5 Counter-strike",
+    "overview": "Niemann sometimes goes for the direct ...d5 approach, challenging White's center immediately. After proper preparation (...e6, ...Be7, ...O-O, then ...d5), this break equalizes or gives Black the advantage. Niemann's calculation makes the sharp resulting positions his playground.",
+    "pawnBreaks": [
+      {
+        "move": "d6-d5 (after ...e6 preparation)",
+        "explanation": "The ...d5 break is the most principled response to White's center. After exd5 Nxd5, the knight centralizes powerfully and Black's pieces activate.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      },
+      {
+        "move": "e7-e5 (alternative)",
+        "explanation": "If ...d5 isn't feasible, ...e5 is always available. The flexibility between ...e5 and ...d5 (via ...e6) gives Black maximum options.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "...Nf6-d5 (after exd5)",
+        "explanation": "Nd5 is the Najdorf's most powerful piece placement. It dominates the center and attacks in every direction."
+      },
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-e6 or ...Bc8-d7",
+        "explanation": "...Be6 supports ...d5 and develops actively. ...Bd7 is more restrained but flexible, preparing ...Bc6 later."
+      }
+    ],
+    "strategicThemes": [
+      "The ...d5 break is the most ambitious choice. Niemann's calculation makes this work in sharp positions.",
+      "Flexibility between ...e5 and ...d5 keeps White off balance. Niemann decides at the last moment.",
+      "The centralized Nd5 after ...d5 exd5 Nxd5 is the strongest piece in the Najdorf. It dominates everything.",
+      "Niemann's aggressive style means he plays for the win from move 1. The Najdorf is his weapon of choice."
+    ],
+    "endgameTransitions": [
+      "After ...d5 and exchanges, Black's active pieces give excellent endgame chances.",
+      "The Nd5 in an endgame is worth more than most pieces. It controls the entire board."
+    ]
+  },
+  {
+    "id": "mp-pro-niemann-grunfeld-c5",
+    "openingId": "pro-niemann-grunfeld",
+    "criticalPositionFen": "rnbqkb1r/ppp1pp1p/5np1/3p4/02PP4/2N5/PP02PPPP/R1BQKBNR w KQkq - 0 4",
+    "title": "...c5 Center Attack",
+    "overview": "Niemann's Grunfeld at the early ...d5 tabiya. After White takes cxd5 Nxd5, the classical Grunfeld begins with Black attacking the center from the flanks. The ...c5 break combined with the fianchettoed Bg7 is Black's primary weapon. Niemann's dynamic, counterattacking style is perfectly suited to the Grunfeld.",
+    "pawnBreaks": [
+      {
+        "move": "c7-c5 (after ...Nxd5 and ...Bg7)",
+        "explanation": "The classic Grunfeld break. ...c5 challenges d4 and activates the Bg7. After dxc5, Black develops rapidly and the Bg7 dominates. Niemann plays this with maximum aggression.",
+        "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/02PP4/2N5/PP02PPPP/R1BQKBNR w KQkq - 0 4"
+      },
+      {
+        "move": "e7-e5",
+        "explanation": "An alternative: ...e5 directly challenges the center. After dxe5, Black gets active piece play. After d5, the position becomes a Benoni-type where Black has counterplay.",
+        "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/02PP4/2N5/PP02PPPP/R1BQKBNR w KQkq - 0 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf8-g7 (fianchetto)",
+        "explanation": "The Bg7 is the Grunfeld's defining piece. On g7 it controls the long diagonal, pressures d4, and supports all counterattacking plans."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nf6xd5 then ...Nd5xc3 (or ...Nd5-b6)",
+        "explanation": "After cxd5 Nxd5, the knight can trade on c3 (giving White doubled pawns) or retreat to b6 to pressure d5 and c4."
+      }
+    ],
+    "strategicThemes": [
+      "The Grunfeld is about proving White's center is a target, not a strength. Niemann's aggressive style excels at this.",
+      "The Bg7 is the most important piece. It pressures d4 and controls the long diagonal throughout the game.",
+      "Niemann's counterattacking instinct is perfect for the Grunfeld. He thrives when attacking White's overextended center.",
+      "Rapid development is key. Get pieces out fast and start attacking the center before White consolidates."
+    ],
+    "endgameTransitions": [
+      "The Grunfeld Bg7 dominates all endgames. Its long-range power controls both sides of the board.",
+      "After ...c5 destroys the center, the resulting positions often favor Black's active pieces over White's structural remnants."
+    ]
+  },
+  {
+    "id": "mp-pro-niemann-grunfeld-Nxc3",
+    "openingId": "pro-niemann-grunfeld",
+    "criticalPositionFen": "rnbqkb1r/ppp1pp1p/5np1/3p4/02PP4/2N5/PP02PPPP/R1BQKBNR w KQkq - 0 4",
+    "title": "Exchange Variation with ...Nxc3",
+    "overview": "After cxd5 Nxd5, Niemann often trades ...Nxc3 bxc3, giving White doubled c-pawns. The resulting position gives White a central pawn mass (c3+d4+e4 after e4) but Black gets the Bg7 pressuring the doubled pawns and active piece play. Niemann uses his calculation to exploit the structural weaknesses.",
+    "pawnBreaks": [
+      {
+        "move": "c7-c5 (targeting d4 and c3)",
+        "explanation": "After ...Nxc3 bxc3, ...c5 targets both d4 and c3. The doubled c-pawns become real weaknesses when challenged by ...c5 and the Bg7's diagonal pressure.",
+        "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/02PP4/2N5/PP02PPPP/R1BQKBNR w KQkq - 0 4"
+      },
+      {
+        "move": "b7-b5",
+        "explanation": "...b5 challenges the queenside and can open the b-file against the c3 pawn. Combined with ...Bg7 pressure, it creates maximum pressure on White's doubled pawns.",
+        "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/02PP4/2N5/PP02PPPP/R1BQKBNR w KQkq - 0 4"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bg7 targeting d4 and c3",
+        "explanation": "The Bg7 is devastating against doubled c-pawns. It pressures d4, c3, and the entire long diagonal. Combined with ...Nc6 and ...c5, it creates overwhelming pressure."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nb8-c6 (pressure on d4)",
+        "explanation": "...Nc6 develops and pressures d4. Combined with the Bg7 and ...c5, it creates triple pressure on d4 that's hard to maintain."
+      }
+    ],
+    "strategicThemes": [
+      "The Exchange Grunfeld gives Black clear targets (doubled c-pawns). Niemann's dynamic play exploits these efficiently.",
+      "The Bg7 is worth more than White's entire pawn center when the center is under attack. Keep it at all costs.",
+      "Niemann's Grunfeld is well-prepared. He knows exactly how to handle White's various setups in the Exchange variation.",
+      "Speed of counterplay is essential. Attack the center before White consolidates with e4+Be3+Qd2."
+    ],
+    "endgameTransitions": [
+      "The doubled c-pawns are a permanent weakness in endgames. Black's Bg7 targets them relentlessly.",
+      "After ...c5 and exchanges, Black's superior pawn structure gives a decisive endgame advantage."
+    ]
   }
 ]
