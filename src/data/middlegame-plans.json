@@ -7881,5 +7881,251 @@
       "The kingside attack should be decisive. If it wins material, any endgame is trivially winning.",
       "If the attack stalls, the advanced f4 pawn can become a weakness. This plan requires full commitment."
     ]
+  },
+  {
+    "id": "mp-pro-gukesh-italian-d4",
+    "openingId": "pro-gukesh-italian",
+    "criticalPositionFen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq - 1 7",
+    "title": "Central d4+e4 Dominance",
+    "overview": "Gukesh's Italian reaches a sharp position where White has an imposing d4+e4 center after the early d4 push. Black has ...Bb4+ checking, but White's powerful center and piece activity compensate. The plan is to maintain the big center, castle quickly, and use the spatial advantage to build a kingside attack. Gukesh's classical style thrives in these positions.",
+    "pawnBreaks": [
+      {
+        "move": "e4-e5",
+        "explanation": "e5 gains more space and drives the Nf6 away. After e5, the knight retreats and White's central space advantage becomes overwhelming. The Bc4 continues to target f7 from the diagonal.",
+        "fen": "r1bqk02r/pppp1ppp/2n02n02/8/1bBPP3/5N02/PP3PPP/RNBQK02R w KQkq - 1 7"
+      },
+      {
+        "move": "d4-d5",
+        "explanation": "Alternatively, d5 drives the Nc6 away and gains central space. After d5 Ne7, White has a massive center and can attack on the kingside with O-O, Re1, and Bg5.",
+        "fen": "r1bqk02r/pppp1ppp/2n02n02/8/1bBPP3/5N02/PP3PPP/RNBQK02R w KQkq - 1 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-c3 or Nb1-d2",
+        "explanation": "Nc3 develops naturally and supports e4/d5. Nd2 is more flexible, preparing Nf1-g3 for the kingside or supporting e5."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-g5 (pin the Nf6)",
+        "explanation": "Bg5 pins the Nf6 to the queen, increasing pressure on the center. If ...h6 Bh4, the pin persists and White's center remains dominant."
+      }
+    ],
+    "strategicThemes": [
+      "The d4+e4 center is White's main asset. Gukesh uses it as a platform for piece development and kingside attacks.",
+      "Castle quickly (O-O) and develop with tempo. The big center means White's pieces find natural active squares easily.",
+      "The Bc4 on the a2-g8 diagonal is a long-term asset. Combined with the central pawns, it creates pressure on f7.",
+      "Gukesh's classical approach: sound development, big center, harmonious pieces. Simple but devastatingly effective."
+    ],
+    "endgameTransitions": [
+      "The central space advantage persists in endgames. White's pieces have more room and Black's are cramped.",
+      "If the center opens (after d5 or e5), the Bc4 dominates in any endgame position."
+    ]
+  },
+  {
+    "id": "mp-pro-gukesh-italian-O-O",
+    "openingId": "pro-gukesh-italian",
+    "criticalPositionFen": "r1bqk02r/pppp1ppp/2n02n02/8/1bBPP3/5N02/PP3PPP/RNBQK02R w KQkq - 1 7",
+    "title": "Rapid Development and King Safety",
+    "overview": "Gukesh prioritizes rapid development and king safety. After O-O, White connects rooks and the Re1 supports e4. The Bb4 will need to retreat or be traded, and White's development advantage becomes the basis for tactical operations. Gukesh's disciplined approach gets all pieces to active squares before committing to a plan.",
+    "pawnBreaks": [
+      {
+        "move": "a2-a3",
+        "explanation": "a3 challenges the Bb4, forcing it to retreat or trade. After ...Bxc3+ bxc3, White gets the bishop pair and a strong center (c3+d4+e4). If ...Be7, White gains a tempo.",
+        "fen": "r1bqk02r/pppp1ppp/2n02n02/8/1bBPP3/5N02/PP3PPP/RNBQK02R w KQkq - 1 7"
+      },
+      {
+        "move": "c2-c3",
+        "explanation": "c3 drives the Bb4 back and supports d4. The center becomes rock-solid (c3+d4+e4) and White can focus on piece play and kingside development.",
+        "fen": "r1bqk02r/pppp1ppp/2n02n02/8/1bBPP3/5N02/PP3PPP/RNBQK02R w KQkq - 1 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rf1-e1 (supporting e4)",
+        "explanation": "Re1 supports the e4 pawn and controls the e-file. After any central opening, the rook is perfectly placed."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1-g5 or Bc1-e3",
+        "explanation": "Bg5 pins the Nf6 and increases central pressure. Be3 supports d4 and prepares Qd2 for a potential Bh6 exchange."
+      }
+    ],
+    "strategicThemes": [
+      "Gukesh's World Championship approach: develop soundly, control the center, and exploit the advantage with precise technique.",
+      "The big center gives White a natural initiative. Every piece finds a good square easily.",
+      "Don't rush — let the pieces do the work. Gukesh's strength is patience and precision, not wild attacks.",
+      "The Bc4 ensures lasting pressure on f7. This diagonal advantage is a key feature of the Italian Game."
+    ],
+    "endgameTransitions": [
+      "Sound development leads to favorable endgames. Gukesh's technique in converting small advantages is world-class.",
+      "The bishop pair (after ...Bxc3+) in an endgame is a significant advantage. The open position favors bishops."
+    ]
+  },
+  {
+    "id": "mp-pro-gukesh-catalan-Qc2",
+    "openingId": "pro-gukesh-catalan",
+    "criticalPositionFen": "rnbq1rk1/ppp1bppp/4pn02/8/2pP4/5NP1/PPQ1PPBP/RNB02RK1 b - - 1 7",
+    "title": "Qc2 Recovery and Bg2 Pressure",
+    "overview": "Gukesh's Catalan features the early Qc2 to recover the c4 pawn while maintaining the Bg2's diagonal pressure. After Qxc4, the Bg2 controls the long diagonal and the queen is centrally placed. The plan is to develop remaining pieces (Bf4 or Bg5, Nc3) and create lasting positional pressure — Gukesh's specialty.",
+    "pawnBreaks": [
+      {
+        "move": "e2-e4 (after Qxc4)",
+        "explanation": "After recovering the pawn, e4 seizes the center. The Bg2 activates fully and the d4+e4 center dominates. This is the most ambitious follow-up to the Catalan.",
+        "fen": "rnbq1rk1/ppp1bppp/4pn02/8/2pP4/5NP1/PPQ1PPBP/RNB02RK1 b - - 1 7"
+      },
+      {
+        "move": "a2-a4",
+        "explanation": "Prevents ...b5 and gains queenside space. a4 also prepares Ra3 swinging the rook to the third rank. Classic Catalan queenside pressure.",
+        "fen": "rnbq1rk1/ppp1bppp/4pn02/8/2pP4/5NP1/PPQ1PPBP/RNB02RK1 b - - 1 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc1-f4 or Bc1-g5",
+        "explanation": "Bf4 develops actively and prevents ...e5. Bg5 pins the Nf6 and increases pressure on e6. Both develop the last minor piece."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nb1-c3 (after Qxc4)",
+        "explanation": "Nc3 develops and supports e4. It also controls d5 and can jump there if the center opens. Natural and strong."
+      }
+    ],
+    "strategicThemes": [
+      "The Catalan is Gukesh's weapon of choice for positional grinding. The Bg2's long-term pressure is his main strategic asset.",
+      "Recovering the c4 pawn with Qc2 is the most accurate approach. The queen stays centralized and supports future operations.",
+      "Gukesh's Catalan is about steady improvement. He builds small advantages and converts them with world-class technique.",
+      "The Bg2 is the position's soul — it controls the long diagonal and supports all central and queenside plans."
+    ],
+    "endgameTransitions": [
+      "The Catalan Bg2 guarantees a favorable endgame. Its long-range power persists in all phases of the game.",
+      "Gukesh's endgame technique is legendary. Even the slightest Catalan advantage becomes decisive in his hands."
+    ]
+  },
+  {
+    "id": "mp-pro-gukesh-catalan-Nc3",
+    "openingId": "pro-gukesh-catalan",
+    "criticalPositionFen": "rnbq1rk1/ppp1bppp/4pn02/8/2pP4/5NP1/PPQ1PPBP/RNB02RK1 b - - 1 7",
+    "title": "Piece Development and d5 Preparation",
+    "overview": "Rather than immediately recovering c4, Gukesh can develop with Nc3 and build pressure. The c4 pawn will be recovered naturally, and in the meantime, White's pieces develop with tempo. The Bg2+Nc3+Nf3 trio creates strong central control and prepares d5 or e4.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "After Nc3 and piece development, d5 closes the center in White's favor. The Bg2 maintains pressure on b7 and the space advantage cramps Black.",
+        "fen": "rnbq1rk1/ppp1bppp/4pn02/8/2pP4/5NP1/PPQ1PPBP/RNB02RK1 b - - 1 7"
+      },
+      {
+        "move": "e2-e4",
+        "explanation": "After recovering c4, e4 creates a dominant center. The Bg2 activates and the position opens favorably for White's better-developed pieces.",
+        "fen": "rnbq1rk1/ppp1bppp/4pn02/8/2pP4/5NP1/PPQ1PPBP/RNB02RK1 b - - 1 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rf1-d1 (d-file control)",
+        "explanation": "Rd1 controls the d-file and supports d5. It also pressures d7 indirectly, adding to the Catalan's positional squeeze."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qc2xc4 (when ready)",
+        "explanation": "The queen recovers c4 at the optimal moment — when it gains tempo or when the position is ready for e4."
+      }
+    ],
+    "strategicThemes": [
+      "Gukesh's Catalan prioritizes harmonious development over material recovery. The c4 pawn can wait.",
+      "Piece coordination is more important than an extra pawn. The Bg2+Nc3+Nf3+Rd1 setup is incredibly strong.",
+      "The Catalan gives White a natural initiative that Gukesh knows how to maintain over many moves.",
+      "Patience and precision — Gukesh's hallmarks — are perfectly suited to the Catalan's strategic demands."
+    ],
+    "endgameTransitions": [
+      "The Bg2's long-term dominance ensures favorable endgames. Gukesh converts these positions with world-class technique.",
+      "Even a slight Catalan advantage becomes winning in Gukesh's hands. His endgame skill is among the best in history."
+    ]
+  },
+  {
+    "id": "mp-pro-gukesh-najdorf-e5",
+    "openingId": "pro-gukesh-najdorf",
+    "criticalPositionFen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6",
+    "title": "...e5 Central Stake",
+    "overview": "Gukesh's Najdorf starts at the early ...a6 position. The first decision is whether to play ...e5 or ...e6. The ...e5 approach is the classical Najdorf — it gains central space, controls d4, and creates a dynamic pawn structure. After ...e5, Black aims for queenside counterplay with ...b5 while White typically attacks the kingside.",
+    "pawnBreaks": [
+      {
+        "move": "e7-e5",
+        "explanation": "The classical Najdorf move. ...e5 controls d4, gains space, and activates the dark-squared bishop. The Nd4 must retreat (usually to b3), and Black gets time for ...Be7, ...O-O, and ...b5.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      },
+      {
+        "move": "b7-b5",
+        "explanation": "After ...e5, ...b5 is the follow-up. It gains queenside space and challenges White's control. The ...Bb7 development and ...b4 advance create counterplay against White's kingside attack.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "...Bf8-e7-d8 or ...Bf8-e7 (solid)",
+        "explanation": "...Be7 is the standard development. The bishop defends the kingside and prepares ...O-O. In some lines, it can reroute to d8 and c7 to support the queenside."
+      },
+      {
+        "piece": "Knight",
+        "route": "...Nb8-d7 (supporting ...e5 and ...b5)",
+        "explanation": "...Nbd7 supports ...e5 and ...b5. From d7, the knight can go to b6 (pressuring c4/a4) or f8-g6 (supporting the kingside)."
+      }
+    ],
+    "strategicThemes": [
+      "The ...e5 Najdorf is the most classical and principled approach. Gukesh plays it with deep theoretical preparation.",
+      "After ...e5, the position becomes a fight between White's kingside attack and Black's queenside counterplay.",
+      "The ...b5 break is Black's primary weapon. Without it, Black is passive and White's attack arrives unchallenged.",
+      "Gukesh's Najdorf is deeply prepared and precisely executed. He knows every theoretical wrinkle in these positions."
+    ],
+    "endgameTransitions": [
+      "The Najdorf's dynamic pawn structure can lead to complex endgames. Gukesh's technique makes even slightly better endgames winning.",
+      "After mutual attacks, the resulting endgame often depends on king activity and pawn structure — areas where Gukesh excels."
+    ]
+  },
+  {
+    "id": "mp-pro-gukesh-najdorf-e6",
+    "openingId": "pro-gukesh-najdorf",
+    "criticalPositionFen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6",
+    "title": "...e6 Flexible Approach",
+    "overview": "The ...e6 Najdorf is more flexible than ...e5. It keeps the center closed and gives Black multiple plans depending on White's setup. After ...e6, Black can play ...b5 (queenside expansion), ...Qc7 (supporting ...e5 or ...d5), or ...Be7+O-O (solid development). Gukesh uses this when he wants a deeper, more strategic fight.",
+    "pawnBreaks": [
+      {
+        "move": "e6-e5 (later)",
+        "explanation": "After ...e6, ...e5 can come later with more support. The ...e6+e5 sequence is slower but gives Black better control over the timing. When ...e5 is played, it's with full piece backing.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      },
+      {
+        "move": "d6-d5",
+        "explanation": "The ultimate central break. ...d5 in one move (after proper preparation) is the strongest possible counter. After ...d5 exd5 Nxd5, Black gets a centralized knight and open lines.",
+        "fen": "rnbqkb1r/1p02pppp/p02p1n02/8/3NP3/2N5/PPP02PPP/R1BQKB1R w KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "...Qd8-c7 (multi-purpose)",
+        "explanation": "...Qc7 is the Najdorf's most versatile queen move. It supports ...e5, ...b5, ...d5, and controls the c-file. It's always useful."
+      },
+      {
+        "piece": "Bishop",
+        "route": "...Bc8-e6 or ...Bc8-d7",
+        "explanation": "...Be6 develops actively and prepares ...Nd7-c5. ...Bd7 is more restrained but flexible, supporting ...Qc7 and ...b5."
+      }
+    ],
+    "strategicThemes": [
+      "The ...e6 Najdorf gives Gukesh maximum flexibility. He decides the central structure based on White's setup.",
+      "The choice between ...e5 and ...d5 keeps White guessing. This strategic uncertainty is a major advantage.",
+      "Gukesh's deep preparation in the Najdorf means he knows exactly when to choose ...e5, ...e6, or ...d5.",
+      "The Najdorf rewards the best-prepared player. Gukesh's theoretical knowledge gives him a lasting edge."
+    ],
+    "endgameTransitions": [
+      "The ...e6 setup leads to solid endgames for Black. The compact structure has no weaknesses to target.",
+      "Gukesh's endgame skill means even slightly inferior Najdorf endgames are holdable, while equal ones become winning."
+    ]
   }
 ]
