@@ -15,6 +15,7 @@
  * `getCoachMove(fen)` after each user move.
  */
 import { stockfishEngine } from './stockfishEngine';
+import { pickBookMove, bookMoveToSquares, isBookMoveLegal } from './coachBookMove';
 import type { CoachDifficulty } from './coachAgent';
 
 export interface PlaySessionConfig {
@@ -91,18 +92,35 @@ function parseUci(uci: string): CoachMoveResult {
 }
 
 /**
- * Ask Stockfish for the coach's next move given the current FEN and
- * an active play-session config. Applies skill level before querying.
+ * Ask the coach for its next move. In the opening phase we consult the
+ * Lichess Opening Explorer so play feels natural (real popular replies
+ * instead of whatever Stockfish-at-low-skill happens to prefer). At
+ * `hard` difficulty we skip the book and ask the engine directly so
+ * the user faces max strength throughout.
  */
 export async function getCoachMove(
   fen: string,
   config: PlaySessionConfig,
 ): Promise<CoachMoveResult> {
-  // Stockfish skill level is set via UCI option. The stockfishEngine
-  // exposes setOption only through analyzePosition; here we use
-  // getBestMove with the configured moveTime and rely on a one-time
-  // skill configuration done at session start via setSkill().
   await setSkill(config.skill);
+
+  // Book moves apply at easy/medium strengths. At hard we want pure
+  // engine play so the user can't coast on rote theory.
+  if (config.skill < 20) {
+    const book = await pickBookMove(fen);
+    if (book && isBookMoveLegal(fen, book)) {
+      const squares = bookMoveToSquares(book);
+      if (squares) {
+        return {
+          uci: book.uci,
+          from: squares.from,
+          to: squares.to,
+          promotion: squares.promotion,
+        };
+      }
+    }
+  }
+
   const uci = await stockfishEngine.getBestMove(fen, config.moveTimeMs);
   return parseUci(uci);
 }

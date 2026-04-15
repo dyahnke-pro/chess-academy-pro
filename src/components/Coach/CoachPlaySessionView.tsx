@@ -1,8 +1,9 @@
 /**
  * CoachPlaySessionView
  * --------------------
- * Renders a game where the user plays against Stockfish with the
- * coach narrating the opponent's moves.
+ * Game where the user plays against Stockfish with the coach narrating
+ * via the `coachMoveCommentary` service (in-depth, eval-tied LLM
+ * analysis — not template filler).
  *
  * Lives inside the CoachSessionPage route; always renders inside
  * ConsistentChessboard + ChessLessonLayout.
@@ -14,33 +15,106 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { getCoachMove, setSkill } from '../../services/coachPlaySession';
 import { voiceService } from '../../services/voiceService';
+import { stockfishEngine } from '../../services/stockfishEngine';
+import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import type { PlaySessionConfig } from '../../services/coachPlaySession';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+/** Depth used to pull an eval after each move. Small because we only need a
+ *  centipawn reading for verdict classification, not a PV. */
+const COMMENTARY_EVAL_DEPTH = 12;
 
 export interface CoachPlaySessionViewProps {
   config: PlaySessionConfig;
   /** Student's side. */
   orientation: 'white' | 'black';
+  /** Optional subject from the intent parser (e.g. "Sicilian Najdorf"). */
+  subject?: string;
   onExit: () => void;
 }
 
 export function CoachPlaySessionView({
   config,
   orientation,
+  subject,
   onExit,
 }: CoachPlaySessionViewProps): JSX.Element {
   const [fen, setFen] = useState<string>(START_FEN);
-  const [status, setStatus] = useState<string>('Your move.');
+  const [status, setStatus] = useState<string>('Your move. I will think, then reply — listen for a short analysis after each move.');
   const [thinking, setThinking] = useState<boolean>(false);
+  const [commenting, setCommenting] = useState<boolean>(false);
   const chessRef = useRef<Chess>(new Chess());
+  // Track the evaluation BEFORE each move so we can classify the swing.
+  const evalBeforeRef = useRef<number | null>(0);
+  const isMountedRef = useRef<boolean>(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => { isMountedRef.current = false; };
+  }, []);
 
   // Configure Stockfish skill at session start.
   useEffect(() => {
     void setSkill(config.skill);
   }, [config.skill]);
 
-  // If the student plays black, Stockfish makes the first move.
+  // Kick off commentary after EITHER side moves: analyze, then ask the LLM.
+  const narrateCommentary = useCallback(async (mover: 'w' | 'b'): Promise<void> => {
+    if (!isMountedRef.current) return;
+    setCommenting(true);
+    try {
+      const evalBefore = evalBeforeRef.current;
+      // Ask Stockfish for the eval (and best reply) at the current position.
+      let evalAfter: number | null = null;
+      let bestReplySan: string | undefined;
+      try {
+        const analysis = await stockfishEngine
+          .queueAnalysis(chessRef.current.fen(), COMMENTARY_EVAL_DEPTH);
+        if (!isMountedRef.current) return;
+        evalAfter = analysis.evaluation;
+        const bestUci = analysis.bestMove;
+        if (bestUci) {
+          try {
+            const probe = new Chess(chessRef.current.fen());
+            const from = bestUci.slice(0, 2);
+            const to = bestUci.slice(2, 4);
+            const promotion = bestUci.length > 4 ? bestUci[4] : undefined;
+            const probeMove = probe.move({ from, to, promotion });
+            bestReplySan = probeMove.san;
+          } catch {
+            // Ignore — best-move probe is best-effort only.
+          }
+        }
+      } catch {
+        // Stockfish unavailable — LLM will still speak from the move alone.
+      }
+
+      const commentary = await generateMoveCommentary({
+        gameAfter: chessRef.current,
+        mover,
+        evalBefore,
+        evalAfter,
+        bestReplySan,
+        subject,
+      });
+      if (!isMountedRef.current) return;
+      // Store the new eval as the baseline for the NEXT move's swing.
+      evalBeforeRef.current = evalAfter;
+      if (commentary) {
+        setStatus(commentary);
+        void voiceService.speak(commentary);
+      } else {
+        // No LLM available — keep the board moving but do not paint filler.
+        // Clear any stale commentary so the student isn't misled.
+        setStatus(defaultStatus(chessRef.current));
+      }
+    } finally {
+      if (isMountedRef.current) setCommenting(false);
+    }
+  }, [subject]);
+
+  // Engine move → update board → narrate.
   const playComputerMove = useCallback(async (): Promise<void> => {
     setThinking(true);
     try {
@@ -52,22 +126,21 @@ export function CoachPlaySessionView({
           promotion: uci.promotion,
         });
       } catch {
-        // Illegal move — engine failure. Bail.
-        setStatus('Engine returned an illegal move. Please restart.');
-        setThinking(false);
+        setStatus('The engine returned an illegal move. Please restart the session.');
         return;
       }
       const nextFen = chessRef.current.fen();
+      if (!isMountedRef.current) return;
       setFen(nextFen);
-      const narration = buildCoachNarration(chessRef.current);
-      setStatus(narration);
-      // Fire and forget — no blocking needed since this is one-off
-      // commentary, not a scripted lesson.
-      void voiceService.speak(narration);
+      if (chessRef.current.isGameOver()) {
+        setStatus(describeGameOver(chessRef.current));
+        return;
+      }
+      await narrateCommentary(chessRef.current.turn() === 'w' ? 'b' : 'w');
     } finally {
-      setThinking(false);
+      if (isMountedRef.current) setThinking(false);
     }
-  }, [config]);
+  }, [config, narrateCommentary]);
 
   useEffect(() => {
     if (orientation === 'black') {
@@ -90,10 +163,17 @@ export function CoachPlaySessionView({
         setStatus(describeGameOver(chessRef.current));
         return true;
       }
-      void playComputerMove();
+      // Narrate the student's move in the background, then make the
+      // engine's reply (which will narrate itself).
+      const moverForUser: 'w' | 'b' = chessRef.current.turn() === 'w' ? 'b' : 'w';
+      void (async () => {
+        await narrateCommentary(moverForUser);
+        if (!isMountedRef.current) return;
+        await playComputerMove();
+      })();
       return true;
     },
-    [playComputerMove],
+    [narrateCommentary, playComputerMove],
   );
 
   const header = (
@@ -104,7 +184,7 @@ export function CoachPlaySessionView({
           {config.label}
         </div>
         <p className="text-sm text-theme-text mt-2 leading-snug">
-          {thinking ? 'Coach is thinking…' : status}
+          {thinking ? 'Coach is thinking…' : commenting ? 'Analysing…' : status}
         </p>
       </div>
       <button
@@ -136,7 +216,7 @@ export function CoachPlaySessionView({
         <ConsistentChessboard
           fen={fen}
           boardOrientation={orientation}
-          interactive={!thinking && !chessRef.current.isGameOver()}
+          interactive={!thinking && !commenting && !chessRef.current.isGameOver()}
           onPieceDrop={handlePieceDrop}
         />
       }
@@ -145,22 +225,11 @@ export function CoachPlaySessionView({
   );
 }
 
-/**
- * Build a short coach-style comment on the last move. Kept
- * template-based to avoid an LLM round-trip on every move; the coach
- * chat itself can deepen analysis on request.
- */
-function buildCoachNarration(game: Chess): string {
-  if (game.isCheckmate()) return "Checkmate. Good game!";
-  if (game.isStalemate()) return 'Stalemate.';
-  if (game.isDraw()) return "It's a draw.";
-  if (game.inCheck()) return 'Check. Your king is under attack — watch the squares around it.';
-  const history = game.history({ verbose: true });
-  const last = history.length > 0 ? history[history.length - 1] : undefined;
-  if (!last) return 'Your move.';
-  if (last.isCapture()) return `I captured on ${last.to}.`;
-  if (last.isKingsideCastle() || last.isQueensideCastle()) return 'I castled.';
-  return `I played ${last.san}.`;
+/** Minimal status when the LLM is unavailable — tells the student whose
+ *  turn it is without painting any generic "analysis". */
+function defaultStatus(game: Chess): string {
+  if (game.isGameOver()) return describeGameOver(game);
+  return game.turn() === 'w' ? "White to move." : "Black to move.";
 }
 
 function describeGameOver(game: Chess): string {

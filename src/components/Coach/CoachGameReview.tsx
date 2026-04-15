@@ -12,8 +12,8 @@ import { KeyMomentNav } from './KeyMomentNav';
 import { MoveActionButtons } from './MoveActionButtons';
 import { ChatInput } from './ChatInput';
 import { getAdaptiveMove } from '../../services/coachGameEngine';
-import { getMoveCommentaryTemplate } from '../../services/coachTemplates';
 import { getCoachCommentary, getCoachChatResponse } from '../../services/coachApi';
+import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { buildChessContextMessage, POSITION_ANALYSIS_ADDITION, INTERACTIVE_REVIEW_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
@@ -550,14 +550,45 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
     setWhatIfFen(moveResult.fen);
 
-    // Get quick commentary on the what-if move
+    // In-depth commentary on the what-if move — tied to Stockfish eval
+    // swing and narrated by the coach LLM. Returns empty string when
+    // the LLM isn't configured; we only surface real analysis, never
+    // generic template filler.
     try {
-      const analysis = await stockfishEngine.analyzePosition(moveResult.fen, 10).catch(() => null);
-      const cmtry = getMoveCommentaryTemplate('good', {
-        playerMove: moveResult.san,
-        bestMove: analysis?.bestMove ?? '?',
+      const [analysisBefore, analysisAfter] = await Promise.all([
+        startFen
+          ? stockfishEngine.queueAnalysis(startFen, 12).catch(() => null)
+          : Promise.resolve(null),
+        stockfishEngine.queueAnalysis(moveResult.fen, 12).catch(() => null),
+      ]);
+      const probe = new Chess();
+      probe.load(moveResult.fen);
+      const moverThatJustMoved: 'w' | 'b' =
+        probe.turn() === 'w' ? 'b' : 'w';
+      let bestReplySan: string | undefined;
+      const bestUci = analysisAfter?.bestMove;
+      if (bestUci) {
+        try {
+          const p = new Chess(moveResult.fen);
+          const bestMoveResult = p.move({
+            from: bestUci.slice(0, 2),
+            to: bestUci.slice(2, 4),
+            promotion: bestUci.length > 4 ? bestUci[4] : undefined,
+          });
+          bestReplySan = bestMoveResult.san;
+        } catch {
+          // best-reply probe is best-effort only
+        }
+      }
+      const commentary = await generateMoveCommentary({
+        gameAfter: probe,
+        mover: moverThatJustMoved,
+        evalBefore: analysisBefore?.evaluation ?? null,
+        evalAfter: analysisAfter?.evaluation ?? null,
+        bestReplySan,
+        reviewTone: true,
       });
-      setWhatIfCommentary(cmtry);
+      setWhatIfCommentary(commentary || null);
     } catch {
       setWhatIfCommentary(null);
     }
