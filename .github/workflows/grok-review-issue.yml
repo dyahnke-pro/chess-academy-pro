@@ -1,0 +1,39 @@
+name: Grok Review Issue
+
+on:
+  issue_comment:
+    types: [created]
+  issues:
+    types: [labeled]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  grok-review:
+    # Trigger when:
+    #   - a new issue comment starts with "/grok"
+    #   - an issue is labeled with "grok-review"
+    if: >-
+      (github.event_name == 'issue_comment' &&
+       startsWith(github.event.comment.body, '/grok')) ||
+      (github.event_name == 'issues' &&
+       github.event.label.name == 'grok-review')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Grok review
+        env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: node scripts/grok-review-issue.mjs
