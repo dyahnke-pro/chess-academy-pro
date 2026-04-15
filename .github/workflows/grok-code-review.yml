@@ -1,0 +1,97 @@
+name: Grok Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  grok-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute PR diff
+        id: diff
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch origin "$BASE_REF"
+          # Cap diff at ~200k chars to stay under model context.
+          git diff "origin/${BASE_REF}...HEAD" | head -c 200000 > /tmp/pr.diff
+          echo "path=/tmp/pr.diff" >> "$GITHUB_OUTPUT"
+          echo "size=$(wc -c </tmp/pr.diff)" >> "$GITHUB_OUTPUT"
+
+      - name: Run Grok code review
+        if: steps.diff.outputs.size != '0'
+        uses: actions/github-script@v7
+        env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          DIFF_PATH: ${{ steps.diff.outputs.path }}
+          GROK_MODEL: grok-4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const diff = fs.readFileSync(process.env.DIFF_PATH, 'utf8');
+
+            if (!diff.trim()) {
+              core.info('No changes to review.');
+              return;
+            }
+
+            const prompt = [
+              'You are an expert senior software engineer doing a thorough code review.',
+              '',
+              'Here is the diff of changes in this pull request:',
+              '',
+              '```diff',
+              diff,
+              '```',
+              '',
+              'Please provide a clear, constructive code review. Focus on:',
+              '- Potential bugs or logic issues',
+              '- Performance or security concerns',
+              '- Code quality and best practices',
+              '- Suggestions for improvement',
+              '- Any positive notes',
+              '',
+              'Be concise but detailed. Use markdown formatting.',
+            ].join('\n');
+
+            const res = await fetch('https://api.x.ai/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${process.env.XAI_API_KEY}`,
+              },
+              body: JSON.stringify({
+                model: process.env.GROK_MODEL,
+                messages: [{ role: 'user', content: prompt }],
+                temperature: 0.7,
+                max_tokens: 2000,
+              }),
+            });
+
+            if (!res.ok) {
+              const body = await res.text();
+              core.setFailed(`xAI API error ${res.status}: ${body}`);
+              return;
+            }
+
+            const data = await res.json();
+            const review = data.choices?.[0]?.message?.content
+              || "Sorry, I couldn't generate a review.";
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## 🤖 Grok Code Review\n\n${review}`,
+            });
