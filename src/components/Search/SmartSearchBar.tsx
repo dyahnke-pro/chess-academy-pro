@@ -2,7 +2,7 @@ import { useRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2, MessageCircle, Play } from 'lucide-react';
 import { useSmartSearch } from '../../hooks/useSmartSearch';
-import { useAppStore } from '../../stores/appStore';
+import { useAppStore, selectFreshBoardSnapshot } from '../../stores/appStore';
 import { parseCoachIntent } from '../../services/coachAgent';
 import type { SmartSearchResult, SmartSearchCategory } from '../../types';
 
@@ -38,6 +38,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
 
   const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const setCoachDrawerInitialMessage = useAppStore((s) => s.setCoachDrawerInitialMessage);
+  const lastBoardSnapshot = useAppStore((s) => selectFreshBoardSnapshot(s));
 
   const showAskCoach = query.trim().length >= ASK_COACH_MIN_LENGTH;
   // Detect agent-routable intents (e.g. "run me through the middlegame",
@@ -52,7 +53,8 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   );
   const showAgentAction =
     agentIntent.kind === 'continue-middlegame' ||
-    agentIntent.kind === 'play-against';
+    agentIntent.kind === 'play-against' ||
+    agentIntent.kind === 'explain-position';
   const totalItems =
     results.length + (showAskCoach ? 1 : 0) + (showAgentAction ? 1 : 0);
   const agentActionIndex = showAgentAction ? 0 : -1;
@@ -115,8 +117,19 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       void navigate(
         `/coach/session/play-against?subject=${subject}&difficulty=${difficulty}`,
       );
+    } else if (agentIntent.kind === 'explain-position') {
+      // Prefer the persistent snapshot the user was just looking at;
+      // if none is fresh, the session page will show an empty state
+      // prompting them for a FEN.
+      const params = new URLSearchParams();
+      if (lastBoardSnapshot) {
+        params.set('fen', lastBoardSnapshot.fen);
+        if (lastBoardSnapshot.source) params.set('source', lastBoardSnapshot.source);
+      }
+      const qs = params.toString();
+      void navigate(`/coach/session/explain-position${qs ? `?${qs}` : ''}`);
     }
-  }, [agentIntent, clear, navigate]);
+  }, [agentIntent, clear, navigate, lastBoardSnapshot]);
 
   const handleSelect = useCallback((result: SmartSearchResult): void => {
     setShowDropdown(false);
@@ -278,12 +291,18 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
                 <div className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>
                   {agentIntent.kind === 'continue-middlegame'
                     ? 'Run the middlegame plans'
-                    : `Play${agentIntent.subject ? ` ${agentIntent.subject}` : ''} vs. Coach`}
+                    : agentIntent.kind === 'explain-position'
+                      ? 'Explain this position'
+                      : `Play${agentIntent.subject ? ` ${agentIntent.subject}` : ''} vs. Coach`}
                 </div>
                 <div className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>
-                  {agentIntent.kind === 'play-against' && agentIntent.difficulty !== 'auto'
-                    ? `Difficulty: ${agentIntent.difficulty}`
-                    : 'Opens a lesson session with the coach'}
+                  {agentIntent.kind === 'explain-position'
+                    ? lastBoardSnapshot
+                      ? `Using your last ${lastBoardSnapshot.source} position`
+                      : 'Open a board first, then ask again'
+                    : agentIntent.kind === 'play-against' && agentIntent.difficulty !== 'auto'
+                      ? `Difficulty: ${agentIntent.difficulty}`
+                      : 'Opens a lesson session with the coach'}
                 </div>
               </div>
               <span

@@ -4,6 +4,11 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { CoachSessionPage } from './CoachSessionPage';
 import { voiceService } from '../../services/voiceService';
+import { useAppStore } from '../../stores/appStore';
+
+beforeEach(() => {
+  useAppStore.getState().clearLastBoardSnapshot();
+});
 
 function renderAt(path: string): ReturnType<typeof render> {
   return render(
@@ -58,6 +63,26 @@ describe('CoachSessionPage — play-against', () => {
     expect(
       screen.getByLabelText('Resign and return to chat'),
     ).toBeInTheDocument();
+  });
+});
+
+describe('CoachSessionPage — explain-position', () => {
+  beforeEach(() => {
+    vi.spyOn(voiceService, 'speak').mockResolvedValue(undefined);
+    vi.spyOn(voiceService, 'stop').mockImplementation(() => {});
+  });
+
+  it('renders an explain-position session with the URL fen', () => {
+    const fen = encodeURIComponent('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+    renderAt(`/coach/session/explain-position?fen=${fen}`);
+    expect(screen.getByTestId('chess-lesson-layout')).toBeInTheDocument();
+    expect(screen.getByTestId('chess-lesson-board')).toBeInTheDocument();
+  });
+
+  it('shows an empty state when no fen is provided and no snapshot exists', () => {
+    renderAt('/coach/session/explain-position');
+    expect(screen.getByTestId('explain-empty-board')).toBeInTheDocument();
+    expect(screen.getByText(/open a game, puzzle, or analysis board/i)).toBeInTheDocument();
   });
 });
 

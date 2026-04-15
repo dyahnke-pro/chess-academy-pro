@@ -25,9 +25,10 @@ import { resolveMiddlegameSession } from '../../services/middlegamePlanner';
 import { useAppStore } from '../../stores/appStore';
 import { resolveConfig } from '../../services/coachPlaySession';
 import { CoachPlaySessionView } from './CoachPlaySessionView';
+import { ExplainPositionSessionView } from './ExplainPositionSessionView';
 import type { CoachDifficulty } from '../../services/coachAgent';
 
-type SessionKind = 'middlegame' | 'play-against';
+type SessionKind = 'middlegame' | 'play-against' | 'explain-position';
 
 export function CoachSessionPage(): JSX.Element {
   const { kind } = useParams<{ kind: SessionKind }>();
@@ -53,6 +54,18 @@ export function CoachSessionPage(): JSX.Element {
         openingId={openingId}
         subject={subject}
         orientation={orientation}
+        onExit={goBack}
+      />
+    );
+  }
+
+  if (kind === 'explain-position') {
+    const urlFen = searchParams.get('fen');
+    const source = searchParams.get('source') ?? undefined;
+    return (
+      <ExplainPositionSessionView
+        urlFen={urlFen}
+        source={source}
         onExit={goBack}
       />
     );

@@ -18,6 +18,7 @@ export type CoachIntentKind =
   | 'play-against'
   | 'puzzle'
   | 'walkthrough'
+  | 'explain-position'
   | 'qa';
 
 export type CoachDifficulty = 'easy' | 'medium' | 'hard' | 'auto';
@@ -68,6 +69,29 @@ export function parseCoachIntent(query: string): CoachIntent {
 
   if (!raw) {
     return { kind: 'qa', raw };
+  }
+
+  // 0. "Explain this position" / "what's happening here" / "analyze
+  //    this". Must come before the middlegame branch so "explain the
+  //    middlegame plan" still routes to continue-middlegame.
+  //
+  // The user is asking us to explain a position they are looking at.
+  // The FEN itself comes from either a URL `?fen=` param or the
+  // persistent `lastBoardSnapshot` in the store — coachAgent just
+  // detects the intent, it doesn't resolve the position.
+  if (
+    !/(middle\s*game|middlegame|opening|endgame)/.test(lower) &&
+    (
+      /^(what'?s?\s+(going\s+on|happening)\s+(here|in\s+this\s+position)?)/.test(lower) ||
+      /explain\s+(this|the\s+current|my\s+current)\s+position/.test(lower) ||
+      /explain\s+this\b/.test(lower) ||
+      /analy[sz]e\s+(this|the\s+current|my\s+current)\s+position/.test(lower) ||
+      /analy[sz]e\s+this\b/.test(lower) ||
+      /what'?s?\s+going\s+on\b/.test(lower) ||
+      /what'?s?\s+happening\b/.test(lower)
+    )
+  ) {
+    return { kind: 'explain-position', raw };
   }
 
   // 1. "Run me through the middlegame plans" / "show me middlegame" /

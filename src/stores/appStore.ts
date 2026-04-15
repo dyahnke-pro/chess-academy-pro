@@ -53,7 +53,28 @@ interface AppState {
     timestamp: number;
   } | null;
   globalPracticePosition: { fen: string; label: string } | null;
+  /**
+   * Last board the user looked at anywhere in the app. Unlike
+   * `globalBoardContext`, this survives the source screen unmounting, so
+   * the coach chat / explain-position flow can reach for "the position
+   * I was just looking at" after the user navigates away.
+   *
+   * Consumers should treat snapshots older than
+   * `LAST_BOARD_SNAPSHOT_TTL_MS` as stale and fall back to asking the
+   * user for a position.
+   */
+  lastBoardSnapshot: {
+    fen: string;
+    /** Where the FEN came from — "analysis", "game-review", "puzzle", etc. */
+    source: string;
+    /** Optional human label used by UI ("Game vs. Smith, move 14"). */
+    label?: string;
+    timestamp: number;
+  } | null;
 }
+
+/** Snapshots older than this are considered stale (15 min). */
+export const LAST_BOARD_SNAPSHOT_TTL_MS = 15 * 60 * 1000;
 
 interface AppActions {
   setActiveProfile: (profile: UserProfile | null) => void;
@@ -81,6 +102,13 @@ interface AppActions {
   setCoachEdgeTabPercent: (percent: number) => void;
   setGlobalBoardContext: (ctx: AppState['globalBoardContext']) => void;
   setGlobalPracticePosition: (pos: AppState['globalPracticePosition']) => void;
+  /**
+   * Capture the "current position" for cross-screen reuse. Called from
+   * every board-containing screen via `useBoardContext`. Persists until
+   * overwritten — survives screen unmount.
+   */
+  setLastBoardSnapshot: (snapshot: { fen: string; source: string; label?: string }) => void;
+  clearLastBoardSnapshot: () => void;
   reset: () => void;
 }
 
@@ -108,6 +136,7 @@ const DEFAULT_STATE: AppState = {
   coachEdgeTabPercent: 50,
   globalBoardContext: null,
   globalPracticePosition: null,
+  lastBoardSnapshot: null,
 };
 
 export const useAppStore = create<AppState & AppActions>()(
@@ -171,6 +200,27 @@ export const useAppStore = create<AppState & AppActions>()(
 
     setGlobalPracticePosition: (pos) => set({ globalPracticePosition: pos }),
 
+    setLastBoardSnapshot: ({ fen, source, label }) =>
+      set({ lastBoardSnapshot: { fen, source, label, timestamp: Date.now() } }),
+
+    clearLastBoardSnapshot: () => set({ lastBoardSnapshot: null }),
+
     reset: () => set(DEFAULT_STATE),
   })),
 );
+
+/**
+ * Read the last board snapshot, returning `null` if it is older than
+ * `LAST_BOARD_SNAPSHOT_TTL_MS`. Use this from screens that want to
+ * reach for "the position the user was just looking at" — e.g. the
+ * coach chat's explain-position flow.
+ */
+export function selectFreshBoardSnapshot(
+  state: AppState,
+  nowMs: number = Date.now(),
+): AppState['lastBoardSnapshot'] {
+  const snapshot = state.lastBoardSnapshot;
+  if (!snapshot) return null;
+  if (nowMs - snapshot.timestamp > LAST_BOARD_SNAPSHOT_TTL_MS) return null;
+  return snapshot;
+}
