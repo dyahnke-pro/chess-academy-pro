@@ -30,9 +30,13 @@ interface ControlledModeProps extends ControlledChessBoardProps {
   fen?: never;
 }
 
+/** A piece-square map alternative to FEN, used by Kid games that render only a few pieces. */
+export type PiecePositionMap = Record<string, { pieceType: string }>;
+
 interface StaticModeProps {
-  /** A position FEN. Mutually exclusive with `game`. */
-  fen: string;
+  /** A position — either a FEN string or a piece-square map.
+   *  Mutually exclusive with `game`. */
+  fen: string | PiecePositionMap;
   game?: never;
   boardOrientation?: 'white' | 'black';
   /** Whether dragging is allowed. Defaults to false (static mode is usually display-only). */
@@ -65,7 +69,7 @@ export function ConsistentChessboard(props: ConsistentChessboardProps): JSX.Elem
 }
 
 function StaticBoard({
-  fen,
+  fen: position,
   boardOrientation = 'white',
   interactive = false,
   arrows,
@@ -99,7 +103,7 @@ function StaticBoard({
     >
       <Chessboard
         options={{
-          position: fen,
+          position,
           boardOrientation,
           allowDragging: interactive,
           dragActivationDistance: 5,

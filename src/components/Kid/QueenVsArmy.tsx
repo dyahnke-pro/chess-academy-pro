@@ -1,10 +1,8 @@
 import { useState, useCallback, useMemo } from 'react';
-import { Chessboard } from 'react-chessboard';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
-import { useSettings } from '../../hooks/useSettings';
-import { getBoardColor } from '../../services/boardColorService';
 import {
   QUEEN_ARMY_LEVELS,
   initQueenArmyState,
@@ -23,8 +21,6 @@ export function QueenVsArmy({ onBack, onComplete }: QueenVsArmyProps): JSX.Eleme
   const [levelIndex, setLevelIndex] = useState(0);
   const level = QUEEN_ARMY_LEVELS[levelIndex];
   const [state, setState] = useState<QueenArmyState>(() => initQueenArmyState(level));
-  const { settings } = useSettings();
-  const boardColors = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
 
   const position = useMemo(() => queenArmyPosition(state), [state]);
   const highlights = useMemo(
@@ -139,17 +135,12 @@ export function QueenVsArmy({ onBack, onComplete }: QueenVsArmyProps): JSX.Eleme
 
       {/* Board */}
       <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px]">
-        <Chessboard
-          options={{
-            position,
-            boardOrientation: 'white' as const,
-            darkSquareStyle: { backgroundColor: boardColors.darkSquare },
-            lightSquareStyle: { backgroundColor: boardColors.lightSquare },
-            squareStyles: customSquareStyles,
-            animationDurationInMs: 200,
-            allowDragging: state.status === 'playing',
-            onPieceDrop: handleDrop,
-          }}
+        <ConsistentChessboard
+          fen={position}
+          boardOrientation="white"
+          squareStyles={customSquareStyles}
+          interactive={state.status === 'playing'}
+          onPieceDrop={handleDrop}
         />
       </BoardVoiceOverlay>
 

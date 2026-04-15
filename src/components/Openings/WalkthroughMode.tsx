@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { Chess } from 'chess.js';
 import { motion } from 'framer-motion';
-import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { useChessGame } from '../../hooks/useChessGame';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
@@ -680,7 +680,7 @@ export function WalkthroughMode({
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
-          <ControlledChessBoard
+          <ConsistentChessboard
             game={game}
             interactive={false}
             showFlipButton={true}

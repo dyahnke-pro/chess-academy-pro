@@ -1,13 +1,10 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Chessboard } from 'react-chessboard';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 import { StarDisplay } from './StarDisplay';
-import { useSettings } from '../../hooks/useSettings';
-import { getBoardColor } from '../../services/boardColorService';
-import { buildPieceRenderer } from '../../services/pieceSetService';
 import { voiceService } from '../../services/voiceService';
 import {
   buildFen,
@@ -47,9 +44,6 @@ export function RowClearerPage(): JSX.Element {
   const hasSpoken = useRef(false);
   const feedbackTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { settings } = useSettings();
-  const boardColorScheme = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
-  const customPieces = useMemo(() => buildPieceRenderer(settings.pieceSet), [settings.pieceSet]);
 
   const kidSpeak = useCallback(
     (text: string): void => {
@@ -316,18 +310,11 @@ export function RowClearerPage(): JSX.Element {
 
         {/* Board */}
         <BoardVoiceOverlay fen={fen} className="w-full md:max-w-[420px] mx-auto">
-          <Chessboard
-            options={{
-              position: fen,
-              boardOrientation: 'white' as const,
-              squareStyles,
-              darkSquareStyle: { backgroundColor: boardColorScheme.darkSquare },
-              lightSquareStyle: { backgroundColor: boardColorScheme.lightSquare },
-              ...(customPieces ? { pieces: customPieces } : {}),
-              allowDragging: false,
-              animationDurationInMs: 200,
-              onSquareClick: handleSquareClick,
-            }}
+          <ConsistentChessboard
+            fen={fen}
+            boardOrientation="white"
+            squareStyles={squareStyles}
+            onSquareClick={handleSquareClick}
           />
         </BoardVoiceOverlay>
 
