@@ -75,6 +75,20 @@ src/
 
 **When "clean up" or "make it match" is requested, match BOTH structure AND visual.** Don't just reorganize information flow — replicate the actual layout, grid, card style, spacing, and interaction patterns of the reference page. Study the reference's exact JSX, Tailwind classes, and component hierarchy before writing new code.
 
+### Boards and Lesson Layouts (IMPORTANT)
+Every board in the app must go through `ConsistentChessboard` (`src/components/Chessboard/ConsistentChessboard.tsx`). Two modes:
+- **Controlled:** `<ConsistentChessboard game={useChessGame()} ... />` — for interactive lesson/coach/play screens.
+- **Static:** `<ConsistentChessboard fen={fenStringOrPositionMap} ... />` — for inline boards that own their own chess instance (Kid games, model-game viewers).
+
+Theming (piece set, square colors, glow, animation duration, border) is centralized in `useBoardTheme()` (`src/hooks/useBoardTheme.ts`). Do NOT pass piece set / square color / animation overrides at the call site — they are pinned by the hook for visual consistency.
+
+Any "lesson with a board" screen (walkthrough, dynamic coach session, middlegame study) should use `ChessLessonLayout` (`src/components/Layout/ChessLessonLayout.tsx`). It guarantees: fixed gap above controls, board-height cap on short viewports, and mobile bottom-nav clearance via `env(safe-area-inset-bottom)`.
+
+### Strict Narration Timing (IMPORTANT)
+Lesson playback (TTS + auto-advance) must use `useStrictNarration` (`src/hooks/useStrictNarration.ts`). Voice-promise resolution is the single source of truth for advance — do NOT add fallback timers that race with `voiceService.speak()`. Manual navigation (`next`/`prev`/`goToStep`) cancels in-flight speech and supersedes pending callbacks via the hook's token counter. If your narration data loads asynchronously after the step is showing, call `narration.replay()` once it arrives.
+
+Spoken text comes from `pickNarrationText(annotation, length)` (`src/services/walkthroughNarration.ts`). New annotations should populate the optional `narration` and `shortNarration` fields on `OpeningMoveAnnotation` so the spoken script can diverge from the displayed annotation when needed; otherwise the helper falls back to the display text.
+
 ### State Management
 - **Zustand** for global app state (user profile, settings, current session, theme).
 - **React state** (`useState`) for local component state only.
