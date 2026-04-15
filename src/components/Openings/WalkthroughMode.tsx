@@ -16,6 +16,9 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { loadSubLineAnnotations, loadAnnotationsForPgn, enhanceWithNarration } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
+import { useStrictNarration } from '../../hooks/useStrictNarration';
+import { trimToSentences } from '../../services/walkthroughNarration';
+import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { ArrowRight, Play, Pause, Info } from 'lucide-react';
 
@@ -35,23 +38,18 @@ interface MoveInfo {
 
 type AutoPlaySpeed = 'learn' | 'study' | 'review' | 'drill';
 
-// Words-per-minute reading speed for auto-advance timing
+// Words-per-minute reading speed used by the arrow-stagger fallback timer
+// (when TTS boundary events aren't available).
 const READING_WPM: Record<AutoPlaySpeed, number> = {
   learn: 120,
   study: 160,
   review: 250,
-  drill: 999, // effectively instant — drill uses fixed delay
+  drill: 999,
 };
 
-// Minimum delay per move even if annotation is short/missing
-const MIN_DELAY_MS: Record<AutoPlaySpeed, number> = {
-  learn: 3000,
-  study: 2000,
-  review: 1500,
-  drill: 2000,
-};
-
-// Post-narration buffer before advancing to next move
+// Post-narration buffer before advancing to the next move in auto-play.
+// The strict-narration hook honors voice completion as the primary timer; this
+// is just a quiet pause between moves.
 const POST_NARRATION_MS: Record<AutoPlaySpeed, number> = {
   learn: 600,
   study: 300,
@@ -75,13 +73,6 @@ const NARRATE: Record<AutoPlaySpeed, boolean> = {
   drill: false,
 };
 
-/** Trim annotation to a given max number of sentences. */
-function trimAnnotation(text: string, maxSentences: number = 2): string {
-  const sentences = text.match(/[^.!?]+[.!?]+/g);
-  if (!sentences || sentences.length <= maxSentences) return text;
-  return sentences.slice(0, maxSentences).join('').trim();
-}
-
 /** How many sentences to show/speak for each speed. null = full text. */
 const SENTENCE_LIMIT: Record<AutoPlaySpeed, number | null> = {
   learn: null,     // Full annotation
@@ -89,13 +80,6 @@ const SENTENCE_LIMIT: Record<AutoPlaySpeed, number | null> = {
   review: 1,       // Just the key point
   drill: null,     // Hidden entirely
 };
-
-function getAnnotationDelay(text: string | undefined, speed: AutoPlaySpeed): number {
-  if (!text) return MIN_DELAY_MS[speed];
-  const wordCount = text.split(/\s+/).length;
-  const readingMs = (wordCount / READING_WPM[speed]) * 60 * 1000;
-  return Math.max(MIN_DELAY_MS[speed], readingMs + 500);
-}
 
 export function WalkthroughMode({
   opening,
@@ -129,15 +113,59 @@ export function WalkthroughMode({
     return moves;
   }, [activePgn]);
 
-  const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
   const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
 
   // Ref for TTS boundary callback — updated per annotation
   const boundaryHandlerRef = useRef<((charIndex: number) => void) | null>(null);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
-  const isAutoPlayingRef = useRef(false);
   const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('learn');
   const [showSpeedInfo, setShowSpeedInfo] = useState(false);
+
+  // ─── Strict narration ──────────────────────────────────────────────────────
+  // The hook owns currentStep + isAutoPlaying. It speaks each step's narration
+  // and only advances after the speech promise resolves — no parallel timers.
+  // Steps: 0 = overview (no narration), 1..N = the N moves of the line.
+
+  // applyStep is a no-op because the FEN is derived from currentMoveIndex
+  // (== hook.currentStep) via fenAtIndex, so React updates the board for free
+  // when the hook updates its index. We pass an empty function rather than
+  // omitting the prop so the contract is explicit.
+  const applyStep = useCallback((_idx: number) => { /* board derives from hook state */ }, []);
+
+  const getNarrationFor = useCallback((idx: number): string => {
+    if (idx === 0 || !NARRATE[autoPlaySpeed]) return '';
+    const ann = annotations?.[idx - 1];
+    if (!ann) return '';
+    const fullText = ann.narration ?? ann.annotation;
+    const limit = SENTENCE_LIMIT[autoPlaySpeed];
+    if (limit !== null) {
+      return ann.shortNarration ?? trimToSentences(fullText, limit);
+    }
+    return fullText;
+  }, [annotations, autoPlaySpeed]);
+
+  const narration = useStrictNarration({
+    stepCount: expectedMoves.length + 1, // +1 for overview at step 0
+    applyStep,
+    getNarration: getNarrationFor,
+    postNarrationDelayMs: POST_NARRATION_MS[autoPlaySpeed],
+    voiceEnabled,
+  });
+
+  const currentMoveIndex = narration.currentStep;
+  const isAutoPlaying = narration.isAutoPlaying;
+
+  // Annotations load asynchronously from IndexedDB. If the user is already on
+  // a move that needs narration when the load completes, re-trigger speech for
+  // the current step so the freshly-loaded text gets spoken.
+  const annotationsLoadedRef = useRef(false);
+  useEffect(() => {
+    if (annotations && !annotationsLoadedRef.current) {
+      annotationsLoadedRef.current = true;
+      if (currentMoveIndex > 0) {
+        narration.replay();
+      }
+    }
+  }, [annotations, currentMoveIndex, narration]);
 
   // Do NOT auto-load Kokoro here — the 87 MB WASM model causes OOM crashes
   // on iOS Safari. Kokoro only loads when the user explicitly taps
@@ -440,8 +468,6 @@ export function WalkthroughMode({
     ? expectedMoves[currentMoveIndex - 1]?.san
     : undefined;
 
-  const postNarrationDelay = POST_NARRATION_MS[autoPlaySpeed];
-
   const cycleSpeed = useCallback(() => {
     setAutoPlaySpeed((prev) => {
       const order: AutoPlaySpeed[] = ['learn', 'study', 'review', 'drill'];
@@ -450,182 +476,31 @@ export function WalkthroughMode({
     });
   }, []);
 
-  // Keep ref in sync with state so closures can read current value
-  useEffect(() => {
-    isAutoPlayingRef.current = isAutoPlaying;
-  }, [isAutoPlaying]);
-
-  // Auto-play timeout ref (dynamic per-move delay)
-  const autoPlayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Schedule the next auto-play advance — TTS end event advances immediately,
-  // with a timer fallback in case TTS doesn't fire (e.g. voice disabled)
-  const scheduleNextMove = useCallback(() => {
-    if (autoPlayRef.current) {
-      clearTimeout(autoPlayRef.current);
-      autoPlayRef.current = null;
-    }
-    ttsFinishedRef.current = null;
-
-    setCurrentMoveIndex((prev) => {
-      if (prev >= expectedMoves.length) {
-        setIsAutoPlaying(false);
-        return prev;
-      }
-      const nextIndex = prev + 1;
-
-      const advanceToNext = (): void => {
-        // Don't advance if auto-play was paused
-        if (!isAutoPlayingRef.current) return;
-
-        // Clear both triggers to prevent double-advance
-        if (autoPlayRef.current) {
-          clearTimeout(autoPlayRef.current);
-          autoPlayRef.current = null;
-        }
-        ttsFinishedRef.current = null;
-
-        if (nextIndex < expectedMoves.length) {
-          // Pause after TTS ends — shorter at higher speeds
-          autoPlayRef.current = setTimeout(() => {
-            scheduleNextMove();
-          }, postNarrationDelay);
-        } else {
-          setIsAutoPlaying(false);
-        }
-      };
-
-      // Register TTS end callback — advances as soon as narration finishes
-      ttsFinishedRef.current = advanceToNext;
-
-      const ann = annotations?.[prev];
-      const spokenText = ann?.annotation;
-      const shouldNarrate = NARRATE[autoPlaySpeed] && voiceEnabled && spokenText;
-
-      if (shouldNarrate) {
-        // When voice is active, Polly fetch + playback can take much longer than
-        // the estimated reading time. Use a generous safety-net timeout and let
-        // ttsFinishedRef handle the normal advance when narration actually ends.
-        autoPlayRef.current = setTimeout(advanceToNext, 30_000);
-      } else {
-        // No narration — use fixed delay based on speed tier
-        const delay = getAnnotationDelay(spokenText, autoPlaySpeed);
-        autoPlayRef.current = setTimeout(advanceToNext, delay);
-      }
-
-      return nextIndex;
-    });
-  }, [expectedMoves.length, annotations, autoPlaySpeed, voiceEnabled, postNarrationDelay]);
-
-  // Auto-play logic: kick off the chain when play starts
-  useEffect(() => {
-    if (isAutoPlaying) {
-      // Small initial delay before first advance
-      autoPlayRef.current = setTimeout(() => {
-        scheduleNextMove();
-      }, 500);
-    }
-    return () => {
-      if (autoPlayRef.current) {
-        clearTimeout(autoPlayRef.current);
-        autoPlayRef.current = null;
-      }
-    };
-  }, [isAutoPlaying, scheduleNextMove]);
-
-  // Stop auto-play when reaching the end
-  useEffect(() => {
-    if (currentMoveIndex >= expectedMoves.length) {
-      setIsAutoPlaying(false);
-    }
-  }, [currentMoveIndex, expectedMoves.length]);
-
   // Voice speed comes from the user's global preference in Settings,
   // NOT from the walkthrough speed tier. The tier controls lesson pace
   // (content amount, timing, arrows) while Settings controls how the
   // voice sounds.
 
-  // Track when TTS finishes speaking — used to advance auto-play immediately
-  const ttsFinishedRef = useRef<(() => void) | null>(null);
-
-  // TTS narration when move changes — tries Polly first, falls back to Web Speech
-  useEffect(() => {
-    if (currentMoveIndex === 0) return;
-    if (!annotations) return;
-    if (!NARRATE[autoPlaySpeed]) return;
-    const ann = annotations[currentMoveIndex - 1] as OpeningMoveAnnotation | undefined;
-    if (!ann) return;
-    if (!voiceEnabled) return;
-
-    let cancelled = false;
-
-    const limit = SENTENCE_LIMIT[autoPlaySpeed];
-    const spokenText = limit !== null
-      ? trimAnnotation(ann.annotation, limit)
-      : ann.annotation;
-
-    void voiceService.speak(spokenText).then(() => {
-      if (!cancelled) {
-        ttsFinishedRef.current?.();
-      }
-    });
-
-    return () => {
-      cancelled = true;
-      voiceService.stop();
-    };
-  }, [voiceEnabled, currentMoveIndex, annotations, autoPlaySpeed]);
-
-  // Clean up speech on unmount
-  useEffect(() => {
-    return () => {
-      voiceService.stop();
-    };
-  }, []);
-
-  // Navigation handlers
-  const goToMove = useCallback((idx: number) => {
-    setIsAutoPlaying(false);
-    voiceService.stop();
-    setCurrentMoveIndex(idx);
-  }, []);
-
-  const handleFirst = useCallback(() => goToMove(0), [goToMove]);
+  // Navigation handlers — all delegate to the strict-narration hook so that
+  // every transition cancels in-flight speech and supersedes any pending
+  // auto-advance via the hook's token counter.
+  const handleFirst = useCallback(() => narration.goToStep(0), [narration]);
   const handlePrev = useCallback(() => {
     unlockAudioContext();
-    voiceService.stop();
-    setIsAutoPlaying(false);
-    setCurrentMoveIndex((prev) => Math.max(0, prev - 1));
-  }, []);
+    narration.prev();
+  }, [narration]);
   const handleNext = useCallback(() => {
     unlockAudioContext();
-    setIsAutoPlaying(false);
-    setCurrentMoveIndex((prev) => Math.min(expectedMoves.length, prev + 1));
-  }, [expectedMoves.length]);
-  const handleLast = useCallback(() => goToMove(expectedMoves.length), [goToMove, expectedMoves.length]);
-
+    narration.next();
+  }, [narration]);
+  const handleLast = useCallback(
+    () => narration.goToStep(expectedMoves.length),
+    [narration, expectedMoves.length],
+  );
   const toggleAutoPlay = useCallback(() => {
     unlockAudioContext();
-    setIsAutoPlaying((prev) => {
-      if (prev) {
-        // Pausing — stop voice immediately and clear pending callbacks
-        voiceService.stop();
-        ttsFinishedRef.current = null;
-        if (autoPlayRef.current) {
-          clearTimeout(autoPlayRef.current);
-          autoPlayRef.current = null;
-        }
-        isAutoPlayingRef.current = false;
-        return false;
-      }
-      // Starting — reset if at end
-      if (currentMoveIndex >= expectedMoves.length) {
-        setCurrentMoveIndex(0);
-      }
-      isAutoPlayingRef.current = true;
-      return true;
-    });
-  }, [currentMoveIndex, expectedMoves.length]);
+    narration.toggleAutoPlay();
+  }, [narration]);
 
   const progress = expectedMoves.length > 0
     ? Math.round((currentMoveIndex / expectedMoves.length) * 100)
@@ -633,178 +508,186 @@ export function WalkthroughMode({
 
   const title = variation ? variation.name : opening.name;
 
-  return (
-    <div className="flex flex-col flex-1 overflow-hidden" data-testid="walkthrough-mode">
-      {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onExit}
-            className="p-1.5 rounded-lg hover:bg-theme-surface"
-            data-testid="walkthrough-back"
-          >
-            <ArrowRight size={16} className="text-theme-text rotate-180" />
-          </button>
-          <div>
-            <p className="text-sm font-semibold text-theme-text">Walkthrough: {title}</p>
-            <p className="text-xs text-theme-text-muted">{opening.eco} &middot; {opening.style}</p>
-          </div>
-        </div>
-        <AnalysisToggles
-          showEvalBar={showEvalBarEffective}
-          onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
-          showEngineLines={showEngineLinesEffective}
-          onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
-          showLichessLines={showLichessEffective}
-          onToggleLichessLines={() => setLichessOverride((prev) => !(prev ?? false))}
-        />
-      </div>
-
-      {/* Progress bar */}
-      <div className="px-4 pt-2">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-[10px] text-theme-text-muted uppercase font-medium">
-            Move {currentMoveIndex} / {expectedMoves.length}
-          </span>
-        </div>
-        <div className="w-full h-1.5 bg-theme-surface rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-theme-accent rounded-full"
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.3 }}
-            data-testid="walkthrough-progress"
-          />
+  const header = (
+    <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onExit}
+          className="p-1.5 rounded-lg hover:bg-theme-surface"
+          data-testid="walkthrough-back"
+        >
+          <ArrowRight size={16} className="text-theme-text rotate-180" />
+        </button>
+        <div>
+          <p className="text-sm font-semibold text-theme-text">Walkthrough: {title}</p>
+          <p className="text-xs text-theme-text-muted">{opening.eco} &middot; {opening.style}</p>
         </div>
       </div>
-
-      {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
-        <div className="w-full md:max-w-[420px]">
-          <ConsistentChessboard
-            game={game}
-            interactive={false}
-            showFlipButton={true}
-            showUndoButton={false}
-            showResetButton={false}
-            showEvalBar={showEvalBarEffective}
-            evaluation={latestEval}
-            isMate={latestIsMate}
-            mateIn={latestMateIn}
-            highlightSquares={lastMove}
-            arrows={boardArrows}
-            annotationHighlights={boardHighlights}
-          />
-          {showEngineLinesEffective && latestTopLines.length > 0 && (
-            <EngineLines lines={latestTopLines} fen={currentFen} className="mt-1" />
-          )}
-          {showLichessEffective && cloudEval && (
-            <LichessLines cloudEval={cloudEval} fen={currentFen} className="mt-1" />
-          )}
-        </div>
-      </div>
-
-      {/* Controls */}
-      <div className="px-4">
-        <BoardControls
-          onFirst={handleFirst}
-          onPrev={handlePrev}
-          onNext={handleNext}
-          onLast={handleLast}
-          canGoPrev={currentMoveIndex > 0}
-          canGoNext={currentMoveIndex < expectedMoves.length}
-          extraLeft={
-            <button
-              onClick={toggleAutoPlay}
-              className="p-2 rounded-lg border text-theme-text hover:bg-theme-surface transition-colors"
-              style={{ borderColor: 'var(--color-border)' }}
-              aria-label={isAutoPlaying ? 'Pause' : 'Play'}
-              data-testid="walkthrough-play-pause"
-            >
-              {isAutoPlaying ? <Pause size={16} /> : <Play size={16} />}
-            </button>
-          }
-          extraRight={
-            <div className="relative flex flex-col items-center">
-              <span className="text-[9px] text-theme-text-muted uppercase tracking-wide leading-none mb-0.5">
-                Voice Narration
-              </span>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={cycleSpeed}
-                  className="px-2.5 py-1.5 rounded-lg border text-xs font-medium hover:bg-theme-surface transition-colors"
-                  style={{
-                    borderColor: 'var(--color-border)',
-                    color: 'var(--color-text-muted)',
-                  }}
-                  aria-label={`Speed: ${autoPlaySpeed}`}
-                  data-testid="walkthrough-speed-toggle"
-                >
-                  {autoPlaySpeed.charAt(0).toUpperCase() + autoPlaySpeed.slice(1)}
-                </button>
-                <button
-                  onClick={() => setShowSpeedInfo((v) => !v)}
-                  className="p-1 rounded-full hover:bg-theme-surface transition-colors"
-                  style={{ color: 'var(--color-text-muted)' }}
-                  aria-label="Speed info"
-                  data-testid="walkthrough-speed-info-btn"
-                >
-                  <Info size={13} />
-                </button>
-              </div>
-              {showSpeedInfo && (
-                <>
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setShowSpeedInfo(false)}
-                  />
-                  <div
-                    className="absolute bottom-full right-0 mb-2 w-64 rounded-xl border p-3 shadow-xl z-50 text-xs leading-relaxed"
-                    style={{
-                      background: 'var(--color-surface)',
-                      borderColor: 'var(--color-border)',
-                      color: 'var(--color-text)',
-                    }}
-                    data-testid="walkthrough-speed-info-popup"
-                  >
-                    <p className="font-semibold mb-1.5">Voice Narration Speed</p>
-                    <ul className="space-y-1.5">
-                      <li><span className="font-medium">Learn</span> — Slow and thorough. Full explanations read aloud, arrows appear progressively, long pauses to absorb.</li>
-                      <li><span className="font-medium">Study</span> — Same content but faster pacing.</li>
-                      <li><span className="font-medium">Review</span> — Quick refresher. Annotations trimmed, arrows appear all at once, minimal pauses.</li>
-                      <li><span className="font-medium">Drill</span> — Just the moves. No narration, no voice. Pure repetition.</li>
-                    </ul>
-                  </div>
-                </>
-              )}
-            </div>
-          }
-        />
-      </div>
-
-      {/* Annotation — hidden in Drill mode */}
-      {autoPlaySpeed !== 'drill' && (
-        <div className="px-4 pb-safe-4 min-h-[100px]">
-          {currentMoveIndex === 0 && opening.overview ? (
-            <div
-              className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg"
-              data-testid="walkthrough-overview"
-            >
-              <p className="text-xs font-semibold text-theme-text-muted uppercase tracking-wide mb-2">
-                Overview
-              </p>
-              <p className="text-sm text-theme-text leading-relaxed">{opening.overview}</p>
-            </div>
-          ) : (
-            <AnnotationCard
-              annotation={currentAnnotation}
-              moveNumber={displayMoveNumber}
-              isWhite={displayIsWhite}
-              visible={currentMoveIndex > 0}
-              actualSan={displayActualSan}
-            />
-          )}
-        </div>
-      )}
+      <AnalysisToggles
+        showEvalBar={showEvalBarEffective}
+        onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
+        showEngineLines={showEngineLinesEffective}
+        onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
+        showLichessLines={showLichessEffective}
+        onToggleLichessLines={() => setLichessOverride((prev) => !(prev ?? false))}
+      />
     </div>
+  );
+
+  const aboveBoard = (
+    <div className="px-4 pt-2">
+      <div className="flex items-center gap-2 mb-1">
+        <span className="text-[10px] text-theme-text-muted uppercase font-medium">
+          Move {currentMoveIndex} / {expectedMoves.length}
+        </span>
+      </div>
+      <div className="w-full h-1.5 bg-theme-surface rounded-full overflow-hidden">
+        <motion.div
+          className="h-full bg-theme-accent rounded-full"
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.3 }}
+          data-testid="walkthrough-progress"
+        />
+      </div>
+    </div>
+  );
+
+  const board = (
+    <ConsistentChessboard
+      game={game}
+      interactive={false}
+      showFlipButton={true}
+      showUndoButton={false}
+      showResetButton={false}
+      showEvalBar={showEvalBarEffective}
+      evaluation={latestEval}
+      isMate={latestIsMate}
+      mateIn={latestMateIn}
+      highlightSquares={lastMove}
+      arrows={boardArrows}
+      annotationHighlights={boardHighlights}
+    />
+  );
+
+  const belowBoard = (showEngineLinesEffective && latestTopLines.length > 0) || (showLichessEffective && cloudEval) ? (
+    <>
+      {showEngineLinesEffective && latestTopLines.length > 0 && (
+        <EngineLines lines={latestTopLines} fen={currentFen} className="mt-1" />
+      )}
+      {showLichessEffective && cloudEval && (
+        <LichessLines cloudEval={cloudEval} fen={currentFen} className="mt-1" />
+      )}
+    </>
+  ) : undefined;
+
+  const controls = (
+    <BoardControls
+      onFirst={handleFirst}
+      onPrev={handlePrev}
+      onNext={handleNext}
+      onLast={handleLast}
+      canGoPrev={currentMoveIndex > 0}
+      canGoNext={currentMoveIndex < expectedMoves.length}
+      extraLeft={
+        <button
+          onClick={toggleAutoPlay}
+          className="p-2 rounded-lg border text-theme-text hover:bg-theme-surface transition-colors"
+          style={{ borderColor: 'var(--color-border)' }}
+          aria-label={isAutoPlaying ? 'Pause' : 'Play'}
+          data-testid="walkthrough-play-pause"
+        >
+          {isAutoPlaying ? <Pause size={16} /> : <Play size={16} />}
+        </button>
+      }
+      extraRight={
+        <div className="relative flex flex-col items-center">
+          <span className="text-[9px] text-theme-text-muted uppercase tracking-wide leading-none mb-0.5">
+            Voice Narration
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={cycleSpeed}
+              className="px-2.5 py-1.5 rounded-lg border text-xs font-medium hover:bg-theme-surface transition-colors"
+              style={{
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-text-muted)',
+              }}
+              aria-label={`Speed: ${autoPlaySpeed}`}
+              data-testid="walkthrough-speed-toggle"
+            >
+              {autoPlaySpeed.charAt(0).toUpperCase() + autoPlaySpeed.slice(1)}
+            </button>
+            <button
+              onClick={() => setShowSpeedInfo((v) => !v)}
+              className="p-1 rounded-full hover:bg-theme-surface transition-colors"
+              style={{ color: 'var(--color-text-muted)' }}
+              aria-label="Speed info"
+              data-testid="walkthrough-speed-info-btn"
+            >
+              <Info size={13} />
+            </button>
+          </div>
+          {showSpeedInfo && (
+            <>
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setShowSpeedInfo(false)}
+              />
+              <div
+                className="absolute bottom-full right-0 mb-2 w-64 rounded-xl border p-3 shadow-xl z-50 text-xs leading-relaxed"
+                style={{
+                  background: 'var(--color-surface)',
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text)',
+                }}
+                data-testid="walkthrough-speed-info-popup"
+              >
+                <p className="font-semibold mb-1.5">Voice Narration Speed</p>
+                <ul className="space-y-1.5">
+                  <li><span className="font-medium">Learn</span> — Slow and thorough. Full explanations read aloud, arrows appear progressively, long pauses to absorb.</li>
+                  <li><span className="font-medium">Study</span> — Same content but faster pacing.</li>
+                  <li><span className="font-medium">Review</span> — Quick refresher. Annotations trimmed, arrows appear all at once, minimal pauses.</li>
+                  <li><span className="font-medium">Drill</span> — Just the moves. No narration, no voice. Pure repetition.</li>
+                </ul>
+              </div>
+            </>
+          )}
+        </div>
+      }
+    />
+  );
+
+  const belowControls = autoPlaySpeed !== 'drill' ? (
+    currentMoveIndex === 0 && opening.overview ? (
+      <div
+        className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg"
+        data-testid="walkthrough-overview"
+      >
+        <p className="text-xs font-semibold text-theme-text-muted uppercase tracking-wide mb-2">
+          Overview
+        </p>
+        <p className="text-sm text-theme-text leading-relaxed">{opening.overview}</p>
+      </div>
+    ) : (
+      <AnnotationCard
+        annotation={currentAnnotation}
+        moveNumber={displayMoveNumber}
+        isWhite={displayIsWhite}
+        visible={currentMoveIndex > 0}
+        actualSan={displayActualSan}
+      />
+    )
+  ) : undefined;
+
+  return (
+    <ChessLessonLayout
+      data-testid="walkthrough-mode"
+      header={header}
+      aboveBoard={aboveBoard}
+      board={board}
+      belowBoard={belowBoard}
+      controls={controls}
+      belowControls={belowControls}
+    />
   );
 }

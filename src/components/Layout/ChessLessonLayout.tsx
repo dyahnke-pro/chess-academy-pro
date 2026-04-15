@@ -21,6 +21,8 @@ export interface ChessLessonLayoutProps {
   board: ReactNode;
   /** Optional content rendered between the header and the board (e.g. progress bar). */
   aboveBoard?: ReactNode;
+  /** Optional content rendered between the board and the controls (e.g. engine lines). */
+  belowBoard?: ReactNode;
   /** Control row — Next/Prev/Flip/Ask/Voice. Always rendered with a fixed gap below the board. */
   controls: ReactNode;
   /** Optional content rendered below the controls (e.g. annotation card). */
@@ -44,6 +46,7 @@ export function ChessLessonLayout({
   header,
   board,
   aboveBoard,
+  belowBoard,
   controls,
   belowControls,
   reserveBottomNav = true,
@@ -73,12 +76,24 @@ export function ChessLessonLayout({
           requiring the user to scroll the lesson content. */}
       <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="mx-auto flex w-full max-w-[440px] flex-col items-stretch px-4 pt-2">
+          {/* Board slot. The board itself (e.g. react-chessboard) handles its
+              own aspect ratio; we cap the wrapper height so the controls
+              never get pushed below the fold on short viewports. */}
           <div
-            className="w-full self-center max-h-[min(60vh,440px)] aspect-square"
+            className="w-full self-center max-h-[min(60vh,440px)]"
             data-testid="chess-lesson-board"
           >
             {board}
           </div>
+
+          {belowBoard && (
+            <div
+              className="flex-shrink-0 mt-2"
+              data-testid="chess-lesson-below-board"
+            >
+              {belowBoard}
+            </div>
+          )}
 
           <div
             className={`flex-shrink-0 ${BOARD_TO_CONTROLS_GAP}`}

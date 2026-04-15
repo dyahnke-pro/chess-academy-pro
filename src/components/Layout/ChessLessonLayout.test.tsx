@@ -55,7 +55,18 @@ describe('ChessLessonLayout', () => {
     // The cap must be present so very tall viewports (or short ones) don't push
     // controls off-screen
     expect(boardSlot.className).toMatch(/max-h-\[min\(60vh,440px\)\]/);
-    expect(boardSlot.className).toMatch(/aspect-square/);
+  });
+
+  it('renders the optional belowBoard slot when given', () => {
+    render(
+      <ChessLessonLayout
+        board={<div>B</div>}
+        belowBoard={<div data-testid="below-board">EngineLines</div>}
+        controls={<div>C</div>}
+      />,
+    );
+    expect(screen.getByTestId('below-board')).toBeInTheDocument();
+    expect(screen.getByTestId('chess-lesson-below-board')).toBeInTheDocument();
   });
 
   it('puts a fixed gap between board and controls', () => {
