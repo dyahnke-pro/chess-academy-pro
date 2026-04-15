@@ -15,7 +15,7 @@
  * Always rendered inside `ConsistentChessboard` + `ChessLessonLayout`
  * so it looks and behaves identically to every other lesson screen.
  */
-import { useMemo } from 'react';
+import { useMemo, type CSSProperties } from 'react';
 import { useNavigate, useParams, useSearchParams, Navigate } from 'react-router-dom';
 import { ArrowLeft, Play, Pause, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -130,10 +130,14 @@ function MiddlegameRunner({ session, onExit }: MiddlegameRunnerProps): JSX.Eleme
     endSquare: a.to,
     color: a.color ?? 'rgba(34, 211, 238, 0.9)',
   }));
-  const stepHighlights = step?.highlights?.map((h) => ({
-    square: h.square,
-    color: h.color ?? 'rgba(250, 204, 21, 0.6)',
-  }));
+  const stepHighlights: Record<string, CSSProperties> | undefined = step?.highlights
+    ? Object.fromEntries(
+        step.highlights.map((h) => [
+          h.square,
+          { boxShadow: `inset 0 0 0 3px ${h.color ?? 'rgba(250, 204, 21, 0.6)'}` },
+        ]),
+      )
+    : undefined;
 
   const header = (
     <div className="flex items-center justify-between gap-3">
@@ -211,9 +215,9 @@ function MiddlegameRunner({ session, onExit }: MiddlegameRunnerProps): JSX.Eleme
       board={
         <ConsistentChessboard
           fen={runner.fen}
-          orientation={session.orientation}
+          boardOrientation={session.orientation}
           arrows={stepArrows}
-          highlights={stepHighlights}
+          squareStyles={stepHighlights}
           interactive={false}
         />
       }

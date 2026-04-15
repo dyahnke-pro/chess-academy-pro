@@ -1,10 +1,8 @@
 import { useState, useCallback, useMemo } from 'react';
-import { Chessboard } from 'react-chessboard';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
-import { useSettings } from '../../hooks/useSettings';
-import { getBoardColor } from '../../services/boardColorService';
 import {
   QUEEN_GAUNTLET_LEVELS,
   initGauntletState,
@@ -23,8 +21,6 @@ export function QueensGauntlet({ onBack, onComplete }: QueensGauntletProps): JSX
   const [levelIndex, setLevelIndex] = useState(0);
   const level = QUEEN_GAUNTLET_LEVELS[levelIndex];
   const [state, setState] = useState<QueenGauntletState>(() => initGauntletState(level));
-  const { settings } = useSettings();
-  const boardColors = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
 
   const position = useMemo(() => gauntletPosition(state), [state]);
 
@@ -146,17 +142,12 @@ export function QueensGauntlet({ onBack, onComplete }: QueensGauntletProps): JSX
 
       {/* Board */}
       <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px]">
-        <Chessboard
-          options={{
-            position,
-            boardOrientation: 'white' as const,
-            darkSquareStyle: { backgroundColor: boardColors.darkSquare },
-            lightSquareStyle: { backgroundColor: boardColors.lightSquare },
-            squareStyles: customSquareStyles,
-            animationDurationInMs: 200,
-            allowDragging: state.status === 'playing',
-            onPieceDrop: handleDrop,
-          }}
+        <ConsistentChessboard
+          fen={position}
+          boardOrientation="white"
+          squareStyles={customSquareStyles}
+          interactive={state.status === 'playing'}
+          onPieceDrop={handleDrop}
         />
       </BoardVoiceOverlay>
 

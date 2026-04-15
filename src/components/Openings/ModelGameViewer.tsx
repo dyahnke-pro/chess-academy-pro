@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Chess } from 'chess.js';
-import { Chessboard } from 'react-chessboard';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -254,17 +254,12 @@ export function ModelGameViewer({
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-center p-4 gap-3">
         <BoardVoiceOverlay fen={currentFen} className="w-full max-w-[400px] aspect-square">
-          <Chessboard
-            options={{
-              position: currentFen,
-              boardOrientation: boardOrientation,
-              allowDragging: isExploring,
-              onPieceDrop: isExploring ? handleExploreDrop : undefined,
-              arrows: isExploring ? [] : customArrows,
-              animationDurationInMs: 200,
-              darkSquareStyle: { backgroundColor: '#779952' },
-              lightSquareStyle: { backgroundColor: '#edeed1' },
-            }}
+          <ConsistentChessboard
+            fen={currentFen}
+            boardOrientation={boardOrientation}
+            interactive={isExploring}
+            onPieceDrop={isExploring ? handleExploreDrop : undefined}
+            arrows={isExploring ? [] : customArrows}
           />
         </BoardVoiceOverlay>
 

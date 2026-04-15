@@ -1,46 +1,78 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '../../test/utils';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { render } from '../../test/utils';
 import { ConsistentChessboard } from './ConsistentChessboard';
+import type { ChessboardOptions } from 'react-chessboard';
 
-const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-const SICILIAN_FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+// Mock react-chessboard to expose the options it would render.
+vi.mock('react-chessboard', () => ({
+  Chessboard: ({ options = {} }: { options?: ChessboardOptions }): JSX.Element => (
+    <div
+      data-testid="mock-chessboard"
+      data-position={String(options.position ?? '')}
+      data-orientation={options.boardOrientation ?? 'white'}
+      data-draggable={String(options.allowDragging ?? true)}
+      data-anim={String(options.animationDurationInMs ?? '')}
+      data-arrows={JSON.stringify(options.arrows ?? [])}
+    />
+  ),
+}));
 
-describe('ConsistentChessboard', () => {
-  it('renders a board at the given FEN', () => {
-    render(<ConsistentChessboard fen={STARTING_FEN} />);
-    expect(screen.getByTestId('consistent-chessboard')).toBeInTheDocument();
-    expect(screen.getByTestId('chess-board-container')).toBeInTheDocument();
+// Mock the useChessGame to satisfy ControlledChessBoard imports indirectly when
+// controlled-mode test runs. We don't actually exercise controlled mode here
+// since ControlledChessBoard already has its own test.
+describe('ConsistentChessboard (static mode)', () => {
+  const FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  it('renders the position FEN', () => {
+    render(<ConsistentChessboard fen={FEN} />);
+    const board = screen.getByTestId('mock-chessboard');
+    expect(board.getAttribute('data-position')).toBe(FEN);
   });
 
-  it('hides interactive controls by default (flip, undo, reset, voice)', () => {
-    render(<ConsistentChessboard fen={STARTING_FEN} />);
-    expect(screen.queryByTestId('flip-button')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('undo-button')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('reset-button')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('board-controls')).not.toBeInTheDocument();
+  it('defaults to non-interactive (no dragging)', () => {
+    render(<ConsistentChessboard fen={FEN} />);
+    const board = screen.getByTestId('mock-chessboard');
+    expect(board.getAttribute('data-draggable')).toBe('false');
   });
 
-  it('respects a custom testId', () => {
-    render(<ConsistentChessboard fen={STARTING_FEN} testId="lesson-board" />);
-    expect(screen.getByTestId('lesson-board')).toBeInTheDocument();
+  it('allows dragging when interactive=true', () => {
+    render(<ConsistentChessboard fen={FEN} interactive />);
+    const board = screen.getByTestId('mock-chessboard');
+    expect(board.getAttribute('data-draggable')).toBe('true');
   });
 
-  it('renders different positions independently', () => {
-    const { unmount } = render(<ConsistentChessboard fen={STARTING_FEN} />);
-    expect(screen.getByTestId('consistent-chessboard')).toBeInTheDocument();
-    unmount();
-    render(<ConsistentChessboard fen={SICILIAN_FEN} />);
-    expect(screen.getByTestId('consistent-chessboard')).toBeInTheDocument();
+  it('applies arrows when provided', () => {
+    const arrows = [{ startSquare: 'e2', endSquare: 'e4', color: 'green' }];
+    render(<ConsistentChessboard fen={FEN} arrows={arrows} />);
+    const board = screen.getByTestId('mock-chessboard');
+    expect(board.getAttribute('data-arrows')).toBe(JSON.stringify(arrows));
   });
 
-  it('applies maxWidth styling when provided', () => {
-    render(<ConsistentChessboard fen={STARTING_FEN} maxWidth="420px" />);
-    const container = screen.getByTestId('consistent-chessboard');
-    expect(container).toHaveStyle({ maxWidth: '420px' });
+  it('uses the standard 200ms animation by default', () => {
+    render(<ConsistentChessboard fen={FEN} />);
+    const board = screen.getByTestId('mock-chessboard');
+    expect(board.getAttribute('data-anim')).toBe('200');
   });
 
-  it('passes through a className', () => {
-    render(<ConsistentChessboard fen={STARTING_FEN} className="custom-lesson" />);
-    expect(screen.getByTestId('consistent-chessboard')).toHaveClass('custom-lesson');
+  it('honors a custom animation duration when given', () => {
+    render(<ConsistentChessboard fen={FEN} animationDurationInMs={400} />);
+    const board = screen.getByTestId('mock-chessboard');
+    expect(board.getAttribute('data-anim')).toBe('400');
+  });
+
+  it('renders the overlay node above the board', () => {
+    render(
+      <ConsistentChessboard
+        fen={FEN}
+        overlay={<div data-testid="my-overlay">flash</div>}
+      />,
+    );
+    expect(screen.getByTestId('my-overlay')).toBeInTheDocument();
+  });
+
+  it('renders inside a static-mode wrapper div', () => {
+    render(<ConsistentChessboard fen={FEN} />);
+    expect(screen.getByTestId('consistent-chessboard-static')).toBeInTheDocument();
   });
 });

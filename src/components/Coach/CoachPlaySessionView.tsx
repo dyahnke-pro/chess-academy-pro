@@ -15,7 +15,6 @@ import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { getCoachMove, setSkill } from '../../services/coachPlaySession';
 import { voiceService } from '../../services/voiceService';
 import type { PlaySessionConfig } from '../../services/coachPlaySession';
-import type { MoveResult } from '../../hooks/useChessGame';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -78,19 +77,21 @@ export function CoachPlaySessionView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleUserMove = useCallback(
-    (move: MoveResult): void => {
+  const handlePieceDrop = useCallback(
+    ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null }): boolean => {
+      if (!targetSquare) return false;
       try {
-        chessRef.current.move({ from: move.from, to: move.to });
+        chessRef.current.move({ from: sourceSquare, to: targetSquare, promotion: 'q' });
       } catch {
-        return;
+        return false;
       }
       setFen(chessRef.current.fen());
       if (chessRef.current.isGameOver()) {
         setStatus(describeGameOver(chessRef.current));
-        return;
+        return true;
       }
       void playComputerMove();
+      return true;
     },
     [playComputerMove],
   );
@@ -134,9 +135,9 @@ export function CoachPlaySessionView({
       board={
         <ConsistentChessboard
           fen={fen}
-          orientation={orientation}
+          boardOrientation={orientation}
           interactive={!thinking && !chessRef.current.isGameOver()}
-          onMove={handleUserMove}
+          onPieceDrop={handlePieceDrop}
         />
       }
       controls={controls}
