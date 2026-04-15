@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect, useState } from 'react';
+import { useRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2, MessageCircle, Play } from 'lucide-react';
 import { useSmartSearch } from '../../hooks/useSmartSearch';
@@ -43,9 +43,13 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   // Detect agent-routable intents (e.g. "run me through the middlegame",
   // "play the Sicilian against me"). When matched we show a fast-path
   // "Start session" suggestion at the top of the dropdown.
-  const agentIntent = query.trim().length >= ASK_COACH_MIN_LENGTH
-    ? parseCoachIntent(query.trim())
-    : { kind: 'qa' as const, raw: '' };
+  const agentIntent = useMemo(
+    () =>
+      query.trim().length >= ASK_COACH_MIN_LENGTH
+        ? parseCoachIntent(query.trim())
+        : { kind: 'qa' as const, raw: '' },
+    [query],
+  );
   const showAgentAction =
     agentIntent.kind === 'continue-middlegame' ||
     agentIntent.kind === 'play-against';

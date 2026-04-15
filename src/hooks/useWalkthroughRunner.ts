@@ -56,12 +56,14 @@ export function useWalkthroughRunner(
   const startFen = session.startFen ?? DEFAULT_START_FEN;
 
   const fen = useMemo(() => {
-    if (currentIndex < 0) return startFen;
-    const step = session.steps[currentIndex];
-    return step?.fenAfter ?? startFen;
+    if (currentIndex < 0 || currentIndex >= session.steps.length) return startFen;
+    return session.steps[currentIndex].fenAfter;
   }, [currentIndex, session.steps, startFen]);
 
-  const currentStep = currentIndex >= 0 ? session.steps[currentIndex] ?? null : null;
+  const currentStep =
+    currentIndex >= 0 && currentIndex < session.steps.length
+      ? session.steps[currentIndex]
+      : null;
   const isFinished =
     session.steps.length > 0 && currentIndex >= session.steps.length - 1;
 
@@ -119,16 +121,12 @@ export function useWalkthroughRunner(
     const { done, cancel } = runStep(step, { silent, speed });
     cancelRef.current = cancel;
 
-    done.then((result) => {
+    void done.then((result) => {
       if (aborted) return;
       cancelRef.current = null;
       if (result.cancelled) return;
       // Only auto-advance when playing and not at the end.
-      if (
-        isPlaying &&
-        currentIndex < session.steps.length - 1 &&
-        !result.cancelled
-      ) {
+      if (isPlaying && currentIndex < session.steps.length - 1) {
         setCurrentIndex((idx) => Math.min(idx + 1, session.steps.length - 1));
       } else if (isPlaying && currentIndex >= session.steps.length - 1) {
         setIsPlaying(false);

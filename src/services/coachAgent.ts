@@ -101,7 +101,7 @@ export function parseCoachIntent(query: string): CoachIntent {
     lower.match(/puzzle\s+(?:about|on|for)\s+(.+)/) ||
     (/^\s*(?:a\s+)?puzzle\s*$/.test(lower) ? ['puzzle', ''] : null);
   if (puzzleMatch && /puzzle/.test(lower)) {
-    const theme = cleanSubject(puzzleMatch[1] ?? '');
+    const theme = cleanSubject(puzzleMatch[1] || '');
     return {
       kind: 'puzzle',
       theme: theme || undefined,

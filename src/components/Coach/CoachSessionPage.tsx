@@ -44,7 +44,7 @@ export function CoachSessionPage(): JSX.Element {
 
   const goBack = (): void => {
     // Returning to the chat preserves scroll + history.
-    navigate(-1);
+    void navigate(-1);
   };
 
   if (kind === 'middlegame') {

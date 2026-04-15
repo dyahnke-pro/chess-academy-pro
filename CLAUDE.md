@@ -157,6 +157,67 @@ Use `src/test/factories.ts` for all test data. Available builders:
 - Import from `openai` anywhere except `src/services/coachApi.ts`
 - Run Stockfish anywhere except through `src/services/stockfishEngine.ts`
 
+## Agent Coach Pattern (WO-AGENT-COACH)
+
+All lesson-style surfaces — opening walkthroughs, middlegame plans,
+coach-run drills, play-against sessions — share the same substrate.
+When you add a new lesson flow, reuse these primitives:
+
+### Shared components
+- **`src/components/Chessboard/ConsistentChessboard.tsx`** — the only
+  board wrapper for lesson views. Narrow API (`fen`, `arrows`,
+  `highlights`, `interactive`, `onMove`, `maxWidth`) over the existing
+  `ControlledChessBoard`. Keeps piece style / colors / arrow colors /
+  animation timing identical everywhere. Do not render
+  `ControlledChessBoard` or `react-chessboard` directly in new lesson
+  screens.
+- **`src/components/Layout/ChessLessonLayout.tsx`** — header / board /
+  controls / footer slots with safe-area and thumb-zone spacing. Caps
+  the board height so the control row never scrolls off-screen on
+  mobile. Wrap every lesson page with this.
+
+### Shared types / services
+- **`src/types/walkthrough.ts`** — `WalkthroughStep` (narration
+  embedded with the move) and `WalkthroughSession`. This is the
+  canonical lesson data shape.
+- **`src/services/walkthroughAdapter.ts`** — `buildStepsFromPgn()` /
+  `buildSession()` convert legacy PGN + parallel annotation arrays
+  into `WalkthroughStep[]`. chess.js is the truth for SAN/fenAfter;
+  mismatches warn in dev.
+- **`src/services/walkthroughRunner.ts`** + **`src/hooks/useWalkthroughRunner.ts`**
+  drive playback with strict voice-gated timing. Board updates
+  instantly on step change; auto-advance is gated on
+  `voiceService.speak()` resolving; a word-count backup timer is a
+  safety net only. Use this hook for any new auto-advancing lesson.
+- **`src/services/coachAgent.ts`** — `parseCoachIntent()` routes
+  natural-language coach queries to `continue-middlegame`,
+  `play-against`, `puzzle`, `walkthrough`, or `qa`. Deterministic
+  regex-first so sessions start instantly without an LLM round-trip.
+- **`src/services/middlegamePlanner.ts`** — resolves a middlegame
+  plan (by openingId or subject) from `middlegame-plans.json` into a
+  `WalkthroughSession`. **Keeps the plan's critical-position FEN so
+  opening→middlegame board context carries over — do not reset.**
+- **`src/services/coachPlaySession.ts`** — rating-matched Stockfish
+  config (with explicit easy/medium/hard override). Always resolve
+  via `resolveConfig(difficulty, rating)`.
+
+### Routing
+- **`/coach/session/:kind`** (`CoachSessionPage.tsx`) — the entry
+  point for any coach-initiated lesson. URL query carries context
+  (`?subject=...&orientation=...&difficulty=...`). `SmartSearchBar`
+  surfaces an "Start session" top-of-dropdown suggestion whenever
+  `parseCoachIntent` matches a routable kind.
+
+### Rules of thumb
+- Never render `react-chessboard` or `ControlledChessBoard` directly
+  in a new lesson view — use `ConsistentChessboard`.
+- Never build your own play/pause/advance timers — use
+  `useWalkthroughRunner`.
+- Never hard-code Stockfish strength — go through
+  `coachPlaySession.resolveConfig`.
+- Never pass narration in a parallel array — embed it on the
+  `WalkthroughStep`.
+
 ## Deployment Policy
 
 **Always merge and deploy without asking.** After every fix:

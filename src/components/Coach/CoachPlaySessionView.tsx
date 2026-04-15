@@ -155,10 +155,10 @@ function buildCoachNarration(game: Chess): string {
   if (game.isDraw()) return "It's a draw.";
   if (game.inCheck()) return 'Check. Your king is under attack — watch the squares around it.';
   const history = game.history({ verbose: true });
-  const last = history[history.length - 1];
+  const last = history.length > 0 ? history[history.length - 1] : undefined;
   if (!last) return 'Your move.';
-  if (last.flags.includes('c')) return `I captured on ${last.to}.`;
-  if (last.flags.includes('k') || last.flags.includes('q')) return 'I castled.';
+  if (last.isCapture()) return `I captured on ${last.to}.`;
+  if (last.isKingsideCastle() || last.isQueensideCastle()) return 'I castled.';
   return `I played ${last.san}.`;
 }
 
