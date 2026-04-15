@@ -94,12 +94,23 @@ export function parseCoachIntent(query: string): CoachIntent {
   }
 
   // 1. "Run me through the middlegame plans" / "show me middlegame" /
-  //    "continue with middlegame" etc.
+  //    "continue with middlegame" etc. Also captures an optional subject
+  //    like "for the Italian" / "of the Sicilian" / "in the King's Indian"
+  //    so downstream resolution can find a matching DB plan instead of
+  //    falling back to a generic Stockfish line.
   if (
     /(middle\s*game|middlegame)/.test(lower) &&
     /(run|walk|show|teach|plan|continue|through|explain)/.test(lower)
   ) {
-    return { kind: 'continue-middlegame', raw };
+    const subjectMatch =
+      lower.match(/middle\s*game\b[^.?!]*?\b(?:for|of|in|from)\s+(?:the\s+)?([a-z][a-z\s'-]+)/) ||
+      lower.match(/(?:for|of|in|from)\s+(?:the\s+)?([a-z][a-z\s'-]+?)\s+middle\s*game/);
+    const subject = subjectMatch ? cleanSubject(subjectMatch[1]) : '';
+    return {
+      kind: 'continue-middlegame',
+      subject: subject || undefined,
+      raw,
+    };
   }
 
   // 2. Explain-position: "explain this position", "what's happening here",

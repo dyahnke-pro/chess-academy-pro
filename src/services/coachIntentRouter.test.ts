@@ -87,6 +87,20 @@ describe('routeChatIntent', () => {
     expect(bare).toBeNull();
   });
 
+  it('navigates continue-middlegame WITH subject when the user names an opening', async () => {
+    vi.mocked(findPlanForOpening).mockReturnValue(null);
+    vi.mocked(findPlanBySubject).mockReturnValue({
+      id: 'mp-italian',
+      title: 'Italian Middlegame',
+    } as never);
+    const routed = await routeChatIntent(
+      'run me through the middlegame plans for the Italian',
+    );
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toMatch(/^\/coach\/session\/middlegame/);
+    expect(routed!.path).toContain('subject=italian');
+  });
+
   it('never throws — router errors become null so chat keeps working', async () => {
     vi.mocked(matchOpeningForSubject).mockRejectedValueOnce(new Error('db down'));
     await expect(

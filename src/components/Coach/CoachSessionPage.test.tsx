@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, within, waitFor } from '@testing-library/react';
-import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { CoachSessionPage } from './CoachSessionPage';
 import { voiceService } from '../../services/voiceService';
@@ -42,10 +42,25 @@ function renderAt(path: string): ReturnType<typeof render> {
         <Routes>
           <Route path="/coach/session/:kind" element={<CoachSessionPage />} />
           <Route path="/coach/chat" element={<div data-testid="chat-redirect" />} />
-          <Route path="/puzzles" element={<div data-testid="puzzles-redirect" />} />
+          <Route path="/tactics" element={<div data-testid="tactics-redirect" />} />
+          <Route
+            path="/tactics/adaptive"
+            element={<TacticsAdaptiveProbe />}
+          />
         </Routes>
       </MotionConfig>
     </MemoryRouter>,
+  );
+}
+
+function TacticsAdaptiveProbe(): JSX.Element {
+  // Surface the forcedWeakThemes router state so tests can assert that
+  // the coach's theme handoff actually reaches AdaptivePuzzlePage.
+  const loc = useLocation();
+  const themes =
+    (loc.state as { forcedWeakThemes?: string[] } | null)?.forcedWeakThemes ?? [];
+  return (
+    <div data-testid="adaptive-redirect" data-themes={themes.join(',')} />
   );
 }
 
@@ -132,9 +147,16 @@ describe('CoachSessionPage — walkthrough', () => {
 });
 
 describe('CoachSessionPage — puzzle', () => {
-  it('redirects to /puzzles with query params', () => {
+  it('redirects to /tactics/adaptive with the theme in router state', () => {
     renderAt('/coach/session/puzzle?theme=fork&difficulty=medium');
-    expect(screen.getByTestId('puzzles-redirect')).toBeInTheDocument();
+    const el = screen.getByTestId('adaptive-redirect');
+    expect(el).toBeInTheDocument();
+    expect(el.getAttribute('data-themes')).toBe('fork');
+  });
+
+  it('redirects to /tactics hub when no theme is provided', () => {
+    renderAt('/coach/session/puzzle');
+    expect(screen.getByTestId('tactics-redirect')).toBeInTheDocument();
   });
 });
 

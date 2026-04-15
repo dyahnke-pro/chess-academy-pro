@@ -13,6 +13,27 @@ describe('parseCoachIntent — middlegame continuation', () => {
     const intent = parseCoachIntent(phrase);
     expect(intent.kind).toBe('continue-middlegame');
   });
+
+  it('extracts a subject from "for the X" suffix', () => {
+    const intent = parseCoachIntent(
+      'Run me through the middlegame plans for the Italian',
+    );
+    expect(intent.kind).toBe('continue-middlegame');
+    expect(intent.subject?.toLowerCase()).toContain('italian');
+  });
+
+  it('extracts a subject from "of the X" suffix', () => {
+    const intent = parseCoachIntent(
+      'Walk me through the middlegame of the Sicilian Defense',
+    );
+    expect(intent.subject?.toLowerCase()).toContain('sicilian');
+  });
+
+  it('leaves subject undefined when no opening is mentioned', () => {
+    const intent = parseCoachIntent('Show me the middlegame plans');
+    expect(intent.kind).toBe('continue-middlegame');
+    expect(intent.subject).toBeUndefined();
+  });
 });
 
 describe('parseCoachIntent — play-against', () => {

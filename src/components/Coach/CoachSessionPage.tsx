@@ -127,12 +127,21 @@ export function CoachSessionPage(): JSX.Element {
 
   if (kind === 'puzzle') {
     // Puzzles have their own full UI — redirect rather than inline.
-    const params = new URLSearchParams();
-    if (theme) params.set('theme', theme);
-    if (difficulty !== 'auto') params.set('difficulty', difficulty);
-    const search = params.toString();
-    const to = search ? `/puzzles?${search}` : '/puzzles';
-    return <Navigate to={to} replace />;
+    // AdaptivePuzzlePage reads themes from `location.state.forcedWeakThemes`
+    // (see src/components/Puzzles/AdaptivePuzzlePage.tsx: it auto-starts
+    // the session when that state is set), so we forward the theme via
+    // router state — not query params, which AdaptivePuzzlePage doesn't
+    // read. Without a theme we land on the regular puzzle trainer hub.
+    if (theme) {
+      return (
+        <Navigate
+          to="/tactics/adaptive"
+          state={{ forcedWeakThemes: [theme] }}
+          replace
+        />
+      );
+    }
+    return <Navigate to="/tactics" replace />;
   }
 
   if (kind === 'explain-position') {
