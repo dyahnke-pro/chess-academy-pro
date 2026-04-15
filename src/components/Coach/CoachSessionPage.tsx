@@ -65,6 +65,7 @@ export function CoachSessionPage(): JSX.Element {
       <CoachPlaySessionView
         config={config}
         orientation={orientation}
+        subject={subject}
         onExit={goBack}
       />
     );

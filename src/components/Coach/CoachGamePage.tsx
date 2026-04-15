@@ -27,7 +27,8 @@ import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookMove } from '../../services/coachGameEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
-import { getScenarioTemplate, getMoveCommentaryTemplate } from '../../services/coachTemplates';
+import { getScenarioTemplate } from '../../services/coachTemplates';
+import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -1136,12 +1137,27 @@ export function CoachGamePage(): JSX.Element {
       }
     }
 
-    const vars = {
-      playerMove: moveResult.san,
-      bestMove: engineBestMoveSan,
-      evalDelta: String(evalLoss),
-    };
-    const commentary = getMoveCommentaryTemplate(classification, vars) + tacticSuffix;
+    // In-depth LLM commentary — no generic templates. Empty string when
+    // the LLM is unavailable (no API key / offline); the UI suppresses the
+    // comment row rather than painting filler.
+    let commentary = '';
+    try {
+      const probe = new Chess(moveResult.fen);
+      const mover: 'w' | 'b' = probe.turn() === 'w' ? 'b' : 'w';
+      const llm = await generateMoveCommentary({
+        gameAfter: probe,
+        mover,
+        evalBefore: preMoveEval,
+        evalAfter: analysis?.evaluation ?? null,
+        bestReplySan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
+      });
+      commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
+    } catch {
+      commentary = tacticSuffix.trim();
+    }
+    // Keep evalLoss referenced even when we drop the template so it's
+    // still available for classification decisions above.
+    void evalLoss;
 
     const playerMove: CoachGameMove = {
       moveNumber: moveCountRef.current,
