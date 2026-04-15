@@ -13,6 +13,27 @@ describe('parseCoachIntent — middlegame continuation', () => {
     const intent = parseCoachIntent(phrase);
     expect(intent.kind).toBe('continue-middlegame');
   });
+
+  it('extracts a subject from "for the X" suffix', () => {
+    const intent = parseCoachIntent(
+      'Run me through the middlegame plans for the Italian',
+    );
+    expect(intent.kind).toBe('continue-middlegame');
+    expect(intent.subject?.toLowerCase()).toContain('italian');
+  });
+
+  it('extracts a subject from "of the X" suffix', () => {
+    const intent = parseCoachIntent(
+      'Walk me through the middlegame of the Sicilian Defense',
+    );
+    expect(intent.subject?.toLowerCase()).toContain('sicilian');
+  });
+
+  it('leaves subject undefined when no opening is mentioned', () => {
+    const intent = parseCoachIntent('Show me the middlegame plans');
+    expect(intent.kind).toBe('continue-middlegame');
+    expect(intent.subject).toBeUndefined();
+  });
 });
 
 describe('parseCoachIntent — play-against', () => {
@@ -91,5 +112,85 @@ describe('parseCoachIntent — fallback', () => {
   it('routes empty input to qa', () => {
     const intent = parseCoachIntent('   ');
     expect(intent.kind).toBe('qa');
+  });
+});
+
+describe('parseCoachIntent — explain-position', () => {
+  it.each([
+    'Explain this position',
+    "what's happening here",
+    'Analyze the board',
+    'what should I do here',
+    'Evaluate this position',
+    'Break down this position',
+  ])('routes %q to explain-position', (phrase) => {
+    const intent = parseCoachIntent(phrase);
+    expect(intent.kind).toBe('explain-position');
+  });
+});
+
+describe('parseCoachIntent — side extraction (play-against)', () => {
+  it('"play against me as black" → side: black', () => {
+    const intent = parseCoachIntent('play against me as black');
+    expect(intent.kind).toBe('play-against');
+    expect(intent.side).toBe('black');
+  });
+
+  it('"play against me as white" → side: white', () => {
+    const intent = parseCoachIntent('play against me as white');
+    expect(intent.kind).toBe('play-against');
+    expect(intent.side).toBe('white');
+  });
+
+  it('"let\'s play, I\'ll take black" → side: black', () => {
+    const intent = parseCoachIntent("Let's play, I'll take black");
+    expect(intent.kind).toBe('play-against');
+    expect(intent.side).toBe('black');
+  });
+
+  it('no side mentioned → side: undefined', () => {
+    const intent = parseCoachIntent("Let's play the Caro-Kann");
+    expect(intent.kind).toBe('play-against');
+    expect(intent.side).toBeUndefined();
+  });
+});
+
+describe('parseCoachIntent — difficulty phrasing', () => {
+  it('"at my level" → medium', () => {
+    const intent = parseCoachIntent("Let's play, at my level");
+    expect(intent.kind).toBe('play-against');
+    expect(intent.difficulty).toBe('medium');
+  });
+
+  it('"challenge me hard" → hard', () => {
+    const intent = parseCoachIntent('challenge me hard');
+    expect(intent.kind).toBe('play-against');
+    expect(intent.difficulty).toBe('hard');
+  });
+});
+
+describe('parseCoachIntent — walkthrough subject variants', () => {
+  it('"walk me through the Sicilian Najdorf" → subject includes Najdorf', () => {
+    const intent = parseCoachIntent('walk me through the Sicilian Najdorf');
+    expect(intent.kind).toBe('walkthrough');
+    expect(intent.subject?.toLowerCase()).toContain('najdorf');
+  });
+
+  it('"teach me the main line of the Italian" → subject: italian', () => {
+    const intent = parseCoachIntent('teach me the main line of the Italian');
+    expect(intent.kind).toBe('walkthrough');
+    expect(intent.subject?.toLowerCase()).toContain('italian');
+  });
+
+  it('"show me the London System opening" → walkthrough with london', () => {
+    const intent = parseCoachIntent('show me the London System opening');
+    expect(intent.kind).toBe('walkthrough');
+    expect(intent.subject?.toLowerCase()).toContain('london');
+  });
+
+  it('"study the Caro-Kann" → walkthrough', () => {
+    const intent = parseCoachIntent('study the Caro-Kann');
+    expect(intent.kind).toBe('walkthrough');
+    expect(intent.subject?.toLowerCase()).toContain('caro');
   });
 });

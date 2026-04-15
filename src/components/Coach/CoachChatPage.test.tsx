@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '../../test/utils';
+import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { CoachChatPage } from './CoachChatPage';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
@@ -24,6 +24,21 @@ vi.mock('../../services/coachChatService', async (importOriginal) => {
   };
 });
 
+vi.mock('../../services/coachIntentRouter', () => ({
+  routeChatIntent: vi.fn(),
+}));
+import { routeChatIntent } from '../../services/coachIntentRouter';
+import { getCoachChatResponse } from '../../services/coachApi';
+
+const mockedNavigate = vi.fn();
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router-dom')>();
+  return {
+    ...actual,
+    useNavigate: () => mockedNavigate,
+  };
+});
+
 const mockProfile = buildUserProfile({
   id: 'main',
   name: 'Player',
@@ -39,6 +54,9 @@ Element.prototype.scrollIntoView = vi.fn();
 describe('CoachChatPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedNavigate.mockReset();
+    vi.mocked(routeChatIntent).mockReset();
+    vi.mocked(routeChatIntent).mockResolvedValue(null);
     useAppStore.setState({
       activeProfile: mockProfile,
       chatMessages: [],
@@ -152,6 +170,39 @@ describe('CoachChatPage', () => {
     render(<CoachChatPage />);
     expect(screen.getByTestId('action-drill_opening')).toBeInTheDocument();
     expect(screen.getByTestId('action-puzzle_theme')).toBeInTheDocument();
+  });
+
+  it('navigates to a session instead of calling LLM when intent is detected', async () => {
+    vi.mocked(routeChatIntent).mockResolvedValueOnce({
+      path: '/coach/session/play-against?difficulty=auto',
+      ackMessage: "Let's play!",
+      intent: { kind: 'play-against', raw: "let's play" },
+    });
+
+    render(<CoachChatPage />);
+    const input = screen.getByTestId('chat-text-input') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: "let's play" } });
+    fireEvent.click(screen.getByTestId('chat-send-btn'));
+
+    await waitFor(() =>
+      expect(mockedNavigate).toHaveBeenCalledWith(
+        '/coach/session/play-against?difficulty=auto',
+      ),
+    );
+    // Intent-routed messages skip the LLM entirely.
+    expect(getCoachChatResponse).not.toHaveBeenCalled();
+  });
+
+  it('falls through to LLM when intent router returns null', async () => {
+    vi.mocked(routeChatIntent).mockResolvedValueOnce(null);
+
+    render(<CoachChatPage />);
+    const input = screen.getByTestId('chat-text-input') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'Why is f7 weak?' } });
+    fireEvent.click(screen.getByTestId('chat-send-btn'));
+
+    await waitFor(() => expect(getCoachChatResponse).toHaveBeenCalled());
+    expect(mockedNavigate).not.toHaveBeenCalled();
   });
 
   it('action buttons have correct labels', () => {

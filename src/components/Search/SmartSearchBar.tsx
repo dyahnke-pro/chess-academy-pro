@@ -52,7 +52,10 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   );
   const showAgentAction =
     agentIntent.kind === 'continue-middlegame' ||
-    agentIntent.kind === 'play-against';
+    agentIntent.kind === 'play-against' ||
+    agentIntent.kind === 'walkthrough' ||
+    agentIntent.kind === 'puzzle' ||
+    agentIntent.kind === 'explain-position';
   const totalItems =
     results.length + (showAskCoach ? 1 : 0) + (showAgentAction ? 1 : 0);
   const agentActionIndex = showAgentAction ? 0 : -1;
@@ -106,17 +109,87 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
     clear();
     setShowDropdown(false);
     inputRef.current?.blur();
+    const params = new URLSearchParams();
     if (agentIntent.kind === 'continue-middlegame') {
-      const subject = encodeURIComponent(agentIntent.subject ?? '');
-      void navigate(`/coach/session/middlegame?subject=${subject}`);
-    } else if (agentIntent.kind === 'play-against') {
-      const subject = encodeURIComponent(agentIntent.subject ?? '');
-      const difficulty = agentIntent.difficulty ?? 'auto';
+      if (agentIntent.subject) params.set('subject', agentIntent.subject);
       void navigate(
-        `/coach/session/play-against?subject=${subject}&difficulty=${difficulty}`,
+        `/coach/session/middlegame${params.toString() ? `?${params.toString()}` : ''}`,
       );
+    } else if (agentIntent.kind === 'play-against') {
+      if (agentIntent.subject) params.set('subject', agentIntent.subject);
+      if (agentIntent.side) params.set('side', agentIntent.side);
+      params.set('difficulty', agentIntent.difficulty ?? 'auto');
+      void navigate(`/coach/session/play-against?${params.toString()}`);
+    } else if (agentIntent.kind === 'walkthrough') {
+      if (agentIntent.subject) params.set('subject', agentIntent.subject);
+      void navigate(
+        `/coach/session/walkthrough${params.toString() ? `?${params.toString()}` : ''}`,
+      );
+    } else if (agentIntent.kind === 'puzzle') {
+      if (agentIntent.theme) params.set('theme', agentIntent.theme);
+      if (agentIntent.difficulty && agentIntent.difficulty !== 'auto') {
+        params.set('difficulty', agentIntent.difficulty);
+      }
+      void navigate(
+        `/coach/session/puzzle${params.toString() ? `?${params.toString()}` : ''}`,
+      );
+    } else if (agentIntent.kind === 'explain-position') {
+      void navigate('/coach/session/explain-position');
     }
   }, [agentIntent, clear, navigate]);
+
+  // Build the action label + subtitle per intent kind.
+  const agentActionLabel = useMemo((): string => {
+    switch (agentIntent.kind) {
+      case 'continue-middlegame':
+        return 'Run the middlegame plans';
+      case 'play-against': {
+        const parts = ['Play'];
+        if (agentIntent.subject) parts.push(agentIntent.subject);
+        parts.push('vs. Coach');
+        return parts.join(' ');
+      }
+      case 'walkthrough':
+        return agentIntent.subject
+          ? `Study ${agentIntent.subject}`
+          : 'Study opening';
+      case 'puzzle':
+        return agentIntent.theme
+          ? `Practice ${agentIntent.theme} puzzles`
+          : 'Practice puzzles';
+      case 'explain-position':
+        return 'Analyze the position';
+      default:
+        return 'Start session';
+    }
+  }, [agentIntent]);
+
+  const agentActionSubtitle = useMemo((): string => {
+    switch (agentIntent.kind) {
+      case 'play-against': {
+        const bits: string[] = [];
+        if (agentIntent.difficulty && agentIntent.difficulty !== 'auto') {
+          const name =
+            agentIntent.difficulty.charAt(0).toUpperCase() +
+            agentIntent.difficulty.slice(1);
+          bits.push(name);
+        }
+        if (agentIntent.side) {
+          bits.push(`Playing as ${agentIntent.side === 'white' ? 'White' : 'Black'}`);
+        }
+        return bits.length ? bits.join(' · ') : 'Opens a game with the coach';
+      }
+      case 'walkthrough':
+        return 'Opens a guided lesson';
+      case 'puzzle':
+        return 'Opens puzzle trainer';
+      case 'explain-position':
+        return 'Stockfish + coach explanation';
+      case 'continue-middlegame':
+      default:
+        return 'Opens a lesson session with the coach';
+    }
+  }, [agentIntent]);
 
   const handleSelect = useCallback((result: SmartSearchResult): void => {
     setShowDropdown(false);
@@ -276,14 +349,10 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>
-                  {agentIntent.kind === 'continue-middlegame'
-                    ? 'Run the middlegame plans'
-                    : `Play${agentIntent.subject ? ` ${agentIntent.subject}` : ''} vs. Coach`}
+                  {agentActionLabel}
                 </div>
                 <div className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>
-                  {agentIntent.kind === 'play-against' && agentIntent.difficulty !== 'auto'
-                    ? `Difficulty: ${agentIntent.difficulty}`
-                    : 'Opens a lesson session with the coach'}
+                  {agentActionSubtitle}
                 </div>
               </div>
               <span

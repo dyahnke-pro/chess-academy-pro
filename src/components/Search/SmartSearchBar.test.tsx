@@ -146,4 +146,73 @@ describe('SmartSearchBar', () => {
     expect(state.coachDrawerOpen).toBe(true);
     expect(state.coachDrawerInitialMessage).toBe('Help me improve');
   });
+
+  describe('agent fast-path suggestions', () => {
+    it('surfaces a "Run the middlegame plans" action for middlegame intents', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<SmartSearchBar />);
+
+      const input = screen.getByTestId('smart-search-input');
+      await user.type(input, 'run me through the middlegame plans');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('agent-action-option')).toBeInTheDocument();
+      });
+      expect(screen.getByText(/Run the middlegame plans/i)).toBeInTheDocument();
+    });
+
+    it('surfaces a "Study" action for walkthrough intents', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<SmartSearchBar />);
+
+      const input = screen.getByTestId('smart-search-input');
+      await user.type(input, 'teach me the Sicilian Najdorf');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('agent-action-option')).toBeInTheDocument();
+      });
+      expect(screen.getByText(/Study/i)).toBeInTheDocument();
+      expect(screen.getByText(/Opens a guided lesson/i)).toBeInTheDocument();
+    });
+
+    it('surfaces a "Practice puzzles" action for puzzle intents', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<SmartSearchBar />);
+
+      const input = screen.getByTestId('smart-search-input');
+      await user.type(input, 'give me a knight fork puzzle');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('agent-action-option')).toBeInTheDocument();
+      });
+      expect(screen.getByText(/Practice/i)).toBeInTheDocument();
+    });
+
+    it('surfaces an "Analyze the position" action for explain-position intents', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<SmartSearchBar />);
+
+      const input = screen.getByTestId('smart-search-input');
+      await user.type(input, 'explain this position');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('agent-action-option')).toBeInTheDocument();
+      });
+      expect(screen.getByText(/Analyze the position/i)).toBeInTheDocument();
+    });
+
+    it('shows difficulty + side in the subtitle for play-against', async () => {
+      const user = userEvent.setup();
+      renderWithRouter(<SmartSearchBar />);
+
+      const input = screen.getByTestId('smart-search-input');
+      await user.type(input, 'play against me as black, hard');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('agent-action-option')).toBeInTheDocument();
+      });
+      expect(screen.getByText(/Playing as Black/i)).toBeInTheDocument();
+      expect(screen.getByText(/Hard/)).toBeInTheDocument();
+    });
+  });
 });

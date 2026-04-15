@@ -4,15 +4,17 @@
  * State machine for "Play X against me" — the user plays a full game
  * against Stockfish while the coach narrates after each move.
  *
- * Difficulty:
- *   - 'auto'    → rating-matched: mapped from the user's current rating
- *   - 'easy'    → Stockfish skill 3, 200ms
- *   - 'medium'  → Stockfish skill 10, 600ms
- *   - 'hard'    → Stockfish skill 20, 1500ms
+ * Difficulty is ELO-relative to the player's actual rating
+ * (see `playerRatingService`):
  *
- * This is a framework-agnostic service. The React page calls
- * `configureForDifficulty` once at session start and then
- * `getCoachMove(fen)` after each user move.
+ *   - 'easy'    → target ELO = playerELO − 300 (comfortable practice)
+ *   - 'medium'  → target ELO = playerELO     (realistic match)
+ *   - 'hard'    → target ELO = playerELO + 300 (stretch game)
+ *   - 'auto'    → same as 'medium'
+ *
+ * Target ELO is mapped onto Stockfish skill (0–20) + move time by
+ * linear interpolation between anchor points, so a player at 1450 sees
+ * a genuinely different setup than a player at 950.
  */
 import { stockfishEngine } from './stockfishEngine';
 import { pickBookMove, bookMoveToSquares, isBookMoveLegal } from './coachBookMove';
@@ -23,54 +25,95 @@ export interface PlaySessionConfig {
   skill: number;
   /** Move time in ms. Higher = stronger. */
   moveTimeMs: number;
-  /** User-facing label for the HUD. */
+  /** Effective ELO the engine is trying to play at. */
+  targetElo: number;
+  /** User-facing label, e.g. "Medium (~1450)". */
   label: string;
 }
 
-/**
- * Rating-matched config. Maps a user rating (ELO-ish) into a reasonable
- * Stockfish skill/time combo so club players aren't crushed by full-
- * strength play.
- */
-export function configFromRating(rating: number | undefined): PlaySessionConfig {
-  const r = rating ?? 1200;
-  if (r < 900) return { skill: 2, moveTimeMs: 150, label: 'Level: friendly' };
-  if (r < 1200) return { skill: 5, moveTimeMs: 250, label: 'Level: casual' };
-  if (r < 1500) return { skill: 9, moveTimeMs: 500, label: 'Level: club' };
-  if (r < 1800) return { skill: 13, moveTimeMs: 800, label: 'Level: strong' };
-  if (r < 2100) return { skill: 17, moveTimeMs: 1200, label: 'Level: expert' };
-  return { skill: 20, moveTimeMs: 1500, label: 'Level: master' };
+/** ELO → (skill, moveTimeMs) anchors. Linearly interpolated between. */
+const ELO_ANCHORS: ReadonlyArray<{ elo: number; skill: number; moveTimeMs: number }> = [
+  { elo: 800, skill: 1, moveTimeMs: 100 },
+  { elo: 1200, skill: 5, moveTimeMs: 250 },
+  { elo: 1500, skill: 9, moveTimeMs: 500 },
+  { elo: 1800, skill: 13, moveTimeMs: 800 },
+  { elo: 2100, skill: 17, moveTimeMs: 1200 },
+  { elo: 2400, skill: 20, moveTimeMs: 2000 },
+];
+
+function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
 }
 
 /**
- * Explicit difficulty picker config. Overrides rating match.
+ * Map a target ELO onto a Stockfish config via linear interpolation
+ * between the anchor points. Clamps at the extremes so absurd ratings
+ * (ELO 200, ELO 3500) still produce a usable setup.
  */
-export function configForDifficulty(difficulty: CoachDifficulty): PlaySessionConfig {
-  switch (difficulty) {
-    case 'easy':
-      return { skill: 3, moveTimeMs: 200, label: 'Easy' };
-    case 'medium':
-      return { skill: 10, moveTimeMs: 600, label: 'Medium' };
-    case 'hard':
-      return { skill: 20, moveTimeMs: 1500, label: 'Hard' };
-    case 'auto':
-    default:
-      // Caller should pass rating to configFromRating for 'auto';
-      // if they didn't, fall back to medium.
-      return { skill: 10, moveTimeMs: 600, label: 'Medium' };
+export function configFromTargetElo(targetElo: number): PlaySessionConfig {
+  const clamped = Math.max(
+    ELO_ANCHORS[0].elo,
+    Math.min(ELO_ANCHORS[ELO_ANCHORS.length - 1].elo, targetElo),
+  );
+
+  // Find bracketing anchors.
+  let lo = ELO_ANCHORS[0];
+  let hi = ELO_ANCHORS[ELO_ANCHORS.length - 1];
+  for (let i = 0; i < ELO_ANCHORS.length - 1; i += 1) {
+    if (clamped >= ELO_ANCHORS[i].elo && clamped <= ELO_ANCHORS[i + 1].elo) {
+      lo = ELO_ANCHORS[i];
+      hi = ELO_ANCHORS[i + 1];
+      break;
+    }
   }
+
+  const span = hi.elo - lo.elo;
+  const t = span === 0 ? 0 : (clamped - lo.elo) / span;
+  const skill = Math.round(lerp(lo.skill, hi.skill, t));
+  const moveTimeMs = Math.round(lerp(lo.moveTimeMs, hi.moveTimeMs, t));
+
+  return {
+    skill: Math.max(0, Math.min(20, skill)),
+    moveTimeMs: Math.max(50, moveTimeMs),
+    targetElo,
+    label: `~${targetElo}`,
+  };
 }
 
+const DIFFICULTY_OFFSET: Record<CoachDifficulty, number> = {
+  easy: -300,
+  medium: 0,
+  hard: 300,
+  auto: 0,
+};
+
+const DIFFICULTY_NAME: Record<CoachDifficulty, string> = {
+  easy: 'Easy',
+  medium: 'Medium',
+  hard: 'Hard',
+  auto: 'Medium',
+};
+
 /**
- * Decide the effective config, preferring explicit difficulty, falling
- * back to rating-matched when difficulty is 'auto'.
+ * Resolve the effective Stockfish config from a chosen difficulty and
+ * the player's actual ELO. Target ELO is player rating plus the
+ * difficulty offset (±300 for easy/hard, 0 for medium/auto).
+ *
+ * @param difficulty chosen difficulty; defaults to 'auto' (= medium)
+ * @param playerElo  the player's effective ELO from `getPlayerRating`
  */
 export function resolveConfig(
   difficulty: CoachDifficulty | undefined,
-  rating: number | undefined,
+  playerElo: number,
 ): PlaySessionConfig {
-  if (!difficulty || difficulty === 'auto') return configFromRating(rating);
-  return configForDifficulty(difficulty);
+  const effective = difficulty ?? 'auto';
+  const offset = DIFFICULTY_OFFSET[effective];
+  const targetElo = Math.max(400, Math.round(playerElo + offset));
+  const base = configFromTargetElo(targetElo);
+  return {
+    ...base,
+    label: `${DIFFICULTY_NAME[effective]} (~${targetElo})`,
+  };
 }
 
 export interface CoachMoveResult {
@@ -94,9 +137,9 @@ function parseUci(uci: string): CoachMoveResult {
 /**
  * Ask the coach for its next move. In the opening phase we consult the
  * Lichess Opening Explorer so play feels natural (real popular replies
- * instead of whatever Stockfish-at-low-skill happens to prefer). At
- * `hard` difficulty we skip the book and ask the engine directly so
- * the user faces max strength throughout.
+ * instead of whatever Stockfish-at-low-skill happens to prefer). At the
+ * strongest strengths we skip the book and ask the engine directly so
+ * the user faces max-strength play throughout.
  */
 export async function getCoachMove(
   fen: string,
@@ -104,7 +147,7 @@ export async function getCoachMove(
 ): Promise<CoachMoveResult> {
   await setSkill(config.skill);
 
-  // Book moves apply at easy/medium strengths. At hard we want pure
+  // Book moves apply below full strength. At skill 20 we want pure
   // engine play so the user can't coast on rote theory.
   if (config.skill < 20) {
     const book = await pickBookMove(fen);

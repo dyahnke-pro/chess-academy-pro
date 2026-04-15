@@ -1,8 +1,10 @@
 import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { buildGameChatMessages, getGameSystemPromptAddition, parseAllTags } from '../../services/coachChatService';
+import { routeChatIntent } from '../../services/coachIntentRouter';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
@@ -69,6 +71,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     ref,
   ) {
     const activeProfile = useAppStore((s) => s.activeProfile);
+    const navigate = useNavigate();
 
     const [messages, setMessagesInternal] = useState<ChatMessageType[]>(initialMessages ?? []);
     const [isStreaming, setIsStreaming] = useState(false);
@@ -140,6 +143,29 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       };
       const updatedMessages = [...messagesRef.current, userMsg];
       setMessages(updatedMessages);
+
+      // Intent routing: outside of an active game, let "play against me",
+      // "explain this position", etc. launch dedicated sessions instead of
+      // running through the chat LLM. We skip routing mid-game so the
+      // in-game chat stays in-game — the user can finish their move first.
+      if (isGameOver) {
+        try {
+          const routed = await routeChatIntent(text, { currentFen: fen });
+          if (routed) {
+            const ackMsg: ChatMessageType = {
+              id: `gmsg-${Date.now()}-ack`,
+              role: 'assistant',
+              content: routed.ackMessage,
+              timestamp: Date.now(),
+            };
+            setMessages([...updatedMessages, ackMsg]);
+            void navigate(routed.path);
+            return;
+          }
+        } catch (err: unknown) {
+          console.warn('[GameChatPanel] intent routing failed:', err);
+        }
+      }
 
       // Run Stockfish analysis so the coach has engine-backed suggestions
       let engineData: EngineData | undefined;
@@ -301,7 +327,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
 
       setIsStreaming(false);
       setStreamingContent('');
-    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, setMessages]);
+    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, setMessages, navigate]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {
