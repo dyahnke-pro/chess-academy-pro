@@ -1,8 +1,9 @@
-import { useRef, useCallback, useEffect, useState } from 'react';
+import { useRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2, MessageCircle } from 'lucide-react';
+import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2, MessageCircle, Play } from 'lucide-react';
 import { useSmartSearch } from '../../hooks/useSmartSearch';
 import { useAppStore } from '../../stores/appStore';
+import { parseCoachIntent } from '../../services/coachAgent';
 import type { SmartSearchResult, SmartSearchCategory } from '../../types';
 
 interface SmartSearchBarProps {
@@ -39,8 +40,24 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   const setCoachDrawerInitialMessage = useAppStore((s) => s.setCoachDrawerInitialMessage);
 
   const showAskCoach = query.trim().length >= ASK_COACH_MIN_LENGTH;
-  const totalItems = results.length + (showAskCoach ? 1 : 0);
-  const askCoachIndex = showAskCoach ? results.length : -1;
+  // Detect agent-routable intents (e.g. "run me through the middlegame",
+  // "play the Sicilian against me"). When matched we show a fast-path
+  // "Start session" suggestion at the top of the dropdown.
+  const agentIntent = useMemo(
+    () =>
+      query.trim().length >= ASK_COACH_MIN_LENGTH
+        ? parseCoachIntent(query.trim())
+        : { kind: 'qa' as const, raw: '' },
+    [query],
+  );
+  const showAgentAction =
+    agentIntent.kind === 'continue-middlegame' ||
+    agentIntent.kind === 'play-against';
+  const totalItems =
+    results.length + (showAskCoach ? 1 : 0) + (showAgentAction ? 1 : 0);
+  const agentActionIndex = showAgentAction ? 0 : -1;
+  const resultsOffset = showAgentAction ? 1 : 0;
+  const askCoachIndex = showAskCoach ? resultsOffset + results.length : -1;
 
   // Notify parent of result changes (for Openings page integration)
   useEffect(() => {
@@ -49,12 +66,12 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
 
   // Show dropdown when there are results, loading, or query is long enough for "Ask Coach"
   useEffect(() => {
-    if (query.trim() && (results.length > 0 || loading || showAskCoach)) {
+    if (query.trim() && (results.length > 0 || loading || showAskCoach || showAgentAction)) {
       setShowDropdown(true);
     } else if (!query.trim()) {
       setShowDropdown(false);
     }
-  }, [query, results, loading, showAskCoach]);
+  }, [query, results, loading, showAskCoach, showAgentAction]);
 
   // Reset selection when results change
   useEffect(() => {
@@ -85,6 +102,22 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
     inputRef.current?.blur();
   }, [setCoachDrawerInitialMessage, setCoachDrawerOpen, clear]);
 
+  const startAgentSession = useCallback((): void => {
+    clear();
+    setShowDropdown(false);
+    inputRef.current?.blur();
+    if (agentIntent.kind === 'continue-middlegame') {
+      const subject = encodeURIComponent(agentIntent.subject ?? '');
+      void navigate(`/coach/session/middlegame?subject=${subject}`);
+    } else if (agentIntent.kind === 'play-against') {
+      const subject = encodeURIComponent(agentIntent.subject ?? '');
+      const difficulty = agentIntent.difficulty ?? 'auto';
+      void navigate(
+        `/coach/session/play-against?subject=${subject}&difficulty=${difficulty}`,
+      );
+    }
+  }, [agentIntent, clear, navigate]);
+
   const handleSelect = useCallback((result: SmartSearchResult): void => {
     setShowDropdown(false);
     void navigate(result.route);
@@ -101,16 +134,26 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       setSelectedIndex((prev) => (prev > 0 ? prev - 1 : totalItems - 1));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (selectedIndex >= 0 && selectedIndex < results.length) {
-        handleSelect(results[selectedIndex]);
-      } else if (selectedIndex === askCoachIndex || (selectedIndex === -1 && showAskCoach)) {
+      if (selectedIndex === agentActionIndex && showAgentAction) {
+        startAgentSession();
+      } else if (
+        selectedIndex >= resultsOffset &&
+        selectedIndex < resultsOffset + results.length
+      ) {
+        handleSelect(results[selectedIndex - resultsOffset]);
+      } else if (selectedIndex === askCoachIndex) {
+        askCoach(query.trim());
+      } else if (selectedIndex === -1 && showAgentAction) {
+        // Unselected default → prefer agent action over ask-coach.
+        startAgentSession();
+      } else if (selectedIndex === -1 && showAskCoach) {
         askCoach(query.trim());
       }
     } else if (e.key === 'Escape') {
       setShowDropdown(false);
       inputRef.current?.blur();
     }
-  }, [showDropdown, totalItems, results, selectedIndex, handleSelect, askCoachIndex, showAskCoach, askCoach, query]);
+  }, [showDropdown, totalItems, results, selectedIndex, handleSelect, askCoachIndex, showAskCoach, askCoach, query, agentActionIndex, showAgentAction, startAgentSession, resultsOffset]);
 
   const defaultPlaceholder = scope === 'opening'
     ? 'Search openings — try "Sicilian as black" or "B01"...'
@@ -208,22 +251,61 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
               </div>
             </div>
           )}
-          {!loading && results.length === 0 && !showAskCoach && query.trim() && (
+          {!loading && results.length === 0 && !showAskCoach && !showAgentAction && query.trim() && (
             <div className="p-4 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
               No results found
             </div>
           )}
+          {/* Agent action suggestion — takes priority when detected */}
+          {showAgentAction && (
+            <button
+              onClick={startAgentSession}
+              className="w-full px-3 py-3 flex items-center gap-3 text-left transition-colors border-b"
+              style={{
+                background: selectedIndex === agentActionIndex ? 'var(--color-border)' : 'transparent',
+                borderColor: 'var(--color-border)',
+              }}
+              onMouseEnter={() => setSelectedIndex(agentActionIndex)}
+              data-testid="agent-action-option"
+            >
+              <div
+                className="p-1.5 rounded-lg shrink-0"
+                style={{ background: 'rgba(34, 211, 238, 0.2)', color: '#22d3ee' }}
+              >
+                <Play size={14} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>
+                  {agentIntent.kind === 'continue-middlegame'
+                    ? 'Run the middlegame plans'
+                    : `Play${agentIntent.subject ? ` ${agentIntent.subject}` : ''} vs. Coach`}
+                </div>
+                <div className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>
+                  {agentIntent.kind === 'play-against' && agentIntent.difficulty !== 'auto'
+                    ? `Difficulty: ${agentIntent.difficulty}`
+                    : 'Opens a lesson session with the coach'}
+                </div>
+              </div>
+              <span
+                className="text-[10px] px-1.5 py-0.5 rounded-full shrink-0"
+                style={{ background: 'rgba(34, 211, 238, 0.3)', color: '#22d3ee' }}
+              >
+                Start
+              </span>
+            </button>
+          )}
           {results.map((result, i) => {
             const Icon = CATEGORY_ICONS[result.category];
+            const itemIndex = resultsOffset + i;
             return (
               <button
                 key={`${result.category}-${result.id}`}
                 onClick={() => handleSelect(result)}
                 className="w-full px-3 py-2.5 flex items-start gap-3 text-left transition-colors"
                 style={{
-                  background: i === selectedIndex ? 'var(--color-border)' : 'transparent',
+                  background: itemIndex === selectedIndex ? 'var(--color-border)' : 'transparent',
                 }}
-                onMouseEnter={() => setSelectedIndex(i)}
+                onMouseEnter={() => setSelectedIndex(itemIndex)}
                 data-testid="search-result"
               >
                 <div

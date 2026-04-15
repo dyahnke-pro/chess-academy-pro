@@ -26,6 +26,7 @@ import { WeaknessThemesPage } from './components/Puzzles/WeaknessThemesPage';
 // PuzzlesHubPage removed — Puzzles tab merged into Tactics
 import { CoachGamePage } from './components/Coach/CoachGamePage';
 import { CoachChatPage } from './components/Coach/CoachChatPage';
+import { CoachSessionPage } from './components/Coach/CoachSessionPage';
 import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
 import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
@@ -150,6 +151,7 @@ export function App(): JSX.Element {
           {/* Coach */}
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
           <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
+          <Route path="/coach/session/:kind" element={<ErrorBoundary><CoachSessionPage /></ErrorBoundary>} />
           <Route path="/coach/analyse" element={<ErrorBoundary><CoachAnalysePage /></ErrorBoundary>} />
           <Route path="/coach/plan" element={<ErrorBoundary><CoachSessionPlanPage /></ErrorBoundary>} />
           <Route path="/coach/report" element={<ErrorBoundary><GameInsightsPage /></ErrorBoundary>} />
