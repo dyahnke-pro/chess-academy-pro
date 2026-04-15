@@ -27,7 +27,7 @@ import { useAppStore, selectFreshBoardSnapshot } from '../../stores/appStore';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { getCoachCommentary } from '../../services/coachApi';
 import { voiceService } from '../../services/voiceService';
-import type { StockfishAnalysis } from '../../types';
+import type { StockfishAnalysis, UserProfile, CoachContext } from '../../types';
 
 const EXPLAIN_DEPTH = 18;
 /** Cap voice playback to one paragraph so we don't read a 400-word essay aloud. */
@@ -88,7 +88,7 @@ export function ExplainPositionSessionView({
         // Stockfish unavailable — LLM will still try to explain.
       }
 
-      const ctx = buildContext(resolved.fen, sfAnalysis, activeProfile?.currentRating ?? 1420);
+      const ctx = buildContext(resolved.fen, sfAnalysis, activeProfile);
 
       let streamed = '';
       try {
@@ -115,12 +115,12 @@ export function ExplainPositionSessionView({
     })();
 
     return () => { run.cancelled = true; };
-  }, [resolved, activeProfile?.currentRating]);
+  }, [resolved, activeProfile]);
 
   const handleFollowUp = useCallback(async (question: string): Promise<void> => {
     if (!resolved) return;
     setFollowUpLoading(true);
-    const ctx = buildContext(resolved.fen, analysis, activeProfile?.currentRating ?? 1420);
+    const ctx = buildContext(resolved.fen, analysis, activeProfile);
     const followCtx = { ...ctx, additionalContext: `User follow-up: ${question}` };
 
     let streamed = '';
@@ -135,7 +135,7 @@ export function ExplainPositionSessionView({
     } finally {
       setFollowUpLoading(false);
     }
-  }, [resolved, analysis, activeProfile?.currentRating]);
+  }, [resolved, analysis, activeProfile]);
 
   if (!resolved) {
     return (
@@ -244,11 +244,18 @@ function isLikelyFen(fen: string): boolean {
   }
 }
 
+/**
+ * Build a `CoachContext` from the active profile. Per WO-COACH §8, every
+ * LLM call must include the user's rating and unresolved bad habits so
+ * the coach speaks to this specific student, not a generic one.
+ */
 function buildContext(
   fen: string,
   analysis: StockfishAnalysis | null,
-  rating: number,
-): import('../../types').CoachContext {
+  profile: UserProfile | null,
+): CoachContext {
+  const weaknesses =
+    profile?.badHabits.filter((h) => !h.isResolved).map((h) => h.description) ?? [];
   return {
     fen,
     lastMoveSan: null,
@@ -259,8 +266,8 @@ function buildContext(
     playerMove: null,
     moveClassification: null,
     playerProfile: {
-      rating,
-      weaknesses: [],
+      rating: profile?.currentRating ?? 1420,
+      weaknesses,
     },
   };
 }
