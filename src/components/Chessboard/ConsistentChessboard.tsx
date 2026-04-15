@@ -1,122 +1,126 @@
-/**
- * ConsistentChessboard
- * ---------------------
- * The single board wrapper used across all lesson-style surfaces
- * (Openings walkthrough, Coach sessions, Middlegame plans, Tactics).
- *
- * It wraps the existing `ControlledChessBoard` but presents a narrow
- * lesson-focused API and enforces a consistent visual look-and-feel
- * (piece style, colors, arrow colors, animation timing) by delegating
- * to the underlying board (which already reads theme + settings).
- *
- * Variations should be expressed through small props (`interactive`,
- * `showArrows`, `orientation`, `maxWidth`). The core look stays
- * identical.
- *
- * See CLAUDE.md → "Agent Coach Pattern" for usage guidance.
- */
-import { useEffect, useMemo } from 'react';
-import { ControlledChessBoard } from '../Board/ControlledChessBoard';
-import { useChessGame } from '../../hooks/useChessGame';
-import type { MoveResult } from '../../hooks/useChessGame';
+// ConsistentChessboard — the single board facade used everywhere in the app.
+//
+// Two usage modes:
+//   1. Controlled mode  — pass a `game` from useChessGame(); forwards to ControlledChessBoard.
+//                         Use this for any interactive lesson/coach/play screen.
+//   2. Static mode      — pass a `fen`, optional handlers, and optional arrows/highlights/
+//                         squareStyles. Use this for inline boards that own their own
+//                         chess instance (memory drills, kid games, model-game viewers).
+//
+// In both modes the board's piece set, square colors, glow, animation duration, and
+// promotion behavior are pinned to the values from useBoardTheme(). Callers cannot
+// override appearance — that is the point.
 
-export interface LessonArrow {
-  startSquare: string;
-  endSquare: string;
-  color: string;
+import { useMemo, type ReactNode, type CSSProperties } from 'react';
+import { Chessboard } from 'react-chessboard';
+import type {
+  PieceDropHandlerArgs,
+  SquareHandlerArgs,
+  PieceHandlerArgs,
+} from 'react-chessboard';
+import { ControlledChessBoard, type ControlledChessBoardProps } from '../Board/ControlledChessBoard';
+import { useBoardTheme, BOARD_ANIMATION_MS } from '../../hooks/useBoardTheme';
+import { buildGlowSquareStyles } from '../../hooks/useBoardGlow';
+
+export type BoardArrow = { startSquare: string; endSquare: string; color: string };
+export type BoardHighlight = { square: string; color: string };
+
+interface ControlledModeProps extends ControlledChessBoardProps {
+  /** Controlled mode marker — `game` is required by ControlledChessBoardProps. */
+  fen?: never;
 }
 
-export interface LessonHighlight {
-  square: string;
-  color: string;
-}
+/** A piece-square map alternative to FEN, used by Kid games that render only a few pieces. */
+export type PiecePositionMap = Record<string, { pieceType: string }>;
 
-export interface ConsistentChessboardProps {
-  /** Current position — updating this replays the board to that FEN. */
-  fen: string;
-  /** Board orientation from the student's perspective. */
-  orientation?: 'white' | 'black';
-  /** Can the student move pieces? */
+interface StaticModeProps {
+  /** A position — either a FEN string or a piece-square map.
+   *  Mutually exclusive with `game`. */
+  fen: string | PiecePositionMap;
+  game?: never;
+  boardOrientation?: 'white' | 'black';
+  /** Whether dragging is allowed. Defaults to false (static mode is usually display-only). */
   interactive?: boolean;
-  /** Arrows for coaching hints. Ignored when showArrows=false. */
-  arrows?: LessonArrow[];
-  /** Square highlights for coaching hints. */
-  highlights?: LessonHighlight[];
-  /** Override: hide arrows even if `arrows` is non-empty. */
-  showArrows?: boolean;
-  /** Max board width in CSS units. Default: fill available. */
-  maxWidth?: string;
-  /** Called after a user-made move is accepted. */
-  onMove?: (move: MoveResult) => void;
-  /** Optional className passed to the outer container. */
+  arrows?: BoardArrow[];
+  /** Extra per-square styles (e.g. selection, legal-move dots). Merged on top of the
+   *  base glow styles so callers don't lose the consistent look. */
+  squareStyles?: Record<string, CSSProperties>;
+  onPieceDrop?: (args: PieceDropHandlerArgs) => boolean;
+  onSquareClick?: (args: SquareHandlerArgs) => void;
+  onPieceDrag?: (args: PieceHandlerArgs) => void;
+  /** Override the default animation duration (e.g. 400ms for slow demo boards). */
+  animationDurationInMs?: number;
   className?: string;
-  /** Optional data-testid passthrough. */
-  testId?: string;
+  /** Content rendered on top of the board (flash overlays, hint badges, etc.). */
+  overlay?: ReactNode;
 }
 
-/**
- * Drives the underlying `useChessGame` hook to stay in sync with the
- * `fen` prop — when the parent sets a new FEN (e.g. lesson next-step),
- * we load it into the game instance.
- */
-export function ConsistentChessboard({
-  fen,
-  orientation = 'white',
+export type ConsistentChessboardProps = ControlledModeProps | StaticModeProps;
+
+function isControlled(props: ConsistentChessboardProps): props is ControlledModeProps {
+  return 'game' in props && props.game !== undefined;
+}
+
+export function ConsistentChessboard(props: ConsistentChessboardProps): JSX.Element {
+  if (isControlled(props)) {
+    return <ControlledChessBoard {...props} />;
+  }
+  return <StaticBoard {...props} />;
+}
+
+function StaticBoard({
+  fen: position,
+  boardOrientation = 'white',
   interactive = false,
   arrows,
-  highlights,
-  showArrows = true,
-  maxWidth,
-  onMove,
+  squareStyles,
+  onPieceDrop,
+  onSquareClick,
+  onPieceDrag,
+  animationDurationInMs = BOARD_ANIMATION_MS,
   className = '',
-  testId,
-}: ConsistentChessboardProps): JSX.Element {
-  const game = useChessGame(fen, orientation);
+  overlay,
+}: StaticModeProps): JSX.Element {
+  const theme = useBoardTheme();
 
-  // Keep the game instance in sync with the incoming fen prop.
-  // Parent-driven position changes (e.g. stepping through a lesson) must
-  // be reflected on the board.
-  useEffect(() => {
-    if (game.position !== fen) {
-      game.loadFen(fen);
+  // Always start with the base glow styles so every square has the same outline,
+  // then layer caller styles on top.
+  const mergedSquareStyles = useMemo((): Record<string, CSSProperties> => {
+    const base = buildGlowSquareStyles(theme.baseGlow);
+    if (!squareStyles) return base;
+    const out = { ...base };
+    for (const [square, style] of Object.entries(squareStyles)) {
+      out[square] = { ...base[square], ...style };
     }
-    // game.loadFen identity is stable across renders (exposed by useChessGame)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fen]);
-
-  useEffect(() => {
-    if (game.boardOrientation !== orientation) {
-      game.setOrientation(orientation);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orientation]);
-
-  const arrowsToShow = useMemo(
-    () => (showArrows ? arrows : undefined),
-    [showArrows, arrows],
-  );
-
-  const style = maxWidth ? { maxWidth, margin: '0 auto' } : undefined;
+    return out;
+  }, [theme.baseGlow, squareStyles]);
 
   return (
     <div
-      className={`consistent-chessboard w-full ${className}`}
-      style={style}
-      data-testid={testId ?? 'consistent-chessboard'}
+      className={`relative ${className}`}
+      data-testid="consistent-chessboard-static"
+      style={theme.borderWrapperStyle}
     >
-      <ControlledChessBoard
-        game={game}
-        interactive={interactive}
-        showFlipButton={false}
-        showUndoButton={false}
-        showResetButton={false}
-        showEvalBar={false}
-        showVoiceMic={false}
-        showLastMoveHighlight={true}
-        arrows={arrowsToShow}
-        annotationHighlights={highlights}
-        onMove={onMove}
+      <Chessboard
+        options={{
+          position,
+          boardOrientation,
+          allowDragging: interactive,
+          dragActivationDistance: 5,
+          animationDurationInMs,
+          darkSquareStyle: theme.darkSquareStyle,
+          lightSquareStyle: theme.lightSquareStyle,
+          squareStyles: mergedSquareStyles,
+          ...(theme.customPieces ? { pieces: theme.customPieces } : {}),
+          ...(arrows && arrows.length > 0
+            ? { arrows, clearArrowsOnPositionChange: true }
+            : {}),
+          ...(onPieceDrop ? { onPieceDrop } : {}),
+          ...(onSquareClick ? { onSquareClick } : {}),
+          ...(onPieceDrag ? { onPieceDrag } : {}),
+        }}
       />
+      {overlay}
     </div>
   );
 }

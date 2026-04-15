@@ -1,105 +1,117 @@
-/**
- * ChessLessonLayout
- * -----------------
- * Wrapper for any "board + controls" lesson screen.
- *
- * Enforces:
- * - Generous, fixed spacing between the board and the control row.
- * - Controls sit in the mobile thumb zone, above the bottom nav,
- *   respecting `env(safe-area-inset-bottom)`.
- * - The board height is capped so the controls are always reachable
- *   without scrolling. Longer explanations scroll inside the header
- *   slot, never pushing controls off-screen.
- *
- * Use it anywhere a lesson runs: Openings walkthrough, Coach session,
- * Middlegame plans, play-against-Stockfish. See CLAUDE.md →
- * "Agent Coach Pattern".
- */
-import type { ReactNode } from 'react';
+// ChessLessonLayout — the canonical wrapper for any "lesson with a board" screen
+// (walkthroughs, coach dynamic sessions, middlegame studies, etc).
+//
+// Why this exists:
+//   - Every lesson screen needs the same vertical rhythm: header → board →
+//     fixed gap → controls → optional below-controls content.
+//   - Buttons must stay in the thumb-friendly zone above the mobile bottom nav.
+//   - Safe-area insets (notch, home indicator) must be respected.
+//   - The board must not push the controls off-screen on short phones, so we
+//     cap board height responsively.
+//
+// Use this for new lesson screens. It does not change any existing screen — it
+// is opt-in at the call site.
+
+import { type ReactNode } from 'react';
 
 export interface ChessLessonLayoutProps {
-  /** Optional header slot — title, progress, explanation. Scrolls if long. */
+  /** Top bar — back button, title, etc. Stays at the top of the viewport. */
   header?: ReactNode;
-  /** The board element (typically a <ConsistentChessboard />). Required. */
+  /** Board content. Auto-centered and capped in height to leave room for controls. */
   board: ReactNode;
-  /** Control buttons row — Next, Prev, Flip, Ask, Voice toggle, etc. */
-  controls?: ReactNode;
-  /** Optional footer slot rendered below controls (e.g. narration caption). */
-  footer?: ReactNode;
-  /** Optional className passed to the outer container. */
-  className?: string;
-  /** Optional data-testid. Defaults to "chess-lesson-layout". */
-  testId?: string;
+  /** Optional content rendered between the header and the board (e.g. progress bar). */
+  aboveBoard?: ReactNode;
+  /** Optional content rendered between the board and the controls (e.g. engine lines). */
+  belowBoard?: ReactNode;
+  /** Control row — Next/Prev/Flip/Ask/Voice. Always rendered with a fixed gap below the board. */
+  controls: ReactNode;
+  /** Optional content rendered below the controls (e.g. annotation card). */
+  belowControls?: ReactNode;
+  /** Whether to add bottom padding to clear the mobile bottom nav. Defaults to true. */
+  reserveBottomNav?: boolean;
+  /** Test id override. */
+  'data-testid'?: string;
 }
+
+/** Pixel offset reserved at the bottom of the page on mobile to clear the nav bar.
+ *  Mobile nav is `py-2 pb-safe` (~2.5rem icons + 1rem padding + safe-area). */
+const MOBILE_NAV_CLEARANCE_CLASS =
+  'pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-4';
+
+/** Fixed gap between the board and the controls. Generous on purpose — the
+ *  buttons must never feel cramped or risk being tapped while picking a piece. */
+const BOARD_TO_CONTROLS_GAP = 'mt-6';
 
 export function ChessLessonLayout({
   header,
   board,
+  aboveBoard,
+  belowBoard,
   controls,
-  footer,
-  className = '',
-  testId = 'chess-lesson-layout',
+  belowControls,
+  reserveBottomNav = true,
+  'data-testid': testId = 'chess-lesson-layout',
 }: ChessLessonLayoutProps): JSX.Element {
   return (
     <div
-      className={`chess-lesson-layout flex flex-col h-full w-full overflow-hidden ${className}`}
+      className={`flex flex-col flex-1 min-h-0 overflow-hidden ${
+        reserveBottomNav ? MOBILE_NAV_CLEARANCE_CLASS : ''
+      }`}
       data-testid={testId}
-      style={{
-        // Respect the iOS safe area at the bottom so the controls row
-        // never sits under the home indicator.
-        paddingBottom: 'env(safe-area-inset-bottom)',
-      }}
     >
       {header && (
-        <div
-          className="flex-shrink-0 overflow-y-auto px-4 pt-3"
-          data-testid="lesson-header"
-          style={{ maxHeight: '30vh' }}
-        >
+        <div className="flex-shrink-0" data-testid="chess-lesson-header">
           {header}
         </div>
       )}
 
-      {/* Board: flex-1 but capped so controls never slide off-screen.
-          The max-height ensures we always leave room for controls +
-          footer + bottom nav below. */}
-      <div
-        className="flex items-center justify-center px-3 py-4 flex-1 min-h-0"
-        data-testid="lesson-board-slot"
-      >
-        <div
-          className="w-full"
-          style={{
-            // Cap the board at a square that fits within the viewport
-            // minus room for controls (~96px), footer (~48px), the
-            // bottom nav (~64px), and safe-area insets.
-            maxWidth: 'min(100%, calc(100dvh - 280px))',
-          }}
-        >
-          {board}
+      {aboveBoard && (
+        <div className="flex-shrink-0" data-testid="chess-lesson-above-board">
+          {aboveBoard}
+        </div>
+      )}
+
+      {/* Scrollable middle column — board + controls + below content stay grouped.
+          On mobile, capping the board's height keeps controls visible without
+          requiring the user to scroll the lesson content. */}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="mx-auto flex w-full max-w-[440px] flex-col items-stretch px-4 pt-2">
+          {/* Board slot. The board itself (e.g. react-chessboard) handles its
+              own aspect ratio; we cap the wrapper height so the controls
+              never get pushed below the fold on short viewports. */}
+          <div
+            className="w-full self-center max-h-[min(60vh,440px)]"
+            data-testid="chess-lesson-board"
+          >
+            {board}
+          </div>
+
+          {belowBoard && (
+            <div
+              className="flex-shrink-0 mt-2"
+              data-testid="chess-lesson-below-board"
+            >
+              {belowBoard}
+            </div>
+          )}
+
+          <div
+            className={`flex-shrink-0 ${BOARD_TO_CONTROLS_GAP}`}
+            data-testid="chess-lesson-controls"
+          >
+            {controls}
+          </div>
+
+          {belowControls && (
+            <div
+              className="flex-shrink-0 mt-4"
+              data-testid="chess-lesson-below-controls"
+            >
+              {belowControls}
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Generous gap between board and controls — thumb-friendly zone. */}
-      {controls && (
-        <div
-          className="flex-shrink-0 flex items-center justify-center gap-3 px-4 pt-2 pb-3"
-          data-testid="lesson-controls"
-          // Sit comfortably above the bottom tab bar (~64px) on mobile.
-          style={{ marginBottom: 'calc(env(safe-area-inset-bottom) + 64px)' }}
-        >
-          {controls}
-        </div>
-      )}
-
-      {footer && (
-        <div
-          className="flex-shrink-0 px-4 pb-2"
-          data-testid="lesson-footer"
-        >
-          {footer}
-        </div>
-      )}
     </div>
   );
 }

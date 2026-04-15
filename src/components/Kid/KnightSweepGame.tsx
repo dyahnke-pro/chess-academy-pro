@@ -1,12 +1,9 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Chessboard } from 'react-chessboard';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
-import { useSettings } from '../../hooks/useSettings';
-import { getBoardColor } from '../../services/boardColorService';
-import { buildPieceRenderer } from '../../services/pieceSetService';
 import { getKnightMoves } from '../../utils/knightMoves';
 import { KNIGHT_SWEEP_LEVELS } from '../../data/knightGameLevels';
 import type { SquareHandlerArgs } from 'react-chessboard';
@@ -15,15 +12,6 @@ type GameState = 'levelSelect' | 'playing' | 'won';
 
 export function KnightSweepGame(): JSX.Element {
   const navigate = useNavigate();
-  const { settings } = useSettings();
-  const boardColorScheme = useMemo(
-    () => getBoardColor(settings.boardColor),
-    [settings.boardColor],
-  );
-  const customPieces = useMemo(
-    () => buildPieceRenderer(settings.pieceSet),
-    [settings.pieceSet],
-  );
 
   const [gameState, setGameState] = useState<GameState>('levelSelect');
   const [currentLevelIdx, setCurrentLevelIdx] = useState(0);
@@ -374,17 +362,11 @@ export function KnightSweepGame(): JSX.Element {
 
       {/* Board */}
       <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px] mx-auto">
-        <Chessboard
-          options={{
-            position,
-            boardOrientation: 'white' as const,
-            squareStyles,
-            darkSquareStyle: { backgroundColor: boardColorScheme.darkSquare },
-            lightSquareStyle: { backgroundColor: boardColorScheme.lightSquare },
-            ...(customPieces ? { pieces: customPieces } : {}),
-            allowDragging: false,
-            onSquareClick: handleSquareClick,
-          }}
+        <ConsistentChessboard
+          fen={position}
+          boardOrientation="white"
+          squareStyles={squareStyles}
+          onSquareClick={handleSquareClick}
         />
       </BoardVoiceOverlay>
     </div>

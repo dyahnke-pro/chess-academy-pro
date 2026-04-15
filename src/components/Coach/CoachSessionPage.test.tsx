@@ -27,8 +27,8 @@ describe('CoachSessionPage — middlegame', () => {
   it('renders a session for a known opening', () => {
     renderAt('/coach/session/middlegame?opening=italian-game&orientation=white');
     expect(screen.getByTestId('chess-lesson-layout')).toBeInTheDocument();
-    expect(screen.getByTestId('lesson-board-slot')).toBeInTheDocument();
-    expect(screen.getByTestId('lesson-controls')).toBeInTheDocument();
+    expect(screen.getByTestId('chess-lesson-board')).toBeInTheDocument();
+    expect(screen.getByTestId('chess-lesson-controls')).toBeInTheDocument();
   });
 
   it('shows a friendly empty state when no plan matches', () => {

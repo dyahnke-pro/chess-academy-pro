@@ -86,13 +86,26 @@ export interface AnnotationHighlight {
 
 export interface OpeningMoveAnnotation {
   san: string;
+  /** Display annotation text (shown in the AnnotationCard). */
   annotation: string;
+  /** Optional voice-narration text for this move. When present, the walkthrough
+   *  will speak this string instead of `annotation` so the spoken script can
+   *  diverge from the display text (e.g. simpler grammar, no abbreviations).
+   *  When absent, callers fall back to a derived form of `annotation`. */
+  narration?: string;
+  /** Shorter narration used for higher speed tiers (Study/Review). When absent,
+   *  the speed-tier sentence trim from `annotation` is used as today. */
+  shortNarration?: string;
   pawnStructure?: string;
   plans?: string[];
   alternatives?: string[];
   moveOrderNote?: string;
   arrows?: AnnotationArrow[];
   highlights?: AnnotationHighlight[];
+  /** Optional one-sentence coach hint surfaced when the user asks for help. */
+  coachHint?: string;
+  /** Stockfish evaluation in centipawns at this move (positive = white better). */
+  evaluation?: number;
 }
 
 // ─── Common Mistakes ──────────────────────────────────────────────────────

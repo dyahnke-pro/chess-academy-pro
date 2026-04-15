@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { Chess, type Square } from 'chess.js';
-import { Chessboard } from 'react-chessboard';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { CheckCircle, XCircle, HelpCircle, Swords } from 'lucide-react';
 import type { CheckpointQuizItem } from '../../types';
@@ -119,14 +119,12 @@ export function CheckpointQuiz({
 
       <div className="flex justify-center mb-3">
         <BoardVoiceOverlay fen={quiz.fen} className="w-64 h-64">
-          <Chessboard
-            options={{
-              position: quiz.fen,
-              onPieceDrop: handleDrop,
-              onSquareClick: handleSquareClick,
-              boardOrientation: boardOrientation,
-              allowDragging: state === 'waiting' && !isPlanQuiz,
-            }}
+          <ConsistentChessboard
+            fen={quiz.fen}
+            boardOrientation={boardOrientation}
+            interactive={state === 'waiting' && !isPlanQuiz}
+            onPieceDrop={handleDrop}
+            onSquareClick={handleSquareClick}
           />
         </BoardVoiceOverlay>
       </div>

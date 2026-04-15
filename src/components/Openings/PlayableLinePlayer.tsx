@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
-import { Chessboard } from 'react-chessboard';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Play,
@@ -14,11 +13,9 @@ import {
 } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
 import { usePieceSound } from '../../hooks/usePieceSound';
-import { useSettings } from '../../hooks/useSettings';
-import { useBoardGlow, buildGlowSquareStyles } from '../../hooks/useBoardGlow';
-import { getBoardColor } from '../../services/boardColorService';
-import { buildPieceRenderer } from '../../services/pieceSetService';
-import { buildPieceGlowFilter } from '../../utils/neonColors';
+import { useBoardGlow } from '../../hooks/useBoardGlow';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { BOARD_DEMO_ANIMATION_MS } from '../../hooks/useBoardTheme';
 import type { PlayableMiddlegameLine, AnnotationArrow } from '../../types';
 import type { PieceDropHandlerArgs, SquareHandlerArgs } from 'react-chessboard';
 
@@ -49,18 +46,6 @@ export function PlayableLinePlayer({
   onExit,
 }: PlayableLinePlayerProps): JSX.Element {
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
-  const { settings } = useSettings();
-
-  // Board theming
-  const boardColorScheme = useMemo(() => getBoardColor(settings.boardColor), [settings.boardColor]);
-  const pieceFilters = useMemo(() => ({
-    whitePieceFilter: buildPieceGlowFilter(settings.whitePieceGlowColor, settings.glowBrightness) || boardColorScheme.whitePieceFilter,
-    blackPieceFilter: buildPieceGlowFilter(settings.blackPieceGlowColor, settings.glowBrightness) || boardColorScheme.blackPieceFilter,
-  }), [settings.whitePieceGlowColor, settings.blackPieceGlowColor, settings.glowBrightness, boardColorScheme]);
-  const customPieces = useMemo(
-    () => buildPieceRenderer(settings.pieceSet, pieceFilters),
-    [settings.pieceSet, pieceFilters],
-  );
 
   // Phase state
   const [phase, setPhase] = useState<Phase>('demo');
@@ -317,17 +302,16 @@ export function PlayableLinePlayer({
     [phase, selectedSquare, legalMoves, showWrongFlash, showCorrectFlash, handleMemoryMoveResult, clearSelection],
   );
 
-  // Board square neon glow
-  const { baseGlow: baseGlowStr, mergeGlow } = useBoardGlow();
-
-  // Square styles for memory phase selection/legal-move hints
+  // Board square overlays for memory phase selection / legal-move hints.
+  // The base glow is applied automatically by ConsistentChessboard — we only
+  // contribute the selection and legal-move highlights here.
+  const { mergeGlow } = useBoardGlow();
   const memorySquareStyles = useMemo((): Record<string, React.CSSProperties> => {
-    const styles = buildGlowSquareStyles(baseGlowStr);
-    if (phase !== 'memory') return styles;
+    if (phase !== 'memory') return {};
+    const styles: Record<string, React.CSSProperties> = {};
 
     if (selectedSquare) {
       styles[selectedSquare] = {
-        ...styles[selectedSquare],
         background: 'rgba(0, 229, 255, 0.35)',
         boxShadow: mergeGlow('inset 0 0 8px rgba(0, 229, 255, 0.4)'),
       };
@@ -335,24 +319,20 @@ export function PlayableLinePlayer({
 
     for (const sq of legalMoves) {
       const piece = chessRef.current.get(sq as Square);
-      if (piece) {
-        styles[sq] = {
-          ...styles[sq],
-          background:
-            'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0, 229, 255, 0.3) 60%, rgba(0, 229, 255, 0.3) 80%, rgba(0,0,0,0) 80%)',
-          cursor: 'pointer',
-        };
-      } else {
-        styles[sq] = {
-          ...styles[sq],
-          background: 'radial-gradient(circle, rgba(0, 229, 255, 0.3) 25%, transparent 25%)',
-          cursor: 'pointer',
-        };
-      }
+      styles[sq] = piece
+        ? {
+            background:
+              'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0, 229, 255, 0.3) 60%, rgba(0, 229, 255, 0.3) 80%, rgba(0,0,0,0) 80%)',
+            cursor: 'pointer',
+          }
+        : {
+            background: 'radial-gradient(circle, rgba(0, 229, 255, 0.3) 25%, transparent 25%)',
+            cursor: 'pointer',
+          };
     }
 
     return styles;
-  }, [phase, selectedSquare, legalMoves, baseGlowStr, mergeGlow]);
+  }, [phase, selectedSquare, legalMoves, mergeGlow]);
 
   const handleRetryMemory = useCallback((): void => {
     chessRef.current = new Chess(line.fen);
@@ -479,31 +459,12 @@ export function PlayableLinePlayer({
         {/* Board */}
         <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
           <div className="w-full md:max-w-[420px]">
-            <div
-              className="relative"
-              style={boardColorScheme.borderGlow
-                ? {
-                    boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(0, 229, 255, 0.06)`,
-                    borderRadius: '4px',
-                    border: '1px solid rgba(0, 229, 255, 0.15)',
-                  }
-                : undefined
-              }
-            >
-              <Chessboard
-                options={{
-                  position: demoFen,
-                  boardOrientation,
-                  allowDragging: false,
-                  arrows: currentDemoArrows,
-                  animationDurationInMs: 400,
-                  darkSquareStyle: { backgroundColor: boardColorScheme.darkSquare },
-                  lightSquareStyle: { backgroundColor: boardColorScheme.lightSquare },
-                  squareStyles: buildGlowSquareStyles(baseGlowStr),
-                  ...(customPieces ? { pieces: customPieces } : {}),
-                }}
-              />
-            </div>
+            <ConsistentChessboard
+              fen={demoFen}
+              boardOrientation={boardOrientation}
+              arrows={currentDemoArrows}
+              animationDurationInMs={BOARD_DEMO_ANIMATION_MS}
+            />
           </div>
         </div>
 
@@ -577,68 +538,51 @@ export function PlayableLinePlayer({
       {/* Board */}
       <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
-          <div
-            className={`relative ${shakeBoard ? 'animate-[boardFlashError_400ms]' : ''}`}
-            style={boardColorScheme.borderGlow
-              ? {
-                  boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(0, 229, 255, 0.06)`,
-                  borderRadius: '4px',
-                  border: '1px solid rgba(0, 229, 255, 0.15)',
-                }
-              : undefined
+          <ConsistentChessboard
+            fen={memoryFen}
+            boardOrientation={boardOrientation}
+            interactive={!showWrongFlash && !showCorrectFlash}
+            squareStyles={memorySquareStyles}
+            onPieceDrop={handlePieceDrop}
+            onSquareClick={handleSquareClick}
+            className={shakeBoard ? 'animate-[boardFlashError_400ms]' : ''}
+            overlay={
+              <>
+                <AnimatePresence>
+                  {showCorrectFlash && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                      data-testid="correct-flash"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-green-500/30 flex items-center justify-center">
+                        <CheckCircle size={28} className="text-green-500" />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <AnimatePresence>
+                  {showWrongFlash && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                      data-testid="wrong-flash"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-red-500/30 flex items-center justify-center">
+                        <XCircle size={28} className="text-red-500" />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </>
             }
-          >
-            <Chessboard
-              options={{
-                position: memoryFen,
-                boardOrientation,
-                allowDragging: !showWrongFlash && !showCorrectFlash,
-                animationDurationInMs: 200,
-                darkSquareStyle: { backgroundColor: boardColorScheme.darkSquare },
-                lightSquareStyle: { backgroundColor: boardColorScheme.lightSquare },
-                squareStyles: memorySquareStyles,
-                ...(customPieces ? { pieces: customPieces } : {}),
-                onPieceDrop: handlePieceDrop,
-                onSquareClick: handleSquareClick,
-              }}
-            />
-
-            {/* Correct flash overlay */}
-            <AnimatePresence>
-              {showCorrectFlash && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  data-testid="correct-flash"
-                >
-                  <div className="w-12 h-12 rounded-full bg-green-500/30 flex items-center justify-center">
-                    <CheckCircle size={28} className="text-green-500" />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Wrong flash overlay */}
-            <AnimatePresence>
-              {showWrongFlash && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  data-testid="wrong-flash"
-                >
-                  <div className="w-12 h-12 rounded-full bg-red-500/30 flex items-center justify-center">
-                    <XCircle size={28} className="text-red-500" />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          />
         </div>
       </div>
 
