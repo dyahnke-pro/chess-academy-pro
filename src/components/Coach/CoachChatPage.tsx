@@ -5,6 +5,7 @@ import { ArrowLeft, Volume2, VolumeOff } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { buildChatMessages, parseActionTags, getChatSystemPromptAdditions, loadAnalysisContext } from '../../services/coachChatService';
+import { routeChatIntent } from '../../services/coachIntentRouter';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -62,6 +63,28 @@ export function CoachChatPage(): JSX.Element {
     };
     addChatMessage(userMsg);
 
+    // Intent routing: if this message resolves to a dynamic session,
+    // acknowledge in chat and navigate instead of calling the LLM.
+    // Pre-validation inside routeChatIntent ensures false-positive
+    // intents (e.g. "teach me about forks") fall through to QA.
+    try {
+      const routed = await routeChatIntent(text);
+      if (routed) {
+        const ackMsg: ChatMessageType = {
+          id: `msg-${Date.now()}-ack`,
+          role: 'assistant',
+          content: routed.ackMessage,
+          timestamp: Date.now(),
+        };
+        addChatMessage(ackMsg);
+        void navigate(routed.path);
+        return;
+      }
+    } catch (err: unknown) {
+      // Router failures should never block the LLM fallback.
+      console.warn('[CoachChatPage] intent routing failed:', err);
+    }
+
     // Start streaming response
     setIsStreaming(true);
     setStreamingContent('');
@@ -115,7 +138,7 @@ export function CoachChatPage(): JSX.Element {
 
     setIsStreaming(false);
     setStreamingContent('');
-  }, [activeProfile, chatMessages, isStreaming, addChatMessage, flushSpeechBuffer, analysisContext]);
+  }, [activeProfile, chatMessages, isStreaming, addChatMessage, flushSpeechBuffer, analysisContext, navigate]);
 
   return (
     <div className="flex flex-col h-[calc(100dvh-4rem)] pb-16 md:pb-0 max-w-2xl mx-auto w-full" data-testid="coach-chat-page">

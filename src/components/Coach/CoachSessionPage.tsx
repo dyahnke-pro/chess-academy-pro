@@ -4,43 +4,79 @@
  * The dynamic lesson route driven by the AI Agent Coach.
  *
  *   /coach/session/middlegame?opening=italian-game&orientation=white
- *   /coach/session/play-against?opening=sicilian&difficulty=auto
+ *   /coach/session/play-against?opening=sicilian&difficulty=auto&side=black
+ *   /coach/session/walkthrough?subject=Sicilian%20Najdorf
+ *   /coach/session/puzzle?theme=fork&difficulty=medium       (redirects)
+ *   /coach/session/explain-position?fen=<FEN>
  *
- * - Middlegame: loads a WalkthroughSession via `middlegamePlanner` and
- *   runs it with `useWalkthroughRunner`, keeping the plan's starting
- *   FEN (carries board context over from the opening).
- * - Play-against: Stockfish plays the coach's side at the resolved
- *   difficulty (rating-matched when 'auto').
+ * - Middlegame: loads a WalkthroughSession via `middlegamePlanner`,
+ *   falling back to a Stockfish-generated PV session when no DB plan
+ *   matches. Runs with `useWalkthroughRunner` (voice-gated advance via
+ *   `runStep`, no timer races).
+ * - Play-against: Stockfish plays the coach's side at ELO-relative
+ *   difficulty (player ELO ± 300 for easy/hard).
+ * - Walkthrough: fuzzy-match an opening by subject, build a session
+ *   from its PGN + annotations, run with `useWalkthroughRunner`.
+ * - Puzzle: redirect to /puzzles with theme/difficulty query params —
+ *   puzzles have their own dedicated full UI.
+ * - Explain-position: Stockfish analysis + streaming coach commentary
+ *   on a non-interactive board.
  *
- * Always rendered inside `ConsistentChessboard` + `ChessLessonLayout`
- * so it looks and behaves identically to every other lesson screen.
+ * All interactive surfaces render inside `ConsistentChessboard` +
+ * `ChessLessonLayout` for visual consistency with every other lesson
+ * screen. See CLAUDE.md → "Agent Coach Pattern".
  */
-import { useMemo, type CSSProperties } from 'react';
-import { useNavigate, useParams, useSearchParams, Navigate } from 'react-router-dom';
-import { ArrowLeft, Play, Pause, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  Navigate,
+} from 'react-router-dom';
+import {
+  ArrowLeft,
+  Play,
+  Pause,
+  ChevronLeft,
+  ChevronRight,
+  RotateCcw,
+} from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useWalkthroughRunner } from '../../hooks/useWalkthroughRunner';
-import { resolveMiddlegameSession } from '../../services/middlegamePlanner';
-import { useAppStore } from '../../stores/appStore';
+import { resolveMiddlegameSessionWithFallback } from '../../services/middlegamePlanner';
+import { resolveWalkthroughSession } from '../../services/walkthroughResolver';
 import { resolveConfig } from '../../services/coachPlaySession';
+import { getPlayerRating } from '../../services/playerRatingService';
 import { CoachPlaySessionView } from './CoachPlaySessionView';
+import { ExplainPositionSessionView } from './ExplainPositionSessionView';
+import { DynamicCoachSession } from './DynamicCoachSession';
+import type { WalkthroughSession } from '../../types/walkthrough';
 import type { CoachDifficulty } from '../../services/coachAgent';
+import type { PlaySessionConfig } from '../../services/coachPlaySession';
 
-type SessionKind = 'middlegame' | 'play-against';
+type SessionKind =
+  | 'middlegame'
+  | 'play-against'
+  | 'walkthrough'
+  | 'puzzle'
+  | 'explain-position';
 
 export function CoachSessionPage(): JSX.Element {
   const { kind } = useParams<{ kind: SessionKind }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const activeProfile = useAppStore((s) => s.activeProfile);
 
   const openingId = searchParams.get('opening') ?? undefined;
   const subject = searchParams.get('subject') ?? undefined;
-  const orientation =
-    searchParams.get('orientation') === 'black' ? 'black' : 'white';
+  const sideParam = searchParams.get('side');
+  const orientationParam = searchParams.get('orientation');
+  const orientation: 'white' | 'black' =
+    sideParam === 'black' || orientationParam === 'black' ? 'black' : 'white';
   const difficulty =
     (searchParams.get('difficulty') as CoachDifficulty | null) ?? 'auto';
+  const theme = searchParams.get('theme') ?? undefined;
+  const fen = searchParams.get('fen') ?? undefined;
 
   const goBack = (): void => {
     // Returning to the chat preserves scroll + history.
@@ -49,35 +85,78 @@ export function CoachSessionPage(): JSX.Element {
 
   if (kind === 'middlegame') {
     return (
-      <MiddlegameSessionBody
-        openingId={openingId}
-        subject={subject}
-        orientation={orientation}
-        onExit={goBack}
-      />
+      <DynamicCoachSession title="Middlegame plan" onExit={goBack}>
+        <MiddlegameSessionBody
+          openingId={openingId}
+          subject={subject}
+          orientation={orientation}
+          fen={fen}
+          onExit={goBack}
+        />
+      </DynamicCoachSession>
     );
   }
 
   if (kind === 'play-against') {
-    const rating = activeProfile?.currentRating;
-    const config = resolveConfig(difficulty, rating);
     return (
-      <CoachPlaySessionView
-        config={config}
-        orientation={orientation}
-        subject={subject}
+      <DynamicCoachSession title={subject ? `Play ${subject}` : 'Play the coach'} onExit={goBack}>
+        <PlayAgainstBody
+          difficulty={difficulty}
+          orientation={orientation}
+          subject={subject}
+          onExit={goBack}
+        />
+      </DynamicCoachSession>
+    );
+  }
+
+  if (kind === 'walkthrough') {
+    return (
+      <DynamicCoachSession
+        title={subject ? `Walkthrough: ${subject}` : 'Opening walkthrough'}
         onExit={goBack}
-      />
+      >
+        <WalkthroughSessionBody
+          subject={subject}
+          orientation={orientation}
+          onExit={goBack}
+        />
+      </DynamicCoachSession>
+    );
+  }
+
+  if (kind === 'puzzle') {
+    // Puzzles have their own full UI — redirect rather than inline.
+    const params = new URLSearchParams();
+    if (theme) params.set('theme', theme);
+    if (difficulty !== 'auto') params.set('difficulty', difficulty);
+    const search = params.toString();
+    const to = search ? `/puzzles?${search}` : '/puzzles';
+    return <Navigate to={to} replace />;
+  }
+
+  if (kind === 'explain-position') {
+    return (
+      <DynamicCoachSession title="Explain this position" onExit={goBack}>
+        <ExplainPositionSessionView
+          fen={fen}
+          orientation={orientation}
+          onExit={goBack}
+        />
+      </DynamicCoachSession>
     );
   }
 
   return <Navigate to="/coach/chat" replace />;
 }
 
+// ─── Middlegame ─────────────────────────────────────────────────────
+
 interface MiddlegameSessionBodyProps {
   openingId?: string;
   subject?: string;
   orientation: 'white' | 'black';
+  fen?: string;
   onExit: () => void;
 }
 
@@ -85,67 +164,183 @@ function MiddlegameSessionBody({
   openingId,
   subject,
   orientation,
+  fen,
   onExit,
 }: MiddlegameSessionBodyProps): JSX.Element {
-  const session = useMemo(
-    () => resolveMiddlegameSession({ openingId, subject, orientation }),
-    [openingId, subject, orientation],
-  );
+  const [session, setSession] = useState<WalkthroughSession | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!session) {
-    return (
-      <ChessLessonLayout
-        header={
-          <div className="text-theme-text-muted">
-            No middlegame plan found for that opening.
-          </div>
-        }
-        board={
-          <div className="aspect-square rounded-lg bg-theme-surface/50" />
-        }
-        controls={
-          <button
-            onClick={onExit}
-            className="px-4 py-2 rounded-xl bg-theme-surface border border-theme-border"
-          >
-            Back to chat
-          </button>
-        }
-      />
-    );
-  }
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    void resolveMiddlegameSessionWithFallback({
+      openingId,
+      subject,
+      orientation,
+      fen,
+    })
+      .then((s) => {
+        if (cancelled) return;
+        if (s) setSession(s);
+        else setError('No middlegame plan found for that opening.');
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        console.warn('[CoachSessionPage] middlegame fallback failed:', err);
+        setError('Could not prepare a middlegame plan. Try again later.');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [openingId, subject, orientation, fen]);
 
-  return <MiddlegameRunner session={session} onExit={onExit} />;
+  if (loading) return <LessonLoadingState label="Preparing plan…" onExit={onExit} />;
+  if (error || !session) return <LessonErrorState message={error ?? 'Plan unavailable.'} onExit={onExit} />;
+  return <WalkthroughRunnerBody session={session} onExit={onExit} />;
 }
 
-interface MiddlegameRunnerProps {
-  session: NonNullable<ReturnType<typeof resolveMiddlegameSession>>;
+// ─── Walkthrough ────────────────────────────────────────────────────
+
+interface WalkthroughSessionBodyProps {
+  subject?: string;
+  orientation: 'white' | 'black';
   onExit: () => void;
 }
 
-function MiddlegameRunner({ session, onExit }: MiddlegameRunnerProps): JSX.Element {
+function WalkthroughSessionBody({
+  subject,
+  orientation,
+  onExit,
+}: WalkthroughSessionBodyProps): JSX.Element {
+  const [session, setSession] = useState<WalkthroughSession | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!subject) {
+      setError('No opening specified.');
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    void resolveWalkthroughSession({ subject, orientation })
+      .then((s) => {
+        if (cancelled) return;
+        if (s) setSession(s);
+        else
+          setError(
+            `I couldn't find an opening matching "${subject}". Try searching from the Openings tab.`,
+          );
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        console.warn('[CoachSessionPage] walkthrough resolve failed:', err);
+        setError('Could not load that walkthrough.');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [subject, orientation]);
+
+  if (loading) return <LessonLoadingState label="Loading walkthrough…" onExit={onExit} />;
+  if (error || !session) return <LessonErrorState message={error ?? 'Walkthrough unavailable.'} onExit={onExit} />;
+  return <WalkthroughRunnerBody session={session} onExit={onExit} />;
+}
+
+// ─── Play-against ───────────────────────────────────────────────────
+
+interface PlayAgainstBodyProps {
+  difficulty: CoachDifficulty;
+  orientation: 'white' | 'black';
+  subject?: string;
+  onExit: () => void;
+}
+
+function PlayAgainstBody({
+  difficulty,
+  orientation,
+  subject,
+  onExit,
+}: PlayAgainstBodyProps): JSX.Element {
+  const [config, setConfig] = useState<PlaySessionConfig | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void getPlayerRating().then((rating) => {
+      if (cancelled) return;
+      setConfig(resolveConfig(difficulty, rating));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [difficulty]);
+
+  if (!config) return <LessonLoadingState label="Matching difficulty to your rating…" onExit={onExit} />;
+  return (
+    <CoachPlaySessionView
+      config={config}
+      orientation={orientation}
+      subject={subject}
+      onExit={onExit}
+    />
+  );
+}
+
+// ─── Shared runner body ─────────────────────────────────────────────
+
+interface WalkthroughRunnerBodyProps {
+  session: WalkthroughSession;
+  onExit: () => void;
+}
+
+function WalkthroughRunnerBody({
+  session,
+  onExit,
+}: WalkthroughRunnerBodyProps): JSX.Element {
   const runner = useWalkthroughRunner(session);
   const step = runner.currentStep;
-  const stepArrows = step?.arrows?.map((a) => ({
-    startSquare: a.from,
-    endSquare: a.to,
-    color: a.color ?? 'rgba(34, 211, 238, 0.9)',
-  }));
-  const stepHighlights: Record<string, CSSProperties> | undefined = step?.highlights
-    ? Object.fromEntries(
-        step.highlights.map((h) => [
-          h.square,
-          { boxShadow: `inset 0 0 0 3px ${h.color ?? 'rgba(250, 204, 21, 0.6)'}` },
-        ]),
-      )
-    : undefined;
+
+  const stepArrows = useMemo(
+    () =>
+      step?.arrows?.map((a) => ({
+        startSquare: a.from,
+        endSquare: a.to,
+        color: a.color ?? 'rgba(34, 211, 238, 0.9)',
+      })),
+    [step],
+  );
+  const stepHighlights: Record<string, CSSProperties> | undefined = useMemo(
+    () =>
+      step?.highlights
+        ? Object.fromEntries(
+            step.highlights.map((h) => [
+              h.square,
+              {
+                boxShadow: `inset 0 0 0 3px ${h.color ?? 'rgba(250, 204, 21, 0.6)'}`,
+              },
+            ]),
+          )
+        : undefined,
+    [step],
+  );
 
   const header = (
     <div className="flex items-center justify-between gap-3">
       <div className="flex-1 min-w-0">
-        <h1 className="text-lg font-bold text-theme-text truncate">{session.title}</h1>
+        <h1 className="text-lg font-bold text-theme-text truncate">
+          {session.title}
+        </h1>
         <div className="text-xs text-theme-text-muted uppercase tracking-wide">
-          {session.subtitle ?? 'Middlegame plan'} ·{' '}
+          {session.subtitle ?? 'Session'} ·{' '}
           {Math.max(runner.currentIndex + 1, 0)} / {session.steps.length}
         </div>
         {step && (
@@ -223,6 +418,60 @@ function MiddlegameRunner({ session, onExit }: MiddlegameRunnerProps): JSX.Eleme
         />
       }
       controls={controls}
+    />
+  );
+}
+
+// ─── Loading / error states ─────────────────────────────────────────
+
+function LessonLoadingState({
+  label,
+  onExit,
+}: {
+  label: string;
+  onExit: () => void;
+}): JSX.Element {
+  return (
+    <ChessLessonLayout
+      header={<div className="text-theme-text-muted">{label}</div>}
+      board={
+        <div className="aspect-square rounded-lg bg-theme-surface/50 animate-pulse" />
+      }
+      controls={
+        <button
+          onClick={onExit}
+          className="px-4 py-2 rounded-xl bg-theme-surface border border-theme-border"
+        >
+          Back to chat
+        </button>
+      }
+    />
+  );
+}
+
+function LessonErrorState({
+  message,
+  onExit,
+}: {
+  message: string;
+  onExit: () => void;
+}): JSX.Element {
+  return (
+    <ChessLessonLayout
+      header={
+        <div className="text-theme-text-muted">
+          {message}
+        </div>
+      }
+      board={<div className="aspect-square rounded-lg bg-theme-surface/50" />}
+      controls={
+        <button
+          onClick={onExit}
+          className="px-4 py-2 rounded-xl bg-theme-surface border border-theme-border"
+        >
+          Back to chat
+        </button>
+      }
     />
   );
 }

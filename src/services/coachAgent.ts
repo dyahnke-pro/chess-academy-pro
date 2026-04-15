@@ -18,6 +18,7 @@ export type CoachIntentKind =
   | 'play-against'
   | 'puzzle'
   | 'walkthrough'
+  | 'explain-position'
   | 'qa';
 
 export type CoachDifficulty = 'easy' | 'medium' | 'hard' | 'auto';
@@ -30,6 +31,8 @@ export interface CoachIntent {
   difficulty?: CoachDifficulty;
   /** Puzzle theme, e.g. "knight fork", "back rank". */
   theme?: string;
+  /** For play-against: which colour the student wants. */
+  side?: 'white' | 'black';
   /** Original raw user query. */
   raw: string;
 }
@@ -49,10 +52,30 @@ const DIFFICULTY_WORDS: Record<string, CoachDifficulty> = {
 
 function extractDifficulty(text: string): CoachDifficulty | undefined {
   const lower = text.toLowerCase();
+  // "at my level" → medium is a natural-language shortcut that wouldn't
+  // otherwise match the word map below.
+  if (/\bat my level\b/.test(lower)) return 'medium';
   for (const [word, level] of Object.entries(DIFFICULTY_WORDS)) {
     const re = new RegExp(`\\b${word}\\b`);
     if (re.test(lower)) return level;
   }
+  return undefined;
+}
+
+function extractSide(text: string): 'white' | 'black' | undefined {
+  const lower = text.toLowerCase();
+  // Explicit "as black/white"
+  const asMatch = lower.match(/\bas\s+(black|white)\b/);
+  if (asMatch) return asMatch[1] as 'white' | 'black';
+  // "I'll take/play black" or "I want black"
+  const takeMatch = lower.match(
+    /\bi\s*(?:'|wi)?ll\s+(?:take|play|be)\s+(black|white)\b/,
+  );
+  if (takeMatch) return takeMatch[1] as 'white' | 'black';
+  const wantMatch = lower.match(/\bi\s+want\s+(?:to\s+play\s+)?(black|white)\b/);
+  if (wantMatch) return wantMatch[1] as 'white' | 'black';
+  const takeShort = lower.match(/\bi\s+take\s+(black|white)\b/);
+  if (takeShort) return takeShort[1] as 'white' | 'black';
   return undefined;
 }
 
@@ -79,23 +102,45 @@ export function parseCoachIntent(query: string): CoachIntent {
     return { kind: 'continue-middlegame', raw };
   }
 
-  // 2. "Play X against me" / "play against me with X" / "play the Stafford"
+  // 2. Explain-position: "explain this position", "what's happening here",
+  //    "analyze the board", "break down this position", "evaluate this".
+  //    Runs BEFORE play-against so phrases like "what should I do here"
+  //    don't get swallowed.
+  if (
+    /\b(explain|analy[sz]e|evaluate|break\s+down)\b.*\b(position|board)\b/.test(lower) ||
+    /\bwhat(?:'s| is)\s+(?:happening|going on)\s+here\b/.test(lower) ||
+    /\bwhat\s+should\s+i\s+(?:do|play)\s+here\b/.test(lower) ||
+    /\bevaluate\s+this\b/.test(lower)
+  ) {
+    return { kind: 'explain-position', raw };
+  }
+
+  // 3. "Play X against me" / "play against me with X" / "play the Stafford"
+  //    Also covers "challenge me", "let's play".
   const playMatch =
     lower.match(/play\s+(?:the\s+)?(.+?)\s+against\s+me/) ||
-    lower.match(/play\s+against\s+me\s+with\s+(?:the\s+)?(.+)/) ||
-    lower.match(/let'?s\s+play\s+(?:the\s+)?(.+)/) ||
-    lower.match(/challenge\s+me\s+with\s+(?:the\s+)?(.+)/);
+    lower.match(/play\s+against\s+me(?:\s+with\s+(?:the\s+)?(.+))?/) ||
+    // "let's play [,.]? [subject]" — allow comma/period between "play" and
+    // the rest so "let's play, I'll take black" still routes.
+    lower.match(/let'?s\s+play\b[\s,.]*(?:the\s+)?(.+)?/) ||
+    lower.match(/challenge\s+me(?:\s+with\s+(?:the\s+)?(.+))?/);
   if (playMatch) {
-    const subject = cleanSubject(playMatch[1]);
+    const rawSubject = playMatch[1] ? cleanSubject(playMatch[1]) : '';
+    const side = extractSide(lower);
+    const difficulty = extractDifficulty(lower) ?? 'auto';
+    // Strip side/difficulty phrases from the subject so "play against me
+    // as black easy" doesn't produce subject "as black easy".
+    const subject = stripSideAndDifficulty(rawSubject) || undefined;
     return {
       kind: 'play-against',
-      subject: subject || undefined,
-      difficulty: extractDifficulty(lower) ?? 'auto',
+      subject,
+      difficulty,
+      side,
       raw,
     };
   }
 
-  // 3. Puzzle requests: "give me a knight-fork puzzle", "puzzle about pins"
+  // 4. Puzzle requests: "give me a knight-fork puzzle", "puzzle about pins"
   const puzzleMatch =
     lower.match(/(?:give\s+me\s+)?(?:a\s+|an\s+)?(.+?)\s+puzzle/) ||
     lower.match(/puzzle\s+(?:about|on|for)\s+(.+)/) ||
@@ -110,12 +155,14 @@ export function parseCoachIntent(query: string): CoachIntent {
     };
   }
 
-  // 4. Walkthrough requests: "walk me through the Sicilian", "teach me
-  //    the London"
+  // 5. Walkthrough requests. Ordered from most specific to least so
+  //    "show me the London System opening" picks up the "opening"
+  //    suffix variant first.
   const walkthroughMatch =
     lower.match(/walk\s+(?:me\s+)?through\s+(?:the\s+)?(.+)/) ||
-    lower.match(/teach\s+me\s+(?:the\s+)?(.+)/) ||
-    lower.match(/show\s+me\s+(?:the\s+)?(.+?)\s+opening/);
+    lower.match(/teach\s+me\s+(?:the\s+main\s+line\s+of\s+)?(?:the\s+)?(.+)/) ||
+    lower.match(/show\s+me\s+(?:the\s+)?(.+?)(?:\s+opening)?$/) ||
+    lower.match(/study\s+(?:the\s+)?(.+)/);
   if (walkthroughMatch) {
     const subject = cleanSubject(walkthroughMatch[1]);
     if (subject) {
@@ -136,5 +183,26 @@ function cleanSubject(subject: string): string {
   return subject
     .replace(/[?.!,]+$/g, '')
     .replace(/\b(please|now|today|against me|right now|real quick)\b/gi, '')
+    .replace(/\s+/g, ' ')
     .trim();
+}
+
+/**
+ * Remove side ("as black"), difficulty, and leftover filler from a
+ * subject phrase extracted from a play-against query.
+ */
+function stripSideAndDifficulty(subject: string): string {
+  let out = subject.toLowerCase();
+  out = out.replace(
+    /\bas\s+(black|white)\b|\bi\s*(?:'|wi)?ll\s+(?:take|play|be)\s+(?:black|white)\b|\bi\s+want\s+(?:to\s+play\s+)?(?:black|white)\b/gi,
+    '',
+  );
+  for (const word of Object.keys(DIFFICULTY_WORDS)) {
+    out = out.replace(new RegExp(`\\b${word}\\b`, 'gi'), '');
+  }
+  out = out.replace(/\bat my level\b/gi, '');
+  out = out.replace(/[,;.]/g, ' ').replace(/\s+/g, ' ').trim();
+  // Drop trailing filler words.
+  out = out.replace(/\b(with|the|a|an|please)\b\s*$/i, '').trim();
+  return out;
 }
