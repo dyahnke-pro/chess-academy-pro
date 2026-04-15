@@ -17,6 +17,7 @@ import { getCoachMove, setSkill } from '../../services/coachPlaySession';
 import { voiceService } from '../../services/voiceService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
+import { useBoardContext } from '../../hooks/useBoardContext';
 import type { PlaySessionConfig } from '../../services/coachPlaySession';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -45,6 +46,22 @@ export function CoachPlaySessionView({
   const [thinking, setThinking] = useState<boolean>(false);
   const [commenting, setCommenting] = useState<boolean>(false);
   const chessRef = useRef<Chess>(new Chess());
+
+  // Publish the live board as the "last position" so the user can
+  // leave this game, ask "explain this position" in chat, and be
+  // routed back here with the right FEN. See useBoardContext.ts.
+  const turn: 'w' | 'b' = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+  useBoardContext(
+    fen,
+    '',
+    0,
+    orientation,
+    turn,
+    undefined,
+    undefined,
+    'play-session',
+    subject ? `Play vs. Coach — ${subject}` : 'Play vs. Coach',
+  );
   // Track the evaluation BEFORE each move so we can classify the swing.
   const evalBeforeRef = useRef<number | null>(0);
   const isMountedRef = useRef<boolean>(true);

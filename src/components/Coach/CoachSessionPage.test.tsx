@@ -4,6 +4,11 @@ import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { CoachSessionPage } from './CoachSessionPage';
 import { voiceService } from '../../services/voiceService';
+import { useAppStore } from '../../stores/appStore';
+
+beforeEach(() => {
+  useAppStore.getState().clearLastBoardSnapshot();
+});
 
 // Mock async services so tests don't hit real Stockfish / Dexie.
 vi.mock('../../services/playerRatingService', () => ({

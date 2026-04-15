@@ -2,7 +2,7 @@ import { useRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2, MessageCircle, Play } from 'lucide-react';
 import { useSmartSearch } from '../../hooks/useSmartSearch';
-import { useAppStore } from '../../stores/appStore';
+import { useAppStore, selectFreshBoardSnapshot } from '../../stores/appStore';
 import { parseCoachIntent } from '../../services/coachAgent';
 import type { SmartSearchResult, SmartSearchCategory } from '../../types';
 
@@ -38,6 +38,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
 
   const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const setCoachDrawerInitialMessage = useAppStore((s) => s.setCoachDrawerInitialMessage);
+  const lastBoardSnapshot = useAppStore((s) => selectFreshBoardSnapshot(s));
 
   const showAskCoach = query.trim().length >= ASK_COACH_MIN_LENGTH;
   // Detect agent-routable intents (e.g. "run me through the middlegame",
@@ -134,9 +135,16 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
         `/coach/session/puzzle${params.toString() ? `?${params.toString()}` : ''}`,
       );
     } else if (agentIntent.kind === 'explain-position') {
-      void navigate('/coach/session/explain-position');
+      // Prefer the persistent snapshot the user was just looking at;
+      // the session page defaults to the starting position when no fen
+      // is passed.
+      if (lastBoardSnapshot) {
+        params.set('fen', lastBoardSnapshot.fen);
+      }
+      const qs = params.toString();
+      void navigate(`/coach/session/explain-position${qs ? `?${qs}` : ''}`);
     }
-  }, [agentIntent, clear, navigate]);
+  }, [agentIntent, clear, navigate, lastBoardSnapshot]);
 
   // Build the action label + subtitle per intent kind.
   const agentActionLabel = useMemo((): string => {

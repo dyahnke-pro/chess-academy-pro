@@ -1,5 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useAppStore } from '../stores/appStore';
+import {
+  useAppStore,
+  selectFreshBoardSnapshot,
+  LAST_BOARD_SNAPSHOT_TTL_MS,
+} from '../stores/appStore';
 import {
   buildUserProfile,
   buildSessionRecord,
@@ -244,5 +248,60 @@ describe('subscribeWithSelector', () => {
     expect(callback).toHaveBeenCalledTimes(1);
 
     unsub();
+  });
+});
+
+// ─── lastBoardSnapshot ───────────────────────────────────────────────────────
+
+describe('lastBoardSnapshot', () => {
+  const TEST_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  it('is null by default', () => {
+    expect(useAppStore.getState().lastBoardSnapshot).toBeNull();
+  });
+
+  it('setLastBoardSnapshot stores fen + source and stamps the time', () => {
+    const before = Date.now();
+    useAppStore.getState().setLastBoardSnapshot({ fen: TEST_FEN, source: 'game-review' });
+    const snap = useAppStore.getState().lastBoardSnapshot;
+    expect(snap).not.toBeNull();
+    expect(snap?.fen).toBe(TEST_FEN);
+    expect(snap?.source).toBe('game-review');
+    expect(snap?.timestamp).toBeGreaterThanOrEqual(before);
+  });
+
+  it('preserves optional label when provided', () => {
+    useAppStore.getState().setLastBoardSnapshot({
+      fen: TEST_FEN,
+      source: 'game-review',
+      label: 'vs. Smith, move 14',
+    });
+    expect(useAppStore.getState().lastBoardSnapshot?.label).toBe('vs. Smith, move 14');
+  });
+
+  it('clearLastBoardSnapshot resets it to null', () => {
+    useAppStore.getState().setLastBoardSnapshot({ fen: TEST_FEN, source: 'puzzle' });
+    useAppStore.getState().clearLastBoardSnapshot();
+    expect(useAppStore.getState().lastBoardSnapshot).toBeNull();
+  });
+
+  it('selectFreshBoardSnapshot returns the snapshot when within TTL', () => {
+    useAppStore.getState().setLastBoardSnapshot({ fen: TEST_FEN, source: 'analysis' });
+    const state = useAppStore.getState();
+    // Pretend "now" is just one second after the stamp.
+    const nowMs = (state.lastBoardSnapshot?.timestamp ?? 0) + 1000;
+    expect(selectFreshBoardSnapshot(state, nowMs)?.fen).toBe(TEST_FEN);
+  });
+
+  it('selectFreshBoardSnapshot returns null when snapshot is stale', () => {
+    useAppStore.getState().setLastBoardSnapshot({ fen: TEST_FEN, source: 'analysis' });
+    const state = useAppStore.getState();
+    const nowMs =
+      (state.lastBoardSnapshot?.timestamp ?? 0) + LAST_BOARD_SNAPSHOT_TTL_MS + 1;
+    expect(selectFreshBoardSnapshot(state, nowMs)).toBeNull();
+  });
+
+  it('selectFreshBoardSnapshot returns null when no snapshot exists', () => {
+    expect(selectFreshBoardSnapshot(useAppStore.getState())).toBeNull();
   });
 });

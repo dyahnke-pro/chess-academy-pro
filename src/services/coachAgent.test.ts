@@ -102,6 +102,33 @@ describe('parseCoachIntent — walkthrough', () => {
   });
 });
 
+describe('parseCoachIntent — explain-position', () => {
+  it.each([
+    'Explain this position',
+    'explain this',
+    'Analyse this position',
+    'Analyze this',
+    "What's happening here",
+    "What's going on",
+    "What's happening in this position",
+    'Explain my current position',
+  ])('routes %q to explain-position', (phrase) => {
+    const intent = parseCoachIntent(phrase);
+    expect(intent.kind).toBe('explain-position');
+  });
+
+  it('does NOT route "explain the middlegame plan" to explain-position', () => {
+    const intent = parseCoachIntent('Explain the middlegame plan');
+    expect(intent.kind).toBe('continue-middlegame');
+  });
+
+  it('does NOT route "explain the Sicilian opening" to explain-position', () => {
+    // Keyword "opening" is excluded so walkthroughs still win.
+    const intent = parseCoachIntent('Explain the Sicilian opening');
+    expect(intent.kind).not.toBe('explain-position');
+  });
+});
+
 describe('parseCoachIntent — fallback', () => {
   it('routes general questions to qa', () => {
     const intent = parseCoachIntent('Why is the f7 square weak?');
