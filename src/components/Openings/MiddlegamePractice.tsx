@@ -113,7 +113,7 @@ export function MiddlegamePractice({
   playerColor,
   onExit,
 }: MiddlegamePracticeProps): JSX.Element {
-  const game = useChessGame({ initialFen: plan.criticalPositionFen });
+  const game = useChessGame(plan.criticalPositionFen, playerColor);
   const { settings } = useSettings();
   const showEngineLines = settings.showEngineLines;
 

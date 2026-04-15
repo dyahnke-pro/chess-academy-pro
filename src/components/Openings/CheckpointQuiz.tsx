@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { CheckCircle, XCircle, HelpCircle, Swords } from 'lucide-react';
@@ -43,7 +43,7 @@ export function CheckpointQuiz({
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive guard
       if (!move) return false;
 
-      const isCorrect = checkMoveCorrect(move.san, move.from, move.to, move.lan, quiz.correctMove);
+      const isCorrect = checkMoveCorrect(move.san, move.from, move.to, move.lan, quiz.correctMove ?? '');
       setState(isCorrect ? 'correct' : 'incorrect');
       setTimeout(() => onComplete(isCorrect), 1500);
       return true;
@@ -69,7 +69,7 @@ export function CheckpointQuiz({
 
       if (selectedSquareRef.current === null) {
         // First click — select the piece (only allow side to move)
-        const piece = chess.get(square);
+        const piece = chess.get(square as Square);
         if (piece && piece.color === sideToMove) {
           selectedSquareRef.current = square;
         }
@@ -80,7 +80,7 @@ export function CheckpointQuiz({
         if (from === square) return; // clicked same square, deselect
 
         // If clicking another own piece, re-select it instead
-        const piece = chess.get(square);
+        const piece = chess.get(square as Square);
         if (piece && piece.color === sideToMove) {
           selectedSquareRef.current = square;
           return;

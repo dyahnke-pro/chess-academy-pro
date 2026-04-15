@@ -418,7 +418,7 @@ export function CoachGamePage(): JSX.Element {
   const clearTacticAnimation = useCallback(() => {
     tacticAnimTimersRef.current.forEach(clearTimeout);
     tacticAnimTimersRef.current = [];
-  });
+  }, []);
 
   /** Auto-play interval ref for tactic line step-through */
   const tacticAutoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
