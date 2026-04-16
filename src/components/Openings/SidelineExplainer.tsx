@@ -32,9 +32,18 @@ export function SidelineExplainer({
         variation.name,
         fen,
       );
-      setExplanation(result);
-    } catch {
-      setError('Could not generate explanation. Try again later.');
+      // Non-empty result — including the offline fallback string — is
+      // a success. Showing "Try again later" when the service actually
+      // returned fallback text was the root cause of the button
+      // appearing broken.
+      if (result && result.trim().length > 0) {
+        setExplanation(result);
+      } else {
+        setError('AI coach is offline. Add an API key in Settings → Coach to enable explanations.');
+      }
+    } catch (err: unknown) {
+      console.warn('[SidelineExplainer] failed:', err);
+      setError('Could not generate explanation. Check Settings → Coach for API key status.');
     } finally {
       setLoading(false);
     }

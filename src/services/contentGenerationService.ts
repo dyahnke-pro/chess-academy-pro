@@ -18,13 +18,26 @@ async function getCachedContent(
   openingId: string,
   type: GeneratedContentType,
 ): Promise<GeneratedContent | undefined> {
-  const results = await db.generatedContent
-    .where('[openingId+type]')
-    .equals([openingId, type])
-    .toArray();
+  // Try the compound index first. On older schema versions the
+  // `[openingId+type]` index doesn't exist and Dexie THROWS — which
+  // used to bubble all the way out of generateSidelineExplanation and
+  // show the user "Could not generate explanation. Try again later."
+  // Swallow the throw and fall through to a manual filter.
+  try {
+    const results = await db.generatedContent
+      .where('[openingId+type]')
+      .equals([openingId, type])
+      .toArray();
+    if (results.length > 0) {
+      const match = results[0];
+      const age = Date.now() - new Date(match.generatedAt).getTime();
+      return age < CACHE_DURATION_MS ? match : undefined;
+    }
+  } catch {
+    // Compound index unavailable — fall through to manual filter.
+  }
 
-  if (results.length === 0) {
-    // Fallback: filter manually (compound index may not exist on older schemas)
+  try {
     const all = await db.generatedContent
       .where('openingId')
       .equals(openingId)
@@ -33,11 +46,9 @@ async function getCachedContent(
     if (!match) return undefined;
     const age = Date.now() - new Date(match.generatedAt).getTime();
     return age < CACHE_DURATION_MS ? match : undefined;
+  } catch {
+    return undefined;
   }
-
-  const match = results[0];
-  const age = Date.now() - new Date(match.generatedAt).getTime();
-  return age < CACHE_DURATION_MS ? match : undefined;
 }
 
 async function storeContent(
@@ -190,7 +201,13 @@ Be concise (3-4 paragraphs). Use ONLY the provided statistics. Do not invent gam
   };
 
   const result = await getCoachCommentary('sideline_explanation', context);
-  await storeContent(cacheKey, 'sideline_explanation', result, JSON.stringify(grounding));
+  // Cache writes must not break the user-visible explanation — if the
+  // Dexie put fails (quota, schema drift) we still return the text.
+  try {
+    await storeContent(cacheKey, 'sideline_explanation', result, JSON.stringify(grounding));
+  } catch (err: unknown) {
+    console.warn('[contentGeneration] sideline cache write failed:', err);
+  }
   return result;
 }
 
