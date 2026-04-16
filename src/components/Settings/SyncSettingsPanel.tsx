@@ -20,6 +20,8 @@ export function SyncSettingsPanel(): JSX.Element {
   const [syncUserId, setSyncUserId] = useState(() => getSyncPref('syncUserId'));
 
   const [status, setStatus] = useState<string | null>(null);
+  const [statusKind, setStatusKind] = useState<'info' | 'success' | 'error'>('info');
+  const [busy, setBusy] = useState(false);
   const [confirmRestore, setConfirmRestore] = useState(false);
 
   const lastSyncDate = getSyncPref('lastSyncDate') || null;
@@ -40,28 +42,43 @@ export function SyncSettingsPanel(): JSX.Element {
   };
 
   const handleBackup = async (): Promise<void> => {
-    if (!activeProfile) return;
+    if (!activeProfile || busy) return;
+    setBusy(true);
     setStatus('Backing up...');
+    setStatusKind('info');
     try {
       await pushToCloud(activeProfile);
-      setStatus('Backup complete!');
+      setStatus('Backup complete.');
+      setStatusKind('success');
+      // Auto-clear successes so the banner doesn't linger forever.
+      setTimeout(() => setStatus(null), 4000);
     } catch (err) {
-      setStatus(`Error: ${err instanceof Error ? err.message : 'unknown'}`);
+      // Errors STAY VISIBLE until the user acts — previously they
+      // vanished in 3s and the user had no idea the backup failed.
+      setStatus(`Backup failed: ${err instanceof Error ? err.message : 'unknown error'}`);
+      setStatusKind('error');
+    } finally {
+      setBusy(false);
     }
-    setTimeout(() => setStatus(null), 3000);
   };
 
   const handleRestore = async (): Promise<void> => {
-    if (!activeProfile) return;
+    if (!activeProfile || busy) return;
+    setBusy(true);
     setConfirmRestore(false);
     setStatus('Restoring...');
+    setStatusKind('info');
     try {
       await pullFromCloud(activeProfile);
-      setStatus('Restore complete! Reload to see changes.');
+      setStatus('Restore complete. Reload to see changes.');
+      setStatusKind('success');
+      setTimeout(() => setStatus(null), 4000);
     } catch (err) {
-      setStatus(`Error: ${err instanceof Error ? err.message : 'unknown'}`);
+      setStatus(`Restore failed: ${err instanceof Error ? err.message : 'unknown error'}`);
+      setStatusKind('error');
+    } finally {
+      setBusy(false);
     }
-    setTimeout(() => setStatus(null), 3000);
   };
 
   return (
@@ -128,7 +145,8 @@ export function SyncSettingsPanel(): JSX.Element {
       <div className="flex gap-2">
         <button
           onClick={() => void handleBackup()}
-          className="flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+          disabled={busy}
+          className="flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50"
           style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
           data-testid="sync-backup-btn"
         >
@@ -138,7 +156,8 @@ export function SyncSettingsPanel(): JSX.Element {
         {!confirmRestore ? (
           <button
             onClick={() => setConfirmRestore(true)}
-            className="flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 border"
+            disabled={busy}
+            className="flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 border disabled:opacity-50"
             style={{ borderColor: 'var(--color-border)' }}
             data-testid="sync-restore-btn"
           >
@@ -148,7 +167,8 @@ export function SyncSettingsPanel(): JSX.Element {
         ) : (
           <button
             onClick={() => void handleRestore()}
-            className="flex-1 py-2 rounded-lg text-sm font-medium"
+            disabled={busy}
+            className="flex-1 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
             style={{ background: 'var(--color-error)', color: '#fff' }}
             data-testid="sync-confirm-restore-btn"
           >
@@ -164,9 +184,48 @@ export function SyncSettingsPanel(): JSX.Element {
       )}
 
       {status && (
-        <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }} data-testid="sync-status">
-          {status}
-        </p>
+        <div
+          className="flex items-start justify-between gap-2 p-2 rounded-lg"
+          style={{
+            background: statusKind === 'error'
+              ? 'rgba(239, 68, 68, 0.12)'
+              : statusKind === 'success'
+                ? 'rgba(34, 197, 94, 0.12)'
+                : 'rgba(6, 182, 212, 0.12)',
+            borderLeft: `3px solid ${
+              statusKind === 'error'
+                ? 'rgb(239, 68, 68)'
+                : statusKind === 'success'
+                  ? 'rgb(34, 197, 94)'
+                  : 'var(--color-accent)'
+            }`,
+          }}
+          data-testid="sync-status"
+        >
+          <p
+            className="text-sm font-medium"
+            style={{
+              color: statusKind === 'error'
+                ? 'rgb(239, 68, 68)'
+                : statusKind === 'success'
+                  ? 'rgb(34, 197, 94)'
+                  : 'var(--color-accent)',
+            }}
+          >
+            {status}
+          </p>
+          {statusKind === 'error' && (
+            <button
+              onClick={() => setStatus(null)}
+              className="text-xs px-2 py-0.5 rounded hover:opacity-70"
+              style={{ color: 'var(--color-text-muted)' }}
+              aria-label="Dismiss error"
+              data-testid="sync-status-dismiss"
+            >
+              Dismiss
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
