@@ -31,6 +31,7 @@ import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
 import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { CoachTrainPage } from './components/Coach/CoachTrainPage';
+import { CoachPage } from './components/Coach/CoachPage';
 import { TacticsPage } from './components/Tactics/TacticsPage';
 import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
 import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
@@ -149,6 +150,7 @@ export function App(): JSX.Element {
           <Route path="/openings/pro/:playerId/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
           <Route path="/openings/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
           {/* Coach */}
+          <Route path="/coach" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
           <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
           <Route path="/coach/session/:kind" element={<ErrorBoundary><CoachSessionPage /></ErrorBoundary>} />
