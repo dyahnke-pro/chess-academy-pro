@@ -1405,7 +1405,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   onShowBestLine={() => void handleToggleBestLine()}
                   showingBestLine={bestLineActive}
                   onPlayFromHere={handlePlayFromHere}
-                  playingFromHere={reviewState.mode === 'whatif'}
+                  // Button is only rendered inside the analysis /
+                  // guided_lesson branch (see the wrapping conditional
+                  // above), so `playingFromHere` is always false here —
+                  // once the user clicks Play the whole nav row is
+                  // replaced by the what-if UI.
+                  playingFromHere={false}
                 />
                 <KeyMomentNav
                   moves={moves}
