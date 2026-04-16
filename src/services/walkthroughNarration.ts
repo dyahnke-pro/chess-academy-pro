@@ -129,6 +129,14 @@ const GENERIC_ANNOTATION_PATTERNS: RegExp[] = [
   // annotations that merely contain the words "White plays" mid-sentence.
   /^\s*(?:White|Black)\s+plays\s+[A-Za-z][\w+#=!?-]*\.?\s*$/i,
 
+  // Bare-SAN annotations — "10. Nxd5", "Nxd5", "10...c5", "1. e4".
+  // Reported in the field: a Catalan subline showed literally "10. Nxd5"
+  // as the only narration. These are pure move stubs, not teaching
+  // content, so the LLM narrator should replace them.
+  /^\s*\d+\.+\s*(?:\.\.\.\s*)?[NBRQK]?[a-h]?[1-8]?[x-]?[a-h][1-8](?:=[NBRQ])?[+#!?]*\s*$/,
+  /^\s*[NBRQK]?[a-h]?[1-8]?[x-]?[a-h][1-8](?:=[NBRQ])?[+#!?]*\s*$/,
+  /^\s*O-O(?:-O)?[+#!?]*\s*$/,
+
   // ─── "Castling" filler — single-sentence stubs ──────────────────────
   /\bCastles to safety, connecting the rooks and tucking the king away\b/i,
   /\bGets the king to safety with castling, an essential step before the middlegame battle begins\b/i,
