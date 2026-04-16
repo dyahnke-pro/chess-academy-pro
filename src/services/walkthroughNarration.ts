@@ -40,7 +40,11 @@ const GENERIC_ANNOTATION_PATTERNS: RegExp[] = [
   /\bboth sides have chances\b/i,
   /\bThe position is sharp and requires precise play from this point forward\b/i,
   /\bThe key moment is approaching\b/i,
+  /\bThe critical moment is approaching\b/i,
+  /\bcritical moment in the trap\b/i,
+  /\bcritical moment in the opening( battle)?\b/i,
   /\bThis is a critical moment where precise play is essential to exploit the tactical opportunity\b/i,
+  /\bThis is a critical moment where precise play is essential\b/i,
 
   // ─── Bare move fragments ─────────────────────────────────────────────
   /^\s*[A-Za-z][\w+#=!?\-]*\s+by\s+(?:White|Black)\.\s*$/i,
@@ -77,11 +81,18 @@ const GENERIC_ANNOTATION_PATTERNS: RegExp[] = [
 
   // ─── "Trap warning" filler — appears throughout trap lines ──────────
   /\bdeveloping normally\.\s*The opponent may not see what'?s coming\b/i,
+  /\bopponent (?:may|might|won[\u2019']?t|will not|doesn[\u2019']?t)(?:\s+not)? (?:see|notice|spot|catch) what[\u2019']?s coming\b/i,
   /\bopponent may not see what'?s coming\b/i,
   /\bThis move looks reasonable but allows the trap to unfold\b/i,
   /\bThis looks natural,? but it walks into the trap\b/i,
   /\bThis is the problematic continuation you need to recognize\b/i,
-  /\bThe trap is being set up\s*[—–-]\s*watch the next few moves carefully\b/i,
+  // Loosened: the generator emits "The trap is being set up —
+  // watch the next few moves carefully" but the bare "trap is
+  // being set" also appears 577× across the corpus, usually as
+  // "the trap is being set in motion" / "… and the trap is being
+  // set". Catch the shorter stem so they all trigger the LLM
+  // replacement.
+  /\bthe trap is being set\b/i,
   /\b(?:White|Black) must be careful here\s*[—–-]\s*the position contains hidden dangers\b/i,
   /\bWatch out\s*[—–-]\s*a mistake here would be very costly\b/i,
   /^\s*Be alert\.?\s*$/i,
