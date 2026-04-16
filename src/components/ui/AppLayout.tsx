@@ -31,7 +31,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Home', icon: LayoutDashboard, glowColor: 'rgba(250, 204, 21, 0.6)', iconColor: 'rgb(250, 204, 21)', activeText: 'text-yellow-400', activeBg: 'bg-yellow-500/10' },
   { to: '/openings', label: 'Openings', icon: BookOpen, glowColor: 'rgba(6, 182, 212, 0.6)', iconColor: 'rgb(6, 182, 212)', activeText: 'text-cyan-400', activeBg: 'bg-cyan-500/10' },
-  { to: '/coach/play', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(251, 113, 133, 0.6)', iconColor: 'rgb(251, 113, 133)', activeText: 'text-rose-400', activeBg: 'bg-rose-500/10' },
+  { to: '/coach', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(251, 113, 133, 0.6)', iconColor: 'rgb(251, 113, 133)', activeText: 'text-rose-400', activeBg: 'bg-rose-500/10' },
   { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(52, 211, 153, 0.6)', iconColor: 'rgb(52, 211, 153)', activeText: 'text-emerald-400', activeBg: 'bg-emerald-500/10' },
   { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(139, 92, 246, 0.6)', iconColor: 'rgb(139, 92, 246)', activeText: 'text-violet-400', activeBg: 'bg-violet-500/10' },
   { to: '/kid', label: 'Kids Mode', icon: Baby, glowColor: 'rgba(251, 146, 60, 0.6)', iconColor: 'rgb(251, 146, 60)', activeText: 'text-orange-400', activeBg: 'bg-orange-500/10' },
@@ -141,6 +141,7 @@ export function AppLayout(): JSX.Element {
   // Hide FAB on pages with their own chat panel and when no profile
   const showCoachFab = activeProfile
     && location.pathname !== '/coach/play'
+    && location.pathname !== '/coach'
     && !location.pathname.startsWith('/play')
     && !coachDrawerOpen;
 
