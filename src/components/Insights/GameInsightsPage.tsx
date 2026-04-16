@@ -8,8 +8,9 @@ import {
   getMistakeInsights,
   getTacticInsights,
 } from '../../services/gameInsightsService';
-import { analyzeAllGames } from '../../services/gameAnalysisService';
-import { OverviewTab, type AnalysisProgress } from './OverviewTab';
+import { runBackgroundAnalysis } from '../../services/gameAnalysisService';
+import { useAppStore } from '../../stores/appStore';
+import { OverviewTab } from './OverviewTab';
 import { OpeningsTab } from './OpeningsTab';
 import { MistakesTab } from './MistakesTab';
 import { TacticsTab } from './TacticsTab';
@@ -39,8 +40,15 @@ export function GameInsightsPage(): JSX.Element {
   const [openings, setOpenings] = useState<OpeningInsights | null>(null);
   const [mistakes, setMistakes] = useState<MistakeInsights | null>(null);
   const [tactics, setTactics] = useState<TacticInsights | null>(null);
-  const [analysisProgress, setAnalysisProgress] = useState<AnalysisProgress | null>(null);
-  const analysisRunning = useRef(false);
+
+  // Subscribe to the global background-analysis store so the CTA on the
+  // Overview tab reflects live progress AND so navigating to another
+  // tab (Openings, Tactics, Weaknesses) doesn't kill the analysis or
+  // orphan its progress — runBackgroundAnalysis pushes into this store,
+  // and AppLayout renders a persistent top-of-app banner from it.
+  const bgAnalysisRunning = useAppStore((s) => s.backgroundAnalysisRunning);
+  const bgAnalysisProgress = useAppStore((s) => s.backgroundAnalysisProgress);
+  const prevBgRunning = useRef(false);
 
   async function loadAll(): Promise<void> {
     const [ov, op, mi, ta] = await Promise.all([
@@ -59,6 +67,15 @@ export function GameInsightsPage(): JSX.Element {
     void loadAll().finally(() => setLoading(false));
   }, []);
 
+  // When the global background analysis finishes, reload insights so the
+  // freshly-populated classifications feed into the accuracy stats.
+  useEffect(() => {
+    if (prevBgRunning.current && !bgAnalysisRunning) {
+      void loadAll();
+    }
+    prevBgRunning.current = bgAnalysisRunning;
+  }, [bgAnalysisRunning]);
+
   async function handleRefresh(): Promise<void> {
     if (refreshing) return;
     setRefreshing(true);
@@ -67,24 +84,13 @@ export function GameInsightsPage(): JSX.Element {
   }
 
   function handleAnalyze(): void {
-    if (analysisRunning.current) return;
-    analysisRunning.current = true;
-    setAnalysisProgress({ current: 0, total: overview?.gamesNeedingAnalysis ?? 0, phase: 'analyzing' });
-    void analyzeAllGames((p) => {
-      setAnalysisProgress({
-        current: p.currentGame,
-        total: p.totalGames,
-        phase: p.phase,
-      });
-    })
-      .then(() => loadAll())
-      .catch((err: unknown) => {
-        console.warn('[GameInsightsPage] analyzeAllGames failed', err);
-      })
-      .finally(() => {
-        analysisRunning.current = false;
-        setAnalysisProgress(null);
-      });
+    if (bgAnalysisRunning) return;
+    // runBackgroundAnalysis is fire-and-forget: it owns the Stockfish
+    // worker pool and reports progress into the global Zustand store,
+    // so the yellow top-of-app banner shows "Analyzing 3/12 — ..."
+    // across every tab. The useEffect above reloads insights when the
+    // run completes.
+    runBackgroundAnalysis();
   }
 
   function handleSearch(e: React.SyntheticEvent): void {
@@ -209,7 +215,8 @@ export function GameInsightsPage(): JSX.Element {
           <OverviewTab
             data={overview}
             onAnalyze={handleAnalyze}
-            analysisProgress={analysisProgress}
+            isAnalyzing={bgAnalysisRunning}
+            analysisLabel={bgAnalysisProgress}
           />
         )}
         {tab === 'openings' && openings && <OpeningsTab data={openings} />}

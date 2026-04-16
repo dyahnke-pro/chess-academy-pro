@@ -5,23 +5,23 @@ import { InsightsStackedBar } from './InsightsStackedBar';
 import { StrengthsCard } from './StrengthsCard';
 import type { OverviewInsights } from '../../types';
 
-export interface AnalysisProgress {
-  current: number;
-  total: number;
-  phase: 'analyzing' | 'computing_weaknesses' | 'done';
-}
-
 interface OverviewTabProps {
   data: OverviewInsights;
-  /** Fired when the user taps "Analyze Now". Page-level handler runs the
-   *  Stockfish batch and pipes progress via `analysisProgress`. */
+  /** Fired when the user taps "Analyze Now". The page-level handler
+   *  starts the global background analysis (see GameInsightsPage). */
   onAnalyze?: () => void;
-  /** Live progress while a batch is running. When set, the CTA renders as
-   *  a progress bar instead of a button. */
-  analysisProgress?: AnalysisProgress | null;
+  /** True while the global background analysis is running. When set,
+   *  the CTA button disables and shows a muted progress label; live
+   *  counts are rendered by the app-level banner so nothing gets out
+   *  of sync when the user navigates to another tab. */
+  isAnalyzing?: boolean;
+  /** Human-readable progress label from the global store
+   *  (e.g. "3/12 — Smith vs Jones"). Displayed inline on the CTA
+   *  button so the user sees it without leaving the Insights page. */
+  analysisLabel?: string | null;
 }
 
-export function OverviewTab({ data, onAnalyze, analysisProgress }: OverviewTabProps): JSX.Element {
+export function OverviewTab({ data, onAnalyze, isAnalyzing, analysisLabel }: OverviewTabProps): JSX.Element {
   const wldData = [
     { name: 'Wins', value: data.wins, color: 'var(--color-success)' },
     { name: 'Losses', value: data.losses, color: 'var(--color-error)' },
@@ -47,12 +47,13 @@ export function OverviewTab({ data, onAnalyze, analysisProgress }: OverviewTabPr
 
   return (
     <div data-testid="overview-tab">
-      {data.gamesNeedingAnalysis > 0 && (
+      {(data.gamesNeedingAnalysis > 0 || isAnalyzing) && (
         <AnalyzeCta
           gamesNeedingAnalysis={data.gamesNeedingAnalysis}
           analyzedGameCount={data.analyzedGameCount}
           onAnalyze={onAnalyze}
-          progress={analysisProgress}
+          isAnalyzing={isAnalyzing ?? false}
+          analysisLabel={analysisLabel ?? null}
         />
       )}
 
@@ -156,28 +157,25 @@ function AnalyzeCta({
   gamesNeedingAnalysis,
   analyzedGameCount,
   onAnalyze,
-  progress,
+  isAnalyzing,
+  analysisLabel,
 }: {
   gamesNeedingAnalysis: number;
   analyzedGameCount: number;
   onAnalyze?: () => void;
-  progress?: AnalysisProgress | null;
+  isAnalyzing: boolean;
+  analysisLabel: string | null;
 }): JSX.Element {
   const totalToProcess = gamesNeedingAnalysis;
-  const isRunning = progress != null && progress.phase !== 'done';
-  const pct = isRunning && progress.total > 0
-    ? Math.min(100, Math.round((progress.current / progress.total) * 100))
-    : 0;
 
-  const heading =
-    analyzedGameCount === 0
+  const heading = isAnalyzing
+    ? 'Analyzing games in background'
+    : analyzedGameCount === 0
       ? `${gamesNeedingAnalysis} game${gamesNeedingAnalysis === 1 ? '' : 's'} not analyzed yet`
       : `${gamesNeedingAnalysis} of ${analyzedGameCount + gamesNeedingAnalysis} games not analyzed`;
 
-  const body = isRunning
-    ? progress.phase === 'computing_weaknesses'
-      ? 'Computing weakness profile…'
-      : `Analyzing ${progress.current} / ${progress.total}…`
+  const body = isAnalyzing
+    ? 'You can switch tabs — progress continues in the top banner. Stats will update when it finishes.'
     : 'Stockfish needs to score every move before accuracy and move-quality stats can populate. Your data stays on-device.';
 
   return (
@@ -203,29 +201,22 @@ function AnalyzeCta({
           <div className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
             {body}
           </div>
-          {isRunning ? (
-            <div
-              className="mt-3 h-1.5 rounded-full overflow-hidden"
-              style={{ background: 'color-mix(in srgb, var(--color-warning) 18%, transparent)' }}
-            >
-              <div
-                className="h-full transition-[width] duration-200"
-                style={{ width: `${pct}%`, background: 'var(--color-warning)' }}
-                data-testid="analyze-progress-bar"
-              />
-            </div>
-          ) : (
-            <button
-              onClick={onAnalyze}
-              disabled={!onAnalyze}
-              className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold disabled:opacity-50"
-              style={{ background: 'var(--color-warning)', color: '#000' }}
-              data-testid="analyze-now-btn"
-            >
-              <Loader2 size={12} className="hidden" />
-              Analyze {totalToProcess === 1 ? 'this game' : `all ${totalToProcess} games`} now
-            </button>
-          )}
+          <button
+            onClick={onAnalyze}
+            disabled={isAnalyzing || !onAnalyze}
+            className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
+            style={{ background: 'var(--color-warning)', color: '#000' }}
+            data-testid="analyze-now-btn"
+          >
+            {isAnalyzing ? (
+              <>
+                <Loader2 size={12} className="animate-spin" />
+                {analysisLabel ? `Analyzing ${analysisLabel}` : 'Analyzing…'}
+              </>
+            ) : (
+              <>Analyze {totalToProcess === 1 ? 'this game' : `all ${totalToProcess} games`} now</>
+            )}
+          </button>
         </div>
       </div>
     </div>
