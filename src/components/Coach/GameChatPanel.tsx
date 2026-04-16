@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { buildGameChatMessages, getGameSystemPromptAddition, parseAllTags } from '../../services/coachChatService';
+import { fetchRelevantGames } from '../../services/gameContextService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -279,7 +280,29 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       speechBufferRef.current = '';
 
       const formattedMessages = buildGameChatMessages(updatedMessages, gameContext, activeProfile);
-      const systemAddition = getGameSystemPromptAddition();
+      const baseAddition = getGameSystemPromptAddition();
+
+      // Best-effort: surface the student's own past games that match the
+      // opening / topic in their message so the coach can cite them
+      // concretely ("you lost the last two Catalans as black — both
+      // times you traded the dark-squared bishop early"). Capped at 5
+      // games; returns empty and does nothing when no match.
+      let relevantGamesBlock = '';
+      try {
+        const relevant = await fetchRelevantGames({
+          query: text,
+          fen,
+          username: activeProfile.preferences.chessComUsername
+            ?? activeProfile.preferences.lichessUsername
+            ?? activeProfile.name,
+        });
+        relevantGamesBlock = relevant.promptBlock;
+      } catch (err: unknown) {
+        console.warn('[GameChatPanel] fetchRelevantGames failed', err);
+      }
+      const systemAddition = relevantGamesBlock
+        ? `${baseAddition}\n\n${relevantGamesBlock}`
+        : baseAddition;
 
       let fullResponse = '';
 
