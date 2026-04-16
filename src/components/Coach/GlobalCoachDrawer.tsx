@@ -211,9 +211,21 @@ export function GlobalCoachDrawer(): JSX.Element | null {
         </div>
       )}
 
-      {/* Preview board for `show_position` annotations (non-interactive) */}
+      {/* Preview board for `show_position` annotations (non-interactive).
+          Includes a dismiss button because the coach can emit a
+          show_position without a matching `clear`, leaving a stuck board
+          that the user can't get rid of — reported in the field. */}
       {showPreviewFen && !minimized && (
-        <div className="px-4 py-2 shrink-0">
+        <div className="relative px-4 py-2 shrink-0">
+          <button
+            onClick={() => setTemporaryFen(null)}
+            className="absolute top-2 right-4 z-10 p-1 rounded-full hover:opacity-80"
+            style={{ background: 'var(--color-bg)', color: 'var(--color-text-muted)' }}
+            aria-label="Dismiss preview board"
+            data-testid="dismiss-preview-board"
+          >
+            <X size={14} />
+          </button>
           <div className="max-w-[200px] mx-auto">
             <ChessBoard
               key={`drawer-preview-${temporaryFen ?? ''}`}

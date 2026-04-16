@@ -150,14 +150,29 @@ export function parseCoachIntent(query: string): CoachIntent {
   }
 
   // 3. "Play X against me" / "play against me with X" / "play the Stafford"
-  //    Also covers "challenge me", "let's play".
+  //    Also covers "challenge me", "let's play", "start a game",
+  //    "wanna play", "give me a game", "play a match", etc.
+  //    Order matters: more specific patterns first so the subject
+  //    capture doesn't swallow the wrong text.
   const playMatch =
     lower.match(/play\s+(?:the\s+)?(.+?)\s+against\s+me/) ||
     lower.match(/play\s+against\s+me(?:\s+with\s+(?:the\s+)?(.+))?/) ||
     // "let's play [,.]? [subject]" — allow comma/period between "play" and
     // the rest so "let's play, I'll take black" still routes.
     lower.match(/let'?s\s+play\b[\s,.]*(?:the\s+)?(.+)?/) ||
-    lower.match(/challenge\s+me(?:\s+with\s+(?:the\s+)?(.+))?/);
+    lower.match(/challenge\s+me(?:\s+with\s+(?:the\s+)?(.+))?/) ||
+    // "start a game" / "start game" / "start a match"
+    lower.match(/\bstart\s+(?:a\s+)?(?:new\s+)?(?:game|match)(?:\s+(?:with|against)\s+(?:the\s+)?(.+))?/) ||
+    // "play a game" / "play a match" / "play me" with optional subject
+    lower.match(/\bplay\s+(?:a\s+)?(?:new\s+)?(?:game|match)(?:\s+(?:with|against)\s+(?:the\s+)?(.+))?/) ||
+    // "want to play" / "wanna play" / "i'd like to play" — optional subject
+    lower.match(/\b(?:want\s+to|wanna|would\s+like\s+to|i'?d\s+like\s+to|can\s+we)\s+play\b(?:\s+(?:the\s+)?(.+))?/) ||
+    // "i'll play" — same idea, e.g. "i'll play the sicilian"
+    lower.match(/\bi'?ll\s+play\b(?:\s+(?:the\s+)?(.+))?/) ||
+    // "give me a game" / "give me a match"
+    lower.match(/\bgive\s+me\s+(?:a\s+)?(?:game|match)(?:\s+(?:with|against)\s+(?:the\s+)?(.+))?/) ||
+    // "ready to play" / "ready for a game"
+    lower.match(/\bready\s+(?:to\s+play|for\s+(?:a\s+)?(?:game|match))\b/);
   if (playMatch) {
     const rawSubject = playMatch[1] ? cleanSubject(playMatch[1]) : '';
     const side = extractSide(lower);

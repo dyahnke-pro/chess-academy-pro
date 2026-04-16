@@ -67,6 +67,50 @@ describe('parseCoachIntent — play-against', () => {
     const hard = parseCoachIntent("Let's play the Ruy Lopez, hard mode");
     expect(hard.difficulty).toBe('hard');
   });
+
+  // Natural phrasings that previously fell through to `qa` and made the
+  // coach chat conversationally ("Ready when you are!") instead of
+  // launching /coach/session/play-against.
+  describe('natural game-start phrasings', () => {
+    const PLAY_PHRASES: readonly string[] = [
+      'start a game',
+      'Start a new game',
+      'Start game',
+      'start a match',
+      'play a game',
+      'Play a match',
+      'play a new game',
+      'i want to play',
+      'I wanna play',
+      "i'd like to play",
+      'can we play',
+      "i'll play",
+      'give me a game',
+      'Give me a match',
+      'ready to play',
+      'ready for a game',
+      'Ready for a match',
+    ];
+
+    for (const phrase of PLAY_PHRASES) {
+      it(`routes "${phrase}" to play-against`, () => {
+        const intent = parseCoachIntent(phrase);
+        expect(intent.kind).toBe('play-against');
+      });
+    }
+
+    it('still extracts subject from "I want to play the Sicilian"', () => {
+      const intent = parseCoachIntent('I want to play the Sicilian');
+      expect(intent.kind).toBe('play-against');
+      expect(intent.subject?.toLowerCase()).toContain('sicilian');
+    });
+
+    it('still extracts subject from "start a game with the London"', () => {
+      const intent = parseCoachIntent('start a game with the London');
+      expect(intent.kind).toBe('play-against');
+      expect(intent.subject?.toLowerCase()).toContain('london');
+    });
+  });
 });
 
 describe('parseCoachIntent — puzzles', () => {
