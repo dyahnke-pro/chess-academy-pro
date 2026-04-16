@@ -6,7 +6,6 @@ import { voiceService } from '../../services/voiceService';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveNavigationControls } from './MoveNavigationControls';
 import { MoveListPanel } from './MoveListPanel';
-import { EvalGraph } from './EvalGraph';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
 import { KeyMomentNav } from './KeyMomentNav';
 import { MoveActionButtons } from './MoveActionButtons';
@@ -504,6 +503,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const navigateMove = useCallback((direction: 'first' | 'prev' | 'next' | 'last') => {
     voiceService.stop();
+    // Cancel any pending auto-advance timers + halt auto-review / guided
+    // playback. Without this, a manual click while an auto-timer is in
+    // flight produces a visible "two pieces moved" jump (the user's +1
+    // followed by the timer's +1), which was the reported review-mode
+    // bug.
+    if (autoReviewTimerRef.current) {
+      clearTimeout(autoReviewTimerRef.current);
+      autoReviewTimerRef.current = null;
+    }
+    if (guidedTimerRef.current) {
+      clearTimeout(guidedTimerRef.current);
+      guidedTimerRef.current = null;
+    }
+    setAutoReviewActive(false);
+    setAutoReviewPaused(false);
+    setAwaitingAiNarration(false);
     setReviewState((prev: ReviewState) => {
       let newIndex = prev.currentMoveIndex;
       switch (direction) {
@@ -1307,15 +1322,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           )}
         </div>
 
-        {/* Compact Eval Graph strip — fixed height, never pushes board */}
-        <div className="px-2 py-0.5 shrink-0">
-          <EvalGraph
-            moves={moves}
-            currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
-            onMoveClick={handleMoveClick}
-            size="compact"
-          />
-        </div>
+        {/* Eval graph removed — the vertical eval bar on the board side
+            (showEvalBar prop on ChessBoard) carries the same information
+            without taking screen real estate above the board. */}
 
         {/* Opponent info bar */}
         <div className="px-2 shrink-0">
