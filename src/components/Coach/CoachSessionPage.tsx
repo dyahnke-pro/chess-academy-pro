@@ -50,6 +50,7 @@ import { resolveConfig } from '../../services/coachPlaySession';
 import { getPlayerRating } from '../../services/playerRatingService';
 import { CoachPlaySessionView } from './CoachPlaySessionView';
 import { ExplainPositionSessionView } from './ExplainPositionSessionView';
+import { CoachPracticeSessionView } from './CoachPracticeSessionView';
 import { DynamicCoachSession } from './DynamicCoachSession';
 import type { WalkthroughSession } from '../../types/walkthrough';
 import type { CoachDifficulty } from '../../services/coachAgent';
@@ -60,7 +61,8 @@ type SessionKind =
   | 'play-against'
   | 'walkthrough'
   | 'puzzle'
-  | 'explain-position';
+  | 'explain-position'
+  | 'practice';
 
 export function CoachSessionPage(): JSX.Element {
   const { kind } = useParams<{ kind: SessionKind }>();
@@ -152,6 +154,14 @@ export function CoachSessionPage(): JSX.Element {
           orientation={orientation}
           onExit={goBack}
         />
+      </DynamicCoachSession>
+    );
+  }
+
+  if (kind === 'practice') {
+    return (
+      <DynamicCoachSession title="Practice position" onExit={goBack}>
+        <CoachPracticeSessionView onExit={goBack} />
       </DynamicCoachSession>
     );
   }

@@ -1,6 +1,7 @@
 import { useCallback, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, Minus } from 'lucide-react';
+import { X, Minus, Swords } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useIsMobile } from '../../hooks/useIsMobile';
@@ -8,7 +9,6 @@ import { MobileChatDrawer } from './MobileChatDrawer';
 import { GameChatPanel } from './GameChatPanel';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { BoardAnnotationCommand, BoardArrow, ChatMessage } from '../../types';
-import type { MoveResult } from '../../hooks/useChessGame';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -19,6 +19,7 @@ const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
  */
 export function GlobalCoachDrawer(): JSX.Element | null {
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const isOpen = useAppStore((s) => s.coachDrawerOpen);
   const setOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const boardCtx = useAppStore((s) => s.globalBoardContext);
@@ -35,17 +36,13 @@ export function GlobalCoachDrawer(): JSX.Element | null {
 
   const {
     practicePosition,
-    practiceAttempts,
-    handlePracticeMove: evaluatePracticeMove,
     exitPractice,
     setPracticeFromAnnotation,
   } = usePracticePosition();
 
-  // Inject coach messages into the chat panel
+  // Inject coach messages into the chat panel (reserved for future use by
+  // other annotation types; keep the ref even if no current caller uses it).
   const chatRef = useRef<{ injectAssistantMessage: (text: string) => void } | null>(null);
-  const coachSay = useCallback((text: string) => {
-    chatRef.current?.injectAssistantMessage(text);
-  }, []);
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -95,14 +92,6 @@ export function GlobalCoachDrawer(): JSX.Element | null {
     }
   }, [handleClear, setPracticeFromAnnotation, setGlobalPractice]);
 
-  const handlePracticeMove = useCallback(async (moveResult: MoveResult) => {
-    const result = await evaluatePracticeMove(moveResult);
-    coachSay(result.message);
-    if (result.type === 'correct' || result.type === 'reveal') {
-      setGlobalPractice(null);
-    }
-  }, [evaluatePracticeMove, coachSay, setGlobalPractice]);
-
   const handleInitialPromptSent = useCallback(() => {
     setInitialMessage(null);
   }, [setInitialMessage]);
@@ -120,8 +109,17 @@ export function GlobalCoachDrawer(): JSX.Element | null {
   const ctxLastMove = boardCtx?.lastMove ?? undefined;
   const ctxHistory = boardCtx?.history ?? undefined;
 
-  // Show inline board when there's a practice position but no external board context
-  const showInlineBoard = (practicePosition || temporaryFen) && !boardCtx;
+  // Show a small show-position preview inline only for `show_position` tags
+  // (practice positions now route to a full-screen view instead).
+  const showPreviewFen = temporaryFen && !practicePosition && !boardCtx;
+
+  const startPractice = useCallback(() => {
+    // Drawer closes so the full-screen view owns the viewport. The
+    // practice position lives in the global store; the session page
+    // reads it on mount.
+    setOpen(false);
+    void navigate('/coach/session/practice');
+  }, [navigate, setOpen]);
 
   const drawerContent = (
     <>
@@ -174,35 +172,56 @@ export function GlobalCoachDrawer(): JSX.Element | null {
         </div>
       </div>
 
-      {/* Practice position banner */}
+      {/* Practice position — prominent CTA that routes to full-screen board */}
       {practicePosition && !minimized && (
         <div
-          className="flex items-center justify-between px-4 py-2 text-sm"
-          style={{ background: 'rgba(34, 197, 94, 0.1)', color: 'var(--color-text)' }}
+          className="flex items-center justify-between gap-3 px-4 py-3 shrink-0"
+          style={{
+            background: 'rgba(34, 197, 94, 0.12)',
+            borderBottom: '1px solid rgba(34, 197, 94, 0.25)',
+          }}
+          data-testid="practice-start-cta"
         >
-          <span>Practice: {practicePosition.label}</span>
+          <div className="flex-1 min-w-0">
+            <div
+              className="text-[10px] uppercase tracking-wide font-semibold"
+              style={{ color: 'rgb(34, 197, 94)' }}
+            >
+              Practice
+            </div>
+            <div className="text-sm truncate" style={{ color: 'var(--color-text)' }}>
+              {practicePosition.label}
+            </div>
+          </div>
+          <button
+            onClick={startPractice}
+            className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium"
+            style={{ background: 'rgb(34, 197, 94)', color: 'white' }}
+            data-testid="practice-start-button"
+          >
+            <Swords size={14} /> Start
+          </button>
           <button
             onClick={() => { exitPractice(); setGlobalPractice(null); }}
-            className="text-xs underline"
+            className="shrink-0 text-xs underline"
             style={{ color: 'var(--color-text-muted)' }}
           >
-            Exit
+            Dismiss
           </button>
         </div>
       )}
 
-      {/* Inline mini board (shown when no external board + practice/position active) */}
-      {showInlineBoard && !minimized && (
+      {/* Preview board for `show_position` annotations (non-interactive) */}
+      {showPreviewFen && !minimized && (
         <div className="px-4 py-2 shrink-0">
           <div className="max-w-[200px] mx-auto">
             <ChessBoard
-              key={`drawer-${practicePosition?.fen ?? temporaryFen ?? ''}-${practiceAttempts}`}
-              initialFen={practicePosition?.fen ?? temporaryFen ?? START_FEN}
-              interactive={!!practicePosition}
+              key={`drawer-preview-${temporaryFen ?? ''}`}
+              initialFen={temporaryFen ?? START_FEN}
+              interactive={false}
               showFlipButton={false}
               showUndoButton={false}
               showResetButton={false}
-              onMove={practicePosition ? (m: MoveResult) => void handlePracticeMove(m) : undefined}
               arrows={annotationArrows.length > 0 ? annotationArrows : undefined}
             />
           </div>

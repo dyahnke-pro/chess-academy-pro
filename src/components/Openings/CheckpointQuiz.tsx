@@ -1,8 +1,8 @@
-import { useState, useCallback, useRef } from 'react';
-import { Chess, type Square } from 'chess.js';
-import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
+import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CheckCircle, XCircle, HelpCircle, Swords } from 'lucide-react';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { useAppStore } from '../../stores/appStore';
 import type { CheckpointQuizItem } from '../../types';
 
 interface CheckpointQuizProps {
@@ -14,83 +14,32 @@ interface CheckpointQuizProps {
 
 type QuizState = 'waiting' | 'correct' | 'incorrect';
 
-function checkMoveCorrect(san: string, from: string, to: string, lan: string, correctMove: string): boolean {
-  return san === correctMove
-    || `${from}${to}` === correctMove
-    || lan === correctMove;
-}
-
+/**
+ * CheckpointQuiz — "Test Yourself" checkpoint between opening sections.
+ *
+ * Two flavours:
+ * - Plan quizzes (multiple-choice strategic question) stay inline — no
+ *   board interaction needed, just pick A/B/C.
+ * - Move quizzes now launch the full-screen practice session instead of
+ *   trying to cram interactive chess onto a 256px thumbnail. The quiz
+ *   renders a static preview of the position plus a prominent "Practice
+ *   on full board" CTA that routes to `/coach/session/practice`. The
+ *   practice session view validates moves via Stockfish (same scoring
+ *   logic the coach uses for `[BOARD: practice:...]` prompts).
+ */
 export function CheckpointQuiz({
   quiz,
   boardOrientation,
   onComplete,
   onPlayPosition,
 }: CheckpointQuizProps): JSX.Element {
+  const navigate = useNavigate();
+  const setGlobalPractice = useAppStore((s) => s.setGlobalPracticePosition);
   const [state, setState] = useState<QuizState>('waiting');
   const [showHint, setShowHint] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
-  const selectedSquareRef = useRef<string | null>(null);
 
   const isPlanQuiz = quiz.type === 'plan' && quiz.choices && quiz.correctIndex !== undefined;
-
-  const tryMove = useCallback(
-    (from: string, to: string): boolean => {
-      if (state !== 'waiting' || isPlanQuiz) return false;
-
-      const chess = new Chess(quiz.fen);
-      const move = chess.move({ from, to, promotion: 'q' });
-
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- defensive guard
-      if (!move) return false;
-
-      const isCorrect = checkMoveCorrect(move.san, move.from, move.to, move.lan, quiz.correctMove ?? '');
-      setState(isCorrect ? 'correct' : 'incorrect');
-      setTimeout(() => onComplete(isCorrect), 1500);
-      return true;
-    },
-    [quiz, state, onComplete, isPlanQuiz],
-  );
-
-  const handleDrop = useCallback(
-    ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }): boolean => {
-      if (!targetSquare) return false;
-      selectedSquareRef.current = null;
-      return tryMove(sourceSquare, targetSquare);
-    },
-    [tryMove],
-  );
-
-  const handleSquareClick = useCallback(
-    ({ square }: { square: string }): void => {
-      if (state !== 'waiting' || isPlanQuiz) return;
-
-      const chess = new Chess(quiz.fen);
-      const sideToMove = chess.turn(); // 'w' or 'b'
-
-      if (selectedSquareRef.current === null) {
-        // First click — select the piece (only allow side to move)
-        const piece = chess.get(square as Square);
-        if (piece && piece.color === sideToMove) {
-          selectedSquareRef.current = square;
-        }
-      } else {
-        // Second click — try to move
-        const from = selectedSquareRef.current;
-        selectedSquareRef.current = null;
-        if (from === square) return; // clicked same square, deselect
-
-        // If clicking another own piece, re-select it instead
-        const piece = chess.get(square as Square);
-        if (piece && piece.color === sideToMove) {
-          selectedSquareRef.current = square;
-          return;
-        }
-
-        tryMove(from, square);
-      }
-    },
-    [state, isPlanQuiz, quiz.fen, tryMove],
-  );
 
   const handleChoiceSelect = useCallback(
     (index: number): void => {
@@ -103,8 +52,24 @@ export function CheckpointQuiz({
     [state, isPlanQuiz, quiz.correctIndex, onComplete],
   );
 
+  const handlePracticeFullBoard = useCallback((): void => {
+    // Route to the full-screen practice view with this position. The
+    // practice session page reads globalPracticePosition on mount and
+    // evaluates moves via Stockfish. Advance the quiz optimistically so
+    // the openings flow continues when the user returns.
+    setGlobalPractice({
+      fen: quiz.fen,
+      label: quiz.concept ? `Test Yourself: ${quiz.concept}` : 'Test Yourself',
+    });
+    onComplete(true);
+    void navigate('/coach/session/practice');
+  }, [navigate, onComplete, quiz.concept, quiz.fen, setGlobalPractice]);
+
   return (
-    <div className="bg-theme-surface rounded-xl p-4 mb-4 border-2 border-purple-500/30" data-testid="checkpoint-quiz">
+    <div
+      className="bg-theme-surface rounded-xl p-4 mb-4 border-2 border-purple-500/30"
+      data-testid="checkpoint-quiz"
+    >
       <div className="flex items-center gap-2 mb-3">
         <HelpCircle size={14} className="text-purple-400" />
         <h3 className="text-sm font-semibold text-theme-text">
@@ -117,17 +82,30 @@ export function CheckpointQuiz({
         {isPlanQuiz ? quiz.question : 'Find the best move in this position.'}
       </p>
 
+      {/* Plan quizzes keep their inline board preview (multiple choice
+          below). Move quizzes show the same preview but launch the full
+          screen board for interaction. */}
       <div className="flex justify-center mb-3">
-        <BoardVoiceOverlay fen={quiz.fen} className="w-64 h-64">
+        <div className="w-64 h-64">
           <ConsistentChessboard
             fen={quiz.fen}
             boardOrientation={boardOrientation}
-            interactive={state === 'waiting' && !isPlanQuiz}
-            onPieceDrop={handleDrop}
-            onSquareClick={handleSquareClick}
+            interactive={false}
           />
-        </BoardVoiceOverlay>
+        </div>
       </div>
+
+      {/* Move quiz: prominent CTA to open the full-screen practice board */}
+      {!isPlanQuiz && state === 'waiting' && (
+        <button
+          onClick={handlePracticeFullBoard}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-colors mb-3"
+          style={{ background: 'rgb(168, 85, 247)', color: 'white' }}
+          data-testid="quiz-practice-full-board"
+        >
+          <Swords size={16} /> Practice on full board
+        </button>
+      )}
 
       {/* Multiple choice answers for plan quizzes */}
       {isPlanQuiz && quiz.choices && (
@@ -176,24 +154,10 @@ export function CheckpointQuiz({
         </p>
       )}
 
-      {state === 'correct' && !isPlanQuiz && (
-        <div className="flex items-center gap-2 text-green-400" data-testid="quiz-correct">
-          <CheckCircle size={16} />
-          <span className="text-sm font-medium">Correct! {quiz.correctMove} is the right move.</span>
-        </div>
-      )}
-
       {state === 'correct' && isPlanQuiz && (
         <div className="flex items-center gap-2 text-green-400" data-testid="quiz-correct">
           <CheckCircle size={16} />
           <span className="text-sm font-medium">Correct! {quiz.hint}</span>
-        </div>
-      )}
-
-      {state === 'incorrect' && !isPlanQuiz && (
-        <div className="flex items-center gap-2 text-red-400" data-testid="quiz-incorrect">
-          <XCircle size={16} />
-          <span className="text-sm font-medium">The best move was {quiz.correctMove}. {quiz.hint}</span>
         </div>
       )}
 
