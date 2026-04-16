@@ -5,6 +5,7 @@ import { calculateAccuracy, getClassificationCounts } from './accuracyService';
 import { getPhaseBreakdown } from './gamePhaseService';
 import { detectMissedTactics } from './missedTacticService';
 import { getMistakePuzzleStats } from './mistakePuzzleService';
+import { gameNeedsAnalysis } from './gameAnalysisService';
 import type {
   GameRecord,
   MoveClassificationCounts,
@@ -127,6 +128,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
       bestMoveAgreement: 0,
       phaseAccuracy: [], accuracyWhite: 0, accuracyBlack: 0,
       strengths: [],
+      analyzedGameCount: 0, gamesNeedingAnalysis: 0,
     };
   }
 
@@ -180,8 +182,11 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
       }
     }
 
-    // Annotations-based stats
-    if (game.annotations && game.annotations.length > 0) {
+    // Annotations-based stats. Only games with FULL Stockfish analysis
+    // contribute — sparse `detectBlunders()` annotations on import would
+    // otherwise zero out every average (and produce a misleading "zero
+    // blunders" strength) because most moves have no classification.
+    if (!gameNeedsAnalysis(game)) {
       const moves = reconstructMovesFromGame(game);
       if (moves.length === 0) continue;
 
@@ -265,14 +270,21 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
   if (winRateWhite >= 60) strengths.push(`${winRateWhite}% win rate as White`);
   if (winRateBlack >= 60) strengths.push(`${winRateBlack}% win rate as Black`);
 
-  // Count games with zero blunders
+  // Count games with zero blunders. Only fully-analyzed games qualify —
+  // previously this counted games with sparse annotations that simply
+  // hadn't been analyzed, producing a false "zero blunders" strength.
   let zeroBlunderGames = 0;
+  let analyzedGameCount = 0;
+  let gamesNeedingAnalysis = 0;
   for (const { game, playerColor } of playerGames) {
-    if (game.annotations && game.annotations.length > 0) {
-      const moves = reconstructMovesFromGame(game);
-      const counts = getClassificationCounts(moves, playerColor);
-      if (counts.blunder === 0) zeroBlunderGames++;
+    if (gameNeedsAnalysis(game)) {
+      gamesNeedingAnalysis++;
+      continue;
     }
+    analyzedGameCount++;
+    const moves = reconstructMovesFromGame(game);
+    const counts = getClassificationCounts(moves, playerColor);
+    if (counts.blunder === 0) zeroBlunderGames++;
   }
   if (zeroBlunderGames >= 3) strengths.push(`${zeroBlunderGames} games with zero blunders`);
 
@@ -287,6 +299,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     bestMoveAgreement,
     phaseAccuracy, accuracyWhite, accuracyBlack,
     strengths,
+    analyzedGameCount, gamesNeedingAnalysis,
   };
 }
 

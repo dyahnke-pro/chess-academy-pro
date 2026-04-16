@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Search, Sparkles } from 'lucide-react';
@@ -8,7 +8,8 @@ import {
   getMistakeInsights,
   getTacticInsights,
 } from '../../services/gameInsightsService';
-import { OverviewTab } from './OverviewTab';
+import { analyzeAllGames } from '../../services/gameAnalysisService';
+import { OverviewTab, type AnalysisProgress } from './OverviewTab';
 import { OpeningsTab } from './OpeningsTab';
 import { MistakesTab } from './MistakesTab';
 import { TacticsTab } from './TacticsTab';
@@ -38,6 +39,8 @@ export function GameInsightsPage(): JSX.Element {
   const [openings, setOpenings] = useState<OpeningInsights | null>(null);
   const [mistakes, setMistakes] = useState<MistakeInsights | null>(null);
   const [tactics, setTactics] = useState<TacticInsights | null>(null);
+  const [analysisProgress, setAnalysisProgress] = useState<AnalysisProgress | null>(null);
+  const analysisRunning = useRef(false);
 
   async function loadAll(): Promise<void> {
     const [ov, op, mi, ta] = await Promise.all([
@@ -61,6 +64,27 @@ export function GameInsightsPage(): JSX.Element {
     setRefreshing(true);
     await loadAll();
     setRefreshing(false);
+  }
+
+  function handleAnalyze(): void {
+    if (analysisRunning.current) return;
+    analysisRunning.current = true;
+    setAnalysisProgress({ current: 0, total: overview?.gamesNeedingAnalysis ?? 0, phase: 'analyzing' });
+    void analyzeAllGames((p) => {
+      setAnalysisProgress({
+        current: p.currentGame,
+        total: p.totalGames,
+        phase: p.phase,
+      });
+    })
+      .then(() => loadAll())
+      .catch((err: unknown) => {
+        console.warn('[GameInsightsPage] analyzeAllGames failed', err);
+      })
+      .finally(() => {
+        analysisRunning.current = false;
+        setAnalysisProgress(null);
+      });
   }
 
   function handleSearch(e: React.SyntheticEvent): void {
@@ -181,7 +205,13 @@ export function GameInsightsPage(): JSX.Element {
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto px-5 pb-20 md:pb-6">
-        {tab === 'overview' && overview && <OverviewTab data={overview} />}
+        {tab === 'overview' && overview && (
+          <OverviewTab
+            data={overview}
+            onAnalyze={handleAnalyze}
+            analysisProgress={analysisProgress}
+          />
+        )}
         {tab === 'openings' && openings && <OpeningsTab data={openings} />}
         {tab === 'mistakes' && mistakes && <MistakesTab data={mistakes} />}
         {tab === 'tactics' && tactics && <TacticsTab data={tactics} />}

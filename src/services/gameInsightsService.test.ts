@@ -135,9 +135,47 @@ describe('gameInsightsService', () => {
       expect(result.winRate).toBe(50);
     });
 
-    it('computes accuracy from annotated games', async () => {
+    it('computes accuracy from fully-analyzed games', async () => {
       await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
 
+      // Default PGN has 6 plies (1.e4 e5 2.Nf3 Nc6 3.Bb5 a6). Provide an
+      // annotation per ply so gameNeedsAnalysis() returns false.
+      const fullAnnotations = [
+        { moveNumber: 1, color: 'white' as const, san: 'e4', evaluation: 0.3, bestMove: 'e4', classification: 'good' as const },
+        { moveNumber: 1, color: 'black' as const, san: 'e5', evaluation: 0.2, bestMove: 'e5', classification: 'good' as const },
+        { moveNumber: 2, color: 'white' as const, san: 'Nf3', evaluation: 0.3, bestMove: 'Nf3', classification: 'good' as const },
+        { moveNumber: 2, color: 'black' as const, san: 'Nc6', evaluation: 0.2, bestMove: 'Nc6', classification: 'good' as const },
+        { moveNumber: 3, color: 'white' as const, san: 'Bb5', evaluation: 0.3, bestMove: 'Bb5', classification: 'good' as const },
+        { moveNumber: 3, color: 'black' as const, san: 'a6', evaluation: 0.2, bestMove: 'a6', classification: 'good' as const },
+      ];
+
+      await db.games.add(
+        buildGameRecord({
+          id: 'g1',
+          white: 'TestUser',
+          black: 'AI Coach',
+          result: '1-0',
+          blackElo: 1500,
+          eco: 'C65',
+          annotations: fullAnnotations,
+        }),
+      );
+
+      const { getOverviewInsights } = await import('./gameInsightsService');
+      const result = await getOverviewInsights();
+
+      expect(result.analyzedGameCount).toBe(1);
+      expect(result.gamesNeedingAnalysis).toBe(0);
+      expect(result.avgAccuracy).toBeGreaterThan(0);
+      expect(result.accuracyWhite).toBeGreaterThan(0);
+    });
+
+    it('treats sparse-annotation games as needing analysis (no accuracy contribution)', async () => {
+      await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
+
+      // Sparse annotations — what detectBlunders() emits on import. The
+      // game has 6 plies but only 1 annotation, so it should be flagged
+      // as needing analysis and excluded from accuracy averages.
       await db.games.add(
         buildGameRecord({
           id: 'g1',
@@ -155,8 +193,11 @@ describe('gameInsightsService', () => {
       const { getOverviewInsights } = await import('./gameInsightsService');
       const result = await getOverviewInsights();
 
-      expect(result.avgAccuracy).toBe(85);
-      expect(result.accuracyWhite).toBe(85);
+      expect(result.totalGames).toBe(1);
+      expect(result.analyzedGameCount).toBe(0);
+      expect(result.gamesNeedingAnalysis).toBe(1);
+      expect(result.avgAccuracy).toBe(0);
+      expect(result.strengths).not.toContain('1 games with zero blunders');
     });
 
     it('tracks highest beaten and lowest lost to', async () => {
