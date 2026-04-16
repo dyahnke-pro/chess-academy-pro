@@ -186,7 +186,7 @@ export function FlashcardStudyPage(): JSX.Element {
   // ─── Complete ────────────────────────────────────────────────────────────
 
   if (phase === 'complete') {
-    const modeLabel = selectedMode ? MODES.find((m) => m.id === selectedMode)?.label : '';
+    const modeLabel = (selectedMode ? MODES.find((m) => m.id === selectedMode)?.label : '') ?? '';
     return (
       <div className="flex flex-col gap-6 p-6 flex-1 overflow-y-auto pb-20 md:pb-6" data-testid="flashcard-complete">
         <button
@@ -202,19 +202,35 @@ export function FlashcardStudyPage(): JSX.Element {
           <h2 className="text-xl font-bold text-theme-text">
             {cards.length === 0 ? 'No Cards Available' : 'Session Complete'}
           </h2>
-          <p className="text-theme-text-muted text-sm">
+          {/* Empty-state messaging with actionable guidance. The
+              previous "Try another mode" text was misleading when the
+              root cause was that the user had no repertoire openings
+              set up — every mode would be empty. */}
+          <p className="text-theme-text-muted text-sm max-w-md">
             {cards.length === 0
-              ? `No cards found for ${modeLabel}. Try another mode.`
+              ? (stats && stats.total === 0
+                  ? 'Flashcards are built from the openings in your repertoire. Add openings to your repertoire first — the Openings tab has a star button on each opening.'
+                  : `No ${modeLabel.toLowerCase()} cards right now. Try another mode, or come back later if you were looking for due cards.`)
               : `You reviewed ${reviewed} card${reviewed !== 1 ? 's' : ''}.${stats ? ` ${stats.total} cards total, ${stats.due} were due.` : ''}`
             }
           </p>
-          <div className="flex gap-3 mt-4">
-            <button
-              onClick={handleBackToModes}
-              className="px-6 py-2 rounded-lg bg-theme-accent text-theme-bg font-semibold text-sm"
-            >
-              Try Another Mode
-            </button>
+          <div className="flex gap-3 mt-4 flex-wrap justify-center">
+            {cards.length === 0 && stats && stats.total === 0 ? (
+              <button
+                onClick={() => void navigate('/openings')}
+                className="px-6 py-2 rounded-lg bg-theme-accent text-theme-bg font-semibold text-sm"
+                data-testid="goto-openings"
+              >
+                Go to Openings
+              </button>
+            ) : (
+              <button
+                onClick={handleBackToModes}
+                className="px-6 py-2 rounded-lg bg-theme-accent text-theme-bg font-semibold text-sm"
+              >
+                Try Another Mode
+              </button>
+            )}
             <button
               onClick={() => void navigate('/')}
               className="px-6 py-2 rounded-lg bg-theme-surface border border-theme-border text-theme-text font-semibold text-sm"
