@@ -13,7 +13,7 @@
  */
 import { db } from '../db/schema';
 import { getRepertoireOpenings } from './openingService';
-import type { GameRecord } from '../types';
+import type { GameRecord, GameSource } from '../types';
 
 /** Max games to include in the context block. Anything more and the
  *  coach starts drowning in noise and the token bill climbs fast. */
@@ -117,6 +117,51 @@ export async function fetchRelevantGames(
   });
 
   return { games, promptBlock: renderPromptBlock(games) };
+}
+
+export interface FindLastGameOptions {
+  /** Optional opening name / ECO token. When omitted, returns the
+   *  user's most recent game regardless of opening. */
+  subject?: string;
+  /** Filter by import source. */
+  source?: GameSource;
+}
+
+/**
+ * Return the newest non-master game in the user's database matching
+ * the given filters, or null when nothing matches. Used by the coach
+ * chat's "review my last game" intent to navigate straight to the
+ * game review view.
+ */
+export async function findLastMatchingGame(
+  options: FindLastGameOptions,
+): Promise<GameRecord | null> {
+  const { ecos, openingNames } = options.subject
+    ? await resolveQueryToOpenings(options.subject.toLowerCase())
+    : { ecos: new Set<string>(), openingNames: new Set<string>() };
+
+  // Always scan newest-first so the first match IS the last game.
+  const candidates = await db.games
+    .orderBy('date')
+    .reverse()
+    .filter((g) => {
+      if (g.isMasterGame) return false;
+      if (g.result === '*') return false;
+      if (options.source && g.source !== options.source) return false;
+      return true;
+    })
+    .limit(CANDIDATE_POOL_LIMIT)
+    .toArray();
+
+  if (!options.subject) {
+    return candidates[0] ?? null;
+  }
+
+  for (const game of candidates) {
+    const match = scoreGameMatch(game, ecos, openingNames);
+    if (match.score > 0) return game;
+  }
+  return null;
 }
 
 interface OpeningIndex {

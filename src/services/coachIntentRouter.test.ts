@@ -9,8 +9,12 @@ vi.mock('./middlegamePlanner', () => ({
   findPlanForOpening: vi.fn(),
   findPlanBySubject: vi.fn(),
 }));
+vi.mock('./gameContextService', () => ({
+  findLastMatchingGame: vi.fn(),
+}));
 
 import { matchOpeningForSubject } from './walkthroughResolver';
+import { findLastMatchingGame } from './gameContextService';
 import {
   findPlanForOpening,
   findPlanBySubject,
@@ -108,6 +112,64 @@ describe('routeChatIntent', () => {
     ).rejects.toBeInstanceOf(Error);
     // The above confirms errors propagate; callers are responsible for
     // wrapping in try/catch (see CoachChatPage.handleSend).
+  });
+});
+
+describe('review-game routing', () => {
+  beforeEach(() => {
+    vi.mocked(findLastMatchingGame).mockReset();
+  });
+
+  it('routes "review my last game" to /coach/play?review=<id>', async () => {
+    vi.mocked(findLastMatchingGame).mockResolvedValueOnce({
+      id: 'g-42',
+      white: 'TestUser',
+      black: 'Alice',
+      result: '1-0',
+      date: '2024-12-01',
+      eco: 'E04',
+    } as never);
+    const routed = await routeChatIntent('review my last game');
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toBe('/coach/play?review=g-42');
+    expect(routed!.ackMessage).toContain('TestUser vs Alice');
+    expect(routed!.ackMessage).toContain('White won');
+  });
+
+  it('passes subject filter to findLastMatchingGame', async () => {
+    vi.mocked(findLastMatchingGame).mockResolvedValueOnce({
+      id: 'g-99',
+      white: 'U',
+      black: 'O',
+      result: '0-1',
+      date: null,
+      eco: 'E04',
+    } as never);
+    await routeChatIntent('run me through my last catalan');
+    expect(findLastMatchingGame).toHaveBeenCalledWith(
+      expect.objectContaining({ subject: expect.stringMatching(/catalan/i) as string }),
+    );
+  });
+
+  it('passes source filter when query names a site', async () => {
+    vi.mocked(findLastMatchingGame).mockResolvedValueOnce({
+      id: 'g-77',
+      white: 'U',
+      black: 'O',
+      result: '1-0',
+      date: null,
+      eco: null,
+    } as never);
+    await routeChatIntent('review my last game on chess.com');
+    expect(findLastMatchingGame).toHaveBeenCalledWith(
+      expect.objectContaining({ source: 'chesscom' }),
+    );
+  });
+
+  it('falls back to chat (returns null) when no games match', async () => {
+    vi.mocked(findLastMatchingGame).mockResolvedValueOnce(null);
+    const routed = await routeChatIntent('review my last catalan');
+    expect(routed).toBeNull();
   });
 });
 

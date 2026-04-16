@@ -26,12 +26,14 @@
  */
 import { parseCoachIntent } from './coachAgent';
 import type { CoachIntent, CoachDifficulty } from './coachAgent';
+import type { GameRecord } from '../types';
 import { matchOpeningForSubject } from './walkthroughResolver';
 import {
   findPlanForOpening,
   findPlanBySubject,
 } from './middlegamePlanner';
 import { TACTICAL_THEMES } from './puzzleService';
+import { findLastMatchingGame } from './gameContextService';
 
 export interface RoutedChatIntent {
   /** Relative path (starts with `/`) for the session route. */
@@ -189,6 +191,24 @@ export async function routeChatIntent(
       };
     }
 
+    case 'review-game': {
+      // Look up the newest matching game in the user's imported
+      // history. If nothing matches (never played the opening, wrong
+      // source, no games imported), fall back to chat so the LLM can
+      // reply conversationally instead of dumping the user on a
+      // broken review page.
+      const game = await findLastMatchingGame({
+        subject: intent.subject,
+        source: intent.source,
+      });
+      if (!game) return null;
+      return {
+        path: `/coach/play?review=${encodeURIComponent(game.id)}`,
+        ackMessage: buildReviewAckMessage(game, intent),
+        intent,
+      };
+    }
+
     default:
       return null;
   }
@@ -232,6 +252,25 @@ function buildPlayAckMessage(intent: CoachIntent): string {
   }
   parts.push('Setting up a game…');
   return parts.join(' ');
+}
+
+function buildReviewAckMessage(game: GameRecord, intent: CoachIntent): string {
+  const vs = `${game.white} vs ${game.black}`;
+  const resultWord =
+    game.result === '1-0'
+      ? 'White won'
+      : game.result === '0-1'
+        ? 'Black won'
+        : game.result === '1/2-1/2'
+          ? 'draw'
+          : 'unfinished';
+  const date = game.date ? ` (${game.date})` : '';
+  const scope = intent.subject
+    ? ` matching "${intent.subject}"`
+    : intent.source
+      ? ` from ${intent.source === 'chesscom' ? 'Chess.com' : 'Lichess'}`
+      : '';
+  return `Opening your last game${scope}: ${vs}${date}, ${resultWord}.`;
 }
 
 /**

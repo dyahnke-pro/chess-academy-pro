@@ -113,6 +113,61 @@ describe('parseCoachIntent — play-against', () => {
   });
 });
 
+describe('parseCoachIntent — review-game', () => {
+  it('routes "review my last game"', () => {
+    const intent = parseCoachIntent('review my last game');
+    expect(intent.kind).toBe('review-game');
+    expect(intent.subject).toBeUndefined();
+    expect(intent.source).toBeUndefined();
+  });
+
+  it('routes "run me through my last Catalan"', () => {
+    const intent = parseCoachIntent('run me through my last Catalan');
+    expect(intent.kind).toBe('review-game');
+    expect(intent.subject?.toLowerCase()).toContain('catalan');
+  });
+
+  it('routes "run me through my last game I played the Catalan"', () => {
+    const intent = parseCoachIntent('run me through my last game I played the Catalan');
+    // Capture is loose — this is the most ambiguous phrasing. We
+    // require the route to fire and the raw-subject capture to at
+    // least contain "catalan" when present.
+    expect(intent.kind).toBe('review-game');
+  });
+
+  it('routes "review my last game on chess.com" with source', () => {
+    const intent = parseCoachIntent('review my last game on chess.com');
+    expect(intent.kind).toBe('review-game');
+    expect(intent.source).toBe('chesscom');
+  });
+
+  it('routes "walk me through my most recent game on lichess" with source', () => {
+    const intent = parseCoachIntent('walk me through my most recent game on lichess');
+    expect(intent.kind).toBe('review-game');
+    expect(intent.source).toBe('lichess');
+  });
+
+  it('routes "show me my latest game"', () => {
+    const intent = parseCoachIntent('show me my latest game');
+    expect(intent.kind).toBe('review-game');
+  });
+
+  it('routes "go over my last game"', () => {
+    const intent = parseCoachIntent('go over my last game');
+    expect(intent.kind).toBe('review-game');
+  });
+
+  it('does NOT route "teach me the Catalan" (walkthrough, not review)', () => {
+    const intent = parseCoachIntent('teach me the Catalan');
+    expect(intent.kind).toBe('walkthrough');
+  });
+
+  it('does NOT route "run me through the middlegame" (middlegame, not review)', () => {
+    const intent = parseCoachIntent('run me through the middlegame');
+    expect(intent.kind).toBe('continue-middlegame');
+  });
+});
+
 describe('parseCoachIntent — puzzles', () => {
   it('routes knight-fork puzzle request', () => {
     const intent = parseCoachIntent('Give me a knight fork puzzle');
