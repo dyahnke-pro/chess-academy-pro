@@ -8,6 +8,7 @@ import {
   getTacticLookahead,
   isTacticWeakness,
   recordTacticOutcome,
+  tacticTypeLabel,
 } from '../services/tacticAlertService';
 import type { StockfishAnalysis, CoachGameMove, TacticType } from '../types';
 
@@ -184,6 +185,12 @@ export function useCoachTips({
 }: UseCoachTipsConfig): void {
   const lastTipFenRef = useRef<string | null>(null);
   const tipCooldownRef = useRef<number>(0);
+  // Plies since the last tactic-preview alert. Without this, the
+  // popup fired on nearly every move once a tactical line was on
+  // the board, blocking play. Suppress consecutive tactic alerts
+  // for a few plies so the user has time to act on the first one.
+  const lastTacticAlertPlyRef = useRef<number>(-Infinity);
+  const TACTIC_ALERT_COOLDOWN_PLIES = 3;
   const onTipRef = useRef(onTip);
   onTipRef.current = onTip;
   const onMissedTacticRef = useRef(onMissedTactic);
@@ -300,17 +307,25 @@ export function useCoachTips({
         // Second: scan ahead for upcoming tactics (rating-adaptive lookahead).
         // Weaker players: 1 move ahead. Stronger players: 2-4 moves ahead.
         // This teaches stronger players to plan and weaker players to recognize.
+        // Suppressed for a few plies after the last tactic alert so the user
+        // isn't bombarded with a popup every move.
+        const cooledDown = moves.length - lastTacticAlertPlyRef.current >= TACTIC_ALERT_COOLDOWN_PLIES;
         const lookahead = getTacticLookahead(playerRating);
-        const upcoming = tacticAlerts ? scanUpcomingTactic(fen, analysis, playerColor, lookahead) : null;
+        const upcoming = tacticAlerts && cooledDown
+          ? scanUpcomingTactic(fen, analysis, playerColor, lookahead)
+          : null;
         if (upcoming) {
           const isWeakness = await isTacticWeakness(upcoming.tacticType);
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (abortController.signal.aborted) return;
 
+          const label = tacticTypeLabel(upcoming.tacticType);
+          const movesPhrase = `${upcoming.movesAway} move${upcoming.movesAway > 1 ? 's' : ''}`;
           const teaching = isWeakness
-            ? `You have a tactic developing — a pattern you've been working on. Look for it in the next ${upcoming.movesAway} move${upcoming.movesAway > 1 ? 's' : ''}.`
-            : `You have a tactic building in this position. Think ${upcoming.movesAway} move${upcoming.movesAway > 1 ? 's' : ''} ahead.`;
+            ? `${capitalize(label)} developing — a pattern you've been working on. Look for it in the next ${movesPhrase}.`
+            : `${capitalize(label)} building in this position. Think ${movesPhrase} ahead.`;
           lastTipFenRef.current = fen;
+          lastTacticAlertPlyRef.current = moves.length;
           const bestLine = analysis.topLines[0];
           const tacticLine: TacticLineData | undefined = bestLine.moves.length > 0
             ? { uciMoves: bestLine.moves, fen, forPlayer: true }
@@ -358,4 +373,8 @@ export function useCoachTips({
       clearTimeout(timer);
     };
   }, [fen, enabled, isPlayerTurn, moves.length, playerColor, getLatestEval, playerRating, blunderAlerts, tacticAlerts, positionalTips]);
+}
+
+function capitalize(s: string): string {
+  return s.length > 0 ? s[0].toUpperCase() + s.slice(1) : s;
 }

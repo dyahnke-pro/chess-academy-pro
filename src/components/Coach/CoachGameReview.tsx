@@ -1641,7 +1641,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         </AnimatePresence>
 
         {/* Scrollable content area */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        {/* Right panel scrolls. pb-24 on mobile keeps the bottom
+            "Play Again" / "Back to Coach" buttons clear of the mobile
+            tab bar — without this they were getting cut off. */}
+        <div className="flex-1 min-h-0 overflow-y-auto pb-24 md:pb-6">
           {/* Move list panel */}
           <div className="min-h-[120px] max-h-[200px] md:max-h-none md:min-h-[150px] border-b border-theme-border overflow-hidden">
             <MoveListPanel

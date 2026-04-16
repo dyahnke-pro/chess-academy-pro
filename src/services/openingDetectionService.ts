@@ -100,19 +100,40 @@ export function getOpeningMoves(openingName: string): string[] | null {
   const entries = openingsData as OpeningEntry[];
   const lower = openingName.toLowerCase();
 
-  // Find all entries whose name starts with the requested opening
-  const matches = entries.filter((e) => e.name.toLowerCase().startsWith(lower));
-  if (matches.length === 0) {
-    // Fallback: substring match
-    const fuzzy = entries.filter((e) => e.name.toLowerCase().includes(lower));
-    if (fuzzy.length === 0) return null;
-    // Pick the longest line for maximum guidance
-    const best = fuzzy.reduce((a, b) => (a.pgn.length > b.pgn.length ? a : b));
+  // Exact match wins — when the user says "King's Indian Defense" we
+  // want the bare main line, not the longest "King's Indian Defense:
+  // Fianchetto, Panno Variation" sub-line. Without this preference
+  // the longest-PGN reducer below picked an obscure variation that
+  // diverged from the user's actual intent on move 3-4 and
+  // tryOpeningBookMove silently fell off the line.
+  const exact = entries.filter((e) => e.name.toLowerCase() === lower);
+  if (exact.length > 0) {
+    const best = exact.reduce((a, b) => (a.pgn.length > b.pgn.length ? a : b));
     return best.pgn.split(/\s+/).filter(Boolean);
   }
 
-  // Pick the longest continuation so the AI follows the opening as deep as possible
-  const best = matches.reduce((a, b) => (a.pgn.length > b.pgn.length ? a : b));
+  // Common-prefix match — "King's Indian" matches "King's Indian
+  // Defense" / "King's Indian Attack". Prefer the bare entry when
+  // present (shortest name in the prefix bucket → least specific →
+  // closest to the canonical main line). Fall back to longest PGN.
+  const prefix = entries.filter((e) => e.name.toLowerCase().startsWith(lower));
+  if (prefix.length > 0) {
+    const bare = prefix.find((e) => e.name.toLowerCase() === lower);
+    const best = bare ?? prefix.reduce((a, b) => {
+      // Prefer shorter NAME (the bare opening) over longer PGN here.
+      if (a.name.length !== b.name.length) return a.name.length < b.name.length ? a : b;
+      return a.pgn.length > b.pgn.length ? a : b;
+    });
+    return best.pgn.split(/\s+/).filter(Boolean);
+  }
+
+  // Fallback: substring match — same shorter-name preference.
+  const fuzzy = entries.filter((e) => e.name.toLowerCase().includes(lower));
+  if (fuzzy.length === 0) return null;
+  const best = fuzzy.reduce((a, b) => {
+    if (a.name.length !== b.name.length) return a.name.length < b.name.length ? a : b;
+    return a.pgn.length > b.pgn.length ? a : b;
+  });
   return best.pgn.split(/\s+/).filter(Boolean);
 }
 

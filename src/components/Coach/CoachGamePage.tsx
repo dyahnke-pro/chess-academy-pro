@@ -1269,6 +1269,14 @@ export function CoachGamePage(): JSX.Element {
     // Non-blunder: sync the move and let the coach-move useEffect respond.
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
+    // Speak the per-move commentary aloud when voice is on. The blunder
+    // path above already speaks its own explanation; this fires on every
+    // OTHER non-blunder move so the coach is verbal during normal play
+    // too (user reported the coach was silent during non-blunder turns).
+    if (commentary.trim() && useAppStore.getState().coachVoiceOn) {
+      void voiceService.speak(commentary.trim());
+    }
+
     setGameState((prev) => ({
       ...prev,
       moves: [...prev.moves, playerMove],
@@ -1780,8 +1788,11 @@ export function CoachGamePage(): JSX.Element {
           )}
         </AnimatePresence>
 
-        {/* ─── Board + overlaid Tip Bubble ───────────────────────────── */}
-        <div className="relative flex-shrink-0">
+        {/* ─── Tip Bubble (now flows ABOVE the board, no overlay) ────────
+             Previously this was `absolute top-0` on top of the board so
+             the user couldn't see/move the pieces underneath. Moved
+             to a normal block-flow sibling above the board container.
+             User report: tactic preview popup covered the board. */}
         <AnimatePresence>
           {tipBubbleText && gameState.status !== 'blunder_pause' && (
             <motion.div
@@ -1789,7 +1800,7 @@ export function CoachGamePage(): JSX.Element {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25 }}
-              className={`absolute top-0 left-0 right-0 z-30 mx-2 mt-1 rounded-xl backdrop-blur-md border px-3 py-2.5 ${
+              className={`mx-2 mb-1 rounded-xl backdrop-blur-md border px-3 py-2.5 shrink-0 ${
                 isExploreMode
                   ? 'border-purple-500/30'
                   : tipTacticLine && !tipTacticLine.forPlayer
@@ -2038,7 +2049,6 @@ export function CoachGamePage(): JSX.Element {
           {!isExploreMode && showEngineLinesEffective && latestTopLines.length > 0 && (
             <EngineLines lines={latestTopLines} fen={game.fen} className="mt-1" />
           )}
-        </div>
         </div>
 
         {/* Player info bar (bottom) — rating shown in header, omitted here */}
