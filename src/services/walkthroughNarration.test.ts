@@ -4,6 +4,7 @@ import {
   pickCoachHint,
   pickEvaluation,
   trimToSentences,
+  isGenericAnnotationText,
 } from './walkthroughNarration';
 import type { OpeningMoveAnnotation } from '../types';
 
@@ -156,5 +157,73 @@ describe('trimToSentences', () => {
 
   it('returns input unchanged if no sentence terminators found', () => {
     expect(trimToSentences('no terminator', 1)).toBe('no terminator');
+  });
+});
+
+describe('isGenericAnnotationText — subline generator filler', () => {
+  // Each of these is a literal sentence emitted by
+  // scripts/generate-subline-annotations.mjs for a warning or trap line.
+  // The LLM narrator relies on this detector to know which slots are
+  // "fillable" — miss a template here and the user sees robotic
+  // "This is the natural continuation" style narration on playback.
+  const FILLER_LINES: readonly string[] = [
+    // Warning openers
+    'White plays Nf3. This is the natural continuation that leads into the warning line.',
+    'Black plays d5. This is the natural continuation that leads into the warning line.',
+    'White captures with dxe5. This sequence leads to the dangerous line.',
+    'Black castles. The position looks normal so far.',
+    // Warning mid-line
+    'cxd4 — this capture changes the character of the position. Be alert.',
+    'Qh5+! Check forces a response. This is where the danger begins.',
+    // Warning payoff
+    'Nxf7! This is the position you must avoid. White has a dangerous attack. Know this pattern so you can sidestep it earlier.',
+    'Qxf7. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line.',
+    'Nxe5. This is the uncomfortable position that results from this line. Now that you\u2019ve seen it, you\u2019ll know to avoid the pitfall.',
+    'Bxf7! This is the move that causes all the trouble.',
+    'Qxh7+! Check \u2014 and the position is very dangerous for the defending side.',
+    'Nxe5. The position is now very difficult. This is the warning \u2014 don\u2019t let your opponent reach this.',
+    'Nc3. We\u2019re approaching the critical position. Pay close attention to the next moves \u2014 this is where the danger lies.',
+    // Trap setup
+    'Black castles, preparing for the middlegame while the trap is being set.',
+    'White captures with dxe5. This exchange is part of the trap setup.',
+    'White plays Nc3, establishing the position. The key moment is approaching.',
+    'White gives check with Qh5! This is a critical moment in the trap.',
+    'Black castles. The position looks safe, but danger lurks.',
+    // Trap payoff
+    'Qxf7#! And this is the final blow. White delivers check and wins material. This is why the Lasker Trap is so dangerous \u2014 memorize this pattern!',
+    'Nxe5! White wins material. The trap is complete. Remember this pattern \u2014 your opponents will fall for it.',
+    'Qd8#! The trap is sprung. White has a winning position. This is the key takeaway from the Fried Liver.',
+    'Nxf7! Now the trap is revealed. White wins material with this capture.',
+    'Qxf7+! Check! The trap is sprung \u2014 there\u2019s no good defense here.',
+    'Bxf7+! This is the critical move that springs the trap. The opponent is in serious trouble.',
+    'Nxe5. This is where the trap begins. The next two moves are the key sequence you need to memorize.',
+    // Bare "Side plays SAN." fallback
+    'White plays Nf3.',
+    'Black plays d5.',
+  ];
+
+  for (const line of FILLER_LINES) {
+    it(`detects filler: ${line.slice(0, 60)}\u2026`, () => {
+      expect(isGenericAnnotationText(line)).toBe(true);
+    });
+  }
+
+  it('does NOT flag real curated commentary', () => {
+    // Real content that mentions squares, motifs, or plans — must stay.
+    const CURATED: readonly string[] = [
+      'The knight on f3 eyes e5 and blunts a future Bg4 pin while clearing the way for short castling.',
+      'Nf3 defends e5 and prepares to meet ...Nc6 with a timely d4, seizing the full center.',
+      'Black chooses the Scandinavian, immediately challenging White\u2019s e-pawn to dissolve the classical center.',
+      '0-0 hides the king on the g1 diagonal and connects the rooks along the back rank.',
+    ];
+    for (const text of CURATED) {
+      expect(isGenericAnnotationText(text)).toBe(false);
+    }
+  });
+
+  it('returns false for empty/whitespace input', () => {
+    expect(isGenericAnnotationText(undefined)).toBe(false);
+    expect(isGenericAnnotationText('')).toBe(false);
+    expect(isGenericAnnotationText('   ')).toBe(false);
   });
 });

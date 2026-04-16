@@ -86,6 +86,49 @@ const GENERIC_ANNOTATION_PATTERNS: RegExp[] = [
   /\bWatch out\s*[—–-]\s*a mistake here would be very costly\b/i,
   /^\s*Be alert\.?\s*$/i,
 
+  // ─── Subline generator filler — from scripts/generate-subline-annotations.mjs ──
+  // Warning-line openers / setup sentences
+  /\bThis is the natural continuation that leads into the warning line\b/i,
+  /\bThis sequence leads to the dangerous line\b/i,
+  /\bThe position looks normal so far\b/i,
+  /\bthis capture changes the character of the position\.\s*Be alert\b/i,
+  /\bCheck forces a response\.\s*This is where the danger begins\b/i,
+  // Warning-line payoff sentences
+  /\bThis is the position you must avoid\b/i,
+  /\bThe damage is done\s*[—–-]\s*this is the result you want to prevent\b/i,
+  /\bThis is the uncomfortable position that results from this line\b/i,
+  /\bNow that you'?ve seen it, you'?ll know to avoid the pitfall\b/i,
+  /\bThis is the move that causes all the trouble\b/i,
+  /\bCheck\s*[—–-]\s*and the position is very dangerous for the defending side\b/i,
+  /\bThe position is now very difficult\.\s*This is the warning\b/i,
+  /\bdon'?t let your opponent reach this\b/i,
+  /\bWe'?re approaching the critical position\b/i,
+  /\bPay close attention to the next moves\s*[—–-]\s*this is where the danger lies\b/i,
+
+  // Trap-line setup / middle / payoff sentences
+  /\bpreparing for the middlegame while the trap is being set\b/i,
+  /\bThis exchange is part of the trap setup\b/i,
+  /\bestablishing the position\.\s*The key moment is approaching\b/i,
+  /\bThis is a critical moment in the trap\b/i,
+  /\bThe position looks safe, but danger lurks\b/i,
+  /\band this is the final blow\b/i,
+  /\bMemorize this pattern\b/i,
+  /\bThe trap is complete\b/i,
+  /\bRemember this pattern\s*[—–-]\s*your opponents will fall for it\b/i,
+  /\bThe trap is sprung\b/i,
+  /\bThis is the key takeaway from the\b/i,
+  /\bNow the trap is revealed\b/i,
+  /\bThe trap is sprung\s*[—–-]\s*there'?s no good defense here\b/i,
+  /\bThis is the critical move that springs the trap\b/i,
+  /\bThe opponent is in serious trouble\b/i,
+  /\bThis is where the trap begins\b/i,
+  /\bThe next two moves are the key sequence you need to memorize\b/i,
+
+  // Bare "Side plays SAN." stubs the generator falls back to when no
+  // template applies. Match the whole line so we don't suppress real
+  // annotations that merely contain the words "White plays" mid-sentence.
+  /^\s*(?:White|Black)\s+plays\s+[A-Za-z][\w+#=!?-]*\.?\s*$/i,
+
   // ─── "Castling" filler — single-sentence stubs ──────────────────────
   /\bCastles to safety, connecting the rooks and tucking the king away\b/i,
   /\bGets the king to safety with castling, an essential step before the middlegame battle begins\b/i,
