@@ -64,9 +64,14 @@ function sanToSquares(san: string, fen: string): { from: string; to: string } | 
   }
 }
 
-const AUTO_REVIEW_ADVANCE_MS = 2500;
-const AUTO_REVIEW_PAUSE_MS = 6000;
-const AUTO_REVIEW_NARRATION_PAUSE_MS = 8000;
+// Pacing tuned to feel like chess.com's post-game review: each move gets
+// enough air for the narration to play, for the student to read the
+// classification badge, and for the eval change to register. Users told
+// us the previous 2.5s/6s/8s values felt rushed. Opponent moves still
+// get the shorter delay so a full move pair lands in ~7-8s total.
+const AUTO_REVIEW_ADVANCE_MS = 4000;
+const AUTO_REVIEW_PAUSE_MS = 9000;
+const AUTO_REVIEW_NARRATION_PAUSE_MS = 12000;
 // Removed AUTO_REVIEW_REPLY_MS (600ms was too fast — opponent moves now use
 // longer delays to prevent perception of two pieces moving simultaneously)
 
@@ -255,9 +260,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
 
     // Best move arrow (green) — show when revealed via button, in guided lesson,
-    // or automatically during auto-review on key moments (blunders/mistakes)
+    // or automatically during auto-review. chess.com's review shows the best
+    // move on every non-played-it-perfectly position, so relax the auto-show
+    // to include inaccuracies and "miss" too (not just blunders/mistakes).
     const autoShowArrow = autoReviewActive
-      && (cls === 'blunder' || cls === 'mistake' || cls === 'miss');
+      && (cls === 'blunder' || cls === 'mistake' || cls === 'miss' || cls === 'inaccuracy');
     if (bestMoveRevealed || reviewState.mode === 'guided_lesson' || autoShowArrow) {
       const bestArrow = uciToArrow(currentMove.bestMove, 'rgba(34, 197, 94, 0.8)');
       if (bestArrow) result.push(bestArrow);
@@ -361,25 +368,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return;
     }
 
-    // Fetch AI commentary for key moments AND significant player moves
-    // Skip coach (opponent) moves — narrate only on the player's moves
-    if (currentMove.isCoachMove) {
-      setAiCommentary(null);
-      return;
-    }
-
-    const cls = currentMove.classification;
-    const isKeyMoment = cls === 'blunder' || cls === 'mistake' || cls === 'brilliant';
-    const isNotable = cls === 'inaccuracy' || cls === 'great' || cls === 'miss';
-    // Also narrate on significant eval swings (even for "good" moves)
-    const hasEvalSwing = currentMove.preMoveEval !== null && currentMove.evaluation !== null
-      && Math.abs(currentMove.evaluation - currentMove.preMoveEval) > 50;
-
-    if (!isKeyMoment && !isNotable && !hasEvalSwing) {
-      setAiCommentary(null);
-      return;
-    }
-
+    // Fetch AI commentary for EVERY move the user navigates to — opponent
+    // moves included, ordinary "good" moves included. Users complained
+    // that the review was silent on most moves because we used to gate
+    // on classification (blunder/mistake/brilliant/inaccuracy) or a
+    // 50cp eval swing. The cache below makes re-visits instant, so the
+    // only real cost is one LLM call the first time each move is
+    // displayed.
     const moveIdx = reviewState.currentMoveIndex;
 
     // Check cache first

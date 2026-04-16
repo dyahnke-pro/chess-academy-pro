@@ -555,7 +555,10 @@ describe('CoachGameReview', () => {
     });
   });
 
-  it('does not load AI commentary for good moves', async () => {
+  it('loads AI commentary for ordinary good moves too', async () => {
+    // Users wanted narration on every move, not only blunders/mistakes
+    // (see CoachGameReview: the gating that used to skip "good" moves
+    // was removed so every navigated move gets its own commentary).
     const { getCoachCommentary } = await import('../../services/coachApi');
     (getCoachCommentary as ReturnType<typeof vi.fn>).mockClear();
 
@@ -565,10 +568,12 @@ describe('CoachGameReview', () => {
     fireEvent.click(screen.getByTestId('nav-next'));
 
     await waitFor(() => {
-      expect(getCoachCommentary).not.toHaveBeenCalled();
+      expect(getCoachCommentary).toHaveBeenCalled();
     });
 
-    expect(screen.queryByTestId('ai-commentary')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('ai-commentary')).toBeInTheDocument();
+    });
   });
 
   it('resets ask panel when navigating to different move', () => {
