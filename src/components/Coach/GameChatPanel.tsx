@@ -166,7 +166,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               timestamp: Date.now(),
             };
             setMessages([...updatedMessages, ackMsg]);
-            void navigate(routed.path);
+            // Reply-only routes (no `path`) just inject the ack as the
+            // coach's response and stay in chat — used for cases like
+            // "review my last Catalan" when the user has no Catalan
+            // games. The ack ends with a play-game offer so the user's
+            // next "yes" hits the affirmation-after-proposal path.
+            if (routed.path) {
+              void navigate(routed.path);
+            }
             return;
           }
         } catch (err: unknown) {

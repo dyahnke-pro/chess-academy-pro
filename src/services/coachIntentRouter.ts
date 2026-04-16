@@ -36,9 +36,15 @@ import { TACTICAL_THEMES } from './puzzleService';
 import { findLastMatchingGame } from './gameContextService';
 
 export interface RoutedChatIntent {
-  /** Relative path (starts with `/`) for the session route. */
-  path: string;
-  /** Acknowledgement message to show in the chat before navigating. */
+  /** Relative path (starts with `/`) for the session route. When
+   *  omitted, the caller treats `ackMessage` as a reply-only coach
+   *  message — no navigation. Used for cases where the router has
+   *  enough context to compose a useful response (e.g. "no matching
+   *  games found, want to play one instead?") but the next step is
+   *  a follow-up turn from the user, not a route change. */
+  path?: string;
+  /** Acknowledgement message to show in the chat (before navigating
+   *  when `path` is set, or as the entire coach reply when not). */
   ackMessage: string;
   /** The parsed intent, exposed for analytics / tests. */
   intent: CoachIntent;
@@ -193,15 +199,21 @@ export async function routeChatIntent(
 
     case 'review-game': {
       // Look up the newest matching game in the user's imported
-      // history. If nothing matches (never played the opening, wrong
-      // source, no games imported), fall back to chat so the LLM can
-      // reply conversationally instead of dumping the user on a
-      // broken review page.
+      // history. On miss, return a reply-only route that explicitly
+      // says no matching games were found AND offers to play one
+      // from the same opening. The user's next "yes" / "let's do it"
+      // is caught by the affirmation-after-game-proposal path above
+      // and routes to /coach/play.
       const game = await findLastMatchingGame({
         subject: intent.subject,
         source: intent.source,
       });
-      if (!game) return null;
+      if (!game) {
+        return {
+          ackMessage: buildNoMatchOfferMessage(intent),
+          intent,
+        };
+      }
       return {
         path: `/coach/play?review=${encodeURIComponent(game.id)}`,
         ackMessage: buildReviewAckMessage(game, intent),
@@ -271,6 +283,38 @@ function buildReviewAckMessage(game: GameRecord, intent: CoachIntent): string {
       ? ` from ${intent.source === 'chesscom' ? 'Chess.com' : 'Lichess'}`
       : '';
   return `Opening your last game${scope}: ${vs}${date}, ${resultWord}.`;
+}
+
+/**
+ * The student asked to review a past game, but their imported history
+ * has no match for the requested filter (opening / source / both).
+ * Acknowledge concretely AND end with a play-game offer so a "yes"
+ * routes via the affirmation-after-proposal flow into /coach/play.
+ *
+ * The wording is intentional: "Want to play..." matches
+ * ASSISTANT_GAME_PROPOSAL_RE so the next-turn affirmation pickup
+ * works without extra wiring.
+ */
+function buildNoMatchOfferMessage(intent: CoachIntent): string {
+  const subject = intent.subject?.trim();
+  const sourceLabel =
+    intent.source === 'chesscom'
+      ? 'Chess.com'
+      : intent.source === 'lichess'
+        ? 'Lichess'
+        : null;
+
+  const lacksWhat = subject
+    ? `any ${subject} games`
+    : sourceLabel
+      ? `any games imported from ${sourceLabel}`
+      : 'any games to review';
+
+  const offer = subject
+    ? `Want to play a game from the ${subject} so you can build some experience to review later?`
+    : `Want to play a quick game so we can review it together afterwards?`;
+
+  return `I don't see ${lacksWhat} in your history yet. ${offer}`;
 }
 
 /**
