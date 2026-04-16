@@ -219,7 +219,11 @@ export function GlobalCoachDrawer(): JSX.Element | null {
             moveNumber={moveNumber}
             playerColor={playerColor}
             turn={turn}
-            isGameOver={false}
+            // Global drawer is never "locked" to an active game — routing
+            // intents like "let's play" must navigate to a session. The
+            // GameChatPanel gates routing behind isGameOver; passing true
+            // here unblocks that path for the global/floating drawer.
+            isGameOver={true}
             gameResult=""
             lastMove={ctxLastMove}
             history={ctxHistory}
