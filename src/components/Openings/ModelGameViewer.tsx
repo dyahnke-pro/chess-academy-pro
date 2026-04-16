@@ -141,6 +141,7 @@ export function ModelGameViewer({
       setExploreFen(null);
       setExploreMoves([]);
       setExploreEval(null);
+      explorePlayerSide.current = null;
     } else {
       // Enter explore mode from current position
       setIsAutoPlaying(false);
@@ -149,6 +150,9 @@ export function ModelGameViewer({
       setExploreFen(fen);
       setExploreMoves([]);
       exploreChess.current = new Chess(fen);
+      // The student plays whichever side it is to move. The engine
+      // will automatically reply for the opposite color after each move.
+      explorePlayerSide.current = exploreChess.current.turn();
       // Get initial eval
       void stockfishEngine.analyzePosition(fen, 12).then((analysis) => {
         const evalStr = analysis.isMate
@@ -159,11 +163,25 @@ export function ModelGameViewer({
     }
   }, [isExploring, baseFen]);
 
+  // Track whose turn it was when the student entered explore mode so we
+  // only auto-reply after their move — not after the engine's own reply.
+  const explorePlayerSide = useRef<'w' | 'b' | null>(null);
+
+  const updateExploreEval = useCallback((fen: string): void => {
+    void stockfishEngine.analyzePosition(fen, 12).then((analysis) => {
+      const evalStr = analysis.isMate
+        ? `Mate in ${analysis.mateIn}`
+        : `${analysis.evaluation > 0 ? '+' : ''}${analysis.evaluation.toFixed(1)}`;
+      setExploreEval(evalStr);
+    }).catch(() => { /* engine not ready */ });
+  }, []);
+
   const handleExploreDrop = useCallback(
     ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }): boolean => {
       if (!isExploring || !targetSquare || !exploreChess.current) return false;
 
-      const move = exploreChess.current.move({
+      const chess = exploreChess.current;
+      const move = chess.move({
         from: sourceSquare,
         to: targetSquare,
         promotion: 'q',
@@ -171,21 +189,41 @@ export function ModelGameViewer({
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- chess.js throws on truly invalid moves but may return null for edge cases
       if (!move) return false;
 
-      const newFen = exploreChess.current.fen();
-      setExploreFen(newFen);
+      const afterPlayerFen = chess.fen();
+      setExploreFen(afterPlayerFen);
       setExploreMoves((prev) => [...prev, move.san]);
+      updateExploreEval(afterPlayerFen);
 
-      // Get engine eval for new position
-      void stockfishEngine.analyzePosition(newFen, 12).then((analysis) => {
-        const evalStr = analysis.isMate
-          ? `Mate in ${analysis.mateIn}`
-          : `${analysis.evaluation > 0 ? '+' : ''}${analysis.evaluation.toFixed(1)}`;
-        setExploreEval(evalStr);
-      }).catch(() => { /* engine not ready */ });
+      // Engine reply: play the opposite side's best move so the student
+      // can see what the game looks like against real resistance. Only
+      // trigger when it's now the non-player's turn and the game isn't
+      // over — otherwise the student would play both sides.
+      if (
+        !chess.isGameOver() &&
+        explorePlayerSide.current &&
+        chess.turn() !== explorePlayerSide.current
+      ) {
+        void stockfishEngine.getBestMove(afterPlayerFen, 800).then((uci) => {
+          if (!exploreChess.current) return;
+          // Guard: the student may have exited explore mode before the
+          // engine responded.
+          if (exploreChess.current.fen() !== afterPlayerFen) return;
+          const from = uci.slice(0, 2);
+          const to = uci.slice(2, 4);
+          const promotion = uci.length > 4 ? uci[4] : undefined;
+          const reply = exploreChess.current.move({ from, to, promotion });
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- engine occasionally emits moves illegal under special rules (castling through check) even at low depth
+          if (!reply) return;
+          const afterEngineFen = exploreChess.current.fen();
+          setExploreFen(afterEngineFen);
+          setExploreMoves((prev) => [...prev, reply.san]);
+          updateExploreEval(afterEngineFen);
+        }).catch(() => { /* engine not ready */ });
+      }
 
       return true;
     },
-    [isExploring],
+    [isExploring, updateExploreEval],
   );
 
   const undoExploreMove = useCallback((): void => {

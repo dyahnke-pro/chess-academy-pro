@@ -26,16 +26,20 @@ function positionToFen(pos: BoardPosition): string {
 }
 
 /**
- * Wraps any board element and places the VoiceChatMic below it.
- * Use this around raw `<Chessboard>` components that don't go through the
- * custom `ChessBoard` wrapper (which has the mic built in).
+ * Wraps any board element and floats the VoiceChatMic in the top-right
+ * corner of the overlay. Prior versions stacked the mic below the board,
+ * which pushed the mic into nearby text whenever the wrapper had a
+ * fixed height (e.g. `w-48 h-48`). Absolute positioning keeps the mic
+ * out of the document flow entirely so no downstream content is pushed.
+ * Use this around raw `<Chessboard>` components that don't go through
+ * the custom `ChessBoard` wrapper (which has the mic built in).
  */
 export function BoardVoiceOverlay({ children, fen, pgn, turn, className, ...rest }: BoardVoiceOverlayProps): JSX.Element {
   const fenStr = positionToFen(fen);
   return (
-    <div className={`flex flex-col ${className ?? ''}`} {...rest}>
+    <div className={`relative ${className ?? ''}`} {...rest}>
       {children}
-      <div className="flex justify-end mt-2">
+      <div className="absolute top-1 right-1 z-10">
         <VoiceChatMic fen={fenStr} pgn={pgn} turn={turn} />
       </div>
     </div>
