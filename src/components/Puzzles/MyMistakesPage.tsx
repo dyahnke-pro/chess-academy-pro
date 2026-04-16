@@ -124,14 +124,24 @@ export function MyMistakesPage(): JSX.Element {
   const handleReanalyze = useCallback(async () => {
     setAnalyzing(true);
     setAnalysisProgress(null);
+    const lastProgressRef: { current: ReanalysisProgress | null } = { current: null };
     try {
       await reanalyzeImportedGames((progress) => {
+        lastProgressRef.current = progress;
         setAnalysisProgress(progress);
       });
       await loadData();
     } finally {
       setAnalyzing(false);
-      setAnalysisProgress(null);
+      // Preserve a terminal warning (e.g. "set your chess.com
+      // username...") so the user can read it after the progress
+      // bar disappears. Clear everything else.
+      const final = lastProgressRef.current;
+      if (final && final.warning) {
+        setAnalysisProgress(final);
+      } else {
+        setAnalysisProgress(null);
+      }
     }
   }, [loadData]);
 
@@ -201,9 +211,21 @@ export function MyMistakesPage(): JSX.Element {
           <div className="h-1.5 rounded-full bg-theme-border overflow-hidden">
             <div
               className="h-full rounded-full bg-theme-accent transition-all duration-300"
-              style={{ width: `${(analysisProgress.current / analysisProgress.total) * 100}%` }}
+              style={{ width: `${(analysisProgress.current / Math.max(analysisProgress.total, 1)) * 100}%` }}
             />
           </div>
+        </div>
+      )}
+
+      {/* Username-missing warning — surfaces the specific reason the
+          analysis couldn't produce puzzles rather than silently ending
+          with zero results. */}
+      {analysisProgress?.warning && (
+        <div
+          className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-400 text-xs mb-4"
+          data-testid="analysis-warning"
+        >
+          {analysisProgress.warning}
         </div>
       )}
 

@@ -631,6 +631,10 @@ export interface ReanalysisProgress {
   current: number;
   total: number;
   puzzlesFound: number;
+  /** Human-readable reason the analysis couldn't run or produced no
+   *  puzzles — surfaced so the UI can tell the user exactly what to
+   *  fix (e.g. "set your chess.com username in Settings"). */
+  warning?: string;
 }
 
 /**
@@ -681,6 +685,24 @@ export async function reanalyzeImportedGames(
   const profile = useAppStore.getState().activeProfile;
   const chessComUsername = profile?.preferences.chessComUsername;
   const lichessUsername = profile?.preferences.lichessUsername;
+
+  // Warn early if the user has imported games but never told us which
+  // side they played. The old silent-zero-puzzles behavior looked like
+  // a broken feature.
+  const hasChesscomGames = allGames.some((g) => g.source === 'chesscom');
+  const hasLichessGames = allGames.some((g) => g.source === 'lichess');
+  const missing: string[] = [];
+  if (hasChesscomGames && !chessComUsername) missing.push('chess.com');
+  if (hasLichessGames && !lichessUsername) missing.push('lichess');
+  if (missing.length > 0) {
+    onProgress?.({
+      current: 0,
+      total: allGames.length,
+      puzzlesFound: 0,
+      warning: `Set your ${missing.join(' and ')} username in Settings → Games so we know which side you played.`,
+    });
+    return 0;
+  }
 
   // Re-run analysis on all games
   let totalPuzzles = 0;
