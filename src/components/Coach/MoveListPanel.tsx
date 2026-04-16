@@ -1,7 +1,33 @@
-import { useEffect, useRef, forwardRef } from 'react';
+import { useEffect, useMemo, useRef, forwardRef } from 'react';
 import { BookOpen } from 'lucide-react';
+import { Chess } from 'chess.js';
 import type { CoachGameMove, MoveClassification } from '../../types';
 import { CLASSIFICATION_STYLES, getClassificationHighlightColor } from './classificationStyles';
+
+const STARTING_FEN =
+  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+const SUBOPTIMAL_CLASSIFICATIONS: MoveClassification[] = [
+  'inaccuracy', 'mistake', 'blunder', 'miss',
+];
+
+/** Convert a UCI move (e.g. "e2e4", "g1f3", "a7a8q") into SAN at the
+ *  given position. Returns null when the UCI is malformed or the
+ *  position can't play that move (e.g. already-moved piece). Used to
+ *  show a "best move" next to the student's played move. */
+function uciToSan(uci: string | null, fenBefore: string): string | null {
+  if (!uci || uci.length < 4) return null;
+  try {
+    const chess = new Chess(fenBefore);
+    const from = uci.slice(0, 2);
+    const to = uci.slice(2, 4);
+    const promotion = uci.length > 4 ? uci[4] : undefined;
+    const move = chess.move({ from, to, promotion });
+    return move.san;
+  } catch {
+    return null;
+  }
+}
 
 interface MoveListPanelProps {
   moves: CoachGameMove[];
@@ -46,6 +72,29 @@ export function MoveListPanel({
     }
   }, [currentMoveIndex]);
 
+  // Precompute per-move "best alternative" SAN for suboptimal moves so
+  // we can render "e4 (d5)" style in the list. The move.fen stored on
+  // each record is the position AFTER the move, so we use the PREVIOUS
+  // move's fen (or the starting position) to replay the best UCI.
+  const bestAlternativeSan = useMemo((): (string | null)[] => {
+    return moves.map((m, i) => {
+      if (!m.classification || !SUBOPTIMAL_CLASSIFICATIONS.includes(m.classification)) {
+        return null;
+      }
+      const fenBefore = i === 0 ? STARTING_FEN : moves[i - 1].fen;
+      return uciToSan(m.bestMove, fenBefore);
+    });
+  }, [moves]);
+
+  // Count the "book" opening moves so we can display
+  // "In theory through move N" at the top of the list. This is
+  // chess.com's "Out of book: move 12" treatment.
+  const bookMoveCount = useMemo(() => {
+    let i = 0;
+    while (i < moves.length && moves[i].classification === 'book') i++;
+    return i;
+  }, [moves]);
+
   // Group moves into pairs (white + black)
   const pairs: Array<{ number: number; white: { move: CoachGameMove; index: number } | null; black: { move: CoachGameMove; index: number } | null }> = [];
 
@@ -79,6 +128,21 @@ export function MoveListPanel({
         </div>
       )}
 
+      {/* "Out of book" indicator — how many moves were still in theory */}
+      {bookMoveCount > 0 && (
+        <div
+          className="px-3 py-1 text-[10px] border-b flex items-center gap-1.5"
+          style={{ color: 'var(--color-text-muted)', borderColor: 'var(--color-border)' }}
+          data-testid="out-of-book-indicator"
+        >
+          <BookOpen size={10} />
+          <span>
+            In theory through move {Math.ceil(bookMoveCount / 2)}
+            {bookMoveCount < moves.length ? ' — out of book after' : ''}
+          </span>
+        </div>
+      )}
+
       {/* Move list */}
       <div ref={scrollRef} className="overflow-y-auto flex-1 min-h-0">
         {pairs.length === 0 && (
@@ -102,6 +166,7 @@ export function MoveListPanel({
                 move={pair.white.move}
                 index={pair.white.index}
                 isActive={currentMoveIndex === pair.white.index}
+                bestAlternativeSan={bestAlternativeSan[pair.white.index]}
                 onClick={onMoveClick}
                 ref={currentMoveIndex === pair.white.index ? activeRef : null}
               />
@@ -115,6 +180,7 @@ export function MoveListPanel({
                 move={pair.black.move}
                 index={pair.black.index}
                 isActive={currentMoveIndex === pair.black.index}
+                bestAlternativeSan={bestAlternativeSan[pair.black.index]}
                 onClick={onMoveClick}
                 ref={currentMoveIndex === pair.black.index ? activeRef : null}
               />
@@ -132,11 +198,16 @@ interface MoveCellProps {
   move: CoachGameMove;
   index: number;
   isActive: boolean;
+  /** Best move SAN at the pre-move position, when the student's choice
+   *  was suboptimal (inaccuracy / mistake / blunder / miss). Rendered
+   *  in small muted text next to the played move so the student sees
+   *  the engine's preferred alternative at a glance. */
+  bestAlternativeSan?: string | null;
   onClick?: (index: number) => void;
 }
 
 const MoveCell = forwardRef<HTMLButtonElement, MoveCellProps>(
-  function MoveCell({ move, index, isActive, onClick }, ref) {
+  function MoveCell({ move, index, isActive, bestAlternativeSan, onClick }, ref) {
     const color = move.classification
       ? CLASSIFICATION_COLORS[move.classification]
       : 'var(--color-text)';
@@ -184,6 +255,16 @@ const MoveCell = forwardRef<HTMLButtonElement, MoveCellProps>(
           </span>
         )}
         <span className="truncate">{move.san}</span>
+        {/* Best alternative — only rendered when the played move was
+            suboptimal AND the UCI→SAN conversion succeeded. */}
+        {bestAlternativeSan && bestAlternativeSan !== move.san && (
+          <span
+            className="text-[9px] text-[rgb(52,211,153)] flex-shrink-0"
+            title={`Best: ${bestAlternativeSan}`}
+          >
+            ({bestAlternativeSan})
+          </span>
+        )}
         {/* Eval text */}
         {evalText && isActive && (
           <span

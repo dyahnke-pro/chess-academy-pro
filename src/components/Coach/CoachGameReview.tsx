@@ -635,6 +635,29 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setIsThinking(false);
   }, []);
 
+  /**
+   * "Play from here" — drop the student into what-if mode from the
+   * current position so they can explore alternatives on the real
+   * interactive board. Pairs with the Show Best Move / Show Best Line
+   * buttons: see the best move, then play it out yourself.
+   */
+  const handlePlayFromHere = useCallback(() => {
+    const fen = currentMove?.fen ?? null;
+    if (!fen) return;
+    if (reviewState.mode === 'whatif') {
+      handleBackToReview();
+      return;
+    }
+    setWhatIfFen(fen);
+    setWhatIfCommentary(null);
+    setReviewState((prev: ReviewState) => ({
+      ...prev,
+      mode: 'whatif',
+      whatIfMoves: [],
+      whatIfStartFen: fen,
+    }));
+  }, [currentMove, reviewState.mode, handleBackToReview]);
+
   // ─── Practice Mode Handlers ──────────────────────────────────────────────────
   const handleStartPractice = useCallback((tactic: MissedTactic) => {
     setPracticeTarget(tactic);
@@ -1339,6 +1362,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   }}
                   onShowBestLine={() => void handleToggleBestLine()}
                   showingBestLine={bestLineActive}
+                  onPlayFromHere={handlePlayFromHere}
+                  playingFromHere={reviewState.mode === 'whatif'}
                 />
                 <KeyMomentNav
                   moves={moves}

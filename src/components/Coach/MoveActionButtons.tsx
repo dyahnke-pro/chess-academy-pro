@@ -1,4 +1,4 @@
-import { Eye, RotateCcw, GitBranch } from 'lucide-react';
+import { Eye, RotateCcw, GitBranch, Swords } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CoachGameMove, MoveClassification } from '../../types';
 
@@ -8,6 +8,11 @@ interface MoveActionButtonsProps {
   onRetryPosition: () => void;
   onShowBestLine?: () => void;
   showingBestLine?: boolean;
+  /** Drops the user into free-play / what-if mode from the current position
+   *  so they can explore the best line (or alternatives) on the real board. */
+  onPlayFromHere?: () => void;
+  /** True when the board is already in play-from-here mode. */
+  playingFromHere?: boolean;
   className?: string;
 }
 
@@ -27,6 +32,8 @@ export function MoveActionButtons({
   onRetryPosition,
   onShowBestLine,
   showingBestLine = false,
+  onPlayFromHere,
+  playingFromHere = false,
   className = '',
 }: MoveActionButtonsProps): JSX.Element {
   const show = isSuboptimal(currentMove);
@@ -57,6 +64,22 @@ export function MoveActionButtons({
             <Eye size={14} />
             Show Best
           </button>
+          {onPlayFromHere && (
+            <button
+              onClick={onPlayFromHere}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 hover:opacity-80"
+              style={{
+                background: playingFromHere ? 'rgb(6, 182, 212)' : 'var(--color-surface)',
+                color: playingFromHere ? 'var(--color-bg)' : 'rgb(6, 182, 212)',
+                border: `1px solid ${playingFromHere ? 'rgb(6, 182, 212)' : 'rgba(6, 182, 212, 0.3)'}`,
+                boxShadow: playingFromHere ? '0 0 10px rgba(6, 182, 212, 0.5)' : '0 0 6px rgba(6, 182, 212, 0.2)',
+              }}
+              data-testid="play-from-here-btn"
+            >
+              <Swords size={14} />
+              {playingFromHere ? 'Exit Play' : 'Play'}
+            </button>
+          )}
           {onShowBestLine && (
             <button
               onClick={onShowBestLine}
