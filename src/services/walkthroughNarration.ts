@@ -19,19 +19,82 @@ import type { OpeningMoveAnnotation } from '../types';
  * Patterns used by the offline annotation generator when it couldn't
  * produce real commentary. These are baked into thousands of move
  * entries across the opening annotation JSON files (albin, alekhine,
- * catalan, etc.) and produce noise like:
+ * benoni, birds, catalan, etc.) and produce noise like:
  *   "Bg2 by White. The position is heading toward the critical moment."
  *   "d6 by Black. The position is becoming uncomfortable — careful defense is needed."
+ *   "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+ *   "Black plays e6, developing normally. The opponent may not see what's coming."
  * Treat matches as "no annotation" so both the AnnotationCard and the
  * voice service stay silent rather than reading filler.
+ *
+ * Each pattern targets a distinctive templated phrase — not just any
+ * sentence containing a chess term — so real curated annotations that
+ * happen to mention "development" or "pawn structure" are preserved.
  */
 const GENERIC_ANNOTATION_PATTERNS: RegExp[] = [
+  // ─── "Position state" filler ────────────────────────────────────────
   /\bposition is heading toward the critical moment\b/i,
   /\bposition is becoming uncomfortable\b/i,
   /\bcareful defense is needed\b/i,
   /\bposition is roughly (equal|balanced)\b/i,
   /\bboth sides have chances\b/i,
+  /\bThe position is sharp and requires precise play from this point forward\b/i,
+  /\bThe key moment is approaching\b/i,
+  /\bThis is a critical moment where precise play is essential to exploit the tactical opportunity\b/i,
+
+  // ─── Bare move fragments ─────────────────────────────────────────────
   /^\s*[A-Za-z][\w+#=!?\-]*\s+by\s+(?:White|Black)\.\s*$/i,
+
+  // ─── "Development" filler ────────────────────────────────────────────
+  /\bDevelopment with purpose\s*[—–-]\s*the \w+ on \w+ eyes important squares\b/i,
+  /\bThe \w+ on \w+ improves (?:White|Black)'?s piece coordination and flexibility\b/i,
+  /\bThis move contributes to (?:White|Black)'?s opening development and fight for central control\b/i,
+  /\b(?:White|Black) improves piece placement heading into the critical phase of the game\b/i,
+  /\bConnecting the rooks is a priority\b/i,
+  /\bThe rook now enters the game on a central file\b/i,
+
+  // ─── "Central control" filler ────────────────────────────────────────
+  /\bCentral pawns control space and restrict the opponent'?s piece activity\b/i,
+  /\bThis central advance fights for space and control of key squares\b/i,
+  /\bControlling the center is the foundation of a strong position\b/i,
+  /\bThis pawn move supports a future d-pawn advance, a key central plan\b/i,
+
+  // ─── "Flank/space" filler ────────────────────────────────────────────
+  /\bGaining space here creates potential targets and restricts the opponent'?s counterplay\b/i,
+  /\bA flank pawn advance, creating space on the (?:queenside|kingside)\b/i,
+  /\bpawn advance gains space and can support a future attack toward the enemy king\b/i,
+  /\bAn aggressive pawn advance, signaling kingside intentions and opening lines\b/i,
+
+  // ─── "Piece placement" filler ────────────────────────────────────────
+  /\bwas less effective on \w+ and moves to \w+ where it serves the plan better\b/i,
+
+  // ─── "Exchange" filler ───────────────────────────────────────────────
+  /\bThis exchange changes the balance\s*[—–-]\s*(?:White|Black) reconfigures the pawn structure or gains material\b/i,
+
+  // ─── "Thematic move" filler ──────────────────────────────────────────
+  /\bA thematic move in this position, maintaining (?:White|Black)'?s initiative\b/i,
+  /\bThe fianchettoed bishop rakes the long diagonal, exerting pressure from a distance\b/i,
+
+  // ─── "Trap warning" filler — appears throughout trap lines ──────────
+  /\bdeveloping normally\.\s*The opponent may not see what'?s coming\b/i,
+  /\bopponent may not see what'?s coming\b/i,
+  /\bThis move looks reasonable but allows the trap to unfold\b/i,
+  /\bThis looks natural,? but it walks into the trap\b/i,
+  /\bThis is the problematic continuation you need to recognize\b/i,
+  /\bThe trap is being set up\s*[—–-]\s*watch the next few moves carefully\b/i,
+  /\b(?:White|Black) must be careful here\s*[—–-]\s*the position contains hidden dangers\b/i,
+  /\bWatch out\s*[—–-]\s*a mistake here would be very costly\b/i,
+  /^\s*Be alert\.?\s*$/i,
+
+  // ─── "Castling" filler — single-sentence stubs ──────────────────────
+  /\bCastles to safety, connecting the rooks and tucking the king away\b/i,
+  /\bGets the king to safety with castling, an essential step before the middlegame battle begins\b/i,
+  /\bCastles, completing king safety and activating the rook\b/i,
+  /\b(?:White|Black) castles, but the position requires careful play\b/i,
+
+  // ─── Generic "improving coordination / winning material" stubs ──────
+  /\bimproving piece coordination and maintaining pressure\b/i,
+  /\bwinning material or improving the position\b/i,
 ];
 
 /**
