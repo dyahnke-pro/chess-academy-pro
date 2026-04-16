@@ -15,6 +15,49 @@
 
 import type { OpeningMoveAnnotation } from '../types';
 
+/**
+ * Patterns used by the offline annotation generator when it couldn't
+ * produce real commentary. These are baked into thousands of move
+ * entries across the opening annotation JSON files (albin, alekhine,
+ * catalan, etc.) and produce noise like:
+ *   "Bg2 by White. The position is heading toward the critical moment."
+ *   "d6 by Black. The position is becoming uncomfortable — careful defense is needed."
+ * Treat matches as "no annotation" so both the AnnotationCard and the
+ * voice service stay silent rather than reading filler.
+ */
+const GENERIC_ANNOTATION_PATTERNS: RegExp[] = [
+  /\bposition is heading toward the critical moment\b/i,
+  /\bposition is becoming uncomfortable\b/i,
+  /\bcareful defense is needed\b/i,
+  /\bposition is roughly (equal|balanced)\b/i,
+  /\bboth sides have chances\b/i,
+  /^\s*[A-Za-z][\w+#=!?\-]*\s+by\s+(?:White|Black)\.\s*$/i,
+];
+
+/**
+ * Returns true when the supplied annotation text is a generic template
+ * filler from the offline annotation generator rather than real
+ * curated commentary. Used to suppress meaningless narration instead
+ * of speaking "this is the critical moment" on every single move.
+ */
+export function isGenericAnnotationText(text: string | undefined): boolean {
+  if (!text) return false;
+  const trimmed = text.trim();
+  if (trimmed.length === 0) return false;
+  // Short fragments like "by White." are inherently generic.
+  if (trimmed.length < 24) return true;
+  return GENERIC_ANNOTATION_PATTERNS.some((re) => re.test(trimmed));
+}
+
+/** Same check against an annotation object — convenience wrapper. */
+export function hasMeaningfulAnnotation(
+  step: OpeningMoveAnnotation | null,
+): boolean {
+  if (!step) return false;
+  const text = step.narration ?? step.annotation ?? '';
+  return text.length > 0 && !isGenericAnnotationText(text);
+}
+
 export type NarrationLength = 'full' | 'short' | 'silent';
 
 /**
@@ -57,6 +100,12 @@ export function pickNarrationText(
 
   const fullText = step.narration ?? step.annotation ?? '';
   if (!fullText) return '';
+
+  // Drop generic template filler rather than reading it aloud. The
+  // annotation JSON files contain thousands of auto-generated stub
+  // lines that the voice service would otherwise monotonously
+  // repeat across every opening.
+  if (isGenericAnnotationText(fullText)) return '';
 
   if (length === 'full') return fullText;
 

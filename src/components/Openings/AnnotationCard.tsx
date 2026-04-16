@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Layers, Target, HelpCircle, ArrowDownUp } from 'lucide-react';
+import { isGenericAnnotationText } from '../../services/walkthroughNarration';
 import type { OpeningMoveAnnotation } from '../../types';
 
 export interface AnnotationCardProps {
@@ -53,10 +54,16 @@ export function AnnotationCard({
             </span>
           </div>
 
-          {/* Main annotation */}
-          <p className="text-sm text-theme-text leading-relaxed" data-testid="annotation-text">
-            {annotation.annotation}
-          </p>
+          {/* Main annotation — suppress generic template filler ("X by
+              White. The position is heading toward the critical moment.")
+              that was baked into the annotation JSONs by an offline
+              stub generator. Without this suppression the same two
+              canned sentences would repeat across every opening. */}
+          {!isGenericAnnotationText(annotation.annotation) && (
+            <p className="text-sm text-theme-text leading-relaxed" data-testid="annotation-text">
+              {annotation.annotation}
+            </p>
+          )}
 
           {/* Move Order Note — why this move order matters */}
           {annotation.moveOrderNote && (
