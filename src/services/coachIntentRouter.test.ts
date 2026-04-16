@@ -166,10 +166,42 @@ describe('review-game routing', () => {
     );
   });
 
-  it('falls back to chat (returns null) when no games match', async () => {
+  it('returns a reply-only offer (no path) when no games match a subject', async () => {
     vi.mocked(findLastMatchingGame).mockResolvedValueOnce(null);
     const routed = await routeChatIntent('review my last catalan');
-    expect(routed).toBeNull();
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toBeUndefined();
+    expect(routed!.ackMessage.toLowerCase()).toContain('catalan');
+    expect(routed!.ackMessage.toLowerCase()).toContain("don't see");
+    // Ack must end with a play-game offer so the affirmation flow
+    // catches "yes" on the next turn.
+    expect(routed!.ackMessage.toLowerCase()).toMatch(/want to play/);
+  });
+
+  it('returns a reply-only offer (no path) when no games match a source', async () => {
+    vi.mocked(findLastMatchingGame).mockResolvedValueOnce(null);
+    const routed = await routeChatIntent('review my last game on lichess');
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toBeUndefined();
+    expect(routed!.ackMessage.toLowerCase()).toContain('lichess');
+  });
+
+  it('returns a reply-only offer (no path) when no games at all', async () => {
+    vi.mocked(findLastMatchingGame).mockResolvedValueOnce(null);
+    const routed = await routeChatIntent('review my last game');
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toBeUndefined();
+    expect(routed!.ackMessage.toLowerCase()).toContain('history');
+  });
+
+  it('"yes" after the no-match offer routes to play-against (affirmation flow)', async () => {
+    // Simulate the prior turn: coach already replied with the no-match
+    // offer text (matches ASSISTANT_GAME_PROPOSAL_RE).
+    const priorAck =
+      "I don't see any catalan games in your history yet. Want to play a game from the catalan so you can build some experience to review later?";
+    const routed = await routeChatIntent('yes', { lastAssistantMessage: priorAck });
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toMatch(/^\/coach\/session\/play-against/);
   });
 });
 

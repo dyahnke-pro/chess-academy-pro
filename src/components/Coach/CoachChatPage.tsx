@@ -68,7 +68,12 @@ export function CoachChatPage(): JSX.Element {
     // Pre-validation inside routeChatIntent ensures false-positive
     // intents (e.g. "teach me about forks") fall through to QA.
     try {
-      const routed = await routeChatIntent(text);
+      // Walk back from the most recent assistant message so the router
+      // can pick up "coach proposed a game → user said yes" patterns.
+      const lastAssistantMessage = [...chatMessages]
+        .reverse()
+        .find((m) => m.role === 'assistant')?.content;
+      const routed = await routeChatIntent(text, { lastAssistantMessage });
       if (routed) {
         const ackMsg: ChatMessageType = {
           id: `msg-${Date.now()}-ack`,
@@ -77,7 +82,11 @@ export function CoachChatPage(): JSX.Element {
           timestamp: Date.now(),
         };
         addChatMessage(ackMsg);
-        void navigate(routed.path);
+        // Reply-only routes (no `path`) just inject the ack and stay
+        // in chat. See coachIntentRouter for the cases that use this.
+        if (routed.path) {
+          void navigate(routed.path);
+        }
         return;
       }
     } catch (err: unknown) {
