@@ -747,6 +747,73 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     handleStartPractice(missedTactics[0]);
   }, [missedTactics, handleStartPractice]);
 
+  /**
+   * "Show" the missed tactic — navigate to the move and play out
+   * what the engine wanted in the best-line view, speaking the
+   * coach's explanation alongside. Different from "Try It" (which
+   * puts the user in practice mode and asks them to find the move).
+   * Show is the "I just want to see what I missed and hear why"
+   * affordance.
+   */
+  const handleShowMissedTactic = useCallback(async (tactic: MissedTactic): Promise<void> => {
+    voiceService.stop();
+
+    // Land on the missed-tactic move so the move list highlight + the
+    // surrounding context update. The board itself will switch to the
+    // best-line view via setBestLineFen below.
+    setReviewState((prev: ReviewState) => ({
+      ...prev,
+      mode: 'analysis',
+      currentMoveIndex: tactic.moveIndex,
+      whatIfMoves: [],
+    }));
+
+    // Pull the engine's full PV from the position BEFORE the missed
+    // move (tactic.fen is the preFen) and seed the existing
+    // best-line view. The user can then step through with the
+    // existing prev/next arrows under the board.
+    setBestLineLoading(true);
+    try {
+      const analysis = await stockfishEngine.analyzePosition(tactic.fen, 18);
+      const pvMoves = analysis.topLines[0]?.moves ?? [];
+      if (pvMoves.length > 0) {
+        // UCI → SAN for display in the best-line strip.
+        const sans: string[] = [];
+        try {
+          const chess = new Chess(tactic.fen);
+          for (const uci of pvMoves) {
+            const from = uci.slice(0, 2);
+            const to = uci.slice(2, 4);
+            const promotion = uci.length > 4 ? uci[4] : undefined;
+            // chess.js throws on illegal moves; the outer try/catch
+            // catches it so we just walk as far as the line is legal.
+            const m = chess.move({ from, to, promotion });
+            sans.push(m.san);
+          }
+        } catch {
+          // SAN conversion failed — surface UCI moves anyway.
+        }
+
+        setBestLineMoves(pvMoves);
+        setBestLineSans(sans);
+        setBestLineIndex(0);
+        setBestLineBaseFen(tactic.fen);
+        setBestLineFen(tactic.fen);
+        setBestLineActive(true);
+      }
+    } catch {
+      // Stockfish failed — degrade gracefully; the explanation still speaks.
+    }
+    setBestLineLoading(false);
+
+    // Speak the explanation last so it overlaps with the user
+    // visually parsing the position. Skip when no explanation is
+    // present (older imports without coach analysis).
+    if (tactic.explanation) {
+      void voiceService.speak(tactic.explanation);
+    }
+  }, []);
+
   /** Advance the drill to the next missed tactic, or exit if done. */
   const handleDrillNext = useCallback(() => {
     const nextIdx = mistakeDrillIndex + 1;
@@ -1730,6 +1797,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                         ({(tactic.evalSwing / 100).toFixed(1)} pawns)
                       </span>
                     </div>
+                    <button
+                      onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                        e.stopPropagation();
+                        void handleShowMissedTactic(tactic);
+                      }}
+                      className="px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap border"
+                      style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
+                      data-testid={`show-tactic-${i}`}
+                      aria-label="Show what was missed"
+                      title="Watch the engine's intended line and hear why"
+                    >
+                      Show
+                    </button>
                     <button
                       onClick={(e: MouseEvent<HTMLButtonElement>) => {
                         e.stopPropagation();
