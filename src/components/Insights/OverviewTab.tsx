@@ -1,14 +1,27 @@
+import { Loader2, Sparkles } from 'lucide-react';
 import { InsightsDonutChart } from './InsightsDonutChart';
 import { InsightsBarChart } from './InsightsBarChart';
 import { InsightsStackedBar } from './InsightsStackedBar';
 import { StrengthsCard } from './StrengthsCard';
 import type { OverviewInsights } from '../../types';
 
-interface OverviewTabProps {
-  data: OverviewInsights;
+export interface AnalysisProgress {
+  current: number;
+  total: number;
+  phase: 'analyzing' | 'computing_weaknesses' | 'done';
 }
 
-export function OverviewTab({ data }: OverviewTabProps): JSX.Element {
+interface OverviewTabProps {
+  data: OverviewInsights;
+  /** Fired when the user taps "Analyze Now". Page-level handler runs the
+   *  Stockfish batch and pipes progress via `analysisProgress`. */
+  onAnalyze?: () => void;
+  /** Live progress while a batch is running. When set, the CTA renders as
+   *  a progress bar instead of a button. */
+  analysisProgress?: AnalysisProgress | null;
+}
+
+export function OverviewTab({ data, onAnalyze, analysisProgress }: OverviewTabProps): JSX.Element {
   const wldData = [
     { name: 'Wins', value: data.wins, color: 'var(--color-success)' },
     { name: 'Losses', value: data.losses, color: 'var(--color-error)' },
@@ -34,6 +47,15 @@ export function OverviewTab({ data }: OverviewTabProps): JSX.Element {
 
   return (
     <div data-testid="overview-tab">
+      {data.gamesNeedingAnalysis > 0 && (
+        <AnalyzeCta
+          gamesNeedingAnalysis={data.gamesNeedingAnalysis}
+          analyzedGameCount={data.analyzedGameCount}
+          onAnalyze={onAnalyze}
+          progress={analysisProgress}
+        />
+      )}
+
       {/* Results */}
       <Section title="Results">
         <div className="flex items-center gap-5 py-3.5">
@@ -126,6 +148,86 @@ function DataRow({ label, value, color }: { label: string; value: string; color?
     >
       <span style={{ color: 'var(--color-text-muted)' }}>{label}</span>
       <span className="font-semibold" style={{ color: color ?? 'var(--color-text)' }}>{value}</span>
+    </div>
+  );
+}
+
+function AnalyzeCta({
+  gamesNeedingAnalysis,
+  analyzedGameCount,
+  onAnalyze,
+  progress,
+}: {
+  gamesNeedingAnalysis: number;
+  analyzedGameCount: number;
+  onAnalyze?: () => void;
+  progress?: AnalysisProgress | null;
+}): JSX.Element {
+  const totalToProcess = gamesNeedingAnalysis;
+  const isRunning = progress != null && progress.phase !== 'done';
+  const pct = isRunning && progress.total > 0
+    ? Math.min(100, Math.round((progress.current / progress.total) * 100))
+    : 0;
+
+  const heading =
+    analyzedGameCount === 0
+      ? `${gamesNeedingAnalysis} game${gamesNeedingAnalysis === 1 ? '' : 's'} not analyzed yet`
+      : `${gamesNeedingAnalysis} of ${analyzedGameCount + gamesNeedingAnalysis} games not analyzed`;
+
+  const body = isRunning
+    ? progress.phase === 'computing_weaknesses'
+      ? 'Computing weakness profile…'
+      : `Analyzing ${progress.current} / ${progress.total}…`
+    : 'Stockfish needs to score every move before accuracy and move-quality stats can populate. Your data stays on-device.';
+
+  return (
+    <div
+      className="rounded-xl p-4 mb-2 border"
+      style={{
+        background: 'color-mix(in srgb, var(--color-warning) 10%, var(--color-surface))',
+        borderColor: 'color-mix(in srgb, var(--color-warning) 40%, transparent)',
+      }}
+      data-testid="analyze-cta"
+    >
+      <div className="flex items-start gap-3">
+        <div
+          className="shrink-0 mt-0.5 p-1.5 rounded-lg"
+          style={{ background: 'color-mix(in srgb, var(--color-warning) 25%, transparent)' }}
+        >
+          <Sparkles size={16} style={{ color: 'var(--color-warning)' }} />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+            {heading}
+          </div>
+          <div className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+            {body}
+          </div>
+          {isRunning ? (
+            <div
+              className="mt-3 h-1.5 rounded-full overflow-hidden"
+              style={{ background: 'color-mix(in srgb, var(--color-warning) 18%, transparent)' }}
+            >
+              <div
+                className="h-full transition-[width] duration-200"
+                style={{ width: `${pct}%`, background: 'var(--color-warning)' }}
+                data-testid="analyze-progress-bar"
+              />
+            </div>
+          ) : (
+            <button
+              onClick={onAnalyze}
+              disabled={!onAnalyze}
+              className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold disabled:opacity-50"
+              style={{ background: 'var(--color-warning)', color: '#000' }}
+              data-testid="analyze-now-btn"
+            >
+              <Loader2 size={12} className="hidden" />
+              Analyze {totalToProcess === 1 ? 'this game' : `all ${totalToProcess} games`} now
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

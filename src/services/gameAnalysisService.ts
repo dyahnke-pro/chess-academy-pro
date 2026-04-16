@@ -361,7 +361,7 @@ export async function analyzeSingleGame(
  * Games with no annotations or only partial annotations (from detectBlunders,
  * which only records mistakes, not every move) need full Stockfish analysis.
  */
-function gameNeedsAnalysis(game: GameRecord): boolean {
+export function gameNeedsAnalysis(game: GameRecord): boolean {
   if (game.isMasterGame) return false;
   if (!game.annotations || game.annotations.length === 0) return true;
 

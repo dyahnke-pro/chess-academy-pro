@@ -891,6 +891,13 @@ export interface OverviewInsights {
   accuracyWhite: number;
   accuracyBlack: number;
   strengths: string[];
+  /** Games with full Stockfish per-move analysis (drives every accuracy
+   *  and move-quality stat above). */
+  analyzedGameCount: number;
+  /** Games imported but lacking full per-move analysis. When > 0 the UI
+   *  surfaces a CTA — otherwise the user sees 0% across the board with
+   *  no hint why. */
+  gamesNeedingAnalysis: number;
 }
 
 export interface OpeningAggregateStats {
