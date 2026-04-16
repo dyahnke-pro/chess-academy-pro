@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { db } from '../db/schema';
-import { fetchRelevantGames } from './gameContextService';
+import { fetchRelevantGames, findLastMatchingGame } from './gameContextService';
 import { buildGameRecord } from '../test/factories';
 
 vi.mock('./openingService', () => ({
@@ -109,5 +109,69 @@ describe('fetchRelevantGames', () => {
     await db.games.bulkAdd(games);
     const result = await fetchRelevantGames({ query: 'catalan', username: 'TestUser', limit: 3 });
     expect(result.games).toHaveLength(3);
+  });
+});
+
+describe('findLastMatchingGame', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+    vi.mocked(getRepertoireOpenings).mockReset();
+    vi.mocked(getRepertoireOpenings).mockResolvedValue([
+      { name: 'Catalan Opening', eco: 'E04' } as never,
+      { name: 'Sicilian Najdorf', eco: 'B90' } as never,
+    ]);
+  });
+
+  it('returns null when no games exist', async () => {
+    const game = await findLastMatchingGame({});
+    expect(game).toBeNull();
+  });
+
+  it('returns the newest game when no subject is given', async () => {
+    await db.games.bulkAdd([
+      buildGameRecord({ id: 'old', date: '2024-01-01', white: 'U', black: 'O', result: '1-0' }),
+      buildGameRecord({ id: 'newest', date: '2024-12-31', white: 'U', black: 'O', result: '1-0' }),
+      buildGameRecord({ id: 'mid', date: '2024-06-15', white: 'U', black: 'O', result: '1-0' }),
+    ]);
+    const game = await findLastMatchingGame({});
+    expect(game?.id).toBe('newest');
+  });
+
+  it('filters by opening subject', async () => {
+    await db.games.bulkAdd([
+      buildGameRecord({ id: 'sicilian', date: '2024-12-31', eco: 'B90', result: '1-0' }),
+      buildGameRecord({ id: 'catalan-new', date: '2024-10-15', eco: 'E04', result: '1-0' }),
+      buildGameRecord({ id: 'catalan-old', date: '2024-01-01', eco: 'E04', result: '1-0' }),
+    ]);
+    const game = await findLastMatchingGame({ subject: 'catalan' });
+    expect(game?.id).toBe('catalan-new');
+  });
+
+  it('filters by source', async () => {
+    await db.games.bulkAdd([
+      buildGameRecord({ id: 'lichess-new', date: '2024-12-31', source: 'lichess', result: '1-0' }),
+      buildGameRecord({ id: 'chesscom-old', date: '2024-10-15', source: 'chesscom', result: '1-0' }),
+    ]);
+    const game = await findLastMatchingGame({ source: 'chesscom' });
+    expect(game?.id).toBe('chesscom-old');
+  });
+
+  it('excludes master and unfinished games', async () => {
+    await db.games.bulkAdd([
+      buildGameRecord({ id: 'master', date: '2024-12-31', isMasterGame: true, result: '1-0' }),
+      buildGameRecord({ id: 'unfinished', date: '2024-12-30', result: '*' }),
+      buildGameRecord({ id: 'real', date: '2024-12-29', result: '1-0' }),
+    ]);
+    const game = await findLastMatchingGame({});
+    expect(game?.id).toBe('real');
+  });
+
+  it('returns null when subject has no matches', async () => {
+    await db.games.add(
+      buildGameRecord({ id: 'g1', eco: 'B90', result: '1-0' }),
+    );
+    const game = await findLastMatchingGame({ subject: 'catalan' });
+    expect(game).toBeNull();
   });
 });

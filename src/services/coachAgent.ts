@@ -19,9 +19,12 @@ export type CoachIntentKind =
   | 'puzzle'
   | 'walkthrough'
   | 'explain-position'
+  | 'review-game'
   | 'qa';
 
 export type CoachDifficulty = 'easy' | 'medium' | 'hard' | 'auto';
+
+export type GameSourceFilter = 'chesscom' | 'lichess';
 
 export interface CoachIntent {
   kind: CoachIntentKind;
@@ -33,6 +36,8 @@ export interface CoachIntent {
   theme?: string;
   /** For play-against: which colour the student wants. */
   side?: 'white' | 'black';
+  /** For review-game: which import source to filter by. */
+  source?: GameSourceFilter;
   /** Original raw user query. */
   raw: string;
 }
@@ -114,6 +119,45 @@ export function parseCoachIntent(query: string): CoachIntent {
     )
   ) {
     return { kind: 'explain-position', raw };
+  }
+
+  // 0.5 Review-game requests — "review my last game", "run me through
+  //     my last Catalan", "walk me through my most recent game on
+  //     chess.com". Runs BEFORE middlegame / walkthrough because those
+  //     greedy patterns would otherwise hijack "run me through my last
+  //     Catalan". Two-step: verb + time-marker test, then pull out
+  //     source and subject separately (one combined regex gets brittle
+  //     fast across the phrasings people actually use).
+  const REVIEW_VERBS_RE =
+    /\b(?:review|run\s+(?:me\s+)?through|walk\s+(?:me\s+)?through|show\s+me|go\s+(?:over|through))\b/;
+  const LAST_MARKER_RE = /\b(?:last|most\s+recent|latest|previous)\b/;
+  if (REVIEW_VERBS_RE.test(lower) && LAST_MARKER_RE.test(lower)) {
+    // Source — "on chess.com" / "on lichess". Handle the optional dot.
+    let source: GameSourceFilter | undefined;
+    const sourceMatch = lower.match(/\bon\s+(chess\.?com|lichess)\b/);
+    if (sourceMatch) {
+      source = sourceMatch[1].replace(/\./g, '') === 'chesscom' ? 'chesscom' : 'lichess';
+    }
+    // Subject — take everything after the time marker, strip filler
+    // words, accept whatever's left as the opening name. Empty string
+    // means "the user didn't specify an opening".
+    const afterMarker = lower.replace(/^.*?\b(?:last|most\s+recent|latest|previous)\b\s*/, '');
+    const subjectRaw = afterMarker
+      .replace(/\bgame\s+i\s+played\b/g, '')
+      .replace(/\b(?:the\s+)?game\b/g, '')
+      .replace(/\bon\s+(?:chess\.?com|lichess)\b/g, '')
+      .replace(/\bi\s+played\b/g, '')
+      .replace(/\b(?:in|of|from|with|the)\b/g, '')
+      .replace(/[?.!]+/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const subject = subjectRaw.length > 0 ? cleanSubject(subjectRaw) : '';
+    return {
+      kind: 'review-game',
+      subject: subject || undefined,
+      source,
+      raw,
+    };
   }
 
   // 1. "Run me through the middlegame plans" / "show me middlegame" /
