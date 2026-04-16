@@ -1,4 +1,43 @@
 /**
+ * Normalize a string for fuzzy matching:
+ *  - lowercase
+ *  - strip diacritics (ü → u, é → e, ñ → n, etc.) so "grünfeld" behaves
+ *    the same as "grunfeld". Otherwise typos like "gunfeld" never find
+ *    the Grünfeld Defence and get routed to whatever random opening
+ *    happens to contain those letters as a subsequence.
+ */
+function normalizeForFuzzy(s: string): string {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+/**
+ * Find the tightest (minimum span) subsequence match of `q` inside `t`.
+ * Returns the span (end - start) or null if no match. Used to reject
+ * subsequence matches that spray across huge unrelated strings — e.g.
+ * "gunfeld" being a subsequence of
+ * "english opening: agincourt defense, catalan defense, semi-slav defense"
+ * only because the 7 letters happen to appear somewhere in the 60 chars.
+ */
+function tightestSubsequenceSpan(q: string, t: string): number | null {
+  if (q.length === 0) return null;
+  let best: number | null = null;
+  for (let start = 0; start < t.length; start++) {
+    if (t[start] !== q[0]) continue;
+    let ti = start + 1;
+    let qi = 1;
+    while (ti < t.length && qi < q.length) {
+      if (t[ti] === q[qi]) qi++;
+      ti++;
+    }
+    if (qi === q.length) {
+      const span = ti - start;
+      if (best === null || span < best) best = span;
+    }
+  }
+  return best;
+}
+
+/**
  * Compute edit distance between two strings (case-insensitive).
  * Uses a standard dynamic-programming Levenshtein implementation
  * with a row-optimisation to avoid allocating a full matrix.
@@ -28,31 +67,24 @@ function editDistance(a: string, b: string): number {
 }
 
 /**
- * Check if query appears as a subsequence of target (case-insensitive).
- * E.g. "itlin" matches "Italian" because i-t-l-i-n appear in order.
- */
-function isSubsequence(query: string, target: string): boolean {
-  let qi = 0;
-  for (let ti = 0; ti < target.length && qi < query.length; ti++) {
-    if (target[ti] === query[qi]) qi++;
-  }
-  return qi === query.length;
-}
-
-/**
  * Score how well a query matches a target string (lower = better match).
  * Returns null if the match is too poor to include.
  *
  * Scoring strategy:
  * 1. Exact substring → score 0 (best)
  * 2. Word-start match → score 1
- * 3. Subsequence match → score 2
- * 4. Edit distance per word → score 3-5
+ * 3. Tight subsequence match → score 2 (only when letters cluster, not
+ *    when they're sprayed across an unrelated long string)
+ * 4. Edit distance per word → score 3+ (Levenshtein distance added)
  * 5. null → no match
+ *
+ * Both query and target are normalized (lowercased + stripped of
+ * diacritics) before scoring, so "grünfeld" / "gunfeld" / "Grunfeld"
+ * all line up.
  */
 export function fuzzyScore(query: string, target: string): number | null {
-  const q = query.toLowerCase();
-  const t = target.toLowerCase();
+  const q = normalizeForFuzzy(query);
+  const t = normalizeForFuzzy(target);
 
   // Exact substring match
   if (t.includes(q)) return 0;
@@ -63,14 +95,26 @@ export function fuzzyScore(query: string, target: string): number | null {
     if (word.startsWith(q)) return 1;
   }
 
-  // Subsequence match
-  if (q.length >= 3 && isSubsequence(q, t)) return 2;
+  // Subsequence match — only when the letters actually cluster. A
+  // 7-letter query sprayed across 60 chars is noise ("gunfeld" was
+  // matching "english opening: agincourt defense, catalan defense,
+  // semi-slav defense" simply because the letters happen to appear
+  // somewhere in that order). Require the matched letters to span at
+  // most 2× the query length so near-contiguous matches like
+  // "itlin" in "italian" still count.
+  if (q.length >= 3) {
+    const span = tightestSubsequenceSpan(q, t);
+    if (span !== null && span <= q.length * 2) {
+      return 2;
+    }
+  }
 
   // Fuzzy word match: find best edit-distance against any word
   // Allow up to ~40% error rate
   const maxDist = Math.max(1, Math.floor(q.length * 0.4));
   let bestWordDist = Infinity;
   for (const word of words) {
+    if (word.length === 0) continue;
     const d = editDistance(q, word);
     if (d < bestWordDist) bestWordDist = d;
   }

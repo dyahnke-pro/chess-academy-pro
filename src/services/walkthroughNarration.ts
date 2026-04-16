@@ -107,8 +107,6 @@ export function isGenericAnnotationText(text: string | undefined): boolean {
   if (!text) return false;
   const trimmed = text.trim();
   if (trimmed.length === 0) return false;
-  // Short fragments like "by White." are inherently generic.
-  if (trimmed.length < 24) return true;
   return GENERIC_ANNOTATION_PATTERNS.some((re) => re.test(trimmed));
 }
 

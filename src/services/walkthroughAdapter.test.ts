@@ -21,12 +21,16 @@ describe('buildStepsFromPgn', () => {
     expect(steps[1].narration).toBe('Classical reply.');
   });
 
-  it('falls back to a SAN-only narration when annotation text is missing', () => {
+  it('returns an empty narration when annotation text is missing', () => {
+    // Previously the adapter fell back to `${san}.` which produced
+    // the chant-like "Bg2. C6. B7." lesson that users hated. Silent
+    // auto-advance is preferable — the board itself tells the student
+    // what was played.
     const annotations: OpeningMoveAnnotation[] = [
       { san: 'e4', annotation: '' },
     ];
     const steps = buildStepsFromPgn({ pgn: 'e4', annotations });
-    expect(steps[0].narration).toBe('e4.');
+    expect(steps[0].narration).toBe('');
   });
 
   it('carries arrows, highlights, pawnStructure, and first plan as coachHint', () => {

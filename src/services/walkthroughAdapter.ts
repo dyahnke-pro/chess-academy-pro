@@ -15,6 +15,7 @@
  * adapter's legacy path. Tracked in MANIFEST.md.
  */
 import { Chess } from 'chess.js';
+import { isGenericAnnotationText } from './walkthroughNarration';
 import type { OpeningMoveAnnotation } from '../types';
 import type { WalkthroughStep, WalkthroughSession } from '../types/walkthrough';
 
@@ -90,18 +91,21 @@ export function buildStepsFromPgn(input: BuildStepsInput): WalkthroughStep[] {
 }
 
 /**
- * Pick the best narration text from a legacy annotation. Prefers
- * `annotation` text, falls back to a terse system-generated one so
- * there's always SOMETHING to speak.
+ * Pick narration text from a legacy annotation. Returns an empty
+ * string when no meaningful annotation exists — previously we fell
+ * back to `${san}.` which produced a voice reading just "Bg2. C6.
+ * B7." across the whole walkthrough. Silent auto-advance is a better
+ * default than monotonous move-calling; the displayed SAN already
+ * tells the student what was played.
  */
 function deriveNarration(
   annotation: OpeningMoveAnnotation | undefined,
-  san: string,
+  _san: string,
 ): string {
-  if (annotation?.annotation && annotation.annotation.trim().length > 0) {
-    return annotation.annotation.trim();
-  }
-  return `${san}.`;
+  const text = annotation?.annotation?.trim();
+  if (!text) return '';
+  if (isGenericAnnotationText(text)) return '';
+  return text;
 }
 
 /**
