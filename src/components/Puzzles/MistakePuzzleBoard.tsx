@@ -321,10 +321,16 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   useEffect(() => {
     if (state !== 'replay' || replaySteps.length === 0) return;
 
+    // Cancellation guard: cleanup nulls this so any in-flight voice
+    // promise from the replay-end sequence stops the puzzle from being
+    // set up after the user has already advanced.
+    const guard = { cancelled: false };
+
     // Start the first move after a brief pause for the intro narration
     const initialDelay = replayIndex === -1 ? 1800 : REPLAY_MOVE_DELAY;
 
     const timer = setTimeout(() => {
+      if (guard.cancelled) return;
       const nextIdx = replayIndex + 1;
 
       if (nextIdx >= replaySteps.length) {
@@ -333,13 +339,22 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         setFen(step.fen);
         setBoardKey((k) => k + 1);
 
-        // Brief pause then show the wrong move narration and start puzzle
         const mistakeMsg = `You played ${puzzle.playerMoveSan} here — ${puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}. Let's find the best move.`;
         setSubtitle(mistakeMsg);
-        void voiceService.speak(mistakeMsg);
 
-        replayTimerRef.current = setTimeout(() => {
-          // Set up puzzle position
+        // Speak the mistake message, then start the puzzle and speak
+        // its intro. Gating the intro on the mistake message's voice
+        // promise (instead of a fixed 2500ms timer) prevents the two
+        // narrations from overlapping when TTS takes longer than the
+        // arbitrary delay — the original cause of the "walked over"
+        // narration in Mixed Training. A 6s safety timer still fires
+        // if the speech promise hangs so the puzzle never gets stuck.
+        voiceService.stop();
+
+        let advanced = false;
+        const advance = (): void => {
+          if (guard.cancelled || advanced) return;
+          advanced = true;
           chessRef.current = new Chess(puzzle.fen);
           setFen(puzzle.fen);
           setBoardKey((k) => k + 1);
@@ -348,7 +363,15 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
             setSubtitle(puzzle.narration.intro);
             void voiceService.speak(puzzle.narration.intro);
           }
-        }, 2500);
+        };
+
+        const safetyTimer = setTimeout(advance, 6000);
+        replayTimerRef.current = safetyTimer;
+
+        void voiceService.speak(mistakeMsg).finally(() => {
+          clearTimeout(safetyTimer);
+          advance();
+        });
         return;
       }
 
@@ -374,6 +397,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     replayTimerRef.current = timer;
 
     return () => {
+      guard.cancelled = true;
       if (replayTimerRef.current) {
         clearTimeout(replayTimerRef.current);
         replayTimerRef.current = null;
@@ -514,9 +538,12 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         });
         // Speak outro after celebration sound, then signal completion.
         // Delay onComplete so the parent doesn't advance to the next
-        // puzzle while the outro is still playing.
+        // puzzle while the outro is still playing. Stop any in-flight
+        // per-move narration before the outro so the two don't overlap
+        // when the move narration runs longer than the 800ms delay.
         if (puzzle.narration.outro) {
           outroTimerRef.current = setTimeout(() => {
+            voiceService.stop();
             setSubtitle(puzzle.narration.outro);
             void voiceService.speak(puzzle.narration.outro);
           }, 800);
