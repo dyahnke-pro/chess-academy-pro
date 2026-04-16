@@ -17,7 +17,8 @@ import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { loadSubLineAnnotations, loadAnnotationsForPgn, enhanceWithNarration } from '../../services/annotationService';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useStrictNarration } from '../../hooks/useStrictNarration';
-import { trimToSentences } from '../../services/walkthroughNarration';
+import { trimToSentences, isGenericAnnotationText } from '../../services/walkthroughNarration';
+import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarrator';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { ArrowRight, Play, Pause, Info } from 'lucide-react';
@@ -233,7 +234,7 @@ export function WalkthroughMode({
 
   // Load annotations — sub-line-specific if key provided, otherwise main line
   useEffect(() => {
-    const guard = { cancelled: false };
+    const guard: { cancelled: boolean } = { cancelled: false };
     // Pre-warm voice service (caches DB prefs + primes AudioContext)
     void voiceService.warmup();
     void (async () => {
@@ -245,16 +246,49 @@ export function WalkthroughMode({
         // Use PGN-aware loader to find best-matching annotation set
         data = await loadAnnotationsForPgn(opening.id, activePgn);
       }
-      if (!guard.cancelled) {
-        setAnnotations(data);
-        // Pre-fetch Polly audio for all annotations so playback is instant
-        if (data) {
-          void voiceService.prefetchAudio(data.map(a => a.annotation));
-        }
+      if (guard.cancelled || !data) {
+        if (!guard.cancelled) setAnnotations(data);
+        return;
+      }
+      // Show raw annotations immediately so the UI isn't blocked while the
+      // LLM narrator does its work. Pre-fetch audio based on whatever text
+      // we have right now; we'll prefetch again once enrichment completes.
+      setAnnotations(data);
+      void voiceService.prefetchAudio(data.map(a => a.narration ?? a.annotation));
+
+      // Enrich any missing or generic-filler narrations via a batched LLM
+      // call. Cached in Dexie, so repeat visits resolve instantly. Curated
+      // real content is preserved. This is what gives trap/warning and
+      // variation walkthroughs the same teaching depth as the dynamic
+      // coach-session walkthroughs.
+      const needsFill = data.some(
+        (a) => !a.narration?.trim() || isGenericAnnotationText(a.narration ?? a.annotation),
+      );
+      if (!needsFill) return;
+      try {
+        const { narrations } = await generateWalkthroughNarrations({
+          openingName: opening.name,
+          variationName: variation?.name,
+          pgn: activePgn,
+          existingNarrations: data.map((a) => a.narration ?? a.annotation),
+        });
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (guard.cancelled) return;
+        const enriched: OpeningMoveAnnotation[] = data.map((ann, i) => {
+          const existing = (ann.narration ?? '').trim();
+          if (existing && !isGenericAnnotationText(existing)) return ann;
+          const fromLlm = narrations[i]?.trim();
+          if (!fromLlm) return ann;
+          return { ...ann, narration: fromLlm };
+        });
+        setAnnotations(enriched);
+        void voiceService.prefetchAudio(enriched.map((a) => a.narration ?? a.annotation));
+      } catch (err: unknown) {
+        console.warn('[WalkthroughMode] LLM narration fill failed:', err);
       }
     })();
     return () => { guard.cancelled = true; };
-  }, [opening.id, activePgn, subLineKey, isVariation, variationIndex]);
+  }, [opening.id, opening.name, activePgn, subLineKey, isVariation, variationIndex, variation?.name]);
 
   // Analyze position when it changes
   useEffect(() => {
