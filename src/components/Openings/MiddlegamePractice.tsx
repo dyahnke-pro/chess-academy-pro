@@ -6,7 +6,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { speechService } from '../../services/speechService';
-import { ArrowLeft, MessageCircle, Volume2, VolumeX } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Volume2, VolumeX, Undo, Lightbulb } from 'lucide-react';
 import type {
   MiddlegamePlan,
   StockfishAnalysis,
@@ -273,7 +273,56 @@ export function MiddlegamePractice({
     setIsNarrating((prev) => !prev);
   }, [isNarrating]);
 
+  // Takeback: undo the last FULL move (player + engine reply) so the
+  // student lands back on their own turn. Single-ply undo would leave
+  // the engine-to-move state, which isn't actionable in practice mode.
+  const handleTakeback = useCallback(() => {
+    if (isCoachThinking || isEngineMoving) return;
+    game.undoMove();
+    // When it's the engine's turn after the single undo (i.e. we just
+    // undid the engine's reply), the useEffect(fen) watcher will
+    // trigger makeEngineMove again — so undo a second ply to bring
+    // it back to the student's turn.
+    if (isEngineTurn()) {
+      game.undoMove();
+    }
+    setMoveCount((n) => Math.max(0, n - 2));
+    setEngineArrows([]);
+    setTopLines([]);
+    setCoachText('Try again — your move.');
+  }, [game, isCoachThinking, isEngineMoving, isEngineTurn]);
+
+  // Hint: surface the engine's top move as a gold arrow for 4s. Same
+  // pattern the Coach play view uses — non-destructive preview, no
+  // state mutation on the game itself.
+  const [isHintActive, setIsHintActive] = useState(false);
+  const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const handleGetHint = useCallback(async () => {
+    if (isCoachThinking || isEngineMoving || isHintActive) return;
+    setIsHintActive(true);
+    try {
+      const analysis = engineAnalysis ?? await stockfishEngine.queueAnalysis(game.fen, 16);
+      if (!isMountedRef.current) return;
+      setEngineArrows(buildEngineArrows(analysis));
+    } catch {
+      // Engine unavailable — hint silently fails
+    }
+    if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
+    hintTimerRef.current = setTimeout(() => {
+      if (!isMountedRef.current) return;
+      setEngineArrows([]);
+      setIsHintActive(false);
+    }, 4000);
+  }, [game.fen, engineAnalysis, isCoachThinking, isEngineMoving, isHintActive]);
+
+  useEffect(() => {
+    return () => {
+      if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
+    };
+  }, []);
+
   const isPlayerTurn = !isEngineTurn() && !game.isCheckmate && !game.isStalemate && !game.isDraw;
+  const canTakeback = isPlayerTurn && moveCount > 0;
 
   return (
     <div className="flex flex-col h-full" data-testid="middlegame-practice">
@@ -329,6 +378,35 @@ export function MiddlegamePractice({
             <EngineLines lines={topLines} fen={game.fen} className="mt-1" />
           )}
         </div>
+      </div>
+
+      {/* Practice controls — mirror the Get-a-Hint / Takeback surface
+          from CoachGamePage so practice behaves like the full Play
+          view the user already knows. */}
+      <div
+        className="flex-shrink-0 flex gap-2 px-4 py-2 border-t border-theme-border"
+        data-testid="middlegame-practice-controls"
+      >
+        <button
+          onClick={() => void handleGetHint()}
+          disabled={!isPlayerTurn || isHintActive || isCoachThinking}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium border border-theme-accent/50 text-theme-accent disabled:opacity-40"
+          data-testid="hint-btn"
+          aria-label="Get a hint"
+        >
+          <Lightbulb size={14} />
+          Get a Hint
+        </button>
+        <button
+          onClick={handleTakeback}
+          disabled={!canTakeback || isCoachThinking || isEngineMoving}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium border border-theme-border text-theme-text disabled:opacity-40"
+          data-testid="takeback-btn"
+          aria-label="Take back last move"
+        >
+          <Undo size={14} />
+          Takeback
+        </button>
       </div>
 
       {/* Coach Commentary */}
