@@ -4,6 +4,7 @@ import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { generateMistakeNarration } from './mistakeNarration';
 import { detectTacticType } from './missedTacticService';
+import { useAppStore } from '../stores/appStore';
 import type {
   MistakePuzzle,
   MistakeClassification,
@@ -671,15 +672,15 @@ export async function reanalyzeImportedGames(
     }
   }
 
-  // Determine username from first imported game
-  let username = '';
-  for (const game of allGames) {
-    if (game.source === 'chesscom' || game.source === 'lichess') {
-      // Username is whichever name isn't a bot/generic
-      username = game.white.toLowerCase();
-      break;
-    }
-  }
+  // Pull the student's real usernames from their profile. Previously
+  // we assumed the first game's white player was the user — that
+  // silently dropped every game where they played black, and worse, if
+  // their first import was a game where THEY played black, the
+  // assumed "username" was actually the opponent and ZERO puzzles
+  // generated for the whole batch. Read the saved usernames instead.
+  const profile = useAppStore.getState().activeProfile;
+  const chessComUsername = profile?.preferences.chessComUsername;
+  const lichessUsername = profile?.preferences.lichessUsername;
 
   // Re-run analysis on all games
   let totalPuzzles = 0;
@@ -690,10 +691,13 @@ export async function reanalyzeImportedGames(
     const freshGame = await db.games.get(allGames[i].id);
     if (!freshGame) continue;
 
-    const count = await generateMistakePuzzlesFromGame(
-      freshGame.id,
-      username || freshGame.white,
-    );
+    const username = freshGame.source === 'chesscom'
+      ? chessComUsername
+      : freshGame.source === 'lichess'
+        ? lichessUsername
+        : undefined;
+
+    const count = await generateMistakePuzzlesFromGame(freshGame.id, username);
     totalPuzzles += count;
   }
 

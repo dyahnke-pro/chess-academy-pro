@@ -500,11 +500,26 @@ export async function analyzeAllGames(
 
   // Generate mistake puzzles and detect bad habits from newly-analyzed games
   const profile = useAppStore.getState().activeProfile;
+  // The mistake generator needs a username to figure out which side
+  // the student played for imported games (chess.com / lichess).
+  // Without it, determinePlayerColor returns null and ZERO puzzles get
+  // generated — the reason the My Mistakes tab has always been empty
+  // for imported games. Resolve it per-game based on the game source.
+  const chessComUsername = profile?.preferences.chessComUsername;
+  const lichessUsername = profile?.preferences.lichessUsername;
+  const resolveUsername = async (gameId: string): Promise<string | undefined> => {
+    const g = await db.games.get(gameId);
+    if (!g) return undefined;
+    if (g.source === 'chesscom') return chessComUsername;
+    if (g.source === 'lichess') return lichessUsername;
+    return undefined; // coach games infer player side from "Stockfish Bot"
+  };
   for (const gameId of analyzedGameIds) {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
     if (_abortAnalysis) break;
     try {
-      await generateMistakePuzzlesFromGame(gameId);
+      const username = await resolveUsername(gameId);
+      await generateMistakePuzzlesFromGame(gameId, username);
     } catch {
       // Continue with remaining games
     }
