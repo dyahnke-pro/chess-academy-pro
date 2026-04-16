@@ -285,6 +285,23 @@ export function scanUpcomingTactic(
   const bestLine = analysis.topLines[0] as (typeof analysis.topLines)[number] | undefined;
   if (!bestLine || bestLine.moves.length < 2) return null;
 
+  // Same eval-gap gate detectGameplayTactic uses for immediate
+  // tactics. Without this, scanUpcomingTactic was firing on
+  // EVERY position where the engine had any plausible best line —
+  // i.e. essentially every move — and the user reported the
+  // tactic-preview popup appearing on almost every move. A tactic
+  // is only worth flagging when the best line is materially better
+  // than the second-best (>= 150cp), otherwise it's just "good play"
+  // and not a teachable concrete pattern.
+  if (analysis.topLines.length >= 2) {
+    const bestEval = analysis.topLines[0].evaluation;
+    const secondEval = analysis.topLines[1].evaluation;
+    const gap = playerColor === 'white'
+      ? bestEval - secondEval
+      : secondEval - bestEval;
+    if (gap < 150) return null;
+  }
+
   // We need chess.js to play through the line — dynamic import would be
   // heavy, so we do lightweight FEN analysis. The detectTacticType function
   // just needs FEN + move, and we can simulate by replaying moves.
@@ -323,6 +340,28 @@ export function scanUpcomingTactic(
   }
 
   return null;
+}
+
+/** Friendly label for a TacticType — used in coach messages so the
+ *  popup says "fork building" instead of generic "tactic building". */
+export function tacticTypeLabel(t: TacticType): string {
+  switch (t) {
+    case 'fork': return 'fork';
+    case 'pin': return 'pin';
+    case 'skewer': return 'skewer';
+    case 'discovered_attack': return 'discovered attack';
+    case 'back_rank': return 'back-rank tactic';
+    case 'hanging_piece': return 'capture on a hanging piece';
+    case 'promotion': return 'promotion';
+    case 'deflection': return 'deflection';
+    case 'overloaded_piece': return 'overload';
+    case 'trapped_piece': return 'trapped-piece motif';
+    case 'clearance': return 'clearance sacrifice';
+    case 'interference': return 'interference';
+    case 'zwischenzug': return 'zwischenzug';
+    case 'x_ray': return 'x-ray';
+    default: return 'tactic';
+  }
 }
 
 /**
