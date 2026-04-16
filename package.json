@@ -11,7 +11,7 @@
     "build": "tsc -b --force && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc -b --force",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
