@@ -235,6 +235,12 @@ export function CoachGamePage(): JSX.Element {
   // get prefixed with this agreed training focus so the session
   // doesn't feel like a cold reset from the chat conversation.
   const focusParam = searchParams.get('focus');
+  // When the coach describes a position in chat (via the "Play from
+  // this position" CTA), or the user asks to play a specific
+  // middlegame setup, we seed the game with this FEN instead of the
+  // standard start. The book-move auto-play driven by `subject` is
+  // suppressed when `fen` is set — we're not starting from move 1.
+  const fenParam = searchParams.get('fen');
   const initialDifficulty: CoachDifficulty =
     difficultyParam === 'easy' || difficultyParam === 'medium' || difficultyParam === 'hard'
       ? difficultyParam
@@ -246,7 +252,11 @@ export function CoachGamePage(): JSX.Element {
 
   // Player color selection (disabled once game has started)
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>(initialSide);
-  const game = useChessGame(undefined, playerColor);
+  // Capture the fen param once on mount so navigation or param-clearing
+  // later in the session doesn't re-seed the game. fenParam is null for
+  // normal "start-from-scratch" games.
+  const [initialGameFen] = useState<string | undefined>(() => fenParam ?? undefined);
+  const game = useChessGame(initialGameFen, playerColor);
 
   const [gameState, setGameState] = useState<CoachGameState>({
     gameId: `game-${Date.now()}`,
@@ -284,14 +294,17 @@ export function CoachGamePage(): JSX.Element {
 
   // Honor `?subject=` on mount once, so a dynamic session redirected
   // from /coach/session/play-against with ?subject=Sicilian seeds the
-  // book moves as if the student had asked by voice.
+  // book moves as if the student had asked by voice. Skipped when
+  // `?fen=` is set — a specific starting position overrides the
+  // opening book (the student is jumping past the opening).
   const subjectAppliedRef = useRef(false);
   useEffect(() => {
     if (subjectAppliedRef.current) return;
     if (!subjectParam) return;
+    if (initialGameFen) return;
     subjectAppliedRef.current = true;
     handleOpeningRequest(subjectParam);
-  }, [subjectParam, handleOpeningRequest]);
+  }, [subjectParam, handleOpeningRequest, initialGameFen]);
 
   // ─── Blunder Interception State ──────────────────────────────────────────
   const [blunderPause, setBlunderPause] = useState<{

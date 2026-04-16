@@ -7,8 +7,7 @@ import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { MobileChatDrawer } from './MobileChatDrawer';
 import { GameChatPanel } from './GameChatPanel';
-import { ChessBoard } from '../Board/ChessBoard';
-import type { BoardAnnotationCommand, BoardArrow, ChatMessage } from '../../types';
+import type { BoardAnnotationCommand, ChatMessage } from '../../types';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -27,8 +26,6 @@ export function GlobalCoachDrawer(): JSX.Element | null {
   const initialMessage = useAppStore((s) => s.coachDrawerInitialMessage);
   const setInitialMessage = useAppStore((s) => s.setCoachDrawerInitialMessage);
 
-  const [annotationArrows, setAnnotationArrows] = useState<BoardArrow[]>([]);
-  const [temporaryFen, setTemporaryFen] = useState<string | null>(null);
   const [minimized, setMinimized] = useState(false);
 
   // Persist chat messages across drawer open/close (this component stays mounted)
@@ -50,24 +47,30 @@ export function GlobalCoachDrawer(): JSX.Element | null {
   }, [setOpen]);
 
   const handleClear = useCallback(() => {
-    setAnnotationArrows([]);
-    setTemporaryFen(null);
     exitPractice();
     setGlobalPractice(null);
   }, [exitPractice, setGlobalPractice]);
 
   const handleBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]) => {
-    const newArrows: BoardArrow[] = [];
     let hasClear = false;
     let hasPractice = false;
+    // If the coach emits a show_position with a FEN, hand off to the
+    // full /coach/play view with that position seeded instead of
+    // rendering a static preview in the drawer (non-interactive,
+    // prone to getting stuck). The student lands in the real play
+    // view and decides whether to start a game from there.
+    let showPositionFen: string | null = null;
 
     for (const cmd of commands) {
       switch (cmd.type) {
         case 'arrow':
-          newArrows.push(...(cmd.arrows ?? []));
+          // Arrows used to decorate the in-drawer preview board. With
+          // show_position now routing out of the drawer, there's no
+          // local surface to render arrows on — the play view owns
+          // its own annotations. Intentionally ignored here.
           break;
         case 'show_position':
-          if (cmd.fen) setTemporaryFen(cmd.fen);
+          if (cmd.fen) showPositionFen = cmd.fen;
           break;
         case 'practice':
           hasPractice = true;
@@ -80,17 +83,21 @@ export function GlobalCoachDrawer(): JSX.Element | null {
 
     if (hasClear) {
       handleClear();
-    } else {
-      if (hasPractice) {
-        setPracticeFromAnnotation(commands);
-        const practiceCmd = commands.find((c) => c.type === 'practice' && c.fen);
-        if (practiceCmd?.fen) {
-          setGlobalPractice({ fen: practiceCmd.fen, label: practiceCmd.label ?? 'Practice position' });
-        }
-      }
-      if (newArrows.length > 0) setAnnotationArrows(newArrows);
+      return;
     }
-  }, [handleClear, setPracticeFromAnnotation, setGlobalPractice]);
+    if (showPositionFen) {
+      setOpen(false);
+      void navigate(`/coach/play?fen=${encodeURIComponent(showPositionFen)}`);
+      return;
+    }
+    if (hasPractice) {
+      setPracticeFromAnnotation(commands);
+      const practiceCmd = commands.find((c) => c.type === 'practice' && c.fen);
+      if (practiceCmd?.fen) {
+        setGlobalPractice({ fen: practiceCmd.fen, label: practiceCmd.label ?? 'Practice position' });
+      }
+    }
+  }, [handleClear, navigate, setOpen, setPracticeFromAnnotation, setGlobalPractice]);
 
   const handleInitialPromptSent = useCallback(() => {
     setInitialMessage(null);
@@ -101,17 +108,13 @@ export function GlobalCoachDrawer(): JSX.Element | null {
   }, []);
 
   // Context for GameChatPanel — use global board context or defaults
-  const fen = practicePosition?.fen ?? temporaryFen ?? boardCtx?.fen ?? START_FEN;
+  const fen = practicePosition?.fen ?? boardCtx?.fen ?? START_FEN;
   const pgn = boardCtx?.pgn ?? '';
   const moveNumber = boardCtx?.moveNumber ?? 1;
   const playerColor: 'white' | 'black' = boardCtx?.playerColor === 'black' ? 'black' : 'white';
   const turn: 'w' | 'b' = boardCtx?.turn === 'b' ? 'b' : 'w';
   const ctxLastMove = boardCtx?.lastMove ?? undefined;
   const ctxHistory = boardCtx?.history ?? undefined;
-
-  // Show a small show-position preview inline only for `show_position` tags
-  // (practice positions now route to a full-screen view instead).
-  const showPreviewFen = temporaryFen && !practicePosition && !boardCtx;
 
   const startPractice = useCallback(() => {
     // Drawer closes so the full-screen view owns the viewport. The
@@ -211,34 +214,14 @@ export function GlobalCoachDrawer(): JSX.Element | null {
         </div>
       )}
 
-      {/* Preview board for `show_position` annotations (non-interactive).
-          Includes a dismiss button because the coach can emit a
-          show_position without a matching `clear`, leaving a stuck board
-          that the user can't get rid of — reported in the field. */}
-      {showPreviewFen && !minimized && (
-        <div className="relative px-4 py-2 shrink-0">
-          <button
-            onClick={() => setTemporaryFen(null)}
-            className="absolute top-2 right-4 z-10 p-1 rounded-full hover:opacity-80"
-            style={{ background: 'var(--color-bg)', color: 'var(--color-text-muted)' }}
-            aria-label="Dismiss preview board"
-            data-testid="dismiss-preview-board"
-          >
-            <X size={14} />
-          </button>
-          <div className="max-w-[200px] mx-auto">
-            <ChessBoard
-              key={`drawer-preview-${temporaryFen ?? ''}`}
-              initialFen={temporaryFen ?? START_FEN}
-              interactive={false}
-              showFlipButton={false}
-              showUndoButton={false}
-              showResetButton={false}
-              arrows={annotationArrows.length > 0 ? annotationArrows : undefined}
-            />
-          </div>
-        </div>
-      )}
+      {/* show_position annotations used to render a static preview
+          board in the drawer. That board was non-interactive, often
+          got stuck (no matching `clear`), and duplicated what the
+          real /coach/play view provides. Per-user directive: when the
+          coach describes a position in chat, the app now auto-routes
+          to /coach/play with that FEN seeded (see handleBoardAnnotation
+          above). The student lands in the interactive view and
+          decides whether to play from there. No preview rendered. */}
 
       {/* Chat panel — hideHeader since the drawer provides its own */}
       {!minimized && (
