@@ -130,17 +130,9 @@ vi.mock('../Board/ChessBoard', () => ({
   ),
 }));
 
-vi.mock('./EvalGraph', () => ({
-  EvalGraph: ({ currentMoveIndex, onMoveClick }: { currentMoveIndex: number | null; onMoveClick?: (i: number) => void }) => (
-    <div data-testid="eval-graph" data-current-index={currentMoveIndex}>
-      {onMoveClick && (
-        <button data-testid="eval-graph-click" onClick={() => onMoveClick(0)}>
-          Click Move
-        </button>
-      )}
-    </div>
-  ),
-}));
+// EvalGraph mock removed — the production component no longer renders
+// the eval line graph in review mode (the vertical eval bar on the
+// board side carries the same info). See coachGameReview commit.
 
 vi.mock('./ReviewSummaryCard', () => ({
   ReviewSummaryCard: ({ onStartReview, onPlayAgain, onBackToCoach, result }: {
@@ -307,7 +299,6 @@ describe('CoachGameReview', () => {
 
     expect(screen.getByTestId('coach-game-review')).toBeInTheDocument();
     expect(screen.getByTestId('chess-board')).toBeInTheDocument();
-    expect(screen.getByTestId('eval-graph')).toBeInTheDocument();
     expect(screen.getByTestId('move-list-panel')).toBeInTheDocument();
     expect(screen.getByTestId('move-nav-controls')).toBeInTheDocument();
   });
@@ -473,25 +464,17 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('move-nav-controls')).toBeInTheDocument();
   });
 
-  it('syncs eval graph current index with navigation', () => {
+  it('updates the board FEN when navigating forward (one ply per click)', () => {
     renderAnalysis();
 
-    // Initially at starting position (index -1)
-    expect(screen.getByTestId('eval-graph')).toHaveAttribute('data-current-index', '-1');
-
-    // Navigate to next
+    // Step back to start, then advance one ply at a time. Each click
+    // should land exactly on the next ply's FEN — this is the
+    // regression guard for the "moves 2 pieces at a time" bug.
+    fireEvent.click(screen.getByTestId('nav-first'));
     fireEvent.click(screen.getByTestId('nav-next'));
-    expect(screen.getByTestId('eval-graph')).toHaveAttribute('data-current-index', '0');
-  });
-
-  it('clicking eval graph move updates board position', () => {
-    renderAnalysis();
-
-    // Click move 0 from eval graph
-    fireEvent.click(screen.getByTestId('eval-graph-click'));
-
-    // Board should now show the first move's FEN
     expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-e4');
+    fireEvent.click(screen.getByTestId('nav-next'));
+    expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-e5');
   });
 
   // ─── AI Features ───────────────────────────────────────────────────────────
