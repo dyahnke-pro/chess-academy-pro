@@ -46,15 +46,10 @@ import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useWalkthroughRunner } from '../../hooks/useWalkthroughRunner';
 import { resolveMiddlegameSessionWithFallback } from '../../services/middlegamePlanner';
 import { resolveWalkthroughSession } from '../../services/walkthroughResolver';
-import { resolveConfig } from '../../services/coachPlaySession';
-import { getPlayerRating } from '../../services/playerRatingService';
-import { CoachPlaySessionView } from './CoachPlaySessionView';
 import { ExplainPositionSessionView } from './ExplainPositionSessionView';
 import { CoachPracticeSessionView } from './CoachPracticeSessionView';
 import { DynamicCoachSession } from './DynamicCoachSession';
 import type { WalkthroughSession } from '../../types/walkthrough';
-import type { CoachDifficulty } from '../../services/coachAgent';
-import type { PlaySessionConfig } from '../../services/coachPlaySession';
 
 type SessionKind =
   | 'middlegame'
@@ -75,8 +70,6 @@ export function CoachSessionPage(): JSX.Element {
   const orientationParam = searchParams.get('orientation');
   const orientation: 'white' | 'black' =
     sideParam === 'black' || orientationParam === 'black' ? 'black' : 'white';
-  const difficulty =
-    (searchParams.get('difficulty') as CoachDifficulty | null) ?? 'auto';
   const theme = searchParams.get('theme') ?? undefined;
   const fen = searchParams.get('fen') ?? undefined;
 
@@ -100,16 +93,19 @@ export function CoachSessionPage(): JSX.Element {
   }
 
   if (kind === 'play-against') {
-    return (
-      <DynamicCoachSession title={subject ? `Play ${subject}` : 'Play the coach'} onExit={goBack}>
-        <PlayAgainstBody
-          difficulty={difficulty}
-          orientation={orientation}
-          subject={subject}
-          onExit={goBack}
-        />
-      </DynamicCoachSession>
-    );
+    // The dynamic session used to render a stripped-down CoachPlaySessionView
+    // with a static-mode board (no click-to-move, no themed board). Users
+    // want the full /coach/play experience — themed board, click-to-move,
+    // move classification, hints, post-game review. Forward the session's
+    // params so CoachGamePage can start in the requested configuration.
+    const params = new URLSearchParams();
+    if (subject) params.set('subject', subject);
+    if (searchParams.get('side') === 'black') params.set('side', 'black');
+    if (searchParams.get('side') === 'white') params.set('side', 'white');
+    const diffParam = searchParams.get('difficulty');
+    if (diffParam && diffParam !== 'auto') params.set('difficulty', diffParam);
+    const qs = params.toString();
+    return <Navigate to={qs ? `/coach/play?${qs}` : '/coach/play'} replace />;
   }
 
   if (kind === 'walkthrough') {
@@ -275,44 +271,11 @@ function WalkthroughSessionBody({
   return <WalkthroughRunnerBody session={session} onExit={onExit} />;
 }
 
-// ─── Play-against ───────────────────────────────────────────────────
-
-interface PlayAgainstBodyProps {
-  difficulty: CoachDifficulty;
-  orientation: 'white' | 'black';
-  subject?: string;
-  onExit: () => void;
-}
-
-function PlayAgainstBody({
-  difficulty,
-  orientation,
-  subject,
-  onExit,
-}: PlayAgainstBodyProps): JSX.Element {
-  const [config, setConfig] = useState<PlaySessionConfig | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    void getPlayerRating().then((rating) => {
-      if (cancelled) return;
-      setConfig(resolveConfig(difficulty, rating));
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [difficulty]);
-
-  if (!config) return <LessonLoadingState label="Matching difficulty to your rating…" onExit={onExit} />;
-  return (
-    <CoachPlaySessionView
-      config={config}
-      orientation={orientation}
-      subject={subject}
-      onExit={onExit}
-    />
-  );
-}
+// play-against now redirects to /coach/play (CoachGamePage) which owns
+// the full-featured game experience — themed board, click-to-move,
+// move classification, hints, post-game review. The PlayAgainstBody
+// wrapper that used to live here is retired along with its use of
+// CoachPlaySessionView.
 
 // ─── Shared runner body ─────────────────────────────────────────────
 

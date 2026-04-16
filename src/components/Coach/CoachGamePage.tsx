@@ -223,11 +223,24 @@ export function CoachGamePage(): JSX.Element {
 
   const playerRating = activeProfile?.currentRating ?? 1420;
 
-  const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
+  // Dynamic sessions redirect here with query params set by SmartSearchBar
+  // / chat intent routing ("play the Sicilian against me as black hard").
+  // Honor those on mount so the student lands in a ready-to-play game
+  // with the requested configuration, not the default.
+  const difficultyParam = searchParams.get('difficulty');
+  const sideParam = searchParams.get('side');
+  const subjectParam = searchParams.get('subject');
+  const initialDifficulty: CoachDifficulty =
+    difficultyParam === 'easy' || difficultyParam === 'medium' || difficultyParam === 'hard'
+      ? difficultyParam
+      : 'medium';
+  const initialSide: 'white' | 'black' = sideParam === 'black' ? 'black' : 'white';
+
+  const [difficulty, setDifficulty] = useState<CoachDifficulty>(initialDifficulty);
   const targetStrength = getTargetStrength(playerRating, difficulty);
 
   // Player color selection (disabled once game has started)
-  const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
+  const [playerColor, setPlayerColor] = useState<'white' | 'black'>(initialSide);
   const game = useChessGame(undefined, playerColor);
 
   const [gameState, setGameState] = useState<CoachGameState>({
@@ -263,6 +276,17 @@ export function CoachGamePage(): JSX.Element {
       console.warn('[CoachGame] Opening not found in book:', openingName);
     }
   }, []);
+
+  // Honor `?subject=` on mount once, so a dynamic session redirected
+  // from /coach/session/play-against with ?subject=Sicilian seeds the
+  // book moves as if the student had asked by voice.
+  const subjectAppliedRef = useRef(false);
+  useEffect(() => {
+    if (subjectAppliedRef.current) return;
+    if (!subjectParam) return;
+    subjectAppliedRef.current = true;
+    handleOpeningRequest(subjectParam);
+  }, [subjectParam, handleOpeningRequest]);
 
   // ─── Blunder Interception State ──────────────────────────────────────────
   const [blunderPause, setBlunderPause] = useState<{

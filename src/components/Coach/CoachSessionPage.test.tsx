@@ -47,6 +47,7 @@ function renderAt(path: string): ReturnType<typeof render> {
         <Routes>
           <Route path="/coach/session/:kind" element={<CoachSessionPage />} />
           <Route path="/coach/chat" element={<div data-testid="chat-redirect" />} />
+          <Route path="/coach/play" element={<CoachPlayProbe />} />
           <Route path="/tactics" element={<div data-testid="tactics-redirect" />} />
           <Route
             path="/tactics/adaptive"
@@ -66,6 +67,19 @@ function TacticsAdaptiveProbe(): JSX.Element {
     (loc.state as { forcedWeakThemes?: string[] } | null)?.forcedWeakThemes ?? [];
   return (
     <div data-testid="adaptive-redirect" data-themes={themes.join(',')} />
+  );
+}
+
+function CoachPlayProbe(): JSX.Element {
+  // Surface the redirect path + query string so tests can assert that
+  // play-against sessions forward their config to /coach/play.
+  const loc = useLocation();
+  return (
+    <div data-testid="coach-play-redirect">
+      <span data-testid="coach-play-redirect-path">
+        {loc.pathname + loc.search}
+      </span>
+    </div>
   );
 }
 
@@ -178,14 +192,15 @@ describe('CoachSessionPage — play-against', () => {
     vi.spyOn(voiceService, 'stop').mockImplementation(() => {});
   });
 
-  it('renders a loading state then the play view', async () => {
+  it('redirects to /coach/play with forwarded query params', async () => {
     renderAt('/coach/session/play-against?subject=italian&difficulty=easy');
-    // Loads the player rating async.
     await waitFor(() =>
-      expect(
-        screen.getByLabelText('Resign and return to chat'),
-      ).toBeInTheDocument(),
+      expect(screen.getByTestId('coach-play-redirect')).toBeInTheDocument(),
     );
+    const pathDisplay = screen.getByTestId('coach-play-redirect-path');
+    expect(pathDisplay.textContent).toContain('/coach/play');
+    expect(pathDisplay.textContent).toContain('subject=italian');
+    expect(pathDisplay.textContent).toContain('difficulty=easy');
   });
 });
 
