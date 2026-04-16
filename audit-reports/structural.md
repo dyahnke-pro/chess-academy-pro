@@ -1,6 +1,6 @@
 # Structural Audit Report
 
-Generated: 2026-04-16T22:38:50.953Z
+Generated: 2026-04-16T22:52:52.074Z
 Total scripted-move records scanned: **43239**
 
 ## Counts
@@ -8,7 +8,7 @@ Total scripted-move records scanned: **43239**
 | Finding | Count |
 |---|---:|
 | Bare / empty annotations | 2 |
-| Filler annotations | 10447 |
+| Filler annotations | 10583 |
 | Illegal moves (PGN won't parse) | 284 |
 | SAN ↔ replay drift | 30 |
 | Illegal arrows | 7654 |

@@ -197,6 +197,14 @@ describe('isGenericAnnotationText — subline generator filler', () => {
     'Qxf7+! Check! The trap is sprung \u2014 there\u2019s no good defense here.',
     'Bxf7+! This is the critical move that springs the trap. The opponent is in serious trouble.',
     'Nxe5. This is where the trap begins. The next two moves are the key sequence you need to memorize.',
+    // User-reported (fall-through from earlier pattern list):
+    'White plays Nf3. The critical moment is approaching.',
+    'Black plays d5 and the trap is being set.',
+    'Nc3 — the trap is being set in motion.',
+    'White plays Bc4, developing normally. The opponent might not see what\u2019s coming.',
+    'Black plays e5 — the opponent won\u2019t see what\u2019s coming.',
+    'White plays d4. This is a critical moment in the trap.',
+    'Nf3. This is a critical moment where precise play is essential.',
     // Bare "Side plays SAN." fallback
     'White plays Nf3.',
     'Black plays d5.',
