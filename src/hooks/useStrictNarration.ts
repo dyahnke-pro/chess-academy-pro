@@ -105,10 +105,13 @@ export function useStrictNarration({
 
       if (!narration) {
         // No speech for this step. In auto-play, advance after the buffer delay.
+        // Advance by bumping state — the [currentStep] effect re-invokes
+        // playStep, so the board (which derives from currentStep) actually
+        // updates. Recursing playStep directly would leave state frozen.
         if (isAutoPlayingRef.current && stepIndex < stepCountRef.current - 1) {
           advanceTimerRef.current = setTimeout(() => {
             if (myToken !== tokenRef.current) return;
-            playStep(stepIndex + 1);
+            setCurrentStep(stepIndex + 1);
           }, Math.max(postNarrationDelayRef.current, 800));
         } else if (stepIndex >= stepCountRef.current - 1) {
           setIsAutoPlaying(false);
@@ -130,7 +133,7 @@ export function useStrictNarration({
         }
         advanceTimerRef.current = setTimeout(() => {
           if (myToken !== tokenRef.current) return;
-          playStep(stepIndex + 1);
+          setCurrentStep(stepIndex + 1);
         }, postNarrationDelayRef.current);
       });
     },
