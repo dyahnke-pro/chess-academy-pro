@@ -19,9 +19,11 @@
 import { searchOpenings } from './openingService';
 import { loadAnnotations, loadSubLineAnnotations } from './annotationService';
 import { buildSession } from './walkthroughAdapter';
+import { generateWalkthroughNarrations } from './walkthroughLlmNarrator';
+import { isGenericAnnotationText } from './walkthroughNarration';
 import { fuzzyScore } from '../utils/fuzzySearch';
-import type { WalkthroughSession } from '../types/walkthrough';
-import type { OpeningRecord, OpeningVariation } from '../types';
+import type { WalkthroughSession, WalkthroughStep } from '../types/walkthrough';
+import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation } from '../types';
 
 export interface ResolveWalkthroughOptions {
   subject: string;
@@ -137,7 +139,7 @@ export async function resolveWalkthroughSession(
     const subLineId = `variation-${variationIndex}`;
     const annotations = await loadSubLineAnnotations(opening.id, subLineId);
 
-    return buildSession({
+    const base = buildSession({
       title: `${opening.name}: ${variation.name}`,
       subtitle: 'Walkthrough',
       pgn: variation.pgn,
@@ -147,12 +149,18 @@ export async function resolveWalkthroughSession(
       kind: 'opening',
       source: `walkthroughResolver:${opening.id}:${subLineId}`,
     });
+    return fillMissingNarrations(base, {
+      openingName: opening.name,
+      variationName: variation.name,
+      pgn: variation.pgn,
+      annotations: annotations ?? [],
+    });
   }
 
   // Main-line: use the opening's PGN + main-line annotations.
   const annotations = await loadAnnotations(opening.id);
 
-  return buildSession({
+  const base = buildSession({
     title: opening.name,
     subtitle: 'Walkthrough',
     pgn: opening.pgn,
@@ -162,4 +170,55 @@ export async function resolveWalkthroughSession(
     kind: 'opening',
     source: `walkthroughResolver:${opening.id}:mainline`,
   });
+  return fillMissingNarrations(base, {
+    openingName: opening.name,
+    pgn: opening.pgn,
+    annotations: annotations ?? [],
+  });
+}
+
+/**
+ * If the freshly-built session has any steps with empty or generic-
+ * filler narration, call the LLM narrator in a single batched round-
+ * trip to fill them in. Results are cached in Dexie so the second
+ * visit to the same walkthrough pays nothing. Any steps where a
+ * curated real annotation exists are preserved untouched.
+ *
+ * The call is best-effort: if the LLM is unavailable we return the
+ * session as-is (silent on uncurated moves) rather than blocking the
+ * walkthrough.
+ */
+async function fillMissingNarrations(
+  session: WalkthroughSession,
+  context: {
+    openingName: string;
+    variationName?: string;
+    pgn: string;
+    annotations: OpeningMoveAnnotation[];
+  },
+): Promise<WalkthroughSession> {
+  const needsFill = session.steps.some(
+    (s) => !s.narration.trim() || isGenericAnnotationText(s.narration),
+  );
+  if (!needsFill) return session;
+
+  try {
+    const { narrations } = await generateWalkthroughNarrations({
+      openingName: context.openingName,
+      variationName: context.variationName,
+      pgn: context.pgn,
+      existingNarrations: context.annotations.map((a) => a.annotation),
+    });
+    const filledSteps: WalkthroughStep[] = session.steps.map((step, i) => {
+      const existing = step.narration.trim();
+      if (existing && !isGenericAnnotationText(existing)) return step;
+      const fromLlm = narrations[i]?.trim();
+      if (!fromLlm) return step;
+      return { ...step, narration: fromLlm };
+    });
+    return { ...session, steps: filledSteps };
+  } catch (err: unknown) {
+    console.warn('[walkthroughResolver] LLM narration fill failed:', err);
+    return session;
+  }
 }
