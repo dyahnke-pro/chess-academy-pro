@@ -230,6 +230,11 @@ export function CoachGamePage(): JSX.Element {
   const difficultyParam = searchParams.get('difficulty');
   const sideParam = searchParams.get('side');
   const subjectParam = searchParams.get('subject');
+  // Carried over from the coach-chat "let's play / yes let's do it"
+  // affirmation flow. When present, the coach's per-move reactions
+  // get prefixed with this agreed training focus so the session
+  // doesn't feel like a cold reset from the chat conversation.
+  const focusParam = searchParams.get('focus');
   const initialDifficulty: CoachDifficulty =
     difficultyParam === 'easy' || difficultyParam === 'medium' || difficultyParam === 'hard'
       ? difficultyParam
@@ -580,9 +585,16 @@ export function CoachGamePage(): JSX.Element {
         { role: 'user' as const, content: userMsg },
       ];
 
+      // When the student arrived here via "let's play / yes let's do it",
+      // prefix the reaction prompt with the agreed training focus so the
+      // coach's commentary stays on-theme with the chat conversation.
+      const systemPrompt = focusParam
+        ? `${EXPLORE_REACTION_ADDITION}\n\nTraining focus for this game (carried over from the chat where the student agreed to play): ${focusParam}. Weave this focus into your reactions — praise moves that apply it, gently flag moves that miss it.`
+        : EXPLORE_REACTION_ADDITION;
+
       void getCoachChatResponse(
         msgHistory,
-        EXPLORE_REACTION_ADDITION,
+        systemPrompt,
         undefined,
         'explore_reaction',
         256,
@@ -597,7 +609,7 @@ export function CoachGamePage(): JSX.Element {
         setIsExploreReacting(false);
       });
     }).catch(() => { /* engine may be busy */ });
-  }, [exploreMessages]);
+  }, [exploreMessages, focusParam]);
 
   /** Dismiss tip and snap board back to the live position */
   const handleDismissTip = useCallback(() => {

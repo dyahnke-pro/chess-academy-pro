@@ -104,6 +104,10 @@ export function CoachSessionPage(): JSX.Element {
     if (searchParams.get('side') === 'white') params.set('side', 'white');
     const diffParam = searchParams.get('difficulty');
     if (diffParam && diffParam !== 'auto') params.set('difficulty', diffParam);
+    // Carry the narrative training focus from the coach-chat affirmation
+    // flow so the play page's coach keeps the agreed focus in mind.
+    const focusParam = searchParams.get('focus');
+    if (focusParam) params.set('focus', focusParam);
     const qs = params.toString();
     return <Navigate to={qs ? `/coach/play?${qs}` : '/coach/play'} replace />;
   }

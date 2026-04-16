@@ -49,7 +49,31 @@ export interface RouteChatIntentOptions {
    * WO-CURRENT-POSITION for the broader follow-up.
    */
   currentFen?: string;
+  /**
+   * Optional text of the most recent assistant message in the chat.
+   * Used to catch the "coach proposes a game → user affirms" flow:
+   * when the assistant just said "let's play a game focused on X"
+   * and the user replies "yes" / "sure" / "let's do it", we route to
+   * /coach/play and forward the assistant's proposal as a `focus`
+   * query param so the game's coach remembers the agreed focus.
+   */
+  lastAssistantMessage?: string;
 }
+
+/** Affirmations that, ON THEIR OWN, should trigger routing ONLY when
+ *  the assistant was clearly proposing a game in the prior turn. These
+ *  are intentionally narrow — single "yes" shouldn't hijack every
+ *  chat. Stronger phrases like "let's do it" are treated the same way
+ *  because the test for a preceding game proposal is what actually
+ *  gates the routing. */
+const AFFIRMATION_RE =
+  /^(?:yes|yeah|yep|yup|sure|ok(?:ay)?|sounds?\s+(?:good|great)|let[\u2019']?s\s+do\s+(?:it|this)|let[\u2019']?s\s+go|i[\u2019']?m\s+in|i[\u2019']?m\s+ready|go\s+for\s+it|do\s+it|alright)[!.\s]*$/i;
+
+/** Loose "the assistant just offered a game" detector. False positives
+ *  here are low-cost (the user affirmed, so navigating is probably
+ *  what they want anyway). */
+const ASSISTANT_GAME_PROPOSAL_RE =
+  /\b(let'?s\s+play|play\s+(?:a\s+)?(?:new\s+)?(?:game|match)|start\s+(?:a\s+)?(?:new\s+)?(?:game|match)|ready\s+to\s+play|shall\s+we\s+play|want\s+to\s+play\??)\b/i;
 
 /**
  * Map a user message to a session route, or return null if the message
@@ -59,6 +83,32 @@ export async function routeChatIntent(
   text: string,
   options: RouteChatIntentOptions = {},
 ): Promise<RoutedChatIntent | null> {
+  // Affirmation-after-proposal: the coach's prior turn offered a game
+  // and the user just said "yes" / "let's do it" / etc. Carry the
+  // assistant's proposal as a `focus` param so the play page's coach
+  // remembers the training agreement (e.g., "spotting hanging pieces
+  // and simple combinations"). Runs BEFORE parseCoachIntent because a
+  // bare "yes" otherwise falls through to qa.
+  if (
+    options.lastAssistantMessage &&
+    AFFIRMATION_RE.test(text.trim()) &&
+    ASSISTANT_GAME_PROPOSAL_RE.test(options.lastAssistantMessage)
+  ) {
+    const params = new URLSearchParams();
+    const focus = extractFocus(options.lastAssistantMessage);
+    if (focus) params.set('focus', focus);
+    return {
+      path: withQuery('/coach/session/play-against', params),
+      ackMessage: focus
+        ? `Great — starting a game. We\u2019ll focus on ${focus}.`
+        : 'Great — starting a game.',
+      // Synthesize a play-against intent so callers (analytics, tests)
+      // see a consistent shape even though parseCoachIntent wouldn't
+      // have matched the affirmation on its own.
+      intent: { kind: 'play-against', difficulty: 'auto', raw: text },
+    };
+  }
+
   const intent = parseCoachIntent(text);
 
   switch (intent.kind) {
@@ -184,9 +234,48 @@ function buildPlayAckMessage(intent: CoachIntent): string {
   return parts.join(' ');
 }
 
+/**
+ * Pull a short "training focus" phrase out of the assistant's game
+ * proposal so the play page's coach can keep the agreed focus in
+ * mind. We try a few templates the coach LLM commonly emits, then
+ * fall back to the whole message (clipped) so context is never lost.
+ */
+function extractFocus(assistantMessage: string): string | null {
+  const text = assistantMessage.trim();
+  if (!text) return null;
+
+  // "focus on X" / "focused on X" / "work on X" / "practice X"
+  const onMatch = text.match(
+    /\b(?:focus(?:ed|ing)?\s+on|work(?:ing)?\s+on|practice|drill)\s+([^.!?\n]{3,160})/i,
+  );
+  if (onMatch) return tidy(onMatch[1]);
+
+  // "play a game where we … X" / "play a game about X"
+  const whereMatch = text.match(
+    /\bplay\s+(?:a\s+)?(?:new\s+)?(?:game|match)\s+(?:where\s+we\s+|about\s+|for\s+|to\s+)([^.!?\n]{3,160})/i,
+  );
+  if (whereMatch) return tidy(whereMatch[1]);
+
+  // Fallback: the whole proposal, clipped to a manageable length so
+  // the play page's coach prompt doesn't balloon.
+  return tidy(text).slice(0, 200);
+}
+
+function tidy(s: string): string {
+  return s
+    .replace(/\s+/g, ' ')
+    .replace(/^[\s,.:;—–-]+|[\s,.:;—–-]+$/g, '')
+    .trim();
+}
+
 /** Test hook — exposed for unit tests only. */
 export function __test__resolvePuzzleTheme(theme: string | undefined): string | null {
   return resolvePuzzleTheme(theme);
+}
+
+/** Test hook — exposed for unit tests only. */
+export function __test__extractFocus(message: string): string | null {
+  return extractFocus(message);
 }
 
 export type { CoachDifficulty };

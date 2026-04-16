@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { routeChatIntent, __test__resolvePuzzleTheme } from './coachIntentRouter';
+import { routeChatIntent, __test__resolvePuzzleTheme, __test__extractFocus } from './coachIntentRouter';
 
 // Mock the resource-lookup layer so tests don't hit Dexie.
 vi.mock('./walkthroughResolver', () => ({
@@ -108,6 +108,79 @@ describe('routeChatIntent', () => {
     ).rejects.toBeInstanceOf(Error);
     // The above confirms errors propagate; callers are responsible for
     // wrapping in try/catch (see CoachChatPage.handleSend).
+  });
+});
+
+describe('affirmation-after-game-proposal', () => {
+  const PROPOSAL =
+    "That's perfect for today — let's play a game where we focus on spotting hanging pieces and simple combinations.";
+
+  it('routes "Let\'s do it!" to play-against when coach just proposed a game', async () => {
+    const routed = await routeChatIntent("Let's do it!", {
+      lastAssistantMessage: PROPOSAL,
+    });
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toMatch(/^\/coach\/session\/play-against/);
+    expect(routed!.intent.kind).toBe('play-against');
+  });
+
+  it('forwards the assistant\u2019s focus phrase as a `focus` query param', async () => {
+    const routed = await routeChatIntent('yes', { lastAssistantMessage: PROPOSAL });
+    expect(routed).not.toBeNull();
+    const path = routed!.path;
+    expect(path).toContain('focus=');
+    // URLSearchParams encodes spaces as `+`; parse properly to compare.
+    const params = new URLSearchParams(path.split('?')[1]);
+    const focus = params.get('focus') ?? '';
+    expect(focus.toLowerCase()).toContain('hanging pieces');
+  });
+
+  it('accepts several natural affirmations', async () => {
+    for (const reply of ['yes', 'yeah', 'sure', 'ok', 'sounds good', 'let\u2019s go', "I'm in"]) {
+      const routed = await routeChatIntent(reply, { lastAssistantMessage: PROPOSAL });
+      expect(routed, `expected "${reply}" to route`).not.toBeNull();
+      expect(routed!.path).toMatch(/^\/coach\/session\/play-against/);
+    }
+  });
+
+  it('does NOT route when affirmation is standalone (no game proposal in prior turn)', async () => {
+    const routed = await routeChatIntent('yes', {
+      lastAssistantMessage: 'That is a classic developing move.',
+    });
+    expect(routed).toBeNull();
+  });
+
+  it('does NOT route when there is no prior assistant message', async () => {
+    const routed = await routeChatIntent('let\u2019s do it');
+    expect(routed).toBeNull();
+  });
+
+  it('does NOT hijack unrelated user messages even after a proposal', async () => {
+    const routed = await routeChatIntent('What is my weakest opening?', {
+      lastAssistantMessage: PROPOSAL,
+    });
+    // "What is my weakest opening?" is a genuine question — don't steal it.
+    expect(routed).toBeNull();
+  });
+});
+
+describe('extractFocus', () => {
+  it('pulls "focus on X" phrases', () => {
+    expect(
+      __test__extractFocus("let's play a game where we focus on spotting hanging pieces"),
+    ).toMatch(/hanging pieces/i);
+  });
+
+  it('pulls "about X" phrases', () => {
+    expect(__test__extractFocus('play a game about rook endgames')).toMatch(
+      /rook endgames/i,
+    );
+  });
+
+  it('falls back to the trimmed message when no template matches', () => {
+    const text = 'Ready for a game?';
+    const out = __test__extractFocus(text);
+    expect(out).toBe('Ready for a game?');
   });
 });
 

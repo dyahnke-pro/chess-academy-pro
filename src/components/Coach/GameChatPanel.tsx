@@ -150,7 +150,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // in-game chat stays in-game — the user can finish their move first.
       if (isGameOver) {
         try {
-          const routed = await routeChatIntent(text, { currentFen: fen });
+          // Grab the most recent assistant message so the router can
+          // detect "coach proposed a game → user said yes". Walk back
+          // from the end of the existing chat history (pre-userMsg).
+          const lastAssistantMessage = [...messagesRef.current]
+            .reverse()
+            .find((m) => m.role === 'assistant')?.content;
+          const routed = await routeChatIntent(text, { currentFen: fen, lastAssistantMessage });
           if (routed) {
             const ackMsg: ChatMessageType = {
               id: `gmsg-${Date.now()}-ack`,
