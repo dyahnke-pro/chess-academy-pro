@@ -129,6 +129,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // ─── Practice Mode State ───────────────────────────────────────────────────
   const [practiceTarget, setPracticeTarget] = useState<MissedTactic | null>(null);
   const [practiceResult, setPracticeResult] = useState<'pending' | 'correct' | 'incorrect' | null>(null);
+
+  // "Drill all mistakes" mode — sequentially walks through every
+  // missed tactic, advancing to the next one after each practice
+  // attempt resolves (correct or three-attempts-then-reveal). When the
+  // queue is empty or exited early we return to normal analysis.
+  const [mistakeDrillQueue, setMistakeDrillQueue] = useState<MissedTactic[]>([]);
+  const [mistakeDrillIndex, setMistakeDrillIndex] = useState(0);
+  const isDrillingMistakes = mistakeDrillQueue.length > 0;
   const [practiceAttempts, setPracticeAttempts] = useState(0);
 
   // ─── Show Best Move Arrow State ─────────────────────────────────────────────
@@ -706,8 +714,42 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setPracticeTarget(null);
     setPracticeResult(null);
     setPracticeAttempts(0);
+    // Stop any running drill too — explicit exit should not keep
+    // queuing up the next mistake.
+    setMistakeDrillQueue([]);
+    setMistakeDrillIndex(0);
     handleBackToReview();
   }, [handleBackToReview]);
+
+  /** Start a sequential drill through every missed tactic in the
+   *  current game. Each tactic is presented in turn; after the
+   *  student resolves the current one (correct or reveal), the next
+   *  one auto-loads. */
+  const handleStartMistakeDrill = useCallback(() => {
+    if (missedTactics.length === 0) return;
+    setMistakeDrillQueue(missedTactics);
+    setMistakeDrillIndex(0);
+    handleStartPractice(missedTactics[0]);
+  }, [missedTactics, handleStartPractice]);
+
+  /** Advance the drill to the next missed tactic, or exit if done. */
+  const handleDrillNext = useCallback(() => {
+    const nextIdx = mistakeDrillIndex + 1;
+    if (nextIdx >= mistakeDrillQueue.length) {
+      setMistakeDrillQueue([]);
+      setMistakeDrillIndex(0);
+      handleExitPractice();
+      return;
+    }
+    setMistakeDrillIndex(nextIdx);
+    // Reset practice state locally then start the next tactic without
+    // going through handleExitPractice (which would clear the drill
+    // queue).
+    setPracticeTarget(null);
+    setPracticeResult(null);
+    setPracticeAttempts(0);
+    handleStartPractice(mistakeDrillQueue[nextIdx]);
+  }, [mistakeDrillIndex, mistakeDrillQueue, handleStartPractice, handleExitPractice]);
 
   // Reveal arrow for the best move in practice mode
   const practiceArrows = useMemo(() => {
@@ -1485,17 +1527,31 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <div className="flex items-center gap-2">
                   <Target size={14} style={{ color: 'var(--color-success)' }} />
                   <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                    Find the best move!
+                    {isDrillingMistakes
+                      ? `Mistake ${mistakeDrillIndex + 1} of ${mistakeDrillQueue.length} — find the best move`
+                      : 'Find the best move!'}
                   </span>
                 </div>
-                <button
-                  onClick={isGuidedLesson ? handleGuidedExitPractice : handleExitPractice}
-                  className="px-2.5 py-1 rounded-lg text-xs font-semibold"
-                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                  data-testid="exit-practice-btn"
-                >
-                  {isGuidedLesson ? 'Back to Lesson' : 'Back to Review'}
-                </button>
+                <div className="flex items-center gap-1.5">
+                  {isDrillingMistakes && practiceResult !== 'pending' && (
+                    <button
+                      onClick={handleDrillNext}
+                      className="px-2.5 py-1 rounded-lg text-xs font-semibold"
+                      style={{ background: 'var(--color-warning)', color: 'var(--color-bg)' }}
+                      data-testid="drill-next-btn"
+                    >
+                      {mistakeDrillIndex + 1 >= mistakeDrillQueue.length ? 'Finish Drill' : 'Next Mistake →'}
+                    </button>
+                  )}
+                  <button
+                    onClick={isGuidedLesson ? handleGuidedExitPractice : handleExitPractice}
+                    className="px-2.5 py-1 rounded-lg text-xs font-semibold"
+                    style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                    data-testid="exit-practice-btn"
+                  >
+                    {isGuidedLesson ? 'Back to Lesson' : 'Back to Review'}
+                  </button>
+                </div>
               </div>
               {practiceResult === 'correct' && (
                 <div className="flex items-center gap-1.5 mt-2" data-testid="practice-correct">
@@ -1620,6 +1676,24 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-warning)' }}>
                   Missed Tactics ({missedTactics.length})
                 </span>
+                {isDrillingMistakes ? (
+                  <span
+                    className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded"
+                    style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                    data-testid="drill-progress"
+                  >
+                    {mistakeDrillIndex + 1} / {mistakeDrillQueue.length}
+                  </span>
+                ) : (
+                  <button
+                    onClick={handleStartMistakeDrill}
+                    className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded hover:opacity-80"
+                    style={{ background: 'var(--color-warning)', color: 'var(--color-bg)' }}
+                    data-testid="drill-all-mistakes-btn"
+                  >
+                    Drill All
+                  </button>
+                )}
               </div>
               <div className="space-y-1.5">
                 {missedTactics.map((tactic: MissedTactic, i: number) => (
