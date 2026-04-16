@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 
 import { BoardGlowButton, BoardGlowSettings } from './BoardGlowSettings';
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
+import { hardRefresh } from '../../utils/hardRefresh';
 import type { UserProfile, PieceAnimationSpeed, CoachVerbosity, MoveMethod } from '../../types';
 
 type SettingsTab = 'profile' | 'board' | 'coach' | 'appearance' | 'about';
@@ -963,10 +964,16 @@ function LichessTokenPanel({ profile, setProfile }: TabProps): JSX.Element {
 
 function AboutTab(): JSX.Element {
   const [confirmReset, setConfirmReset] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleReset = async (): Promise<void> => {
     await db.delete();
     window.location.reload();
+  };
+
+  const handleHardRefresh = async (): Promise<void> => {
+    setRefreshing(true);
+    await hardRefresh();
   };
 
   return (
@@ -986,7 +993,21 @@ function AboutTab(): JSX.Element {
       <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
         Built with React, TypeScript, Vite, Tailwind CSS, chess.js, Stockfish WASM, Dexie.js, Zustand, and Claude API.
       </div>
-      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'var(--color-border)' }}>
+        <div>
+          <button
+            onClick={() => void handleHardRefresh()}
+            disabled={refreshing}
+            className="w-full py-2 rounded-lg text-sm font-medium disabled:opacity-60"
+            style={{ background: 'var(--color-accent)', color: '#fff' }}
+            data-testid="hard-refresh-btn"
+          >
+            {refreshing ? 'Refreshing…' : 'Check for Updates'}
+          </button>
+          <p className="text-xs mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
+            Clears cached assets and reloads to pull the latest version. Your data is kept.
+          </p>
+        </div>
         {!confirmReset ? (
           <button
             onClick={() => setConfirmReset(true)}
