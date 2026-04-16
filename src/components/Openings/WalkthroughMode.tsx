@@ -556,9 +556,10 @@ export function WalkthroughMode({
     <ConsistentChessboard
       game={game}
       interactive={false}
-      showFlipButton={true}
+      showFlipButton={false}
       showUndoButton={false}
       showResetButton={false}
+      showVoiceMic={false}
       showEvalBar={showEvalBarEffective}
       evaluation={latestEval}
       isMate={latestIsMate}
