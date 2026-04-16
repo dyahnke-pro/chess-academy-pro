@@ -121,6 +121,13 @@ vi.mock('../../services/stockfishEngine', () => ({
   },
 }));
 
+vi.mock('../../services/walkthroughLlmNarrator', () => ({
+  // Default: return empty narrations so the enrichment path is a no-op and
+  // the raw annotations from annotationService drive the test. Individual
+  // tests can override via mockResolvedValueOnce.
+  generateWalkthroughNarrations: vi.fn().mockResolvedValue({ narrations: [], fromCache: false }),
+}));
+
 vi.mock('../../services/annotationService', () => {
   const annotations = [
     {

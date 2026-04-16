@@ -27,6 +27,7 @@ import {
   getTotalLines,
   toggleFavorite,
 } from '../../services/openingService';
+import { narrateOpeningSection } from '../../services/openingSectionNarrator';
 import type { OpeningRecord, ModelGame, MiddlegamePlan } from '../../types';
 import {
   ArrowLeft,
@@ -46,6 +47,7 @@ import {
   Crosshair,
   Heart,
   PlayCircle,
+  Loader2,
 } from 'lucide-react';
 
 type ViewMode =
@@ -194,18 +196,17 @@ export function OpeningDetailPage(): JSX.Element {
   }, [opening]);
 
   // ─── Voice narration ──────────────────────────────────────────────────────
-  const toggleNarration = useCallback((sectionId: string, text: string): void => {
-    if (narratingSection === sectionId) {
-      // Stop
-      window.speechSynthesis.cancel();
+  // Sections currently waiting on the LLM paragraph (traps/warnings only).
+  const [loadingSection, setLoadingSection] = useState<string | null>(null);
+  // Token counter so a stale async fetch can't start speaking after the user
+  // has already tapped the button again.
+  const narrationRequestToken = useRef(0);
+
+  const speakText = useCallback((sectionId: string, text: string): void => {
+    if (!text) {
       setNarratingSection(null);
-      utteranceRef.current = null;
       return;
     }
-
-    // Stop any current narration
-    window.speechSynthesis.cancel();
-
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 0.95;
     utterance.onend = () => {
@@ -219,7 +220,55 @@ export function OpeningDetailPage(): JSX.Element {
     utteranceRef.current = utterance;
     setNarratingSection(sectionId);
     window.speechSynthesis.speak(utterance);
-  }, [narratingSection]);
+  }, []);
+
+  const toggleNarration = useCallback((
+    sectionId: string,
+    text: string,
+    options?: { kind?: 'traps' | 'warnings'; bullets?: string[] | null },
+  ): void => {
+    if (narratingSection === sectionId || loadingSection === sectionId) {
+      // Stop (or cancel an in-flight fetch)
+      window.speechSynthesis.cancel();
+      narrationRequestToken.current += 1;
+      setNarratingSection(null);
+      setLoadingSection(null);
+      utteranceRef.current = null;
+      return;
+    }
+
+    // Stop any current narration
+    window.speechSynthesis.cancel();
+    narrationRequestToken.current += 1;
+    const token = narrationRequestToken.current;
+
+    // Traps & warnings go through the LLM narrator: the dry bullet-list
+    // readout is replaced by one cohesive teaching paragraph. Cached, so
+    // only the first tap per section per opening pays the round-trip.
+    if (opening && options?.kind && options.bullets && options.bullets.length > 0) {
+      setLoadingSection(sectionId);
+      void narrateOpeningSection({
+        openingId: opening.id,
+        openingName: opening.name,
+        color: opening.color,
+        kind: options.kind,
+        bullets: options.bullets,
+      })
+        .then((paragraph) => {
+          if (narrationRequestToken.current !== token) return; // superseded
+          setLoadingSection(null);
+          speakText(sectionId, paragraph || text);
+        })
+        .catch(() => {
+          if (narrationRequestToken.current !== token) return;
+          setLoadingSection(null);
+          speakText(sectionId, text);
+        });
+      return;
+    }
+
+    speakText(sectionId, text);
+  }, [narratingSection, loadingSection, opening, speakText]);
 
   // Precompute variation FENs for thumbnails
   const variationFens = useMemo((): string[] => {
@@ -464,16 +513,39 @@ export function OpeningDetailPage(): JSX.Element {
   const quizzes = (checkpointQuizzesData as Record<string, CheckpointQuizItem[]>)[opening.id] ?? [];
   const currentQuiz: CheckpointQuizItem | null = quizzes[quizIndex] as CheckpointQuizItem | undefined ?? null;
 
-  const NarrationButton = ({ sectionId, text }: { sectionId: string; text: string }): JSX.Element => {
+  const NarrationButton = ({
+    sectionId,
+    text,
+    kind,
+    bullets,
+  }: {
+    sectionId: string;
+    text: string;
+    kind?: 'traps' | 'warnings';
+    bullets?: string[] | null;
+  }): JSX.Element => {
     const isNarrating = narratingSection === sectionId;
+    const isLoading = loadingSection === sectionId;
     return (
       <button
-        onClick={() => toggleNarration(sectionId, text)}
+        onClick={() => toggleNarration(sectionId, text, kind ? { kind, bullets } : undefined)}
         className="ml-auto p-1.5 rounded-lg hover:bg-theme-border/50 text-theme-text-muted hover:text-theme-accent transition-colors"
-        aria-label={isNarrating ? 'Stop narration' : 'Narrate section'}
+        aria-label={
+          isLoading
+            ? 'Preparing narration'
+            : isNarrating
+              ? 'Stop narration'
+              : 'Narrate section'
+        }
         data-testid={`narrate-${sectionId}`}
       >
-        {isNarrating ? <StopIcon size={14} /> : <Volume2 size={14} />}
+        {isLoading ? (
+          <Loader2 size={14} className="animate-spin" />
+        ) : isNarrating ? (
+          <StopIcon size={14} />
+        ) : (
+          <Volume2 size={14} />
+        )}
       </button>
     );
   };
@@ -636,7 +708,12 @@ export function OpeningDetailPage(): JSX.Element {
           <div className="flex items-center gap-2 mb-2">
             <Target size={14} className="text-green-500" />
             <h3 className="text-sm font-semibold text-theme-text">Traps & Pitfalls</h3>
-            <NarrationButton sectionId="traps" text={opening.traps.join('. ')} />
+            <NarrationButton
+              sectionId="traps"
+              text={opening.traps.join('. ')}
+              kind="traps"
+              bullets={opening.traps}
+            />
             {opening.trapLines && opening.trapLines.length > 0 && (
               <button
                 onClick={() => setViewMode('train-traps')}
@@ -724,7 +801,12 @@ export function OpeningDetailPage(): JSX.Element {
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle size={14} className="text-amber-500" />
             <h3 className="text-sm font-semibold text-theme-text">Watch Out For</h3>
-            <NarrationButton sectionId="warnings" text={opening.warnings.join('. ')} />
+            <NarrationButton
+              sectionId="warnings"
+              text={opening.warnings.join('. ')}
+              kind="warnings"
+              bullets={opening.warnings}
+            />
             {opening.warningLines && opening.warningLines.length > 0 && (
               <button
                 onClick={() => setViewMode('train-warnings')}
