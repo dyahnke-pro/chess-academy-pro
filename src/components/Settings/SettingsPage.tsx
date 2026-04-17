@@ -10,6 +10,7 @@ import { exportUserData } from '../../services/dbService';
 import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
+import { FeedbackForm } from '../Feedback/FeedbackForm';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
 
@@ -965,6 +966,7 @@ function LichessTokenPanel({ profile, setProfile }: TabProps): JSX.Element {
 function AboutTab(): JSX.Element {
   const [confirmReset, setConfirmReset] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   const handleReset = async (): Promise<void> => {
     await db.delete();
@@ -994,6 +996,39 @@ function AboutTab(): JSX.Element {
         Built with React, TypeScript, Vite, Tailwind CSS, chess.js, Stockfish WASM, Dexie.js, Zustand, and Claude API.
       </div>
       <div className="pt-4 border-t space-y-3" style={{ borderColor: 'var(--color-border)' }}>
+        {/* Feedback button — primary post-launch signal. Placed at top
+            of the action list so users see it immediately when they
+            open Settings → About. */}
+        {!feedbackOpen ? (
+          <div>
+            <button
+              onClick={() => setFeedbackOpen(true)}
+              className="w-full py-2 rounded-lg text-sm font-medium border"
+              style={{
+                background: 'var(--color-surface)',
+                color: 'var(--color-text)',
+                borderColor: 'var(--color-accent)',
+              }}
+              data-testid="open-feedback-btn"
+            >
+              Send Feedback
+            </button>
+            <p className="text-xs mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
+              Bug report, feature request, or a note — opens your mail app
+              with a pre-filled message.
+            </p>
+          </div>
+        ) : (
+          <div
+            className="rounded-lg border overflow-hidden"
+            style={{
+              background: 'var(--color-bg)',
+              borderColor: 'var(--color-border)',
+            }}
+          >
+            <FeedbackForm onClose={() => setFeedbackOpen(false)} />
+          </div>
+        )}
         <div>
           <button
             onClick={() => void handleHardRefresh()}

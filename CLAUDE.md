@@ -2,6 +2,24 @@
 
 This file is loaded automatically in every Claude Code session. Follow these instructions exactly.
 
+## ⏰ Open launch reminders (surface these proactively every session)
+
+**Lemon Squeezy signup pending.** User chose Lemon Squeezy as the payment
+processor (merchant of record — handles sales tax and VAT for them). They
+have NOT signed up yet. At the start of every session until this is
+resolved, proactively remind them:
+
+> "Reminder: still need to sign up for Lemon Squeezy
+> (https://lemonsqueezy.com) so I can wire the paywall. ~10 minutes.
+> Once you have the API key and two subscription product IDs ($7.99/mo
+> and $79.99/yr), share them and I'll implement the integration."
+
+**Domain not purchased.** `chessacademy.pro` recommended (Cloudflare
+Registrar, ~$15/year). Remind if not yet bought.
+
+**Stop reminding** once either is complete — update or remove this
+section when the user confirms signup or shares keys.
+
 ## Project Overview
 
 Chess Academy Pro is an AI-powered chess training PWA built with React + TypeScript + Vite. It wraps as a native iOS app via Capacitor and is distributed through TestFlight. The app features an LLM-powered chess coach (Claude API), Stockfish WASM analysis, spaced repetition puzzles, opening training, and adaptive difficulty.
