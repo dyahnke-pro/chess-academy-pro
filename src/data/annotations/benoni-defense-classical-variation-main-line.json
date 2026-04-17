@@ -28,46 +28,6 @@
     {
       "san": "dxe6",
       "annotation": "We're capturing toward the center, opening the d-file and maintaining material balance while creating new strategic imbalances. This exchange eliminates Black's pressure on our d5 pawn but also opens lines for Black's pieces, particularly the f8-bishop. Our pawn structure becomes more flexible, though we should be mindful that Black gets improved piece activity. This capture is the most principled approach, keeping our central pawn and preparing to complete our development."
-    },
-    {
-      "san": "Bxe6",
-      "annotation": "Our opponent recaptures with the bishop, developing a piece and maintaining material balance while creating immediate tactical possibilities. Black's bishop is actively placed on e6, eyeing our queenside and supporting potential ...d6-d5 breaks. This recapture also connects Black's rooks and prepares castling, showing good practical opening play. However, the bishop on e6 can become a target for our pieces later, and we should look for ways to challenge it."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "We're developing our knight to its ideal square, supporting the e4 advance and preparing to complete our kingside development. This move follows the opening principle of developing toward the center while maintaining flexibility in our pawn structure. Our knight on c3 also eyes important squares like d5 and b5, giving us tactical possibilities. We're preparing to establish a strong pawn center with e4, which will give us excellent space and attacking chances."
-    },
-    {
-      "san": "d6",
-      "annotation": "Black establishes a solid pawn structure and prepares to develop the dark-squared bishop, creating the characteristic Benoni formation. This move supports the c5 pawn and prepares ...g6 and ...Bg7, leading to a fianchetto setup. Our opponent is building a resilient but somewhat passive position, accepting space limitations for solid piece coordination. Black's pawn on d6 also prepares potential ...Nc6 development and keeps the position flexible."
-    },
-    {
-      "san": "e4",
-      "annotation": "We're establishing our ideal pawn center, gaining significant space advantage and restricting Black's pieces. This advance gives us excellent development prospects for our bishops and prepares potential kingside attacking chances. Our e4 pawn controls the crucial f5 and d5 squares, limiting Black's piece activity. We're now ready to develop our bishops and castle, maintaining our space advantage while preparing for the middlegame where our extra space should provide excellent winning chances."
-    },
-    {
-      "san": "g6",
-      "annotation": "Our opponent begins the characteristic Benoni kingside fianchetto, preparing to develop the dark-squared bishop to g7 where it will become a powerful defensive and counterattacking piece. This move also prepares castling kingside and gives the king an escape square on g7 if needed. Black is following typical Benoni development, accepting a somewhat cramped position in exchange for active piece play. The g6 move also prepares potential ...f5 pawn breaks in the middlegame to create kingside counterplay."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We're completing our kingside development with this natural knight move, supporting our e4 pawn and preparing to castle. The knight on f3 controls important central squares like e5 and d4 while maintaining flexibility. This move also prepares potential h3 and g4 advances for a kingside attack later in the game. We're following sound opening principles by developing pieces efficiently while maintaining our space advantage in the center."
-    },
-    {
-      "san": "Bg7",
-      "annotation": "Black completes the kingside fianchetto, placing the bishop on its most active diagonal where it exerts long-range pressure toward our queenside. This bishop becomes Black's most important defensive piece, controlling key squares and supporting counterplay. Our opponent has now created the typical Benoni structure with active piece play to compensate for the space disadvantage. The bishop on g7 also supports potential ...f5 breaks and defends the kingside effectively."
-    },
-    {
-      "san": "Be2",
-      "annotation": "We're developing our light-squared bishop to a solid square, preparing to castle and maintaining flexibility in our setup. This move keeps our bishop safe from tactics while supporting our e4 pawn and preparing potential f4 advances. The bishop on e2 also maintains the option of redeploying to d3 or f3 later depending on the position's needs. We're prioritizing solid development over more aggressive but potentially premature bishop placements like Bc4."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black castles kingside, bringing the king to safety and connecting the rooks, which is essential before the position opens up further. This move completes Black's basic development and prepares to bring the rooks into active play on central files. Our opponent is now ready to begin typical Benoni counterplay with moves like ...Re8, ...Nbd7, and potential pawn breaks. Black's king is reasonably safe on g8, protected by the fianchettoed bishop and pawn shield."
-    },
-    {
-      "san": "O-O",
-      "annotation": "We're castling to complete our basic development and bring our king to safety before launching any aggressive operations. This move connects our rooks and prepares to bring them to central files where they can support our space advantage. Our king is now safe from immediate tactics, allowing us to focus on improving our piece coordination and preparing middlegame plans. With both sides castled, the real strategic battle of the Benoni begins, where we'll look to exploit our space advantage while Black seeks counterplay on the wings."
     }
   ]
 }

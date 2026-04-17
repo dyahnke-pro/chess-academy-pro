@@ -14,13 +14,13 @@
       ],
       "arrows": [
         {
-          "from": "e4",
-          "to": "d5",
+          "from": "e2",
+          "to": "e4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "e4",
-          "to": "f5",
+          "from": "e2",
+          "to": "e4",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -44,8 +44,8 @@
       ],
       "arrows": [
         {
-          "from": "c6",
-          "to": "d5",
+          "from": "c7",
+          "to": "c6",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -69,13 +69,13 @@
       ],
       "arrows": [
         {
-          "from": "d4",
-          "to": "c5",
+          "from": "d2",
+          "to": "d4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "d4",
-          "to": "e5",
+          "from": "d2",
+          "to": "d4",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -99,8 +99,8 @@
       ],
       "arrows": [
         {
-          "from": "d5",
-          "to": "e4",
+          "from": "d7",
+          "to": "d5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -124,8 +124,8 @@
       ],
       "arrows": [
         {
-          "from": "c3",
-          "to": "e4",
+          "from": "b1",
+          "to": "c3",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -172,13 +172,13 @@
       ],
       "arrows": [
         {
-          "from": "e4",
-          "to": "f6",
+          "from": "c3",
+          "to": "e4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "e4",
-          "to": "d6",
+          "from": "c3",
+          "to": "e4",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -202,8 +202,8 @@
       ],
       "arrows": [
         {
-          "from": "f5",
-          "to": "c2",
+          "from": "c8",
+          "to": "f5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -226,13 +226,13 @@
       ],
       "arrows": [
         {
-          "from": "g3",
-          "to": "f5",
+          "from": "e4",
+          "to": "g3",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "g3",
-          "to": "h5",
+          "from": "e4",
+          "to": "g3",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ]
@@ -250,13 +250,13 @@
       ],
       "arrows": [
         {
-          "from": "g6",
-          "to": "d3",
+          "from": "f5",
+          "to": "g6",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "g6",
-          "to": "c2",
+          "from": "f5",
+          "to": "g6",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ]
@@ -274,8 +274,8 @@
       ],
       "arrows": [
         {
-          "from": "h4",
-          "to": "h5",
+          "from": "h2",
+          "to": "h4",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -299,8 +299,8 @@
       ],
       "arrows": [
         {
-          "from": "h6",
-          "to": "g5",
+          "from": "h7",
+          "to": "h6",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -323,13 +323,13 @@
       ],
       "arrows": [
         {
-          "from": "f3",
-          "to": "e5",
+          "from": "g1",
+          "to": "f3",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "f3",
-          "to": "d4",
+          "from": "g1",
+          "to": "f3",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ]
@@ -347,13 +347,13 @@
       ],
       "arrows": [
         {
-          "from": "d7",
-          "to": "f6",
+          "from": "b8",
+          "to": "d7",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "d7",
-          "to": "c5",
+          "from": "b8",
+          "to": "d7",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ]
@@ -368,8 +368,8 @@
       ],
       "arrows": [
         {
-          "from": "h5",
-          "to": "g6",
+          "from": "h4",
+          "to": "h5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -408,8 +408,8 @@
       ],
       "arrows": [
         {
-          "from": "d3",
-          "to": "h7",
+          "from": "f1",
+          "to": "d3",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -445,8 +445,8 @@
       ],
       "arrows": [
         {
-          "from": "d3",
-          "to": "h7",
+          "from": "d1",
+          "to": "d3",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -490,7 +490,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White stakes a claim on e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -510,8 +510,8 @@
           "annotation": "Black advances to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -524,7 +524,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White pushes the pawn to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -541,7 +541,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black pushes the pawn to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -582,11 +582,11 @@
         },
         {
           "san": "dxe4",
-          "annotation": "Black captures the pawn on e4. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "d5",
+              "from": "d5",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -607,8 +607,8 @@
           "annotation": "White exchanges on e4, removing Black's pawn. The knight reaches a powerful central outpost on e4, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "e4",
-              "to": "c3",
+              "from": "c3",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -684,11 +684,11 @@
         },
         {
           "san": "h4",
-          "annotation": "White pushes the pawn to h4. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h4",
-              "to": "h2",
+              "from": "h2",
+              "to": "h4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -697,11 +697,11 @@
         },
         {
           "san": "h6",
-          "annotation": "Black moves forward to h6. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h6",
-              "to": "h7",
+              "from": "h7",
+              "to": "h6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -752,11 +752,11 @@
         },
         {
           "san": "h5",
-          "annotation": "White moves forward to h5. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h5",
-              "to": "h4",
+              "from": "h4",
+              "to": "h5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -809,8 +809,8 @@
           "annotation": "Black takes on d3, removing White's bishop. The bishop on d3 controls key diagonal squares and maintains active piece play.",
           "arrows": [
             {
-              "from": "d3",
-              "to": "h7",
+              "from": "h7",
+              "to": "d3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -826,8 +826,8 @@
           "annotation": "White exchanges on d3, removing Black's bishop. The queen takes up an influential position on d3, eyeing multiple targets.",
           "arrows": [
             {
-              "from": "d3",
-              "to": "d1",
+              "from": "d1",
+              "to": "d3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -848,8 +848,8 @@
           "annotation": "Black stakes a claim on e6. Black improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -899,11 +899,11 @@
         },
         {
           "san": "O-O-O",
-          "annotation": "Castles, completing king safety and activating the rook.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c1",
-              "to": "d1",
+              "from": "e1",
+              "to": "c1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -958,11 +958,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Castles to safety, connecting the rooks and tucking the king away.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -975,11 +975,11 @@
         },
         {
           "san": "g3",
-          "annotation": "White pushes the pawn to g3. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g3",
-              "to": "g2",
+              "from": "g2",
+              "to": "g3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -988,11 +988,11 @@
         },
         {
           "san": "c5",
-          "annotation": "Black pushes the pawn to c5. A thematic move in this position, maintaining Black's initiative.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c5",
-              "to": "c6",
+              "from": "c6",
+              "to": "c5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1011,7 +1011,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White advances to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -1031,8 +1031,8 @@
           "annotation": "Black pushes the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1045,7 +1045,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White expands with the pawn to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -1062,7 +1062,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black stakes a claim on d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -1079,7 +1079,7 @@
         },
         {
           "san": "e5",
-          "annotation": "White expands with the pawn to e5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e4",
@@ -1142,11 +1142,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black moves forward to e6. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1175,11 +1175,11 @@
         },
         {
           "san": "c5",
-          "annotation": "Black moves forward to c5. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c5",
-              "to": "c6",
+              "from": "c6",
+              "to": "c5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1226,11 +1226,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Castles to safety, connecting the rooks and tucking the king away.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1309,8 +1309,8 @@
           "annotation": "White stakes a claim on c3. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "c2",
+              "from": "c2",
+              "to": "c3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1325,8 +1325,8 @@
           "annotation": "Black captures the pawn on d4. Black improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "c5",
+              "from": "c5",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1343,8 +1343,8 @@
           "annotation": "White captures the pawn on d4. White improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "c3",
+              "from": "c3",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1399,11 +1399,11 @@
         },
         {
           "san": "a5",
-          "annotation": "Black expands with the pawn to a5. A flank pawn advance, creating space on the queenside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "a5",
-              "to": "a7",
+              "from": "a7",
+              "to": "a5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1422,7 +1422,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White stakes a claim on e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -1442,8 +1442,8 @@
           "annotation": "Black advances to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1477,7 +1477,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black advances to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -1539,11 +1539,11 @@
         },
         {
           "san": "h3",
-          "annotation": "White pushes the pawn to h3. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h3",
-              "to": "h2",
+              "from": "h2",
+              "to": "h3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1559,8 +1559,8 @@
           "annotation": "Black wins the piece on f3, removing White's knight. The bishop on f3 controls key diagonal squares and maintains active piece play.",
           "arrows": [
             {
-              "from": "f3",
-              "to": "g4",
+              "from": "g4",
+              "to": "f3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1576,8 +1576,8 @@
           "annotation": "White wins the piece on f3, removing Black's bishop. The queen takes up an influential position on f3, eyeing multiple targets.",
           "arrows": [
             {
-              "from": "f3",
-              "to": "d1",
+              "from": "d1",
+              "to": "f3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1593,11 +1593,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black moves forward to e6. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1610,7 +1610,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White expands with the pawn to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -1668,8 +1668,8 @@
           "annotation": "Black captures the pawn on e4. Black improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "e4",
-              "to": "d5",
+              "from": "d5",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1686,8 +1686,8 @@
           "annotation": "White wins the piece on e4, removing Black's pawn. The knight reaches a powerful central outpost on e4, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "e4",
-              "to": "c3",
+              "from": "c3",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1703,8 +1703,8 @@
           "annotation": "Black removes the defender on e4, removing White's knight. The knight reaches a powerful central outpost on e4, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "e4",
-              "to": "f6",
+              "from": "f6",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1724,8 +1724,8 @@
           "annotation": "White wins the piece on e4, removing Black's knight. The queen takes up an influential position on e4, eyeing multiple targets.",
           "arrows": [
             {
-              "from": "e4",
-              "to": "f3",
+              "from": "f3",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1758,11 +1758,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Castles, completing king safety and activating the rook.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1841,8 +1841,8 @@
           "annotation": "White pushes the pawn to c3. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "c2",
+              "from": "c2",
+              "to": "c3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1851,11 +1851,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1874,7 +1874,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White pushes the pawn to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -1894,8 +1894,8 @@
           "annotation": "Black stakes a claim on c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -1908,7 +1908,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White stakes a claim on d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -1925,7 +1925,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black advances to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -1942,11 +1942,11 @@
         },
         {
           "san": "exd5",
-          "annotation": "White captures the pawn on d5. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d5",
-              "to": "e4",
+              "from": "e4",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1967,11 +1967,11 @@
         },
         {
           "san": "cxd5",
-          "annotation": "Black captures the pawn on d5. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d5",
-              "to": "c6",
+              "from": "c6",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -1989,11 +1989,11 @@
         },
         {
           "san": "c4",
-          "annotation": "White stakes a claim on c4. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c4",
-              "to": "c2",
+              "from": "c2",
+              "to": "c4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2043,11 +2043,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black moves forward to e6. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2097,8 +2097,8 @@
           "annotation": "White captures the pawn on d5. White improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "d5",
-              "to": "c4",
+              "from": "c4",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -2122,8 +2122,8 @@
           "annotation": "Black exchanges on d5, removing White's pawn. The knight reaches a powerful central outpost on d5, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "d5",
-              "to": "f6",
+              "from": "f6",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -2194,11 +2194,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2211,11 +2211,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Castles to safety, connecting the rooks and tucking the king away.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2250,11 +2250,11 @@
         },
         {
           "san": "a3",
-          "annotation": "White expands with the pawn to a3. A flank pawn advance, creating space on the queenside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "a3",
-              "to": "a2",
+              "from": "a2",
+              "to": "a3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2327,7 +2327,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White moves forward to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -2347,8 +2347,8 @@
           "annotation": "Black pushes the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2361,7 +2361,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White moves forward to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -2378,7 +2378,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black moves forward to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -2395,11 +2395,11 @@
         },
         {
           "san": "f3",
-          "annotation": "White pushes the pawn to f3. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "f3",
-              "to": "f2",
+              "from": "f2",
+              "to": "f3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2415,11 +2415,11 @@
         },
         {
           "san": "dxe4",
-          "annotation": "Black captures the pawn on e4. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "d5",
+              "from": "d5",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -2437,11 +2437,11 @@
         },
         {
           "san": "fxe4",
-          "annotation": "White captures the pawn on e4. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "f3",
+              "from": "f3",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -2459,7 +2459,7 @@
         },
         {
           "san": "e5",
-          "annotation": "Black advances to e5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e7",
@@ -2547,11 +2547,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2592,8 +2592,8 @@
           "annotation": "White pushes the pawn to c3. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "c2",
+              "from": "c2",
+              "to": "c3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2643,11 +2643,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2699,7 +2699,7 @@
         },
         {
           "san": "Kh1",
-          "annotation": "White moves the king to h1. A thematic move in this position, maintaining White's initiative.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g1",
@@ -2719,11 +2719,11 @@
         },
         {
           "san": "b5",
-          "annotation": "Black stakes a claim on b5. A flank pawn advance, creating space on the queenside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "b5",
-              "to": "b7",
+              "from": "b7",
+              "to": "b5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2742,7 +2742,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White advances to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -2762,8 +2762,8 @@
           "annotation": "Black pushes the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2776,7 +2776,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White stakes a claim on d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -2793,7 +2793,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black stakes a claim on d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -2810,7 +2810,7 @@
         },
         {
           "san": "e5",
-          "annotation": "White stakes a claim on e5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e4",
@@ -2873,11 +2873,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black expands with the pawn to e6. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2906,11 +2906,11 @@
         },
         {
           "san": "c5",
-          "annotation": "Black stakes a claim on c5. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c5",
-              "to": "c6",
+              "from": "c6",
+              "to": "c5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2923,11 +2923,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Castles, completing king safety and activating the rook.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2940,7 +2940,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black deploys the knight to c6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b8",
@@ -2960,8 +2960,8 @@
           "annotation": "White pushes the pawn to c3. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "c2",
+              "from": "c2",
+              "to": "c3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -2980,8 +2980,8 @@
           "annotation": "Black captures the pawn on d4. Black improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "c5",
+              "from": "c5",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -2998,8 +2998,8 @@
           "annotation": "White captures the pawn on d4. White improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "c3",
+              "from": "c3",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -3013,7 +3013,7 @@
         },
         {
           "san": "Nge7",
-          "annotation": "Black deploys the knight to e7. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g8",
@@ -3034,7 +3034,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "White moves the knight to c3. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b1",
@@ -3054,7 +3054,7 @@
         },
         {
           "san": "Ng6",
-          "annotation": "Black moves the knight to g6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e7",
@@ -3093,7 +3093,7 @@
         },
         {
           "san": "Qb6",
-          "annotation": "Black moves the queen to b6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d8",
@@ -3133,8 +3133,8 @@
           "annotation": "Black removes the defender on d4, removing White's pawn. The knight reaches a powerful central outpost on d4, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "c6",
+              "from": "c6",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -3154,8 +3154,8 @@
           "annotation": "White takes on d4, removing Black's knight. The knight reaches a powerful central outpost on d4, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "f3",
+              "from": "f3",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -3168,11 +3168,11 @@
         },
         {
           "san": "Qxb2",
-          "annotation": "Black wins the piece on b2, removing White's pawn. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "b2",
-              "to": "b6",
+              "from": "b6",
+              "to": "b2",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -3188,8 +3188,8 @@
           "annotation": "White captures on e6, removing Black's pawn. The knight on e6 improves White's piece coordination and flexibility.",
           "arrows": [
             {
-              "from": "e6",
-              "to": "d4",
+              "from": "d4",
+              "to": "e6",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -3210,11 +3210,11 @@
         },
         {
           "san": "fxe6",
-          "annotation": "Black captures the knight on e6. A thematic move in this position, maintaining Black's initiative.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "f7",
+              "from": "f7",
+              "to": "e6",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -3276,23 +3276,23 @@
         },
         {
           "san": "c6",
-          "annotation": "Black plays c6, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "White plays d4, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "d5",
-          "annotation": "Black plays d5, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "White plays Nc3. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "dxe4",
-          "annotation": "Black captures with dxe4. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d5",
@@ -3303,67 +3303,67 @@
         },
         {
           "san": "Nxe4",
-          "annotation": "White captures with Nxe4. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Bf5",
-          "annotation": "Black plays Bf5, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Ng3",
-          "annotation": "White plays Ng3. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "Bg6",
-          "annotation": "Black continues with Bg6. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "h4",
-          "annotation": "h4 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "h6",
-          "annotation": "Black plays h6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "h5",
-          "annotation": "White plays h5. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "Bh7",
-          "annotation": "Black continues with Bh7. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Bd3",
-          "annotation": "Bd3 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "Bxd3",
-          "annotation": "Black captures with Bxd3. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Qxd3",
-          "annotation": "White captures with Qxd3. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Nd7",
-          "annotation": "Black continues with Nd7. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "Qc7",
-          "annotation": "Black plays Qc7, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Bd2",
-          "annotation": "White plays Bd2. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "e6",
-          "annotation": "e6. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e7",
@@ -3374,7 +3374,7 @@
         },
         {
           "san": "O-O-O",
-          "annotation": "O-O-O! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e1",
@@ -3385,7 +3385,7 @@
         },
         {
           "san": "Ngf6",
-          "annotation": "Ngf6! The trap is sprung. Black has a winning position. This is the key takeaway from the Classical Bishop Trap."
+          "annotation": ""
         }
       ]
     },
@@ -3399,19 +3399,19 @@
         },
         {
           "san": "c6",
-          "annotation": "Black plays c6. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "White plays d4. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "d5",
-          "annotation": "d5. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "f3",
-          "annotation": "White plays f3. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "dxe4",
@@ -3437,11 +3437,11 @@
         },
         {
           "san": "e5",
-          "annotation": "e5. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "Nf3",
-          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "exd4",
@@ -3456,19 +3456,19 @@
         },
         {
           "san": "Bc4",
-          "annotation": "White continues with Bc4. Watch out — a mistake here would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bb4+",
-          "annotation": "Bb4+! Check forces a response. This is where the danger begins."
+          "annotation": ""
         },
         {
           "san": "c3",
-          "annotation": "White plays c3. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "dxc3",
-          "annotation": "dxc3. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d4",
@@ -3479,7 +3479,7 @@
         },
         {
           "san": "bxc3",
-          "annotation": "bxc3! This is the move that causes all the trouble.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b2",
@@ -3490,7 +3490,7 @@
         },
         {
           "san": "Ba5",
-          "annotation": "Ba5. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall."
+          "annotation": ""
         }
       ]
     },
@@ -3504,71 +3504,71 @@
         },
         {
           "san": "c6",
-          "annotation": "Black plays c6. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "White plays d4. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "d5",
-          "annotation": "d5. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "e5",
-          "annotation": "White plays e5. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Bf5",
-          "annotation": "Bf5 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "Nf3",
-          "annotation": "White continues with Nf3. Watch out — a mistake here would be very costly."
+          "annotation": ""
         },
         {
           "san": "e6",
-          "annotation": "e6. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "Be2",
-          "annotation": "White plays Be2. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Nd7",
-          "annotation": "Nd7 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "O-O",
-          "annotation": "White castles, but the position requires careful play."
+          "annotation": ""
         },
         {
           "san": "Be7",
-          "annotation": "Be7. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "c3",
-          "annotation": "White plays c3. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "c5",
-          "annotation": "c5 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "Nh4",
-          "annotation": "White continues with Nh4. Watch out — a mistake here would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bg6",
-          "annotation": "Bg6. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+          "annotation": ""
         },
         {
           "san": "Nxg6",
-          "annotation": "Nxg6! This is the move that causes all the trouble."
+          "annotation": ""
         },
         {
           "san": "hxg6",
-          "annotation": "hxg6. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line.",
+          "annotation": "",
           "arrows": [
             {
               "from": "h7",
@@ -3596,8 +3596,8 @@
           "annotation": "White builds the classical two-pawn center. The stage is set for the Fantasy Variation.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "d5",
+              "from": "d2",
+              "to": "d4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ]
@@ -3611,8 +3611,8 @@
           "annotation": "The Fantasy Variation! White supports e4 with the f-pawn rather than a knight. This is aggressive — White wants to keep the full pawn center and is willing to weaken the kingside to do it.",
           "arrows": [
             {
-              "from": "f3",
-              "to": "e4",
+              "from": "f2",
+              "to": "f3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ]
@@ -3626,8 +3626,8 @@
           "annotation": "White recaptures with the f-pawn, maintaining the strong e4-d4 center and opening the f-file for the rook. This is the key payoff of the Fantasy — the half-open f-file creates attacking chances.",
           "arrows": [
             {
-              "from": "f1",
-              "to": "f8",
+              "from": "f3",
+              "to": "e4",
               "color": "rgba(220, 50, 50, 0.7)"
             }
           ]
@@ -3637,8 +3637,8 @@
           "annotation": "Black strikes back in the center with ...e5! This is the critical counter — challenging d4 immediately before White can consolidate. Black aims for active piece play.",
           "arrows": [
             {
-              "from": "e5",
-              "to": "d4",
+              "from": "e7",
+              "to": "e5",
               "color": "rgba(0, 100, 255, 0.7)"
             }
           ]
@@ -3648,8 +3648,8 @@
           "annotation": "White develops the knight naturally, defending d4 and preparing rapid kingside development. The knight also eyes e5 if Black exchanges on d4.",
           "arrows": [
             {
-              "from": "f3",
-              "to": "d4",
+              "from": "g1",
+              "to": "f3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ]
@@ -3663,8 +3663,8 @@
           "annotation": "White develops the bishop to an aggressive square, targeting f7 and preparing to castle. The bishop on c4 is a powerhouse in these open positions.",
           "arrows": [
             {
-              "from": "c4",
-              "to": "f7",
+              "from": "f1",
+              "to": "c4",
               "color": "rgba(220, 50, 50, 0.7)"
             }
           ]
@@ -3678,8 +3678,8 @@
           "annotation": "White castles, connecting the rooks and placing the king in safety. The rook on f1 immediately pressures f7 down the open file. White's development lead is becoming dangerous.",
           "arrows": [
             {
-              "from": "f1",
-              "to": "f7",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(220, 50, 50, 0.7)"
             }
           ]
@@ -3693,8 +3693,8 @@
           "annotation": "White pushes the e-pawn forward with tempo, kicking the f6-knight and gaining space. This advance is the key to White's initiative — the pawn on e5 cramps Black's position.",
           "arrows": [
             {
-              "from": "e5",
-              "to": "f6",
+              "from": "e4",
+              "to": "e5",
               "color": "rgba(220, 50, 50, 0.7)"
             }
           ]
@@ -3708,8 +3708,8 @@
           "annotation": "White's queen enters the game, supporting the e5 pawn and preparing to coordinate with the rook. The queen on e2 also eyes the e-file and supports potential tactics.",
           "arrows": [
             {
-              "from": "e2",
-              "to": "e5",
+              "from": "d1",
+              "to": "e2",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ]
@@ -3723,13 +3723,13 @@
           "annotation": "White recaptures the d4 pawn with the knight, restoring material equality. The knight on d4 is beautifully centralized, and White's pieces are all actively placed.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "c6",
+              "from": "f3",
+              "to": "d4",
               "color": "rgba(0, 100, 255, 0.7)"
             },
             {
-              "from": "d4",
-              "to": "f5",
+              "from": "f3",
+              "to": "d4",
               "color": "rgba(0, 100, 255, 0.7)"
             }
           ]
@@ -3743,8 +3743,8 @@
           "annotation": "White retreats the bishop to b3, keeping it on the dangerous a2-g8 diagonal aimed at f7.",
           "arrows": [
             {
-              "from": "b3",
-              "to": "f7",
+              "from": "c4",
+              "to": "b3",
               "color": "rgba(220, 50, 50, 0.7)"
             }
           ]
@@ -3757,7 +3757,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White stakes a claim on e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -3777,8 +3777,8 @@
           "annotation": "Black stakes a claim on c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -3791,7 +3791,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White moves forward to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -3808,7 +3808,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black pushes the pawn to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -3825,7 +3825,7 @@
         },
         {
           "san": "e5",
-          "annotation": "White expands with the pawn to e5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e4",
@@ -3888,11 +3888,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black stakes a claim on e6. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -3942,11 +3942,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4001,11 +4001,11 @@
         },
         {
           "san": "h6",
-          "annotation": "Black stakes a claim on h6. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h6",
-              "to": "h7",
+              "from": "h7",
+              "to": "h6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4111,11 +4111,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4151,8 +4151,8 @@
           "annotation": "Black removes the defender on c5, removing White's knight. The knight reaches a powerful central outpost on c5, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "c5",
-              "to": "d7",
+              "from": "d7",
+              "to": "c5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4169,11 +4169,11 @@
         },
         {
           "san": "dxc5",
-          "annotation": "White captures the knight on c5. A thematic move in this position, maintaining White's initiative.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c5",
-              "to": "d4",
+              "from": "d4",
+              "to": "c5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4190,8 +4190,8 @@
           "annotation": "Black captures on c5, removing White's pawn. The bishop on c5 controls key diagonal squares and maintains active piece play.",
           "arrows": [
             {
-              "from": "c5",
-              "to": "e7",
+              "from": "e7",
+              "to": "c5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4210,7 +4210,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White advances to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -4230,8 +4230,8 @@
           "annotation": "Black pushes the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4244,7 +4244,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White expands with the pawn to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -4261,7 +4261,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black stakes a claim on d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -4278,11 +4278,11 @@
         },
         {
           "san": "exd5",
-          "annotation": "White captures the pawn on d5. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d5",
-              "to": "e4",
+              "from": "e4",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4303,11 +4303,11 @@
         },
         {
           "san": "cxd5",
-          "annotation": "Black captures the pawn on d5. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d5",
-              "to": "c6",
+              "from": "c6",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4367,8 +4367,8 @@
           "annotation": "White stakes a claim on c3. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "c2",
+              "from": "c2",
+              "to": "c3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4497,8 +4497,8 @@
           "annotation": "Black expands with the pawn to e6. Black improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4551,8 +4551,8 @@
           "annotation": "White takes on d6, removing Black's bishop. The bishop on d6 controls key diagonal squares and maintains active piece play.",
           "arrows": [
             {
-              "from": "d6",
-              "to": "f4",
+              "from": "f4",
+              "to": "d6",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4573,8 +4573,8 @@
           "annotation": "Black captures on d6, removing White's bishop. The queen takes up an influential position on d6, eyeing multiple targets.",
           "arrows": [
             {
-              "from": "d6",
-              "to": "d7",
+              "from": "d7",
+              "to": "d6",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4587,11 +4587,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4607,11 +4607,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Castles, completing king safety and activating the rook.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4668,7 +4668,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White expands with the pawn to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -4688,8 +4688,8 @@
           "annotation": "Black pushes the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4702,7 +4702,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White stakes a claim on d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -4719,7 +4719,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black moves forward to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -4760,11 +4760,11 @@
         },
         {
           "san": "dxe4",
-          "annotation": "Black captures the pawn on e4. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "d5",
+              "from": "d5",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4785,8 +4785,8 @@
           "annotation": "White captures on e4, removing Black's pawn. The knight reaches a powerful central outpost on e4, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "e4",
-              "to": "c3",
+              "from": "c3",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4824,8 +4824,8 @@
           "annotation": "White takes on f6, removing Black's knight. This also checks the king, creating tactical pressure. The knight on f6 improves White's piece coordination and flexibility.",
           "arrows": [
             {
-              "from": "f6",
-              "to": "e4",
+              "from": "e4",
+              "to": "f6",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4841,11 +4841,11 @@
         },
         {
           "san": "exf6",
-          "annotation": "Black captures the knight on f6. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "f6",
-              "to": "e7",
+              "from": "e7",
+              "to": "f6",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -4866,8 +4866,8 @@
           "annotation": "White stakes a claim on c3. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "c2",
+              "from": "c2",
+              "to": "c3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4918,11 +4918,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -4993,11 +4993,11 @@
         },
         {
           "san": "h5",
-          "annotation": "Black pushes the pawn to h5. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h5",
-              "to": "h7",
+              "from": "h7",
+              "to": "h5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5045,11 +5045,11 @@
         },
         {
           "san": "O-O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c1",
-              "to": "d1",
+              "from": "e1",
+              "to": "c1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5092,7 +5092,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White moves forward to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -5112,8 +5112,8 @@
           "annotation": "Black advances to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5126,7 +5126,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White moves forward to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -5143,7 +5143,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black stakes a claim on d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -5184,11 +5184,11 @@
         },
         {
           "san": "dxe4",
-          "annotation": "Black captures the pawn on e4. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "d5",
+              "from": "d5",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5209,8 +5209,8 @@
           "annotation": "White exchanges on e4, removing Black's pawn. The knight reaches a powerful central outpost on e4, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "e4",
-              "to": "c3",
+              "from": "c3",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5286,11 +5286,11 @@
         },
         {
           "san": "h4",
-          "annotation": "White pushes the pawn to h4. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h4",
-              "to": "h2",
+              "from": "h2",
+              "to": "h4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5299,11 +5299,11 @@
         },
         {
           "san": "h6",
-          "annotation": "Black moves forward to h6. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h6",
-              "to": "h7",
+              "from": "h7",
+              "to": "h6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5312,11 +5312,11 @@
         },
         {
           "san": "h5",
-          "annotation": "White moves forward to h5. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h5",
-              "to": "h4",
+              "from": "h4",
+              "to": "h5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5349,7 +5349,7 @@
         },
         {
           "san": "Bd3",
-          "annotation": "White places the bishop on the active d3 square. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f1",
@@ -5369,8 +5369,8 @@
           "annotation": "Black takes on d3, removing White's bishop. The bishop on d3 controls key diagonal squares and maintains active piece play.",
           "arrows": [
             {
-              "from": "d3",
-              "to": "h7",
+              "from": "h7",
+              "to": "d3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5390,8 +5390,8 @@
           "annotation": "White wins the piece on d3, removing Black's bishop. The queen takes up an influential position on d3, eyeing multiple targets.",
           "arrows": [
             {
-              "from": "d3",
-              "to": "d1",
+              "from": "d1",
+              "to": "d3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5407,7 +5407,7 @@
         },
         {
           "san": "Nd7",
-          "annotation": "Black moves the knight to d7. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b8",
@@ -5424,7 +5424,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White moves the knight to f3. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g1",
@@ -5446,7 +5446,7 @@
         },
         {
           "san": "Qc7",
-          "annotation": "Black moves the queen to c7. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d8",
@@ -5483,11 +5483,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black moves forward to e6. A thematic move in this position, maintaining Black's initiative.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5500,11 +5500,11 @@
         },
         {
           "san": "O-O-O",
-          "annotation": "Castles, completing king safety and activating the rook.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c1",
-              "to": "d1",
+              "from": "e1",
+              "to": "c1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5559,11 +5559,11 @@
         },
         {
           "san": "O-O-O",
-          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c8",
-              "to": "d8",
+              "from": "e8",
+              "to": "c8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5576,11 +5576,11 @@
         },
         {
           "san": "g3",
-          "annotation": "White moves forward to g3. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g3",
-              "to": "g2",
+              "from": "g2",
+              "to": "g3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5592,8 +5592,8 @@
           "annotation": "Black takes on e4, removing White's knight. The knight reaches a powerful central outpost on e4, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "e4",
-              "to": "f6",
+              "from": "f6",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5613,8 +5613,8 @@
           "annotation": "White wins the piece on e4, removing Black's knight. The queen takes up an influential position on e4, eyeing multiple targets.",
           "arrows": [
             {
-              "from": "e4",
-              "to": "d3",
+              "from": "d3",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5630,7 +5630,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black moves the knight to f6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -5653,7 +5653,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White expands with the pawn to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -5673,8 +5673,8 @@
           "annotation": "Black pushes the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5687,7 +5687,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White stakes a claim on d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -5704,7 +5704,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black advances to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -5721,11 +5721,11 @@
         },
         {
           "san": "exd5",
-          "annotation": "White captures the pawn on d5. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d5",
-              "to": "e4",
+              "from": "e4",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5746,11 +5746,11 @@
         },
         {
           "san": "cxd5",
-          "annotation": "Black captures the pawn on d5. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d5",
-              "to": "c6",
+              "from": "c6",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5768,11 +5768,11 @@
         },
         {
           "san": "c4",
-          "annotation": "White moves forward to c4. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c4",
-              "to": "c2",
+              "from": "c2",
+              "to": "c4",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5822,11 +5822,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black expands with the pawn to e6. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5839,7 +5839,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White brings the knight to its natural square on f3. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g1",
@@ -5856,7 +5856,7 @@
         },
         {
           "san": "Bb4",
-          "annotation": "Black deploys the bishop to b4. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f8",
@@ -5876,8 +5876,8 @@
           "annotation": "White captures the pawn on d5. White improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "d5",
-              "to": "c4",
+              "from": "c4",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5898,11 +5898,11 @@
         },
         {
           "san": "Nxd5",
-          "annotation": "Black exchanges on d5, removing White's pawn. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d5",
-              "to": "f6",
+              "from": "f6",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -5932,7 +5932,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black places the knight on the active c6 square. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b8",
@@ -5953,7 +5953,7 @@
         },
         {
           "san": "Bd3",
-          "annotation": "White moves the bishop to d3. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f1",
@@ -5973,11 +5973,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -5990,11 +5990,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6012,7 +6012,7 @@
         },
         {
           "san": "Be7",
-          "annotation": "Black moves the bishop to e7. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b4",
@@ -6032,8 +6032,8 @@
           "annotation": "White exchanges on d5, removing Black's knight. The knight reaches a powerful central outpost on d5, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "d5",
-              "to": "c3",
+              "from": "c3",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6049,11 +6049,11 @@
         },
         {
           "san": "exd5",
-          "annotation": "Black captures the knight on d5. A thematic move in this position, maintaining Black's initiative.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d5",
-              "to": "e6",
+              "from": "e6",
+              "to": "d5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6071,7 +6071,7 @@
         },
         {
           "san": "Qb3",
-          "annotation": "White moves the queen to b3. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d1",
@@ -6088,7 +6088,7 @@
         },
         {
           "san": "Na5",
-          "annotation": "Black moves the knight to a5. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c6",
@@ -6105,7 +6105,7 @@
         },
         {
           "san": "Qc2",
-          "annotation": "White moves the queen to c2. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b3",
@@ -6153,7 +6153,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White moves forward to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -6173,8 +6173,8 @@
           "annotation": "Black stakes a claim on c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6187,7 +6187,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White moves forward to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -6204,7 +6204,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black stakes a claim on d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -6221,11 +6221,11 @@
         },
         {
           "san": "f3",
-          "annotation": "White moves forward to f3. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "f3",
-              "to": "f2",
+              "from": "f2",
+              "to": "f3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6241,11 +6241,11 @@
         },
         {
           "san": "dxe4",
-          "annotation": "Black captures the pawn on e4. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "d5",
+              "from": "d5",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6263,11 +6263,11 @@
         },
         {
           "san": "fxe4",
-          "annotation": "White captures the pawn on e4. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "f3",
+              "from": "f3",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6285,7 +6285,7 @@
         },
         {
           "san": "e5",
-          "annotation": "Black moves forward to e5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e7",
@@ -6318,11 +6318,11 @@
         },
         {
           "san": "exd4",
-          "annotation": "Black captures the pawn on d4. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d4",
-              "to": "e5",
+              "from": "e5",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6357,7 +6357,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black activates the knight on f6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g8",
@@ -6374,7 +6374,7 @@
         },
         {
           "san": "e5",
-          "annotation": "White expands with the pawn to e5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e4",
@@ -6394,7 +6394,7 @@
         },
         {
           "san": "Nd5",
-          "annotation": "Black develops the knight to d5. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f6",
@@ -6411,11 +6411,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6428,7 +6428,7 @@
         },
         {
           "san": "Be7",
-          "annotation": "Black develops the bishop to e7. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f8",
@@ -6449,11 +6449,11 @@
         },
         {
           "san": "Nxd4",
-          "annotation": "White exchanges on d4, removing Black's pawn. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d4",
-              "to": "f3",
+              "from": "f3",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6469,11 +6469,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6489,8 +6489,8 @@
           "annotation": "White pushes the pawn to c3. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "c2",
+              "from": "c2",
+              "to": "c3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6540,7 +6540,7 @@
         },
         {
           "san": "Nc5",
-          "annotation": "Black moves the knight to c5. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -6561,7 +6561,7 @@
         },
         {
           "san": "N2f3",
-          "annotation": "White moves the knight to f3. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -6578,11 +6578,11 @@
         },
         {
           "san": "a5",
-          "annotation": "Black stakes a claim on a5. A flank pawn advance, creating space on the queenside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "a5",
-              "to": "a7",
+              "from": "a7",
+              "to": "a5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6616,7 +6616,7 @@
         },
         {
           "san": "Be6",
-          "annotation": "Black moves the bishop to e6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c8",
@@ -6653,8 +6653,8 @@
           "annotation": "Black takes on d3, removing White's bishop. The knight on d3 improves Black's piece coordination and flexibility.",
           "arrows": [
             {
-              "from": "d3",
-              "to": "c5",
+              "from": "c5",
+              "to": "d3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6671,11 +6671,11 @@
         },
         {
           "san": "Qxd3",
-          "annotation": "White captures on d3, removing Black's knight. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d3",
-              "to": "c2",
+              "from": "c2",
+              "to": "d3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6691,7 +6691,7 @@
         },
         {
           "san": "Bg4",
-          "annotation": "Black moves the bishop to g4. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e6",
@@ -6714,7 +6714,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White moves forward to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -6734,8 +6734,8 @@
           "annotation": "Black moves forward to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6748,7 +6748,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White expands with the pawn to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -6765,7 +6765,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black pushes the pawn to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -6806,11 +6806,11 @@
         },
         {
           "san": "dxe4",
-          "annotation": "Black captures the pawn on e4. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "d5",
+              "from": "d5",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6867,11 +6867,11 @@
         },
         {
           "san": "f3",
-          "annotation": "White expands with the pawn to f3. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "f3",
-              "to": "f2",
+              "from": "f2",
+              "to": "f3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6883,11 +6883,11 @@
         },
         {
           "san": "exf3",
-          "annotation": "Black captures the pawn on f3. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "f3",
-              "to": "e4",
+              "from": "e4",
+              "to": "f3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6905,11 +6905,11 @@
         },
         {
           "san": "Nxf3",
-          "annotation": "White exchanges on f3, removing Black's pawn. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "f3",
-              "to": "g1",
+              "from": "g1",
+              "to": "f3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6922,7 +6922,7 @@
         },
         {
           "san": "Bg4",
-          "annotation": "Black brings the bishop to its natural square on g4. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c8",
@@ -6939,11 +6939,11 @@
         },
         {
           "san": "h3",
-          "annotation": "White expands with the pawn to h3. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "h3",
-              "to": "h2",
+              "from": "h2",
+              "to": "h3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -6962,8 +6962,8 @@
           "annotation": "Black removes the defender on f3, removing White's knight. The bishop on f3 controls key diagonal squares and maintains active piece play.",
           "arrows": [
             {
-              "from": "f3",
-              "to": "g4",
+              "from": "g4",
+              "to": "f3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6976,11 +6976,11 @@
         },
         {
           "san": "Qxf3",
-          "annotation": "White takes on f3, removing Black's bishop. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "f3",
-              "to": "d1",
+              "from": "d1",
+              "to": "f3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -6993,11 +6993,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black stakes a claim on e6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7010,7 +7010,7 @@
         },
         {
           "san": "Be3",
-          "annotation": "White moves the bishop to e3. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c1",
@@ -7030,7 +7030,7 @@
         },
         {
           "san": "Nd5",
-          "annotation": "Black moves the knight to d5. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f6",
@@ -7047,11 +7047,11 @@
         },
         {
           "san": "O-O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c1",
-              "to": "d1",
+              "from": "e1",
+              "to": "c1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7069,7 +7069,7 @@
         },
         {
           "san": "Be7",
-          "annotation": "Black moves the bishop to e7. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f8",
@@ -7106,11 +7106,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Tucks the king to safety via castling. The rook now enters the game on a central file.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7127,7 +7127,7 @@
         },
         {
           "san": "Qh5",
-          "annotation": "White moves the queen to h5. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f3",
@@ -7144,11 +7144,11 @@
         },
         {
           "san": "g6",
-          "annotation": "Black expands with the pawn to g6. A flank pawn advance, creating space on the kingside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g6",
-              "to": "g7",
+              "from": "g7",
+              "to": "g6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7182,7 +7182,7 @@
         },
         {
           "san": "Bf6",
-          "annotation": "Black moves the bishop to f6. This is a critical moment where precise play is essential to exploit the tactical opportunity.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e7",
@@ -7216,7 +7216,7 @@
         },
         {
           "san": "Bg7",
-          "annotation": "Black moves the bishop to g7. The fianchettoed bishop rakes the long diagonal, exerting pressure from a distance.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f6",
@@ -7243,7 +7243,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White advances to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -7263,8 +7263,8 @@
           "annotation": "Black moves forward to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7277,7 +7277,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White pushes the pawn to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -7294,7 +7294,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black pushes the pawn to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -7311,11 +7311,11 @@
         },
         {
           "san": "f3",
-          "annotation": "White stakes a claim on f3. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "f3",
-              "to": "f2",
+              "from": "f2",
+              "to": "f3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7331,11 +7331,11 @@
         },
         {
           "san": "dxe4",
-          "annotation": "Black captures the pawn on e4. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "d5",
+              "from": "d5",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -7353,11 +7353,11 @@
         },
         {
           "san": "fxe4",
-          "annotation": "White captures the pawn on e4. This move contributes to White's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e4",
-              "to": "f3",
+              "from": "f3",
+              "to": "e4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -7375,7 +7375,7 @@
         },
         {
           "san": "e5",
-          "annotation": "Black stakes a claim on e5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e7",
@@ -7408,11 +7408,11 @@
         },
         {
           "san": "exd4",
-          "annotation": "Black captures the pawn on d4. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "d4",
-              "to": "e5",
+              "from": "e5",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -7467,8 +7467,8 @@
           "annotation": "White pushes the pawn to c3. Black must be careful here — the position contains hidden dangers.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "c2",
+              "from": "c2",
+              "to": "c3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7487,8 +7487,8 @@
           "annotation": "Black captures the pawn on c3. White must be careful here — the position contains hidden dangers.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "d4",
+              "from": "d4",
+              "to": "c3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -7505,8 +7505,8 @@
           "annotation": "White captures the pawn on c3. Black must be careful here — the position contains hidden dangers.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "b2",
+              "from": "b2",
+              "to": "c3",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -7541,11 +7541,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7600,11 +7600,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7620,8 +7620,8 @@
           "annotation": "White removes the defender on f7, removing Black's pawn. This also delivers check, forcing the opponent to respond immediately. Black must be careful here — the position contains hidden dangers.",
           "arrows": [
             {
-              "from": "f7",
-              "to": "c4",
+              "from": "c4",
+              "to": "f7",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -7664,7 +7664,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White pushes the pawn to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -7684,8 +7684,8 @@
           "annotation": "Black expands with the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7698,7 +7698,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White moves forward to d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -7715,7 +7715,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black advances to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -7732,7 +7732,7 @@
         },
         {
           "san": "e5",
-          "annotation": "White stakes a claim on e5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e4",
@@ -7795,11 +7795,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black advances to e6. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7849,11 +7849,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Gets the king to safety with castling, an essential step before the middlegame battle begins.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7928,8 +7928,8 @@
           "annotation": "White captures on g6, removing Black's bishop. Black must be careful here — the position contains hidden dangers.",
           "arrows": [
             {
-              "from": "g6",
-              "to": "h4",
+              "from": "h4",
+              "to": "g6",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -7945,8 +7945,8 @@
           "annotation": "Black captures the knight on g6. White must be careful here — the position contains hidden dangers.",
           "arrows": [
             {
-              "from": "g6",
-              "to": "h7",
+              "from": "h7",
+              "to": "g6",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -7967,8 +7967,8 @@
           "annotation": "White expands with the pawn to c3. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c3",
-              "to": "c2",
+              "from": "c2",
+              "to": "c3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -7983,8 +7983,8 @@
           "annotation": "Black moves forward to c5. Black improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "c5",
-              "to": "c6",
+              "from": "c6",
+              "to": "c5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -8073,11 +8073,11 @@
         },
         {
           "san": "dxc5",
-          "annotation": "White captures the pawn on c5. A thematic move in this position, maintaining White's initiative.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "c5",
-              "to": "d4",
+              "from": "d4",
+              "to": "c5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -8094,8 +8094,8 @@
           "annotation": "Black captures on c5, removing White's pawn. The knight reaches a powerful central outpost on c5, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "c5",
-              "to": "d7",
+              "from": "d7",
+              "to": "c5",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -8114,7 +8114,7 @@
       "moveAnnotations": [
         {
           "san": "e4",
-          "annotation": "White pushes the pawn to e4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -8134,8 +8134,8 @@
           "annotation": "Black moves forward to c6. This pawn move supports a future d-pawn advance, a key central plan.",
           "arrows": [
             {
-              "from": "c6",
-              "to": "c7",
+              "from": "c7",
+              "to": "c6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -8169,7 +8169,7 @@
         },
         {
           "san": "d5",
-          "annotation": "Black advances to d5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d7",
@@ -8210,11 +8210,11 @@
         },
         {
           "san": "e6",
-          "annotation": "Black pushes the pawn to e6. This move contributes to Black's opening development and fight for central control.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "e6",
-              "to": "e7",
+              "from": "e7",
+              "to": "e6",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -8227,7 +8227,7 @@
         },
         {
           "san": "d4",
-          "annotation": "White stakes a claim on d4. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -8261,7 +8261,7 @@
         },
         {
           "san": "e5",
-          "annotation": "White advances to e5. This central advance fights for space and control of key squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e4",
@@ -8318,8 +8318,8 @@
           "annotation": "Black moves forward to c5. Black improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "c5",
-              "to": "c6",
+              "from": "c6",
+              "to": "c5",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -8328,11 +8328,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Castles, completing king safety and activating the rook.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g1",
-              "to": "f1",
+              "from": "e1",
+              "to": "g1",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -8428,11 +8428,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "Castles, completing king safety and activating the rook.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "g8",
-              "to": "f8",
+              "from": "e8",
+              "to": "g8",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -8445,11 +8445,11 @@
         },
         {
           "san": "a3",
-          "annotation": "White stakes a claim on a3. A flank pawn advance, creating space on the queenside.",
+          "annotation": "",
           "arrows": [
             {
-              "from": "a3",
-              "to": "a2",
+              "from": "a2",
+              "to": "a3",
               "color": "rgba(0, 180, 80, 0.8)"
             }
           ],
@@ -8465,8 +8465,8 @@
           "annotation": "Black captures the pawn on d4. Black improves piece placement heading into the critical phase of the game.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "c5",
+              "from": "c5",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -8483,8 +8483,8 @@
           "annotation": "White captures on d4, removing Black's pawn. The knight reaches a powerful central outpost on d4, controlling multiple key squares.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "f3",
+              "from": "f3",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -8503,8 +8503,8 @@
           "annotation": "Black removes the defender on d4, removing White's knight. White must be careful here — the position contains hidden dangers.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "c6",
+              "from": "c6",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],
@@ -8524,8 +8524,8 @@
           "annotation": "White takes on d4, removing Black's knight. The bishop on d4 controls key diagonal squares and maintains active piece play.",
           "arrows": [
             {
-              "from": "d4",
-              "to": "e3",
+              "from": "e3",
+              "to": "d4",
               "color": "rgba(255, 50, 50, 0.8)"
             }
           ],

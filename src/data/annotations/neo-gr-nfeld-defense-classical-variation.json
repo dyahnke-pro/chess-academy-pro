@@ -24,26 +24,6 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the fianchetto development, placing the dark-squared bishop on its most active diagonal where it immediately eyes our d4 pawn and controls crucial central squares. This bishop becomes the cornerstone of Black's hypermodern strategy, ready to support the typical Grünfeld pawn breaks like ...d5 and ...c5 that will challenge our central dominance. From g7, the bishop also provides excellent kingside safety while maintaining long-term pressure against our position. We must be constantly aware of this bishop's influence, as it can quickly turn tactical if we're not careful with our central pawn advances - many White players have fallen victim to discovered attacks and tactical shots along this diagonal."
-    },
-    {
-      "san": "O-O",
-      "annotation": "We're completing our kingside development by castling, securing our king while bringing the rook into play on the f1 square where it supports potential central advances. Castling also connects our rooks and prepares us for the coming central battle that's typical in these Grünfeld-style positions. With our king safely tucked away, we can now focus on building our ideal pawn center without worrying about tactical vulnerabilities. This move also puts immediate pressure on Black to make a decision about the center - we're essentially saying 'your hypermodern setup looks nice, but now you need to prove it works against our solid development.'"
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black mirrors our castling, completing kingside safety while maintaining the tension in the center and keeping all strategic options available. With the king secure, Black can now focus on the critical central battle that defines this opening system. The castled king also allows the f8 rook to potentially swing to e8 or d8 to support the coming ...d5 advance that's central to Black's counterplay. This symmetrical development maintains the balance, but we know that Black will soon need to make concrete moves in the center to justify the hypermodern setup - the question is whether Black will play ...d5 immediately or prepare it further with moves like ...c6 or ...Nbd7."
-    },
-    {
-      "san": "d5",
-      "annotation": "Black strikes in the center with the characteristic Grünfeld pawn break, immediately challenging our control and creating the tension that defines this opening complex. This move transforms the position from a quiet development phase into a sharp central battle, where Black offers the d5 pawn to disrupt our pawn center and activate the pieces. The d5 advance is the point of Black's entire setup - the fianchettoed bishop on g7 now supports this central challenge while Black prepares to meet our cxd5 with piece recaptures that increase activity. We're now entering true Grünfeld territory, where Black's strategy of 'provoke and attack' the white center begins in earnest, and we must decide how aggressively to accept Black's challenge."
-    },
-    {
-      "san": "c4",
-      "annotation": "We're accepting Black's central challenge by playing the critical c4 advance, creating the classic Queen's Gambit/Grünfeld pawn structure that will define the middlegame battle. This move attacks Black's d5 pawn while opening lines for our queen and potentially our c1 bishop, and it stakes out crucial space on the queenside. By playing c4, we're essentially calling Black's bluff - if Black captures with dxc4, we'll recapture and maintain our central control, while if Black maintains the tension, we can continue building with moves like Nc3 and potentially e4. This position now transposes into Grünfeld Defense proper, where Black's counterplay will revolve around undermining our strong pawn center while we try to convert our space advantage into a lasting initiative."
-    },
-    {
-      "san": "dxc4",
-      "annotation": "Black accepts our gambit by capturing on c4, following the main line Grünfeld strategy of eliminating our c-pawn to reduce White's central control while gaining time to develop pieces actively. This capture opens the d-file for Black's pieces and removes one of our key central pawns, though it also allows us to recapture with gain of tempo. By taking on c4, Black is committing to the sharp, tactical nature of the Grünfeld Defense where piece activity often compensates for any temporary material or positional concessions. We'll likely recapture with our queen or knight, and Black will continue with moves like ...c5 or ...Nc6, keeping up the pressure against our remaining central pawns while completing development - this is exactly the type of dynamic, unbalanced position that makes the Grünfeld such a fighting defense."
     }
   ]
 }

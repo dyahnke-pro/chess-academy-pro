@@ -24,14 +24,6 @@
     {
       "san": "d5",
       "annotation": "Black strikes in the center with the thematic Queen's Gambit Declined move, challenging our c4 pawn and establishing a solid pawn presence in the center. This move creates the classical QGD pawn structure where Black accepts a slightly passive position in exchange for solidity and no weaknesses. The d5 pawn controls important central squares like c4 and e4, preventing us from establishing a big pawn center. However, Black now faces a key decision about whether to maintain the tension with the c4 pawn or resolve it immediately, each choice leading to different types of middlegame positions."
-    },
-    {
-      "san": "dxc4",
-      "annotation": "Our opponent decides to capture the gambit pawn, temporarily gaining material but allowing us to develop with tempo and gain central control. This is actually the Vienna Variation of the Queen's Gambit Declined, where Black accepts the pawn but plans to return it under favorable circumstances rather than trying to hold onto it. By taking on c4, Black frees their position somewhat and prepares rapid development, but they also give us the opportunity to recapture with a piece and maintain central pressure. This capture often leads to more dynamic play than the main line Queen's Gambit Declined where Black maintains the pawn tension with moves like ...Be7 or ...Nbd7."
-    },
-    {
-      "san": "e3",
-      "annotation": "We choose the quiet, positional recapture that characterizes the Quiet Variation, prioritizing solid development and central control over immediate material recovery. This move supports our d4 pawn, opens the diagonal for our light-squared bishop, and prepares Bxc4 to regain our pawn with excellent piece coordination. While we could have played the more forcing 5.Bxc4 immediately, the text move gives us a slightly different pawn structure that's often more favorable in the resulting endgames. The e3 pawn also prevents Black from establishing a pawn on d4 and gives our position tremendous solidity, though it does slightly restrict our dark-squared bishop's development options."
     }
   ]
 }

@@ -351,23 +351,24 @@ export async function analyzeSingleGame(
   if (!annotations) return null;
 
   // Store back to DB
-  await db.games.update(gameId, { annotations });
+  await db.games.update(gameId, { annotations, fullyAnalyzed: true });
 
   return annotations;
 }
 
 /**
- * Check if a game needs (re-)analysis.
- * Games with no annotations or only partial annotations (from detectBlunders,
- * which only records mistakes, not every move) need full Stockfish analysis.
+ * Check if a game needs (re-)analysis. Uses the `fullyAnalyzed` flag
+ * set by `analyzeAllGames` as the single source of truth. The old
+ * heuristic (`annotations.length < moves.length / 2`) is kept as a
+ * fallback for games imported before the flag existed — once the
+ * flag is set, the heuristic is never consulted again.
  */
 export function gameNeedsAnalysis(game: GameRecord): boolean {
   if (game.isMasterGame) return false;
+  if (game.fullyAnalyzed === true) return false;
   if (!game.annotations || game.annotations.length === 0) return true;
 
-  // detectBlunders() creates sparse annotations (only mistakes/blunders).
-  // A fully analyzed game has one annotation per half-move.
-  // If annotations cover less than half the game's moves, it's partial.
+  // Legacy fallback for games imported before the fullyAnalyzed flag.
   const { moves } = replayPgnToFens(game.pgn);
   if (moves.length === 0) return false;
   return game.annotations.length < moves.length / 2;
@@ -457,7 +458,7 @@ export async function analyzeAllGames(
 
           const annotations = await analyzeGameOnWorker(game, worker);
           if (annotations && annotations.length > 0) {
-            await db.games.update(game.id, { annotations });
+            await db.games.update(game.id, { annotations, fullyAnalyzed: true });
             analyzedGameIds.push(game.id);
             analyzed++;
           }
@@ -480,7 +481,7 @@ export async function analyzeAllGames(
 
         const annotations = await analyzeGamePositions(game);
         if (annotations && annotations.length > 0) {
-          await db.games.update(game.id, { annotations });
+          await db.games.update(game.id, { annotations, fullyAnalyzed: true });
           analyzedGameIds.push(game.id);
           analyzed++;
         }

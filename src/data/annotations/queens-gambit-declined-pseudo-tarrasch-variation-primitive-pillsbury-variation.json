@@ -32,18 +32,6 @@
     {
       "san": "c5",
       "annotation": "Black strikes back in the center with this thematic pawn break, challenging our d4 pawn and opening lines for their pieces. This move defines the Pseudo-Tarrasch Variation, where Black adopts an active, counterattacking approach rather than the more passive setups typical in the QGD. Our opponent is willing to accept some structural weaknesses (like a potential isolated d-pawn) in exchange for dynamic piece play and central activity. This aggressive response shows Black refuses to be passively squeezed and wants to create their own chances."
-    },
-    {
-      "san": "cxd4",
-      "annotation": "Black captures our d4 pawn, opening the center and transforming the position into something more tactical and dynamic. This capture is the hallmark of the Pseudo-Tarrasch - Black eliminates the central tension immediately and prepares to challenge us with active piece play. Our opponent has calculated that the resulting positions offer sufficient counterplay despite the potentially isolated d5 pawn. By opening the center, Black also activates their pieces more quickly, particularly the dark-squared bishop and queen."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its ideal square, completing our basic development while preparing to recapture on d4. This move maintains the flexibility of our position - we can recapture with either the knight or queen depending on Black's response. Our knight on f3 also supports a future e2-e4 advance and guards against any ...Ng4 tricks from Black. By developing first rather than immediately recapturing, we maintain maximum options and keep Black guessing about our exact plans."
-    },
-    {
-      "san": "Qxd4",
-      "annotation": "We're recapturing with our queen, centralizing our most powerful piece and creating immediate threats against Black's position. This defines the Primitive Pillsbury Variation, where we place our queen actively in the center rather than the more restrained Nxd4 recapture. Our queen on d4 attacks multiple targets and forces Black to develop carefully to avoid tactical shots. While this aggressive approach can lead to our queen being attacked and losing time, it also creates maximum pressure and often leads to sharp, tactical positions where our superior development can be decisive."
     }
   ]
 }

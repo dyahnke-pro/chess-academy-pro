@@ -10,23 +10,23 @@
     },
     {
       "san": "Nf3",
-      "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+      "annotation": ""
     },
     {
       "san": "Nc6",
-      "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+      "annotation": ""
     },
     {
       "san": "Bc4",
-      "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+      "annotation": ""
     },
     {
       "san": "Bc5",
-      "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares."
+      "annotation": ""
     },
     {
       "san": "b4",
-      "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+      "annotation": ""
     },
     {
       "san": "Bxb4",
@@ -41,7 +41,7 @@
     },
     {
       "san": "c3",
-      "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+      "annotation": ""
     },
     {
       "san": "Ba5",
@@ -64,11 +64,11 @@
     },
     {
       "san": "O-O",
-      "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+      "annotation": ""
     },
     {
       "san": "d6",
-      "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+      "annotation": ""
     },
     {
       "san": "cxd4",
@@ -99,19 +99,19 @@
     },
     {
       "san": "Ne7",
-      "annotation": "Ne7 brings the knight into the game. Development with purpose — the knight on e7 eyes important squares."
+      "annotation": ""
     },
     {
       "san": "Bd3",
-      "annotation": "Bd3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+      "annotation": ""
     },
     {
       "san": "O-O",
-      "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+      "annotation": ""
     },
     {
       "san": "Nc3",
-      "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+      "annotation": ""
     },
     {
       "san": "Ng6",
@@ -162,23 +162,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -193,7 +193,7 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Ba5",
@@ -216,11 +216,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "cxd4",
@@ -251,19 +251,19 @@
         },
         {
           "san": "Ne7",
-          "annotation": "Ne7 brings the knight into the game. Development with purpose — the knight on e7 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bd3",
-          "annotation": "Bd3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Ng6",
@@ -275,11 +275,11 @@
         },
         {
           "san": "c5",
-          "annotation": "c5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Qd2",
-          "annotation": "Qd2 brings the queen into the game. Development with purpose — the queen on d2 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "f6",
@@ -298,7 +298,7 @@
         },
         {
           "san": "Bd7",
-          "annotation": "Bd7 brings the bishop into the game. Development with purpose — the bishop on d7 eyes important squares. Notice how the pieces coordinate in this position.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c8",
@@ -334,23 +334,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -365,7 +365,7 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Be7",
@@ -407,7 +407,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "e5",
@@ -415,7 +415,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Qh4",
@@ -423,7 +423,7 @@
         },
         {
           "san": "Nd5",
-          "annotation": "Nd5 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Qg3",
@@ -431,11 +431,11 @@
         },
         {
           "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "O-O",
-          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": ""
         },
         {
           "san": "Nb6",
@@ -447,7 +447,7 @@
         },
         {
           "san": "Be6",
-          "annotation": "Be6 brings the bishop into the game. Development with purpose — the bishop on e6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "exd6",
@@ -462,7 +462,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority. Notice how the pieces coordinate in this position.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e8",
@@ -473,7 +473,7 @@
         },
         {
           "san": "Qxg7+",
-          "annotation": "Qxg7+! This is the key position of the Evans Gambit: Slow Variation with Be7 Retreat. White has the initiative with check. Remember this pattern — it comes up frequently in practice.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g3",
@@ -498,23 +498,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Bb6",
@@ -522,23 +522,23 @@
         },
         {
           "san": "a4",
-          "annotation": "a4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "a6",
-          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nd5",
-          "annotation": "Nd5 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Nxd5",
@@ -564,11 +564,11 @@
         },
         {
           "san": "Nd4",
-          "annotation": "Nd4 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "a5",
-          "annotation": "a5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Ba7",
@@ -598,7 +598,7 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Bb6",
@@ -621,7 +621,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": ""
         },
         {
           "san": "dxc3",
@@ -636,7 +636,7 @@
         },
         {
           "san": "Qg4",
-          "annotation": "Qg4 brings the queen into the game. Development with purpose — the queen on g4 eyes important squares. We're reaching the critical position of this variation.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d1",
@@ -647,7 +647,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority. Notice how the pieces coordinate in this position.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e8",
@@ -683,23 +683,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -714,7 +714,7 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Ba5",
@@ -737,7 +737,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": ""
         },
         {
           "san": "dxc3",
@@ -752,11 +752,11 @@
         },
         {
           "san": "Qb3",
-          "annotation": "Qb3 brings the queen into the game. Development with purpose — the queen on b3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Qf6",
-          "annotation": "Qf6 brings the queen into the game. Development with purpose — the queen on f6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "e5",
@@ -768,7 +768,7 @@
         },
         {
           "san": "Nxc3",
-          "annotation": "Nxc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b1",
@@ -779,15 +779,15 @@
         },
         {
           "san": "Nge7",
-          "annotation": "Nge7 brings the knight into the game. Development with purpose — the knight on e7 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Ba3",
-          "annotation": "Ba3 brings the bishop into the game. Development with purpose — the bishop on a3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": ""
         },
         {
           "san": "Rac1",
@@ -799,7 +799,7 @@
         },
         {
           "san": "Nd5",
-          "annotation": "Nd5 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Na5",
@@ -854,23 +854,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -885,11 +885,11 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "d4",
@@ -908,11 +908,11 @@
         },
         {
           "san": "O-O",
-          "annotation": "White castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "cxd4",
@@ -931,15 +931,15 @@
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bg4",
-          "annotation": "Bg4 brings the bishop into the game. Development with purpose — the bishop on g4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Qa4",
-          "annotation": "Qa4 brings the queen into the game. Development with purpose — the queen on a4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bd7",
@@ -951,11 +951,11 @@
         },
         {
           "san": "Qe7",
-          "annotation": "Qe7 brings the queen into the game. Development with purpose — the queen on e7 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nd5",
-          "annotation": "Nd5 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Qd8",
@@ -963,7 +963,7 @@
         },
         {
           "san": "a4",
-          "annotation": "a4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "Na5",
@@ -997,7 +997,7 @@
         },
         {
           "san": "a6",
-          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Notice how the pieces coordinate in this position.",
+          "annotation": "",
           "arrows": [
             {
               "from": "a7",
@@ -1033,23 +1033,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 develops the knight to f3. The position looks normal, but the key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -1064,15 +1064,15 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Ba5",
-          "annotation": "Ba5 improves the bishop's placement. The bishop was less effective on b4 and moves to a5 where it serves the plan better. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "exd4",
@@ -1102,19 +1102,19 @@
         },
         {
           "san": "Qb3",
-          "annotation": "Qb3 brings the queen into the game. Development with purpose — the queen on b3 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Qf6",
-          "annotation": "Qf6 brings the queen into the game. Development with purpose — the queen on f6 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Qg6",
-          "annotation": "Qg6 activates the queen. From g6, the queen has maximum influence across multiple diagonals and files. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Nxc3",
@@ -1129,11 +1129,11 @@
         },
         {
           "san": "Nge7",
-          "annotation": "Nge7 brings the knight into the game. Development with purpose — the knight on e7 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Ba3",
-          "annotation": "Ba3 brings the bishop into the game. Development with purpose — the bishop on a3 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "O-O",
@@ -1141,19 +1141,19 @@
         },
         {
           "san": "Rac1",
-          "annotation": "Rac1 improves the rook's placement. The rook was less effective on a1 and moves to c1 where it serves the plan better. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "b6",
-          "annotation": "b6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Nd5",
-          "annotation": "Nd5 increases White's influence over the center. Controlling the center is the foundation of a strong position. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bb7",
-          "annotation": "Bb7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Nxe7+",
@@ -1168,11 +1168,11 @@
         },
         {
           "san": "Kh8",
-          "annotation": "Kh8 improves the king's placement. The king was less effective on g8 and moves to h8 where it serves the plan better. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Nxg6+",
-          "annotation": "Nxg6+. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e7",
@@ -1194,7 +1194,7 @@
         },
         {
           "san": "Bxf7",
-          "annotation": "Bxf7! White wins the pawn. The trap is complete — the material advantage is decisive. Remember this pattern.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c4",
@@ -1219,23 +1219,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 develops the knight to f3. The position looks normal, but the key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -1250,19 +1250,19 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Ba5",
-          "annotation": "Ba5 improves the bishop's placement. The bishop was less effective on b4 and moves to a5 where it serves the plan better. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "dxe5",
@@ -1288,7 +1288,7 @@
         },
         {
           "san": "Qd5",
-          "annotation": "Qd5. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d1",
@@ -1309,8 +1309,8 @@
           ]
         },
         {
-          "san": "Qxf7+",
-          "annotation": "Qxf7+! And this is the final blow. White delivers check and wins material. This is why the Quick d5 Double Attack is so dangerous — memorize this pattern!",
+          "san": "Qxf7#",
+          "annotation": "",
           "arrows": [
             {
               "from": "d5",
@@ -1335,23 +1335,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 develops the knight to f3. The position looks normal, but the key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -1366,15 +1366,15 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Ba5",
-          "annotation": "Ba5 improves the bishop's placement. The bishop was less effective on b4 and moves to a5 where it serves the plan better. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "exd4",
@@ -1393,31 +1393,31 @@
         },
         {
           "san": "d3",
-          "annotation": "d3 increases Black's influence over the center. Controlling the center is the foundation of a strong position. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Qb3",
-          "annotation": "Qb3 brings the queen into the game. Development with purpose — the queen on b3 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Qf6",
-          "annotation": "Qf6 brings the queen into the game. Development with purpose — the queen on f6 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Qg6",
-          "annotation": "Qg6 activates the queen. From g6, the queen has maximum influence across multiple diagonals and files. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Re1",
-          "annotation": "Re1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "d2",
-          "annotation": "d2 improves the pawn's placement. The pawn was less effective on d3 and moves to d2 where it serves the plan better. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bxd2",
@@ -1432,11 +1432,11 @@
         },
         {
           "san": "Nge7",
-          "annotation": "Nge7 brings the knight into the game. Development with purpose — the knight on e7 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Qa3",
-          "annotation": "Qa3 activates the queen. From a3, the queen has maximum influence across multiple diagonals and files. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "O-O",
@@ -1488,7 +1488,7 @@
         },
         {
           "san": "Kxg2",
-          "annotation": "Kxg2. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g1",
@@ -1510,7 +1510,7 @@
         },
         {
           "san": "Qxe5",
-          "annotation": "Qxe5! White wins the knight. The trap is complete — the material advantage is decisive. Remember this pattern.",
+          "annotation": "",
           "arrows": [
             {
               "from": "a5",
@@ -1535,23 +1535,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 develops the knight to f3. The position looks normal, but the key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -1566,19 +1566,19 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Ba5",
-          "annotation": "Ba5 improves the bishop's placement. The bishop was less effective on b4 and moves to a5 where it serves the plan better. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "exd5",
@@ -1608,7 +1608,7 @@
         },
         {
           "san": "Be6",
-          "annotation": "Be6 brings the bishop into the game. Development with purpose — the bishop on e6 eyes important squares. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "dxc6",
@@ -1689,11 +1689,11 @@
         },
         {
           "san": "Rb8",
-          "annotation": "Rb8 improves the rook's placement. The rook was less effective on a8 and moves to b8 where it serves the plan better. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Nd5",
-          "annotation": "Nd5 increases White's influence over the center. Controlling the center is the foundation of a strong position. The opponent may not realize the trap is being set."
+          "annotation": ""
         },
         {
           "san": "Bxd5",
@@ -1708,7 +1708,7 @@
         },
         {
           "san": "Bg5+",
-          "annotation": "Bg5+. This is where the trap begins. The next two moves are the key sequence you need to memorize.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c1",
@@ -1730,7 +1730,7 @@
         },
         {
           "san": "Bxf6+",
-          "annotation": "Bxf6+! And this is the final blow. White delivers check and wins material. This is why the Lasker Defense Counter-Trap is so dangerous — memorize this pattern!",
+          "annotation": "",
           "arrows": [
             {
               "from": "g5",
@@ -1759,19 +1759,19 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -1786,7 +1786,7 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Ba5",
@@ -1828,15 +1828,15 @@
         },
         {
           "san": "Be6",
-          "annotation": "Be6 brings the bishop into the game. Development with purpose — the bishop on e6 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bb5",
           "annotation": "Bb5 improves the bishop's placement. The bishop was less effective on c4 and moves to b5 where it serves the plan better. Be alert — a mistake in this position would be very costly."
         },
         {
-          "san": "Nge7",
-          "annotation": "Nge7 brings the knight into the game. Development with purpose — the knight on e7 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "san": "Ne7",
+          "annotation": ""
         },
         {
           "san": "cxd4",
@@ -1855,11 +1855,11 @@
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "a6",
-          "annotation": "a6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Ba4",
@@ -1883,7 +1883,7 @@
         },
         {
           "san": "Bg6",
-          "annotation": "Bg6. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies.",
+          "annotation": "",
           "arrows": [
             {
               "from": "h5",
@@ -1894,7 +1894,7 @@
         },
         {
           "san": "Bb3",
-          "annotation": "Bb3. The position is now very difficult. This is the warning — don't let your opponent reach this.",
+          "annotation": "",
           "arrows": [
             {
               "from": "a4",
@@ -1905,7 +1905,7 @@
         },
         {
           "san": "Bb6",
-          "annotation": "Bb6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "annotation": "",
           "arrows": [
             {
               "from": "a5",
@@ -1934,19 +1934,19 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -1961,7 +1961,7 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Ba5",
@@ -1988,15 +1988,15 @@
         },
         {
           "san": "d3",
-          "annotation": "d3 increases Black's influence over the center. Controlling the center is the foundation of a strong position. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Qb3",
-          "annotation": "Qb3 brings the queen into the game. Development with purpose — the queen on b3 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Qf6",
-          "annotation": "Qf6 brings the queen into the game. Development with purpose — the queen on f6 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "e5",
@@ -2012,15 +2012,15 @@
         },
         {
           "san": "Nge7",
-          "annotation": "Nge7 brings the knight into the game. Development with purpose — the knight on e7 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Ba3",
-          "annotation": "Ba3 brings the bishop into the game. Development with purpose — the bishop on a3 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "b5",
-          "annotation": "b5 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bxb5",
@@ -2046,7 +2046,7 @@
           "annotation": "Black castles, but the position already requires very careful play."
         },
         {
-          "san": "Bd3",
+          "san": "Bxd3",
           "annotation": "Bd3 captures the pawn. This exchange changes the character of the position — the danger is increasing.",
           "arrows": [
             {
@@ -2058,7 +2058,7 @@
         },
         {
           "san": "Qf5",
-          "annotation": "Qf5. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g6",
@@ -2069,7 +2069,7 @@
         },
         {
           "san": "Nbd2",
-          "annotation": "Nbd2. The position is now very difficult. This is the warning — don't let your opponent reach this.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b1",
@@ -2080,7 +2080,7 @@
         },
         {
           "san": "Bb6",
-          "annotation": "Bb6. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "annotation": "",
           "arrows": [
             {
               "from": "a5",
@@ -2109,19 +2109,19 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "b4",
-          "annotation": "b4 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bxb4",
@@ -2136,7 +2136,7 @@
         },
         {
           "san": "c3",
-          "annotation": "c3 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Ba5",
@@ -2163,7 +2163,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "e5",
@@ -2208,7 +2208,7 @@
         },
         {
           "san": "Be6",
-          "annotation": "Be6 brings the bishop into the game. Development with purpose — the bishop on e6 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "fxg7",
@@ -2249,11 +2249,11 @@
         },
         {
           "san": "Bg5",
-          "annotation": "Bg5 brings the bishop into the game. Development with purpose — the bishop on g5 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Qe7",
-          "annotation": "Qe7 brings the queen into the game. Development with purpose — the queen on e7 eyes important squares. Be alert — a mistake in this position would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bxe7",
@@ -2268,7 +2268,7 @@
         },
         {
           "san": "Kxe7",
-          "annotation": "Kxe7. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e8",
@@ -2279,7 +2279,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3. The position is now very difficult. This is the warning — don't let your opponent reach this.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b1",
@@ -2290,7 +2290,7 @@
         },
         {
           "san": "Rxg2+",
-          "annotation": "Rxg2+! This is the position you must avoid. Black has a dangerous attack with check. Know this pattern so you can sidestep it earlier in the line.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g7",

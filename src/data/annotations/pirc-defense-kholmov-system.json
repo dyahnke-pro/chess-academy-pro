@@ -16,18 +16,6 @@
     {
       "san": "Nf6",
       "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing kingside castling. This is a key piece in the Pirc Defense structure, as the knight will often support central breaks like ...e5 or help defend the kingside. The knight on f6 also keeps pressure on our center, forcing us to consider how to maintain our pawn on e4. From f6, this knight has excellent mobility and can potentially jump to strong outposts like e4 or g4 later in the game."
-    },
-    {
-      "san": "g6",
-      "annotation": "Our opponent begins the characteristic kingside fianchetto that defines the Pirc Defense, preparing to develop the dark-squared bishop to g7. This setup will give Black's bishop a powerful diagonal pointing directly at our center and potentially our king if we castle short. The move also prepares ...Bg7 followed by castling, creating a solid but flexible kingside structure. We need to be aware that this fianchettoed bishop will become a key defensive and offensive piece for Black, often supporting central breaks or putting pressure on our queenside."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting our central pawn chain and preparing for further piece development. This knight controls important central squares like d5 and e4, while also keeping options open for various pawn advances like f4-f5 or even a4-a5 depending on how the position develops. The knight on c3 is perfectly placed for the attacking formations we typically want to achieve against the Pirc Defense. Additionally, this development keeps our options open for both Be2 or Bc4 setups, and we're not committing to any particular pawn structure just yet."
-    },
-    {
-      "san": "Bc4",
-      "annotation": "We enter the Kholmov System of the Pirc Defense, an aggressive setup that aims the bishop directly at Black's potentially weak f7 square. This bishop placement is more forcing than the alternative Be2, as it immediately creates concrete threats and puts pressure on Black's kingside development. The bishop on c4 supports potential tactics involving Ng5 or f4-f5 advances, while also keeping Black's king less secure even after castling. This is a principled way to meet the Pirc, as we're not just developing pieces but creating immediate problems that Black must solve before completing their harmonious setup."
     }
   ]
 }

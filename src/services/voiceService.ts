@@ -162,6 +162,19 @@ class VoiceService {
   }
 
   private async speakInternal(text: string, force: boolean): Promise<void> {
+    // Dev-mode guard: warn when a new speak fires while a previous one
+    // is still playing. This is the root cause of every "two voices
+    // overlap" bug we've fixed — callers doing `void speak(A)` then
+    // `void speak(B)` without awaiting. The stop() below handles it
+    // gracefully, but the warning helps catch the caller pattern
+    // during development.
+    if (import.meta.env.DEV && this.playing) {
+      console.warn(
+        '[VoiceService] speak() called while already playing — previous speech will be cut off.',
+        'Caller should `await speak()` or chain with .then() to prevent overlap.',
+        { newText: text.slice(0, 60) },
+      );
+    }
     this.stop();
 
     const prefs = await this.loadPrefs();

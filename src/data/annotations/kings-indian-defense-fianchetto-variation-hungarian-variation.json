@@ -24,38 +24,6 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the characteristic King's Indian fianchetto, placing the dark-squared bishop on its most active diagonal where it eyes our entire queenside and central dark squares. This bishop will become Black's primary attacking piece, potentially supporting future ...e5 breaks and creating threats along the long diagonal toward our king. Our opponent has now established the classic King's Indian setup with the bishop controlling key squares like d4, c3, and b2. The bishop also provides additional protection for the kingside, making Black's king position more secure while preparing for the typical King's Indian counterattacking chances."
-    },
-    {
-      "san": "d6",
-      "annotation": "Our opponent solidifies the center with this modest but important pawn move, supporting a future ...e5 advance while giving the king an escape square on f8 if needed. This move also opens the c8-h3 diagonal for the light-squared bishop, though that piece will often struggle to find good squares in the King's Indian structure. The d6 pawn serves as an anchor for Black's position, preventing us from advancing d5 immediately while maintaining the option of ...e5 to challenge our center. This is the most common and solid way for Black to continue in the King's Indian, preparing the typical central counterplay that defines this opening."
-    },
-    {
-      "san": "g3",
-      "annotation": "We're adopting the Fianchetto Variation against the King's Indian, preparing to place our light-squared bishop on g2 where it will control the long diagonal and support our central control. This setup is particularly effective against the King's Indian because it allows us to maintain pressure on Black's position without committing to the more aggressive h3 and Be3 systems. The g3 move also provides additional safety for our king by creating escape squares and preventing potential back-rank tactics later. Our fianchettoed bishop will work beautifully with our central pawns, creating a harmonious piece coordination that's difficult for Black to challenge directly."
-    },
-    {
-      "san": "Bg2",
-      "annotation": "We complete our fianchetto setup, placing the light-squared bishop on its most active diagonal where it supports our d4 pawn and controls key central squares. This bishop placement is the hallmark of the Fianchetto Variation, giving us excellent long-term pressure against Black's queenside while maintaining solid control over our position. The bishop on g2 also provides crucial support for our king's safety and can become a powerful attacking piece if Black weakens the dark squares around their king. With this move, we've established a solid, flexible position that allows us to respond to Black's various King's Indian plans while maintaining our own strategic advantages."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Our opponent wisely gets the king to safety, completing the essential development phase of the King's Indian setup while preparing to launch typical counterattacking operations. This move also connects the rooks and prepares potential tactics along the f-file, especially after a future ...f5 advance that's characteristic of King's Indian play. Black's king is now relatively safe on the kingside, which allows for more aggressive piece play and pawn advances in the center and on the queenside. By castling, our opponent is also preparing to bring the rook on f8 into play, either supporting central pawn breaks or participating in kingside attacks."
-    },
-    {
-      "san": "O-O",
-      "annotation": "We follow suit by getting our king to safety, completing our basic development while maintaining all our strategic advantages in the position. Castling also brings our rook to f1, where it can support central pawn advances like e4 or provide defensive support along the f-file. Our king is now well-protected behind our fianchettoed bishop and pawn chain, giving us the security needed to pursue our middlegame plans. With both sides having completed their basic development, the real strategic battle of the King's Indian is about to begin, with us holding space advantages and Black preparing typical counterplay."
-    },
-    {
-      "san": "Nbd7",
-      "annotation": "Black develops the knight toward the center, preparing to support the crucial ...e5 pawn break that's central to King's Indian strategy while maintaining flexibility about its ultimate destination. This knight can potentially redeploy to c5, e5, or f6 depending on how the position develops, and it also supports potential queenside operations with moves like ...a5 or ...b5. The move also clears the c8 square for the light-squared bishop, though in King's Indian structures this piece often struggles to find good squares. By developing this knight, our opponent is completing the mobilization of their forces and preparing to challenge our central control with the thematic ...e5 advance."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing to respond to Black's inevitable ...e5 central challenge. This knight placement also eyes important squares like b5 and d5, potentially supporting future queenside expansion with moves like a4-a5 or supporting central pawn advances. The knight on c3 works harmoniously with our other pieces, particularly our fianchettoed bishop on g2, creating a solid foundation for our middlegame plans. Most importantly, this development keeps all our options open while maintaining pressure on Black's position and preparing us to meet their typical King's Indian counterplay with accurate responses."
-    },
-    {
-      "san": "a6",
-      "annotation": "Our opponent plays the Hungarian Variation move, a subtle but important prophylactic move that prevents our pieces from occupying the b5 square while preparing potential queenside counterplay with ...b5. This move is particularly clever because it addresses one of White's main plans in the Fianchetto system - the advance Nd5 or the maneuver Nd2-c4-b6 that can be very annoying for Black. The a6 move also prepares ...b5 expansion, potentially challenging our queenside space advantage and creating counterplay. While this might seem slow, it's actually a very practical approach that gives Black additional options in the middlegame while preventing some of our most dangerous piece maneuvers."
     }
   ]
 }

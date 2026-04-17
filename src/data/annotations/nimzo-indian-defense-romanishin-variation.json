@@ -32,18 +32,6 @@
     {
       "san": "c5",
       "annotation": "Black immediately strikes at our pawn center with this thematic Nimzo-Indian move, challenging our d4 pawn and creating central tension. This advance is the hallmark of the Nimzo-Indian Defense - our opponent is not just passively developing but actively fighting for central control and creating immediate tactical complications. The pawn on c5 also prepares to potentially trade on d4, which would give Black a central presence and open lines for piece activity. We now face an important decision about whether to maintain the tension, advance with d5, or allow the trade, each choice leading to fundamentally different pawn structures and strategic themes."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Our opponent prioritizes king safety by castling kingside, which is absolutely essential before the center opens up with potential pawn trades. This move also connects the rooks and prepares to potentially increase pressure on our d4 pawn with moves like ...Re8 and ...d6. Black is following excellent practical advice - secure the king first, then worry about central battles, especially since the position could become sharp quickly. The castled king also frees up Black's rook to potentially support the c5 pawn or create pressure along the e-file, making this both a safety measure and a subtle developing choice."
-    },
-    {
-      "san": "g3",
-      "annotation": "We're choosing the Romanishin Variation of the Nimzo-Indian, a sophisticated positional approach that aims to fianchetto our king's bishop and create long-term pressure on the long diagonal. This move prepares Bg2, where our bishop will eye the important d5 and c6 squares while also supporting our center from a safe distance. The g3 setup is less forcing than alternatives like Qc2 or e3, but it leads to rich, strategic positions where understanding pawn structures and piece coordination becomes crucial. Our plan is to complete development with Bg2 and then look for central advances like d5 or tactical shots involving our bishops working together on the long diagonals."
-    },
-    {
-      "san": "Bg2",
-      "annotation": "We complete our kingside development by fianchettoing the king's bishop, creating a powerful piece that controls the entire long diagonal from a2 to h8. This bishop is perfectly placed to support our central pawns, especially if we advance d5, while also eyeing Black's kingside and potentially supporting future tactical operations. The fianchettoed bishop is one of the key strategic assets in this variation, often becoming more valuable as the game progresses and pawn trades open up the position. Our setup is now harmonious and flexible - we can castle next move for safety, then look to create central tension with moves like d5 or e4, depending on how Black continues the development."
     }
   ]
 }

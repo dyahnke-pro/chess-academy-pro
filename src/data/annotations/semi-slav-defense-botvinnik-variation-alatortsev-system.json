@@ -72,10 +72,6 @@
     {
       "san": "hxg5",
       "annotation": "Black is essentially forced to recapture our knight, but this capture opens the h-file completely and leaves Black's king in mortal danger on multiple fronts. By taking on g5, Black eliminates our knight but creates even more weaknesses and gives us clear attacking lines toward the exposed king. The hxg5 capture is practically forced because leaving our pawn on g5 would be even worse, but it plays directly into our tactical plans. Now Black's king has no safe haven, and we have multiple powerful continuations to press our advantage."
-    },
-    {
-      "san": "Nxd5",
-      "annotation": "Black counterattacks desperately by capturing our knight with check, trying to create complications and hoping to survive the attack through tactics rather than passive defense. This capture eliminates one of our key attacking pieces and gives Black a tempo by attacking our king, but it also removes one of Black's few developed pieces from the defense. The Nxd5 move shows that Black understands the position is critical and that normal moves won't save the game - only sharp counterplay offers any hope. However, after we deal with the check, we'll still have a winning attack against Black's exposed king, and this tactical shot is likely too little, too late to save Black's position."
     }
   ]
 }

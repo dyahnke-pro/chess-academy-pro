@@ -40,18 +40,6 @@
     {
       "san": "d5",
       "annotation": "We push forward boldly in the center, maintaining our space advantage while forcing Black to make immediate decisions about their pawn structure. This advance gains space and restricts Black's pieces, particularly making it harder for them to achieve the liberating ...d5 break. Our pawn on d5 also supports a potential e2-e4 advance, which would give us a massive pawn center. However, this committal move also gives Black clear targets to attack and opens the possibility of ...exd5, which would open lines for Black's pieces and potentially give them good piece play."
-    },
-    {
-      "san": "exd5",
-      "annotation": "Black chooses to resolve the central tension immediately, opening the e-file and activating their pieces while eliminating our advanced pawn. This practical decision gives our opponent good piece development prospects, as the e-file may become useful for a rook later, and the bishop on b7 now has even more scope along the long diagonal. The exchange also prevents us from building a massive pawn center with e2-e4, keeping the position more balanced. Our opponent is trading space disadvantage for piece activity, which is often a sound strategic decision in the Queen's Indian."
-    },
-    {
-      "san": "cxd5",
-      "annotation": "We recapture toward the center, maintaining our pawn presence while keeping the position relatively balanced in terms of pawn structure. This recapture opens the c-file for our rook and maintains central control, though we've traded our advanced d-pawn for a more modest central presence. The pawn on d5 still provides some space advantage and controls important squares like c6 and e6. Our position remains solid with good development prospects, though Black has achieved reasonable equality through active piece play."
-    },
-    {
-      "san": "Ng5",
-      "annotation": "We launch an immediate tactical strike, attacking the f7 square and creating concrete threats that Black must address carefully. This aggressive knight move is the signature of the Buerger Variation, creating immediate tactical complications rather than pursuing quiet positional development. The knight attacks f7 and eyes the e6 square, while also preparing potential discoveries if our bishop moves from g2. Black must now respond precisely to avoid falling into tactical difficulties, as moves like ...h6 could lead to complications after knight retreats or sacrifices on f7. This sharp continuation transforms the game from positional maneuvering to tactical calculation."
     }
   ]
 }

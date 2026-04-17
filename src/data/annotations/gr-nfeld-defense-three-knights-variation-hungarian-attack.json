@@ -20,18 +20,6 @@
     {
       "san": "d5",
       "annotation": "Black strikes at the heart of our pawn center with this central counter-thrust, the defining move of the Grünfeld Defense. Our opponent is immediately challenging our c4 pawn and forcing us to make a critical decision about the pawn structure. This advance opens lines for Black's pieces and aims to prove that our 'ideal' pawn center is actually overextended and vulnerable. We must now choose whether to maintain our central pawns with moves like cxd5 or e3, each leading to different types of positions with unique strategic themes."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We're developing our kingside knight to its ideal square, adding another defender to our d4 pawn while preparing kingside castling. This knight placement supports our center without committing to any particular pawn structure just yet, keeping our options flexible. The knight on f3 also eyes the important e5 square and can potentially reroute to more active squares like e5 or g5 depending on how the position develops. By developing before resolving the central tension, we're following sound opening principles while keeping Black guessing about our exact plan."
-    },
-    {
-      "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup, placing the dark-squared bishop on its most aggressive diagonal where it immediately eyes our queenside. This bishop is now perfectly positioned to support Black's central counterplay and will become a monster piece if we're not careful with our pawn structure. The Grünfeld bishop on g7 is often considered Black's best piece, capable of creating tactical threats and maintaining long-term pressure. Our opponent has now set up the classic Grünfeld formation and is ready to intensify the pressure on our center with moves like ...c5 or ...dxc4."
-    },
-    {
-      "san": "Bf4",
-      "annotation": "We're developing our dark-squared bishop to an active central square, entering the Hungarian Attack variation of the Grünfeld Defense. This aggressive bishop placement aims to support our center while eyeing Black's kingside, particularly the sensitive h6 square. The bishop on f4 also prepares potential tactical ideas involving Bh6 to trade off Black's fianchettoed bishop, which would significantly weaken Black's dark squares. This move signals our intention to play actively and aggressively, rather than simply defending our pawn center passively, and sets up interesting tactical possibilities in the middlegame."
     }
   ]
 }

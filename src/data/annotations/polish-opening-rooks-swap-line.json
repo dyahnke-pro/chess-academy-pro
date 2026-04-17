@@ -24,26 +24,6 @@
     {
       "san": "a6",
       "annotation": "Black attacks our b5 pawn, forcing us to make a critical choice about our pawn structure. Rather than retreat, a6 invites us to capture, which will lead to the unusual Rooks Swap line where material gets traded off rapidly. This move shows Black playing actively to simplify the position and reduce our attacking potential."
-    },
-    {
-      "san": "axb5",
-      "annotation": "We capture on b5, fully committing to the rook-trading sequence that defines this line. By taking with the a-pawn, we're preparing to recapture with our bishop after Black takes on a1, ultimately leading to a position where our bishop controls the important long diagonal while our pawn structure remains sound. This capture says we're willing to simplify if it improves our piece placement."
-    },
-    {
-      "san": "axb5",
-      "annotation": "Black recaptures with the a-pawn, accepting the trade and opening the a-file for rook action. This move is forced if Black wants to maintain balanced material, though it does allow our pieces to coordinate well along the long diagonal afterward. Black is signaling acceptance of a more simplified position rather than trying to muddy the waters."
-    },
-    {
-      "san": "Rxa1",
-      "annotation": "Black takes our rook on a1, entering the forcing sequence that this entire line is built around. By trading rooks so early, Black accepts a simplified position and removes one of our potentially active pieces. This trade is critical because it determines the character of the middlegame—we'll have fewer pieces to work with but a clearer, more strategic position."
-    },
-    {
-      "san": "Bxa1",
-      "annotation": "We recapture with our bishop, completing the material exchange and repositioning our bishop to a1 where it still controls the important long diagonal (pointing toward h8). Our Ba1 is slightly out of play compared to b2, but the trade has simplified Black's attacking chances while we maintain solid control of key squares. The position now shifts from tactical complications toward a strategic middlegame where our pawn structure and piece placement matter most."
-    },
-    {
-      "san": "d5",
-      "annotation": "Black strikes at the center, a active move that claims space and opens lines for the light-squared bishop on c8. This pawn advance is one of Black's main counterplay ideas in these simplified positions, asserting that despite accepting trades, they have active play in the center. We now need to decide how to meet this central aggression—whether to trade, advance, or maneuver around it."
     }
   ]
 }

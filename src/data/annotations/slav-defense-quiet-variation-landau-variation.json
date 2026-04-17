@@ -48,18 +48,6 @@
     {
       "san": "Qc8",
       "annotation": "Our opponent makes an excellent defensive move, moving the queen out of potential tactics while preparing to defend the queenside weaknesses we've been targeting. Black's queen on c8 serves multiple purposes: it defends the b7 pawn, prepares potential counterplay along the c-file, and maintains flexibility for future plans. This move demonstrates excellent positional understanding, as Black recognizes that immediate defense is more important than rapid development when facing concrete threats. The queen on c8 also keeps open the possibility of moves like Qc2 or other active queen placements once the immediate defensive tasks are complete."
-    },
-    {
-      "san": "e6",
-      "annotation": "Black consolidates the position with this stabilizing move, supporting the isolated d-pawn while preparing to complete kingside development with Be7 and castling. This move creates a more secure pawn structure and eliminates any potential tactics involving our pieces attacking along the a2-g8 diagonal. Our opponent is following sound positional principles by securing the king's position before pursuing more ambitious plans. The e6 move also prepares potential future plans like f6 and e5, giving Black good central control and the possibility of activating the pieces further. This demonstrates the typical Slav Defense strategy: secure the position first, then seek active counterplay."
-    },
-    {
-      "san": "Bd2",
-      "annotation": "We're developing our dark-squared bishop to a flexible square where it can support various strategic plans while preparing to complete our queenside development. The bishop on d2 serves multiple functions: it can potentially swing to c3 to put pressure on Black's kingside, supports our queenside pieces, and prepares potential future moves like Rc1 or other rook development. This move also keeps our options open regarding castling, as we might castle queenside in some variations if the position allows for it. Our bishop development to d2 rather than other squares shows we're maintaining flexibility while gradually improving our piece coordination and preparing for the middlegame phase where piece activity will become crucial."
-    },
-    {
-      "san": "Na3",
-      "annotation": "We're playing the characteristic move of the Landau Variation, developing our knight to an unusual but purposeful square where it prepares to jump to c4 or b5 with powerful effect. This knight placement is specifically designed to exploit the weaknesses created by Black's pawn structure, particularly the b5 and c4 squares that have become available after the pawn exchanges. From a3, our knight can quickly relocate to active squares and create concrete threats against Black's position, especially in coordination with our active queen on b3. While Na3 looks awkward at first glance, it's actually a key piece in our attacking setup, demonstrating how in chess, unusual moves can be highly effective when they serve a specific strategic purpose in the position at hand."
     }
   ]
 }

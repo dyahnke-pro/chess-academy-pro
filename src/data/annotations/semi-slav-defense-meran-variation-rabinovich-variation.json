@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move is the foundation of many solid, strategic openings where we'll build up our position methodically rather than launching immediate tactical strikes. The d4 opening typically leads to rich middlegame positions where both sides have chances for both positional maneuvering and tactical fireworks. Our plan revolves around controlling the center and developing our pieces to active squares before committing to any particular pawn structure."
+      "annotation": ""
     },
     {
       "san": "d5",
@@ -79,7 +79,7 @@
     },
     {
       "san": "cxd4",
-      "annotation": "Our opponent captures our central pawn, opening the position and creating immediate tactical complications that both sides will need to navigate carefully. This capture is practically forced, as allowing us to maintain our powerful pawn center would give us a crushing positional advantage. Black's capture opens the c-file and creates potential counterplay, though it also exposes Black's position to our piece activity. The resulting positions are extremely sharp and theoretical, where both sides have chances for tactical brilliancies but also risks of falling into serious trouble."
+      "annotation": ""
     },
     {
       "san": "Nxb5",

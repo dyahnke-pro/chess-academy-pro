@@ -56,18 +56,6 @@
     {
       "san": "Bg7",
       "annotation": "Our opponent completes the fianchetto, placing the dark-squared bishop on its most active diagonal where it pressures our d4 pawn and controls key central squares. The bishop on g7 is a cornerstone of Black's position, providing both defense and potential counterattacking chances along the long diagonal. This development also prepares castling kingside while maintaining flexibility in Black's piece coordination. We need to be aware that this bishop can become very dangerous if we're not careful with our pawn advances or piece placement."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black castles kingside, bringing the king to safety while connecting the rooks and completing a crucial part of development. This move makes sense given that the kingside is reasonably secure and Black needs to get the king out of the center before we can create serious threats. Castling also brings the f8 rook into the game, potentially supporting the f7 pawn or preparing to contest important files. Now that Black's king is safe, we need to think about how to increase our pressure and make the most of our space advantage."
-    },
-    {
-      "san": "Rc1",
-      "annotation": "We place our rook on the semi-open c-file, increasing pressure against Black's queenside while preparing potential advances like c5. The rook on c1 supports our c4 pawn and eyes Black's c8 square, making it harder for our opponent to coordinate the queenside pieces. This move also prepares for potential queenside castling, keeping our king flexible while maintaining maximum pressure on Black's position. The rook will be perfectly placed if we can advance c5 at some point, creating serious threats against Black's queenside structure."
-    },
-    {
-      "san": "b3",
-      "annotation": "We strengthen our queenside pawn structure while preparing to fianchetto our dark-squared bishop on b2, where it would dominate the long diagonal. This move also supports our c4 pawn and prepares potential advances like a4-a5, putting even more pressure on Black's queenside. The b3 advance fits well with our space advantage and gives us additional options for piece development and pawn advances. By solidifying our queenside, we're preparing to increase the pressure on Black's position while maintaining all our structural advantages from the opening."
     }
   ]
 }

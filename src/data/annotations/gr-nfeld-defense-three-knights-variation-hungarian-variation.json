@@ -20,26 +20,6 @@
     {
       "san": "d5",
       "annotation": "This is the defining move of the Grünfeld Defense! Black immediately strikes at our pawn center, offering to trade their d-pawn for our c-pawn and completely transform the pawn structure. Our opponent is embracing the Grünfeld philosophy: they're willing to give us a strong pawn center with pawns on d4 and e4 (after we recapture) in exchange for incredibly active piece play and long-term pressure against our central pawns. This move creates immediate tension and forces us to make important decisions about how to maintain our central advantage."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, supporting our d4 pawn while preparing to castle kingside and maintaining maximum flexibility in the center. This move allows us to avoid the main line Grünfeld with cxd5, instead choosing a more positional approach where we keep the tension and develop our pieces harmoniously. The knight on f3 also prepares e3 and Bd3, leading to solid development while keeping our central pawns well-supported and our king safe."
-    },
-    {
-      "san": "Bg7",
-      "annotation": "Black completes their fianchetto setup, placing the dark-squared bishop on the long diagonal where it exerts tremendous pressure on our central pawns and potentially our king position. This bishop is now perfectly placed to support the typical Grünfeld pawn breaks like c5 and e5, while also providing excellent defensive coverage for Black's kingside. The Bg7 is often called the 'cornerstone' of Black's position in the Grünfeld, as it coordinates beautifully with the knight on f6 and supports Black's dynamic counterplay against our pawn center."
-    },
-    {
-      "san": "Bf4",
-      "annotation": "We're developing our light-squared bishop to an active square where it controls important central squares like e5 and d6, while also supporting our queenside expansion and preparing to meet Black's central pawn breaks. This bishop placement is characteristic of the Three Knights Variation, where we prefer piece development over immediate central pawn advances. The Bf4 also prepares e3 and potentially h3 and g4 in some lines, giving us multiple strategic options while maintaining pressure on Black's position."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black wisely castles kingside, bringing their king to safety before the position becomes too tactical and sharp, which is essential in Grünfeld structures where central pawn storms and piece attacks can develop quickly. This move also connects the rooks and prepares Black's typical Grünfeld counterplay with moves like c5, Nc6, and potentially f5 or e6 depending on how we continue. With the king safely tucked away, our opponent can now focus on challenging our central pawn structure more aggressively without worrying about immediate tactical threats against their monarch."
-    },
-    {
-      "san": "e3",
-      "annotation": "We're solidifying our pawn center and preparing to complete our kingside development with Bd3 and castling, adopting a solid, positional approach to the Grünfeld rather than the more aggressive alternatives like e4. This move supports our d4 pawn, opens the diagonal for our light-squared bishop, and prepares to meet Black's central counterplay with a solid pawn structure that's difficult to undermine. The e3 setup, combined with our pieces on f3, f4, and the coming Bd3, creates a harmonious setup that maintains central control while avoiding the sharp tactical complications that arise from more aggressive pawn advances."
     }
   ]
 }

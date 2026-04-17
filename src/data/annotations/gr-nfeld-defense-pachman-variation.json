@@ -39,7 +39,7 @@
     },
     {
       "san": "dxc4",
-      "annotation": "Black has little choice but to capture our c4 pawn, as leaving it undefended would simply lose material after Qxd5. By exchanging on c4, Black relieves the pressure on the center while gaining some space and time for development. This capture also opens up the long diagonal even more for Black's bishop on g7, which can now exert maximum pressure on our remaining central pawns. However, Black is also giving us a lead in development and potential pressure against the kingside, particularly the f7 square. This is a critical moment in the opening where both sides need to continue developing while keeping an eye on tactical opportunities."
+      "annotation": ""
     },
     {
       "san": "Bxc4",
@@ -47,7 +47,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black wisely gets the king to safety with castling, addressing the immediate threats against f7 while connecting the rooks. This move is practically forced given our pressure on the kingside, and it's a good example of how tactical threats often dictate the move order in chess openings. By castling, Black also brings the rook on f8 into play, which can later support purposeful moves like c5 or even defensive moves like Re8. However, Black is still behind in development and needs to catch up quickly before our lead becomes overwhelming. The king on g8 is relatively safe, but we still maintain some initiative due to our better piece coordination."
+      "annotation": ""
     },
     {
       "san": "Nf3",

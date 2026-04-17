@@ -60,14 +60,6 @@
     {
       "san": "dxe6",
       "annotation": "We capture the pawn to maintain material balance while opening the d-file for our heavy pieces and creating potential attacking chances. This exchange eliminates Black's central pawn break but also opens lines for Black's pieces to become more active. The capture keeps material equal while we maintain our structural advantages in the position. We're simplifying the center in a way that should favor our better piece coordination and space advantage."
-    },
-    {
-      "san": "Nxe6",
-      "annotation": "Black recaptures with the knight, bringing it to a centralized square where it eyes important outposts and maintains piece activity. This recapture keeps material balanced while activating Black's pieces toward the center of the board. The knight on e6 also supports potential ...f5 breaks and maintains pressure on our position. Our opponent has successfully challenged our center and created a more balanced position with active piece play."
-    },
-    {
-      "san": "Bxe6",
-      "annotation": "We exchange our dark-squared bishop for Black's centralized knight, eliminating a key defender of the dark squares around Black's king while maintaining material balance. This capture removes Black's active knight but also gives up our potentially strong attacking bishop. The exchange simplifies the position while we maintain our structural advantages and better piece coordination. We're trading off Black's active pieces while keeping our positional advantages intact for the developing middlegame battle."
     }
   ]
 }
