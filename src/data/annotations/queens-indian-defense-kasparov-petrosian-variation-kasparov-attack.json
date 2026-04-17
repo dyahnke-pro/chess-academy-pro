@@ -36,22 +36,6 @@
     {
       "san": "d5",
       "annotation": "Black strikes in the center with perfect timing, challenging our c4 pawn and opening up the position to activate the light-squared bishop on b7. This central break is thematic in the Queen's Indian - Black waits for the right moment to challenge our pawn center and create dynamic piece play. The move also opens the diagonal for the bishop, potentially creating tactical opportunities while forcing us to make an important decision about our pawn structure. By playing ...d5 now, Black transforms the position from a purely positional struggle into something more dynamic and double-edged."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, supporting the c4 pawn while adding pressure to the center and preparing for the tactical complications that will arise from Black's central challenge. This active move keeps our options open - we can still recapture on d5 with the c-pawn or allow Black to take on c4, leading to different pawn structures and strategic themes. The knight on c3 also eyes important central squares like e4 and d5, and supports potential queenside expansion or tactical operations. By completing our minor piece development, we're preparing for the critical decisions about how to handle the central tension."
-    },
-    {
-      "san": "cxd5",
-      "annotation": "We're practically forced to capture, as allowing ...dxc4 would give Black a comfortable position with an extra central pawn and active piece play. By taking with the c-pawn, we maintain our central presence while opening the c-file for potential future use. This capture also leads to the characteristic pawn structure of this variation, where we have a pawn on d4 and Black will likely recapture with the knight. The resulting position will feature opposite-colored bishop tensions and dynamic piece play, typical of the Queen's Indian middlegame themes."
-    },
-    {
-      "san": "Nxd5",
-      "annotation": "Black recaptures with the knight, centralizing this piece powerfully while maintaining good coordination with the rest of the army. The knight on d5 becomes a strong outpost, controlling key central squares and potentially supporting future tactical operations or piece exchanges. This recapture also keeps Black's pawn structure intact and maintains the pressure along the long diagonal from the bishop on b7. From d5, the knight can potentially jump to various squares like f4, b4, or f6, giving Black flexible and active piece play in the resulting middlegame positions."
-    },
-    {
-      "san": "Qc2",
-      "annotation": "We're launching the Kasparov Attack, bringing our queen to an active square where it supports potential central advances while eyeing the Black king position along the c-file and long diagonal. This aggressive queen placement is characteristic of Kasparov's dynamic style - the queen on c2 supports a future e4 advance, controls important central squares, and creates subtle tactical threats. The move also connects our rooks and prepares for potential kingside attacking chances, transforming what could be a quiet positional game into something much sharper. From c2, our queen coordinates beautifully with our pieces and maintains maximum pressure on Black's position."
     }
   ]
 }

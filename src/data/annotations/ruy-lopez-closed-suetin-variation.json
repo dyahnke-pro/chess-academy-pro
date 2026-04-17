@@ -56,18 +56,6 @@
     {
       "san": "d6",
       "annotation": "Black solidifies the center with this pawn move, supporting the e5 pawn and preparing to complete development with moves like Bb7 or Nbd7. This creates a solid pawn structure that's harder for us to attack directly, while opening the c8-h3 diagonal for Black's light-squared bishop. The d6 pawn also prepares potential counterplay with c5, challenging our central control. This move represents Black's transition from pure development to establishing a solid positional foundation - a key moment in the Ruy Lopez where Black chooses solidity over more aggressive options like d5 or Bg4."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black castles kingside, completing the essential safety measures and connecting the rooks. This move is virtually mandatory at this point, as leaving the king in the center would be extremely dangerous given the tactical nature of Ruy Lopez positions. With the king safely tucked away, Black can now focus on completing development and beginning active operations in the center and queenside. The castled king also frees the f8 square for potential piece maneuvering and ensures that Black's rook on h8 can potentially swing into the game via f8-f6-h6 or similar routes in attacking variations."
-    },
-    {
-      "san": "c3",
-      "annotation": "We play this important preparatory move, supporting a future d2-d4 advance that will challenge Black's central pawn structure. The c3 pawn controls the b4 and d4 squares, preventing Black from placing pieces on these important central posts. This move is a key component of the classic Ruy Lopez plan: we prepare d4 to open the center and create attacking chances against Black's king. The pawn on c3 also provides additional support for our queenside structure and prepares potential expansion with b2-b4. While this move appears quiet, it sets up one of the most important strategic battles in the Ruy Lopez - the fight for central control with d4."
-    },
-    {
-      "san": "a3",
-      "annotation": "We play the Suetin Variation with this subtle but purposeful move, preventing Black from playing Na5 to attack our bishop on b3 and preparing our own queenside expansion. This seemingly modest pawn move controls the b4 square permanently and supports a potential b2-b4 advance that would give us significant queenside space. The move also has a psychological element - we're showing that we're in no hurry to play d4, instead choosing to improve our position methodically. This variation, named after Soviet grandmaster Alexey Suetin, represents a patient approach to the Ruy Lopez where we build up our position slowly before launching our central break."
     }
   ]
 }

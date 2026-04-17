@@ -56,46 +56,6 @@
     {
       "san": "d6",
       "annotation": "Black solidifies the center with this pawn move, supporting the e5 pawn and preparing to complete kingside development. This move creates a solid pawn chain on e5-d6 while opening the c8-h3 diagonal for Black's light-squared bishop. The pawn on d6 also restricts some of our central ambitions while giving Black a firm foothold in the center. This solid approach is typical of the Closed Ruy Lopez, where Black accepts a somewhat passive position in exchange for a solid, hard-to-break pawn structure."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black completes kingside development by castling, ensuring king safety before the middlegame battles intensify. This move connects Black's rooks and prepares for the central and wing operations that characterize the Closed Ruy Lopez. With the king safely tucked away, Black can now focus on piece development and creating counterplay on the queenside or in the center. Castling also places the king away from potential discoveries along the e-file, which will become increasingly important as we advance our central pawns."
-    },
-    {
-      "san": "h3",
-      "annotation": "We play the useful move h3, preventing Black's pieces (particularly a knight or bishop) from reaching the g4 square where they could pin our f3 knight or create other tactical problems. this purposeful move also prepares potential kingside expansion with g2-g4 in appropriate circumstances, giving our king a flight square on h2. The move fits perfectly with the slow maneuvering nature of the Closed Ruy Lopez, where small improvements to our position accumulate into meaningful advantages. Additionally, h3 can support a future f2-f4 advance by controlling the g4 square and preventing Black's pieces from interfering with our kingside plans."
-    },
-    {
-      "san": "Na5",
-      "annotation": "Black initiates the Chigorin Defense by attacking our strong bishop on b3, forcing us to make a decision about this important piece. This knight maneuver is characteristic of dynamic defenses in the Ruy Lopez, where Black accepts a somewhat awkward piece placement to eliminate our powerful dark-squared bishop. The knight on a5 may seem out of play, but it can later reroute to c4 via c6 or support queenside operations. By challenging our bishop, Black reduces our control over important central squares and limits our attacking potential on the kingside."
-    },
-    {
-      "san": "Bc2",
-      "annotation": "We retreat our bishop to c2, maintaining this valuable piece while keeping it active on the important a2-g8 diagonal. From c2, our bishop still controls central squares and can support both our central pawn advances and potential kingside attacks. This retreat also avoids the immediate exchange that Black was threatening, preserving our dark-squared bishop which is often crucial in Ruy Lopez middlegames. The bishop on c2 is perfectly placed to support our typical plans of d2-d4 and potential f2-f4, while maintaining pressure on Black's kingside."
-    },
-    {
-      "san": "c5",
-      "annotation": "Black strikes at our center with this typical pawn advance, challenging our future d2-d4 and creating immediate central tension. This move is the hallmark of the Chigorin Defense, where Black seeks active counterplay rather than passive defense. The pawn advance also opens the c-file for potential rook activity and supports Black's pawn on a5 by giving it the c6 square as a retreat. By playing c5, Black transitions from a purely defensive setup to one with genuine counterplay, forcing us to calculate carefully before advancing our central pawns."
-    },
-    {
-      "san": "d4",
-      "annotation": "We advance our central pawn to d4, the critical move in the Closed Ruy Lopez that opens the position and activates our pieces. This advance challenges Black's central pawn chain and opens diagonals for our bishops while preparing to recapture with our c-pawn to maintain central control. The pawn on d4 also supports potential advances like f2-f4 and gives our pieces more scope for activity. This move transforms the position from maneuvering to more concrete tactical and strategic themes, where central control becomes paramount."
-    },
-    {
-      "san": "Qc7",
-      "annotation": "Black develops the queen to c7, a multifunctional square that supports the c5 pawn, eyes our bishop on c2, and prepares to coordinate with Black's other pieces. This move also removes the queen from potential discoveries along the d-file while maintaining flexibility in Black's setup. The queen on c7 supports potential operations along the c-file and can quickly redeploy to support either central defense or queenside counterplay. From c7, the queen also monitors important central squares and maintains tactical vigilance against our central advances."
-    },
-    {
-      "san": "Nbd2",
-      "annotation": "We develop our queenside knight to d2, following the typical Ruy Lopez plan of supporting our central pawn structure while preparing further piece development. This knight will often reroute to f1 and then to e3 or g3, depending on our strategic needs in the middlegame. The knight on d2 also supports our c3 square and prepares potential advances like f2-f4 by providing additional support to our center. This development follows the classical Ruy Lopez template where we build up our position methodically before launching concrete operations."
-    },
-    {
-      "san": "cxd4",
-      "annotation": "Black captures our d4 pawn, accepting the challenge we posed to their central structure and opening the position for piece play. This exchange is almost forced, as allowing us to maintain the pawn on d4 would give us too much central control. By taking on d4, Black also opens the c-file for potential rook activity and eliminates some of the tension in the center. This capture leads us into the main theoretical lines of the Chigorin Defense, where both sides will fight for control of the resulting pawn structure."
-    },
-    {
-      "san": "cxd4",
-      "annotation": "We recapture with our c-pawn, maintaining our central pawn duo on e4-d4 while opening the c-file for our own operations. This recapture follows opening principles by keeping pawns in the center and maintaining maximum control of important squares. Our pawn structure now gives us excellent central control and prepares potential advances like d4-d5 or f2-f4 depending on how the position develops. The pawn on d4 also supports our pieces and restricts Black's options, while the open c-file offers potential for rook activity against Black's somewhat exposed queen."
     }
   ]
 }

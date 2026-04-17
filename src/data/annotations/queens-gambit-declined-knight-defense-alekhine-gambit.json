@@ -8,42 +8,6 @@
     {
       "san": "Nf6",
       "annotation": "Our opponent develops the knight to its ideal square, immediately challenging our central pawn and preparing to support their own central expansion. This hypermodern approach allows Black to influence the center from the side rather than occupying it directly with pawns. The knight on f6 also prepares kingside castling and keeps flexible options for pawn breaks like ...e6 and ...d5 or ...c5. By attacking our d4 pawn right away, Black forces us to make concrete decisions about how we want to support our center."
-    },
-    {
-      "san": "e6",
-      "annotation": "Black chooses the solid French Defense setup, supporting a future ...d5 advance while opening the diagonal for their light-squared bishop. This move signals Black's intention to play the Queen's Gambit Declined rather than more aggressive defenses like the King's Indian or Grünfeld. The pawn on e6 also provides additional protection for the f7 square and prepares safe kingside development. While this setup is somewhat passive, it leads to solid, reliable positions where Black can gradually equalize through careful piece play and well-timed pawn breaks."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, supporting the d4 pawn while preparing kingside castling and maintaining flexibility in our setup. The knight on f3 controls important central squares like e5 and d4, and it can potentially reroute to more active squares later via e5 or d2-e4. This natural development move also prepares our kingside for castling and keeps our options open for various Queen's Gambit setups. By not committing to c4 immediately, we maintain the possibility of other systems while still putting pressure on Black's position."
-    },
-    {
-      "san": "d5",
-      "annotation": "Our opponent strikes back in the center with the thematic Queen's Gambit Declined move, directly challenging our space advantage and fighting for central equality. This advance opens lines for Black's light-squared bishop and creates the central tension that defines this opening system. Black is now ready to meet our c4 advance with the choice of capturing or maintaining the tension with moves like ...c6. This pawn structure often leads to rich middlegame positions where both sides have clear plans - we'll typically aim for central control and kingside pressure, while Black seeks counterplay on the queenside or through piece activity."
-    },
-    {
-      "san": "c4",
-      "annotation": "We play the signature Queen's Gambit move, offering our c-pawn to deflect Black's central d5 pawn and gain a larger share of the center. This gambit isn't a true gambit since Black rarely holds onto the extra pawn successfully, but it immediately creates central tension and forces our opponent to make crucial decisions. If Black captures, we can recapture with strong central control, while if they decline, we maintain pressure on their pawn chain. This move also opens the c-file for our rook and prepares potential queenside expansion with moves like b3 and Bb2."
-    },
-    {
-      "san": "Nbd7",
-      "annotation": "Black develops their queenside knight to a somewhat passive but solid square, preparing to support the center and maintain their pawn on d5. This is the Knight Defense variation, which aims to keep the position solid rather than seeking immediate counterplay. The knight on d7 can later jump to more active squares like b6 or f6 (after the other knight moves), and it supports potential ...c5 breaks. While this development doesn't contest the center as actively as alternatives like ...Nc6 or ...c6, it's a reliable choice that maintains Black's position without creating weaknesses."
-    },
-    {
-      "san": "Bg5",
-      "annotation": "We deploy our dark-squared bishop to an aggressive square, pinning Black's knight to the queen and creating immediate tactical tension. This pin is a key theme in many Queen's Gambit systems, as it puts pressure on Black's kingside development and makes it harder for them to castle safely. The bishop on g5 also supports our central control and prepares potential tactics involving the pinned knight. Our opponent will need to address this pin carefully, often with moves like ...h6 or ...Be7, and we must be ready to make concrete decisions about whether to maintain the pin or retreat the bishop."
-    },
-    {
-      "san": "h6",
-      "annotation": "Our opponent challenges our bishop with the typical response to the pin, forcing us to make a crucial decision about whether to capture the knight or retreat. This move weakens Black's kingside slightly by advancing a pawn in front of their king, but it's often necessary to resolve the uncomfortable pin. By playing ...h6, Black is essentially saying they're willing to accept some kingside weakening in exchange for eliminating the pressure on their knight. We now must choose between the forcing Bxf6 (which damages Black's pawn structure but eliminates our strong bishop) or retreating to h4 or f4 to maintain the piece."
-    },
-    {
-      "san": "Bh4",
-      "annotation": "We retreat our bishop to h4, maintaining the pin on the knight while keeping our dark-squared bishop on the board for future attacking chances. This is often the most principled choice, as the bishop remains actively placed and continues to put pressure on Black's position. From h4, our bishop supports potential kingside attacks and maintains the awkward pin, making it difficult for Black to complete development naturally. The bishop can also potentially retreat further to g3 if needed, or even support a future g4-g5 pawn storm in some variations."
-    },
-    {
-      "san": "dxc4",
-      "annotation": "Black finally captures our c-pawn, entering the Alekhine Gambit variation where they accept the material but must be careful not to fall behind in development. This capture removes the central tension and gives Black an extra pawn, but it also opens up our position and allows us to gain time by attacking the advanced c4 pawn. Our opponent is essentially betting that they can consolidate their extra material while completing development, but we'll have strong compensation in terms of piece activity and central control. This leads to sharp, tactical play where precise move order and calculation become crucial for both sides."
     }
   ]
 }

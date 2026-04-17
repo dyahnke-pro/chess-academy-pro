@@ -20,26 +20,6 @@
     {
       "san": "d4",
       "annotation": "We push into the center with tempo, meeting Black's challenge directly and opening lines for our pieces. This aggressive move forces Black to make immediate decisions about how to handle the tension, and we'll soon see that our d4 pawn becomes a key feature of our position."
-    },
-    {
-      "san": "dxe5",
-      "annotation": "Black captures our d4 pawn, removing a central defender. However, this decision leaves Black's king more exposed and allows us to continue developing with threats. Black is playing for piece activity and compensation, but we're confident in our position."
-    },
-    {
-      "san": "d4",
-      "annotation": "We recapture with the d-pawn, reestablishing a strong presence in the center and keeping Black's pieces under pressure. This pawn on d4 is now firmly planted and difficult to remove, and it opens the d-file for potential rook activity."
-    },
-    {
-      "san": "Ne4",
-      "annotation": "Our knight jumps actively into the game, attacking Black's d4 pawn and controlling important squares like d6 and f6. From e4, our knight is aggressively placed and threatens to jump to dangerous outposts; this move embodies the aggressive spirit of the Asten Gambit, where we sacrifice material for rapid piece activity and initiative."
-    },
-    {
-      "san": "f5",
-      "annotation": "Black attacks our knight and tries to open lines for the kingside attack, keeping the position sharp and complex. By pushing the f-pawn, Black gains space and creates threats against our exposed king position, so we must be careful not to allow Black too much initiative."
-    },
-    {
-      "san": "exf6",
-      "annotation": "We capture the f-pawn en passant (if it were Black's last move that created the en passant opportunity) or simply take on f5 with our e5 pawn, opening lines and removing a dangerous pawn that was threatening our knight. This capture keeps our material advantage and prevents Black from opening too many lines toward our king, though we remain in a sharp, tactical position where both sides have compensation and attacking chances."
     }
   ]
 }

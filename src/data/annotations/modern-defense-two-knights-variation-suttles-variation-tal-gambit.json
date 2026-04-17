@@ -16,38 +16,6 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the fundamental idea of the Modern Defense by fianchettoing the dark-squared bishop, creating immediate pressure against our e4 pawn and establishing a powerful piece on the long diagonal. This bishop will be Black's most important piece in the middlegame, often serving as both a defensive anchor and an attacking weapon depending on the position. From g7, the bishop eyes our entire queenside and can support both central breaks like ...d5 and kingside counterplay. We need to be constantly aware of this bishop's influence, as it can quickly turn tactical if we're not careful with our piece coordination."
-    },
-    {
-      "san": "d6",
-      "annotation": "Black solidifies the center and prepares to complete development, showing typical Modern Defense patience in building a solid but flexible pawn structure. This move supports a future ...e5 break while keeping options open for ...c5 or ...c6, depending on how we continue our development. The d6 pawn also prepares to support Black's pieces and provides a solid foundation for counterplay, though it does make the position somewhat cramped for Black. This pawn structure is characteristic of the Modern Defense - Black accepts less space in exchange for piece activity and long-term counterchances against our potentially overextended center."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "We develop our knight to its ideal square, adding crucial support to our d4 pawn while preparing to continue our aggressive development plan. From c3, our knight controls important central squares like e4, d5, and b5, while also keeping our options open for various attacking setups. This move is particularly strong in the Modern Defense context because it prepares us to meet Black's typical ...c5 break with solid central control. The knight on c3 also supports potential pawn advances like d5 or f4-f5, making it a versatile piece that fits perfectly with our space advantage and development plans."
-    },
-    {
-      "san": "c6",
-      "annotation": "Black plays a solid but somewhat passive move that prepares ...d5 while supporting the queenside, showing a more classical approach within the Modern Defense framework. This move controls the important b5 and d5 squares, preventing us from advancing our pieces too aggressively on the queenside. However, c6 also has drawbacks - it blocks the natural development of Black's knight to c6 and makes the queenside slightly cramped. This pawn move suggests Black is planning a more solid, less hypermodern approach than typical Modern Defense setups, possibly preparing to challenge our center directly with ...d5 rather than relying purely on piece pressure."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We complete our basic development by bringing our knight to its ideal square, where it supports our central pawns while preparing to castle kingside safely. The knight on f3 is perfectly placed - it defends our e4 pawn, controls the important e5 and g5 squares, and keeps our development flexible for various attacking schemes. This move also prepares us to meet Black's potential central breaks, as the knight can support our center or redeploy quickly if needed. From f3, our knight coordinates beautifully with our other pieces and maintains the pressure on Black's somewhat cramped position."
-    },
-    {
-      "san": "Bg5",
-      "annotation": "We launch into aggressive development by developing our bishop to an active square where it immediately creates tactical threats and puts pressure on Black's position. The bishop on g5 is particularly annoying for Black because it pins any future knight that might come to f6, while also controlling important dark squares in Black's position. This move fits perfectly with the aggressive spirit of the variation and forces Black to be very careful about piece coordination. The bishop on g5 also supports potential tactical shots and makes it harder for Black to develop naturally, turning up the heat in what was becoming a positional game."
-    },
-    {
-      "san": "Qb6",
-      "annotation": "Black makes a provocative and ambitious move that immediately targets our b2 pawn while bringing the queen into active play, showing typical Modern Defense resourcefulness in creating counterplay. This queen move puts immediate tactical pressure on us and forces us to be precise in our response, as Black is threatening to win material with ...Qxb2. The queen on b6 also supports potential central breaks and keeps our b2 pawn under constant pressure. However, this early queen development also has risks - the queen could become a target for our pieces, and Black is spending time with the queen instead of completing development, which could backfire if we respond energetically."
-    },
-    {
-      "san": "Qd2",
-      "annotation": "We defend our b2 pawn while simultaneously improving our queen's position, preparing to connect our rooks and maintaining our development advantage. This move serves multiple purposes: it protects the threatened pawn, prepares potential castling queenside, and keeps our queen flexible for future operations. The queen on d2 also supports our center and can quickly swing to the kingside if tactical opportunities arise. While this might seem like a purely defensive move, it actually maintains our initiative by forcing Black to decide whether to commit to winning the b2 pawn or retreat to safer squares, and either choice gives us good practical chances."
-    },
-    {
-      "san": "Qxb2",
-      "annotation": "Black boldly captures our b2 pawn, accepting the Tal Gambit and entering sharp tactical territory where material is sacrificed for rapid development and attacking chances. This capture commits Black to a dangerous path - while they've won a pawn, their queen is now dangerously placed on the edge of the board where it can become a target for our pieces. Black is essentially betting that the extra pawn will be worth more than our upcoming attacking chances and better piece coordination. This pawn grab exemplifies the spirit of the Modern Defense - Black is willing to take material but must now prove that the queen can escape safely while their other pieces struggle to develop harmoniously. The position has now become sharp and tactical, exactly what the Tal Gambit aims to achieve."
     }
   ]
 }

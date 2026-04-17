@@ -36,30 +36,6 @@
     {
       "san": "Bg2",
       "annotation": "We're completing our fianchetto setup by placing the light-squared bishop on its ideal square, where it becomes a monster piece controlling the long diagonal and supporting our central pawns. The bishop on g2 eyes Black's queenside, particularly the c6 and b7 squares, while also providing crucial defense for our king. This bishop often plays a key role in supporting our queenside expansion with moves like b4 or defending against Black's central breaks. The Bg2 also allows us to castle safely and creates the foundation for our typical King's Indian Attack formation."
-    },
-    {
-      "san": "O-O",
-      "annotation": "We're securing our king's safety and completing our basic development, preparing to launch our strategic plans without worrying about king safety. Castling also brings our rook closer to the center and prepares potential operations on the f-file or kingside. Our king is well-protected behind the fianchetto bishop and pawn chain, though we need to remain alert to Black's eventual f5-f4 advances. With both sides castled, the real strategic battle can begin, often revolving around our queenside expansion versus Black's kingside attack."
-    },
-    {
-      "san": "d6",
-      "annotation": "Black establishes a solid pawn center and prepares to support the crucial e5 advance that's fundamental to King's Indian strategy. This move also opens a retreat square for the pawn on f6 and provides additional support for potential c5 or f5 pawn breaks. The d6 pawn creates a solid foundation for Black's position, though it does limit the dark-squared bishop's scope slightly. This setup is typical of King's Indian structures where Black builds a solid base before launching dynamic counterplay."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "We're developing our queenside knight to its most active square, where it supports our central pawns and prepares various strategic plans including e4 or b4 advances. The knight on c3 also eyes the important e4 and d5 squares, helping us maintain central control while keeping our options flexible. This move is particularly important because it allows us to recapture on d4 with the knight if Black plays cxd4, maintaining our pawn structure. The Nc3 also supports potential queenside expansion and coordinates well with our overall setup."
-    },
-    {
-      "san": "Nc6",
-      "annotation": "Black develops the queenside knight to its natural square, where it adds pressure to our d4 pawn and supports Black's central ambitions, particularly the e5 advance. The knight on c6 also prepares to potentially jump to d4 or e5, creating central tension and tactical possibilities. This move fits perfectly with Black's King's Indian strategy, as the knight supports both central pawn breaks and can later relocate to more active squares like e7-f5 or a5. Black is building up pressure against our center while maintaining flexibility in piece placement."
-    },
-    {
-      "san": "dxc5",
-      "annotation": "We're making a critical decision to release the central tension and open the d-file, often leading to a race between our queenside expansion and Black's kingside attack. This exchange removes Black's advanced pawn but also gives Black the half-open d-file and eliminates some of our central control. The capture is often part of our strategy to simplify the center and focus on our queenside majority, while Black typically aims to create kingside play with f5-f4. This move transforms the position from a closed, maneuvering game to a more open, tactical battle."
-    },
-    {
-      "san": "dxc5",
-      "annotation": "Black recaptures toward the center, maintaining material balance while opening the d-file for potential rook activity and keeping the position dynamically balanced. This recapture also supports Black's central pawn structure and prepares to potentially advance the e5 pawn with more force behind it. The open d-file often becomes a key battleground where both sides will try to control it with their rooks. Black's pawn structure remains solid and flexible, with good chances for both central and kingside counterplay depending on how we continue our development."
     }
   ]
 }

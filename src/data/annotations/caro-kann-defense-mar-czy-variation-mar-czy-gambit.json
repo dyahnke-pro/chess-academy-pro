@@ -32,18 +32,6 @@
     {
       "san": "e5",
       "annotation": "Black strikes back in the center with e5, challenging our d4 pawn and creating immediate central tension while opening lines for their pieces. This move follows sound opening principles by fighting for central space and activating Black's dark-squared bishop diagonal. The e5 advance also prevents us from easily consolidating our central advantage and forces us to make concrete decisions about the pawn structure. Black is essentially accepting the gambit nature of the position, creating sharp tactical play rather than trying to consolidate material or position quietly."
-    },
-    {
-      "san": "exd4",
-      "annotation": "Black captures our d4 pawn, accepting the gambit and winning material while opening up the center completely for both sides' pieces. This decision commits Black to holding their extra pawn while dealing with our rapid piece development and attacking chances. The capture also opens the d-file and creates potential weaknesses around Black's king, as their pawn structure becomes somewhat scattered. Black is banking on their material advantage being more significant than our piece activity and attacking potential - a typical gambit trade-off that will determine the evaluation of this opening line."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, attacking Black's advanced d4 pawn while developing with tempo and preparing to castle kingside. This move also eyes the important e5 square and supports potential future advances like e5 ourselves if the position allows. The knight on f3 is perfectly placed to coordinate with our other pieces and can quickly redeploy to attack Black's weakened kingside structure. By developing with a threat, we're maintaining the initiative and forcing Black to deal with our piece activity rather than simply consolidating their material advantage."
-    },
-    {
-      "san": "Bc4",
-      "annotation": "We complete our development of the kingside pieces by placing our bishop on the active c4 square, eyeing Black's vulnerable f7 point and preparing to castle. This bishop placement is typical in gambit openings, as it puts immediate pressure on Black's kingside and coordinates beautifully with our knight and potential future piece attacks. The bishop also supports potential sacrificial ideas on f7 and controls the important e6 square where Black might want to develop pieces. With this move, we've essentially completed our gambit setup - we've sacrificed a pawn for rapid development, central control, and attacking chances against Black's somewhat exposed position, making this a critical moment where both sides must play accurately to achieve their respective goals."
     }
   ]
 }

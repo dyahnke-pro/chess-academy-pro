@@ -60,18 +60,6 @@
     {
       "san": "Ne2",
       "annotation": "We're playing a flexible knight development that supports our pawn center while maintaining multiple strategic options. The knight on e2 can later jump to f4, where it would be beautifully placed to support our central pawns and create kingside threats. This knight can also go to g3 or d2 depending on how the position develops, giving us maximum flexibility. The Ne2 move is characteristic of the Larsen Variation - rather than the more committal Nf3, we're keeping our options open while still supporting our center. This approach allows us to adapt our piece placement based on Black's specific plan of counterplay."
-    },
-    {
-      "san": "O-O",
-      "annotation": "We're getting our king to safety while bringing our rook into the game, completing our basic development and preparing for the middlegame battles ahead. Castling also connects our rooks and allows us to focus on our central strategy without worrying about king safety. With our king secure, we can now consider more aggressive moves like h3, f3, or advancing our central pawns further. This move demonstrates good opening principles - after building our center and developing our pieces, king safety becomes the priority before launching any serious attacks."
-    },
-    {
-      "san": "Qd7",
-      "annotation": "Black brings the queen into the game with a flexible move that prepares several strategic ideas. The queen on d7 can support counterplay with moves like Rd8, putting pressure on our d4 pawn, or it can swing to the queenside with Qb7 or Qa4 to create threats. This queen placement also prepares potential piece coordination - Black might consider moves like Nc6 or even c5 to increase the pressure on our center. Our opponent is methodically improving the piece coordination while maintaining the tension, typical of Grünfeld middlegame strategy where Black seeks to prove that our pawns are targets rather than strengths."
-    },
-    {
-      "san": "b6",
-      "annotation": "Black opens lines for the queenside pieces and prepares to fianchetto the light-squared bishop, creating additional pressure on our central formation. This move supports a potential Bb7, where the bishop would join the attack on our e4 pawn and control important central squares. The b6 move also gives Black's queen additional squares on a6 or c6, increasing tactical possibilities. This pawn advance fits perfectly with Black's hypermodern strategy in the Grünfeld - rather than challenging our center with pawns, Black is mobilizing pieces to create maximum pressure on our potentially overextended position. We need to be alert to the increasing coordination of Black's pieces and consider whether to consolidate our center or push forward more aggressively."
     }
   ]
 }

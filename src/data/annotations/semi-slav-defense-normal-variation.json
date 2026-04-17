@@ -48,14 +48,6 @@
     {
       "san": "Bd6",
       "annotation": "Black develops their light-squared bishop to an active central square, where it eyes our kingside and particularly the h2 square near our future king position. This bishop placement is more active than the alternative ...Be7, as from d6 the bishop controls important central squares and can support various pawn breaks. The bishop also connects with potential tactical themes involving ...Bxh2+ discoveries or supporting an eventual ...e5 pawn break. However, this bishop placement does make it a potential target for our pieces, and Black needs to be careful about tactics involving our knight potentially reaching e4."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Our opponent castles kingside to bring their king to safety and connect their rooks, which is essential before the position becomes more tactical. This is the logical culmination of Black's kingside development, and now they have a secure king position from which to launch central or queenside operations. The rook on f8 also adds support to the f7 square and can potentially support an ...f5 pawn break later. Black has now completed their basic development and can focus on more active plans like ...e5, ...c5, or queenside expansion with ...a6 and ...b5."
-    },
-    {
-      "san": "Be2",
-      "annotation": "We're developing our light-squared bishop to a flexible square where it supports our kingside while maintaining the option to castle. The bishop on e2 is less aggressive than on d3, but it's also safer from enemy pieces and doesn't block our own pawns' mobility. This modest development fits our positional approach perfectly, as we're building a solid foundation before committing to more aggressive operations. The bishop can later potentially relocate to f3 or h5 if the position calls for more active play, while for now it simply completes our basic development and prepares castling."
     }
   ]
 }

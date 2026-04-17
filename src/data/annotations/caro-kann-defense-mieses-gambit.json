@@ -8,18 +8,6 @@
     {
       "san": "c6",
       "annotation": "Our opponent chooses the Caro-Kann Defense, a solid but somewhat passive response that immediately signals Black's intention to challenge our central pawn on e4 with ...d5 on the next move. Unlike 1...e5 which creates immediate central tension, the Caro-Kann allows Black to support the d5 advance with the c6 pawn, leading to a more structured pawn formation. This opening typically results in positions where Black gets a solid pawn structure and good piece coordination, but often at the cost of slower development and less aggressive counterplay. We should prepare for Black's ...d5 thrust and consider how we want to maintain our central advantage."
-    },
-    {
-      "san": "d5",
-      "annotation": "Black immediately follows up on the Caro-Kann plan by attacking our e4 pawn with a supported central advance. This move creates immediate tension in the center and forces us to make a critical decision about our pawn structure - we must either capture on d5, advance with e5, or defend the e4 pawn. The d5 advance is thematically correct because it's solidly supported by the c6 pawn, unlike in some other defenses where the d-pawn might be vulnerable. Now we need to choose between maintaining the central tension or resolving it in a way that gives us the best practical chances for an advantage."
-    },
-    {
-      "san": "exd5",
-      "annotation": "We're recapturing on d5, opening up the center and transforming the pawn structure into a more open game where piece activity will be crucial. This capture eliminates Black's central pawn and potentially gives us better piece development, particularly for our light-squared bishop and queen. By exchanging pawns, we're also opening the e-file which could become important later if we castle kingside and potentially double rooks. However, we must be aware that Black will likely recapture with the c-pawn, giving them a solid central presence and potentially better control over the d4 square than in some other Caro-Kann variations."
-    },
-    {
-      "san": "Be3",
-      "annotation": "This is the defining move of the Mieses Gambit - an unusual and somewhat provocative bishop development that ignores normal opening principles by placing the bishop on a square where it can be easily attacked. We're essentially offering a gambit by putting our bishop on e3 where Black can immediately challenge it with ...Bf5 or later with moves like ...Qd4, winning the bishop pair or forcing us into awkward positions. The idea behind this unconventional move is to disrupt Black's normal Caro-Kann development and force them into unfamiliar territory where tactical complications might arise. While objectively dubious, this gambit can be psychologically effective against opponents who aren't prepared for such early aggression and may lead to interesting tactical positions where our lead in development compensates for the material investment."
     }
   ]
 }

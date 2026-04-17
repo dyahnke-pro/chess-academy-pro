@@ -67,8 +67,8 @@
       ],
       "arrows": [
         {
-          "from": "c3",
-          "to": "d5",
+          "from": "b1",
+          "to": "c3",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
@@ -101,8 +101,8 @@
       ],
       "arrows": [
         {
-          "from": "f6",
-          "to": "e4",
+          "from": "g8",
+          "to": "f6",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -127,13 +127,13 @@
       ],
       "arrows": [
         {
-          "from": "f4",
-          "to": "e5",
+          "from": "f2",
+          "to": "f4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "f1",
-          "to": "f8",
+          "from": "f2",
+          "to": "f4",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -168,8 +168,8 @@
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "d5",
-          "to": "e4",
+          "from": "d7",
+          "to": "d5",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -203,8 +203,8 @@
           "color": "rgba(220, 50, 50, 0.7)"
         },
         {
-          "from": "e5",
-          "to": "f6",
+          "from": "f4",
+          "to": "e5",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -232,13 +232,13 @@
       ],
       "arrows": [
         {
-          "from": "e4",
-          "to": "c3",
+          "from": "f6",
+          "to": "e4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "e4",
-          "to": "d2",
+          "from": "f6",
+          "to": "e4",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -264,8 +264,8 @@
       ],
       "arrows": [
         {
-          "from": "f3",
-          "to": "e5",
+          "from": "g1",
+          "to": "f3",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
@@ -295,13 +295,13 @@
       ],
       "arrows": [
         {
-          "from": "e7",
-          "to": "f6",
+          "from": "f8",
+          "to": "e7",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "e8",
-          "to": "g8",
+          "from": "f8",
+          "to": "e7",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -322,13 +322,13 @@
       ],
       "arrows": [
         {
-          "from": "d3",
-          "to": "e4",
+          "from": "d2",
+          "to": "d3",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "c1",
-          "to": "f4",
+          "from": "d2",
+          "to": "d3",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -425,13 +425,13 @@
       ],
       "arrows": [
         {
-          "from": "e2",
-          "to": "h5",
+          "from": "f1",
+          "to": "e2",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "e1",
-          "to": "g1",
+          "from": "f1",
+          "to": "e2",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -452,13 +452,13 @@
       ],
       "arrows": [
         {
-          "from": "c6",
-          "to": "e5",
+          "from": "b8",
+          "to": "c6",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "c6",
-          "to": "d4",
+          "from": "b8",
+          "to": "c6",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -484,13 +484,13 @@
       ],
       "arrows": [
         {
-          "from": "f1",
-          "to": "f7",
+          "from": "e1",
+          "to": "g1",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "d1",
-          "to": "e1",
+          "from": "e1",
+          "to": "g1",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -525,8 +525,8 @@
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "f6",
-          "to": "e5",
+          "from": "f7",
+          "to": "f6",
           "color": "rgba(220, 50, 50, 0.7)"
         }
       ],
@@ -574,13 +574,13 @@
       ],
       "arrows": [
         {
-          "from": "f6",
-          "to": "c3",
+          "from": "e7",
+          "to": "f6",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "f8",
-          "to": "f1",
+          "from": "e7",
+          "to": "f6",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -601,13 +601,13 @@
       ],
       "arrows": [
         {
-          "from": "e1",
-          "to": "h4",
+          "from": "d1",
+          "to": "e1",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "e1",
-          "to": "e3",
+          "from": "d1",
+          "to": "e1",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -628,8 +628,8 @@
       ],
       "arrows": [
         {
-          "from": "g4",
-          "to": "f3",
+          "from": "c8",
+          "to": "g4",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -655,8 +655,8 @@
       ],
       "arrows": [
         {
-          "from": "h4",
-          "to": "h7",
+          "from": "e1",
+          "to": "h4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
@@ -713,13 +713,13 @@
       ],
       "arrows": [
         {
-          "from": "f1",
-          "to": "g1",
+          "from": "g2",
+          "to": "f3",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "g1",
-          "to": "g7",
+          "from": "g2",
+          "to": "f3",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -748,8 +748,8 @@
       ],
       "arrows": [
         {
-          "from": "d6",
-          "to": "g6",
+          "from": "d8",
+          "to": "d6",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -775,8 +775,8 @@
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "f1",
-          "to": "g1",
+          "from": "g1",
+          "to": "h1",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -797,13 +797,13 @@
       ],
       "arrows": [
         {
-          "from": "e8",
-          "to": "e2",
+          "from": "a8",
+          "to": "e8",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "e8",
-          "to": "e1",
+          "from": "a8",
+          "to": "e8",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -824,13 +824,13 @@
       ],
       "arrows": [
         {
-          "from": "f4",
-          "to": "d6",
+          "from": "c1",
+          "to": "f4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "f4",
-          "to": "c7",
+          "from": "c1",
+          "to": "f4",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -851,8 +851,8 @@
       ],
       "arrows": [
         {
-          "from": "d7",
-          "to": "c7",
+          "from": "d6",
+          "to": "d7",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -874,8 +874,8 @@
       ],
       "arrows": [
         {
-          "from": "g1",
-          "to": "g7",
+          "from": "f1",
+          "to": "g1",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -900,13 +900,13 @@
       ],
       "arrows": [
         {
-          "from": "d8",
-          "to": "e6",
+          "from": "c6",
+          "to": "d8",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "d8",
-          "to": "f7",
+          "from": "c6",
+          "to": "d8",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -927,13 +927,13 @@
       ],
       "arrows": [
         {
-          "from": "d1",
-          "to": "b3",
+          "from": "e2",
+          "to": "d1",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "d1",
-          "to": "c2",
+          "from": "e2",
+          "to": "d1",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -954,13 +954,13 @@
       ],
       "arrows": [
         {
-          "from": "e6",
-          "to": "g7",
+          "from": "d8",
+          "to": "e6",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "e6",
-          "to": "d4",
+          "from": "d8",
+          "to": "e6",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -981,13 +981,13 @@
       ],
       "arrows": [
         {
-          "from": "e3",
-          "to": "a7",
+          "from": "f4",
+          "to": "e3",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "e3",
-          "to": "h6",
+          "from": "f4",
+          "to": "e3",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -1053,13 +1053,13 @@
       ],
       "arrows": [
         {
-          "from": "d4",
-          "to": "c2",
+          "from": "e6",
+          "to": "d4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "d4",
-          "to": "f3",
+          "from": "e6",
+          "to": "d4",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -1080,13 +1080,13 @@
       ],
       "arrows": [
         {
-          "from": "d4",
-          "to": "g7",
+          "from": "e3",
+          "to": "d4",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
-          "from": "d4",
-          "to": "a7",
+          "from": "e3",
+          "to": "d4",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -1111,13 +1111,13 @@
       ],
       "arrows": [
         {
-          "from": "d4",
-          "to": "a1",
+          "from": "f6",
+          "to": "d4",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "d4",
-          "to": "g7",
+          "from": "f6",
+          "to": "d4",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -1139,8 +1139,8 @@
       ],
       "arrows": [
         {
-          "from": "c3",
-          "to": "d4",
+          "from": "c2",
+          "to": "c3",
           "color": "rgba(0, 180, 80, 0.8)"
         }
       ],
@@ -1161,13 +1161,13 @@
       ],
       "arrows": [
         {
-          "from": "f6",
-          "to": "g7",
+          "from": "d4",
+          "to": "f6",
           "color": "rgba(0, 100, 255, 0.7)"
         },
         {
-          "from": "f6",
-          "to": "c3",
+          "from": "d4",
+          "to": "f6",
           "color": "rgba(0, 100, 255, 0.7)"
         }
       ],
@@ -1188,8 +1188,8 @@
       ],
       "arrows": [
         {
-          "from": "g3",
-          "to": "g7",
+          "from": "h4",
+          "to": "g3",
           "color": "rgba(0, 180, 80, 0.8)"
         },
         {
@@ -1247,11 +1247,11 @@
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "f4",
@@ -1278,11 +1278,11 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "d4",
@@ -1312,11 +1312,11 @@
         },
         {
           "san": "Bd6",
-          "annotation": "Bd6 brings the bishop into the game. Development with purpose — the bishop on d6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bxe5",
@@ -1342,7 +1342,7 @@
         },
         {
           "san": "Qxd1+",
-          "annotation": "Qxd1+ brings the queen into the game. Development with purpose — the queen on d1 eyes important squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d8",
@@ -1364,7 +1364,7 @@
         },
         {
           "san": "Be6",
-          "annotation": "Be6 brings the bishop into the game. Development with purpose — the bishop on e6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bxe6",
@@ -1390,7 +1390,7 @@
         },
         {
           "san": "Bxf4",
-          "annotation": "Bxf4 brings the bishop into the game. Development with purpose — the bishop on f4 eyes important squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c1",
@@ -1401,7 +1401,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Ke2",
@@ -1409,7 +1409,7 @@
         },
         {
           "san": "Nge7",
-          "annotation": "Nge7 brings the knight into the game. Development with purpose — the knight on e7 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Rad1",
@@ -1460,11 +1460,11 @@
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "f4",
@@ -1487,11 +1487,11 @@
         },
         {
           "san": "Qe7",
-          "annotation": "Qe7 brings the queen into the game. Development with purpose — the queen on e7 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Qe2",
-          "annotation": "Qe2 brings the queen into the game. Development with purpose — the queen on e2 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Ng8",
@@ -1499,11 +1499,11 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "d4",
@@ -1511,11 +1511,11 @@
         },
         {
           "san": "Bg4",
-          "annotation": "Bg4 brings the bishop into the game. Development with purpose — the bishop on g4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bxf4",
-          "annotation": "Bxf4 brings the bishop into the game. Development with purpose — the bishop on f4 eyes important squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c1",
@@ -1526,7 +1526,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "O-O-O",
@@ -1589,11 +1589,11 @@
         },
         {
           "san": "Bd3",
-          "annotation": "Bd3 brings the bishop into the game. Development with purpose — the bishop on d3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Rhe1",
@@ -1601,11 +1601,11 @@
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 brings the bishop into the game. Development with purpose — the bishop on c5 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bf5",
-          "annotation": "Bf5 increases White's influence over the center. Controlling the center is the foundation of a strong position. We're reaching the critical position of this variation.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d3",
@@ -1616,7 +1616,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority. Notice how the pieces coordinate in this position.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e8",
@@ -1627,7 +1627,7 @@
         },
         {
           "san": "Bxh7+",
-          "annotation": "Bxh7+! This is the key position of the Vienna Gambit: Qe7 Variation. White has the initiative with check. Remember this pattern — it comes up frequently in practice.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f5",
@@ -1652,15 +1652,15 @@
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 brings the bishop into the game. Development with purpose — the bishop on c4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nxe4",
@@ -1675,11 +1675,11 @@
         },
         {
           "san": "Qh5",
-          "annotation": "Qh5 brings the queen into the game. Development with purpose — the queen on h5 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nd6",
-          "annotation": "Nd6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Bb3",
@@ -1687,7 +1687,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nb5",
@@ -1711,7 +1711,7 @@
         },
         {
           "san": "Qe7",
-          "annotation": "Qe7 brings the queen into the game. Development with purpose — the queen on e7 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nxc7+",
@@ -1741,11 +1741,11 @@
         },
         {
           "san": "b6",
-          "annotation": "b6 expands on the queenside. Gaining space here creates potential targets and restricts the opponent's counterplay."
+          "annotation": ""
         },
         {
           "san": "d3",
-          "annotation": "d3 increases White's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Bb7",
@@ -1757,7 +1757,7 @@
         },
         {
           "san": "Nd4",
-          "annotation": "Nd4 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Qg3",
@@ -1776,7 +1776,7 @@
         },
         {
           "san": "Bg5",
-          "annotation": "Bg5 brings the bishop into the game. Development with purpose — the bishop on g5 eyes important squares. Notice how the pieces coordinate in this position.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c1",
@@ -1812,11 +1812,11 @@
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "f4",
@@ -1839,11 +1839,11 @@
         },
         {
           "san": "Nd5",
-          "annotation": "Nd5 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nxc3",
@@ -1869,11 +1869,11 @@
         },
         {
           "san": "Be7",
-          "annotation": "Be7 brings the bishop into the game. Development with purpose — the bishop on e7 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bxf4",
-          "annotation": "Bxf4 brings the bishop into the game. Development with purpose — the bishop on f4 eyes important squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c1",
@@ -1884,19 +1884,19 @@
         },
         {
           "san": "O-O",
-          "annotation": "Black castles kingside to tuck the king away safely and activate the rook. Connecting the rooks is a priority."
+          "annotation": ""
         },
         {
           "san": "Bd3",
-          "annotation": "Bd3 brings the bishop into the game. Development with purpose — the bishop on d3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Qe2",
-          "annotation": "Qe2 brings the queen into the game. Development with purpose — the queen on e2 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "dxe5",
@@ -1922,7 +1922,7 @@
         },
         {
           "san": "Nd7",
-          "annotation": "Nd7 brings the knight into the game. Development with purpose — the knight on d7 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "O-O-O",
@@ -1952,7 +1952,7 @@
         },
         {
           "san": "Bf6",
-          "annotation": "Bf6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "Bxf6",
@@ -1967,7 +1967,7 @@
         },
         {
           "san": "Qxf6",
-          "annotation": "Qxf6 brings the queen into the game. Development with purpose — the queen on f6 eyes important squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d8",
@@ -2000,7 +2000,7 @@
         },
         {
           "san": "Qe4+",
-          "annotation": "Qe4+! This is the key position of the Vienna Gambit: Nd5 Variation. White has the initiative with check. Remember this pattern — it comes up frequently in practice.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e2",
@@ -2025,11 +2025,11 @@
         },
         {
           "san": "Nc3",
-          "annotation": "Nc3 brings the knight into the game. Development with purpose — the knight on c3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6 brings the knight into the game. Development with purpose — the knight on f6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "f4",
@@ -2056,11 +2056,11 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 brings the knight into the game. Development with purpose — the knight on f3 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "d6 increases Black's influence over the center. Controlling the center is the foundation of a strong position."
+          "annotation": ""
         },
         {
           "san": "d4",
@@ -2068,11 +2068,11 @@
         },
         {
           "san": "Bg4",
-          "annotation": "Bg4 brings the bishop into the game. Development with purpose — the bishop on g4 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bxf4",
-          "annotation": "Bxf4 brings the bishop into the game. Development with purpose — the bishop on f4 eyes important squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "c1",
@@ -2105,7 +2105,7 @@
         },
         {
           "san": "Qxd1+",
-          "annotation": "Qxd1+ brings the queen into the game. Development with purpose — the queen on d1 eyes important squares.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d8",
@@ -2127,11 +2127,11 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6 brings the knight into the game. Development with purpose — the knight on c6 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "Bb5",
-          "annotation": "Bb5 brings the bishop into the game. Development with purpose — the bishop on b5 eyes important squares."
+          "annotation": ""
         },
         {
           "san": "O-O-O+",
@@ -2216,7 +2216,7 @@
         },
         {
           "san": "Bd6",
-          "annotation": "Bd6 brings the bishop into the game. Development with purpose — the bishop on d6 eyes important squares. We're reaching the critical position of this variation.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f8",
@@ -2238,7 +2238,7 @@
         },
         {
           "san": "Re8+",
-          "annotation": "Re8+! This is the key position of the Vienna Gambit: Pierce Gambit. Black has the initiative with check. Remember this pattern — it comes up frequently in practice.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d8",
@@ -2259,23 +2259,23 @@
         },
         {
           "san": "e5",
-          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "f4",
-          "annotation": "White plays f4. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "exf4",
-          "annotation": "Black captures with exf4. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e5",
@@ -2286,27 +2286,27 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "Ng8",
-          "annotation": "Black plays Ng8, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "White plays d4. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "Black continues with d6. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Bxf4",
-          "annotation": "White captures with Bxf4. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "dxe5",
-          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d6",
@@ -2317,7 +2317,7 @@
         },
         {
           "san": "dxe5",
-          "annotation": "White captures with dxe5. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d4",
@@ -2328,11 +2328,11 @@
         },
         {
           "san": "Qxd1+",
-          "annotation": "Black captures with Qxd1+. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Kxd1",
-          "annotation": "White captures with Kxd1. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e1",
@@ -2343,58 +2343,58 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Nf3",
-          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "Bg4",
-          "annotation": "Black continues with Bg4. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Bb5",
-          "annotation": "Bb5 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "O-O-O+",
-          "annotation": "Black gives check with O-O-O+! This is a critical moment in the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e8",
-              "to": "c1",
+              "to": "c8",
               "color": "rgba(220, 50, 50, 0.8)"
             }
           ]
         },
         {
           "san": "Ke1",
-          "annotation": "White plays Ke1. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "Nge7",
-          "annotation": "Black continues with Nge7. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Bxc6",
-          "annotation": "White captures with Bxc6. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Nxc6",
-          "annotation": "Black captures with Nxc6. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Nd5",
-          "annotation": "Nd5. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+          "annotation": ""
         },
         {
           "san": "Be6",
-          "annotation": "Be6! This is the critical move that springs the trap. The opponent is in serious trouble."
+          "annotation": ""
         },
         {
           "san": "Nxc7",
-          "annotation": "Nxc7! White wins material. The trap is complete. Remember this pattern — your opponents will fall for it."
+          "annotation": ""
         }
       ]
     },
@@ -2408,23 +2408,23 @@
         },
         {
           "san": "e5",
-          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "f4",
-          "annotation": "White plays f4. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "exf4",
-          "annotation": "Black captures with exf4. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e5",
@@ -2435,23 +2435,23 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "Nd5",
-          "annotation": "Black plays Nd5, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Nf3",
-          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "Nxc3",
-          "annotation": "Black captures with Nxc3. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "dxc3",
-          "annotation": "White captures with dxc3. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d2",
@@ -2462,31 +2462,31 @@
         },
         {
           "san": "Be7",
-          "annotation": "Black plays Be7, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Bxf4",
-          "annotation": "White captures with Bxf4. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "O-O",
-          "annotation": "Black castles. The position looks safe, but danger lurks."
+          "annotation": ""
         },
         {
           "san": "Bd3",
-          "annotation": "Bd3 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "Black plays d6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Qe2",
-          "annotation": "White plays Qe2. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "dxe5",
-          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d6",
@@ -2497,11 +2497,11 @@
         },
         {
           "san": "Bxh7+",
-          "annotation": "White captures with Bxh7+. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Kxh7",
-          "annotation": "Black captures with Kxh7. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g8",
@@ -2512,31 +2512,31 @@
         },
         {
           "san": "Ng5+",
-          "annotation": "White gives check with Ng5+! This is a critical moment in the trap."
+          "annotation": ""
         },
         {
           "san": "Kg6",
-          "annotation": "Black continues with Kg6. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Qd3+",
-          "annotation": "White gives check with Qd3+! This is a critical moment in the trap."
+          "annotation": ""
         },
         {
           "san": "f5",
-          "annotation": "Black plays f5, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Qg3",
-          "annotation": "Qg3. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+          "annotation": ""
         },
         {
           "san": "Qd5",
-          "annotation": "Qd5! This is the critical move that springs the trap. The opponent is in serious trouble."
+          "annotation": ""
         },
         {
           "san": "Ne4+",
-          "annotation": "Ne4+! And this is the final blow. White delivers check and wins material. This is why the Greek Gift Sacrifice is so dangerous — memorize this pattern!"
+          "annotation": ""
         }
       ]
     },
@@ -2550,87 +2550,87 @@
         },
         {
           "san": "e5",
-          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "White plays Bc4. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "Nxe4",
-          "annotation": "Black captures with Nxe4. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Qh5",
-          "annotation": "Qh5 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "Nd6",
-          "annotation": "Black plays Nd6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Bb3",
-          "annotation": "White plays Bb3. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "Be7",
-          "annotation": "Black continues with Be7. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Nf3",
-          "annotation": "Nf3 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Ng5",
-          "annotation": "White plays Ng5. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "g6",
-          "annotation": "Black continues with g6. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Qf3",
-          "annotation": "Qf3 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "f5",
-          "annotation": "Black plays f5, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Qd5",
-          "annotation": "White plays Qd5. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "e4",
-          "annotation": "Black continues with e4. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "O-O",
-          "annotation": "White castles. The position looks safe, but danger lurks."
+          "annotation": ""
         },
         {
           "san": "Bxg5",
-          "annotation": "Black captures with Bxg5. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Qxe4+",
-          "annotation": "White captures with Qxe4+. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "fxe4",
-          "annotation": "Black captures with fxe4. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "f5",
@@ -2641,11 +2641,11 @@
         },
         {
           "san": "Bf7+",
-          "annotation": "Bf7+. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+          "annotation": ""
         },
         {
           "san": "Kxf7",
-          "annotation": "Kxf7! Now the trap is revealed. Black wins material with this capture.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e8",
@@ -2656,7 +2656,7 @@
         },
         {
           "san": "Nxe4",
-          "annotation": "Nxe4! White wins material. The trap is complete. Remember this pattern — your opponents will fall for it."
+          "annotation": ""
         }
       ]
     },
@@ -2670,23 +2670,23 @@
         },
         {
           "san": "e5",
-          "annotation": "Black plays e5, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "White plays Nc3, establishing the position. The key moment is approaching."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Black plays Nf6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "f4",
-          "annotation": "White plays f4. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "exf4",
-          "annotation": "Black captures with exf4. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e5",
@@ -2697,27 +2697,27 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "Ng8",
-          "annotation": "Black plays Ng8, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Nf3",
-          "annotation": "White plays Nf3. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "Black continues with d6. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "d4 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "dxe5",
-          "annotation": "Black captures with dxe5. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "d6",
@@ -2728,55 +2728,55 @@
         },
         {
           "san": "Nxe5",
-          "annotation": "White captures with Nxe5. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Be6",
-          "annotation": "Black continues with Be6. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Bc4",
-          "annotation": "Bc4 by White. The position is heading toward the critical moment."
+          "annotation": ""
         },
         {
           "san": "Bxc4",
-          "annotation": "Black captures with Bxc4. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Nxc4",
-          "annotation": "White captures with Nxc4. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Qxd4",
-          "annotation": "Black captures with Qxd4. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Qxd4",
-          "annotation": "White captures with Qxd4. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Black plays Nc6, developing normally. The opponent may not see what's coming."
+          "annotation": ""
         },
         {
           "san": "Be3",
-          "annotation": "White plays Be3. This move looks reasonable but allows the trap to unfold."
+          "annotation": ""
         },
         {
           "san": "Bb4",
-          "annotation": "Black continues with Bb4. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "O-O",
-          "annotation": "White castles. The position looks safe, but danger lurks."
+          "annotation": ""
         },
         {
           "san": "Bxc3",
-          "annotation": "Black captures with Bxc3. This looks natural, but it walks into the trap."
+          "annotation": ""
         },
         {
           "san": "bxc3",
-          "annotation": "White captures with bxc3. This looks natural, but it walks into the trap.",
+          "annotation": "",
           "arrows": [
             {
               "from": "b2",
@@ -2787,26 +2787,26 @@
         },
         {
           "san": "Nge7",
-          "annotation": "Black continues with Nge7. The trap is being set up — watch the next few moves carefully."
+          "annotation": ""
         },
         {
           "san": "Bxf4",
-          "annotation": "Bxf4. This is where the trap begins. The next two moves are the key sequence you need to memorize."
+          "annotation": ""
         },
         {
           "san": "O-O",
-          "annotation": "O-O! This is the critical move that springs the trap. The opponent is in serious trouble.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e8",
-              "to": "g1",
+              "to": "g8",
               "color": "rgba(220, 50, 50, 0.8)"
             }
           ]
         },
         {
           "san": "Rfe1",
-          "annotation": "Rfe1! The trap is sprung. White has a winning position. This is the key takeaway from the f5 Push Trap."
+          "annotation": ""
         }
       ]
     },
@@ -2820,23 +2820,23 @@
         },
         {
           "san": "e5",
-          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "White plays Nc3. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "f4",
-          "annotation": "White plays f4. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "d5",
-          "annotation": "d5 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "fxe5",
@@ -2855,23 +2855,23 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Bc5",
-          "annotation": "Bc5 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "White continues with d4. Watch out — a mistake here would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bb4",
-          "annotation": "Bb4. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "Bd2",
-          "annotation": "White plays Bd2. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Nxd2",
@@ -2891,15 +2891,15 @@
         },
         {
           "san": "O-O",
-          "annotation": "Black castles, but the position requires careful play."
+          "annotation": ""
         },
         {
           "san": "Bd3",
-          "annotation": "White continues with Bd3. Watch out — a mistake here would be very costly."
+          "annotation": ""
         },
         {
           "san": "f6",
-          "annotation": "f6. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "exf6",
@@ -2918,23 +2918,23 @@
         },
         {
           "san": "O-O",
-          "annotation": "White castles, but the position requires careful play."
+          "annotation": ""
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "Rae1",
-          "annotation": "White plays Rae1. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Bg4",
-          "annotation": "Bg4 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "h3",
-          "annotation": "White continues with h3. Watch out — a mistake here would be very costly."
+          "annotation": ""
         },
         {
           "san": "Bxf3",
@@ -2942,15 +2942,15 @@
         },
         {
           "san": "Rxf3",
-          "annotation": "Rxf3. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+          "annotation": ""
         },
         {
           "san": "Rxf3",
-          "annotation": "Rxf3! This is the move that causes all the trouble."
+          "annotation": ""
         },
         {
           "san": "gxf3",
-          "annotation": "gxf3. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line.",
+          "annotation": "",
           "arrows": [
             {
               "from": "g2",
@@ -2971,19 +2971,19 @@
         },
         {
           "san": "e5",
-          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "White plays Nc3. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "f4",
-          "annotation": "White plays f4. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "exf4",
@@ -2998,31 +2998,31 @@
         },
         {
           "san": "e5",
-          "annotation": "White continues with e5. Watch out — a mistake here would be very costly."
+          "annotation": ""
         },
         {
           "san": "Qe7",
-          "annotation": "Qe7. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "Qe2",
-          "annotation": "White plays Qe2. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Ng8",
-          "annotation": "Ng8 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "Nf3",
-          "annotation": "White continues with Nf3. Watch out — a mistake here would be very costly."
+          "annotation": ""
         },
         {
           "san": "d6",
-          "annotation": "d6. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "d4",
-          "annotation": "White plays d4. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "dxe5",
@@ -3048,7 +3048,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Nc6. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "Bxf4",
@@ -3056,11 +3056,11 @@
         },
         {
           "san": "Bg4",
-          "annotation": "Bg4 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "O-O-O",
-          "annotation": "White castles, but the position requires careful play."
+          "annotation": ""
         },
         {
           "san": "Qxe5",
@@ -3076,11 +3076,11 @@
         },
         {
           "san": "Bb5+",
-          "annotation": "Bb5+! Check forces a response. This is where the danger begins."
+          "annotation": ""
         },
         {
           "san": "c6",
-          "annotation": "c6. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "Bxc6+",
@@ -3103,7 +3103,7 @@
         },
         {
           "san": "Bxf3",
-          "annotation": "Bxf3. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+          "annotation": ""
         },
         {
           "san": "Rd8+",
@@ -3111,7 +3111,7 @@
         },
         {
           "san": "Rxd8",
-          "annotation": "Rxd8. The damage is done — this is the result you want to prevent. Remember where the critical decision point was earlier in the line."
+          "annotation": ""
         }
       ]
     },
@@ -3125,23 +3125,23 @@
         },
         {
           "san": "e5",
-          "annotation": "Black plays e5. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "Nc3",
-          "annotation": "White plays Nc3. This is the natural continuation that leads into the warning line."
+          "annotation": ""
         },
         {
           "san": "Nf6",
-          "annotation": "Nf6. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "f4",
-          "annotation": "White plays f4. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "d5",
-          "annotation": "d5 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "exd5",
@@ -3156,15 +3156,15 @@
         },
         {
           "san": "e4",
-          "annotation": "e4. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "d3",
-          "annotation": "White plays d3. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Bb4",
-          "annotation": "Bb4 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "dxe4",
@@ -3183,15 +3183,15 @@
         },
         {
           "san": "Bd2",
-          "annotation": "White plays Bd2. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Qh4+",
-          "annotation": "Qh4+! Check forces a response. This is where the danger begins."
+          "annotation": ""
         },
         {
           "san": "g3",
-          "annotation": "White continues with g3. Watch out — a mistake here would be very costly."
+          "annotation": ""
         },
         {
           "san": "Nxg3",
@@ -3199,11 +3199,11 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White plays Nf3. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Qh5",
-          "annotation": "Qh5 by Black. The position is becoming uncomfortable — careful defense is needed."
+          "annotation": ""
         },
         {
           "san": "hxg3",
@@ -3218,11 +3218,11 @@
         },
         {
           "san": "Bg4",
-          "annotation": "Bg4. The position is sharp and requires precise play from this point forward."
+          "annotation": ""
         },
         {
           "san": "Be2",
-          "annotation": "White plays Be2. This is the problematic continuation you need to recognize."
+          "annotation": ""
         },
         {
           "san": "Bxf3",
@@ -3242,19 +3242,19 @@
         },
         {
           "san": "Bxc3",
-          "annotation": "Bxc3. We're approaching the critical position. Pay close attention to the next moves — this is where the danger lies."
+          "annotation": ""
         },
         {
           "san": "Bxc3",
-          "annotation": "Bxc3! This is the move that causes all the trouble."
+          "annotation": ""
         },
         {
           "san": "O-O",
-          "annotation": "O-O. This is the uncomfortable position that results from this line. Now that you've seen it, you'll know to avoid the pitfall.",
+          "annotation": "",
           "arrows": [
             {
               "from": "e8",
-              "to": "g1",
+              "to": "g8",
               "color": "rgba(230, 170, 30, 0.8)"
             }
           ]

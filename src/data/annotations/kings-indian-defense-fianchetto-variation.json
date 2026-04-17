@@ -16,18 +16,6 @@
     {
       "san": "g6",
       "annotation": "Black signals the King's Indian Defense setup by preparing to fianchetto the dark-squared bishop, which will become a powerful attacking piece aimed at our kingside. This move is part of Black's hypermodern strategy - rather than challenging our center directly with pawns, they're preparing to attack it with pieces from the flanks. The fianchettoed bishop on g7 will eye our entire diagonal and can become a monster in tactical complications, especially if Black achieves the typical ...f7-f5-f4 pawn storm later. This setup shows Black is willing to accept a slightly cramped position in exchange for dynamic piece play and attacking chances."
-    },
-    {
-      "san": "Bg7",
-      "annotation": "The dark-squared bishop finds its ideal home, completing the fianchetto and creating one of Black's most important pieces in the King's Indian Defense. From g7, this bishop controls the long diagonal all the way to a1, putting pressure on our queenside and central squares while supporting Black's kingside attacking ambitions. This bishop often becomes the star of Black's tactical combinations, especially when supported by moves like ...f5-f4 or ...h6-h5-h4 pawn storms. The bishop also helps defend the king and supports the crucial ...e7-e5 pawn break that Black will often play to challenge our center and open lines for counterplay."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, supporting our d4 pawn while preparing kingside castling and maintaining maximum flexibility in our setup. The knight on f3 also prevents any immediate ...e5-e4 advances from Black and keeps the option of playing e2-e4 ourselves to transpose into different pawn structures. This move fits perfectly with our positional approach - we're not rushing to create tension, but instead completing our development and maintaining central control. From f3, our knight can potentially reroute to d2, e5, or h4 depending on how the position develops, giving us excellent piece mobility."
-    },
-    {
-      "san": "g3",
-      "annotation": "We're committing to our own fianchetto setup, preparing to place our light-squared bishop on g2 where it will dominate the long diagonal and complement our central pawn structure beautifully. This creates the famous 'Fianchetto Variation' of the King's Indian, leading to rich positional battles where both sides have bishops eyeing opposite diagonals. Our bishop on g2 will support our central pawns, control key squares like f3 and h3, and often participate in kingside attacks or central breakthroughs. This setup typically leads to a more positional game than the sharp theoretical lines of the main King's Indian, but still offers both sides excellent winning chances through careful maneuvering and well-timed pawn breaks."
     }
   ]
 }

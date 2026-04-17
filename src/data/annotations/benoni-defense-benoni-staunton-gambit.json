@@ -16,10 +16,6 @@
     {
       "san": "f5",
       "annotation": "Black plays a provocative and double-edged move that's characteristic of the most aggressive Benoni setups, immediately challenging our central ambitions before we can consolidate. This pawn advance prepares to meet our likely e4 with a pawn exchange, but it also severely weakens Black's kingside, particularly the e6 and g6 squares, and makes castling kingside much more dangerous. Our opponent is showing they want maximum complications and are willing to accept serious positional concessions for the sake of tactical chances - this is the kind of move that leads to sharp, uncompromising battles where both sides must calculate precisely."
-    },
-    {
-      "san": "exf5",
-      "annotation": "We're capturing the pawn and opening up the position to our advantage, as Black's aggressive f5 push has backfired tactically. This capture not only wins material but also opens the e-file for our rook and creates serious weaknesses in Black's position, particularly around the exposed king. The Benoni-Staunton Gambit has essentially collapsed here because Black cannot adequately compensate for the lost pawn, and we've emerged with both a material advantage and superior piece coordination. From here, we should focus on rapid development, keeping Black's king in the center, and converting our advantages into a winning attack."
     }
   ]
 }

@@ -48,30 +48,6 @@
     {
       "san": "Nc6",
       "annotation": "Black develops the knight to a central square, adding more pressure to our d4 pawn while preparing potential central operations. This knight placement is typical in King's Indian structures, where it supports the eventual e7-e5 break and can later be redeployed to more active squares like e7 or d4. The knight also eyes important central squares and gives Black more piece coordination for future attacks. We should be aware that this knight, combined with Black's other pieces, creates significant pressure on our central pawns and may force us to make concrete decisions about our pawn structure soon."
-    },
-    {
-      "san": "a6",
-      "annotation": "Our opponent plays the Panno Variation move, preparing queenside expansion with b7-b5 while preventing any potential Nb5 jumps from our pieces. This seemingly quiet move is actually quite ambitious - Black is preparing to create counterplay on the queenside with moves like Rb8 and b5, challenging our pawn structure. The a6 move also gives Black's pieces more flexibility and prepares to potentially undermine our queenside pawn chain. We should recognize that this signals Black's intention to create play on both flanks, making the position more complex and requiring careful handling of the resulting pawn tensions."
-    },
-    {
-      "san": "Rb8",
-      "annotation": "Black continues the Panno plan by placing the rook behind the future b-pawn advance, preparing the thematic b7-b5 break that will challenge our queenside structure. This rook placement also supports potential queenside operations and gives Black more piece coordination for the upcoming middlegame battles. The move demonstrates typical King's Indian strategy - developing pieces to support concrete pawn advances that will create counterplay. We need to be prepared for the coming b5 advance and consider how we'll respond to Black's queenside pressure while maintaining our central advantages."
-    },
-    {
-      "san": "h3",
-      "annotation": "We're playing a useful prophylactic move that prevents Black pieces from occupying the g4 square, particularly stopping potential Bg4 pins against our pawn on f3. This move also gives our king a bit more breathing room and prepares potential kingside expansion if the position calls for it. While it might seem slow, h3 is actually quite practical - it eliminates Black's tactical possibilities on the kingside and allows us to focus on central and queenside operations without worrying about annoying pins. The move also prepares potential g3-g4 advances in some lines, giving us more strategic flexibility."
-    },
-    {
-      "san": "b5",
-      "annotation": "Black strikes with the thematic Panno Variation pawn break, immediately challenging our queenside pawn structure and creating concrete threats against our c4 pawn. This aggressive move opens the b-file for Black's rook and creates immediate tactical complications that we must address carefully. The b5 advance also gives Black space on the queenside and potential outposts for pieces on squares like a5 or c5. We're now facing the characteristic King's Indian middlegame where Black creates counterplay on the queenside while potentially preparing kingside operations - we need to decide how to handle this pawn tension and whether to maintain or resolve it."
-    },
-    {
-      "san": "Nd2",
-      "annotation": "We're entering the Korchnoi Line by redeploying our knight from f3 to d2, where it can support our central pawns and prepare various strategic ideas. This knight move allows us to maintain our pawn on c4 while preparing potential central advances like e2-e4, and it also eyes the important c4 and e4 squares. The knight on d2 can later jump to more active squares like c4, e4, or f3 depending on how the position develops. This move demonstrates deep positional understanding - we're improving our piece coordination while maintaining flexibility in our central pawn structure, preparing for the complex middlegame battles that are characteristic of this variation."
-    },
-    {
-      "san": "Be3",
-      "annotation": "We develop our light-squared bishop to an active central square where it supports our queenside pawns and prepares potential central operations. This bishop placement defends our c4 pawn against Black's pressure while also eyeing important central squares like d4 and f4. The bishop on e3 also supports potential pawn advances in the center and gives us more piece coordination for the middlegame. Additionally, this move prepares various tactical possibilities and maintains our solid position while Black continues to create counterplay on the flanks."
     }
   ]
 }

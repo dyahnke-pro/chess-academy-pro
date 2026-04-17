@@ -6,14 +6,14 @@
       "annotation": "The starting move of the Jobava London System. We're claiming the center and preparing to develop our pieces aggressively. Naroditsky chooses d4 because the Jobava setup creates immediate tactical threats while avoiding the massive theory of mainline Queen's Gambit or Nimzo-Indian positions.",
       "arrows": [
         {
-          "from": "d4",
-          "to": "e5",
+          "from": "d2",
+          "to": "d4",
           "color": "green",
           "delay": 0
         },
         {
-          "from": "d4",
-          "to": "c5",
+          "from": "d2",
+          "to": "d4",
           "color": "green",
           "delay": 0
         }
@@ -33,14 +33,14 @@
       ],
       "arrows": [
         {
-          "from": "c3",
-          "to": "b5",
+          "from": "b1",
+          "to": "c3",
           "color": "red",
           "delay": 0
         },
         {
-          "from": "c3",
-          "to": "e4",
+          "from": "b1",
+          "to": "c3",
           "color": "green",
           "delay": 500
         }
@@ -68,8 +68,8 @@
       ],
       "arrows": [
         {
-          "from": "f4",
-          "to": "c7",
+          "from": "c1",
+          "to": "f4",
           "color": "red",
           "delay": 0
         },
@@ -97,8 +97,8 @@
       "annotation": "The signature move of the Jobava London against e6! The knight jumps to b5 threatening Nc7+ forking the king and rook. Black is forced to play the awkward Na6. Naroditsky shows that Black's knight on a6 will take several tempi to reroute, giving White a lasting initiative.",
       "arrows": [
         {
-          "from": "b5",
-          "to": "c7",
+          "from": "c3",
+          "to": "b5",
           "color": "red",
           "delay": 0
         }
@@ -1009,7 +1009,7 @@
         },
         {
           "san": "Bg7",
-          "annotation": "Black retreats the bishop, but the damage is done."
+          "annotation": ""
         },
         {
           "san": "Bd3",

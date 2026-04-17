@@ -391,6 +391,14 @@ export interface GameRecord {
   coachAnalysis: string | null;
   isMasterGame: boolean;
   openingId: string | null;
+  /** True when analyzeAllGames has completed full Stockfish per-move
+   *  analysis on this game. False / undefined for freshly-imported
+   *  games that only have sparse detectBlunders annotations. Every
+   *  consumer that needs accuracy, move-quality stats, or weakness
+   *  profiling should check this flag instead of guessing from
+   *  annotation density (the old `annotations.length >= moves/2`
+   *  heuristic). */
+  fullyAnalyzed?: boolean;
 }
 
 // ─── Flashcards ──────────────────────────────────────────────────────────────

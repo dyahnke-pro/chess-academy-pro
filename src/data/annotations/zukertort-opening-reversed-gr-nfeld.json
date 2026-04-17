@@ -28,14 +28,6 @@
     {
       "san": "O-O",
       "annotation": "We castle kingside to complete our kingside safety before committing to d4—a logical choice that removes our king from the center and activates our h1 rook toward the center files. Now we're ready to push d4 with confidence, knowing our king is secure."
-    },
-    {
-      "san": "cxd4",
-      "annotation": "Black captures our d-pawn, deciding that counterplay in the center is more important than maintaining the d5 outpost. This opens up the c-file and gives us the central tension we wanted—we'll recapture and enjoy good piece placement with our bishop on g2."
-    },
-    {
-      "san": "Nxd4",
-      "annotation": "We recapture with the knight, centralizing it actively on d4 where it controls key squares like e6, c6, and f5. This gives us a strong classical setup: our knight is centralized, our bishop on g2 is aiming at the center, we control the d4 square, and we have a clear plan to develop with c4, Be3, and Nc3."
     }
   ]
 }

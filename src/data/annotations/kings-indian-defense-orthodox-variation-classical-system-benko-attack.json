@@ -56,26 +56,6 @@
     {
       "san": "Nc6",
       "annotation": "Black is developing the queenside knight while preparing to challenge our advanced pawn center from a different angle. This knight placement supports potential ...f5 advances and prepares to relocate to more active squares like e7 or a5. Our opponent is also keeping options open for various King's Indian pawn breaks and piece maneuvers that can create counterplay. The knight on c6 may seem temporarily blocked by our d5 pawn, but in the King's Indian, Black often finds dynamic ways to activate seemingly passive pieces."
-    },
-    {
-      "san": "Ne1",
-      "annotation": "We're repositioning our knight to support the crucial f2-f4 advance, which is a key component of the Orthodox Variation's attacking plan. This seemingly passive move actually prepares one of our most important strategic ideas - building kingside pressure with f4, g4, and h4. The knight from e1 can later go to d3 or f3, supporting our central control while making room for the f-pawn's advance. This is typical King's Indian strategy where we're willing to make seemingly slow moves to prepare devastating attacking formations."
-    },
-    {
-      "san": "Nd7",
-      "annotation": "Our opponent is preparing the classic King's Indian knight maneuver to f6 via e7, while also supporting the potential ...f5 pawn break. This knight repositioning is essential for Black's counterplay, as it clears the c6 square and prepares more active piece placement. Black is also preparing to challenge our kingside attack with moves like ...f5, using the knight from d7 to support this advance. The knight can also later support ...c6 or ...c5 pawn breaks that challenge our queenside structure."
-    },
-    {
-      "san": "f3",
-      "annotation": "We're building the foundation for our kingside attack by preparing the devastating g2-g4 advance that will launch our pawn storm. This move supports our e4 pawn, controls the crucial g4 square, and prepares to advance our kingside pawns with maximum effect. The f3 advance is a signature move in the Orthodox Variation, showing our commitment to a direct kingside assault. However, this move also slightly weakens our king position, so we must be ready to attack before Black's counterplay becomes too dangerous."
-    },
-    {
-      "san": "f5",
-      "annotation": "Black strikes back with the thematic King's Indian counterattack, challenging our e4 pawn and creating immediate tactical complications. This advance opens the f-file for potential rook pressure and gives Black's pieces much more activity and breathing room. Our opponent is also preparing potential tactics involving the g7 bishop and creating the sharp, double-edged positions that make the King's Indian Defense so exciting. This pawn break signals the beginning of the real battle, where both sides will need to calculate precisely to avoid tactical disasters."
-    },
-    {
-      "san": "g4",
-      "annotation": "We're launching our signature kingside pawn storm with the Benko Attack, a direct and aggressive continuation that aims to overwhelm Black's kingside defenses. This advance attacks Black's f5 pawn immediately while preparing h4-h5 to open lines against the black king. The g4 move is the defining characteristic of this variation - we're committing to a full-scale kingside assault that can become devastating if Black isn't careful. However, this advance also commits us to sharp tactics and requires precise calculation, as Black will have opportunities for counterplay in the center and on the kingside as well."
     }
   ]
 }

@@ -24,22 +24,6 @@
     {
       "san": "g6",
       "annotation": "Black commits to the Leningrad Dutch structure, preparing to fianchetto the dark-squared bishop on g7 where it will become a powerful attacking piece. This move supports the f5 pawn and prepares to create a solid kingside pawn chain with pawns on f5, g6, and eventually h6 if needed. The g6 advance also opens up the possibility of kingside castling, though Black will need to be careful about king safety given the advanced f5 pawn. This pawn structure is characteristic of the Leningrad variation and often leads to sharp middlegame battles."
-    },
-    {
-      "san": "O-O",
-      "annotation": "We castle kingside, bringing our king to safety while connecting our rooks and completing a crucial part of our development. Castling is particularly important in Dutch Defense positions since Black often has kingside attacking ambitions, and we need our king secure before the middlegame battles begin. This move also brings our king's rook into the game, potentially supporting central files or kingside defense. By castling early, we maintain maximum flexibility in our piece deployment while ensuring our king won't become a target in the sharp positions that typically arise from the Dutch."
-    },
-    {
-      "san": "Bg7",
-      "annotation": "Black completes the dark-squared bishop fianchetto, creating the characteristic Leningrad Dutch formation with the powerful bishop eyeing our queenside and central squares. This bishop will often become Black's most important attacking piece, supporting advances like e5 or pressuring our position along the long diagonal. The bishop on g7 also defends the kingside and works in harmony with Black's pawn structure to create a solid yet aggressive setup. From g7, this bishop can support Black's typical middlegame plans of central expansion or kingside pressure."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We develop our knight to its ideal square, controlling the central e5 and h4 squares while supporting our overall development scheme. This knight placement is flexible, as the piece can later jump to e5, h4, or support central advances depending on how the position develops. The knight on f3 also provides additional defense for our kingside, which is important given Black's potential attacking chances. This move completes our basic development and prepares us to react to Black's setup with either central advances or piece maneuvering."
-    },
-    {
-      "san": "Nh6",
-      "annotation": "Black chooses an unusual but interesting knight development in the Basman System, avoiding the more common Nf6 and instead eyeing the f5 pawn for support and preparing potential piece activity on the kingside. This knight can later jump to f7 to support the kingside or to g4 to create pressure, though it's somewhat out of play on the rim. The Nh6 move is characteristic of Basman's experimental approach to the Dutch Defense, seeking to avoid main lines while maintaining fighting chances. While this looks awkward, the knight has specific tactical and strategic purposes in Black's setup, though it requires careful handling to avoid becoming a target."
     }
   ]
 }

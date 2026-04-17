@@ -20,26 +20,6 @@
     {
       "san": "d5",
       "annotation": "This is the defining move of the Grünfeld Defense! Black immediately strikes at our pawn center, challenging both our c4 and d4 pawns and creating immediate central tension. Our opponent is following the Grünfeld philosophy: allow White to build a large pawn center, then undermine it with precise pawn breaks and piece activity. This move transforms the position from a King's Indian setup into the sharp tactical battles characteristic of the Grünfeld. Black is essentially saying 'I'll give you a big center, but I'll prove it's actually weak and overextended.' We now face a critical decision about how to maintain our central advantage."
-    },
-    {
-      "san": "Bf4",
-      "annotation": "We're developing our bishop to an active square outside the pawn chain, following the key principle of developing pieces before creating pawn structures that might block them. The bishop on f4 supports our central pawns, particularly if we decide to advance with e3-e4 later, and it eyes the important c7 and h6 squares. This move is part of the Brinckmann Attack system, where we avoid the more common Nf3 development in favor of keeping maximum central tension. The bishop also prepares potential tactics involving Qb3, attacking the b7 square and putting pressure on Black's queenside. This development maintains our space advantage while keeping our options open for various pawn advances."
-    },
-    {
-      "san": "Bg7",
-      "annotation": "Black completes the fianchetto setup by developing the bishop to its ideal square, where it becomes a powerful long-range piece controlling the entire long diagonal from g7 to a1. This bishop will be Black's main weapon in the coming middlegame, constantly pressuring our center and supporting typical Grünfeld counterplay. From g7, the bishop also defends the kingside and supports the eventual ...c5 break that's coming in most Grünfeld lines. Our opponent has now created the classic Grünfeld structure with the bishop eyeing our center while keeping the king safe for castling. We should be preparing for Black's typical counterplay involving moves like ...c5, ...Nc6, and potential sacrifices on our central pawns."
-    },
-    {
-      "san": "e3",
-      "annotation": "We're consolidating our central pawn structure with this stabilizing move, supporting our d4 pawn and preparing to potentially advance with f2-f3 and e3-e4 to create the 'big center' that characterizes many Grünfeld variations. The e3 move also opens a diagonal for our light-squared bishop to develop to d3 or e2, and it prevents Black's knight from jumping to the annoying d4 square. This is a more restrained approach than the immediate e2-e4, showing that we're willing to build our position methodically rather than rushing into tactical complications. However, we should be aware that this slightly passive approach gives Black time to organize counterplay with moves like ...c5, ...Nc6, and ...Bg4."
-    },
-    {
-      "san": "O-O",
-      "annotation": "Black sensibly completes kingside development by castling, getting the king to safety before the central fighting begins in earnest. This move is almost automatic in the Grünfeld, as Black needs the king secure before launching the typical counterattacks against our center with moves like ...c5, ...Nc6, and ...Bg4. Castling also brings the rook closer to the center via the f8-square, where it might support ...f7-f5 pushes later or defend along the back rank. With the king safe, Black is now ready to begin the characteristic Grünfeld counterplay that makes this opening so dynamic and double-edged. We should expect our opponent to start challenging our center very soon with moves like ...c5 or ...Nc6."
-    },
-    {
-      "san": "Nf3",
-      "annotation": "We're finally developing our king's knight to its ideal square, supporting our central pawns and preparing to castle kingside ourselves. The knight on f3 controls important central squares like e5 and d4, while also supporting potential advances of our e-pawn to e4 if the tactical situation allows it. This move completes our basic development and prepares us to meet Black's coming counterplay with solid piece coordination. However, we should note that this move order has allowed Black to achieve a comfortable setup, and we'll need to be ready for typical Grünfeld breaks like ...c5, which will challenge our central pawn structure and lead to the sharp middlegame positions that define this opening system."
     }
   ]
 }

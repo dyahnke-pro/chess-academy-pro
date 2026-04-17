@@ -40,18 +40,6 @@
     {
       "san": "Bf5",
       "annotation": "Black develops their light-squared bishop to an active square, putting pressure on our e4 square and preparing to contest our central ambitions. This is one of the most principled responses in the Slav Defense because the bishop develops actively before we can play e3 and block it in. The bishop on f5 also supports Black's plan to hold onto the c4 pawn temporarily while completing their development safely. However, this bishop placement does have a drawback - it can become a target for our pieces, and we might be able to exploit this with moves like Nh4 or g3 followed by Bg2."
-    },
-    {
-      "san": "Na6",
-      "annotation": "Our opponent develops their queen's knight to the rim, which violates the general principle that 'knights on the rim are dim,' but this move actually serves several important purposes in this specific position. The knight on a6 prepares to support the c4 pawn with ...Nb4 or can reroute to c5 via b4, where it would be excellently placed to contest our central control. This move also avoids blocking the c-file with ...Nc6, keeping Black's position flexible and allowing their rook to potentially contest the c-file later. While the knight appears passive on a6, it's actually preparing to become more active once Black consolidates their position."
-    },
-    {
-      "san": "Ne5",
-      "annotation": "We centralize our knight aggressively, attacking Black's bishop on f5 and c6 pawn while seizing control of key central squares. This knight leap is the beginning of the Krause Attack, a sharp system where we prioritize piece activity and central control over immediate material recovery. The knight on e5 is powerfully placed - it attacks multiple targets, controls important squares like d7 and f7, and prepares tactical possibilities involving our other pieces. Our opponent must now deal with the pressure on their bishop while being careful not to allow devastating tactics in the center."
-    },
-    {
-      "san": "e4",
-      "annotation": "We launch the Fazekas Gambit, sacrificing our e-pawn to blast open the center and create massive complications that favor our superior development and piece coordination. This explosive move is the culmination of our opening strategy - instead of slowly regaining the c4 pawn, we're offering another pawn to create immediate tactical threats and long-term positional compensation. The e4 advance opens lines for our bishops, increases our central space advantage, and puts enormous pressure on Black's somewhat loose piece coordination. Our opponent must now navigate carefully through sharp tactical waters while we get excellent practical chances and attacking potential for our material investment."
     }
   ]
 }
