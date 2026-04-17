@@ -29,9 +29,50 @@ import {
 } from './coachActionDispatcher';
 import { AGENT_ACTION_GRAMMAR } from './coachPrompts';
 import { useCoachSessionStore } from '../stores/coachSessionStore';
+import { useAppStore } from '../stores/appStore';
+import { voiceService } from './voiceService';
 import type { ChatMessage } from '../types';
 
 const HISTORY_LIMIT = 20;
+
+/**
+ * Deterministic narration-toggle detector. Runs BEFORE the LLM so
+ * "narrate while we play" reliably flips voice on regardless of
+ * prompt-following. Returns `{ enable }` on match, null otherwise.
+ */
+export function detectNarrationToggle(text: string): { enable: boolean } | null {
+  const lower = text.toLowerCase();
+  const hasNarrationTopic =
+    /\b(narrat|commentat|commentar|voice|speak|talk|announc)/i.test(lower);
+  // "shut up" stands on its own.
+  if (/\bshut\s+up\b/i.test(lower)) return { enable: false };
+  const offSignal =
+    /\b(stop|turn\s+off|disable|silence|mute|quiet|no\s+more|cease|end)\b/i;
+  if (offSignal.test(lower) && hasNarrationTopic) return { enable: false };
+  const hasVerb =
+    /\b(narrat|commentat|speak|voice|announce|talk\s+through)/i.test(lower);
+  const hasPlayContext =
+    /\b(game|play|we|move|each\s+move|during|while|turn\s+on)\b/i.test(lower);
+  if (hasVerb && hasPlayContext) return { enable: true };
+  return null;
+}
+
+/**
+ * Apply a narration toggle and return the user-facing ack text. Flips
+ * both the session-store narrationMode and the appStore coachVoiceOn
+ * flag (the existing per-move commentary path reads the latter).
+ */
+export function applyNarrationToggle(enable: boolean): string {
+  useCoachSessionStore.getState().setNarrationMode(enable);
+  const voiceOn = useAppStore.getState().coachVoiceOn;
+  if (enable && !voiceOn) useAppStore.getState().toggleCoachVoice();
+  if (!enable && voiceOn) useAppStore.getState().toggleCoachVoice();
+  const ack = enable
+    ? "Got it — I'll narrate each move out loud as we play. Make your move when you're ready."
+    : "Narration off — I'll stay quiet and let you focus.";
+  if (enable) void voiceService.speak(ack).catch(() => {});
+  return ack;
+}
 
 export interface RunAgentTurnOptions {
   /** Conversation so far INCLUDING the new user message. */

@@ -5,7 +5,7 @@ import { useAppStore } from '../../stores/appStore';
 import { buildGameContextBlock, getGameSystemPromptAddition } from '../../services/coachChatService';
 import { fetchRelevantGames } from '../../services/gameContextService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
-import { runAgentTurn } from '../../services/coachAgentRunner';
+import { runAgentTurn, detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -145,6 +145,24 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       };
       const updatedMessages = [...messagesRef.current, userMsg];
       setMessages(updatedMessages);
+
+      // Narration toggle — deterministic intercept. Runs BEFORE the
+      // LLM so "narrate while we play" reliably flips the flag even
+      // during an active game (isGameOver=false skips the broader
+      // intent router below). No LLM round-trip, no prompt-following
+      // required. The existing per-move commentary path then speaks.
+      const narrationToggle = detectNarrationToggle(text);
+      if (narrationToggle) {
+        const ack = applyNarrationToggle(narrationToggle.enable);
+        const ackMsg: ChatMessageType = {
+          id: `gmsg-${Date.now()}-narr`,
+          role: 'assistant',
+          content: ack,
+          timestamp: Date.now(),
+        };
+        setMessages([...updatedMessages, ackMsg]);
+        return;
+      }
 
       // Intent routing: outside of an active game, let "play against me",
       // "explain this position", etc. launch dedicated sessions instead of

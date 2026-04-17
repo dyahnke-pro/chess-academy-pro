@@ -6,10 +6,11 @@ import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { getChatSystemPromptAdditions, loadAnalysisContext } from '../../services/coachChatService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
-import { runCoachTurn } from '../../services/coachAgentRunner';
+import { runCoachTurn, detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
+import type { ChatMessage as ChatMessageType } from '../../types';
 
 export function CoachChatPage(): JSX.Element {
   const navigate = useNavigate();
@@ -63,6 +64,26 @@ export function CoachChatPage(): JSX.Element {
 
   const handleSend = useCallback(async (text: string) => {
     if (!activeProfile || isStreaming) return;
+
+    // Deterministic narration toggle — flips voice on/off reliably
+    // without depending on LLM prompt-following.
+    const narrationToggle = detectNarrationToggle(text);
+    if (narrationToggle) {
+      appendMessage({
+        id: `msg-${Date.now()}-u`,
+        role: 'user',
+        content: text,
+        timestamp: Date.now(),
+      });
+      const ack = applyNarrationToggle(narrationToggle.enable);
+      appendMessage({
+        id: `msg-${Date.now()}-narr`,
+        role: 'assistant',
+        content: ack,
+        timestamp: Date.now(),
+      } satisfies ChatMessageType);
+      return;
+    }
 
     // Fast-path: deterministic intent router for explicit phrases like
     // "play the KIA against me" or "review my last Catalan". Routes
