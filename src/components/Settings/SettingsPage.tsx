@@ -10,6 +10,9 @@ import { exportUserData } from '../../services/dbService';
 import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
+import { ShareForFreeModal } from '../Billing/ShareForFreeModal';
+import { resolvePricingTier, getPricingOffer, remainingFreeMonths } from '../../services/pricingService';
+import { Sparkles, Gift } from 'lucide-react';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
 
@@ -965,6 +968,11 @@ function LichessTokenPanel({ profile, setProfile }: TabProps): JSX.Element {
 function AboutTab(): JSX.Element {
   const [confirmReset, setConfirmReset] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [shareFreeOpen, setShareFreeOpen] = useState(false);
+  const activeProfile = useAppStore((s) => s.activeProfile);
+  const tier = resolvePricingTier(activeProfile);
+  const offer = getPricingOffer(activeProfile);
+  const bankedFreeMonths = remainingFreeMonths(activeProfile);
 
   const handleReset = async (): Promise<void> => {
     await db.delete();
@@ -993,6 +1001,84 @@ function AboutTab(): JSX.Element {
       <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
         Built with React, TypeScript, Vite, Tailwind CSS, chess.js, Stockfish WASM, Dexie.js, Zustand, and Claude API.
       </div>
+      {/* Pricing / Billing status — shown right under the app
+          description so users see their plan immediately. Beta
+          users see the "Free for life" share promo; free-social
+          users see confirmation; standard users see the plain
+          price. */}
+      <div
+        className="rounded-xl p-4 border space-y-2"
+        style={{
+          background: tier === 'beta'
+            ? 'color-mix(in srgb, var(--color-accent) 8%, transparent)'
+            : 'var(--color-bg)',
+          borderColor: tier === 'beta'
+            ? 'var(--color-accent)'
+            : 'var(--color-border)',
+        }}
+        data-testid="billing-summary"
+      >
+        <div className="flex items-center gap-2">
+          <Sparkles size={14} style={{ color: 'var(--color-accent)' }} />
+          <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
+            Your Plan
+          </span>
+        </div>
+        <div className="text-base font-bold" style={{ color: 'var(--color-text)' }}>
+          {offer.label}
+          {offer.lockedForLife && (
+            <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded uppercase"
+              style={{
+                background: 'var(--color-accent)',
+                color: 'var(--color-bg)',
+              }}>
+              Locked for life
+            </span>
+          )}
+        </div>
+        <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+          {offer.description}
+        </div>
+        {bankedFreeMonths > 0 && (
+          <div
+            className="flex items-center gap-2 text-xs px-2 py-1.5 rounded-md"
+            style={{
+              background: 'var(--color-bg)',
+              color: 'var(--color-text)',
+            }}
+            data-testid="banked-free-months"
+          >
+            <Gift size={12} style={{ color: 'var(--color-accent)' }} />
+            <span>
+              <strong>{bankedFreeMonths}</strong> free month
+              {bankedFreeMonths === 1 ? '' : 's'} banked
+              {tier !== 'free-trial' && ' — next billing skipped until used up.'}
+            </span>
+          </div>
+        )}
+        <button
+          onClick={() => setShareFreeOpen(true)}
+          className="mt-1 w-full py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-2"
+          style={{
+            background: 'var(--color-accent)',
+            color: 'var(--color-bg)',
+          }}
+          data-testid="open-share-free"
+        >
+          <Gift size={14} />
+          {bankedFreeMonths > 0
+            ? 'Post again → another free month'
+            : 'Post about us → earn a free month'}
+        </button>
+      </div>
+
+      {shareFreeOpen && (
+        <ShareForFreeModal
+          onClose={() => setShareFreeOpen(false)}
+          onGranted={() => { /* profile is already updated in the modal */ }}
+        />
+      )}
+
       <div className="pt-4 border-t space-y-3" style={{ borderColor: 'var(--color-border)' }}>
         <div>
           <button

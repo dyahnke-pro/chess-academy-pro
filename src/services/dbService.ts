@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import { createDefaultSrsFields } from './srsEngine';
 import { DEFAULT_THEME_ID } from './themeService';
+import { isBetaPhaseActive } from './pricingService';
 import type { UserProfile, PuzzleRecord, OpeningRecord, SessionRecord, FlashcardRecord } from '../types';
 
 // ─── Profile ──────────────────────────────────────────────────────────────────
@@ -50,6 +51,15 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
       },
       monthlyBudgetCap: null,
       estimatedSpend: 0,
+      // Auto-assign pricing tier on first-ever profile creation.
+      // Anyone who installs during the beta window gets 'beta' with
+      // the $2.99/mo locked-for-life price. Post-beta installs go
+      // straight to 'standard' (or 'free-trial' if we wire trial
+      // logic later). This flag is persisted so the tier never
+      // reshuffles if the beta phase ends while an existing user is
+      // still active.
+      pricingTier: isBetaPhaseActive() ? 'beta' as const : 'standard' as const,
+      pricingTierAssignedAt: new Date().toISOString(),
       elevenlabsKeyEncrypted: null,
       elevenlabsKeyIv: null,
       elevenlabsVoiceId: null,

@@ -466,6 +466,38 @@ export interface UserPreferences {
   };
   monthlyBudgetCap: number | null;
   estimatedSpend: number;
+  /**
+   * Pricing tier assigned to this user. Set once at profile creation
+   * and never changes unless the user takes a tier-changing action
+   * (e.g. "Share for free forever" flips 'beta' to 'free-social').
+   * Undefined on legacy profiles — `resolvePricingTier` defaults to
+   * 'beta' during the beta phase, 'standard' after.
+   */
+  pricingTier?: 'beta' | 'standard' | 'free-trial';
+  /** ISO date the user was assigned their tier. Used to validate
+   *  beta-era eligibility and to show "you've been with us since X". */
+  pricingTierAssignedAt?: string | null;
+  /**
+   * Per-post free-month accrual. Each social share with a verified
+   * screenshot adds one month of free access; Lemon Squeezy consumes
+   * these credits on renewal (skips the next billing cycle).
+   *
+   * - `freeMonthsEarned` — cumulative count of free months ever
+   *   granted (append-only; never decrements)
+   * - `freeMonthsUsed`   — count actually consumed by the subscription
+   *   provider. `remaining = earned - used`. Updated by Lemon Squeezy
+   *   webhook when we wire paywall.
+   */
+  freeMonthsEarned?: number;
+  freeMonthsUsed?: number;
+  /** Append-only audit log of share-for-free claims. Useful for
+   *  spot-checking suspected fraud (multiple claims in one hour,
+   *  etc.) and for the "Share again" UI to show last-share time. */
+  shareHistory?: Array<{
+    platform: 'x' | 'reddit' | 'other';
+    claimedAt: string;
+    screenshotName?: string;
+  }>;
   elevenlabsKeyEncrypted: string | null;
   elevenlabsKeyIv: string | null;
   elevenlabsVoiceId: string | null;
