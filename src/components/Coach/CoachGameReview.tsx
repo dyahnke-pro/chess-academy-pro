@@ -142,6 +142,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [bestMoveRevealed, setBestMoveRevealed] = useState(false);
 
   // ─── Best Line Explorer State ──────────────────────────────────────────────
+  // Revision counter: incremented on every new best-line request.
+  // Async Stockfish callbacks check their captured revision against
+  // the current ref — if they differ, the response is stale (user
+  // navigated away) and gets discarded. Fixes the race where two
+  // rapid "Show Best Line" clicks spawn parallel analyses.
+  const bestLineRevisionRef = useRef(0);
   const [bestLineActive, setBestLineActive] = useState(false);
   const [bestLineMoves, setBestLineMoves] = useState<string[]>([]); // UCI moves
   const [bestLineSans, setBestLineSans] = useState<string[]>([]); // SAN moves
@@ -152,6 +158,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // ─── Auto-Review State ────────────────────────────────────────────────────
   const [autoReviewActive, setAutoReviewActive] = useState(false);
+  // Ref mirror of autoReviewActive — readable inside async callbacks
+  // (closures) that resolve after the state setter has been batched.
+  // Without this, a getCoachCommentary().then() that resolves after
+  // the user stops auto-review would still call voiceService.speak()
+  // and schedule a new advance timer, making the review "un-stoppable"
+  // until the LLM response finishes.
+  const autoReviewActiveRef = useRef(false);
   const [autoReviewPaused, setAutoReviewPaused] = useState(false);
   const [reviewDepth, setReviewDepth] = useState<'quick' | 'full'>('quick');
   const autoReviewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -517,8 +530,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       guidedTimerRef.current = null;
     }
     setAutoReviewActive(false);
+    autoReviewActiveRef.current = false;
     setAutoReviewPaused(false);
     setAwaitingAiNarration(false);
+    // Clean up practice mode if the user navigates away mid-drill.
+    // Without this, practiceTarget stays set → board remains
+    // interactive when it shouldn't be, and the practice UI bleeds
+    // into analysis mode.
+    setPracticeTarget(null);
+    setPracticeResult('pending');
+    // Also exit best-line view so the board shows the actual game
+    // position, not a stale engine line.
+    setBestLineActive(false);
     setReviewState((prev: ReviewState) => {
       let newIndex = prev.currentMoveIndex;
       switch (direction) {
@@ -527,7 +550,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         case 'next': newIndex = Math.min(moves.length - 1, prev.currentMoveIndex + 1); break;
         case 'last': newIndex = moves.length - 1; break;
       }
-      return { ...prev, currentMoveIndex: newIndex };
+      return { ...prev, currentMoveIndex: newIndex, mode: 'analysis' };
     });
   }, [moves.length]);
 
@@ -845,6 +868,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const handleToggleBestLine = useCallback(async () => {
     if (bestLineActive) {
       // Exit best line mode
+      bestLineRevisionRef.current++;
       setBestLineActive(false);
       setBestLineMoves([]);
       setBestLineSans([]);
@@ -858,9 +882,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const moveIdx = reviewState.currentMoveIndex;
     const preFen = moveIdx > 0 ? moves[moveIdx - 1]?.fen ?? STARTING_FEN : STARTING_FEN;
 
+    bestLineRevisionRef.current++;
+    const thisRevision = bestLineRevisionRef.current;
     setBestLineLoading(true);
     try {
       const analysis = await stockfishEngine.analyzePosition(preFen, 18);
+      // Discard stale response if user navigated away during analysis
+      if (bestLineRevisionRef.current !== thisRevision) return;
       const pvMoves = analysis.topLines[0]?.moves ?? [];
       if (pvMoves.length === 0) {
         setBestLineLoading(false);
@@ -931,7 +959,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // ─── Auto-Review Mode ──────────────────────────────────────────────────────
   const handleStartAutoReview = useCallback(() => {
+    // Mutex: kill guided-lesson if it's running — both auto-advance
+    // moveIndex independently and would otherwise double-step.
+    if (guidedTimerRef.current) {
+      clearTimeout(guidedTimerRef.current);
+      guidedTimerRef.current = null;
+    }
+    setGuidedLessonActive(false);
+    setGuidedStopped(false);
     setAutoReviewActive(true);
+    autoReviewActiveRef.current = true;
     setAutoReviewPaused(false);
     setAwaitingAiNarration(false);
     setReviewState((prev: ReviewState) => ({
@@ -947,6 +984,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const handleStopAutoReview = useCallback(() => {
     setAutoReviewActive(false);
+    autoReviewActiveRef.current = false;
     setAutoReviewPaused(false);
     setAwaitingAiNarration(false);
     voiceService.stop();
@@ -1061,17 +1099,29 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         };
 
         void getCoachCommentary('interactive_review', ctx, (chunk) => {
+          // Guard streaming chunks: if user stopped auto-review while
+          // the LLM was streaming, don't keep updating the UI with
+          // stale chunks.
+          if (!autoReviewActiveRef.current) return;
           setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
         }).then((fullText) => {
           aiCommentaryCacheRef.current.set(moveIdx, fullText);
+          // If auto-review was stopped while the LLM call was in
+          // flight, don't speak the response or schedule a new
+          // advance. This closes the "un-stoppable review" race
+          // where a slow LLM response would re-start voice + advance
+          // after the user had already pressed Stop.
+          if (!autoReviewActiveRef.current) {
+            setIsLoadingAiCommentary(false);
+            setAwaitingAiNarration(false);
+            return;
+          }
           setAiCommentary(fullText);
           setIsLoadingAiCommentary(false);
           void voiceService.speak(fullText);
-          // Wait proportional to commentary length, then advance directly
           const narrationDelay = Math.max(AUTO_REVIEW_NARRATION_PAUSE_MS, fullText.length * 55);
           autoReviewTimerRef.current = setTimeout(() => {
             setAwaitingAiNarration(false);
-            // Advance immediately — don't re-enter this effect for the same move
             setReviewState((prev: ReviewState) => ({
               ...prev,
               currentMoveIndex: Math.min(moves.length - 1, prev.currentMoveIndex + 1),
