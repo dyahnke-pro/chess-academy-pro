@@ -30,6 +30,7 @@
     "@anthropic-ai/sdk": "^0.78.0",
     "@aws-sdk/client-polly": "^3.1019.0",
     "@capacitor/core": "8.1.0",
+    "@vercel/analytics": "^2.0.1",
     "chess.js": "1.4.0",
     "dexie": "4.3.0",
     "framer-motion": "12.34.4",
