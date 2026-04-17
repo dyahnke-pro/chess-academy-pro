@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
 import { getThemeById, applyTheme } from './services/themeService';
@@ -39,6 +40,8 @@ import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
 import { TacticCreatePage } from './components/Tactics/TacticCreatePage';
 import { SettingsPage } from './components/Settings/SettingsPage';
 import { OnboardingPage } from './components/Settings/OnboardingPage';
+import { PrivacyPolicyPage } from './components/Legal/PrivacyPolicyPage';
+import { TermsOfServicePage } from './components/Legal/TermsOfServicePage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
 import { ImportPage } from './components/Games/ImportPage';
 import { ProPlayerPage } from './components/Openings/ProPlayerPage';
@@ -141,6 +144,7 @@ export function App(): JSX.Element {
 
   return (
     <BrowserRouter>
+      <Analytics />
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
@@ -198,6 +202,10 @@ export function App(): JSX.Element {
             }
           />
           <Route path="/settings/onboarding" element={<ErrorBoundary><OnboardingPage /></ErrorBoundary>} />
+          {/* Legal pages — required for launch + App Store review. Linked
+              from Settings → About and from any paywall / checkout flow. */}
+          <Route path="/legal/privacy" element={<ErrorBoundary><PrivacyPolicyPage /></ErrorBoundary>} />
+          <Route path="/legal/terms" element={<ErrorBoundary><TermsOfServicePage /></ErrorBoundary>} />
           <Route path="/neon-mock" element={<NeonBoardMock />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
