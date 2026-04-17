@@ -7,6 +7,7 @@ import { fetchRelevantGames } from '../../services/gameContextService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
 import { runAgentTurn, detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
+import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
@@ -363,6 +364,22 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         // the parsed annotation commands so the board can react.
         const { cleanText: textWithoutBoardTags, commands: annotations } =
           parseBoardTags(result.assistantMessage.content);
+
+        // If the coach didn't explicitly draw any arrows, auto-extract
+        // SAN-like move references from its reply and draw them. Keeps
+        // the board visually in sync with "consider Nf3 / the key move
+        // is Bxc4" without relying on the LLM emitting [BOARD: arrow]
+        // tags. Explicit arrows always win (no override).
+        const hasExplicitArrows = annotations.some(
+          (c) => c.type === 'arrow' && (c.arrows?.length ?? 0) > 0,
+        );
+        if (!hasExplicitArrows && !isGameOver) {
+          const autoArrows = extractMoveArrows(textWithoutBoardTags, { fen });
+          if (autoArrows.length > 0) {
+            annotations.push({ type: 'arrow', arrows: autoArrows });
+          }
+        }
+
         const assistantMsg: ChatMessageType = {
           ...result.assistantMessage,
           id: `gmsg-${Date.now()}-resp`,
