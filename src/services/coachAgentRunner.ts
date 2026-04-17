@@ -68,10 +68,34 @@ export function applyNarrationToggle(enable: boolean): string {
   if (enable && !voiceOn) useAppStore.getState().toggleCoachVoice();
   if (!enable && voiceOn) useAppStore.getState().toggleCoachVoice();
   const ack = enable
-    ? "Got it — I'll narrate each move out loud as we play. Make your move when you're ready."
+    ? "Got it — I'll narrate each move out loud as we play. Starting a game now."
     : "Narration off — I'll stay quiet and let you focus.";
   if (enable) void voiceService.speak(ack).catch(() => {});
   return ack;
+}
+
+/**
+ * Speak a short announcement of a move. Used by CoachGamePage after
+ * both sides' moves so narration is guaranteed when the session is in
+ * narration mode, even if LLM commentary is empty or slow.
+ *
+ * Precedence: full LLM commentary > short SAN announcement > silence.
+ * Gated on useCoachSessionStore.narrationMode so non-narrated games
+ * stay silent (narrationMode is only on when the user asked for it).
+ */
+export function narrateMove(opts: {
+  san: string;
+  mover: 'w' | 'b';
+  playerColor: 'w' | 'b';
+  commentary?: string | null;
+}): void {
+  if (!useCoachSessionStore.getState().narrationMode) return;
+  const text = opts.commentary?.trim()
+    ? opts.commentary.trim()
+    : opts.mover === opts.playerColor
+      ? `You played ${opts.san}.`
+      : `I played ${opts.san}.`;
+  void voiceService.speak(text).catch(() => {});
 }
 
 export interface RunAgentTurnOptions {

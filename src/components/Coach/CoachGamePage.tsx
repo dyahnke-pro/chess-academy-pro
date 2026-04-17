@@ -25,6 +25,7 @@ import { ResignButton } from './ResignButton';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
+import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookMove } from '../../services/coachGameEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
@@ -977,6 +978,15 @@ export function CoachGamePage(): JSX.Element {
         ...prev,
         moves: [...prev.moves, coachMove],
       }));
+      // Narrate the coach's move when narration mode is on. Falls
+      // back to a short SAN announcement since applyCoachMove doesn't
+      // generate LLM commentary on the engine's side.
+      const coachSide: 'w' | 'b' = playerColor === 'white' ? 'b' : 'w';
+      narrateMove({
+        san: result.san,
+        mover: coachSide,
+        playerColor: playerColor === 'white' ? 'w' : 'b',
+      });
     };
 
     const tryMakeMove = (moveUci: string): MoveResult | null => {
@@ -1303,11 +1313,22 @@ export function CoachGamePage(): JSX.Element {
     // Non-blunder: sync the move and let the coach-move useEffect respond.
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
-    // Speak the per-move commentary aloud when voice is on. The blunder
-    // path above already speaks its own explanation; this fires on every
-    // OTHER non-blunder move so the coach is verbal during normal play
-    // too (user reported the coach was silent during non-blunder turns).
-    if (commentary.trim() && useAppStore.getState().coachVoiceOn) {
+    // Speak the per-move commentary aloud. Two gates:
+    //  - If narration mode is on (user asked the coach to narrate),
+    //    always announce the move — use LLM commentary when it landed,
+    //    otherwise a short SAN fallback. This is the belt-and-
+    //    suspenders path so silence never happens mid-game.
+    //  - Else the legacy path: speak only LLM commentary, only when
+    //    coachVoiceOn is true.
+    if (useCoachSessionStore.getState().narrationMode) {
+      const mover: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+      narrateMove({
+        san: moveResult.san,
+        mover,
+        playerColor: mover,
+        commentary: commentary.trim() || null,
+      });
+    } else if (commentary.trim() && useAppStore.getState().coachVoiceOn) {
       void voiceService.speak(commentary.trim());
     }
 

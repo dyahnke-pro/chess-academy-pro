@@ -66,7 +66,9 @@ export function CoachChatPage(): JSX.Element {
     if (!activeProfile || isStreaming) return;
 
     // Deterministic narration toggle — flips voice on/off reliably
-    // without depending on LLM prompt-following.
+    // without depending on LLM prompt-following. When enabling from
+    // the chat page (not mid-game), ALSO navigate to a new play
+    // session so "narrate a game while we play" actually starts one.
     const narrationToggle = detectNarrationToggle(text);
     if (narrationToggle) {
       appendMessage({
@@ -82,6 +84,9 @@ export function CoachChatPage(): JSX.Element {
         content: ack,
         timestamp: Date.now(),
       } satisfies ChatMessageType);
+      if (narrationToggle.enable) {
+        void navigate('/coach/session/play-against?narrate=1');
+      }
       return;
     }
 
