@@ -35,17 +35,61 @@ export const POLLY_VOICES = [
 // Web Speech fallback settings
 const WEB_SPEECH_FALLBACK = { rate: 0.95, pitch: 0.78 };
 
+/** How long to cool down Polly after a failed call before trying again.
+ *  A one-off 429 / 503 from AWS or a transient network hiccup shouldn't
+ *  permanently disable Polly for the session — we retry after this
+ *  window. Short enough that the user gets their premium voice back
+ *  within a move or two; long enough to avoid hammering a broken
+ *  endpoint. */
+const POLLY_COOLDOWN_MS = 15_000;
+
+/** Voice delivery tier currently serving speak() calls. Exposed for
+ *  UI so the Settings screen can show "Polly active" vs "Web Speech
+ *  fallback". */
+export type VoiceTier = 'polly' | 'voice-pack' | 'web-speech' | 'muted';
+
 class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
   private abortController: AbortController | null = null;
   private playing = false;
   private speed = 1.0;
-  /** Set to false after Polly fails — skips fetch on subsequent calls so fallback is instant.
-   *  Starts false since the Vercel Polly endpoint is not currently deployed. */
+  /** Whether the Polly endpoint is currently considered usable. Set by
+   *  warmup() on probe success, cleared (temporarily) by speakPolly on
+   *  failure. Comes back automatically after POLLY_COOLDOWN_MS so a
+   *  transient blip doesn't drop the user to Web Speech for the whole
+   *  session. */
   private pollyAvailable = false;
+  /** When non-null, Polly is in cooldown until this timestamp. Reads
+   *  of `pollyAvailable` treat a past cooldown as expired and
+   *  re-enable Polly automatically. */
+  private pollyCooldownUntil: number | null = null;
+  /** Tier actually used on the last successful speak() call. Read by
+   *  the Settings UI to show which voice engine is active. */
+  private lastTier: VoiceTier = 'muted';
 
   /** In-memory cache of Polly audio buffers keyed by "voice:text" */
   private audioCache = new Map<string, ArrayBuffer>();
+
+  /** True when Polly is currently available (warmup succeeded and
+   *  we're not in a failure cooldown). Used by the speakInternal
+   *  chain and exposed to Settings UI for diagnostics. */
+  isPollyLive(): boolean {
+    if (this.pollyAvailable) return true;
+    if (this.pollyCooldownUntil && Date.now() >= this.pollyCooldownUntil) {
+      // Cooldown expired — optimistically clear the flag so the next
+      // speak() tries Polly again. If it fails again we'll just come
+      // back here on the next call.
+      this.pollyCooldownUntil = null;
+      this.pollyAvailable = true;
+      return true;
+    }
+    return false;
+  }
+
+  /** Tier used on the last successful speak() call. */
+  getCurrentTier(): VoiceTier {
+    return this.lastTier;
+  }
 
   // Cached preferences to avoid DB read on every speak() call
   private cachedPrefs: {
@@ -181,23 +225,36 @@ class VoiceService {
     if (!prefs) {
       this.speed = 0.95;
       await this.speakFallback(text);
+      this.lastTier = 'web-speech';
       return;
     }
 
-    if (!force && !prefs.voiceEnabled) return;
+    if (!force && !prefs.voiceEnabled) {
+      this.lastTier = 'muted';
+      return;
+    }
 
     this.speed = prefs.voiceSpeed;
 
-    // Tier 1: Amazon Polly (server-side, no API key needed in browser)
-    if (prefs.pollyEnabled && this.pollyAvailable) {
+    // Tier 1: Amazon Polly. `isPollyLive()` handles cooldown expiry
+    // so a transient failure doesn't drop us to Web Speech forever.
+    if (prefs.pollyEnabled && this.isPollyLive()) {
       const success = await this.speakPolly(text, prefs.pollyVoice);
-      if (success) return;
+      if (success) {
+        this.lastTier = 'polly';
+        return;
+      }
+      // fall through to tiers 2/3 for this call; Polly will be retried
+      // on the next call once the cooldown expires (see isPollyLive).
     }
 
     // Tier 2: Offline voice packs (pre-rendered clips cached in IndexedDB)
     if (voicePackService.isReady()) {
       const played = await voicePackService.speak(text, this.speed);
-      if (played) return;
+      if (played) {
+        this.lastTier = 'voice-pack';
+        return;
+      }
     }
 
     // Tier 3: Web Speech API (with user's selected system voice)
@@ -205,6 +262,7 @@ class VoiceService {
       speechService.setVoice(prefs.systemVoiceURI);
     }
     await this.speakFallback(text);
+    this.lastTier = 'web-speech';
   }
 
   stop(): void {
@@ -237,6 +295,20 @@ class VoiceService {
     return `${voice}:${text}`;
   }
 
+  /** Mark Polly as temporarily unavailable. Cleared automatically once
+   *  POLLY_COOLDOWN_MS elapses (see isPollyLive). Replaces the legacy
+   *  permanent-kill behavior that stranded users on Web Speech for the
+   *  rest of the session after one transient failure. */
+  private coolDownPolly(reason: string): void {
+    this.pollyAvailable = false;
+    this.pollyCooldownUntil = Date.now() + POLLY_COOLDOWN_MS;
+    if (import.meta.env.DEV) {
+      console.warn(
+        `[VoiceService] Polly cooling down for ${Math.round(POLLY_COOLDOWN_MS / 1000)}s — ${reason}`,
+      );
+    }
+  }
+
   private async speakPolly(text: string, voice: string): Promise<boolean> {
     try {
       const key = this.pollyKey(text, voice);
@@ -247,8 +319,7 @@ class VoiceService {
         const url = getTtsUrl(text, voice);
         const response = await fetch(url, { signal: this.abortController.signal });
         if (!response.ok) {
-          console.warn('[VoiceService] Polly API error:', response.status, '— disabling for session');
-          this.pollyAvailable = false;
+          this.coolDownPolly(`API error ${response.status}`);
           return false;
         }
         arrayBuffer = await response.arrayBuffer();
@@ -256,14 +327,22 @@ class VoiceService {
         this.audioCache.set(key, arrayBuffer);
       }
 
-      await this.playAudioBuffer(arrayBuffer.slice(0));
+      const played = await this.playAudioBuffer(arrayBuffer.slice(0));
+      if (!played) {
+        // Audio context was suspended outside a user gesture and
+        // couldn't be resumed. Don't cool down Polly — the fetch
+        // succeeded. Just signal failure so caller falls through to
+        // Web Speech for THIS call; next call may succeed if the user
+        // interacts in the meantime.
+        return false;
+      }
       return true;
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
+        // A subsequent speak() aborted this one; not a Polly failure.
         return false;
       }
-      console.warn('[VoiceService] Polly TTS failed — disabling for session:', error);
-      this.pollyAvailable = false;
+      this.coolDownPolly(error instanceof Error ? error.message : String(error));
       this.playing = false;
       this.currentSource = null;
       return false;
@@ -274,7 +353,7 @@ class VoiceService {
    *  annotations are known so playback is instant later. */
   async prefetchAudio(texts: string[]): Promise<void> {
     const prefs = await this.loadPrefs();
-    if (!prefs?.pollyEnabled || !this.pollyAvailable || !prefs.voiceEnabled) return;
+    if (!prefs?.pollyEnabled || !this.isPollyLive() || !prefs.voiceEnabled) return;
 
     const voice = prefs.pollyVoice;
     const uncached = texts.filter(t => t && !this.audioCache.has(this.pollyKey(t, voice)));
@@ -304,11 +383,31 @@ class VoiceService {
     await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
   }
 
-  private async playAudioBuffer(buffer: ArrayBuffer): Promise<void> {
+  /**
+   * Decode and play a Polly audio buffer. Returns true on successful
+   * playback, false when the AudioContext couldn't be resumed (iOS
+   * gesture restriction) — signals the caller to fall through to a
+   * different tier for THIS call without disabling Polly.
+   */
+  private async playAudioBuffer(buffer: ArrayBuffer): Promise<boolean> {
     const ctx = getSharedAudioContext();
 
     if (ctx.state === 'suspended') {
-      await ctx.resume();
+      try {
+        await ctx.resume();
+      } catch {
+        // iOS suspends the AudioContext when away from a user gesture
+        // and resume() rejects outside one. Signal failure so the
+        // caller can fall back to Web Speech (which has its own
+        // gesture-unlock rules). Don't throw — this isn't a Polly
+        // fault, it's a browser restriction.
+        return false;
+      }
+      // Re-read state; resume() may have succeeded silently or left
+      // the context still suspended depending on the browser.
+      if ((ctx.state as AudioContextState) !== 'running') {
+        return false;
+      }
     }
 
     const audioBuffer = await ctx.decodeAudioData(buffer);
@@ -320,14 +419,15 @@ class VoiceService {
     this.currentSource = source;
     this.playing = true;
 
-    return new Promise<void>((resolve) => {
-      source.onended = () => {
+    await new Promise<void>((resolve) => {
+      source.onended = (): void => {
         this.playing = false;
         this.currentSource = null;
         resolve();
       };
       source.start();
     });
+    return true;
   }
 }
 

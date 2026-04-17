@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import { POLLY_VOICES, getTtsUrl, voiceService } from '../../services/voiceService';
+import { POLLY_VOICES, getTtsUrl, voiceService, type VoiceTier } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import { Volume2, Play, Mic, Sparkles, AlertCircle } from 'lucide-react';
@@ -35,6 +35,19 @@ export function VoiceSettingsPanel(): JSX.Element {
 
   const [voiceSpeed, setVoiceSpeed] = useState(() => activeProfile?.preferences.voiceSpeed ?? 1.0);
   const [status, setStatus] = useState<string | null>(null);
+  // Live voice-tier indicator — polls the singleton so the user can
+  // see at a glance whether they're getting the premium Polly voice
+  // or a fallback. Polling (not push) because voiceService doesn't
+  // emit events yet; 2s is plenty and costs nothing.
+  const [currentTier, setCurrentTier] = useState<VoiceTier>(() => voiceService.getCurrentTier());
+  const [pollyLive, setPollyLive] = useState<boolean>(() => voiceService.isPollyLive());
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCurrentTier(voiceService.getCurrentTier());
+      setPollyLive(voiceService.isPollyLive());
+    }, 2000);
+    return () => clearInterval(id);
+  }, []);
 
   // Amazon Polly TTS state
   const [pollyEnabled, setPollyEnabled] = useState(() => activeProfile?.preferences.pollyEnabled ?? true);
@@ -213,6 +226,12 @@ export function VoiceSettingsPanel(): JSX.Element {
           High-quality AI voice powered by Amazon Polly. Reads any text naturally — no setup required.
         </p>
 
+        {/* Live voice-tier indicator — shows which engine actually
+            served the last speak() call, so the user can tell when
+            Polly is in use vs. fallen back to Web Speech. Polls
+            voiceService every 2s. */}
+        <VoiceTierIndicator tier={currentTier} pollyLive={pollyLive} pollyEnabled={pollyEnabled} />
+
         {pollyEnabled && (
           <div className="space-y-3">
             <div>
@@ -371,4 +390,82 @@ export function VoiceSettingsPanel(): JSX.Element {
       )}
     </div>
   );
+}
+
+interface VoiceTierIndicatorProps {
+  tier: VoiceTier;
+  pollyLive: boolean;
+  pollyEnabled: boolean;
+}
+
+/**
+ * Colored-dot status row that reflects which engine served the last
+ * speak() call. Polled via `voiceService.getCurrentTier()`. When
+ * Polly is enabled but not "live" (cooldown after a failure), we
+ * show an explicit warning — otherwise the user would silently hear
+ * Web Speech and wonder why their premium voice disappeared.
+ */
+function VoiceTierIndicator({ tier, pollyLive, pollyEnabled }: VoiceTierIndicatorProps): JSX.Element {
+  const { label, description, color } = describeTier(tier, pollyLive, pollyEnabled);
+  return (
+    <div
+      className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs"
+      style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)' }}
+      data-testid="voice-tier-indicator"
+    >
+      <span
+        className="inline-block w-2 h-2 rounded-full"
+        style={{ background: color, boxShadow: `0 0 0 3px ${color}22` }}
+      />
+      <div className="flex-1 min-w-0">
+        <div className="font-medium" style={{ color: 'var(--color-text)' }}>
+          {label}
+        </div>
+        <div style={{ color: 'var(--color-text-muted)' }}>{description}</div>
+      </div>
+    </div>
+  );
+}
+
+function describeTier(
+  tier: VoiceTier,
+  pollyLive: boolean,
+  pollyEnabled: boolean,
+): { label: string; description: string; color: string } {
+  if (pollyEnabled && !pollyLive && tier !== 'polly') {
+    return {
+      label: 'Polly cooling down',
+      description: 'Recent TTS call failed — using fallback. Will retry automatically.',
+      color: '#f59e0b',
+    };
+  }
+  switch (tier) {
+    case 'polly':
+      return {
+        label: 'Polly (Cloud Voice) active',
+        description: 'Premium AI voice is serving the coach audio.',
+        color: '#22c55e',
+      };
+    case 'voice-pack':
+      return {
+        label: 'Pre-recorded voice pack',
+        description: 'Offline clip — works without network.',
+        color: '#3b82f6',
+      };
+    case 'web-speech':
+      return {
+        label: 'System voice (fallback)',
+        description: pollyEnabled
+          ? 'Device voice in use. Polly will resume when reachable.'
+          : 'Device voice. Enable Cloud Voice for higher quality.',
+        color: '#64748b',
+      };
+    case 'muted':
+    default:
+      return {
+        label: 'No voice played yet',
+        description: 'Trigger a preview or play a move to see which engine responds.',
+        color: '#475569',
+      };
+  }
 }

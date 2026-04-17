@@ -185,4 +185,31 @@ describe('voiceService', () => {
       expect(voiceService.isPlaying()).toBe(false);
     });
   });
+
+  describe('tier reporting', () => {
+    it('exposes isPollyLive() for the Settings indicator', () => {
+      // Starts false by default (warmup hasn't probed yet in a fresh
+      // test environment).
+      expect(voiceService.isPollyLive()).toBe(false);
+    });
+
+    it('getCurrentTier() reports web-speech after a fallback speak', async () => {
+      const profile = buildUserProfile({ id: 'main' });
+      profile.preferences.voiceEnabled = true;
+      profile.preferences.pollyEnabled = false;
+      await db.profiles.put(profile);
+
+      await voiceService.speak('Hello');
+      expect(voiceService.getCurrentTier()).toBe('web-speech');
+    });
+
+    it('getCurrentTier() reports "muted" when voice is disabled', async () => {
+      const profile = buildUserProfile({ id: 'main' });
+      profile.preferences.voiceEnabled = false;
+      await db.profiles.put(profile);
+
+      await voiceService.speak('Hello');
+      expect(voiceService.getCurrentTier()).toBe('muted');
+    });
+  });
 });
