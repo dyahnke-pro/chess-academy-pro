@@ -5,10 +5,21 @@ import type {
   MoveAnnotation,
 } from '../types/index';
 
-export function reconstructMovesFromGame(game: GameRecord): CoachGameMove[] {
-  const tokens = game.pgn.split(/\s+/).filter((t) => t.length > 0);
-  // Filter out move number tokens like "1.", "2.", etc.
-  const sanMoves = tokens.filter((t) => !/^\d+\.+$/.test(t));
+export function reconstructMovesFromGame(
+  game: GameRecord,
+  playerColor?: 'white' | 'black',
+): CoachGameMove[] {
+  // chess.loadPgn() handles headers, braced comments, NAGs, and result
+  // tokens correctly. The old manual whitespace-split parser failed the
+  // first iteration for any PGN with headers (e.g. "[Event" threw on
+  // chess.move), silently returning [] for every imported game.
+  const loader = new Chess();
+  try {
+    loader.loadPgn(game.pgn);
+  } catch {
+    return [];
+  }
+  const sanMoves = loader.history();
 
   if (sanMoves.length === 0) {
     return [];
@@ -22,7 +33,12 @@ export function reconstructMovesFromGame(game: GameRecord): CoachGameMove[] {
     }
   }
 
-  const playerIsWhite = game.white !== 'AI Coach' && game.white !== 'Stockfish Bot';
+  // For coach-vs-player games the player's color is inferred from the
+  // AI placeholder names. For imported human-vs-human games the caller
+  // must pass playerColor explicitly; otherwise we'd default to "white"
+  // and mis-mark every user-as-black move as a coach move.
+  const inferredPlayerIsWhite = game.white !== 'AI Coach' && game.white !== 'Stockfish Bot';
+  const playerIsWhite = playerColor ? playerColor === 'white' : inferredPlayerIsWhite;
   const chess = new Chess();
   const moves: CoachGameMove[] = [];
   let previousEval: number | null = null;

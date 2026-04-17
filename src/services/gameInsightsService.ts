@@ -187,7 +187,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     // otherwise zero out every average (and produce a misleading "zero
     // blunders" strength) because most moves have no classification.
     if (!gameNeedsAnalysis(game)) {
-      const moves = reconstructMovesFromGame(game);
+      const moves = reconstructMovesFromGame(game, playerColor);
       if (moves.length === 0) continue;
 
       totalMoves += moves.length;
@@ -282,7 +282,8 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
       continue;
     }
     analyzedGameCount++;
-    const moves = reconstructMovesFromGame(game);
+    const moves = reconstructMovesFromGame(game, playerColor);
+    if (moves.length === 0) continue;
     const counts = getClassificationCounts(moves, playerColor);
     if (counts.blunder === 0) zeroBlunderGames++;
   }
@@ -583,7 +584,7 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   for (const { game, playerColor } of playerGames) {
     if (!game.annotations || game.annotations.length === 0) continue;
 
-    const moves = reconstructMovesFromGame(game);
+    const moves = reconstructMovesFromGame(game, playerColor);
     if (moves.length === 0) continue;
 
     const counts = getClassificationCounts(moves, playerColor);

@@ -56,7 +56,7 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
         let blunders = 0, mistakes = 0, inaccuracies = 0;
 
         if (game.annotations && game.annotations.length > 0) {
-          const moves = reconstructMovesFromGame(game);
+          const moves = reconstructMovesFromGame(game, playerColor);
           if (moves.length > 0) {
             const acc = calculateAccuracy(moves);
             accuracy = Math.round(playerColor === 'white' ? acc.white : acc.black);

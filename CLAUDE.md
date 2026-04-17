@@ -240,7 +240,7 @@ When you add a new lesson flow, reuse these primitives:
 3. Push to the feature branch
 4. Create a PR (or push directly to `main` for trivial fixes)
 5. Merge the PR immediately — do NOT wait for the user to ask
-6. Merging to `main` triggers the TestFlight workflow automatically
+6. Merging to `main` triggers the Vercel deploy automatically (Vercel is wired directly to the repo — there's no GitHub Actions workflow for this). iOS/TestFlight builds are produced locally via Capacitor when needed.
 
 Never ask "want me to merge?" — just do it.
 
