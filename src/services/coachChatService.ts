@@ -343,6 +343,79 @@ function buildProfileContext(profile: UserProfile): string {
   ].filter(Boolean).join('\n');
 }
 
+/**
+ * Format the game-state block for injection as a system-prompt
+ * addition. Standalone so the agent runner can pass it via
+ * `extraSystemPrompt` without going through the legacy two-message
+ * priming that `buildGameChatMessages` relies on.
+ */
+export function buildGameContextBlock(
+  gameContext: GameContext,
+  profile: UserProfile,
+): string {
+  const turnLabel = gameContext.turn === 'w' ? 'White' : 'Black';
+  const engineBlock = gameContext.engineData
+    ? [
+        '[Engine Analysis — TRUST THIS DATA]',
+        `Best move: ${uciMoveToSan(gameContext.engineData.bestMove, gameContext.fen)}`,
+        `Eval: ${gameContext.engineData.isMate ? `Mate in ${gameContext.engineData.mateIn}` : `${(gameContext.engineData.evaluation / 100).toFixed(1)} pawns`}`,
+        ...gameContext.engineData.topLines.slice(0, 3).map(
+          (l, i) => `Line ${i + 1}: ${uciLinesToSan(l.moves, gameContext.fen, 6)} (${l.mate !== null ? `M${l.mate}` : (l.evaluation / 100).toFixed(1)})`,
+        ),
+      ].join('\n')
+    : '';
+  const lastMoveLabel = gameContext.lastMove
+    ? `Last move: ${gameContext.lastMove.san} (${gameContext.lastMove.from}-${gameContext.lastMove.to})`
+    : '';
+  const historyLabel = gameContext.history && gameContext.history.length > 0
+    ? `Full SAN: ${gameContext.history.join(' ')}`
+    : '';
+
+  const tacticBlock = gameContext.tacticAnalysis
+    ? [
+        '[Tactic Analysis — TRUST THIS DATA]',
+        gameContext.tacticAnalysis.moveQuality
+          ? `Move quality: ${gameContext.tacticAnalysis.moveQuality}${gameContext.tacticAnalysis.evalSwing !== undefined ? ` (eval swing: ${gameContext.tacticAnalysis.evalSwing > 0 ? '+' : ''}${gameContext.tacticAnalysis.evalSwing}cp)` : ''}`
+          : '',
+        gameContext.tacticAnalysis.hangingPieces && gameContext.tacticAnalysis.hangingPieces.length > 0
+          ? `Hanging pieces: ${gameContext.tacticAnalysis.hangingPieces.map((p) => `${p.color === 'w' ? 'White' : 'Black'} ${p.piece} on ${p.square}`).join(', ')}`
+          : '',
+        gameContext.tacticAnalysis.currentTactics && gameContext.tacticAnalysis.currentTactics.length > 0
+          ? `Current tactics: ${gameContext.tacticAnalysis.currentTactics.join('; ')}`
+          : '',
+        gameContext.tacticAnalysis.upcomingForPlayer && gameContext.tacticAnalysis.upcomingForPlayer.length > 0
+          ? `FOR PLAYER (opportunity): ${gameContext.tacticAnalysis.upcomingForPlayer.join('; ')}`
+          : '',
+        gameContext.tacticAnalysis.upcomingForOpponent && gameContext.tacticAnalysis.upcomingForOpponent.length > 0
+          ? `AGAINST PLAYER (threat): ${gameContext.tacticAnalysis.upcomingForOpponent.join('; ')}`
+          : '',
+      ].filter(Boolean).join('\n')
+    : '';
+
+  const positionBlock = gameContext.positionAssessment
+    ? `[Position Assessment — TRUST THIS DATA]\n${gameContext.positionAssessment.summary}`
+    : '';
+
+  const profileContext = buildProfileContext(profile);
+
+  return [
+    '[Game Context]',
+    `FEN: ${gameContext.fen}`,
+    `PGN: ${truncatePgn(gameContext.pgn)}`,
+    lastMoveLabel,
+    historyLabel,
+    `Move: ${gameContext.moveNumber}, Turn: ${turnLabel}`,
+    `Player plays: ${gameContext.playerColor}`,
+    gameContext.isGameOver ? `Game over — Result: ${gameContext.gameResult}` : '',
+    engineBlock,
+    tacticBlock,
+    positionBlock,
+    '',
+    '[Player context]',
+    profileContext,
+  ].filter(Boolean).join('\n');
+}
+
 export function buildGameChatMessages(
   history: ChatMessage[],
   gameContext: GameContext,

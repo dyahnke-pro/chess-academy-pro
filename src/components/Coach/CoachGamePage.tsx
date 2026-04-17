@@ -24,6 +24,7 @@ import { MobileChatDrawer } from './MobileChatDrawer';
 import { ResignButton } from './ResignButton';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
+import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookMove } from '../../services/coachGameEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
@@ -300,11 +301,44 @@ export function CoachGamePage(): JSX.Element {
   const subjectAppliedRef = useRef(false);
   useEffect(() => {
     if (subjectAppliedRef.current) return;
-    if (!subjectParam) return;
+    const seed = searchParams.get('opening') ?? subjectParam;
+    if (!seed) return;
     if (initialGameFen) return;
     subjectAppliedRef.current = true;
-    handleOpeningRequest(subjectParam);
-  }, [subjectParam, handleOpeningRequest, initialGameFen]);
+    handleOpeningRequest(seed);
+  }, [subjectParam, handleOpeningRequest, initialGameFen, searchParams]);
+
+  // Honor `?narrate=1` from the agent's start_play action. Flips
+  // both the session-store narrationMode and the appStore voice
+  // toggle so the existing per-move commentary path actually speaks.
+  const narrationAppliedRef = useRef(false);
+  useEffect(() => {
+    if (narrationAppliedRef.current) return;
+    if (searchParams.get('narrate') !== '1') return;
+    narrationAppliedRef.current = true;
+    useCoachSessionStore.getState().setNarrationMode(true);
+    if (!useAppStore.getState().coachVoiceOn) {
+      useAppStore.getState().toggleCoachVoice();
+    }
+  }, [searchParams]);
+
+  // Publish the current route to the agent's session store so its
+  // context snapshot reflects "user is on the play screen."
+  useEffect(() => {
+    useCoachSessionStore.getState().setCurrentRoute('/coach/play');
+  }, []);
+
+  // Subscribe to pending narration from the agent. When the LLM emits
+  // [[ACTION:narrate {text:...}]] from another surface (e.g., chat
+  // drawer), the dispatcher pushes onto the queue and the play view
+  // mirrors it into status text. The dispatcher already calls
+  // voiceService.speak(text) so we only handle the visual surface here.
+  const pendingNarration = useCoachSessionStore((s) => s.pendingNarration);
+  const consumeNarration = useCoachSessionStore((s) => s.consumeNarration);
+  useEffect(() => {
+    if (!pendingNarration) return;
+    consumeNarration();
+  }, [pendingNarration, consumeNarration]);
 
   // ─── Blunder Interception State ──────────────────────────────────────────
   const [blunderPause, setBlunderPause] = useState<{

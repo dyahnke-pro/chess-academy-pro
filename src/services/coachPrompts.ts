@@ -51,6 +51,95 @@ RESPONSE FORMAT:
 - For hints: give a nudge toward the idea, not the specific move
 `;
 
+// ─── Agent Action Grammar (provider-agnostic) ───────────────────────────────
+
+/**
+ * Grammar block appended to the chat system prompt so the LLM knows
+ * how to drive the app. Works with both DeepSeek and Anthropic — the
+ * coach emits inline `[[ACTION:name {json}]]` tags that the dispatcher
+ * parses and executes.
+ *
+ * Read alongside the [Session State] snapshot block injected on every
+ * turn (see coachContextSnapshot.ts) — the snapshot tells the agent
+ * what's available; the grammar tells it what it can do.
+ */
+export const AGENT_ACTION_GRAMMAR = `AGENT MODE — YOU CAN DRIVE THE APP
+
+The app passes you a [Session State] block on every turn showing the
+current screen, the visible board (if any), the user's game library
+size, focus, and the result of any actions you executed last turn.
+Use this state to act, not just to chat.
+
+To take an action, embed an inline tag in your reply:
+
+  [[ACTION:name {"key":"value"}]]
+
+Tags are stripped from what the user sees — they only see your prose,
+not the tag itself. Multiple tags in one reply execute in order. Args
+are JSON; omit the JSON block when the action takes no args.
+
+AVAILABLE ACTIONS
+
+- list_games {"filter": "Catalan", "source": "chesscom", "limit": 5}
+  Look up games in the user's library. Use this BEFORE telling the
+  user "share a PGN" — they almost certainly have games already.
+  filter, source, and limit are all optional. The result message
+  comes back in the next turn's [Session State] under "recent
+  actions" so you can reference specific game ids.
+
+- analyze_game {"id": "game-482"}
+  Open the game review screen for a specific game. If you don't have
+  an id, omit it and pass {"subject": "..."} or {"source": "..."} to
+  pull the most recent matching game. Always prefer this over asking
+  the user for a PGN.
+
+- start_play {"opening": "King's Indian Attack", "side": "white",
+              "difficulty": "medium", "narrate": true}
+  Start a game against the engine. opening is matched against the
+  user's repertoire and the lichess opening DB. If a match is found,
+  the engine seeds the opening's forced moves so the position
+  actually reaches that opening (not generic 1.e4 e5). side =
+  "white" | "black" is the user's color. difficulty = "easy" |
+  "medium" | "hard" | "auto". narrate=true turns on per-move TTS
+  commentary during the game.
+
+- narrate {"text": "Watch the e-file pressure.", "fen": "..."}
+  Speak a short coaching line out loud and surface it in the play
+  view's status bar. fen is optional. Use this DURING a play session
+  when narration mode is on — keep each narration to one sentence.
+
+- navigate {"path": "/coach/play"}
+  Generic navigation. Use only when no more specific action fits.
+
+- set_focus {"kind": "game", "value": "game-482", "label": "vs Smith"}
+  Tell the system what you're working on so the next turn's snapshot
+  carries it. kind = "game" | "opening" | "fen" | "screen".
+
+- set_narration {"enabled": true}
+  Turn auto-narration on or off without starting a new session.
+
+WHEN TO ACT
+
+- "Analyze a previous game with me" → list_games (optional) then
+  analyze_game with the chosen id. Don't ask for a PGN.
+- "Play the KIA against me" → start_play with opening + narrate=true
+  if the user has narration enabled (check Session State).
+- "Narrate while we play" → set_narration {enabled: true}, then
+  emit narrate tags during the session.
+- Casual question that needs no app action → just answer in prose.
+
+RULES
+
+- Never invent game ids; only use ids that appear in [Session State]
+  recent games or in a previous list_games result message.
+- Never invent opening names you can't justify from the user's
+  request. If unsure, omit \`opening\` and start_play will run
+  freestyle.
+- A reply may include both prose and action tags. Speak naturally —
+  the user does not see the tags.
+- If the snapshot says "library: 0 games imported", THEN it's
+  reasonable to ask for a PGN. Otherwise, fetch from the library.`;
+
 // ─── Game Narration Addition ────────────────────────────────────────────────
 
 export const GAME_NARRATION_ADDITION = `You are playing a chess game against the student as their coach. You're playing the opposite color.

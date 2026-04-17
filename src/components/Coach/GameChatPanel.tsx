@@ -2,10 +2,11 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
-import { getCoachChatResponse } from '../../services/coachApi';
-import { buildGameChatMessages, getGameSystemPromptAddition, parseAllTags } from '../../services/coachChatService';
+import { buildGameContextBlock, getGameSystemPromptAddition } from '../../services/coachChatService';
 import { fetchRelevantGames } from '../../services/gameContextService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
+import { runAgentTurn } from '../../services/coachAgentRunner';
+import { parseBoardTags } from '../../services/boardAnnotationService';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
@@ -286,14 +287,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       setStreamingContent('');
       speechBufferRef.current = '';
 
-      const formattedMessages = buildGameChatMessages(updatedMessages, gameContext, activeProfile);
+      const gameContextBlock = buildGameContextBlock(gameContext, activeProfile);
       const baseAddition = getGameSystemPromptAddition();
 
-      // Best-effort: surface the student's own past games that match the
-      // opening / topic in their message so the coach can cite them
-      // concretely ("you lost the last two Catalans as black — both
-      // times you traded the dark-squared bishop early"). Capped at 5
-      // games; returns empty and does nothing when no match.
       let relevantGamesBlock = '';
       try {
         const relevant = await fetchRelevantGames({
@@ -307,62 +303,66 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       } catch (err: unknown) {
         console.warn('[GameChatPanel] fetchRelevantGames failed', err);
       }
-      const systemAddition = relevantGamesBlock
-        ? `${baseAddition}\n\n${relevantGamesBlock}`
-        : baseAddition;
+      const systemAddition = [gameContextBlock, baseAddition, relevantGamesBlock]
+        .filter(Boolean)
+        .join('\n\n');
 
       let fullResponse = '';
 
-      const response = await getCoachChatResponse(
-        formattedMessages,
-        systemAddition,
-        (chunk) => {
-          fullResponse += chunk;
-          // Strip [BOARD:] tags in real-time so they don't flash during streaming
-          const displayText = fullResponse.replace(BOARD_TAG_STRIP_RE, '').trim();
-          setStreamingContent(displayText);
+      try {
+        const result = await runAgentTurn({
+          history: updatedMessages,
+          navigate: (path: string) => { void navigate(path); },
+          extraSystemPrompt: systemAddition,
+          onChunk: (chunk: string) => {
+            fullResponse += chunk;
+            // Strip [BOARD:] and [[ACTION:]] tags in real-time so
+            // they don't flash during streaming.
+            const displayText = fullResponse
+              .replace(BOARD_TAG_STRIP_RE, '')
+              .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
+              .trim();
+            setStreamingContent(displayText);
 
-          // Buffer speech to sentence boundaries — read voice state directly from store
-          if (useAppStore.getState().coachVoiceOn) {
-            speechBufferRef.current += chunk;
-            const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
-            if (sentenceEnd) {
-              const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
-              speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-              void voiceService.speak(sentence.trim());
+            if (useAppStore.getState().coachVoiceOn) {
+              speechBufferRef.current += chunk;
+              const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+              if (sentenceEnd) {
+                const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
+                speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
+                void voiceService.speak(sentence.trim());
+              }
             }
-          }
-        },
-      );
+          },
+        });
 
-      // Flush remaining speech buffer
-      if (speechBufferRef.current.trim()) {
-        flushSpeechBuffer();
+        if (speechBufferRef.current.trim()) {
+          flushSpeechBuffer();
+        }
+
+        // Strip board annotation tags from the user-visible message
+        // (the agent runner already stripped action tags). Capture
+        // the parsed annotation commands so the board can react.
+        const { cleanText: textWithoutBoardTags, commands: annotations } =
+          parseBoardTags(result.assistantMessage.content);
+        const assistantMsg: ChatMessageType = {
+          ...result.assistantMessage,
+          id: `gmsg-${Date.now()}-resp`,
+          content: textWithoutBoardTags,
+          metadata: {
+            actions: result.assistantMessage.metadata?.actions,
+            annotations: annotations.length > 0 ? annotations : undefined,
+          },
+        };
+        setMessages((prev) => [...prev, assistantMsg]);
+
+        if (annotations.length > 0) {
+          onBoardAnnotation?.(annotations);
+        }
+      } finally {
+        setIsStreaming(false);
+        setStreamingContent('');
       }
-
-      // Parse action tags and board annotation tags
-      const { cleanText, actions, annotations } = parseAllTags(response);
-
-      // Add assistant message
-      const assistantMsg: ChatMessageType = {
-        id: `gmsg-${Date.now()}-resp`,
-        role: 'assistant',
-        content: cleanText,
-        timestamp: Date.now(),
-        metadata: {
-          actions: actions.length > 0 ? actions : undefined,
-          annotations: annotations.length > 0 ? annotations : undefined,
-        },
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
-
-      // Apply board annotations (arrows, highlights, temp positions)
-      if (annotations.length > 0) {
-        onBoardAnnotation?.(annotations);
-      }
-
-      setIsStreaming(false);
-      setStreamingContent('');
     }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, setMessages, navigate]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
