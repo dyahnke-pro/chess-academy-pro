@@ -198,17 +198,53 @@ describe('reconstructMovesFromGame', () => {
     expect(moves[2].preMoveEval).toBe(-10);
   });
 
-  it('stops reconstruction on illegal move', () => {
+  it('returns empty array for PGN with illegal moves (chess.js rejects the whole PGN)', () => {
     const game = buildGameRecord({
       pgn: '1. e4 e5 2. Qh8 Nc6', // Qh8 is illegal from starting position after 1.e4 e5
     });
 
     const moves = reconstructMovesFromGame(game);
 
-    // Should stop at the illegal move (Qh8)
-    expect(moves).toHaveLength(2);
+    expect(moves).toHaveLength(0);
+  });
+
+  it('parses PGN with headers (imported Chess.com/Lichess games)', () => {
+    const game = buildGameRecord({
+      pgn: `[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2024.01.15"]
+[White "Alice"]
+[Black "Bob"]
+[Result "1-0"]
+[ECO "C65"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 1-0`,
+      white: 'Alice',
+      black: 'Bob',
+    });
+
+    const moves = reconstructMovesFromGame(game);
+
+    expect(moves).toHaveLength(6);
     expect(moves[0].san).toBe('e4');
-    expect(moves[1].san).toBe('e5');
+    expect(moves[5].san).toBe('a6');
+  });
+
+  it('respects explicit playerColor for imported games where user played black', () => {
+    const game = buildGameRecord({
+      pgn: '1. e4 e5 2. Nf3 Nc6',
+      white: 'Opponent',
+      black: 'User',
+    });
+
+    // Without playerColor, heuristic defaults to playerIsWhite=true (white
+    // player isn't an AI name), so black moves would be mis-marked as coach
+    // moves. With playerColor='black', the user's moves are correctly kept.
+    const moves = reconstructMovesFromGame(game, 'black');
+
+    expect(moves[0].isCoachMove).toBe(true);  // opponent's e4
+    expect(moves[1].isCoachMove).toBe(false); // user's e5
+    expect(moves[3].isCoachMove).toBe(false); // user's Nc6
   });
 
   it('returns empty array for empty PGN', () => {
