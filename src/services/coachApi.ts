@@ -31,6 +31,7 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   sideline_explanation:    'deepseek-chat',
   smart_search:            'deepseek-chat',
   explore_reaction:        'deepseek-chat',
+  intent_classify:         'deepseek-chat',
 };
 
 const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
@@ -58,6 +59,7 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   sideline_explanation:    'claude-haiku-4-5-20251001',
   smart_search:            'claude-haiku-4-5-20251001',
   explore_reaction:        'claude-haiku-4-5-20251001',
+  intent_classify:         'claude-haiku-4-5-20251001',
 };
 
 // Offline fallback templates

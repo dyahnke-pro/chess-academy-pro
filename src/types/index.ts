@@ -704,7 +704,8 @@ export type CoachTask =
   | 'middlegame_plan_generation'
   | 'sideline_explanation'
   | 'smart_search'
-  | 'explore_reaction';
+  | 'explore_reaction'
+  | 'intent_classify';
 
 export interface CoachContext {
   fen: string;
