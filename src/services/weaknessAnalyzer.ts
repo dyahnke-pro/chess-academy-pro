@@ -141,6 +141,10 @@ function analyzeGames(games: GameRecord[]): {
   let gamesWithAnnotations = 0;
 
   for (const game of games) {
+    // Only include fully-analyzed games. Sparse detectBlunders
+    // annotations produce false weakness signals because most moves
+    // have no classification — same root cause as the 0% accuracy bug.
+    if (!game.fullyAnalyzed) continue;
     if (!game.annotations || game.annotations.length === 0) continue;
     gamesWithAnnotations++;
 
@@ -624,7 +628,7 @@ function computeSkillRadar(
   let totalErrors = 0;
 
   for (const game of annotatedGames) {
-    if (!game.annotations) continue;
+    if (!game.fullyAnalyzed || !game.annotations) continue;
     const len = game.annotations.length;
     totalMoves += len;
 
@@ -820,7 +824,7 @@ function buildStrengthItems(
     let brilliantCount = 0;
     let greatCount = 0;
     for (const game of annotatedGames) {
-      if (!game.annotations) continue;
+      if (!game.fullyAnalyzed || !game.annotations) continue;
       totalMoves += game.annotations.length;
       totalErrors += game.annotations.filter(
         (a) => a.classification === 'blunder' || a.classification === 'mistake',

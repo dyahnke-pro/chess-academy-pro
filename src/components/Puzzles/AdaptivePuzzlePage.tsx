@@ -58,7 +58,12 @@ export function AdaptivePuzzlePage(): JSX.Element {
 
   // Seed puzzles and load stats on mount
   useEffect(() => {
-    void seedPuzzles().then(() => getPuzzleStats()).then(setStats);
+    void seedPuzzles()
+      .then(() => getPuzzleStats())
+      .then(setStats)
+      .catch((err: unknown) => {
+        console.warn('[AdaptivePuzzlePage] puzzle seeding/stats failed:', err);
+      });
   }, []);
 
   const fetchNextPuzzle = useCallback(async (sess: AdaptiveSessionState): Promise<void> => {

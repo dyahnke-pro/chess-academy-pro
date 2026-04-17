@@ -4,6 +4,7 @@ import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { generateMistakeNarration } from './mistakeNarration';
 import { detectTacticType } from './missedTacticService';
+import { tacticTypeLabel } from './tacticAlertService';
 import { useAppStore } from '../stores/appStore';
 import type {
   MistakePuzzle,
@@ -45,7 +46,12 @@ async function resolveGameContext(
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
-const CP_LOSS_THRESHOLD = 50;
+// Minimum centipawn loss to create a puzzle. 50cp was too low — it
+// generated puzzles for minor positional inaccuracies ("you should
+// have played Bd3 instead of Be2") that aren't instructive. 150cp
+// means the user missed a full piece-level opportunity — a real
+// tactical shot worth drilling.
+const CP_LOSS_THRESHOLD = 150;
 const MASTERY_REPETITIONS = 3;
 const MIN_PV_MOVES = 3;
 const MAX_PV_MOVES = 5;
@@ -305,6 +311,8 @@ async function analyzeGameWithStockfish(
 
     const moveNumber = Math.floor(moveIdx / 2) + 1;
     const classification = classifyCpLoss(cpLoss);
+    // Bounds check: truncated PGNs produce fewer FENs than moves.
+    if (fenBeforeIdx >= fens.length) continue;
     const fen = fens[fenBeforeIdx];
 
     // Get best move + PV line via Stockfish at higher depth
@@ -345,6 +353,22 @@ async function analyzeGameWithStockfish(
 
     // Skip if deeper analysis confirms the player's move was actually best
     if (bestMove === playerMove || bestMoveSan === playerMoveSan) continue;
+
+    // ─── Tactical quality gate ──────────────────────────────────────
+    // Only create puzzles for positions with a CONCRETE tactical motif
+    // (fork, pin, skewer, discovered attack, back-rank, removing the
+    // guard, promotion, checkmate pattern). Skip generic
+    // 'tactical_sequence' and untyped positional misses — those make
+    // bland "find the slightly better move" drills, not the kind of
+    // sharp tactical training the user wants.
+    const tacticType = detectTacticType(fen, bestMove);
+    if (tacticType === 'tactical_sequence') continue;
+
+    // Cap solution length at 6 ply (3 full moves). Longer sequences
+    // are too complex to learn from as a drill.
+    if (pvMoves.length > 6) {
+      pvMoves = pvMoves.slice(0, 6);
+    }
 
     // Eval before mistake from the player's perspective (positive = player is better)
     const evalBeforeFromPlayer = playerColor === 'white'
@@ -392,7 +416,7 @@ async function analyzeGameWithStockfish(
       sourceGameId: gameId,
       sourceMode,
       playerColor,
-      promptText: PROMPT_TEXT[classification],
+      promptText: `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`,
       narration,
       createdAt: now,
       opponentName: gameContext.opponentName,
@@ -407,7 +431,7 @@ async function analyzeGameWithStockfish(
       status: 'unsolved',
       attempts: 0,
       successes: 0,
-      tacticType: detectTacticType(fen, bestMove),
+      tacticType,
     });
   }
 
@@ -516,6 +540,15 @@ async function generateFromAnnotations(
       pvMoves = pvMoves.slice(0, MAX_PV_MOVES);
     }
 
+    // Tactical quality gate — same filter as the imported-game path.
+    const tacticType = detectTacticType(fen, bestMove);
+    if (tacticType === 'tactical_sequence') continue;
+
+    // Cap solution length at 6 ply for clean, focused drills.
+    if (pvMoves.length > 6) {
+      pvMoves = pvMoves.slice(0, 6);
+    }
+
     const movesUci = pvMoves.join(' ');
     const bestMoveSan = uciToSan(fen, bestMove);
     const classification: MistakeClassification = annotation.classification === 'miss' ? 'miss' : classifyCpLoss(cpLoss);
@@ -581,7 +614,7 @@ async function generateFromAnnotations(
       sourceGameId: gameId,
       sourceMode,
       playerColor,
-      promptText: PROMPT_TEXT[classification],
+      promptText: `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`,
       narration,
       createdAt: now,
       opponentName: gameContext.opponentName,
@@ -596,7 +629,7 @@ async function generateFromAnnotations(
       status: 'unsolved',
       attempts: 0,
       successes: 0,
-      tacticType: detectTacticType(fen, bestMove),
+      tacticType,
     });
   }
 
