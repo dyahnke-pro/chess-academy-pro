@@ -39,6 +39,7 @@ import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
 import { TacticCreatePage } from './components/Tactics/TacticCreatePage';
 import { SettingsPage } from './components/Settings/SettingsPage';
 import { OnboardingPage } from './components/Settings/OnboardingPage';
+import { LandingPage } from './components/Landing/LandingPage';
 import { GameDatabasePage } from './components/Games/GameDatabasePage';
 import { ImportPage } from './components/Games/ImportPage';
 import { ProPlayerPage } from './components/Openings/ProPlayerPage';
@@ -142,6 +143,11 @@ export function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Marketing landing page — outside AppLayout so it doesn't
+            inherit the in-app bottom nav or top bar. Linked from
+            external marketing (tweets, PH, Reddit). Later the root
+            redirect for first-time visitors will point here. */}
+        <Route path="/landing" element={<LandingPage />} />
         <Route element={<AppLayout />}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           {/* Openings */}
