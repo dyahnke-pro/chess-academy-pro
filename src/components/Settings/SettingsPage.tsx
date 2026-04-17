@@ -11,8 +11,8 @@ import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
 import { ShareForFreeModal } from '../Billing/ShareForFreeModal';
-import { resolvePricingTier, getPricingOffer } from '../../services/pricingService';
-import { Sparkles } from 'lucide-react';
+import { resolvePricingTier, getPricingOffer, remainingFreeMonths } from '../../services/pricingService';
+import { Sparkles, Gift } from 'lucide-react';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
 
@@ -972,6 +972,7 @@ function AboutTab(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const tier = resolvePricingTier(activeProfile);
   const offer = getPricingOffer(activeProfile);
+  const bankedFreeMonths = remainingFreeMonths(activeProfile);
 
   const handleReset = async (): Promise<void> => {
     await db.delete();
@@ -1038,19 +1039,37 @@ function AboutTab(): JSX.Element {
         <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
           {offer.description}
         </div>
-        {tier === 'beta' && (
-          <button
-            onClick={() => setShareFreeOpen(true)}
-            className="mt-2 w-full py-2 rounded-lg text-sm font-semibold"
+        {bankedFreeMonths > 0 && (
+          <div
+            className="flex items-center gap-2 text-xs px-2 py-1.5 rounded-md"
             style={{
-              background: 'var(--color-accent)',
-              color: 'var(--color-bg)',
+              background: 'var(--color-bg)',
+              color: 'var(--color-text)',
             }}
-            data-testid="open-share-free"
+            data-testid="banked-free-months"
           >
-            Share on social → unlock free for life
-          </button>
+            <Gift size={12} style={{ color: 'var(--color-accent)' }} />
+            <span>
+              <strong>{bankedFreeMonths}</strong> free month
+              {bankedFreeMonths === 1 ? '' : 's'} banked
+              {tier !== 'free-trial' && ' — next billing skipped until used up.'}
+            </span>
+          </div>
         )}
+        <button
+          onClick={() => setShareFreeOpen(true)}
+          className="mt-1 w-full py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-2"
+          style={{
+            background: 'var(--color-accent)',
+            color: 'var(--color-bg)',
+          }}
+          data-testid="open-share-free"
+        >
+          <Gift size={14} />
+          {bankedFreeMonths > 0
+            ? 'Post again → another free month'
+            : 'Post about us → earn a free month'}
+        </button>
       </div>
 
       {shareFreeOpen && (

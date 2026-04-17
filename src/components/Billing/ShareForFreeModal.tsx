@@ -1,42 +1,36 @@
 import { useState, useCallback, useRef } from 'react';
-import { X, Share2, Upload, Check, ExternalLink, Loader2 } from 'lucide-react';
+import { X, Share2, Upload, ExternalLink, Loader2, Gift } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { buildShareIntents } from '../../services/pricingService';
 
 /**
- * ShareForFreeModal — "Post on social, upload your screenshot, get
- * Chess Academy Pro free for life" flow.
+ * ShareForFreeModal — "Post on social, upload your screenshot, earn
+ * another free month." This is a per-post accrual model:
+ *
+ *   - Each verified share → +1 to `preferences.freeMonthsEarned`
+ *   - No cap — user can stack multiple months by posting multiple
+ *     times (audit log catches abuse if needed)
+ *   - Lemon Squeezy consumes one earned month per renewal cycle
+ *     (will be wired when paywall lands)
  *
  * UX:
- *   1. Explanation + "Open X" / "Open Reddit" buttons (pre-composed
- *      post). Tapping an intent opens the share compose in a new tab.
- *   2. Screenshot upload — required to submit.
- *   3. Submit — flips the user's pricingTier to 'free-social' on the
- *      profile, emails a proof receipt to support@chessacademy.pro
- *      with the screenshot attached (via navigator.share when
- *      available, else mailto + download fallback).
- *   4. Confirmation — "You're free for life. Thanks for spreading
- *      the word."
+ *   1. "Post on X" / "Post on Reddit" buttons → open compose in new tab
+ *   2. Upload screenshot of the published post (required)
+ *   3. Submit → add 1 to freeMonthsEarned + append shareHistory entry
+ *      + email proof receipt to support with screenshot attached
+ *   4. Confirmation with new running total
  *
- * Proof receipt format (email body + attachment):
- *   Subject:  [Free-lifetime claim] Chess Academy Pro — <display name>
- *   Body:     Claim timestamp, platform they said they posted on,
- *             display name, profile ID. Screenshot attached.
- *
- * Fraud mitigation:
- *   - Screenshot is required (just having an intent URL doesn't cut
- *     it — they have to actually demonstrate the post)
- *   - The entitlement flips immediately (optimistic), but every claim
- *     generates an audit email you can review and revoke later
- *   - `socialShareClaim` is persisted on the profile with timestamp
- *     and platform so you can correlate
+ * Proof receipt format: audit email to support@chessacademy.pro with
+ * the screenshot attached (via navigator.share or mailto+download).
+ * Cross-reference the timestamp + platform against the user's public
+ * post history when you want to spot-check.
  */
 const SUPPORT_EMAIL = 'support@chessacademy.pro';
 
 interface ShareForFreeModalProps {
   onClose: () => void;
-  onGranted: () => void;
+  onGranted?: (newTotal: number) => void;
 }
 
 type SubmitState = 'idle' | 'submitting' | 'granted';
@@ -48,12 +42,17 @@ export function ShareForFreeModal({ onClose, onGranted }: ShareForFreeModalProps
   const [platform, setPlatform] = useState<'x' | 'reddit' | 'other' | null>(null);
   const [screenshot, setScreenshot] = useState<{ blob: Blob; url: string; name: string } | null>(null);
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
+  const [newTotal, setNewTotal] = useState<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const appUrl = typeof window !== 'undefined'
     ? `${window.location.origin}/landing`
     : 'https://chessacademy.pro/landing';
   const intents = buildShareIntents(appUrl);
+
+  const currentEarned = activeProfile?.preferences.freeMonthsEarned ?? 0;
+  const currentUsed = activeProfile?.preferences.freeMonthsUsed ?? 0;
+  const currentRemaining = Math.max(0, currentEarned - currentUsed);
 
   const openShareIntent = useCallback((which: 'x' | 'reddit') => {
     const intent = intents.find((i) => i.platform === which);
@@ -80,38 +79,44 @@ export function ShareForFreeModal({ onClose, onGranted }: ShareForFreeModalProps
 
     const timestamp = new Date().toISOString();
     const platformLabel = platform ?? 'other';
+    const nextEarned = currentEarned + 1;
+    const existingHistory = activeProfile.preferences.shareHistory ?? [];
 
-    // 1. Persist the claim on the profile (atomic with tier flip).
+    // Atomic: increment earned counter + append audit entry. We don't
+    // touch `pricingTier` — users stay on their base tier, free months
+    // stack as a credit on top.
     const updatedPrefs = {
       ...activeProfile.preferences,
-      pricingTier: 'free-social' as const,
-      pricingTierAssignedAt: timestamp,
-      socialShareClaim: {
-        platform: platformLabel,
-        claimedAt: timestamp,
-        screenshotName: screenshot.name,
-      },
+      freeMonthsEarned: nextEarned,
+      shareHistory: [
+        ...existingHistory,
+        {
+          platform: platformLabel as 'x' | 'reddit' | 'other',
+          claimedAt: timestamp,
+          screenshotName: screenshot.name,
+        },
+      ],
     };
     await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
+    setNewTotal(nextEarned - currentUsed);
 
-    // 2. Send proof receipt. Prefer navigator.share (attaches the
-    //    screenshot on mobile) so the email arrives with actual
-    //    evidence. Fall back to mailto + download on desktop.
-    const subject = `[Free-lifetime claim] Chess Academy Pro — ${activeProfile.name}`;
+    // Audit receipt
+    const subject = `[Free-month claim #${nextEarned}] Chess Academy Pro — ${activeProfile.name}`;
     const bodyLines = [
-      `User claimed free-for-life entitlement.`,
+      `User claimed free-month credit #${nextEarned}.`,
       '',
       `Display name: ${activeProfile.name}`,
       `Profile ID: ${activeProfile.id}`,
       `Platform they posted on: ${platformLabel}`,
       `Claim timestamp: ${timestamp}`,
       `Screenshot: ${screenshot.name}`,
+      `Running total: ${nextEarned} earned, ${currentUsed} used, ${nextEarned - currentUsed} remaining`,
       '',
       '---',
-      `Review by searching for this user's post on the platform above,`,
-      `comparing to the attached screenshot. If fraudulent, revoke by`,
-      `flipping preferences.pricingTier back to 'beta' in the DB.`,
+      'Spot-check by searching for this user\'s post on the platform',
+      'above and comparing to the attached screenshot. If fraudulent,',
+      'revoke by decrementing preferences.freeMonthsEarned in the DB.',
     ];
     const body = bodyLines.join('\n');
 
@@ -123,24 +128,20 @@ export function ShareForFreeModal({ onClose, onGranted }: ShareForFreeModalProps
         if (navigator.canShare({ files: [file] })) {
           await navigator.share({ title: subject, text: body, files: [file] });
           setSubmitState('granted');
-          onGranted();
+          onGranted?.(nextEarned - currentUsed);
           return;
         }
       }
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') {
-        // User cancelled — they still got the entitlement, but we
-        // didn't collect proof. Not ideal but they've already shared,
-        // so don't force them to retry.
         setSubmitState('granted');
-        onGranted();
+        onGranted?.(nextEarned - currentUsed);
         return;
       }
       console.warn('[ShareForFree] navigator.share failed:', err);
     }
 
-    // Fallback: download the screenshot + mailto. User attaches in
-    // their mail client.
+    // Fallback: download screenshot + mailto
     const link = document.createElement('a');
     link.href = screenshot.url;
     link.download = screenshot.name || 'chess-academy-proof.png';
@@ -151,20 +152,19 @@ export function ShareForFreeModal({ onClose, onGranted }: ShareForFreeModalProps
     const mailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
     setSubmitState('granted');
-    onGranted();
-  }, [screenshot, platform, activeProfile, setActiveProfile, submitState, onGranted]);
+    onGranted?.(nextEarned - currentUsed);
+  }, [screenshot, platform, activeProfile, setActiveProfile, submitState, currentEarned, currentUsed, onGranted]);
 
   if (submitState === 'granted') {
     return (
       <ModalShell onClose={onClose}>
-        <div className="flex flex-col items-center text-center gap-3 py-6">
-          <Check size={36} style={{ color: 'var(--color-accent)' }} />
+        <div className="flex flex-col items-center text-center gap-3 py-6 px-5">
+          <Gift size={36} style={{ color: 'var(--color-accent)' }} />
           <h3 className="font-bold text-lg" style={{ color: 'var(--color-text)' }}>
-            You're free for life.
+            +1 free month.
           </h3>
           <p className="text-sm max-w-xs" style={{ color: 'var(--color-text-muted)' }}>
-            Thanks for spreading the word. Proof receipt sent to
-            support — you'll never see a paywall again.
+            You now have <strong style={{ color: 'var(--color-text)' }}>{newTotal} free month{newTotal === 1 ? '' : 's'}</strong> banked. Post again anytime to stack another.
           </p>
           <button
             onClick={onClose}
@@ -172,7 +172,7 @@ export function ShareForFreeModal({ onClose, onGranted }: ShareForFreeModalProps
             style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
             data-testid="share-free-done"
           >
-            Awesome
+            Nice
           </button>
         </div>
       </ModalShell>
@@ -185,14 +185,29 @@ export function ShareForFreeModal({ onClose, onGranted }: ShareForFreeModalProps
         <div className="flex items-center gap-2">
           <Share2 size={18} style={{ color: 'var(--color-accent)' }} />
           <h3 className="font-bold text-base" style={{ color: 'var(--color-text)' }}>
-            Free for life — post about us
+            Earn a free month — post about us
           </h3>
         </div>
 
+        {currentRemaining > 0 && (
+          <div
+            className="text-xs px-3 py-2 rounded-lg flex items-center gap-2"
+            style={{
+              background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)',
+              color: 'var(--color-text)',
+            }}
+            data-testid="share-free-running-total"
+          >
+            <Gift size={14} style={{ color: 'var(--color-accent)' }} />
+            You have {currentRemaining} free month{currentRemaining === 1 ? '' : 's'} banked. Posting again adds one more.
+          </div>
+        )}
+
         <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
           Post about Chess Academy Pro on X or Reddit, upload a
-          screenshot of your post, and your account flips to{' '}
-          <strong style={{ color: 'var(--color-text)' }}>free forever</strong>.
+          screenshot of your post, and we'll add{' '}
+          <strong style={{ color: 'var(--color-text)' }}>one month free</strong>{' '}
+          to your subscription. Stack as many as you want.
         </p>
 
         {/* Step 1: Share intents */}
@@ -289,7 +304,6 @@ export function ShareForFreeModal({ onClose, onGranted }: ShareForFreeModalProps
           />
         </div>
 
-        {/* Step 3: Submit */}
         <button
           onClick={() => { void handleSubmit(); }}
           disabled={!screenshot || submitState !== 'idle'}
@@ -302,7 +316,9 @@ export function ShareForFreeModal({ onClose, onGranted }: ShareForFreeModalProps
               <Loader2 size={14} className="animate-spin" /> Submitting…
             </>
           ) : (
-            'Flip me to free'
+            <>
+              <Gift size={14} /> Add 1 free month
+            </>
           )}
         </button>
 

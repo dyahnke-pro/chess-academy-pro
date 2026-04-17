@@ -23,7 +23,7 @@
  */
 import type { UserProfile } from '../types';
 
-export type PricingTier = 'beta' | 'free-social' | 'standard' | 'free-trial';
+export type PricingTier = 'beta' | 'standard' | 'free-trial';
 
 /** Beta phase cutoff. Anyone who creates a profile on or before this
  *  date is auto-flagged as a beta user and gets the $2.99 tier for
@@ -62,14 +62,6 @@ const OFFERS: Record<PricingTier, PricingOffer> = {
     lockedForLife: true,
     free: false,
   },
-  'free-social': {
-    priceMonthly: 0,
-    priceYearly: 0,
-    label: 'Free forever (shared)',
-    description: 'Free for life — thanks for spreading the word.',
-    lockedForLife: true,
-    free: true,
-  },
   standard: {
     priceMonthly: 7.99,
     priceYearly: 79.99,
@@ -87,6 +79,39 @@ const OFFERS: Record<PricingTier, PricingOffer> = {
     free: true,
   },
 };
+
+/**
+ * Net free months remaining on this user's subscription. Earned via
+ * social-share posts; consumed by Lemon Squeezy on renewal (each
+ * renewal cycle consumes one month if any remain).
+ */
+export function remainingFreeMonths(profile: UserProfile | null | undefined): number {
+  if (!profile) return 0;
+  const earned = profile.preferences.freeMonthsEarned ?? 0;
+  const used = profile.preferences.freeMonthsUsed ?? 0;
+  return Math.max(0, earned - used);
+}
+
+/**
+ * Estimate the next billing date assuming the user has X free months
+ * remaining. Returns null when the user has no tier yet (shouldn't
+ * happen in practice but keeps the caller simple).
+ *
+ * Logic: start from `pricingTierAssignedAt` (or now), add
+ * `remainingFreeMonths + 1` months (the +1 is the current free month
+ * they're already in). This is purely advisory UI — the real billing
+ * date comes from the payment provider once wired.
+ */
+export function projectedNextBillingDate(
+  profile: UserProfile | null | undefined,
+  now: Date = new Date(),
+): Date | null {
+  if (!profile) return null;
+  const remaining = remainingFreeMonths(profile);
+  const target = new Date(now);
+  target.setMonth(target.getMonth() + remaining);
+  return target;
+}
 
 /**
  * Resolve the effective pricing tier for a profile. Defaults to

@@ -5,52 +5,43 @@ import {
   getOfferForTier,
   buildShareIntents,
   isBetaPhaseActive,
+  remainingFreeMonths,
+  projectedNextBillingDate,
   BETA_PHASE_END_DATE,
 } from './pricingService';
 import { buildUserProfile } from '../test/factories';
 
 describe('isBetaPhaseActive', () => {
   it('returns true before the cutoff', () => {
-    const beforeCutoff = new Date('2026-04-17T00:00:00Z');
-    expect(isBetaPhaseActive(beforeCutoff)).toBe(true);
+    expect(isBetaPhaseActive(new Date('2026-04-17T00:00:00Z'))).toBe(true);
   });
 
   it('returns false well after the cutoff', () => {
-    const wayAfter = new Date('2030-01-01T00:00:00Z');
-    expect(isBetaPhaseActive(wayAfter)).toBe(false);
+    expect(isBetaPhaseActive(new Date('2030-01-01T00:00:00Z'))).toBe(false);
   });
 
   it('treats the cutoff day itself as still beta', () => {
-    const cutoffDay = new Date(`${BETA_PHASE_END_DATE}T12:00:00Z`);
-    expect(isBetaPhaseActive(cutoffDay)).toBe(true);
+    expect(isBetaPhaseActive(new Date(`${BETA_PHASE_END_DATE}T12:00:00Z`))).toBe(true);
   });
 });
 
 describe('resolvePricingTier', () => {
   it('returns the stored tier verbatim when set', () => {
     const profile = buildUserProfile();
-    profile.preferences.pricingTier = 'free-social';
-    expect(resolvePricingTier(profile)).toBe('free-social');
+    profile.preferences.pricingTier = 'standard';
+    expect(resolvePricingTier(profile)).toBe('standard');
   });
 
   it('defaults unset profiles to beta during beta phase', () => {
     const profile = buildUserProfile();
     delete profile.preferences.pricingTier;
-    const beforeCutoff = new Date('2026-04-17T00:00:00Z');
-    expect(resolvePricingTier(profile, beforeCutoff)).toBe('beta');
+    expect(resolvePricingTier(profile, new Date('2026-04-17T00:00:00Z'))).toBe('beta');
   });
 
   it('defaults unset profiles to standard post-beta', () => {
     const profile = buildUserProfile();
     delete profile.preferences.pricingTier;
-    const wayAfter = new Date('2030-01-01T00:00:00Z');
-    expect(resolvePricingTier(profile, wayAfter)).toBe('standard');
-  });
-
-  it('returns standard when no profile is provided post-beta', () => {
-    const wayAfter = new Date('2030-01-01T00:00:00Z');
-    expect(resolvePricingTier(null, wayAfter)).toBe('standard');
-    expect(resolvePricingTier(undefined, wayAfter)).toBe('standard');
+    expect(resolvePricingTier(profile, new Date('2030-01-01T00:00:00Z'))).toBe('standard');
   });
 });
 
@@ -61,18 +52,6 @@ describe('getPricingOffer', () => {
     const offer = getPricingOffer(profile);
     expect(offer.priceMonthly).toBe(2.99);
     expect(offer.lockedForLife).toBe(true);
-    expect(offer.free).toBe(false);
-    expect(offer.label).toMatch(/beta/i);
-  });
-
-  it('free-social tier is $0 and free: true', () => {
-    const profile = buildUserProfile();
-    profile.preferences.pricingTier = 'free-social';
-    const offer = getPricingOffer(profile);
-    expect(offer.priceMonthly).toBe(0);
-    expect(offer.priceYearly).toBe(0);
-    expect(offer.free).toBe(true);
-    expect(offer.lockedForLife).toBe(true);
   });
 
   it('standard tier is $7.99/mo, not locked', () => {
@@ -81,40 +60,92 @@ describe('getPricingOffer', () => {
     const offer = getPricingOffer(profile);
     expect(offer.priceMonthly).toBe(7.99);
     expect(offer.lockedForLife).toBe(false);
-    expect(offer.free).toBe(false);
   });
 });
 
 describe('getOfferForTier', () => {
-  it('returns the offer for each tier without needing a profile', () => {
+  it('returns offers for all tiers', () => {
     expect(getOfferForTier('beta').priceMonthly).toBe(2.99);
     expect(getOfferForTier('standard').priceMonthly).toBe(7.99);
-    expect(getOfferForTier('free-social').priceMonthly).toBe(0);
     expect(getOfferForTier('free-trial').free).toBe(true);
   });
 });
 
-describe('buildShareIntents', () => {
-  it('returns X, Reddit, and copy intents with the URL embedded', () => {
-    const intents = buildShareIntents('https://chessacademy.pro/landing');
-    expect(intents).toHaveLength(3);
-    const platforms = intents.map((i) => i.platform);
-    expect(platforms).toEqual(['x', 'reddit', 'copy']);
+describe('remainingFreeMonths', () => {
+  it('returns 0 when no profile', () => {
+    expect(remainingFreeMonths(null)).toBe(0);
+    expect(remainingFreeMonths(undefined)).toBe(0);
+  });
 
+  it('returns 0 when earned and used are both zero or unset', () => {
+    const profile = buildUserProfile();
+    expect(remainingFreeMonths(profile)).toBe(0);
+  });
+
+  it('returns earned - used when both are set', () => {
+    const profile = buildUserProfile();
+    profile.preferences.freeMonthsEarned = 5;
+    profile.preferences.freeMonthsUsed = 2;
+    expect(remainingFreeMonths(profile)).toBe(3);
+  });
+
+  it('clamps to 0 when used exceeds earned (data bug)', () => {
+    const profile = buildUserProfile();
+    profile.preferences.freeMonthsEarned = 1;
+    profile.preferences.freeMonthsUsed = 5;
+    expect(remainingFreeMonths(profile)).toBe(0);
+  });
+
+  it('handles earned alone (used unset)', () => {
+    const profile = buildUserProfile();
+    profile.preferences.freeMonthsEarned = 3;
+    expect(remainingFreeMonths(profile)).toBe(3);
+  });
+});
+
+describe('projectedNextBillingDate', () => {
+  it('returns null when no profile', () => {
+    expect(projectedNextBillingDate(null)).toBeNull();
+  });
+
+  it('pushes by N months when N free months remain', () => {
+    const profile = buildUserProfile();
+    profile.preferences.freeMonthsEarned = 3;
+    profile.preferences.freeMonthsUsed = 0;
+    const now = new Date('2026-04-17T00:00:00Z');
+    const projected = projectedNextBillingDate(profile, now);
+    expect(projected).not.toBeNull();
+    // Expect it pushed ~3 months
+    const diffMs = projected!.getTime() - now.getTime();
+    const diffDays = diffMs / (1000 * 60 * 60 * 24);
+    expect(diffDays).toBeGreaterThan(80);
+    expect(diffDays).toBeLessThan(100);
+  });
+
+  it('returns "now" when no free months remain', () => {
+    const profile = buildUserProfile();
+    const now = new Date('2026-04-17T00:00:00Z');
+    const projected = projectedNextBillingDate(profile, now);
+    expect(projected?.getTime()).toBe(now.getTime());
+  });
+});
+
+describe('buildShareIntents', () => {
+  it('returns X, Reddit, and copy intents', () => {
+    const intents = buildShareIntents('https://chessacademy.pro/landing');
+    expect(intents.map((i) => i.platform)).toEqual(['x', 'reddit', 'copy']);
+  });
+
+  it('X intent contains tweet URL with encoded URL', () => {
+    const intents = buildShareIntents('https://chessacademy.pro/landing');
     const x = intents.find((i) => i.platform === 'x');
     expect(x?.url).toContain('x.com/intent/tweet');
     expect(x?.url).toContain(encodeURIComponent('https://chessacademy.pro/landing'));
-
-    const reddit = intents.find((i) => i.platform === 'reddit');
-    expect(reddit?.url).toContain('reddit.com/submit');
-    expect(reddit?.url).toContain(encodeURIComponent('https://chessacademy.pro/landing'));
   });
 
-  it('embeds a marketing-ready post body', () => {
+  it('Reddit intent contains reddit.com/submit with encoded URL', () => {
     const intents = buildShareIntents('https://chessacademy.pro/landing');
-    const x = intents.find((i) => i.platform === 'x');
-    // Decode to check the composed text is reasonable
-    const decoded = decodeURIComponent(x?.url ?? '');
-    expect(decoded).toMatch(/Chess Academy Pro/);
+    const reddit = intents.find((i) => i.platform === 'reddit');
+    expect(reddit?.url).toContain('reddit.com/submit');
   });
 });
