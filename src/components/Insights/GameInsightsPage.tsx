@@ -10,6 +10,7 @@ import {
 } from '../../services/gameInsightsService';
 import { runBackgroundAnalysis } from '../../services/gameAnalysisService';
 import { useAppStore } from '../../stores/appStore';
+import { routeChatIntent } from '../../services/coachIntentRouter';
 import { OverviewTab } from './OverviewTab';
 import { OpeningsTab } from './OpeningsTab';
 import { MistakesTab } from './MistakesTab';
@@ -93,11 +94,27 @@ export function GameInsightsPage(): JSX.Element {
     runBackgroundAnalysis();
   }
 
-  function handleSearch(e: React.SyntheticEvent): void {
+  async function handleSearch(e: React.SyntheticEvent): Promise<void> {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      void navigate(`/coach/chat?q=${encodeURIComponent(searchQuery.trim())}`);
+    const query = searchQuery.trim();
+    if (!query) return;
+
+    // Route through the agent's intent router first so phrases like
+    // "review my last Catalan" or "play the KIA against me" open the
+    // right surface instead of dumping the user into an empty chat.
+    // Only fall back to /coach/chat when the query is genuinely a
+    // question (intent === qa) — and in that case carry the query so
+    // the chat can auto-send it.
+    try {
+      const routed = await routeChatIntent(query);
+      if (routed?.path) {
+        void navigate(routed.path);
+        return;
+      }
+    } catch (err: unknown) {
+      console.warn('[GameInsightsPage] intent routing failed:', err);
     }
+    void navigate(`/coach/chat?q=${encodeURIComponent(query)}`);
   }
 
   if (loading) {
@@ -147,7 +164,7 @@ export function GameInsightsPage(): JSX.Element {
         </div>
 
         {/* Search bar */}
-        <form onSubmit={handleSearch} className="mb-3">
+        <form onSubmit={(e) => { void handleSearch(e); }} className="mb-3">
           <div
             className="flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 border"
             style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}

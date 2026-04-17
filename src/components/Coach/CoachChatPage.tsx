@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeOff } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
@@ -13,6 +13,7 @@ import { ChatInput } from './ChatInput';
 
 export function CoachChatPage(): JSX.Element {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const chatMessages = useCoachSessionStore((s) => s.messages);
   const appendMessage = useCoachSessionStore((s) => s.appendMessage);
@@ -137,6 +138,25 @@ export function CoachChatPage(): JSX.Element {
       setStreamingContent('');
     }
   }, [activeProfile, chatMessages, isStreaming, appendMessage, flushSpeechBuffer, analysisContext, navigate]);
+
+  // Auto-send a query carried in the URL (e.g., from the Game Insights
+  // search bar navigating here with ?q=...). Runs once per distinct
+  // query, strips the param after firing so refreshing doesn't resend,
+  // and waits for the profile + hydration to be ready.
+  const autoSentQueryRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!activeProfile || !hydrated) return;
+    const q = searchParams.get('q');
+    if (!q || !q.trim()) return;
+    if (autoSentQueryRef.current === q) return;
+    autoSentQueryRef.current = q;
+    // Strip ?q= immediately so navigating back here doesn't resend it
+    // and refreshing stays clean.
+    const next = new URLSearchParams(searchParams);
+    next.delete('q');
+    setSearchParams(next, { replace: true });
+    void handleSend(q);
+  }, [activeProfile, hydrated, searchParams, setSearchParams, handleSend]);
 
   return (
     <div className="flex flex-col h-[calc(100dvh-4rem)] pb-16 md:pb-0 max-w-2xl mx-auto w-full" data-testid="coach-chat-page">
