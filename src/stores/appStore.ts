@@ -95,6 +95,7 @@ interface AppActions {
   toggleCoachBubble: () => void;
   setCoachBubbleText: (text: string) => void;
   toggleCoachVoice: () => void;
+  setCoachVoiceOn: (on: boolean) => void;
   toggleCoachTips: () => void;
   setBackgroundAnalysis: (running: boolean, progress?: string | null) => void;
   setCoachDrawerOpen: (open: boolean) => void;
@@ -184,6 +185,8 @@ export const useAppStore = create<AppState & AppActions>()(
     setCoachBubbleText: (text) => set({ coachBubbleText: text }),
 
     toggleCoachVoice: () => set((state) => ({ coachVoiceOn: !state.coachVoiceOn })),
+
+    setCoachVoiceOn: (on) => set({ coachVoiceOn: on }),
 
     toggleCoachTips: () => set((state) => ({ coachTipsOn: !state.coachTipsOn })),
 

@@ -211,7 +211,7 @@ describe('SmartSearchBar', () => {
       await waitFor(() => {
         expect(screen.getByTestId('agent-action-option')).toBeInTheDocument();
       });
-      expect(screen.getByText(/Playing as Black/i)).toBeInTheDocument();
+      expect(screen.getByText(/You play Black/i)).toBeInTheDocument();
       expect(screen.getByText(/Hard/)).toBeInTheDocument();
     });
   });
