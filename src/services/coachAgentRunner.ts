@@ -29,6 +29,7 @@ import {
 } from './coachActionDispatcher';
 import { AGENT_ACTION_GRAMMAR } from './coachPrompts';
 import { extractAndRememberNotes } from './coachMemoryService';
+import { buildGroundingBlock } from './coachContextEnricher';
 import { useCoachSessionStore } from '../stores/coachSessionStore';
 import { useAppStore } from '../stores/appStore';
 import { voiceService } from './voiceService';
@@ -135,7 +136,20 @@ export async function runAgentTurn(
   const snapshot = await buildCoachContextSnapshot();
   const snapshotText = formatCoachContextSnapshot(snapshot);
 
+  // Pre-emptive grounding: when the user's latest message is about
+  // openings / current position / their performance, we fetch
+  // Lichess Opening Explorer stats, Stockfish analysis, and the
+  // student's own aggregated game insights BEFORE calling the LLM.
+  // That way the model answers from real data instead of its priors.
+  const latestUserMessage = [...history].reverse().find((m) => m.role === 'user')?.content ?? '';
+  const lastBoardFen = useAppStore.getState().lastBoardSnapshot?.fen ?? null;
+  const groundingBlock = await buildGroundingBlock({
+    userText: latestUserMessage,
+    currentFen: lastBoardFen,
+  });
+
   const additions = [AGENT_ACTION_GRAMMAR, snapshotText];
+  if (groundingBlock) additions.push(groundingBlock);
   if (extraSystemPrompt) additions.push(extraSystemPrompt);
   const systemAddition = additions.join('\n\n');
 
