@@ -62,6 +62,21 @@ interface VoiceChatMicProps {
 
 const MAX_HISTORY_PAIRS = 3;
 const VOICE_ENGINE_DEPTH = 10;
+/** Tokens cap for voice replies. Voice answers should be 1-2
+ *  sentences — anything longer drags response time and is painful
+ *  to listen to. Previously 300 (written for a text-style answer). */
+const VOICE_MAX_TOKENS = 120;
+
+/** Regex that flags when the user's question is move/position specific
+ *  enough that the engine analysis block is worth including. Most
+ *  conversational turns ("what's a fork?", "can you teach me the
+ *  Sicilian?") don't need engine data and the extra tokens just slow
+ *  things down. */
+const ENGINE_REQUIRED_RE = /\b(best|blunder|mistake|inaccur|trade|sacrifice|hanging|threat|check\s*mate|winning|losing|eval|what.*(move|play)|should\s*i|analy[sz]e|position)\b/i;
+
+function shouldIncludeEngine(userText: string): boolean {
+  return ENGINE_REQUIRED_RE.test(userText);
+}
 
 function buildSystemAddition(
   fen: string,
@@ -207,6 +222,11 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [unsupportedFlash, setUnsupportedFlash] = useState(false);
+  // Live interim transcript shown above the mic while the user is
+  // speaking. Cleared on final recognition + after the coach replies.
+  // The single biggest UX win — makes the mic feel responsive
+  // instead of "did it even hear me?"
+  const [interimTranscript, setInterimTranscript] = useState('');
   const listeningRef = useRef(false);
   const messagesRef = useRef<ChatMessage[]>([]);
 
@@ -241,12 +261,18 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     setMessages(currentMessages);
     setIsStreaming(true);
 
-    // Use pre-computed engine data if available AND valid, otherwise run Stockfish
+    // Engine analysis is expensive (~500-1000ms). Only run it when the
+    // user's question actually needs it — most voice turns are general
+    // chat ("what's a fork?", "teach me the Sicilian") where the engine
+    // block just bloats the prompt and slows the reply. Use the
+    // pre-computed snapshot when available (free), else gate on the
+    // question's keywords.
+    const needsEngine = shouldIncludeEngine(text);
     let engineData: EngineSnapshot | null = engineSnapshot ?? null;
     if (engineData && (!engineData.bestMove || engineData.topLines.length === 0)) {
       engineData = null;
     }
-    if (!engineData) {
+    if (!engineData && needsEngine) {
       try {
         const analysis = await stockfishEngine.analyzePosition(fen, VOICE_ENGINE_DEPTH);
         engineData = {
@@ -295,12 +321,16 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       }
     };
 
+    // Route through chat_response — my model routing audit moved
+    // this to the cheap tier (deepseek-chat / claude-haiku). Voice
+    // replies are 1-2 sentences anyway; reasoner is overkill + slower.
+    // Capped at VOICE_MAX_TOKENS so responses stay snappy.
     const rawResponse = await getCoachChatResponse(
       formatted,
       systemAddition,
       onChunk,
-      'chat_response', // Sonnet — Haiku is too weak to follow the engine analysis prompt
-      300,
+      'chat_response',
+      VOICE_MAX_TOKENS,
     );
 
     // Extract arrow annotations before flushing remaining speech
@@ -344,6 +374,9 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
   useEffect(() => {
     voiceInputService.onResult((transcript: string) => {
       if (transcript.trim()) {
+        // Final recognition landed — clear the interim preview and
+        // send.
+        setInterimTranscript('');
         void handleUserMessageRef.current(transcript.trim());
       }
       restartListening();
@@ -363,11 +396,22 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     if (listening) {
       voiceInputService.stopListening();
       setListening(false);
-    } else {
-      const started = voiceInputService.startListening();
-      setListening(started);
+      setInterimTranscript('');
+      return;
     }
-  }, [listening]);
+
+    // Tap-to-interrupt: if the coach is mid-reply, cut off the TTS
+    // and start listening. Previously the user had to wait for the
+    // coach to finish — painful during a long answer.
+    if (isStreaming) {
+      voiceService.stop();
+    }
+
+    const started = voiceInputService.startListening({
+      onInterim: (text: string) => setInterimTranscript(text),
+    });
+    setListening(started);
+  }, [listening, isStreaming]);
 
   return (
     <div className="relative" data-testid="voice-chat-mic">
@@ -385,18 +429,53 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
         )}
       </AnimatePresence>
 
+      {/* Live interim transcript — shows the user's words as they
+          speak, so the mic feels responsive. Positioned above the
+          button, clipped to a max-width so long phrases don't blow
+          out the layout. */}
+      <AnimatePresence>
+        {listening && interimTranscript && (
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            className="absolute bottom-full mb-2 right-0 max-w-[260px] text-xs px-2.5 py-1.5 rounded-lg shadow-md z-20"
+            style={{
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-text)',
+            }}
+            data-testid="voice-interim-transcript"
+          >
+            <span style={{ color: 'var(--color-accent)' }}>●</span>{' '}
+            {interimTranscript}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.button
         onClick={handleMicToggle}
-        disabled={isStreaming}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors ${
           listening
             ? 'bg-red-500/15 text-red-500 border border-red-500'
             : 'bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text'
-        } disabled:opacity-50`}
+        }`}
         animate={listening ? { scale: [1, 1.05, 1] } : { scale: 1 }}
         transition={listening ? { duration: 1.2, repeat: Infinity } : {}}
-        title={listening ? 'Stop listening' : 'Talk to coach'}
-        aria-label={listening ? 'Stop listening' : 'Talk to coach'}
+        title={
+          listening
+            ? 'Stop listening'
+            : isStreaming
+              ? 'Tap to interrupt and talk'
+              : 'Talk to coach'
+        }
+        aria-label={
+          listening
+            ? 'Stop listening'
+            : isStreaming
+              ? 'Tap to interrupt and talk'
+              : 'Talk to coach'
+        }
         data-testid="voice-chat-mic-btn"
       >
         {listening ? <MicOff size={14} /> : <Mic size={14} />}
