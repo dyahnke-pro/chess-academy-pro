@@ -17,6 +17,7 @@ import { ThemeToggle } from './ThemeToggle';
 import { InstallPrompt } from './InstallPrompt';
 import { OfflineBanner } from './OfflineBanner';
 import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
+import { QuickFeedbackButton } from '../Feedback/QuickFeedbackButton';
 
 interface NavItem {
   to: string;
@@ -389,6 +390,11 @@ export function AppLayout(): JSX.Element {
 
       {/* Global coach drawer */}
       <GlobalCoachDrawer />
+
+      {/* Always-on floating feedback button — top-right of every
+          in-app page. Lives outside page content so individual routes
+          don't need to remember to render it. */}
+      <QuickFeedbackButton />
     </div>
   );
 }
