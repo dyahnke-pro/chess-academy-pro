@@ -128,7 +128,7 @@ const DEFAULT_STATE: AppState = {
   weaknessProfile: null,
   coachBubbleVisible: true,
   coachBubbleText: '',
-  coachVoiceOn: false,
+  coachVoiceOn: true,
   coachTipsOn: false,
   backgroundAnalysisRunning: false,
   backgroundAnalysisProgress: null,

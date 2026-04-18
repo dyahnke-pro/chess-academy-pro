@@ -126,29 +126,42 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       return;
     }
     // Reset any existing handler — the one registered below becomes
-    // the single active callback for this listening session.
+    // the single active callback for this listening session. In
+    // continuous mode the mic stays ON until the user taps off, so
+    // this callback may fire MULTIPLE times (once per utterance). The
+    // first utterance that matches a routable intent navigates and
+    // turns the mic off; otherwise we keep listening and ask the
+    // coach.
     voiceInputService.onResult((transcript) => {
       const text = transcript.trim();
-      setListening(false);
       if (!text) return;
       setQuery(text);
       // Re-parse the intent against the final transcript (live
       // agentIntent memo may still be showing the interim).
       const intent = parseCoachIntent(text);
       const params = new URLSearchParams();
-      clear();
-      setShowDropdown(false);
-      inputRef.current?.blur();
       if (intent.kind === 'play-against') {
         if (intent.subject) params.set('subject', intent.subject);
         if (intent.side) params.set('side', intent.side);
         params.set('difficulty', intent.difficulty ?? 'auto');
+        voiceInputService.stopListening();
+        clear();
+        setShowDropdown(false);
+        inputRef.current?.blur();
         void navigate(`/coach/session/play-against?${params.toString()}`);
       } else if (intent.kind === 'walkthrough' && intent.subject) {
         params.set('subject', intent.subject);
+        voiceInputService.stopListening();
+        clear();
+        setShowDropdown(false);
+        inputRef.current?.blur();
         void navigate(`/coach/session/walkthrough?${params.toString()}`);
       } else if (intent.kind === 'continue-middlegame') {
         if (intent.subject) params.set('subject', intent.subject);
+        voiceInputService.stopListening();
+        clear();
+        setShowDropdown(false);
+        inputRef.current?.blur();
         void navigate(
           `/coach/session/middlegame${params.toString() ? `?${params.toString()}` : ''}`,
         );
@@ -157,21 +170,32 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
         if (intent.difficulty && intent.difficulty !== 'auto') {
           params.set('difficulty', intent.difficulty);
         }
+        voiceInputService.stopListening();
+        clear();
+        setShowDropdown(false);
+        inputRef.current?.blur();
         void navigate(
           `/coach/session/puzzle${params.toString() ? `?${params.toString()}` : ''}`,
         );
       } else if (intent.kind === 'explain-position') {
         if (lastBoardSnapshot) params.set('fen', lastBoardSnapshot.fen);
         const qs = params.toString();
+        voiceInputService.stopListening();
+        clear();
+        setShowDropdown(false);
+        inputRef.current?.blur();
         void navigate(`/coach/session/explain-position${qs ? `?${qs}` : ''}`);
       } else {
-        // No structured intent — fall back to "ask the coach" with the
-        // whole utterance. The coach page handles free-form questions.
+        // No structured intent — hand the whole utterance to the
+        // coach drawer. The drawer's chat path runs TTS on the
+        // reply by default (voice-on). We leave the mic ON so the
+        // user can keep the back-and-forth going without re-tapping.
         askCoach(text);
       }
     });
     const ok = voiceInputService.startListening({
       onInterim: (interim) => setQuery(interim),
+      onEnd: () => setListening(false),
     });
     setListening(ok);
   }, [listening, setQuery, clear, navigate, lastBoardSnapshot, askCoach]);
