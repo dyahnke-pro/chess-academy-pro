@@ -46,6 +46,11 @@ export interface MoveCommentaryInput {
    *    - 'slow' — verbose, deeper explanation with background context.
    *  When omitted, defaults to 'medium'. */
   verbosity?: CoachVerbosity;
+  /** Prebuilt blocks of real Lichess + engine data to inject into the
+   *  prompt during opening teaching. Keeps the commentary service
+   *  provider-agnostic — the caller fetches what it needs and passes
+   *  the pre-formatted text. Each is optional. */
+  groundedNotes?: string[];
   /**
    * True when the context is a post-game review, so the coach speaks to
    * the student about the game's arc rather than as an in-game opponent.
@@ -130,7 +135,7 @@ async function getLlmCommentary(
   input: MoveCommentaryInput,
   history: VerboseMove[],
 ): Promise<string> {
-  const { gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone, chatHistory, verbosity = 'medium' } = input;
+  const { gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone, chatHistory, verbosity = 'medium', groundedNotes = [] } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
 
@@ -165,10 +170,15 @@ async function getLlmCommentary(
         ? 'Narration density: VERBOSE. Deeper explanation — background, plans, how this connects to the student\u2019s known weaknesses; three to five sentences.'
         : 'Narration density: NORMAL. A couple of sentences, maybe three if something critical deserves it.';
 
+  const groundedBlock = groundedNotes.filter(Boolean).join('\n\n');
+
   const user = [
     subject ? `Session subject: ${subject}.` : '',
     chatContext
       ? `[Recent chat between you and the student — stay consistent with it]\n${chatContext}`
+      : '',
+    groundedBlock
+      ? `[Lichess / engine data for THIS position — cite the numbers, don't guess]\n${groundedBlock}`
       : '',
     `${moverName} just played ${last.san}.`,
     `Move flags: ${describeMoveFlags(last)}.`,
