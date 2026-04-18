@@ -140,7 +140,11 @@ function toProfileSummary(p: UserProfile): NonNullable<CoachContextSnapshot['pro
  * the model how to read this block.
  */
 export function formatCoachContextSnapshot(snapshot: CoachContextSnapshot): string {
-  const lines: string[] = ['[Session State]'];
+  const lines: string[] = [
+    '[Session State — REAL DATA about this student. Reference it directly.',
+    ' If any field is populated, you DO have access to that data —',
+    ' never tell the student "I don\'t have access" to something listed here.]',
+  ];
   lines.push(`route: ${snapshot.route}`);
 
   if (snapshot.profile) {

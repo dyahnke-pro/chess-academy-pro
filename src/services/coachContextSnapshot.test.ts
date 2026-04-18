@@ -56,7 +56,7 @@ describe('buildCoachContextSnapshot', () => {
     useCoachSessionStore.getState().setCurrentRoute('/coach/chat');
     const snapshot = await buildCoachContextSnapshot();
     const text = formatCoachContextSnapshot(snapshot);
-    expect(text).toContain('[Session State]');
+    expect(text).toContain('[Session State');
     expect(text).toContain('route: /coach/chat');
     expect(text).toContain('library: 1 games imported');
     expect(text).toContain('id=g-1');
