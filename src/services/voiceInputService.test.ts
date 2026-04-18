@@ -165,4 +165,101 @@ describe('voiceInputService', () => {
       expect(onFinal).toHaveBeenCalledWith('how do I castle');
     });
   });
+
+  describe('auto-finalize on silence and onend', () => {
+    it('dispatches the latest interim as final when onend fires without a final result', () => {
+      voiceInputService.stopListening();
+      const onFinal = vi.fn();
+      voiceInputService.onResult(onFinal);
+      voiceInputService.startListening({ onInterim: () => {} });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+      const rec = (voiceInputService as any).recognition as {
+        onresult: ((event: unknown) => void) | null;
+        onend: (() => void) | null;
+      };
+
+      // Partial only — no final result.
+      rec.onresult?.({
+        resultIndex: 0,
+        results: [
+          {
+            isFinal: false,
+            length: 1,
+            item: () => ({ transcript: 'why is knight c5 best', confidence: 0.7 }),
+            0: { transcript: 'why is knight c5 best', confidence: 0.7 },
+          },
+        ],
+      });
+
+      // Browser ends recognition without firing a final (iOS Safari quirk).
+      rec.onend?.();
+
+      expect(onFinal).toHaveBeenCalledWith('why is knight c5 best');
+    });
+
+    it('does not double-fire when a real final arrives and then onend runs', () => {
+      voiceInputService.stopListening();
+      const onFinal = vi.fn();
+      voiceInputService.onResult(onFinal);
+      voiceInputService.startListening();
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+      const rec = (voiceInputService as any).recognition as {
+        onresult: ((event: unknown) => void) | null;
+        onend: (() => void) | null;
+      };
+
+      rec.onresult?.({
+        resultIndex: 0,
+        results: [
+          {
+            isFinal: true,
+            length: 1,
+            item: () => ({ transcript: 'castle kingside', confidence: 0.9 }),
+            0: { transcript: 'castle kingside', confidence: 0.9 },
+          },
+        ],
+      });
+      rec.onend?.();
+
+      expect(onFinal).toHaveBeenCalledTimes(1);
+      expect(onFinal).toHaveBeenCalledWith('castle kingside');
+    });
+
+    it('auto-finalizes after SILENCE_TIMEOUT_MS of no new interim results', () => {
+      vi.useFakeTimers();
+      try {
+        voiceInputService.stopListening();
+        const onFinal = vi.fn();
+        voiceInputService.onResult(onFinal);
+        voiceInputService.startListening({ onInterim: () => {} });
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+        const rec = (voiceInputService as any).recognition as {
+          onresult: ((event: unknown) => void) | null;
+        };
+        rec.onresult?.({
+          resultIndex: 0,
+          results: [
+            {
+              isFinal: false,
+              length: 1,
+              item: () => ({ transcript: 'show me the line', confidence: 0.6 }),
+              0: { transcript: 'show me the line', confidence: 0.6 },
+            },
+          ],
+        });
+
+        expect(onFinal).not.toHaveBeenCalled();
+
+        // Fast-forward past the silence timeout.
+        vi.advanceTimersByTime(2000);
+
+        expect(onFinal).toHaveBeenCalledWith('show me the line');
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+  });
 });
