@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap, Compass } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess } from 'chess.js';
 import { useChessGame } from '../../hooks/useChessGame';
@@ -731,7 +731,37 @@ export function CoachGamePage(): JSX.Element {
     }
   }, [handleBackToGame, setPracticeFromAnnotation]);
 
-  // Color change handler — resets the game
+  // Restart handler — resets board + game state back to the starting position
+  // while keeping the current player color and difficulty. Used by the
+  // Restart button and by the in-chat "restart the game" intent.
+  const handleRestart = useCallback((opts?: { keepRequestedOpening?: boolean }) => {
+    game.resetGame();
+    moveCountRef.current = 0;
+    setGameState({
+      gameId: `game-${Date.now()}`,
+      playerColor,
+      targetStrength,
+      moves: [],
+      hintsUsed: 0,
+      currentHintLevel: 0,
+      takebacksUsed: 0,
+      status: 'playing',
+      result: 'ongoing',
+      keyMoments: [],
+    });
+    setLatestEval(0);
+    setLatestIsMate(false);
+    setLatestMateIn(null);
+    setViewedMoveIndex(null);
+    if (!opts?.keepRequestedOpening) {
+      setRequestedOpeningMoves(null);
+    }
+    resetHints();
+    prevNudgeRef.current = null;
+    handleBackToGame();
+  }, [game, playerColor, targetStrength, handleBackToGame, resetHints]);
+
+  // Color change handler — resets the game with the new color
   const handleColorChange = useCallback((color: 'white' | 'black') => {
     setPlayerColor(color);
     game.resetGame();
@@ -1339,8 +1369,13 @@ export function CoachGamePage(): JSX.Element {
   // Takeback — always undo two half-moves (opponent's reply + player's move)
   const handleTakeback = useCallback(() => {
     const moves = gameState.moves;
-    if (moves.length < 2) return;
-    const undoCount = 2;
+    if (moves.length === 0) return;
+    // Undo the coach's reply + the player's previous move so it's the
+    // player's turn again. When only the player's move exists (coach
+    // hasn't replied, or we're taking the first half-move of the game
+    // back), undo just that one. Lets the user tap Takeback repeatedly
+    // all the way back to the starting position.
+    const undoCount = Math.min(2, moves.length);
 
     for (let i = 0; i < undoCount; i++) {
       game.undoMove();
@@ -2073,7 +2108,7 @@ export function CoachGamePage(): JSX.Element {
               />
               <button
                 onClick={handleTakeback}
-                disabled={gameState.moves.length < 2}
+                disabled={gameState.moves.length === 0}
                 className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-amber-500/30 text-sm font-medium text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 disabled:opacity-30 transition-all duration-200"
                 style={{ boxShadow: '0 0 10px rgba(245, 158, 11, 0.25), 0 0 3px rgba(245, 158, 11, 0.15)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(245, 158, 11, 0.45), 0 0 6px rgba(245, 158, 11, 0.25)'; }}
@@ -2082,6 +2117,19 @@ export function CoachGamePage(): JSX.Element {
               >
                 <Undo2 size={16} />
                 <span>Takeback</span>
+              </button>
+              <button
+                onClick={() => handleRestart()}
+                disabled={gameState.moves.length === 0}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/30 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
+                style={{ boxShadow: '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(6, 182, 212, 0.45), 0 0 6px rgba(6, 182, 212, 0.25)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)'; }}
+                data-testid="restart-btn"
+                aria-label="Restart game"
+              >
+                <RotateCcw size={16} />
+                <span>Restart</span>
               </button>
               <ResignButton onResign={handleResign} disabled={gameState.moves.length === 0} />
             </div>
@@ -2176,6 +2224,8 @@ export function CoachGamePage(): JSX.Element {
               history={game.history}
               previousFen={previousFenRef.current}
               onBoardAnnotation={handleBoardAnnotation}
+              onRestartGame={handleRestart}
+              onPlayOpening={handleOpeningRequest}
               initialPrompt={pendingChatPrompt}
               className="h-full"
             />
@@ -2228,6 +2278,8 @@ export function CoachGamePage(): JSX.Element {
               history={game.history}
               previousFen={previousFenRef.current}
               onBoardAnnotation={handleBoardAnnotation}
+              onRestartGame={handleRestart}
+              onPlayOpening={handleOpeningRequest}
               initialPrompt={pendingChatPrompt}
             />
           </div>
