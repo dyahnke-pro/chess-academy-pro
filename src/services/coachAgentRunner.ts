@@ -1,0 +1,213 @@
+/**
+ * coachAgentRunner
+ * ----------------
+ * Single agent loop for the coach chat. Two entry points:
+ *
+ *   - `runAgentTurn`   — stateless. Caller passes in the conversation
+ *     history; we send to the LLM, parse [[ACTION:...]] tags, dispatch
+ *     them, and return the new assistant message. Used by per-game
+ *     chats that maintain their own message list (GameChatPanel).
+ *
+ *   - `runCoachTurn`   — uses `useCoachSessionStore` as the source of
+ *     truth for messages; appends user + assistant messages and toggles
+ *     the streaming flag. Used by the persistent coach chat page and
+ *     the global drawer (one shared conversation across screens).
+ *
+ * Both wrap the same: snapshot → LLM → parseActions → dispatch →
+ * cleaned text.
+ */
+import { getCoachChatResponse } from './coachApi';
+import {
+  buildCoachContextSnapshot,
+  formatCoachContextSnapshot,
+} from './coachContextSnapshot';
+import {
+  parseActions,
+  dispatchActions,
+  type ActionContext,
+  type ParsedAction,
+} from './coachActionDispatcher';
+import { AGENT_ACTION_GRAMMAR } from './coachPrompts';
+import { useCoachSessionStore } from '../stores/coachSessionStore';
+import { useAppStore } from '../stores/appStore';
+import { voiceService } from './voiceService';
+import type { ChatMessage } from '../types';
+
+const HISTORY_LIMIT = 20;
+
+/**
+ * Deterministic narration-toggle detector. Runs BEFORE the LLM so
+ * "narrate while we play" reliably flips voice on regardless of
+ * prompt-following. Returns `{ enable }` on match, null otherwise.
+ */
+export function detectNarrationToggle(text: string): { enable: boolean } | null {
+  const lower = text.toLowerCase();
+  const hasNarrationTopic =
+    /\b(narrat|commentat|commentar|voice|speak|talk|announc)/i.test(lower);
+  // "shut up" stands on its own.
+  if (/\bshut\s+up\b/i.test(lower)) return { enable: false };
+  const offSignal =
+    /\b(stop|turn\s+off|disable|silence|mute|quiet|no\s+more|cease|end)\b/i;
+  if (offSignal.test(lower) && hasNarrationTopic) return { enable: false };
+  const hasVerb =
+    /\b(narrat|commentat|speak|voice|announce|talk\s+through)/i.test(lower);
+  const hasPlayContext =
+    /\b(game|play|we|move|each\s+move|during|while|turn\s+on)\b/i.test(lower);
+  if (hasVerb && hasPlayContext) return { enable: true };
+  return null;
+}
+
+/**
+ * Apply a narration toggle and return the user-facing ack text. Flips
+ * both the session-store narrationMode and the appStore coachVoiceOn
+ * flag (the existing per-move commentary path reads the latter).
+ */
+export function applyNarrationToggle(enable: boolean): string {
+  useCoachSessionStore.getState().setNarrationMode(enable);
+  const voiceOn = useAppStore.getState().coachVoiceOn;
+  if (enable && !voiceOn) useAppStore.getState().toggleCoachVoice();
+  if (!enable && voiceOn) useAppStore.getState().toggleCoachVoice();
+  const ack = enable
+    ? "Got it — I'll narrate each move out loud as we play. Starting a game now."
+    : "Narration off — I'll stay quiet and let you focus.";
+  if (enable) void voiceService.speak(ack).catch(() => {});
+  return ack;
+}
+
+/**
+ * Speak a short announcement of a move. Used by CoachGamePage after
+ * both sides' moves so narration is guaranteed when the session is in
+ * narration mode, even if LLM commentary is empty or slow.
+ *
+ * Precedence: full LLM commentary > short SAN announcement > silence.
+ * Gated on useCoachSessionStore.narrationMode so non-narrated games
+ * stay silent (narrationMode is only on when the user asked for it).
+ */
+export function narrateMove(opts: {
+  san: string;
+  mover: 'w' | 'b';
+  playerColor: 'w' | 'b';
+  commentary?: string | null;
+}): void {
+  if (!useCoachSessionStore.getState().narrationMode) return;
+  const text = opts.commentary?.trim()
+    ? opts.commentary.trim()
+    : opts.mover === opts.playerColor
+      ? `You played ${opts.san}.`
+      : `I played ${opts.san}.`;
+  void voiceService.speak(text).catch(() => {});
+}
+
+export interface RunAgentTurnOptions {
+  /** Conversation so far INCLUDING the new user message. */
+  history: ChatMessage[];
+  /** React Router navigate. Required for navigation actions. */
+  navigate: (path: string) => void;
+  /** Per-screen system additions (game context, board annotation
+   *  grammar, etc.). Appended to the agent grammar + snapshot block. */
+  extraSystemPrompt?: string;
+  /** Streaming chunk callback for prose. Tag stripping happens
+   *  post-stream — chunks include action tag fragments. */
+  onChunk?: (chunk: string) => void;
+}
+
+export interface RunAgentTurnResult {
+  /** Cleaned assistant message — action tags stripped. */
+  assistantMessage: ChatMessage;
+  /** Raw streamed response, tags included. Useful for callers that
+   *  need to parse other tag families (board annotations, etc.). */
+  rawResponse: string;
+  /** Actions parsed and dispatched this turn. */
+  actions: ParsedAction[];
+}
+
+/**
+ * Run one agent turn against the supplied history. Stateless: does not
+ * mutate any store. Caller is responsible for persisting the returned
+ * assistant message.
+ */
+export async function runAgentTurn(
+  options: RunAgentTurnOptions,
+): Promise<RunAgentTurnResult> {
+  const { history, navigate, extraSystemPrompt, onChunk } = options;
+
+  const snapshot = await buildCoachContextSnapshot();
+  const snapshotText = formatCoachContextSnapshot(snapshot);
+
+  const additions = [AGENT_ACTION_GRAMMAR, snapshotText];
+  if (extraSystemPrompt) additions.push(extraSystemPrompt);
+  const systemAddition = additions.join('\n\n');
+
+  const trimmed = history.slice(-HISTORY_LIMIT).map((m) => ({
+    role: m.role,
+    content: m.content,
+  }));
+
+  const raw = await getCoachChatResponse(trimmed, systemAddition, onChunk);
+
+  const { cleanText, actions } = parseActions(raw);
+
+  if (actions.length > 0) {
+    const ctx: ActionContext = { navigate };
+    await dispatchActions(actions, ctx);
+  }
+
+  const assistantMessage: ChatMessage = {
+    id: `msg-${Date.now()}-a`,
+    role: 'assistant',
+    content: cleanText,
+    timestamp: Date.now(),
+    metadata:
+      actions.length > 0
+        ? {
+            actions: actions.map((a) => ({
+              type: a.name,
+              id: JSON.stringify(a.args),
+            })),
+          }
+        : undefined,
+  };
+
+  return { assistantMessage, rawResponse: raw, actions };
+}
+
+export interface RunCoachTurnOptions {
+  userText: string;
+  navigate: (path: string) => void;
+  extraSystemPrompt?: string;
+  onChunk?: (chunk: string) => void;
+}
+
+/**
+ * Drive one user → assistant turn through the agent loop, persisting
+ * messages to the shared session store. Used by the persistent coach
+ * chat page (and the drawer when it shares the chat page's history).
+ */
+export async function runCoachTurn(
+  options: RunCoachTurnOptions,
+): Promise<RunAgentTurnResult> {
+  const { userText, navigate, extraSystemPrompt, onChunk } = options;
+
+  const userMessage: ChatMessage = {
+    id: `msg-${Date.now()}-u`,
+    role: 'user',
+    content: userText,
+    timestamp: Date.now(),
+  };
+  useCoachSessionStore.getState().appendMessage(userMessage);
+  useCoachSessionStore.getState().setStreaming(true);
+
+  try {
+    const history = useCoachSessionStore.getState().messages;
+    const result = await runAgentTurn({
+      history,
+      navigate,
+      extraSystemPrompt,
+      onChunk,
+    });
+    useCoachSessionStore.getState().appendMessage(result.assistantMessage);
+    return result;
+  } finally {
+    useCoachSessionStore.getState().setStreaming(false);
+  }
+}

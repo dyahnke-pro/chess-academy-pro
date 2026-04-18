@@ -2,6 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { CoachChatPage } from './CoachChatPage';
 import { useAppStore } from '../../stores/appStore';
+import {
+  useCoachSessionStore,
+  __resetCoachSessionStoreForTests,
+} from '../../stores/coachSessionStore';
 import { buildUserProfile } from '../../test/factories';
 import type { ChatMessage as ChatMessageType } from '../../types';
 
@@ -51,12 +55,17 @@ const mockProfile = buildUserProfile({
 // Mock scrollIntoView for JSDOM
 Element.prototype.scrollIntoView = vi.fn();
 
+function setSessionMessages(messages: ChatMessageType[]): void {
+  useCoachSessionStore.setState({ messages, hydrated: true });
+}
+
 describe('CoachChatPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockedNavigate.mockReset();
     vi.mocked(routeChatIntent).mockReset();
     vi.mocked(routeChatIntent).mockResolvedValue(null);
+    __resetCoachSessionStoreForTests();
     useAppStore.setState({
       activeProfile: mockProfile,
       chatMessages: [],
@@ -94,12 +103,10 @@ describe('CoachChatPage', () => {
   });
 
   it('shows existing messages', () => {
-    useAppStore.setState({
-      chatMessages: [
+    setSessionMessages([
         { id: '1', role: 'user', content: 'Hello coach!', timestamp: 1000 },
         { id: '2', role: 'assistant', content: 'Hello! Ready to train?', timestamp: 1001 },
-      ],
-    });
+      ]);
 
     render(<CoachChatPage />);
     expect(screen.getByText('Hello coach!')).toBeInTheDocument();
@@ -107,33 +114,27 @@ describe('CoachChatPage', () => {
   });
 
   it('renders user messages with user role test id', () => {
-    useAppStore.setState({
-      chatMessages: [
+    setSessionMessages([
         { id: '1', role: 'user', content: 'What opening should I play?', timestamp: 1000 },
-      ],
-    });
+      ]);
 
     render(<CoachChatPage />);
     expect(screen.getByTestId('chat-message-user')).toBeInTheDocument();
   });
 
   it('renders assistant messages with assistant role test id', () => {
-    useAppStore.setState({
-      chatMessages: [
+    setSessionMessages([
         { id: '2', role: 'assistant', content: 'Try the Italian Game!', timestamp: 1001 },
-      ],
-    });
+      ]);
 
     render(<CoachChatPage />);
     expect(screen.getByTestId('chat-message-assistant')).toBeInTheDocument();
   });
 
   it('hides empty state when messages exist', () => {
-    useAppStore.setState({
-      chatMessages: [
+    setSessionMessages([
         { id: '1', role: 'user', content: 'Hello!', timestamp: 1000 },
-      ],
-    });
+      ]);
 
     render(<CoachChatPage />);
     expect(screen.queryByText(/Ask about positions, openings, strategy/)).not.toBeInTheDocument();
@@ -163,9 +164,7 @@ describe('CoachChatPage', () => {
         ],
       },
     };
-    useAppStore.setState({
-      chatMessages: [msgWithActions],
-    });
+    setSessionMessages([msgWithActions]);
 
     render(<CoachChatPage />);
     expect(screen.getByTestId('action-drill_opening')).toBeInTheDocument();
@@ -217,9 +216,7 @@ describe('CoachChatPage', () => {
         ],
       },
     };
-    useAppStore.setState({
-      chatMessages: [msgWithActions],
-    });
+    setSessionMessages([msgWithActions]);
 
     render(<CoachChatPage />);
     expect(screen.getByTestId('action-review_game')).toHaveTextContent('Review Game');

@@ -156,7 +156,7 @@ export function App(): JSX.Element {
           <Route path="/coach/session/:kind" element={<ErrorBoundary><CoachSessionPage /></ErrorBoundary>} />
           <Route path="/coach/analyse" element={<ErrorBoundary><CoachAnalysePage /></ErrorBoundary>} />
           <Route path="/coach/plan" element={<ErrorBoundary><CoachSessionPlanPage /></ErrorBoundary>} />
-          <Route path="/coach/report" element={<ErrorBoundary><GameInsightsPage /></ErrorBoundary>} />
+          {/* /coach/report is a legacy alias — redirect lives below in the redirects block */}
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
           {/* Tactics (absorbs former Puzzles tab) */}
           <Route path="/tactics" element={<ErrorBoundary><TacticsPage /></ErrorBoundary>} />
@@ -177,7 +177,8 @@ export function App(): JSX.Element {
           <Route path="/puzzles/mistakes" element={<Navigate to="/tactics/mistakes" replace />} />
           <Route path="/puzzles/weakness" element={<Navigate to="/tactics/weakness" replace />} />
           <Route path="/puzzles/lichess-dashboard" element={<Navigate to="/tactics/lichess" replace />} />
-          <Route path="/weaknesses" element={<Navigate to="/coach/report" replace />} />
+          <Route path="/weaknesses" element={<ErrorBoundary><GameInsightsPage /></ErrorBoundary>} />
+          <Route path="/coach/report" element={<Navigate to="/weaknesses" replace />} />
           <Route path="/weaknesses/puzzles" element={<Navigate to="/tactics/weakness" replace />} />
           <Route path="/weaknesses/adaptive" element={<Navigate to="/tactics/adaptive" replace />} />
           <Route path="/weaknesses/classic" element={<Navigate to="/tactics/classic" replace />} />

@@ -2,10 +2,12 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
-import { getCoachChatResponse } from '../../services/coachApi';
-import { buildGameChatMessages, getGameSystemPromptAddition, parseAllTags } from '../../services/coachChatService';
+import { buildGameContextBlock, getGameSystemPromptAddition } from '../../services/coachChatService';
 import { fetchRelevantGames } from '../../services/gameContextService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
+import { runAgentTurn, detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
+import { parseBoardTags } from '../../services/boardAnnotationService';
+import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -154,34 +156,37 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       const updatedMessages = [...messagesRef.current, userMsg];
       setMessages(updatedMessages);
 
+      // Narration toggle — deterministic intercept. Runs BEFORE the
+      // in-game block below so "narrate while we play" reliably flips
+      // the flag even during an active game (which the in-game branch
+      // would otherwise handle via its own narrate case). This path
+      // uses applyNarrationToggle from coachAgentRunner for consistency
+      // with CoachChatPage.
+      const narrationToggle = detectNarrationToggle(text);
+      if (narrationToggle) {
+        const ack = applyNarrationToggle(narrationToggle.enable);
+        const ackMsg: ChatMessageType = {
+          id: `gmsg-${Date.now()}-narr`,
+          role: 'assistant',
+          content: ack,
+          timestamp: Date.now(),
+        };
+        setMessages([...updatedMessages, ackMsg]);
+        if (narrationToggle.enable) {
+          void voiceService.speak(ack);
+        } else {
+          voiceService.stop();
+        }
+        return;
+      }
+
       // In-game intents: short-circuit the LLM for actions that actually
-      // need to change the board (restart, play a specific opening).
-      // Previously "Restart the game" would produce a narrative reply
-      // ("Perfect, a fresh start!") but the board stayed where it was —
-      // the chat had no way to mutate game state. Handle those here.
+      // need to change the board (restart, play a specific opening,
+      // mute). Previously "Restart the game" would produce a narrative
+      // reply but the board stayed where it was — the chat had no way
+      // to mutate game state. Handle those here.
       if (!isGameOver) {
         const inGame = detectInGameChatIntent(text);
-        if (inGame?.kind === 'narrate') {
-          // The LLM can say "narration enabled" all day but it can't
-          // actually flip the toggle — coachVoiceOn is a user-controlled
-          // setting in the store. Flip it here, then speak the
-          // confirmation DIRECTLY through voiceService (don't gate on
-          // the store state — the setter hasn't propagated yet, and we
-          // want the user to hear something immediately so they know
-          // voice actually turned on).
-          useAppStore.getState().setCoachVoiceOn(true);
-          const ack =
-            "Voice narration is on. I'll talk through the game. Your move.";
-          const ackMsg: ChatMessageType = {
-            id: `gmsg-${Date.now()}-ack`,
-            role: 'assistant',
-            content: ack,
-            timestamp: Date.now(),
-          };
-          setMessages([...updatedMessages, ackMsg]);
-          void voiceService.speak(ack);
-          return;
-        }
         if (inGame?.kind === 'mute') {
           useAppStore.getState().setCoachVoiceOn(false);
           voiceService.stop();
@@ -373,14 +378,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       setStreamingContent('');
       speechBufferRef.current = '';
 
-      const formattedMessages = buildGameChatMessages(updatedMessages, gameContext, activeProfile);
+      const gameContextBlock = buildGameContextBlock(gameContext, activeProfile);
       const baseAddition = getGameSystemPromptAddition();
 
-      // Best-effort: surface the student's own past games that match the
-      // opening / topic in their message so the coach can cite them
-      // concretely ("you lost the last two Catalans as black — both
-      // times you traded the dark-squared bishop early"). Capped at 5
-      // games; returns empty and does nothing when no match.
       let relevantGamesBlock = '';
       try {
         const relevant = await fetchRelevantGames({
@@ -394,62 +394,82 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       } catch (err: unknown) {
         console.warn('[GameChatPanel] fetchRelevantGames failed', err);
       }
-      const systemAddition = relevantGamesBlock
-        ? `${baseAddition}\n\n${relevantGamesBlock}`
-        : baseAddition;
+      const systemAddition = [gameContextBlock, baseAddition, relevantGamesBlock]
+        .filter(Boolean)
+        .join('\n\n');
 
       let fullResponse = '';
 
-      const response = await getCoachChatResponse(
-        formattedMessages,
-        systemAddition,
-        (chunk) => {
-          fullResponse += chunk;
-          // Strip [BOARD:] tags in real-time so they don't flash during streaming
-          const displayText = fullResponse.replace(BOARD_TAG_STRIP_RE, '').trim();
-          setStreamingContent(displayText);
+      try {
+        const result = await runAgentTurn({
+          history: updatedMessages,
+          navigate: (path: string) => { void navigate(path); },
+          extraSystemPrompt: systemAddition,
+          onChunk: (chunk: string) => {
+            fullResponse += chunk;
+            // Strip [BOARD:] and [[ACTION:]] tags in real-time so
+            // they don't flash during streaming.
+            const displayText = fullResponse
+              .replace(BOARD_TAG_STRIP_RE, '')
+              .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
+              .trim();
+            setStreamingContent(displayText);
 
-          // Buffer speech to sentence boundaries — read voice state directly from store
-          if (useAppStore.getState().coachVoiceOn) {
-            speechBufferRef.current += chunk;
-            const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
-            if (sentenceEnd) {
-              const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
-              speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-              void voiceService.speak(sentence.trim());
+            if (useAppStore.getState().coachVoiceOn) {
+              speechBufferRef.current += chunk;
+              const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+              if (sentenceEnd) {
+                const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
+                speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
+                void voiceService.speak(sentence.trim());
+              }
             }
+          },
+        });
+
+        if (speechBufferRef.current.trim()) {
+          flushSpeechBuffer();
+        }
+
+        // Strip board annotation tags from the user-visible message
+        // (the agent runner already stripped action tags). Capture
+        // the parsed annotation commands so the board can react.
+        const { cleanText: textWithoutBoardTags, commands: annotations } =
+          parseBoardTags(result.assistantMessage.content);
+
+        // If the coach didn't explicitly draw any arrows, auto-extract
+        // SAN-like move references from its reply and draw them. Keeps
+        // the board visually in sync with "consider Nf3 / the key move
+        // is Bxc4" without relying on the LLM emitting [BOARD: arrow]
+        // tags. Explicit arrows always win (no override).
+        const hasExplicitArrows = annotations.some(
+          (c) => c.type === 'arrow' && (c.arrows?.length ?? 0) > 0,
+        );
+        if (!hasExplicitArrows && !isGameOver) {
+          const autoArrows = extractMoveArrows(textWithoutBoardTags, { fen });
+          if (autoArrows.length > 0) {
+            annotations.push({ type: 'arrow', arrows: autoArrows });
           }
-        },
-      );
+        }
 
-      // Flush remaining speech buffer
-      if (speechBufferRef.current.trim()) {
-        flushSpeechBuffer();
+        const assistantMsg: ChatMessageType = {
+          ...result.assistantMessage,
+          id: `gmsg-${Date.now()}-resp`,
+          content: textWithoutBoardTags,
+          metadata: {
+            actions: result.assistantMessage.metadata?.actions,
+            annotations: annotations.length > 0 ? annotations : undefined,
+          },
+        };
+        setMessages((prev) => [...prev, assistantMsg]);
+
+        if (annotations.length > 0) {
+          onBoardAnnotation?.(annotations);
+        }
+      } finally {
+        setIsStreaming(false);
+        setStreamingContent('');
       }
-
-      // Parse action tags and board annotation tags
-      const { cleanText, actions, annotations } = parseAllTags(response);
-
-      // Add assistant message
-      const assistantMsg: ChatMessageType = {
-        id: `gmsg-${Date.now()}-resp`,
-        role: 'assistant',
-        content: cleanText,
-        timestamp: Date.now(),
-        metadata: {
-          actions: actions.length > 0 ? actions : undefined,
-          annotations: annotations.length > 0 ? annotations : undefined,
-        },
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
-
-      // Apply board annotations (arrows, highlights, temp positions)
-      if (annotations.length > 0) {
-        onBoardAnnotation?.(annotations);
-      }
-
-      setIsStreaming(false);
-      setStreamingContent('');
     }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, setMessages, navigate]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)

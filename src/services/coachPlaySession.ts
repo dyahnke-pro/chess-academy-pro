@@ -15,7 +15,14 @@
  * Target ELO is mapped onto Stockfish skill (0–20) + move time by
  * linear interpolation between anchor points, so a player at 1450 sees
  * a genuinely different setup than a player at 950.
+ *
+ * Opening seeding (since the agent coach can request specific
+ * openings like "play the KIA against me"): when an opening PGN is
+ * supplied, the play surface forces the engine to follow the
+ * opening's main moves until the line runs out, then hands control
+ * back to the engine for the rest of the game. See `nextSeededMove`.
  */
+import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { pickBookMove, bookMoveToSquares, isBookMoveLegal } from './coachBookMove';
 import type { CoachDifficulty } from './coachAgent';
@@ -196,4 +203,65 @@ export async function setSkill(skill: number): Promise<void> {
 /** Reset internal skill cache — tests only. */
 export function __resetSkillCacheForTests(): void {
   _currentSkill = null;
+}
+
+// ─── Opening seeding ────────────────────────────────────────────────────────
+
+/**
+ * Compile an opening PGN move list into a sequence of {fen → SAN}
+ * pairs. The play view consults this map BEFORE asking the engine
+ * for a move; if the current FEN matches, the seeded SAN is played
+ * instead. Falls through to engine play once the line is exhausted
+ * or the user diverges.
+ */
+export interface OpeningSeed {
+  /** The opening's display name (for logging / status). */
+  name: string;
+  /** Map of position FEN → next SAN move along the prepared line. */
+  byFen: Map<string, string>;
+}
+
+/**
+ * Build an opening seed from a PGN move list (e.g. "Nf3 Nf6 g3 d5").
+ * Returns null when the PGN is empty or fails to parse.
+ */
+export function buildOpeningSeed(name: string, pgn: string): OpeningSeed | null {
+  const moves = pgn.trim().split(/\s+/).filter((tok) => tok.length > 0);
+  if (moves.length === 0) return null;
+
+  const game = new Chess();
+  const byFen = new Map<string, string>();
+
+  for (const san of moves) {
+    const fenBefore = game.fen();
+    let result;
+    try {
+      result = game.move(san);
+    } catch {
+      // Bad token — bail out, return what we have so far.
+      break;
+    }
+    byFen.set(stripClocks(fenBefore), result.san);
+  }
+
+  if (byFen.size === 0) return null;
+  return { name, byFen };
+}
+
+/**
+ * Look up the next seeded move for a position, if the seed has one.
+ * The FEN halfmove + fullmove counters are stripped so a played line
+ * still matches the seeded line even when move counts diverge.
+ */
+export function nextSeededMove(seed: OpeningSeed, fen: string): string | null {
+  const key = stripClocks(fen);
+  return seed.byFen.get(key) ?? null;
+}
+
+/** Strip the halfmove + fullmove counters from a FEN so positional
+ *  identity matches across slight game-state divergences. */
+function stripClocks(fen: string): string {
+  const parts = fen.split(' ');
+  if (parts.length < 4) return fen;
+  return parts.slice(0, 4).join(' ');
 }

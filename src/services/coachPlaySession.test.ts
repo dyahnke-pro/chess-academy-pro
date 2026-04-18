@@ -3,6 +3,8 @@ import {
   configFromTargetElo,
   resolveConfig,
   getCoachMove,
+  buildOpeningSeed,
+  nextSeededMove,
   __resetSkillCacheForTests,
 } from './coachPlaySession';
 import { stockfishEngine } from './stockfishEngine';
@@ -120,3 +122,45 @@ describe('getCoachMove', () => {
     expect(result.promotion).toBe('q');
   });
 });
+
+describe('buildOpeningSeed / nextSeededMove', () => {
+  it('compiles a PGN move list into a fen→san map', () => {
+    const seed = buildOpeningSeed("King's Indian Attack", 'Nf3 Nf6 g3 d5');
+    expect(seed).not.toBeNull();
+    expect(seed!.byFen.size).toBe(4);
+    // Starting position → Nf3
+    const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -';
+    const startMove = nextSeededMove(seed!, `${startFen} 0 1`);
+    expect(startMove).toBe('Nf3');
+  });
+
+  it('matches downstream positions and returns null when off-book', async () => {
+    const seed = buildOpeningSeed('Test', 'Nf3 Nf6 g3');
+    expect(seed).not.toBeNull();
+    // Walk the line via chess.js so the FEN we look up matches what
+    // the seed would have observed during compilation.
+    const { Chess } = await import('chess.js');
+    const game = new Chess();
+    game.move('Nf3');
+    expect(nextSeededMove(seed!, game.fen())).toBe('Nf6');
+    game.move('Nf6');
+    expect(nextSeededMove(seed!, game.fen())).toBe('g3');
+    game.move('g3');
+    // Past the end of the prepared line.
+    expect(nextSeededMove(seed!, game.fen())).toBeNull();
+    // Bogus FEN.
+    expect(nextSeededMove(seed!, 'unknown-fen')).toBeNull();
+  });
+
+  it('returns null on empty PGN', () => {
+    expect(buildOpeningSeed('Empty', '')).toBeNull();
+    expect(buildOpeningSeed('Whitespace', '   ')).toBeNull();
+  });
+
+  it('stops gracefully on bad PGN tokens', () => {
+    const seed = buildOpeningSeed('Bad', 'Nf3 garbage e4');
+    // Only the first valid move is recorded; the rest is dropped.
+    expect(seed!.byFen.size).toBe(1);
+  });
+});
+

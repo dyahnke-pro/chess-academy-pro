@@ -1,8 +1,9 @@
-import { useCallback, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useState, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, Minus, Swords } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
+import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { MobileChatDrawer } from './MobileChatDrawer';
@@ -19,12 +20,30 @@ const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 export function GlobalCoachDrawer(): JSX.Element | null {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const location = useLocation();
   const isOpen = useAppStore((s) => s.coachDrawerOpen);
   const setOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const boardCtx = useAppStore((s) => s.globalBoardContext);
   const setGlobalPractice = useAppStore((s) => s.setGlobalPracticePosition);
   const initialMessage = useAppStore((s) => s.coachDrawerInitialMessage);
   const setInitialMessage = useAppStore((s) => s.setCoachDrawerInitialMessage);
+  const setSessionRoute = useCoachSessionStore((s) => s.setCurrentRoute);
+  const hydrate = useCoachSessionStore((s) => s.hydrate);
+  const sessionHydrated = useCoachSessionStore((s) => s.hydrated);
+
+  // Hydrate the agent session on app boot so context-snapshot
+  // recentActions / focus survive reload.
+  useEffect(() => {
+    if (!sessionHydrated) void hydrate();
+  }, [hydrate, sessionHydrated]);
+
+  // Publish the current route to the agent session store so the
+  // coach's per-turn context snapshot says "user is on /coach/play"
+  // instead of "/" — that's what makes "deeper integration" feel
+  // session-aware.
+  useEffect(() => {
+    setSessionRoute(location.pathname);
+  }, [location.pathname, setSessionRoute]);
 
   const [minimized, setMinimized] = useState(false);
 

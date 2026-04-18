@@ -96,21 +96,27 @@ export function CoachSessionPage(): JSX.Element {
   }
 
   if (kind === 'play-against') {
-    // The dynamic session used to render a stripped-down CoachPlaySessionView
-    // with a static-mode board (no click-to-move, no themed board). Users
-    // want the full /coach/play experience — themed board, click-to-move,
-    // move classification, hints, post-game review. Forward the session's
-    // params so CoachGamePage can start in the requested configuration.
+    // Forward to the full /coach/play experience (themed board,
+    // click-to-move, move classification, hints, post-game review).
+    // Carries every param the agent coach can set: subject (free-text
+    // training focus), side, difficulty, focus (legacy ack-flow text),
+    // opening (resolved opening name from agent action),
+    // openingPgn (forced opening line for the engine to follow), and
+    // narrate (auto-narrate per move via the shared session store).
     const params = new URLSearchParams();
     if (subject) params.set('subject', subject);
     if (searchParams.get('side') === 'black') params.set('side', 'black');
     if (searchParams.get('side') === 'white') params.set('side', 'white');
     const diffParam = searchParams.get('difficulty');
     if (diffParam && diffParam !== 'auto') params.set('difficulty', diffParam);
-    // Carry the narrative training focus from the coach-chat affirmation
-    // flow so the play page's coach keeps the agreed focus in mind.
     const focusParam = searchParams.get('focus');
     if (focusParam) params.set('focus', focusParam);
+    const openingParam = searchParams.get('opening');
+    if (openingParam) params.set('opening', openingParam);
+    const openingPgnParam = searchParams.get('openingPgn');
+    if (openingPgnParam) params.set('openingPgn', openingPgnParam);
+    const narrateParam = searchParams.get('narrate');
+    if (narrateParam) params.set('narrate', narrateParam);
     const qs = params.toString();
     return <Navigate to={qs ? `/coach/play?${qs}` : '/coach/play'} replace />;
   }

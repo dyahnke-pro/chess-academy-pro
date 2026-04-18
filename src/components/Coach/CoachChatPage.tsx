@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeOff } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
-import { getCoachChatResponse } from '../../services/coachApi';
-import { buildChatMessages, parseActionTags, getChatSystemPromptAdditions, loadAnalysisContext } from '../../services/coachChatService';
+import { useCoachSessionStore } from '../../stores/coachSessionStore';
+import { getChatSystemPromptAdditions, loadAnalysisContext } from '../../services/coachChatService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
+import { runCoachTurn, detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -45,9 +46,13 @@ function stripMarkdownForTts(text: string): string {
 
 export function CoachChatPage(): JSX.Element {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const activeProfile = useAppStore((s) => s.activeProfile);
-  const chatMessages = useAppStore((s) => s.chatMessages);
-  const addChatMessage = useAppStore((s) => s.addChatMessage);
+  const chatMessages = useCoachSessionStore((s) => s.messages);
+  const appendMessage = useCoachSessionStore((s) => s.appendMessage);
+  const hydrate = useCoachSessionStore((s) => s.hydrate);
+  const hydrated = useCoachSessionStore((s) => s.hydrated);
+  const setCurrentRoute = useCoachSessionStore((s) => s.setCurrentRoute);
 
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
@@ -56,6 +61,12 @@ export function CoachChatPage(): JSX.Element {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechBufferRef = useRef('');
   const voiceMutedRef = useRef(false);
+
+  // Hydrate persisted session on mount and publish current route.
+  useEffect(() => {
+    if (!hydrated) void hydrate();
+    setCurrentRoute('/coach/chat');
+  }, [hydrate, hydrated, setCurrentRoute]);
 
   // Keep ref in sync for use inside streaming callback
   useEffect(() => {
@@ -86,21 +97,44 @@ export function CoachChatPage(): JSX.Element {
   const handleSend = useCallback(async (text: string) => {
     if (!activeProfile || isStreaming) return;
 
-    // Add user message
-    const userMsg: ChatMessageType = {
-      id: `msg-${Date.now()}`,
-      role: 'user',
-      content: text,
-      timestamp: Date.now(),
-    };
-    addChatMessage(userMsg);
+    // Deterministic narration toggle — flips voice on/off reliably
+    // without depending on LLM prompt-following. When enabling from
+    // the chat page (not mid-game), ALSO navigate to a new play
+    // session so "narrate a game while we play" actually starts one.
+    const narrationToggle = detectNarrationToggle(text);
+    if (narrationToggle) {
+      appendMessage({
+        id: `msg-${Date.now()}-u`,
+        role: 'user',
+        content: text,
+        timestamp: Date.now(),
+      });
+      const ack = applyNarrationToggle(narrationToggle.enable);
+      appendMessage({
+        id: `msg-${Date.now()}-narr`,
+        role: 'assistant',
+        content: ack,
+        timestamp: Date.now(),
+      } satisfies ChatMessageType);
+      if (narrationToggle.enable) {
+        void navigate('/coach/session/play-against?narrate=1');
+      }
+      return;
+    }
 
     // "Read this to me" — speak the last coach message verbatim
     // (markdown-stripped). Bypass the LLM so the spoken words match
-    // what's on screen instead of being paraphrased.
+    // what's on screen instead of being paraphrased. Append the user
+    // message to the session store so the transcript stays honest.
     if (READ_THIS_RE.test(text)) {
       const lastAssistant = [...chatMessages].reverse().find((m) => m.role === 'assistant');
       if (lastAssistant) {
+        appendMessage({
+          id: `msg-${Date.now()}-u`,
+          role: 'user',
+          content: text,
+          timestamp: Date.now(),
+        });
         setVoiceMuted(false);
         voiceMutedRef.current = false;
         voiceService.stop();
@@ -109,91 +143,99 @@ export function CoachChatPage(): JSX.Element {
       }
     }
 
-    // Intent routing: if this message resolves to a dynamic session,
-    // acknowledge in chat and navigate instead of calling the LLM.
-    // Pre-validation inside routeChatIntent ensures false-positive
-    // intents (e.g. "teach me about forks") fall through to QA.
+    // Fast-path: deterministic intent router for explicit phrases like
+    // "play the KIA against me" or "review my last Catalan". Routes
+    // instantly without an LLM round-trip. Falls through to the agent
+    // loop for everything it doesn't recognize — that's where actions
+    // like list_games / start_play with arbitrary openings live.
     try {
-      // Walk back from the most recent assistant message so the router
-      // can pick up "coach proposed a game → user said yes" patterns.
       const lastAssistantMessage = [...chatMessages]
         .reverse()
         .find((m) => m.role === 'assistant')?.content;
       const routed = await routeChatIntent(text, { lastAssistantMessage });
       if (routed) {
-        const ackMsg: ChatMessageType = {
+        appendMessage({
+          id: `msg-${Date.now()}-u`,
+          role: 'user',
+          content: text,
+          timestamp: Date.now(),
+        });
+        appendMessage({
           id: `msg-${Date.now()}-ack`,
           role: 'assistant',
           content: routed.ackMessage,
           timestamp: Date.now(),
-        };
-        addChatMessage(ackMsg);
-        // Reply-only routes (no `path`) just inject the ack and stay
-        // in chat. See coachIntentRouter for the cases that use this.
+        });
         if (routed.path) {
           void navigate(routed.path);
         }
         return;
       }
     } catch (err: unknown) {
-      // Router failures should never block the LLM fallback.
       console.warn('[CoachChatPage] intent routing failed:', err);
     }
 
-    // Start streaming response
+    // Agent loop: build snapshot, call LLM, dispatch any [[ACTION:]]
+    // tags it emits. The runner appends both user + assistant messages
+    // to the session store; this view just renders them.
     setIsStreaming(true);
     setStreamingContent('');
     speechBufferRef.current = '';
 
-    const allMessages = [...chatMessages, userMsg];
-    const formattedMessages = buildChatMessages(allMessages, activeProfile, analysisContext || undefined);
-    const systemAdditions = getChatSystemPromptAdditions(!!analysisContext);
+    const extraSystem = analysisContext
+      ? `${getChatSystemPromptAdditions(true)}\n\n${analysisContext}`
+      : getChatSystemPromptAdditions(false);
 
-    let fullResponse = '';
+    let streamed = '';
+    try {
+      await runCoachTurn({
+        userText: text,
+        navigate: (path: string) => { void navigate(path); },
+        extraSystemPrompt: extraSystem,
+        onChunk: (chunk: string) => {
+          streamed += chunk;
+          setStreamingContent(streamed);
 
-    const response = await getCoachChatResponse(
-      formattedMessages,
-      systemAdditions,
-      (chunk) => {
-        fullResponse += chunk;
-        setStreamingContent(fullResponse);
-
-        // Buffer speech to sentence boundaries (skip if muted)
-        if (!voiceMutedRef.current) {
-          speechBufferRef.current += chunk;
-          const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
-          if (sentenceEnd) {
-            const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
-            speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-            void voiceService.speak(sentence.trim());
+          if (!voiceMutedRef.current) {
+            speechBufferRef.current += chunk;
+            const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+            if (sentenceEnd) {
+              const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
+              speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
+              void voiceService.speak(sentence.trim());
+            }
           }
-        }
-      },
-    );
-
-    // Flush remaining speech buffer
-    if (speechBufferRef.current.trim()) {
-      flushSpeechBuffer();
+        },
+      });
+      if (speechBufferRef.current.trim()) {
+        flushSpeechBuffer();
+      }
+    } catch (err) {
+      console.warn('[CoachChatPage] agent turn failed:', err);
+    } finally {
+      setIsStreaming(false);
+      setStreamingContent('');
     }
+  }, [activeProfile, chatMessages, isStreaming, appendMessage, flushSpeechBuffer, analysisContext, navigate]);
 
-    // Parse action tags
-    const { cleanText, actions } = parseActionTags(response);
-
-    // Add assistant message
-    const assistantMsg: ChatMessageType = {
-      id: `msg-${Date.now()}-resp`,
-      role: 'assistant',
-      content: cleanText,
-      timestamp: Date.now(),
-      metadata: {
-        actions: actions.length > 0 ? actions : undefined,
-      },
-    };
-    addChatMessage(assistantMsg);
-
-    setIsStreaming(false);
-    setStreamingContent('');
-  }, [activeProfile, chatMessages, isStreaming, addChatMessage, flushSpeechBuffer, analysisContext, navigate]);
+  // Auto-send a query carried in the URL (e.g., from the Game Insights
+  // search bar navigating here with ?q=...). Runs once per distinct
+  // query, strips the param after firing so refreshing doesn't resend,
+  // and waits for the profile + hydration to be ready.
+  const autoSentQueryRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!activeProfile || !hydrated) return;
+    const q = searchParams.get('q');
+    if (!q || !q.trim()) return;
+    if (autoSentQueryRef.current === q) return;
+    autoSentQueryRef.current = q;
+    // Strip ?q= immediately so navigating back here doesn't resend it
+    // and refreshing stays clean.
+    const next = new URLSearchParams(searchParams);
+    next.delete('q');
+    setSearchParams(next, { replace: true });
+    void handleSend(q);
+  }, [activeProfile, hydrated, searchParams, setSearchParams, handleSend]);
 
   return (
     <div className="flex flex-col h-[calc(100dvh-4rem)] pb-16 md:pb-0 max-w-2xl mx-auto w-full" data-testid="coach-chat-page">
