@@ -13,6 +13,8 @@
  * See CLAUDE.md → "Agent Coach Pattern".
  */
 
+import { expandOpeningAlias } from './openingAliases';
+
 export type CoachIntentKind =
   | 'continue-middlegame'
   | 'play-against'
@@ -157,10 +159,10 @@ export function parseCoachIntent(query: string): CoachIntent {
       .replace(/[?.!]+/g, '')
       .replace(/\s+/g, ' ')
       .trim();
-    const subject = subjectRaw.length > 0 ? cleanSubject(subjectRaw) : '';
+    const cleanedSubject = subjectRaw.length > 0 ? cleanSubject(subjectRaw) : '';
     return {
       kind: 'review-game',
-      subject: subject || undefined,
+      subject: cleanedSubject ? expandOpeningAlias(cleanedSubject) : undefined,
       source,
       mode,
       raw,
@@ -182,7 +184,7 @@ export function parseCoachIntent(query: string): CoachIntent {
     const subject = subjectMatch ? cleanSubject(subjectMatch[1]) : '';
     return {
       kind: 'continue-middlegame',
-      subject: subject || undefined,
+      subject: subject ? expandOpeningAlias(subject) : undefined,
       raw,
     };
   }
@@ -238,6 +240,11 @@ export function parseCoachIntent(query: string): CoachIntent {
       side = coachColor === 'white' ? 'black' : 'white';
       subject = undefined;
     }
+    // Expand common abbreviations ("kid" → "King's Indian Defense")
+    // so the opening-book lookup downstream actually resolves.
+    if (subject) {
+      subject = expandOpeningAlias(subject);
+    }
     return {
       kind: 'play-against',
       subject,
@@ -273,7 +280,7 @@ export function parseCoachIntent(query: string): CoachIntent {
   if (walkthroughMatch) {
     const subject = cleanSubject(walkthroughMatch[1]);
     if (subject) {
-      return { kind: 'walkthrough', subject, raw };
+      return { kind: 'walkthrough', subject: expandOpeningAlias(subject), raw };
     }
   }
 

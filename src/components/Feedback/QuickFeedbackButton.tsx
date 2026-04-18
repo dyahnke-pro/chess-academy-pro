@@ -162,21 +162,24 @@ export function QuickFeedbackButton(): JSX.Element {
 
   return (
     <>
-      {/* Floating trigger — top-right of every page, tucked against
-          the header so it doesn't compete with content. aria-label so
-          screen readers know what it is. */}
+      {/* Inline pill — lives in the header bar alongside the app title
+          so users can actually see what it is (the previous floating
+          circle was tucked under the status-bar notch on iPhones and
+          read as an unlabeled mystery icon). Compact icon-only on very
+          small screens, icon + "Feedback" label from xs up. */}
       <button
         onClick={openPanel}
-        className="fixed top-3 right-3 z-[60] w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-transform hover:scale-105"
+        className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-transform hover:scale-105"
         style={{
           background: 'var(--color-accent)',
           color: 'var(--color-bg)',
         }}
-        aria-label="Send quick feedback"
+        aria-label="Send feedback"
         title="Quick feedback"
         data-testid="quick-feedback-button"
       >
-        <MessageSquarePlus size={16} />
+        <MessageSquarePlus size={14} />
+        <span>Feedback</span>
       </button>
 
       {open && (
