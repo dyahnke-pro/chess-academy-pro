@@ -76,7 +76,15 @@ const MAX_RESTART_ATTEMPTS = 3;
  */
 class VoiceInputService {
   private recognition: SpeechRecognitionInstance | null = null;
-  private resultHandler: ResultHandler | null = null;
+  /**
+   * Array of active result handlers. Was previously a single slot
+   * which meant ChatInput, VoiceChatMic, and SmartSearchBar all
+   * fought for the same setter — whichever registered last silenced
+   * the others. Now handlers are additive and each caller gets an
+   * unsubscriber back to drop its own entry on cleanup, so multiple
+   * mic-enabled surfaces can coexist without silently breaking each
+   * other. */
+  private resultHandlers: ResultHandler[] = [];
   private interimHandler: InterimHandler | null = null;
   private endHandler: EndHandler | null = null;
   private listening = false;
@@ -142,8 +150,21 @@ class VoiceInputService {
     this.detachLifecycleListeners();
   }
 
-  onResult(handler: ResultHandler): void {
-    this.resultHandler = handler;
+  /**
+   * Register a handler to receive finalised transcripts. Returns an
+   * unsubscriber the caller MUST call on cleanup so handlers don't
+   * leak between mounts. Multiple handlers coexist — every final
+   * transcript fans out to all of them, so ChatInput, VoiceChatMic,
+   * and SmartSearchBar can all listen simultaneously if all three
+   * are mounted. Previously this was a single-slot setter and the
+   * last caller silenced the others.
+   */
+  onResult(handler: ResultHandler): () => void {
+    this.resultHandlers.push(handler);
+    return () => {
+      const idx = this.resultHandlers.indexOf(handler);
+      if (idx >= 0) this.resultHandlers.splice(idx, 1);
+    };
   }
 
   isListening(): boolean {
@@ -288,7 +309,16 @@ class VoiceInputService {
     this.latestInterim = '';
     // Successful utterance → reset the restart-thrash counter.
     this.restartAttempts = 0;
-    this.resultHandler?.(trimmed);
+    // Fan out to every registered handler. Snapshot first so a
+    // handler that unsubscribes as part of its callback doesn't
+    // skip a sibling handler in the same dispatch.
+    for (const handler of [...this.resultHandlers]) {
+      try {
+        handler(trimmed);
+      } catch (err) {
+        console.warn('[voiceInputService] result handler threw:', err);
+      }
+    }
     // Prepare for the next utterance. The browser's continuous mode
     // may keep firing new results within the same session; if it
     // ends, onend's restart path starts a fresh one.

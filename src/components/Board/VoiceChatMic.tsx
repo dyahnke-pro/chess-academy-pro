@@ -63,10 +63,12 @@ interface VoiceChatMicProps {
 
 const MAX_HISTORY_PAIRS = 3;
 const VOICE_ENGINE_DEPTH = 10;
-/** Tokens cap for voice replies. Voice answers should be 1-2
- *  sentences — anything longer drags response time and is painful
- *  to listen to. Previously 300 (written for a text-style answer). */
-const VOICE_MAX_TOKENS = 120;
+/** Tokens cap for voice replies. Previously 120 (set in PR #230 for
+ *  latency), but that truncates the first-ever greeting's
+ *  capabilities tour and any 3+ sentence answer. 400 keeps replies
+ *  in the "comfortable spoken length" band (~45 seconds max) without
+ *  cutting off a natural mid-thought. */
+const VOICE_MAX_TOKENS = 400;
 
 /** Regex that flags when the user's question is move/position specific
  *  enough that the engine analysis block is worth including. Most
@@ -373,7 +375,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
   }, []);
 
   useEffect(() => {
-    voiceInputService.onResult((transcript: string) => {
+    const unsubscribe = voiceInputService.onResult((transcript: string) => {
       if (transcript.trim()) {
         // Final recognition landed — clear the interim preview and
         // send.
@@ -382,6 +384,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       }
       restartListening();
     });
+    return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

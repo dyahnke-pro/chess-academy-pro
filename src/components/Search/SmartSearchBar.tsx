@@ -40,6 +40,18 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   const [voiceUnsupported, setVoiceUnsupported] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  /** Holds the current voice-input unsubscriber so we can drop it
+   *  before registering a new one on each mic tap, and on unmount.
+   *  Stops the service's resultHandlers array from growing every
+   *  time the user starts listening. */
+  const voiceUnsubscribeRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    return () => {
+      voiceUnsubscribeRef.current?.();
+      voiceUnsubscribeRef.current = null;
+    };
+  }, []);
 
   const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const setCoachDrawerInitialMessage = useAppStore((s) => s.setCoachDrawerInitialMessage);
@@ -127,14 +139,16 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       setListening(false);
       return;
     }
-    // Reset any existing handler — the one registered below becomes
-    // the single active callback for this listening session. In
+    // Drop any previous handler from this component before
+    // registering a new one — otherwise every mic-tap would pile
+    // another listener into the service's fan-out array. In
     // continuous mode the mic stays ON until the user taps off, so
     // this callback may fire MULTIPLE times (once per utterance). The
     // first utterance that matches a routable intent navigates and
     // turns the mic off; otherwise we keep listening and ask the
     // coach.
-    voiceInputService.onResult((transcript) => {
+    voiceUnsubscribeRef.current?.();
+    voiceUnsubscribeRef.current = voiceInputService.onResult((transcript) => {
       const text = transcript.trim();
       if (!text) return;
       setQuery(text);
