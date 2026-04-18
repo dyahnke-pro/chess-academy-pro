@@ -47,9 +47,18 @@ const POSITION_QUESTION_RE =
 /** "How am I doing?", "my games", "performance", "strengths / weaknesses",
  *  "accuracy", "am I improving", "stats" — triggers the deep
  *  game-stats block pulled from gameInsightsService. Runs on top of
- *  the opening block when relevant. */
+ *  the opening block when relevant. Also fires on bare greetings so
+ *  the coach can compose a grounded welcome ("I see you're scoring
+ *  68% as White…") instead of a generic "hi". */
 const PERFORMANCE_QUESTION_RE =
   /\b(my\s+(?:games?|play|performance|stats|accuracy|rating|elo|weak\w*|strength\w*|blunder\w*|mistake\w*|game\s+review)|how\s+am\s+i\s+doing|am\s+i\s+(?:improving|getting\s+better)|recent\s+games|last\s+\d+\s+games|my\s+win\s+rate|track\s+record|overall|which\s+opening\s+do\s+i|where\s+am\s+i\s+losing)\b/i;
+
+/** Bare greetings — "hi", "hello", "hey", "what's up", "good morning",
+ *  "good evening", "yo". Triggers the same grounded data that a
+ *  performance question does, so the coach has real stats to cite in
+ *  its welcome message. */
+const GREETING_RE =
+  /^\s*(hi|hello|hey(?:\s+there)?|yo|howdy|greetings|good\s+(?:morning|afternoon|evening)|what'?s\s+up|sup)\b[\s!.?,]*$/i;
 
 /** Tactics-awareness questions — triggers tacticInsights block with
  *  per-theme missed-tactic counts. */
@@ -100,9 +109,12 @@ export interface EnricherInput {
  */
 export async function buildGroundingBlock(input: EnricherInput): Promise<string> {
   const { userText, currentFen } = input;
+  const isGreeting = GREETING_RE.test(userText);
   const wantsOpening = OPENING_QUESTION_RE.test(userText);
   const wantsPosition = POSITION_QUESTION_RE.test(userText);
-  const wantsPerformance = PERFORMANCE_QUESTION_RE.test(userText) || wantsOpening;
+  // Greetings fire the performance blocks so the coach can welcome
+  // the student with a concrete observation from their real data.
+  const wantsPerformance = PERFORMANCE_QUESTION_RE.test(userText) || wantsOpening || isGreeting;
   const wantsTactics = TACTICS_QUESTION_RE.test(userText);
   const wantsMistakes = MISTAKE_QUESTION_RE.test(userText) || wantsPerformance;
   const wantsStudy = STUDY_QUESTION_RE.test(userText);
@@ -110,6 +122,7 @@ export async function buildGroundingBlock(input: EnricherInput): Promise<string>
   const wantsGameDetail = RECENT_GAME_DETAIL_RE.test(userText);
 
   if (
+    !isGreeting &&
     !wantsOpening &&
     !wantsPosition &&
     !wantsPerformance &&

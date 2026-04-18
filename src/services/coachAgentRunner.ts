@@ -27,7 +27,7 @@ import {
   type ActionContext,
   type ParsedAction,
 } from './coachActionDispatcher';
-import { AGENT_ACTION_GRAMMAR } from './coachPrompts';
+import { AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES } from './coachPrompts';
 import { extractAndRememberNotes } from './coachMemoryService';
 import { buildGroundingBlock } from './coachContextEnricher';
 import { useCoachSessionStore } from '../stores/coachSessionStore';
@@ -156,7 +156,7 @@ export async function runAgentTurn(
     currentFen: lastBoardFen,
   });
 
-  const additions = [AGENT_ACTION_GRAMMAR, snapshotText];
+  const additions = [AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES, snapshotText];
   if (groundingBlock) additions.push(groundingBlock);
   if (extraSystemPrompt) additions.push(extraSystemPrompt);
   const systemAddition = additions.join('\n\n');
