@@ -66,6 +66,7 @@ export async function pushToCloud(profile: UserProfile): Promise<void> {
         apikey: config.supabaseAnonKey,
       },
       body: jsonData,
+      signal: AbortSignal.timeout(20000),
     },
   );
 
@@ -92,6 +93,7 @@ export async function listCloudBackups(profile: UserProfile): Promise<CloudBacku
         Authorization: `Bearer ${config.supabaseAnonKey}`,
         apikey: config.supabaseAnonKey,
       },
+      signal: AbortSignal.timeout(10000),
     },
   );
 
@@ -120,6 +122,7 @@ export async function pullFromCloud(profile: UserProfile): Promise<void> {
         Authorization: `Bearer ${config.supabaseAnonKey}`,
         apikey: config.supabaseAnonKey,
       },
+      signal: AbortSignal.timeout(20000),
     },
   );
 

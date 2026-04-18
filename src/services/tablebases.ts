@@ -86,7 +86,10 @@ export async function fetchTablebase(fen: string): Promise<TablebaseResult> {
   }
 
   const url = `https://tablebase.lichess.ovh/standard?fen=${encodeURIComponent(fen)}`;
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  const response = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    signal: AbortSignal.timeout(5000),
+  });
 
   if (!response.ok) {
     throw new Error(`Tablebase API error: ${response.status}`);

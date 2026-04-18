@@ -3,6 +3,11 @@ import type { LichessExplorerResult, LichessCloudEval } from '../types';
 const EXPLORER_BASE = 'https://explorer.lichess.ovh';
 const LICHESS_API_BASE = 'https://lichess.org/api';
 
+/** Network timeout for any Lichess call. Keeps slow / unresponsive
+ *  Lichess endpoints from stalling the UI — callers that don't wrap
+ *  with their own timeout still get protection at the service edge. */
+const LICHESS_FETCH_TIMEOUT_MS = 5000;
+
 export type ExplorerSource = 'lichess' | 'masters';
 
 /**
@@ -19,7 +24,10 @@ export async function fetchLichessExplorer(
     params.set('ratings', '1600,1800,2000,2200,2500');
   }
   const url = `${EXPLORER_BASE}/${source}?${params.toString()}`;
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  const response = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
+  });
   if (!response.ok) {
     throw new Error(`Explorer API error: ${response.status}`);
   }
@@ -37,7 +45,10 @@ export async function fetchCloudEval(
 ): Promise<LichessCloudEval | null> {
   const params = new URLSearchParams({ fen, multiPv: String(multiPv) });
   const url = `${LICHESS_API_BASE}/cloud-eval?${params.toString()}`;
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  const response = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
+  });
   if (response.status === 404) return null;
   if (!response.ok) {
     throw new Error(`Cloud eval API error: ${response.status}`);
