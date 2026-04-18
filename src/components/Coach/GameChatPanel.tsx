@@ -46,6 +46,11 @@ interface GameChatPanelProps {
    *  was invalid or there was nothing to undo. Powers the coach's
    *  play_variation action — "what if Black plays Ne4 instead of Bh6?" */
   onPlayVariation?: (args: { undo: number; moves: string[] }) => boolean;
+  /** Snap the board back to the position it was in before the first
+   *  variation was applied. Returns true on success, false if no
+   *  snapshot exists (no variation in progress). Powers
+   *  return_to_game — "ok back to my real game". */
+  onReturnToGame?: () => boolean;
   /** If set, auto-sends this message on mount (e.g., from post-game practice bridge) */
   initialPrompt?: string | null;
   /** Called after the initial prompt has been sent */
@@ -80,6 +85,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onRestartGame,
       onPlayOpening,
       onPlayVariation,
+      onReturnToGame,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -414,6 +420,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           game: onPlayVariation
             ? {
                 playVariation: (vArgs) => onPlayVariation(vArgs),
+                returnToGame: () => (onReturnToGame ? onReturnToGame() : false),
                 getCurrentFen: () => fen,
               }
             : undefined,
@@ -482,7 +489,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayVariation, setMessages, navigate]);
+    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayVariation, onReturnToGame, setMessages, navigate]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {

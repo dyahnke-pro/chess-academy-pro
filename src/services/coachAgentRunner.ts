@@ -116,6 +116,7 @@ export interface RunAgentTurnOptions {
    *  play_variation actions. */
   game?: {
     playVariation: (args: { undo: number; moves: string[] }) => boolean;
+    returnToGame: () => boolean;
     getCurrentFen: () => string;
   };
 }
