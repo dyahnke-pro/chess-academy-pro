@@ -3,6 +3,7 @@ import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { useChessGame } from '../../hooks/useChessGame';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { speechService } from '../../services/speechService';
+import { sanitizeForTTS } from '../../services/voiceService';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -163,7 +164,9 @@ export function MiddlegamePlanStudy({
       if (!text) return;
       setIsNarrating(true);
       narrationActiveRef.current = true;
-      void speechService.speak(text, {
+      // Route through the shared sanitizer so chess notation / piece
+      // letters don't reach the speech engine as "Nxf7" / "P on e4".
+      void speechService.speak(sanitizeForTTS(text), {
         onEnd: () => {
           if (narrationActiveRef.current) {
             setIsNarrating(false);

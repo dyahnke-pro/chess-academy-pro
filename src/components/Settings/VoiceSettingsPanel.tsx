@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import { POLLY_VOICES, getTtsUrl, voiceService, type VoiceTier } from '../../services/voiceService';
+import { POLLY_VOICES, getTtsUrl, voiceService, sanitizeForTTS, type VoiceTier } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import { Volume2, Play, Mic, Sparkles, AlertCircle } from 'lucide-react';
@@ -152,7 +152,9 @@ export function VoiceSettingsPanel(): JSX.Element {
     if (systemVoiceURI) {
       speechService.setVoice(systemVoiceURI);
     }
-    speechService.speak('Great move! You found the key idea in this position.', {
+    // Defense-in-depth: route even hardcoded previews through the
+    // sanitizer so future string changes can't leak chess shorthand.
+    void speechService.speak(sanitizeForTTS('Great move! You found the key idea in this position.'), {
       rate: voiceSpeed,
     });
     setTimeout(() => setSystemPreviewPlaying(false), 3000);
