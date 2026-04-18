@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { voiceInputService } from '../../services/voiceInputService';
 import { voiceService } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
+import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
@@ -398,6 +399,17 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       setListening(false);
       setInterimTranscript('');
       return;
+    }
+
+    // Mic on = voice narration on (implicit). If the student turns
+    // the mic on during a game, they expect a spoken conversation —
+    // the coach should narrate per-move without being asked. Flip
+    // coachVoiceOn here; the per-move commentary path reads this
+    // flag to decide whether to TTS its reply. Left ON when the user
+    // later stops the mic — they can explicitly toggle voice off via
+    // the dedicated voice button if they want silence.
+    if (!useAppStore.getState().coachVoiceOn) {
+      useAppStore.getState().setCoachVoiceOn(true);
     }
 
     // Tap-to-interrupt: if the coach is mid-reply, cut off the TTS
