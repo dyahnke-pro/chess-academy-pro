@@ -68,6 +68,30 @@ describe('parseCoachIntent — play-against', () => {
     expect(hard.difficulty).toBe('hard');
   });
 
+  describe('opening alias expansion', () => {
+    it('expands "kid" to "King\'s Indian Defense" so the book lookup resolves', () => {
+      const intent = parseCoachIntent('Play the kid against me');
+      expect(intent.kind).toBe('play-against');
+      expect(intent.subject).toBe("King's Indian Defense");
+    });
+
+    it('expands "najdorf" to the canonical Sicilian variation name', () => {
+      const intent = parseCoachIntent('Play the Najdorf against me');
+      expect(intent.subject).toBe('Sicilian Defense: Najdorf Variation');
+    });
+
+    it('leaves unknown subjects untouched so fuzzy matching can try', () => {
+      const intent = parseCoachIntent('Play the Stafford Gambit against me');
+      expect(intent.subject?.toLowerCase()).toContain('stafford');
+    });
+
+    it('expands aliases on walkthrough subjects too', () => {
+      const intent = parseCoachIntent('Walk me through the KID');
+      expect(intent.kind).toBe('walkthrough');
+      expect(intent.subject).toBe("King's Indian Defense");
+    });
+  });
+
   // Natural phrasings that previously fell through to `qa` and made the
   // coach chat conversationally ("Ready when you are!") instead of
   // launching /coach/session/play-against.

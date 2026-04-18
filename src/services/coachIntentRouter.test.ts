@@ -112,7 +112,9 @@ describe('routeChatIntent', () => {
     );
     expect(routed).not.toBeNull();
     expect(routed!.path).toMatch(/^\/coach\/session\/middlegame/);
-    expect(routed!.path).toContain('subject=italian');
+    // "italian" now expands to "Italian Game" via the alias map so the
+    // opening-book lookup downstream resolves.
+    expect(routed!.path).toContain('subject=Italian+Game');
   });
 
   it('never throws — router errors become null so chat keeps working', async () => {
