@@ -51,7 +51,7 @@ const POSITION_QUESTION_RE =
  *  the coach can compose a grounded welcome ("I see you're scoring
  *  68% as White…") instead of a generic "hi". */
 const PERFORMANCE_QUESTION_RE =
-  /\b(my\s+(?:games?|play|performance|stats|accuracy|rating|elo|weak\w*|strength\w*|blunder\w*|mistake\w*|game\s+review)|how\s+am\s+i\s+doing|am\s+i\s+(?:improving|getting\s+better)|recent\s+games|last\s+\d+\s+games|my\s+win\s+rate|track\s+record|overall|which\s+opening\s+do\s+i|where\s+am\s+i\s+losing)\b/i;
+  /\b(my\s+(?:games?|play|performance|stats|accuracy|rating|elo|weak\w*|strength\w*|blunder\w*|mistake\w*|game\s+review)|how\s+am\s+i\s+doing|am\s+i\s+(?:improving|getting\s+better)|recent\s+games|last\s+\d+\s+games|my\s+win\s+rate|track\s+record|overall|which\s+opening\s+do\s+i|where\s+am\s+i\s+losing|what\s+should\s+(?:we|i)\s+(?:do|work\s+on|practice|focus\s+on)|what\s+(?:to|should\s+i)\s+(?:work\s+on|practice|study)|what\s+do\s+(?:we|i)\s+need\s+to\s+work\s+on)\b/i;
 
 /** Bare greetings — "hi", "hello", "hey", "what's up", "good morning",
  *  "good evening", "yo". Triggers the same grounded data that a
