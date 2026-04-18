@@ -525,6 +525,14 @@ export interface UserPreferences {
   // Lichess API token (encrypted, for puzzle activity/dashboard)
   lichessTokenEncrypted?: string | null;
   lichessTokenIv?: string | null;
+  /**
+   * Persistent "what the coach has learned about this student" notes.
+   * Short natural-language observations emitted by the coach (via the
+   * `[[REMEMBER: ...]]` tag in its replies) and injected into every
+   * coach prompt so advice stays consistent over time. Bounded to
+   * avoid runaway growth; see coachMemoryService for limits.
+   */
+  coachMemory?: string[];
 }
 
 export interface UserProfile {

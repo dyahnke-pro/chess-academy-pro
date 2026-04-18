@@ -19,6 +19,8 @@
  */
 import type { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
+import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
+import type { ChatMessage } from '../types';
 
 export type MoveVerdict = 'excellent' | 'good' | 'book' | 'inaccuracy' | 'mistake' | 'blunder' | 'neutral';
 
@@ -42,7 +44,19 @@ export interface MoveCommentaryInput {
   reviewTone?: boolean;
   /** When true, skip the LLM entirely and return '' (no narration). */
   offline?: boolean;
+  /**
+   * Recent chat history from the shared coach session. Gives the
+   * commentary LLM memory of what was just said in chat, so narration
+   * and chat stay one continuous conversation rather than two parallel
+   * threads. Only the last handful of messages are used to keep tokens
+   * in check.
+   */
+  chatHistory?: readonly ChatMessage[];
 }
+
+/** How many prior chat messages to include in the commentary prompt.
+ *  Small by design — we want continuity, not a full replay. */
+const CHAT_CONTEXT_MESSAGES = 6;
 
 /**
  * Classify an eval swing into a rough verdict from the MOVER's perspective.
@@ -82,7 +96,9 @@ export async function generateMoveCommentary(input: MoveCommentaryInput): Promis
     // The coachApi returns a warning banner string when no key is
     // configured; surface that as "not available" rather than speaking it.
     if (trimmed.startsWith('⚠️')) return '';
-    return trimmed;
+    // Strip any [[REMEMBER: ...]] tags the LLM embedded and persist
+    // them — the coach can now grow its memory of the student mid-game.
+    return extractAndRememberNotes(trimmed);
   } catch {
     return '';
   }
@@ -101,7 +117,7 @@ async function getLlmCommentary(
   input: MoveCommentaryInput,
   history: VerboseMove[],
 ): Promise<string> {
-  const { gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone } = input;
+  const { gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone, chatHistory } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
 
@@ -115,10 +131,25 @@ async function getLlmCommentary(
   const moverName = mover === 'w' ? 'White' : 'Black';
   const recentSan = history.slice(-8).map((m) => m.san).join(' ');
 
-  const system = reviewTone ? REVIEW_SYSTEM_PROMPT : PLAY_SYSTEM_PROMPT;
+  // Persistent memory the coach has built up about this student —
+  // carries across sessions so advice stays consistent over time.
+  const memoryBlock = await buildCoachMemoryBlock();
+  const basePrompt = reviewTone ? REVIEW_SYSTEM_PROMPT : PLAY_SYSTEM_PROMPT;
+  const system = memoryBlock ? `${basePrompt}\n\n${memoryBlock}` : basePrompt;
+
+  // Recent chat turns from the shared session — lets the commentary
+  // reference what the student just asked or what the coach just said
+  // in chat, so narration and chat are one conversation.
+  const chatContext = (chatHistory ?? [])
+    .slice(-CHAT_CONTEXT_MESSAGES)
+    .map((m) => `${m.role === 'user' ? 'Student' : 'Coach'}: ${m.content}`)
+    .join('\n');
 
   const user = [
     subject ? `Session subject: ${subject}.` : '',
+    chatContext
+      ? `[Recent chat between you and the student — stay consistent with it]\n${chatContext}`
+      : '',
     `${moverName} just played ${last.san}.`,
     `Move flags: ${describeMoveFlags(last)}.`,
     `FEN after the move: ${gameAfter.fen()}.`,
@@ -170,6 +201,18 @@ const COMMON_RULES = [
   '  board. Translate any square references into spoken English ("the',
   '  knight to c6" not "Nc6"; "castle kingside" not "O-O").',
   '- No lists, no markdown, no move numbers, no bullet points.',
+  '',
+  'MEMORY — building up a picture of this student over time:',
+  '- When you notice something worth remembering long-term (recurring',
+  '  weakness, preferred opening, rating trend, what motivates them),',
+  '  emit a [[REMEMBER: short note]] tag at the very end of your reply.',
+  '  The note is saved to persistent memory and fed back to you on',
+  '  every future turn, so future advice is consistent.',
+  '- Keep notes short and concrete. Good: "Blunders back-rank when',
+  '  low on time." Bad: "Is a chess player."',
+  '- Do NOT emit a REMEMBER tag on every move — only when you\'ve',
+  '  actually noticed a new durable pattern. The tag is invisible to',
+  '  the student — do not reference it in your spoken reply.',
 ].join('\n');
 
 const PLAY_SYSTEM_PROMPT = `${COMMON_RULES}
