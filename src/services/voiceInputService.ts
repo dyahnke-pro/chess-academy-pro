@@ -113,9 +113,17 @@ class VoiceInputService {
     this.userStopped = false;
     this.restartAttempts = 0;
 
+    // Listen for the browser/PWA telling us the app is leaving the
+    // foreground. `visibilitychange` fires on tab switch or window
+    // minimize; `pagehide` is the reliable signal on iOS when the
+    // user backgrounds the PWA, closes the tab, or navigates away.
+    // Stop listening so the mic isn't left hot in the background.
+    this.attachLifecycleListeners();
+
     const started = this.createAndStart(SpeechRecognitionClass);
     this.listening = started;
     if (!started) {
+      this.detachLifecycleListeners();
       this.endHandler?.();
     }
     return started;
@@ -131,6 +139,7 @@ class VoiceInputService {
       }
     }
     this.listening = false;
+    this.detachLifecycleListeners();
   }
 
   onResult(handler: ResultHandler): void {
@@ -226,6 +235,46 @@ class VoiceInputService {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  // ─── Lifecycle listeners ──────────────────────────────────────────
+
+  /** Bound listener refs so add/remove match. Created lazily so SSR
+   *  builds don't reference `document` at module load. */
+  private visibilityListener: (() => void) | null = null;
+  private pageHideListener: (() => void) | null = null;
+
+  private attachLifecycleListeners(): void {
+    if (typeof document === 'undefined') return;
+    // Don't double-register.
+    this.detachLifecycleListeners();
+
+    this.visibilityListener = () => {
+      if (document.visibilityState === 'hidden') {
+        this.stopListening();
+      }
+    };
+    this.pageHideListener = () => {
+      this.stopListening();
+    };
+    document.addEventListener('visibilitychange', this.visibilityListener);
+    // `pagehide` covers iOS Safari / PWA background & unload in a way
+    // `beforeunload` doesn't. Add both for best coverage.
+    window.addEventListener('pagehide', this.pageHideListener);
+    window.addEventListener('beforeunload', this.pageHideListener);
+  }
+
+  private detachLifecycleListeners(): void {
+    if (typeof document === 'undefined') return;
+    if (this.visibilityListener) {
+      document.removeEventListener('visibilitychange', this.visibilityListener);
+      this.visibilityListener = null;
+    }
+    if (this.pageHideListener) {
+      window.removeEventListener('pagehide', this.pageHideListener);
+      window.removeEventListener('beforeunload', this.pageHideListener);
+      this.pageHideListener = null;
     }
   }
 
