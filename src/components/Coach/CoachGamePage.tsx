@@ -36,6 +36,8 @@ import {
   saveCoachPlayState,
   clearCoachPlayState,
 } from '../../services/coachPlayPersistence';
+import { fetchLichessExplorer } from '../../services/lichessExplorerService';
+import { detectTrapInPosition, formatTrapForPrompt } from '../../services/openingTrapDetector';
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
@@ -1494,6 +1496,60 @@ export function CoachGamePage(): JSX.Element {
         // Pull recent chat from the shared session store so narration
         // stays consistent with what was just said in chat.
         const sessionMessages = useCoachSessionStore.getState().messages;
+
+        // In opening-teaching mode, ground the commentary in REAL
+        // Lichess + engine data: pull the Opening Explorer stats for
+        // the current position, run the trap detector on the result,
+        // and feed both as `groundedNotes` the prompt will cite. The
+        // fetch is best-effort — network failures fall back to prose
+        // without the numbers.
+        const groundedNotes: string[] = [];
+        if (inOpeningTeaching) {
+          try {
+            const explorer = await fetchLichessExplorer(probe.fen(), 'lichess');
+            if (explorer.moves && explorer.moves.length > 0) {
+              const topMoves = explorer.moves
+                .slice(0, 5)
+                .map((m) => {
+                  const total = m.white + m.draws + m.black;
+                  const whitePct = total ? Math.round((m.white + m.draws * 0.5) / total * 100) : 0;
+                  return `- ${m.san}: ${total.toLocaleString()} games, ${whitePct}% for White`;
+                })
+                .join('\n');
+              const openingLabel = explorer.opening
+                ? ` (${explorer.opening.eco} ${explorer.opening.name})`
+                : '';
+              groundedNotes.push(
+                `[Lichess Opening Explorer at current position${openingLabel}]\n${topMoves}`,
+              );
+
+              // Trap detection: engine eval on the top explorer moves,
+              // then flag any popular-but-losing candidates. We borrow
+              // the post-move Stockfish eval for the TOP reply only —
+              // for the rest we use a cheap heuristic (no eval means
+              // "can't judge"; those are skipped).
+              const evaluations = analysis?.topLines && analysis.topLines.length > 0
+                ? analysis.topLines.slice(0, 5).map((line, i) => {
+                    const san = explorer.moves[i]?.san ?? '';
+                    return { san, evalCp: line.evaluation * (mover === 'w' ? 1 : -1) };
+                  }).filter((e) => e.san)
+                : [];
+              if (evaluations.length > 0) {
+                const trap = detectTrapInPosition({
+                  explorer,
+                  evaluations,
+                  engineBestSan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
+                });
+                if (trap) {
+                  groundedNotes.push(formatTrapForPrompt(trap));
+                }
+              }
+            }
+          } catch (err: unknown) {
+            console.warn('[CoachGame] Lichess explorer fetch failed:', err);
+          }
+        }
+
         const llm = await generateMoveCommentary({
           gameAfter: probe,
           mover,
@@ -1505,6 +1561,7 @@ export function CoachGamePage(): JSX.Element {
           // TEACHING MODE branch of PLAY_SYSTEM_PROMPT.
           subject: subjectParam ?? undefined,
           verbosity: narrationDensity,
+          groundedNotes,
         });
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
         // Mirror the commentary into the shared session so the next
