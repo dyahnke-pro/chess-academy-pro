@@ -42,12 +42,15 @@ export async function generateSetupPuzzle(
 
   try {
     chess.loadPgn(game.pgn);
-    const history = chess.history();
+    const history = chess.history({ verbose: true });
     chess.reset();
     for (const move of history) {
-      chess.move(move);
+      chess.move(move.san);
       fens.push(chess.fen());
-      moves.push(move);
+      // Store as UCI (e.g. "e2e4", "g1f3", "e7e8q") — TacticSetupBoard
+      // parses solutionMoves as UCI, and verifySetupPosition compares
+      // against Stockfish's UCI output.
+      moves.push(`${move.from}${move.to}${move.promotion ?? ''}`);
     }
   } catch {
     return null;
