@@ -118,6 +118,22 @@ AVAILABLE ACTIONS
 - set_narration {"enabled": true}
   Turn auto-narration on or off without starting a new session.
 
+- play_variation {"undo": 1, "moves": ["Ne4"]}
+  DURING AN ACTIVE GAME ONLY, AND ONLY ON EXPLICIT USER REQUEST.
+  Take back the last N half-moves on the board, then play SAN moves
+  forward. Use this when the student EXPLICITLY asks to see a
+  hypothetical — "what if X instead of Y?", "try Ne4", "take that
+  back and play Bh6", "show me the line after ...Nc6". NEVER fire
+  this proactively to "make a point" or because you disagree with a
+  move — if the student just asked a question, answer with prose.
+  The student keeps ownership of their game; your job here is to
+  render variations they asked to see.
+  If the student's question is about a hypothetical replacement for
+  the previous move, undo=1 first; if they asked about "the move
+  before that", undo=2; etc. Returns an error gracefully when the
+  chat isn't attached to a live game — just answer in prose in that
+  case.
+
 WHEN TO ACT
 
 - "Analyze a previous game with me" → list_games (optional) then

@@ -111,6 +111,13 @@ export interface RunAgentTurnOptions {
   /** Streaming chunk callback for prose. Tag stripping happens
    *  post-stream — chunks include action tag fragments. */
   onChunk?: (chunk: string) => void;
+  /** Optional game-mutation hooks. Only set when the chat is rendered
+   *  alongside an active play session so the coach can emit
+   *  play_variation actions. */
+  game?: {
+    playVariation: (args: { undo: number; moves: string[] }) => boolean;
+    getCurrentFen: () => string;
+  };
 }
 
 export interface RunAgentTurnResult {
@@ -131,7 +138,7 @@ export interface RunAgentTurnResult {
 export async function runAgentTurn(
   options: RunAgentTurnOptions,
 ): Promise<RunAgentTurnResult> {
-  const { history, navigate, extraSystemPrompt, onChunk } = options;
+  const { history, navigate, extraSystemPrompt, onChunk, game } = options;
 
   const snapshot = await buildCoachContextSnapshot();
   const snapshotText = formatCoachContextSnapshot(snapshot);
@@ -163,7 +170,7 @@ export async function runAgentTurn(
   const { cleanText: afterActions, actions } = parseActions(raw);
 
   if (actions.length > 0) {
-    const ctx: ActionContext = { navigate };
+    const ctx: ActionContext = { navigate, ...(game ? { game } : {}) };
     await dispatchActions(actions, ctx);
   }
 

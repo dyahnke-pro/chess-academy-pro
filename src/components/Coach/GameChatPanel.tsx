@@ -41,6 +41,11 @@ interface GameChatPanelProps {
    *  against them. The opening name is passed through to the board's
    *  opening-book hook. */
   onPlayOpening?: (openingName: string) => void;
+  /** Apply a what-if variation: take back `undo` half-moves, then play
+   *  `moves` (SAN) forward. Returns true on success, false if any move
+   *  was invalid or there was nothing to undo. Powers the coach's
+   *  play_variation action — "what if Black plays Ne4 instead of Bh6?" */
+  onPlayVariation?: (args: { undo: number; moves: string[] }) => boolean;
   /** If set, auto-sends this message on mount (e.g., from post-game practice bridge) */
   initialPrompt?: string | null;
   /** Called after the initial prompt has been sent */
@@ -74,6 +79,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onBoardAnnotation,
       onRestartGame,
       onPlayOpening,
+      onPlayVariation,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -405,6 +411,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           history: updatedMessages,
           navigate: (path: string) => { void navigate(path); },
           extraSystemPrompt: systemAddition,
+          game: onPlayVariation
+            ? {
+                playVariation: (vArgs) => onPlayVariation(vArgs),
+                getCurrentFen: () => fen,
+              }
+            : undefined,
           onChunk: (chunk: string) => {
             fullResponse += chunk;
             // Strip [BOARD:] and [[ACTION:]] tags in real-time so
@@ -470,7 +482,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, setMessages, navigate]);
+    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayVariation, setMessages, navigate]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {
