@@ -15,7 +15,9 @@ import { getOpeningMoves } from './openingDetectionService';
 
 export type InGameChatIntent =
   | { kind: 'restart' }
-  | { kind: 'play-opening'; openingName: string };
+  | { kind: 'play-opening'; openingName: string }
+  | { kind: 'narrate' }
+  | { kind: 'mute' };
 
 /** Chess opening abbreviations people actually type. Expanded to a
  *  canonical name that `getOpeningMoves` can resolve against the
@@ -60,6 +62,17 @@ function expandAlias(subject: string): string {
 const RESTART_RE =
   /\b(?:restart|reset|new\s+game|start\s+over|start\s+(?:a\s+)?new|fresh\s+(?:game|start|board)|from\s+the\s+start|back\s+to\s+(?:the\s+)?start(?:ing\s+position)?|take\s+back\s+to\s+(?:the\s+)?start(?:ing\s+position)?)\b/i;
 
+/** Voice narration toggle — "narrate for me", "read it out loud",
+ *  "speak to me", "turn on voice", "use text to speech", etc. The LLM
+ *  has no tool to flip the voice toggle on its own, so without this
+ *  intent it just claims narration is "enabled" in text and the user
+ *  hears nothing. */
+const NARRATE_RE =
+  /\b(?:narrate|read\s+(?:it\s+)?(?:out\s+)?(?:aloud|out\s+loud)|speak\s+(?:to\s+me|aloud|out\s+loud)|talk\s+(?:to\s+me|through)|say\s+it\s+out\s+loud|out\s+loud|voice\s+(?:on|narration)|turn\s+on\s+(?:the\s+)?voice|enable\s+(?:voice|tts|text[- ]to[- ]speech|narration)|use\s+(?:voice|tts|text[- ]to[- ]speech)|text[- ]to[- ]speech)\b/i;
+
+const MUTE_RE =
+  /\b(?:mute|be\s+quiet|stop\s+talking|shut\s+up|silence|silent|turn\s+off\s+(?:the\s+)?voice|voice\s+off|disable\s+(?:voice|tts|narration|text[- ]to[- ]speech))\b/i;
+
 /** Fallback "play <opening>" matcher for phrasings parseCoachIntent
  *  doesn't cover — e.g. "play the KID", "play a Sicilian", "let's try
  *  the London". parseCoachIntent requires "against me" / "game" /
@@ -76,6 +89,16 @@ const PLAY_OPENING_RE =
 export function detectInGameChatIntent(text: string): InGameChatIntent | null {
   const trimmed = text.trim();
   if (!trimmed) return null;
+
+  // Mute checked BEFORE narrate — "turn off voice" contains "voice"
+  // which would otherwise false-positive into the narrate branch.
+  if (MUTE_RE.test(trimmed)) {
+    return { kind: 'mute' };
+  }
+
+  if (NARRATE_RE.test(trimmed)) {
+    return { kind: 'narrate' };
+  }
 
   if (RESTART_RE.test(trimmed)) {
     return { kind: 'restart' };
