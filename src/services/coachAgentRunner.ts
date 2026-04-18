@@ -28,6 +28,7 @@ import {
   type ParsedAction,
 } from './coachActionDispatcher';
 import { AGENT_ACTION_GRAMMAR } from './coachPrompts';
+import { extractAndRememberNotes } from './coachMemoryService';
 import { useCoachSessionStore } from '../stores/coachSessionStore';
 import { useAppStore } from '../stores/appStore';
 import { voiceService } from './voiceService';
@@ -145,12 +146,17 @@ export async function runAgentTurn(
 
   const raw = await getCoachChatResponse(trimmed, systemAddition, onChunk);
 
-  const { cleanText, actions } = parseActions(raw);
+  const { cleanText: afterActions, actions } = parseActions(raw);
 
   if (actions.length > 0) {
     const ctx: ActionContext = { navigate };
     await dispatchActions(actions, ctx);
   }
+
+  // Strip [[REMEMBER:]] tags out of the visible text and persist the
+  // extracted notes to the coach's long-term memory. Runs AFTER action
+  // parsing so the two tag families don't collide.
+  const cleanText = extractAndRememberNotes(afterActions);
 
   const assistantMessage: ChatMessage = {
     id: `msg-${Date.now()}-a`,

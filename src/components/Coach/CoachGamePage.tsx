@@ -1321,14 +1321,30 @@ export function CoachGamePage(): JSX.Element {
       try {
         const probe = new Chess(moveResult.fen);
         const mover: 'w' | 'b' = probe.turn() === 'w' ? 'b' : 'w';
+        // Pull recent chat from the shared session store so narration
+        // stays consistent with what was just said in chat.
+        const sessionMessages = useCoachSessionStore.getState().messages;
         const llm = await generateMoveCommentary({
           gameAfter: probe,
           mover,
           evalBefore: preMoveEval,
           evalAfter: analysis?.evaluation ?? null,
           bestReplySan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
+          chatHistory: sessionMessages,
         });
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
+        // Mirror the commentary into the shared session so the next
+        // chat turn (or the next move's narration) sees what we just
+        // said. Skip empties and pure tactic suffixes — we only record
+        // real narration.
+        if (llm) {
+          useCoachSessionStore.getState().appendMessage({
+            id: `narr-${Date.now()}`,
+            role: 'assistant',
+            content: llm,
+            timestamp: Date.now(),
+          });
+        }
       } catch {
         commentary = tacticSuffix.trim();
       }

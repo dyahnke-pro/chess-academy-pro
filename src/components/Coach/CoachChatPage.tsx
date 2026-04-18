@@ -7,6 +7,7 @@ import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { getChatSystemPromptAdditions, loadAnalysisContext } from '../../services/coachChatService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
 import { runCoachTurn, detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
+import { buildCoachMemoryBlock } from '../../services/coachMemoryService';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -182,9 +183,14 @@ export function CoachChatPage(): JSX.Element {
     setStreamingContent('');
     speechBufferRef.current = '';
 
-    const extraSystem = analysisContext
+    // Persistent coach memory (cross-session observations about this
+     // student). Appended to the system prompt so advice stays
+     // consistent across days/weeks.
+    const memoryBlock = await buildCoachMemoryBlock();
+    const chatAdditions = analysisContext
       ? `${getChatSystemPromptAdditions(true)}\n\n${analysisContext}`
       : getChatSystemPromptAdditions(false);
+    const extraSystem = memoryBlock ? `${chatAdditions}\n\n${memoryBlock}` : chatAdditions;
 
     let streamed = '';
     try {

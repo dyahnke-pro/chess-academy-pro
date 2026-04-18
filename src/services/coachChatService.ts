@@ -289,7 +289,17 @@ When you want to suggest the student try a specific drill or review, include an 
 
 Keep responses concise (2-4 sentences for casual chat, longer for analysis requests).
 Reference the student's profile and weaknesses naturally.
-Be warm and encouraging. Use "we" and "let's" language. Celebrate small wins.`;
+Be warm and encouraging. Use "we" and "let's" language. Celebrate small wins.
+
+MEMORY — building up a picture of this student over time:
+When you notice something worth remembering long-term (recurring
+weakness, preferred opening, rating trend, what motivates them, goals
+they mention), emit a [[REMEMBER: short note]] tag at the very end of
+your reply. The note is saved to persistent memory and fed back into
+every future turn — in the chat AND during games — so advice stays
+consistent over weeks. Keep notes short and concrete ("Struggles with
+rook endgames" not "Is a chess player"). Do not reference the tag in
+your spoken reply; it's invisible to the student.`;
 
   if (hasAnalysisData) {
     return base + `
