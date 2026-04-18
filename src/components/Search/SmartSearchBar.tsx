@@ -1,9 +1,10 @@
 import { useRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2, MessageCircle, Play } from 'lucide-react';
+import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2, MessageCircle, Play, Mic, MicOff } from 'lucide-react';
 import { useSmartSearch } from '../../hooks/useSmartSearch';
 import { useAppStore, selectFreshBoardSnapshot } from '../../stores/appStore';
 import { parseCoachIntent } from '../../services/coachAgent';
+import { voiceInputService } from '../../services/voiceInputService';
 import type { SmartSearchResult, SmartSearchCategory } from '../../types';
 
 interface SmartSearchBarProps {
@@ -33,6 +34,8 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   const { query, setQuery, results, loading, clear } = useSmartSearch({ scope });
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [listening, setListening] = useState(false);
+  const [voiceUnsupported, setVoiceUnsupported] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -105,6 +108,73 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
     setShowDropdown(false);
     inputRef.current?.blur();
   }, [setCoachDrawerInitialMessage, setCoachDrawerOpen, clear]);
+
+  // Voice input — lets the user dictate into the search bar from any
+  // page. On final transcript we submit the same way Enter does: agent
+  // action if one matches, otherwise hand the whole utterance to the
+  // coach. Auto-finalize on silence handles the "mic just stops and
+  // sends" experience.
+  const handleMicToggle = useCallback(() => {
+    if (!voiceInputService.isSupported()) {
+      setVoiceUnsupported(true);
+      setTimeout(() => setVoiceUnsupported(false), 2500);
+      return;
+    }
+    if (listening) {
+      voiceInputService.stopListening();
+      setListening(false);
+      return;
+    }
+    // Reset any existing handler — the one registered below becomes
+    // the single active callback for this listening session.
+    voiceInputService.onResult((transcript) => {
+      const text = transcript.trim();
+      setListening(false);
+      if (!text) return;
+      setQuery(text);
+      // Re-parse the intent against the final transcript (live
+      // agentIntent memo may still be showing the interim).
+      const intent = parseCoachIntent(text);
+      const params = new URLSearchParams();
+      clear();
+      setShowDropdown(false);
+      inputRef.current?.blur();
+      if (intent.kind === 'play-against') {
+        if (intent.subject) params.set('subject', intent.subject);
+        if (intent.side) params.set('side', intent.side);
+        params.set('difficulty', intent.difficulty ?? 'auto');
+        void navigate(`/coach/session/play-against?${params.toString()}`);
+      } else if (intent.kind === 'walkthrough' && intent.subject) {
+        params.set('subject', intent.subject);
+        void navigate(`/coach/session/walkthrough?${params.toString()}`);
+      } else if (intent.kind === 'continue-middlegame') {
+        if (intent.subject) params.set('subject', intent.subject);
+        void navigate(
+          `/coach/session/middlegame${params.toString() ? `?${params.toString()}` : ''}`,
+        );
+      } else if (intent.kind === 'puzzle') {
+        if (intent.theme) params.set('theme', intent.theme);
+        if (intent.difficulty && intent.difficulty !== 'auto') {
+          params.set('difficulty', intent.difficulty);
+        }
+        void navigate(
+          `/coach/session/puzzle${params.toString() ? `?${params.toString()}` : ''}`,
+        );
+      } else if (intent.kind === 'explain-position') {
+        if (lastBoardSnapshot) params.set('fen', lastBoardSnapshot.fen);
+        const qs = params.toString();
+        void navigate(`/coach/session/explain-position${qs ? `?${qs}` : ''}`);
+      } else {
+        // No structured intent — fall back to "ask the coach" with the
+        // whole utterance. The coach page handles free-form questions.
+        askCoach(text);
+      }
+    });
+    const ok = voiceInputService.startListening({
+      onInterim: (interim) => setQuery(interim),
+    });
+    setListening(ok);
+  }, [listening, setQuery, clear, navigate, lastBoardSnapshot, askCoach]);
 
   const startAgentSession = useCallback((): void => {
     clear();
@@ -302,8 +372,31 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
               <X size={14} style={{ color: 'var(--color-text-muted)' }} />
             </button>
           )}
+          <button
+            onClick={handleMicToggle}
+            className={`p-1 rounded-md transition-colors ${
+              listening ? 'bg-red-500/15' : 'hover:opacity-70'
+            }`}
+            style={{
+              color: listening ? 'rgb(239, 68, 68)' : 'var(--color-accent)',
+            }}
+            aria-label={listening ? 'Stop voice input' : 'Dictate with voice'}
+            title={listening ? 'Stop listening' : 'Speak to search'}
+            data-testid="search-mic"
+          >
+            {listening ? <MicOff size={14} /> : <Mic size={14} />}
+          </button>
         </div>
       </div>
+      {voiceUnsupported && (
+        <div
+          className="absolute left-0 right-0 mt-1 text-[10px] text-center"
+          style={{ color: 'rgb(239, 68, 68)' }}
+          data-testid="search-mic-unsupported"
+        >
+          Voice input isn't supported in this browser.
+        </div>
+      )}
 
       {/* AI badge caption */}
       <div className="flex items-center gap-1 mt-1.5 ml-1">

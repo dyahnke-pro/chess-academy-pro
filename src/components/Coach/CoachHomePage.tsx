@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Swords, BarChart3, Calendar, Search, MessageCircle, GraduationCap } from 'lucide-react';
+import { SmartSearchBar } from '../Search/SmartSearchBar';
 
 export function CoachHomePage(): JSX.Element {
   const navigate = useNavigate();
@@ -13,6 +14,11 @@ export function CoachHomePage(): JSX.Element {
       transition={{ duration: 0.3 }}
       data-testid="coach-home-page"
     >
+      {/* Ask coach / dictate / deep-link into any session — voice or text. */}
+      <section>
+        <SmartSearchBar placeholder="Ask your coach or say what you want to do..." />
+      </section>
+
       {/* Work with Coach — full-width card */}
       <section>
         <ActionCard
