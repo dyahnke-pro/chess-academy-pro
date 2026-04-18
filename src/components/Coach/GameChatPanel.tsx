@@ -161,6 +161,40 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // the chat had no way to mutate game state. Handle those here.
       if (!isGameOver) {
         const inGame = detectInGameChatIntent(text);
+        if (inGame?.kind === 'narrate') {
+          // The LLM can say "narration enabled" all day but it can't
+          // actually flip the toggle — coachVoiceOn is a user-controlled
+          // setting in the store. Flip it here, then speak the
+          // confirmation DIRECTLY through voiceService (don't gate on
+          // the store state — the setter hasn't propagated yet, and we
+          // want the user to hear something immediately so they know
+          // voice actually turned on).
+          useAppStore.getState().setCoachVoiceOn(true);
+          const ack =
+            "Voice narration is on. I'll talk through the game. Your move.";
+          const ackMsg: ChatMessageType = {
+            id: `gmsg-${Date.now()}-ack`,
+            role: 'assistant',
+            content: ack,
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ackMsg]);
+          void voiceService.speak(ack);
+          return;
+        }
+        if (inGame?.kind === 'mute') {
+          useAppStore.getState().setCoachVoiceOn(false);
+          voiceService.stop();
+          const ack = 'Voice narration is off.';
+          const ackMsg: ChatMessageType = {
+            id: `gmsg-${Date.now()}-ack`,
+            role: 'assistant',
+            content: ack,
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ackMsg]);
+          return;
+        }
         if (inGame?.kind === 'restart' && onRestartGame) {
           onRestartGame();
           const ack: ChatMessageType = {
