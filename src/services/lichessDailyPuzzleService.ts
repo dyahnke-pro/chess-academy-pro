@@ -58,6 +58,7 @@ export async function fetchLichessDailyPuzzle(): Promise<LichessDailyPuzzle> {
 
   const response = await fetch('https://lichess.org/api/puzzle/daily', {
     headers: { Accept: 'application/json' },
+    signal: AbortSignal.timeout(5000),
   });
 
   if (!response.ok) {

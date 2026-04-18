@@ -367,7 +367,7 @@ class VoiceService {
         batch.map(async (text) => {
           try {
             const url = getTtsUrl(text, voice);
-            const res = await fetch(url);
+            const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
             if (res.ok) {
               this.audioCache.set(this.pollyKey(text, voice), await res.arrayBuffer());
             }

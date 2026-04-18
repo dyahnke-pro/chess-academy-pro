@@ -93,6 +93,7 @@ export async function importChessComGames(
 
   const archivesResponse = await fetch(
     `https://api.chess.com/pub/player/${encodeURIComponent(username.toLowerCase())}/games/archives`,
+    { signal: AbortSignal.timeout(10000) },
   );
 
   if (!archivesResponse.ok) {
@@ -119,7 +120,7 @@ export async function importChessComGames(
     onProgress?.(imported, `Fetching month ${i + 1} of ${reversedArchives.length}...`);
 
     try {
-      const response = await fetch(archiveUrl);
+      const response = await fetch(archiveUrl, { signal: AbortSignal.timeout(15000) });
       if (!response.ok) continue;
 
       const data = (await response.json()) as ChessComResponse;
@@ -167,6 +168,7 @@ export async function importChessComStats(
 ): Promise<PlatformStats> {
   const response = await fetch(
     `https://api.chess.com/pub/player/${encodeURIComponent(username.toLowerCase())}/stats`,
+    { signal: AbortSignal.timeout(10000) },
   );
 
   if (!response.ok) {
