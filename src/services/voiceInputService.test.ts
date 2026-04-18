@@ -98,4 +98,71 @@ describe('voiceInputService', () => {
       expect(handler).not.toHaveBeenCalled();
     });
   });
+
+  describe('interim results', () => {
+    it('enables interimResults on the underlying recognition instance', () => {
+      voiceInputService.stopListening();
+      voiceInputService.startListening();
+      // Poke the private recognition through the service — if interim
+      // results are disabled, the UX regresses to the old "silent until
+      // final" behavior. Guard against that.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test, intentional
+      const privateRec = (voiceInputService as any).recognition as { interimResults: boolean };
+      expect(privateRec.interimResults).toBe(true);
+    });
+
+    it('fires the interim handler for non-final partial results', () => {
+      voiceInputService.stopListening();
+      const onInterim = vi.fn();
+      const onFinal = vi.fn();
+      voiceInputService.onResult(onFinal);
+      voiceInputService.startListening({ onInterim });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+      const rec = (voiceInputService as any).recognition as {
+        onresult: ((event: unknown) => void) | null;
+      };
+      // Simulate a partial result: "how do I" (not final yet)
+      rec.onresult?.({
+        resultIndex: 0,
+        results: [
+          {
+            isFinal: false,
+            length: 1,
+            item: () => ({ transcript: 'how do I', confidence: 0.8 }),
+            0: { transcript: 'how do I', confidence: 0.8 },
+          },
+        ],
+      });
+
+      expect(onInterim).toHaveBeenCalledWith('how do I');
+      expect(onFinal).not.toHaveBeenCalled();
+    });
+
+    it('fires the final handler once isFinal lands', () => {
+      voiceInputService.stopListening();
+      const onInterim = vi.fn();
+      const onFinal = vi.fn();
+      voiceInputService.onResult(onFinal);
+      voiceInputService.startListening({ onInterim });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+      const rec = (voiceInputService as any).recognition as {
+        onresult: ((event: unknown) => void) | null;
+      };
+      rec.onresult?.({
+        resultIndex: 0,
+        results: [
+          {
+            isFinal: true,
+            length: 1,
+            item: () => ({ transcript: 'how do I castle', confidence: 0.95 }),
+            0: { transcript: 'how do I castle', confidence: 0.95 },
+          },
+        ],
+      });
+
+      expect(onFinal).toHaveBeenCalledWith('how do I castle');
+    });
+  });
 });
