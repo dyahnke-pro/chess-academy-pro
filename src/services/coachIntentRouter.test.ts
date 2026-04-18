@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { routeChatIntent, __test__resolvePuzzleTheme, __test__extractFocus } from './coachIntentRouter';
+import {
+  routeChatIntent,
+  __test__resolvePuzzleTheme,
+  __test__extractFocus,
+  __test__extractProposedOpening,
+  __test__extractProposedUserSide,
+} from './coachIntentRouter';
 
 // Mock the resource-lookup layer so tests don't hit Dexie.
 vi.mock('./walkthroughResolver', () => ({
@@ -328,5 +334,90 @@ describe('resolvePuzzleTheme', () => {
   it('returns null for unknown themes', () => {
     expect(__test__resolvePuzzleTheme('zxc abc')).toBeNull();
     expect(__test__resolvePuzzleTheme(undefined)).toBeNull();
+  });
+});
+
+describe('extractProposedOpening', () => {
+  it('picks up a specific Sicilian variation', () => {
+    expect(
+      __test__extractProposedOpening(
+        "Let's play a game — I'll be White and play the Sicilian Najdorf.",
+      ),
+    ).toBe('Sicilian Najdorf');
+  });
+
+  it('falls back to the opening family when no variation is named', () => {
+    expect(
+      __test__extractProposedOpening("Ready to play? How about the Italian?"),
+    ).toBe('Italian');
+  });
+
+  it('returns undefined when no known opening appears', () => {
+    expect(
+      __test__extractProposedOpening("Let's play a game focused on endgame technique."),
+    ).toBeUndefined();
+  });
+});
+
+describe('extractProposedUserSide', () => {
+  it("flips \"I'll be White\" to black for the user", () => {
+    expect(
+      __test__extractProposedUserSide("Let's play — I'll be White, you play Black."),
+    ).toBe('black');
+  });
+
+  it('returns the direct "you play Black" side', () => {
+    expect(__test__extractProposedUserSide('You play Black.')).toBe('black');
+  });
+
+  it('returns the direct "you play White" side', () => {
+    expect(__test__extractProposedUserSide('You play White.')).toBe('white');
+  });
+
+  it('returns undefined when no side is stated', () => {
+    expect(__test__extractProposedUserSide("Let's play a game!")).toBeUndefined();
+  });
+});
+
+describe('affirmation-after-proposal: structured extraction', () => {
+  it('forwards opening + user side to /coach/session/play-against params', async () => {
+    const routed = await routeChatIntent("let's do it", {
+      lastAssistantMessage:
+        "Let's play a game — I'll be White and play the Sicilian Najdorf, you play Black.",
+    });
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toContain('subject=Sicilian+Najdorf');
+    expect(routed!.path).toContain('side=black');
+  });
+
+  it('still works when only the opening is named', async () => {
+    const routed = await routeChatIntent('yes', {
+      lastAssistantMessage: "Let's play the Italian Game.",
+    });
+    expect(routed!.path).toContain('subject=Italian+Game');
+    expect(routed!.path).not.toContain('side=');
+  });
+});
+
+describe('narrate vs review routing', () => {
+  beforeEach(() => {
+    vi.mocked(findLastMatchingGame).mockResolvedValue({
+      id: 'game-123',
+      white: 'Me',
+      black: 'Opp',
+      result: '1-0',
+      date: '2026-01-01',
+    } as never);
+  });
+
+  it('routes "Narrate my last game" to /coach/session/narrate', async () => {
+    const routed = await routeChatIntent('Narrate my last game');
+    expect(routed!.path).toMatch(/^\/coach\/session\/narrate/);
+    expect(routed!.path).toContain('gameId=game-123');
+  });
+
+  it('keeps "Review my last game" on /coach/play?review=', async () => {
+    const routed = await routeChatIntent('Review my last game');
+    expect(routed!.path).toMatch(/^\/coach\/play\?review=game-123$/);
   });
 });
