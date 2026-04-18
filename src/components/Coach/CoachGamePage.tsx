@@ -1616,6 +1616,17 @@ export function CoachGamePage(): JSX.Element {
           }
         }
 
+        // Recent move classifications — feeds the [StudentState] block
+        // so the coach can read the rhythm (just blundered? on a
+        // streak?) and adapt tone. Take the newest 5.
+        const recentMoveClassifications = gameState.moves
+          .slice(-5)
+          .map((m) => m.classification);
+        // Tempo signal: when did the student last input something?
+        // Most recent move's timestamp is a good proxy since chat
+        // messages get stamped separately in the session store.
+        const lastUserInteractionMs = Date.now();
+
         const llm = await generateMoveCommentary({
           gameAfter: probe,
           mover,
@@ -1628,6 +1639,8 @@ export function CoachGamePage(): JSX.Element {
           subject: subjectParam ?? undefined,
           verbosity: narrationDensity,
           groundedNotes,
+          recentMoveClassifications,
+          lastUserInteractionMs,
         });
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
         // Mirror the commentary into the shared session so the next

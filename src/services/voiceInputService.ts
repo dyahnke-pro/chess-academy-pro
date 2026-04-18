@@ -12,6 +12,12 @@ export interface StartListeningOptions {
    *  "listening" UI state back to false. NOT fired between utterances
    *  while we're transparently restarting for continuous listening. */
   onEnd?: EndHandler;
+  /** Fired when the FIRST interim transcript of a new utterance
+   *  arrives — i.e. the student just started speaking. Lets callers
+   *  cut the coach off mid-sentence so live conversation feels like
+   *  talking over a trainer: the moment you start, they stop. Exactly
+   *  one fire per utterance — reset after each final. */
+  onSpeechStart?: () => void;
 }
 
 interface SpeechRecognitionEvent {
@@ -87,6 +93,10 @@ class VoiceInputService {
   private resultHandlers: ResultHandler[] = [];
   private interimHandler: InterimHandler | null = null;
   private endHandler: EndHandler | null = null;
+  private speechStartHandler: (() => void) | null = null;
+  /** True once the current utterance has fired onSpeechStart. Reset
+   *  after each dispatched final so the next utterance gets one fire. */
+  private speechStartFired = false;
   private listening = false;
   /** True when the CALLER asked us to stop. Distinguishes user intent
    *  from the browser's automatic end-of-utterance. */
@@ -118,6 +128,8 @@ class VoiceInputService {
 
     this.interimHandler = options.onInterim ?? null;
     this.endHandler = options.onEnd ?? null;
+    this.speechStartHandler = options.onSpeechStart ?? null;
+    this.speechStartFired = false;
     this.userStopped = false;
     this.restartAttempts = 0;
 
@@ -203,6 +215,19 @@ class VoiceInputService {
         }
       }
       if (interimText) {
+        // First interim of this utterance → student just started
+        // talking. Fire the start hook so callers (voice chat,
+        // SmartSearchBar, ChatInput) can cut off the coach's
+        // in-flight TTS and let the student take the floor. Trainer
+        // feel: never talked over.
+        if (!this.speechStartFired) {
+          this.speechStartFired = true;
+          try {
+            this.speechStartHandler?.();
+          } catch (err) {
+            console.warn('[voiceInputService] speechStart handler threw:', err);
+          }
+        }
         this.latestInterim = interimText;
         this.interimHandler?.(interimText);
       }
@@ -307,6 +332,8 @@ class VoiceInputService {
     // Reset the per-utterance interim/final state so the next
     // utterance starts clean within the same listening session.
     this.latestInterim = '';
+    // Next utterance should fire onSpeechStart again.
+    this.speechStartFired = false;
     // Successful utterance → reset the restart-thrash counter.
     this.restartAttempts = 0;
     // Fan out to every registered handler. Snapshot first so a

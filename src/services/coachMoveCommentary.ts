@@ -20,7 +20,8 @@
 import type { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
-import type { ChatMessage, CoachVerbosity } from '../types';
+import { buildStudentStateBlock } from './studentStateBlock';
+import type { ChatMessage, CoachVerbosity, MoveClassification } from '../types';
 
 export type MoveVerdict = 'excellent' | 'good' | 'book' | 'inaccuracy' | 'mistake' | 'blunder' | 'neutral';
 
@@ -66,6 +67,13 @@ export interface MoveCommentaryInput {
    * in check.
    */
   chatHistory?: readonly ChatMessage[];
+  /** Recent move classifications (newest last) so the coach can read
+   *  the student's rhythm — just blundered? on a streak? — and adapt
+   *  tone. Used to build the [StudentState] block. */
+  recentMoveClassifications?: (MoveClassification | null)[];
+  /** Timestamp (ms) of the most recent user move or chat message.
+   *  Used to infer tempo (fast / thinking / idle). */
+  lastUserInteractionMs?: number;
 }
 
 /** How many prior chat messages to include in the commentary prompt.
@@ -135,7 +143,11 @@ async function getLlmCommentary(
   input: MoveCommentaryInput,
   history: VerboseMove[],
 ): Promise<string> {
-  const { gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone, chatHistory, verbosity = 'medium', groundedNotes = [] } = input;
+  const {
+    gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone,
+    chatHistory, verbosity = 'medium', groundedNotes = [],
+    recentMoveClassifications, lastUserInteractionMs,
+  } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
 
@@ -186,8 +198,20 @@ async function getLlmCommentary(
 
   const groundedBlock = groundedNotes.filter(Boolean).join('\n\n');
 
+  // [StudentState] lets the coach read the room before replying —
+  // what's the student's rhythm, sentiment, tempo? Trainer feel #2:
+  // "always-on context awareness" — the thing a real coach picks up
+  // from watching the student at the board.
+  const studentStateBlock = buildStudentStateBlock({
+    recentMoveClassifications,
+    recentChat: chatHistory ? [...chatHistory] : undefined,
+    lastUserInteractionMs,
+    turn: gameAfter.turn() === mover ? 'coach' : 'student',
+  });
+
   const user = [
     subject ? `Session subject: ${subject}.` : '',
+    studentStateBlock,
     chatContext
       ? `[Recent chat between you and the student — stay consistent with it]\n${chatContext}`
       : '',

@@ -265,6 +265,9 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
     const ok = voiceInputService.startListening({
       onInterim: (interim) => setQuery(interim),
       onEnd: () => setListening(false),
+      // Student starts talking → coach stops. Matches natural
+      // conversation tempo: no talking over the student.
+      onSpeechStart: () => voiceService.stop(),
     });
     setListening(ok);
   }, [listening, setQuery, clear, navigate, lastBoardSnapshot, askCoach]);
