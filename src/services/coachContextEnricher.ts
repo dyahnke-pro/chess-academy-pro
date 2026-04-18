@@ -438,25 +438,26 @@ async function buildStudyProgressBlock(): Promise<string | null> {
 
 async function buildTimeControlBlock(): Promise<string | null> {
   try {
-    const games = await withTimeout(
-      db.games
-        .filter((g) => !g.isMasterGame && g.result !== '*')
-        .limit(300)
-        .toArray(),
+    const [games, usernames] = await withTimeout(
+      Promise.all([
+        db.games
+          .filter((g) => !g.isMasterGame && g.result !== '*')
+          .limit(300)
+          .toArray(),
+        getStudentUsernames(),
+      ]),
       FETCH_TIMEOUT_MS,
     );
     if (games.length === 0) return null;
-    // `GameRecord` has no explicit time-control field; derive from the
-    // event string which in Lichess / Chess.com imports contains
-    // "blitz" / "rapid" / "classical" / "bullet".
     const buckets: Record<string, { wins: number; losses: number; draws: number }> = {};
     for (const g of games) {
       const tc = inferTimeControl(g);
       if (!tc) continue;
+      const side = inferStudentSide(g, usernames);
+      if (side === null) continue;
       buckets[tc] ??= { wins: 0, losses: 0, draws: 0 };
-      if (g.result === '1/2-1/2') buckets[tc].draws += 1;
-      else if (isStudentWin(g)) buckets[tc].wins += 1;
-      else buckets[tc].losses += 1;
+      const outcome = studentOutcome(g, side);
+      buckets[tc][outcome] += 1;
     }
     const entries = Object.entries(buckets).filter(([, v]) => v.wins + v.losses + v.draws >= 5);
     if (entries.length === 0) return null;
@@ -480,41 +481,84 @@ function inferTimeControl(g: GameRecord): string | null {
   return null;
 }
 
-function isStudentWin(g: GameRecord): boolean {
-  // Without a known student-colour per game, fall back to the simpler
-  // heuristic: call it a "win" when the result favours whichever side
-  // has the higher ELO (usually the student playing up). The TC
-  // breakdown is comparative, not absolute — this is good enough.
-  if (g.result === '1-0') return (g.whiteElo ?? 0) >= (g.blackElo ?? 0);
-  if (g.result === '0-1') return (g.blackElo ?? 0) >= (g.whiteElo ?? 0);
-  return false;
+/**
+ * Pull the student's known usernames off the profile so we can match
+ * games by player name. Falls back to whatever the profile has when
+ * only one platform is connected.
+ */
+async function getStudentUsernames(): Promise<string[]> {
+  const profile = await db.profiles.get('main').catch(() => undefined);
+  const names: string[] = [];
+  if (profile?.preferences.lichessUsername) names.push(profile.preferences.lichessUsername);
+  if (profile?.preferences.chessComUsername) names.push(profile.preferences.chessComUsername);
+  if (profile?.name) names.push(profile.name);
+  return names.map((n) => n.toLowerCase());
+}
+
+/** 'white' | 'black' | null (null = can't tell — game skipped). */
+function inferStudentSide(g: GameRecord, usernames: string[]): 'white' | 'black' | null {
+  const white = g.white.toLowerCase();
+  const black = g.black.toLowerCase();
+  for (const u of usernames) {
+    if (white === u) return 'white';
+    if (black === u) return 'black';
+  }
+  return null;
+}
+
+function studentOutcome(g: GameRecord, side: 'white' | 'black'): 'wins' | 'losses' | 'draws' {
+  if (g.result === '1/2-1/2') return 'draws';
+  if (g.result === '1-0') return side === 'white' ? 'wins' : 'losses';
+  if (g.result === '0-1') return side === 'black' ? 'wins' : 'losses';
+  return 'draws';
 }
 
 async function buildTrendBlock(): Promise<string | null> {
   try {
-    const games = await withTimeout(
-      db.games
-        .orderBy('date')
-        .reverse()
-        .filter((g) => !g.isMasterGame && g.result !== '*')
-        .limit(40)
-        .toArray(),
+    const [games, usernames] = await withTimeout(
+      Promise.all([
+        db.games
+          .orderBy('date')
+          .reverse()
+          .filter((g) => !g.isMasterGame && g.result !== '*')
+          .limit(40)
+          .toArray(),
+        getStudentUsernames(),
+      ]),
       FETCH_TIMEOUT_MS,
     );
     if (games.length < 10) return null;
     const recent = games.slice(0, 20);
     const prior = games.slice(20, 40);
-    const pct = (batch: GameRecord[]): number => {
-      const w = batch.filter((g) => isStudentWin(g)).length;
-      const d = batch.filter((g) => g.result === '1/2-1/2').length;
-      return batch.length ? (w + d * 0.5) / batch.length : 0;
+    const pct = (batch: GameRecord[]): number | null => {
+      let totalScore = 0;
+      let counted = 0;
+      for (const g of batch) {
+        const side = inferStudentSide(g, usernames);
+        if (side === null) continue;
+        const o = studentOutcome(g, side);
+        totalScore += o === 'wins' ? 1 : o === 'draws' ? 0.5 : 0;
+        counted += 1;
+      }
+      return counted === 0 ? null : totalScore / counted;
     };
-    const recentPct = Math.round(pct(recent) * 100);
-    const priorPct = prior.length > 0 ? Math.round(pct(prior) * 100) : null;
-    const arrow = priorPct === null ? '' : recentPct > priorPct + 3 ? '↑ improving' : recentPct < priorPct - 3 ? '↓ regressing' : '→ steady';
-    const line = priorPct === null
-      ? `Last ${recent.length} games: ${recentPct}% score`
-      : `Last 20 games: ${recentPct}% score vs prior 20: ${priorPct}% ${arrow}`;
+    const recentPct = pct(recent);
+    const priorPct = prior.length > 0 ? pct(prior) : null;
+    if (recentPct === null) return null;
+    const recentRounded = Math.round(recentPct * 100);
+    const priorRounded = priorPct === null ? null : Math.round(priorPct * 100);
+    const arrow =
+      priorRounded === null
+        ? ''
+        : recentRounded > priorRounded + 3
+          ? '↑ improving'
+          : recentRounded < priorRounded - 3
+            ? '↓ regressing'
+            : '→ steady';
+    const line =
+      priorRounded === null
+        ? `Last ${recent.length} games: ${recentRounded}% score`
+        : `Last 20 games: ${recentRounded}% score vs prior 20: ${priorRounded}% ${arrow}`;
     return `[Recent Trend]\n${line}`;
   } catch {
     return null;
