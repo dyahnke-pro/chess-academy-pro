@@ -1474,10 +1474,20 @@ export function CoachGamePage(): JSX.Element {
     // because they classify as 'book' / 'best', killing the feature.
     let commentary = '';
     const verbosity = resolveVerbosity(useAppStore.getState().activeProfile);
+    // Narration density — separate from the commentary-gate verbosity
+    // above. Honors the user's Settings toggle (none/fast/medium/slow)
+    // so the LLM output matches the chosen depth. 'none' short-circuits
+    // the LLM call entirely so no tokens are burned producing text
+    // we'd throw away.
+    const narrationDensity =
+      useAppStore.getState().activeProfile?.preferences.coachVerbosity ?? 'medium';
     const bookDepth = requestedOpeningMoves?.length ?? 0;
     const inOpeningTeaching =
       !!subjectParam && game.history.length <= Math.max(bookDepth, 12);
-    if (inOpeningTeaching || shouldCallLlmForMove(verbosity, classification)) {
+    const shouldFire =
+      narrationDensity !== 'none' &&
+      (inOpeningTeaching || shouldCallLlmForMove(verbosity, classification));
+    if (shouldFire) {
       try {
         const probe = new Chess(moveResult.fen);
         const mover: 'w' | 'b' = probe.turn() === 'w' ? 'b' : 'w';
@@ -1494,6 +1504,7 @@ export function CoachGamePage(): JSX.Element {
           // Threading the URL subject here activates the OPENING
           // TEACHING MODE branch of PLAY_SYSTEM_PROMPT.
           subject: subjectParam ?? undefined,
+          verbosity: narrationDensity,
         });
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
         // Mirror the commentary into the shared session so the next
