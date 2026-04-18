@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Send, Mic, MicOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { voiceInputService } from '../../services/voiceInputService';
+import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 
 interface ChatInputProps {
@@ -74,7 +75,11 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
       if (!useAppStore.getState().coachVoiceOn) {
         useAppStore.getState().setCoachVoiceOn(true);
       }
-      const started = voiceInputService.startListening();
+      const started = voiceInputService.startListening({
+        // Student starts talking → coach stops mid-sentence. Trainer
+        // feel: never talked over.
+        onSpeechStart: () => voiceService.stop(),
+      });
       setListening(started);
     }
   }, [listening]);

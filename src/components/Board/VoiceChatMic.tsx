@@ -464,6 +464,10 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
 
     const started = voiceInputService.startListening({
       onInterim: (text: string) => setInterimTranscript(text),
+      // Trainer feel: the instant the student starts speaking, the
+      // coach stops talking. Matches how a person-to-person lesson
+      // actually works — never talked over. Fires once per utterance.
+      onSpeechStart: () => voiceService.stop(),
     });
     setListening(started);
   }, [listening, isStreaming]);

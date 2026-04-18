@@ -29,6 +29,7 @@ import {
 } from './coachActionDispatcher';
 import { AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES } from './coachPrompts';
 import { extractAndRememberNotes, buildCoachMemoryBlock } from './coachMemoryService';
+import { buildStudentStateBlock } from './studentStateBlock';
 import { buildGroundingBlock } from './coachContextEnricher';
 import { useCoachSessionStore } from '../stores/coachSessionStore';
 import { useAppStore } from '../stores/appStore';
@@ -163,8 +164,21 @@ export async function runAgentTurn(
   // rather than hiding in the snapshot.
   const memoryBlock = await buildCoachMemoryBlock();
 
+  // [StudentState] — trainer feel #2: always-on context awareness.
+  // Reads the student's recent rhythm + sentiment so the coach can
+  // adapt tone (empathy after frustration, punch when fast, depth
+  // when idle). The most recent user message timestamp is the best
+  // tempo signal we have without move-level data on the chat path.
+  const lastUserMsg = [...history].reverse().find((m) => m.role === 'user');
+  const lastUserInteractionMs = lastUserMsg?.timestamp ?? Date.now();
+  const studentStateBlock = buildStudentStateBlock({
+    recentChat: history,
+    lastUserInteractionMs,
+  });
+
   const additions = [AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES, snapshotText];
   if (memoryBlock) additions.push(memoryBlock);
+  if (studentStateBlock) additions.push(studentStateBlock);
   if (groundingBlock) additions.push(groundingBlock);
   if (extraSystemPrompt) additions.push(extraSystemPrompt);
   const systemAddition = additions.join('\n\n');
