@@ -354,21 +354,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setBoardFlash(null);
   }, [reviewState.currentMoveIndex, currentMove?.classification]);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent): void => {
-      if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return;
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        navigateMove('prev');
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        navigateMove('next');
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  });
+  // Keyboard navigation effect is declared below navigateMove — it
+  // needs navigateMove in its dep array, so it has to come after the
+  // useCallback declaration to avoid a TDZ error at render time.
 
   // ─── AI Commentary: lazy-load for key moments and significant positions ─────
   // Skipped during auto-review / guided lesson auto-advance — those modes
@@ -553,6 +541,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return { ...prev, currentMoveIndex: newIndex, mode: 'analysis' };
     });
   }, [moves.length]);
+
+  // Keyboard navigation. Dep array is REQUIRED — without it the effect
+  // re-runs on every render and stacks keydown listeners, so one key
+  // press advances N plies at once. navigateMove is stable
+  // (only depends on moves.length) so this installs exactly once per
+  // review session.
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent): void => {
+      if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        navigateMove('prev');
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        navigateMove('next');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [reviewState.mode, navigateMove]);
 
   const handleMoveClick = useCallback((moveIndex: number) => {
     setReviewState((prev: ReviewState) => ({

@@ -75,7 +75,7 @@ describe('CoachChatPage', () => {
 
   it('shows empty state prompt', () => {
     render(<CoachChatPage />);
-    expect(screen.getByText(/Ask about positions, openings, strategy/)).toBeInTheDocument();
+    expect(screen.getByText(/How can I help you today\?/)).toBeInTheDocument();
   });
 
   it('renders chat input', () => {
