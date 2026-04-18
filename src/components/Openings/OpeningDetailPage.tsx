@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Chess } from 'chess.js';
+import { sanitizeForTTS } from '../../services/voiceService';
 import { DrillMode } from './DrillMode';
 import { PracticeMode } from './PracticeMode';
 import { OpeningPlayMode } from './OpeningPlayMode';
@@ -207,7 +208,10 @@ export function OpeningDetailPage(): JSX.Element {
       setNarratingSection(null);
       return;
     }
-    const utterance = new SpeechSynthesisUtterance(text);
+    // Sanitize chess notation + piece-letter shorthand before the Web
+    // Speech engine sees it. Raw SpeechSynthesisUtterance bypasses
+    // voiceService, so we normalise here instead.
+    const utterance = new SpeechSynthesisUtterance(sanitizeForTTS(text));
     utterance.rate = 0.95;
     utterance.onend = () => {
       setNarratingSection(null);

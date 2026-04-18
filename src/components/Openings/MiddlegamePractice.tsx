@@ -6,6 +6,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { speechService } from '../../services/speechService';
+import { sanitizeForTTS } from '../../services/voiceService';
 import { ArrowLeft, MessageCircle, Volume2, VolumeX, Undo, Lightbulb } from 'lucide-react';
 import type {
   MiddlegamePlan,
@@ -245,7 +246,9 @@ export function MiddlegamePractice({
       setCoachText(response);
 
       if (isNarrating) {
-        speechService.speak(response);
+        // LLM response may include chess notation; sanitize before TTS
+        // so the student hears plain English instead of "Nxf7".
+        speechService.speak(sanitizeForTTS(response));
       }
     } catch {
       if (isMountedRef.current) {
