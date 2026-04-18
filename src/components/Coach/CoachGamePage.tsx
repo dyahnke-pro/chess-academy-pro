@@ -861,6 +861,42 @@ export function CoachGamePage(): JSX.Element {
   // Restart handler — resets board + game state back to the starting position
   // while keeping the current player color and difficulty. Used by the
   // Restart button and by the in-chat "restart the game" intent.
+  // Apply a what-if variation on command from the in-game chat coach:
+  // rebuild the position by replaying the current move history minus
+  // `undo` half-moves, then playing the supplied SAN moves forward.
+  // Returns true on success; false on any illegal SAN / nothing to undo.
+  // The coach can only invoke this via play_variation when the student
+  // explicitly asks for a hypothetical — see coachPrompts.
+  const handlePlayVariation = useCallback(
+    ({ undo, moves }: { undo: number; moves: string[] }): boolean => {
+      try {
+        const sandbox = initialGameFen ? new Chess(initialGameFen) : new Chess();
+        const currentHistory = game.history;
+        const keep = Math.max(0, currentHistory.length - Math.max(0, undo));
+        if (keep === currentHistory.length && moves.length === 0) {
+          // Nothing requested — don't mutate the board.
+          return false;
+        }
+        if (undo > currentHistory.length) {
+          // Can't undo more than we've played.
+          return false;
+        }
+        for (let i = 0; i < keep; i++) {
+          const played = sandbox.move(currentHistory[i]);
+          if (!played) return false;
+        }
+        for (const san of moves) {
+          const played = sandbox.move(san);
+          if (!played) return false;
+        }
+        return game.loadFen(sandbox.fen());
+      } catch {
+        return false;
+      }
+    },
+    [game, initialGameFen],
+  );
+
   const handleRestart = useCallback((opts?: { keepRequestedOpening?: boolean }) => {
     // Explicit restart — drop the resumable snapshot so we don't
     // auto-load the abandoned game on next visit.
@@ -2432,6 +2468,7 @@ export function CoachGamePage(): JSX.Element {
               onBoardAnnotation={handleBoardAnnotation}
               onRestartGame={handleRestart}
               onPlayOpening={handleOpeningRequest}
+              onPlayVariation={handlePlayVariation}
               initialPrompt={pendingChatPrompt}
               className="h-full"
             />
@@ -2486,6 +2523,7 @@ export function CoachGamePage(): JSX.Element {
               onBoardAnnotation={handleBoardAnnotation}
               onRestartGame={handleRestart}
               onPlayOpening={handleOpeningRequest}
+              onPlayVariation={handlePlayVariation}
               initialPrompt={pendingChatPrompt}
             />
           </div>

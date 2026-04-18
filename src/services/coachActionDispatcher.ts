@@ -37,6 +37,21 @@ export interface ParsedActionsResult {
 export interface ActionContext {
   /** React Router navigate. Required for navigation actions. */
   navigate: (path: string) => void;
+  /**
+   * Live-game callbacks, provided only when the chat is rendered
+   * alongside an active play session (e.g. CoachGamePage's in-game
+   * chat panel). When absent, any action that needs to mutate the
+   * board returns an error result gracefully rather than crashing.
+   */
+  game?: {
+    /** Apply a variation: undo the last N half-moves, then play
+     *  SAN moves forward. Returns true on success, false if any
+     *  move failed to apply (invalid SAN, nothing to undo, etc.). */
+    playVariation: (args: { undo: number; moves: string[] }) => boolean;
+    /** Return the current FEN — useful for logging in the action
+     *  result so the next LLM turn sees where the board landed. */
+    getCurrentFen: () => string;
+  };
 }
 
 export interface ActionResult {
@@ -91,6 +106,7 @@ const handlers: Record<string, ActionHandler> = {
   navigate: handleNavigate,
   set_focus: handleSetFocus,
   set_narration: handleSetNarration,
+  play_variation: handlePlayVariation,
 };
 
 export function getRegisteredActionNames(): string[] {
@@ -321,6 +337,54 @@ function handleSetNarration(
   if (enabled && !voiceOn) useAppStore.getState().toggleCoachVoice();
   if (!enabled && voiceOn) useAppStore.getState().toggleCoachVoice();
   return { status: 'ok', message: `Narration mode ${enabled ? 'enabled' : 'disabled'}` };
+}
+
+/**
+ * Play a what-if variation on the live game: take back the last N
+ * half-moves, then play the supplied SAN moves forward. Only works
+ * when the chat is rendered alongside an active game (ctx.game is
+ * set). When the student asks "what if Black plays Ne4 instead of
+ * Bh6?", the coach emits:
+ *
+ *   [[ACTION:play_variation {"undo": 1, "moves": ["Ne4"]}]]
+ *
+ * and the board takes the bishop back and plays the knight move.
+ */
+function handlePlayVariation(
+  args: Record<string, unknown>,
+  ctx: ActionContext,
+): ActionResult {
+  if (!ctx.game) {
+    return {
+      status: 'error',
+      message:
+        'play_variation requires an active game — only usable from the in-game chat panel, not the global drawer.',
+    };
+  }
+  const undo = typeof args.undo === 'number' ? Math.max(0, Math.round(args.undo)) : 0;
+  const movesRaw = Array.isArray(args.moves) ? args.moves : [];
+  const moves = movesRaw.filter((m): m is string => typeof m === 'string' && m.trim().length > 0);
+  if (undo === 0 && moves.length === 0) {
+    return {
+      status: 'error',
+      message: 'play_variation requires either an "undo" count or "moves" array (or both).',
+    };
+  }
+  const ok = ctx.game.playVariation({ undo, moves });
+  if (!ok) {
+    return {
+      status: 'error',
+      message: `play_variation failed — either nothing to undo (${undo}) or a SAN move was illegal (${moves.join(', ')}).`,
+    };
+  }
+  const fen = ctx.game.getCurrentFen();
+  const undoNote = undo > 0 ? `took back ${undo} half-move${undo === 1 ? '' : 's'}` : '';
+  const playNote = moves.length > 0 ? `played ${moves.join(' ')}` : '';
+  const summary = [undoNote, playNote].filter(Boolean).join(', ');
+  return {
+    status: 'ok',
+    message: `Variation applied (${summary}). Board now at: ${fen}`,
+  };
 }
 
 // ─── Utilities ──────────────────────────────────────────────────────────────
