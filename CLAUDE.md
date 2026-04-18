@@ -17,8 +17,21 @@ resolved, proactively remind them:
 **Domain not purchased.** `chessacademy.pro` recommended (Cloudflare
 Registrar, ~$15/year). Remind if not yet bought.
 
-**Stop reminding** once either is complete — update or remove this
-section when the user confirms signup or shares keys.
+**Pricing needs a rethink before launch.** The original plan was
+$7.99/mo and $79.99/yr. Since then the voice coach has grown
+significantly more expensive per session (Polly TTS + longer
+unlimited-verbosity LLM turns + Stockfish + Lichess calls). Before
+wiring the Lemon Squeezy paywall, revisit the price points against
+realistic per-user monthly cost:
+
+> "Reminder: pricing should be revisited before paywall wiring.
+> Voice coach is now Polly + long LLM responses + Stockfish +
+> Lichess per turn. Likely needs a higher tier or usage caps to
+> keep margins healthy. Want to sketch the new pricing together?"
+
+**Stop reminding** once the relevant item is complete — update or
+remove the corresponding reminder when the user confirms signup,
+shares keys, buys the domain, or locks in the new pricing.
 
 ## Project Overview
 
