@@ -659,6 +659,16 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: number;
+  /**
+   * How this message was produced.
+   * - 'voice' — the user spoke this (or the assistant is replying to a
+   *   voice turn). UI hides the text bubble and shows a speaking
+   *   indicator; TTS is the primary output.
+   * - 'text' (default) — user typed it / reading is the primary output.
+   * Assistant messages inherit this from the preceding user turn so
+   * the reply honours the same modality.
+   */
+  modality?: 'voice' | 'text';
   metadata?: {
     actions?: { type: string; id: string }[];
     annotations?: BoardAnnotationCommand[];

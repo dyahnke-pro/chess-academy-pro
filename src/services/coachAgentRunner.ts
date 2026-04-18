@@ -201,6 +201,9 @@ export async function runAgentTurn(
 
 export interface RunCoachTurnOptions {
   userText: string;
+  /** How the user input arrived — 'voice' hides the text reply bubble
+   *  in the rendering layer (TTS is the primary output). */
+  userModality?: 'voice' | 'text';
   navigate: (path: string) => void;
   extraSystemPrompt?: string;
   onChunk?: (chunk: string) => void;
@@ -214,12 +217,13 @@ export interface RunCoachTurnOptions {
 export async function runCoachTurn(
   options: RunCoachTurnOptions,
 ): Promise<RunAgentTurnResult> {
-  const { userText, navigate, extraSystemPrompt, onChunk } = options;
+  const { userText, userModality = 'text', navigate, extraSystemPrompt, onChunk } = options;
 
   const userMessage: ChatMessage = {
     id: `msg-${Date.now()}-u`,
     role: 'user',
     content: userText,
+    modality: userModality,
     timestamp: Date.now(),
   };
   useCoachSessionStore.getState().appendMessage(userMessage);
@@ -233,8 +237,14 @@ export async function runCoachTurn(
       extraSystemPrompt,
       onChunk,
     });
-    useCoachSessionStore.getState().appendMessage(result.assistantMessage);
-    return result;
+    // Inherit modality so the renderer can hide the text bubble
+    // when the user asked by voice.
+    const taggedAssistant: ChatMessage = {
+      ...result.assistantMessage,
+      modality: userModality,
+    };
+    useCoachSessionStore.getState().appendMessage(taggedAssistant);
+    return { ...result, assistantMessage: taggedAssistant };
   } finally {
     useCoachSessionStore.getState().setStreaming(false);
   }
