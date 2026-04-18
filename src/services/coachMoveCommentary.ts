@@ -149,6 +149,13 @@ async function getLlmCommentary(
   const moverName = mover === 'w' ? 'White' : 'Black';
   const recentSan = history.slice(-8).map((m) => m.san).join(' ');
 
+  // Legal moves from the resulting position — gives the LLM a
+  // concrete ground-truth list so it never invents moves that
+  // contradict the board. Capped at 40 to avoid bloating the prompt.
+  // If the model is about to say "you can push the e-pawn" but e4
+  // isn't in this list, it has no excuse.
+  const legalMovesSan = gameAfter.moves().slice(0, 40).join(' ');
+
   // Persistent memory the coach has built up about this student —
   // carries across sessions so advice stays consistent over time.
   const memoryBlock = await buildCoachMemoryBlock();
@@ -163,12 +170,17 @@ async function getLlmCommentary(
     .map((m) => `${m.role === 'user' ? 'Student' : 'Coach'}: ${m.content}`)
     .join('\n');
 
+  // Density overrides COMMON_RULES' default 1-3-sentence cap. Without
+  // this override, even when the student asks for deep explanations
+  // the model stops at three sentences because the HARD RULE in
+  // COMMON_RULES pins brevity. When 'slow' is selected, lift the cap
+  // entirely and direct the model toward in-depth coaching.
   const densityLine =
     verbosity === 'fast'
-      ? 'Narration density: TERSE. One compact sentence, no preamble.'
+      ? 'Narration density: TERSE. One compact sentence, no preamble. Overrides the 20-70 word rule downward — keep it tight.'
       : verbosity === 'slow'
-        ? 'Narration density: VERBOSE. Deeper explanation — background, plans, how this connects to the student\u2019s known weaknesses; three to five sentences.'
-        : 'Narration density: NORMAL. A couple of sentences, maybe three if something critical deserves it.';
+        ? 'Narration density: VERBOSE (OVERRIDES the 1-3 sentence and 20-70 word HARD RULE). Give a FULL in-depth explanation — 4 to 7 sentences, up to ~180 words. Cover: what just changed structurally, the plans both sides now have, what the student should be watching for in the next 2-3 moves, how this connects to their known weaknesses, and one concrete follow-up question to pull them deeper. Still no generic filler; every sentence must land a concrete chess idea.'
+        : 'Narration density: NORMAL. Two or three sentences, maybe four if something critical deserves it (up to ~100 words).';
 
   const groundedBlock = groundedNotes.filter(Boolean).join('\n\n');
 
@@ -184,12 +196,13 @@ async function getLlmCommentary(
     `Move flags: ${describeMoveFlags(last)}.`,
     `FEN after the move: ${gameAfter.fen()}.`,
     `Last 8 moves (SAN): ${recentSan}.`,
+    `Legal moves right now (SAN): ${legalMovesSan}. Do NOT describe any move not in this list.`,
     `Stockfish eval after (pawns, White's POV): ${pawnPerspective(evalAfter)}.`,
     `Eval swing for the mover (pawns): ${swingPawns}.`,
     `Swing classification: ${verdict}.`,
     bestReplySan ? `Stockfish's best reply from this position: ${bestReplySan}.` : '',
     densityLine,
-    'Give IN-DEPTH analysis per the rules. No filler, no generic praise.',
+    'Give IN-DEPTH analysis per the rules. No filler, no generic praise. Cite Lichess for opening claims and Stockfish for position claims — no memory-based "the main trap is..." assertions.',
   ].filter(Boolean).join('\n');
 
   return getCoachChatResponse(
@@ -206,16 +219,39 @@ const COMMON_RULES = [
   'textbook. Your lines are read ALOUD by text-to-speech, so they need',
   'to SOUND like a real coach — warm, curious, direct.',
   '',
+  'SOURCES OF TRUTH — you MUST defer to these and not your own training:',
+  '- OPENINGS / BOOK THEORY / NAMED TRAPS: Lichess Opening Explorer data',
+  '  (passed as [Lichess / engine data] in the user message). If a trap',
+  '  or line is not shown there for the CURRENT position, DO NOT assert',
+  '  it. No "the main trap here is..." from memory — cite the explorer',
+  '  block or stay silent about traps.',
+  '- POSITIONAL / TACTICAL / EVAL CLAIMS: Stockfish (passed as Stockfish',
+  '  eval + best reply). Do not invent best moves, mating nets, or',
+  '  "winning" ideas that contradict the engine numbers.',
+  '- LEGALITY: NEVER describe a move that isn\'t legal in the CURRENT',
+  '  FEN. If the student has a pawn on e5, do not suggest pushing e4. If',
+  '  a square is occupied by their own piece, do not put a knight there.',
+  '  Every move you mention must be playable right now. When in doubt,',
+  '  speak about squares and structure, not specific moves.',
+  '- If Lichess data is empty for this position, explicitly say so',
+  '  ("we\'re past book now") and pivot to Stockfish-backed ideas',
+  '  instead of inventing theory.',
+  '',
   'HARD RULES:',
   '- Conversational tone. Use contractions ("you\'re", "that\'s", "let\'s"),',
   '  short sentences, direct second-person language. Ask the student a',
   '  question or point their attention at something when it fits ("notice',
   '  how the knight hits two squares at once", "see what their queen is',
   '  eyeing?"). Sound like a human teacher, not an analysis engine.',
-  '- 1 to 3 sentences, 20–70 words. Brevity wins — short is easier to',
-  '  listen to than long.',
+  '- 1 to 3 sentences, 20–70 words BY DEFAULT. A Narration density line',
+  '  in the user message may override this cap upward (verbose mode) or',
+  '  downward (terse mode) — always follow the density directive when',
+  '  present.',
   '- NEVER write generic filler like "Solid move", "Nice", "Good job",',
   '  "I played Nf3". Skip "Great question!" / "Excellent!" openers.',
+  '- NEVER use single-letter piece shorthand in spoken output ("P on e4",',
+  '  "N on c3", "Q to d8"). Always spell pieces out: pawn, knight, bishop,',
+  '  rook, queen, king. The output is read aloud — letters sound wrong.',
   '- Cite at least ONE concrete feature from the position — a threat,',
   '  pinned piece, weak square, pawn break, open file, misplaced piece,',
   '  king safety, outpost, structural idea. Two is fine when it fits,',

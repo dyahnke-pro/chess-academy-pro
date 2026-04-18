@@ -62,6 +62,12 @@ export interface DetectTrapInput {
   /** SAN of the move the engine thinks is best — used as the
    *  refutation hint when a trap fires. */
   engineBestSan?: string;
+  /** Legal SAN moves in the CURRENT position. Used to gate explorer
+   *  candidates so a stale or mismatched explorer payload can't
+   *  produce a trap claim for an illegal move. Optional because the
+   *  caller is sometimes upstream of the chess instance — when
+   *  omitted, detection proceeds without legality filtering. */
+  legalSan?: string[];
 }
 
 /**
@@ -76,8 +82,16 @@ export function detectTrapInPosition(input: DetectTrapInput): TrapSignal | null 
     evalBySan.set(ev.san, ev.evalCp);
   }
 
+  // Defensive: if the caller supplied the current legal-move set,
+  // filter explorer candidates against it. Explorer data comes from
+  // Lichess games recorded at a position — if the client FEN drifts
+  // from the explorer FEN even by one ply, we could flag an illegal
+  // move as a trap (exactly the "push e-pawn but e5 blocks it" bug).
+  const legal = input.legalSan ? new Set(input.legalSan) : null;
+
   let worst: { move: LichessExplorerMove; evalCp: number } | null = null;
   for (const move of input.explorer.moves) {
+    if (legal && !legal.has(move.san)) continue;
     const totalGames = move.white + move.draws + move.black;
     if (totalGames < POPULAR_MOVE_MIN_GAMES) continue;
     const evalCp = evalBySan.get(move.san);
