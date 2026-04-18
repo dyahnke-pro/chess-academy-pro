@@ -6,7 +6,29 @@ import { SYSTEM_PROMPT, buildChessContextMessage, getVerbosityInstruction } from
 import { recordApiUsage } from './coachCostService';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 
+/**
+ * Model routing policy
+ * --------------------
+ * Three tiers:
+ *   CHEAP   — routine dialog, short commentary, everything high-frequency
+ *   MID     — once-per-game or once-per-day analysis with meaningful depth
+ *   HEAVY   — rare deep-analysis passes (weekly report, deep position work)
+ *
+ * Per-task choice is a deliberate cost-vs-quality tradeoff:
+ *   - chat_response fires on EVERY chat turn. Kept on CHEAP because most
+ *     turns are casual Q&A ("what's the idea behind Nf3?") where the
+ *     MID-tier reasoner is overkill. The user can always ask "think
+ *     deeper" and we can route that through MID explicitly in a future
+ *     upgrade. Moving chat_response from MID to CHEAP cuts DeepSeek cost
+ *     ~50% and Anthropic cost ~75% on the largest single LLM surface.
+ *   - post_game_analysis / daily_lesson / bad_habit_report / opening_*
+ *     / game_post_review fire once per natural event, so MID is worth
+ *     the quality bump.
+ *   - weakness_report / weekly_report / deep_analysis fire rarely and
+ *     the output is consumed as a reference artifact — HEAVY pays off.
+ */
 const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
+  // High-frequency / short outputs → CHEAP (deepseek-chat)
   move_commentary:         'deepseek-chat',
   hint:                    'deepseek-chat',
   puzzle_feedback:         'deepseek-chat',
@@ -14,27 +36,32 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   game_opening_line:       'deepseek-chat',
   whatif_commentary:       'deepseek-chat',
   game_narrative_summary:  'deepseek-chat',
-  post_game_analysis:      'deepseek-reasoner',
-  daily_lesson:            'deepseek-reasoner',
-  bad_habit_report:        'deepseek-reasoner',
-  opening_overview:        'deepseek-reasoner',
-  chat_response:           'deepseek-reasoner',
-  game_post_review:        'deepseek-reasoner',
-  position_analysis_chat:  'deepseek-reasoner',
-  session_plan_generation: 'deepseek-reasoner',
-  interactive_review:      'deepseek-reasoner',
-  weakness_report:         'deepseek-reasoner',
-  weekly_report:           'deepseek-reasoner',
-  deep_analysis:           'deepseek-reasoner',
-  model_game_annotation:   'deepseek-reasoner',
-  middlegame_plan_generation: 'deepseek-reasoner',
+  chat_response:           'deepseek-chat',  // was 'deepseek-reasoner' — biggest single cost win
   sideline_explanation:    'deepseek-chat',
   smart_search:            'deepseek-chat',
   explore_reaction:        'deepseek-chat',
   intent_classify:         'deepseek-chat',
+
+  // Per-event analysis → MID (deepseek-reasoner)
+  post_game_analysis:      'deepseek-reasoner',
+  daily_lesson:            'deepseek-reasoner',
+  bad_habit_report:        'deepseek-reasoner',
+  opening_overview:        'deepseek-reasoner',
+  game_post_review:        'deepseek-reasoner',
+  position_analysis_chat:  'deepseek-reasoner',
+  session_plan_generation: 'deepseek-reasoner',
+  interactive_review:      'deepseek-reasoner',
+  model_game_annotation:   'deepseek-reasoner',
+  middlegame_plan_generation: 'deepseek-reasoner',
+
+  // Rare deep-dive outputs → still reasoner (DeepSeek has no heavier tier)
+  weakness_report:         'deepseek-reasoner',
+  weekly_report:           'deepseek-reasoner',
+  deep_analysis:           'deepseek-reasoner',
 };
 
 const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
+  // High-frequency / short outputs → CHEAP (Haiku)
   move_commentary:         'claude-haiku-4-5-20251001',
   hint:                    'claude-haiku-4-5-20251001',
   puzzle_feedback:         'claude-haiku-4-5-20251001',
@@ -42,24 +69,28 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   game_opening_line:       'claude-haiku-4-5-20251001',
   whatif_commentary:       'claude-haiku-4-5-20251001',
   game_narrative_summary:  'claude-haiku-4-5-20251001',
-  post_game_analysis:      'claude-sonnet-4-6',
-  daily_lesson:            'claude-sonnet-4-6',
-  bad_habit_report:        'claude-sonnet-4-6',
-  opening_overview:        'claude-sonnet-4-6',
-  chat_response:           'claude-sonnet-4-6',
-  game_post_review:        'claude-sonnet-4-6',
-  position_analysis_chat:  'claude-sonnet-4-6',
-  session_plan_generation: 'claude-sonnet-4-6',
-  interactive_review:      'claude-sonnet-4-6',
-  weakness_report:         'claude-opus-4-6',
-  weekly_report:           'claude-opus-4-6',
-  deep_analysis:           'claude-opus-4-6',
-  model_game_annotation:   'claude-sonnet-4-6',
-  middlegame_plan_generation: 'claude-sonnet-4-6',
+  chat_response:           'claude-haiku-4-5-20251001',  // was 'claude-sonnet-4-6' — biggest single cost win
   sideline_explanation:    'claude-haiku-4-5-20251001',
   smart_search:            'claude-haiku-4-5-20251001',
   explore_reaction:        'claude-haiku-4-5-20251001',
   intent_classify:         'claude-haiku-4-5-20251001',
+
+  // Per-event analysis → MID (Sonnet)
+  post_game_analysis:      'claude-sonnet-4-6',
+  daily_lesson:            'claude-sonnet-4-6',
+  bad_habit_report:        'claude-sonnet-4-6',
+  opening_overview:        'claude-sonnet-4-6',
+  game_post_review:        'claude-sonnet-4-6',
+  position_analysis_chat:  'claude-sonnet-4-6',
+  session_plan_generation: 'claude-sonnet-4-6',
+  interactive_review:      'claude-sonnet-4-6',
+  model_game_annotation:   'claude-sonnet-4-6',
+  middlegame_plan_generation: 'claude-sonnet-4-6',
+
+  // Rare deep-dive outputs → HEAVY (Opus)
+  weakness_report:         'claude-opus-4-6',
+  weekly_report:           'claude-opus-4-6',
+  deep_analysis:           'claude-opus-4-6',
 };
 
 // Offline fallback templates
