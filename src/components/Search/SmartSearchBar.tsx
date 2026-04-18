@@ -237,7 +237,9 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
                 console.warn('[SmartSearchBar] speakForced failed:', err);
               });
           } else {
-            void firstSpeakPromise.then(() => voiceService.speakQueuedForced(cleaned));
+            // .finally so queued sentences fire whether first-speak
+            // resolved or rejected — no silence mid-reply on errors.
+            void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(cleaned));
           }
         };
         voiceService.stop();
@@ -247,10 +249,13 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           navigate: (path: string) => { void navigate(path); },
           onChunk: (chunk: string) => {
             speechBuffer += chunk;
-            const sentenceEnd = /[.!?]\s/.exec(speechBuffer);
+            // Flush on ANY sentence terminator (.!?\n) — no whitespace
+            // requirement. Earlier regex required `[.!?]\s` which
+            // delayed first audio until the second word arrived.
+            const sentenceEnd = /[.!?\n]/.exec(speechBuffer);
             if (sentenceEnd) {
               const sentence = speechBuffer.slice(0, sentenceEnd.index + 1).trim();
-              speechBuffer = speechBuffer.slice(sentenceEnd.index + 2);
+              speechBuffer = speechBuffer.slice(sentenceEnd.index + 1).trimStart();
               speakOrQueue(sentence);
             }
           },
@@ -470,7 +475,9 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           )}
           <button
             onClick={handleMicToggle}
-            className={`p-1 rounded-md transition-colors ${
+            // min-h/w 44px = WCAG AA tap target minimum (previously
+            // ~26x26 which is too small on mobile).
+            className={`flex items-center justify-center min-h-[44px] min-w-[44px] p-2 rounded-md transition-colors ${
               listening ? 'bg-red-500/15' : 'hover:opacity-70'
             }`}
             style={{
@@ -480,7 +487,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
             title={listening ? 'Stop listening' : 'Speak to search'}
             data-testid="search-mic"
           >
-            {listening ? <MicOff size={14} /> : <Mic size={14} />}
+            {listening ? <MicOff size={16} /> : <Mic size={16} />}
           </button>
         </div>
       </div>
