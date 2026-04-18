@@ -61,6 +61,12 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
   const navigate = useNavigate();
   const isUser = message.role === 'user';
   const actions = message.metadata?.actions ?? [];
+  // Voice-mode assistant replies render as a compact "Speaking…"
+  // chip instead of the full text bubble — user asked by voice, so
+  // TTS is the primary output and a transcript on screen would
+  // compete with it. The raw text is still stored in the session
+  // for memory + context snapshot purposes.
+  const isVoiceAssistant = !isUser && message.modality === 'voice';
 
   const handleAction = (action: { type: string; id: string }): void => {
     switch (action.type) {
@@ -103,9 +109,35 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
             : 'bg-theme-surface border border-theme-border text-theme-text rounded-bl-sm'
         }`}
       >
-        <p className="text-sm leading-relaxed whitespace-pre-wrap">{renderFormattedText(message.content)}</p>
+        {isVoiceAssistant ? (
+          <div className="flex items-center gap-2 py-0.5" data-testid="voice-assistant-indicator">
+            <div className="flex gap-0.5">
+              {[0, 1, 2, 3].map((i) => (
+                <motion.span
+                  key={i}
+                  className="w-1 h-3 rounded-full bg-theme-accent"
+                  animate={
+                    isStreaming
+                      ? { scaleY: [0.4, 1, 0.4] }
+                      : { scaleY: 0.6 }
+                  }
+                  transition={
+                    isStreaming
+                      ? { duration: 0.9, repeat: Infinity, delay: i * 0.12 }
+                      : {}
+                  }
+                />
+              ))}
+            </div>
+            <span className="text-xs text-theme-text-muted italic">
+              {isStreaming ? 'Speaking…' : 'Spoken reply'}
+            </span>
+          </div>
+        ) : (
+          <p className="text-sm leading-relaxed whitespace-pre-wrap">{renderFormattedText(message.content)}</p>
+        )}
 
-        {isStreaming && !message.content && (
+        {isStreaming && !isVoiceAssistant && !message.content && (
           <div className="flex gap-1 py-1" data-testid="streaming-indicator">
             {[0, 1, 2].map((i) => (
               <motion.span
@@ -118,7 +150,7 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
           </div>
         )}
 
-        {actions.length > 0 && (
+        {actions.length > 0 && !isVoiceAssistant && (
           <div className="flex flex-wrap gap-2 mt-1">
             {actions.map((action, i) => (
               <ActionButton

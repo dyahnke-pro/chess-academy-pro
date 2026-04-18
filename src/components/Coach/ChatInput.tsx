@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { voiceInputService } from '../../services/voiceInputService';
 
 interface ChatInputProps {
-  onSend: (text: string) => void;
+  onSend: (text: string, modality?: 'voice' | 'text') => void;
   disabled?: boolean;
   placeholder?: string;
 }
@@ -13,13 +13,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const listeningRef = useRef(false);
   const voiceSupported = voiceInputService.isSupported();
-
-  // Keep ref in sync with state so the onResult callback can read it
-  useEffect(() => {
-    listeningRef.current = listening;
-  }, [listening]);
 
   // Auto-focus the textarea on mount
   useEffect(() => {
@@ -28,20 +22,19 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
 
   useEffect(() => {
     voiceInputService.onResult((transcript) => {
-      setText((prev) => (prev ? prev + ' ' + transcript : transcript));
-      // Re-start listening if mic is active (persistent mode)
-      if (listeningRef.current) {
-        setTimeout(() => {
-          voiceInputService.startListening();
-        }, 150);
-      }
+      const trimmed = transcript.trim();
+      if (!trimmed) return;
+      // Voice turns auto-send with modality='voice' so the assistant
+      // reply plays as TTS only — no text bubble. The input field
+      // stays empty (no appending) so the user can keep talking.
+      onSend(trimmed, 'voice');
     });
-  }, []);
+  }, [onSend]);
 
   const handleSend = useCallback(() => {
     const trimmed = text.trim();
     if (!trimmed || disabled) return;
-    onSend(trimmed);
+    onSend(trimmed, 'text');
     setText('');
     // Reset textarea height
     if (textareaRef.current) {

@@ -57,6 +57,7 @@ export function CoachChatPage(): JSX.Element {
 
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
+  const [streamingModality, setStreamingModality] = useState<'voice' | 'text'>('text');
   const [analysisContext, setAnalysisContext] = useState('');
   const [voiceMuted, setVoiceMuted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -95,7 +96,7 @@ export function CoachChatPage(): JSX.Element {
     speechBufferRef.current = '';
   }, []);
 
-  const handleSend = useCallback(async (text: string) => {
+  const handleSend = useCallback(async (text: string, modality: 'voice' | 'text' = 'text') => {
     if (!activeProfile || isStreaming) return;
 
     // Deterministic narration toggle — flips voice on/off reliably
@@ -108,6 +109,7 @@ export function CoachChatPage(): JSX.Element {
         id: `msg-${Date.now()}-u`,
         role: 'user',
         content: text,
+        modality,
         timestamp: Date.now(),
       });
       const ack = applyNarrationToggle(narrationToggle.enable);
@@ -115,6 +117,7 @@ export function CoachChatPage(): JSX.Element {
         id: `msg-${Date.now()}-narr`,
         role: 'assistant',
         content: ack,
+        modality,
         timestamp: Date.now(),
       } satisfies ChatMessageType);
       if (narrationToggle.enable) {
@@ -134,6 +137,7 @@ export function CoachChatPage(): JSX.Element {
           id: `msg-${Date.now()}-u`,
           role: 'user',
           content: text,
+          modality,
           timestamp: Date.now(),
         });
         setVoiceMuted(false);
@@ -159,12 +163,14 @@ export function CoachChatPage(): JSX.Element {
           id: `msg-${Date.now()}-u`,
           role: 'user',
           content: text,
+          modality,
           timestamp: Date.now(),
         });
         appendMessage({
           id: `msg-${Date.now()}-ack`,
           role: 'assistant',
           content: routed.ackMessage,
+          modality,
           timestamp: Date.now(),
         });
         if (routed.path) {
@@ -181,6 +187,7 @@ export function CoachChatPage(): JSX.Element {
     // to the session store; this view just renders them.
     setIsStreaming(true);
     setStreamingContent('');
+    setStreamingModality(modality);
     speechBufferRef.current = '';
 
     // Persistent coach memory (cross-session observations about this
@@ -193,29 +200,54 @@ export function CoachChatPage(): JSX.Element {
     const extraSystem = memoryBlock ? `${chatAdditions}\n\n${memoryBlock}` : chatAdditions;
 
     let streamed = '';
+    // Stop any in-flight TTS at the START of the turn so we don't
+    // stack replies. First sentence will be spoken via speakForced;
+    // subsequent sentences QUEUE via speakQueuedForced so they don't
+    // cut each other off mid-word — the prior code used .speak()
+    // which stops whatever's playing, truncating sentence N-1 every
+    // time sentence N arrives.
+    const shouldSpeak = !voiceMutedRef.current || modality === 'voice';
+    if (shouldSpeak) voiceService.stop();
+    let firstSentenceSpoken = false;
+
     try {
       await runCoachTurn({
         userText: text,
+        userModality: modality,
         navigate: (path: string) => { void navigate(path); },
         extraSystemPrompt: extraSystem,
         onChunk: (chunk: string) => {
           streamed += chunk;
           setStreamingContent(streamed);
 
-          if (!voiceMutedRef.current) {
+          if (shouldSpeak) {
             speechBufferRef.current += chunk;
             const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
             if (sentenceEnd) {
-              const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
+              const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1).trim();
               speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-              void voiceService.speak(sentence.trim());
+              if (sentence) {
+                if (!firstSentenceSpoken) {
+                  void voiceService.speakForced(sentence);
+                  firstSentenceSpoken = true;
+                } else {
+                  voiceService.speakQueuedForced(sentence);
+                }
+              }
             }
           }
         },
       });
-      if (speechBufferRef.current.trim()) {
-        flushSpeechBuffer();
+      // Flush any trailing text (no sentence terminator) to the queue.
+      const tail = speechBufferRef.current.trim();
+      if (shouldSpeak && tail) {
+        if (!firstSentenceSpoken) {
+          void voiceService.speakForced(tail);
+        } else {
+          voiceService.speakQueuedForced(tail);
+        }
       }
+      speechBufferRef.current = '';
     } catch (err) {
       console.warn('[CoachChatPage] agent turn failed:', err);
     } finally {
@@ -339,6 +371,7 @@ export function CoachChatPage(): JSX.Element {
               id: 'streaming',
               role: 'assistant',
               content: streamingContent,
+              modality: streamingModality,
               timestamp: Date.now(),
             }}
             isStreaming
@@ -351,6 +384,7 @@ export function CoachChatPage(): JSX.Element {
               id: 'streaming-empty',
               role: 'assistant',
               content: '',
+              modality: streamingModality,
               timestamp: Date.now(),
             }}
             isStreaming
