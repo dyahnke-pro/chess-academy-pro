@@ -6,6 +6,7 @@ import { getCoachChatResponse } from '../../services/coachApi';
 import { buildGameChatMessages, getGameSystemPromptAddition, parseAllTags } from '../../services/coachChatService';
 import { fetchRelevantGames } from '../../services/gameContextService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
+import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
@@ -32,6 +33,12 @@ interface GameChatPanelProps {
   previousFen?: string | null;
   className?: string;
   onBoardAnnotation?: (commands: BoardAnnotationCommand[]) => void;
+  /** Called when the user asks in chat to restart the current game. */
+  onRestartGame?: () => void;
+  /** Called when the user asks in chat to play a specific opening
+   *  against them. The opening name is passed through to the board's
+   *  opening-book hook. */
+  onPlayOpening?: (openingName: string) => void;
   /** If set, auto-sends this message on mount (e.g., from post-game practice bridge) */
   initialPrompt?: string | null;
   /** Called after the initial prompt has been sent */
@@ -63,6 +70,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       previousFen,
       className,
       onBoardAnnotation,
+      onRestartGame,
+      onPlayOpening,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -144,6 +153,50 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       };
       const updatedMessages = [...messagesRef.current, userMsg];
       setMessages(updatedMessages);
+
+      // In-game intents: short-circuit the LLM for actions that actually
+      // need to change the board (restart, play a specific opening).
+      // Previously "Restart the game" would produce a narrative reply
+      // ("Perfect, a fresh start!") but the board stayed where it was —
+      // the chat had no way to mutate game state. Handle those here.
+      if (!isGameOver) {
+        const inGame = detectInGameChatIntent(text);
+        if (inGame?.kind === 'restart' && onRestartGame) {
+          onRestartGame();
+          const ack: ChatMessageType = {
+            id: `gmsg-${Date.now()}-ack`,
+            role: 'assistant',
+            content: 'Fresh board — starting over. Your move.',
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ack]);
+          if (useAppStore.getState().coachVoiceOn) {
+            void voiceService.speak(ack.content);
+          }
+          return;
+        }
+        if (inGame?.kind === 'play-opening' && onPlayOpening) {
+          // Restart BEFORE queuing the opening — handleRestart clears
+          // requestedOpeningMoves, so we have to wipe the board first
+          // and then set the book line. React batches both state
+          // updates inside this handler, so the coach's move effect
+          // sees the fresh board + book on its next run and plays the
+          // first book move immediately.
+          onRestartGame?.();
+          onPlayOpening(inGame.openingName);
+          const ack: ChatMessageType = {
+            id: `gmsg-${Date.now()}-ack`,
+            role: 'assistant',
+            content: `Starting a fresh game — I'll play the ${inGame.openingName} against you.`,
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ack]);
+          if (useAppStore.getState().coachVoiceOn) {
+            void voiceService.speak(ack.content);
+          }
+          return;
+        }
+      }
 
       // Intent routing: outside of an active game, let "play against me",
       // "explain this position", etc. launch dedicated sessions instead of
@@ -363,7 +416,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
 
       setIsStreaming(false);
       setStreamingContent('');
-    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, setMessages, navigate]);
+    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, setMessages, navigate]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {

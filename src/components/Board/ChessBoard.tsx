@@ -77,9 +77,9 @@ export interface ChessBoardProps {
 }
 
 const FLASH_COLORS: Record<string, string> = {
-  good: 'rgba(34, 197, 94, 0.6)',       // green-500
-  inaccuracy: 'rgba(245, 158, 11, 0.6)', // amber-500
-  blunder: 'rgba(239, 68, 68, 0.6)',     // red-500
+  good: 'rgba(34, 197, 94, 0.95)',       // green-500
+  inaccuracy: 'rgba(245, 158, 11, 0.95)', // amber-500
+  blunder: 'rgba(239, 68, 68, 0.95)',     // red-500
 };
 
 export function ChessBoard({
@@ -139,7 +139,7 @@ export function ChessBoard({
       return;
     }
     setFlashColor(FLASH_COLORS[moveQualityFlash] ?? null);
-    const timer = setTimeout(() => setFlashColor(null), 500);
+    const timer = setTimeout(() => setFlashColor(null), 900);
     return () => clearTimeout(timer);
   }, [moveQualityFlash]);
 
@@ -343,7 +343,7 @@ export function ChessBoard({
           {flashColor && (
             <div
               className="absolute inset-0 pointer-events-none rounded-sm animate-pulse"
-              style={{ boxShadow: `inset 0 0 0 4px ${flashColor}` }}
+              style={{ boxShadow: `inset 0 0 0 8px ${flashColor}, 0 0 24px 6px ${flashColor}` }}
               data-testid="move-quality-flash"
             />
           )}
