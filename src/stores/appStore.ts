@@ -41,6 +41,10 @@ interface AppState {
   // Global coach drawer
   coachDrawerOpen: boolean;
   coachDrawerInitialMessage: string | null;
+  /** Modality of the pending initial message — tells the drawer's
+   *  chat panel whether to render the first exchange as a spoken
+   *  "Speaking…" chip (voice) or a normal text bubble (text). */
+  coachDrawerInitialMessageModality: 'voice' | 'text';
   coachEdgeTabPercent: number; // 0–100, vertical position on right edge
   globalBoardContext: {
     fen: string;
@@ -99,7 +103,7 @@ interface AppActions {
   toggleCoachTips: () => void;
   setBackgroundAnalysis: (running: boolean, progress?: string | null) => void;
   setCoachDrawerOpen: (open: boolean) => void;
-  setCoachDrawerInitialMessage: (msg: string | null) => void;
+  setCoachDrawerInitialMessage: (msg: string | null, modality?: 'voice' | 'text') => void;
   setCoachEdgeTabPercent: (percent: number) => void;
   setGlobalBoardContext: (ctx: AppState['globalBoardContext']) => void;
   setGlobalPracticePosition: (pos: AppState['globalPracticePosition']) => void;
@@ -134,6 +138,7 @@ const DEFAULT_STATE: AppState = {
   backgroundAnalysisProgress: null,
   coachDrawerOpen: false,
   coachDrawerInitialMessage: null,
+  coachDrawerInitialMessageModality: 'text',
   coachEdgeTabPercent: 50,
   globalBoardContext: null,
   globalPracticePosition: null,
@@ -195,7 +200,8 @@ export const useAppStore = create<AppState & AppActions>()(
 
     setCoachDrawerOpen: (open) => set({ coachDrawerOpen: open }),
 
-    setCoachDrawerInitialMessage: (msg) => set({ coachDrawerInitialMessage: msg }),
+    setCoachDrawerInitialMessage: (msg, modality = 'text') =>
+      set({ coachDrawerInitialMessage: msg, coachDrawerInitialMessageModality: modality }),
 
     setCoachEdgeTabPercent: (percent) => set({ coachEdgeTabPercent: Math.max(10, Math.min(90, percent)) }),
 
