@@ -36,7 +36,7 @@ export interface CoachContextSnapshot {
   narrationMode: boolean;
 }
 
-const RECENT_GAMES_FOR_SNAPSHOT = 5;
+const RECENT_GAMES_FOR_SNAPSHOT = 100;
 const RECENT_ACTIONS_FOR_SNAPSHOT = 5;
 const WEAKNESS_ITEMS_FOR_SNAPSHOT = 3;
 
