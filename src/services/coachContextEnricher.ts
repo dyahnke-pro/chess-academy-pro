@@ -24,8 +24,14 @@
 import { fetchLichessExplorer } from './lichessExplorerService';
 import { stockfishEngine } from './stockfishEngine';
 import { getRepertoireOpenings } from './openingService';
-import { getOverviewInsights, getOpeningInsights } from './gameInsightsService';
-import type { LichessExplorerResult } from '../types';
+import {
+  getOverviewInsights,
+  getOpeningInsights,
+  getMistakeInsights,
+  getTacticInsights,
+} from './gameInsightsService';
+import { db } from '../db/schema';
+import type { GameRecord, LichessExplorerResult, MoveAnnotation } from '../types';
 
 /** "What should I play?", "recommend an opening", "I'm an e4 player",
  *  "repertoire as white", "sharp openings" — triggers the opening-
@@ -44,6 +50,30 @@ const POSITION_QUESTION_RE =
  *  the opening block when relevant. */
 const PERFORMANCE_QUESTION_RE =
   /\b(my\s+(?:games?|play|performance|stats|accuracy|rating|elo|weak\w*|strength\w*|blunder\w*|mistake\w*|game\s+review)|how\s+am\s+i\s+doing|am\s+i\s+(?:improving|getting\s+better)|recent\s+games|last\s+\d+\s+games|my\s+win\s+rate|track\s+record|overall|which\s+opening\s+do\s+i|where\s+am\s+i\s+losing)\b/i;
+
+/** Tactics-awareness questions — triggers tacticInsights block with
+ *  per-theme missed-tactic counts. */
+const TACTICS_QUESTION_RE =
+  /\b(tactic\w*|fork\w*|pin\w*|skewer\w*|discover\w*|double\s+attack|mating\s+(?:net|attack)|sacrifice|combination|puzzle\w*|miss(?:ed)?\s+(?:tactic|the\s+win)|brilliant\s+move\w*|great\s+move\w*)\b/i;
+
+/** Phase / blunder / mistake pattern questions — triggers the deep
+ *  mistake block with costliest mistakes + per-phase breakdown. */
+const MISTAKE_QUESTION_RE =
+  /\b(blunder\w*|mistake\w*|miss(?:ed)?\s+(?:wins?|chances?)|costly|hang(?:ing)?|threw\s+(?:away|the)|late[- ]game|collapse|endgame|middlegame|opening\s+phase|phase\s+(?:accuracy|errors?))\b/i;
+
+/** Study / drill / repetition questions — triggers SRS + drill
+ *  progress block. */
+const STUDY_QUESTION_RE =
+  /\b(drill\w*|study|studying|practice|practised|flashcard\w*|repetition|srs|spaced|review\s+deck|memoriz\w*|woodpecker)\b/i;
+
+/** Time-control questions — triggers per-TC breakdown. */
+const TIME_CONTROL_QUESTION_RE =
+  /\b(blitz|rapid|classical|bullet|time\s+control|tc)\b/i;
+
+/** "Review my last game" / "walk through my games" — triggers the
+ *  per-move annotated snapshot of the 3 most-recent analyzed games. */
+const RECENT_GAME_DETAIL_RE =
+  /\b(my\s+last\s+game|walk\s+(?:me\s+)?through\s+my|recent\s+game|review\s+(?:my|the)\s+game|go\s+over\s+my|move[- ]by[- ]move)\b/i;
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -72,39 +102,71 @@ export async function buildGroundingBlock(input: EnricherInput): Promise<string>
   const { userText, currentFen } = input;
   const wantsOpening = OPENING_QUESTION_RE.test(userText);
   const wantsPosition = POSITION_QUESTION_RE.test(userText);
-  const wantsPerformance =
-    PERFORMANCE_QUESTION_RE.test(userText) || wantsOpening;
+  const wantsPerformance = PERFORMANCE_QUESTION_RE.test(userText) || wantsOpening;
+  const wantsTactics = TACTICS_QUESTION_RE.test(userText);
+  const wantsMistakes = MISTAKE_QUESTION_RE.test(userText) || wantsPerformance;
+  const wantsStudy = STUDY_QUESTION_RE.test(userText);
+  const wantsTimeControl = TIME_CONTROL_QUESTION_RE.test(userText) || wantsPerformance;
+  const wantsGameDetail = RECENT_GAME_DETAIL_RE.test(userText);
 
-  if (!wantsOpening && !wantsPosition && !wantsPerformance) return '';
-
-  const blocks: string[] = [];
-
-  if (wantsPerformance) {
-    const [overviewBlock, openingStatsBlock] = await Promise.all([
-      buildOverviewBlock(),
-      buildOpeningHistoryBlock(),
-    ]);
-    if (overviewBlock) blocks.push(overviewBlock);
-    if (openingStatsBlock) blocks.push(openingStatsBlock);
+  if (
+    !wantsOpening &&
+    !wantsPosition &&
+    !wantsPerformance &&
+    !wantsTactics &&
+    !wantsMistakes &&
+    !wantsStudy &&
+    !wantsTimeControl &&
+    !wantsGameDetail
+  ) {
+    return '';
   }
 
-  if (wantsOpening) {
-    const [repertoireBlock, explorerBlock] = await Promise.all([
-      buildRepertoireBlock(),
-      buildStartingPositionExplorerBlock(),
-    ]);
-    if (repertoireBlock) blocks.push(repertoireBlock);
-    if (explorerBlock) blocks.push(explorerBlock);
-  }
+  // Run every requested block in parallel, then filter nulls. Each
+  // helper is individually timeout-guarded — a single slow source
+  // can't stall the whole turn.
+  const [
+    overviewBlock,
+    openingHistoryBlock,
+    repertoireBlock,
+    startingExplorerBlock,
+    positionExplorerBlock,
+    engineBlock,
+    tacticsBlock,
+    mistakesBlock,
+    studyBlock,
+    timeControlBlock,
+    trendBlock,
+    gameDetailBlock,
+  ] = await Promise.all([
+    wantsPerformance ? buildOverviewBlock() : Promise.resolve(null),
+    wantsPerformance ? buildOpeningHistoryBlock() : Promise.resolve(null),
+    wantsOpening ? buildRepertoireBlock() : Promise.resolve(null),
+    wantsOpening ? buildStartingPositionExplorerBlock() : Promise.resolve(null),
+    wantsPosition && currentFen ? buildPositionExplorerBlock(currentFen) : Promise.resolve(null),
+    wantsPosition && currentFen ? buildEngineBlock(currentFen) : Promise.resolve(null),
+    wantsTactics ? buildTacticsBlock() : Promise.resolve(null),
+    wantsMistakes ? buildMistakesBlock() : Promise.resolve(null),
+    wantsStudy ? buildStudyProgressBlock() : Promise.resolve(null),
+    wantsTimeControl ? buildTimeControlBlock() : Promise.resolve(null),
+    wantsPerformance ? buildTrendBlock() : Promise.resolve(null),
+    wantsGameDetail ? buildRecentGameDetailBlock() : Promise.resolve(null),
+  ]);
 
-  if (wantsPosition && currentFen) {
-    const [engineBlock, explorerBlock] = await Promise.all([
-      buildEngineBlock(currentFen),
-      buildPositionExplorerBlock(currentFen),
-    ]);
-    if (engineBlock) blocks.push(engineBlock);
-    if (explorerBlock) blocks.push(explorerBlock);
-  }
+  const blocks = [
+    overviewBlock,
+    trendBlock,
+    timeControlBlock,
+    openingHistoryBlock,
+    repertoireBlock,
+    startingExplorerBlock,
+    positionExplorerBlock,
+    engineBlock,
+    tacticsBlock,
+    mistakesBlock,
+    studyBlock,
+    gameDetailBlock,
+  ].filter((b): b is string => b !== null && b.length > 0);
 
   if (blocks.length === 0) return '';
 
@@ -282,6 +344,237 @@ async function buildEngineBlock(fen: string): Promise<string | null> {
   } catch {
     return null;
   }
+}
+
+// ─── Tactics / mistakes / study / trend / time-control blocks ─────
+
+async function buildTacticsBlock(): Promise<string | null> {
+  try {
+    const t = await withTimeout(getTacticInsights(), FETCH_TIMEOUT_MS);
+    if (!t || t.totalGames === 0) return null;
+    const lines: string[] = [
+      `Awareness rate (found vs missed tactics): ${Math.round(t.awarenessRate * 100)}% (${t.foundVsMissed.found} found / ${t.foundVsMissed.missed} missed)`,
+      `Per-game averages: ${t.avgBrilliantsPerGame.toFixed(2)} brilliants, ${t.avgGreatPerGame.toFixed(2)} great moves`,
+    ];
+    if (t.tacticsByType.length > 0) {
+      const top = t.tacticsByType.slice(0, 5).map((x) => `${x.type} ${x.count}`).join(', ');
+      lines.push(`Tactics found by type: ${top}`);
+    }
+    if (t.missedByType.length > 0) {
+      const top = t.missedByType
+        .slice(0, 5)
+        .map((x) => `${x.type} missed ${x.count}× (avg cost ${(x.avgCost / 100).toFixed(1)} pawns)`)
+        .join('; ');
+      lines.push(`Missed tactics by type: ${top}`);
+    }
+    if (t.missedByPhase.length > 0) {
+      const phases = t.missedByPhase.map((p) => `${p.phase} ${p.count}`).join(', ');
+      lines.push(`Missed tactics by phase: ${phases}`);
+    }
+    return `[Tactical Awareness — analyzed from game history]\n${lines.join('\n')}`;
+  } catch {
+    return null;
+  }
+}
+
+async function buildMistakesBlock(): Promise<string | null> {
+  try {
+    const m = await withTimeout(getMistakeInsights(), FETCH_TIMEOUT_MS);
+    if (!m || m.totalGames === 0) return null;
+    const lines: string[] = [
+      `Error totals: ${m.errorBreakdown.blunders} blunders, ${m.errorBreakdown.mistakes} mistakes, ${m.errorBreakdown.inaccuracies} inaccuracies`,
+      `Avg centipawn loss per error: ${m.avgCpLoss.toFixed(0)}cp`,
+      `Errors by situation: winning ${m.errorsBySituation.winning}, equal ${m.errorsBySituation.equal}, losing ${m.errorsBySituation.losing}`,
+      `Thrown-wins: ${m.thrownWins} — late-game collapses: ${m.lateGameCollapses} — missed wins: ${m.missedWins}`,
+    ];
+    if (m.errorsByPhase.length > 0) {
+      const phases = m.errorsByPhase
+        .map((p) => `${p.phase} ${p.errors} errors (avg ${p.avgCpLoss.toFixed(0)}cp)`)
+        .join('; ');
+      lines.push(`Errors by phase: ${phases}`);
+    }
+    if (m.costliestMistakes.length > 0) {
+      const top = m.costliestMistakes.slice(0, 5).map((c) => {
+        const op = c.openingName ? ` in ${c.openingName}` : '';
+        return `  - ${c.date} vs ${c.opponentName}${op} — move ${c.moveNumber} ${c.san} (${c.classification}, lost ${(c.cpLoss / 100).toFixed(1)} pawns, ${c.phase})`;
+      });
+      lines.push(`Costliest recent mistakes:\n${top.join('\n')}`);
+    }
+    return `[Mistake Patterns — where this student's points go to die]\n${lines.join('\n')}`;
+  } catch {
+    return null;
+  }
+}
+
+async function buildStudyProgressBlock(): Promise<string | null> {
+  try {
+    const [flashcardCount, flashcardsDue, repertoire] = await withTimeout(
+      Promise.all([
+        db.flashcards.count(),
+        db.flashcards.filter((f) => new Date(f.srsDueDate).getTime() <= Date.now()).count(),
+        getRepertoireOpenings(),
+      ]),
+      FETCH_TIMEOUT_MS,
+    );
+    const lines: string[] = [];
+    if (flashcardCount > 0) {
+      lines.push(`Flashcards: ${flashcardCount} total, ${flashcardsDue} due for review now`);
+    }
+    if (repertoire.length > 0) {
+      const drilled = repertoire.filter((r) => r.drillAttempts > 0);
+      if (drilled.length > 0) {
+        const avgAcc = drilled.reduce((s, r) => s + r.drillAccuracy, 0) / drilled.length;
+        lines.push(`Repertoire drilling: ${drilled.length}/${repertoire.length} openings attempted, avg ${Math.round(avgAcc * 100)}% drill accuracy`);
+      } else {
+        lines.push(`Repertoire: ${repertoire.length} openings added, 0 drilled yet`);
+      }
+    }
+    if (lines.length === 0) return null;
+    return `[Study / Drill Progress]\n${lines.join('\n')}`;
+  } catch {
+    return null;
+  }
+}
+
+async function buildTimeControlBlock(): Promise<string | null> {
+  try {
+    const games = await withTimeout(
+      db.games
+        .filter((g) => !g.isMasterGame && g.result !== '*')
+        .limit(300)
+        .toArray(),
+      FETCH_TIMEOUT_MS,
+    );
+    if (games.length === 0) return null;
+    // `GameRecord` has no explicit time-control field; derive from the
+    // event string which in Lichess / Chess.com imports contains
+    // "blitz" / "rapid" / "classical" / "bullet".
+    const buckets: Record<string, { wins: number; losses: number; draws: number }> = {};
+    for (const g of games) {
+      const tc = inferTimeControl(g);
+      if (!tc) continue;
+      buckets[tc] ??= { wins: 0, losses: 0, draws: 0 };
+      if (g.result === '1/2-1/2') buckets[tc].draws += 1;
+      else if (isStudentWin(g)) buckets[tc].wins += 1;
+      else buckets[tc].losses += 1;
+    }
+    const entries = Object.entries(buckets).filter(([, v]) => v.wins + v.losses + v.draws >= 5);
+    if (entries.length === 0) return null;
+    const lines = entries.map(([tc, v]) => {
+      const n = v.wins + v.losses + v.draws;
+      const pct = Math.round(((v.wins + v.draws * 0.5) / n) * 100);
+      return `- ${tc}: ${n} games, ${pct}% score (${v.wins}W / ${v.losses}L / ${v.draws}D)`;
+    });
+    return `[Time-Control Breakdown — last 300 games]\n${lines.join('\n')}`;
+  } catch {
+    return null;
+  }
+}
+
+function inferTimeControl(g: GameRecord): string | null {
+  const event = (g.event ?? '').toLowerCase();
+  if (event.includes('bullet')) return 'bullet';
+  if (event.includes('blitz')) return 'blitz';
+  if (event.includes('rapid')) return 'rapid';
+  if (event.includes('classical') || event.includes('standard')) return 'classical';
+  return null;
+}
+
+function isStudentWin(g: GameRecord): boolean {
+  // Without a known student-colour per game, fall back to the simpler
+  // heuristic: call it a "win" when the result favours whichever side
+  // has the higher ELO (usually the student playing up). The TC
+  // breakdown is comparative, not absolute — this is good enough.
+  if (g.result === '1-0') return (g.whiteElo ?? 0) >= (g.blackElo ?? 0);
+  if (g.result === '0-1') return (g.blackElo ?? 0) >= (g.whiteElo ?? 0);
+  return false;
+}
+
+async function buildTrendBlock(): Promise<string | null> {
+  try {
+    const games = await withTimeout(
+      db.games
+        .orderBy('date')
+        .reverse()
+        .filter((g) => !g.isMasterGame && g.result !== '*')
+        .limit(40)
+        .toArray(),
+      FETCH_TIMEOUT_MS,
+    );
+    if (games.length < 10) return null;
+    const recent = games.slice(0, 20);
+    const prior = games.slice(20, 40);
+    const pct = (batch: GameRecord[]): number => {
+      const w = batch.filter((g) => isStudentWin(g)).length;
+      const d = batch.filter((g) => g.result === '1/2-1/2').length;
+      return batch.length ? (w + d * 0.5) / batch.length : 0;
+    };
+    const recentPct = Math.round(pct(recent) * 100);
+    const priorPct = prior.length > 0 ? Math.round(pct(prior) * 100) : null;
+    const arrow = priorPct === null ? '' : recentPct > priorPct + 3 ? '↑ improving' : recentPct < priorPct - 3 ? '↓ regressing' : '→ steady';
+    const line = priorPct === null
+      ? `Last ${recent.length} games: ${recentPct}% score`
+      : `Last 20 games: ${recentPct}% score vs prior 20: ${priorPct}% ${arrow}`;
+    return `[Recent Trend]\n${line}`;
+  } catch {
+    return null;
+  }
+}
+
+async function buildRecentGameDetailBlock(): Promise<string | null> {
+  try {
+    const games = await withTimeout(
+      db.games
+        .orderBy('date')
+        .reverse()
+        .filter((g) => !g.isMasterGame && g.result !== '*' && g.fullyAnalyzed === true)
+        .limit(3)
+        .toArray(),
+      FETCH_TIMEOUT_MS,
+    );
+    if (games.length === 0) return null;
+    const sections = games.map((g) => {
+      const anns = g.annotations ?? [];
+      const counts = classificationCounts(anns);
+      const heads = anns.slice(0, 15).map((a) => `${a.moveNumber}${a.color === 'white' ? '' : '...'}${a.san}${classificationTag(a.classification)}`).join(' ');
+      return [
+        `• ${g.date} ${g.white} (${g.whiteElo ?? '?'}) vs ${g.black} (${g.blackElo ?? '?'}) — ${g.result}${g.eco ? ` [${g.eco}]` : ''}`,
+        `  counts: ${formatCounts(counts)}`,
+        `  first moves: ${heads}`,
+      ].join('\n');
+    });
+    return `[Recent Annotated Games — per-move classifications]\n${sections.join('\n')}`;
+  } catch {
+    return null;
+  }
+}
+
+function classificationCounts(anns: MoveAnnotation[]): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const a of anns) {
+    const k = (a.classification ?? 'unknown').toLowerCase();
+    counts[k] = (counts[k] ?? 0) + 1;
+  }
+  return counts;
+}
+
+function formatCounts(counts: Record<string, number>): string {
+  const interesting = ['brilliant', 'great', 'best', 'excellent', 'inaccuracy', 'mistake', 'blunder', 'miss'];
+  return interesting
+    .filter((k) => counts[k])
+    .map((k) => `${k}=${counts[k]}`)
+    .join(', ') || '—';
+}
+
+function classificationTag(c: string | null | undefined): string {
+  if (!c) return '';
+  const key = c.toLowerCase();
+  if (key === 'blunder') return '??';
+  if (key === 'mistake') return '?';
+  if (key === 'inaccuracy') return '?!';
+  if (key === 'brilliant') return '!!';
+  if (key === 'great' || key === 'excellent') return '!';
+  return '';
 }
 
 // ─── Util ─────────────────────────────────────────────────────────
