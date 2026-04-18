@@ -7,6 +7,13 @@ import { speechService } from '../../services/speechService';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { buildStudentStateBlock } from '../../services/studentStateBlock';
+import { buildCoachMemoryBlock, extractAndRememberNotes } from '../../services/coachMemoryService';
+import { db } from '../../db/schema';
+
+/** Dexie meta key for the one-time "voice needs volume" banner. Set
+ *  to '1' once shown so we don't repeat on every mic tap. */
+const VOICE_ONBOARDING_META_KEY = 'voice-onboarding-shown';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import type { ChatMessage, BoardArrow } from '../../types';
 
@@ -154,7 +161,9 @@ ${lastMove.bestMove ? `Engine's best move was: ${lastMove.bestMove} (for ${color
     : `It is NOT the student's turn right now (it's your turn as ${opponentColor}). Talk about the position or their last move instead.`}
 3. CRITICAL: The student plays ${playerLabel}. NEVER suggest a ${opponentColor} move as the student's move. ${opponentColor} moves are YOUR moves.
 4. When the student asks about a move: use [Last Move Played]. Say if it was good/inaccuracy/mistake and why.
-5. Keep responses to 1-2 sentences. Be direct.
+5. Length follows the student's current verbosity setting — a routine exchange is a sentence, a teachable moment can be longer. No filler either way.
+5a. MATCH THE STUDENT'S LANGUAGE. If the student's most recent message is in Spanish / French / German / Portuguese / any non-English language, reply in THAT language and stay there for the whole reply. Do not switch back to English mid-reply. English is the default only when the student speaks English.
+5b. READ THE ROOM. If the student sounds frustrated ("ugh", "why did I", "I always do this"), lead with a one-beat acknowledgement ("yeah, that one gets everyone") before teaching. If they're on a good run, match the energy.
 6. CRITICAL — SPEAK LIKE A HUMAN, NOT A COMPUTER. Your response is read aloud by text-to-speech. NEVER output chess notation like "Nc3", "Qd8", "O-O", "e4", "Bxf7", etc. ALSO NEVER use single-letter piece shorthand like "P on e4", "N on c3", "Q to d8", "the K is on g1" — the letters sound wrong when spoken. ALWAYS translate into plain spoken English. Examples:
    - "Nc3" → "move your knight to c3"
    - "Qd8" → "queen back to d8"
@@ -227,6 +236,8 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [unsupportedFlash, setUnsupportedFlash] = useState(false);
+  const [micError, setMicError] = useState<string | null>(null);
+  const [onboardingBanner, setOnboardingBanner] = useState<string | null>(null);
   // Live interim transcript shown above the mic while the user is
   // speaking. Cleared on final recognition + after the coach replies.
   // The single biggest UX win — makes the mic feel responsive
@@ -298,7 +309,23 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
 
     const recent = currentMessages.slice(-(MAX_HISTORY_PAIRS * 2));
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
-    const systemAddition = buildSystemAddition(fen, pgn, turn, playerColor, engineData, lastMoveContext);
+    const baseSystem = buildSystemAddition(fen, pgn, turn, playerColor, engineData, lastMoveContext);
+
+    // Audit finding: VoiceChatMic was flying blind vs. the chat coach.
+    // Wire the same trainer-grade context blocks the main agent runner
+    // has — StudentState (mood / tempo) + persistent memory — so
+    // replies land with real empathy and continuity instead of
+    // generic chess prose.
+    const studentStateBlock = buildStudentStateBlock({
+      recentChat: currentMessages,
+      lastUserInteractionMs: Date.now(),
+      turn: engineData && turn === (playerColor === 'white' ? 'w' : 'b') ? 'student' : 'coach',
+      contextLabel: 'in-game voice chat',
+    });
+    const memoryBlock = await buildCoachMemoryBlock();
+    const systemAddition = [baseSystem, studentStateBlock, memoryBlock]
+      .filter((s): s is string => !!s && s.length > 0)
+      .join('\n\n');
 
     // Stop any in-flight TTS (per-move narration from CoachGamePage, a
     // previous voice reply that's still playing, etc.) before the voice
@@ -330,25 +357,36 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
         .trim();
       if (!trimmed) return;
       if (!firstSpeakPromise) {
+        // .catch returns a resolved promise so subsequent .finally
+        // chains always fire. Without this swallow, a speakForced
+        // rejection (e.g. iOS AudioContext blocked) would cause
+        // every queued sentence to be dropped — user hears only the
+        // first sentence then silence mid-reply.
         firstSpeakPromise = Promise.resolve(voiceService.speakForced(trimmed))
           .catch((err: unknown) => {
             console.warn('[VoiceChatMic] speakForced failed:', err);
           });
       } else {
-        // Wait for the first speakForced to finish its stop()+start cycle
-        // before queuing. Without this await, queue() can land before
-        // speakInternal's stop() and get wiped.
-        void firstSpeakPromise.then(() => voiceService.speakQueuedForced(trimmed));
+        // Use .finally so the queue fires whether speakForced
+        // resolved or rejected. Even if first-speak failed, Web
+        // Speech can still play subsequent sentences via the
+        // fallback chain — better partial audio than silence.
+        void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(trimmed));
       }
     };
 
     const onChunk = (chunk: string): void => {
       sentenceBuffer += chunk;
-      // Split on sentence-ending punctuation followed by a space or end
-      const match = sentenceBuffer.match(/^(.*?[.!?])\s+(.*)$/s);
+      // Flush on any sentence terminator (period, bang, question, or
+      // newline) — no requirement for trailing whitespace. Previous
+      // regex required `[.!?]\s+` which added 200-400ms of first-word
+      // latency on short streams. Flushing eagerly on ".!?\n" makes
+      // the coach's first word land as soon as the first sentence
+      // actually finishes.
+      const match = sentenceBuffer.match(/^(.*?[.!?\n])(\s*)(.*)$/s);
       if (match) {
         flushSentence(match[1]);
-        sentenceBuffer = match[2];
+        sentenceBuffer = match[3];
       }
     };
 
@@ -364,8 +402,14 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       VOICE_MAX_TOKENS,
     );
 
+    // Strip + persist any [[REMEMBER: ...]] notes the coach emitted.
+    // Voice chat now grows the same cross-session memory as the main
+    // chat surface — so "student keeps missing knight forks" said
+    // during a voice turn carries forward to every future session.
+    const afterMemory = extractAndRememberNotes(rawResponse);
+
     // Extract arrow annotations before flushing remaining speech
-    const { arrows: responseArrows, cleanText: response } = extractArrows(rawResponse);
+    const { arrows: responseArrows, cleanText: response } = extractArrows(afterMemory);
 
     // Flush remaining text (cleaned of arrow tags)
     const { cleanText: cleanBuffer } = extractArrows(sentenceBuffer);
@@ -444,6 +488,19 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       return;
     }
 
+    // One-time banner: voice coach needs volume + silent-switch off.
+    // iOS silent mode mutes Web Audio entirely (Polly); Web Speech
+    // honours the mute switch too. Without this hint users think the
+    // app is broken the first time they try voice on a muted phone.
+    // Stored in Dexie meta so it only shows once per device.
+    void db.meta.get(VOICE_ONBOARDING_META_KEY).then((rec) => {
+      if (!rec) {
+        setOnboardingBanner('Voice coach needs volume ON — if you\u2019re on silent mode, flip the mute switch off.');
+        setTimeout(() => setOnboardingBanner(null), 6000);
+        void db.meta.put({ key: VOICE_ONBOARDING_META_KEY, value: '1' });
+      }
+    });
+
     // Mic on = voice narration on (implicit). If the student turns
     // the mic on during a game, they expect a spoken conversation —
     // the coach should narrate per-move without being asked. Flip
@@ -468,6 +525,18 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       // coach stops talking. Matches how a person-to-person lesson
       // actually works — never talked over. Fires once per utterance.
       onSpeechStart: () => voiceService.stop(),
+      onError: (reason) => {
+        setListening(false);
+        setInterimTranscript('');
+        setMicError(
+          reason === 'permission-denied'
+            ? 'Mic access denied. Enable microphone permission to talk to the coach.'
+            : reason === 'unavailable'
+              ? 'Mic unavailable. Check that no other app is using it.'
+              : 'Mic reconnect failed. Tap again to retry.'
+        );
+        setTimeout(() => setMicError(null), 4000);
+      },
     });
     setListening(started);
   }, [listening, isStreaming]);
@@ -484,6 +553,28 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
             data-testid="voice-unsupported-msg"
           >
             Mic not supported
+          </motion.span>
+        )}
+        {micError && (
+          <motion.span
+            className="absolute bottom-full mb-1 right-0 text-[11px] text-red-400 bg-theme-surface border border-red-500/40 rounded px-2 py-1 max-w-[240px] z-20"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            data-testid="voice-mic-error"
+          >
+            {micError}
+          </motion.span>
+        )}
+        {onboardingBanner && (
+          <motion.span
+            className="absolute bottom-full mb-1 right-0 text-[11px] text-amber-400 bg-theme-surface border border-amber-500/40 rounded px-2 py-1 max-w-[260px] z-20"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            data-testid="voice-onboarding-banner"
+          >
+            {onboardingBanner}
           </motion.span>
         )}
       </AnimatePresence>
@@ -514,7 +605,10 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
 
       <motion.button
         onClick={handleMicToggle}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors ${
+        // min-h/w 44px = WCAG AA tap target minimum. Previously
+        // px-3 py-1.5 rendered around 30x30px which is below iOS HIG
+        // and WCAG AA 44x44.
+        className={`flex items-center gap-1.5 min-h-[44px] min-w-[44px] px-4 py-2.5 rounded-md text-sm transition-colors ${
           listening
             ? 'bg-red-500/15 text-red-500 border border-red-500'
             : 'bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text'

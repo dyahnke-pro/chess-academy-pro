@@ -120,7 +120,8 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
         <motion.button
           onClick={handleVoice}
           disabled={disabled}
-          className={`p-2.5 rounded-xl border transition-colors ${
+          // min-h/w 44px = WCAG AA tap target minimum
+          className={`min-h-[44px] min-w-[44px] p-3 rounded-xl border transition-colors flex items-center justify-center ${
             listening
               ? 'border-red-500 bg-red-500/10 text-red-500'
               : 'border-theme-border text-theme-text-muted hover:text-theme-text'

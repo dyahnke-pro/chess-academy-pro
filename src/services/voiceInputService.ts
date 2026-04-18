@@ -18,6 +18,11 @@ export interface StartListeningOptions {
    *  talking over a trainer: the moment you start, they stop. Exactly
    *  one fire per utterance — reset after each final. */
   onSpeechStart?: () => void;
+  /** Fired on hard errors the user should know about — permission
+   *  denied, microphone unavailable, restart-thrash cap reached. The
+   *  caller is expected to surface a toast or inline message so the
+   *  student isn't left staring at a dead mic without explanation. */
+  onError?: (reason: 'permission-denied' | 'unavailable' | 'thrashing') => void;
 }
 
 interface SpeechRecognitionEvent {
@@ -93,6 +98,7 @@ class VoiceInputService {
   private resultHandlers: ResultHandler[] = [];
   private interimHandler: InterimHandler | null = null;
   private endHandler: EndHandler | null = null;
+  private errorHandler: ((reason: 'permission-denied' | 'unavailable' | 'thrashing') => void) | null = null;
   private speechStartHandler: (() => void) | null = null;
   /** True once the current utterance has fired onSpeechStart. Reset
    *  after each dispatched final so the next utterance gets one fire. */
@@ -128,6 +134,7 @@ class VoiceInputService {
 
     this.interimHandler = options.onInterim ?? null;
     this.endHandler = options.onEnd ?? null;
+    this.errorHandler = options.onError ?? null;
     this.speechStartHandler = options.onSpeechStart ?? null;
     this.speechStartFired = false;
     this.userStopped = false;
@@ -252,12 +259,14 @@ class VoiceInputService {
       this.restartAttempts += 1;
       if (this.restartAttempts > MAX_RESTART_ATTEMPTS) {
         this.listening = false;
+        this.errorHandler?.('thrashing');
         this.endHandler?.();
         return;
       }
       const klass = this.getSpeechRecognitionClass();
       if (!klass) {
         this.listening = false;
+        this.errorHandler?.('unavailable');
         this.endHandler?.();
         return;
       }
@@ -273,6 +282,11 @@ class VoiceInputService {
       // the restart decision.
       if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
         this.userStopped = true;
+        this.errorHandler?.('permission-denied');
+      } else if (event.error === 'audio-capture') {
+        // Mic hardware missing / in use by another app. Still let
+        // onend restart logic run, but surface the failure up top.
+        this.errorHandler?.('unavailable');
       }
     };
 
