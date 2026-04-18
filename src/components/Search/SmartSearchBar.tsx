@@ -5,6 +5,8 @@ import { useSmartSearch } from '../../hooks/useSmartSearch';
 import { useAppStore, selectFreshBoardSnapshot } from '../../stores/appStore';
 import { parseCoachIntent } from '../../services/coachAgent';
 import { voiceInputService } from '../../services/voiceInputService';
+import { runCoachTurn } from '../../services/coachAgentRunner';
+import { voiceService } from '../../services/voiceService';
 import type { SmartSearchResult, SmartSearchCategory } from '../../types';
 
 interface SmartSearchBarProps {
@@ -186,11 +188,51 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
         inputRef.current?.blur();
         void navigate(`/coach/session/explain-position${qs ? `?${qs}` : ''}`);
       } else {
-        // No structured intent — hand the whole utterance to the
-        // coach drawer. The drawer's chat path runs TTS on the
-        // reply by default (voice-on). We leave the mic ON so the
-        // user can keep the back-and-forth going without re-tapping.
-        askCoach(text);
+        // No structured intent — voice-only QA. Run the coach turn
+        // in the BACKGROUND (no drawer, no chat panel) so a text box
+        // doesn't pop up just because the user said something. The
+        // coach reply streams via TTS only. The exchange is still
+        // saved to the session store so it's part of the persistent
+        // history if the user opens the chat later.
+        clear();
+        setShowDropdown(false);
+        inputRef.current?.blur();
+        // Stream the reply straight to TTS, sentence-by-sentence,
+        // queueing each so they don't cut each other off. No drawer
+        // opens; no text bubble appears.
+        let speechBuffer = '';
+        let firstSentenceSpoken = false;
+        voiceService.stop();
+        void runCoachTurn({
+          userText: text,
+          userModality: 'voice',
+          navigate: (path: string) => { void navigate(path); },
+          onChunk: (chunk: string) => {
+            speechBuffer += chunk;
+            const sentenceEnd = /[.!?]\s/.exec(speechBuffer);
+            if (sentenceEnd) {
+              const sentence = speechBuffer.slice(0, sentenceEnd.index + 1).trim();
+              speechBuffer = speechBuffer.slice(sentenceEnd.index + 2);
+              if (!sentence) return;
+              if (!firstSentenceSpoken) {
+                void voiceService.speakForced(sentence);
+                firstSentenceSpoken = true;
+              } else {
+                voiceService.speakQueuedForced(sentence);
+              }
+            }
+          },
+        }).then(() => {
+          const tail = speechBuffer.trim();
+          if (!tail) return;
+          if (!firstSentenceSpoken) {
+            void voiceService.speakForced(tail);
+          } else {
+            voiceService.speakQueuedForced(tail);
+          }
+        }).catch((err) => {
+          console.warn('[SmartSearchBar] background voice turn failed:', err);
+        });
       }
     });
     const ok = voiceInputService.startListening({
