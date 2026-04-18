@@ -31,6 +31,11 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookM
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { getScenarioTemplate } from '../../services/coachTemplates';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
+import {
+  loadCoachPlayState,
+  saveCoachPlayState,
+  clearCoachPlayState,
+} from '../../services/coachPlayPersistence';
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
@@ -309,6 +314,71 @@ export function CoachGamePage(): JSX.Element {
     subjectAppliedRef.current = true;
     handleOpeningRequest(seed);
   }, [subjectParam, handleOpeningRequest, initialGameFen, searchParams]);
+
+  // Resume a saved in-progress game from Dexie. Runs once on mount.
+  // Only fires when the URL has no explicit game specifier (?fen,
+  // ?review, ?subject, ?opening, ?side) — if the user is starting
+  // something specific, we respect that over the saved snapshot.
+  const resumeCheckedRef = useRef(false);
+  useEffect(() => {
+    if (resumeCheckedRef.current) return;
+    resumeCheckedRef.current = true;
+    const hasExplicitStart =
+      searchParams.has('fen') ||
+      searchParams.has('review') ||
+      searchParams.has('subject') ||
+      searchParams.has('opening') ||
+      searchParams.has('side');
+    if (hasExplicitStart) return;
+    void loadCoachPlayState().then((saved) => {
+      if (!saved) return;
+      // Only restore when we haven't made any moves yet (mount state).
+      if (moveCountRef.current > 0) return;
+      setDifficulty(saved.difficulty);
+      setPlayerColor(saved.playerColor);
+      const ok = game.loadFen(saved.fen);
+      if (!ok) {
+        // Saved FEN is corrupt — drop it and start fresh.
+        void clearCoachPlayState();
+        return;
+      }
+      if (saved.subject) {
+        handleOpeningRequest(saved.subject);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist the active game on every board change so the next visit
+  // resumes where we left off. Skipped while a review is loaded
+  // (review mode has its own state path), while the game is done
+  // (clearCoachPlayState runs in the game-over path instead), and
+  // while no real moves have been played yet (writing a starting
+  // position as a resumable snapshot buys us nothing and just wastes
+  // a DB write on every mount).
+  useEffect(() => {
+    if (reviewMoves) return;
+    if (gameState.status !== 'playing') return;
+    if (game.isGameOver) return;
+    if (gameState.moves.length === 0) return;
+    void saveCoachPlayState({
+      fen: game.fen,
+      playerColor,
+      difficulty,
+      subject: subjectParam ?? null,
+      halfMoveCount: moveCountRef.current,
+      updatedAt: Date.now(),
+    });
+  }, [
+    game.fen,
+    game.isGameOver,
+    reviewMoves,
+    gameState.status,
+    gameState.moves.length,
+    playerColor,
+    difficulty,
+    subjectParam,
+  ]);
 
   // Honor `?narrate=1` from the agent's start_play action. Flips
   // both the session-store narrationMode and the appStore voice
@@ -792,6 +862,9 @@ export function CoachGamePage(): JSX.Element {
   // while keeping the current player color and difficulty. Used by the
   // Restart button and by the in-chat "restart the game" intent.
   const handleRestart = useCallback((opts?: { keepRequestedOpening?: boolean }) => {
+    // Explicit restart — drop the resumable snapshot so we don't
+    // auto-load the abandoned game on next visit.
+    void clearCoachPlayState();
     game.resetGame();
     moveCountRef.current = 0;
     setGameState({
@@ -981,6 +1054,9 @@ export function CoachGamePage(): JSX.Element {
   // Auto-transition from gameover overlay to postgame review after showing final position
   useEffect(() => {
     if (gameState.status !== 'gameover') return;
+    // Clear the resumable snapshot once the game actually ends so we
+    // don't auto-restore a finished position on the next visit.
+    void clearCoachPlayState();
     const timer = setTimeout(() => {
       setGameState((prev) => ({ ...prev, status: 'postgame' }));
     }, 3500);
