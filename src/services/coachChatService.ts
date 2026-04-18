@@ -406,7 +406,17 @@ export function buildGameContextBlock(
           ? `Move quality: ${gameContext.tacticAnalysis.moveQuality}${gameContext.tacticAnalysis.evalSwing !== undefined ? ` (eval swing: ${gameContext.tacticAnalysis.evalSwing > 0 ? '+' : ''}${gameContext.tacticAnalysis.evalSwing}cp)` : ''}`
           : '',
         gameContext.tacticAnalysis.hangingPieces && gameContext.tacticAnalysis.hangingPieces.length > 0
-          ? `Hanging pieces: ${gameContext.tacticAnalysis.hangingPieces.map((p) => `${p.color === 'w' ? 'White' : 'Black'} ${p.piece} on ${p.square}`).join(', ')}`
+          ? `Hanging pieces: ${gameContext.tacticAnalysis.hangingPieces.map((p) => {
+              // Use full piece names so TTS doesn't speak "P on e4" — the LLM
+              // echoes whatever we feed it, so normalise here rather than
+              // hoping the prompt catches every shorthand case.
+              const pieceMap: Record<string, string> = {
+                p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+              };
+              const pieceKey = p.piece.toLowerCase();
+              const pieceName = pieceMap[pieceKey] ?? p.piece;
+              return `${p.color === 'w' ? 'White' : 'Black'} ${pieceName} on ${p.square}`;
+            }).join(', ')}`
           : '',
         gameContext.tacticAnalysis.currentTactics && gameContext.tacticAnalysis.currentTactics.length > 0
           ? `Current tactics: ${gameContext.tacticAnalysis.currentTactics.join('; ')}`
@@ -478,7 +488,17 @@ export function buildGameChatMessages(
           ? `Move quality: ${gameContext.tacticAnalysis.moveQuality}${gameContext.tacticAnalysis.evalSwing !== undefined ? ` (eval swing: ${gameContext.tacticAnalysis.evalSwing > 0 ? '+' : ''}${gameContext.tacticAnalysis.evalSwing}cp)` : ''}`
           : '',
         gameContext.tacticAnalysis.hangingPieces && gameContext.tacticAnalysis.hangingPieces.length > 0
-          ? `Hanging pieces: ${gameContext.tacticAnalysis.hangingPieces.map((p) => `${p.color === 'w' ? 'White' : 'Black'} ${p.piece} on ${p.square}`).join(', ')}`
+          ? `Hanging pieces: ${gameContext.tacticAnalysis.hangingPieces.map((p) => {
+              // Use full piece names so TTS doesn't speak "P on e4" — the LLM
+              // echoes whatever we feed it, so normalise here rather than
+              // hoping the prompt catches every shorthand case.
+              const pieceMap: Record<string, string> = {
+                p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+              };
+              const pieceKey = p.piece.toLowerCase();
+              const pieceName = pieceMap[pieceKey] ?? p.piece;
+              return `${p.color === 'w' ? 'White' : 'Black'} ${pieceName} on ${p.square}`;
+            }).join(', ')}`
           : '',
         gameContext.tacticAnalysis.currentTactics && gameContext.tacticAnalysis.currentTactics.length > 0
           ? `Current tactics: ${gameContext.tacticAnalysis.currentTactics.join('; ')}`

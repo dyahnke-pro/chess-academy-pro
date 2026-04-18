@@ -1601,6 +1601,10 @@ export function CoachGamePage(): JSX.Element {
                   explorer,
                   evaluations,
                   engineBestSan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
+                  // Gate against the CURRENT legal-move set so an
+                  // explorer/FEN mismatch can't surface a trap for a
+                  // move that isn't playable right now.
+                  legalSan: probe.moves(),
                 });
                 if (trap) {
                   groundedNotes.push(formatTrapForPrompt(trap));
