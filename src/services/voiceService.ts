@@ -48,6 +48,61 @@ const POLLY_COOLDOWN_MS = 15_000;
  *  fallback". */
 export type VoiceTier = 'polly' | 'voice-pack' | 'web-speech' | 'muted';
 
+/** Map piece letters to spoken names. Applied right before TTS so
+ *  nothing reaches the speech engine as "P" / "N" / "B" / "R" / "Q" /
+ *  "K" — those sound wrong when read aloud. Upstream prompts and
+ *  formatters also try to avoid them, but this is the last line of
+ *  defense: regardless of source (LLM output that ignored the prompt,
+ *  legacy code path, cached response), the student never hears
+ *  "hanging P on e4". */
+const PIECE_LETTER_NAMES: Record<string, string> = {
+  P: 'pawn', N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king',
+};
+
+/** SAN-ish move pattern — captures piece+capture+square/square+promo.
+ *  Used to expand shorthand SAN like "Nxf7" or "Bc4" into plain
+ *  English before TTS. Kept simple on purpose: false-positives here
+ *  just produce slightly odd speech, never crashes. */
+const SAN_MOVE_RE = /\b([NBRQK])(x?)([a-h][1-8])\b/g;
+/** Pawn-capture SAN (e.g. "exd5", "fxe6") — no piece letter. */
+const PAWN_CAPTURE_RE = /\b([a-h])x([a-h][1-8])\b/g;
+/** Isolated piece-letter shorthand in contexts like:
+ *    - "hanging P", "the N", "a B", "my R", "your Q", "their K"
+ *    - "P on e4", "N to c3", "Q from d1", "B at f7"
+ *  Only single uppercase P/N/B/R/Q/K at a word boundary — won't
+ *  touch proper names, initialisms, or legitimate mid-word letters. */
+const ISOLATED_PIECE_LETTER_RE = /\b([PNBRQK])\b(?=\s+(?:on|to|at|from|of|takes|is|was|hangs|hanging|sits|sitting|attacks|attacking|defends|defending|moves|moved|can|could|should|would)\b)/g;
+const PIECE_LETTER_AFTER_CONTEXT_RE = /\b(hanging|loose|dropped|undefended|attacked|the|a|my|your|their|our|his|her|that|this)\s+([PNBRQK])\b/g;
+
+/** Castling shorthand → plain English. "O-O" sounds nothing like
+ *  "castle kingside" when read aloud. */
+const CASTLE_KING_RE = /\bO-O\b(?!-)/g;
+const CASTLE_QUEEN_RE = /\bO-O-O\b/g;
+
+/** Normalise LLM output so the spoken layer never has to read chess
+ *  notation aloud. Pure function — safe to call on any string. */
+export function sanitizeForTTS(text: string): string {
+  if (!text) return text;
+  let out = text;
+  // Castling FIRST (before piece-letter substitutions mangle the O's).
+  out = out.replace(CASTLE_QUEEN_RE, 'castle queenside');
+  out = out.replace(CASTLE_KING_RE, 'castle kingside');
+  // Pawn captures: "exd5" → "e-pawn takes d5"
+  out = out.replace(PAWN_CAPTURE_RE, (_, file: string, dest: string) => `${file}-pawn takes ${dest}`);
+  // Piece SAN: "Nxf7" → "knight takes f7", "Bc4" → "bishop to c4"
+  out = out.replace(SAN_MOVE_RE, (_, piece: string, capture: string, dest: string) => {
+    const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    return capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
+  });
+  // Isolated piece letters in chess-context sentences.
+  out = out.replace(PIECE_LETTER_AFTER_CONTEXT_RE, (_, lead: string, piece: string) => {
+    const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    return `${lead} ${name}`;
+  });
+  out = out.replace(ISOLATED_PIECE_LETTER_RE, (_, piece: string) => PIECE_LETTER_NAMES[piece] ?? piece);
+  return out;
+}
+
 class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
   private abortController: AbortController | null = null;
@@ -170,7 +225,7 @@ class VoiceService {
   }
 
   async speak(text: string): Promise<void> {
-    return this.speakInternal(text, false);
+    return this.speakInternal(sanitizeForTTS(text), false);
   }
 
   /** Low-latency speak for training modes — skips Polly/voice-packs and DB reads.
@@ -187,13 +242,13 @@ class VoiceService {
     if (this.cachedPrefs?.systemVoiceURI) {
       speechService.setVoice(this.cachedPrefs.systemVoiceURI);
     }
-    await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: speed });
+    await speechService.speak(sanitizeForTTS(text), { ...WEB_SPEECH_FALLBACK, rate: speed });
   }
 
   /** Speak regardless of the voiceEnabled preference.
    *  Used by the voice-chat mic where the user explicitly opted into voice. */
   async speakForced(text: string): Promise<void> {
-    return this.speakInternal(text, true);
+    return this.speakInternal(sanitizeForTTS(text), true);
   }
 
   /** Queue a sentence without stopping current speech. For streaming voice responses. */
@@ -202,7 +257,7 @@ class VoiceService {
       speechService.setVoice(this.cachedPrefs.systemVoiceURI);
     }
     const speed = this.cachedPrefs?.voiceSpeed ?? this.speed;
-    speechService.queue(text, { rate: speed, pitch: 0.78 });
+    speechService.queue(sanitizeForTTS(text), { rate: speed, pitch: 0.78 });
   }
 
   private async speakInternal(text: string, force: boolean): Promise<void> {

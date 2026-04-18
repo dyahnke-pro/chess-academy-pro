@@ -799,12 +799,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
       <SelectRow
         label="Coach Detail"
         tooltip="How detailed the coach's explanations are"
-        value={profile.preferences.coachVerbosity ?? 'medium'}
+        value={profile.preferences.coachVerbosity ?? 'unlimited'}
         options={[
           { value: 'none', label: 'None — Silent, no commentary' },
           { value: 'fast', label: 'Fast — Brief, just the key point' },
           { value: 'medium', label: 'Medium — Balanced detail' },
           { value: 'slow', label: 'Slow — Thorough explanations' },
+          { value: 'unlimited', label: 'Unlimited — Full personal-trainer mode, no cap' },
         ]}
         onChange={(v) => void handleVerbosityChange(v as CoachVerbosity)}
         testId="coach-verbosity-select"

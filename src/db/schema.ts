@@ -403,6 +403,38 @@ class ChessAcademyDB extends Dexie {
         }
       });
     });
+
+    // Version 21: flip default coach verbosity to 'unlimited' for the
+    // personal-trainer experience. Preserves explicit fast/slow/none
+    // choices the student already made; only upgrades 'medium' (which
+    // was the pre-existing default) and missing values. This matches
+    // the "unlimited is the new default" product direction while
+    // respecting users who intentionally picked something else.
+    this.version(21).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
+      classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
+      openingNarrations: 'id, openingName, variation, moveSan, fen, approved',
+    }).upgrade(async (tx) => {
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        const current = prefs.coachVerbosity;
+        if (current === 'medium' || current === undefined || current === null) {
+          prefs.coachVerbosity = 'unlimited';
+        }
+      });
+    });
   }
 }
 

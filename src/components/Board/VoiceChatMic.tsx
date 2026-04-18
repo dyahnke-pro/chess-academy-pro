@@ -300,6 +300,14 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
     const systemAddition = buildSystemAddition(fen, pgn, turn, playerColor, engineData, lastMoveContext);
 
+    // Stop any in-flight TTS (per-move narration from CoachGamePage, a
+    // previous voice reply that's still playing, etc.) before the voice
+    // chat reply starts — otherwise the two narrators overlap and the
+    // student hears both at once. User's latest voice question always
+    // wins; the coach will re-narrate the position if it's still
+    // relevant on the next move.
+    voiceService.stop();
+
     // Stream sentences to speech as they arrive — speak starts on first sentence,
     // subsequent sentences queue without canceling, so speech finishes ~when tokens do.
     //

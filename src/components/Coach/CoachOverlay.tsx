@@ -5,12 +5,13 @@ import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
 import type { CoachVerbosity } from '../../types';
 
-const VERBOSITY_CYCLE: CoachVerbosity[] = ['none', 'fast', 'medium', 'slow'];
+const VERBOSITY_CYCLE: CoachVerbosity[] = ['none', 'fast', 'medium', 'slow', 'unlimited'];
 const VERBOSITY_LABELS: Record<CoachVerbosity, string> = {
   none: 'Off',
   fast: 'Brief',
   medium: 'Balanced',
   slow: 'Detailed',
+  unlimited: 'Unlimited',
 };
 
 export function CoachOverlay(): JSX.Element {
