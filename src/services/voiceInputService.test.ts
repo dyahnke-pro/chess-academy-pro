@@ -227,39 +227,69 @@ describe('voiceInputService', () => {
       expect(onFinal).toHaveBeenCalledWith('castle kingside');
     });
 
-    it('auto-finalizes after SILENCE_TIMEOUT_MS of no new interim results', () => {
-      vi.useFakeTimers();
-      try {
-        voiceInputService.stopListening();
-        const onFinal = vi.fn();
-        voiceInputService.onResult(onFinal);
-        voiceInputService.startListening({ onInterim: () => {} });
+    it('dispatches multiple finals in one session (continuous listening)', () => {
+      voiceInputService.stopListening();
+      const onFinal = vi.fn();
+      voiceInputService.onResult(onFinal);
+      voiceInputService.startListening();
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
-        const rec = (voiceInputService as any).recognition as {
-          onresult: ((event: unknown) => void) | null;
-        };
-        rec.onresult?.({
-          resultIndex: 0,
-          results: [
-            {
-              isFinal: false,
-              length: 1,
-              item: () => ({ transcript: 'show me the line', confidence: 0.6 }),
-              0: { transcript: 'show me the line', confidence: 0.6 },
-            },
-          ],
-        });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+      const rec = (voiceInputService as any).recognition as {
+        onresult: ((event: unknown) => void) | null;
+      };
+      // First utterance.
+      rec.onresult?.({
+        resultIndex: 0,
+        results: [
+          {
+            isFinal: true,
+            length: 1,
+            item: () => ({ transcript: 'hello coach', confidence: 0.9 }),
+            0: { transcript: 'hello coach', confidence: 0.9 },
+          },
+        ],
+      });
+      // Second utterance in the same listening session.
+      rec.onresult?.({
+        resultIndex: 1,
+        results: [
+          { isFinal: false, length: 1, 0: { transcript: '', confidence: 0 } },
+          {
+            isFinal: true,
+            length: 1,
+            item: () => ({ transcript: 'what is a pin', confidence: 0.9 }),
+            0: { transcript: 'what is a pin', confidence: 0.9 },
+          },
+        ],
+      });
 
-        expect(onFinal).not.toHaveBeenCalled();
+      expect(onFinal).toHaveBeenCalledTimes(2);
+      expect(onFinal).toHaveBeenNthCalledWith(1, 'hello coach');
+      expect(onFinal).toHaveBeenNthCalledWith(2, 'what is a pin');
+    });
 
-        // Fast-forward past the silence timeout.
-        vi.advanceTimersByTime(2000);
+    it('fires the onEnd callback only after the user explicitly stops', () => {
+      voiceInputService.stopListening();
+      const onEnd = vi.fn();
+      voiceInputService.startListening({ onEnd });
 
-        expect(onFinal).toHaveBeenCalledWith('show me the line');
-      } finally {
-        vi.useRealTimers();
-      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+      const rec = (voiceInputService as any).recognition as {
+        onend: (() => void) | null;
+      };
+      // Browser's end-of-utterance — caller did NOT stop yet. Should
+      // transparently restart (onEnd stays silent).
+      rec.onend?.();
+      expect(onEnd).not.toHaveBeenCalled();
+
+      // Now the user taps off. onEnd fires on the next browser onend.
+      voiceInputService.stopListening();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box
+      const rec2 = (voiceInputService as any).recognition as {
+        onend: (() => void) | null;
+      };
+      rec2.onend?.();
+      expect(onEnd).toHaveBeenCalledTimes(1);
     });
   });
 });
