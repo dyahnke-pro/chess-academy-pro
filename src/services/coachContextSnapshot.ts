@@ -14,7 +14,7 @@ import { useCoachSessionStore } from '../stores/coachSessionStore';
 import { useAppStore } from '../stores/appStore';
 import { db } from '../db/schema';
 import { getStoredWeaknessProfile } from './weaknessAnalyzer';
-import type { GameRecord } from '../types';
+import type { GameRecord, UserProfile } from '../types';
 
 export interface CoachContextSnapshot {
   /** Current React Router pathname. */
@@ -30,6 +30,22 @@ export interface CoachContextSnapshot {
   };
   /** Recent weakness signal, if any. */
   weakness: { topItems: string[]; overallAssessment: string } | null;
+  /** Student profile summary — always present when there's a profile.
+   *  Small, always-on so every coach turn anchors on who this student
+   *  is. */
+  profile: {
+    name: string;
+    currentRating: number;
+    level: number;
+    skillRadar: {
+      opening: number;
+      tactics: number;
+      endgame: number;
+      calculation: number;
+      memory: number;
+    };
+    unresolvedBadHabits: string[];
+  } | null;
   /** Recent agent actions and their results. */
   recentActions: { name: string; result: string; message?: string }[];
   /** Narration mode flag. */
@@ -48,7 +64,7 @@ export async function buildCoachContextSnapshot(): Promise<CoachContextSnapshot>
   const sessionState = useCoachSessionStore.getState();
   const appState = useAppStore.getState();
 
-  const [totalGames, recentGames, weaknessProfile] = await Promise.all([
+  const [totalGames, recentGames, weaknessProfile, profile] = await Promise.all([
     db.games.filter((g) => !g.isMasterGame && g.result !== '*').count(),
     db.games
       .orderBy('date')
@@ -57,6 +73,7 @@ export async function buildCoachContextSnapshot(): Promise<CoachContextSnapshot>
       .limit(RECENT_GAMES_FOR_SNAPSHOT)
       .toArray(),
     getStoredWeaknessProfile().catch(() => null),
+    db.profiles.get('main').catch(() => undefined),
   ]);
 
   const board = appState.globalBoardContext?.fen
@@ -93,8 +110,27 @@ export async function buildCoachContextSnapshot(): Promise<CoachContextSnapshot>
           overallAssessment: weaknessProfile.overallAssessment,
         }
       : null,
+    profile: profile ? toProfileSummary(profile) : null,
     recentActions,
     narrationMode: sessionState.narrationMode,
+  };
+}
+
+function toProfileSummary(p: UserProfile): NonNullable<CoachContextSnapshot['profile']> {
+  return {
+    name: p.name,
+    currentRating: p.currentRating,
+    level: p.level,
+    skillRadar: {
+      opening: p.skillRadar.opening,
+      tactics: p.skillRadar.tactics,
+      endgame: p.skillRadar.endgame,
+      calculation: p.skillRadar.calculation,
+      memory: p.skillRadar.memory,
+    },
+    unresolvedBadHabits: p.badHabits
+      .filter((h) => !h.isResolved)
+      .map((h) => h.description),
   };
 }
 
@@ -106,6 +142,17 @@ export async function buildCoachContextSnapshot(): Promise<CoachContextSnapshot>
 export function formatCoachContextSnapshot(snapshot: CoachContextSnapshot): string {
   const lines: string[] = ['[Session State]'];
   lines.push(`route: ${snapshot.route}`);
+
+  if (snapshot.profile) {
+    const p = snapshot.profile;
+    lines.push(
+      `student: ${p.name}, ${p.currentRating} ELO, level=${p.level}`,
+      `skill radar (0-100): opening ${p.skillRadar.opening}, tactics ${p.skillRadar.tactics}, endgame ${p.skillRadar.endgame}, calculation ${p.skillRadar.calculation}, memory ${p.skillRadar.memory}`,
+    );
+    if (p.unresolvedBadHabits.length > 0) {
+      lines.push(`unresolved bad habits: ${p.unresolvedBadHabits.slice(0, 5).join('; ')}`);
+    }
+  }
 
   if (snapshot.board) {
     lines.push(`board fen: ${snapshot.board.fen}${snapshot.board.label ? ` (${snapshot.board.label})` : ''}`);
