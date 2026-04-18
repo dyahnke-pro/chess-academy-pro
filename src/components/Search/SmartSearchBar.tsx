@@ -214,8 +214,32 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
         // Stream the reply straight to TTS, sentence-by-sentence,
         // queueing each so they don't cut each other off. No drawer
         // opens; no text bubble appears.
+        //
+        // CRITICAL: speakForced must settle its stop()+start cycle
+        // before any speakQueuedForced fires. Otherwise queue() lands
+        // during speakInternal's async gap and gets wiped by the
+        // subsequent stop(). Gate queued sentences on the first-speak
+        // promise so they only queue after playback has actually begun.
         let speechBuffer = '';
-        let firstSentenceSpoken = false;
+        let firstSpeakPromise: Promise<void> | null = null;
+        const speakOrQueue = (sentence: string): void => {
+          // Strip stock filler openers even if the LLM disobeys the
+          // no-filler prompt. Speaking "Great question!" by itself is
+          // the bug pattern users see most often — cleaner to suppress
+          // at the boundary than hope the model behaves.
+          const cleaned = sentence
+            .replace(/^(great question!?|excellent!?|good question!?|nice (one|question)!?|interesting!?|that'?s a (great|good|nice) (question|one)!?)\s*/i, '')
+            .trim();
+          if (!cleaned) return;
+          if (!firstSpeakPromise) {
+            firstSpeakPromise = Promise.resolve(voiceService.speakForced(cleaned))
+              .catch((err: unknown) => {
+                console.warn('[SmartSearchBar] speakForced failed:', err);
+              });
+          } else {
+            void firstSpeakPromise.then(() => voiceService.speakQueuedForced(cleaned));
+          }
+        };
         voiceService.stop();
         void runCoachTurn({
           userText: text,
@@ -227,24 +251,13 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
             if (sentenceEnd) {
               const sentence = speechBuffer.slice(0, sentenceEnd.index + 1).trim();
               speechBuffer = speechBuffer.slice(sentenceEnd.index + 2);
-              if (!sentence) return;
-              if (!firstSentenceSpoken) {
-                void voiceService.speakForced(sentence);
-                firstSentenceSpoken = true;
-              } else {
-                voiceService.speakQueuedForced(sentence);
-              }
+              speakOrQueue(sentence);
             }
           },
         }).then(() => {
           const tail = speechBuffer.trim();
-          if (!tail) return;
-          if (!firstSentenceSpoken) {
-            void voiceService.speakForced(tail);
-          } else {
-            voiceService.speakQueuedForced(tail);
-          }
-        }).catch((err) => {
+          if (tail) speakOrQueue(tail);
+        }).catch((err: unknown) => {
           console.warn('[SmartSearchBar] background voice turn failed:', err);
         });
       }

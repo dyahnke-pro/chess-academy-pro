@@ -40,7 +40,9 @@ const mockSpeak = vi.fn();
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
     speak: (text: string): void => { mockSpeak(text); },
-    speakForced: (text: string): void => { mockSpeak(text); },
+    speakForced: (text: string): Promise<void> => { mockSpeak(text); return Promise.resolve(); },
+    speakQueuedForced: (text: string): void => { mockSpeak(text); },
+    stop: (): void => { /* noop */ },
   },
 }));
 

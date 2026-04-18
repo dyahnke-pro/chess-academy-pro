@@ -300,17 +300,35 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
 
     // Stream sentences to speech as they arrive — speak starts on first sentence,
     // subsequent sentences queue without canceling, so speech finishes ~when tokens do.
+    //
+    // CRITICAL: speakForced must be awaited before any speakQueuedForced can
+    // safely fire. speakInternal calls this.stop() (wipes current speech and
+    // the queue), then loads prefs asynchronously, then kicks off playback.
+    // If a queued sentence arrives during the async gap, stop() will wipe it.
+    // Gate the first sentence with a promise so subsequent queues only run
+    // after speakForced has definitively started its playback.
     let sentenceBuffer = '';
-    let isFirstSentence = true;
+    let firstSpeakPromise: Promise<void> | null = null;
 
     const flushSentence = (sentence: string): void => {
-      const trimmed = sentence.trim();
+      // Strip stock filler openers even if the LLM ignores the no-filler
+      // rule. A sentence of just "Great question!" leaves the user hearing
+      // only that while the rest of the reply gets wiped by the race that
+      // the gating below prevents; belt-and-suspenders.
+      const trimmed = sentence
+        .replace(/^(great question!?|excellent!?|good question!?|nice (one|question)!?|interesting!?|that'?s a (great|good|nice) (question|one)!?)\s*/i, '')
+        .trim();
       if (!trimmed) return;
-      if (isFirstSentence) {
-        void voiceService.speakForced(trimmed);
-        isFirstSentence = false;
+      if (!firstSpeakPromise) {
+        firstSpeakPromise = Promise.resolve(voiceService.speakForced(trimmed))
+          .catch((err: unknown) => {
+            console.warn('[VoiceChatMic] speakForced failed:', err);
+          });
       } else {
-        voiceService.speakQueuedForced(trimmed);
+        // Wait for the first speakForced to finish its stop()+start cycle
+        // before queuing. Without this await, queue() can land before
+        // speakInternal's stop() and get wiped.
+        void firstSpeakPromise.then(() => voiceService.speakQueuedForced(trimmed));
       }
     };
 
@@ -386,6 +404,18 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     });
     return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // When the component unmounts mid-listening (user navigates away),
+  // cut the mic so the "listening" chrome doesn't reappear stale on
+  // the next mount and the browser doesn't keep the microphone hot.
+  useEffect(() => {
+    return () => {
+      if (listeningRef.current) {
+        voiceInputService.stopListening();
+      }
+      voiceService.stop();
+    };
   }, []);
 
   const handleMicToggle = useCallback(() => {

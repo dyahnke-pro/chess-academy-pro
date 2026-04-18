@@ -21,6 +21,13 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
     textareaRef.current?.focus();
   }, []);
 
+  // Keep a ref to onSend so the voice handler subscription doesn't
+  // re-register on every parent render (which creates a window where
+  // both the OLD and NEW handler receive a final transcript and
+  // double-send the message).
+  const onSendRef = useRef(onSend);
+  useEffect(() => { onSendRef.current = onSend; }, [onSend]);
+
   useEffect(() => {
     const unsubscribe = voiceInputService.onResult((transcript) => {
       const trimmed = transcript.trim();
@@ -28,10 +35,10 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
       // Voice turns auto-send with modality='voice' so the assistant
       // reply plays as TTS only — no text bubble. The input field
       // stays empty (no appending) so the user can keep talking.
-      onSend(trimmed, 'voice');
+      onSendRef.current(trimmed, 'voice');
     });
     return unsubscribe;
-  }, [onSend]);
+  }, []);
 
   const handleSend = useCallback(() => {
     const trimmed = text.trim();
