@@ -48,6 +48,11 @@ export interface ActionContext {
      *  SAN moves forward. Returns true on success, false if any
      *  move failed to apply (invalid SAN, nothing to undo, etc.). */
     playVariation: (args: { undo: number; moves: string[] }) => boolean;
+    /** Snap the board back to the position it was in the first time
+     *  a variation was applied. Returns true if there was a saved
+     *  pre-variation state to restore, false if the board is already
+     *  on the real line (no variation in progress). */
+    returnToGame: () => boolean;
     /** Return the current FEN — useful for logging in the action
      *  result so the next LLM turn sees where the board landed. */
     getCurrentFen: () => string;
@@ -107,6 +112,7 @@ const handlers: Record<string, ActionHandler> = {
   set_focus: handleSetFocus,
   set_narration: handleSetNarration,
   play_variation: handlePlayVariation,
+  return_to_game: handleReturnToGame,
 };
 
 export function getRegisteredActionNames(): string[] {
@@ -384,6 +390,36 @@ function handlePlayVariation(
   return {
     status: 'ok',
     message: `Variation applied (${summary}). Board now at: ${fen}`,
+  };
+}
+
+/**
+ * Snap the board back to the position it was in the first time
+ * play_variation was invoked this session. Use this when the student
+ * says "ok back to the real game", "undo all that", "return to my
+ * actual game", etc. — NEVER proactively.
+ */
+function handleReturnToGame(
+  _args: Record<string, unknown>,
+  ctx: ActionContext,
+): ActionResult {
+  if (!ctx.game) {
+    return {
+      status: 'error',
+      message:
+        'return_to_game requires an active game — only usable from the in-game chat panel.',
+    };
+  }
+  const ok = ctx.game.returnToGame();
+  if (!ok) {
+    return {
+      status: 'error',
+      message: 'No variation to undo — the board is already on the real line.',
+    };
+  }
+  return {
+    status: 'ok',
+    message: `Snapped back to the real game. Board now at: ${ctx.game.getCurrentFen()}`,
   };
 }
 

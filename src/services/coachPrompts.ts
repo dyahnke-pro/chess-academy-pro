@@ -134,6 +134,17 @@ AVAILABLE ACTIONS
   chat isn't attached to a live game — just answer in prose in that
   case.
 
+- return_to_game
+  Snap the board back to the real game position after exploring one
+  or more variations with play_variation. Use when the student says
+  "ok back to the game", "undo all that", "return to the real line",
+  "reset the board to where we were", "done exploring", etc. Also
+  use proactively when a variation exchange is naturally winding
+  down (student says "got it, makes sense", "I see", and the next
+  real move is theirs) — leaving the board stuck on a variation
+  while the student tries to move on is worse than auto-snapping
+  back. Takes no arguments.
+
 WHEN TO ACT
 
 - "Analyze a previous game with me" → list_games (optional) then

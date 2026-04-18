@@ -861,6 +861,12 @@ export function CoachGamePage(): JSX.Element {
   // Restart handler — resets board + game state back to the starting position
   // while keeping the current player color and difficulty. Used by the
   // Restart button and by the in-chat "restart the game" intent.
+  // When the coach plays a variation, we snapshot the real-line FEN
+  // BEFORE applying the first variation so return_to_game can snap
+  // back. Cleared on restart (handleRestart) and whenever the student
+  // lands back on the real position via return_to_game.
+  const preVariationFenRef = useRef<string | null>(null);
+
   // Apply a what-if variation on command from the in-game chat coach:
   // rebuild the position by replaying the current move history minus
   // `undo` half-moves, then playing the supplied SAN moves forward.
@@ -889,6 +895,13 @@ export function CoachGamePage(): JSX.Element {
           const played = sandbox.move(san);
           if (!played) return false;
         }
+        // Snapshot the REAL-line FEN before we load the variation so
+        // return_to_game can restore it. Capture only on the FIRST
+        // variation of a session — subsequent variations shouldn't
+        // overwrite the real-line anchor with another variation FEN.
+        if (preVariationFenRef.current === null) {
+          preVariationFenRef.current = game.fen;
+        }
         return game.loadFen(sandbox.fen());
       } catch {
         return false;
@@ -897,10 +910,24 @@ export function CoachGamePage(): JSX.Element {
     [game, initialGameFen],
   );
 
+  // Snap the board back to the real game after exploring variations.
+  // Returns false when the snapshot is empty (no variation in progress);
+  // the dispatcher surfaces that as an error message to the LLM.
+  const handleReturnToGame = useCallback((): boolean => {
+    const saved = preVariationFenRef.current;
+    if (!saved) return false;
+    const ok = game.loadFen(saved);
+    if (ok) preVariationFenRef.current = null;
+    return ok;
+  }, [game]);
+
   const handleRestart = useCallback((opts?: { keepRequestedOpening?: boolean }) => {
     // Explicit restart — drop the resumable snapshot so we don't
-    // auto-load the abandoned game on next visit.
+    // auto-load the abandoned game on next visit. Also clear the
+    // pre-variation snapshot so return_to_game from a later chat
+    // doesn't try to snap to a stale position from the old game.
     void clearCoachPlayState();
+    preVariationFenRef.current = null;
     game.resetGame();
     moveCountRef.current = 0;
     setGameState({
@@ -2469,6 +2496,7 @@ export function CoachGamePage(): JSX.Element {
               onRestartGame={handleRestart}
               onPlayOpening={handleOpeningRequest}
               onPlayVariation={handlePlayVariation}
+              onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}
               className="h-full"
             />
@@ -2524,6 +2552,7 @@ export function CoachGamePage(): JSX.Element {
               onRestartGame={handleRestart}
               onPlayOpening={handleOpeningRequest}
               onPlayVariation={handlePlayVariation}
+              onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}
             />
           </div>
