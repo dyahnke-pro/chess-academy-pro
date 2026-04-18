@@ -1193,8 +1193,20 @@ export function CoachGamePage(): JSX.Element {
       try {
         console.log('[CoachGame] Coach thinking... FEN:', game.fen);
 
-        // Try opening book move first if a specific opening was requested
+        // Sanity guard: verify chess.js ACTUALLY agrees it's AI's turn
+        // before any engine / book call. React-state derived `game.turn`
+        // can lag the real chess instance during rapid move sequences,
+        // and without this check a stale effect firing could hand
+        // Stockfish the user's side — letting the AI play BOTH sides.
+        const fenTurn = game.fen.split(' ')[1] as 'w' | 'b' | undefined;
         const aiColor = playerColor === 'white' ? 'black' : 'white';
+        const aiTurnChar = aiColor === 'white' ? 'w' : 'b';
+        if (fenTurn !== aiTurnChar) {
+          console.warn('[CoachGame] Abort — FEN says', fenTurn, 'but AI is', aiColor);
+          return;
+        }
+
+        // Try opening book move first if a specific opening was requested
         const bookMove = tryOpeningBookMove(game.fen, game.history, requestedOpeningMoves, aiColor);
 
         let move: string;
