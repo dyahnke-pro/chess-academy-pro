@@ -1053,6 +1053,35 @@ export function CoachGamePage(): JSX.Element {
         applyCoachMove(result, postCoachEval, analysis.evaluation, analysis.bestMove);
         // Track previous FEN for tactic classification
         previousFenRef.current = result.fen;
+
+        // Classify the coach's move the same way the player's moves are
+        // classified so users get a visual flash on the opponent's turn
+        // too. Adaptive / book moves can still land as a blunder at low
+        // difficulty, so this is informative rather than cosmetic.
+        const coachColor: 'white' | 'black' = playerColor === 'white' ? 'black' : 'white';
+        const isEngineBest = !!analysis.bestMove && move === analysis.bestMove;
+        const secondBestEval = analysis.topLines.length > 1 ? analysis.topLines[1].evaluation : null;
+        const coachClassification = classifyMove(
+          analysis.evaluation,
+          postCoachEval,
+          analysis.evaluation,
+          isEngineBest,
+          coachColor,
+          secondBestEval,
+        );
+        const coachFlashMap = new Map<string, 'blunder' | 'inaccuracy' | 'good'>([
+          ['blunder', 'blunder'],
+          ['mistake', 'blunder'],
+          ['inaccuracy', 'inaccuracy'],
+          ['brilliant', 'good'],
+          ['great', 'good'],
+        ]);
+        const coachFlash = coachFlashMap.get(coachClassification);
+        if (coachFlash) {
+          setMoveFlash(coachFlash);
+          setTimeout(() => setMoveFlash(null), 900);
+        }
+
         // Use POST-move analysis for eval bar + engine lines — these are for the
         // player's turn, which is what voice chat needs when answering "what should I play?"
         setLatestEval(postCoachEval);
@@ -1263,7 +1292,7 @@ export function CoachGamePage(): JSX.Element {
     const flash = flashMap.get(classification);
     if (flash) {
       setMoveFlash(flash);
-      setTimeout(() => setMoveFlash(null), 600);
+      setTimeout(() => setMoveFlash(null), 900);
     }
 
     // BLUNDER INTERCEPTION: pause game and explain

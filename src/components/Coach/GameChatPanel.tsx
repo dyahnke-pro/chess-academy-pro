@@ -176,11 +176,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           return;
         }
         if (inGame?.kind === 'play-opening' && onPlayOpening) {
-          onPlayOpening(inGame.openingName);
-          // Also restart so the opening starts from move 1. The coach
-          // will pick up book moves on its next turn via
-          // requestedOpeningMoves.
+          // Restart BEFORE queuing the opening — handleRestart clears
+          // requestedOpeningMoves, so we have to wipe the board first
+          // and then set the book line. React batches both state
+          // updates inside this handler, so the coach's move effect
+          // sees the fresh board + book on its next run and plays the
+          // first book move immediately.
           onRestartGame?.();
+          onPlayOpening(inGame.openingName);
           const ack: ChatMessageType = {
             id: `gmsg-${Date.now()}-ack`,
             role: 'assistant',
