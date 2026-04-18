@@ -29,6 +29,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookM
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { getScenarioTemplate } from '../../services/coachTemplates';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
+import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -1265,22 +1266,32 @@ export function CoachGamePage(): JSX.Element {
       }
     }
 
-    // In-depth LLM commentary — no generic templates. Empty string when
-    // the LLM is unavailable (no API key / offline); the UI suppresses the
-    // comment row rather than painting filler.
+    // LLM commentary is gated on the user's coachCommentaryVerbosity
+    // preference (default 'key-moments'). On non-key moves we skip the
+    // LLM entirely and fall back to the deterministic tacticSuffix,
+    // which cuts per-game LLM spend ~60% without losing the
+    // pedagogically important commentary on blunders/brilliants.
     let commentary = '';
-    try {
-      const probe = new Chess(moveResult.fen);
-      const mover: 'w' | 'b' = probe.turn() === 'w' ? 'b' : 'w';
-      const llm = await generateMoveCommentary({
-        gameAfter: probe,
-        mover,
-        evalBefore: preMoveEval,
-        evalAfter: analysis?.evaluation ?? null,
-        bestReplySan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
-      });
-      commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
-    } catch {
+    const verbosity = resolveVerbosity(useAppStore.getState().activeProfile);
+    if (shouldCallLlmForMove(verbosity, classification)) {
+      try {
+        const probe = new Chess(moveResult.fen);
+        const mover: 'w' | 'b' = probe.turn() === 'w' ? 'b' : 'w';
+        const llm = await generateMoveCommentary({
+          gameAfter: probe,
+          mover,
+          evalBefore: preMoveEval,
+          evalAfter: analysis?.evaluation ?? null,
+          bestReplySan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
+        });
+        commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
+      } catch {
+        commentary = tacticSuffix.trim();
+      }
+    } else {
+      // Non-key move — skip the LLM. The tactic classifier may still
+      // have found something worth noting (hanging piece, fork motif);
+      // keep that so the user isn't staring at a blank row.
       commentary = tacticSuffix.trim();
     }
     // Keep evalLoss referenced even when we drop the template so it's

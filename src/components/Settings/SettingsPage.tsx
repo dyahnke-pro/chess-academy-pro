@@ -784,6 +784,14 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
     setProfile({ ...profile, preferences: updatedPrefs });
   };
 
+  const handleCommentaryVerbosityChange = async (
+    value: 'key-moments' | 'every-move' | 'off',
+  ): Promise<void> => {
+    const updatedPrefs = { ...profile.preferences, coachCommentaryVerbosity: value };
+    await db.profiles.update(profile.id, { preferences: updatedPrefs });
+    setProfile({ ...profile, preferences: updatedPrefs });
+  };
+
   return (
     <div className="pt-4 border-t space-y-1" style={{ borderColor: 'var(--color-border)' }}>
       <SectionHeader title="Gameplay Coaching" />
@@ -799,6 +807,18 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         ]}
         onChange={(v) => void handleVerbosityChange(v as CoachVerbosity)}
         testId="coach-verbosity-select"
+      />
+      <SelectRow
+        label="Commentary Frequency"
+        tooltip="How often the coach generates AI commentary during a game. Key moments only saves tokens and keeps sessions snappy."
+        value={profile.preferences.coachCommentaryVerbosity ?? 'key-moments'}
+        options={[
+          { value: 'key-moments', label: 'Key moments — Only blunders, brilliants, turning points' },
+          { value: 'every-move', label: 'Every move — AI commentary after every move (uses more tokens)' },
+          { value: 'off', label: 'Off — Deterministic tactic hints only' },
+        ]}
+        onChange={(v) => void handleCommentaryVerbosityChange(v as 'key-moments' | 'every-move' | 'off')}
+        testId="coach-commentary-verbosity-select"
       />
       <ToggleRow
         label="Blunder Alerts"

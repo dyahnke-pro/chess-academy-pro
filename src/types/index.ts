@@ -500,6 +500,20 @@ export interface UserPreferences {
   coachMissedTacticTakeback?: boolean;
   coachReviewVoice?: boolean;
   coachVerbosity?: CoachVerbosity;
+  /**
+   * Controls when the coach invokes the LLM for per-move commentary
+   * during play-against games.
+   *   - 'key-moments' (default): only blunders, mistakes, brilliants,
+   *     and greats trigger an LLM call. Other moves use a short
+   *     deterministic tactic suffix or stay silent. Cuts per-game
+   *     LLM spend ~60%.
+   *   - 'every-move': legacy — call the LLM on every move (expensive).
+   *   - 'off': never call the LLM mid-game; commentary comes purely
+   *     from the local tactic classifier.
+   * When unset, treat as 'key-moments' so users who haven't touched
+   * the setting automatically benefit from the cost reduction.
+   */
+  coachCommentaryVerbosity?: 'key-moments' | 'every-move' | 'off';
   // Neon Glow Settings
   glowBrightness?: number;         // 0–200, default 100 — master dimmer for all glow
   boardGlowColor?: string;         // rgb string e.g. "0, 229, 255" — single color for all squares
