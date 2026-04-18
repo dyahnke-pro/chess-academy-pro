@@ -153,7 +153,7 @@ class VoiceService {
     // Cast to partial — old IndexedDB records may lack newer fields
     const prefs = profile.preferences as Partial<typeof profile.preferences>;
     this.cachedPrefs = {
-      voiceEnabled: prefs.voiceEnabled ?? false,
+      voiceEnabled: prefs.voiceEnabled ?? true,
       pollyEnabled: prefs.pollyEnabled ?? false,
       pollyVoice: prefs.pollyVoice || 'ruth',
       systemVoiceURI: prefs.systemVoiceURI ?? null,

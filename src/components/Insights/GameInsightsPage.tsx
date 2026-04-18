@@ -12,6 +12,7 @@ import { runBackgroundAnalysis } from '../../services/gameAnalysisService';
 import { useAppStore } from '../../stores/appStore';
 import { routeChatIntent } from '../../services/coachIntentRouter';
 import { OverviewTab } from './OverviewTab';
+import { ShareableInsightsStrip } from './ShareableInsightsStrip';
 import { OpeningsTab } from './OpeningsTab';
 import { MistakesTab } from './MistakesTab';
 import { TacticsTab } from './TacticsTab';
@@ -229,12 +230,18 @@ export function GameInsightsPage(): JSX.Element {
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto px-5 pb-20 md:pb-6">
         {tab === 'overview' && overview && (
-          <OverviewTab
-            data={overview}
-            onAnalyze={handleAnalyze}
-            isAnalyzing={bgAnalysisRunning}
-            analysisLabel={bgAnalysisProgress}
-          />
+          <>
+            {/* Shareable "Your Chess, In A Nutshell" cards — the
+                launch-critical growth surface. Hidden when the user
+                has too few games for honest insights. */}
+            <ShareableInsightsStrip />
+            <OverviewTab
+              data={overview}
+              onAnalyze={handleAnalyze}
+              isAnalyzing={bgAnalysisRunning}
+              analysisLabel={bgAnalysisProgress}
+            />
+          </>
         )}
         {tab === 'openings' && openings && <OpeningsTab data={openings} />}
         {tab === 'mistakes' && mistakes && <MistakesTab data={mistakes} />}

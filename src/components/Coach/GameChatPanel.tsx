@@ -8,6 +8,7 @@ import { routeChatIntent } from '../../services/coachIntentRouter';
 import { runAgentTurn, detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
+import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
@@ -34,6 +35,12 @@ interface GameChatPanelProps {
   previousFen?: string | null;
   className?: string;
   onBoardAnnotation?: (commands: BoardAnnotationCommand[]) => void;
+  /** Called when the user asks in chat to restart the current game. */
+  onRestartGame?: () => void;
+  /** Called when the user asks in chat to play a specific opening
+   *  against them. The opening name is passed through to the board's
+   *  opening-book hook. */
+  onPlayOpening?: (openingName: string) => void;
   /** If set, auto-sends this message on mount (e.g., from post-game practice bridge) */
   initialPrompt?: string | null;
   /** Called after the initial prompt has been sent */
@@ -65,6 +72,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       previousFen,
       className,
       onBoardAnnotation,
+      onRestartGame,
+      onPlayOpening,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -148,10 +157,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       setMessages(updatedMessages);
 
       // Narration toggle — deterministic intercept. Runs BEFORE the
-      // LLM so "narrate while we play" reliably flips the flag even
-      // during an active game (isGameOver=false skips the broader
-      // intent router below). No LLM round-trip, no prompt-following
-      // required. The existing per-move commentary path then speaks.
+      // in-game block below so "narrate while we play" reliably flips
+      // the flag even during an active game (which the in-game branch
+      // would otherwise handle via its own narrate case). This path
+      // uses applyNarrationToggle from coachAgentRunner for consistency
+      // with CoachChatPage.
       const narrationToggle = detectNarrationToggle(text);
       if (narrationToggle) {
         const ack = applyNarrationToggle(narrationToggle.enable);
@@ -162,7 +172,69 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           timestamp: Date.now(),
         };
         setMessages([...updatedMessages, ackMsg]);
+        if (narrationToggle.enable) {
+          void voiceService.speak(ack);
+        } else {
+          voiceService.stop();
+        }
         return;
+      }
+
+      // In-game intents: short-circuit the LLM for actions that actually
+      // need to change the board (restart, play a specific opening,
+      // mute). Previously "Restart the game" would produce a narrative
+      // reply but the board stayed where it was — the chat had no way
+      // to mutate game state. Handle those here.
+      if (!isGameOver) {
+        const inGame = detectInGameChatIntent(text);
+        if (inGame?.kind === 'mute') {
+          useAppStore.getState().setCoachVoiceOn(false);
+          voiceService.stop();
+          const ack = 'Voice narration is off.';
+          const ackMsg: ChatMessageType = {
+            id: `gmsg-${Date.now()}-ack`,
+            role: 'assistant',
+            content: ack,
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ackMsg]);
+          return;
+        }
+        if (inGame?.kind === 'restart' && onRestartGame) {
+          onRestartGame();
+          const ack: ChatMessageType = {
+            id: `gmsg-${Date.now()}-ack`,
+            role: 'assistant',
+            content: 'Fresh board — starting over. Your move.',
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ack]);
+          if (useAppStore.getState().coachVoiceOn) {
+            void voiceService.speak(ack.content);
+          }
+          return;
+        }
+        if (inGame?.kind === 'play-opening' && onPlayOpening) {
+          // Restart BEFORE queuing the opening — handleRestart clears
+          // requestedOpeningMoves, so we have to wipe the board first
+          // and then set the book line. React batches both state
+          // updates inside this handler, so the coach's move effect
+          // sees the fresh board + book on its next run and plays the
+          // first book move immediately.
+          onRestartGame?.();
+          onPlayOpening(inGame.openingName);
+          const ack: ChatMessageType = {
+            id: `gmsg-${Date.now()}-ack`,
+            role: 'assistant',
+            content: `Starting a fresh game — I'll play the ${inGame.openingName} against you.`,
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ack]);
+          if (useAppStore.getState().coachVoiceOn) {
+            void voiceService.speak(ack.content);
+          }
+          return;
+        }
       }
 
       // Intent routing: outside of an active game, let "play against me",
@@ -398,7 +470,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, setMessages, navigate]);
+    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, setMessages, navigate]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {

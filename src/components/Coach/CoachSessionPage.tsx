@@ -46,6 +46,8 @@ import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useWalkthroughRunner } from '../../hooks/useWalkthroughRunner';
 import { resolveMiddlegameSessionWithFallback } from '../../services/middlegamePlanner';
 import { resolveWalkthroughSession } from '../../services/walkthroughResolver';
+import { buildNarrationSession } from '../../services/gameNarrationBuilder';
+import { db } from '../../db/schema';
 import { ExplainPositionSessionView } from './ExplainPositionSessionView';
 import { CoachPracticeSessionView } from './CoachPracticeSessionView';
 import { DynamicCoachSession } from './DynamicCoachSession';
@@ -57,7 +59,8 @@ type SessionKind =
   | 'walkthrough'
   | 'puzzle'
   | 'explain-position'
-  | 'practice';
+  | 'practice'
+  | 'narrate';
 
 export function CoachSessionPage(): JSX.Element {
   const { kind } = useParams<{ kind: SessionKind }>();
@@ -168,6 +171,15 @@ export function CoachSessionPage(): JSX.Element {
     return (
       <DynamicCoachSession title="Practice position" onExit={goBack}>
         <CoachPracticeSessionView onExit={goBack} />
+      </DynamicCoachSession>
+    );
+  }
+
+  if (kind === 'narrate') {
+    const gameId = searchParams.get('gameId') ?? undefined;
+    return (
+      <DynamicCoachSession title="Narration" onExit={goBack}>
+        <NarrateGameSessionBody gameId={gameId} orientation={orientation} onExit={goBack} />
       </DynamicCoachSession>
     );
   }
@@ -286,6 +298,59 @@ function WalkthroughSessionBody({
 // move classification, hints, post-game review. The PlayAgainstBody
 // wrapper that used to live here is retired along with its use of
 // CoachPlaySessionView.
+
+// ─── Narrate game ────────────────────────────────────────────────────
+
+interface NarrateGameSessionBodyProps {
+  gameId?: string;
+  orientation: 'white' | 'black';
+  onExit: () => void;
+}
+
+function NarrateGameSessionBody({
+  gameId,
+  orientation,
+  onExit,
+}: NarrateGameSessionBodyProps): JSX.Element {
+  const [session, setSession] = useState<WalkthroughSession | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!gameId) {
+      setError('No game specified.');
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    void db.games
+      .get(gameId)
+      .then((game) => {
+        if (cancelled) return;
+        if (!game) {
+          setError("I couldn't find that game in your history.");
+          return;
+        }
+        setSession(buildNarrationSession(game, orientation));
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        console.warn('[CoachSessionPage] narrate load failed:', err);
+        setError('Could not load that game.');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [gameId, orientation]);
+
+  if (loading) return <LessonLoadingState label="Loading game…" onExit={onExit} />;
+  if (error || !session) return <LessonErrorState message={error ?? 'Game unavailable.'} onExit={onExit} />;
+  return <WalkthroughRunnerBody session={session} onExit={onExit} />;
+}
 
 // ─── Shared runner body ─────────────────────────────────────────────
 

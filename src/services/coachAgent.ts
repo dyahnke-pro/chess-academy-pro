@@ -13,6 +13,8 @@
  * See CLAUDE.md → "Agent Coach Pattern".
  */
 
+import { expandOpeningAlias } from './openingAliases';
+
 export type CoachIntentKind =
   | 'continue-middlegame'
   | 'play-against'
@@ -38,6 +40,10 @@ export interface CoachIntent {
   side?: 'white' | 'black';
   /** For review-game: which import source to filter by. */
   source?: GameSourceFilter;
+  /** For review-game: 'narrate' wants a move-by-move auto-playing
+   *  session with voice; 'review' (default) opens the interactive
+   *  review view. */
+  mode?: 'narrate' | 'review';
   /** Original raw user query. */
   raw: string;
 }
@@ -129,9 +135,11 @@ export function parseCoachIntent(query: string): CoachIntent {
   //     source and subject separately (one combined regex gets brittle
   //     fast across the phrasings people actually use).
   const REVIEW_VERBS_RE =
-    /\b(?:review|run\s+(?:me\s+)?through|walk\s+(?:me\s+)?through|show\s+me|go\s+(?:over|through))\b/;
+    /\b(?:review|run\s+(?:me\s+)?through|walk\s+(?:me\s+)?through|show\s+me|go\s+(?:over|through)|narrate|recap|replay|analy[sz]e|insights?\s+(?:from|on|about))\b/;
+  const NARRATE_VERBS_RE = /\b(?:narrate|recap|replay)\b/;
   const LAST_MARKER_RE = /\b(?:last|most\s+recent|latest|previous)\b/;
   if (REVIEW_VERBS_RE.test(lower) && LAST_MARKER_RE.test(lower)) {
+    const mode: 'narrate' | 'review' = NARRATE_VERBS_RE.test(lower) ? 'narrate' : 'review';
     // Source — "on chess.com" / "on lichess". Handle the optional dot.
     let source: GameSourceFilter | undefined;
     const sourceMatch = lower.match(/\bon\s+(chess\.?com|lichess)\b/);
@@ -151,11 +159,12 @@ export function parseCoachIntent(query: string): CoachIntent {
       .replace(/[?.!]+/g, '')
       .replace(/\s+/g, ' ')
       .trim();
-    const subject = subjectRaw.length > 0 ? cleanSubject(subjectRaw) : '';
+    const cleanedSubject = subjectRaw.length > 0 ? cleanSubject(subjectRaw) : '';
     return {
       kind: 'review-game',
-      subject: subject || undefined,
+      subject: cleanedSubject ? expandOpeningAlias(cleanedSubject) : undefined,
       source,
+      mode,
       raw,
     };
   }
@@ -175,7 +184,7 @@ export function parseCoachIntent(query: string): CoachIntent {
     const subject = subjectMatch ? cleanSubject(subjectMatch[1]) : '';
     return {
       kind: 'continue-middlegame',
-      subject: subject || undefined,
+      subject: subject ? expandOpeningAlias(subject) : undefined,
       raw,
     };
   }
@@ -219,11 +228,23 @@ export function parseCoachIntent(query: string): CoachIntent {
     lower.match(/\bready\s+(?:to\s+play|for\s+(?:a\s+)?(?:game|match))\b/);
   if (playMatch) {
     const rawSubject = playMatch[1] ? cleanSubject(playMatch[1]) : '';
-    const side = extractSide(lower);
+    let side = extractSide(lower);
     const difficulty = extractDifficulty(lower) ?? 'auto';
     // Strip side/difficulty phrases from the subject so "play against me
     // as black easy" doesn't produce subject "as black easy".
-    const subject = stripSideAndDifficulty(rawSubject) || undefined;
+    let subject = stripSideAndDifficulty(rawSubject) || undefined;
+    // "Play Black against me" / "Play white against me" — the captured
+    // "subject" is actually the COACH's color. User plays the opposite.
+    if (subject && /^(black|white)$/i.test(subject)) {
+      const coachColor = subject.toLowerCase() as 'white' | 'black';
+      side = coachColor === 'white' ? 'black' : 'white';
+      subject = undefined;
+    }
+    // Expand common abbreviations ("kid" → "King's Indian Defense")
+    // so the opening-book lookup downstream actually resolves.
+    if (subject) {
+      subject = expandOpeningAlias(subject);
+    }
     return {
       kind: 'play-against',
       subject,
@@ -259,7 +280,7 @@ export function parseCoachIntent(query: string): CoachIntent {
   if (walkthroughMatch) {
     const subject = cleanSubject(walkthroughMatch[1]);
     if (subject) {
-      return { kind: 'walkthrough', subject, raw };
+      return { kind: 'walkthrough', subject: expandOpeningAlias(subject), raw };
     }
   }
 

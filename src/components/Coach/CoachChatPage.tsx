@@ -12,6 +12,38 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType } from '../../types';
 
+const STARTER_CHIPS = [
+  'Play the Italian against me',
+  'Play Black against me',
+  'Narrate my last game',
+  'Walk me through the Sicilian',
+  'Key insights from my last game',
+  "What's my worst opening?",
+] as const;
+
+/** "Read this to me" / "read that aloud" / "speak it" — user wants the
+ *  previous coach message spoken verbatim, not re-summarized. */
+const READ_THIS_RE =
+  /^\s*(?:please\s+)?(?:read|say|speak|narrate)\s+(?:this|that|it|the\s+(?:last|previous)\s+(?:message|reply|response))(?:\s+(?:to\s+me|aloud|out\s+loud|for\s+me))?[.!?\s]*$/i;
+
+/** Strip markdown/tags so Polly/Web Speech doesn't read "asterisk asterisk
+ *  bold asterisk asterisk". Intentionally not a full Markdown parser. */
+function stripMarkdownForTts(text: string): string {
+  return text
+    .replace(/\[BOARD:[^\]]*\]/gi, '')
+    .replace(/\[ACTION:[^\]]*\]/gi, '')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/_{1,2}(.+?)_{1,2}/g, '$1')
+    .replace(/`(.+?)`/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^>\s+/gm, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/→/g, 'to')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function CoachChatPage(): JSX.Element {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,10 +57,10 @@ export function CoachChatPage(): JSX.Element {
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [analysisContext, setAnalysisContext] = useState('');
-  const [voiceMuted, setVoiceMuted] = useState(true);
+  const [voiceMuted, setVoiceMuted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechBufferRef = useRef('');
-  const voiceMutedRef = useRef(true);
+  const voiceMutedRef = useRef(false);
 
   // Hydrate persisted session on mount and publish current route.
   useEffect(() => {
@@ -88,6 +120,27 @@ export function CoachChatPage(): JSX.Element {
         void navigate('/coach/session/play-against?narrate=1');
       }
       return;
+    }
+
+    // "Read this to me" — speak the last coach message verbatim
+    // (markdown-stripped). Bypass the LLM so the spoken words match
+    // what's on screen instead of being paraphrased. Append the user
+    // message to the session store so the transcript stays honest.
+    if (READ_THIS_RE.test(text)) {
+      const lastAssistant = [...chatMessages].reverse().find((m) => m.role === 'assistant');
+      if (lastAssistant) {
+        appendMessage({
+          id: `msg-${Date.now()}-u`,
+          role: 'user',
+          content: text,
+          timestamp: Date.now(),
+        });
+        setVoiceMuted(false);
+        voiceMutedRef.current = false;
+        voiceService.stop();
+        void voiceService.speak(stripMarkdownForTts(lastAssistant.content));
+        return;
+      }
     }
 
     // Fast-path: deterministic intent router for explicit phrases like
@@ -227,22 +280,42 @@ export function CoachChatPage(): JSX.Element {
       <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y p-4 space-y-4">
         {chatMessages.length === 0 && !isStreaming && (
           <motion.div
-            className="flex flex-col items-center gap-4 py-12"
+            className="flex flex-col items-center gap-5 py-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            data-testid="coach-greeting"
           >
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold bg-theme-accent"
             >
               C
             </div>
-            <div className="text-center max-w-xs">
-              <p className="text-sm font-medium text-theme-text">
-                Your coach is ready to chat
+            <div className="text-center max-w-sm">
+              <p className="text-lg font-semibold text-theme-text">
+                How can I help you today?
               </p>
-              <p className="text-xs text-theme-text-muted mt-1">
-                Ask about positions, openings, strategy, or just say hello!
+              <p className="text-xs text-theme-text-muted mt-2 leading-relaxed">
+                I can play you at any strength, narrate your games move-by-move,
+                study your history for patterns, walk through openings, and
+                answer any chess question.
               </p>
+            </div>
+            <div className="w-full max-w-md">
+              <p className="text-xs text-theme-text-muted mb-2">
+                You can ask me to:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {STARTER_CHIPS.map((chip) => (
+                  <button
+                    key={chip}
+                    onClick={() => void handleSend(chip)}
+                    className="text-xs px-3 py-2 rounded-full border border-theme-border bg-theme-surface text-theme-text hover:border-theme-accent hover:text-theme-accent transition-colors"
+                    data-testid="coach-starter-chip"
+                  >
+                    {chip}
+                  </button>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}

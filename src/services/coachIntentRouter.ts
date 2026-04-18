@@ -35,6 +35,7 @@ import {
 import { TACTICAL_THEMES } from './puzzleService';
 import { findLastMatchingGame } from './gameContextService';
 import { getCoachChatResponse } from './coachApi';
+import { getWeakestOpenings } from './openingService';
 
 export interface RoutedChatIntent {
   /** Relative path (starts with `/`) for the session route. When
@@ -84,6 +85,13 @@ const AFFIRMATION_RE =
 const ASSISTANT_GAME_PROPOSAL_RE =
   /\b(let'?s\s+play|play\s+(?:a\s+)?(?:new\s+)?(?:game|match)|start\s+(?:a\s+)?(?:new\s+)?(?:game|match)|ready\s+to\s+play|shall\s+we\s+play|want\s+to\s+play\??)\b/i;
 
+/** "What's my worst/weakest opening?" — reply-only intent. The backend
+ *  has `getWeakestOpenings()` ranked by drill accuracy; we summarize the
+ *  top 3 in chat so the user can decide what to drill next. Side filter
+ *  ("as white" / "as black") is honored when present. */
+const WEAKEST_OPENING_RE =
+  /\b(?:my\s+)?(?:worst|weakest|lowest[- ]?scoring|most[- ]struggled[- ]?with)\s+(?:opening|openings|line|lines|repertoire)\b|\bwhich\s+opening\s+(?:do\s+i|am\s+i)\s+(?:struggle|struggling|worst|weakest)\b|\bwhere\s+(?:do\s+i|am\s+i)\s+(?:struggling|weakest)\s+(?:in\s+my\s+)?openings?\b/i;
+
 /**
  * Map a user message to a session route, or return null if the message
  * should be handled as normal LLM chat.
@@ -98,6 +106,19 @@ export async function routeChatIntent(
   // remembers the training agreement (e.g., "spotting hanging pieces
   // and simple combinations"). Runs BEFORE parseCoachIntent because a
   // bare "yes" otherwise falls through to qa.
+  // Weakest-opening lookup — answered directly from the repertoire data
+  // in Dexie, no LLM round-trip. Reply-only (no navigation). Honors an
+  // optional "as white" / "as black" side filter.
+  if (WEAKEST_OPENING_RE.test(text)) {
+    const sideMatch = text.match(/\bas\s+(white|black)\b/i);
+    const side = sideMatch ? (sideMatch[1].toLowerCase() as 'white' | 'black') : undefined;
+    const weakest = await getWeakestOpenings(3, side);
+    return {
+      ackMessage: buildWeakestOpeningsMessage(weakest, side),
+      intent: { kind: 'qa', raw: text },
+    };
+  }
+
   if (
     options.lastAssistantMessage &&
     AFFIRMATION_RE.test(text.trim()) &&
@@ -105,16 +126,18 @@ export async function routeChatIntent(
   ) {
     const params = new URLSearchParams();
     const focus = extractFocus(options.lastAssistantMessage);
+    const subject = extractProposedOpening(options.lastAssistantMessage);
+    const userSide = extractProposedUserSide(options.lastAssistantMessage);
+    if (subject) params.set('subject', subject);
+    if (userSide) params.set('side', userSide);
     if (focus) params.set('focus', focus);
     return {
       path: withQuery('/coach/session/play-against', params),
-      ackMessage: focus
-        ? `Great — starting a game. We\u2019ll focus on ${focus}.`
-        : 'Great — starting a game.',
+      ackMessage: buildProposalAckMessage(subject, userSide, focus),
       // Synthesize a play-against intent so callers (analytics, tests)
       // see a consistent shape even though parseCoachIntent wouldn't
       // have matched the affirmation on its own.
-      intent: { kind: 'play-against', difficulty: 'auto', raw: text },
+      intent: { kind: 'play-against', subject, side: userSide, difficulty: 'auto', raw: text },
     };
   }
 
@@ -212,6 +235,16 @@ export async function routeChatIntent(
       if (!game) {
         return {
           ackMessage: buildNoMatchOfferMessage(intent),
+          intent,
+        };
+      }
+      // "Narrate" / "recap" / "replay" → dedicated narration-playback
+      // session (auto-advancing, voice-gated). "Review" / "walk through"
+      // → interactive review view.
+      if (intent.mode === 'narrate') {
+        return {
+          path: `/coach/session/narrate?gameId=${encodeURIComponent(game.id)}`,
+          ackMessage: buildReviewAckMessage(game, intent),
           intent,
         };
       }
@@ -417,6 +450,30 @@ function buildNoMatchOfferMessage(intent: CoachIntent): string {
 }
 
 /**
+ * Format the weakest-openings list into a chat-ready message. When the
+ * repertoire is empty we say so explicitly instead of returning a
+ * generic "I don't know" reply — the absence of data is the answer.
+ */
+function buildWeakestOpeningsMessage(
+  weakest: { name: string; color: string; drillAttempts: number; drillAccuracy: number }[],
+  side?: 'white' | 'black',
+): string {
+  const sideLabel = side ? ` as ${side === 'white' ? 'White' : 'Black'}` : '';
+  if (weakest.length === 0) {
+    return `I don't have any openings in your repertoire${sideLabel} yet. Once you add openings and drill them, I can rank which ones need work.`;
+  }
+  const lines = weakest.map((op, i) => {
+    const colorLabel = op.color === 'white' ? 'W' : 'B';
+    if (op.drillAttempts === 0) {
+      return `${i + 1}. ${op.name} (${colorLabel}) — not drilled yet`;
+    }
+    const pct = Math.round(op.drillAccuracy * 100);
+    return `${i + 1}. ${op.name} (${colorLabel}) — ${pct}% accuracy over ${op.drillAttempts} drill${op.drillAttempts === 1 ? '' : 's'}`;
+  });
+  return `Here are the openings${sideLabel} you're struggling with most:\n\n${lines.join('\n')}\n\nWant to drill one of them?`;
+}
+
+/**
  * Pull a short "training focus" phrase out of the assistant's game
  * proposal so the play page's coach can keep the agreed focus in
  * mind. We try a few templates the coach LLM commonly emits, then
@@ -450,6 +507,129 @@ function tidy(s: string): string {
     .trim();
 }
 
+/** Common opening names the coach might propose, in canonical form.
+ *  Matched word-boundary-insensitively against the assistant message.
+ *  Ordering matters — more specific names ("Sicilian Najdorf") must
+ *  come before broader ones ("Sicilian") so the richer match wins. */
+const PROPOSED_OPENING_NAMES: string[] = [
+  'Sicilian Najdorf',
+  'Sicilian Dragon',
+  'Sicilian Scheveningen',
+  'Sicilian Sveshnikov',
+  'Sicilian Taimanov',
+  'Accelerated Dragon',
+  'Najdorf',
+  'Dragon',
+  'Scheveningen',
+  'Sveshnikov',
+  'Taimanov',
+  "King's Indian Defense",
+  "King's Indian",
+  "Queen's Gambit Declined",
+  "Queen's Gambit Accepted",
+  "Queen's Gambit",
+  "Queen's Indian Defense",
+  "Queen's Indian",
+  'Nimzo-Indian',
+  "Gr\u00fcnfeld",
+  'Grunfeld',
+  'Benoni',
+  'Ruy Lopez',
+  'Italian Game',
+  'Italian',
+  'Caro-Kann',
+  'French Defense',
+  'French',
+  'Scandinavian',
+  'Pirc',
+  'Alekhine',
+  'Catalan',
+  'London System',
+  'London',
+  'English Opening',
+  'English',
+  "Bird's Opening",
+  'Scotch Game',
+  'Scotch',
+  'Vienna',
+  'Four Knights',
+  'Petrov',
+  'Sicilian Defense',
+  'Sicilian',
+];
+
+/**
+ * Pull an opening name out of the coach's game proposal.
+ *
+ * The LLM's proposals are varied — "Let's play the Sicilian Najdorf",
+ * "I'll play the Italian against you", "how about a Ruy Lopez?" — so
+ * we look for any known opening name as a substring. Returns the
+ * first (most specific-first) match, or undefined.
+ */
+function extractProposedOpening(assistantMessage: string): string | undefined {
+  const lower = assistantMessage.toLowerCase();
+  for (const name of PROPOSED_OPENING_NAMES) {
+    const re = new RegExp(`\\b${escapeRegExp(name.toLowerCase())}\\b`);
+    if (re.test(lower)) {
+      return name;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Pull the user's proposed side out of the coach's proposal.
+ *
+ * The coach might phrase it as either "I'll play White" (coach side,
+ * user plays opposite) or "you play White" (direct user side).
+ * Returns the USER's side, or undefined if not stated.
+ */
+function extractProposedUserSide(
+  assistantMessage: string,
+): 'white' | 'black' | undefined {
+  const lower = assistantMessage.toLowerCase();
+  // "you play White/Black" / "you'll be White"
+  const direct = lower.match(
+    /\byou(?:'ll|\s+will)?\s+(?:play|be|take)\s+(white|black)\b/,
+  );
+  if (direct) return direct[1] as 'white' | 'black';
+  // "I'll play White" / "I'll be Black" — coach is that color, user is opposite.
+  const coach = lower.match(
+    /\bi(?:'ll|\s+will)?\s+(?:play|be|take)\s+(white|black)\b/,
+  );
+  if (coach) {
+    return coach[1] === 'white' ? 'black' : 'white';
+  }
+  return undefined;
+}
+
+/**
+ * Compose the acknowledgement shown when the user affirms the coach's
+ * proposal. Mentions the concrete opening/side we pulled from the
+ * proposal so the user sees we understood, with a soft "We'll focus
+ * on…" tail when a focus was extracted.
+ */
+function buildProposalAckMessage(
+  subject: string | undefined,
+  userSide: 'white' | 'black' | undefined,
+  focus: string | null,
+): string {
+  const bits: string[] = ['Great — starting a game.'];
+  if (subject && userSide) {
+    bits.push(
+      `I'll play ${userSide === 'white' ? 'Black' : 'White'}; we'll open with the ${subject}.`,
+    );
+  } else if (subject) {
+    bits.push(`We'll open with the ${subject}.`);
+  } else if (userSide) {
+    bits.push(`You'll play ${userSide === 'white' ? 'White' : 'Black'}.`);
+  }
+  if (focus && !subject) {
+    bits.push(`We'll focus on ${focus}.`);
+  }
+  return bits.join(' ');
+}
+
 /** Test hook — exposed for unit tests only. */
 export function __test__resolvePuzzleTheme(theme: string | undefined): string | null {
   return resolvePuzzleTheme(theme);
@@ -458,6 +638,18 @@ export function __test__resolvePuzzleTheme(theme: string | undefined): string | 
 /** Test hook — exposed for unit tests only. */
 export function __test__extractFocus(message: string): string | null {
   return extractFocus(message);
+}
+
+/** Test hook — exposed for unit tests only. */
+export function __test__extractProposedOpening(message: string): string | undefined {
+  return extractProposedOpening(message);
+}
+
+/** Test hook — exposed for unit tests only. */
+export function __test__extractProposedUserSide(
+  message: string,
+): 'white' | 'black' | undefined {
+  return extractProposedUserSide(message);
 }
 
 export type { CoachDifficulty };

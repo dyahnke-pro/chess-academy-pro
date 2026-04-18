@@ -17,6 +17,7 @@ import { ThemeToggle } from './ThemeToggle';
 import { InstallPrompt } from './InstallPrompt';
 import { OfflineBanner } from './OfflineBanner';
 import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
+import { QuickFeedbackButton } from '../Feedback/QuickFeedbackButton';
 
 interface NavItem {
   to: string;
@@ -171,15 +172,18 @@ export function AppLayout(): JSX.Element {
             Chess Academy
           </span>
         </div>
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 rounded-lg"
-          style={{ color: 'var(--color-text)' }}
-          aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
-          data-testid="mobile-menu-btn"
-        >
-          {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        <div className="flex items-center gap-2">
+          <QuickFeedbackButton />
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 rounded-lg"
+            style={{ color: 'var(--color-text)' }}
+            aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+            data-testid="mobile-menu-btn"
+          >
+            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </header>
 
       {/* Mobile sidebar overlay */}
@@ -299,6 +303,9 @@ export function AppLayout(): JSX.Element {
           </div>
 
           <div className="px-2 border-t pt-3 mt-3" style={{ borderColor: 'var(--color-border)' }}>
+            <div className="px-3 pb-2">
+              <QuickFeedbackButton />
+            </div>
             <ThemeToggle />
             {activeProfile && (
               <div className="flex items-center gap-2 px-3 py-2 mt-1">
