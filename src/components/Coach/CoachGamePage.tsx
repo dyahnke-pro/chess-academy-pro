@@ -315,6 +315,27 @@ export function CoachGamePage(): JSX.Element {
     playerMoveSan: string;
   } | null>(null);
   const [moveFlash, setMoveFlash] = useState<'blunder' | 'inaccuracy' | 'good' | null>(null);
+  // Single shared flash-clear timer. Without this, back-to-back flashes
+  // (player move then coach reply) leak the first timer, which fires
+  // during the second flash and clears it early.
+  const flashClearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const triggerMoveFlash = useCallback((flash: 'blunder' | 'inaccuracy' | 'good') => {
+    if (flashClearTimerRef.current !== null) {
+      clearTimeout(flashClearTimerRef.current);
+    }
+    setMoveFlash(flash);
+    flashClearTimerRef.current = setTimeout(() => {
+      setMoveFlash(null);
+      flashClearTimerRef.current = null;
+    }, 900);
+  }, []);
+  useEffect(() => {
+    return () => {
+      if (flashClearTimerRef.current !== null) {
+        clearTimeout(flashClearTimerRef.current);
+      }
+    };
+  }, []);
 
   // Track whether voice mic is active (listening or streaming) to suppress tips
   const [voiceActive, setVoiceActive] = useState(false);
@@ -1077,9 +1098,8 @@ export function CoachGamePage(): JSX.Element {
           ['great', 'good'],
         ]);
         const coachFlash = coachFlashMap.get(coachClassification);
-        if (coachFlash) {
-          setMoveFlash(coachFlash);
-          setTimeout(() => setMoveFlash(null), 900);
+        if (coachFlash && !isCancelled()) {
+          triggerMoveFlash(coachFlash);
         }
 
         // Use POST-move analysis for eval bar + engine lines — these are for the
@@ -1291,8 +1311,7 @@ export function CoachGamePage(): JSX.Element {
     ]);
     const flash = flashMap.get(classification);
     if (flash) {
-      setMoveFlash(flash);
-      setTimeout(() => setMoveFlash(null), 900);
+      triggerMoveFlash(flash);
     }
 
     // BLUNDER INTERCEPTION: pause game and explain
@@ -1341,7 +1360,7 @@ export function CoachGamePage(): JSX.Element {
       moves: [...prev.moves, playerMove],
       currentHintLevel: 0,
     }));
-  }, [game, handleBackToGame, resetHints, playerColor, gameState.moves]);
+  }, [game, handleBackToGame, resetHints, playerColor, gameState.moves, triggerMoveFlash]);
 
   // Handle practice move (when in chat-driven practice mode)
   const handlePracticeMove = useCallback(async (moveResult: MoveResult) => {
