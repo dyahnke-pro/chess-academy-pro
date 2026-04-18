@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Send, Mic, MicOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { voiceInputService } from '../../services/voiceInputService';
+import { useAppStore } from '../../stores/appStore';
 
 interface ChatInputProps {
   onSend: (text: string, modality?: 'voice' | 'text') => void;
@@ -58,6 +59,13 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
       voiceInputService.stopListening();
       setListening(false);
     } else {
+      // Mic on = voice narration on (implicit). Student enabling the
+      // mic is implicitly opting into a spoken conversation, so flip
+      // the per-move / reply TTS flag on too. Left on when they later
+      // stop the mic — explicit voice-off button still overrides.
+      if (!useAppStore.getState().coachVoiceOn) {
+        useAppStore.getState().setCoachVoiceOn(true);
+      }
       const started = voiceInputService.startListening();
       setListening(started);
     }
