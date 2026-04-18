@@ -12,9 +12,13 @@ vi.mock('./middlegamePlanner', () => ({
 vi.mock('./gameContextService', () => ({
   findLastMatchingGame: vi.fn(),
 }));
+vi.mock('./openingService', () => ({
+  getWeakestOpenings: vi.fn(async () => []),
+}));
 
 import { matchOpeningForSubject } from './walkthroughResolver';
 import { findLastMatchingGame } from './gameContextService';
+import { getWeakestOpenings } from './openingService';
 import {
   findPlanForOpening,
   findPlanBySubject,
@@ -250,11 +254,43 @@ describe('affirmation-after-game-proposal', () => {
   });
 
   it('does NOT hijack unrelated user messages even after a proposal', async () => {
-    const routed = await routeChatIntent('What is my weakest opening?', {
+    // "What is my repertoire size?" — genuine question, no dedicated
+    // intent — should fall through to LLM chat.
+    const routed = await routeChatIntent('What is my repertoire size?', {
       lastAssistantMessage: PROPOSAL,
     });
-    // "What is my weakest opening?" is a genuine question — don't steal it.
     expect(routed).toBeNull();
+  });
+});
+
+describe('weakest-opening intent', () => {
+  beforeEach(() => {
+    vi.mocked(getWeakestOpenings).mockReset();
+    vi.mocked(getWeakestOpenings).mockResolvedValue([]);
+  });
+
+  it('answers "What is my weakest opening?" without navigation', async () => {
+    const routed = await routeChatIntent('What is my weakest opening?');
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toBeUndefined();
+    expect(routed!.ackMessage).toMatch(/opening|repertoire/i);
+  });
+
+  it('forwards an "as black" side filter to getWeakestOpenings', async () => {
+    await routeChatIntent("What's my worst opening as black?");
+    expect(getWeakestOpenings).toHaveBeenCalledWith(3, 'black');
+  });
+
+  it('formats the list when openings exist', async () => {
+    vi.mocked(getWeakestOpenings).mockResolvedValue([
+      { name: 'Sicilian Defense', color: 'black', drillAttempts: 10, drillAccuracy: 0.4 },
+      { name: 'French Defense', color: 'black', drillAttempts: 0, drillAccuracy: 0 },
+    ] as never);
+    const routed = await routeChatIntent('What are my weakest openings?');
+    expect(routed!.ackMessage).toContain('Sicilian Defense');
+    expect(routed!.ackMessage).toContain('40% accuracy');
+    expect(routed!.ackMessage).toContain('French Defense');
+    expect(routed!.ackMessage).toContain('not drilled yet');
   });
 });
 

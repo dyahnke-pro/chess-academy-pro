@@ -152,10 +152,10 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       case 'continue-middlegame':
         return 'Run the middlegame plans';
       case 'play-against': {
-        const parts = ['Play'];
-        if (agentIntent.subject) parts.push(agentIntent.subject);
-        parts.push('vs. Coach');
-        return parts.join(' ');
+        if (agentIntent.subject) {
+          return `Play the ${agentIntent.subject}`;
+        }
+        return 'Play against the coach';
       }
       case 'walkthrough':
         return agentIntent.subject
@@ -175,7 +175,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   const agentActionSubtitle = useMemo((): string => {
     switch (agentIntent.kind) {
       case 'play-against': {
-        const bits: string[] = [];
+        const bits: string[] = ['Coach plays against you'];
         if (agentIntent.difficulty && agentIntent.difficulty !== 'auto') {
           const name =
             agentIntent.difficulty.charAt(0).toUpperCase() +
@@ -183,9 +183,9 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           bits.push(name);
         }
         if (agentIntent.side) {
-          bits.push(`Playing as ${agentIntent.side === 'white' ? 'White' : 'Black'}`);
+          bits.push(`You play ${agentIntent.side === 'white' ? 'White' : 'Black'}`);
         }
-        return bits.length ? bits.join(' · ') : 'Opens a game with the coach';
+        return bits.join(' · ');
       }
       case 'walkthrough':
         return 'Opens a guided lesson';
