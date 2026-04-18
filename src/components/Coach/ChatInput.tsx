@@ -22,7 +22,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
   }, []);
 
   useEffect(() => {
-    voiceInputService.onResult((transcript) => {
+    const unsubscribe = voiceInputService.onResult((transcript) => {
       const trimmed = transcript.trim();
       if (!trimmed) return;
       // Voice turns auto-send with modality='voice' so the assistant
@@ -30,6 +30,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
       // stays empty (no appending) so the user can keep talking.
       onSend(trimmed, 'voice');
     });
+    return unsubscribe;
   }, [onSend]);
 
   const handleSend = useCallback(() => {
