@@ -20,7 +20,7 @@
 import type { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
-import type { ChatMessage } from '../types';
+import type { ChatMessage, CoachVerbosity } from '../types';
 
 export type MoveVerdict = 'excellent' | 'good' | 'book' | 'inaccuracy' | 'mistake' | 'blunder' | 'neutral';
 
@@ -37,6 +37,15 @@ export interface MoveCommentaryInput {
   bestReplySan?: string;
   /** Optional subject (e.g. "Sicilian Najdorf") to bias the prose. */
   subject?: string;
+  /** Narration density from UserPreferences.coachVerbosity. Maps to
+   *  the user's existing settings toggle:
+   *    - 'none' — caller shouldn't call this at all; guarded as a
+   *      safety net (returns '' if it slips through).
+   *    - 'fast' — terse, one compact sentence.
+   *    - 'medium' — normal flow, a couple of sentences.
+   *    - 'slow' — verbose, deeper explanation with background context.
+   *  When omitted, defaults to 'medium'. */
+  verbosity?: CoachVerbosity;
   /**
    * True when the context is a post-game review, so the coach speaks to
    * the student about the game's arc rather than as an in-game opponent.
@@ -85,6 +94,10 @@ export function classifyEvalSwing(
  */
 export async function generateMoveCommentary(input: MoveCommentaryInput): Promise<string> {
   if (input.offline) return '';
+  // Safety net: caller shouldn't be invoking us when the student has
+  // set verbosity to 'none', but if they do we short-circuit here
+  // rather than burning a token call for output we'd throw away.
+  if (input.verbosity === 'none') return '';
 
   const history = input.gameAfter.history({ verbose: true });
   if (history.length === 0) return '';
@@ -117,7 +130,7 @@ async function getLlmCommentary(
   input: MoveCommentaryInput,
   history: VerboseMove[],
 ): Promise<string> {
-  const { gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone, chatHistory } = input;
+  const { gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone, chatHistory, verbosity = 'medium' } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
 
@@ -145,6 +158,13 @@ async function getLlmCommentary(
     .map((m) => `${m.role === 'user' ? 'Student' : 'Coach'}: ${m.content}`)
     .join('\n');
 
+  const densityLine =
+    verbosity === 'fast'
+      ? 'Narration density: TERSE. One compact sentence, no preamble.'
+      : verbosity === 'slow'
+        ? 'Narration density: VERBOSE. Deeper explanation — background, plans, how this connects to the student\u2019s known weaknesses; three to five sentences.'
+        : 'Narration density: NORMAL. A couple of sentences, maybe three if something critical deserves it.';
+
   const user = [
     subject ? `Session subject: ${subject}.` : '',
     chatContext
@@ -158,6 +178,7 @@ async function getLlmCommentary(
     `Eval swing for the mover (pawns): ${swingPawns}.`,
     `Swing classification: ${verdict}.`,
     bestReplySan ? `Stockfish's best reply from this position: ${bestReplySan}.` : '',
+    densityLine,
     'Give IN-DEPTH analysis per the rules. No filler, no generic praise.',
   ].filter(Boolean).join('\n');
 
