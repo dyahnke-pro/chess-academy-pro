@@ -1466,9 +1466,18 @@ export function CoachGamePage(): JSX.Element {
     // LLM entirely and fall back to the deterministic tacticSuffix,
     // which cuts per-game LLM spend ~60% without losing the
     // pedagogically important commentary on blunders/brilliants.
+    //
+    // EXCEPTION: when a subject is set AND we're still in opening
+    // theory (book depth OR configured book length), fire the LLM on
+    // every move so the coach can teach the opening ideas in real
+    // time. "Key moments only" would skip most opening book moves
+    // because they classify as 'book' / 'best', killing the feature.
     let commentary = '';
     const verbosity = resolveVerbosity(useAppStore.getState().activeProfile);
-    if (shouldCallLlmForMove(verbosity, classification)) {
+    const bookDepth = requestedOpeningMoves?.length ?? 0;
+    const inOpeningTeaching =
+      !!subjectParam && game.history.length <= Math.max(bookDepth, 12);
+    if (inOpeningTeaching || shouldCallLlmForMove(verbosity, classification)) {
       try {
         const probe = new Chess(moveResult.fen);
         const mover: 'w' | 'b' = probe.turn() === 'w' ? 'b' : 'w';
@@ -1482,6 +1491,9 @@ export function CoachGamePage(): JSX.Element {
           evalAfter: analysis?.evaluation ?? null,
           bestReplySan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
           chatHistory: sessionMessages,
+          // Threading the URL subject here activates the OPENING
+          // TEACHING MODE branch of PLAY_SYSTEM_PROMPT.
+          subject: subjectParam ?? undefined,
         });
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
         // Mirror the commentary into the shared session so the next
