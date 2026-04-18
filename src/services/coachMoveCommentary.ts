@@ -170,17 +170,19 @@ async function getLlmCommentary(
     .map((m) => `${m.role === 'user' ? 'Student' : 'Coach'}: ${m.content}`)
     .join('\n');
 
-  // Density overrides COMMON_RULES' default 1-3-sentence cap. Without
-  // this override, even when the student asks for deep explanations
-  // the model stops at three sentences because the HARD RULE in
-  // COMMON_RULES pins brevity. When 'slow' is selected, lift the cap
-  // entirely and direct the model toward in-depth coaching.
+  // Density is a DIRECTIONAL hint — no hard caps. The model uses its
+  // own judgement for length. "Fast" pushes toward brevity (don't
+  // lecture between moves), "slow" goes deeper, "unlimited" unlocks
+  // the full personal-trainer mode. The only floor is "don't output
+  // empty/filler text."
   const densityLine =
     verbosity === 'fast'
-      ? 'Narration density: TERSE. One compact sentence, no preamble. Overrides the 20-70 word rule downward — keep it tight.'
+      ? 'Narration density: TERSE. Keep it tight between moves so the student can keep playing — prioritize the single most important idea. No preamble.'
       : verbosity === 'slow'
-        ? 'Narration density: VERBOSE (OVERRIDES the 1-3 sentence and 20-70 word HARD RULE). Give a FULL in-depth explanation — 4 to 7 sentences, up to ~180 words. Cover: what just changed structurally, the plans both sides now have, what the student should be watching for in the next 2-3 moves, how this connects to their known weaknesses, and one concrete follow-up question to pull them deeper. Still no generic filler; every sentence must land a concrete chess idea.'
-        : 'Narration density: NORMAL. Two or three sentences, maybe four if something critical deserves it (up to ~100 words).';
+        ? 'Narration density: IN-DEPTH. Go as long as the teaching needs — no sentence cap. Cover what changed structurally, the plans both sides have, what the student should watch for next, how this connects to their known weaknesses, and a concrete follow-up question. Speak like a trainer sitting next to them — natural pacing, not a lecture, not a one-liner.'
+        : verbosity === 'unlimited'
+          ? 'Narration density: UNLIMITED — full personal-trainer mode. No cap on length. Walk through the move the way a coach at the board would: what changed, both sides\' plans, alternatives considered, how this connects to the student\'s past games and known weaknesses, traps in this line, and what to watch for on the next few moves. Ask a concrete open question at the end. Still no filler — every sentence earns its place.'
+          : 'Narration density: NATURAL. As long or short as the moment deserves — no cap. One crisp idea when the move is routine, a fuller explanation when something critical just happened.';
 
   const groundedBlock = groundedNotes.filter(Boolean).join('\n\n');
 
@@ -239,14 +241,19 @@ const COMMON_RULES = [
   '',
   'HARD RULES:',
   '- Conversational tone. Use contractions ("you\'re", "that\'s", "let\'s"),',
-  '  short sentences, direct second-person language. Ask the student a',
-  '  question or point their attention at something when it fits ("notice',
-  '  how the knight hits two squares at once", "see what their queen is',
-  '  eyeing?"). Sound like a human teacher, not an analysis engine.',
-  '- 1 to 3 sentences, 20–70 words BY DEFAULT. A Narration density line',
-  '  in the user message may override this cap upward (verbose mode) or',
-  '  downward (terse mode) — always follow the density directive when',
-  '  present.',
+  '  direct second-person language. Ask the student a question or point',
+  '  their attention at something when it fits ("notice how the knight hits',
+  '  two squares at once", "see what their queen is eyeing?"). Sound like a',
+  '  human teacher sitting across the board, not an analysis engine.',
+  '- No length cap. Speak as long as the idea needs and no longer — a',
+  '  routine move might get one sentence, a critical moment might get',
+  '  several. Follow the Narration density directive in the user message',
+  '  for relative length; never output empty or filler content.',
+  '- MATCH THE STUDENT\'S LANGUAGE. If the student asks or speaks in',
+  '  Spanish / French / German / Portuguese / any other language, reply',
+  '  in that same language and keep the same chess-coaching tone. Do not',
+  '  switch back to English mid-reply. English is the default only when',
+  '  the student\'s own language is English.',
   '- NEVER write generic filler like "Solid move", "Nice", "Good job",',
   '  "I played Nf3". Skip "Great question!" / "Excellent!" openers.',
   '- NEVER use single-letter piece shorthand in spoken output ("P on e4",',

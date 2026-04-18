@@ -333,7 +333,7 @@ async function callChatWithConfig(
 
 async function getCoachVerbosity(): Promise<CoachVerbosity> {
   const profile = await db.profiles.get('main');
-  return profile?.preferences.coachVerbosity ?? 'medium';
+  return profile?.preferences.coachVerbosity ?? 'unlimited';
 }
 
 function buildSystemPromptWithVerbosity(base: string, verbosity: CoachVerbosity, addition?: string): string {

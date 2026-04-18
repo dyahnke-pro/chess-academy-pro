@@ -423,7 +423,7 @@ export interface FlashcardRecord {
 // ─── Settings Enums (WO-5) ───────────────────────────────────────────────────
 
 export type PieceAnimationSpeed = 'none' | 'fast' | 'medium' | 'slow';
-export type CoachVerbosity = 'none' | 'fast' | 'medium' | 'slow';
+export type CoachVerbosity = 'none' | 'fast' | 'medium' | 'slow' | 'unlimited';
 export type MoveMethod = 'drag' | 'click' | 'both';
 export type AiProvider = 'deepseek' | 'anthropic';
 

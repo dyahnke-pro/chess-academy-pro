@@ -1536,7 +1536,7 @@ export function CoachGamePage(): JSX.Element {
     // the LLM call entirely so no tokens are burned producing text
     // we'd throw away.
     const narrationDensity =
-      useAppStore.getState().activeProfile?.preferences.coachVerbosity ?? 'medium';
+      useAppStore.getState().activeProfile?.preferences.coachVerbosity ?? 'unlimited';
     const bookDepth = requestedOpeningMoves?.length ?? 0;
     const inOpeningTeaching =
       !!subjectParam && game.history.length <= Math.max(bookDepth, 12);
@@ -1707,7 +1707,9 @@ export function CoachGamePage(): JSX.Element {
         currentHintLevel: 0,
       }));
 
-      // Voice the explanation
+      // Voice the explanation — stop any in-flight TTS first so a
+      // previous narration or voice-chat reply doesn't overlap.
+      voiceService.stop();
       void voiceService.speak(explanation);
       return;
     }
@@ -1724,6 +1726,10 @@ export function CoachGamePage(): JSX.Element {
     //    coachVoiceOn is true.
     if (useCoachSessionStore.getState().narrationMode) {
       const mover: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+      // Stop any in-flight TTS (a stale voice-chat reply still playing,
+      // an earlier move's narration that overran) before the next move
+      // speaks. Prevents the "I hear two narrations at once" overlap.
+      voiceService.stop();
       narrateMove({
         san: moveResult.san,
         mover,
@@ -1731,6 +1737,7 @@ export function CoachGamePage(): JSX.Element {
         commentary: commentary.trim() || null,
       });
     } else if (commentary.trim() && useAppStore.getState().coachVoiceOn) {
+      voiceService.stop();
       void voiceService.speak(commentary.trim());
     }
 
