@@ -36,8 +36,62 @@ import {
   saveCoachPlayState,
   clearCoachPlayState,
 } from '../../services/coachPlayPersistence';
-import { fetchLichessExplorer } from '../../services/lichessExplorerService';
-import { detectTrapInPosition, formatTrapForPrompt } from '../../services/openingTrapDetector';
+import { fetchLichessExplorer, fetchCloudEval } from '../../services/lichessExplorerService';
+import { detectTrapInPosition, formatTrapForPrompt, type MoveEvaluation } from '../../services/openingTrapDetector';
+
+/** Max wall-clock for any Lichess lookup during opening teaching.
+ *  Matches coachContextEnricher's FETCH_TIMEOUT_MS so the whole
+ *  coach-narration path shares a budget. Past this, narration
+ *  degrades to ungrounded prose rather than stalling the turn. */
+const LICHESS_FETCH_TIMEOUT_MS = 2500;
+
+/** Race a promise against a timeout. Matches coachContextEnricher's
+ *  withTimeout helper — not imported to avoid cross-module coupling
+ *  for a 3-line util. */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
+  ]);
+}
+
+/**
+ * Evaluate a set of candidate SAN moves on the position reached AFTER
+ * each move. Uses Lichess cloud-eval (no auth, free, cached) per
+ * candidate in parallel. Candidates whose FEN has no cloud eval
+ * (404) are skipped — better to miss a trap than to mis-flag one.
+ *
+ * Eval is normalised to the MOVER's POV: positive = the candidate
+ * player got better, negative = they lost ground. This matches what
+ * `detectTrapInPosition` expects (it looks for popular moves where
+ * evalCp &lt;= -200 for the mover).
+ */
+async function evaluateExplorerCandidates(
+  fen: string,
+  sanList: string[],
+  mover: 'w' | 'b',
+): Promise<MoveEvaluation[]> {
+  const ChessCtor = (await import('chess.js')).Chess;
+  const tasks = sanList.map(async (san) => {
+    try {
+      const board = new ChessCtor(fen);
+      const moved = board.move(san);
+      if (!moved) return null;
+      const resultingFen = board.fen();
+      const eval_ = await withTimeout(fetchCloudEval(resultingFen, 1), LICHESS_FETCH_TIMEOUT_MS);
+      if (!eval_ || !eval_.pvs || eval_.pvs.length === 0) return null;
+      // cloud-eval cp is from WHITE's POV. Flip for black movers so
+      // the detector gets a "this was good/bad for the MOVER" number.
+      const cpWhitePov = eval_.pvs[0].cp ?? 0;
+      const evalCp = mover === 'w' ? cpWhitePov : -cpWhitePov;
+      return { san, evalCp };
+    } catch {
+      return null;
+    }
+  });
+  const results = await Promise.all(tasks);
+  return results.filter((r): r is MoveEvaluation => r !== null);
+}
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
@@ -1498,15 +1552,20 @@ export function CoachGamePage(): JSX.Element {
         const sessionMessages = useCoachSessionStore.getState().messages;
 
         // In opening-teaching mode, ground the commentary in REAL
-        // Lichess + engine data: pull the Opening Explorer stats for
-        // the current position, run the trap detector on the result,
-        // and feed both as `groundedNotes` the prompt will cite. The
-        // fetch is best-effort — network failures fall back to prose
-        // without the numbers.
+        // Lichess + engine data: pull the Opening Explorer for the
+        // current position, cloud-eval each popular candidate on its
+        // RESULTING position, and run the trap detector on the
+        // combined result. The fetch is best-effort — wrapped in
+        // withTimeout so a slow Lichess response never stalls
+        // narration; failures fall through to prose without the
+        // numbers.
         const groundedNotes: string[] = [];
         if (inOpeningTeaching) {
           try {
-            const explorer = await fetchLichessExplorer(probe.fen(), 'lichess');
+            const explorer = await withTimeout(
+              fetchLichessExplorer(probe.fen(), 'lichess'),
+              LICHESS_FETCH_TIMEOUT_MS,
+            );
             if (explorer.moves && explorer.moves.length > 0) {
               const topMoves = explorer.moves
                 .slice(0, 5)
@@ -1523,17 +1582,20 @@ export function CoachGamePage(): JSX.Element {
                 `[Lichess Opening Explorer at current position${openingLabel}]\n${topMoves}`,
               );
 
-              // Trap detection: engine eval on the top explorer moves,
-              // then flag any popular-but-losing candidates. We borrow
-              // the post-move Stockfish eval for the TOP reply only —
-              // for the rest we use a cheap heuristic (no eval means
-              // "can't judge"; those are skipped).
-              const evaluations = analysis?.topLines && analysis.topLines.length > 0
-                ? analysis.topLines.slice(0, 5).map((line, i) => {
-                    const san = explorer.moves[i]?.san ?? '';
-                    return { san, evalCp: line.evaluation * (mover === 'w' ? 1 : -1) };
-                  }).filter((e) => e.san)
-                : [];
+              // Trap detection — cloud-eval each top explorer move on
+              // its RESULTING position to get a correct per-candidate
+              // eval. The prior implementation paired explorer moves
+              // (ranked by popularity) with Stockfish top-lines
+              // (ranked by strength) by array index. Those arrays
+              // don't align, so the detector was reading the wrong
+              // eval for the wrong move. Now each candidate is
+              // evaluated on its own resulting FEN; missing cloud
+              // evals (404) are skipped, never misattributed.
+              const evaluations = await evaluateExplorerCandidates(
+                probe.fen(),
+                explorer.moves.slice(0, 5).map((m) => m.san),
+                mover,
+              );
               if (evaluations.length > 0) {
                 const trap = detectTrapInPosition({
                   explorer,

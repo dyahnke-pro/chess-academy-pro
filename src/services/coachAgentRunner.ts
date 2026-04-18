@@ -28,7 +28,7 @@ import {
   type ParsedAction,
 } from './coachActionDispatcher';
 import { AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES } from './coachPrompts';
-import { extractAndRememberNotes } from './coachMemoryService';
+import { extractAndRememberNotes, buildCoachMemoryBlock } from './coachMemoryService';
 import { buildGroundingBlock } from './coachContextEnricher';
 import { useCoachSessionStore } from '../stores/coachSessionStore';
 import { useAppStore } from '../stores/appStore';
@@ -156,7 +156,15 @@ export async function runAgentTurn(
     currentFen: lastBoardFen,
   });
 
+  // Persistent cross-session memory. The commentary path already
+  // injects this via coachMoveCommentary; the chat path needs its
+  // own explicit injection so notes like "student blunders
+  // back-rank when short on time" get front-and-centre framing
+  // rather than hiding in the snapshot.
+  const memoryBlock = await buildCoachMemoryBlock();
+
   const additions = [AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES, snapshotText];
+  if (memoryBlock) additions.push(memoryBlock);
   if (groundingBlock) additions.push(groundingBlock);
   if (extraSystemPrompt) additions.push(extraSystemPrompt);
   const systemAddition = additions.join('\n\n');
