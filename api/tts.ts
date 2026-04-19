@@ -5,14 +5,34 @@ const ALLOWED_ORIGINS = [
   'https://chess-academy-pro.vercel.app',
 ];
 
+/**
+ * Build CORS headers — reject unrecognised origins instead of
+ * falling back to `*`. The prior wildcard fallback let any site
+ * trigger TTS on a user's behalf (cost-amplification risk), and the
+ * security audit flagged it as a launch blocker. When the origin
+ * isn't on the allowlist we omit the ACAO header entirely and the
+ * caller returns 403 so the request never runs Polly.
+ */
 function getCorsHeaders(req?: Request): Record<string, string> {
   const origin = req?.headers.get('Origin') ?? '';
-  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : '*';
-  return {
-    'Access-Control-Allow-Origin': allowedOrigin,
+  const base: Record<string, string> = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    base['Access-Control-Allow-Origin'] = origin;
+    base['Vary'] = 'Origin';
+  }
+  return base;
+}
+
+/** True when the request's Origin is on the allowlist (or missing —
+ *  server-to-server calls without an Origin header are allowed so
+ *  health checks / `curl -s` sanity probes still work). */
+function isOriginAllowed(req?: Request): boolean {
+  const origin = req?.headers.get('Origin');
+  if (!origin) return true;
+  return ALLOWED_ORIGINS.includes(origin);
 }
 
 interface VoiceConfig {
@@ -160,6 +180,13 @@ export default async function handler(req: Request): Promise<Response> {
 
     if (req.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: cors });
+    }
+
+    // Hard origin check — bail before calling Polly if the request
+    // isn't coming from one of our known origins. Protects the AWS
+    // budget from cost-amplification attacks via random sites.
+    if (!isOriginAllowed(req)) {
+      return new Response('Origin not allowed', { status: 403, headers: cors });
     }
 
     if (req.method === 'GET') {

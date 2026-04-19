@@ -301,6 +301,43 @@ function handleNarrate(
   return { status: 'ok', message: `Narrated: ${truncate(text, 80)}` };
 }
 
+/** Paths the LLM is allowed to route the student to via a navigate
+ *  action. Prompt-injection hardening from the security audit: a
+ *  crafted "[[ACTION:navigate /settings]]" should not be able to
+ *  drop the student into their API-key settings, nor should it be
+ *  able to escape to arbitrary external URLs.
+ *
+ *  Matching rule: each prefix matches itself OR itself + "/...".
+ *  Leaf paths (e.g. "/coach") match "/coach" and "/coach/play".
+ *  Settings / onboarding / legal are deliberately excluded — the
+ *  student reaches those via UI affordances only.
+ */
+const NAVIGATE_ALLOWED_PREFIXES: readonly string[] = [
+  '/',
+  '/coach',
+  '/openings',
+  '/tactics',
+  '/weaknesses',
+  '/games',
+  '/puzzles',
+  '/dashboard',
+  '/play',
+];
+
+function isNavigatePathAllowed(path: string): boolean {
+  // Reject anything that looks like an absolute URL or a protocol
+  // scheme — only in-app routing is permitted.
+  if (/^[a-z]+:/i.test(path)) return false;
+  if (path.startsWith('//')) return false;
+  // Normalise the prefix we compare against (everything up to the
+  // first '?' or '#'), and strip a trailing slash so "/coach/" and
+  // "/coach" match the same way.
+  const base = path.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
+  return NAVIGATE_ALLOWED_PREFIXES.some(
+    (p) => base === p || base.startsWith(p === '/' ? '/' : `${p}/`),
+  );
+}
+
 function handleNavigate(
   args: Record<string, unknown>,
   ctx: ActionContext,
@@ -311,6 +348,12 @@ function handleNavigate(
   }
   if (!path.startsWith('/')) {
     return { status: 'error', message: 'navigate path must be relative (start with "/")' };
+  }
+  if (!isNavigatePathAllowed(path)) {
+    return {
+      status: 'error',
+      message: `navigate path not allowed: ${path} (settings / onboarding / external URLs blocked)`,
+    };
   }
   ctx.navigate(path);
   return { status: 'ok', message: `Navigated to ${path}` };
