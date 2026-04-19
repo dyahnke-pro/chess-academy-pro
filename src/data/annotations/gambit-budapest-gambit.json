@@ -10,7 +10,7 @@
     },
     {
       "san": "c4",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: c4 is a known theory move in this line."
     },
     {
       "san": "e5",
@@ -33,19 +33,19 @@
     },
     {
       "san": "Bf4",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: Bf4 is a known theory move in this line."
     },
     {
       "san": "Nc6",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: Nc6 is a known theory move in this line."
     },
     {
       "san": "Nf3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: Nf3 is a known theory move in this line."
     },
     {
       "san": "Bb4+",
-      "annotation": "",
+      "annotation": "Continuing Gambit Budapest Gambit: Bb4+ is a known theory move in this line.",
       "arrows": [
         {
           "from": "f8",
@@ -56,15 +56,15 @@
     },
     {
       "san": "Nbd2",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: Nbd2 is a known theory move in this line."
     },
     {
       "san": "Qe7",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: Qe7 is a known theory move in this line."
     },
     {
       "san": "a3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: a3 is a known theory move in this line."
     },
     {
       "san": "Ngxe5",
@@ -101,7 +101,7 @@
     },
     {
       "san": "e3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: e3 is a known theory move in this line."
     },
     {
       "san": "Bxd2+",
@@ -116,7 +116,7 @@
     },
     {
       "san": "Qxd2",
-      "annotation": "",
+      "annotation": "Continuing Gambit Budapest Gambit: Qxd2 is a known theory move in this line.",
       "arrows": [
         {
           "from": "d1",
@@ -127,31 +127,31 @@
     },
     {
       "san": "d6",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: d6 is a known theory move in this line."
     },
     {
       "san": "Be2",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: Be2 is a known theory move in this line."
     },
     {
       "san": "O-O",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: O-O is a known theory move in this line."
     },
     {
       "san": "O-O",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: O-O is a known theory move in this line."
     },
     {
       "san": "Bf5",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: Bf5 is a known theory move in this line."
     },
     {
       "san": "b4",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: b4 is a known theory move in this line."
     },
     {
       "san": "a5",
-      "annotation": ""
+      "annotation": "Continuing Gambit Budapest Gambit: a5 is a known theory move in this line."
     },
     {
       "san": "Rab1",
@@ -2805,5 +2805,6 @@
         }
       ]
     }
-  ]
+  ],
+  "openingId": "gambit-budapest-gambit"
 }

@@ -25,7 +25,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: Nf3 is a known theory move in this line."
     },
     {
       "san": "g5",
@@ -33,7 +33,7 @@
     },
     {
       "san": "Bc4",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: Bc4 is a known theory move in this line."
     },
     {
       "san": "Bg7",
@@ -49,11 +49,11 @@
     },
     {
       "san": "Ne5",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: Ne5 is a known theory move in this line."
     },
     {
       "san": "Qe7",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: Qe7 is a known theory move in this line."
     },
     {
       "san": "d4",
@@ -61,15 +61,15 @@
     },
     {
       "san": "d6",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: d6 is a known theory move in this line."
     },
     {
       "san": "Nd3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: Nd3 is a known theory move in this line."
     },
     {
       "san": "Nf6",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: Nf6 is a known theory move in this line."
     },
     {
       "san": "Nxf4",
@@ -95,7 +95,7 @@
     },
     {
       "san": "O-O",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: O-O is a known theory move in this line."
     },
     {
       "san": "d5",
@@ -107,7 +107,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: Nc6 is a known theory move in this line."
     },
     {
       "san": "Re1",
@@ -115,11 +115,11 @@
     },
     {
       "san": "Bf5",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: Bf5 is a known theory move in this line."
     },
     {
       "san": "Nc3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Kings Gambit: Nc3 is a known theory move in this line."
     },
     {
       "san": "Nxc3",
@@ -156,7 +156,7 @@
     },
     {
       "san": "Ba3",
-      "annotation": "",
+      "annotation": "Continuing Gambit Kings Gambit: Ba3 is a known theory move in this line.",
       "arrows": [
         {
           "from": "c1",
@@ -2382,5 +2382,6 @@
         }
       ]
     }
-  ]
+  ],
+  "openingId": "gambit-kings-gambit"
 }

@@ -10,11 +10,11 @@
     },
     {
       "san": "c4",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: c4 is a known theory move in this line."
     },
     {
       "san": "c5",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: c5 is a known theory move in this line."
     },
     {
       "san": "d5",
@@ -22,7 +22,7 @@
     },
     {
       "san": "b5",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: b5 is a known theory move in this line."
     },
     {
       "san": "cxb5",
@@ -37,7 +37,7 @@
     },
     {
       "san": "a6",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: a6 is a known theory move in this line."
     },
     {
       "san": "bxa6",
@@ -52,7 +52,7 @@
     },
     {
       "san": "Bxa6",
-      "annotation": "",
+      "annotation": "Continuing Gambit Benko Gambit: Bxa6 is a known theory move in this line.",
       "arrows": [
         {
           "from": "c8",
@@ -63,11 +63,11 @@
     },
     {
       "san": "Nc3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: Nc3 is a known theory move in this line."
     },
     {
       "san": "d6",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: d6 is a known theory move in this line."
     },
     {
       "san": "e4",
@@ -113,15 +113,15 @@
     },
     {
       "san": "O-O",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: O-O is a known theory move in this line."
     },
     {
       "san": "Nf3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: Nf3 is a known theory move in this line."
     },
     {
       "san": "Nbd7",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: Nbd7 is a known theory move in this line."
     },
     {
       "san": "Re1",
@@ -129,11 +129,11 @@
     },
     {
       "san": "Qa5",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: Qa5 is a known theory move in this line."
     },
     {
       "san": "Qc2",
-      "annotation": ""
+      "annotation": "Continuing Gambit Benko Gambit: Qc2 is a known theory move in this line."
     },
     {
       "san": "Rfb8",
@@ -153,7 +153,7 @@
     },
     {
       "san": "Nc4",
-      "annotation": "",
+      "annotation": "Continuing Gambit Benko Gambit: Nc4 is a known theory move in this line.",
       "arrows": [
         {
           "from": "b6",
@@ -3465,5 +3465,6 @@
         }
       ]
     }
-  ]
+  ],
+  "openingId": "gambit-benko-gambit"
 }
