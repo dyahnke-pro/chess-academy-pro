@@ -1,4 +1,5 @@
 import type { StockfishAnalysis, AnalysisLine } from '../types';
+import { MATE_EVAL_VALUE } from './engineConstants';
 
 type StockfishMessageHandler = (analysis: StockfishAnalysis) => void;
 type StockfishStatus = 'idle' | 'loading' | 'ready' | 'error';
@@ -274,7 +275,7 @@ class StockfishEngine {
 
         const line: AnalysisLine = {
           rank,
-          evaluation: scoreType === 'cp' ? scoreValue : (scoreValue > 0 ? 30000 : -30000),
+          evaluation: scoreType === 'cp' ? scoreValue : (scoreValue > 0 ? MATE_EVAL_VALUE : -MATE_EVAL_VALUE),
           moves,
           mate: scoreType === 'mate' ? scoreValue : null,
         };

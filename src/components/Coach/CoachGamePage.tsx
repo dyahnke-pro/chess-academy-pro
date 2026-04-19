@@ -134,14 +134,7 @@ import type {
   ChatMessage,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
-
-/** Mate eval threshold — Stockfish encodes checkmate as ±30000.
- *  Any absolute eval ≥ this value is treated as a forced mate. */
-const MATE_EVAL_THRESHOLD = 20000;
-
-function isMateEval(evaluation: number): boolean {
-  return Math.abs(evaluation) >= MATE_EVAL_THRESHOLD;
-}
+import { isMateEval } from '../../services/engineConstants';
 
 function classifyMove(
   preMoveEval: number | null,
