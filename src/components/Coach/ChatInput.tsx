@@ -133,7 +133,11 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
       className="flex items-end gap-2 p-3 border-t border-theme-border bg-theme-bg"
       data-testid="chat-input"
     >
+      <label htmlFor="coach-chat-textarea" className="sr-only">
+        Message to coach
+      </label>
       <textarea
+        id="coach-chat-textarea"
         ref={textareaRef}
         value={text}
         onChange={handleInput}
@@ -142,6 +146,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
         disabled={disabled}
         rows={1}
         enterKeyHint="send"
+        aria-label="Message to coach"
         className="flex-1 resize-none rounded-xl border border-theme-border bg-theme-surface px-4 py-2.5 text-sm text-theme-text placeholder:text-theme-text-muted focus:outline-none focus:border-theme-accent disabled:opacity-50 min-h-[40px] max-h-[200px]"
         data-testid="chat-text-input"
       />

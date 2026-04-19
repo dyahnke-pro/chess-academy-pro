@@ -338,7 +338,13 @@ export function CoachChatPage(): JSX.Element {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y p-4 space-y-4">
+      <div
+        className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y p-4 space-y-4"
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions"
+        aria-label="Coach chat messages"
+      >
         {chatMessages.length === 0 && !isStreaming && (
           <motion.div
             className="flex flex-col items-center gap-5 py-8"

@@ -65,6 +65,18 @@ export function GlobalCoachDrawer(): JSX.Element | null {
     setMinimized(false);
   }, [setOpen]);
 
+  // Escape key closes the drawer when it's open. Keyboard-only users
+  // (accessibility audit) had no way to dismiss the drawer without
+  // mouse-targeting the close button.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent): void => {
+      if (e.key === 'Escape') handleClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, handleClose]);
+
   const handleClear = useCallback(() => {
     exitPractice();
     setGlobalPractice(null);
