@@ -1,9 +1,29 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { db } from '../db/schema';
 import type {
   UserProfile, SessionRecord, AppTheme,
   CoachGameState, ChatMessage, WeaknessProfile,
 } from '../types';
+
+/**
+ * Write coachVoiceOn back to the profile's Dexie record when the
+ * student toggles it. Fire-and-forget — we don't want to block the
+ * UI update on a DB write, and a failure here is non-fatal (the
+ * value stays correct in-memory for the session and next save will
+ * sync it). No-op when there's no active profile yet (cold start
+ * before hydration).
+ */
+function persistCoachVoiceOn(profile: UserProfile | null, on: boolean): void {
+  if (!profile) return;
+  // Mirror the in-memory flip so cached reads stay correct.
+  profile.preferences.coachVoiceOn = on;
+  void db.profiles.update(profile.id, {
+    preferences: { ...profile.preferences, coachVoiceOn: on },
+  }).catch((err: unknown) => {
+    console.warn('[appStore] persistCoachVoiceOn failed:', err);
+  });
+}
 
 interface AppState {
   // Auth / Profile
@@ -149,7 +169,17 @@ export const useAppStore = create<AppState & AppActions>()(
   subscribeWithSelector((set) => ({
     ...DEFAULT_STATE,
 
-    setActiveProfile: (profile) => set({ activeProfile: profile }),
+    setActiveProfile: (profile) => {
+      // Hydrate coachVoiceOn from the profile's persisted preference
+      // when available. Previously coachVoiceOn reset to the in-memory
+      // default on every reload, silently overriding the user's last
+      // explicit choice — same silent-override pattern as the tempo
+      // bug. Falls back to the current default (true) when the field
+      // isn't present on the profile yet.
+      const persisted = profile?.preferences.coachVoiceOn;
+      const nextVoiceOn = typeof persisted === 'boolean' ? persisted : true;
+      set({ activeProfile: profile, coachVoiceOn: nextVoiceOn });
+    },
 
     setLoading: (loading) => set({ isLoading: loading }),
 
@@ -189,9 +219,16 @@ export const useAppStore = create<AppState & AppActions>()(
 
     setCoachBubbleText: (text) => set({ coachBubbleText: text }),
 
-    toggleCoachVoice: () => set((state) => ({ coachVoiceOn: !state.coachVoiceOn })),
+    toggleCoachVoice: () => set((state) => {
+      const next = !state.coachVoiceOn;
+      persistCoachVoiceOn(state.activeProfile, next);
+      return { coachVoiceOn: next };
+    }),
 
-    setCoachVoiceOn: (on) => set({ coachVoiceOn: on }),
+    setCoachVoiceOn: (on) => set((state) => {
+      persistCoachVoiceOn(state.activeProfile, on);
+      return { coachVoiceOn: on };
+    }),
 
     toggleCoachTips: () => set((state) => ({ coachTipsOn: !state.coachTipsOn })),
 

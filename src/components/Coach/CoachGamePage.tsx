@@ -35,6 +35,8 @@ import {
   loadCoachPlayState,
   saveCoachPlayState,
   clearCoachPlayState,
+  loadCoachPlayChat,
+  saveCoachPlayChat,
 } from '../../services/coachPlayPersistence';
 import { fetchLichessExplorer, fetchCloudEval } from '../../services/lichessExplorerService';
 import { detectTrapInPosition, formatTrapForPrompt, type MoveEvaluation } from '../../services/openingTrapDetector';
@@ -113,6 +115,7 @@ import type {
   CoachDifficulty, MoveClassification, MoveAnnotation,
   StockfishAnalysis, GameAnalysisSummary, GameRecord, AnalysisLine,
   GameResult, BoardArrow, BoardHighlight, BoardAnnotationCommand,
+  ChatMessage,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
@@ -544,6 +547,21 @@ export function CoachGamePage(): JSX.Element {
 
   // Post-game practice bridge prompt
   const [pendingChatPrompt, setPendingChatPrompt] = useState<string | null>(null);
+
+  // In-game chat transcript, hydrated from Dexie on mount so the
+  // conversation survives reload / navigation. Previously lost
+  // because GameChatPanel's internal useState was the only home for
+  // messages — the component exposes initialMessages + onMessagesUpdate
+  // hooks but CoachGamePage wasn't wiring them.
+  const [initialChatMessages, setInitialChatMessages] = useState<ChatMessage[] | null>(null);
+  useEffect(() => {
+    void loadCoachPlayChat().then((msgs) => setInitialChatMessages(msgs));
+  }, []);
+  const handleChatMessagesUpdate = useCallback((messages: ChatMessage[]) => {
+    // Persist every transcript change. saveCoachPlayChat bounds the
+    // array at 200 messages internally and swallows DB errors.
+    void saveCoachPlayChat(messages);
+  }, []);
 
   // Settings-driven analysis toggles (user can override in-game)
   const { settings } = useSettings();
@@ -2683,6 +2701,8 @@ export function CoachGamePage(): JSX.Element {
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}
+              initialMessages={initialChatMessages ?? undefined}
+              onMessagesUpdate={handleChatMessagesUpdate}
               className="h-full"
             />
           </MobileChatDrawer>

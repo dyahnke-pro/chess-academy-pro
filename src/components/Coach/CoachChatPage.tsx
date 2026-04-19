@@ -97,7 +97,14 @@ export function CoachChatPage(): JSX.Element {
   }, []);
 
   const handleSend = useCallback(async (text: string, modality: 'voice' | 'text' = 'text') => {
-    if (!activeProfile || isStreaming) return;
+    // Guard: if the persisted session hasn't hydrated yet, refuse to
+    // send so old messages don't suddenly appear MID-stream and race
+    // with the new response. Dexie reads are fast locally but on a
+    // cold start the hydrate() call is unawaited (fire-and-forget in
+    // the mount effect), so a keystroke race is possible. Dropping
+    // the send is safer than corrupting the transcript ordering —
+    // user can retry after the input re-enables in the next tick.
+    if (!activeProfile || isStreaming || !hydrated) return;
 
     // Deterministic narration toggle — flips voice on/off reliably
     // without depending on LLM prompt-following. When enabling from
@@ -260,7 +267,7 @@ export function CoachChatPage(): JSX.Element {
       setIsStreaming(false);
       setStreamingContent('');
     }
-  }, [activeProfile, chatMessages, isStreaming, appendMessage, flushSpeechBuffer, analysisContext, navigate]);
+  }, [activeProfile, hydrated, chatMessages, isStreaming, appendMessage, flushSpeechBuffer, analysisContext, navigate]);
 
   // Auto-send a query carried in the URL (e.g., from the Game Insights
   // search bar navigating here with ?q=...). Runs once per distinct

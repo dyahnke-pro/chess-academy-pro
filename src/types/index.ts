@@ -453,6 +453,11 @@ export interface UserPreferences {
   showEngineLines: boolean;
   soundEnabled: boolean;
   voiceEnabled: boolean;
+  /** Coach-specific voice narration toggle, persisted separately
+   *  from `voiceEnabled` so the user can silence the coach without
+   *  disabling all in-app audio. Defaults to true (trainer-mode
+   *  default) and syncs with appStore.coachVoiceOn. */
+  coachVoiceOn?: boolean;
   dailySessionMinutes: number;
   aiProvider: AiProvider;
   apiKeyEncrypted: string | null;
