@@ -17,8 +17,16 @@
  * truth; everything else is session configuration.
  */
 import { db } from '../db/schema';
+import type { ChatMessage } from '../types';
 
 const META_KEY = 'coachPlayActive.v1';
+/** Separate key for the per-game chat transcript so corruption here
+ *  can't break the main resume flow. Paired with META_KEY by caller
+ *  (GameChatPanel wiring in CoachGamePage). */
+const CHAT_META_KEY = 'coachPlayChat.v1';
+/** Cap on persisted chat messages — keeps DB writes cheap even on
+ *  long games where the student asks many questions. */
+const CHAT_MAX_MESSAGES = 200;
 
 /** Drop saved state older than this on load — if you haven't touched
  *  the tab in a week, you probably meant to start fresh. */
@@ -78,12 +86,45 @@ export async function loadCoachPlayState(): Promise<CoachPlayActiveState | null>
 
 /**
  * Drop the saved state. Called on game-over, explicit restart, or
- * stale-load above.
+ * stale-load above. Also drops the paired chat transcript so the
+ * next game starts fresh.
  */
 export async function clearCoachPlayState(): Promise<void> {
   try {
     await db.table('meta').delete(META_KEY);
+    await db.table('meta').delete(CHAT_META_KEY);
   } catch {
     /* no-op */
+  }
+}
+
+/**
+ * Persist the GameChatPanel chat transcript so it survives reload.
+ * Capped at CHAT_MAX_MESSAGES (newest kept) to bound DB writes and
+ * prevent runaway growth on long games. Swallows errors — if
+ * IndexedDB is unavailable the transcript just won't resume.
+ */
+export async function saveCoachPlayChat(messages: ChatMessage[]): Promise<void> {
+  try {
+    const trimmed = messages.slice(-CHAT_MAX_MESSAGES);
+    await db.table('meta').put({ key: CHAT_META_KEY, value: trimmed });
+  } catch {
+    /* no-op */
+  }
+}
+
+/**
+ * Load the saved chat transcript for the active game, or [] when
+ * no transcript is saved. Returns [] (not null) so callers can
+ * unconditionally spread into initial state.
+ */
+export async function loadCoachPlayChat(): Promise<ChatMessage[]> {
+  try {
+    const record = await db.table('meta').get(CHAT_META_KEY);
+    if (!record) return [];
+    const value = record.value as ChatMessage[] | undefined;
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
   }
 }
