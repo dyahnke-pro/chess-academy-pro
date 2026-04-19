@@ -182,19 +182,10 @@ async function getLlmCommentary(
     .map((m) => `${m.role === 'user' ? 'Student' : 'Coach'}: ${m.content}`)
     .join('\n');
 
-  // Density is a DIRECTIONAL hint — no hard caps. The model uses its
-  // own judgement for length. "Fast" pushes toward brevity (don't
-  // lecture between moves), "slow" goes deeper, "unlimited" unlocks
-  // the full personal-trainer mode. The only floor is "don't output
-  // empty/filler text."
-  const densityLine =
-    verbosity === 'fast'
-      ? 'Narration density: TERSE. Keep it tight between moves so the student can keep playing — prioritize the single most important idea. No preamble.'
-      : verbosity === 'slow'
-        ? 'Narration density: IN-DEPTH. Go as long as the teaching needs — no sentence cap. Cover what changed structurally, the plans both sides have, what the student should watch for next, how this connects to their known weaknesses, and a concrete follow-up question. Speak like a trainer sitting next to them — natural pacing, not a lecture, not a one-liner.'
-        : verbosity === 'unlimited'
-          ? 'Narration density: UNLIMITED — full personal-trainer mode. No cap on length. Walk through the move the way a coach at the board would: what changed, both sides\' plans, alternatives considered, how this connects to the student\'s past games and known weaknesses, traps in this line, and what to watch for on the next few moves. Ask a concrete open question at the end. Still no filler — every sentence earns its place.'
-          : 'Narration density: NATURAL. As long or short as the moment deserves — no cap. One crisp idea when the move is routine, a fuller explanation when something critical just happened.';
+  // Density directive is NOT injected here anymore — it comes from
+  // VERBOSITY_INSTRUCTIONS inside getCoachChatResponse, using the
+  // verbosity we pass through below. Keeping only one source of
+  // truth prevents the two copies from drifting out of sync.
 
   const groundedBlock = groundedNotes.filter(Boolean).join('\n\n');
 
@@ -227,16 +218,19 @@ async function getLlmCommentary(
     `Eval swing for the mover (pawns): ${swingPawns}.`,
     `Swing classification: ${verdict}.`,
     bestReplySan ? `Stockfish's best reply from this position: ${bestReplySan}.` : '',
-    densityLine,
     'Give IN-DEPTH analysis per the rules. No filler, no generic praise. Cite Lichess for opening claims and Stockfish for position claims — no memory-based "the main trap is..." assertions.',
   ].filter(Boolean).join('\n');
 
+  // Pass verbosity through so the system prompt's VERBOSITY_INSTRUCTIONS
+  // matches the caller's intent — avoids a redundant DB fetch and
+  // keeps length-directive behaviour deterministic on this path.
   return getCoachChatResponse(
     [{ role: 'user', content: user }],
     system,
     undefined,
     'interactive_review',
     420,
+    verbosity,
   );
 }
 

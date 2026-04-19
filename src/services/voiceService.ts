@@ -11,9 +11,13 @@ import { db } from '../db/schema';
 const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
 const isCapacitor = typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
 
-export function getTtsUrl(text: string, voice: string): string {
+export function getTtsUrl(text: string, voice: string, useSsml = true): string {
   const base = isCapacitor ? VERCEL_ORIGIN : '';
-  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}`;
+  // SSML default-on so Polly gets engine-aware structure (paragraph
+  // on generative voices, prosody slowdown on neural). Short clips
+  // / warmups opt out to avoid empty-SSML edge cases.
+  const ssmlParam = useSsml ? '&ssml=1' : '';
+  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}`;
 }
 
 /** Available Amazon Polly voices (served via /api/tts endpoint) */
@@ -178,7 +182,10 @@ class VoiceService {
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 3000);
-        const url = getTtsUrl('.', prefs.pollyVoice);
+        // Probe uses plain text (SSML=false) — no need to pay the
+        // SSML parse cost for a one-char warmup, and it avoids any
+        // chance of empty-SSML edge cases on Polly.
+        const url = getTtsUrl('.', prefs.pollyVoice, false);
         const res = await fetch(url, { signal: controller.signal });
         clearTimeout(timeout);
 

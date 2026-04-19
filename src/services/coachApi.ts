@@ -350,11 +350,16 @@ export async function getCoachChatResponse(
   onStream?: (chunk: string) => void,
   task: CoachTask = 'chat_response',
   maxTokens: number = 1024,
+  /** Optional verbosity override. When provided, bypasses the DB
+   *  fetch so callers that already know the student's verbosity
+   *  (e.g. per-move commentary) can avoid a redundant lookup and
+   *  guarantee a single source of truth for the length directive. */
+  verbosityOverride?: CoachVerbosity,
 ): Promise<string> {
   const config = await getProviderConfig();
   if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
 
-  const verbosity = await getCoachVerbosity();
+  const verbosity = verbosityOverride ?? await getCoachVerbosity();
   const systemPrompt = buildSystemPromptWithVerbosity(SYSTEM_PROMPT, verbosity, systemPromptAddition);
 
   try {

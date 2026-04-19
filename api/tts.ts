@@ -38,7 +38,40 @@ const ALLOWED_VOICES: Record<string, VoiceConfig> = {
 
 const MAX_TEXT_LENGTH = 3000;
 
-async function synthesize(text: string, voice: string, req: Request): Promise<Response> {
+/** Escape the five XML-significant characters so plain text is safe
+ *  inside an SSML document. */
+function escapeForSsml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+/**
+ * Wrap plain coaching text in engine-appropriate SSML for natural
+ * inflection. Polly tag support differs by engine:
+ *   - GENERATIVE voices (Ruth / Matthew / Danielle / Gregory) only
+ *     support structural tags (<speak>, <p>, <s>, <lang>, <mark>,
+ *     <sub>, <w>). They interpret punctuation, pacing and emotion
+ *     from context on their own, so we only add paragraph structure
+ *     to help the engine parse it cleanly.
+ *   - NEURAL voices support prosody / break / emphasis. A mild
+ *     `<prosody rate="95%">` slowdown makes delivery feel warmer and
+ *     more coach-like.
+ *
+ * Plain text is always safe to fall back to — SSML is opt-in.
+ */
+function buildSsmlForEngine(text: string, engine: string): string {
+  const escaped = escapeForSsml(text);
+  if (engine === 'generative') {
+    return `<speak><p>${escaped}</p></speak>`;
+  }
+  return `<speak><prosody rate="95%"><p>${escaped}</p></prosody></speak>`;
+}
+
+async function synthesize(text: string, voice: string, req: Request, useSsml: boolean): Promise<Response> {
   const cors = getCorsHeaders(req);
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID_POLLY;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY_POLLY;
@@ -74,9 +107,12 @@ async function synthesize(text: string, voice: string, req: Request): Promise<Re
       credentials: { accessKeyId, secretAccessKey },
     });
 
+    const synthText = useSsml ? buildSsmlForEngine(text, voiceConfig.engine) : text;
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import loses type info
     const command = new SynthesizeSpeechCommand({
-      Text: text,
+      Text: synthText,
+      TextType: useSsml ? 'ssml' : 'text',
       OutputFormat: 'mp3',
       VoiceId: voiceConfig.voiceId,
       Engine: voiceConfig.engine,
@@ -127,6 +163,9 @@ export default async function handler(req: Request): Promise<Response> {
       const url = new URL(req.url);
       const text = url.searchParams.get('text')?.trim() ?? '';
       const voice = url.searchParams.get('voice') ?? 'ruth';
+      // `ssml=1` opts in to SSML wrapping. Default off so callers
+      // that don't set the flag behave exactly like before.
+      const useSsml = url.searchParams.get('ssml') === '1';
 
       // Diagnostic mode: /api/tts?diag=1 returns env var status without calling Polly
       if (url.searchParams.get('diag') === '1') {
@@ -139,19 +178,20 @@ export default async function handler(req: Request): Promise<Response> {
         );
       }
 
-      return synthesize(text, voice, req);
+      return synthesize(text, voice, req, useSsml);
     }
 
     if (req.method === 'POST') {
-      let body: { text?: string; voice?: string };
+      let body: { text?: string; voice?: string; ssml?: boolean };
       try {
-        body = await req.json() as { text?: string; voice?: string };
+        body = await req.json() as { text?: string; voice?: string; ssml?: boolean };
       } catch {
         return new Response('Invalid JSON', { status: 400, headers: cors });
       }
       const text = body.text?.trim() ?? '';
       const voice = body.voice ?? 'ruth';
-      return synthesize(text, voice, req);
+      const useSsml = body.ssml === true;
+      return synthesize(text, voice, req, useSsml);
     }
 
     return new Response('Method not allowed', { status: 405, headers: cors });
