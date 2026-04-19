@@ -33,6 +33,16 @@ realistic per-user monthly cost:
 remove the corresponding reminder when the user confirms signup,
 shares keys, buys the domain, or locks in the new pricing.
 
+**iOS AVAudioSession native override pending.** Required for Polly
+TTS to play reliably on iOS PWA when a Bluetooth headset is
+connected or when the user has the ringer switch on. The default
+Capacitor/WKWebView audio session category silences Web Audio in
+both cases. Fix is a native Swift patch in `ios/App/App/AppDelegate.swift`
+(or a Capacitor plugin) that sets:
+`AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.mixWithOthers, .allowBluetooth, .defaultToSpeaker])`
+on app launch. ~1-2 hours of Swift work, only relevant when we build
+for TestFlight. Track, don't block shipping to Vercel PWA.
+
 ## Project Overview
 
 Chess Academy Pro is an AI-powered chess training PWA built with React + TypeScript + Vite. It wraps as a native iOS app via Capacitor and is distributed through TestFlight. The app features an LLM-powered chess coach (Claude API), Stockfish WASM analysis, spaced repetition puzzles, opening training, and adaptive difficulty.

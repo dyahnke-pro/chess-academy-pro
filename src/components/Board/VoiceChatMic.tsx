@@ -10,6 +10,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildStudentStateBlock } from '../../services/studentStateBlock';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from '../../services/coachMemoryService';
 import { db } from '../../db/schema';
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
 /** Dexie meta key for the one-time "voice needs volume" banner. Set
  *  to '1' once shown so we don't repeat on every mic tap. */
@@ -245,6 +246,9 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
   const [interimTranscript, setInterimTranscript] = useState('');
   const listeningRef = useRef(false);
   const messagesRef = useRef<ChatMessage[]>([]);
+  // Gate the pulsing mic animation on the user's motion preference —
+  // accessibility requires respecting this system setting.
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     listeningRef.current = listening;
@@ -613,8 +617,8 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
             ? 'bg-red-500/15 text-red-500 border border-red-500'
             : 'bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text'
         }`}
-        animate={listening ? { scale: [1, 1.05, 1] } : { scale: 1 }}
-        transition={listening ? { duration: 1.2, repeat: Infinity } : {}}
+        animate={listening && !prefersReducedMotion ? { scale: [1, 1.05, 1] } : { scale: 1 }}
+        transition={listening && !prefersReducedMotion ? { duration: 1.2, repeat: Infinity } : {}}
         title={
           listening
             ? 'Stop listening'
