@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { voiceInputService } from './voiceInputService';
+import { voiceInputService, shouldDropAsNoise } from './voiceInputService';
 
 describe('voiceInputService', () => {
   beforeEach(() => {
@@ -293,3 +293,63 @@ describe('voiceInputService', () => {
     });
   });
 });
+
+// ─────────────────────────────────────────────────────────────────
+// Noise-filter regression tests (PR #272 ANSWER_WORD_SET fix).
+//
+// Before PR #272, "yes" / "no" / "yeah" / "nope" were in NOISE_WORD_SET
+// and got silently dropped as noise. When the coach asked "want to
+// drill that?" the student's "yes" was swallowed — the whole trainer-
+// feel answer flow broke. These tests lock in the behaviour so any
+// future rewording of the sets can't regress the answer flow.
+// ─────────────────────────────────────────────────────────────────
+
+describe('shouldDropAsNoise', () => {
+  describe('answer words pass through (regression — PR #272)', () => {
+    const answers = ['yes', 'no', 'yeah', 'nope', 'sure', 'hint', 'answer', 'skip'];
+    for (const word of answers) {
+      it(`lets "${word}" through as a legitimate single-word answer`, () => {
+        expect(shouldDropAsNoise(word, 0.9)).toBe(false);
+      });
+    }
+  });
+
+  describe('greetings pass through', () => {
+    const greetings = ['hi', 'hello', 'hey', 'sup'];
+    for (const word of greetings) {
+      it(`lets "${word}" through as a greeting`, () => {
+        expect(shouldDropAsNoise(word, 0.9)).toBe(false);
+      });
+    }
+  });
+
+  describe('pure noise words drop', () => {
+    const noise = ['um', 'uh', 'the', 'ok', 'okay', 'mm', 'hmm'];
+    for (const word of noise) {
+      it(`drops "${word}" as filler`, () => {
+        expect(shouldDropAsNoise(word, 0.9)).toBe(true);
+      });
+    }
+  });
+
+  describe('length + confidence signals', () => {
+    it('drops empty / <2-char strings unconditionally', () => {
+      expect(shouldDropAsNoise('', 0.9)).toBe(true);
+      expect(shouldDropAsNoise(' ', 0.9)).toBe(true);
+      expect(shouldDropAsNoise('a', 0.9)).toBe(true);
+    });
+
+    it('drops short low-confidence utterances (<3 words below 0.55 confidence)', () => {
+      expect(shouldDropAsNoise('maybe later', 0.3)).toBe(true);
+    });
+
+    it('keeps short HIGH-confidence utterances', () => {
+      expect(shouldDropAsNoise('play black', 0.9)).toBe(false);
+    });
+
+    it('keeps longer utterances even at low confidence (ambiguous speech better handled by LLM)', () => {
+      expect(shouldDropAsNoise('what should i do here in this position', 0.3)).toBe(false);
+    });
+  });
+});
+
