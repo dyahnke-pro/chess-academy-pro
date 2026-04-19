@@ -116,6 +116,25 @@ function resolveAnnotationId(openingId: string): string {
     if (baseId && Object.hasOwn(ANNOTATION_MODULES, baseId)) return baseId;
   }
 
+  // dataLoader builds opening IDs as slugify(`${eco}-${name}`) — e.g.
+  // "c50-italian-game". Annotation files are keyed by the name-only
+  // slug — "italian-game". Strip a leading ECO prefix (letter + 2
+  // digits + dash) and retry. Without this, the 3641 Lichess-ECO
+  // openings couldn't reach the 1916 annotation files (the audit's
+  // #1 unreachable-content finding — generated but never rendered).
+  const ecoStripped = /^[a-e]\d{2}-(.+)$/.exec(openingId);
+  if (ecoStripped) {
+    const bare = ecoStripped[1];
+    if (Object.hasOwn(ANNOTATION_MODULES, bare)) return bare;
+    // Try American → British spelling as a second fallback (the
+    // annotation files use British "-defence" but Lichess uses
+    // American "-defense").
+    const britishised = bare.replace(/-defense$/, '-defence');
+    if (britishised !== bare && Object.hasOwn(ANNOTATION_MODULES, britishised)) {
+      return britishised;
+    }
+  }
+
   return openingId;
 }
 
