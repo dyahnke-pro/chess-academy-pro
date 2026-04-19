@@ -112,7 +112,10 @@ export function VoiceSettingsPanel(): JSX.Element {
     if (pollyPreviewPlaying) return;
     setPollyPreviewPlaying(true);
 
-    const previewText = 'Great move! You found the key idea in this position.';
+    // Defense-in-depth: route the Polly preview through sanitizeForTTS
+    // just like every live-coach path. Current string has no chess
+    // shorthand, but future edits won't leak "Nc3" into spoken audio.
+    const previewText = sanitizeForTTS('Great move! You found the key idea in this position.');
     const url = getTtsUrl(previewText, pollyVoice);
     const audio = new Audio(url);
 

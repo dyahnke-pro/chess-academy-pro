@@ -77,17 +77,31 @@ const NOISE_CONFIDENCE_THRESHOLD = 0.55;
 
 /** Isolated noise / filler words that we should NOT send to the
  *  coach. A real question/greeting won't consist of only one of
- *  these. Case-insensitive. */
+ *  these. Case-insensitive.
+ *
+ *  Deliberately EXCLUDES "yes", "no", "yeah", "nope" — those are
+ *  legitimate answers when the coach asks a yes/no question (e.g.
+ *  "want to drill that?", "answer or hint?"). Dropping them broke
+ *  the trainer-feel answer flow — the coach's question hung with no
+ *  response. If a background voice says "yes" out of context, the
+ *  coach's own prompt can handle the non-sequitur. */
 const NOISE_WORD_SET = new Set([
   'the', 'a', 'an', 'and', 'or', 'but', 'so', 'um', 'uh', 'er', 'ah',
-  'eh', 'oh', 'mm', 'hmm', 'huh', 'ok', 'okay', 'yeah', 'yep', 'nope',
-  'mhm', 'uhhuh', 'yes', 'no',
+  'eh', 'oh', 'mm', 'hmm', 'huh', 'ok', 'okay', 'mhm', 'uhhuh',
 ]);
 
 /** Greetings allowed through even when short/single-word — these
  *  SHOULD reach the coach to trigger a RETURN greeting reply. */
 const GREETING_WORD_SET = new Set([
   'hi', 'hello', 'hey', 'yo', 'sup', 'howdy', 'greetings',
+]);
+
+/** Single-word ANSWERS the student commonly gives to the coach's
+ *  yes/no prompts. Explicitly allowed through the noise filter so
+ *  the coach's "want to drill that?" flow actually works. */
+const ANSWER_WORD_SET = new Set([
+  'yes', 'no', 'yeah', 'yep', 'nope', 'sure', 'absolutely', 'definitely',
+  'hint', 'answer', 'skip', 'continue', 'stop', 'pause', 'resume',
 ]);
 
 /**
@@ -106,7 +120,10 @@ export function shouldDropAsNoise(text: string, avgConfidence: number): boolean 
   const words = normalized.replace(/[^\w'\s]/g, '').split(/\s+/).filter(Boolean);
   if (words.length === 1) {
     const word = words[0];
+    // Greetings + yes/no answers pass through — these are the two
+    // cases where a single word IS the full intent.
     if (GREETING_WORD_SET.has(word)) return false;
+    if (ANSWER_WORD_SET.has(word)) return false;
     if (NOISE_WORD_SET.has(word)) return true;
   }
   // Confidence signal: only drop when confidence is BOTH low AND the
