@@ -58,6 +58,55 @@ const ALLOWED_VOICES: Record<string, VoiceConfig> = {
 
 const MAX_TEXT_LENGTH = 3000;
 
+/**
+ * Per-IP rate limit. A legit voice-coach session sends roughly one
+ * TTS request per coach narration — call it 1/sec at peak, a few
+ * hundred per 15-min session. 600/hour leaves comfortable headroom
+ * and still throttles cost-amplification attacks (the CORS fix
+ * already blocks cross-site abuse; this catches automated abuse
+ * from allowed origins).
+ *
+ * Caveat: Vercel edge workers are stateless across cold starts, so
+ * this is per-worker best-effort. A determined attacker can spread
+ * across warmup cycles. For hard guarantees we'd need Vercel KV or
+ * Upstash — defer until we actually see abuse.
+ */
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1h
+const RATE_LIMIT_MAX_REQUESTS = 600;
+const rateLimitState = new Map<string, { count: number; windowStart: number }>();
+
+function getClientIp(req: Request): string {
+  // Vercel forwards the real client IP via x-forwarded-for. First
+  // entry is the client; subsequent are proxies.
+  const fwd = req.headers.get('x-forwarded-for');
+  if (fwd) return fwd.split(',')[0].trim();
+  return req.headers.get('x-real-ip') ?? 'unknown';
+}
+
+/** Returns true when the request should be rejected for rate
+ *  limiting, false when it's under the cap. Stateful: increments
+ *  the counter on every call. */
+function isRateLimited(req: Request): boolean {
+  const ip = getClientIp(req);
+  const now = Date.now();
+  const entry = rateLimitState.get(ip);
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimitState.set(ip, { count: 1, windowStart: now });
+    // Opportunistic cleanup — drop stale buckets so the Map doesn't
+    // grow without bound across the worker's lifetime.
+    if (rateLimitState.size > 1000) {
+      for (const [key, val] of rateLimitState) {
+        if (now - val.windowStart > RATE_LIMIT_WINDOW_MS) {
+          rateLimitState.delete(key);
+        }
+      }
+    }
+    return false;
+  }
+  entry.count += 1;
+  return entry.count > RATE_LIMIT_MAX_REQUESTS;
+}
+
 /** Escape the five XML-significant characters so plain text is safe
  *  inside an SSML document. */
 function escapeForSsml(text: string): string {
@@ -187,6 +236,19 @@ export default async function handler(req: Request): Promise<Response> {
     // budget from cost-amplification attacks via random sites.
     if (!isOriginAllowed(req)) {
       return new Response('Origin not allowed', { status: 403, headers: cors });
+    }
+
+    // Per-IP rate limit — catches automated abuse from allowed
+    // origins (CORS-bypassed attacker with a valid origin header).
+    // 600 req/hour is ~3-4x a heavy session.
+    if (isRateLimited(req)) {
+      return new Response('Rate limit exceeded. Slow down.', {
+        status: 429,
+        headers: {
+          ...cors,
+          'Retry-After': '3600',
+        },
+      });
     }
 
     if (req.method === 'GET') {
