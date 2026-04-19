@@ -118,8 +118,11 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
       Engine: voiceConfig.engine,
     } as any);
 
+    // Keep server timeout ≥ client timeout (voiceService uses 10s) so
+    // the server never aborts a request the client is still willing
+    // to wait for.
     const abortController = new AbortController();
-    const timeout = setTimeout(() => abortController.abort(), 8000);
+    const timeout = setTimeout(() => abortController.abort(), 10000);
 
     let result;
     try {
