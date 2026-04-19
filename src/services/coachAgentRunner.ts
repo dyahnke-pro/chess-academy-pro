@@ -167,13 +167,23 @@ export async function runAgentTurn(
   // [StudentState] — trainer feel #2: always-on context awareness.
   // Reads the student's recent rhythm + sentiment so the coach can
   // adapt tone (empathy after frustration, punch when fast, depth
-  // when idle). The most recent user message timestamp is the best
-  // tempo signal we have without move-level data on the chat path.
-  const lastUserMsg = [...history].reverse().find((m) => m.role === 'user');
-  const lastUserInteractionMs = lastUserMsg?.timestamp ?? Date.now();
+  // when idle).
+  //
+  // Tempo signal: use the PREVIOUS user message's timestamp as the
+  // reference, not the most recent one. The most recent is the
+  // message that just arrived — Date.now() - thatTimestamp ≈ 0,
+  // which always flags FAST tempo and cancels out Unlimited
+  // verbosity. Using the penultimate user message gives the real
+  // "how long did they pause between turns" signal. Undefined when
+  // there's only one user message (first-ever turn) — builder
+  // treats that as no-tempo-signal and omits the block.
+  const userMessages = history.filter((m) => m.role === 'user');
+  const previousUserMs = userMessages.length >= 2
+    ? userMessages[userMessages.length - 2].timestamp
+    : undefined;
   const studentStateBlock = buildStudentStateBlock({
     recentChat: history,
-    lastUserInteractionMs,
+    lastUserInteractionMs: previousUserMs,
   });
 
   const additions = [AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES, snapshotText];
