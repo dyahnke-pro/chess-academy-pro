@@ -32,8 +32,9 @@ let _abortAnalysis = false;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-/** Mate eval threshold — Stockfish encodes checkmate as ±30000 */
-const MATE_EVAL_THRESHOLD = 20000;
+// MATE_EVAL_THRESHOLD is now exported from engineConstants so all
+// subsystems share the same value. Local alias kept for readability.
+import { MATE_EVAL_THRESHOLD, MATE_EVAL_VALUE } from './engineConstants';
 
 function classifyCpLoss(
   cpLoss: number,
@@ -111,7 +112,7 @@ class DedicatedWorker {
             const scoreType = scoreMatch[1];
             const scoreValue = parseInt(scoreMatch[2]);
             lastEval = scoreType === 'mate'
-              ? (scoreValue > 0 ? 30000 : -30000)
+              ? (scoreValue > 0 ? MATE_EVAL_VALUE : -MATE_EVAL_VALUE)
               : scoreValue;
           }
         }

@@ -340,13 +340,20 @@ async function analyzeGameWithStockfish(
     const san = moves[moveIdx];
     const gamePhase = classifyGamePhase(fen, moveNumber);
 
-    // Player's actual move in UCI + SAN
+    // Player's actual move in UCI + SAN.
+    // chess.js 1.4.0 RETURNS null on illegal moves (older versions
+    // threw) — the null would have hit TypeError on .from access
+    // below, still caught by the existing try/catch but only by
+    // happy accident. Explicit null-check makes the fallback
+    // intent clear and future-proofs against chess.js upgrades.
     let playerMove = '';
     const playerMoveSan = san;
     try {
       const c = new Chess(fen);
       const m = c.move(san);
-      playerMove = m.from + m.to + (m.promotion ?? '');
+      playerMove = m
+        ? m.from + m.to + (m.promotion ?? '')
+        : san;
     } catch {
       playerMove = san;
     }
