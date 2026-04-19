@@ -126,8 +126,37 @@ class VoiceService {
    *  the Settings UI to show which voice engine is active. */
   private lastTier: VoiceTier = 'muted';
 
-  /** In-memory cache of Polly audio buffers keyed by "voice:text" */
+  /** Max audio-cache entries before LRU eviction. ~50 entries ≈ 5-8MB
+   *  depending on utterance length. Prior implementation was
+   *  unbounded, which the perf audit flagged as a 90-min-session
+   *  memory leak on iOS PWA (~15MB after 60+ narrations). */
+  private static readonly AUDIO_CACHE_MAX_ENTRIES = 50;
+
+  /** In-memory LRU cache of Polly audio buffers keyed by "voice:text".
+   *  Map iteration order IS insertion order per spec, so the oldest
+   *  entry is at the front. On hit we delete+reinsert to mark as
+   *  most-recently-used; on eviction we drop the first (oldest) key. */
   private audioCache = new Map<string, ArrayBuffer>();
+
+  /** Mark a cache entry as most-recently-used (move to end of Map). */
+  private touchAudioCacheEntry(key: string): ArrayBuffer | undefined {
+    const buf = this.audioCache.get(key);
+    if (buf === undefined) return undefined;
+    this.audioCache.delete(key);
+    this.audioCache.set(key, buf);
+    return buf;
+  }
+
+  /** Insert with LRU eviction of the oldest entry when over cap. */
+  private setAudioCacheEntry(key: string, buf: ArrayBuffer): void {
+    // Delete-and-reinsert guarantees MRU position even on overwrite.
+    this.audioCache.delete(key);
+    this.audioCache.set(key, buf);
+    if (this.audioCache.size > VoiceService.AUDIO_CACHE_MAX_ENTRIES) {
+      const oldest = this.audioCache.keys().next().value;
+      if (oldest !== undefined) this.audioCache.delete(oldest);
+    }
+  }
 
   /** True when Polly is currently available (warmup succeeded and
    *  we're not in a failure cooldown). Used by the speakInternal
@@ -410,7 +439,11 @@ class VoiceService {
   private async speakPolly(text: string, voice: string): Promise<boolean> {
     try {
       const key = this.pollyKey(text, voice);
-      let arrayBuffer = this.audioCache.get(key);
+      // Use touchAudioCacheEntry so a hit marks the entry as
+      // most-recently-used (LRU order). Previously a plain get
+      // left the insertion order as-is — common re-speaks stayed
+      // near the eviction front even when they were hot.
+      let arrayBuffer = this.touchAudioCacheEntry(key);
 
       if (!arrayBuffer) {
         // Combine caller-abort signal (new speak() supersedes current)
@@ -435,7 +468,7 @@ class VoiceService {
         }
         arrayBuffer = await response.arrayBuffer();
         this.abortController = null;
-        this.audioCache.set(key, arrayBuffer);
+        this.setAudioCacheEntry(key, arrayBuffer);
       }
 
       const played = await this.playAudioBuffer(arrayBuffer.slice(0));
@@ -480,7 +513,7 @@ class VoiceService {
             const url = getTtsUrl(text, voice);
             const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
             if (res.ok) {
-              this.audioCache.set(this.pollyKey(text, voice), await res.arrayBuffer());
+              this.setAudioCacheEntry(this.pollyKey(text, voice), await res.arrayBuffer());
             }
           } catch {
             // Prefetch failure is non-fatal

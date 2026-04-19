@@ -94,7 +94,18 @@ export const useCoachSessionStore = create<CoachSessionState & CoachSessionActio
     ...DEFAULT_STATE,
 
     appendMessage: (m) => {
-      set((s) => ({ messages: [...s.messages, m] }));
+      // Trim the in-memory array on every append so long sessions
+      // can't balloon before the next debounced persist fires. Prior
+      // behaviour kept every message (could be 500+ after 90 min at
+      // one msg / 10 sec). Persist layer also applies this cap, so
+      // the in-memory trim just mirrors what hits disk.
+      set((s) => {
+        const next = [...s.messages, m];
+        if (next.length > MESSAGES_PERSIST_LIMIT) {
+          return { messages: next.slice(-MESSAGES_PERSIST_LIMIT) };
+        }
+        return { messages: next };
+      });
       schedulePersist(get);
     },
     setMessages: (m) => {
