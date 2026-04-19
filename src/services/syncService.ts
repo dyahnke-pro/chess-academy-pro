@@ -1,5 +1,6 @@
 import { db } from '../db/schema';
 import { exportUserData } from './dbService';
+import { decryptApiKey } from './cryptoService';
 import type {
   UserProfile,
   PuzzleRecord,
@@ -37,17 +38,35 @@ interface ImportData {
   openingWeakSpots?: OpeningWeakSpot[];
 }
 
-export function getSyncConfig(profile: UserProfile): SyncConfig {
-  const prefs = profile.preferences;
+export async function getSyncConfig(profile: UserProfile): Promise<SyncConfig> {
+  const prefs = profile.preferences as unknown as Record<string, unknown>;
+  // Prefer encrypted form. Fall back to legacy plaintext for users
+  // whose config was saved before the encryption migration — next
+  // save will upgrade it via SyncSettingsPanel.
+  let anonKey: string | null = null;
+  const encrypted = prefs.supabaseAnonKeyEncrypted as string | null | undefined;
+  const iv = prefs.supabaseAnonKeyIv as string | null | undefined;
+  if (encrypted && iv) {
+    try {
+      anonKey = await decryptApiKey(encrypted, iv);
+    } catch {
+      // Decrypt failed (key derivation mismatch, corrupt record).
+      // Leave anonKey null; caller's "sync not configured" path
+      // will surface a clean error to the user.
+      anonKey = null;
+    }
+  } else {
+    anonKey = (prefs.supabaseAnonKey as string | null) ?? null;
+  }
   return {
-    supabaseUrl: (prefs as unknown as Record<string, unknown>).supabaseUrl as string | null ?? null,
-    supabaseAnonKey: (prefs as unknown as Record<string, unknown>).supabaseAnonKey as string | null ?? null,
-    syncUserId: (prefs as unknown as Record<string, unknown>).syncUserId as string | null ?? null,
+    supabaseUrl: (prefs.supabaseUrl as string | null) ?? null,
+    supabaseAnonKey: anonKey,
+    syncUserId: (prefs.syncUserId as string | null) ?? null,
   };
 }
 
 export async function pushToCloud(profile: UserProfile): Promise<void> {
-  const config = getSyncConfig(profile);
+  const config = await getSyncConfig(profile);
   if (!config.supabaseUrl || !config.supabaseAnonKey || !config.syncUserId) {
     throw new Error('Sync not configured. Set Supabase URL, anon key, and user ID in settings.');
   }
@@ -81,7 +100,7 @@ export async function pushToCloud(profile: UserProfile): Promise<void> {
 }
 
 export async function listCloudBackups(profile: UserProfile): Promise<CloudBackup[]> {
-  const config = getSyncConfig(profile);
+  const config = await getSyncConfig(profile);
   if (!config.supabaseUrl || !config.supabaseAnonKey || !config.syncUserId) {
     return [];
   }
@@ -104,7 +123,7 @@ export async function listCloudBackups(profile: UserProfile): Promise<CloudBacku
 }
 
 export async function pullFromCloud(profile: UserProfile): Promise<void> {
-  const config = getSyncConfig(profile);
+  const config = await getSyncConfig(profile);
   if (!config.supabaseUrl || !config.supabaseAnonKey || !config.syncUserId) {
     throw new Error('Sync not configured.');
   }

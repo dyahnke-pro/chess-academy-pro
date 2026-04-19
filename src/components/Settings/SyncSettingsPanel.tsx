@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { pushToCloud, pullFromCloud } from '../../services/syncService';
+import { encryptApiKey } from '../../services/cryptoService';
 import { Cloud, Download, Upload } from 'lucide-react';
 
 export function SyncSettingsPanel(): JSX.Element {
@@ -28,10 +29,24 @@ export function SyncSettingsPanel(): JSX.Element {
 
   const handleSaveConfig = async (): Promise<void> => {
     if (!activeProfile) return;
+    // Encrypt the Supabase anon key before persisting — security
+    // audit flagged plaintext storage as an XSS exfiltration vector.
+    // Null out the plaintext field so the old value never coexists
+    // with the encrypted one on the same record.
+    let anonKeyEncrypted: string | null = null;
+    let anonKeyIv: string | null = null;
+    if (supabaseAnonKey) {
+      const enc = await encryptApiKey(supabaseAnonKey);
+      anonKeyEncrypted = enc.encrypted;
+      anonKeyIv = enc.iv;
+    }
     const updatedPrefs = {
       ...activeProfile.preferences,
       supabaseUrl: supabaseUrl || null,
-      supabaseAnonKey: supabaseAnonKey || null,
+      // Drop plaintext so a stale read can't pick it up.
+      supabaseAnonKey: null,
+      supabaseAnonKeyEncrypted: anonKeyEncrypted,
+      supabaseAnonKeyIv: anonKeyIv,
       syncUserId: syncUserId || null,
     } as unknown as Record<string, unknown>;
 

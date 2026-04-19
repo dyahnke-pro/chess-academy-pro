@@ -464,6 +464,11 @@ export interface UserPreferences {
   apiKeyIv: string | null;
   anthropicApiKeyEncrypted: string | null;
   anthropicApiKeyIv: string | null;
+  /** Supabase anon key stored encrypted via cryptoService. Paired
+   *  with supabaseAnonKeyIv. Optional so older profiles without the
+   *  sync feature wired up don't need a migration. */
+  supabaseAnonKeyEncrypted?: string | null;
+  supabaseAnonKeyIv?: string | null;
   preferredModel: {
     commentary: string;
     analysis: string;
