@@ -263,6 +263,16 @@ export function CoachChatPage(): JSX.Element {
       speechBufferRef.current = '';
     } catch (err) {
       console.warn('[CoachChatPage] agent turn failed:', err);
+      // Surface the failure to the student instead of leaving a stuck
+      // spinner + orphaned user message. Refresh-loses-chat was the
+      // prior behaviour; now they see what went wrong.
+      const detail = err instanceof Error ? err.message : 'Please try again.';
+      appendMessage({
+        id: `err-${Date.now()}`,
+        role: 'assistant',
+        content: `⚠️ Coach is unavailable right now (${detail}). Your message is saved — tap send to retry when you\u2019re back online.`,
+        timestamp: Date.now(),
+      });
     } finally {
       setIsStreaming(false);
       setStreamingContent('');

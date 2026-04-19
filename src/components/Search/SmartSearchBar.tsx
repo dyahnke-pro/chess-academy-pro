@@ -276,6 +276,15 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       // Student starts talking → coach stops. Matches natural
       // conversation tempo: no talking over the student.
       onSpeechStart: () => voiceService.stop(),
+      // Surface hard errors so the mic never looks mysteriously
+      // dead. Reuses the existing voiceUnsupported inline chip UX
+      // — overloads it with a transient error message.
+      onError: (reason) => {
+        setListening(false);
+        setVoiceUnsupported(true);
+        setTimeout(() => setVoiceUnsupported(false), 4000);
+        console.warn('[SmartSearchBar] mic error:', reason);
+      },
     });
     setListening(ok);
   }, [listening, setQuery, clear, navigate, lastBoardSnapshot, askCoach]);

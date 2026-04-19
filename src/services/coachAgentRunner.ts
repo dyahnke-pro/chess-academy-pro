@@ -73,7 +73,11 @@ export function applyNarrationToggle(enable: boolean): string {
   const ack = enable
     ? "Got it — I'll narrate each move out loud as we play. Starting a game now."
     : "Narration off — I'll stay quiet and let you focus.";
-  if (enable) void voiceService.speak(ack).catch(() => {});
+  if (enable) {
+    void voiceService.speak(ack).catch((err: unknown) => {
+      console.warn('[applyNarrationToggle] TTS failed:', err);
+    });
+  }
   return ack;
 }
 
@@ -98,7 +102,14 @@ export function narrateMove(opts: {
     : opts.mover === opts.playerColor
       ? `You played ${opts.san}.`
       : `I played ${opts.san}.`;
-  void voiceService.speak(text).catch(() => {});
+  // Log TTS failures so silent regressions are detectable. Don't
+  // surface to UI here — narrateMove is invoked on every move and a
+  // toast storm on a Polly outage would be worse than silence.
+  // CoachGamePage + GameChatPanel handle their own user-initiated
+  // TTS errors where a toast is appropriate.
+  void voiceService.speak(text).catch((err: unknown) => {
+    console.warn('[narrateMove] TTS failed:', err);
+  });
 }
 
 export interface RunAgentTurnOptions {

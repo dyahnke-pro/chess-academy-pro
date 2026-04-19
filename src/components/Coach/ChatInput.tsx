@@ -15,6 +15,7 @@ interface ChatInputProps {
 export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JSX.Element {
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
+  const [micError, setMicError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const voiceSupported = voiceInputService.isSupported();
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -84,6 +85,20 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
         // Student starts talking → coach stops mid-sentence. Trainer
         // feel: never talked over.
         onSpeechStart: () => voiceService.stop(),
+        // Surface hard errors instead of leaving a dead mic with no
+        // explanation. Matches the red-chip pattern already in
+        // VoiceChatMic — here we use a transient banner.
+        onError: (reason) => {
+          setListening(false);
+          setMicError(
+            reason === 'permission-denied'
+              ? 'Mic access denied. Enable microphone permission to talk to the coach.'
+              : reason === 'unavailable'
+                ? 'Mic unavailable. Check that no other app is using it.'
+                : 'Mic reconnect failed. Tap again to retry.'
+          );
+          setTimeout(() => setMicError(null), 4000);
+        },
       });
       setListening(started);
     }
@@ -103,6 +118,16 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
   }, [handleSend]);
 
   return (
+    <div className="relative">
+      {micError && (
+        <div
+          className="absolute bottom-full left-3 right-3 mb-1 text-[11px] text-red-400 bg-theme-surface border border-red-500/40 rounded px-2 py-1 z-20"
+          data-testid="chat-input-mic-error"
+          role="alert"
+        >
+          {micError}
+        </div>
+      )}
     <form
       onSubmit={handleSubmit}
       className="flex items-end gap-2 p-3 border-t border-theme-border bg-theme-bg"
@@ -148,5 +173,6 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
         <Send size={18} />
       </button>
     </form>
+    </div>
   );
 }
