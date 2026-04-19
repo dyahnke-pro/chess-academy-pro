@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess } from 'chess.js';
+import { safeChessFromFen } from '../../services/chessSafe';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
@@ -1572,7 +1573,15 @@ export function CoachGamePage(): JSX.Element {
       (inOpeningTeaching || shouldCallLlmForMove(verbosity, classification));
     if (shouldFire) {
       try {
-        const probe = new Chess(moveResult.fen);
+        // safeChessFromFen returns null on malformed FEN instead of
+        // throwing — a corrupt FEN here would previously tank the
+        // whole narration pipeline for the move. Now we bail early
+        // and still announce the SAN via the fallback path.
+        const probe = safeChessFromFen(moveResult.fen);
+        if (!probe) {
+          console.warn('[CoachGame] bad FEN for narration probe:', moveResult.fen);
+          return;
+        }
         const mover: 'w' | 'b' = probe.turn() === 'w' ? 'b' : 'w';
         // Pull recent chat from the shared session store so narration
         // stays consistent with what was just said in chat.
