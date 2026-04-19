@@ -68,13 +68,21 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
  * `detectTrapInPosition` expects (it looks for popular moves where
  * evalCp &lt;= -200 for the mover).
  */
+/** Max Lichess cloud-eval requests in flight at once. Previously
+ *  Promise.all fired 5+ candidates in parallel on every trap check,
+ *  which could 429 on the public endpoint or just pile up on slow
+ *  networks. 2-at-a-time is enough to keep latency reasonable
+ *  without burst. */
+const LICHESS_CLOUD_EVAL_CONCURRENCY = 2;
+
 async function evaluateExplorerCandidates(
   fen: string,
   sanList: string[],
   mover: 'w' | 'b',
 ): Promise<MoveEvaluation[]> {
   const ChessCtor = (await import('chess.js')).Chess;
-  const tasks = sanList.map(async (san) => {
+
+  const evalOne = async (san: string): Promise<MoveEvaluation | null> => {
     try {
       const board = new ChessCtor(fen);
       const moved = board.move(san);
@@ -90,8 +98,16 @@ async function evaluateExplorerCandidates(
     } catch {
       return null;
     }
-  });
-  const results = await Promise.all(tasks);
+  };
+
+  // Chunked Promise.all — process LICHESS_CLOUD_EVAL_CONCURRENCY at a
+  // time to cap outbound request bursts against the free Lichess API.
+  const results: (MoveEvaluation | null)[] = [];
+  for (let i = 0; i < sanList.length; i += LICHESS_CLOUD_EVAL_CONCURRENCY) {
+    const chunk = sanList.slice(i, i + LICHESS_CLOUD_EVAL_CONCURRENCY);
+    const chunkResults = await Promise.all(chunk.map(evalOne));
+    results.push(...chunkResults);
+  }
   return results.filter((r): r is MoveEvaluation => r !== null);
 }
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
