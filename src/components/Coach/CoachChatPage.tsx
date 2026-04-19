@@ -207,8 +207,23 @@ export function CoachChatPage(): JSX.Element {
     // which stops whatever's playing, truncating sentence N-1 every
     // time sentence N arrives.
     const shouldSpeak = !voiceMutedRef.current || modality === 'voice';
+    // firstSpeakPromise gates queued sentences so they fire AFTER the
+    // first-speak settles (resolve OR reject). Using .finally means a
+    // Polly failure on sentence 1 still lets sentence 2+ play via Web
+    // Speech — partial audio beats mid-reply silence.
+    let firstSpeakPromise: Promise<void> | null = null;
+    const speakOrQueue = (sentence: string): void => {
+      if (!sentence) return;
+      if (!firstSpeakPromise) {
+        firstSpeakPromise = Promise.resolve(voiceService.speakForced(sentence))
+          .catch((err: unknown) => {
+            console.warn('[CoachChatPage] speakForced failed:', err);
+          });
+      } else {
+        void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(sentence));
+      }
+    };
     if (shouldSpeak) voiceService.stop();
-    let firstSentenceSpoken = false;
 
     try {
       await runCoachTurn({
@@ -222,31 +237,22 @@ export function CoachChatPage(): JSX.Element {
 
           if (shouldSpeak) {
             speechBufferRef.current += chunk;
-            const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+            // Flush on any terminator including newline — no trailing
+            // whitespace requirement. Matches VoiceChatMic and
+            // SmartSearchBar; saves 200-400ms of first-word latency.
+            const sentenceEnd = /[.!?\n]/.exec(speechBufferRef.current);
             if (sentenceEnd) {
               const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1).trim();
-              speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-              if (sentence) {
-                if (!firstSentenceSpoken) {
-                  void voiceService.speakForced(sentence);
-                  firstSentenceSpoken = true;
-                } else {
-                  voiceService.speakQueuedForced(sentence);
-                }
-              }
+              speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 1).trimStart();
+              speakOrQueue(sentence);
             }
           }
         },
       });
-      // Flush any trailing text (no sentence terminator) to the queue.
+      // Flush any trailing text (no sentence terminator) via the same
+      // gating so a tail-only reply still fires.
       const tail = speechBufferRef.current.trim();
-      if (shouldSpeak && tail) {
-        if (!firstSentenceSpoken) {
-          void voiceService.speakForced(tail);
-        } else {
-          voiceService.speakQueuedForced(tail);
-        }
-      }
+      if (shouldSpeak && tail) speakOrQueue(tail);
       speechBufferRef.current = '';
     } catch (err) {
       console.warn('[CoachChatPage] agent turn failed:', err);
