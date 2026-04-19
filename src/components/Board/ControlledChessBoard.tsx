@@ -1,6 +1,7 @@
 import { useMemo, useCallback, useState, useEffect } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { RotateCcw, SkipBack, RefreshCw } from 'lucide-react';
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useBoardGlow } from '../../hooks/useBoardGlow';
@@ -109,6 +110,7 @@ export function ControlledChessBoard({
 
   // Board border flash
   const [flashColor, setFlashColor] = useState<string | null>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     if (!moveQualityFlash) {
@@ -302,7 +304,7 @@ export function ControlledChessBoard({
           />
           {flashColor && (
             <div
-              className="absolute inset-0 pointer-events-none rounded-sm animate-pulse"
+              className={`absolute inset-0 pointer-events-none rounded-sm ${prefersReducedMotion ? '' : 'animate-pulse'}`}
               style={{ boxShadow: `inset 0 0 0 8px ${flashColor}, 0 0 24px 6px ${flashColor}` }}
               data-testid="move-quality-flash"
             />
