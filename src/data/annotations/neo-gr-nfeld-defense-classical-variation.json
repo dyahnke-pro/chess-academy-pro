@@ -24,6 +24,26 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the fianchetto development, placing the dark-squared bishop on its most active diagonal where it immediately eyes our d4 pawn and controls crucial central squares. This bishop becomes the cornerstone of Black's hypermodern strategy, ready to support the typical Grünfeld pawn breaks like ...d5 and ...c5 that will challenge our central dominance. From g7, the bishop also provides excellent kingside safety while maintaining long-term pressure against our position. We must be constantly aware of this bishop's influence, as it can quickly turn tactical if we're not careful with our central pawn advances - many White players have fallen victim to discovered attacks and tactical shots along this diagonal."
+    },
+    {
+      "san": "Bg2",
+      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: Bg2 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "d5",
+      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: d5 is a known theory move in this line."
+    },
+    {
+      "san": "c4",
+      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: c4 is a known theory move in this line."
     }
   ]
 }

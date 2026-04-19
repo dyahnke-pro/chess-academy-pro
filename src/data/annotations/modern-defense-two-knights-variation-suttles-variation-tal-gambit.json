@@ -16,6 +16,38 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the fundamental idea of the Modern Defense by fianchettoing the dark-squared bishop, creating immediate pressure against our e4 pawn and establishing a powerful piece on the long diagonal. This bishop will be Black's most important piece in the middlegame, often serving as both a defensive anchor and an attacking weapon depending on the position. From g7, the bishop eyes our entire queenside and can support both central breaks like ...d5 and kingside counterplay. We need to be constantly aware of this bishop's influence, as it can quickly turn tactical if we're not careful with our piece coordination."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "d6",
+      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: d6 is a known theory move in this line."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "c6",
+      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: c6 is a known theory move in this line."
+    },
+    {
+      "san": "Bg5",
+      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Bg5 is a known theory move in this line."
+    },
+    {
+      "san": "Qb6",
+      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Qb6 is a known theory move in this line."
+    },
+    {
+      "san": "Qd2",
+      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Qd2 is a known theory move in this line."
+    },
+    {
+      "san": "Qxb2",
+      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Qxb2 is a known theory move in this line."
     }
   ]
 }

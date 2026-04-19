@@ -60,6 +60,18 @@
     {
       "san": "Ne2",
       "annotation": "We're playing a flexible knight development that supports our pawn center while maintaining multiple strategic options. The knight on e2 can later jump to f4, where it would be beautifully placed to support our central pawns and create kingside threats. This knight can also go to g3 or d2 depending on how the position develops, giving us maximum flexibility. The Ne2 move is characteristic of the Larsen Variation - rather than the more committal Nf3, we're keeping our options open while still supporting our center. This approach allows us to adapt our piece placement based on Black's specific plan of counterplay."
+    },
+    {
+      "san": "Qd7",
+      "annotation": "Continuing Gr Nfeld Defense Exchange Variation Larsen Variation: Qd7 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Gr Nfeld Defense Exchange Variation Larsen Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "b6",
+      "annotation": "Continuing Gr Nfeld Defense Exchange Variation Larsen Variation: b6 is a known theory move in this line."
     }
   ]
 }

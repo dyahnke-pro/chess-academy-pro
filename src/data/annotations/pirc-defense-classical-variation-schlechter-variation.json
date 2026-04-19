@@ -16,6 +16,26 @@
     {
       "san": "Nf6",
       "annotation": "Black develops the knight to its ideal square, immediately putting pressure on our e4 pawn and preparing to castle kingside. This is a critical move in the Pirc Defense because the knight from f6 can later jump to excellent squares like d7, h5, or even e8 to support central counterplay with ...e5. The knight also supports Black's plan to fianchetto the dark-squared bishop on g7, creating a powerful battery aimed at our center. From f6, this knight can be a real thorn in our side if we don't develop purposefully."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "g6",
+      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: g6 is a known theory move in this line."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "Bg7",
+      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: Bg7 is a known theory move in this line."
+    },
+    {
+      "san": "h3",
+      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: h3 is a known theory move in this line."
     }
   ]
 }

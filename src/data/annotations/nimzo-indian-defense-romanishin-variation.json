@@ -32,6 +32,18 @@
     {
       "san": "c5",
       "annotation": "Black immediately strikes at our pawn center with this thematic Nimzo-Indian move, challenging our d4 pawn and creating central tension. This advance is the hallmark of the Nimzo-Indian Defense - our opponent is not just passively developing but actively fighting for central control and creating immediate tactical complications. The pawn on c5 also prepares to potentially trade on d4, which would give Black a central presence and open lines for piece activity. We now face an important decision about whether to maintain the tension, advance with d5, or allow the trade, each choice leading to fundamentally different pawn structures and strategic themes."
+    },
+    {
+      "san": "g3",
+      "annotation": "Continuing Nimzo Indian Defense Romanishin Variation: g3 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Nimzo Indian Defense Romanishin Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "Bg2",
+      "annotation": "Continuing Nimzo Indian Defense Romanishin Variation: Bg2 is a known theory move in this line."
     }
   ]
 }

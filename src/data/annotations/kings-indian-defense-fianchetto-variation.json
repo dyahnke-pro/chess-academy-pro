@@ -16,6 +16,18 @@
     {
       "san": "g6",
       "annotation": "Black signals the King's Indian Defense setup by preparing to fianchetto the dark-squared bishop, which will become a powerful attacking piece aimed at our kingside. This move is part of Black's hypermodern strategy - rather than challenging our center directly with pawns, they're preparing to attack it with pieces from the flanks. The fianchettoed bishop on g7 will eye our entire diagonal and can become a monster in tactical complications, especially if Black achieves the typical ...f7-f5-f4 pawn storm later. This setup shows Black is willing to accept a slightly cramped position in exchange for dynamic piece play and attacking chances."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "Bg7",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation: Bg7 is a known theory move in this line."
+    },
+    {
+      "san": "g3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation: g3 is a known theory move in this line."
     }
   ]
 }

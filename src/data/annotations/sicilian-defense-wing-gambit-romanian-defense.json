@@ -52,6 +52,10 @@
     {
       "san": "c4",
       "annotation": "We advance our c-pawn, attacking Black's queen once again and forcing them to move their most powerful piece for the second time in the opening. This move also expands our control of the center, particularly the important d5 and b5 squares, while opening lines for our queen. The c4 advance fits our active playing style and maintains the pressure that's essential in gambit positions. By continuously forcing Black's queen to move, we're gaining valuable development time while our opponent's most powerful piece becomes somewhat of a liability, having to constantly find safe squares."
+    },
+    {
+      "san": "Qe6",
+      "annotation": "Continuing Sicilian Defense Wing Gambit Romanian Defense: Qe6 is a known theory move in this line."
     }
   ]
 }

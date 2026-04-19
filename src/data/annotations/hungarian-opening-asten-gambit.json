@@ -20,6 +20,26 @@
     {
       "san": "d4",
       "annotation": "We push into the center with tempo, meeting Black's challenge directly and opening lines for our pieces. This aggressive move forces Black to make immediate decisions about how to handle the tension, and we'll soon see that our d4 pawn becomes a key feature of our position."
+    },
+    {
+      "san": "e5",
+      "annotation": "Continuing Hungarian Opening Asten Gambit: e5 is a known theory move in this line."
+    },
+    {
+      "san": "dxe5",
+      "annotation": "Continuing Hungarian Opening Asten Gambit: dxe5 is a known theory move in this line."
+    },
+    {
+      "san": "d4",
+      "annotation": "Continuing Hungarian Opening Asten Gambit: d4 is a known theory move in this line."
+    },
+    {
+      "san": "Ne4",
+      "annotation": "Continuing Hungarian Opening Asten Gambit: Ne4 is a known theory move in this line."
+    },
+    {
+      "san": "f5",
+      "annotation": "Continuing Hungarian Opening Asten Gambit: f5 is a known theory move in this line."
     }
   ]
 }

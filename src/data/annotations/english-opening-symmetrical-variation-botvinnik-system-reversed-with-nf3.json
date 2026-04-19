@@ -40,6 +40,22 @@
     {
       "san": "e5",
       "annotation": "Black breaks the symmetry with this central advance, staking a claim in the center and signaling more aggressive intentions than the previous symmetrical approach suggested. This move controls the crucial f4 and d4 squares, preventing some of our active moves while preparing Black's own piece activity. However, this pawn advance also creates potential weaknesses, particularly the d6 and f6 squares, which we might exploit later with our pieces. Black is transitioning from symmetrical play to a more independent strategy, which often gives both sides rich middlegame possibilities but requires more precise calculation and positional understanding."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing English Opening Symmetrical Variation Botvinnik System Reversed With Nf3: O-O is a known theory move in this line."
+    },
+    {
+      "san": "Nge7",
+      "annotation": "Continuing English Opening Symmetrical Variation Botvinnik System Reversed With Nf3: Nge7 is a known theory move in this line."
+    },
+    {
+      "san": "d3",
+      "annotation": "Continuing English Opening Symmetrical Variation Botvinnik System Reversed With Nf3: d3 is a known theory move in this line."
+    },
+    {
+      "san": "d6",
+      "annotation": "Continuing English Opening Symmetrical Variation Botvinnik System Reversed With Nf3: d6 is a known theory move in this line."
     }
   ]
 }

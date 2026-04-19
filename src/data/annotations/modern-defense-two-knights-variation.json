@@ -16,6 +16,18 @@
     {
       "san": "Bg7",
       "annotation": "Black completes their fianchetto setup, placing the dark-squared bishop on its most active square where it puts pressure on our central pawns, especially the d4 pawn. This bishop will become a key piece in Black's counterplay, potentially supporting pawn breaks like ...c5 or ...e5, or even participating in kingside attacks if the position opens up. The g7 bishop also provides important defensive cover for Black's king once they castle kingside, creating a solid fortress that's difficult to crack."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Modern Defense Two Knights Variation: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "d6",
+      "annotation": "Continuing Modern Defense Two Knights Variation: d6 is a known theory move in this line."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Modern Defense Two Knights Variation: Nf3 is a known theory move in this line."
     }
   ]
 }

@@ -56,6 +56,50 @@
     {
       "san": "d6",
       "annotation": "Black solidifies the center with this pawn move, supporting the e5 pawn and preparing to complete kingside development. This move creates a solid pawn chain on e5-d6 while opening the c8-h3 diagonal for Black's light-squared bishop. The pawn on d6 also restricts some of our central ambitions while giving Black a firm foothold in the center. This solid approach is typical of the Closed Ruy Lopez, where Black accepts a somewhat passive position in exchange for a solid, hard-to-break pawn structure."
+    },
+    {
+      "san": "c3",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: c3 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: O-O is a known theory move in this line."
+    },
+    {
+      "san": "h3",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: h3 is a known theory move in this line."
+    },
+    {
+      "san": "Na5",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: Na5 is a known theory move in this line."
+    },
+    {
+      "san": "Bc2",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: Bc2 is a known theory move in this line."
+    },
+    {
+      "san": "c5",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: c5 is a known theory move in this line."
+    },
+    {
+      "san": "d4",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: d4 is a known theory move in this line."
+    },
+    {
+      "san": "Qc7",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: Qc7 is a known theory move in this line."
+    },
+    {
+      "san": "Nbd2",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: Nbd2 is a known theory move in this line."
+    },
+    {
+      "san": "cxd4",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: cxd4 is a known theory move in this line."
+    },
+    {
+      "san": "cxd4",
+      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: cxd4 is a known theory move in this line."
     }
   ]
 }

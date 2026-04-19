@@ -32,6 +32,18 @@
     {
       "san": "e5",
       "annotation": "Black strikes back in the center with e5, challenging our d4 pawn and creating immediate central tension while opening lines for their pieces. This move follows sound opening principles by fighting for central space and activating Black's dark-squared bishop diagonal. The e5 advance also prevents us from easily consolidating our central advantage and forces us to make concrete decisions about the pawn structure. Black is essentially accepting the gambit nature of the position, creating sharp tactical play rather than trying to consolidate material or position quietly."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Caro Kann Defense Mar Czy Variation Mar Czy Gambit: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "exd4",
+      "annotation": "Continuing Caro Kann Defense Mar Czy Variation Mar Czy Gambit: exd4 is a known theory move in this line."
+    },
+    {
+      "san": "Bc4",
+      "annotation": "Continuing Caro Kann Defense Mar Czy Variation Mar Czy Gambit: Bc4 is a known theory move in this line."
     }
   ]
 }

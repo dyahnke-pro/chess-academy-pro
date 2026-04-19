@@ -48,6 +48,18 @@
     {
       "san": "Qc8",
       "annotation": "Our opponent makes an excellent defensive move, moving the queen out of potential tactics while preparing to defend the queenside weaknesses we've been targeting. Black's queen on c8 serves multiple purposes: it defends the b7 pawn, prepares potential counterplay along the c-file, and maintains flexibility for future plans. This move demonstrates excellent positional understanding, as Black recognizes that immediate defense is more important than rapid development when facing concrete threats. The queen on c8 also keeps open the possibility of moves like Qc2 or other active queen placements once the immediate defensive tasks are complete."
+    },
+    {
+      "san": "Bd2",
+      "annotation": "Continuing Slav Defense Quiet Variation Landau Variation: Bd2 is a known theory move in this line."
+    },
+    {
+      "san": "e6",
+      "annotation": "Continuing Slav Defense Quiet Variation Landau Variation: e6 is a known theory move in this line."
+    },
+    {
+      "san": "Na3",
+      "annotation": "Continuing Slav Defense Quiet Variation Landau Variation: Na3 is a known theory move in this line."
     }
   ]
 }

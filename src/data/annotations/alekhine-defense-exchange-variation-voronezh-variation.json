@@ -56,6 +56,18 @@
     {
       "san": "Bg7",
       "annotation": "Our opponent completes the fianchetto, placing the dark-squared bishop on its most active diagonal where it pressures our d4 pawn and controls key central squares. The bishop on g7 is a cornerstone of Black's position, providing both defense and potential counterattacking chances along the long diagonal. This development also prepares castling kingside while maintaining flexibility in Black's piece coordination. We need to be aware that this bishop can become very dangerous if we're not careful with our pawn advances or piece placement."
+    },
+    {
+      "san": "Rc1",
+      "annotation": "Continuing Alekhine Defense Exchange Variation Voronezh Variation: Rc1 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Alekhine Defense Exchange Variation Voronezh Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "b3",
+      "annotation": "Continuing Alekhine Defense Exchange Variation Voronezh Variation: b3 is a known theory move in this line."
     }
   ]
 }

@@ -40,6 +40,18 @@
     {
       "san": "Bf5",
       "annotation": "Black develops their light-squared bishop to an active square, putting pressure on our e4 square and preparing to contest our central ambitions. This is one of the most principled responses in the Slav Defense because the bishop develops actively before we can play e3 and block it in. The bishop on f5 also supports Black's plan to hold onto the c4 pawn temporarily while completing their development safely. However, this bishop placement does have a drawback - it can become a target for our pieces, and we might be able to exploit this with moves like Nh4 or g3 followed by Bg2."
+    },
+    {
+      "san": "Ne5",
+      "annotation": "Continuing Slav Defense Czech Variation Krause Attack Fazekas Gambit: Ne5 is a known theory move in this line."
+    },
+    {
+      "san": "Na6",
+      "annotation": "Continuing Slav Defense Czech Variation Krause Attack Fazekas Gambit: Na6 is a known theory move in this line."
+    },
+    {
+      "san": "e4",
+      "annotation": "Continuing Slav Defense Czech Variation Krause Attack Fazekas Gambit: e4 is a known theory move in this line."
     }
   ]
 }

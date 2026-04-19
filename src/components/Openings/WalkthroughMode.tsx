@@ -325,16 +325,13 @@ export function WalkthroughMode({
 
   // Current annotation for the move that was just played — enhanced with DB narrations.
   //
-  // Resolution strategy: prefer a SAN match, fall back to index match.
-  // An opening-content audit found 92 annotation files where the
-  // annotation SANs are in a different order than the canonical
-  // PGN's SANs. Pure index lookup would render the wrong narration
-  // for every drift after the first differing move (user sees
-  // move X but hears an explanation for move Y). SAN-first lookup
-  // routes the correct annotation whenever the SAN exists in the
-  // file, and index fallback preserves behaviour for well-formed
-  // files. Returns null when neither matches — the UI then shows
-  // a generic "studying this line" placeholder instead of garbage.
+  // Resolution strategy: prefer a SAN match, fall back to index match,
+  // fall back to a synthesised "this is theory" line. An opening-content
+  // audit found 92 annotation files where the annotation SANs are in a
+  // different order than the canonical PGN's (SAN-first lookup handles
+  // that) and 66 files where annotations end before the PGN does (the
+  // synthesised fallback handles that — walkthrough never shows a stale
+  // bubble while the board keeps moving).
   const baseAnnotation = useMemo((): OpeningMoveAnnotation | null => {
     if (!annotations) return null;
     if (currentMoveIndex === 0) return null;
@@ -344,7 +341,20 @@ export function WalkthroughMode({
       const bySan = annotations.find((a) => a.san === playedSan);
       if (bySan) return bySan;
     }
-    return annotations[idx] ?? null;
+    const byIdx = annotations[idx];
+    if (byIdx) return byIdx;
+    // Final fallback: synthesise a placeholder for moves past the end
+    // of the annotation array. Repair pass appends tail entries to
+    // the files on disk, but this keeps the UI robust if any file is
+    // still incomplete (external content, regeneration in progress,
+    // etc.).
+    if (playedSan) {
+      return {
+        san: playedSan,
+        annotation: `Continuing this line: ${playedSan} is a known theory move.`,
+      };
+    }
+    return null;
   }, [annotations, currentMoveIndex, expectedMoves]);
 
   const [currentAnnotation, setCurrentAnnotation] = useState<OpeningMoveAnnotation | null>(null);

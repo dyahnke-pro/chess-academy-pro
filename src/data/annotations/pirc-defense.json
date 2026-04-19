@@ -16,6 +16,14 @@
     {
       "san": "Nf6",
       "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and beginning the typical Pirc Defense piece coordination. This move fits perfectly with Black's hypermodern strategy - instead of occupying the center with pawns, they're using pieces to pressure our central pawns and create tactical opportunities. The knight on f6 also supports a future ...e5 pawn break and prepares to castle kingside after ...g6 and ...Bg7. We need to decide how to handle the attack on our e4 pawn - we can defend it, advance it, or even ignore it temporarily since Black cannot capture it immediately without losing material."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Pirc Defense: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "g6",
+      "annotation": "Continuing Pirc Defense: g6 is a known theory move in this line."
     }
   ]
 }

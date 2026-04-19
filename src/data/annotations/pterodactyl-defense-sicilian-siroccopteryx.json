@@ -16,6 +16,26 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the fianchetto setup, placing the bishop on the long diagonal where it eyes our central pawns and controls important squares like d4 and f3. This bishop will become a key defensive piece, protecting Black's king and exerting long-range pressure on our position. The fianchettoed bishop is particularly effective in the Pterodactyl because it supports Black's strategy of controlling the center from a distance. We need to be careful about our piece placement since this bishop can become quite annoying if we're not precise with our development."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "c5",
+      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: c5 is a known theory move in this line."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "Qa5",
+      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: Qa5 is a known theory move in this line."
+    },
+    {
+      "san": "Bc4",
+      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: Bc4 is a known theory move in this line."
     }
   ]
 }

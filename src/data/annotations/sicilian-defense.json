@@ -8,6 +8,22 @@
     {
       "san": "c5",
       "annotation": "Our opponent has chosen the Sicilian Defense, one of the most popular and complex responses to 1.e4, immediately signaling their intention to fight for an unbalanced, tactical game. Rather than matching our central pawn with 1...e5, Black attacks our potential d4 square from the side, preventing us from establishing a classical pawn center with d2-d4. This asymmetrical pawn structure typically leads to opposite-side castling, pawn storms, and sharp tactical battles where both sides have winning chances. The c5 pawn also prepares to support Black's own central expansion with moves like d6 and later d5, while potentially opening the c-file for Black's rook after we play d4 and Black recaptures."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Sicilian Defense: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "d6",
+      "annotation": "Continuing Sicilian Defense: d6 is a known theory move in this line."
+    },
+    {
+      "san": "d4",
+      "annotation": "Continuing Sicilian Defense: d4 is a known theory move in this line."
+    },
+    {
+      "san": "cxd4",
+      "annotation": "Continuing Sicilian Defense: cxd4 is a known theory move in this line."
     }
   ]
 }

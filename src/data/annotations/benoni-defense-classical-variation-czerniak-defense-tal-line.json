@@ -24,6 +24,58 @@
     {
       "san": "e6",
       "annotation": "Black immediately challenges our advanced d5 pawn, offering a pawn trade that would relieve some of the positional pressure we've created. This is a critical moment in the Benoni - Black must decide whether to accept the space disadvantage or try to eliminate our strong central pawn. The move also prepares to develop the light-squared bishop, though it will be somewhat restricted by Black's own pawn structure. If we capture on e6, Black gets good piece development and open lines, so we need to consider our options carefully."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "exd5",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: exd5 is a known theory move in this line."
+    },
+    {
+      "san": "cxd5",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: cxd5 is a known theory move in this line."
+    },
+    {
+      "san": "d6",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: d6 is a known theory move in this line."
+    },
+    {
+      "san": "e4",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: e4 is a known theory move in this line."
+    },
+    {
+      "san": "g6",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: g6 is a known theory move in this line."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "Bg7",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Bg7 is a known theory move in this line."
+    },
+    {
+      "san": "Be2",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Be2 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: O-O is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: O-O is a known theory move in this line."
+    },
+    {
+      "san": "Re8",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Re8 is a known theory move in this line."
+    },
+    {
+      "san": "Nd2",
+      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Nd2 is a known theory move in this line."
     }
   ]
 }

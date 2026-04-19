@@ -36,6 +36,34 @@
     {
       "san": "Bg2",
       "annotation": "We're completing our fianchetto setup by placing the light-squared bishop on its ideal square, where it becomes a monster piece controlling the long diagonal and supporting our central pawns. The bishop on g2 eyes Black's queenside, particularly the c6 and b7 squares, while also providing crucial defense for our king. This bishop often plays a key role in supporting our queenside expansion with moves like b4 or defending against Black's central breaks. The Bg2 also allows us to castle safely and creates the foundation for our typical King's Indian Attack formation."
+    },
+    {
+      "san": "d6",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: d6 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: O-O is a known theory move in this line."
+    },
+    {
+      "san": "c5",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: c5 is a known theory move in this line."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "Nc6",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: Nc6 is a known theory move in this line."
+    },
+    {
+      "san": "dxc5",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: dxc5 is a known theory move in this line."
+    },
+    {
+      "san": "dxc5",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: dxc5 is a known theory move in this line."
     }
   ]
 }

@@ -16,6 +16,18 @@
     {
       "san": "Nf6",
       "annotation": "Black develops the knight to its ideal square, attacking our e4 pawn and preparing kingside castling. This is a key piece in the Pirc Defense structure, as the knight will often support central breaks like ...e5 or help defend the kingside. The knight on f6 also keeps pressure on our center, forcing us to consider how to maintain our pawn on e4. From f6, this knight has excellent mobility and can potentially jump to strong outposts like e4 or g4 later in the game."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Pirc Defense Kholmov System: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "g6",
+      "annotation": "Continuing Pirc Defense Kholmov System: g6 is a known theory move in this line."
+    },
+    {
+      "san": "Bc4",
+      "annotation": "Continuing Pirc Defense Kholmov System: Bc4 is a known theory move in this line."
     }
   ]
 }

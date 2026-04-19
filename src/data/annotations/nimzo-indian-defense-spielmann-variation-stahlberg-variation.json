@@ -56,6 +56,18 @@
     {
       "san": "Nxc5",
       "annotation": "Black recaptures the pawn, equalizing material while maintaining excellent piece activity and central control. This capture brings the knight to an active square where it attacks our queen on b3, forcing us to move it again and potentially losing time. The knight on c5 is beautifully centralized - it controls important squares like e4, d3, a4, and b7, while also supporting Black's other pieces. From c5, the knight can potentially jump to e4 again or support pawn advances like ...b6 or ...d6. Black has successfully navigated the tactical complications and now has a fully equal position with active pieces and good coordination - exactly what the Nimzo-Indian Defense aims to achieve against our early queen aggression."
+    },
+    {
+      "san": "Qc2",
+      "annotation": "Continuing Nimzo Indian Defense Spielmann Variation Stahlberg Variation: Qc2 is a known theory move in this line."
+    },
+    {
+      "san": "f5",
+      "annotation": "Continuing Nimzo Indian Defense Spielmann Variation Stahlberg Variation: f5 is a known theory move in this line."
+    },
+    {
+      "san": "g3",
+      "annotation": "Continuing Nimzo Indian Defense Spielmann Variation Stahlberg Variation: g3 is a known theory move in this line."
     }
   ]
 }

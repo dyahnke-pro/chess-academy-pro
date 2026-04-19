@@ -48,6 +48,18 @@
     {
       "san": "Nbd7",
       "annotation": "Black develops their second knight to a central square, preparing to support the crucial ...e5 pawn break that defines the King's Indian structure. The knight on d7 can also potentially relocate to c5, e5, or f6 (after the original knight moves) depending on how the position develops. This move also clears the c8-h3 diagonal for Black's light-squared bishop and keeps options open for queenside play with moves like ...a6 and ...b5. The Nd7 is a key preparatory move that sets up Black's main strategic themes while maintaining maximum flexibility."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Classical Variation: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "e5",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Classical Variation: e5 is a known theory move in this line."
+    },
+    {
+      "san": "e4",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Classical Variation: e4 is a known theory move in this line."
     }
   ]
 }
