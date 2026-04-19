@@ -21,6 +21,7 @@ import type { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
 import { buildStudentStateBlock } from './studentStateBlock';
+import { recordAudit } from './narrationAuditor';
 import type { ChatMessage, CoachVerbosity, MoveClassification } from '../types';
 
 export type MoveVerdict = 'excellent' | 'good' | 'book' | 'inaccuracy' | 'mistake' | 'blunder' | 'neutral';
@@ -124,7 +125,15 @@ export async function generateMoveCommentary(input: MoveCommentaryInput): Promis
     if (trimmed.startsWith('⚠️')) return '';
     // Strip any [[REMEMBER: ...]] tags the LLM embedded and persist
     // them — the coach can now grow its memory of the student mid-game.
-    return extractAndRememberNotes(trimmed);
+    const cleaned = extractAndRememberNotes(trimmed);
+    // Background audit: check the narration against the CURRENT
+    // position (after the move) for factual claims. Fire-and-forget;
+    // results land in Dexie meta for the Settings debug viewer. The
+    // auditor is rules-based and never affects the speak/render path
+    // even if it throws. Context label lets us trace findings back
+    // to this pipeline vs the chat path.
+    void recordAudit(input.gameAfter.fen(), cleaned, 'move-commentary');
+    return cleaned;
   } catch {
     return '';
   }
