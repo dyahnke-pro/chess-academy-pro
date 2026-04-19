@@ -323,13 +323,29 @@ export function WalkthroughMode({
     return () => { cancelled = true; };
   }, [currentFen, showLichessEffective]);
 
-  // Current annotation for the move that was just played — enhanced with DB narrations
+  // Current annotation for the move that was just played — enhanced with DB narrations.
+  //
+  // Resolution strategy: prefer a SAN match, fall back to index match.
+  // An opening-content audit found 92 annotation files where the
+  // annotation SANs are in a different order than the canonical
+  // PGN's SANs. Pure index lookup would render the wrong narration
+  // for every drift after the first differing move (user sees
+  // move X but hears an explanation for move Y). SAN-first lookup
+  // routes the correct annotation whenever the SAN exists in the
+  // file, and index fallback preserves behaviour for well-formed
+  // files. Returns null when neither matches — the UI then shows
+  // a generic "studying this line" placeholder instead of garbage.
   const baseAnnotation = useMemo((): OpeningMoveAnnotation | null => {
     if (!annotations) return null;
     if (currentMoveIndex === 0) return null;
     const idx = currentMoveIndex - 1;
+    const playedSan = expectedMoves[idx]?.san;
+    if (playedSan) {
+      const bySan = annotations.find((a) => a.san === playedSan);
+      if (bySan) return bySan;
+    }
     return annotations[idx] ?? null;
-  }, [annotations, currentMoveIndex]);
+  }, [annotations, currentMoveIndex, expectedMoves]);
 
   const [currentAnnotation, setCurrentAnnotation] = useState<OpeningMoveAnnotation | null>(null);
 
