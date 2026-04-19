@@ -56,6 +56,18 @@
     {
       "san": "d6",
       "annotation": "Black solidifies the center with this pawn move, supporting the e5 pawn and preparing to complete development with moves like Bb7 or Nbd7. This creates a solid pawn structure that's harder for us to attack directly, while opening the c8-h3 diagonal for Black's light-squared bishop. The d6 pawn also prepares potential counterplay with c5, challenging our central control. This move represents Black's transition from pure development to establishing a solid positional foundation - a key moment in the Ruy Lopez where Black chooses solidity over more aggressive options like d5 or Bg4."
+    },
+    {
+      "san": "c3",
+      "annotation": "Continuing Ruy Lopez Closed Suetin Variation: c3 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Ruy Lopez Closed Suetin Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "a3",
+      "annotation": "Continuing Ruy Lopez Closed Suetin Variation: a3 is a known theory move in this line."
     }
   ]
 }

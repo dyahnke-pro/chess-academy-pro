@@ -16,6 +16,18 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the fianchetto setup, placing their dark-squared bishop on its most active square where it eyes our central pawns and potentially our kingside. This bishop becomes the cornerstone of Black's position, often supporting counterplay with moves like ...c5 or ...d6 followed by ...f5. Our opponent is now ready to challenge our center from this strong diagonal, and we need to be aware that this bishop can become quite dangerous if we're not careful with our king safety. The Pterodactyl is starting to take shape as Black prepares to strike at our pawn center."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Pterodactyl Defense Eastern Anhanguera: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "c5",
+      "annotation": "Continuing Pterodactyl Defense Eastern Anhanguera: c5 is a known theory move in this line."
+    },
+    {
+      "san": "Be3",
+      "annotation": "Continuing Pterodactyl Defense Eastern Anhanguera: Be3 is a known theory move in this line."
     }
   ]
 }

@@ -12,6 +12,14 @@
     {
       "san": "Bb2",
       "annotation": "Now we complete our plan: our bishop settles on b2, aiming down the long diagonal at g7 and putting gentle pressure on Black's center. Notice how this move coordinates with our b4 pawn—together they control the central squares c5 and c4, and our bishop eyes the weakness on g7 if Black's kingside becomes loose. We're building a positional setup rather than forcing immediate tactics."
+    },
+    {
+      "san": "Nf6",
+      "annotation": "Continuing Polish Opening With D5: Nf6 is a known theory move in this line."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Polish Opening With D5: Nf3 is a known theory move in this line."
     }
   ]
 }

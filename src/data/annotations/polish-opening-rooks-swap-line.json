@@ -24,6 +24,26 @@
     {
       "san": "a6",
       "annotation": "Black attacks our b5 pawn, forcing us to make a critical choice about our pawn structure. Rather than retreat, a6 invites us to capture, which will lead to the unusual Rooks Swap line where material gets traded off rapidly. This move shows Black playing actively to simplify the position and reduce our attacking potential."
+    },
+    {
+      "san": "a4",
+      "annotation": "Continuing Polish Opening Rooks Swap Line: a4 is a known theory move in this line."
+    },
+    {
+      "san": "axb5",
+      "annotation": "Continuing Polish Opening Rooks Swap Line: axb5 is a known theory move in this line."
+    },
+    {
+      "san": "axb5",
+      "annotation": "Continuing Polish Opening Rooks Swap Line: axb5 is a known theory move in this line."
+    },
+    {
+      "san": "Rxa1",
+      "annotation": "Continuing Polish Opening Rooks Swap Line: Rxa1 is a known theory move in this line."
+    },
+    {
+      "san": "Bxa1",
+      "annotation": "Continuing Polish Opening Rooks Swap Line: Bxa1 is a known theory move in this line."
     }
   ]
 }

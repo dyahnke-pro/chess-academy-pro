@@ -24,6 +24,18 @@
     {
       "san": "d5",
       "annotation": "Black strikes in the center with the thematic Queen's Gambit Declined move, challenging our c4 pawn and establishing a solid pawn presence in the center. This move creates the classical QGD pawn structure where Black accepts a slightly passive position in exchange for solidity and no weaknesses. The d5 pawn controls important central squares like c4 and e4, preventing us from establishing a big pawn center. However, Black now faces a key decision about whether to maintain the tension with the c4 pawn or resolve it immediately, each choice leading to different types of middlegame positions."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Queens Gambit Declined Vienna Variation Quiet Variation: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "dxc4",
+      "annotation": "Continuing Queens Gambit Declined Vienna Variation Quiet Variation: dxc4 is a known theory move in this line."
+    },
+    {
+      "san": "e3",
+      "annotation": "Continuing Queens Gambit Declined Vienna Variation Quiet Variation: e3 is a known theory move in this line."
     }
   ]
 }

@@ -56,6 +56,10 @@ function titleFromSlug(slug: string): string {
     .replace(/\b(Defense|Defence|Opening|Gambit|Attack|Variation|System)\b/g, (m) => m);
 }
 
+function tokenizePgn(pgn: string): string[] {
+  return pgn.replace(/\d+\./g, '').split(/\s+/).filter(Boolean);
+}
+
 function main(): void {
   const openings: Opening[] = JSON.parse(readFileSync(OPENINGS_PATH, 'utf-8'));
   const bySlugByName = new Map<string, Opening>();
@@ -66,6 +70,7 @@ function main(): void {
   const stats = {
     fixedOpeningId: 0,
     filledStub: 0,
+    filledTail: 0,
     unchanged: 0,
     unparseable: 0,
   };
@@ -108,6 +113,40 @@ function main(): void {
       }
     }
 
+    // Repair 3: annotations that end before the canonical PGN does.
+    // The walkthrough runs the full PGN but the annotation array
+    // runs out partway — users see the last narration bubble stick
+    // while the board keeps moving.
+    //
+    // Safety gate: only append the canonical PGN's tail when the
+    // annotation's existing SANs match the PGN prefix exactly. A
+    // drifted file (annotations in a different move order than the
+    // canonical PGN) would produce an illegal chess sequence if we
+    // naively concatenated the PGN tail — the prefix reaches a
+    // different position than the PGN's tail assumes. For drifted
+    // files, trust the render-time SAN-match lookup + synthesised
+    // fallback to handle missing moves.
+    const opening = bySlugByName.get(data.openingId) ?? bySlugByName.get(filenameSlug);
+    if (opening) {
+      const pgnSans = tokenizePgn(opening.pgn);
+      const prefixMatches = list.length <= pgnSans.length
+        && list.every((entry, i) => entry.san === pgnSans[i]);
+      if (prefixMatches && list.length < pgnSans.length) {
+        for (let i = list.length; i < pgnSans.length; i++) {
+          list.push({
+            san: pgnSans[i],
+            annotation: `Continuing ${title}: ${pgnSans[i]} is a known theory move in this line.`,
+          });
+          stats.filledTail += 1;
+        }
+        // Ensure the write-back uses whichever key was in the file.
+        if (data.moveAnnotations) data.moveAnnotations = list;
+        else if (data.moveAnalyses) data.moveAnalyses = list;
+        else data.moveAnnotations = list;
+        changed = true;
+      }
+    }
+
     if (changed) {
       writeFileSync(path, JSON.stringify(data, null, 2) + '\n');
     } else {
@@ -119,13 +158,10 @@ function main(): void {
   console.log(`Total files: ${files.length}`);
   console.log(`  openingId fixed:  ${stats.fixedOpeningId}`);
   console.log(`  stub annotations filled: ${stats.filledStub}`);
+  console.log(`  tail annotations appended: ${stats.filledTail}`);
   console.log(`  unchanged: ${stats.unchanged}`);
   console.log(`  unparseable (skipped): ${stats.unparseable}`);
   console.log('===\n');
-
-  // Suppress unused warning on the opening lookup — reserved for a
-  // future name-match pass.
-  void bySlugByName;
 }
 
 main();

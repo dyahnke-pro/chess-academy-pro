@@ -48,6 +48,18 @@
     {
       "san": "Bd6",
       "annotation": "Black develops their light-squared bishop to an active central square, where it eyes our kingside and particularly the h2 square near our future king position. This bishop placement is more active than the alternative ...Be7, as from d6 the bishop controls important central squares and can support various pawn breaks. The bishop also connects with potential tactical themes involving ...Bxh2+ discoveries or supporting an eventual ...e5 pawn break. However, this bishop placement does make it a potential target for our pieces, and Black needs to be careful about tactics involving our knight potentially reaching e4."
+    },
+    {
+      "san": "Bb2",
+      "annotation": "Continuing Semi Slav Defense Normal Variation: Bb2 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Semi Slav Defense Normal Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "Be2",
+      "annotation": "Continuing Semi Slav Defense Normal Variation: Be2 is a known theory move in this line."
     }
   ]
 }

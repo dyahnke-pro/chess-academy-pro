@@ -8,6 +8,18 @@
     {
       "san": "c6",
       "annotation": "Our opponent chooses the Caro-Kann Defense, a solid but somewhat passive response that immediately signals Black's intention to challenge our central pawn on e4 with ...d5 on the next move. Unlike 1...e5 which creates immediate central tension, the Caro-Kann allows Black to support the d5 advance with the c6 pawn, leading to a more structured pawn formation. This opening typically results in positions where Black gets a solid pawn structure and good piece coordination, but often at the cost of slower development and less aggressive counterplay. We should prepare for Black's ...d5 thrust and consider how we want to maintain our central advantage."
+    },
+    {
+      "san": "d4",
+      "annotation": "Continuing Caro Kann Defense Mieses Gambit: d4 is a known theory move in this line."
+    },
+    {
+      "san": "d5",
+      "annotation": "Continuing Caro Kann Defense Mieses Gambit: d5 is a known theory move in this line."
+    },
+    {
+      "san": "Be3",
+      "annotation": "Continuing Caro Kann Defense Mieses Gambit: Be3 is a known theory move in this line."
     }
   ]
 }

@@ -84,6 +84,10 @@
     {
       "san": "Be3",
       "annotation": "We're retreating our bishop to the excellent e3 square, where it maintains important central influence while supporting our knight on d4 and preparing potential tactics. From e3, our bishop controls the crucial d4 square (supporting our knight), eyes the Black king position, and maintains flexibility for future operations. This retreat also avoids any potential tactics involving ...Nh5 or ...g6 that could have trapped our bishop on h4, showing good practical chess sense. The bishop on e3 coordinates perfectly with our other pieces and maintains our superior piece activity while keeping Black's position under constant pressure, making it an ideal square for this piece in the current structure."
+    },
+    {
+      "san": "Bg4",
+      "annotation": "Continuing Tarrasch Defense Classical Variation Spassky Variation: Bg4 is a known theory move in this line."
     }
   ]
 }

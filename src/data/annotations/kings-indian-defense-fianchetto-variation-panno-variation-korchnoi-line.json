@@ -48,6 +48,34 @@
     {
       "san": "Nc6",
       "annotation": "Black develops the knight to a central square, adding more pressure to our d4 pawn while preparing potential central operations. This knight placement is typical in King's Indian structures, where it supports the eventual e7-e5 break and can later be redeployed to more active squares like e7 or d4. The knight also eyes important central squares and gives Black more piece coordination for future attacks. We should be aware that this knight, combined with Black's other pieces, creates significant pressure on our central pawns and may force us to make concrete decisions about our pawn structure soon."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "a6",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: a6 is a known theory move in this line."
+    },
+    {
+      "san": "h3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: h3 is a known theory move in this line."
+    },
+    {
+      "san": "Rb8",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: Rb8 is a known theory move in this line."
+    },
+    {
+      "san": "Be3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: Be3 is a known theory move in this line."
+    },
+    {
+      "san": "b5",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: b5 is a known theory move in this line."
+    },
+    {
+      "san": "Nd2",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: Nd2 is a known theory move in this line."
     }
   ]
 }

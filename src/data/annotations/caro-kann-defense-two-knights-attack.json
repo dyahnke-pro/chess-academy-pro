@@ -8,6 +8,18 @@
     {
       "san": "c6",
       "annotation": "Our opponent chooses the Caro-Kann Defense, a solid and somewhat passive system that aims to undermine our central pawn on e4 with the upcoming d5 advance. This move prepares d5 while avoiding the tactical complications that arise in openings like the Sicilian Defense or King's Indian. Black is signaling a preference for solid, positional play over sharp tactical battles. The Caro-Kann typically leads to slightly cramped but very secure positions for Black, and our opponent is likely hoping to reach an endgame where the solid pawn structure pays dividends."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Caro Kann Defense Two Knights Attack: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "d5",
+      "annotation": "Continuing Caro Kann Defense Two Knights Attack: d5 is a known theory move in this line."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Caro Kann Defense Two Knights Attack: Nf3 is a known theory move in this line."
     }
   ]
 }

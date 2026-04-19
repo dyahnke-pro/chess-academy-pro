@@ -16,6 +16,18 @@
     {
       "san": "Nc6",
       "annotation": "Our opponent plays the Chigorin Defense, an unorthodox but perfectly playable response that develops a piece while defending the d5 pawn from an unusual square. Black is choosing a more active, piece-oriented approach rather than the classical pawn moves like e6 or c6, which means they're willing to accept slightly less central control in exchange for rapid piece development. This knight on c6 eyes important central squares like e5 and d4, and can later support advances like ...e5 or ...f5 depending on how the position develops. We need to be aware that Black's setup is quite flexible and can transpose into various pawn structures, making it harder for us to predict their exact plans."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Queens Gambit Declined Chigorin Defense Janowski Variation: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "dxc4",
+      "annotation": "Continuing Queens Gambit Declined Chigorin Defense Janowski Variation: dxc4 is a known theory move in this line."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Queens Gambit Declined Chigorin Defense Janowski Variation: Nf3 is a known theory move in this line."
     }
   ]
 }

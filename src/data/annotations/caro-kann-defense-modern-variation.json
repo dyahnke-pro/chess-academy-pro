@@ -8,6 +8,18 @@
     {
       "san": "c6",
       "annotation": "Our opponent chooses the Caro-Kann Defense, one of the most solid and reliable responses to 1.e4. By playing c6, Black is preparing to challenge our central pawn with ...d5 on the next move, but unlike the French Defense (1...e6), this approach doesn't block in the light-squared bishop. The Caro-Kann is known for giving Black excellent piece activity and a sound pawn structure, though it can sometimes lead to slightly passive positions in the early middlegame. This opening has been trusted by world champions like Karpov and Anand, and signals that Black wants a strategic battle rather than wild tactics."
+    },
+    {
+      "san": "d4",
+      "annotation": "Continuing Caro Kann Defense Modern Variation: d4 is a known theory move in this line."
+    },
+    {
+      "san": "d5",
+      "annotation": "Continuing Caro Kann Defense Modern Variation: d5 is a known theory move in this line."
+    },
+    {
+      "san": "Nd2",
+      "annotation": "Continuing Caro Kann Defense Modern Variation: Nd2 is a known theory move in this line."
     }
   ]
 }

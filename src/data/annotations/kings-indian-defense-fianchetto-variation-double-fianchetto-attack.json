@@ -24,6 +24,42 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the fianchetto setup, placing the dark-squared bishop on its most powerful square in the King's Indian Defense. This bishop becomes the cornerstone of Black's position, controlling the long diagonal and often serving as both a defensive bulwark and an attacking weapon. The bishop on g7 supports the typical King's Indian pawn advances like ...e5 and ...f5, while also defending the castled king. Our opponent now has a solid, flexible structure that can quickly transform into aggressive attacking chances, particularly if we're not careful about our king safety."
+    },
+    {
+      "san": "g3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: g3 is a known theory move in this line."
+    },
+    {
+      "san": "d6",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: d6 is a known theory move in this line."
+    },
+    {
+      "san": "Bg2",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: Bg2 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: O-O is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: O-O is a known theory move in this line."
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: Nbd7 is a known theory move in this line."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "e5",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: e5 is a known theory move in this line."
+    },
+    {
+      "san": "b3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: b3 is a known theory move in this line."
     }
   ]
 }

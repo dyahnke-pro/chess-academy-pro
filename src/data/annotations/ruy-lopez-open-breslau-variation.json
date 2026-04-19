@@ -84,6 +84,10 @@
     {
       "san": "Nd4",
       "annotation": "We leap forward with our knight to d4, occupying this excellent central outpost while attacking Black's bishop on e6 and eyeing several key squares in Black's position. This knight move is the culmination of our opening strategy - we've developed with purpose and now place our pieces on their most active squares. From d4, our knight controls crucial central territory and can potentially jump to more advanced posts like f5 or c6, creating immediate tactical threats. The attack on Black's bishop also forces our opponent to make difficult decisions about piece coordination, maintaining our initiative as we enter the complex middlegame of the Open Ruy Lopez where our superior piece activity should give us excellent winning chances."
+    },
+    {
+      "san": "Nxe5",
+      "annotation": "Continuing Ruy Lopez Open Breslau Variation: Nxe5 is a known theory move in this line."
     }
   ]
 }

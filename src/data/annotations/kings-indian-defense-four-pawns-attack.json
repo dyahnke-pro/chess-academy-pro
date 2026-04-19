@@ -32,6 +32,18 @@
     {
       "san": "d6",
       "annotation": "Our opponent solidifies the position by supporting the potential ...e5 advance and preparing to complete development with ...O-O and ...Nbd7. The d6 pawn also provides crucial support for pieces on e5 and c5, making it a critical move in the King's Indian structure. Black is showing patience - rather than immediately challenging our center, they're building a solid foundation from which to launch counterplay later. This move also prevents our potential e4-e5 advance from being immediately devastating, as the d6 pawn controls e5 and supports Black's pieces."
+    },
+    {
+      "san": "Be2",
+      "annotation": "Continuing Kings Indian Defense Four Pawns Attack: Be2 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Kings Indian Defense Four Pawns Attack: O-O is a known theory move in this line."
+    },
+    {
+      "san": "f4",
+      "annotation": "Continuing Kings Indian Defense Four Pawns Attack: f4 is a known theory move in this line."
     }
   ]
 }

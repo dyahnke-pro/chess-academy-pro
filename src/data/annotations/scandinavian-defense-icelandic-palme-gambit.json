@@ -16,6 +16,14 @@
     {
       "san": "Nf6",
       "annotation": "Black chooses the Modern Variation of the Scandinavian, developing the knight instead of recapturing immediately with the queen. This is actually a very principled approach - our opponent is following the opening principle of developing pieces before moving the same piece twice. The knight attacks our advanced d5 pawn and prepares to support Black's central counterplay. This move avoids the main line where Black's queen comes out early and gets harassed by our developing pieces, leading to a more positional struggle."
+    },
+    {
+      "san": "c4",
+      "annotation": "Continuing Scandinavian Defense Icelandic Palme Gambit: c4 is a known theory move in this line."
+    },
+    {
+      "san": "e6",
+      "annotation": "Continuing Scandinavian Defense Icelandic Palme Gambit: e6 is a known theory move in this line."
     }
   ]
 }

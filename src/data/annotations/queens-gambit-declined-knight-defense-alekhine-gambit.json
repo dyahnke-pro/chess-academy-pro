@@ -8,6 +8,46 @@
     {
       "san": "Nf6",
       "annotation": "Our opponent develops the knight to its ideal square, immediately challenging our central pawn and preparing to support their own central expansion. This hypermodern approach allows Black to influence the center from the side rather than occupying it directly with pawns. The knight on f6 also prepares kingside castling and keeps flexible options for pawn breaks like ...e6 and ...d5 or ...c5. By attacking our d4 pawn right away, Black forces us to make concrete decisions about how we want to support our center."
+    },
+    {
+      "san": "c4",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: c4 is a known theory move in this line."
+    },
+    {
+      "san": "e6",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: e6 is a known theory move in this line."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "d5",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: d5 is a known theory move in this line."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Nbd7 is a known theory move in this line."
+    },
+    {
+      "san": "Bg5",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Bg5 is a known theory move in this line."
+    },
+    {
+      "san": "h6",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: h6 is a known theory move in this line."
+    },
+    {
+      "san": "Bh4",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Bh4 is a known theory move in this line."
+    },
+    {
+      "san": "dxc4",
+      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: dxc4 is a known theory move in this line."
     }
   ]
 }

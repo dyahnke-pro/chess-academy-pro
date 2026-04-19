@@ -16,6 +16,10 @@
     {
       "san": "f5",
       "annotation": "Black plays a provocative and double-edged move that's characteristic of the most aggressive Benoni setups, immediately challenging our central ambitions before we can consolidate. This pawn advance prepares to meet our likely e4 with a pawn exchange, but it also severely weakens Black's kingside, particularly the e6 and g6 squares, and makes castling kingside much more dangerous. Our opponent is showing they want maximum complications and are willing to accept serious positional concessions for the sake of tactical chances - this is the kind of move that leads to sharp, uncompromising battles where both sides must calculate precisely."
+    },
+    {
+      "san": "e4",
+      "annotation": "Continuing Benoni Defense Benoni Staunton Gambit: e4 is a known theory move in this line."
     }
   ]
 }

@@ -32,6 +32,18 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the fianchetto setup, placing the dark-squared bishop on its ideal diagonal where it pressures our pawn center and controls key central squares. This bishop becomes Black's most important piece in the Pirc, exerting pressure on d4 and potentially supporting central breaks like ...c5 or ...e5. Our opponent has now created a solid defensive structure while maintaining counterplay possibilities against our pawn center. The bishop on g7 also provides additional defense for Black's king, though our coming attack will test whether this defensive setup is sufficient."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Pirc Defense Austrian Attack Weiss Variation: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Pirc Defense Austrian Attack Weiss Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "Bd3",
+      "annotation": "Continuing Pirc Defense Austrian Attack Weiss Variation: Bd3 is a known theory move in this line."
     }
   ]
 }

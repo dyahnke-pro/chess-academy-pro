@@ -24,6 +24,38 @@
     {
       "san": "Bg7",
       "annotation": "Black completes the characteristic King's Indian fianchetto, placing the dark-squared bishop on its most active diagonal where it eyes our entire queenside and central dark squares. This bishop will become Black's primary attacking piece, potentially supporting future ...e5 breaks and creating threats along the long diagonal toward our king. Our opponent has now established the classic King's Indian setup with the bishop controlling key squares like d4, c3, and b2. The bishop also provides additional protection for the kingside, making Black's king position more secure while preparing for the typical King's Indian counterattacking chances."
+    },
+    {
+      "san": "g3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: g3 is a known theory move in this line."
+    },
+    {
+      "san": "d6",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: d6 is a known theory move in this line."
+    },
+    {
+      "san": "Bg2",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: Bg2 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: O-O is a known theory move in this line."
+    },
+    {
+      "san": "Nbd7",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: Nbd7 is a known theory move in this line."
+    },
+    {
+      "san": "Nc3",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: Nc3 is a known theory move in this line."
+    },
+    {
+      "san": "a6",
+      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: a6 is a known theory move in this line."
     }
   ]
 }

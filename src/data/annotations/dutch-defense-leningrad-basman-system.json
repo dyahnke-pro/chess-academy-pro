@@ -24,6 +24,22 @@
     {
       "san": "g6",
       "annotation": "Black commits to the Leningrad Dutch structure, preparing to fianchetto the dark-squared bishop on g7 where it will become a powerful attacking piece. This move supports the f5 pawn and prepares to create a solid kingside pawn chain with pawns on f5, g6, and eventually h6 if needed. The g6 advance also opens up the possibility of kingside castling, though Black will need to be careful about king safety given the advanced f5 pawn. This pawn structure is characteristic of the Leningrad variation and often leads to sharp middlegame battles."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Dutch Defense Leningrad Basman System: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "Bg7",
+      "annotation": "Continuing Dutch Defense Leningrad Basman System: Bg7 is a known theory move in this line."
+    },
+    {
+      "san": "O-O",
+      "annotation": "Continuing Dutch Defense Leningrad Basman System: O-O is a known theory move in this line."
+    },
+    {
+      "san": "Nh6",
+      "annotation": "Continuing Dutch Defense Leningrad Basman System: Nh6 is a known theory move in this line."
     }
   ]
 }

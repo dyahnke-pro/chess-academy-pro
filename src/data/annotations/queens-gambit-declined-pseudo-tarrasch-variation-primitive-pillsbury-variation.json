@@ -32,6 +32,18 @@
     {
       "san": "c5",
       "annotation": "Black strikes back in the center with this thematic pawn break, challenging our d4 pawn and opening lines for their pieces. This move defines the Pseudo-Tarrasch Variation, where Black adopts an active, counterattacking approach rather than the more passive setups typical in the QGD. Our opponent is willing to accept some structural weaknesses (like a potential isolated d-pawn) in exchange for dynamic piece play and central activity. This aggressive response shows Black refuses to be passively squeezed and wants to create their own chances."
+    },
+    {
+      "san": "Nf3",
+      "annotation": "Continuing Queens Gambit Declined Pseudo Tarrasch Variation Primitive Pillsbury Variation: Nf3 is a known theory move in this line."
+    },
+    {
+      "san": "cxd4",
+      "annotation": "Continuing Queens Gambit Declined Pseudo Tarrasch Variation Primitive Pillsbury Variation: cxd4 is a known theory move in this line."
+    },
+    {
+      "san": "Qxd4",
+      "annotation": "Continuing Queens Gambit Declined Pseudo Tarrasch Variation Primitive Pillsbury Variation: Qxd4 is a known theory move in this line."
     }
   ]
 }
