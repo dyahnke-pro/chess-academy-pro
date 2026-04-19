@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { AnimatePresence, motion, useDragControls } from 'framer-motion';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 interface MobileChatDrawerProps {
   isOpen: boolean;
@@ -16,6 +17,11 @@ interface MobileChatDrawerProps {
 export function MobileChatDrawer({ isOpen, onClose, children }: MobileChatDrawerProps): JSX.Element {
   const sheetRef = useRef<HTMLDivElement>(null);
   const dragControls = useDragControls();
+  // Focus trap — when the drawer is open, Tab stays inside. Previous
+  // behaviour let keyboard users Tab past the drawer into the
+  // (aria-hidden) page behind it. Pairs with the existing Escape
+  // handler for a proper dialog contract.
+  const trapRef = useFocusTrap<HTMLDivElement>(isOpen);
 
   // Escape key closes the drawer — keyboard-only accessibility.
   useEffect(() => {
@@ -45,7 +51,10 @@ export function MobileChatDrawer({ isOpen, onClose, children }: MobileChatDrawer
 
           {/* Bottom sheet */}
           <motion.div
-            ref={sheetRef}
+            ref={(el) => {
+              sheetRef.current = el;
+              trapRef.current = el;
+            }}
             key="chat-drawer"
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
