@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { voiceInputService } from '../../services/voiceInputService';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
 interface ChatInputProps {
   onSend: (text: string, modality?: 'voice' | 'text') => void;
@@ -16,6 +17,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
   const [listening, setListening] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const voiceSupported = voiceInputService.isSupported();
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   // Auto-focus the textarea on mount
   useEffect(() => {
@@ -126,8 +128,8 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
               ? 'border-red-500 bg-red-500/10 text-red-500'
               : 'border-theme-border text-theme-text-muted hover:text-theme-text'
           } disabled:opacity-50`}
-          animate={listening ? { scale: [1, 1.1, 1] } : { scale: 1 }}
-          transition={listening ? { duration: 1, repeat: Infinity } : {}}
+          animate={listening && !prefersReducedMotion ? { scale: [1, 1.1, 1] } : { scale: 1 }}
+          transition={listening && !prefersReducedMotion ? { duration: 1, repeat: Infinity } : {}}
           data-testid="voice-input-btn"
         >
           {listening ? <MicOff size={18} /> : <Mic size={18} />}

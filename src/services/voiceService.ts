@@ -289,6 +289,14 @@ class VoiceService {
       return;
     }
 
+    // Register MediaSession pause/stop handlers so Bluetooth headset
+    // play/pause buttons and OS-level media controls can interrupt
+    // the coach. Without this, tapping pause on AirPods during a
+    // narration does nothing (or falls through to the OS default).
+    // Re-registered on every speak so handlers always reference the
+    // current voiceService instance.
+    this.configureMediaSession();
+
     this.speed = prefs.voiceSpeed;
 
     // Tier 1: Amazon Polly. `isPollyLive()` handles cooldown expiry
@@ -318,6 +326,34 @@ class VoiceService {
     }
     await this.speakFallback(text);
     this.lastTier = 'web-speech';
+  }
+
+  /** Register MediaSession action handlers so BT headset / OS media
+   *  controls can pause & stop the coach. Safe no-op when the API
+   *  isn't available. Called on every speak() since the spec allows
+   *  re-registering; browsers dedupe internally. */
+  private configureMediaSession(): void {
+    if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
+    try {
+      // A title makes the BT device show something meaningful on its
+      // display when available (some models show track info).
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: 'Chess Academy Coach',
+        artist: 'Voice narration',
+      });
+      navigator.mediaSession.setActionHandler('pause', () => this.stop());
+      navigator.mediaSession.setActionHandler('stop', () => this.stop());
+      // We don't implement play/seek because TTS isn't resumable in a
+      // meaningful way (would require tracking sentence position).
+      // Clearing these prevents BT "play" from triggering the OS
+      // default (silent) behaviour and getting stuck.
+      navigator.mediaSession.setActionHandler('play', null);
+      navigator.mediaSession.setActionHandler('seekbackward', null);
+      navigator.mediaSession.setActionHandler('seekforward', null);
+    } catch {
+      // MediaSession throws if a handler isn't supported on the
+      // platform — safe to ignore, we fall through to default.
+    }
   }
 
   stop(): void {
@@ -370,9 +406,22 @@ class VoiceService {
       let arrayBuffer = this.audioCache.get(key);
 
       if (!arrayBuffer) {
+        // Combine caller-abort signal (new speak() supersedes current)
+        // with a 10s timeout so slow-network Polly can't hang the
+        // voice pipeline indefinitely. Matches the prefetchAudio
+        // pattern (5s) but longer because real speech may be a
+        // longer sentence than prefetched annotations.
         this.abortController = new AbortController();
+        const timeoutSignal = AbortSignal.timeout(10_000);
+        // AbortSignal.any is Chrome 116+/Safari 17.4+ — older browsers
+        // (and some WKWebView builds) still need the caller-only
+        // signal. Types mark `any` as always present; reality differs.
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        const combinedSignal = AbortSignal.any
+          ? AbortSignal.any([this.abortController.signal, timeoutSignal])
+          : this.abortController.signal;
         const url = getTtsUrl(text, voice);
-        const response = await fetch(url, { signal: this.abortController.signal });
+        const response = await fetch(url, { signal: combinedSignal });
         if (!response.ok) {
           this.coolDownPolly(`API error ${response.status}`);
           return false;

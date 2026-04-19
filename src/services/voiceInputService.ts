@@ -304,6 +304,7 @@ class VoiceInputService {
    *  builds don't reference `document` at module load. */
   private visibilityListener: (() => void) | null = null;
   private pageHideListener: (() => void) | null = null;
+  private deviceChangeListener: (() => void) | null = null;
 
   private attachLifecycleListeners(): void {
     if (typeof document === 'undefined') return;
@@ -318,11 +319,43 @@ class VoiceInputService {
     this.pageHideListener = () => {
       this.stopListening();
     };
+    // Audio-route changes: BT headset connect/disconnect fires
+    // `devicechange` on navigator.mediaDevices. The Web Speech API
+    // doesn't automatically re-select the new mic — we have to
+    // restart recognition so the platform re-opens with the new
+    // input route. Only restart if we were already listening AND
+    // not manually stopped.
+    this.deviceChangeListener = () => {
+      if (!this.listening || this.userStopped) return;
+      // Flag as transient so onend doesn't count it toward the
+      // thrash cap. Quick stop+restart refreshes mic selection.
+      const klass = this.getSpeechRecognitionClass();
+      if (!klass) return;
+      try {
+        this.recognition?.stop();
+      } catch {
+        /* already stopping */
+      }
+      // Restart after a tick so the browser settles the route
+      // change before we re-open.
+      setTimeout(() => {
+        if (this.listening && !this.userStopped) {
+          const k = this.getSpeechRecognitionClass();
+          if (k) this.createAndStart(k);
+        }
+      }, 250);
+    };
     document.addEventListener('visibilitychange', this.visibilityListener);
     // `pagehide` covers iOS Safari / PWA background & unload in a way
     // `beforeunload` doesn't. Add both for best coverage.
     window.addEventListener('pagehide', this.pageHideListener);
     window.addEventListener('beforeunload', this.pageHideListener);
+    // navigator.mediaDevices types as non-null in TS lib but can be
+    // undefined on older browsers / insecure contexts / file://.
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (typeof navigator !== 'undefined' && navigator.mediaDevices) {
+      navigator.mediaDevices.addEventListener('devicechange', this.deviceChangeListener);
+    }
   }
 
   private detachLifecycleListeners(): void {
@@ -335,6 +368,11 @@ class VoiceInputService {
       window.removeEventListener('pagehide', this.pageHideListener);
       window.removeEventListener('beforeunload', this.pageHideListener);
       this.pageHideListener = null;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (this.deviceChangeListener && typeof navigator !== 'undefined' && navigator.mediaDevices) {
+      navigator.mediaDevices.removeEventListener('devicechange', this.deviceChangeListener);
+      this.deviceChangeListener = null;
     }
   }
 
