@@ -56,6 +56,7 @@ vi.mock('../../services/voiceInputService', () => ({
     startListening: (): boolean => mockStartListening(),
     stopListening: (): void => { mockStopListening(); },
     isListening: (): boolean => false,
+    prewarmMic: async (): Promise<void> => { /* no-op in tests */ },
     onResult: (handler: (text: string) => void) => {
       mockOnResult(handler);
     },

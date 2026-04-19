@@ -139,6 +139,9 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       setListening(false);
       return;
     }
+    // Pre-warm mic permission + hardware so first-tap reliably
+    // starts recognition (fixes the "press twice" bug).
+    void voiceInputService.prewarmMic();
     // Drop any previous handler from this component before
     // registering a new one — otherwise every mic-tap would pile
     // another listener into the service's fan-out array. In
