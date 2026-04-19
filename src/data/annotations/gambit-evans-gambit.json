@@ -10,23 +10,23 @@
     },
     {
       "san": "Nf3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: Nf3 is a known theory move in this line."
     },
     {
       "san": "Nc6",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: Nc6 is a known theory move in this line."
     },
     {
       "san": "Bc4",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: Bc4 is a known theory move in this line."
     },
     {
       "san": "Bc5",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: Bc5 is a known theory move in this line."
     },
     {
       "san": "b4",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: b4 is a known theory move in this line."
     },
     {
       "san": "Bxb4",
@@ -41,7 +41,7 @@
     },
     {
       "san": "c3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: c3 is a known theory move in this line."
     },
     {
       "san": "Ba5",
@@ -64,11 +64,11 @@
     },
     {
       "san": "O-O",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: O-O is a known theory move in this line."
     },
     {
       "san": "d6",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: d6 is a known theory move in this line."
     },
     {
       "san": "cxd4",
@@ -99,19 +99,19 @@
     },
     {
       "san": "Ne7",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: Ne7 is a known theory move in this line."
     },
     {
       "san": "Bd3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: Bd3 is a known theory move in this line."
     },
     {
       "san": "O-O",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: O-O is a known theory move in this line."
     },
     {
       "san": "Nc3",
-      "annotation": ""
+      "annotation": "Continuing Gambit Evans Gambit: Nc3 is a known theory move in this line."
     },
     {
       "san": "Ng6",
@@ -2301,5 +2301,6 @@
         }
       ]
     }
-  ]
+  ],
+  "openingId": "gambit-evans-gambit"
 }

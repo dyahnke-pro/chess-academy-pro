@@ -303,7 +303,7 @@
     },
     {
       "san": "exd5",
-      "annotation": "",
+      "annotation": "Continuing Kings Gambit: exd5 is a known theory move in this line.",
       "pawnStructure": "White has a passed d5 pawn and open central lines.",
       "plans": [
         "Use the passed d-pawn as a long-term asset",
