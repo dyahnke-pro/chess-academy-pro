@@ -320,9 +320,17 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     // has — StudentState (mood / tempo) + persistent memory — so
     // replies land with real empathy and continuity instead of
     // generic chess prose.
+    // Tempo: PREVIOUS user message's timestamp, not the one that
+    // just arrived. Date.now() always flagged FAST → LLM kept replies
+    // tight → every greeting became "Hi." Undefined when this is the
+    // first voice exchange; builder skips tempo in that case.
+    const previousUserMsg = currentMessages
+      .slice(0, -1) // drop the just-appended current message
+      .filter((m) => m.role === 'user')
+      .at(-1);
     const studentStateBlock = buildStudentStateBlock({
       recentChat: currentMessages,
-      lastUserInteractionMs: Date.now(),
+      lastUserInteractionMs: previousUserMsg?.timestamp,
       turn: engineData && turn === (playerColor === 'white' ? 'w' : 'b') ? 'student' : 'coach',
       contextLabel: 'in-game voice chat',
     });

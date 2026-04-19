@@ -1622,10 +1622,17 @@ export function CoachGamePage(): JSX.Element {
         const recentMoveClassifications = gameState.moves
           .slice(-5)
           .map((m) => m.classification);
-        // Tempo signal: when did the student last input something?
-        // Most recent move's timestamp is a good proxy since chat
-        // messages get stamped separately in the session store.
-        const lastUserInteractionMs = Date.now();
+        // Tempo signal: time of the PREVIOUS user interaction (chat
+        // message or board move), not "now". The builder treats <2s
+        // as no-signal, so passing Date.now() always flagged FAST
+        // and forced the LLM into "keep replies tight" mode — that
+        // cancelled out Unlimited verbosity. Use the newest user
+        // chat message timestamp (the student's last typed/spoken
+        // turn); undefined when there is none so the block skips
+        // tempo entirely.
+        const lastUserChatMs = [...sessionMessages]
+          .reverse()
+          .find((m) => m.role === 'user')?.timestamp;
 
         const llm = await generateMoveCommentary({
           gameAfter: probe,
@@ -1640,7 +1647,7 @@ export function CoachGamePage(): JSX.Element {
           verbosity: narrationDensity,
           groundedNotes,
           recentMoveClassifications,
-          lastUserInteractionMs,
+          lastUserInteractionMs: lastUserChatMs,
         });
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
         // Mirror the commentary into the shared session so the next

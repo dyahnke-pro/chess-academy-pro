@@ -63,6 +63,13 @@ function sentimentFromChat(chat: ChatMessage[] | undefined): 'frustrated' | 'con
 function tempoFromLastInteraction(lastMs: number | undefined): 'fast' | 'thinking' | 'idle' | 'unknown' {
   if (lastMs === undefined) return 'unknown';
   const elapsedSec = (Date.now() - lastMs) / 1000;
+  // <2s means the caller passed "now" (i.e. the timestamp of the
+  // CURRENT interaction) instead of the previous turn — no meaningful
+  // tempo signal. Treat as unknown so we don't force the coach into
+  // "keep replies tight" mode on every turn. This was the bug that
+  // turned every greeting into "Hi." — every message arrived as
+  // "fast tempo → be brief" even when the student actually paused.
+  if (elapsedSec < 2) return 'unknown';
   if (elapsedSec < 10) return 'fast';
   if (elapsedSec < 90) return 'thinking';
   return 'idle';
