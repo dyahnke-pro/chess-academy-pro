@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { AnimatePresence, motion, useDragControls } from 'framer-motion';
 
@@ -16,6 +16,16 @@ interface MobileChatDrawerProps {
 export function MobileChatDrawer({ isOpen, onClose, children }: MobileChatDrawerProps): JSX.Element {
   const sheetRef = useRef<HTMLDivElement>(null);
   const dragControls = useDragControls();
+
+  // Escape key closes the drawer — keyboard-only accessibility.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent): void => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
@@ -59,6 +69,9 @@ export function MobileChatDrawer({ isOpen, onClose, children }: MobileChatDrawer
               borderTop: '1px solid var(--color-border)',
               paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Coach chat"
             data-testid="mobile-chat-drawer"
           >
             {/* Drag handle — only this area initiates drag */}

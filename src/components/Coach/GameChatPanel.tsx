@@ -523,7 +523,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         )}
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 min-h-0 flex flex-col gap-4">
+        <div
+          className="flex-1 overflow-y-auto p-4 min-h-0 flex flex-col gap-4"
+          role="log"
+          aria-live="polite"
+          aria-relevant="additions"
+          aria-label="In-game coach chat messages"
+        >
           {messages.length === 0 && !isStreaming && (
             <motion.div
               className="flex flex-col items-center gap-3 py-8"

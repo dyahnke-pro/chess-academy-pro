@@ -439,6 +439,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => { if (results.length > 0 || showAskCoach) setShowDropdown(true); }}
           onKeyDown={handleKeyDown}
+          aria-label={scope === 'opening' ? 'Search openings' : 'Search or ask coach'}
           placeholder={placeholder ?? defaultPlaceholder}
           className="w-full pl-9 pr-16 py-2.5 rounded-xl text-sm transition-all duration-200 focus:outline-none"
           style={{
