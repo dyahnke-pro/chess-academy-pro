@@ -1,6 +1,7 @@
 import { useMemo, useCallback, useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Chessboard } from 'react-chessboard';
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import { RotateCcw, SkipBack, RefreshCw } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -132,6 +133,11 @@ export function ChessBoard({
 
   // ─── Board border flash ─────────────────────────────────────────────────────
   const [flashColor, setFlashColor] = useState<string | null>(null);
+  // Gate the pulsing move-quality flash on the user's motion
+  // preference — a11y audit flagged the animate-pulse ring on the
+  // board as a vestibular-disorder trigger at a critical feedback
+  // moment. Non-animated flash still shows the colour ring.
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     if (!moveQualityFlash) {
@@ -342,7 +348,7 @@ export function ChessBoard({
           {/* Move quality border flash */}
           {flashColor && (
             <div
-              className="absolute inset-0 pointer-events-none rounded-sm animate-pulse"
+              className={`absolute inset-0 pointer-events-none rounded-sm ${prefersReducedMotion ? '' : 'animate-pulse'}`}
               style={{ boxShadow: `inset 0 0 0 8px ${flashColor}, 0 0 24px 6px ${flashColor}` }}
               data-testid="move-quality-flash"
             />
