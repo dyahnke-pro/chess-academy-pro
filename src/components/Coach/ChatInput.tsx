@@ -70,6 +70,9 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
       voiceInputService.stopListening();
       setListening(false);
     } else {
+      // Pre-warm mic so first-tap reliably starts (fixes the
+      // "press twice" bug).
+      void voiceInputService.prewarmMic();
       // Mic on = voice narration on (implicit). Student enabling the
       // mic is implicitly opting into a spoken conversation, so flip
       // the per-move / reply TTS flag on too. Left on when they later

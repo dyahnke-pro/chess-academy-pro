@@ -69,6 +69,55 @@ interface SpeechRecognitionConstructor {
  *  cap it so we don't brick the page. Reset on successful final. */
 const MAX_RESTART_ATTEMPTS = 3;
 
+/** Minimum average confidence to accept a transcript. Web Speech
+ *  reports 0-1; below this the audio was noisy or the speech wasn't
+ *  clearly directed at the mic. 0.55 is a balance — catches most
+ *  background chatter without rejecting quiet-but-clear speech. */
+const NOISE_CONFIDENCE_THRESHOLD = 0.55;
+
+/** Isolated noise / filler words that we should NOT send to the
+ *  coach. A real question/greeting won't consist of only one of
+ *  these. Case-insensitive. */
+const NOISE_WORD_SET = new Set([
+  'the', 'a', 'an', 'and', 'or', 'but', 'so', 'um', 'uh', 'er', 'ah',
+  'eh', 'oh', 'mm', 'hmm', 'huh', 'ok', 'okay', 'yeah', 'yep', 'nope',
+  'mhm', 'uhhuh', 'yes', 'no',
+]);
+
+/** Greetings allowed through even when short/single-word — these
+ *  SHOULD reach the coach to trigger a RETURN greeting reply. */
+const GREETING_WORD_SET = new Set([
+  'hi', 'hello', 'hey', 'yo', 'sup', 'howdy', 'greetings',
+]);
+
+/**
+ * Heuristic noise filter — returns true when a final transcript
+ * looks like background noise, cross-talk, or a mic pop rather than
+ * the student addressing the coach. Errs on the side of LETTING
+ * AMBIGUOUS speech through (false negatives are better than
+ * frustrating the student with missed intents). Three signals:
+ *   1. Average confidence below threshold.
+ *   2. Single word matching NOISE_WORD_SET (and not a greeting).
+ *   3. Empty or < 2 chars.
+ */
+export function shouldDropAsNoise(text: string, avgConfidence: number): boolean {
+  const normalized = text.trim().toLowerCase();
+  if (normalized.length < 2) return true;
+  const words = normalized.replace(/[^\w'\s]/g, '').split(/\s+/).filter(Boolean);
+  if (words.length === 1) {
+    const word = words[0];
+    if (GREETING_WORD_SET.has(word)) return false;
+    if (NOISE_WORD_SET.has(word)) return true;
+  }
+  // Confidence signal: only drop when confidence is BOTH low AND the
+  // utterance is short (longer speech with low confidence might still
+  // be a real question we should try to answer).
+  if (avgConfidence > 0 && avgConfidence < NOISE_CONFIDENCE_THRESHOLD && words.length <= 3) {
+    return true;
+  }
+  return false;
+}
+
 /**
  * voiceInputService — continuous dictation.
  *
@@ -118,11 +167,53 @@ class VoiceInputService {
    *  cap to avoid tight loops on permission-denied / device errors. */
   private restartAttempts = 0;
 
+  /** True once we've successfully opened a mic stream at least once.
+   *  Used to bypass the getUserMedia pre-warm on subsequent taps —
+   *  permission grants persist for the session, so we only need to
+   *  ask + warm up the audio pipeline once. */
+  private micPreWarmed = false;
+
   isSupported(): boolean {
     return typeof window !== 'undefined' && (
       'SpeechRecognition' in window ||
       'webkitSpeechRecognition' in window
     );
+  }
+
+  /**
+   * Pre-warm the mic permission + hardware by opening a brief
+   * getUserMedia stream, then closing it. Solves the "press mic
+   * twice to start" bug: on the first-ever tap, some browsers pop
+   * the permission prompt synchronously which steals focus and
+   * cancels the in-flight Web Speech start. By requesting the mic
+   * ourselves BEFORE calling recognition.start(), permission is
+   * resolved and audio hardware is hot by the time Web Speech
+   * opens its own stream. Noise-suppression + echo-cancellation
+   * are requested via constraints so Web Speech sees cleaner
+   * audio on devices that honour them.
+   */
+  async prewarmMic(): Promise<void> {
+    if (this.micPreWarmed) return;
+    if (typeof navigator === 'undefined') return;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!navigator.mediaDevices?.getUserMedia) return;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+      // Close the stream immediately — Web Speech opens its own. We
+      // only needed the permission grant + device warm-up.
+      stream.getTracks().forEach((t) => t.stop());
+      this.micPreWarmed = true;
+    } catch {
+      // Permission denied or no mic — don't flip the flag so we can
+      // retry on the next tap. The error surfaces through
+      // recognition.onerror in the normal flow.
+    }
   }
 
   startListening(options: StartListeningOptions = {}): boolean {
@@ -213,12 +304,36 @@ class VoiceInputService {
     this.recognition.onresult = (event: SpeechRecognitionEvent) => {
       let interimText = '';
       let finalText = '';
+      let finalConfidence = 0;
+      let finalSegments = 0;
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
           finalText += result[0].transcript;
+          finalConfidence += result[0].confidence || 0;
+          finalSegments += 1;
         } else {
           interimText += result[0].transcript;
+        }
+      }
+      // Noise / cross-talk filter: reject finals that look like
+      // background chatter or mic pops picked up while the student
+      // wasn't actually addressing the coach. Three signals, any of
+      // which drops the transcript:
+      //   1. Low average confidence (< 0.55) — Web Speech is unsure
+      //   2. Single-word noise (just "the", "uh", "yeah", "okay", etc.)
+      //   3. Very short non-greeting (< 2 chars)
+      // Greetings are allowed through even if short/single-word.
+      if (finalText && finalSegments > 0) {
+        const avgConfidence = finalConfidence / finalSegments;
+        const trimmed = finalText.trim();
+        if (shouldDropAsNoise(trimmed, avgConfidence)) {
+          // Swallow the noise — reset per-utterance state so the next
+          // real utterance starts clean.
+          this.latestInterim = '';
+          this.speechStartFired = false;
+          this.finalDispatched = false;
+          return;
         }
       }
       if (interimText) {

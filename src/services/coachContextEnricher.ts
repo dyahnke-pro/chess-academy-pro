@@ -112,14 +112,28 @@ export async function buildGroundingBlock(input: EnricherInput): Promise<string>
   const isGreeting = GREETING_RE.test(userText);
   const wantsOpening = OPENING_QUESTION_RE.test(userText);
   const wantsPosition = POSITION_QUESTION_RE.test(userText);
-  // Greetings fire the performance blocks so the coach can welcome
-  // the student with a concrete observation from their real data.
-  const wantsPerformance = PERFORMANCE_QUESTION_RE.test(userText) || wantsOpening || isGreeting;
+  // Greetings used to fire the full performance grounding so the coach
+  // could welcome with "I see you're scoring 68% as White..." BUT the
+  // snapshot block (buildCoachContextSnapshot) already contains those
+  // stats — fetching them again just to say hello costs 2-5 seconds
+  // of Lichess + Stockfish + DB work per turn. First-word latency on
+  // voice was ~7s because of this. Let the snapshot handle greetings;
+  // only fire grounding when the student actually asks a data-specific
+  // question.
+  const wantsPerformance = PERFORMANCE_QUESTION_RE.test(userText) || wantsOpening;
   const wantsTactics = TACTICS_QUESTION_RE.test(userText);
   const wantsMistakes = MISTAKE_QUESTION_RE.test(userText) || wantsPerformance;
   const wantsStudy = STUDY_QUESTION_RE.test(userText);
   const wantsTimeControl = TIME_CONTROL_QUESTION_RE.test(userText) || wantsPerformance;
   const wantsGameDetail = RECENT_GAME_DETAIL_RE.test(userText);
+
+  // Fast-path: pure greeting with no substantive question. Skip the
+  // grounding fetch entirely — snapshot carries the welcome data.
+  if (isGreeting && !wantsOpening && !wantsPosition && !wantsPerformance &&
+      !wantsTactics && !wantsMistakes && !wantsStudy && !wantsTimeControl &&
+      !wantsGameDetail) {
+    return '';
+  }
 
   if (
     !isGreeting &&

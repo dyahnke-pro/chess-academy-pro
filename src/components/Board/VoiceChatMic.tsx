@@ -492,6 +492,13 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     }
     // Warm up Web Speech in this gesture context so iOS doesn't block TTS later
     speechService.warmupInGestureContext();
+    // Pre-warm mic permission + hardware BEFORE Web Speech starts —
+    // fixes the "press mic twice to start" bug where the permission
+    // prompt on first tap steals focus from recognition.start().
+    // Fire and forget; completes in parallel with the rest of the
+    // start flow. Subsequent taps no-op via the internal micPreWarmed
+    // flag.
+    void voiceInputService.prewarmMic();
 
     if (listening) {
       voiceInputService.stopListening();
