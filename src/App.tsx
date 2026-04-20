@@ -9,6 +9,7 @@ import { getSharedAudioContext } from './services/audioContextManager';
 import { speechService } from './services/speechService';
 import { voiceService } from './services/voiceService';
 import { db } from './db/schema';
+import { installGlobalErrorHooks, logAppAudit } from './services/appAuditor';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -85,6 +86,14 @@ export function App(): JSX.Element {
     };
   }, []);
 
+  // Install window.onerror + unhandledrejection hooks so any runtime
+  // failure flows into the same audit log as narration findings and
+  // subsystem errors. One place to look post-launch.
+  useEffect(() => {
+    const uninstall = installGlobalErrorHooks();
+    return uninstall;
+  }, []);
+
   useEffect(() => {
     async function init(): Promise<void> {
       // Create the shared AudioContext immediately so its touchstart unlock
@@ -123,6 +132,13 @@ export function App(): JSX.Element {
 
       } catch (error) {
         console.error('App initialization failed:', error);
+        void logAppAudit({
+          kind: 'uncaught-error',
+          category: 'app',
+          source: 'App.init',
+          summary: error instanceof Error ? error.message : 'App initialization failed',
+          details: error instanceof Error ? error.stack : String(error),
+        });
       } finally {
         setLoading(false);
       }
