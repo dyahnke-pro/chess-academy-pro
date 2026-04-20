@@ -1256,7 +1256,13 @@ export function CoachGamePage(): JSX.Element {
       // Narrate the coach's move when narration mode is on. Falls
       // back to a short SAN announcement since applyCoachMove doesn't
       // generate LLM commentary on the engine's side.
+      // Stop any in-flight TTS (a stale voice-chat reply still playing,
+      // the previous move's narration that overran) before the coach's
+      // move speaks. Without this the coach narration and a prior
+      // voice-chat reply can overlap — the student hears two voices
+      // at once. Matches the player-move path's guard below.
       const coachSide: 'w' | 'b' = playerColor === 'white' ? 'b' : 'w';
+      voiceService.stop();
       narrateMove({
         san: result.san,
         mover: coachSide,

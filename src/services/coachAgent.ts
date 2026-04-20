@@ -48,6 +48,15 @@ export interface CoachIntent {
   raw: string;
 }
 
+/** Generic "I want to learn an opening, you pick" phrasings — no
+ *  specific opening named. Matches the full user query (lowercased),
+ *  not just a captured subject fragment. Routes to play-against so
+ *  the student lands on the live board where the coach can propose
+ *  and start one; the walkthrough player needs a concrete opening
+ *  match and would otherwise fall back to a stub. */
+const GENERIC_OPENING_REQUEST_RE =
+  /^(?:please\s+)?(?:can\s+you\s+)?(?:teach|show|give)\s+me\s+(?:a|an|another|a\s+new|a\s+different|a\s+random|some)\s+(?:new\s+|different\s+|random\s+)?(?:opening|openings|opening\s+theory)\b[\s!.?]*$/i;
+
 const DIFFICULTY_WORDS: Record<string, CoachDifficulty> = {
   easy: 'easy',
   beginner: 'easy',
@@ -265,6 +274,21 @@ export function parseCoachIntent(query: string): CoachIntent {
       kind: 'puzzle',
       theme: theme || undefined,
       difficulty: extractDifficulty(lower),
+      raw,
+    };
+  }
+
+  // 4.5 "Teach me an opening" / "show me a new opening" — generic
+  //    requests with no specific opening name. Must come BEFORE the
+  //    walkthrough regex below, which would otherwise capture a
+  //    fragment subject ("an", "a new") that the walkthrough player
+  //    can't resolve. Route to play-against so the student lands on
+  //    the live board where the coach can suggest and start one.
+  if (GENERIC_OPENING_REQUEST_RE.test(lower)) {
+    return {
+      kind: 'play-against',
+      difficulty: extractDifficulty(lower) ?? 'auto',
+      side: extractSide(lower),
       raw,
     };
   }

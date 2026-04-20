@@ -223,6 +223,22 @@ describe('parseCoachIntent — walkthrough', () => {
     expect(intent.kind).toBe('walkthrough');
     expect(intent.subject?.toLowerCase()).toContain('london');
   });
+
+  it('"teach me an opening" (generic, no name) → play-against', () => {
+    const intent = parseCoachIntent('teach me an opening');
+    expect(intent.kind).toBe('play-against');
+    expect(intent.subject).toBeUndefined();
+  });
+
+  it('"teach me a new opening" → play-against', () => {
+    const intent = parseCoachIntent('teach me a new opening');
+    expect(intent.kind).toBe('play-against');
+  });
+
+  it('"show me an opening" (generic) → play-against', () => {
+    const intent = parseCoachIntent('show me an opening');
+    expect(intent.kind).toBe('play-against');
+  });
 });
 
 describe('parseCoachIntent — explain-position', () => {

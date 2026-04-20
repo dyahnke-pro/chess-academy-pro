@@ -9,6 +9,12 @@ import { getCoachChatResponse } from '../../services/coachApi';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildStudentStateBlock } from '../../services/studentStateBlock';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from '../../services/coachMemoryService';
+import { buildGroundingBlock } from '../../services/coachContextEnricher';
+import {
+  buildCoachContextSnapshot,
+  formatCoachContextSnapshot,
+} from '../../services/coachContextSnapshot';
+import { COACH_CONVERSATION_RULES } from '../../services/coachPrompts';
 import { db } from '../../db/schema';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
@@ -315,17 +321,18 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
     const baseSystem = buildSystemAddition(fen, pgn, turn, playerColor, engineData, lastMoveContext);
 
-    // Audit finding: VoiceChatMic was flying blind vs. the chat coach.
-    // Wire the same trainer-grade context blocks the main agent runner
-    // has — StudentState (mood / tempo) + persistent memory — so
-    // replies land with real empathy and continuity instead of
-    // generic chess prose.
+    // Voice chat was flying blind vs. the chat coach: it skipped the
+    // conversation rules (greeting structure, data-access rule), the
+    // session-state snapshot, and the grounded-data block. With none
+    // of those, the LLM had no stats to cite and fell back to bare
+    // "Hi." replies. Inject the same trainer-grade blocks the main
+    // coach runner uses so voice greetings land with real content.
     // Tempo: PREVIOUS user message's timestamp, not the one that
     // just arrived. Date.now() always flagged FAST → LLM kept replies
     // tight → every greeting became "Hi." Undefined when this is the
     // first voice exchange; builder skips tempo in that case.
     const previousUserMsg = currentMessages
-      .slice(0, -1) // drop the just-appended current message
+      .slice(0, -1)
       .filter((m) => m.role === 'user')
       .at(-1);
     const studentStateBlock = buildStudentStateBlock({
@@ -334,8 +341,20 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       turn: engineData && turn === (playerColor === 'white' ? 'w' : 'b') ? 'student' : 'coach',
       contextLabel: 'in-game voice chat',
     });
-    const memoryBlock = await buildCoachMemoryBlock();
-    const systemAddition = [baseSystem, studentStateBlock, memoryBlock]
+    const [memoryBlock, snapshot, groundingBlock] = await Promise.all([
+      buildCoachMemoryBlock(),
+      buildCoachContextSnapshot(),
+      buildGroundingBlock({ userText: text, currentFen: fen }),
+    ]);
+    const snapshotText = formatCoachContextSnapshot(snapshot);
+    const systemAddition = [
+      baseSystem,
+      COACH_CONVERSATION_RULES,
+      snapshotText,
+      memoryBlock,
+      studentStateBlock,
+      groundingBlock,
+    ]
       .filter((s): s is string => !!s && s.length > 0)
       .join('\n\n');
 
