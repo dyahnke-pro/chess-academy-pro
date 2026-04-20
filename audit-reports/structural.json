@@ -1,13 +1,13 @@
 {
   "summary": {
-    "generatedAt": "2026-04-17T00:38:57.801Z",
-    "totalRecords": 42961,
+    "generatedAt": "2026-04-20T15:36:39.338Z",
+    "totalRecords": 43141,
     "counts": {
-      "bareAnnotations": 11996,
+      "bareAnnotations": 11848,
       "fillerAnnotations": 0,
-      "illegalMoves": 6,
-      "sanDrift": 3,
-      "illegalArrows": 37,
+      "illegalMoves": 0,
+      "sanDrift": 0,
+      "illegalArrows": 0,
       "classificationSanity": 0,
       "phraseClusters": 50
     }
@@ -3911,30 +3911,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "alekhine-defense-exchange-variation",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "Nf6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "alekhine-defense-modern-variation-alekhine-variation",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "alekhine-defense-welling-variation",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "gambit-benko-gambit",
         "sublineName": "Benko Gambit: Fianchetto Variation",
@@ -7463,14 +7439,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "benoni-defense-kings-pawn-line",
-        "sublineName": null,
-        "moveIndex": 3,
-        "san": "g6",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "birds-opening",
         "sublineName": "Bird's: From's Gambit",
@@ -8428,54 +8396,6 @@
         "sublineName": "Stonewall Kingside Attack",
         "moveIndex": 29,
         "san": "e5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "blackmar-diemer-gambit-declined-brombacher-countergambit",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "blackmar-diemer-gambit-lemberger-countergambit-sneiders-attack",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "e5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "bogo-indian-defense-gr-nfeld-variation",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "Nf6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "bogo-indian-defense-haiti-variation",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "Nc6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "bogo-indian-defense-monticelli-trap",
-        "sublineName": null,
-        "moveIndex": 15,
-        "san": "Ne4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "bogo-indian-defense",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "Bb4+",
         "annotation": ""
       },
       {
@@ -9884,30 +9804,6 @@
         "sublineName": "Premature d5 Break",
         "moveIndex": 20,
         "san": "cxd5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "caro-kann-defense-advance-variation-prins-attack",
-        "sublineName": null,
-        "moveIndex": 6,
-        "san": "b4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "caro-kann-defense-campomanes-attack",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "caro-kann-defense-classical-variation-spassky-variation",
-        "sublineName": null,
-        "moveIndex": 4,
-        "san": "Nd2",
         "annotation": ""
       },
       {
@@ -18439,54 +18335,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "dutch-defense-classical-variation-blackburne-attack",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "f5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "english-opening-anglo-indian-defense-gr-nfeld-formation",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "d5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "english-opening-kings-english-variation-four-knights-variation-fianchetto-line-delayed-nc6",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "e5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "english-opening-kings-english-variation-taimanov-variation",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "g6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "english-opening-kings-english-variation-taimanov-variation",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "Bg7",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "english-opening-symmetrical-variation-anti-benoni-variation-spielmann-defense",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "english-opening",
         "sublineName": "English: Symmetrical Variation",
@@ -26295,110 +26143,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 2,
-        "san": "c4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 3,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "b5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "a6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 9,
-        "san": "Bxa6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 10,
-        "san": "Nc3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 11,
-        "san": "d6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 19,
-        "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 20,
-        "san": "Nf3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 21,
-        "san": "Nbd7",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 23,
-        "san": "Qa5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 24,
-        "san": "Qc2",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-benko-gambit",
-        "sublineName": null,
-        "moveIndex": 29,
-        "san": "Nc4",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "gambit-benko-gambit",
         "sublineName": "Benko Gambit: Fully Accepted (King Walk)",
@@ -28343,142 +28087,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 2,
-        "san": "c4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 6,
-        "san": "Bf4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "Nc6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 8,
-        "san": "Nf3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 9,
-        "san": "Bb4+",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 10,
-        "san": "Nbd2",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 11,
-        "san": "Qe7",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 12,
-        "san": "a3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 16,
-        "san": "e3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 18,
-        "san": "Qxd2",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 19,
-        "san": "d6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 20,
-        "san": "Be2",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 21,
-        "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 22,
-        "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 23,
-        "san": "Bf5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 24,
-        "san": "b4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-budapest-gambit",
-        "sublineName": null,
-        "moveIndex": 25,
-        "san": "a5",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "gambit-budapest-gambit",
         "sublineName": "Budapest Gambit: Alekhine Variation (Bf4)",
@@ -30071,102 +29679,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 2,
-        "san": "Nf3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 3,
-        "san": "Nc6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 4,
-        "san": "Bc4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "Bc5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 6,
-        "san": "b4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 8,
-        "san": "c3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 12,
-        "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 13,
-        "san": "d6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 19,
-        "san": "Ne7",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 20,
-        "san": "Bd3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 21,
-        "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-evans-gambit",
-        "sublineName": null,
-        "moveIndex": 22,
-        "san": "Nc3",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "gambit-evans-gambit",
         "sublineName": "Evans Gambit: Normal Variation with d5 Push",
@@ -31591,102 +31103,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 4,
-        "san": "Nf3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 6,
-        "san": "Bc4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 10,
-        "san": "Ne5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 11,
-        "san": "Qe7",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 13,
-        "san": "d6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 14,
-        "san": "Nd3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 15,
-        "san": "Nf6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 18,
-        "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 21,
-        "san": "Nc6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 23,
-        "san": "Bf5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 24,
-        "san": "Nc3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gambit-kings-gambit",
-        "sublineName": null,
-        "moveIndex": 28,
-        "san": "Ba3",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "gambit-kings-gambit",
         "sublineName": "King's Gambit Accepted: Knight Gambit Main Line",
@@ -32948,30 +32364,6 @@
         "sublineName": "Modern Defense: Black Declines Cleanly",
         "moveIndex": 25,
         "san": "Kxg7",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gr-nfeld-defense-pachman-variation",
-        "sublineName": null,
-        "moveIndex": 9,
-        "san": "dxc4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gr-nfeld-defense-pachman-variation",
-        "sublineName": null,
-        "moveIndex": 11,
-        "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "gr-nfeld-defense-three-knights-variation-burille-variation-reversed-tarrasch",
-        "sublineName": null,
-        "moveIndex": 15,
-        "san": "Nc6",
         "annotation": ""
       },
       {
@@ -36900,22 +36292,6 @@
         "sublineName": "Giuoco Piano: Black Delays Castling",
         "moveIndex": 19,
         "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "k-das-opening-schneider-gambit",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "g5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "kings-gambit",
-        "sublineName": null,
-        "moveIndex": 12,
-        "san": "exd5",
         "annotation": ""
       },
       {
@@ -42607,54 +41983,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "kings-indian-defense-averbakh-variation-modern-defense-burgess-line",
-        "sublineName": null,
-        "moveIndex": 10,
-        "san": "Bg5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "kings-indian-defense-averbakh-variation-modern-defense",
-        "sublineName": null,
-        "moveIndex": 6,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "kings-indian-defense-fianchetto-variation-classical-main-line",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "kings-indian-defense-fianchetto-variation-delayed-fianchetto",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "d4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "kings-indian-defense-s-misch-variation-closed-variation-main-line",
-        "sublineName": null,
-        "moveIndex": 11,
-        "san": "e5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "lemming-defense",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "london-system",
         "sublineName": "London vs King's Indian",
@@ -45028,14 +44356,6 @@
         "sublineName": "Dutch f5-f4 Pawn Storm",
         "moveIndex": 31,
         "san": "f4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "marienbad-system",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "c5",
         "annotation": ""
       },
       {
@@ -47903,46 +47223,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "modern-defense-randspringer-variation",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "f5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "neo-gr-nfeld-defense-ultra-delayed-exchange-variation",
-        "sublineName": null,
-        "moveIndex": 12,
-        "san": "cxd5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "nimzo-indian-defense-normal-variation-bernstein-defense",
-        "sublineName": null,
-        "moveIndex": 15,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "nimzo-indian-defense-normal-variation-gligoric-system-bernstein-defense",
-        "sublineName": null,
-        "moveIndex": 3,
-        "san": "e6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "nimzo-indian-defense-simagin-variation",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "d4",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "nimzo-indian",
         "sublineName": "Classical Variation (4.Qc2)",
@@ -49908,38 +49188,6 @@
         "sublineName": "Premature ...c5 Without ...d5",
         "moveIndex": 25,
         "san": "g6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "nimzowitsch-defense-scandinavian-variation-bogoljubow-variation-brandics-gambit",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "a6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "nimzowitsch-defense-scandinavian-variation-bogoljubow-variation-erben-gambit",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "nimzowitsch-defense-scandinavian-variation-bogoljubow-variation",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "nimzowitsch-defense-scandinavian-variation-exchange-variation-marshall-gambit",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
         "annotation": ""
       },
       {
@@ -59263,94 +58511,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-accepted-alekhine-defense-haberditz-variation",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "b5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-accepted-classical-defense-normal-line",
-        "sublineName": null,
-        "moveIndex": 9,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-declined-albin-countergambit-balogh-variation",
-        "sublineName": null,
-        "moveIndex": 3,
-        "san": "e5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-declined-baltic-defense-argentinian-gambit",
-        "sublineName": null,
-        "moveIndex": 9,
-        "san": "Nxc6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-declined-charousek-variation-miladinovic-gambit",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "dxe4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-declined-chigorin-defense-tartakower-gambit",
-        "sublineName": null,
-        "moveIndex": 3,
-        "san": "Nc6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-declined-lasker-defense-bernstein-variation-mar-del-plata-gambit",
-        "sublineName": null,
-        "moveIndex": 16,
-        "san": "cxd5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-declined-orthodox-defense-classical-variation",
-        "sublineName": null,
-        "moveIndex": 27,
-        "san": "Qxe5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-declined-orthodox-defense-janowski-variation",
-        "sublineName": null,
-        "moveIndex": 15,
-        "san": "dxc4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-declined-ragozin-defense",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "Bb4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-gambit-declined-semi-tarrasch-defense-exchange-variation",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "queens-gambit",
         "sublineName": "Exchange Variation",
@@ -60831,14 +59991,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "queens-indian-defense-fianchetto-variation-nimzowitsch-variation",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "Ba6",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "queens-indian",
         "sublineName": "Queen's Indian: Petrosian Variation",
@@ -61868,38 +61020,6 @@
         "sublineName": "Ne4 Central Domination",
         "moveIndex": 27,
         "san": "a5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-pawn-game-barry-attack-tarzan-attack",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "Nf6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-pawn-game-colle-system",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "d5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-pawn-game-liedmann-gambit",
-        "sublineName": null,
-        "moveIndex": 4,
-        "san": "e3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "queens-pawn-game-torre-attack-gr-nfeld-variation-main-line",
-        "sublineName": null,
-        "moveIndex": 9,
-        "san": "O-O",
         "annotation": ""
       },
       {
@@ -63900,78 +63020,6 @@
         "sublineName": "Premature c5 Leak",
         "moveIndex": 22,
         "san": "b3",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "ruy-lopez-closed-balla-variation",
-        "sublineName": null,
-        "moveIndex": 11,
-        "san": "b5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "ruy-lopez-closed-breyer-defense",
-        "sublineName": null,
-        "moveIndex": 23,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "ruy-lopez-closed-center-attack-basque-gambit",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "ruy-lopez-closed-keres-defense",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "ruy-lopez-closed-martinez-variation",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "ruy-lopez-closed-smyslov-breyer-zaitsev-hybrid",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "ruy-lopez-closed-trajkovic-counterattack",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "ruy-lopez-marshall-attack-main-line",
-        "sublineName": null,
-        "moveIndex": 11,
-        "san": "b5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "ruy-lopez-open-motzko-attack-nenarokov-variation",
-        "sublineName": null,
-        "moveIndex": 13,
-        "san": "d5",
         "annotation": ""
       },
       {
@@ -66916,30 +65964,6 @@
         "sublineName": "Qa5 Bd2 King Safety Neglect",
         "moveIndex": 27,
         "san": "Ke8",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "scandinavian-defense-classical-variation",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "d5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "scandinavian-defense-gubinsky-melts-defense",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "d5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "scandinavian-defense-richter-variation",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "d5",
         "annotation": ""
       },
       {
@@ -70916,110 +69940,6 @@
         "sublineName": "Scotch Classical: Premature Nf5 Refutation",
         "moveIndex": 9,
         "san": "d5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-botvinnik-variation",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "e6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-chigorin-defense",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "e6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-meran-variation-old-variation",
-        "sublineName": null,
-        "moveIndex": 3,
-        "san": "c6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-meran-variation-old-variation",
-        "sublineName": null,
-        "moveIndex": 17,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-meran-variation-rabinovich-variation",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "d4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-meran-variation-rabinovich-variation",
-        "sublineName": null,
-        "moveIndex": 19,
-        "san": "cxd4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-meran-variation-reynolds-variation",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "d5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-meran-variation-wade-variation-kaidanov-gambit",
-        "sublineName": null,
-        "moveIndex": 24,
-        "san": "Nxd4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-meran-variation-wade-variation",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "e6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-noteboom-variation-anti-noteboom-variation-belyavsky-line",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "dxc4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-quiet-variation",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "e6",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-quiet-variation",
-        "sublineName": null,
-        "moveIndex": 9,
-        "san": "Nbd7",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "semi-slav-defense-stoltz-variation-shabalov-attack",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "e6",
         "annotation": ""
       },
       {
@@ -75628,46 +74548,6 @@
         "sublineName": "Alapin: Danger of ...e5 Blocking the Bishop",
         "moveIndex": 23,
         "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "sicilian-defense-alapin-variation-barmen-defense-endgame-variation",
-        "sublineName": null,
-        "moveIndex": 17,
-        "san": "Nxd4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "sicilian-defense-bowdler-attack",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "sicilian-defense-keres-variation",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "sicilian-defense-morphy-gambit",
-        "sublineName": null,
-        "moveIndex": 0,
-        "san": "e4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "sicilian-defense-snyder-variation",
-        "sublineName": null,
-        "moveIndex": 1,
-        "san": "c5",
         "annotation": ""
       },
       {
@@ -85255,22 +84135,6 @@
         "annotation": ""
       },
       {
-        "source": "annotation-main",
-        "openingId": "slav-defense-czech-variation-bled-attack",
-        "sublineName": null,
-        "moveIndex": 7,
-        "san": "dxc4",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "slav-defense-steiner-variation",
-        "sublineName": null,
-        "moveIndex": 2,
-        "san": "c4",
-        "annotation": ""
-      },
-      {
         "source": "annotation-subline",
         "openingId": "smith-morra-gambit",
         "sublineName": "Smith-Morra: Classical Setup",
@@ -89628,46 +88492,6 @@
         "sublineName": "Aggressive e5 Refutation",
         "moveIndex": 30,
         "san": "Qc6+",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "tarrasch-defense-classical-variation-main-line",
-        "sublineName": null,
-        "moveIndex": 15,
-        "san": "O-O",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "tarrasch-defense-classical-variation-petursson-variation",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "tarrasch-defense-classical-variation",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "tarrasch-defense-swedish-variation",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "c5",
-        "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "tarrasch-defense-tarrasch-gambit",
-        "sublineName": null,
-        "moveIndex": 5,
-        "san": "c5",
         "annotation": ""
       },
       {
@@ -95973,391 +94797,12 @@
         "moveIndex": 19,
         "san": "g5",
         "annotation": ""
-      },
-      {
-        "source": "annotation-main",
-        "openingId": "yusupov-rubinstein-system",
-        "sublineName": null,
-        "moveIndex": 3,
-        "san": "e6",
-        "annotation": ""
       }
     ],
     "fillerAnnotations": [],
-    "illegalMoves": [
-      {
-        "source": "middlegame-plan",
-        "openingId": "kings-indian-defence",
-        "sublineName": "e5 Central Counter: Closed Center",
-        "moveIndex": 0,
-        "san": "e5",
-        "fenBefore": "r1bq1rk1/ppp2pbp/2np1np1/4p3/2PPP3/2N1BN2/PP2BPPP/R2Q1RK1 b - - 0 7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "scotch-game",
-        "sublineName": "Open Center: Rapid Development",
-        "moveIndex": 0,
-        "san": "d4",
-        "fenBefore": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4"
-      },
-      {
-        "source": "common-mistake-correct",
-        "openingId": "ruy-lopez",
-        "sublineName": "mistake[1].correct",
-        "moveIndex": 0,
-        "san": "Ba4",
-        "fenBefore": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4"
-      },
-      {
-        "source": "common-mistake-wrong",
-        "openingId": "ruy-lopez",
-        "sublineName": "mistake[2].wrong",
-        "moveIndex": 0,
-        "san": "Bxb5",
-        "fenBefore": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BP2N1P/PP1P1PP1/RNBQR1K1 w - - 0 10"
-      },
-      {
-        "source": "common-mistake-correct",
-        "openingId": "sicilian-dragon",
-        "sublineName": "mistake[0].correct",
-        "moveIndex": 0,
-        "san": "O-O",
-        "fenBefore": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R b KQkq - 0 7"
-      },
-      {
-        "source": "common-mistake-correct",
-        "openingId": "grunfeld-defence",
-        "sublineName": "mistake[1].correct",
-        "moveIndex": 0,
-        "san": "Nxd5",
-        "fenBefore": "rnbqkb1r/ppp1pp1p/6p1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4"
-      }
-    ],
-    "sanDrift": [
-      {
-        "source": "middlegame-plan",
-        "openingId": "italian-game",
-        "sublineName": "f4 Recapture and Queen Swing",
-        "moveIndex": 0,
-        "declared": "exf4",
-        "replayed": "exf4+"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "pro-naroditsky-jobava-london",
-        "sublineName": "e4 Break After ...c6",
-        "moveIndex": 2,
-        "declared": "Nac7",
-        "replayed": "Nc7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "pro-naroditsky-jobava-london",
-        "sublineName": "Space Squeeze: Nc4 + e4",
-        "moveIndex": 2,
-        "declared": "Nac7",
-        "replayed": "Nc7"
-      }
-    ],
-    "illegalArrows": [
-      {
-        "source": "middlegame-plan",
-        "openingId": "italian-game",
-        "sublineName": "f4 Recapture and Queen Swing",
-        "moveIndex": 6,
-        "san": "Nd7",
-        "arrow": "c6->d7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "italian-game",
-        "sublineName": "f4 Recapture and Queen Swing",
-        "moveIndex": 7,
-        "san": "Qg3",
-        "arrow": "g3->g7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "sicilian-najdorf",
-        "sublineName": "English Attack: g4 Pawn Storm",
-        "moveIndex": 7,
-        "san": "g4",
-        "arrow": "g4->g5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "french-defence",
-        "sublineName": "f4-f5 Pawn Storm",
-        "moveIndex": 8,
-        "san": "f5",
-        "arrow": "f5->e6"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "french-defence",
-        "sublineName": "Ng5 Kingside Attack",
-        "moveIndex": 2,
-        "san": "Ng5",
-        "arrow": "g5->h7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "french-defence",
-        "sublineName": "Ng5 Kingside Attack",
-        "moveIndex": 6,
-        "san": "Qh5",
-        "arrow": "h5->f7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "french-defence",
-        "sublineName": "a3-b4 Queenside Expansion",
-        "moveIndex": 6,
-        "san": "Nb3",
-        "arrow": "b3->c5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "caro-kann",
-        "sublineName": "Nge2-g3 with f4 Buildup",
-        "moveIndex": 4,
-        "san": "f4",
-        "arrow": "f4->f5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "qgd",
-        "sublineName": "Rb1-b4-b5 Minority Attack",
-        "moveIndex": 6,
-        "san": "b5",
-        "arrow": "b5->c6"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "qgd",
-        "sublineName": "e4 Central Break: Active Pieces",
-        "moveIndex": 3,
-        "san": "Nxe4",
-        "arrow": "d7->e4"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "qgd",
-        "sublineName": "e4 Central Break: Active Pieces",
-        "moveIndex": 6,
-        "san": "Bc2",
-        "arrow": "c2->h7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "kings-indian-defence",
-        "sublineName": "f5-g5-g4 Pawn Storm",
-        "moveIndex": 6,
-        "san": "g5",
-        "arrow": "g5->g4"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "kings-indian-defence",
-        "sublineName": "e5 Central Counter: Closed Center",
-        "moveIndex": 0,
-        "san": "e5",
-        "arrow": "e7->e5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "english-opening",
-        "sublineName": "d4 Catalan Transposition",
-        "moveIndex": 4,
-        "san": "Bg2",
-        "arrow": "g2->d5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "english-opening",
-        "sublineName": "b4 Queenside Gambit",
-        "moveIndex": 2,
-        "san": "Nd5",
-        "arrow": "d5->c7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "english-opening",
-        "sublineName": "b4 Queenside Gambit",
-        "moveIndex": 4,
-        "san": "Rb1",
-        "arrow": "b1->b4"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "ruy-lopez",
-        "sublineName": "Slow Maneuver: Nbd2-f1-g3",
-        "moveIndex": 6,
-        "san": "Nf1",
-        "arrow": "f1->g3"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "ruy-lopez",
-        "sublineName": "Slow Maneuver: Nbd2-f1-g3",
-        "moveIndex": 7,
-        "san": "Nc5",
-        "arrow": "c5->b3"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "london-system",
-        "sublineName": "e4 Central Breakthrough",
-        "moveIndex": 2,
-        "san": "Bd3",
-        "arrow": "d3->h7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "london-system",
-        "sublineName": "e4 Central Breakthrough",
-        "moveIndex": 4,
-        "san": "Nbd2",
-        "arrow": "d2->e4"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "london-system",
-        "sublineName": "c4 with Qb3 Pressure",
-        "moveIndex": 3,
-        "san": "Qb3",
-        "arrow": "b3->b7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "london-system",
-        "sublineName": "c4 with Qb3 Pressure",
-        "moveIndex": 3,
-        "san": "Qb3",
-        "arrow": "b3->d5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "sicilian-dragon",
-        "sublineName": "h4-h5: Opening the h-File",
-        "moveIndex": 6,
-        "san": "Bxh5",
-        "arrow": "h5->f7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "sicilian-dragon",
-        "sublineName": "h4-h5: Opening the h-File",
-        "moveIndex": 7,
-        "san": "Nxh5",
-        "arrow": "h1->h5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "sicilian-dragon",
-        "sublineName": "h4 with Nd5 Jump",
-        "moveIndex": 6,
-        "san": "g4",
-        "arrow": "g4->h5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "sicilian-dragon",
-        "sublineName": "h4 with Nd5 Jump",
-        "moveIndex": 8,
-        "san": "Nd5",
-        "arrow": "d5->e7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "ruy-lopez",
-        "sublineName": "f4 Exchange: Open f-File Attack",
-        "moveIndex": 3,
-        "san": "Bxf4",
-        "arrow": "f1->f7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "ruy-lopez",
-        "sublineName": "f4 Exchange: Open f-File Attack",
-        "moveIndex": 5,
-        "san": "Qe1",
-        "arrow": "e1->g3"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "ruy-lopez",
-        "sublineName": "f4 Exchange: Open f-File Attack",
-        "moveIndex": 7,
-        "san": "Qg3",
-        "arrow": "g3->g7"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "scotch-game",
-        "sublineName": "Open Center: Rapid Development",
-        "moveIndex": 0,
-        "san": "d4",
-        "arrow": "d2->d4"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "pro-naroditsky-jobava-london",
-        "sublineName": "e4 Break After ...c6",
-        "moveIndex": 0,
-        "san": "c6",
-        "arrow": "c6->b5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "pro-naroditsky-jobava-london",
-        "sublineName": "e4 Break After ...c6",
-        "moveIndex": 1,
-        "san": "Na3",
-        "arrow": "a3->c4"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "pro-naroditsky-jobava-london",
-        "sublineName": "Space Squeeze: Nc4 + e4",
-        "moveIndex": 5,
-        "san": "Nc4",
-        "arrow": "c4->e5"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "pro-naroditsky-jobava-london",
-        "sublineName": "Space Squeeze: Nc4 + e4",
-        "moveIndex": 5,
-        "san": "Nc4",
-        "arrow": "c4->d6"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "pro-naroditsky-jobava-london",
-        "sublineName": "h4-h5 Pawn Storm: O-O-O Plan",
-        "moveIndex": 2,
-        "san": "h5",
-        "arrow": "h5->g6"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "pro-naroditsky-jobava-london",
-        "sublineName": "h4-h5 Pawn Storm: O-O-O Plan",
-        "moveIndex": 4,
-        "san": "Qd2",
-        "arrow": "d2->h6"
-      },
-      {
-        "source": "middlegame-plan",
-        "openingId": "pro-naroditsky-jobava-london",
-        "sublineName": "h4-h5 Pawn Storm: O-O-O Plan",
-        "moveIndex": 6,
-        "san": "O-O-O",
-        "arrow": "d1->h1"
-      }
-    ],
+    "illegalMoves": [],
+    "sanDrift": [],
+    "illegalArrows": [],
     "classificationSanity": []
   },
   "phraseClusters": [

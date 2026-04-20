@@ -1,0 +1,14 @@
+{
+  "summary": {
+    "generatedAt": "2026-04-20T15:29:06.222Z",
+    "processed": 5,
+    "blunders": 0,
+    "missingCloudEval": 0,
+    "fetchErrors": 5
+  },
+  "findings": {
+    "blunders": [],
+    "missingCloudEval": 0,
+    "fetchErrors": 5
+  }
+}
