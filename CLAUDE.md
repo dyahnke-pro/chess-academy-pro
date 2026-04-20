@@ -87,12 +87,16 @@ Chess Academy Pro is an AI-powered chess training PWA built with React + TypeScr
 src/
   components/     # React components grouped by feature
   hooks/          # Custom React hooks
-  stores/         # Zustand stores
+  stores/         # Zustand stores (the actual create() definitions)
+  store/          # Derived selectors composed over the stores (e.g. userContext)
   services/       # Business logic, API clients, engine wrapper
   data/           # Static JSON data (openings, puzzles, etc.)
   types/          # Shared TypeScript interfaces/types
   utils/          # Pure utility functions
+  db/             # Dexie schema + tests
   test/           # Test setup, mocks, helpers
+docs/             # Operational docs (e.g. RLS-CHECKLIST.md)
+supabase/         # Supabase config + migrations (see Migration Discipline)
 ```
 
 ### Styling
@@ -133,6 +137,43 @@ Spoken text comes from `pickNarrationText(annotation, length)` (`src/services/wa
 - **React state** (`useState`) for local component state only.
 - **Dexie.js** for persistent data (puzzles, games, SRS cards, opening progress).
 - Never duplicate state between Zustand and Dexie — Zustand holds runtime state, Dexie holds persistent data.
+
+### User-Context Selectors (IMPORTANT)
+Components MUST consume user-scoped values through the canonical
+selectors in `src/store/userContext.ts`, not by reading
+`activeProfile` directly off `useAppStore`. The exported hooks are:
+`useCurrentUser`, `useDefaultCoach`, `useUserRating`, `useStreak`,
+`useLearnerType`, `useHasOnboarded`, `useMistakesDueToday`. Add new
+user-derived values here so the data source can move (e.g. Dexie →
+Supabase) without touching every consumer. Direct
+`useAppStore((s) => s.activeProfile.<field>)` reads in components
+should be migrated to a selector when touched.
+
+### Migration Discipline (IMPORTANT)
+- **Supabase migrations are append-only.** Files live in
+  `supabase/migrations/NNNN_<topic>.sql` (zero-padded index, short
+  snake_case topic). NEVER edit a migration that has already shipped
+  — add a new file. The Supabase CLI applies them in order against
+  every environment, so a retroactive edit silently desyncs prod.
+- **Run `npm run db:migrate`** to apply pending migrations against
+  the linked project, `npm run db:reset` to drop the local DB and
+  replay every migration from zero (use this on a throwaway branch
+  DB to verify migrations apply cleanly), and `npm run db:diff -- <name>`
+  to autogenerate a migration file from local schema changes.
+- **Every new table requires the RLS checklist.** See
+  `docs/RLS-CHECKLIST.md`. RLS is enabled in the same migration that
+  creates the table, with explicit policies per operation. No
+  exceptions — even single-user data sits next to `auth.users` and
+  needs the boundary.
+- **Dexie schema changes are also append-only.** See the header
+  block in `src/db/schema.ts`. Every change is a NEW
+  `this.version(N+1).stores({...})` block with an `.upgrade()`
+  callback that backfills any new fields. NEVER mutate a
+  previously-declared `this.version(N)` block — Dexie compares the
+  declaration against the on-disk version to decide whether to run
+  upgrades, so an in-place edit silently corrupts every existing
+  browser DB. Index changes (the second half of each `stores`
+  entry) require a version bump even if the field set is unchanged.
 
 ### Naming
 - Variables/functions: `camelCase`

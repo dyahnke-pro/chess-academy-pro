@@ -1,3 +1,39 @@
+/**
+ * Dexie schema for ChessAcademyDB. The on-disk version is currently 21.
+ *
+ * Versioning discipline (WO-INFRA-01):
+ *
+ *   1. NEVER mutate a previously-shipped `this.version(N).stores({...})`
+ *      block. Once a version is in users' browsers, its schema is
+ *      frozen — Dexie compares the recorded version against the
+ *      current declaration to decide whether to run upgrades.
+ *      Editing an old block silently breaks every existing browser DB.
+ *
+ *   2. Every schema change ships as a NEW `this.version(N+1).stores({...})`
+ *      block, in declaration order, immediately after the previous
+ *      version. Bump the inline version comment block at the top of
+ *      `constructor()` so reviewers can see the high-water mark.
+ *
+ *   3. Any change that adds, removes, or rewrites a field on an
+ *      existing record MUST attach an `.upgrade(async (tx) => ...)`
+ *      callback that backfills the new shape. Missing-field reads
+ *      should never crash older browser data — initialize defaults
+ *      defensively, mirroring the patterns in versions 3–21 below.
+ *
+ *   4. Index changes (the second half of each `stores` entry) require
+ *      a new version even if the field set is unchanged. Adding a
+ *      new index is a schema migration in IndexedDB.
+ *
+ *   5. Test the upgrade. Run `npm run build && npm run preview` against
+ *      a browser profile that already holds the previous version to
+ *      confirm the upgrade callback applies cleanly without console
+ *      errors. fake-indexeddb in Vitest covers the happy path; only a
+ *      real browser exercises the prior on-disk shape.
+ *
+ *   6. Never use `localStorage` as a workaround to skip a version
+ *      bump (CLAUDE.md "Do NOT" list). All persistent state lives in
+ *      Dexie so the upgrade pipeline is the single source of truth.
+ */
 import Dexie, { type EntityTable } from 'dexie';
 import type {
   PuzzleRecord,

@@ -13,6 +13,7 @@ import {
   Target,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
+import { useCurrentUser, useUserRating } from '../../store/userContext';
 import { ThemeToggle } from './ThemeToggle';
 import { InstallPrompt } from './InstallPrompt';
 import { OfflineBanner } from './OfflineBanner';
@@ -126,7 +127,8 @@ function DraggableCoachFab({ onOpen }: { onOpen: () => void }): JSX.Element {
 }
 
 export function AppLayout(): JSX.Element {
-  const activeProfile = useAppStore((s) => s.activeProfile);
+  const activeProfile = useCurrentUser();
+  const userRating = useUserRating();
   const sidebarOpen = useAppStore((s) => s.sidebarOpen);
   const setSidebarOpen = useAppStore((s) => s.setSidebarOpen);
   const coachDrawerOpen = useAppStore((s) => s.coachDrawerOpen);
@@ -320,7 +322,7 @@ export function AppLayout(): JSX.Element {
                     {activeProfile.name}
                   </div>
                   <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                    Level {activeProfile.level} · {activeProfile.currentRating} ELO
+                    Level {activeProfile.level} · {userRating} ELO
                   </div>
                 </div>
               </div>
