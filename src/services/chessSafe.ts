@@ -14,16 +14,25 @@
  * directly.
  */
 import { Chess } from 'chess.js';
+import { logAppAudit } from './appAuditor';
 
 /**
  * Try to construct a Chess instance from a FEN. Returns null on any
  * error (invalid syntax, bad piece placement, bad side-to-move, etc.)
- * instead of throwing.
+ * instead of throwing. Logs the bad FEN to the app auditor so the
+ * user can see what went wrong later.
  */
-export function safeChessFromFen(fen: string): Chess | null {
+export function safeChessFromFen(fen: string, context?: string): Chess | null {
   try {
     return new Chess(fen);
-  } catch {
+  } catch (err) {
+    void logAppAudit({
+      kind: 'bad-fen',
+      category: 'subsystem',
+      source: context ?? 'safeChessFromFen',
+      summary: `Invalid FEN rejected: ${err instanceof Error ? err.message : String(err)}`,
+      fen,
+    });
     return null;
   }
 }

@@ -456,6 +456,18 @@ class VoiceService {
         `[VoiceService] Polly cooling down for ${Math.round(POLLY_COOLDOWN_MS / 1000)}s — ${reason}`,
       );
     }
+    // Fire the app auditor so Polly degradation is visible post-launch
+    // even without console access. Dynamic import to avoid a circular
+    // dependency at module-load time.
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'polly-fallback',
+        category: 'subsystem',
+        source: 'voiceService.speakPolly',
+        summary: `Polly cooling down for ${Math.round(POLLY_COOLDOWN_MS / 1000)}s`,
+        details: reason,
+      });
+    });
   }
 
   private async speakPolly(text: string, voice: string): Promise<boolean> {

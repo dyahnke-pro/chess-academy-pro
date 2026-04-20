@@ -5,7 +5,7 @@
  * (no LLM, no network, no cost). Runs fire-and-forget on every
  * narration the coach produces — when a claim in the prose can be
  * verified deterministically against the current FEN, we flag
- * mismatches to a local audit log.
+ * mismatches to the shared app-auditor log.
  *
  * What it catches:
  *   1. Piece-on-square claims that don't match the position
@@ -20,15 +20,12 @@
  *   - Plan claims ("preparing a kingside attack")
  *   - Opening-theory correctness
  *
- * Flags persist in Dexie's `meta` table under a rolling-window key,
- * bounded by AUDIT_LOG_MAX_ENTRIES. Callers read via `getAuditLog()`
- * for a debug viewer in Settings.
+ * Findings flow into `appAuditor.logAppAudit` so they appear
+ * alongside every other audit kind in the unified Settings panel.
  */
 import { Chess } from 'chess.js';
-import { db } from '../db/schema';
-
-const AUDIT_LOG_META_KEY = 'narration-audit-log.v1';
-const AUDIT_LOG_MAX_ENTRIES = 200;
+import { logAppAudit, getAppAuditLog } from './appAuditor';
+import type { AuditEntry } from './appAuditor';
 
 export interface AuditFlag {
   kind: 'piece-on-square' | 'hanging-piece' | 'check-claim' | 'mate-claim' | 'illegal-san';
@@ -196,9 +193,10 @@ export function auditNarration(
 }
 
 /**
- * Persist flags to the audit log (rolling window of last
- * AUDIT_LOG_MAX_ENTRIES entries). Fire-and-forget: swallows Dexie
- * errors so a failed write never blocks the speak/render path.
+ * Run the rules-based checks and persist any findings. Fire-and-forget:
+ * swallows write errors via appAuditor so a failed log never blocks
+ * the speak/render path. One appAuditor entry per flag — the panel
+ * groups them by originating narration.
  */
 export async function recordAudit(
   fen: string,
@@ -207,55 +205,60 @@ export async function recordAudit(
 ): Promise<void> {
   const flags = auditNarration(fen, narration);
   if (flags.length === 0) return;
-  try {
-    const existing = await db.meta.get(AUDIT_LOG_META_KEY);
-    const current: AuditLogEntry[] = parseLog(existing?.value);
-    current.push({
-      timestamp: Date.now(),
-      fen,
-      context,
-      flags,
-    });
-    // Keep only the newest AUDIT_LOG_MAX_ENTRIES.
-    const trimmed = current.slice(-AUDIT_LOG_MAX_ENTRIES);
-    // MetaRecord.value is typed as string — JSON-encode the list.
-    await db.meta.put({ key: AUDIT_LOG_META_KEY, value: JSON.stringify(trimmed) });
-  } catch {
-    /* auditor failures must not affect the voice/render path */
-  }
+  await Promise.all(
+    flags.map((flag) =>
+      logAppAudit({
+        kind: flag.kind,
+        category: 'narration',
+        source: context ?? 'narration',
+        summary: flag.explanation,
+        details: flag.narrationExcerpt && flag.narrationExcerpt !== flag.kind
+          ? `excerpt: "${flag.narrationExcerpt}"`
+          : undefined,
+        fen,
+        context,
+      }),
+    ),
+  );
 }
 
-function parseLog(raw: unknown): AuditLogEntry[] {
-  if (typeof raw !== 'string') {
-    // Older shapes (pre-stringify) may have stored arrays directly;
-    // accept those defensively so an in-flight upgrade doesn't wipe
-    // the log.
-    return Array.isArray(raw) ? (raw as AuditLogEntry[]) : [];
-  }
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as AuditLogEntry[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-/** Read the current audit log (for the debug viewer in Settings). */
+/** Narration-only slice of the unified audit log — filter by category
+ *  so the existing panel and tests keep working while we transition to
+ *  the unified UI. */
 export async function getAuditLog(): Promise<AuditLogEntry[]> {
-  try {
-    const record = await db.meta.get(AUDIT_LOG_META_KEY);
-    if (!record) return [];
-    return Array.isArray(record.value) ? record.value as AuditLogEntry[] : [];
-  } catch {
-    return [];
+  const all = await getAppAuditLog();
+  const byFen = new Map<string, AuditLogEntry>();
+  for (const entry of all) {
+    if (entry.category !== 'narration' || !entry.fen) continue;
+    const key = `${entry.timestamp}::${entry.fen}`;
+    const existing = byFen.get(key);
+    const flag: AuditFlag = {
+      kind: entry.kind as AuditFlag['kind'],
+      narrationExcerpt: extractExcerpt(entry) ?? entry.kind,
+      explanation: entry.summary,
+    };
+    if (existing) {
+      existing.flags.push(flag);
+    } else {
+      byFen.set(key, {
+        timestamp: entry.timestamp,
+        fen: entry.fen,
+        context: entry.context,
+        flags: [flag],
+      });
+    }
   }
+  return Array.from(byFen.values());
 }
 
-/** Clear the audit log — useful after triaging a batch of findings. */
+/** Clear the entire unified log (narration + app + subsystem). */
 export async function clearAuditLog(): Promise<void> {
-  try {
-    await db.meta.delete(AUDIT_LOG_META_KEY);
-  } catch {
-    /* no-op */
-  }
+  const { clearAppAuditLog } = await import('./appAuditor');
+  await clearAppAuditLog();
+}
+
+function extractExcerpt(entry: AuditEntry): string | null {
+  if (!entry.details) return null;
+  const match = entry.details.match(/excerpt:\s*"([^"]+)"/);
+  return match ? match[1] : null;
 }

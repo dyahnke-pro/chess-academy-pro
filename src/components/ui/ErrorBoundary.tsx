@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { logAppAudit } from '../../services/appAuditor';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -28,6 +29,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
     console.error('ErrorBoundary caught:', error, info);
+    void logAppAudit({
+      kind: 'error-boundary',
+      category: 'app',
+      source: 'ErrorBoundary',
+      summary: error.message || 'React error caught by boundary',
+      details: [error.stack, info.componentStack].filter(Boolean).join('\n\n'),
+    });
   }
 
   render(): ReactNode {
