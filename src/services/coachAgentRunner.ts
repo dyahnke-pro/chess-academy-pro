@@ -31,6 +31,7 @@ import { AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES } from './coachPrompts';
 import { extractAndRememberNotes, buildCoachMemoryBlock } from './coachMemoryService';
 import { buildStudentStateBlock } from './studentStateBlock';
 import { buildGroundingBlock } from './coachContextEnricher';
+import { recordAudit } from './narrationAuditor';
 import { useCoachSessionStore } from '../stores/coachSessionStore';
 import { useAppStore } from '../stores/appStore';
 import { voiceService } from './voiceService';
@@ -222,6 +223,15 @@ export async function runAgentTurn(
   // extracted notes to the coach's long-term memory. Runs AFTER action
   // parsing so the two tag families don't collide.
   const cleanText = extractAndRememberNotes(afterActions);
+
+  // Background fact-check against the current board. lastBoardFen is
+  // the best approximation of "position the coach is commenting on"
+  // for chat turns (move-commentary has a tighter wire via the
+  // commentary pipeline). Skip when we have no FEN anchor — the
+  // auditor can't verify claims without a position.
+  if (lastBoardFen && cleanText) {
+    void recordAudit(lastBoardFen, cleanText, 'coach-chat');
+  }
 
   const assistantMessage: ChatMessage = {
     id: `msg-${Date.now()}-a`,
