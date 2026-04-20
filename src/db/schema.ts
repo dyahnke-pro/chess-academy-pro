@@ -1,3 +1,6 @@
+// Dexie schema — append-only versions. See src/db/README.md for the
+// bump + upgrade convention. Never edit a previously-shipped
+// `this.version(n).stores(...)` block; add a new one.
 import Dexie, { type EntityTable } from 'dexie';
 import type {
   PuzzleRecord,
