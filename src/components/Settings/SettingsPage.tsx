@@ -15,6 +15,7 @@ import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
 
 import { BoardGlowButton, BoardGlowSettings } from './BoardGlowSettings';
+import { NarrationAuditPanel } from './NarrationAuditPanel';
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import { hardRefresh } from '../../utils/hardRefresh';
 import type { UserProfile, PieceAnimationSpeed, CoachVerbosity, MoveMethod } from '../../types';
@@ -1083,6 +1084,16 @@ function AboutTab(): JSX.Element {
             Are you sure? This cannot be undone.
           </button>
         )}
+      </div>
+
+      {/* Runtime narration audit — passive background check of every
+          coach narration against the live board. Flags persist to
+          Dexie and show up here for triage. "Copy for Claude" exports
+          the current log as a markdown report that can be pasted
+          straight into a Claude Code session. */}
+      <div className="pt-4 border-t space-y-2" style={{ borderColor: 'var(--color-border)' }}>
+        <div className="text-sm font-medium">Narration audit</div>
+        <NarrationAuditPanel />
       </div>
     </div>
   );
