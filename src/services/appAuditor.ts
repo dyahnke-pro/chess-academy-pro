@@ -126,6 +126,73 @@ async function readLog(): Promise<AuditEntry[]> {
 }
 
 /**
+ * Register a console back-door on `window.__AUDIT__` so the log is
+ * reachable from DevTools even when the Settings UI isn't:
+ *
+ *   await __AUDIT__.dump()       // full entries
+ *   await __AUDIT__.copy()       // copies the markdown report to clipboard
+ *   await __AUDIT__.clear()      // empty the log
+ *   __AUDIT__.count()            // last-read count (updated on dump/copy)
+ *
+ * Idempotent. Safe to call multiple times. Installed on app boot.
+ */
+export function installConsoleBackdoor(): void {
+  if (typeof window === 'undefined') return;
+  const api = {
+    dump: async (): Promise<AuditEntry[]> => {
+      const log = await getAppAuditLog();
+      (api as unknown as { count: () => number }).count = () => log.length;
+      // eslint-disable-next-line no-console
+      console.log('[appAuditor] dump:', log.length, 'entries', log);
+      return log;
+    },
+    copy: async (): Promise<void> => {
+      const log = await getAppAuditLog();
+      const md = formatAuditLogAsMarkdown(log);
+      try {
+        await navigator.clipboard.writeText(md);
+        // eslint-disable-next-line no-console
+        console.log('[appAuditor] copied', log.length, 'entries to clipboard');
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn('[appAuditor] clipboard write failed:', err);
+        // eslint-disable-next-line no-console
+        console.log(md);
+      }
+    },
+    clear: async (): Promise<void> => {
+      await clearAppAuditLog();
+      // eslint-disable-next-line no-console
+      console.log('[appAuditor] cleared');
+    },
+    count: () => -1,
+  };
+  (window as unknown as { __AUDIT__: typeof api }).__AUDIT__ = api;
+}
+
+/** Minimal markdown serializer for the back-door `__AUDIT__.copy()`
+ *  helper. Mirrors the UI panel's `formatLogAsMarkdown` without
+ *  pulling the panel component into this service. */
+function formatAuditLogAsMarkdown(log: AuditEntry[]): string {
+  if (log.length === 0) return '# App audit log\n\n_No findings._\n';
+  const blocks = [...log].reverse().map((entry, i) => {
+    const ts = new Date(entry.timestamp).toISOString();
+    return [
+      `### Finding ${i + 1} — [${entry.category}/${entry.kind}]`,
+      `- timestamp: \`${ts}\``,
+      `- source: \`${entry.source}\``,
+      entry.route ? `- route: \`${entry.route}\`` : '',
+      entry.fen ? `- FEN: \`${entry.fen}\`` : '',
+      entry.context ? `- context: \`${entry.context}\`` : '',
+      ``,
+      `**${entry.summary}**`,
+      entry.details ? '\n```\n' + entry.details + '\n```' : '',
+    ].filter(Boolean).join('\n');
+  });
+  return ['# App audit log', '', `Total: **${log.length}** entries.`, '', '## Findings', '', blocks.join('\n\n')].join('\n');
+}
+
+/**
  * Install global error hooks on app boot. Returns a cleanup function
  * that detaches them — the production app never cleans up, but tests
  * need teardown to avoid cross-test pollution.
