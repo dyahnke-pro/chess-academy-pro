@@ -70,14 +70,24 @@ const PIECE_LETTER_NAMES: Record<string, string> = {
 const SAN_MOVE_RE = /\b([NBRQK])(x?)([a-h][1-8])\b/g;
 /** Pawn-capture SAN (e.g. "exd5", "fxe6") — no piece letter. */
 const PAWN_CAPTURE_RE = /\b([a-h])x([a-h][1-8])\b/g;
-/** Isolated piece-letter shorthand in contexts like:
- *    - "hanging P", "the N", "a B", "my R", "your Q", "their K"
- *    - "P on e4", "N to c3", "Q from d1", "B at f7"
- *  Only single uppercase P/N/B/R/Q/K at a word boundary — won't
- *  touch proper names, initialisms, or legitimate mid-word letters. */
-const ISOLATED_PIECE_LETTER_RE = /\b([PNBRQK])\b(?=\s+(?:on|to|at|from|of|takes|is|was|hangs|hanging|sits|sitting|attacks|attacking|defends|defending|moves|moved|can|could|should|would)\b)/g;
-const PIECE_LETTER_AFTER_CONTEXT_RE = /\b(hanging|loose|dropped|undefended|attacked|the|a|my|your|their|our|his|her|that|this)\s+([PNBRQK])\b/g;
-
+/** Piece letter immediately followed by a square in any bracketing —
+ *  e.g. "P(f3)", "P [f3]", "P <f3>", "P →f3", "P->f3", "P—f3",
+ *  "P (on f3)". Covers the "piece-and-location" shorthand that doesn't
+ *  use the word "on" (or wraps it in parens). */
+const PIECE_LETTER_ADJACENT_SQUARE_RE = /\b([PNBRQK])\s*[(\[<\-\u2013\u2014\u2192]+\s*(?:on\s+)?([a-h][1-8])\b/g;
+/** Parenthesized bare piece letter: "piece at f3 (P)" → "piece at f3 (pawn)". */
+const PIECE_LETTER_IN_PARENS_RE = /([(\[<])([PNBRQK])(?=[)\]>.,;:\s])/g;
+/** Isolated piece-letter shorthand after a chess-context word. Kept
+ *  narrow enough not to touch "Plan B" in non-chess prose, but broad
+ *  enough to cover the verbs and qualifiers LLMs actually emit
+ *  when they slip back into SAN shorthand. */
+const PIECE_LETTER_AFTER_CONTEXT_RE =
+  /\b(hanging|loose|dropped|undefended|attacked|captured|defended|protected|pinned|skewered|forked|trapped|weak|strong|passed|isolated|doubled|exposed|advanced|central|enemy|opposing|opponent's|white's|black's|white|black|the|a|an|my|your|their|our|his|her|its|that|this|these|those|both|either|neither|every|each|one|two|three|save|saving|protect|protecting|lose|losing|take|taking|grab|grabbing|trade|trading|exchange|exchanging|develop|developing|advance|advancing|push|pushing|promote|promoting|sacrifice|sacrificing|hang|hangs)\s+([PNBRQK])\b/gi;
+/** Piece letter followed by an action word (on/to/at/from/hangs/etc.).
+ *  Runs after the "after-context" pass so both halves of a sentence
+ *  like "your P on f3" get caught. */
+const ISOLATED_PIECE_LETTER_RE =
+  /\b([PNBRQK])\b(?=\s+(?:on|to|at|from|of|takes|is|was|were|are|hangs|hanging|sits|sitting|stands|standing|attacks|attacking|defends|defending|moves|moved|moving|can|could|should|would|will|might|may|goes|going|covers|covering|controls|controlling|threatens|threatening|protects|protecting|supports|supporting)\b)/g;
 /** Castling shorthand → plain English. "O-O" sounds nothing like
  *  "castle kingside" when read aloud. */
 const CASTLE_KING_RE = /\bO-O\b(?!-)/g;
@@ -98,11 +108,23 @@ export function sanitizeForTTS(text: string): string {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;
     return capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
   });
-  // Isolated piece letters in chess-context sentences.
-  out = out.replace(PIECE_LETTER_AFTER_CONTEXT_RE, (_, lead: string, piece: string) => {
+  // Bracketed / arrowed piece-on-square shorthand: "P(f3)" → "pawn on f3".
+  out = out.replace(PIECE_LETTER_ADJACENT_SQUARE_RE, (_, piece: string, square: string) => {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    return `${name} on ${square}`;
+  });
+  // Bare piece letter in parens/brackets: "(P)" → "(pawn)".
+  out = out.replace(PIECE_LETTER_IN_PARENS_RE, (_, bracket: string, piece: string) => {
+    const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    return `${bracket}${name}`;
+  });
+  // Isolated piece letters after a chess-context word ("hanging P",
+  // "save P", "the white B").
+  out = out.replace(PIECE_LETTER_AFTER_CONTEXT_RE, (_, lead: string, piece: string) => {
+    const name = PIECE_LETTER_NAMES[piece.toUpperCase()] ?? piece;
     return `${lead} ${name}`;
   });
+  // Piece letter followed by an action word ("P on f3", "N attacks").
   out = out.replace(ISOLATED_PIECE_LETTER_RE, (_, piece: string) => PIECE_LETTER_NAMES[piece] ?? piece);
   return out;
 }
