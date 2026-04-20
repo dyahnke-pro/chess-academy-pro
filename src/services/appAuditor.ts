@@ -39,6 +39,7 @@ export type AuditKind =
   | 'check-claim'
   | 'mate-claim'
   | 'illegal-san'
+  | 'sanitizer-leak'
   // Runtime errors
   | 'uncaught-error'
   | 'unhandled-rejection'

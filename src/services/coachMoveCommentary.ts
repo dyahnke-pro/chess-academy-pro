@@ -22,6 +22,8 @@ import { getCoachChatResponse } from './coachApi';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
 import { buildStudentStateBlock } from './studentStateBlock';
 import { recordAudit } from './narrationAuditor';
+import { logAppAudit } from './appAuditor';
+import { detectSanitizerLeak } from './voiceService';
 import type { ChatMessage, CoachVerbosity, MoveClassification } from '../types';
 
 export type MoveVerdict = 'excellent' | 'good' | 'book' | 'inaccuracy' | 'mistake' | 'blunder' | 'neutral';
@@ -126,13 +128,20 @@ export async function generateMoveCommentary(input: MoveCommentaryInput): Promis
     // Strip any [[REMEMBER: ...]] tags the LLM embedded and persist
     // them — the coach can now grow its memory of the student mid-game.
     const cleaned = extractAndRememberNotes(trimmed);
-    // Background audit: check the narration against the CURRENT
-    // position (after the move) for factual claims. Fire-and-forget;
-    // results land in Dexie meta for the Settings debug viewer. The
-    // auditor is rules-based and never affects the speak/render path
-    // even if it throws. Context label lets us trace findings back
-    // to this pipeline vs the chat path.
+    // Double audit: (1) narrationAuditor checks factual claims
+    // against the FEN; (2) detectSanitizerLeak catches piece-letter
+    // shorthand that would become "hanging P on f3" at the speaker.
+    // Independent failure modes, both fire-and-forget.
     void recordAudit(input.gameAfter.fen(), cleaned, 'move-commentary');
+    if (detectSanitizerLeak(cleaned)) {
+      void logAppAudit({
+        kind: 'sanitizer-leak',
+        category: 'subsystem',
+        source: 'coachMoveCommentary',
+        summary: 'Piece-letter shorthand in move commentary output',
+        details: `text: ${cleaned.slice(0, 300)}`,
+      });
+    }
     return cleaned;
   } catch {
     return '';

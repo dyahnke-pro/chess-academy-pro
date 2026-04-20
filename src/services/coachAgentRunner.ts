@@ -32,6 +32,8 @@ import { extractAndRememberNotes, buildCoachMemoryBlock } from './coachMemorySer
 import { buildStudentStateBlock } from './studentStateBlock';
 import { buildGroundingBlock } from './coachContextEnricher';
 import { recordAudit } from './narrationAuditor';
+import { logAppAudit } from './appAuditor';
+import { detectSanitizerLeak } from './voiceService';
 import { useCoachSessionStore } from '../stores/coachSessionStore';
 import { useAppStore } from '../stores/appStore';
 import { voiceService } from './voiceService';
@@ -224,13 +226,20 @@ export async function runAgentTurn(
   // parsing so the two tag families don't collide.
   const cleanText = extractAndRememberNotes(afterActions);
 
-  // Background fact-check against the current board. lastBoardFen is
-  // the best approximation of "position the coach is commenting on"
-  // for chat turns (move-commentary has a tighter wire via the
-  // commentary pipeline). Skip when we have no FEN anchor — the
-  // auditor can't verify claims without a position.
+  // Double audit: factual-claim check against the FEN plus a
+  // sanitizer-leak check so piece-letter shorthand that would
+  // survive to TTS surfaces in the unified log. Both fire-and-forget.
   if (lastBoardFen && cleanText) {
     void recordAudit(lastBoardFen, cleanText, 'coach-chat');
+  }
+  if (cleanText && detectSanitizerLeak(cleanText)) {
+    void logAppAudit({
+      kind: 'sanitizer-leak',
+      category: 'subsystem',
+      source: 'coachAgentRunner',
+      summary: 'Piece-letter shorthand in coach chat response',
+      details: `text: ${cleanText.slice(0, 300)}`,
+    });
   }
 
   const assistantMessage: ChatMessage = {
