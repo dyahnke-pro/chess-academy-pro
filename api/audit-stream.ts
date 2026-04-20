@@ -17,11 +17,13 @@
  *         behaviour is local-only — audit data never leaves the
  *         device unless the user explicitly enables streaming.
  *
- * Storage: uses `@vercel/kv` if configured. If KV env vars are
- *          missing we fall through to an in-memory Map on the
- *          function instance — not durable across cold starts but
- *          works for live-watch sessions where events are read
- *          within seconds.
+ * Storage: uses Upstash Redis when `UPSTASH_REDIS_REST_URL` +
+ *          `UPSTASH_REDIS_REST_TOKEN` (or the `KV_REST_API_*` vars
+ *          Vercel's KV integration used to inject) are configured.
+ *          Falls back to an in-memory Map on the function instance
+ *          when neither is set — not durable across cold starts but
+ *          works for live-watch sessions where events are read within
+ *          seconds.
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
@@ -37,7 +39,7 @@ interface AuditStreamEntry {
   route?: string;
 }
 
-// Best-effort in-memory fallback (per function instance) when KV
+// Best-effort in-memory fallback (per function instance) when Upstash
 // isn't configured. The Map is keyed by timestamp+kind for dedup.
 const inMemoryBuffer: AuditStreamEntry[] = [];
 const MAX_IN_MEMORY = 500;
@@ -48,34 +50,51 @@ function trimInMemory(): void {
   }
 }
 
-async function readKv(since: number): Promise<AuditStreamEntry[] | null> {
+function getRedisConfig(): { url: string; token: string } | null {
+  const url =
+    process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL ?? null;
+  const token =
+    process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN ?? null;
+  if (!url || !token) return null;
+  return { url, token };
+}
+
+async function readRedis(since: number): Promise<AuditStreamEntry[] | null> {
+  const cfg = getRedisConfig();
+  if (!cfg) return null;
   try {
-    const { kv } = await import('@vercel/kv');
-    // Entries stored under a single list key. LRANGE gets everything.
-    const raw = await kv.lrange<string>('audit-stream', 0, -1);
+    const { Redis } = await import('@upstash/redis');
+    const redis = new Redis(cfg);
+    const raw = await redis.lrange('audit-stream', 0, -1);
     const parsed = raw
-      .map((s) => {
-        try {
-          return JSON.parse(s) as AuditStreamEntry;
-        } catch {
-          return null;
+      .map((item) => {
+        // Upstash returns parsed JSON for JSON-ish strings, raw strings otherwise.
+        if (typeof item === 'object' && item !== null) return item as AuditStreamEntry;
+        if (typeof item === 'string') {
+          try {
+            return JSON.parse(item) as AuditStreamEntry;
+          } catch {
+            return null;
+          }
         }
+        return null;
       })
-      .filter((e): e is AuditStreamEntry => e !== null && e.timestamp > since);
+      .filter((e): e is AuditStreamEntry => e !== null && typeof e.timestamp === 'number' && e.timestamp > since);
     return parsed;
   } catch {
     return null;
   }
 }
 
-async function writeKv(entry: AuditStreamEntry): Promise<boolean> {
+async function writeRedis(entry: AuditStreamEntry): Promise<boolean> {
+  const cfg = getRedisConfig();
+  if (!cfg) return false;
   try {
-    const { kv } = await import('@vercel/kv');
-    await kv.rpush('audit-stream', JSON.stringify(entry));
-    // Trim to last 1000 entries so the list doesn't grow unbounded.
-    await kv.ltrim('audit-stream', -1000, -1);
-    // 24-hour TTL on the whole list.
-    await kv.expire('audit-stream', 86_400);
+    const { Redis } = await import('@upstash/redis');
+    const redis = new Redis(cfg);
+    await redis.rpush('audit-stream', JSON.stringify(entry));
+    await redis.ltrim('audit-stream', -1000, -1);
+    await redis.expire('audit-stream', 86_400);
     return true;
   } catch {
     return false;
@@ -115,27 +134,27 @@ export default async function handler(
       context: body.context,
       route: body.route,
     };
-    const wroteToKv = await writeKv(entry);
-    if (!wroteToKv) {
+    const wroteToRedis = await writeRedis(entry);
+    if (!wroteToRedis) {
       inMemoryBuffer.push(entry);
       trimInMemory();
     }
-    res.status(200).json({ ok: true, storage: wroteToKv ? 'kv' : 'memory' });
+    res.status(200).json({ ok: true, storage: wroteToRedis ? 'redis' : 'memory' });
     return;
   }
 
   if (req.method === 'GET') {
     const sinceRaw = req.query.since;
     const since = typeof sinceRaw === 'string' ? parseInt(sinceRaw, 10) : 0;
-    const kvEntries = await readKv(since);
+    const redisEntries = await readRedis(since);
     const memEntries = inMemoryBuffer.filter((e) => e.timestamp > since);
-    const entries = kvEntries ?? memEntries;
+    const entries = redisEntries ?? memEntries;
     // Newest last so the caller can use the last timestamp as the next `since`.
     entries.sort((a, b) => a.timestamp - b.timestamp);
     res.status(200).json({
       entries,
       count: entries.length,
-      storage: kvEntries ? 'kv' : 'memory',
+      storage: redisEntries ? 'redis' : 'memory',
     });
     return;
   }
