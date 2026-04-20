@@ -5,6 +5,7 @@ import {
   getAppAuditLog,
   clearAppAuditLog,
   installGlobalErrorHooks,
+  installConsoleBackdoor,
 } from './appAuditor';
 
 describe('appAuditor', () => {
@@ -136,6 +137,64 @@ describe('appAuditor', () => {
       await new Promise((r) => setTimeout(r, 10));
       const log = await getAppAuditLog();
       expect(log.some((e) => e.summary === 'after uninstall')).toBe(false);
+    });
+  });
+
+  describe('installConsoleBackdoor', () => {
+    interface AuditApi {
+      dump: () => Promise<unknown[]>;
+      copy: () => Promise<void>;
+      clear: () => Promise<void>;
+      count: () => number;
+    }
+    const getBackdoor = (): AuditApi =>
+      (window as unknown as { __AUDIT__: AuditApi }).__AUDIT__;
+
+    it('exposes __AUDIT__ on window', () => {
+      installConsoleBackdoor();
+      expect(typeof getBackdoor().dump).toBe('function');
+      expect(typeof getBackdoor().copy).toBe('function');
+      expect(typeof getBackdoor().clear).toBe('function');
+      expect(typeof getBackdoor().count).toBe('function');
+    });
+
+    it('dump() returns the full log', async () => {
+      await logAppAudit({ kind: 'bad-fen', category: 'subsystem', source: 't', summary: 'x' });
+      installConsoleBackdoor();
+      const log = await getBackdoor().dump();
+      expect(Array.isArray(log)).toBe(true);
+      expect(log).toHaveLength(1);
+    });
+
+    it('clear() empties the log', async () => {
+      await logAppAudit({ kind: 'bad-fen', category: 'subsystem', source: 't', summary: 'x' });
+      installConsoleBackdoor();
+      await getBackdoor().clear();
+      const after = await getAppAuditLog();
+      expect(after).toEqual([]);
+    });
+
+    it('copy() writes markdown to the clipboard', async () => {
+      await logAppAudit({
+        kind: 'bad-fen',
+        category: 'subsystem',
+        source: 't',
+        summary: 'Invalid FEN',
+      });
+      installConsoleBackdoor();
+      let captured = '';
+      const original = navigator.clipboard;
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText: async (s: string) => { captured = s; } },
+        configurable: true,
+      });
+      try {
+        await getBackdoor().copy();
+        expect(captured).toContain('# App audit log');
+        expect(captured).toContain('Invalid FEN');
+      } finally {
+        Object.defineProperty(navigator, 'clipboard', { value: original, configurable: true });
+      }
     });
   });
 });

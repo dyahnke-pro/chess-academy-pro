@@ -9,7 +9,7 @@ import { getSharedAudioContext } from './services/audioContextManager';
 import { speechService } from './services/speechService';
 import { voiceService } from './services/voiceService';
 import { db } from './db/schema';
-import { installGlobalErrorHooks, logAppAudit } from './services/appAuditor';
+import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit } from './services/appAuditor';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -65,6 +65,7 @@ import { KidPuzzlePage } from './components/Kid/KidPuzzlePage';
 import { GuidedGameHubPage } from './components/Kid/GuidedGameHubPage';
 import { GuidedGamePage } from './components/Kid/GuidedGamePage';
 import { NeonBoardMock } from './components/Board/NeonBoardMock';
+import { DebugAuditPage } from './components/Debug/DebugAuditPage';
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -91,6 +92,9 @@ export function App(): JSX.Element {
   // subsystem errors. One place to look post-launch.
   useEffect(() => {
     const uninstall = installGlobalErrorHooks();
+    // Register the __AUDIT__ DevTools back-door alongside. Also
+    // available via the /debug/audit route.
+    installConsoleBackdoor();
     return uninstall;
   }, []);
 
@@ -221,6 +225,8 @@ export function App(): JSX.Element {
           />
           <Route path="/settings/onboarding" element={<ErrorBoundary><OnboardingPage /></ErrorBoundary>} />
           <Route path="/neon-mock" element={<NeonBoardMock />} />
+          {/* Audit back-door — not linked from UI; deep-link only. */}
+          <Route path="/debug/audit" element={<ErrorBoundary><DebugAuditPage /></ErrorBoundary>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route element={<KidLayout />}>
