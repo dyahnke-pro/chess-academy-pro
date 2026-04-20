@@ -149,8 +149,13 @@ export function App(): JSX.Element {
           <Route path="/openings/pro/:playerId" element={<ErrorBoundary><ProPlayerPage /></ErrorBoundary>} />
           <Route path="/openings/pro/:playerId/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
           <Route path="/openings/:id" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
-          {/* Coach */}
-          <Route path="/coach" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
+          {/* Coach — /coach redirects to the live play-with-coach
+              board so "tap Coach in the nav" always lands the student
+              on a playable game instead of a card hub. The old hub
+              (CoachHomePage / CoachPage) is still reachable at
+              /coach/home for anyone who wants the action grid. */}
+          <Route path="/coach" element={<Navigate to="/coach/play" replace />} />
+          <Route path="/coach/home" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
           <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
           <Route path="/coach/session/:kind" element={<ErrorBoundary><CoachSessionPage /></ErrorBoundary>} />

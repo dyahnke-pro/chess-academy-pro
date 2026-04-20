@@ -191,7 +191,24 @@ export async function routeChatIntent(
     case 'walkthrough': {
       if (!intent.subject) return null;
       const match = await matchOpeningForSubject(intent.subject);
-      if (!match) return null;
+      if (!match) {
+        // Walkthroughs only exist for openings we have annotated DB
+        // content for. Rather than silently falling through to plain
+        // chat (which leaves the user wondering why nothing happened),
+        // explain we don't have a walkthrough for that name and offer
+        // to play it instead — play-against resolves any Lichess-known
+        // opening, so the student still gets hands-on practice.
+        //
+        // Wording matters: "Want to play..." matches
+        // ASSISTANT_GAME_PROPOSAL_RE so the user's next "yes" /
+        // "let's do it" automatically routes into /coach/session/play-against
+        // via the affirmation-after-proposal path at the top of
+        // routeChatIntent.
+        return {
+          ackMessage: `I don't have a ready-made walkthrough for "${intent.subject}" yet. Want to play it against me so you can learn it in-game?`,
+          intent,
+        };
+      }
       const params = new URLSearchParams();
       params.set('subject', intent.subject);
       return {

@@ -68,6 +68,10 @@ export function CoachAnalysePage(): JSX.Element {
         setCoachExplanation(explanation);
       });
 
+      // Cut any in-flight TTS (a previous analysis, a voice-chat
+      // reply that's still speaking) before this narration starts —
+      // otherwise two voices play at once.
+      voiceService.stop();
       void voiceService.speak(explanation.slice(0, 200)); // First 200 chars only for voice
     } catch (error) {
       console.error('Analysis error:', error);
@@ -118,6 +122,9 @@ export function CoachAnalysePage(): JSX.Element {
     });
 
     setLoading(false);
+    // Stop prior TTS before speaking the follow-up answer — same
+    // reason as the analysePosition path above.
+    voiceService.stop();
     void voiceService.speak(response.slice(0, 200));
   }, [game.fen, analysis, activeProfile]);
 

@@ -52,14 +52,12 @@ vi.mock('../../hooks/useChessGame', () => ({
   }),
 }));
 
-vi.mock('../../services/speechService', () => ({
-  speechService: {
+vi.mock('../../services/voiceService', () => ({
+  voiceService: {
     speak: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
-    setEnabled: vi.fn(),
-    isEnabled: true,
-    isSpeaking: false,
   },
+  sanitizeForTTS: (text: string) => text,
 }));
 
 function renderStudy(
@@ -172,24 +170,23 @@ describe('MiddlegamePlanStudy', () => {
     expect(screen.getByLabelText('Read aloud')).toBeInTheDocument();
   });
 
-  it('calls speechService.speak when narration is toggled on', async () => {
-    const { speechService } = await import('../../services/speechService');
+  it('calls voiceService.speak when narration is toggled on', async () => {
+    const { voiceService } = await import('../../services/voiceService');
     renderStudy();
     await userEvent.click(screen.getByTestId('narration-toggle'));
-    expect(speechService.speak).toHaveBeenCalledWith(
+    expect(voiceService.speak).toHaveBeenCalledWith(
       expect.stringContaining('White plays d4'),
-      expect.objectContaining({ onEnd: expect.any(Function) }),
     );
   });
 
-  it('calls speechService.stop when narration is toggled off', async () => {
-    const { speechService } = await import('../../services/speechService');
+  it('calls voiceService.stop when narration is toggled off', async () => {
+    const { voiceService } = await import('../../services/voiceService');
     renderStudy();
     // Toggle on
     await userEvent.click(screen.getByTestId('narration-toggle'));
     // Toggle off
     await userEvent.click(screen.getByTestId('narration-toggle'));
-    expect(speechService.stop).toHaveBeenCalled();
+    expect(voiceService.stop).toHaveBeenCalled();
   });
 
   it('always shows bottom bar with practice button', () => {

@@ -73,7 +73,14 @@ describe('routeChatIntent', () => {
   it('navigates walkthrough only when opening matches', async () => {
     vi.mocked(matchOpeningForSubject).mockResolvedValueOnce(null);
     const missing = await routeChatIntent('walk me through the Flibbertigibbet');
-    expect(missing).toBeNull();
+    // Previously returned null (silent fallback to chat). Now returns a
+    // reply-only ack explaining no walkthrough is available and offering
+    // to play the line instead — so the user gets a clear next step.
+    expect(missing).not.toBeNull();
+    expect(missing!.path).toBeUndefined();
+    expect(missing!.ackMessage.toLowerCase()).toContain('walkthrough');
+    expect(missing!.ackMessage.toLowerCase()).toContain('want to play');
+    expect(missing!.ackMessage.toLowerCase()).toContain('flibbertigibbet');
 
     vi.mocked(matchOpeningForSubject).mockResolvedValueOnce({
       opening: { id: 'sicilian', name: 'Sicilian Defense' } as never,
@@ -82,6 +89,16 @@ describe('routeChatIntent', () => {
     expect(found).not.toBeNull();
     expect(found!.path).toMatch(/^\/coach\/session\/walkthrough/);
     expect(found!.path).toContain('subject=');
+  });
+
+  it('"yes" after walkthrough-unavailable offer routes to play-against', async () => {
+    const assistantOffer =
+      'I don\u2019t have a ready-made walkthrough for "King\u2019s Gambit" yet. Want to play it against me so you can learn it in-game?';
+    const routed = await routeChatIntent('yes', {
+      lastAssistantMessage: assistantOffer,
+    });
+    expect(routed).not.toBeNull();
+    expect(routed!.path).toMatch(/^\/coach\/session\/play-against/);
   });
 
   it('navigates puzzle only when theme resolves to a known tactic', async () => {

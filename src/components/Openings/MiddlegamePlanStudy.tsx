@@ -2,8 +2,7 @@ import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { useChessGame } from '../../hooks/useChessGame';
 import { MiddlegamePractice } from './MiddlegamePractice';
-import { speechService } from '../../services/speechService';
-import { sanitizeForTTS } from '../../services/voiceService';
+import { voiceService } from '../../services/voiceService';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -142,21 +141,26 @@ export function MiddlegamePlanStudy({
 
   // Stop narration on tab/carousel change or unmount
   useEffect(() => {
-    speechService.stop();
+    voiceService.stop();
     setIsNarrating(false);
     narrationActiveRef.current = false;
   }, [activeSection, pawnBreakIndex, maneuverIndex]);
 
   useEffect(() => {
     return () => {
-      speechService.stop();
+      voiceService.stop();
     };
   }, []);
 
-  // Narration toggle
+  // Narration toggle. Routes through voiceService (NOT speechService
+  // directly) so Polly audio playing from a coach surface gets
+  // cancelled when this narration starts, user voice prefs are
+  // honoured, and the output sanitizer runs. speechService.stop()
+  // only touches Web Speech — it can't cancel a Polly <audio>
+  // element that voiceService is playing.
   const toggleNarration = useCallback((): void => {
     if (isNarrating) {
-      speechService.stop();
+      voiceService.stop();
       setIsNarrating(false);
       narrationActiveRef.current = false;
     } else {
@@ -164,15 +168,11 @@ export function MiddlegamePlanStudy({
       if (!text) return;
       setIsNarrating(true);
       narrationActiveRef.current = true;
-      // Route through the shared sanitizer so chess notation / piece
-      // letters don't reach the speech engine as "Nxf7" / "P on e4".
-      void speechService.speak(sanitizeForTTS(text), {
-        onEnd: () => {
-          if (narrationActiveRef.current) {
-            setIsNarrating(false);
-            narrationActiveRef.current = false;
-          }
-        },
+      void voiceService.speak(text).finally(() => {
+        if (narrationActiveRef.current) {
+          setIsNarrating(false);
+          narrationActiveRef.current = false;
+        }
       });
     }
   }, [isNarrating, plan, activeSection, pawnBreakIndex, maneuverIndex]);
