@@ -75,17 +75,20 @@ export interface AuditEntry {
   route?: string;
 }
 
-/** Log one entry. Fire-and-forget. */
+/** Log one entry. Fire-and-forget. Also streams the entry to
+ *  `/api/audit-stream` when the user has opted in by setting
+ *  `auditStreamUrl` + `auditStreamSecret` in localStorage. Stream
+ *  failures are silent; the local Dexie log is still written. */
 export async function logAppAudit(
   entry: Omit<AuditEntry, 'timestamp' | 'route'>,
 ): Promise<void> {
+  const filled: AuditEntry = {
+    ...entry,
+    timestamp: Date.now(),
+    route: typeof window !== 'undefined' ? window.location?.pathname : undefined,
+  };
   try {
     const current = await readLog();
-    const filled: AuditEntry = {
-      ...entry,
-      timestamp: Date.now(),
-      route: typeof window !== 'undefined' ? window.location?.pathname : undefined,
-    };
     current.push(filled);
     const trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
     await db.meta.put({
@@ -94,6 +97,30 @@ export async function logAppAudit(
     });
   } catch {
     /* swallow — auditor failures must not affect the feature path */
+  }
+  // Opt-in remote stream — used for live-watch sessions where Claude
+  // polls the backend for new entries. Off by default.
+  void streamAuditEntry(filled);
+}
+
+async function streamAuditEntry(entry: AuditEntry): Promise<void> {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;
+  const url = localStorage.getItem('auditStreamUrl');
+  const secret = localStorage.getItem('auditStreamSecret');
+  if (!url || !secret) return;
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-audit-secret': secret,
+      },
+      body: JSON.stringify(entry),
+      // Best-effort: don't block on slow networks.
+      signal: AbortSignal.timeout(4000),
+    });
+  } catch {
+    /* silent — the local Dexie log is still the source of truth */
   }
 }
 
