@@ -197,6 +197,19 @@ Use `src/test/factories.ts` for all test data. Available builders:
 - One logical change per commit
 - Do NOT commit `.env` files, API keys, or `node_modules`
 
+## Standing Orders for Work Orders
+
+These rules apply to every work order. They don't get "completed" —
+they must be satisfied whenever the WO touches the listed surface.
+
+- **Any WO changing Supabase schema MUST produce a migration file + RLS policies.**
+- **Any WO adding a Dexie store MUST bump version + add upgrade function.**
+- **Any WO adding a new route MUST register it in `router.tsx` AND add a nav entry.**
+- **Any WO adding a new UI surface MUST include loading, empty, and error states.**
+- **Any WO adding a user-facing feature MUST declare: feature flag name, nav entry, activation cue, post-completion route.**
+- **Any WO gating on a user flag MUST specify retroactive handling for existing users.**
+- **Any WO adding events MUST document PostHog event names + properties.**
+
 ## Do NOT
 
 - Use `any` type
