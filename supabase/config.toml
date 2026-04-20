@@ -1,0 +1,35 @@
+# Supabase CLI project config.
+# Generated as part of WO-INFRA-01. Keep checked in.
+#
+# Project ref is set per-developer via `supabase link --project-ref ...`
+# and is NOT tracked here (the CLI writes it to .supabase/).
+
+project_id = "chess-academy-pro"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["https://chessacademy.pro"]
+jwt_expiry = 3600
+enable_signup = true
+
+[storage]
+enabled = true
+# Backups bucket is created by 0001_init_backups.sql.
+file_size_limit = "50MiB"

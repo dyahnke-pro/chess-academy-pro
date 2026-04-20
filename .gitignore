@@ -4,6 +4,7 @@ dist
 *.local
 .env
 .env.*
+!.env.example
 ios
 android
 coverage
@@ -17,3 +18,4 @@ public/stockfish/*.wasm
 src/data/annotations-all.json
 voice_packs/
 missing_clips.txt
+.supabase/
