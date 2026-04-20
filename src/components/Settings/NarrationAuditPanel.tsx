@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getAuditLog, clearAuditLog } from '../../services/narrationAuditor';
 import type { AuditLogEntry } from '../../services/narrationAuditor';
-import { AlertTriangle, Trash2 } from 'lucide-react';
+import { AlertTriangle, Trash2, Copy, Check } from 'lucide-react';
 
 /**
  * Debug viewer for the runtime narration auditor. Lists recent
@@ -9,13 +9,15 @@ import { AlertTriangle, Trash2 } from 'lucide-react';
  * references, wrong check/mate claims) so content issues can be
  * triaged from real sessions without waiting for a batch grader.
  *
- * Surfaced in Settings → About (or wherever the user routes it).
- * Intentionally low-visibility — most users should never see this;
- * it's a power/maintainer tool.
+ * Key affordance: "Copy for Claude" serialises the whole log as a
+ * markdown report that can be pasted directly into a Claude Code
+ * session. That's the "send Claude what it needs to fix it" path
+ * for any finding the auditor surfaces post-launch.
  */
 export function NarrationAuditPanel(): JSX.Element {
   const [log, setLog] = useState<AuditLogEntry[] | null>(null);
   const [busy, setBusy] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const refresh = async (): Promise<void> => {
     const data = await getAuditLog();
@@ -33,6 +35,32 @@ export function NarrationAuditPanel(): JSX.Element {
     setBusy(false);
   };
 
+  const handleCopy = async (): Promise<void> => {
+    if (!log || log.length === 0) return;
+    const markdown = formatLogAsMarkdown(log);
+    try {
+      await navigator.clipboard.writeText(markdown);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard API can reject (not-focused iframe, http context on older
+      // iOS). Fallback via a transient textarea so copy always works.
+      const textarea = document.createElement('textarea');
+      textarea.value = markdown;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 2000);
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+  };
+
   if (log === null) {
     return (
       <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -46,8 +74,8 @@ export function NarrationAuditPanel(): JSX.Element {
       <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
         No narration inconsistencies flagged. The auditor runs in the
         background and will log any claims that conflict with the
-        position (e.g., "knight on f3" when f3 is empty, or a check
-        claim when the king isn\u2019t in check).
+        position (e.g., &ldquo;knight on f3&rdquo; when f3 is empty, or
+        a check claim when the king isn&rsquo;t in check).
       </div>
     );
   }
@@ -62,15 +90,26 @@ export function NarrationAuditPanel(): JSX.Element {
           <AlertTriangle size={12} style={{ color: 'var(--color-accent)' }} />
           <span>{log.length} flagged {log.length === 1 ? 'entry' : 'entries'}</span>
         </div>
-        <button
-          onClick={() => { void handleClear(); }}
-          disabled={busy}
-          className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
-          data-testid="narration-audit-clear"
-        >
-          <Trash2 size={12} />
-          Clear
-        </button>
+        <div className="flex gap-1">
+          <button
+            onClick={() => { void handleCopy(); }}
+            className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
+            data-testid="narration-audit-copy"
+            title="Copy a markdown report suitable for pasting into a Claude Code session"
+          >
+            {copied ? <Check size={12} /> : <Copy size={12} />}
+            {copied ? 'Copied' : 'Copy for Claude'}
+          </button>
+          <button
+            onClick={() => { void handleClear(); }}
+            disabled={busy}
+            className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
+            data-testid="narration-audit-clear"
+          >
+            <Trash2 size={12} />
+            Clear
+          </button>
+        </div>
       </div>
       <div className="space-y-2 max-h-80 overflow-y-auto">
         {entries.map((entry, i) => (
@@ -106,4 +145,59 @@ export function NarrationAuditPanel(): JSX.Element {
       </div>
     </div>
   );
+}
+
+/** Serialise an audit log as a markdown report. Shape is optimised
+ *  for pasting into a Claude Code session — one fenced-code block
+ *  per finding with timestamp, context, FEN, and per-flag excerpt +
+ *  explanation. Exported for regression tests. */
+export function formatLogAsMarkdown(log: AuditLogEntry[]): string {
+  if (log.length === 0) return '# Narration audit log\n\n_No findings._\n';
+
+  const byKind = new Map<string, number>();
+  for (const entry of log) {
+    for (const flag of entry.flags) {
+      byKind.set(flag.kind, (byKind.get(flag.kind) ?? 0) + 1);
+    }
+  }
+
+  const summary = [...byKind.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([k, n]) => `- ${k}: ${n}`)
+    .join('\n');
+
+  const entries = [...log].reverse();
+  const blocks = entries.map((entry, i) => {
+    const ts = new Date(entry.timestamp).toISOString();
+    const ctx = entry.context ?? '(no context)';
+    const flags = entry.flags
+      .map((f) => {
+        const excerpt = f.narrationExcerpt && f.narrationExcerpt !== f.kind
+          ? `  - excerpt: "${f.narrationExcerpt}"\n`
+          : '';
+        return `- **[${f.kind}]** ${f.explanation}\n${excerpt}`;
+      })
+      .join('');
+    return [
+      `### Finding ${i + 1}`,
+      `- timestamp: \`${ts}\``,
+      `- context: \`${ctx}\``,
+      `- FEN: \`${entry.fen}\``,
+      ``,
+      flags,
+    ].join('\n');
+  });
+
+  return [
+    '# Narration audit log',
+    '',
+    `Total: **${log.length}** flagged ${log.length === 1 ? 'entry' : 'entries'}.`,
+    '',
+    '## By kind',
+    summary,
+    '',
+    '## Findings',
+    '',
+    blocks.join('\n'),
+  ].join('\n');
 }
