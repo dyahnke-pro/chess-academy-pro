@@ -468,13 +468,12 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
   }, [handleUserMessage]);
 
   const restartListening = useCallback(() => {
-    if (listeningRef.current) {
-      setTimeout(() => {
-        if (listeningRef.current) {
-          voiceInputService.startListening();
-        }
-      }, 200);
-    }
+    // No-op: voiceInputService handles continuous listening internally
+    // (its onend handler restarts unless userStopped is true). A second
+    // restart path here raced with user-tap-off and wiped the onInterim
+    // / onSpeechStart / onError handlers because it called
+    // startListening() with no options. Kept as a no-op so the
+    // onResult subscription site reads cleanly; leave to the service.
   }, []);
 
   useEffect(() => {
@@ -519,7 +518,17 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     // flag.
     void voiceInputService.prewarmMic();
 
-    if (listening) {
+    // Source of truth for the toggle is listeningRef, not the
+    // `listening` state captured by this callback's closure. React
+    // state may lag a just-completed setListening from another path
+    // (e.g. restart race), while listeningRef is synced on every
+    // render. Using the ref guarantees tap N always sees the right
+    // on/off state — no sticky "on" after an off-tap, no double-start.
+    if (listeningRef.current) {
+      // Update the ref synchronously so any in-flight restart path
+      // sees the off-state immediately — setListening alone would
+      // only settle after the next commit.
+      listeningRef.current = false;
       voiceInputService.stopListening();
       setListening(false);
       setInterimTranscript('');
@@ -564,6 +573,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       // actually works — never talked over. Fires once per utterance.
       onSpeechStart: () => voiceService.stop(),
       onError: (reason) => {
+        listeningRef.current = false;
         setListening(false);
         setInterimTranscript('');
         setMicError(
@@ -576,8 +586,10 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
         setTimeout(() => setMicError(null), 4000);
       },
     });
+    // Same sync-ref pattern as the off-branch above.
+    listeningRef.current = started;
     setListening(started);
-  }, [listening, isStreaming]);
+  }, [isStreaming]);
 
   return (
     <div className="relative" data-testid="voice-chat-mic">
