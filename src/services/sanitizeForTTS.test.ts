@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeForTTS } from './voiceService';
+import { sanitizeForTTS, detectSanitizerLeak } from './voiceService';
 
 /**
  * Regression coverage for the TTS sanitizer — the last line of defense
@@ -87,6 +87,42 @@ describe('sanitizeForTTS', () => {
     for (const input of noChangeCases) {
       it(`${JSON.stringify(input)} is left unchanged`, () => {
         expect(sanitizeForTTS(input)).toBe(input);
+      });
+    }
+  });
+
+  describe('detectSanitizerLeak (defense-in-depth)', () => {
+    // Should flag — piece-letter shorthand in a chess context
+    const shouldLeak = [
+      'hanging P on f3',
+      'the Q attacks',
+      'your R is pinned',
+      'save the B',
+      'N hangs',
+      'P to d4',
+      "Black's P on d5",
+    ];
+    for (const t of shouldLeak) {
+      it(`flags ${JSON.stringify(t)}`, () => {
+        expect(detectSanitizerLeak(t)).toBe(true);
+      });
+    }
+
+    // Should NOT flag — sanitized output or general English
+    const shouldNotLeak = [
+      'hanging pawn on f3',
+      'the queen attacks',
+      'Plan B',
+      'Section R',
+      'Q and A',
+      'Dr. P',
+      'R.I.P.',
+      'This is just normal narration without chess shorthand.',
+      '',
+    ];
+    for (const t of shouldNotLeak) {
+      it(`passes ${JSON.stringify(t)}`, () => {
+        expect(detectSanitizerLeak(t)).toBe(false);
       });
     }
   });

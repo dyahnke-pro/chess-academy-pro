@@ -93,6 +93,19 @@ const ISOLATED_PIECE_LETTER_RE =
 const CASTLE_KING_RE = /\bO-O\b(?!-)/g;
 const CASTLE_QUEEN_RE = /\bO-O-O\b/g;
 
+/** Defense-in-depth second-layer check. Returns true if `text` still
+ *  contains piece-letter shorthand that `sanitizeForTTS` should have
+ *  expanded but didn't. The auditor wires this after every TTS call
+ *  so a new LLM shape slipping past the sanitizer regexes surfaces
+ *  in the app audit log. Independent of the narrationAuditor's
+ *  factual-claim checks — different failure mode, same defense. */
+const LEAK_DETECTOR_RE =
+  /\b[PNBRQK]\s+(?:on|to|at|from|hangs|hanging|is|was|takes|attacks|defends|sits|stands|covers|controls|threatens|protects|supports)\b|\b(?:hanging|loose|dropped|undefended|attacked|captured|save|protect|lose|hang|the|a|an|my|your|their|our|his|her|weak|strong|enemy|opposing|black['\u2019]s|white['\u2019]s)\s+[PNBRQK]\b/i;
+export function detectSanitizerLeak(text: string): boolean {
+  if (!text) return false;
+  return LEAK_DETECTOR_RE.test(text);
+}
+
 /** Normalise LLM output so the spoken layer never has to read chess
  *  notation aloud. Pure function — safe to call on any string. */
 export function sanitizeForTTS(text: string): string {
@@ -331,6 +344,23 @@ class VoiceService {
         'Caller should `await speak()` or chain with .then() to prevent overlap.',
         { newText: text.slice(0, 60) },
       );
+    }
+    // Defense-in-depth: after sanitizeForTTS has run at the call site,
+    // scan the result for piece-letter shorthand that still slipped
+    // through. Different failure mode than narrationAuditor's
+    // factual checks — this catches new LLM shapes the sanitizer
+    // vocabulary doesn't know about yet. Fire-and-forget; never
+    // blocks the speak path.
+    if (detectSanitizerLeak(text)) {
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'sanitizer-leak',
+          category: 'subsystem',
+          source: 'voiceService.speakInternal',
+          summary: 'Piece-letter shorthand survived sanitizeForTTS',
+          details: `text: ${text.slice(0, 300)}`,
+        });
+      });
     }
     this.stop();
 
