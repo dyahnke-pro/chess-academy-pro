@@ -107,10 +107,11 @@ export default defineConfig(({ mode }) => {
   },
   build: {
     target: 'esnext',
-    // Emit source maps so Sentry can symbolicate stack traces. The
-    // sentryVitePlugin uploads them post-build and then deletes them
-    // from `dist` so they don't ship to the CDN.
-    sourcemap: true,
+    // 'hidden' emits .map files for the sentryVitePlugin to upload but
+    // strips the `//# sourceMappingURL=` reference from the shipped JS
+    // so browsers never download them. The plugin's
+    // `filesToDeleteAfterUpload` then removes the maps from `dist`.
+    sourcemap: 'hidden',
     rollupOptions: {
       output: {
         manualChunks: {
@@ -118,6 +119,11 @@ export default defineConfig(({ mode }) => {
           'chess-vendor': ['chess.js', 'react-chessboard'],
           'ui-vendor': ['framer-motion', 'recharts', 'lucide-react'],
           'data-vendor': ['dexie', 'zustand'],
+          // Split Sentry + PostHog off the main bundle — they're big
+          // and only read at boot, so the cost of a separate chunk is
+          // recouped immediately and keeps the index bundle under the
+          // PWA precache ceiling.
+          'observability': ['@sentry/react', 'posthog-js'],
         },
       },
     },
