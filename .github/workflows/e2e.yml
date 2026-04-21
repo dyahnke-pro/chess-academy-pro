@@ -1,30 +1,49 @@
 name: E2E (Playwright vs. Vercel Preview)
 
+# We trigger on deployment_status rather than pull_request so the job
+# only runs once Vercel's preview deploy is actually live and we can
+# read its URL straight from the event payload. pull_request wants a
+# separate "wait for preview" action, which is flakier than letting
+# GitHub route the event to us.
 on:
-  pull_request:
-  push:
-    branches: [main]
+  deployment_status:
 
 concurrency:
-  group: e2e-${{ github.ref }}
+  group: e2e-${{ github.event.deployment.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
+  deployments: read
 
 jobs:
   e2e:
     name: Smoke tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Only run when Vercel reports a healthy preview. Skip production
+    # deploys (they don't need the E2E gate on merge) and any non-
+    # Vercel environment (e.g. if someone wires another deployer).
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment != 'Production' &&
+      contains(github.event.deployment_status.environment_url, 'vercel.app')
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Check out the deploy's ref so the tests run against the code
+          # that produced the preview URL, not the branch's HEAD at the
+          # time the workflow happens to fire.
+          ref: ${{ github.event.deployment.ref }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
 
-      # Cache the Playwright browser binaries keyed on the package-lock
-      # hash. First CI run downloads chromium; subsequent runs hit the
-      # cache and start tests ~2x faster.
+      # Cache the Playwright browser binaries keyed on package-lock so
+      # the first CI run downloads chromium and subsequent runs hit the
+      # cache — measurably ~2x faster past the first install.
       - name: Cache Playwright browsers
         id: pw-cache
         uses: actions/cache@v4
@@ -43,19 +62,9 @@ jobs:
         if: steps.pw-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      # Wait for the Vercel Preview deployment to go live, then capture
-      # its URL and expose it as PLAYWRIGHT_BASE_URL.
-      - name: Wait for Vercel Preview URL
-        id: wait-preview
-        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 600
-          check_interval: 15
-
       - name: Run Playwright tests
         env:
-          PLAYWRIGHT_BASE_URL: ${{ steps.wait-preview.outputs.url }}
+          PLAYWRIGHT_BASE_URL: ${{ github.event.deployment_status.environment_url }}
           CI: 'true'
         run: npx playwright test
 
