@@ -25,8 +25,18 @@ export default async function globalSetup(config: FullConfig): Promise<void> {
 
   mkdirSync(dirname(storageState), { recursive: true });
 
+  const vercelBypassToken = process.env.VERCEL_BYPASS_TOKEN;
+  const extraHTTPHeaders = vercelBypassToken
+    ? {
+        'x-vercel-protection-bypass': vercelBypassToken,
+        'x-vercel-set-bypass-cookie': 'true',
+      }
+    : undefined;
+
   const browser = await chromium.launch();
-  const context = await browser.newContext();
+  const context = await browser.newContext(
+    extraHTTPHeaders ? { extraHTTPHeaders } : {},
+  );
   const page = await context.newPage();
 
   await page.goto(`${baseURL}/auth/test-login`);

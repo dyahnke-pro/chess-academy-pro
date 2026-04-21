@@ -62,9 +62,38 @@ jobs:
         if: steps.pw-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
+      # Health-check the preview URL before firing up Playwright. Emits
+      # the resolved URL + HTTP status so a flat-out unreachable or
+      # auth-gated preview fails loud and fast rather than 14 specs each
+      # timing out for 30s.
+      - name: Probe Vercel preview URL
+        env:
+          PREVIEW_URL: ${{ github.event.deployment_status.environment_url }}
+          VERCEL_BYPASS_TOKEN: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          echo "::notice::Preview URL: $PREVIEW_URL"
+          if [ -n "$VERCEL_BYPASS_TOKEN" ]; then
+            status=$(curl -sS -o /tmp/preview-body -w '%{http_code}' \
+              -H "x-vercel-protection-bypass: $VERCEL_BYPASS_TOKEN" \
+              -H "x-vercel-set-bypass-cookie: true" \
+              "$PREVIEW_URL/")
+          else
+            status=$(curl -sS -o /tmp/preview-body -w '%{http_code}' "$PREVIEW_URL/")
+          fi
+          echo "HTTP $status"
+          head -c 400 /tmp/preview-body || true
+          echo
+          # Fail the job early with a clear message if the preview is
+          # gated or down — no point running Playwright against a 401.
+          if [ "$status" != "200" ]; then
+            echo "::error::Preview returned HTTP $status — not running Playwright. If this is 401, set VERCEL_AUTOMATION_BYPASS_SECRET in repo secrets."
+            exit 1
+          fi
+
       - name: Run Playwright tests
         env:
           PLAYWRIGHT_BASE_URL: ${{ github.event.deployment_status.environment_url }}
+          VERCEL_BYPASS_TOKEN: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
           CI: 'true'
         run: npx playwright test
 
