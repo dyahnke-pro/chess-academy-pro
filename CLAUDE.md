@@ -202,13 +202,16 @@ Use `src/test/factories.ts` for all test data. Available builders:
 These rules apply to every work order. They don't get "completed" —
 they must be satisfied whenever the WO touches the listed surface.
 
-- **Any WO changing Supabase schema MUST produce a migration file + RLS policies.**
+- **Any WO changing Supabase schema MUST produce a migration file + RLS policies.** See `docs/RLS-CHECKLIST.md`.
 - **Any WO adding a Dexie store MUST bump version + add upgrade function.**
 - **Any WO adding a new route MUST register it in `router.tsx` AND add a nav entry.**
 - **Any WO adding a new UI surface MUST include loading, empty, and error states.**
 - **Any WO adding a user-facing feature MUST declare: feature flag name, nav entry, activation cue, post-completion route.**
 - **Any WO gating on a user flag MUST specify retroactive handling for existing users.**
 - **Any WO adding events MUST document PostHog event names + properties.**
+- **All new Zustand state goes in `src/stores/appStore.ts` (selectors in `src/stores/userContext.ts`). Never duplicate state in component-local `useState` when a selector exists — add a selector instead.**
+- **All PostHog events use constants from `src/services/analytics.ts`. Never pass a string literal to `posthog.capture()` at a call site. Define the event + its props in the `EVENTS` / `EventProps` maps.**
+- **User-facing features default OFF at ship.** Ship the code with the flag defaulted `false` in PostHog; flip it ON in the dashboard only after a prod smoke test. `useFeatureFlag(flag)` from `src/hooks/useFeatureFlag.ts` is the single gate.
 
 ## Do NOT
 
@@ -222,6 +225,9 @@ they must be satisfied whenever the WO touches the listed surface.
 - Use `localStorage` for anything (use Dexie/IndexedDB)
 - Import from `openai` anywhere except `src/services/coachApi.ts`
 - Run Stockfish anywhere except through `src/services/stockfishEngine.ts`
+- Import `toast` from `sonner` directly — use `notify` from `src/services/notify.ts`
+- Call `posthog.capture()` directly — use `track()` + `EVENTS.*` from `src/services/analytics.ts`
+- Import `@sentry/react` directly at call sites — use `captureException` from `src/services/sentry.ts`
 
 ## Agent Coach Pattern (WO-AGENT-COACH)
 

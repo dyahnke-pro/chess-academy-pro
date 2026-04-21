@@ -95,6 +95,16 @@ interface AppState {
     label?: string;
     timestamp: number;
   } | null;
+
+  /**
+   * Keys of nudges / changelog entries / new-feature pins the user
+   * has dismissed. Mirror of the `user_dismissals` Supabase table
+   * (see supabase/migrations/0002_user_dismissals.sql). Populated from
+   * Supabase on login; empty set when not logged in or offline.
+   * Local-only dismissals (added optimistically) are pushed to Supabase
+   * in the background via recordDismissal().
+   */
+  dismissals: Set<string>;
 }
 
 /** Snapshots older than this are considered stale (15 min). */
@@ -134,6 +144,12 @@ interface AppActions {
    */
   setLastBoardSnapshot: (snapshot: { fen: string; source: string; label?: string }) => void;
   clearLastBoardSnapshot: () => void;
+  /** Optimistically mark a key as dismissed in local state. Persistence
+   *  to `user_dismissals` happens separately in nudgeEngine. */
+  addDismissal: (key: string) => void;
+  /** Replace the dismissals set (called by the dismissals hydration
+   *  effect after pulling the current user's rows from Supabase). */
+  setDismissals: (keys: Iterable<string>) => void;
   reset: () => void;
 }
 
@@ -163,6 +179,7 @@ const DEFAULT_STATE: AppState = {
   globalBoardContext: null,
   globalPracticePosition: null,
   lastBoardSnapshot: null,
+  dismissals: new Set<string>(),
 };
 
 export const useAppStore = create<AppState & AppActions>()(
@@ -251,7 +268,17 @@ export const useAppStore = create<AppState & AppActions>()(
 
     clearLastBoardSnapshot: () => set({ lastBoardSnapshot: null }),
 
-    reset: () => set(DEFAULT_STATE),
+    addDismissal: (key) =>
+      set((state) => {
+        if (state.dismissals.has(key)) return state;
+        const next = new Set(state.dismissals);
+        next.add(key);
+        return { dismissals: next };
+      }),
+
+    setDismissals: (keys) => set({ dismissals: new Set(keys) }),
+
+    reset: () => set({ ...DEFAULT_STATE, dismissals: new Set<string>() }),
   })),
 );
 

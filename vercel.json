@@ -1,7 +1,9 @@
 {
   "rewrites": [
     { "source": "/voice-packs/:file", "destination": "/api/voice-packs/:file" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/ingest/static/:path*", "destination": "https://us-assets.i.posthog.com/static/:path*" },
+    { "source": "/ingest/:path*", "destination": "https://us.i.posthog.com/:path*" },
+    { "source": "/((?!api/|ingest/).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

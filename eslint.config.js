@@ -16,6 +16,7 @@ export default tseslint.config(
       'vite.config.ts',
       'vitest.config.ts',
       'e2e',
+      'tests',
       'playwright.config.ts',
       'api',
       'scripts',

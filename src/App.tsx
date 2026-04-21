@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import { useAppStore } from './stores/appStore';
+import { capturePageview, identifyUser, resetUser } from './services/analytics';
+import { setSentryUser } from './services/sentry';
 import { getOrCreateMainProfile } from './services/dbService';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
@@ -66,6 +69,39 @@ import { GuidedGameHubPage } from './components/Kid/GuidedGameHubPage';
 import { GuidedGamePage } from './components/Kid/GuidedGamePage';
 import { NeonBoardMock } from './components/Board/NeonBoardMock';
 import { DebugAuditPage } from './components/Debug/DebugAuditPage';
+import { TestLoginPage } from './components/Debug/TestLoginPage';
+
+/**
+ * Router-scoped side-effect host. Lives inside <BrowserRouter> so it
+ * can subscribe to location changes and fire PostHog pageviews. No
+ * UI — returns null.
+ */
+function AnalyticsListener(): null {
+  const location = useLocation();
+  useEffect(() => {
+    capturePageview(window.location.href);
+  }, [location.pathname, location.search]);
+  return null;
+}
+
+/**
+ * Mirrors the active profile into Sentry + PostHog identity when it
+ * changes. The single-user app's "login" is a local profile load;
+ * clearing the profile is treated as a logout.
+ */
+function IdentitySync(): null {
+  const activeProfile = useAppStore((s) => s.activeProfile);
+  useEffect(() => {
+    if (activeProfile) {
+      identifyUser(activeProfile.id, { name: activeProfile.name });
+      setSentryUser({ id: activeProfile.id });
+    } else {
+      resetUser();
+      setSentryUser(null);
+    }
+  }, [activeProfile]);
+  return null;
+}
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -159,8 +195,27 @@ export function App(): JSX.Element {
   const hasApiKey = Boolean(activeProfile?.preferences.apiKeyEncrypted) ||
     Boolean(activeProfile?.preferences.anthropicApiKeyEncrypted);
 
+  // Gate the internal test-login route behind an env flag so it can
+  // never ship to production by accident. Playwright sets this in CI.
+  const allowTestLogin = import.meta.env.VITE_ALLOW_TEST_LOGIN === 'true';
+
   return (
     <BrowserRouter>
+      <AnalyticsListener />
+      <IdentitySync />
+      {/* Sonner toast host. One mount per app; consumers use the
+          `notify` helper in src/services/notify.ts so the toast
+          surface stays uniform. */}
+      <Toaster
+        position="top-center"
+        richColors
+        closeButton
+        toastOptions={{
+          // Min visible time of 5s matches WCAG guidance for toast
+          // accessibility; individual notify.*() calls can override.
+          duration: 5000,
+        }}
+      />
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
@@ -227,6 +282,12 @@ export function App(): JSX.Element {
           <Route path="/neon-mock" element={<NeonBoardMock />} />
           {/* Audit back-door — not linked from UI; deep-link only. */}
           <Route path="/debug/audit" element={<ErrorBoundary><DebugAuditPage /></ErrorBoundary>} />
+          {/* Playwright-only test login. The route is only registered
+              when VITE_ALLOW_TEST_LOGIN=true at build time; production
+              bundles never include it. */}
+          {allowTestLogin && (
+            <Route path="/auth/test-login" element={<ErrorBoundary><TestLoginPage /></ErrorBoundary>} />
+          )}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route element={<KidLayout />}>
