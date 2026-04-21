@@ -206,7 +206,7 @@
       {
         "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1PP2/2NP1N2/PPP3PP/R1BQ1RK1 b - - 0 8",
         "moves": [
-          "exf4",
+          "exf4+",
           "d4",
           "Bb4",
           "Bxf4",
@@ -264,7 +264,7 @@
           ],
           [
             {
-              "from": "c6",
+              "from": "f6",
               "to": "d7"
             }
           ],
@@ -272,10 +272,6 @@
             {
               "from": "e1",
               "to": "g3"
-            },
-            {
-              "from": "g3",
-              "to": "g7"
             }
           ]
         ],
@@ -562,10 +558,6 @@
             {
               "from": "g2",
               "to": "g4"
-            },
-            {
-              "from": "g4",
-              "to": "g5"
             }
           ]
         ],
@@ -685,10 +677,6 @@
             {
               "from": "f4",
               "to": "f5"
-            },
-            {
-              "from": "f5",
-              "to": "e6"
             }
           ]
         ],
@@ -733,10 +721,6 @@
             {
               "from": "f3",
               "to": "g5"
-            },
-            {
-              "from": "g5",
-              "to": "h7"
             }
           ],
           [
@@ -761,10 +745,6 @@
             {
               "from": "d1",
               "to": "h5"
-            },
-            {
-              "from": "h5",
-              "to": "f7"
             }
           ],
           [
@@ -874,10 +854,6 @@
             {
               "from": "d2",
               "to": "b3"
-            },
-            {
-              "from": "b3",
-              "to": "c5"
             }
           ]
         ],
@@ -972,10 +948,6 @@
             {
               "from": "f2",
               "to": "f4"
-            },
-            {
-              "from": "f4",
-              "to": "f5"
             }
           ],
           [
@@ -1286,10 +1258,6 @@
             {
               "from": "b4",
               "to": "b5"
-            },
-            {
-              "from": "b5",
-              "to": "c6"
             }
           ]
         ],
@@ -1374,7 +1342,7 @@
           ],
           [
             {
-              "from": "d7",
+              "from": "f6",
               "to": "e4"
             }
           ],
@@ -1396,7 +1364,7 @@
               "to": "c2"
             },
             {
-              "from": "c2",
+              "from": "e4",
               "to": "h7"
             }
           ]
@@ -1574,10 +1542,6 @@
             {
               "from": "g6",
               "to": "g5"
-            },
-            {
-              "from": "g5",
-              "to": "g4"
             }
           ],
           [
@@ -1619,79 +1583,7 @@
     "endgameTransitions": [
       "If the attacks don't break through, the blocked center leads to complex maneuvering endgames. The side with better-placed knights and a more advanced pawn storm typically holds the advantage in these slow, strategic positions."
     ],
-    "playableLines": [
-      {
-        "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2N1BN2/PP2BPPP/R2Q1RK1 b - - 0 7",
-        "moves": [
-          "e5",
-          "d5",
-          "Ne7",
-          "Nd2",
-          "Nh5",
-          "g3",
-          "f5"
-        ],
-        "annotations": [
-          "This is the King's Indian e5 break. Black strikes the center with ...e5, challenging White's d4 pawn and creating the tension that will define the middlegame. This is the move that transforms a quiet Indian into a sharp fighting game.",
-          "White closes the center with d5, locking the pawn structure. This commits both sides to opposite-flank play — White will push on the queenside with c5-c6, while Black prepares the kingside storm with ...f5-f4-g5.",
-          "The Nc6 retreats to e7, since d5 blocks its path. From e7, the knight can reroute to g6 to support the ...f5 break, or jump to d4 via c5 — both excellent squares in the closed King's Indian structure.",
-          "White begins the queenside expansion, rerouting the knight toward c4 or b3 to support the c5 advance. The knight on c4 targets both d6 and e5, supporting White's queenside breakthrough.",
-          "Black plays Nh5, leaping toward the f4 outpost and supporting the upcoming ...f5 advance. The Nh5 also prevents White from playing f2-f4 to control the kingside, clearing the way for Black's pawn storm.",
-          "White plays g3, preparing to control the f4 square and keep Black's knight from reaching its dream outpost. However, this slightly weakens White's own kingside — a trade-off that Black can exploit if the g-file opens.",
-          "Black launches the thematic kingside pawn storm with ...f5, attacking White's e4 pawn base. This is the move the entire King's Indian setup was designed for — the f-file opens, the g-file may follow, and Black's attack is in full swing."
-        ],
-        "arrows": [
-          [
-            {
-              "from": "e7",
-              "to": "e5"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "d5"
-            }
-          ],
-          [
-            {
-              "from": "c6",
-              "to": "e7"
-            }
-          ],
-          [
-            {
-              "from": "f3",
-              "to": "d2"
-            }
-          ],
-          [
-            {
-              "from": "f6",
-              "to": "h5"
-            }
-          ],
-          [
-            {
-              "from": "g2",
-              "to": "g3"
-            }
-          ],
-          [
-            {
-              "from": "f7",
-              "to": "f5"
-            },
-            {
-              "from": "f5",
-              "to": "e4",
-              "color": "red"
-            }
-          ]
-        ],
-        "title": "e5 Central Counter: Closed Center"
-      }
-    ]
+    "playableLines": []
   },
   {
     "id": "mp-english-d4",
@@ -1775,11 +1667,6 @@
             {
               "from": "f1",
               "to": "g2"
-            },
-            {
-              "from": "g2",
-              "to": "d5",
-              "color": "yellow"
             }
           ],
           [
@@ -1872,11 +1759,6 @@
             {
               "from": "c3",
               "to": "d5"
-            },
-            {
-              "from": "d5",
-              "to": "c7",
-              "color": "red"
             }
           ],
           [
@@ -1889,11 +1771,6 @@
             {
               "from": "a1",
               "to": "b1"
-            },
-            {
-              "from": "b1",
-              "to": "b4",
-              "color": "yellow"
             }
           ],
           [
@@ -2086,22 +1963,12 @@
             {
               "from": "d2",
               "to": "f1"
-            },
-            {
-              "from": "f1",
-              "to": "g3",
-              "color": "yellow"
             }
           ],
           [
             {
               "from": "d7",
               "to": "c5"
-            },
-            {
-              "from": "c5",
-              "to": "b3",
-              "color": "red"
             }
           ]
         ],
@@ -2184,11 +2051,6 @@
             {
               "from": "f1",
               "to": "d3"
-            },
-            {
-              "from": "d3",
-              "to": "h7",
-              "color": "yellow"
             }
           ],
           [
@@ -2201,11 +2063,6 @@
             {
               "from": "b1",
               "to": "d2"
-            },
-            {
-              "from": "d2",
-              "to": "e4",
-              "color": "yellow"
             }
           ],
           [
@@ -2305,16 +2162,6 @@
             {
               "from": "d1",
               "to": "b3"
-            },
-            {
-              "from": "b3",
-              "to": "b7",
-              "color": "red"
-            },
-            {
-              "from": "b3",
-              "to": "d5",
-              "color": "red"
             }
           ],
           [
@@ -2443,11 +2290,6 @@
             {
               "from": "e2",
               "to": "h5"
-            },
-            {
-              "from": "h5",
-              "to": "f7",
-              "color": "red"
             }
           ],
           [
@@ -2456,7 +2298,7 @@
               "to": "h5"
             },
             {
-              "from": "h1",
+              "from": "f6",
               "to": "h5",
               "color": "yellow"
             }
@@ -2529,11 +2371,6 @@
             {
               "from": "g2",
               "to": "g4"
-            },
-            {
-              "from": "g4",
-              "to": "h5",
-              "color": "red"
             }
           ],
           [
@@ -2546,11 +2383,6 @@
             {
               "from": "c3",
               "to": "d5"
-            },
-            {
-              "from": "d5",
-              "to": "e7",
-              "color": "red"
             }
           ]
         ],
@@ -2634,11 +2466,6 @@
             {
               "from": "c1",
               "to": "f4"
-            },
-            {
-              "from": "f1",
-              "to": "f7",
-              "color": "yellow"
             }
           ],
           [
@@ -2651,11 +2478,6 @@
             {
               "from": "d1",
               "to": "e1"
-            },
-            {
-              "from": "e1",
-              "to": "g3",
-              "color": "yellow"
             }
           ],
           [
@@ -2668,11 +2490,6 @@
             {
               "from": "e1",
               "to": "g3"
-            },
-            {
-              "from": "g3",
-              "to": "g7",
-              "color": "red"
             }
           ]
         ],
@@ -2715,92 +2532,7 @@
       "In simplified positions, White's central pawn majority (e4 vs Black's queenside pawns) provides a lasting structural advantage. The e-pawn can advance to create a passed pawn in the endgame.",
       "White's superior piece activity from the opening carries into the endgame. Actively placed minor pieces and rooks on open files convert the initiative into concrete advantages — winning pawns or creating a passed pawn."
     ],
-    "playableLines": [
-      {
-        "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
-        "moves": [
-          "d4",
-          "exd4",
-          "Nxd4",
-          "Nf6",
-          "Nxc6",
-          "bxc6",
-          "Bd3",
-          "d5"
-        ],
-        "annotations": [
-          "This is the Scotch Game. White opens the center with d4, the defining move that creates an open position favoring rapid piece development. The early central break prevents Black from building a solid defensive wall.",
-          "Black captures exd4, accepting the central exchange. While this gives Black a symmetrical pawn structure, it also opens lines that favor White's faster-developing pieces.",
-          "White recaptures Nxd4, placing the knight on the dominant central square. The Nd4 controls c6, e6, f5, and b5 — it's the most powerful piece on the board and dictates the flow of the game.",
-          "Black develops the knight to f6, attacking the e4 pawn and getting a piece into the game. The Nf6 is Black's most natural developing move, but it doesn't address the Nd4's central dominance.",
-          "White captures Nxc6, damaging Black's queenside pawn structure. The exchange removes Black's Nc6 defender and forces bxc6, creating doubled c-pawns that weaken Black's queenside long-term.",
-          "Black recaptures bxc6, keeping pawns in the center but accepting the structural damage. The doubled c-pawns on c6 and c7 are a permanent weakness — they can't both advance, and the c6 pawn may become a target.",
-          "White develops the bishop to d3, targeting the h7 pawn along the b1-h7 diagonal. The Bd3 supports the e4 pawn, prepares O-O, and creates the latent threat of Bxh7+ if Black castles kingside without care.",
-          "Black strikes back with d5, challenging White's e4 pawn at the right moment. This central counterblow is necessary — without it, Black would be too passive. After dxe4 Bxe4, the position is sharp with chances for both sides."
-        ],
-        "arrows": [
-          [
-            {
-              "from": "d2",
-              "to": "d4"
-            }
-          ],
-          [
-            {
-              "from": "e5",
-              "to": "d4"
-            }
-          ],
-          [
-            {
-              "from": "f3",
-              "to": "d4"
-            }
-          ],
-          [
-            {
-              "from": "g8",
-              "to": "f6"
-            },
-            {
-              "from": "f6",
-              "to": "e4",
-              "color": "red"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "c6"
-            }
-          ],
-          [
-            {
-              "from": "b7",
-              "to": "c6"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "d3"
-            },
-            {
-              "from": "d3",
-              "to": "h7",
-              "color": "yellow"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "d5"
-            }
-          ]
-        ],
-        "title": "Open Center: Rapid Development"
-      }
-    ]
+    "playableLines": []
   },
   {
     "id": "mp-jobava-e4",
@@ -2848,7 +2580,7 @@
         "moves": [
           "c6",
           "Na3",
-          "Nac7",
+          "Nc7",
           "O-O",
           "b5",
           "e4"
@@ -2866,22 +2598,12 @@
             {
               "from": "c7",
               "to": "c6"
-            },
-            {
-              "from": "c6",
-              "to": "b5",
-              "color": "red"
             }
           ],
           [
             {
               "from": "b5",
               "to": "a3"
-            },
-            {
-              "from": "a3",
-              "to": "c4",
-              "color": "yellow"
             }
           ],
           [
@@ -2921,7 +2643,7 @@
         "moves": [
           "c6",
           "Na3",
-          "Nac7",
+          "Nc7",
           "O-O",
           "b6",
           "Nc4",
@@ -2973,16 +2695,6 @@
             {
               "from": "a3",
               "to": "c4"
-            },
-            {
-              "from": "c4",
-              "to": "e5",
-              "color": "yellow"
-            },
-            {
-              "from": "c4",
-              "to": "d6",
-              "color": "yellow"
             }
           ],
           [
@@ -3080,11 +2792,6 @@
             {
               "from": "h4",
               "to": "h5"
-            },
-            {
-              "from": "h5",
-              "to": "g6",
-              "color": "red"
             }
           ],
           [
@@ -3097,11 +2804,6 @@
             {
               "from": "d1",
               "to": "d2"
-            },
-            {
-              "from": "d2",
-              "to": "h6",
-              "color": "yellow"
             }
           ],
           [
@@ -3114,11 +2816,6 @@
             {
               "from": "e1",
               "to": "c1"
-            },
-            {
-              "from": "d1",
-              "to": "h1",
-              "color": "yellow"
             }
           ]
         ],

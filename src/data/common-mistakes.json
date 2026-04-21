@@ -85,18 +85,6 @@
       "wrongMove": "Nf6",
       "correctMove": "a6",
       "explanation": "Nf6 allows 4. O-O Nxe4 5. d4 (the Open Ruy Lopez) which leads to very sharp tactical play favoring White. a6 forces the bishop back and gives Black more flexibility."
-    },
-    {
-      "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
-      "wrongMove": "Bxc6",
-      "correctMove": "Ba4",
-      "explanation": "Bxc6 gives up the bishop pair and doubles pawns but gives Black the bishop pair and strong center. Ba4 maintains tension and preserves options."
-    },
-    {
-      "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BP2N1P/PP1P1PP1/RNBQR1K1 w - - 0 10",
-      "wrongMove": "Bxb5",
-      "correctMove": "d4",
-      "explanation": "Bxb5 wins a pawn but after axb5 Rxa1 Black gets counterplay. d4 breaks through the center where White is better developed."
     }
   ],
   "qgd": [
@@ -180,12 +168,6 @@
     }
   ],
   "sicilian-dragon": [
-    {
-      "fen": "r1bqkb1r/pp2pp1p/2np1np1/8/3NP3/2N1B3/PPPQBPPP/R3K2R b KQkq - 0 7",
-      "wrongMove": "Ng4",
-      "correctMove": "O-O",
-      "explanation": "Ng4 tries to win the bishop pair but after Bxg4 Bxg4 f3 Bd7, White has gained a tempo and Black hasn't castled yet. Castle first — king safety is paramount before starting queenside counterplay."
-    },
     {
       "fen": "r1bqk2r/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R b KQkq - 0 7",
       "wrongMove": "a5",
@@ -285,12 +267,6 @@
       "wrongMove": "Nf3",
       "correctMove": "cxd5",
       "explanation": "Nf3 allows Black to comfortably capture on c4 or play Bg7 with an ideal Grunfeld setup. Capturing cxd5 immediately tests Black's commitment and leads to the mainline Exchange Variation where White builds a strong center."
-    },
-    {
-      "fen": "rnbqkb1r/ppp1pp1p/6p1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
-      "wrongMove": "Bg7",
-      "correctMove": "Nxd5",
-      "explanation": "Developing the bishop before recapturing on d5 gives White a free pawn and a dominating center with e4. Recapturing Nxd5 first is essential to keep material balance and challenge White's central control."
     },
     {
       "fen": "rnbq1rk1/ppp1ppbp/6p1/8/2BPn3/2N1BN2/PP3PPP/R2QK2R b KQ - 5 7",

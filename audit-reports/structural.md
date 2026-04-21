@@ -1,76 +1,19 @@
 # Structural Audit Report
 
-Generated: 2026-04-17T00:38:57.801Z
-Total scripted-move records scanned: **42961**
+Generated: 2026-04-20T15:36:39.338Z
+Total scripted-move records scanned: **43141**
 
 ## Counts
 
 | Finding | Count |
 |---|---:|
-| Bare / empty annotations | 11996 |
+| Bare / empty annotations | 11848 |
 | Filler annotations | 0 |
-| Illegal moves (PGN won't parse) | 6 |
-| SAN ↔ replay drift | 3 |
-| Illegal arrows | 37 |
+| Illegal moves (PGN won't parse) | 0 |
+| SAN ↔ replay drift | 0 |
+| Illegal arrows | 0 |
 | Classification ↔ text sanity | 0 |
 | Templated-phrase clusters (≥25 reuses) | 50 |
-
-## Illegal moves (highest priority — these lines are broken)
-
-| Source | Opening | Subline | Move# | SAN |
-|---|---|---|---:|---|
-| middlegame-plan | kings-indian-defence | e5 Central Counter: Closed Center | 1 | e5 |
-| middlegame-plan | scotch-game | Open Center: Rapid Development | 1 | d4 |
-| common-mistake-correct | ruy-lopez | mistake[1].correct | 1 | Ba4 |
-| common-mistake-wrong | ruy-lopez | mistake[2].wrong | 1 | Bxb5 |
-| common-mistake-correct | sicilian-dragon | mistake[0].correct | 1 | O-O |
-| common-mistake-correct | grunfeld-defence | mistake[1].correct | 1 | Nxd5 |
-
-## SAN ↔ replay drift
-
-Annotation declared SAN does not match chess.js replay at that ply.
-
-| Source | Opening | Subline | Move# | Declared | Replayed |
-|---|---|---|---:|---|---|
-| middlegame-plan | italian-game | f4 Recapture and Queen Swing | 1 | exf4 | exf4+ |
-| middlegame-plan | pro-naroditsky-jobava-london | e4 Break After ...c6 | 3 | Nac7 | Nc7 |
-| middlegame-plan | pro-naroditsky-jobava-london | Space Squeeze: Nc4 + e4 | 3 | Nac7 | Nc7 |
-
-## Illegal arrows
-
-| Source | Opening | Subline | Move# | SAN | Arrow |
-|---|---|---|---:|---|---|
-| middlegame-plan | italian-game | f4 Recapture and Queen Swing | 7 | Nd7 | c6->d7 |
-| middlegame-plan | italian-game | f4 Recapture and Queen Swing | 8 | Qg3 | g3->g7 |
-| middlegame-plan | sicilian-najdorf | English Attack: g4 Pawn Storm | 8 | g4 | g4->g5 |
-| middlegame-plan | french-defence | f4-f5 Pawn Storm | 9 | f5 | f5->e6 |
-| middlegame-plan | french-defence | Ng5 Kingside Attack | 3 | Ng5 | g5->h7 |
-| middlegame-plan | french-defence | Ng5 Kingside Attack | 7 | Qh5 | h5->f7 |
-| middlegame-plan | french-defence | a3-b4 Queenside Expansion | 7 | Nb3 | b3->c5 |
-| middlegame-plan | caro-kann | Nge2-g3 with f4 Buildup | 5 | f4 | f4->f5 |
-| middlegame-plan | qgd | Rb1-b4-b5 Minority Attack | 7 | b5 | b5->c6 |
-| middlegame-plan | qgd | e4 Central Break: Active Pieces | 4 | Nxe4 | d7->e4 |
-| middlegame-plan | qgd | e4 Central Break: Active Pieces | 7 | Bc2 | c2->h7 |
-| middlegame-plan | kings-indian-defence | f5-g5-g4 Pawn Storm | 7 | g5 | g5->g4 |
-| middlegame-plan | kings-indian-defence | e5 Central Counter: Closed Center | 1 | e5 | e7->e5 |
-| middlegame-plan | english-opening | d4 Catalan Transposition | 5 | Bg2 | g2->d5 |
-| middlegame-plan | english-opening | b4 Queenside Gambit | 3 | Nd5 | d5->c7 |
-| middlegame-plan | english-opening | b4 Queenside Gambit | 5 | Rb1 | b1->b4 |
-| middlegame-plan | ruy-lopez | Slow Maneuver: Nbd2-f1-g3 | 7 | Nf1 | f1->g3 |
-| middlegame-plan | ruy-lopez | Slow Maneuver: Nbd2-f1-g3 | 8 | Nc5 | c5->b3 |
-| middlegame-plan | london-system | e4 Central Breakthrough | 3 | Bd3 | d3->h7 |
-| middlegame-plan | london-system | e4 Central Breakthrough | 5 | Nbd2 | d2->e4 |
-| middlegame-plan | london-system | c4 with Qb3 Pressure | 4 | Qb3 | b3->b7 |
-| middlegame-plan | london-system | c4 with Qb3 Pressure | 4 | Qb3 | b3->d5 |
-| middlegame-plan | sicilian-dragon | h4-h5: Opening the h-File | 7 | Bxh5 | h5->f7 |
-| middlegame-plan | sicilian-dragon | h4-h5: Opening the h-File | 8 | Nxh5 | h1->h5 |
-| middlegame-plan | sicilian-dragon | h4 with Nd5 Jump | 7 | g4 | g4->h5 |
-| middlegame-plan | sicilian-dragon | h4 with Nd5 Jump | 9 | Nd5 | d5->e7 |
-| middlegame-plan | ruy-lopez | f4 Exchange: Open f-File Attack | 4 | Bxf4 | f1->f7 |
-| middlegame-plan | ruy-lopez | f4 Exchange: Open f-File Attack | 6 | Qe1 | e1->g3 |
-| middlegame-plan | ruy-lopez | f4 Exchange: Open f-File Attack | 8 | Qg3 | g3->g7 |
-| middlegame-plan | scotch-game | Open Center: Rapid Development | 1 | d4 | d2->d4 |
-| … | … | (7 more) | | | |
 
 ## Templated-phrase clusters
 
@@ -134,7 +77,7 @@ regex list hasn't learned yet. Candidates for new patterns.
 
 | Opening | Bare-annotation count |
 |---|---:|
-| gambit-benko-gambit | 495 |
+| gambit-benko-gambit | 482 |
 | sicilian-najdorf | 397 |
 | marshall-attack | 358 |
 | sicilian-sveshnikov | 336 |
@@ -148,8 +91,8 @@ regex list hasn't learned yet. Candidates for new patterns.
 | smith-morra-gambit | 283 |
 | semi-slav | 282 |
 | scotch-game | 273 |
-| kings-gambit | 263 |
 | catalan-opening | 262 |
+| kings-gambit | 262 |
 | stafford-gambit | 262 |
 | danish-gambit | 258 |
 | englund-gambit | 250 |

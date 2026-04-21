@@ -1,0 +1,432 @@
+{
+  "summary": {
+    "filesScanned": 1915,
+    "noLichessMatch": 0,
+    "diverges": 38,
+    "shortLichess": 0
+  },
+  "findings": {
+    "noLichessMatch": [],
+    "diverges": [
+      {
+        "file": "alekhine-defence.json",
+        "openingId": "alekhine-defence",
+        "parentName": "Alekhine Defense",
+        "parentEco": "B03",
+        "moveIndex": 9,
+        "fileSan": "e6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "e4 Nf6 e5 Nd5 d4 d6 c4",
+        "fileLine": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6"
+      },
+      {
+        "file": "benoni-defense-classical-variation-main-line.json",
+        "openingId": "benoni-defense-classical-variation-main-line",
+        "parentName": "Benoni Defense: Classical Variation, Main Line",
+        "parentEco": "A73",
+        "moveIndex": 6,
+        "fileSan": "dxe6",
+        "lichessSan": "Nc3",
+        "lichessLine": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6",
+        "fileLine": "d4 Nf6 c4 c5 d5 e6 dxe6"
+      },
+      {
+        "file": "benoni-defense-kings-pawn-line-with-be3.json",
+        "openingId": "benoni-defense-kings-pawn-line-with-be3",
+        "parentName": "Benoni Defense",
+        "parentEco": "A56",
+        "moveIndex": 6,
+        "fileSan": "dxe6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "d4 Nf6 c4 c5",
+        "fileLine": "d4 Nf6 c4 c5 d5 e6 dxe6 d6 e4 g6"
+      },
+      {
+        "file": "benoni-defense-kings-pawn-line-with-bg5.json",
+        "openingId": "benoni-defense-kings-pawn-line-with-bg5",
+        "parentName": "Benoni Defense",
+        "parentEco": "A56",
+        "moveIndex": 14,
+        "fileSan": "dxe6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "d4 Nf6 c4 c5",
+        "fileLine": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O"
+      },
+      {
+        "file": "benoni-defense-pawn-storm-variation.json",
+        "openingId": "benoni-defense-pawn-storm-variation",
+        "parentName": "Benoni Defense: Pawn Storm Variation",
+        "parentEco": "A66",
+        "moveIndex": 6,
+        "fileSan": "dxe6",
+        "lichessSan": "Nc3",
+        "lichessLine": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6",
+        "fileLine": "d4 Nf6 c4 c5 d5 e6 dxe6"
+      },
+      {
+        "file": "birds-opening.json",
+        "openingId": "birds-opening",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 5,
+        "fileSan": "g6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "f4 d5 Nf3 Nf6 e3 g6 Be2 Bg7 O-O O-O"
+      },
+      {
+        "file": "caro-kann-defense-classical-variation-seirawan-variation.json",
+        "openingId": "caro-kann-defense-classical-variation-seirawan-variation",
+        "parentName": "Caro-Kann Defense: Classical Variation, Seirawan Variation",
+        "parentEco": "B19",
+        "moveIndex": 12,
+        "fileSan": "h5",
+        "lichessSan": "Nf3",
+        "lichessLine": "e4 c6 d4 d5 Nd2 dxe4 Nxe4 Bf5 Ng3 Bg6",
+        "fileLine": "e4 c6 d4 d5 Nd2 dxe4 Nxe4 Bf5 Ng3 Bg6"
+      },
+      {
+        "file": "catalan-opening-closed-zagoryansky-variation.json",
+        "openingId": "catalan-opening-closed-zagoryansky-variation",
+        "parentName": "Catalan Opening: Closed, Zagoryansky Variation",
+        "parentEco": "E08",
+        "moveIndex": 4,
+        "fileSan": "d5",
+        "lichessSan": "Nf3",
+        "lichessLine": "d4 e6 c4 Nf6 Nf3 d5 g3 Be7 Bg2 O-O",
+        "fileLine": "d4 e6 c4 Nf6 d5"
+      },
+      {
+        "file": "dutch-defence.json",
+        "openingId": "dutch-defence",
+        "parentName": "Dutch Defense",
+        "parentEco": "A84",
+        "moveIndex": 13,
+        "fileSan": "Qe8",
+        "lichessSan": "(unknown)",
+        "lichessLine": "d4 f5 c4",
+        "fileLine": "d4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O"
+      },
+      {
+        "file": "english-opening.json",
+        "openingId": "english-opening",
+        "parentName": "English Opening",
+        "parentEco": "A10",
+        "moveIndex": 7,
+        "fileSan": "Bb4",
+        "lichessSan": "(unknown)",
+        "lichessLine": "c4",
+        "fileLine": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4 Bg2 O-O"
+      },
+      {
+        "file": "englund-gambit.json",
+        "openingId": "englund-gambit",
+        "parentName": "Englund Gambit",
+        "parentEco": "A40",
+        "moveIndex": 6,
+        "fileSan": "Bf4",
+        "lichessSan": "(unknown)",
+        "lichessLine": "d4 e5",
+        "fileLine": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2"
+      },
+      {
+        "file": "evans-gambit.json",
+        "openingId": "evans-gambit",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 17,
+        "fileSan": "Nf6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5"
+      },
+      {
+        "file": "gambit-kings-gambit.json",
+        "openingId": "gambit-kings-gambit",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 9,
+        "fileSan": "g4",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "e4 e5 f4 exf4 Nf3 g5 Bc4 Bg7 h4 g4"
+      },
+      {
+        "file": "grunfeld-defence.json",
+        "openingId": "grunfeld-defence",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 14,
+        "fileSan": "Be3",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3"
+      },
+      {
+        "file": "italian-game.json",
+        "openingId": "italian-game",
+        "parentName": "Italian Game",
+        "parentEco": "C50",
+        "moveIndex": 13,
+        "fileSan": "Bxd2+",
+        "lichessSan": "(unknown)",
+        "lichessLine": "e4 e5 Nf3 Nc6 Bc4",
+        "fileLine": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4"
+      },
+      {
+        "file": "kings-gambit.json",
+        "openingId": "kings-gambit",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 16,
+        "fileSan": "O-O",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6"
+      },
+      {
+        "file": "kings-indian-defense-four-pawns-attack-fluid-attack.json",
+        "openingId": "kings-indian-defense-four-pawns-attack-fluid-attack",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 10,
+        "fileSan": "c5",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O"
+      },
+      {
+        "file": "kings-indian-defense-orthodox-variation-classical-system-benko-attack.json",
+        "openingId": "kings-indian-defense-orthodox-variation-classical-system-benko-attack",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 13,
+        "fileSan": "Nc6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O"
+      },
+      {
+        "file": "london-system.json",
+        "openingId": "london-system",
+        "parentName": "London System",
+        "parentEco": "A48",
+        "moveIndex": 3,
+        "fileSan": "Nf6",
+        "lichessSan": "g6",
+        "lichessLine": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6",
+        "fileLine": "d4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6"
+      },
+      {
+        "file": "nimzo-indian.json",
+        "openingId": "nimzo-indian",
+        "parentName": "Nimzo-Indian Defense",
+        "parentEco": "E20",
+        "moveIndex": 11,
+        "fileSan": "d5",
+        "lichessSan": "(unknown)",
+        "lichessLine": "d4 Nf6 c4 e6 Nc3 Bb4",
+        "fileLine": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+"
+      },
+      {
+        "file": "old-indian-defence.json",
+        "openingId": "old-indian-defence",
+        "parentName": "Old Indian Defense",
+        "parentEco": "A53",
+        "moveIndex": 9,
+        "fileSan": "Be7",
+        "lichessSan": "(unknown)",
+        "lichessLine": "d4 Nf6 c4 d6",
+        "fileLine": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7"
+      },
+      {
+        "file": "philidor-defence.json",
+        "openingId": "philidor-defence",
+        "parentName": "Philidor Defense",
+        "parentEco": "C41",
+        "moveIndex": 12,
+        "fileSan": "Re1",
+        "lichessSan": "(unknown)",
+        "lichessLine": "e4 e5 Nf3 d6 Bc4 Be7",
+        "fileLine": "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7"
+      },
+      {
+        "file": "qga.json",
+        "openingId": "qga",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 19,
+        "fileSan": "Qb6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5"
+      },
+      {
+        "file": "queens-gambit-declined-harrwitz-attack-two-knights-defense-blockade-line.json",
+        "openingId": "queens-gambit-declined-harrwitz-attack-two-knights-defense-blockade-line",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 4,
+        "fileSan": "d5",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "d4 Nf6 c4 e6 d5"
+      },
+      {
+        "file": "queens-gambit.json",
+        "openingId": "queens-gambit",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 14,
+        "fileSan": "Nf3",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7"
+      },
+      {
+        "file": "queens-indian-defense-buerger-variation.json",
+        "openingId": "queens-indian-defense-buerger-variation",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 8,
+        "fileSan": "c5",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 c5 d5"
+      },
+      {
+        "file": "queens-indian-defense-kasparov-petrosian-variation-kasparov-attack.json",
+        "openingId": "queens-indian-defense-kasparov-petrosian-variation-kasparov-attack",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 8,
+        "fileSan": "d5",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "d4 Nf6 c4 e6 Nf3 b6 a3 Bb7 d5"
+      },
+      {
+        "file": "r-ti-opening-anglo-slav-variation-gurevich-system.json",
+        "openingId": "r-ti-opening-anglo-slav-variation-gurevich-system",
+        "parentName": "Réti Opening: Anglo-Slav Variation, Gurevich System",
+        "parentEco": "A11",
+        "moveIndex": 6,
+        "fileSan": "b3",
+        "lichessSan": "Nc3",
+        "lichessLine": "c4 c6 Nf3 d5 e3 Nf6 Nc3 e6 b3 Bd6",
+        "fileLine": "c4 c6 Nf3 d5 e3 Nf6 b3 e6 Nc3 Bd6"
+      },
+      {
+        "file": "reti-opening.json",
+        "openingId": "reti-opening",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 5,
+        "fileSan": "Nc6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4"
+      },
+      {
+        "file": "rubinstein-opening-classical-defense.json",
+        "openingId": "rubinstein-opening-classical-defense",
+        "parentName": "Rubinstein Opening: Classical Defense",
+        "parentEco": "D05",
+        "moveIndex": 6,
+        "fileSan": "dxc5",
+        "lichessSan": "Bd3",
+        "lichessLine": "d4 Nf6 Nf3 e6 e3 c5 Bd3 d5 b3 Nc6",
+        "fileLine": "d4 Nf6 Nf3 e6 e3 c5 dxc5 Bxc5 Bd3 d5"
+      },
+      {
+        "file": "scandinavian-defence.json",
+        "openingId": "scandinavian-defence",
+        "parentName": "Scandinavian Defense",
+        "parentEco": "B01",
+        "moveIndex": 10,
+        "fileSan": "Bc4",
+        "lichessSan": "(unknown)",
+        "lichessLine": "e4 d5 b3",
+        "fileLine": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5"
+      },
+      {
+        "file": "scotch-gambit.json",
+        "openingId": "scotch-gambit",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 10,
+        "fileSan": "exf6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5"
+      },
+      {
+        "file": "slav-defence.json",
+        "openingId": "slav-defence",
+        "parentName": "Slav Defense",
+        "parentEco": "D10",
+        "moveIndex": 15,
+        "fileSan": "Nbd7",
+        "lichessSan": "(unknown)",
+        "lichessLine": "d4 d5 c4 c6 Nc3 dxc4",
+        "fileLine": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5"
+      },
+      {
+        "file": "smith-morra-gambit.json",
+        "openingId": "smith-morra-gambit",
+        "parentName": "(no mapped parent)",
+        "parentEco": "",
+        "moveIndex": 13,
+        "fileSan": "Nf6",
+        "lichessSan": "(unknown)",
+        "lichessLine": "",
+        "fileLine": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Bc4 e6"
+      },
+      {
+        "file": "trompowsky-attack.json",
+        "openingId": "trompowsky-attack",
+        "parentName": "Trompowsky Attack",
+        "parentEco": "A45",
+        "moveIndex": 5,
+        "fileSan": "d5",
+        "lichessSan": "(unknown)",
+        "lichessLine": "d4 Nf6 Bg5",
+        "fileLine": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Bd3 Nd6"
+      },
+      {
+        "file": "vienna-game.json",
+        "openingId": "vienna-game",
+        "parentName": "Vienna Game",
+        "parentEco": "C25",
+        "moveIndex": 7,
+        "fileSan": "O-O",
+        "lichessSan": "(unknown)",
+        "lichessLine": "e4 e5 Nc3",
+        "fileLine": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 O-O Nf3 d6"
+      },
+      {
+        "file": "zukertort-opening-double-fianchetto-attack.json",
+        "openingId": "zukertort-opening-double-fianchetto-attack",
+        "parentName": "Zukertort Opening: Double Fianchetto Attack",
+        "parentEco": "A05",
+        "moveIndex": 6,
+        "fileSan": "Bg2",
+        "lichessSan": "Bb2",
+        "lichessLine": "Nf3 Nf6 g3 g6 b3 Bg7 Bb2 O-O Bg2 d6",
+        "fileLine": "Nf3 Nf6 g3 g6 b3 Bg7 Bg2 O-O Bb2 d6"
+      },
+      {
+        "file": "zukertort-opening-reversed-gr-nfeld.json",
+        "openingId": "zukertort-opening-reversed-gr-nfeld",
+        "parentName": "Zukertort Opening: Reversed Grünfeld",
+        "parentEco": "A08",
+        "moveIndex": 5,
+        "fileSan": "e6",
+        "lichessSan": "Nc6",
+        "lichessLine": "Nf3 d5 g3 c5 Bg2 Nc6 d4 e6 O-O",
+        "fileLine": "Nf3 d5 g3 c5 Bg2 e6 O-O"
+      }
+    ],
+    "shortLichess": []
+  }
+}
