@@ -46,6 +46,7 @@ vi.mock('../db/schema', () => ({
 type StreamCb = (chunk: string) => void;
 const chatCalls: { addition: string; task: string; onStream?: StreamCb }[] = [];
 let chatResolver: ((text: string) => void) | null = null;
+let chatRejecter: ((err: Error) => void) | null = null;
 
 vi.mock('../services/coachApi', () => ({
   getCoachChatResponse: vi.fn(
@@ -56,8 +57,9 @@ vi.mock('../services/coachApi', () => ({
       task: string = 'chat_response',
     ) => {
       chatCalls.push({ addition: systemPromptAddition, task, onStream });
-      return new Promise<string>((resolve) => {
+      return new Promise<string>((resolve, reject) => {
         chatResolver = resolve;
+        chatRejecter = reject;
       });
     },
   ),
@@ -83,6 +85,7 @@ beforeEach(() => {
   stopCount = 0;
   chatCalls.length = 0;
   chatResolver = null;
+  chatRejecter = null;
 });
 
 // ── Tests ─────────────────────────────────────────────────────────────────
@@ -199,5 +202,70 @@ describe('usePositionNarration', () => {
     expect(stopCount).toBeGreaterThanOrEqual(1);
     expect(result.current.isNarrating).toBe(false);
     expect(result.current.currentText).toBe('');
+  });
+
+  it('still speaks accumulated tokens when the stream errors mid-flight', async () => {
+    const { result } = renderHook(() => usePositionNarration(defaultArgs()));
+
+    act(() => {
+      void result.current.narrate();
+    });
+    await waitFor(() => expect(chatCalls.length).toBe(1));
+
+    // Stream a partial sentence...
+    act(() => {
+      chatCalls[0].onStream?.('Right now,');
+    });
+    expect(result.current.currentText).toBe('Right now,');
+
+    // ...then the stream blows up before completing.
+    act(() => {
+      chatRejecter?.(new Error('stream aborted'));
+    });
+
+    // Voice MUST fire on the partial text — that's what the user saw.
+    await waitFor(() => expect(speakRecords.length).toBe(1));
+    expect(speakRecords[0].text).toBe('Right now,');
+    expect(result.current.error).toContain('stream aborted');
+  });
+
+  it('does not speak when the user cancels mid-stream', async () => {
+    const { result } = renderHook(() => usePositionNarration(defaultArgs()));
+
+    act(() => {
+      void result.current.narrate();
+    });
+    await waitFor(() => expect(chatCalls.length).toBe(1));
+
+    act(() => {
+      chatCalls[0].onStream?.('Partial...');
+    });
+    act(() => {
+      result.current.cancel();
+    });
+
+    // Now resolve the (cancelled) stream — speak must NOT fire.
+    await act(async () => {
+      chatResolver?.('Partial finished sentence.');
+      await Promise.resolve();
+    });
+    expect(speakRecords.length).toBe(0);
+  });
+
+  it('does not speak the inline error placeholder when nothing streamed', async () => {
+    const { result } = renderHook(() => usePositionNarration(defaultArgs()));
+
+    act(() => {
+      void result.current.narrate();
+    });
+    await waitFor(() => expect(chatCalls.length).toBe(1));
+
+    // No tokens streamed; API "succeeded" with the error-placeholder string.
+    await act(async () => {
+      chatResolver?.('⚠️ Coach error: no API key configured.');
+      await Promise.resolve();
+    });
+    expect(speakRecords.length).toBe(0);
+    await waitFor(() => expect(result.current.isNarrating).toBe(false));
   });
 });

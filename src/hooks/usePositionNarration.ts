@@ -61,6 +61,13 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
     setCurrentText('');
     setIsNarrating(true);
 
+    // Accumulated streamed text. Lives outside the API try/catch so a
+    // truncated / aborted / timed-out stream still produces voice for
+    // whatever the coach already generated. Rule: if the coach
+    // generated words, Dave hears them.
+    let fullText = '';
+    let apiResponse = '';
+
     try {
       // Ground the narration in Stockfish so the coach doesn't
       // hallucinate what's hanging or whose pieces are active.
@@ -91,35 +98,56 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
 
       const userMessage = buildChessContextMessage(context);
 
-      let fullText = '';
-      const response = await getCoachChatResponse(
-        [{ role: 'user', content: userMessage }],
-        POSITION_NARRATION_ADDITION,
-        (chunk: string) => {
-          if (token !== activeTokenRef.current) return;
-          fullText += chunk;
-          setCurrentText(fullText);
-        },
-        'position_analysis_chat',
-        400,
-        // Override verbosity — narration length is constrained by the
-        // prompt, not by the student's global verbosity setting.
-        'medium',
-      );
+      try {
+        apiResponse = await getCoachChatResponse(
+          [{ role: 'user', content: userMessage }],
+          POSITION_NARRATION_ADDITION,
+          (chunk: string) => {
+            if (token !== activeTokenRef.current) return;
+            fullText += chunk;
+            setCurrentText(fullText);
+          },
+          'position_analysis_chat',
+          400,
+          // Override verbosity — narration length is constrained by the
+          // prompt, not by the student's global verbosity setting.
+          'medium',
+        );
+      } catch (err: unknown) {
+        // Stream errored — DON'T bail. We may still have accumulated
+        // tokens worth speaking. Record the error and fall through to
+        // the speak path below.
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(msg);
+      }
+
+      // Only suppress speech on explicit user cancel / re-tap (token
+      // supersession). Stream errors / truncation still speak.
       if (token !== activeTokenRef.current) return;
 
-      const speakText = (response || fullText).trim();
+      // Prefer streamed tokens — that's what the user saw on screen.
+      // Fall back to the API return value only if nothing streamed AND
+      // it isn't an inline error placeholder ("⚠️ Coach error: …").
+      const streamed = fullText.trim();
+      const apiTrimmed = apiResponse.trim();
+      let speakText = streamed;
+      if (!speakText && apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
+        speakText = apiTrimmed;
+      }
+
       if (!speakText) {
-        setIsNarrating(false);
         return;
       }
 
       setCurrentText(speakText);
-      await voiceService.speakForced(speakText);
-    } catch (err: unknown) {
-      if (token !== activeTokenRef.current) return;
-      const msg = err instanceof Error ? err.message : String(err);
-      setError(msg);
+      try {
+        await voiceService.speakForced(speakText);
+      } catch (err: unknown) {
+        // Audio failure — text already on screen for the student.
+        // Surface the error but don't crash the hook.
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(msg);
+      }
     } finally {
       if (token === activeTokenRef.current) {
         setIsNarrating(false);
