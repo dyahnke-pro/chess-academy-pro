@@ -2,6 +2,12 @@
 
 This document is the single source of truth for all technical decisions. Load it into every Claude Code session alongside the relevant work order.
 
+> **⚠️ Coach persona sections are SUPERSEDED by WO-CLEANUP-01.**
+> Any reference in this file to `coachPersonality`, `unlockedCoaches`,
+> Danya / Kasparov / Fischer, `danyaTemplates`, or per-persona voice
+> IDs is historical. The app ships one unified coach (Amazon Polly).
+> Current coach prompt: `src/services/coachPrompts.ts`.
+
 ---
 
 ## Table of Contents

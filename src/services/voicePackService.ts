@@ -29,21 +29,11 @@ export interface VoicePackVoice {
   gender: 'Female' | 'Male';
 }
 
-/** Available voice packs — same voices as Kokoro, but pre-rendered as audio clips. */
+/** Available voice packs — same voices as Kokoro, but pre-rendered as audio clips.
+ *  Pruned by WO-CLEANUP-01 to the one voice that actually has a KNOWN_SIZES entry.
+ *  Adding new voices requires a matching KNOWN_SIZES entry below. */
 export const VOICE_PACK_VOICES: VoicePackVoice[] = [
-  { id: 'af_heart', name: 'Heart', accent: 'American', gender: 'Female' },
   { id: 'af_bella', name: 'Bella', accent: 'American', gender: 'Female' },
-  { id: 'af_nicole', name: 'Nicole', accent: 'American', gender: 'Female' },
-  { id: 'af_sarah', name: 'Sarah', accent: 'American', gender: 'Female' },
-  { id: 'af_nova', name: 'Nova', accent: 'American', gender: 'Female' },
-  { id: 'am_adam', name: 'Adam', accent: 'American', gender: 'Male' },
-  { id: 'am_eric', name: 'Eric', accent: 'American', gender: 'Male' },
-  { id: 'am_michael', name: 'Michael', accent: 'American', gender: 'Male' },
-  { id: 'am_liam', name: 'Liam', accent: 'American', gender: 'Male' },
-  { id: 'bf_emma', name: 'Emma', accent: 'British', gender: 'Female' },
-  { id: 'bf_isabella', name: 'Isabella', accent: 'British', gender: 'Female' },
-  { id: 'bm_daniel', name: 'Daniel', accent: 'British', gender: 'Male' },
-  { id: 'bm_george', name: 'George', accent: 'British', gender: 'Male' },
 ];
 
 export interface VoicePackInfo {

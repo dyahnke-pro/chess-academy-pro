@@ -401,6 +401,10 @@ export function CoachGamePage(): JSX.Element {
       searchParams.has('opening') ||
       searchParams.has('side');
     if (hasExplicitStart) return;
+    // Disabled by WO-CLEANUP-01 — resume produces ghost squares; see WO-RESUME-01 for rebuild.
+    const RESUME_ENABLED = false;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!RESUME_ENABLED) return;
     void loadCoachPlayState().then((saved) => {
       if (!saved) return;
       // Only restore when we haven't made any moves yet (mount state).

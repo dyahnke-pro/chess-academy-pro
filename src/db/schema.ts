@@ -73,9 +73,8 @@ class ChessAcademyDB extends Dexie {
         if (!('elevenlabsKeyEncrypted' in prefs)) {
           prefs.elevenlabsKeyEncrypted = null;
           prefs.elevenlabsKeyIv = null;
-          prefs.voiceIdDanya = 'pNInz6obpgDQGcFmaJgB';
-          prefs.voiceIdKasparov = 'VR6AewLTigWG4xSOukaG';
-          prefs.voiceIdFischer = 'TxGEqnHWrfWFTfGW9XjX';
+          // Persona voice seeds removed by WO-CLEANUP-01 — Danya/Kasparov/Fischer
+          // were never wired to runtime code; the app uses a single unified coach.
         }
       });
     });

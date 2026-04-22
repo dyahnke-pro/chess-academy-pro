@@ -109,8 +109,10 @@ describe('VOICE_PACK_VOICES', () => {
     expect(bella?.gender).toBe('Female');
   });
 
-  it('has 13 voices', () => {
-    expect(VOICE_PACK_VOICES).toHaveLength(13);
+  it('exposes only voices that have a KNOWN_SIZES entry', () => {
+    // Pruned by WO-CLEANUP-01: only af_bella has a working download size.
+    expect(VOICE_PACK_VOICES).toHaveLength(1);
+    expect(VOICE_PACK_VOICES[0].id).toBe('af_bella');
   });
 });
 

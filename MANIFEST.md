@@ -2,6 +2,12 @@
 
 Last updated: 2026-04-20
 
+> **⚠️ Coach persona entries are SUPERSEDED by WO-CLEANUP-01.**
+> Any WO row referencing Danya / Kasparov / Fischer, a
+> `CoachPersonalitySelector`, or per-personality voice IDs is
+> historical. The app ships one unified coach (Amazon Polly).
+> Current coach prompt: `src/services/coachPrompts.ts`.
+
 ---
 
 ## Build Work Orders

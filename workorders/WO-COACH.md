@@ -1,5 +1,12 @@
 # WO-COACH — Next Level AI Coach System
 
+> **⚠️ SUPERSEDED by WO-CLEANUP-01.** The three-persona design
+> (Danya / Kasparov / Fischer) and the ElevenLabs voice pipeline
+> described below were never implemented. The app ships a single
+> unified coach voiced by Amazon Polly. The current coach prompt lives
+> in `src/services/coachPrompts.ts`. Treat this file as historical
+> context only — do not use it as a spec.
+
 **Status:** Not Started
 **Dependencies:** WO-07, WO-08, WO-11, WO-23
 **Priority:** Highest — this is the most important feature in the entire app
