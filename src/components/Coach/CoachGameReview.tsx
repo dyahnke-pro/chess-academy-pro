@@ -454,9 +454,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (!cancelled) {
         aiCommentaryCacheRef.current.set(moveIdx, fullText);
         setAiCommentary(fullText);
-        if (settings.coachReviewVoice) {
-          void voiceService.speak(fullText);
-        }
+        // Disabled by WO-COACH-NARRATION-04 — legacy per-move voice overlaps
+        // with post-game review voice (the summary narrative auto-speak above
+        // is the canonical review voice). Text surface retained: aiCommentary
+        // still renders so the student can read the per-move analysis.
+        void fullText;
       }
     }).finally(() => {
       if (!cancelled) setIsLoadingAiCommentary(false);
