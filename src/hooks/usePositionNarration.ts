@@ -157,10 +157,12 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
               setCurrentText(fullText);
             },
             'position_analysis_chat',
-            // Raised 400→600 by WO-COACH-NARRATION-03. Narration spec is
-            // 70-150 words (~100-225 tokens). 600 gives a safety margin
-            // so the model doesn't land the last sentence against the cap.
-            600,
+            // Raised 600→2000 by WO-COACH-NARRATION-06 after the prompt's
+            // length guidance was removed. The narration now runs as long
+            // as the position warrants; 2000 tokens (~1300 words) is well
+            // above any realistic end-on-a-complete-sentence length so the
+            // cap never becomes the reason a narration truncates.
+            2000,
             // Override verbosity — narration length is constrained by the
             // prompt, not by the student's global verbosity setting.
             'medium',

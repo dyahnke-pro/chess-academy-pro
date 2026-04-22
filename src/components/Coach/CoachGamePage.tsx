@@ -12,6 +12,7 @@ import type { TacticLineData } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
 import { VoiceChatMic } from '../Board/VoiceChatMic';
 import type { EngineSnapshot, LastMoveContext } from '../Board/VoiceChatMic';
+import { normalizePieceShorthand } from '../../services/voiceService';
 import { EngineLines } from '../Board/EngineLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { DifficultyToggle } from './DifficultyToggle';
@@ -1470,6 +1471,12 @@ export function CoachGamePage(): JSX.Element {
     setViewedMoveIndex(null);
     resetHints();
     prevNudgeRef.current = null;
+    // Clear any stale move-quality flash before we start analyzing this
+    // move. Without this, a previous move's flash (including an 'blunder'
+    // flash from the coach's last move) can still be visible during the
+    // current move's analysis window, which looked to the user like
+    // their best move was being flagged red (WO-COACH-NARRATION-06).
+    setMoveFlash(null);
 
     // Capture pre-move FEN before making the move
     const preFen = game.fen;
@@ -1560,8 +1567,13 @@ export function CoachGamePage(): JSX.Element {
           tacticSuffix = ` (${realTactics.map((t) => t.description).join('; ')})`;
         }
         if (tacticResult.hangingPieces.length > 0) {
-          const hangingDescs = tacticResult.hangingPieces.map(
-            (p) => `${p.color === 'w' ? 'White' : 'Black'} ${p.piece} on ${p.square}`,
+          // normalizePieceShorthand ensures bare piece letters ("p", "N")
+          // are expanded to words ("pawn", "knight") so the banner reads
+          // "White pawn on h7" instead of "White p on h7" (WO-COACH-NARRATION-06).
+          const hangingDescs = tacticResult.hangingPieces.map((p) =>
+            normalizePieceShorthand(
+              `${p.color === 'w' ? 'White' : 'Black'} ${p.piece} on ${p.square}`,
+            ),
           );
           tacticSuffix += ` Hanging: ${hangingDescs.join(', ')}.`;
         }

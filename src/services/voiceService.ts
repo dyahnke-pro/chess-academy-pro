@@ -106,8 +106,43 @@ export function detectSanitizerLeak(text: string): boolean {
   return LEAK_DETECTOR_RE.test(text);
 }
 
+/** Extracted by WO-COACH-NARRATION-06 so the piece-letter normalization
+ *  is reusable by UI surfaces that render engine-output text without
+ *  going through the TTS pipeline (blunder banners, hanging-piece
+ *  alerts, tip bubbles). UI-safe: keeps SAN notation like "Nxf7"
+ *  untouched and does NOT expand castling "O-O" — those read fine on
+ *  screen and shouldn't be reshaped for visual display. Only the
+ *  descriptive-prose shorthand ("White P on h7" → "White pawn on h7",
+ *  "hanging N" → "hanging knight") is normalized.
+ *  Pure function — safe to call on any string. */
+export function normalizePieceShorthand(text: string): string {
+  if (!text) return text;
+  let out = text;
+  // Bracketed / arrowed piece-on-square shorthand: "P(f3)" → "pawn on f3".
+  out = out.replace(PIECE_LETTER_ADJACENT_SQUARE_RE, (_, piece: string, square: string) => {
+    const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    return `${name} on ${square}`;
+  });
+  // Bare piece letter in parens/brackets: "(P)" → "(pawn)".
+  out = out.replace(PIECE_LETTER_IN_PARENS_RE, (_, bracket: string, piece: string) => {
+    const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    return `${bracket}${name}`;
+  });
+  // Isolated piece letters after a chess-context word ("hanging P",
+  // "save P", "the white B"). Case-insensitive so "White p" → "White pawn".
+  out = out.replace(PIECE_LETTER_AFTER_CONTEXT_RE, (_, lead: string, piece: string) => {
+    const name = PIECE_LETTER_NAMES[piece.toUpperCase()] ?? piece;
+    return `${lead} ${name}`;
+  });
+  // Piece letter followed by an action word ("P on f3", "N attacks").
+  out = out.replace(ISOLATED_PIECE_LETTER_RE, (_, piece: string) => PIECE_LETTER_NAMES[piece] ?? piece);
+  return out;
+}
+
 /** Normalise LLM output so the spoken layer never has to read chess
- *  notation aloud. Pure function — safe to call on any string. */
+ *  notation aloud. Pure function — safe to call on any string. Wraps
+ *  normalizePieceShorthand with the TTS-only transforms (SAN expansion,
+ *  castling → plain English, pawn-capture expansion). */
 export function sanitizeForTTS(text: string): string {
   if (!text) return text;
   let out = text;
@@ -121,25 +156,8 @@ export function sanitizeForTTS(text: string): string {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;
     return capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
   });
-  // Bracketed / arrowed piece-on-square shorthand: "P(f3)" → "pawn on f3".
-  out = out.replace(PIECE_LETTER_ADJACENT_SQUARE_RE, (_, piece: string, square: string) => {
-    const name = PIECE_LETTER_NAMES[piece] ?? piece;
-    return `${name} on ${square}`;
-  });
-  // Bare piece letter in parens/brackets: "(P)" → "(pawn)".
-  out = out.replace(PIECE_LETTER_IN_PARENS_RE, (_, bracket: string, piece: string) => {
-    const name = PIECE_LETTER_NAMES[piece] ?? piece;
-    return `${bracket}${name}`;
-  });
-  // Isolated piece letters after a chess-context word ("hanging P",
-  // "save P", "the white B").
-  out = out.replace(PIECE_LETTER_AFTER_CONTEXT_RE, (_, lead: string, piece: string) => {
-    const name = PIECE_LETTER_NAMES[piece.toUpperCase()] ?? piece;
-    return `${lead} ${name}`;
-  });
-  // Piece letter followed by an action word ("P on f3", "N attacks").
-  out = out.replace(ISOLATED_PIECE_LETTER_RE, (_, piece: string) => PIECE_LETTER_NAMES[piece] ?? piece);
-  return out;
+  // Descriptive piece-letter normalization (UI-safe, reusable).
+  return normalizePieceShorthand(out);
 }
 
 class VoiceService {
