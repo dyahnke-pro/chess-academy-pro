@@ -286,15 +286,20 @@ When you add a new lesson flow, reuse these primitives:
 
 ## Deployment Policy
 
-**Always merge and deploy without asking.** After every fix:
-1. Run tests, typecheck, lint — fix any failures
-2. Commit with a clear message
-3. Push to the feature branch
-4. Create a PR (or push directly to `main` for trivial fixes)
-5. Merge the PR immediately — do NOT wait for the user to ask
-6. Merging to `main` triggers the Vercel deploy automatically (Vercel is wired directly to the repo — there's no GitHub Actions workflow for this). iOS/TestFlight builds are produced locally via Capacitor when needed.
+**Push every build directly to `main`. No feature branches, no PRs, no
+preview deploys.** Dave wants every change to land on production
+immediately. Workflow:
 
-Never ask "want me to merge?" — just do it.
+1. Run tests, typecheck, lint — fix any failures
+2. Commit with a clear message on `main`
+3. `git push origin main` — Vercel picks it up and deploys
+4. iOS/TestFlight builds are produced locally via Capacitor when needed
+
+Do NOT create feature branches, do NOT open PRs, do NOT merge through
+the UI. The previous "branch + PR + merge" flow is retired — Vercel
+preview builds add latency without value for a single-developer app.
+
+Never ask "want me to merge?" / "want me to push?" — just push to main.
 
 ## Before Finishing a Session
 
