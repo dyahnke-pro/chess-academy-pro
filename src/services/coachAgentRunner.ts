@@ -105,14 +105,13 @@ export function narrateMove(opts: {
     : opts.mover === opts.playerColor
       ? `You played ${opts.san}.`
       : `I played ${opts.san}.`;
-  // Log TTS failures so silent regressions are detectable. Don't
-  // surface to UI here — narrateMove is invoked on every move and a
-  // toast storm on a Polly outage would be worse than silence.
-  // CoachGamePage + GameChatPanel handle their own user-initiated
-  // TTS errors where a toast is appropriate.
-  void voiceService.speak(text).catch((err: unknown) => {
-    console.warn('[narrateMove] TTS failed:', err);
-  });
+  // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
+  // "Read this position" narration. Text surface retained via session
+  // store / chat messages; only TTS is muted.
+  void text;
+  // void voiceService.speak(text).catch((err: unknown) => {
+  //   console.warn('[narrateMove] TTS failed:', err);
+  // });
 }
 
 export interface RunAgentTurnOptions {

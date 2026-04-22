@@ -1788,39 +1788,22 @@ export function CoachGamePage(): JSX.Element {
         currentHintLevel: 0,
       }));
 
-      // Voice the explanation — stop any in-flight TTS first so a
-      // previous narration or voice-chat reply doesn't overlap.
-      voiceService.stop();
-      void voiceService.speak(explanation);
+      // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
+      // "Read this position" narration. Text surface retained: the blunder
+      // interception overlay already renders `explanation` on the board.
+      void explanation;
       return;
     }
 
     // Non-blunder: sync the move and let the coach-move useEffect respond.
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
-    // Speak the per-move commentary aloud. Two gates:
-    //  - If narration mode is on (user asked the coach to narrate),
-    //    always announce the move — use LLM commentary when it landed,
-    //    otherwise a short SAN fallback. This is the belt-and-
-    //    suspenders path so silence never happens mid-game.
-    //  - Else the legacy path: speak only LLM commentary, only when
-    //    coachVoiceOn is true.
-    if (useCoachSessionStore.getState().narrationMode) {
-      const mover: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
-      // Stop any in-flight TTS (a stale voice-chat reply still playing,
-      // an earlier move's narration that overran) before the next move
-      // speaks. Prevents the "I hear two narrations at once" overlap.
-      voiceService.stop();
-      narrateMove({
-        san: moveResult.san,
-        mover,
-        playerColor: mover,
-        commentary: commentary.trim() || null,
-      });
-    } else if (commentary.trim() && useAppStore.getState().coachVoiceOn) {
-      voiceService.stop();
-      void voiceService.speak(commentary.trim());
-    }
+    // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
+    // "Read this position" narration. The narrateMove() speak path is
+    // muted internally (see coachAgentRunner.narrateMove); the legacy
+    // voiceService.speak(commentary) path is silenced here. Text
+    // surfaces (chat message, commentary row) are retained elsewhere.
+    void commentary;
 
     setGameState((prev) => ({
       ...prev,

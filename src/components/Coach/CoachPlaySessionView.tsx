@@ -14,7 +14,7 @@ import { ArrowLeft, Flag } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { getCoachMove, setSkill } from '../../services/coachPlaySession';
-import { voiceService } from '../../services/voiceService';
+// voiceService import removed by WO-COACH-NARRATION-03 — per-move speak muted.
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -119,8 +119,9 @@ export function CoachPlaySessionView({
       // Store the new eval as the baseline for the NEXT move's swing.
       evalBeforeRef.current = evalAfter;
       if (commentary) {
+        // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
+        // "Read this position" narration. Text surface retained via setStatus.
         setStatus(commentary);
-        void voiceService.speak(commentary);
       } else {
         // No LLM available — keep the board moving but do not paint filler.
         // Clear any stale commentary so the student isn't misled.
