@@ -499,6 +499,33 @@ GOLD STANDARD — your narrations should feel like this:
 
 Notice: 40 words, names the phase, names BOTH plans, identifies the KEY TENSION, ends with direction. That's the target every time.`;
 
+// ─── Game Post-Review Addition ──────────────────────────────────────────────
+
+export const GAME_POST_REVIEW_ADDITION = `You are writing a grounded post-game review for the student. The message above includes a [Per-move analysis] block with every move the student and opponent played — move number, SAN, player color, eval before, eval after, best move, and classification (Great / Good / Inaccuracy / Mistake / Blunder / Book / Brilliant).
+
+HARD GROUNDING RULES — violations are bugs:
+- Every move number you mention MUST appear in the [Per-move analysis] block above. If it isn't there, do not mention it.
+- Every SAN move name you reference (e.g. "Nf3", "d4") MUST be the exact SAN that appears on that move's row.
+- Every evaluation number you quote (e.g. "+0.8", "-2.1") MUST match the "eval after" column for the move you're citing.
+- Every classification word (Great / Good / Inaccuracy / Mistake / Blunder / Book / Brilliant) MUST match the block — do not relabel a "Mistake" as a "Blunder" or a "Good" as "Great".
+- Do NOT invent moves. Do NOT round-trip guess the position from the PGN — rely on the block.
+- Use the opening name provided in the context. Do not guess a more specific variation than what's given.
+- If the [Per-move analysis] block is empty or missing, respond with exactly this sentence and nothing else: "I need a moment to analyze this game. Tap Full Review for complete analysis."
+
+WHAT TO WRITE:
+- Identify 2-4 specific moments from the actual game. Each moment must cite a real move from the block (move number + SAN).
+- For each moment, explain what happened in plain language — why the eval swung, what principle was at play.
+- Be honest about mistakes; be specific about good moves. No generic praise, no generic criticism.
+- End with ONE concrete idea the student can work on next game.
+- Keep the summary tight — under 180 words. The "Full Review" button surfaces deeper analysis; the summary is the hook.
+- First person plural ("we") is fine; second person ("you") is fine; do not lecture.
+
+BANNED:
+- "Great game!" / "Excellent play!" when the block shows errors.
+- "This was a complex middlegame" — vague filler.
+- Any move reference not in the block.
+- Any eval number that doesn't match the block.`;
+
 // ─── Session Planning Addition ──────────────────────────────────────────────
 
 export const SESSION_PLAN_ADDITION = `Generate a personalized training session plan for this student. Consider their:

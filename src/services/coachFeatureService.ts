@@ -1,7 +1,8 @@
 import { db } from '../db/schema';
-import { getCoachCommentary } from './coachApi';
+import { getCoachChatResponse, getCoachCommentary } from './coachApi';
+import { GAME_POST_REVIEW_ADDITION } from './coachPrompts';
 import { getThemeSkills } from './puzzleService';
-import type { CoachContext, BadHabit, UserProfile } from '../types';
+import type { BadHabit, CoachContext, UserProfile } from '../types';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -172,6 +173,25 @@ export interface NarrativeMoveData {
   isCoachMove: boolean;
 }
 
+/** Exact fallback sentence required by WO-REVIEW-01 when the per-move
+ *  analysis is empty. The UI surfaces this verbatim — do not prettify. */
+export const NARRATIVE_SUMMARY_NO_DATA = 'I need a moment to analyze this game. Tap Full Review for complete analysis.';
+
+/** Format a single move row for the grounded [Per-move analysis] block.
+ *  Columns: full move number, color, SAN, eval before, eval after, best,
+ *  classification. Every field is either derived from the move record or
+ *  explicitly marked "n/a" so the LLM cannot invent the missing value. */
+function formatMoveRow(m: NarrativeMoveData, prevEvalCp: number | null, coachColor: 'White' | 'Black'): string {
+  const fullMove = Math.ceil(m.moveNumber / 2);
+  const moverColor: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
+  const side = m.isCoachMove ? `${moverColor}/coach` : moverColor === coachColor ? `${moverColor}/coach` : `${moverColor}/student`;
+  const evalBefore = prevEvalCp !== null ? (prevEvalCp / 100).toFixed(2) : 'n/a';
+  const evalAfter = m.evaluation !== null ? (m.evaluation / 100).toFixed(2) : 'n/a';
+  const best = m.bestMove ?? 'n/a';
+  const classification = m.classification ?? 'unclassified';
+  return `Move ${fullMove}. ${m.san} (${side}) — eval before: ${evalBefore}, eval after: ${evalAfter}, best: ${best}, classification: ${classification}`;
+}
+
 export async function generateNarrativeSummary(
   pgn: string,
   playerColor: string,
@@ -181,56 +201,78 @@ export async function generateNarrativeSummary(
   onStream?: (chunk: string) => void,
   moveData?: NarrativeMoveData[],
 ): Promise<string> {
-  // Build engine analysis context for the LLM so it doesn't guess
-  let analysisContext = '';
+  // No per-move analysis → bail out with the graceful fallback.
+  // Writing prose from nothing is exactly the hallucination path
+  // WO-REVIEW-01 closes.
+  if (!moveData || moveData.length === 0) {
+    onStream?.(NARRATIVE_SUMMARY_NO_DATA);
+    return NARRATIVE_SUMMARY_NO_DATA;
+  }
+
+  // Count errors across ALL student (non-coach) moves for the tone guide.
   let blunderCount = 0;
   let mistakeCount = 0;
   let inaccuracyCount = 0;
-  if (moveData && moveData.length > 0) {
-    const keyMoves = moveData.filter((m) =>
-      !m.isCoachMove && m.classification &&
-      m.classification !== 'good' && m.classification !== 'book',
-    );
-    for (const m of keyMoves) {
-      if (m.classification === 'blunder') blunderCount++;
-      else if (m.classification === 'mistake') mistakeCount++;
-      else if (m.classification === 'inaccuracy') inaccuracyCount++;
-    }
-    if (keyMoves.length > 0) {
-      analysisContext = '\n\nEngine analysis of key moments (USE THIS DATA, do not guess):\n' +
-        `Blunders: ${blunderCount}, Mistakes: ${mistakeCount}, Inaccuracies: ${inaccuracyCount}\n` +
-        keyMoves.map((m) => {
-          const evalText = m.evaluation !== null ? ` (eval: ${(m.evaluation / 100).toFixed(1)})` : '';
-          const bestText = m.bestMove ? `, best was ${m.bestMove}` : '';
-          return `- Move ${Math.ceil(m.moveNumber / 2)} ${m.san}: ${m.classification}${evalText}${bestText}. ${m.commentary}`;
-        }).join('\n');
-    }
+  for (const m of moveData) {
+    if (m.isCoachMove) continue;
+    if (m.classification === 'blunder') blunderCount++;
+    else if (m.classification === 'mistake') mistakeCount++;
+    else if (m.classification === 'inaccuracy') inaccuracyCount++;
   }
-
   const totalErrors = blunderCount + mistakeCount + inaccuracyCount;
   const toneGuide = totalErrors === 0
-    ? 'The player played cleanly — praise their accuracy.'
+    ? 'The student played cleanly — praise the accuracy without overclaiming brilliance.'
     : totalErrors <= 2
       ? 'Mostly solid play with a couple areas to improve. Be constructive.'
-      : `The player made ${totalErrors} errors (${blunderCount} blunders, ${mistakeCount} mistakes). Be honest about what went wrong — do NOT call the game "excellent" or "great". Focus on the specific mistakes and what to learn from them.`;
+      : `The student made ${totalErrors} errors (${blunderCount} blunders, ${mistakeCount} mistakes, ${inaccuracyCount} inaccuracies). Be honest about what went wrong — do NOT call the game "excellent" or "great". Focus on the specific errors and what to learn from them.`;
 
-  const context: CoachContext = {
-    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-    lastMoveSan: null,
-    moveNumber: 0,
-    pgn,
-    openingName,
-    stockfishAnalysis: null,
-    playerMove: null,
-    moveClassification: null,
-    playerProfile: {
-      rating: playerRating,
-      weaknesses: [],
-    },
-    additionalContext: `Player color: ${playerColor}. Game result: ${result}. ${toneGuide} Write a narrative summary describing the key moments, what went well, what to improve, and the overall story of the game.${analysisContext}`,
-  };
+  // Build a [Per-move analysis] block with EVERY move. Previously the
+  // filter limited this to blunders/mistakes/inaccuracies, which left
+  // the LLM free to invent narrative for unanalyzed moves — the
+  // hallucination mode WO-REVIEW-01 is fixing. Every move gets a row.
+  const coachColor: 'White' | 'Black' = playerColor === 'white' ? 'Black' : 'White';
+  const rows: string[] = [];
+  let prevEvalCp: number | null = 0;
+  for (const m of moveData) {
+    rows.push(formatMoveRow(m, prevEvalCp, coachColor));
+    prevEvalCp = m.evaluation;
+  }
 
-  return getCoachCommentary('game_narrative_summary', context, onStream);
+  const perMoveBlock = `[Per-move analysis]\n${rows.join('\n')}`;
+  const resultLine = `Game result: ${result}.`;
+  const openingLine = openingName
+    ? `Opening: ${openingName}.`
+    : 'Opening: (not classified).';
+  const playerLine = `Student color: ${playerColor}. Student rating: ~${playerRating}.`;
+  const errorSummary = `Student errors — blunders: ${blunderCount}, mistakes: ${mistakeCount}, inaccuracies: ${inaccuracyCount}.`;
+
+  const userMessage = [
+    playerLine,
+    openingLine,
+    resultLine,
+    errorSummary,
+    `Tone: ${toneGuide}`,
+    '',
+    perMoveBlock,
+    '',
+    `PGN: ${pgn}`,
+  ].join('\n');
+
+  return getCoachChatResponse(
+    [{ role: 'user', content: userMessage }],
+    GAME_POST_REVIEW_ADDITION,
+    onStream,
+    'game_narrative_summary',
+    // Raised from the default 1024 so the tail of the summary isn't
+    // clipped when the model explores the per-move block. Still tight
+    // enough to force brevity.
+    800,
+    // Review length is constrained by the addition, not by the
+    // student's global verbosity. Override to 'medium' so a user-
+    // level 'none' setting doesn't silently return a blank review
+    // (the root cause of today's empty output).
+    'medium',
+  );
 }
 
 // ─── Review Narration Segments ─────────────────────────────────────────────

@@ -21,6 +21,7 @@ import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { generateNarrativeSummary, generateReviewNarrationSegments } from '../../services/coachFeatureService';
 import type { NarrativeMoveData, ReviewNarrationSegments } from '../../services/coachFeatureService';
+import { logAppAudit } from '../../services/appAuditor';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
 import { useSettings } from '../../hooks/useSettings';
 import { Chess } from 'chess.js';
@@ -229,12 +230,38 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       (chunk: string) => setNarrativeSummary((prev: string | null) => (prev ?? '') + chunk),
       narrativeMoveData,
     ).then((fullText) => {
+      // getCoachChatResponse never throws on API failure — it returns
+      // "⚠️ Coach error: …" strings. Translate those to the degraded
+      // UI state so the student isn't shown a raw error string and no
+      // half-generated review is spoken aloud.
+      if (fullText.startsWith('⚠️')) {
+        setNarrativeSummary('Review is unavailable for this game. Tap Full Review for detailed analysis.');
+        void logAppAudit({
+          kind: 'llm-error',
+          category: 'subsystem',
+          source: 'CoachGameReview.narrativeSummary',
+          summary: 'generateNarrativeSummary returned error placeholder',
+          details: fullText,
+        });
+        return;
+      }
       setNarrativeSummary(fullText);
       if (settings.coachReviewVoice) {
         void voiceService.speak(fullText);
       }
-    }).catch(() => {
-      setNarrativeSummary(null);
+    }).catch((err: unknown) => {
+      // Surface a graceful degraded state rather than leaving the
+      // review blank. Log the actual error so silent failures are
+      // visible post-WO-REVIEW-01.
+      const msg = err instanceof Error ? err.message : String(err);
+      setNarrativeSummary('Review is unavailable for this game. Tap Full Review for detailed analysis.');
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'CoachGameReview.narrativeSummary',
+        summary: 'generateNarrativeSummary rejected',
+        details: msg,
+      });
     }).finally(() => {
       setIsLoadingNarrative(false);
     });
