@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess } from 'chess.js';
 import { safeChessFromFen } from '../../services/chessSafe';
@@ -23,6 +23,8 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveListPanel } from './MoveListPanel';
 import { MobileChatDrawer } from './MobileChatDrawer';
 import { ResignButton } from './ResignButton';
+import { PositionNarrationBanner } from './PositionNarrationBanner';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
@@ -1108,6 +1110,19 @@ export function CoachGamePage(): JSX.Element {
     () => detectOpening(game.history),
     [game.history],
   );
+
+  // Position narration — "Read this position" button on the play screen.
+  const positionNarration = usePositionNarration({
+    fen: game.fen,
+    pgn: game.history.join(' '),
+    moveNumber: moveCountRef.current,
+    playerColor,
+    openingName: detectedOpening?.name ?? null,
+  });
+
+  const handleReadPosition = useCallback(() => {
+    void positionNarration.narrate();
+  }, [positionNarration]);
 
   // Captured pieces — recalculated when FEN changes
   const capturedPieces = useMemo(
@@ -2494,6 +2509,12 @@ export function CoachGamePage(): JSX.Element {
           )}
         </AnimatePresence>
 
+        {/* "Read this position" narration subtitle — fades above the board while coach speaks */}
+        <PositionNarrationBanner
+          text={positionNarration.currentText}
+          active={positionNarration.isNarrating}
+        />
+
         {/* Board — flex-shrink-0 so it never shrinks regardless of content above/below */}
         <div className="px-2 py-1 flex justify-center flex-shrink-0">
           <div className="w-full md:max-w-[420px] relative">
@@ -2501,7 +2522,7 @@ export function CoachGamePage(): JSX.Element {
               key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}-${exploreFen ?? ''}`}
               initialFen={displayFen}
               orientation={playerColor}
-              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null) || !!practicePosition || isExploreMode}
+              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null && !positionNarration.isNarrating) || !!practicePosition || isExploreMode}
               onMove={handleBoardMoveRouted}
               showEvalBar={showEvalBarEffective || isExploreMode}
               evaluation={isExploreMode && exploreEval !== null ? exploreEval : latestEval}
@@ -2628,6 +2649,26 @@ export function CoachGamePage(): JSX.Element {
                 <span>Restart</span>
               </button>
               <ResignButton onResign={handleResign} disabled={gameState.moves.length === 0} />
+            </div>
+
+            {/* Row 1.5: Read this position (coach narration) */}
+            <div className="flex justify-center">
+              <button
+                onClick={handleReadPosition}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-emerald-500/30 text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-200"
+                style={{ boxShadow: '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(16, 185, 129, 0.45), 0 0 6px rgba(16, 185, 129, 0.25)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)'; }}
+                data-testid="read-position-btn"
+                aria-label={positionNarration.isNarrating ? 'Restart position narration' : 'Read this position aloud'}
+              >
+                {positionNarration.isNarrating ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Volume2 size={16} />
+                )}
+                <span>{positionNarration.isNarrating ? 'Reading…' : 'Read this position'}</span>
+              </button>
             </div>
 
             {/* Row 2: Ask (voice) button */}
