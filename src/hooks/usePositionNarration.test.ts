@@ -43,6 +43,14 @@ vi.mock('../db/schema', () => ({
   },
 }));
 
+const auditCalls: { kind: string; summary: string }[] = [];
+vi.mock('../services/appAuditor', () => ({
+  logAppAudit: vi.fn((entry: { kind: string; summary: string }) => {
+    auditCalls.push({ kind: entry.kind, summary: entry.summary });
+    return Promise.resolve();
+  }),
+}));
+
 type StreamCb = (chunk: string) => void;
 const chatCalls: { addition: string; task: string; onStream?: StreamCb }[] = [];
 let chatResolver: ((text: string) => void) | null = null;
@@ -86,6 +94,7 @@ beforeEach(() => {
   chatCalls.length = 0;
   chatResolver = null;
   chatRejecter = null;
+  auditCalls.length = 0;
 });
 
 // ── Tests ─────────────────────────────────────────────────────────────────
@@ -267,5 +276,38 @@ describe('usePositionNarration', () => {
     });
     expect(speakRecords.length).toBe(0);
     await waitFor(() => expect(result.current.isNarrating).toBe(false));
+  });
+
+  it('recovers from a hung API call — resets isNarrating after the timeout fires', async () => {
+    vi.useFakeTimers();
+    try {
+      const { result } = renderHook(() => usePositionNarration(defaultArgs()));
+
+      act(() => {
+        void result.current.narrate();
+      });
+      // The hook awaits stockfish first — drain that microtask.
+      await vi.advanceTimersByTimeAsync(0);
+      await vi.waitFor(() => expect(chatCalls.length).toBe(1));
+      expect(result.current.isNarrating).toBe(true);
+
+      // Do NOT resolve or reject the chat promise. Advance fake clock
+      // past the 30s narration-api timeout and drain microtasks so the
+      // timeout rejection, the catch block, and the finally all run.
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(31_000);
+      });
+
+      // Board-unfreeze invariant: isNarrating must be false after timeout.
+      expect(result.current.isNarrating).toBe(false);
+      // User-visible recovery message.
+      expect(result.current.currentText).toMatch(/timed out/i);
+      // Audit log fired so silent hangs are observable post-ship.
+      expect(auditCalls.some((c) => c.kind === 'llm-error' && /timed out/i.test(c.summary))).toBe(true);
+      // No speech attempted — nothing streamed before the timeout.
+      expect(speakRecords.length).toBe(0);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
