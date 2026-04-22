@@ -51,9 +51,18 @@ export function createPhaseTransitionState(): PhaseTransitionState {
   };
 }
 
-/** True when both student rooks sit on the back rank with no piece
- *  (including the king) between them. Uses chess.js for the board
- *  walk — cheap enough to run per move. */
+/** True when both of the student's rooks sit on their back rank.
+ *
+ *  Relaxed by WO-PHASE-FIX-01. The original WO-PHASE-NARRATION-01 spec
+ *  also required the squares between the rooks to be empty, but in
+ *  practice at move 10-15 (the moment Dave expects the transition to
+ *  fire) the queen is still on d1 and minor pieces are often still on
+ *  c1/b1/g1 — the strict check almost never fires in real games. The
+ *  castled requirement in detectPhaseTransition already guarantees the
+ *  king is out of the way; other pieces still on the back rank will
+ *  move naturally, they aren't a coaching concern at this boundary.
+ *
+ *  Uses chess.js for the board walk — cheap enough to run per move. */
 export function rooksConnected(fen: string, color: 'white' | 'black'): boolean {
   let board: ReturnType<Chess['board']>;
   try {
@@ -66,21 +75,12 @@ export function rooksConnected(fen: string, color: 'white' | 'black'): boolean {
   const row = board[rank];
   if (!row) return false;
 
-  const rookFiles: number[] = [];
+  let rookCount = 0;
   for (let file = 0; file < 8; file++) {
     const sq = row[file];
-    if (sq?.type === 'r' && sq.color === rookColor) rookFiles.push(file);
+    if (sq?.type === 'r' && sq.color === rookColor) rookCount++;
   }
-  if (rookFiles.length < 2) return false;
-
-  // Any piece (of any color) between the two rooks on the back rank
-  // blocks the connection — including the king that hasn't castled or
-  // a bishop/knight still at home.
-  const [leftFile, rightFile] = [rookFiles[0], rookFiles[rookFiles.length - 1]];
-  for (let file = leftFile + 1; file < rightFile; file++) {
-    if (row[file] != null) return false;
-  }
-  return true;
+  return rookCount >= 2;
 }
 
 /** Material-based fallback for the middlegame → endgame boundary.
@@ -173,5 +173,52 @@ export function debugPhaseDiagnostics(fen: string, moveNumber: number): {
     phase: classifyPhase(fen, moveNumber),
     material: countMaterial(fen),
     endgameByMaterialFallback: isEndgameByMaterialFallback(fen),
+  };
+}
+
+export interface PhaseTransitionDiagnostic {
+  moveNumber: number;
+  san: string;
+  isCoachMove: boolean;
+  phase: 'opening' | 'middlegame' | 'endgame';
+  studentCastled: boolean;
+  studentRooksOnBackRank: boolean;
+  endgameByMaterialFallback: boolean;
+  openingToMiddlegameFired: boolean;
+  middlegameToEndgameFired: boolean;
+}
+
+/** Snapshot every input the detector considers for a given move so
+ *  callers can write an audit trail. Cheap enough to run every move;
+ *  the caller decides when to actually log (e.g. only when the
+ *  detector returned null on a past-opening student move).
+ *
+ *  Added by WO-PHASE-FIX-01 so silent failures of the detector are
+ *  visible in the audit log without a debug-mode toggle. */
+export function phaseTransitionDiagnostic(
+  lastMove: LastMoveSnapshot,
+  state: PhaseTransitionState,
+  playerColor: 'white' | 'black',
+): PhaseTransitionDiagnostic {
+  const phase = classifyPhase(lastMove.fen, lastMove.moveNumber);
+  let castled = false;
+  try {
+    const features = assessPosition(lastMove.fen);
+    castled = playerColor === 'white'
+      ? features.kingSafety.whiteCastled
+      : features.kingSafety.blackCastled;
+  } catch {
+    castled = false;
+  }
+  return {
+    moveNumber: lastMove.moveNumber,
+    san: lastMove.san,
+    isCoachMove: lastMove.isCoachMove,
+    phase,
+    studentCastled: castled,
+    studentRooksOnBackRank: rooksConnected(lastMove.fen, playerColor),
+    endgameByMaterialFallback: isEndgameByMaterialFallback(lastMove.fen),
+    openingToMiddlegameFired: state.openingToMiddlegameFired,
+    middlegameToEndgameFired: state.middlegameToEndgameFired,
   };
 }

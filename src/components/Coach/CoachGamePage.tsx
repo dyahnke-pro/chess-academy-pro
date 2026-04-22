@@ -30,6 +30,7 @@ import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import {
   createPhaseTransitionState,
   detectPhaseTransition,
+  phaseTransitionDiagnostic,
   type PhaseTransitionEvent,
   type PhaseTransitionState,
 } from '../../services/phaseTransitionDetector';
@@ -1169,7 +1170,27 @@ export function CoachGamePage(): JSX.Element {
     if (lastMove.isCoachMove) return;
 
     const event = detectPhaseTransition(lastMove, phaseStateRef.current, playerColor);
-    if (!event) return;
+    if (!event) {
+      // Instrumentation (WO-PHASE-FIX-01): when the detector stays
+      // silent after the opening cutoff and a boundary still hasn't
+      // fired, emit a diagnostic so a silent-detector regression is
+      // visible in the audit log instead of the app seeming frozen.
+      const diag = phaseTransitionDiagnostic(lastMove, phaseStateRef.current, playerColor);
+      const pastOpeningCutoff = diag.phase !== 'opening';
+      const anyBoundaryPending =
+        !diag.openingToMiddlegameFired || !diag.middlegameToEndgameFired;
+      if (pastOpeningCutoff && anyBoundaryPending) {
+        void logAppAudit({
+          kind: 'llm-error',
+          category: 'subsystem',
+          source: 'CoachGamePage.phaseTransition',
+          summary: `phase detector silent: move ${diag.moveNumber} ${diag.san}`,
+          details: JSON.stringify(diag),
+          fen: lastMove.fen,
+        });
+      }
+      return;
+    }
 
     const verbosity: PhaseNarrationVerbosity =
       useAppStore.getState().activeProfile?.preferences.phaseNarrationVerbosity ?? 'standard';

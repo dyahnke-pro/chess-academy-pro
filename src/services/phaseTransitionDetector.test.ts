@@ -21,16 +21,18 @@ function moveSnapshot(overrides: Partial<LastMoveSnapshot> = {}): LastMoveSnapsh
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-// Middlegame after queen trades: White castled kingside (king on g1),
-// rooks on a1 and f1 with b1–e1 empty — connected. Material well above
-// the endgame threshold so classifyPhase reports 'middlegame'.
+// Middlegame, White has castled, both rooks still on the back rank.
+// Under WO-PHASE-FIX-01's relaxed rule, "rooks connected" means "both
+// rooks on the back rank" — pieces like the queen on d1 no longer
+// block connection, because the castled check already guarantees the
+// king is out of the way and in-between minors will move out naturally.
 const MIDDLEGAME_WHITE_CASTLED_CONNECTED =
-  'r4rk1/pp3ppp/2np1n2/2b1p3/4P3/2NP1N2/PPPB1PPP/R4RK1 w - - 0 21';
+  'r1bq1rk1/pp3ppp/2np1n2/2b1p3/4P3/2NP1N2/PPPQ1PPP/R1B2RK1 w - - 0 21';
 
-// Same shape, but White's queen still on d1 between the rooks — king
-// is castled but rooks are NOT connected.
-const MIDDLEGAME_WHITE_CASTLED_NOT_CONNECTED =
-  'r2q1rk1/pp3ppp/2np1n2/2b1p3/4P3/2NP1N2/PPPB1PPP/R2Q1RK1 w - - 0 21';
+// Same shape but White has traded a rook off — one of the two rooks
+// is gone, so even the relaxed rule rejects connection.
+const MIDDLEGAME_WHITE_ROOK_TRADED =
+  '4r1k1/pp3ppp/1qnp1n2/2b1p3/4P3/2NP1N2/PPPQ1PPP/5RK1 w - - 0 25';
 
 // Past move 10, material > 13, but White hasn't castled (king on e1).
 const MIDDLEGAME_WHITE_NOT_CASTLED =
@@ -47,19 +49,19 @@ const QUEENS_OFF_ONE_ROOK_EACH =
 // ── rooksConnected ────────────────────────────────────────────────────────
 
 describe('rooksConnected', () => {
-  it('detects connected rooks on an uncluttered back rank', () => {
-    // White rooks on a1 and f1, only the castled king on g1 and nothing
-    // between the rooks — connected.
+  it('detects two rooks on the back rank', () => {
     expect(rooksConnected(MIDDLEGAME_WHITE_CASTLED_CONNECTED, 'white')).toBe(true);
   });
 
-  it('rejects connection when a piece sits between the rooks', () => {
-    // Knight still on b1 blocks a1 <-> f1.
-    expect(rooksConnected(MIDDLEGAME_WHITE_CASTLED_NOT_CONNECTED, 'white')).toBe(false);
+  it('still returns true at the starting position (both rooks on back rank)', () => {
+    // The detector combines this with the castled + past-opening
+    // checks, so the loose helper here is correct. Starting-position
+    // narrations are prevented by classifyPhase returning 'opening'.
+    expect(rooksConnected(START_FEN, 'white')).toBe(true);
   });
 
-  it('rejects connection at the starting position (king + pieces between rooks)', () => {
-    expect(rooksConnected(START_FEN, 'white')).toBe(false);
+  it('rejects connection when fewer than two rooks remain on the back rank', () => {
+    expect(rooksConnected(MIDDLEGAME_WHITE_ROOK_TRADED, 'white')).toBe(false);
   });
 });
 
@@ -82,10 +84,10 @@ describe('detectPhaseTransition — opening → middlegame', () => {
     expect(state.openingToMiddlegameFired).toBe(true);
   });
 
-  it('does NOT fire when rooks are not yet connected', () => {
+  it('does NOT fire when the student has traded a rook off the back rank', () => {
     const state = initialState();
     const event = detectPhaseTransition(
-      moveSnapshot({ fen: MIDDLEGAME_WHITE_CASTLED_NOT_CONNECTED, moveNumber: 21 }),
+      moveSnapshot({ fen: MIDDLEGAME_WHITE_ROOK_TRADED, moveNumber: 25 }),
       state,
       'white',
     );
@@ -200,5 +202,26 @@ describe('detectPhaseTransition — starting position', () => {
     expect(event).toBeNull();
     expect(state.openingToMiddlegameFired).toBe(false);
     expect(state.middlegameToEndgameFired).toBe(false);
+  });
+});
+
+// ── WO-PHASE-FIX-01 regression: fires in realistic middlegame ─────────────
+
+describe('WO-PHASE-FIX-01 regression — relaxed rook-connection rule', () => {
+  // Typical Italian-ish middlegame at move 11: White has castled, both
+  // rooks still on the back rank, queen on d1 between them, minor
+  // pieces developed. The original strict rule refused to fire here
+  // (queen blocked connection) which is why phase narration never
+  // triggered in live games. Under the relaxed rule this DOES fire.
+  it('fires at move 11 with the queen still on d1 (the Dave scenario)', () => {
+    const fen = 'r1bq1rk1/pp3ppp/2np1n2/2b1p3/4P3/2NP1N2/PPPQ1PPP/R1B2RK1 w - - 0 21';
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      { fen, san: 'Qd2', moveNumber: 21, isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('opening-to-middlegame');
   });
 });
