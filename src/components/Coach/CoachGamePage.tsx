@@ -26,6 +26,15 @@ import { MobileChatDrawer } from './MobileChatDrawer';
 import { ResignButton } from './ResignButton';
 import { PositionNarrationBanner } from './PositionNarrationBanner';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
+import { usePhaseNarration } from '../../hooks/usePhaseNarration';
+import {
+  createPhaseTransitionState,
+  detectPhaseTransition,
+  type PhaseTransitionEvent,
+  type PhaseTransitionState,
+} from '../../services/phaseTransitionDetector';
+import { logAppAudit } from '../../services/appAuditor';
+import type { PhaseNarrationVerbosity } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
@@ -1019,6 +1028,9 @@ export function CoachGamePage(): JSX.Element {
     // doesn't try to snap to a stale position from the old game.
     void clearCoachPlayState();
     preVariationFenRef.current = null;
+    // Reset the phase-transition ledger so the new game can fire its
+    // transitions fresh (WO-PHASE-NARRATION-01).
+    phaseStateRef.current = createPhaseTransitionState();
     game.resetGame();
     moveCountRef.current = 0;
     setGameState({
@@ -1128,6 +1140,74 @@ export function CoachGamePage(): JSX.Element {
   const handleReadPosition = useCallback(() => {
     void positionNarration.narrate();
   }, [positionNarration]);
+
+  // Phase-transition narration — fires at most twice per game
+  // (opening→middlegame, middlegame→endgame) per WO-PHASE-NARRATION-01.
+  // The detector ledger resets when a new game starts (see handleRestart
+  // / play-again paths). Using a ref so mutations don't trigger renders.
+  const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
+  const phaseNarration = usePhaseNarration({
+    getPgn: () => game.history.join(' '),
+    getOpeningName: () => detectedOpening?.name ?? null,
+  });
+
+  // Fire phase-transition narration when the student's move completes a
+  // phase boundary. Gates (WO-PHASE-NARRATION-01):
+  //   - Only fires when the most recent move is the student's (coach
+  //     moves don't trigger; the detector also enforces this).
+  //   - Never fires when verbosity is 'off'.
+  //   - Never fires when a blunder alert is active or pending — the
+  //     blunder wins priority and the transition is marked fired so
+  //     it won't retry later in the game.
+  //   - Never fires while the "Read this position" narration is in
+  //     flight — user-triggered narration wins.
+  // Every detection (fired or suppressed) is logged via logAppAudit so
+  // we have a tuning trail without debug-mode toggles.
+  useEffect(() => {
+    const lastMove = gameState.moves[gameState.moves.length - 1];
+    if (!lastMove) return;
+    if (lastMove.isCoachMove) return;
+
+    const event = detectPhaseTransition(lastMove, phaseStateRef.current, playerColor);
+    if (!event) return;
+
+    const verbosity: PhaseNarrationVerbosity =
+      useAppStore.getState().activeProfile?.preferences.phaseNarrationVerbosity ?? 'standard';
+    const blunderActive =
+      gameState.status === 'blunder_pause' || blunderPause !== null;
+
+    if (verbosity === 'off' || blunderActive || positionNarration.isNarrating) {
+      const reason = verbosity === 'off'
+        ? 'verbosity-off'
+        : blunderActive
+          ? 'blunder-priority'
+          : 'position-narration-active';
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'CoachGamePage.phaseTransition',
+        summary: `phase transition suppressed: ${event.kind} (${reason})`,
+        details: `move ${event.moveNumber} ${event.triggeringMoveSan}; verbosity=${verbosity}`,
+        fen: event.fen,
+      });
+      return;
+    }
+
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'CoachGamePage.phaseTransition',
+      summary: `phase transition narrating: ${event.kind}`,
+      details: `move ${event.moveNumber} ${event.triggeringMoveSan}; verbosity=${verbosity}`,
+      fen: event.fen,
+    });
+    void phaseNarration.narrate(event as PhaseTransitionEvent, verbosity);
+    // Dependencies: we watch moves.length so this fires exactly once
+    // per new move. blunderPause + status are read inside the effect
+    // via live reads — deliberate, so the guard always reflects the
+    // current truth at fire time.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState.moves.length]);
 
   // Captured pieces — recalculated when FEN changes
   const capturedPieces = useMemo(
@@ -2154,6 +2234,9 @@ export function CoachGamePage(): JSX.Element {
           onPlayAgain={() => {
             game.resetGame();
             moveCountRef.current = 0;
+            // Reset phase-transition ledger for the fresh game
+            // (WO-PHASE-NARRATION-01).
+            phaseStateRef.current = createPhaseTransitionState();
             setGameState({
               gameId: `game-${Date.now()}`,
               playerColor,
@@ -2508,10 +2591,16 @@ export function CoachGamePage(): JSX.Element {
           )}
         </AnimatePresence>
 
-        {/* "Read this position" narration subtitle — fades above the board while coach speaks */}
+        {/* Narration subtitle — reused for both "Read this position"
+            (user-triggered) and phase-transition narration (auto).
+            Position narration wins if both are active, but that's
+            guarded out above so this is really just "whichever one is
+            currently streaming." (WO-PHASE-NARRATION-01) */}
         <PositionNarrationBanner
-          text={positionNarration.currentText}
-          active={positionNarration.isNarrating}
+          text={positionNarration.isNarrating || positionNarration.currentText
+            ? positionNarration.currentText
+            : phaseNarration.currentText}
+          active={positionNarration.isNarrating || phaseNarration.isNarrating}
         />
 
         {/* Board — flex-shrink-0 so it never shrinks regardless of content above/below */}
@@ -2521,7 +2610,7 @@ export function CoachGamePage(): JSX.Element {
               key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}-${exploreFen ?? ''}`}
               initialFen={displayFen}
               orientation={playerColor}
-              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null && !positionNarration.isNarrating) || !!practicePosition || isExploreMode}
+              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null && !positionNarration.isNarrating && !phaseNarration.isNarrating) || !!practicePosition || isExploreMode}
               onMove={handleBoardMoveRouted}
               showEvalBar={showEvalBarEffective || isExploreMode}
               evaluation={isExploreMode && exploreEval !== null ? exploreEval : latestEval}

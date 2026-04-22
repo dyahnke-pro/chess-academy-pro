@@ -424,6 +424,13 @@ export interface FlashcardRecord {
 
 export type PieceAnimationSpeed = 'none' | 'fast' | 'medium' | 'slow';
 export type CoachVerbosity = 'none' | 'fast' | 'medium' | 'slow' | 'unlimited';
+
+/** How much the coach says at live phase transitions (opening→middlegame
+ *  and middlegame→endgame). Separate from CoachVerbosity because the
+ *  surfaces have different shapes: phase narration fires at most twice
+ *  per game; in-game commentary can fire every move. Added by
+ *  WO-PHASE-NARRATION-01. */
+export type PhaseNarrationVerbosity = 'off' | 'brief' | 'standard' | 'full';
 export type MoveMethod = 'drag' | 'click' | 'both';
 export type AiProvider = 'deepseek' | 'anthropic';
 
@@ -510,6 +517,10 @@ export interface UserPreferences {
   coachMissedTacticTakeback?: boolean;
   coachReviewVoice?: boolean;
   coachVerbosity?: CoachVerbosity;
+  /** Live phase-transition narration verbosity. 'off' silences the
+   *  coach at phase boundaries; 'brief'/'standard'/'full' set the
+   *  depth. Default 'standard'. Added by WO-PHASE-NARRATION-01. */
+  phaseNarrationVerbosity?: PhaseNarrationVerbosity;
   /**
    * Controls when the coach invokes the LLM for per-move commentary
    * during play-against games.
