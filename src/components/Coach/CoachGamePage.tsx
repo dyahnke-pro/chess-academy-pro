@@ -1206,14 +1206,17 @@ export function CoachGamePage(): JSX.Element {
 
     if (!event) {
       console.log('[PHASE-02] skipped: detector returned null');
-      // Non-fires on student moves: log with full diagnostic so Dave
-      // can tell castled=false vs rooks-not-on-back-rank vs already-
-      // fired at a glance. One entry per student move.
+      // WO-PHASE-FIX-03: summary now shows which of the 4 rules are
+      // close to firing so a silent game is diagnosable at a glance.
       void logAppAudit({
         kind: 'phase-transition-suppressed',
         category: 'subsystem',
         source: 'CoachGamePage.phaseTransition',
-        summary: `no-fire: move ${diag.moveNumber} ${diag.san} (phase=${diag.phase}, castled=${diag.studentCastled}, rooks=${diag.studentRooksOnBackRank})`,
+        summary:
+          `no-fire: move ${diag.san} (fullMove=${diag.fullMoveNumber}, ` +
+          `developed=${diag.developedMinors.total}/8 [w${diag.developedMinors.white} b${diag.developedMinors.black}], ` +
+          `castled=${diag.studentCastled}, rooks=${diag.studentRooksOnBackRank}, ` +
+          `majorCaptured=${diag.majorPieceCaptured})`,
         details: JSON.stringify(diag),
         fen: lastMove.fen,
       });

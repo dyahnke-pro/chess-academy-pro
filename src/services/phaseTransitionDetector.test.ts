@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import {
+  countDevelopedMinors,
   createPhaseTransitionState,
   detectPhaseTransition,
+  hasMajorPieceCaptured,
   rooksConnected,
   type LastMoveSnapshot,
   type PhaseTransitionState,
@@ -54,9 +56,11 @@ describe('rooksConnected', () => {
   });
 
   it('still returns true at the starting position (both rooks on back rank)', () => {
-    // The detector combines this with the castled + past-opening
-    // checks, so the loose helper here is correct. Starting-position
-    // narrations are prevented by classifyPhase returning 'opening'.
+    // The detector combines this with castled, development threshold,
+    // major-capture, and move-15 rules (WO-PHASE-FIX-03), so the loose
+    // helper here is correct. Starting-position transitions are
+    // prevented by Rule 1 needing move≥8, Rule 2 needing castled,
+    // Rule 3 needing a capture, and Rule 4 needing move≥15.
     expect(rooksConnected(START_FEN, 'white')).toBe(true);
   });
 
@@ -84,10 +88,14 @@ describe('detectPhaseTransition — opening → middlegame', () => {
     expect(state.openingToMiddlegameFired).toBe(true);
   });
 
-  it('does NOT fire when the student has traded a rook off the back rank', () => {
+  it('does NOT fire when no opening-end rule is satisfied (early game)', () => {
+    // After 1.e4 e5 2.Nf3 Nf6 — each side has developed only one
+    // minor piece, no castle, no captures, full-move 3. None of the
+    // four WO-PHASE-FIX-03 rules can fire yet.
+    const earlyOpening = 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3';
     const state = initialState();
     const event = detectPhaseTransition(
-      moveSnapshot({ fen: MIDDLEGAME_WHITE_ROOK_TRADED, moveNumber: 25 }),
+      moveSnapshot({ fen: earlyOpening, moveNumber: 5, san: 'Nf6' }),
       state,
       'white',
     );
@@ -173,6 +181,11 @@ describe('detectPhaseTransition — middlegame → endgame', () => {
 
   it('does not refire after the endgame boundary has already fired', () => {
     const state = createPhaseTransitionState();
+    // Both flags pre-set: this test isolates the endgame refire guard.
+    // Without setting openingToMiddlegameFired, WO-PHASE-FIX-03's Rule
+    // 4 (move ≥ 15) would emit opening-to-middlegame first on an
+    // endgame FEN at move 41.
+    state.openingToMiddlegameFired = true;
     state.middlegameToEndgameFired = true;
     const event = detectPhaseTransition(
       moveSnapshot({ fen: ENDGAME_KP_KP, moveNumber: 81 }),
@@ -218,6 +231,138 @@ describe('WO-PHASE-FIX-01 regression — relaxed rook-connection rule', () => {
     const state = createPhaseTransitionState();
     const event = detectPhaseTransition(
       { fen, san: 'Qd2', moveNumber: 21, isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('opening-to-middlegame');
+  });
+});
+
+// ── WO-PHASE-FIX-03: four-rule opening-end detection ─────────────────────
+
+describe('countDevelopedMinors', () => {
+  it('returns zero at the starting position', () => {
+    expect(countDevelopedMinors(START_FEN)).toEqual({ white: 0, black: 0, total: 0 });
+  });
+
+  it('counts per side when both sides developed knights and one bishop each', () => {
+    // r1bqk2r — black knights off b8/g8, f8-bishop off, c8-bishop home.
+    // R1BQK2R — symmetric for white. Development = 3 each side.
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 8';
+    expect(countDevelopedMinors(fen)).toEqual({ white: 3, black: 3, total: 6 });
+  });
+});
+
+describe('hasMajorPieceCaptured', () => {
+  it('returns false at the starting position', () => {
+    expect(hasMajorPieceCaptured(START_FEN)).toBe(false);
+  });
+
+  it('returns true when a rook is missing', () => {
+    expect(hasMajorPieceCaptured(MIDDLEGAME_WHITE_ROOK_TRADED)).toBe(true);
+  });
+
+  it('returns true when a queen is missing', () => {
+    // Both queens off — after early trade.
+    const fen = 'rnb1kbnr/ppp2ppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 5';
+    expect(hasMajorPieceCaptured(fen)).toBe(true);
+  });
+});
+
+describe('WO-PHASE-FIX-03 — opening-end rule set', () => {
+  function ply(fullMove: number, side: 'white' | 'black'): number {
+    // Helper: convert full-move + side to a ply number matching
+    // moveCountRef semantics (1-indexed, odd=white's move).
+    return side === 'white' ? fullMove * 2 - 1 : fullMove * 2;
+  }
+
+  it('Rule 1: fires when both sides have 3+ developed minors and fullMove >= 8', () => {
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 8';
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      { fen, san: 'O-O', moveNumber: ply(8, 'black'), isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('opening-to-middlegame');
+  });
+
+  it('Rule 1: does NOT fire at fullMove 7 even with full development (move threshold)', () => {
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 7';
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      { fen, san: 'Bb4', moveNumber: ply(7, 'black'), isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(event).toBeNull();
+  });
+
+  it('Rule 3: fires when a queen is captured (major piece trade)', () => {
+    // Early queen trade — fullMove 5, no development, no castle.
+    // Only Rule 3 can fire here.
+    const fen = 'rnb1kbnr/ppp2ppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 5';
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      { fen, san: 'Qxe7', moveNumber: ply(5, 'white'), isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('opening-to-middlegame');
+  });
+
+  it('Rule 3: fires when a rook is captured', () => {
+    // Same MIDDLEGAME_WHITE_ROOK_TRADED fixture — rooks missing, this
+    // now correctly fires under Rule 3 (previously this test asserted
+    // null, which was wrong under the four-rule spec; see updated
+    // early-game no-fire test above for the now-correct negative case).
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      moveSnapshot({ fen: MIDDLEGAME_WHITE_ROOK_TRADED, moveNumber: ply(10, 'white') }),
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('opening-to-middlegame');
+  });
+
+  it('Rule 4: fires at fullMove 15 safety net regardless of development', () => {
+    // Starting-position FEN at fullMove 15 — nothing developed, no
+    // castle, no captures. Rule 4 is the safety net that guarantees
+    // the transition fires by move 15 at latest.
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      moveSnapshot({ fen: START_FEN, moveNumber: ply(15, 'white'), san: 'a4' }),
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('opening-to-middlegame');
+  });
+
+  it('Rule 4: does NOT fire one full-move early (fullMove 14)', () => {
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      moveSnapshot({ fen: START_FEN, moveNumber: ply(14, 'white') }),
+      state,
+      'white',
+    );
+    expect(event).toBeNull();
+  });
+
+  it('classifyPhase no longer gates opening→middlegame', () => {
+    // FEN where classifyPhase() would return 'opening' (fullMove ≤ 10)
+    // but Rule 2 (castled + rooks connected) IS satisfied. Before
+    // WO-PHASE-FIX-03 this was rejected by the classifyPhase gate; now
+    // the rule set is self-sufficient and the transition fires.
+    const fen = 'r4rk1/pp3ppp/2np1n2/2b1p3/4P3/2NP1N2/PPPQ1PPP/R4RK1 w - - 0 9';
+    const state = createPhaseTransitionState();
+    // Ply 17 → fullMove 9 → classifyPhase says 'opening' (≤ 10).
+    const event = detectPhaseTransition(
+      { fen, san: 'Nf3', moveNumber: 17, isCoachMove: false },
       state,
       'white',
     );

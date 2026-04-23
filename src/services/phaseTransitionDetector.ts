@@ -143,6 +143,71 @@ function isEndgameByMaterialFallback(fen: string): boolean {
   return false;
 }
 
+/** Count minor pieces that are NOT on their starting squares, per side.
+ *  A captured minor counts as "developed" — if a knight is gone it's
+ *  definitely not on b1. Pure FEN parse, no chess.js dependency.
+ *
+ *  Added by WO-PHASE-FIX-03 for Rule 1 of the new opening-end detection.
+ *  Starting squares: white knights b1 g1, white bishops c1 f1; black
+ *  knights b8 g8, black bishops c8 f8. */
+export function countDevelopedMinors(fen: string): { white: number; black: number; total: number } {
+  const ranks = (fen.split(' ')[0] ?? '').split('/');
+  if (ranks.length !== 8) return { white: 0, black: 0, total: 0 };
+  const backWhite = ranks[7] ?? '';
+  const backBlack = ranks[0] ?? '';
+
+  // Walk a rank, returning an 8-entry array of piece chars or null for empty squares.
+  const expandRank = (rank: string): (string | null)[] => {
+    const out: (string | null)[] = [];
+    for (const ch of rank) {
+      if (ch >= '1' && ch <= '8') {
+        for (let i = 0; i < Number(ch); i++) out.push(null);
+      } else {
+        out.push(ch);
+      }
+    }
+    return out.length === 8 ? out : [];
+  };
+
+  const whiteRow = expandRank(backWhite);
+  const blackRow = expandRank(backBlack);
+
+  // file-index → expected starting piece for each side
+  const whiteStart: Record<number, string> = { 1: 'N', 6: 'N', 2: 'B', 5: 'B' };
+  const blackStart: Record<number, string> = { 1: 'n', 6: 'n', 2: 'b', 5: 'b' };
+
+  let whiteDeveloped = 0;
+  let blackDeveloped = 0;
+  for (const file of [1, 2, 5, 6]) {
+    if (whiteRow[file] !== whiteStart[file]) whiteDeveloped++;
+    if (blackRow[file] !== blackStart[file]) blackDeveloped++;
+  }
+  return { white: whiteDeveloped, black: blackDeveloped, total: whiteDeveloped + blackDeveloped };
+}
+
+/** True iff any queen or rook has been captured from the starting 6
+ *  total major pieces. FEN-based — no move history needed. Pawn
+ *  promotion could in theory mask a capture (e.g., queen traded then
+ *  promoted) but promotions are vanishingly rare in the opening
+ *  phase this rule is meant to detect.
+ *
+ *  Added by WO-PHASE-FIX-03 for Rule 3 of the new opening-end
+ *  detection. */
+export function hasMajorPieceCaptured(fen: string): boolean {
+  const board = fen.split(' ')[0] ?? '';
+  let whiteQueens = 0;
+  let blackQueens = 0;
+  let whiteRooks = 0;
+  let blackRooks = 0;
+  for (const ch of board) {
+    if (ch === 'Q') whiteQueens++;
+    else if (ch === 'q') blackQueens++;
+    else if (ch === 'R') whiteRooks++;
+    else if (ch === 'r') blackRooks++;
+  }
+  return whiteQueens < 1 || blackQueens < 1 || whiteRooks < 2 || blackRooks < 2;
+}
+
 /**
  * Detect a phase transition produced by the most recent STUDENT move.
  * Returns `null` when no transition should fire, otherwise returns the
@@ -174,40 +239,61 @@ export function detectPhaseTransition(
   const phase = classifyPhase(lastMove.fen, lastMove.moveNumber);
 
   // ── Opening → middlegame ─────────────────────────────────────────
-  // Per WO-PHASE-FIX-02: trust the castled+connected signal. classifyPhase
-  // stays as a soft sanity check (skip if we're clearly still in the
-  // opening per move count) but is not the primary gate — the presence
-  // of castling + both rooks on the back rank is the definitive
-  // "opening wrapping up" marker.
+  // Per WO-PHASE-FIX-03: four-rule OR, first match wins. classifyPhase
+  // is NOT a gate here — the four rules ARE the opening-end definition.
+  // classifyPhase remains in use for middlegame → endgame only.
+  //
+  //   Rule 1: Both sides developed ≥ 3 of 4 minors AND full move ≥ 8.
+  //   Rule 2: Student has castled AND their rooks on the back rank
+  //           (existing rule, preserved).
+  //   Rule 3: A queen or rook has been captured at any point.
+  //   Rule 4: Full move ≥ 15 (safety net; opening is over by now per
+  //           every chess authority we consulted).
   if (!state.openingToMiddlegameFired) {
-    if (phase === 'opening') {
-      console.log('[PHASE-DETECT-02] reject: classifyPhase says opening', {
-        phase,
+    const fullMoveNumber = Math.ceil(lastMove.moveNumber / 2);
+    const dev = countDevelopedMinors(lastMove.fen);
+    const castled = hasCastled(lastMove.fen, playerColor);
+    const connected = rooksConnected(lastMove.fen, playerColor);
+    const majorCaptured = hasMajorPieceCaptured(lastMove.fen);
+
+    const rule1 = dev.white >= 3 && dev.black >= 3 && fullMoveNumber >= 8;
+    const rule2 = castled && connected;
+    const rule3 = majorCaptured;
+    const rule4 = fullMoveNumber >= 15;
+
+    if (rule1 || rule2 || rule3 || rule4) {
+      state.openingToMiddlegameFired = true;
+      const triggeringRule = rule1 ? 'development' : rule2 ? 'castled-connected' : rule3 ? 'major-captured' : 'move-15-safety';
+      console.log('[PHASE-DETECT-03] EVENT EMITTED: opening-to-middlegame', {
+        fen: lastMove.fen,
         moveNumber: lastMove.moveNumber,
-      });
-    } else {
-      const castled = hasCastled(lastMove.fen, playerColor);
-      const connected = rooksConnected(lastMove.fen, playerColor);
-      if (castled && connected) {
-        state.openingToMiddlegameFired = true;
-        console.log('[PHASE-DETECT-03] EVENT EMITTED: opening-to-middlegame', {
-          fen: lastMove.fen,
-          moveNumber: lastMove.moveNumber,
-          san: lastMove.san,
-        });
-        return {
-          kind: 'opening-to-middlegame',
-          fen: lastMove.fen,
-          moveNumber: lastMove.moveNumber,
-          playerColor,
-          triggeringMoveSan: lastMove.san,
-        };
-      }
-      console.log('[PHASE-DETECT-02] reject: not castled + connected', {
+        san: lastMove.san,
+        triggeringRule,
+        fullMoveNumber,
+        dev,
         castled,
         connected,
+        majorCaptured,
       });
+      return {
+        kind: 'opening-to-middlegame',
+        fen: lastMove.fen,
+        moveNumber: lastMove.moveNumber,
+        playerColor,
+        triggeringMoveSan: lastMove.san,
+      };
     }
+    console.log('[PHASE-DETECT-02] reject: no opening-end rule satisfied', {
+      fullMoveNumber,
+      dev,
+      castled,
+      connected,
+      majorCaptured,
+      rule1,
+      rule2,
+      rule3,
+      rule4,
+    });
   } else {
     console.log('[PHASE-DETECT-02] reject: already fired opening→middlegame');
   }
@@ -259,9 +345,14 @@ export interface PhaseTransitionDiagnostic {
   moveNumber: number;
   san: string;
   isCoachMove: boolean;
+  fullMoveNumber: number;
   phase: 'opening' | 'middlegame' | 'endgame';
   studentCastled: boolean;
   studentRooksOnBackRank: boolean;
+  /** WO-PHASE-FIX-03: added for Rule 1 (development threshold). */
+  developedMinors: { white: number; black: number; total: number };
+  /** WO-PHASE-FIX-03: added for Rule 3 (major-piece-captured trigger). */
+  majorPieceCaptured: boolean;
   endgameByMaterialFallback: boolean;
   openingToMiddlegameFired: boolean;
   middlegameToEndgameFired: boolean;
@@ -272,8 +363,9 @@ export interface PhaseTransitionDiagnostic {
  *  the caller decides when to actually log (e.g. only when the
  *  detector returned null on a past-opening student move).
  *
- *  Added by WO-PHASE-FIX-01 so silent failures of the detector are
- *  visible in the audit log without a debug-mode toggle. */
+ *  Added by WO-PHASE-FIX-01; expanded by WO-PHASE-FIX-03 to carry the
+ *  per-side development count + major-capture flag so the audit log
+ *  shows exactly which of the four opening-end rules are close. */
 export function phaseTransitionDiagnostic(
   lastMove: LastMoveSnapshot,
   state: PhaseTransitionState,
@@ -283,9 +375,12 @@ export function phaseTransitionDiagnostic(
     moveNumber: lastMove.moveNumber,
     san: lastMove.san,
     isCoachMove: lastMove.isCoachMove,
+    fullMoveNumber: Math.ceil(lastMove.moveNumber / 2),
     phase: classifyPhase(lastMove.fen, lastMove.moveNumber),
     studentCastled: hasCastled(lastMove.fen, playerColor),
     studentRooksOnBackRank: rooksConnected(lastMove.fen, playerColor),
+    developedMinors: countDevelopedMinors(lastMove.fen),
+    majorPieceCaptured: hasMajorPieceCaptured(lastMove.fen),
     endgameByMaterialFallback: isEndgameByMaterialFallback(lastMove.fen),
     openingToMiddlegameFired: state.openingToMiddlegameFired,
     middlegameToEndgameFired: state.middlegameToEndgameFired,
