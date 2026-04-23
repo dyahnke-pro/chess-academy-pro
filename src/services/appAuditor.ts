@@ -60,7 +60,9 @@ export type AuditKind =
   | 'voice-speak-invoked'
   // Phase-transition narration trail (WO-PHASE-FIX-02)
   | 'phase-transition-detected'
-  | 'phase-transition-suppressed';
+  | 'phase-transition-suppressed'
+  // Narration latency (WO-POLISH-03)
+  | 'narration-latency';
 
 export interface AuditEntry {
   timestamp: number;

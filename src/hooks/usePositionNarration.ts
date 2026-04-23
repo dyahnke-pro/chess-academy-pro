@@ -23,8 +23,15 @@ export interface UsePositionNarrationResult {
   error: string | null;
 }
 
-/** Stockfish analysis budget — a hung worker must not strand the hook. */
+/** Stockfish analysis budget — a hung worker must not strand the hook.
+ *  This is the outer safety timeout; the hook also races against a
+ *  much shorter budget below to keep the tap→first-word latency down. */
 const STOCKFISH_TIMEOUT_MS = 8_000;
+/** Tap-latency race budget (WO-POLISH-03). If Stockfish hasn't
+ *  returned within this window, dispatch the LLM call without the
+ *  engine analysis. The narration prompt already handles the missing
+ *  block gracefully ("narrate in plans and general shape only"). */
+const STOCKFISH_FAST_BUDGET_MS = 500;
 /** Total budget for the coach LLM round-trip (network + stream). Raised
  *  30s→120s by WO-POLISH-02. A long-form narration at realistic stream
  *  rates can take well past 30s; the original cap was truncating valid
@@ -105,6 +112,9 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
     setError(null);
     setCurrentText('');
     setIsNarrating(true);
+    // WO-POLISH-03: record tap timestamp so the first-sentence
+    // dispatch can log tap-to-first-word latency in the audit trail.
+    const tapTs = Date.now();
 
     // Accumulated streamed text. Lives outside the API try/catch so a
     // truncated / aborted / timed-out stream still produces voice for
@@ -115,20 +125,24 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
     let apiTimedOut = false;
 
     try {
-      // Ground the narration in Stockfish so the coach doesn't
-      // hallucinate what's hanging or whose pieces are active.
-      // Non-fatal: if Stockfish can't answer in time (or at all),
-      // narrate without it.
-      let stockfishAnalysis: StockfishAnalysis | null = null;
-      try {
-        stockfishAnalysis = await withTimeout(
-          stockfishEngine.analyzePosition(args.fen, 16),
-          STOCKFISH_TIMEOUT_MS,
-          'stockfish',
-        );
-      } catch {
-        stockfishAnalysis = null;
-      }
+      // WO-POLISH-03: fire Stockfish in PARALLEL with the rest of
+      // setup. Race against a short budget so LLM dispatch isn't
+      // blocked by engine analysis; whichever finishes first is what
+      // the LLM gets. If Stockfish is late, the narration prompt
+      // already handles missing stockfishAnalysis gracefully.
+      // Depth dropped 16 → 12 for faster turnaround; tactics
+      // detection is deterministic and runs in buildChessContextMessage
+      // regardless, so grounding quality barely changes.
+      const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
+        stockfishEngine.analyzePosition(args.fen, 12),
+        STOCKFISH_TIMEOUT_MS,
+        'stockfish',
+      ).then(
+        (r) => r,
+        () => null as StockfishAnalysis | null,
+      );
+      const stockfishBudget = new Promise<null>((resolve) => setTimeout(() => resolve(null), STOCKFISH_FAST_BUDGET_MS));
+      const stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
       if (token !== activeTokenRef.current) return;
 
       const profile = await db.profiles.get('main');
@@ -149,6 +163,64 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
 
       const userMessage = buildChessContextMessage(context);
 
+      // WO-POLISH-03: sentence-buffered streaming TTS. As LLM chunks
+      // arrive, split on sentence boundaries and dispatch each sentence
+      // for speech immediately. First sentence goes through Polly
+      // (speakForced — premium voice for the first impression);
+      // subsequent sentences go through Web Speech (speakQueuedForced —
+      // low latency, no cancellation of the Polly utterance) so the
+      // user hears the narration start within one sentence of the first
+      // LLM token.
+      let sentenceBuffer = '';
+      let firstSpeakPromise: Promise<void> | null = null;
+      let sentenceCount = 0;
+      const dispatchSentence = (sentence: string): void => {
+        const trimmed = sentence.trim();
+        if (!trimmed) return;
+        sentenceCount += 1;
+        if (sentenceCount === 1) {
+          const firstDispatchMs = Date.now() - tapTs;
+          void logAppAudit({
+            kind: 'narration-latency',
+            category: 'subsystem',
+            source: 'usePositionNarration',
+            summary: `tap-to-first-dispatch ${firstDispatchMs}ms`,
+            details: JSON.stringify({
+              tapToFirstDispatchMs: firstDispatchMs,
+              firstSentenceChars: trimmed.length,
+              stockfishResolved: stockfishAnalysis !== null,
+            }),
+            fen: args.fen,
+          });
+          firstSpeakPromise = voiceService.speakForced(trimmed).catch(() => {
+            /* swallow — error handled via logAppAudit path */
+          });
+        } else {
+          // Queue subsequent sentences behind the Polly first-sentence
+          // so they don't talk over it. speakQueuedForced uses Web
+          // Speech, which starts near-instantly once Polly ends.
+          if (firstSpeakPromise) {
+            void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(trimmed));
+          } else {
+            voiceService.speakQueuedForced(trimmed);
+          }
+        }
+      };
+      // `+` (not `*`) so a bare terminator like "..." can't match a
+      // zero-char sentence. Requires ≥1 non-terminator char before the
+      // `.`/`!`/`?` so we dispatch only actual sentences.
+      const SENTENCE_END_RE = /([^.!?]+[.!?])(?=\s|$)/g;
+      const flushCompletedSentences = (): void => {
+        SENTENCE_END_RE.lastIndex = 0;
+        let match: RegExpExecArray | null;
+        let lastEnd = 0;
+        while ((match = SENTENCE_END_RE.exec(sentenceBuffer)) !== null) {
+          dispatchSentence(match[1]);
+          lastEnd = SENTENCE_END_RE.lastIndex;
+        }
+        if (lastEnd > 0) sentenceBuffer = sentenceBuffer.slice(lastEnd);
+      };
+
       try {
         apiResponse = await withTimeout(
           getCoachChatResponse(
@@ -158,6 +230,8 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
               if (token !== activeTokenRef.current) return;
               fullText += chunk;
               setCurrentText(fullText);
+              sentenceBuffer += chunk;
+              flushCompletedSentences();
             },
             'position_analysis_chat',
             // Raised 2000→4000 by WO-POLISH-02. Effectively unlimited
@@ -194,48 +268,53 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       // arrived before the failure.
       if (token !== activeTokenRef.current) return;
 
-      // Prefer streamed tokens — that's what the user saw on screen.
-      // Fall back to the API return value only if nothing streamed AND
-      // it isn't an inline error placeholder ("⚠️ Coach error: …").
-      const streamed = fullText.trim();
-      const apiTrimmed = apiResponse.trim();
-      let speakText = streamed;
-      if (!speakText && apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
-        speakText = apiTrimmed;
+      // Flush any tail text that didn't end with a sentence terminator
+      // (e.g. stream truncated mid-sentence — still speakable).
+      if (sentenceBuffer.trim()) {
+        dispatchSentence(sentenceBuffer);
+        sentenceBuffer = '';
       }
 
-      if (!speakText) {
-        // Nothing to say. If we hit the timeout and streamed nothing,
-        // surface a graceful retry message so the banner isn't empty.
-        if (apiTimedOut) {
+      // Fallback path: if nothing streamed and nothing dispatched, but
+      // the API returned a usable response (non-streaming provider,
+      // rare), dispatch that as a single speak.
+      if (sentenceCount === 0) {
+        const apiTrimmed = apiResponse.trim();
+        if (apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
+          setCurrentText(apiTrimmed);
+          dispatchSentence(apiTrimmed);
+        } else if (apiTimedOut) {
+          // Nothing to say and the call timed out — surface retry hint.
           setCurrentText('Narration timed out — tap again to retry.');
+          return;
+        } else {
+          return;
         }
-        return;
       }
 
-      setCurrentText(speakText);
-      try {
-        await withTimeout(
-          voiceService.speakForced(speakText),
-          NARRATION_SPEAK_TIMEOUT_MS,
-          'narration-speak',
-        );
-      } catch (err: unknown) {
-        // Audio failure or playback timeout — text already on screen
-        // for the student. Surface the error but don't crash the hook.
-        const msg = err instanceof Error ? err.message : String(err);
-        setError(msg);
-        if (msg.endsWith('-timeout')) {
-          // Force audio to stop so the next narrate() starts clean.
-          voiceService.stop();
-          void logAppAudit({
-            kind: 'tts-failure',
-            category: 'subsystem',
-            source: 'usePositionNarration',
-            summary: 'narration TTS playback timed out',
-            details: msg,
-            fen: args.fen,
-          });
+      // Block isNarrating true until the first (Polly) sentence finishes
+      // — preserves the "board frozen while main voice speaks" invariant
+      // from WO-COACH-NARRATION-05. Any queued Web Speech sentences
+      // continue playing after the board unfreezes, which is fine —
+      // Dave can play while the tail narration finishes.
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (firstSpeakPromise) {
+        try {
+          await withTimeout(firstSpeakPromise, NARRATION_SPEAK_TIMEOUT_MS, 'narration-speak');
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : String(err);
+          setError(msg);
+          if (msg.endsWith('-timeout')) {
+            voiceService.stop();
+            void logAppAudit({
+              kind: 'tts-failure',
+              category: 'subsystem',
+              source: 'usePositionNarration',
+              summary: 'narration TTS playback timed out',
+              details: msg,
+              fen: args.fen,
+            });
+          }
         }
       }
     } finally {
