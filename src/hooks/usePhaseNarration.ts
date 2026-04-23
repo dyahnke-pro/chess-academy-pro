@@ -96,6 +96,20 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     setCurrentText('');
     setIsNarrating(true);
 
+    // Full-trail instrumentation (WO-PHASE-FIX-02): record that the
+    // hook actually received an event. If Dave ever sees a
+    // 'phase-transition-detected' audit entry without a matching
+    // 'usePhaseNarration received' entry, the dispatch wiring is
+    // broken between CoachGamePage and the hook.
+    void logAppAudit({
+      kind: 'phase-transition-detected',
+      category: 'subsystem',
+      source: 'usePhaseNarration',
+      summary: `received: ${event.kind} verbosity=${verbosity}`,
+      details: JSON.stringify(event),
+      fen: event.fen,
+    });
+
     let fullText = '';
     let apiResponse = '';
     let apiTimedOut = false;

@@ -1,6 +1,45 @@
 import { Chess } from 'chess.js';
 import { classifyPhase, countMaterial } from './gamePhaseService';
-import { assessPosition } from './positionAssessor';
+
+/** Direct FEN-based castling check. Replaces the assessPosition call
+ *  that WO-PHASE-FIX-01 used — assessPosition runs multiple analyzers
+ *  (pawn structure, piece activity) that can throw on edge-case FENs,
+ *  silently collapsing to castled=false. This parses only the castling-
+ *  rights field + king square, three lines, zero throw surface. */
+function hasCastled(fen: string, color: 'white' | 'black'): boolean {
+  const parts = fen.split(' ');
+  const board = parts[0] ?? '';
+  const castlingRights = parts[2] ?? '-';
+  // Scan for the king on the back rank. FEN board starts from rank 8.
+  // For white, back rank is the last slash-separated rank (index 7).
+  // For black, back rank is the first (index 0).
+  const ranks = board.split('/');
+  if (ranks.length !== 8) return false;
+  const backRank = color === 'white' ? ranks[7] : ranks[0];
+  const kingChar = color === 'white' ? 'K' : 'k';
+  let kingFile = -1;
+  let file = 0;
+  for (const ch of backRank) {
+    if (ch === kingChar) {
+      kingFile = file;
+      break;
+    }
+    if (ch >= '1' && ch <= '8') {
+      file += Number(ch);
+    } else {
+      file += 1;
+    }
+  }
+  if (kingFile < 0) return false;
+  // King on g-file (6) = castled kingside; c-file (2) = castled queenside.
+  const castledSquare = kingFile === 6 || kingFile === 2;
+  if (!castledSquare) return false;
+  // Both castling-rights chars for this side must be absent (confirms the
+  // king actually moved via castling, not just drifted to g1 via e1-f1-g1).
+  const kingsideFlag = color === 'white' ? 'K' : 'k';
+  const queensideFlag = color === 'white' ? 'Q' : 'q';
+  return !castlingRights.includes(kingsideFlag) && !castlingRights.includes(queensideFlag);
+}
 
 /**
  * Live phase-transition detector for coach games. Emits at most one event
@@ -121,16 +160,13 @@ export function detectPhaseTransition(
   const phase = classifyPhase(lastMove.fen, lastMove.moveNumber);
 
   // ── Opening → middlegame ─────────────────────────────────────────
+  // Per WO-PHASE-FIX-02: trust the castled+connected signal. classifyPhase
+  // stays as a soft sanity check (skip if we're clearly still in the
+  // opening per move count) but is not the primary gate — the presence
+  // of castling + both rooks on the back rank is the definitive
+  // "opening wrapping up" marker.
   if (!state.openingToMiddlegameFired && phase !== 'opening') {
-    let castled = false;
-    try {
-      const features = assessPosition(lastMove.fen);
-      castled = playerColor === 'white'
-        ? features.kingSafety.whiteCastled
-        : features.kingSafety.blackCastled;
-    } catch {
-      castled = false;
-    }
+    const castled = hasCastled(lastMove.fen, playerColor);
     const connected = rooksConnected(lastMove.fen, playerColor);
     if (castled && connected) {
       state.openingToMiddlegameFired = true;
@@ -200,22 +236,12 @@ export function phaseTransitionDiagnostic(
   state: PhaseTransitionState,
   playerColor: 'white' | 'black',
 ): PhaseTransitionDiagnostic {
-  const phase = classifyPhase(lastMove.fen, lastMove.moveNumber);
-  let castled = false;
-  try {
-    const features = assessPosition(lastMove.fen);
-    castled = playerColor === 'white'
-      ? features.kingSafety.whiteCastled
-      : features.kingSafety.blackCastled;
-  } catch {
-    castled = false;
-  }
   return {
     moveNumber: lastMove.moveNumber,
     san: lastMove.san,
     isCoachMove: lastMove.isCoachMove,
-    phase,
-    studentCastled: castled,
+    phase: classifyPhase(lastMove.fen, lastMove.moveNumber),
+    studentCastled: hasCastled(lastMove.fen, playerColor),
     studentRooksOnBackRank: rooksConnected(lastMove.fen, playerColor),
     endgameByMaterialFallback: isEndgameByMaterialFallback(lastMove.fen),
     openingToMiddlegameFired: state.openingToMiddlegameFired,

@@ -57,7 +57,10 @@ export type AuditKind =
   | 'navigation-error'
   | 'fen-desync'
   // Voice instrumentation (WO-LEGACY-VOICE-01)
-  | 'voice-speak-invoked';
+  | 'voice-speak-invoked'
+  // Phase-transition narration trail (WO-PHASE-FIX-02)
+  | 'phase-transition-detected'
+  | 'phase-transition-suppressed';
 
 export interface AuditEntry {
   timestamp: number;

@@ -1167,28 +1167,35 @@ export function CoachGamePage(): JSX.Element {
   useEffect(() => {
     const lastMove = gameState.moves[gameState.moves.length - 1];
     if (!lastMove) return;
-    if (lastMove.isCoachMove) return;
+    if (lastMove.isCoachMove) {
+      // Full-trail audit (WO-PHASE-FIX-02): every time the effect fires
+      // we record what it saw, so a silent-detector regression never
+      // vanishes into a gap. Coach moves get a lightweight entry.
+      void logAppAudit({
+        kind: 'phase-transition-suppressed',
+        category: 'subsystem',
+        source: 'CoachGamePage.phaseTransition',
+        summary: `skipped: coach move (ply ${lastMove.moveNumber})`,
+        details: JSON.stringify({ reason: 'coach-move', san: lastMove.san }),
+      });
+      return;
+    }
 
+    const diag = phaseTransitionDiagnostic(lastMove, phaseStateRef.current, playerColor);
     const event = detectPhaseTransition(lastMove, phaseStateRef.current, playerColor);
+
     if (!event) {
-      // Instrumentation (WO-PHASE-FIX-01): when the detector stays
-      // silent after the opening cutoff and a boundary still hasn't
-      // fired, emit a diagnostic so a silent-detector regression is
-      // visible in the audit log instead of the app seeming frozen.
-      const diag = phaseTransitionDiagnostic(lastMove, phaseStateRef.current, playerColor);
-      const pastOpeningCutoff = diag.phase !== 'opening';
-      const anyBoundaryPending =
-        !diag.openingToMiddlegameFired || !diag.middlegameToEndgameFired;
-      if (pastOpeningCutoff && anyBoundaryPending) {
-        void logAppAudit({
-          kind: 'llm-error',
-          category: 'subsystem',
-          source: 'CoachGamePage.phaseTransition',
-          summary: `phase detector silent: move ${diag.moveNumber} ${diag.san}`,
-          details: JSON.stringify(diag),
-          fen: lastMove.fen,
-        });
-      }
+      // Non-fires on student moves: log with full diagnostic so Dave
+      // can tell castled=false vs rooks-not-on-back-rank vs already-
+      // fired at a glance. One entry per student move.
+      void logAppAudit({
+        kind: 'phase-transition-suppressed',
+        category: 'subsystem',
+        source: 'CoachGamePage.phaseTransition',
+        summary: `no-fire: move ${diag.moveNumber} ${diag.san} (phase=${diag.phase}, castled=${diag.studentCastled}, rooks=${diag.studentRooksOnBackRank})`,
+        details: JSON.stringify(diag),
+        fen: lastMove.fen,
+      });
       return;
     }
 
@@ -1204,22 +1211,26 @@ export function CoachGamePage(): JSX.Element {
           ? 'blunder-priority'
           : 'position-narration-active';
       void logAppAudit({
-        kind: 'llm-error',
+        kind: 'phase-transition-suppressed',
         category: 'subsystem',
         source: 'CoachGamePage.phaseTransition',
-        summary: `phase transition suppressed: ${event.kind} (${reason})`,
-        details: `move ${event.moveNumber} ${event.triggeringMoveSan}; verbosity=${verbosity}`,
+        summary: `suppressed: ${event.kind} (${reason})`,
+        details: JSON.stringify({ ...event, reason, verbosity }),
         fen: event.fen,
       });
       return;
     }
 
+    // Detection success — dedicated kind so Dave can filter the audit
+    // log for 'phase-transition-detected' and see exactly when/where
+    // each boundary fired. Narration voice is traced separately via
+    // the 'voice-speak-invoked' audit from WO-LEGACY-VOICE-01.
     void logAppAudit({
-      kind: 'llm-error',
+      kind: 'phase-transition-detected',
       category: 'subsystem',
       source: 'CoachGamePage.phaseTransition',
-      summary: `phase transition narrating: ${event.kind}`,
-      details: `move ${event.moveNumber} ${event.triggeringMoveSan}; verbosity=${verbosity}`,
+      summary: `${event.kind} at move ${event.moveNumber} ${event.triggeringMoveSan}`,
+      details: JSON.stringify({ ...event, verbosity }),
       fen: event.fen,
     });
     void phaseNarration.narrate(event as PhaseTransitionEvent, verbosity);
