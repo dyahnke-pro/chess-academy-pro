@@ -89,6 +89,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     event: PhaseTransitionEvent,
     verbosity: Exclude<PhaseNarrationVerbosity, 'off'>,
   ): Promise<void> => {
+    console.log('[PHASE-HOOK-01] received event', { event, verbosity });
+    if (activeTokenRef.current > 0) {
+      console.log('[PHASE-HOOK-02] aborting prior narration (token supersession)');
+    }
     activeTokenRef.current += 1;
     const token = activeTokenRef.current;
     voiceService.stop();
@@ -115,6 +119,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     let apiTimedOut = false;
 
     try {
+      console.log('[PHASE-HOOK-03] stockfish analysis call');
       let stockfishAnalysis: StockfishAnalysis | null = null;
       try {
         stockfishAnalysis = await withTimeout(
@@ -122,7 +127,11 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           STOCKFISH_TIMEOUT_MS,
           'stockfish',
         );
-      } catch {
+        console.log('[PHASE-HOOK-04] stockfish returned', {
+          hasAnalysis: stockfishAnalysis !== null,
+        });
+      } catch (err) {
+        console.log('[PHASE-HOOK-04] stockfish timed out / errored', err);
         stockfishAnalysis = null;
       }
       if (token !== activeTokenRef.current) return;
@@ -153,6 +162,11 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
 
       const userMessage = buildChessContextMessage(context);
 
+      console.log('[PHASE-HOOK-05] LLM call dispatched', {
+        addition: 'PHASE_NARRATION_ADDITION',
+        task: 'position_analysis_chat',
+        maxTokens: 2000,
+      });
       try {
         apiResponse = await withTimeout(
           getCoachChatResponse(
@@ -170,8 +184,13 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           NARRATION_API_TIMEOUT_MS,
           'phase-narration-api',
         );
+        console.log('[PHASE-HOOK-06] LLM returned', {
+          length: apiResponse.length,
+          startsWithWarning: apiResponse.startsWith('⚠️'),
+        });
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
+        console.log('[PHASE-HOOK-06] LLM errored', msg);
         setError(msg);
         if (msg.endsWith('-timeout')) {
           apiTimedOut = true;
@@ -196,6 +215,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       }
 
       if (!speakText) {
+        console.log('[PHASE-HOOK-07] speech SKIPPED: no speakable text', {
+          streamedLen: streamed.length,
+          apiTimedOut,
+        });
         if (apiTimedOut) {
           setCurrentText('Phase narration timed out.');
         }
@@ -203,14 +226,17 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       }
 
       setCurrentText(speakText);
+      console.log('[PHASE-HOOK-07] speech call dispatched', { length: speakText.length });
       try {
         await withTimeout(
           voiceService.speakForced(speakText),
           NARRATION_SPEAK_TIMEOUT_MS,
           'phase-narration-speak',
         );
+        console.log('[PHASE-HOOK-08] speech complete');
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
+        console.log('[PHASE-HOOK-08] speech errored / timed out', msg);
         setError(msg);
         if (msg.endsWith('-timeout')) {
           voiceService.stop();

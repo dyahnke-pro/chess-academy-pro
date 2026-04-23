@@ -1166,8 +1166,27 @@ export function CoachGamePage(): JSX.Element {
   // we have a tuning trail without debug-mode toggles.
   useEffect(() => {
     const lastMove = gameState.moves[gameState.moves.length - 1];
-    if (!lastMove) return;
+    // WO-PHASE-FIX-02 temporary devtools instrumentation — remove once
+    // Dave reproduces and we diagnose. Prefixed [PHASE-*] for easy
+    // devtools filtering / later grep-and-remove.
+    console.log('[PHASE-01] detection effect fired', {
+      movesLength: gameState.moves.length,
+      status: gameState.status,
+      blunderPauseActive: gameState.status === 'blunder_pause' || blunderPause !== null,
+      positionNarrating: positionNarration.isNarrating,
+      phaseNarrationVerbosity:
+        useAppStore.getState().activeProfile?.preferences.phaseNarrationVerbosity ?? 'standard',
+      ledger: { ...phaseStateRef.current },
+      lastMove: lastMove
+        ? { san: lastMove.san, moveNumber: lastMove.moveNumber, isCoachMove: lastMove.isCoachMove }
+        : null,
+    });
+    if (!lastMove) {
+      console.log('[PHASE-02] skipped: no lastMove (moves array empty)');
+      return;
+    }
     if (lastMove.isCoachMove) {
+      console.log('[PHASE-02] skipped: was coach move, not student move');
       // Full-trail audit (WO-PHASE-FIX-02): every time the effect fires
       // we record what it saw, so a silent-detector regression never
       // vanishes into a gap. Coach moves get a lightweight entry.
@@ -1183,8 +1202,10 @@ export function CoachGamePage(): JSX.Element {
 
     const diag = phaseTransitionDiagnostic(lastMove, phaseStateRef.current, playerColor);
     const event = detectPhaseTransition(lastMove, phaseStateRef.current, playerColor);
+    console.log('[PHASE-03] detector result:', event ? { ...event, diag } : { event: null, diag });
 
     if (!event) {
+      console.log('[PHASE-02] skipped: detector returned null');
       // Non-fires on student moves: log with full diagnostic so Dave
       // can tell castled=false vs rooks-not-on-back-rank vs already-
       // fired at a glance. One entry per student move.
@@ -1210,6 +1231,7 @@ export function CoachGamePage(): JSX.Element {
         : blunderActive
           ? 'blunder-priority'
           : 'position-narration-active';
+      console.log('[PHASE-02] skipped:', reason);
       void logAppAudit({
         kind: 'phase-transition-suppressed',
         category: 'subsystem',
@@ -1221,6 +1243,7 @@ export function CoachGamePage(): JSX.Element {
       return;
     }
 
+    console.log('[PHASE-04] dispatching phase narration', { kind: event.kind, verbosity });
     // Detection success — dedicated kind so Dave can filter the audit
     // log for 'phase-transition-detected' and see exactly when/where
     // each boundary fired. Narration voice is traced separately via

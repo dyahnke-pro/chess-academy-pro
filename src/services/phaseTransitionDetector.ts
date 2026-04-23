@@ -154,8 +154,22 @@ export function detectPhaseTransition(
   state: PhaseTransitionState,
   playerColor: 'white' | 'black',
 ): PhaseTransitionEvent | null {
+  console.log('[PHASE-DETECT-01] called', {
+    fen: lastMove.fen,
+    moveNumber: lastMove.moveNumber,
+    san: lastMove.san,
+    isCoachMove: lastMove.isCoachMove,
+    playerColor,
+    stockfishPhase: null, // not emitted by current engine
+    ledgerOpeningToMiddlegame: state.openingToMiddlegameFired,
+    ledgerMiddlegameToEndgame: state.middlegameToEndgameFired,
+  });
+
   // Only the student's moves trigger narration — coach moves don't.
-  if (lastMove.isCoachMove) return null;
+  if (lastMove.isCoachMove) {
+    console.log('[PHASE-DETECT-02] reject: coach move');
+    return null;
+  }
 
   const phase = classifyPhase(lastMove.fen, lastMove.moveNumber);
 
@@ -165,19 +179,37 @@ export function detectPhaseTransition(
   // opening per move count) but is not the primary gate — the presence
   // of castling + both rooks on the back rank is the definitive
   // "opening wrapping up" marker.
-  if (!state.openingToMiddlegameFired && phase !== 'opening') {
-    const castled = hasCastled(lastMove.fen, playerColor);
-    const connected = rooksConnected(lastMove.fen, playerColor);
-    if (castled && connected) {
-      state.openingToMiddlegameFired = true;
-      return {
-        kind: 'opening-to-middlegame',
-        fen: lastMove.fen,
+  if (!state.openingToMiddlegameFired) {
+    if (phase === 'opening') {
+      console.log('[PHASE-DETECT-02] reject: classifyPhase says opening', {
+        phase,
         moveNumber: lastMove.moveNumber,
-        playerColor,
-        triggeringMoveSan: lastMove.san,
-      };
+      });
+    } else {
+      const castled = hasCastled(lastMove.fen, playerColor);
+      const connected = rooksConnected(lastMove.fen, playerColor);
+      if (castled && connected) {
+        state.openingToMiddlegameFired = true;
+        console.log('[PHASE-DETECT-03] EVENT EMITTED: opening-to-middlegame', {
+          fen: lastMove.fen,
+          moveNumber: lastMove.moveNumber,
+          san: lastMove.san,
+        });
+        return {
+          kind: 'opening-to-middlegame',
+          fen: lastMove.fen,
+          moveNumber: lastMove.moveNumber,
+          playerColor,
+          triggeringMoveSan: lastMove.san,
+        };
+      }
+      console.log('[PHASE-DETECT-02] reject: not castled + connected', {
+        castled,
+        connected,
+      });
     }
+  } else {
+    console.log('[PHASE-DETECT-02] reject: already fired opening→middlegame');
   }
 
   // ── Middlegame → endgame ─────────────────────────────────────────
@@ -185,6 +217,11 @@ export function detectPhaseTransition(
     const inEndgame = phase === 'endgame' || isEndgameByMaterialFallback(lastMove.fen);
     if (inEndgame) {
       state.middlegameToEndgameFired = true;
+      console.log('[PHASE-DETECT-03] EVENT EMITTED: middlegame-to-endgame', {
+        fen: lastMove.fen,
+        moveNumber: lastMove.moveNumber,
+        san: lastMove.san,
+      });
       return {
         kind: 'middlegame-to-endgame',
         fen: lastMove.fen,
@@ -193,6 +230,12 @@ export function detectPhaseTransition(
         triggeringMoveSan: lastMove.san,
       };
     }
+    console.log('[PHASE-DETECT-02] reject: endgame conditions not met', {
+      phase,
+      endgameByMaterialFallback: isEndgameByMaterialFallback(lastMove.fen),
+    });
+  } else {
+    console.log('[PHASE-DETECT-02] reject: already fired middlegame→endgame');
   }
 
   return null;
