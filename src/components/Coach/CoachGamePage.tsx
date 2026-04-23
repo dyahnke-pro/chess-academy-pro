@@ -126,7 +126,7 @@ async function evaluateExplorerCandidates(
 }
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
 import { getCoachChatResponse } from '../../services/coachApi';
-import { EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
+import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
@@ -1691,9 +1691,13 @@ export function CoachGamePage(): JSX.Element {
 
     // Run deterministic tactic classifier on the move
     let tacticSuffix = '';
+    // Hoisted by WO-POLISH-02: tacticResult is also consumed by the
+    // blunder-alert LLM call below as grounded context, so it needs
+    // outer scope, not just inside the suffix try-block.
+    let tacticResult: ReturnType<typeof classifyPosition> | null = null;
     if (analysis) {
       try {
-        const tacticResult = classifyPosition(
+        tacticResult = classifyPosition(
           preFen,
           moveResult.fen,
           moveResult.san,
@@ -1915,13 +1919,69 @@ export function CoachGamePage(): JSX.Element {
 
     // BLUNDER INTERCEPTION: pause game and explain
     if (classification === 'blunder' && engineBestMoveUci) {
-      const explanation = commentary;
-
       // Sync the blunder move onto the game instance so undoMove() in
       // handleBlunderTryBestMove / handleBlunderTakeBack can reverse it.
       // Status is set to 'blunder_pause' in the same synchronous block,
       // so the coach-move useEffect never sees 'playing' + coach's turn.
       game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
+
+      // WO-POLISH-02: build a clean coach-voice fallback for the blunder
+      // popup. Used verbatim if the LLM call below times out or errors.
+      // NEVER falls back to tacticSuffix — that's template prose with
+      // "Hanging: White pawn on d2" shape Dave wants gone.
+      let explanation: string;
+      const firstHanging = tacticResult?.hangingPieces[0];
+      if (firstHanging) {
+        const pieceName = {
+          p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+        }[firstHanging.piece.toLowerCase()] ?? firstHanging.piece;
+        const ownership = (firstHanging.color === 'w') === (playerColor === 'white') ? 'Your' : "Opponent's";
+        explanation = `${ownership} ${pieceName} on ${firstHanging.square} is hanging.`;
+      } else {
+        explanation = 'That move loses material — take another look at the position.';
+      }
+
+      // WO-POLISH-02: LLM-generated coach-voice alert. Uses the grounded
+      // context (FEN + hanging pieces + best move) so it can describe
+      // what's wrong in plain prose. Falls back to the clean template
+      // above on timeout / error — never to the tacticSuffix template.
+      try {
+        const alertContext = [
+          `Position after the student's blunder (FEN): ${moveResult.fen}`,
+          `Student color: ${playerColor}.`,
+          `Student just played: ${moveResult.san}.`,
+          `Engine evaluation after the move: ${analysis?.evaluation ?? 0} centipawns (white's perspective).`,
+          engineBestMoveSan && engineBestMoveSan !== '?'
+            ? `What the engine preferred (do NOT quote this to the student): ${engineBestMoveSan}.`
+            : '',
+          tacticResult && tacticResult.hangingPieces.length > 0
+            ? `Hanging pieces detected (coordinates + piece): ${tacticResult.hangingPieces
+                .map((p) => `${p.color === 'w' ? 'white' : 'black'} ${p.piece} on ${p.square}`)
+                .join(', ')}.`
+            : '',
+          tacticResult && tacticResult.tactics.filter((t) => t.type !== 'none').length > 0
+            ? `Tactics detected: ${tacticResult.tactics
+                .filter((t) => t.type !== 'none')
+                .map((t) => t.description)
+                .join('; ')}.`
+            : '',
+        ].filter(Boolean).join('\n');
+
+        const alertText = await getCoachChatResponse(
+          [{ role: 'user', content: alertContext }],
+          BLUNDER_ALERT_ADDITION,
+          undefined,
+          'chat_response',
+          200,
+          'fast',
+        );
+        const trimmed = alertText.trim();
+        if (trimmed && !trimmed.startsWith('⚠️')) {
+          explanation = trimmed;
+        }
+      } catch {
+        // fall through with the clean template
+      }
 
       setBlunderPause({
         explanation,

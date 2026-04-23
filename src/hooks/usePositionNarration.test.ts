@@ -292,10 +292,11 @@ describe('usePositionNarration', () => {
       expect(result.current.isNarrating).toBe(true);
 
       // Do NOT resolve or reject the chat promise. Advance fake clock
-      // past the 30s narration-api timeout and drain microtasks so the
-      // timeout rejection, the catch block, and the finally all run.
+      // past the 120s narration-api timeout (raised from 30s by
+      // WO-POLISH-02) and drain microtasks so the timeout rejection,
+      // the catch block, and the finally all run.
       await act(async () => {
-        await vi.advanceTimersByTimeAsync(31_000);
+        await vi.advanceTimersByTimeAsync(121_000);
       });
 
       // Board-unfreeze invariant: isNarrating must be false after timeout.

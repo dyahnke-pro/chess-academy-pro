@@ -25,15 +25,18 @@ export interface UsePositionNarrationResult {
 
 /** Stockfish analysis budget — a hung worker must not strand the hook. */
 const STOCKFISH_TIMEOUT_MS = 8_000;
-/** Total budget for the coach LLM round-trip (network + stream). The WO
- *  cites ~30s as the human-acceptable upper bound before we show a
- *  retry message. Tuned a bit tighter so the student sees a clear
- *  failure instead of a silent wait. */
-const NARRATION_API_TIMEOUT_MS = 30_000;
-/** Speech playback budget. Caps the hook's wait for Polly / Web Speech
- *  to finish so a frozen audio pipeline can't hold isNarrating true
- *  indefinitely. The voiceService itself already aborts on stop(). */
-const NARRATION_SPEAK_TIMEOUT_MS = 60_000;
+/** Total budget for the coach LLM round-trip (network + stream). Raised
+ *  30s→120s by WO-POLISH-02. A long-form narration at realistic stream
+ *  rates can take well past 30s; the original cap was truncating valid
+ *  responses mid-stream and leaving `fullText` short of a period. */
+const NARRATION_API_TIMEOUT_MS = 120_000;
+/** Speech playback budget. Raised 60s→600s by WO-POLISH-02 — the
+ *  previous 60s cap was the primary `narration-speak-timeout` source
+ *  (audit log Finding 49). A normal 300-word narration at Polly's
+ *  spoken rate already runs well over 60s; 10 minutes is effectively
+ *  unlimited for any narration we'd actually produce. The timeout
+ *  remains a safety net for a frozen audio pipeline, not a truncator. */
+const NARRATION_SPEAK_TIMEOUT_MS = 600_000;
 
 /** Race a promise against a timeout. Rejects with an Error whose
  *  message ends in "-timeout" so the caller can cheaply distinguish
@@ -157,12 +160,10 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
               setCurrentText(fullText);
             },
             'position_analysis_chat',
-            // Raised 600→2000 by WO-COACH-NARRATION-06 after the prompt's
-            // length guidance was removed. The narration now runs as long
-            // as the position warrants; 2000 tokens (~1300 words) is well
-            // above any realistic end-on-a-complete-sentence length so the
-            // cap never becomes the reason a narration truncates.
-            2000,
+            // Raised 2000→4000 by WO-POLISH-02. Effectively unlimited
+            // for a narration; the cap is never the reason a sentence
+            // gets cut off.
+            4000,
             // Override verbosity — narration length is constrained by the
             // prompt, not by the student's global verbosity setting.
             'medium',
