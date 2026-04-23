@@ -138,10 +138,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         };
         setMessages((prev) => [...prev, msg]);
 
-        // Speak if voice is on (read latest state directly)
-        if (useAppStore.getState().coachVoiceOn) {
-          void voiceService.speak(text);
-        }
+        // Silenced by WO-LEGACY-VOICE-01 — this path was the funnel for
+        // CoachGamePage's coach tips, missed-tactic alerts, and upcoming-
+        // threat warnings (all of which carry `tacticSuffix` text like
+        // "Hanging: White pawn on h7"). Text surface retained: the
+        // message still renders in the chat panel — only TTS is muted.
+        void text;
       },
     }), [setMessages]);
 

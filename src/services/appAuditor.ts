@@ -55,7 +55,9 @@ export type AuditKind =
   // App state
   | 'error-boundary'
   | 'navigation-error'
-  | 'fen-desync';
+  | 'fen-desync'
+  // Voice instrumentation (WO-LEGACY-VOICE-01)
+  | 'voice-speak-invoked';
 
 export interface AuditEntry {
   timestamp: number;

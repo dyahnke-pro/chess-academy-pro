@@ -866,12 +866,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     setBestLineLoading(false);
 
-    // Speak the explanation last so it overlaps with the user
-    // visually parsing the position. Skip when no explanation is
-    // present (older imports without coach analysis).
-    if (tactic.explanation) {
-      void voiceService.speak(tactic.explanation);
-    }
+    // Silenced by WO-LEGACY-VOICE-01 — tactic.explanation strings carry
+    // deterministic piece-letter shorthand ("hanging X on Y") that is
+    // the legacy voice Dave wants gone. Text surface retained: the
+    // tactic banner / highlight still renders.
+    void tactic.explanation;
   }, []);
 
   /** Advance the drill to the next missed tactic, or exit if done. */
@@ -1058,9 +1057,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const moveIdx = reviewState.currentMoveIndex;
     if (moveIdx >= moves.length - 1) {
       cleanup();
-      // Reached end of game — speak the closing narration segment if available
+      // Silenced by WO-LEGACY-VOICE-01 — auto-review closing. Grounded
+      // review summary speaks once at mount; subsequent auto-review
+      // speaks used to interrupt it. Text surface retained elsewhere.
       const closingText = narrationSegments?.closing ?? 'That concludes the game review.';
-      void voiceService.speak(closingText);
+      void closingText;
       setAutoReviewActive(false);
       return cleanup;
     }
@@ -1068,7 +1069,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // Starting position (moveIdx === -1): speak the intro narration segment
     if (moveIdx === -1) {
       if (narrationSegments?.intro) {
-        void voiceService.speak(narrationSegments.intro);
+        // Silenced by WO-LEGACY-VOICE-01 — auto-review intro. Grounded
+        // review summary is the canonical voice; this used to interrupt it.
+        void narrationSegments.intro;
         const introDelay = Math.max(4000, narrationSegments.intro.length * 55);
         autoReviewTimerRef.current = setTimeout(() => {
           setReviewState((prev: ReviewState) => ({ ...prev, currentMoveIndex: 0 }));
@@ -1104,9 +1107,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (reviewDepth === 'full' && isKeyMoment && currentMoveForAutoReview) {
       const cachedComment = aiCommentaryCacheRef.current.get(moveIdx);
       if (cachedComment) {
-        // Already cached — speak it, show it, and wait for narration-length pause
+        // Silenced by WO-LEGACY-VOICE-01 — per-move cached comment.
+        // Text surface retained via setAiCommentary; timing preserved.
         setAiCommentary(cachedComment);
-        void voiceService.speak(cachedComment);
+        void cachedComment;
         scheduleAdvance(Math.max(AUTO_REVIEW_NARRATION_PAUSE_MS, cachedComment.length * 55));
       } else {
         // Fetch AI commentary — pause advancement until it's done
@@ -1155,7 +1159,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           }
           setAiCommentary(fullText);
           setIsLoadingAiCommentary(false);
-          void voiceService.speak(fullText);
+          // Silenced by WO-LEGACY-VOICE-01 — streamed per-move LLM
+          // commentary. Text surface retained via setAiCommentary.
+          void fullText;
           const narrationDelay = Math.max(AUTO_REVIEW_NARRATION_PAUSE_MS, fullText.length * 55);
           autoReviewTimerRef.current = setTimeout(() => {
             setAwaitingAiNarration(false);
@@ -1178,10 +1184,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // Use cached AI commentary if available (richer), otherwise template
       const cachedAi = aiCommentaryCacheRef.current.get(moveIdx);
       const spokenText = cachedAi ?? currentMoveForAutoReview.commentary;
+      // Silenced by WO-LEGACY-VOICE-01 — these per-move speaks carried
+      // CoachGameMove.commentary which contains tacticSuffix text
+      // ("Hanging: White pawn on h7") — the exact legacy voice Dave
+      // flagged. Text surface retained via setAiCommentary above.
       if (isKeyMoment && spokenText) {
-        void voiceService.speak(`Move ${moveNum}. ${spokenText}`);
+        void `Move ${moveNum}. ${spokenText}`;
       } else if (reviewDepth === 'full' && isNotable && spokenText) {
-        void voiceService.speak(spokenText);
+        void spokenText;
       }
     }
 
@@ -1219,7 +1229,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setGuidedComplete(true);
       setGuidedLessonActive(false);
 
-      void voiceService.speak('That concludes the guided lesson. Great work reviewing this game!');
+      // Silenced by WO-LEGACY-VOICE-01 — guided-lesson closing announcement.
+      // Grounded review summary is the canonical post-game voice.
 
       // Generate narrative summary
       const gamePgn = pgn ?? moves.map((m) => m.san).join(' ');
@@ -1255,10 +1266,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           }));
           setGuidedStopped(true);
 
-          // Voice narrate the key moment
+          // Silenced by WO-LEGACY-VOICE-01 — guided-lesson per-move speak
+          // carried the same tacticSuffix-tainted CoachGameMove.commentary
+          // as the auto-review path. Text surface retained elsewhere.
           if (nextMove.commentary) {
             const moveNum = Math.ceil(nextMove.moveNumber / 2);
-            void voiceService.speak(`Move ${moveNum}. ${nextMove.commentary}`);
+            void `Move ${moveNum}. ${nextMove.commentary}`;
           }
         }, GUIDED_ADVANCE_MS);
 

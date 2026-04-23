@@ -313,13 +313,35 @@ class VoiceService {
     this.prefsCacheTime = 0;
   }
 
+  /** Fire-and-forget audit log of every speak invocation so the next
+   *  legacy-voice regression surfaces in one session instead of needing
+   *  grep archaeology. Added by WO-LEGACY-VOICE-01. Dynamic import so
+   *  voiceService doesn't take a hard dep on appAuditor (which pulls
+   *  Dexie — can cold-start early in the app lifecycle). */
+  private logSpeakInvoked(method: string, text: string): void {
+    const preview = text.slice(0, 40);
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'voice-speak-invoked',
+        category: 'subsystem',
+        source: `voiceService.${method}`,
+        summary: preview,
+        details: text.length > 40 ? `length=${text.length}` : undefined,
+      });
+    }).catch(() => {
+      // Never break speech on an audit-log failure.
+    });
+  }
+
   async speak(text: string): Promise<void> {
+    this.logSpeakInvoked('speak', text);
     return this.speakInternal(sanitizeForTTS(text), false);
   }
 
   /** Low-latency speak for training modes — skips Polly/voice-packs and DB reads.
    *  Uses cached preferences (from warmup) and goes straight to Web Speech API. */
   async speakFast(text: string): Promise<void> {
+    this.logSpeakInvoked('speakFast', text);
     if (this.cachedPrefs && !this.cachedPrefs.voiceEnabled) return;
 
     // Stop any in-flight speech without going through the full stop() chain
@@ -337,11 +359,13 @@ class VoiceService {
   /** Speak regardless of the voiceEnabled preference.
    *  Used by the voice-chat mic where the user explicitly opted into voice. */
   async speakForced(text: string): Promise<void> {
+    this.logSpeakInvoked('speakForced', text);
     return this.speakInternal(sanitizeForTTS(text), true);
   }
 
   /** Queue a sentence without stopping current speech. For streaming voice responses. */
   speakQueuedForced(text: string): void {
+    this.logSpeakInvoked('speakQueuedForced', text);
     if (this.cachedPrefs?.systemVoiceURI) {
       speechService.setVoice(this.cachedPrefs.systemVoiceURI);
     }
