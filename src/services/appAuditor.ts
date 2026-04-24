@@ -63,6 +63,8 @@ export type AuditKind =
   | 'phase-transition-suppressed'
   // Narration latency (WO-POLISH-03)
   | 'narration-latency'
+  // Phase narration latency (WO-PHASE-LAG-01)
+  | 'phase-narration-latency'
   // Walk-the-game review trail (WO-REVIEW-02)
   | 'review-opened'
   | 'review-narration-spoken'

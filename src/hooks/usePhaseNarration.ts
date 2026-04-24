@@ -27,6 +27,11 @@ export interface UsePhaseNarrationResult {
  *  hung engine, fetch, or TTS call can never strand the hook and the
  *  transition is always either spoken or logged-and-forgotten. */
 const STOCKFISH_TIMEOUT_MS = 8_000;
+/** Tap-latency race budget (WO-PHASE-LAG-01, mirrors WO-POLISH-03). If
+ *  Stockfish hasn't returned within this window, dispatch the LLM call
+ *  without the engine analysis. PHASE_NARRATION_ADDITION tolerates a
+ *  missing stockfishAnalysis block. */
+const STOCKFISH_FAST_BUDGET_MS = 500;
 const NARRATION_API_TIMEOUT_MS = 30_000;
 const NARRATION_SPEAK_TIMEOUT_MS = 60_000;
 
@@ -99,6 +104,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     setError(null);
     setCurrentText('');
     setIsNarrating(true);
+    // WO-PHASE-LAG-01: detection timestamp drives the tap-to-first-word
+    // latency measurement. Phase narration has no literal tap — "tap"
+    // here means "the moment the hook received the detection event".
+    const detectedTs = Date.now();
 
     // Full-trail instrumentation (WO-PHASE-FIX-02): record that the
     // hook actually received an event. If Dave ever sees a
@@ -119,21 +128,28 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     let apiTimedOut = false;
 
     try {
-      console.log('[PHASE-HOOK-03] stockfish analysis call');
-      let stockfishAnalysis: StockfishAnalysis | null = null;
-      try {
-        stockfishAnalysis = await withTimeout(
-          stockfishEngine.analyzePosition(event.fen, 16),
-          STOCKFISH_TIMEOUT_MS,
-          'stockfish',
-        );
-        console.log('[PHASE-HOOK-04] stockfish returned', {
-          hasAnalysis: stockfishAnalysis !== null,
-        });
-      } catch (err) {
-        console.log('[PHASE-HOOK-04] stockfish timed out / errored', err);
-        stockfishAnalysis = null;
-      }
+      // WO-PHASE-LAG-01: mirror WO-POLISH-03's parallel + race pattern.
+      // Stockfish runs alongside the rest of setup; we race it against
+      // a short budget so LLM dispatch isn't blocked by engine
+      // analysis. PHASE_NARRATION_ADDITION already handles missing
+      // stockfishAnalysis gracefully. Depth dropped 16 → 12 for faster
+      // turnaround; phase narration doesn't need deep lines.
+      console.log('[PHASE-HOOK-03] stockfish analysis call (parallel)');
+      const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
+        stockfishEngine.analyzePosition(event.fen, 12),
+        STOCKFISH_TIMEOUT_MS,
+        'stockfish',
+      ).then(
+        (r) => r,
+        () => null as StockfishAnalysis | null,
+      );
+      const stockfishBudget = new Promise<null>((resolve) =>
+        setTimeout(() => resolve(null), STOCKFISH_FAST_BUDGET_MS),
+      );
+      const stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
+      console.log('[PHASE-HOOK-04] stockfish race resolved', {
+        hasAnalysis: stockfishAnalysis !== null,
+      });
       if (token !== activeTokenRef.current) return;
 
       const profile = await db.profiles.get('main');
@@ -162,6 +178,61 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
 
       const userMessage = buildChessContextMessage(context);
 
+      // WO-PHASE-LAG-01: sentence-buffered streaming TTS (mirror of
+      // WO-POLISH-03 in usePositionNarration). First complete sentence
+      // goes to Polly (speakForced) so the premium voice lands on the
+      // first impression; subsequent sentences chain through Web Speech
+      // (speakQueuedForced) behind the Polly promise so they don't talk
+      // over it. Net effect: voice starts within one sentence of the
+      // first LLM token instead of waiting for the full response.
+      let sentenceBuffer = '';
+      let firstSpeakPromise: Promise<void> | null = null;
+      let sentenceCount = 0;
+      const dispatchSentence = (sentence: string): void => {
+        const trimmed = sentence.trim();
+        if (!trimmed) return;
+        sentenceCount += 1;
+        if (sentenceCount === 1) {
+          const firstDispatchMs = Date.now() - detectedTs;
+          void logAppAudit({
+            kind: 'phase-narration-latency',
+            category: 'subsystem',
+            source: 'usePhaseNarration',
+            summary: `detection-to-first-dispatch ${firstDispatchMs}ms (${event.kind})`,
+            details: JSON.stringify({
+              tapToFirstDispatchMs: firstDispatchMs,
+              firstSentenceChars: trimmed.length,
+              stockfishResolved: stockfishAnalysis !== null,
+              transitionKind: event.kind,
+            }),
+            fen: event.fen,
+          });
+          firstSpeakPromise = voiceService.speakForced(trimmed).catch(() => {
+            /* swallow — error handled via logAppAudit path */
+          });
+        } else {
+          if (firstSpeakPromise) {
+            void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(trimmed));
+          } else {
+            voiceService.speakQueuedForced(trimmed);
+          }
+        }
+      };
+      // `+` (not `*`) so a bare terminator like "..." can't match a
+      // zero-char sentence. Requires ≥1 non-terminator char before the
+      // `.`/`!`/`?` so we dispatch only actual sentences.
+      const SENTENCE_END_RE = /([^.!?]+[.!?])(?=\s|$)/g;
+      const flushCompletedSentences = (): void => {
+        SENTENCE_END_RE.lastIndex = 0;
+        let match: RegExpExecArray | null;
+        let lastEnd = 0;
+        while ((match = SENTENCE_END_RE.exec(sentenceBuffer)) !== null) {
+          dispatchSentence(match[1]);
+          lastEnd = SENTENCE_END_RE.lastIndex;
+        }
+        if (lastEnd > 0) sentenceBuffer = sentenceBuffer.slice(lastEnd);
+      };
+
       console.log('[PHASE-HOOK-05] LLM call dispatched', {
         addition: 'PHASE_NARRATION_ADDITION',
         task: 'position_analysis_chat',
@@ -176,6 +247,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               if (token !== activeTokenRef.current) return;
               fullText += chunk;
               setCurrentText(fullText);
+              sentenceBuffer += chunk;
+              flushCompletedSentences();
             },
             'position_analysis_chat',
             2000,
@@ -207,47 +280,61 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
 
       if (token !== activeTokenRef.current) return;
 
-      const streamed = fullText.trim();
-      const apiTrimmed = apiResponse.trim();
-      let speakText = streamed;
-      if (!speakText && apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
-        speakText = apiTrimmed;
+      // Flush any tail text that didn't end with a sentence terminator
+      // (e.g. stream truncated mid-sentence — still speakable).
+      if (sentenceBuffer.trim()) {
+        dispatchSentence(sentenceBuffer);
+        sentenceBuffer = '';
       }
 
-      if (!speakText) {
-        console.log('[PHASE-HOOK-07] speech SKIPPED: no speakable text', {
-          streamedLen: streamed.length,
-          apiTimedOut,
-        });
-        if (apiTimedOut) {
+      // Fallback: if nothing streamed and nothing dispatched but the
+      // API returned a usable response (non-streaming provider, rare),
+      // dispatch that as a single speak.
+      if (sentenceCount === 0) {
+        const apiTrimmed = apiResponse.trim();
+        if (apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
+          setCurrentText(apiTrimmed);
+          dispatchSentence(apiTrimmed);
+        } else if (apiTimedOut) {
           setCurrentText('Phase narration timed out.');
+          return;
+        } else {
+          console.log('[PHASE-HOOK-07] speech SKIPPED: no speakable text');
+          return;
         }
-        return;
       }
 
-      setCurrentText(speakText);
-      console.log('[PHASE-HOOK-07] speech call dispatched', { length: speakText.length });
-      try {
-        await withTimeout(
-          voiceService.speakForced(speakText),
-          NARRATION_SPEAK_TIMEOUT_MS,
-          'phase-narration-speak',
-        );
-        console.log('[PHASE-HOOK-08] speech complete');
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : String(err);
-        console.log('[PHASE-HOOK-08] speech errored / timed out', msg);
-        setError(msg);
-        if (msg.endsWith('-timeout')) {
-          voiceService.stop();
-          void logAppAudit({
-            kind: 'tts-failure',
-            category: 'subsystem',
-            source: 'usePhaseNarration',
-            summary: 'phase narration TTS playback timed out',
-            details: msg,
-            fen: event.fen,
-          });
+      console.log('[PHASE-HOOK-07] streaming speech dispatched', {
+        sentenceCount,
+      });
+      // Block isNarrating true until the first (Polly) sentence
+      // finishes — preserves the "board frozen while main voice speaks"
+      // invariant. Queued Web Speech sentences continue playing after
+      // the board unfreezes, which is fine.
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (firstSpeakPromise) {
+        try {
+          await withTimeout(
+            firstSpeakPromise,
+            NARRATION_SPEAK_TIMEOUT_MS,
+            'phase-narration-speak',
+          );
+          console.log('[PHASE-HOOK-08] first-sentence speech complete');
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : String(err);
+          console.log('[PHASE-HOOK-08] speech errored / timed out', msg);
+          setError(msg);
+          if (msg.endsWith('-timeout')) {
+            voiceService.stop();
+            void logAppAudit({
+              kind: 'tts-failure',
+              category: 'subsystem',
+              source: 'usePhaseNarration',
+              summary: 'phase narration TTS playback timed out',
+              details: msg,
+              fen: event.fen,
+            });
+          }
         }
       }
     } finally {
