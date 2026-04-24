@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
+import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 import type { ReviewNarration, ReviewMoveSegment } from '../services/coachFeatureService';
 
 export type ReviewNarrationState = 'idle' | 'speaking' | 'paused';
@@ -42,6 +43,11 @@ export interface UseReviewPlaybackResult {
   togglePausePlay: () => void;
   /** Re-speak the current segment / intro from the top. */
   replay: () => void;
+  /** WO-HINT-REDESIGN-01: plies (1-indexed) that had hint requests in
+   *  this game. Parent feeds these into `KeyMomentNav` so the prev /
+   *  next nav buttons stop on hint moments alongside blunders /
+   *  brilliancies. */
+  hintPlies: number[];
 }
 
 /**
@@ -97,12 +103,36 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     return segments.find((s) => s.ply === currentPly) ?? null;
   }, [currentPly, segments]);
 
+  // WO-HINT-REDESIGN-01: hint records from the unified coach memory
+  // store. Re-derived per render so a hint logged mid-review (rare,
+  // but possible during analysis-phase exploration) shows up.
+  const hintRequests = useCoachMemoryStore((s) => s.hintRequests);
+
+  /** Look up a hint record for the given ply. Used by both the
+   *  current-text override below and by callers building Key Moment
+   *  indices in the parent component. */
+  const hintRecordForPly = useCallback(
+    (ply: number) => hintRequests.find((r) => r.ply === ply) ?? null,
+    [hintRequests],
+  );
+
   const currentText = useMemo<string | null>(() => {
     if (!narration) return null;
     if (currentPly === 0) return narration.intro;
     if (currentPly > lastPly && narration.closing) return narration.closing;
-    return currentSegment?.narration ?? null;
-  }, [narration, currentPly, lastPly, currentSegment]);
+    const baseText = currentSegment?.narration ?? null;
+    // WO-HINT-REDESIGN-01: prepend a deterministic hint callout when
+    // the current ply had a hint request. v1 uses a template; the
+    // REVIEW_HINT_CALLOUT_ADDITION prompt is reserved for a future
+    // LLM-driven version that customizes per-ply context.
+    const hint = hintRecordForPly(currentPly);
+    if (hint) {
+      const tierWord = hint.tierStoppedAt === 1 ? 'a Tier 1 nudge' : hint.tierStoppedAt === 2 ? 'Tier 2 — the piece named' : 'the full answer';
+      const callout = `You asked for help here — you needed ${tierWord}. The move was ${hint.bestMoveSan}.`;
+      return baseText ? `${callout} ${baseText}` : callout;
+    }
+    return baseText;
+  }, [narration, currentPly, lastPly, currentSegment, hintRecordForPly]);
 
   // Dispatch speech for the current ply's text. Supersedes any prior
   // utterance via token-counter cancellation + voiceService.stop().
@@ -218,6 +248,11 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     speakCurrent(currentText);
   }, [speakCurrent, currentText]);
 
+  const hintPlies = useMemo(
+    () => hintRequests.map((r) => r.ply).filter((ply) => ply > 0),
+    [hintRequests],
+  );
+
   return {
     currentPly,
     narrationState,
@@ -230,5 +265,6 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     jumpToPly,
     togglePausePlay,
     replay,
+    hintPlies,
   };
 }

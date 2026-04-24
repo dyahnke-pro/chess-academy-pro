@@ -1,292 +1,307 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+/**
+ * useHintSystem tests — WO-HINT-REDESIGN-01.
+ *
+ * Verifies the progressive hint pipeline:
+ *   - Tier 1 prompt sent on first tap, no arrow rendered.
+ *   - Tier 2 escalates the same FEN's record, still no arrow.
+ *   - Tier 3 escalates and now an arrow appears.
+ *   - Each tap appends a `coach-memory-hint-requested` audit and the
+ *     unified memory store's `hintRequests` reflects the highest tier.
+ *   - Resetting the hook between FENs finalizes the pending record.
+ *   - Tier prompt strings still hold the discipline guarantees the
+ *     WO requires (no piece names at Tier 1, no destination at Tier 2,
+ *     concrete move + plan at Tier 3).
+ */
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useHintSystem } from './useHintSystem';
-import type { UseHintSystemConfig } from './useHintSystem';
+import {
+  HINT_TIER_1_ADDITION,
+  HINT_TIER_2_ADDITION,
+  HINT_TIER_3_ADDITION,
+} from '../services/coachPrompts';
 
-// Mock stockfish engine
-vi.mock('../services/stockfishEngine', () => ({
-  stockfishEngine: {
-    initialize: vi.fn().mockResolvedValue(undefined),
-    analyzePosition: vi.fn().mockResolvedValue({
-      bestMove: 'e2e4',
-      evaluation: 30,
-      isMate: false,
-      mateIn: null,
-      depth: 16,
-      topLines: [
-        { rank: 1, evaluation: 30, moves: ['e2e4', 'e7e5'], mate: null },
-        { rank: 2, evaluation: 20, moves: ['d2d4', 'd7d5'], mate: null },
-        { rank: 3, evaluation: 15, moves: ['g1f3', 'd7d5'], mate: null },
-      ],
-      nodesPerSecond: 1000000,
+// ── Mocks ─────────────────────────────────────────────────────────────────
+
+const speakRecords: { method: string; text: string }[] = [];
+vi.mock('../services/voiceService', () => ({
+  voiceService: {
+    speakForced: vi.fn((text: string) => {
+      speakRecords.push({ method: 'speakForced', text });
+      return Promise.resolve();
+    }),
+    speakQueuedForced: vi.fn((text: string) => {
+      speakRecords.push({ method: 'speakQueuedForced', text });
+      return Promise.resolve();
     }),
     stop: vi.fn(),
   },
 }));
 
-// Mock socratic nudge service
-vi.mock('../services/socraticNudgeService', () => ({
-  generateSocraticNudge: vi.fn().mockReturnValue('Think about controlling the center.'),
+vi.mock('../services/stockfishEngine', () => ({
+  stockfishEngine: {
+    initialize: vi.fn().mockResolvedValue(undefined),
+    analyzePosition: vi.fn().mockResolvedValue({
+      bestMove: 'g1f3',
+      evaluation: 30,
+      isMate: false,
+      mateIn: null,
+      depth: 10,
+      topLines: [],
+      nodesPerSecond: 0,
+    }),
+    stop: vi.fn(),
+  },
 }));
 
-const DEFAULT_CONFIG: UseHintSystemConfig = {
-  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-  playerColor: 'white',
-  enabled: true,
-};
+vi.mock('./stockfishFenCache', () => ({
+  getCachedStockfish: vi.fn(() => undefined),
+  setCachedStockfish: vi.fn(),
+}));
 
-describe('useHintSystem', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+const auditCalls: { kind: string; summary: string }[] = [];
+vi.mock('../services/appAuditor', () => ({
+  logAppAudit: vi.fn((entry: { kind: string; summary: string }) => {
+    auditCalls.push({ kind: entry.kind, summary: entry.summary });
+    return Promise.resolve();
+  }),
+}));
 
-  it('initializes with level 0 and empty state', () => {
-    const { result } = renderHook(() => useHintSystem(DEFAULT_CONFIG));
-    expect(result.current.hintState.level).toBe(0);
+const llmCalls: { addition: string; userMessage: string }[] = [];
+const llmResponses: string[] = [];
+vi.mock('../services/coachApi', () => ({
+  getCoachChatResponse: vi.fn(
+    (
+      messages: { role: 'user' | 'assistant'; content: string }[],
+      addition: string,
+    ) => {
+      llmCalls.push({ addition, userMessage: messages[0]?.content ?? '' });
+      const response = llmResponses.shift() ?? 'mock hint';
+      return Promise.resolve(response);
+    },
+  ),
+}));
+
+import { useHintSystem } from './useHintSystem';
+import {
+  useCoachMemoryStore,
+  __resetCoachMemoryStoreForTests,
+} from '../stores/coachMemoryStore';
+import { db } from '../db/schema';
+
+beforeEach(async () => {
+  speakRecords.length = 0;
+  auditCalls.length = 0;
+  llmCalls.length = 0;
+  llmResponses.length = 0;
+  __resetCoachMemoryStoreForTests();
+  await db.meta.delete('coachMemory.v1');
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
+// Starting position — white to move so the mocked best move (g1f3)
+// is legal and Tier 3 can render the arrow.
+const FEN_AFTER_E4 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+describe('useHintSystem — Tier 1 (the WHY)', () => {
+  it('sends HINT_TIER_1_ADDITION on first tap and renders no arrows', async () => {
+    llmResponses.push('Your center is begging for reinforcement — find the piece that can defend it.');
+    const { result } = renderHook(() =>
+      useHintSystem({
+        fen: FEN_AFTER_E4,
+        playerColor: 'black',
+        enabled: true,
+        gameId: 'g-1',
+        moveNumber: 1,
+        ply: 1,
+      }),
+    );
+
+    act(() => {
+      result.current.requestHint();
+    });
+
+    await waitFor(() => expect(llmCalls.length).toBe(1));
+    expect(llmCalls[0].addition).toBe(HINT_TIER_1_ADDITION);
+    await waitFor(() => expect(result.current.hintState.level).toBe(1));
     expect(result.current.hintState.arrows).toEqual([]);
-    expect(result.current.hintState.nudgeText).toBeNull();
     expect(result.current.hintState.ghostMove).toBeNull();
-    expect(result.current.hintState.isAnalyzing).toBe(false);
-    expect(result.current.hintState.hintsUsed).toBe(0);
+    // Spoken via Polly as the first sentence.
+    expect(speakRecords.some((r) => r.method === 'speakForced')).toBe(true);
   });
 
-  describe('with knownMove', () => {
-    const configWithKnown: UseHintSystemConfig = {
-      ...DEFAULT_CONFIG,
-      knownMove: { from: 'e2', to: 'e4', san: 'e4' },
-    };
+  it('records the request to coach memory and emits the audit', async () => {
+    llmResponses.push('Your center is collapsing.');
+    const { result } = renderHook(() =>
+      useHintSystem({
+        fen: FEN_AFTER_E4,
+        playerColor: 'black',
+        enabled: true,
+        gameId: 'g-1',
+        moveNumber: 1,
+        ply: 1,
+      }),
+    );
 
-    it('level 0→1: shows single gold arrow for known move', () => {
-      const { result } = renderHook(() => useHintSystem(configWithKnown));
-      act(() => result.current.requestHint());
-
-      expect(result.current.hintState.level).toBe(1);
-      expect(result.current.hintState.arrows).toHaveLength(1);
-      expect(result.current.hintState.arrows[0].startSquare).toBe('e2');
-      expect(result.current.hintState.arrows[0].endSquare).toBe('e4');
-      expect(result.current.hintState.arrows[0].color).toContain('255, 215, 0');
+    act(() => {
+      result.current.requestHint();
     });
 
-    it('level 1→2: generates nudge text', () => {
-      const { result } = renderHook(() => useHintSystem(configWithKnown));
-      act(() => result.current.requestHint()); // → level 1
-      act(() => result.current.requestHint()); // → level 2
+    await waitFor(() => expect(result.current.hintState.level).toBe(1));
+    const records = useCoachMemoryStore.getState().hintRequests;
+    expect(records).toHaveLength(1);
+    expect(records[0].tierReached).toBe(1);
+    expect(records[0].fen).toBe(FEN_AFTER_E4);
+    expect(records[0].userPlayedBestMove).toBeNull();
+    expect(auditCalls.some((c) => c.kind === 'coach-memory-hint-requested')).toBe(true);
+  });
+});
 
-      expect(result.current.hintState.level).toBe(2);
-      expect(result.current.hintState.nudgeText).toBeTruthy();
-      // Arrows from level 1 persist
-      expect(result.current.hintState.arrows).toHaveLength(1);
+describe('useHintSystem — Tier 2 escalation (the WHICH)', () => {
+  it('uses HINT_TIER_2_ADDITION on second tap, still no arrow', async () => {
+    llmResponses.push('Tier 1 prose.', 'Tier 2 prose.');
+    const { result } = renderHook(() =>
+      useHintSystem({
+        fen: FEN_AFTER_E4,
+        playerColor: 'black',
+        enabled: true,
+        gameId: 'g-1',
+        moveNumber: 1,
+        ply: 1,
+      }),
+    );
+
+    act(() => {
+      result.current.requestHint();
     });
+    await waitFor(() => expect(result.current.hintState.level).toBe(1));
 
-    it('level 2→3: generates ghost move', () => {
-      const { result } = renderHook(() => useHintSystem(configWithKnown));
-      act(() => result.current.requestHint()); // → 1
-      act(() => result.current.requestHint()); // → 2
-      act(() => result.current.requestHint()); // → 3
-
-      expect(result.current.hintState.level).toBe(3);
-      expect(result.current.hintState.ghostMove).not.toBeNull();
-      expect(result.current.hintState.ghostMove?.fromSquare).toBe('e2');
-      expect(result.current.hintState.ghostMove?.toSquare).toBe('e4');
-      expect(result.current.hintState.ghostMove?.piece).toBe('wP');
-      // Arrows and nudge persist
-      expect(result.current.hintState.arrows).toHaveLength(1);
-      expect(result.current.hintState.nudgeText).toBeTruthy();
+    act(() => {
+      result.current.requestHint();
     });
+    await waitFor(() => expect(result.current.hintState.level).toBe(2));
+    expect(llmCalls[1].addition).toBe(HINT_TIER_2_ADDITION);
+    expect(result.current.hintState.arrows).toEqual([]);
+    // Memory store records the same FEN once with escalated tier.
+    const records = useCoachMemoryStore.getState().hintRequests;
+    expect(records).toHaveLength(1);
+    expect(records[0].tierReached).toBe(2);
+  });
+});
 
-    it('does not advance beyond level 3', () => {
-      const { result } = renderHook(() => useHintSystem(configWithKnown));
-      act(() => result.current.requestHint()); // → 1
-      act(() => result.current.requestHint()); // → 2
-      act(() => result.current.requestHint()); // → 3
-      act(() => result.current.requestHint()); // → still 3
+describe('useHintSystem — Tier 3 (the FULL ANSWER)', () => {
+  it('uses HINT_TIER_3_ADDITION on third tap and renders an arrow', async () => {
+    llmResponses.push('Tier 1 prose.', 'Tier 2 prose.', 'Tier 3 prose.');
+    const { result } = renderHook(() =>
+      useHintSystem({
+        fen: FEN_AFTER_E4,
+        playerColor: 'black',
+        enabled: true,
+        gameId: 'g-1',
+        moveNumber: 1,
+        ply: 1,
+      }),
+    );
 
-      expect(result.current.hintState.level).toBe(3);
-      expect(result.current.hintState.hintsUsed).toBe(3);
-    });
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(result.current.hintState.level).toBe(1));
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(result.current.hintState.level).toBe(2));
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(result.current.hintState.level).toBe(3));
 
-    it('increments hintsUsed for each level', () => {
-      const { result } = renderHook(() => useHintSystem(configWithKnown));
-      expect(result.current.hintState.hintsUsed).toBe(0);
-
-      act(() => result.current.requestHint());
-      expect(result.current.hintState.hintsUsed).toBe(1);
-
-      act(() => result.current.requestHint());
-      expect(result.current.hintState.hintsUsed).toBe(2);
-
-      act(() => result.current.requestHint());
-      expect(result.current.hintState.hintsUsed).toBe(3);
-    });
+    expect(llmCalls[2].addition).toBe(HINT_TIER_3_ADDITION);
+    expect(result.current.hintState.arrows).toHaveLength(1);
+    expect(result.current.hintState.arrows[0].startSquare).toBe('g1');
+    expect(result.current.hintState.arrows[0].endSquare).toBe('f3');
+    const records = useCoachMemoryStore.getState().hintRequests;
+    expect(records[0].tierReached).toBe(3);
   });
 
-  describe('without knownMove (Stockfish mode)', () => {
-    it('level 0→1: triggers Stockfish analysis and sets isAnalyzing', async () => {
-      const { stockfishEngine } = await import('../services/stockfishEngine');
-      const { result } = renderHook(() => useHintSystem(DEFAULT_CONFIG));
+  it('does not escalate beyond Tier 3 on additional taps', async () => {
+    llmResponses.push('a', 'b', 'c');
+    const { result } = renderHook(() =>
+      useHintSystem({
+        fen: FEN_AFTER_E4,
+        playerColor: 'black',
+        enabled: true,
+        gameId: 'g-1',
+        moveNumber: 1,
+        ply: 1,
+      }),
+    );
 
-      // Trigger hint request (fires async Stockfish analysis)
-      act(() => {
-        result.current.requestHint();
-      });
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(result.current.hintState.level).toBe(1));
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(result.current.hintState.level).toBe(2));
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(result.current.hintState.level).toBe(3));
+    // Extra tap is a no-op.
+    act(() => { result.current.requestHint(); });
+    expect(result.current.hintState.level).toBe(3);
+    expect(llmCalls.length).toBe(3);
+  });
+});
 
-      // Should be analyzing immediately
-      expect(result.current.hintState.isAnalyzing).toBe(true);
+describe('useHintSystem — FEN-change finalization', () => {
+  it('finalizes the pending hint record when the FEN changes', async () => {
+    llmResponses.push('Tier 1 prose.');
+    const { result, rerender } = renderHook(
+      (props: Parameters<typeof useHintSystem>[0]) => useHintSystem(props),
+      {
+        initialProps: {
+          fen: FEN_AFTER_E4,
+          playerColor: 'black' as const,
+          enabled: true,
+          gameId: 'g-1',
+          moveNumber: 1,
+          ply: 1,
+        },
+      },
+    );
 
-      // Wait for the async analysis to resolve
-      await waitFor(() => {
-        expect(result.current.hintState.level).toBe(1);
-      });
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(result.current.hintState.level).toBe(1));
+    expect(useCoachMemoryStore.getState().hintRequests[0].userPlayedBestMove).toBeNull();
 
-      expect(stockfishEngine.initialize).toHaveBeenCalled();
-      expect(stockfishEngine.analyzePosition).toHaveBeenCalledWith(
-        DEFAULT_CONFIG.fen,
-        16,
-      );
-      expect(result.current.hintState.arrows).toHaveLength(3);
-      expect(result.current.hintState.isAnalyzing).toBe(false);
+    // Simulate the next move: parent rerenders with a new FEN.
+    rerender({
+      fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2',
+      playerColor: 'black',
+      enabled: true,
+      gameId: 'g-1',
+      moveNumber: 1,
+      ply: 1,
     });
 
-    it('builds 3 arrows with correct colors from analysis', async () => {
-      const { result } = renderHook(() => useHintSystem(DEFAULT_CONFIG));
-
-      act(() => {
-        result.current.requestHint();
-      });
-
-      await waitFor(() => {
-        expect(result.current.hintState.level).toBe(1);
-      });
-
-      const arrows = result.current.hintState.arrows;
-      expect(arrows[0].color).toContain('255, 215, 0'); // gold
-      expect(arrows[1].color).toContain('148, 163, 184'); // slate
-      expect(arrows[2].color).toContain('148, 163, 184'); // slate
-      // Best move arrow
-      expect(arrows[0].startSquare).toBe('e2');
-      expect(arrows[0].endSquare).toBe('e4');
+    await waitFor(() => {
+      const r = useCoachMemoryStore.getState().hintRequests[0];
+      expect(r.userPlayedBestMove).toBe(false);
     });
+    expect(auditCalls.some((c) => c.kind === 'coach-memory-hint-recorded')).toBe(true);
+  });
+});
+
+describe('HINT prompt discipline (verbatim guarantees)', () => {
+  it('Tier 1 forbids piece names and square coordinates', () => {
+    expect(HINT_TIER_1_ADDITION).toMatch(/ABSOLUTELY FORBIDDEN at Tier 1/);
+    expect(HINT_TIER_1_ADDITION).toMatch(/Piece names: knight, bishop, rook, queen, king, pawn/);
+    expect(HINT_TIER_1_ADDITION).toMatch(/Square coordinates/);
+    expect(HINT_TIER_1_ADDITION).toMatch(/Do NOT state the move/);
   });
 
-  describe('resetHints', () => {
-    it('resets to level 0 but preserves hintsUsed', () => {
-      const config: UseHintSystemConfig = {
-        ...DEFAULT_CONFIG,
-        knownMove: { from: 'e2', to: 'e4', san: 'e4' },
-      };
-      const { result } = renderHook(() => useHintSystem(config));
-
-      act(() => result.current.requestHint()); // → 1
-      act(() => result.current.requestHint()); // → 2
-      expect(result.current.hintState.hintsUsed).toBe(2);
-
-      act(() => result.current.resetHints());
-
-      expect(result.current.hintState.level).toBe(0);
-      expect(result.current.hintState.arrows).toEqual([]);
-      expect(result.current.hintState.nudgeText).toBeNull();
-      expect(result.current.hintState.ghostMove).toBeNull();
-      expect(result.current.hintState.hintsUsed).toBe(2); // preserved
-    });
+  it('Tier 2 names the piece but forbids the destination square', () => {
+    expect(HINT_TIER_2_ADDITION).toMatch(/Forbidden at Tier 2/);
+    expect(HINT_TIER_2_ADDITION).toMatch(/destination square/);
+    expect(HINT_TIER_2_ADDITION).toMatch(/disambiguate/);
   });
 
-  describe('FEN change', () => {
-    it('resets hint state when FEN changes', () => {
-      const config: UseHintSystemConfig = {
-        ...DEFAULT_CONFIG,
-        knownMove: { from: 'e2', to: 'e4', san: 'e4' },
-      };
-      const { result, rerender } = renderHook(
-        (props: UseHintSystemConfig) => useHintSystem(props),
-        { initialProps: config },
-      );
-
-      act(() => result.current.requestHint()); // → 1
-      expect(result.current.hintState.level).toBe(1);
-
-      // Change FEN
-      rerender({
-        ...config,
-        fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
-      });
-
-      expect(result.current.hintState.level).toBe(0);
-      expect(result.current.hintState.arrows).toEqual([]);
-      expect(result.current.hintState.hintsUsed).toBe(1); // preserved
-    });
-  });
-
-  describe('disabled state', () => {
-    it('requestHint is a no-op when disabled', () => {
-      const config: UseHintSystemConfig = {
-        ...DEFAULT_CONFIG,
-        enabled: false,
-        knownMove: { from: 'e2', to: 'e4', san: 'e4' },
-      };
-      const { result } = renderHook(() => useHintSystem(config));
-
-      act(() => result.current.requestHint());
-      expect(result.current.hintState.level).toBe(0);
-    });
-  });
-
-  describe('ghost move data', () => {
-    it('generates correct ghost for a capture move', () => {
-      // Position where Nf3 can capture on e5
-      const config: UseHintSystemConfig = {
-        ...DEFAULT_CONFIG,
-        fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3',
-        knownMove: { from: 'f3', to: 'e5', san: 'Nxe5' },
-      };
-      const { result } = renderHook(() => useHintSystem(config));
-
-      act(() => result.current.requestHint()); // → 1
-      act(() => result.current.requestHint()); // → 2
-      act(() => result.current.requestHint()); // → 3
-
-      const ghost = result.current.hintState.ghostMove;
-      expect(ghost).not.toBeNull();
-      expect(ghost?.fromSquare).toBe('f3');
-      expect(ghost?.toSquare).toBe('e5');
-      expect(ghost?.piece).toBe('wN');
-      expect(ghost?.capturedSquare).toBe('e5');
-    });
-
-    it('generates ghost with null capturedSquare for non-capture', () => {
-      const config: UseHintSystemConfig = {
-        ...DEFAULT_CONFIG,
-        knownMove: { from: 'e2', to: 'e4', san: 'e4' },
-      };
-      const { result } = renderHook(() => useHintSystem(config));
-
-      act(() => result.current.requestHint()); // → 1
-      act(() => result.current.requestHint()); // → 2
-      act(() => result.current.requestHint()); // → 3
-
-      expect(result.current.hintState.ghostMove?.capturedSquare).toBeNull();
-    });
-  });
-
-  describe('puzzle themes', () => {
-    it('passes puzzleThemes to nudge generator', async () => {
-      const { generateSocraticNudge } = await import('../services/socraticNudgeService');
-      const mockedNudge = vi.mocked(generateSocraticNudge);
-
-      const config: UseHintSystemConfig = {
-        ...DEFAULT_CONFIG,
-        knownMove: { from: 'e2', to: 'e4', san: 'e4' },
-        puzzleThemes: ['fork', 'middlegame'],
-      };
-      const { result } = renderHook(() => useHintSystem(config));
-
-      act(() => result.current.requestHint()); // → 1
-      act(() => result.current.requestHint()); // → 2
-
-      expect(mockedNudge).toHaveBeenCalledWith(
-        expect.objectContaining({
-          puzzleThemes: ['fork', 'middlegame'],
-        }),
-      );
-    });
+  it('Tier 3 asks for the move plus the plan it enables', () => {
+    expect(HINT_TIER_3_ADDITION).toMatch(/2-3 sentences/);
+    expect(HINT_TIER_3_ADDITION).toMatch(/move itself/);
+    expect(HINT_TIER_3_ADDITION).toMatch(/plan it enables/);
   });
 });
