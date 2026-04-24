@@ -1819,6 +1819,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   currentIndex={walkMoveIndex}
                   onNavigate={(idx: number) => walkPlayback.jumpToPly(idx + 1)}
                   className=""
+                  extraIndices={walkPlayback.hintPlies.map((ply) => ply - 1)}
                 />
               </div>
               <div className="max-h-[180px] overflow-y-auto">
@@ -2137,6 +2138,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   currentIndex={reviewState.currentMoveIndex}
                   onNavigate={handleMoveClick}
                   className=""
+                  extraIndices={walkPlayback.hintPlies.map((ply) => ply - 1)}
                 />
               </div>
             </div>
