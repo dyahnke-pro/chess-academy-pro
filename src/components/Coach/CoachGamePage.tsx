@@ -377,8 +377,28 @@ export function CoachGamePage(): JSX.Element {
     if (moves) {
       console.log('[CoachGame] Opening requested:', openingName, '— book moves:', moves.join(' '));
       setRequestedOpeningMoves(moves);
+      // WO-COACH-OPENING-INTENT-01: record that chat captured an intent
+      // and the book resolved. Paired with `coach-opening-intent-consulted`
+      // emitted in the coach's turn effect when a book move lands.
+      void logAppAudit({
+        kind: 'coach-opening-intent-set',
+        category: 'subsystem',
+        source: 'CoachGamePage.handleOpeningRequest',
+        summary: `intent=${openingName} plies=${moves.length}`,
+        details: JSON.stringify({ name: openingName, plies: moves.length, firstMove: moves[0] }),
+      });
     } else {
       console.warn('[CoachGame] Opening not found in book:', openingName);
+      // WO-COACH-OPENING-INTENT-01: log unresolved intents too — an
+      // invalid or un-aliased name silently falling through is the
+      // primary "coach played e5 to Caro-Kann" suspect.
+      void logAppAudit({
+        kind: 'coach-opening-intent-set',
+        category: 'subsystem',
+        source: 'CoachGamePage.handleOpeningRequest',
+        summary: `intent=${openingName} UNRESOLVED`,
+        details: 'getOpeningMoves returned null — coach will fall back to Stockfish',
+      });
     }
   }, []);
 
@@ -1051,7 +1071,17 @@ export function CoachGamePage(): JSX.Element {
     setLatestMateIn(null);
     setViewedMoveIndex(null);
     if (!opts?.keepRequestedOpening) {
-      setRequestedOpeningMoves(null);
+      setRequestedOpeningMoves((prev: string[] | null) => {
+        if (prev) {
+          void logAppAudit({
+            kind: 'coach-opening-intent-cleared',
+            category: 'subsystem',
+            source: 'CoachGamePage.handleRestart',
+            summary: 'cleared on restart',
+          });
+        }
+        return null;
+      });
     }
     resetHints();
     prevNudgeRef.current = null;
@@ -1079,7 +1109,17 @@ export function CoachGamePage(): JSX.Element {
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
-    setRequestedOpeningMoves(null);
+    setRequestedOpeningMoves((prev: string[] | null) => {
+      if (prev) {
+        void logAppAudit({
+          kind: 'coach-opening-intent-cleared',
+          category: 'subsystem',
+          source: 'CoachGamePage.handleColorChange',
+          summary: 'cleared on color change',
+        });
+      }
+      return null;
+    });
     resetHints();
     prevNudgeRef.current = null;
     handleBackToGame();
@@ -1463,6 +1503,22 @@ export function CoachGamePage(): JSX.Element {
         if (bookMove) {
           console.log('[CoachGame] Playing opening book move:', bookMove);
           move = bookMove;
+          // WO-COACH-OPENING-INTENT-01: audit every successful book
+          // consultation so regressions (coach plays off-book despite
+          // a valid intent) are diagnosable from the log alone.
+          void logAppAudit({
+            kind: 'coach-opening-intent-consulted',
+            category: 'subsystem',
+            source: 'CoachGamePage.makeCoachMove',
+            summary: `played book move ${bookMove}`,
+            details: JSON.stringify({
+              moveChosen: bookMove,
+              source: 'book',
+              gameHistory: game.history.join(' '),
+              plyCount: game.history.length,
+            }),
+            fen: game.fen,
+          });
           // Still run a quick analysis for eval bar / commentary
           try {
             analysis = await stockfishEngine.analyzePosition(game.fen, 10);
@@ -1476,6 +1532,28 @@ export function CoachGamePage(): JSX.Element {
           // Clear requested opening if we've left the book
           if (requestedOpeningMoves) {
             console.log('[CoachGame] Left opening book, clearing requested opening');
+            // WO-COACH-OPENING-INTENT-01: emit both "consulted (fallback)"
+            // and "cleared" so the log captures the exact moment the
+            // coach stopped following the intent.
+            void logAppAudit({
+              kind: 'coach-opening-intent-consulted',
+              category: 'subsystem',
+              source: 'CoachGamePage.makeCoachMove',
+              summary: `left book — fallback to Stockfish`,
+              details: JSON.stringify({
+                moveChosen: move,
+                source: 'fallback',
+                gameHistory: game.history.join(' '),
+                plyCount: game.history.length,
+              }),
+              fen: game.fen,
+            });
+            void logAppAudit({
+              kind: 'coach-opening-intent-cleared',
+              category: 'subsystem',
+              source: 'CoachGamePage.makeCoachMove',
+              summary: 'left book on coach turn',
+            });
             setRequestedOpeningMoves(null);
           }
         }
@@ -2060,7 +2138,17 @@ export function CoachGamePage(): JSX.Element {
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
-    setRequestedOpeningMoves(null);
+    setRequestedOpeningMoves((prev: string[] | null) => {
+      if (prev) {
+        void logAppAudit({
+          kind: 'coach-opening-intent-cleared',
+          category: 'subsystem',
+          source: 'CoachGamePage.resetWithPrompt',
+          summary: 'cleared on chat-prompt reset',
+        });
+      }
+      return null;
+    });
     setPendingChatPrompt(prompt);
   }, [game, playerColor, targetStrength]);
 
@@ -2371,7 +2459,17 @@ export function CoachGamePage(): JSX.Element {
             setLatestIsMate(false);
             setLatestMateIn(null);
             setViewedMoveIndex(null);
-            setRequestedOpeningMoves(null);
+            setRequestedOpeningMoves((prev: string[] | null) => {
+              if (prev) {
+                void logAppAudit({
+                  kind: 'coach-opening-intent-cleared',
+                  category: 'subsystem',
+                  source: 'CoachGamePage.play-again',
+                  summary: 'cleared on play-again',
+                });
+              }
+              return null;
+            });
             resetHints();
             prevNudgeRef.current = null;
           }}

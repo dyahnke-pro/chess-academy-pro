@@ -155,4 +155,56 @@ describe('openingDetectionService', () => {
       expect(result).toBe('d4');
     });
   });
+
+  // WO-COACH-OPENING-INTENT-01: the six openings from Dave's test list
+  // must each resolve to the correct first coach response. This is the
+  // regression bar — if any of these ever breaks, the coach has gone
+  // off-book and the WO has failed.
+  describe('opening-intent end-to-end (WO-COACH-OPENING-INTENT-01)', () => {
+    const scenarios: Array<{
+      name: string;
+      lookup: string;
+      aiColor: 'white' | 'black';
+      history: string[];
+      expectedReply: string;
+    }> = [
+      { name: 'Caro-Kann as Black → 1.e4 → c6', lookup: 'Caro-Kann Defense', aiColor: 'black', history: ['e4'], expectedReply: 'c6' },
+      { name: 'Sicilian as Black → 1.e4 → c5', lookup: 'Sicilian Defense', aiColor: 'black', history: ['e4'], expectedReply: 'c5' },
+      { name: 'French as Black → 1.e4 → e6', lookup: 'French Defense', aiColor: 'black', history: ['e4'], expectedReply: 'e6' },
+      { name: 'London as White → 1.d4', lookup: 'London System', aiColor: 'white', history: [], expectedReply: 'd4' },
+      { name: "King's Indian as Black → 1.d4 → Nf6", lookup: "King's Indian Defense", aiColor: 'black', history: ['d4'], expectedReply: 'Nf6' },
+    ];
+
+    for (const s of scenarios) {
+      it(s.name, () => {
+        const moves = getOpeningMoves(s.lookup);
+        expect(moves, `getOpeningMoves(${s.lookup}) returned null`).not.toBeNull();
+        if (!moves) return;
+        const reply = getNextOpeningBookMove(moves, s.history, s.aiColor);
+        expect(reply).toBe(s.expectedReply);
+      });
+    }
+
+    it('cleared intent (null openingMoves) → coach falls back, book returns null', () => {
+      // The coach-turn path reads `requestedOpeningMoves`; when cleared
+      // the hook passes null. tryOpeningBookMove short-circuits in
+      // coachGameEngine; here we exercise the underlying book call.
+      const reply = getNextOpeningBookMove([], ['e4'], 'black');
+      expect(reply).toBeNull();
+    });
+
+    it('invalid intent (unknown name) → getOpeningMoves returns null', () => {
+      expect(getOpeningMoves('Totally Made Up Opening')).toBeNull();
+      expect(getOpeningMoves('not-a-real-opening-xyz')).toBeNull();
+    });
+
+    it('Caro-Kann as Black → 2.d4 → d5 (main line second move)', () => {
+      const moves = getOpeningMoves('Caro-Kann Defense');
+      expect(moves).not.toBeNull();
+      if (!moves) return;
+      // After Dave plays 1.e4 c6 2.d4, coach (black) should play d5.
+      const reply = getNextOpeningBookMove(moves, ['e4', 'c6', 'd4'], 'black');
+      expect(reply).toBe('d5');
+    });
+  });
 });
