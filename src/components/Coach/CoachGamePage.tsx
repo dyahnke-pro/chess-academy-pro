@@ -39,6 +39,7 @@ import type { PhaseNarrationVerbosity } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
+import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookMove } from '../../services/coachGameEngine';
@@ -369,38 +370,36 @@ export function CoachGamePage(): JSX.Element {
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   const moveCountRef = useRef(0);
 
-  // Requested opening — set via voice chat when user says "play the French Defense", etc.
-  const [requestedOpeningMoves, setRequestedOpeningMoves] = useState<string[] | null>(null);
+  // Requested opening — WO-COACH-MEMORY-UNIFY-01 replaced the old
+  // component-local useState with a derived value read from the
+  // `useCoachMemoryStore` singleton. Every chat surface writes to the
+  // store via `tryCaptureOpeningIntent`; the move-selector reads it
+  // back here. The store persists across games and sessions, so Dave's
+  // "Caro-Kann from Home dashboard → game from Coach tab" scenario
+  // works regardless of URL plumbing.
+  const intendedOpening = useCoachMemoryStore((s) => s.intendedOpening);
+  const requestedOpeningMoves = useMemo<string[] | null>(() => {
+    if (!intendedOpening) return null;
+    return getOpeningMoves(intendedOpening.name);
+  }, [intendedOpening]);
 
+  // Legacy shim: URL params (`?opening=…`, `?subject=…`) and resumed
+  // games still call `handleOpeningRequest(name)`. We keep the name
+  // and simply forward into the memory store, which handles audit
+  // emission and persistence. Live chat surfaces skip this shim and
+  // go straight to `tryCaptureOpeningIntent`.
   const handleOpeningRequest = useCallback((openingName: string) => {
     const moves = getOpeningMoves(openingName);
-    if (moves) {
-      console.log('[CoachGame] Opening requested:', openingName, '— book moves:', moves.join(' '));
-      setRequestedOpeningMoves(moves);
-      // WO-COACH-OPENING-INTENT-01: record that chat captured an intent
-      // and the book resolved. Paired with `coach-opening-intent-consulted`
-      // emitted in the coach's turn effect when a book move lands.
-      void logAppAudit({
-        kind: 'coach-opening-intent-set',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleOpeningRequest',
-        summary: `intent=${openingName} plies=${moves.length}`,
-        details: JSON.stringify({ name: openingName, plies: moves.length, firstMove: moves[0] }),
-      });
-    } else {
+    if (!moves) {
       console.warn('[CoachGame] Opening not found in book:', openingName);
-      // WO-COACH-OPENING-INTENT-01: log unresolved intents too — an
-      // invalid or un-aliased name silently falling through is the
-      // primary "coach played e5 to Caro-Kann" suspect.
-      void logAppAudit({
-        kind: 'coach-opening-intent-set',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleOpeningRequest',
-        summary: `intent=${openingName} UNRESOLVED`,
-        details: 'getOpeningMoves returned null — coach will fall back to Stockfish',
-      });
+      return;
     }
-  }, []);
+    useCoachMemoryStore.getState().setIntendedOpening({
+      name: openingName,
+      color: playerColor,
+      capturedFromSurface: 'url-or-resume',
+    });
+  }, [playerColor]);
 
   // Honor `?subject=` on mount once, so a dynamic session redirected
   // from /coach/session/play-against with ?subject=Sicilian seeds the
@@ -1070,19 +1069,12 @@ export function CoachGamePage(): JSX.Element {
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
-    if (!opts?.keepRequestedOpening) {
-      setRequestedOpeningMoves((prev: string[] | null) => {
-        if (prev) {
-          void logAppAudit({
-            kind: 'coach-opening-intent-cleared',
-            category: 'subsystem',
-            source: 'CoachGamePage.handleRestart',
-            summary: 'cleared on restart',
-          });
-        }
-        return null;
-      });
-    }
+    // WO-COACH-MEMORY-UNIFY-01: memory persists across games. Do NOT
+    // clear `intendedOpening` on restart — the coach keeps following
+    // the named opening in the next game until the user explicitly
+    // says "forget it" or "play anything". `opts.keepRequestedOpening`
+    // is now a no-op flag retained for callers that pass it.
+    void opts;
     resetHints();
     prevNudgeRef.current = null;
     handleBackToGame();
@@ -1109,17 +1101,12 @@ export function CoachGamePage(): JSX.Element {
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
-    setRequestedOpeningMoves((prev: string[] | null) => {
-      if (prev) {
-        void logAppAudit({
-          kind: 'coach-opening-intent-cleared',
-          category: 'subsystem',
-          source: 'CoachGamePage.handleColorChange',
-          summary: 'cleared on color change',
-        });
-      }
-      return null;
-    });
+    // WO-COACH-MEMORY-UNIFY-01: memory persists across color changes
+    // too. The user can switch sides and still want the same opening
+    // repertoire — a Caro-Kann player will happily play the White side
+    // of a position they just defended. Opening validity for the new
+    // color is enforced downstream by tryOpeningBookMove (which only
+    // returns a move when it's the coach's turn in the book line).
     resetHints();
     prevNudgeRef.current = null;
     handleBackToGame();
@@ -1503,11 +1490,11 @@ export function CoachGamePage(): JSX.Element {
         if (bookMove) {
           console.log('[CoachGame] Playing opening book move:', bookMove);
           move = bookMove;
-          // WO-COACH-OPENING-INTENT-01: audit every successful book
+          // WO-COACH-MEMORY-UNIFY-01: audit every successful book
           // consultation so regressions (coach plays off-book despite
           // a valid intent) are diagnosable from the log alone.
           void logAppAudit({
-            kind: 'coach-opening-intent-consulted',
+            kind: 'coach-memory-intent-consulted',
             category: 'subsystem',
             source: 'CoachGamePage.makeCoachMove',
             summary: `played book move ${bookMove}`,
@@ -1532,11 +1519,12 @@ export function CoachGamePage(): JSX.Element {
           // Clear requested opening if we've left the book
           if (requestedOpeningMoves) {
             console.log('[CoachGame] Left opening book, clearing requested opening');
-            // WO-COACH-OPENING-INTENT-01: emit both "consulted (fallback)"
-            // and "cleared" so the log captures the exact moment the
-            // coach stopped following the intent.
+            // WO-COACH-MEMORY-UNIFY-01: emit the "consulted (fallback)"
+            // audit directly; the subsequent store clear fires its own
+            // `coach-memory-intent-cleared` audit with reason
+            // 'intent-left-book'.
             void logAppAudit({
-              kind: 'coach-opening-intent-consulted',
+              kind: 'coach-memory-intent-consulted',
               category: 'subsystem',
               source: 'CoachGamePage.makeCoachMove',
               summary: `left book — fallback to Stockfish`,
@@ -1548,13 +1536,7 @@ export function CoachGamePage(): JSX.Element {
               }),
               fen: game.fen,
             });
-            void logAppAudit({
-              kind: 'coach-opening-intent-cleared',
-              category: 'subsystem',
-              source: 'CoachGamePage.makeCoachMove',
-              summary: 'left book on coach turn',
-            });
-            setRequestedOpeningMoves(null);
+            useCoachMemoryStore.getState().clearIntendedOpening('intent-left-book');
           }
         }
 
@@ -2138,17 +2120,10 @@ export function CoachGamePage(): JSX.Element {
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
-    setRequestedOpeningMoves((prev: string[] | null) => {
-      if (prev) {
-        void logAppAudit({
-          kind: 'coach-opening-intent-cleared',
-          category: 'subsystem',
-          source: 'CoachGamePage.resetWithPrompt',
-          summary: 'cleared on chat-prompt reset',
-        });
-      }
-      return null;
-    });
+    // WO-COACH-MEMORY-UNIFY-01: chat-prompt resets don't clear intent.
+    // The user's new chat prompt may reaffirm, override, or leave the
+    // intent as-is — `tryCaptureOpeningIntent` handles the write when
+    // the new prompt actually names an opening.
     setPendingChatPrompt(prompt);
   }, [game, playerColor, targetStrength]);
 
@@ -2459,17 +2434,9 @@ export function CoachGamePage(): JSX.Element {
             setLatestIsMate(false);
             setLatestMateIn(null);
             setViewedMoveIndex(null);
-            setRequestedOpeningMoves((prev: string[] | null) => {
-              if (prev) {
-                void logAppAudit({
-                  kind: 'coach-opening-intent-cleared',
-                  category: 'subsystem',
-                  source: 'CoachGamePage.play-again',
-                  summary: 'cleared on play-again',
-                });
-              }
-              return null;
-            });
+            // WO-COACH-MEMORY-UNIFY-01: "play again" keeps the prior
+            // opening intent. A user who just finished a Caro-Kann
+            // game tapping Play Again expects another Caro-Kann.
             resetHints();
             prevNudgeRef.current = null;
           }}

@@ -82,7 +82,14 @@ export type AuditKind =
   // Coach opening intent (WO-COACH-OPENING-INTENT-01)
   | 'coach-opening-intent-set'
   | 'coach-opening-intent-consulted'
-  | 'coach-opening-intent-cleared';
+  | 'coach-opening-intent-cleared'
+  // Unified coach memory (WO-COACH-MEMORY-UNIFY-01). Mirrors the
+  // coach-opening-intent-* kinds but fires from the new store actions;
+  // the old kinds stay defined for backward compatibility with
+  // historical audit logs.
+  | 'coach-memory-intent-set'
+  | 'coach-memory-intent-consulted'
+  | 'coach-memory-intent-cleared';
 
 export interface AuditEntry {
   timestamp: number;
