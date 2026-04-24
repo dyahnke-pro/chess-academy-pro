@@ -36,12 +36,43 @@ export interface IntendedOpening {
   capturedFromSurface: string;
 }
 
-/** Schema-only — not populated in this WO. */
-export interface CoachMemoryMessage {
+/** Unified coach conversation entry. Populated by WO-LIVE-COACH-01.
+ *
+ *  Captures every coach utterance and (eventually) every user reply
+ *  across surfaces — live game interjections, chat panels, phase
+ *  narration, hints, review walk callouts, blunder alerts. The
+ *  `surface` field tags origin so future cross-game queries can
+ *  filter ("show me everything you said during my last 3 games" /
+ *  "what did I tell you about my opening preferences in chat?").
+ *
+ *  Persists across games and sessions per UNIFY-01 pattern (Dexie +
+ *  future Supabase ride along the same export path). */
+export interface CoachMessage {
   id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  ts: number;
+  timestamp: number;
+  surface:
+    | 'live-coach'
+    | 'chat-home'
+    | 'chat-coach-tab'
+    | 'chat-in-game'
+    | 'chat-review-ask'
+    | 'chat-review-practice'
+    | 'phase'
+    | 'hint'
+    | 'review-walk'
+    | 'blunder';
+  role: 'coach' | 'user';
+  text: string;
+  gameId?: string;
+  ply?: number;
+  fen?: string;
+  trigger?:
+    | 'great-move'
+    | 'missed-tactic'
+    | 'opponent-blunder'
+    | 'eval-swing-wrong'
+    | 'recovery'
+    | null;
 }
 
 /** Schema-only — not populated in this WO. */
@@ -108,7 +139,7 @@ export interface GameSummary {
 
 interface CoachMemoryState {
   intendedOpening: IntendedOpening | null;
-  conversationHistory: CoachMemoryMessage[];
+  conversationHistory: CoachMessage[];
   preferences: CoachPreferences;
   hintRequests: HintRequestRecord[];
   blunderPatterns: BlunderPattern[];
@@ -144,8 +175,19 @@ interface CoachMemoryActions {
     fen: string;
     playedMoveUci: string | null;
   }) => void;
+  /** Append a coach utterance (or user reply) to the unified
+   *  conversation history. Bounded to the last
+   *  CONVERSATION_HISTORY_MAX entries to keep persistence stable
+   *  across long sessions; older entries fall off in FIFO order.
+   *  Emits `coach-memory-conversation-appended` audit. */
+  appendConversationMessage: (input: Omit<CoachMessage, 'id' | 'timestamp'> & {
+    id?: string;
+    timestamp?: number;
+  }) => string;
   hydrate: () => Promise<void>;
 }
+
+const CONVERSATION_HISTORY_MAX = 200;
 
 const DEFAULT_STATE: CoachMemoryState = {
   intendedOpening: null,
@@ -279,6 +321,41 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
       schedulePersist(get);
     },
 
+    appendConversationMessage: (input) => {
+      const id = input.id ?? `msg-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const message: CoachMessage = {
+        id,
+        timestamp: input.timestamp ?? Date.now(),
+        surface: input.surface,
+        role: input.role,
+        text: input.text,
+        gameId: input.gameId,
+        ply: input.ply,
+        fen: input.fen,
+        trigger: input.trigger ?? null,
+      };
+      const next = [...get().conversationHistory, message].slice(-CONVERSATION_HISTORY_MAX);
+      set({ conversationHistory: next });
+      void logAppAudit({
+        kind: 'coach-memory-conversation-appended',
+        category: 'subsystem',
+        source: 'useCoachMemoryStore.appendConversationMessage',
+        summary: `${message.surface}/${message.role}: ${message.text.slice(0, 60)}`,
+        details: JSON.stringify({
+          id: message.id,
+          surface: message.surface,
+          role: message.role,
+          length: message.text.length,
+          ply: message.ply,
+          trigger: message.trigger,
+          gameId: message.gameId,
+        }),
+        fen: message.fen,
+      });
+      schedulePersist(get);
+      return id;
+    },
+
     hydrate: async () => {
       const restored = await loadPersisted();
       if (restored) {
@@ -303,7 +380,7 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
 
 interface PersistedShape {
   intendedOpening: IntendedOpening | null;
-  conversationHistory: CoachMemoryMessage[];
+  conversationHistory: CoachMessage[];
   preferences: CoachPreferences;
   hintRequests: HintRequestRecord[];
   blunderPatterns: BlunderPattern[];

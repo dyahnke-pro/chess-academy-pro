@@ -183,3 +183,93 @@ describe('tryCaptureForgetIntent', () => {
     expect(useCoachMemoryStore.getState().intendedOpening?.name).toBe('Caro-Kann Defense');
   });
 });
+
+describe('useCoachMemoryStore.appendConversationMessage', () => {
+  it('appends a coach utterance and emits coach-memory-conversation-appended audit', () => {
+    const id = useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'live-coach',
+      role: 'coach',
+      text: 'Beautiful — that knight maneuver completely rewires your kingside.',
+      gameId: 'g-1',
+      ply: 14,
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      trigger: 'great-move',
+    });
+    const history = useCoachMemoryStore.getState().conversationHistory;
+    expect(history).toHaveLength(1);
+    expect(history[0].id).toBe(id);
+    expect(history[0].surface).toBe('live-coach');
+    expect(history[0].trigger).toBe('great-move');
+    expect(history[0].timestamp).toBeGreaterThan(0);
+    expect(auditCalls.some((c) => c.kind === 'coach-memory-conversation-appended')).toBe(true);
+  });
+
+  it('preserves order when called multiple times', () => {
+    const store = useCoachMemoryStore.getState();
+    store.appendConversationMessage({
+      surface: 'live-coach', role: 'coach', text: 'first', trigger: 'great-move',
+    });
+    store.appendConversationMessage({
+      surface: 'live-coach', role: 'coach', text: 'second', trigger: 'opponent-blunder',
+    });
+    const history = useCoachMemoryStore.getState().conversationHistory;
+    expect(history).toHaveLength(2);
+    expect(history[0].text).toBe('first');
+    expect(history[1].text).toBe('second');
+  });
+
+  it('caps the array at 200 entries and drops oldest first', () => {
+    const store = useCoachMemoryStore.getState();
+    for (let i = 0; i < 205; i++) {
+      store.appendConversationMessage({
+        surface: 'live-coach',
+        role: 'coach',
+        text: `msg-${i}`,
+        trigger: null,
+      });
+    }
+    const history = useCoachMemoryStore.getState().conversationHistory;
+    expect(history).toHaveLength(200);
+    // Oldest (msg-0..msg-4) dropped, newest retained.
+    expect(history[0].text).toBe('msg-5');
+    expect(history[199].text).toBe('msg-204');
+  });
+
+  it('persists conversation history through hydrate roundtrip', async () => {
+    useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'live-coach', role: 'coach', text: 'Persisted utterance.', trigger: 'great-move',
+    });
+    await __flushCoachMemoryPersistForTests();
+
+    // Cold-start: in-memory reset, then hydrate from Dexie.
+    useCoachMemoryStore.setState({
+      intendedOpening: null,
+      conversationHistory: [],
+      preferences: { likes: [], dislikes: [], style: null },
+      hintRequests: [],
+      blunderPatterns: [],
+      growthMap: [],
+      gameHistory: [],
+      hydrated: false,
+    });
+    await useCoachMemoryStore.getState().hydrate();
+
+    const history = useCoachMemoryStore.getState().conversationHistory;
+    expect(history).toHaveLength(1);
+    expect(history[0].text).toBe('Persisted utterance.');
+  });
+
+  it('honors caller-supplied id and timestamp when provided', () => {
+    const id = useCoachMemoryStore.getState().appendConversationMessage({
+      id: 'custom-id-123',
+      timestamp: 1_700_000_000_000,
+      surface: 'live-coach',
+      role: 'coach',
+      text: 'pinned',
+      trigger: null,
+    });
+    expect(id).toBe('custom-id-123');
+    const stored = useCoachMemoryStore.getState().conversationHistory[0];
+    expect(stored.timestamp).toBe(1_700_000_000_000);
+  });
+});
