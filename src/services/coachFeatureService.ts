@@ -1,7 +1,13 @@
+import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { getCoachChatResponse, getCoachCommentary } from './coachApi';
-import { GAME_POST_REVIEW_ADDITION } from './coachPrompts';
+import {
+  GAME_POST_REVIEW_ADDITION,
+  REVIEW_INTRO_ADDITION,
+  REVIEW_MOVE_SEGMENT_ADDITION,
+} from './coachPrompts';
 import { getThemeSkills } from './puzzleService';
+import { logAppAudit } from './appAuditor';
 import type { BadHabit, CoachContext, UserProfile } from '../types';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
@@ -368,4 +374,282 @@ export function buildProfileContext(profile: UserProfile): CoachContext {
         .map((h) => h.description),
     },
   };
+}
+
+// ─── Walk-the-game Review Narration (WO-REVIEW-02) ──────────────────────────
+
+
+/** One move's worth of review narration material. Merged at build time
+ *  from the deterministic move data (FEN / classification / best move)
+ *  plus the per-ply narration string the LLM returned. A null `narration`
+ *  means "this move passes in silence" — the review UI advances the
+ *  board but speaks nothing. */
+export interface ReviewMoveSegment {
+  /** 1-indexed ply count. Ply 1 = White's first move, ply 2 = Black's first. */
+  ply: number;
+  /** Chess "full move number" — Math.ceil(ply / 2). */
+  moveNumber: number;
+  san: string;
+  playerColor: 'white' | 'black';
+  fenBefore: string;
+  fenAfter: string;
+  classification: 'brilliant' | 'great' | 'good' | 'book' | 'inaccuracy' | 'mistake' | 'blunder' | 'miss' | null;
+  evalBefore: number | null;
+  evalAfter: number | null;
+  bestMoveSan: string | null;
+  bestMoveUci: string | null;
+  narration: string | null;
+}
+
+export interface ReviewNarration {
+  intro: string;
+  segments: ReviewMoveSegment[];
+  /** Optional — spoken when the user reaches the last ply. Null by default. */
+  closing: string | null;
+}
+
+/** Rich move data that feeds the walk-the-game review. Includes the
+ *  starting-FEN before each move so the board can rewind/replay
+ *  precisely. Derived by CoachGameReview from CoachGameMove[]. */
+export interface ReviewMoveInput {
+  ply: number;
+  san: string;
+  isCoachMove: boolean;
+  classification: ReviewMoveSegment['classification'];
+  evaluation: number | null;
+  preMoveEval: number | null;
+  bestMove: string | null;
+  fenAfter: string;
+}
+
+/** Extract a JSON array from an LLM response. Accepts either a raw
+ *  JSON array or one wrapped in markdown fences. Returns null on any
+ *  shape that doesn't cleanly parse to an array — caller decides
+ *  whether to retry or fall back to silence. */
+function parseSegmentsJson(raw: string): Array<{ ply?: unknown; narration?: unknown }> | null {
+  if (!raw) return null;
+  const fenceStripped = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+  // Find the first `[` and its matching `]` — handles prose prefixes/suffixes.
+  const firstBracket = fenceStripped.indexOf('[');
+  const lastBracket = fenceStripped.lastIndexOf(']');
+  if (firstBracket < 0 || lastBracket <= firstBracket) return null;
+  const slice = fenceStripped.slice(firstBracket, lastBracket + 1);
+  try {
+    const parsed: unknown = JSON.parse(slice);
+    return Array.isArray(parsed) ? (parsed as Array<{ ply?: unknown; narration?: unknown }>) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Build the grounded [Per-move analysis] block the LLM uses to decide
+ *  what to narrate. Mirrors the shape generateNarrativeSummary uses
+ *  (WO-REVIEW-01) so the LLM sees the same data it's already trained
+ *  on via our previous prompts. */
+function buildPerMoveBlock(moves: ReviewMoveInput[], playerColor: 'white' | 'black'): string {
+  const coachColor: 'White' | 'Black' = playerColor === 'white' ? 'Black' : 'White';
+  const rows: string[] = [];
+  for (const m of moves) {
+    const fullMove = Math.ceil(m.ply / 2);
+    const moverColor: 'White' | 'Black' = m.ply % 2 === 1 ? 'White' : 'Black';
+    const side = m.isCoachMove || moverColor === coachColor ? `${moverColor}/coach` : `${moverColor}/student`;
+    const evalBefore = m.preMoveEval !== null ? (m.preMoveEval / 100).toFixed(2) : 'n/a';
+    const evalAfter = m.evaluation !== null ? (m.evaluation / 100).toFixed(2) : 'n/a';
+    const best = m.bestMove ?? 'n/a';
+    const classification = m.classification ?? 'unclassified';
+    rows.push(
+      `Ply ${m.ply} — Move ${fullMove}. ${m.san} (${side}) — eval before: ${evalBefore}, eval after: ${evalAfter}, best: ${best}, classification: ${classification}`,
+    );
+  }
+  return `[Per-move analysis]\n${rows.join('\n')}`;
+}
+
+/** Reconstruct the FEN at each ply from the move list. Uses chess.js
+ *  to replay the SAN sequence — if any SAN is invalid we bail with a
+ *  shorter list (better to narrate the moves we can than refuse the
+ *  whole review). */
+function buildFenChain(moves: ReviewMoveInput[]): { fenBefore: string; fenAfter: string }[] {
+  const chain: { fenBefore: string; fenAfter: string }[] = [];
+  const chess = new Chess();
+  for (const m of moves) {
+    const fenBefore = chess.fen();
+    let moveResult: unknown = null;
+    try {
+      moveResult = chess.move(m.san);
+    } catch {
+      moveResult = null;
+    }
+    if (!moveResult) break;
+    chain.push({ fenBefore, fenAfter: chess.fen() });
+  }
+  return chain;
+}
+
+/** Fallback intro used if the LLM intro call fails. Still grounded in
+ *  result + opening name. */
+function defaultIntroText(params: {
+  playerColor: 'white' | 'black';
+  result: string;
+  openingName: string | null;
+  mistakeCount: number;
+}): string {
+  const colorWord = params.playerColor === 'white' ? 'White' : 'Black';
+  const resultWord = params.result === 'win' ? 'a win' : params.result === 'loss' ? 'a loss' : 'a draw';
+  const openingBit = params.openingName ? ` — ${params.openingName}.` : '.';
+  const momentBit = params.mistakeCount > 0
+    ? ` A few moments to review along the way.`
+    : ` Mostly clean play — we'll flag what stood out.`;
+  return `Let's walk through this game. You played ${colorWord} and finished with ${resultWord}${openingBit}${momentBit}`;
+}
+
+/**
+ * Build the per-move walk-the-game narration for a completed coach
+ * game. Dispatches two LLM calls in parallel: one for the short intro,
+ * one for the per-ply segment JSON. Parsing failures degrade
+ * gracefully — the ReviewNarration always returns a valid intro and a
+ * segments array covering every ply, with `narration: null` for any
+ * ply the LLM didn't cover.
+ */
+export async function generateReviewNarration(params: {
+  moves: ReviewMoveInput[];
+  playerColor: 'white' | 'black';
+  openingName: string | null;
+  result: string;
+  playerRating: number;
+}): Promise<ReviewNarration> {
+  const { moves, playerColor, openingName, result, playerRating } = params;
+
+  // Reconstruct FENs via chess.js so the UI can rewind cleanly.
+  const fenChain = buildFenChain(moves);
+  const usableCount = fenChain.length;
+
+  // Count student mistakes for the intro tone.
+  let mistakeCount = 0;
+  for (const m of moves.slice(0, usableCount)) {
+    if (m.isCoachMove) continue;
+    if (m.classification === 'blunder' || m.classification === 'mistake' || m.classification === 'inaccuracy') {
+      mistakeCount += 1;
+    }
+  }
+
+  // Graceful empty case — if chess.js couldn't replay any moves, return
+  // a minimal narration with just an intro so the UI can still mount.
+  if (usableCount === 0) {
+    return {
+      intro: defaultIntroText({ playerColor, result, openingName, mistakeCount }),
+      segments: [],
+      closing: null,
+    };
+  }
+
+  const perMoveBlock = buildPerMoveBlock(moves.slice(0, usableCount), playerColor);
+  const introUserMessage = [
+    `Student color: ${playerColor}.`,
+    `Game result: ${result}.`,
+    openingName ? `Opening: ${openingName}.` : 'Opening: (not classified).',
+    `Student errors: ${mistakeCount} (blunders + mistakes + inaccuracies).`,
+  ].join('\n');
+  const segmentsUserMessage = [
+    `Student color: ${playerColor}.`,
+    `Game result: ${result}.`,
+    openingName ? `Opening: ${openingName}.` : 'Opening: (not classified).',
+    `Student rating: ~${playerRating}.`,
+    '',
+    perMoveBlock,
+  ].join('\n');
+
+  // Fire both in parallel so the review opens faster.
+  const introPromise = getCoachChatResponse(
+    [{ role: 'user', content: introUserMessage }],
+    REVIEW_INTRO_ADDITION,
+    undefined,
+    'chat_response',
+    200,
+    'fast',
+  ).catch(() => '');
+
+  const segmentsPromise = getCoachChatResponse(
+    [{ role: 'user', content: segmentsUserMessage }],
+    REVIEW_MOVE_SEGMENT_ADDITION,
+    undefined,
+    'game_narrative_summary',
+    2000,
+    'medium',
+  ).catch((err: unknown) => {
+    const msg = err instanceof Error ? err.message : String(err);
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'coachFeatureService.generateReviewNarration',
+      summary: 'segments LLM call failed',
+      details: msg,
+    });
+    return '';
+  });
+
+  const [introRaw, segmentsRaw] = await Promise.all([introPromise, segmentsPromise]);
+
+  // Intro: use LLM response if non-empty and not the ⚠️ error placeholder;
+  // else fall back to a grounded default.
+  const introTrimmed = introRaw.trim();
+  const intro = introTrimmed && !introTrimmed.startsWith('⚠️')
+    ? introTrimmed
+    : defaultIntroText({ playerColor, result, openingName, mistakeCount });
+
+  // Parse per-ply segments. Build a lookup { ply → narration } with
+  // relaxed validation — reject obviously-malformed entries but accept
+  // anything that has a plausible ply + string-or-null narration.
+  const parsed = parseSegmentsJson(segmentsRaw);
+  const narrationByPly = new Map<number, string | null>();
+  if (parsed) {
+    for (const entry of parsed) {
+      if (typeof entry !== 'object') continue;
+      const plyVal = entry.ply;
+      const narrationVal = entry.narration;
+      if (typeof plyVal !== 'number' || !Number.isFinite(plyVal)) continue;
+      const ply = Math.round(plyVal);
+      if (ply < 1 || ply > usableCount) continue;
+      if (narrationVal === null || narrationVal === undefined) {
+        narrationByPly.set(ply, null);
+      } else if (typeof narrationVal === 'string') {
+        const trimmed = narrationVal.trim();
+        narrationByPly.set(ply, trimmed.length > 0 ? trimmed : null);
+      }
+    }
+  } else if (segmentsRaw) {
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'coachFeatureService.generateReviewNarration',
+      summary: 'segments JSON parse failed — falling back to silent walk',
+      details: segmentsRaw.slice(0, 300),
+    });
+  }
+
+  // Stitch into ReviewMoveSegment[] with one entry per ply, narration
+  // filled where the LLM provided one and null for ply gaps.
+  const segments: ReviewMoveSegment[] = [];
+  for (let i = 0; i < usableCount; i++) {
+    const m = moves[i];
+    const fenPair = fenChain[i];
+    const fullMove = Math.ceil(m.ply / 2);
+    const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
+    const bestUci = m.bestMove;
+    segments.push({
+      ply: m.ply,
+      moveNumber: fullMove,
+      san: m.san,
+      playerColor: moverColor,
+      fenBefore: fenPair.fenBefore,
+      fenAfter: fenPair.fenAfter,
+      classification: m.classification,
+      evalBefore: m.preMoveEval,
+      evalAfter: m.evaluation,
+      bestMoveSan: bestUci, // UCI is passed through as SAN when SAN isn't available
+      bestMoveUci: bestUci,
+      narration: narrationByPly.get(m.ply) ?? null,
+    });
+  }
+
+  return { intro, segments, closing: null };
 }

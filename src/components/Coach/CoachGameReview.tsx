@@ -19,8 +19,19 @@ import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../servi
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
-import { generateNarrativeSummary, generateReviewNarrationSegments } from '../../services/coachFeatureService';
-import type { NarrativeMoveData, ReviewNarrationSegments } from '../../services/coachFeatureService';
+import {
+  generateNarrativeSummary,
+  generateReviewNarrationSegments,
+  generateReviewNarration,
+} from '../../services/coachFeatureService';
+import type {
+  NarrativeMoveData,
+  ReviewNarrationSegments,
+  ReviewNarration,
+  ReviewMoveInput,
+} from '../../services/coachFeatureService';
+import { useReviewPlayback } from '../../hooks/useReviewPlayback';
+import { SkipBack, SkipForward, ChevronLeft, ChevronRight } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
 import { useSettings } from '../../hooks/useSettings';
@@ -180,6 +191,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [guidedComplete, setGuidedComplete] = useState(false);
   const [narrativeSummary, setNarrativeSummary] = useState<string | null>(null);
   const [isLoadingNarrative, setIsLoadingNarrative] = useState(false);
+  // WO-REVIEW-02 walk-the-game state. Fetched once per review mount;
+  // null while loading, set to a ReviewNarration once ready. Falls back
+  // to the ReviewSummaryCard's paragraph view if generation fails.
+  const [walkNarration, setWalkNarration] = useState<ReviewNarration | null>(null);
+  const [isLoadingWalk, setIsLoadingWalk] = useState(false);
   const guidedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Pre-compute accuracy + classification counts
@@ -266,6 +282,54 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setIsLoadingNarrative(false);
     });
   }, [reviewPhase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // WO-REVIEW-02 walk-the-game: fetch per-ply segments + intro when
+  // the summary phase mounts (non-guided lessons only). Runs in
+  // parallel with the legacy narrativeSummary fetch; if the walk
+  // narration succeeds we render the walk UI, otherwise the summary
+  // card's paragraph is the graceful fallback.
+  const reviewMoveInputs = useMemo<ReviewMoveInput[]>(() =>
+    moves.map((m, i) => ({
+      ply: i + 1,
+      san: m.san,
+      isCoachMove: m.isCoachMove,
+      classification: m.classification ?? null,
+      evaluation: m.evaluation,
+      preMoveEval: m.preMoveEval,
+      bestMove: m.bestMove,
+      fenAfter: m.fen,
+    })),
+    [moves],
+  );
+
+  useEffect(() => {
+    if (reviewPhase !== 'summary' || isGuidedLesson || walkNarration !== null || isLoadingWalk) return;
+    if (reviewMoveInputs.length === 0) return;
+    setIsLoadingWalk(true);
+    void generateReviewNarration({
+      moves: reviewMoveInputs,
+      playerColor,
+      openingName,
+      result,
+      playerRating,
+    }).then((narration) => {
+      setWalkNarration(narration);
+    }).catch((err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err);
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'CoachGameReview.walkNarration',
+        summary: 'generateReviewNarration rejected',
+        details: msg,
+      });
+    }).finally(() => {
+      setIsLoadingWalk(false);
+    });
+  }, [reviewPhase, isGuidedLesson, reviewMoveInputs, playerColor, openingName, result, playerRating, walkNarration, isLoadingWalk]);
+
+  // Instantiate the playback hook; drives the walk-the-game UI below.
+  const walkPlayback = useReviewPlayback({ narration: walkNarration });
 
   // Derived state from current move index
   const currentMove = reviewState.currentMoveIndex >= 0 && reviewState.currentMoveIndex < moves.length
@@ -1407,6 +1471,140 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // ─── Summary Phase ──────────────────────────────────────────────────────────
   if (reviewPhase === 'summary') {
+    // WO-REVIEW-02 walk-the-game: when per-ply narration is ready,
+    // render the walk UI (board + nav + subtitle banner). While
+    // loading, show the summary card with a spinner tag. If generation
+    // fails entirely (walkNarration stays null + not loading), also
+    // fall through to the card so the student isn't blocked.
+    if (walkNarration && walkNarration.segments.length > 0) {
+      const seg = walkPlayback.currentSegment;
+      const displayFen = seg ? seg.fenAfter : (moves[0]?.fen && walkPlayback.currentPly > 0 ? moves[0].fen : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+      const walkArrows = (() => {
+        if (!seg) return undefined;
+        const showBest = seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder';
+        if (!showBest || !seg.bestMoveUci || seg.bestMoveUci.length < 4) return undefined;
+        const startSquare = seg.bestMoveUci.slice(0, 2);
+        const endSquare = seg.bestMoveUci.slice(2, 4);
+        return [{ startSquare, endSquare, color: '#22c55e' }];
+      })();
+      const badge = seg?.classification ?? null;
+      const lastPly = walkNarration.segments[walkNarration.segments.length - 1].ply;
+
+      return (
+        <div className="flex flex-col items-center w-full h-full overflow-y-auto" data-testid="coach-game-review-walk">
+          {/* Header: back + "Walk through the game" */}
+          <div className="flex items-center gap-2 w-full px-3 py-2 border-b border-theme-border shrink-0">
+            <button onClick={onBackToCoach} className="p-1 rounded-lg hover:bg-theme-surface" aria-label="Back to coach">
+              <ArrowLeft size={18} style={{ color: 'var(--color-text)' }} />
+            </button>
+            <h2 className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+              Game Review — walk through
+            </h2>
+            <div className="ml-auto text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              Ply {walkPlayback.currentPly}/{lastPly}
+            </div>
+          </div>
+
+          {/* Board with optional green best-move arrow + classification badge */}
+          <div className="px-2 py-2 flex justify-center shrink-0 relative">
+            <div className="w-full md:max-w-[420px] relative">
+              <ChessBoard
+                initialFen={displayFen}
+                orientation={playerColor}
+                interactive={false}
+                arrows={walkArrows}
+                showEvalBar={false}
+              />
+              {badge && (
+                <div
+                  className="absolute top-1 left-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wide pointer-events-none text-white"
+                  style={{
+                    background: CLASSIFICATION_STYLES[badge as keyof typeof CLASSIFICATION_STYLES].color,
+                  }}
+                  data-testid="review-classification-badge"
+                >
+                  {CLASSIFICATION_STYLES[badge as keyof typeof CLASSIFICATION_STYLES].label}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Narration banner — intro at ply 0, per-ply at ply > 0, or silent placeholder */}
+          <div className="w-full px-3 py-2 shrink-0">
+            <div
+              className="mx-auto max-w-xl rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2"
+              style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(16,185,129,0.3))' }}
+              data-testid="review-narration-banner"
+            >
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                {walkPlayback.currentText ?? '(this move passes silently — tap forward to continue)'}
+              </p>
+            </div>
+          </div>
+
+          {/* Nav controls */}
+          <div className="flex items-center justify-center gap-2 w-full py-2 shrink-0" data-testid="review-nav-controls">
+            <button
+              onClick={walkPlayback.goToStart}
+              className="p-2 rounded-lg hover:bg-theme-surface disabled:opacity-30"
+              disabled={walkPlayback.currentPly === 0}
+              aria-label="Jump to start"
+            >
+              <SkipBack size={20} style={{ color: 'var(--color-text)' }} />
+            </button>
+            <button
+              onClick={walkPlayback.goBack}
+              className="p-2 rounded-lg hover:bg-theme-surface disabled:opacity-30"
+              disabled={walkPlayback.currentPly === 0}
+              aria-label="Back one move"
+            >
+              <ChevronLeft size={22} style={{ color: 'var(--color-text)' }} />
+            </button>
+            <button
+              onClick={walkPlayback.togglePausePlay}
+              className="p-2 rounded-lg hover:bg-theme-surface"
+              aria-label={walkPlayback.narrationState === 'speaking' ? 'Pause narration' : 'Play narration'}
+            >
+              {walkPlayback.narrationState === 'speaking'
+                ? <Pause size={22} style={{ color: 'var(--color-text)' }} />
+                : <Play size={22} style={{ color: 'var(--color-text)' }} />}
+            </button>
+            <button
+              onClick={walkPlayback.goForward}
+              className="p-2 rounded-lg hover:bg-theme-surface disabled:opacity-30"
+              disabled={walkPlayback.currentPly >= lastPly}
+              aria-label="Forward one move"
+              data-testid="review-forward-btn"
+            >
+              <ChevronRight size={22} style={{ color: 'var(--color-text)' }} />
+            </button>
+            <button
+              onClick={walkPlayback.goToEnd}
+              className="p-2 rounded-lg hover:bg-theme-surface disabled:opacity-30"
+              disabled={walkPlayback.currentPly >= lastPly}
+              aria-label="Jump to end"
+            >
+              <SkipForward size={20} style={{ color: 'var(--color-text)' }} />
+            </button>
+          </div>
+
+          {/* Footer: access to the deeper analysis phase + play-again */}
+          <div className="flex items-center gap-2 px-3 py-2 w-full shrink-0 border-t border-theme-border">
+            <button onClick={() => handleStartReview('full')} className="text-xs px-3 py-1.5 rounded-lg border border-theme-border hover:bg-theme-surface" style={{ color: 'var(--color-text)' }}>
+              Full analysis
+            </button>
+            <button onClick={onPlayAgain} className="text-xs px-3 py-1.5 rounded-lg border border-theme-border hover:bg-theme-surface ml-auto" style={{ color: 'var(--color-text)' }}>
+              Play again
+            </button>
+            <button onClick={onBackToCoach} className="text-xs px-3 py-1.5 rounded-lg border border-theme-border hover:bg-theme-surface" style={{ color: 'var(--color-text)' }}>
+              Back to coach
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // Fallback / loading: show the summary card (legacy paragraph view).
     return (
       <div className="flex flex-col items-center justify-center w-full h-full overflow-y-auto" data-testid="coach-game-review">
         <ReviewSummaryCard

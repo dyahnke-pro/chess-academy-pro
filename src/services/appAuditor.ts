@@ -62,7 +62,11 @@ export type AuditKind =
   | 'phase-transition-detected'
   | 'phase-transition-suppressed'
   // Narration latency (WO-POLISH-03)
-  | 'narration-latency';
+  | 'narration-latency'
+  // Walk-the-game review trail (WO-REVIEW-02)
+  | 'review-opened'
+  | 'review-narration-spoken'
+  | 'review-nav';
 
 export interface AuditEntry {
   timestamp: number;
