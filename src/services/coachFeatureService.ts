@@ -578,7 +578,7 @@ export async function generateReviewNarration(params: {
   ).catch((err: unknown) => {
     const msg = err instanceof Error ? err.message : String(err);
     void logAppAudit({
-      kind: 'llm-error',
+      kind: 'review-segments-parse-failed',
       category: 'subsystem',
       source: 'coachFeatureService.generateReviewNarration',
       summary: 'segments LLM call failed',
@@ -618,7 +618,7 @@ export async function generateReviewNarration(params: {
     }
   } else if (segmentsRaw) {
     void logAppAudit({
-      kind: 'llm-error',
+      kind: 'review-segments-parse-failed',
       category: 'subsystem',
       source: 'coachFeatureService.generateReviewNarration',
       summary: 'segments JSON parse failed — falling back to silent walk',
@@ -650,6 +650,15 @@ export async function generateReviewNarration(params: {
       narration: narrationByPly.get(m.ply) ?? null,
     });
   }
+
+  const narratedCount = segments.filter((s) => s.narration !== null).length;
+  void logAppAudit({
+    kind: 'review-segments-generated',
+    category: 'subsystem',
+    source: 'coachFeatureService.generateReviewNarration',
+    summary: `${narratedCount} of ${segments.length} plies narrated`,
+    details: JSON.stringify({ totalSegments: segments.length, narratedCount }),
+  });
 
   return { intro, segments, closing: null };
 }

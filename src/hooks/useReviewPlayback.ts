@@ -29,6 +29,10 @@ export interface UseReviewPlaybackResult {
   goBack: () => void;
   goToStart: () => void;
   goToEnd: () => void;
+  /** Jump to an arbitrary ply. speaks=true plays the matching segment's
+   *  narration (if any); speaks=false advances the board silently (used
+   *  when back-navigation shouldn't re-speak). */
+  jumpToPly: (ply: number, opts?: { speak?: boolean }) => void;
   togglePausePlay: () => void;
   /** Re-speak the current segment / intro from the top. */
   replay: () => void;
@@ -178,6 +182,11 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     commitPly(lastPly, { speak: true });
   }, [commitPly, lastPly]);
 
+  const jumpToPly = useCallback((ply: number, opts?: { speak?: boolean }) => {
+    const speak = opts?.speak ?? true;
+    commitPly(ply, { speak });
+  }, [commitPly]);
+
   const togglePausePlay = useCallback(() => {
     if (narrationState === 'speaking') {
       // Stop current utterance. Switch to paused state so user sees
@@ -205,6 +214,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     goBack,
     goToStart,
     goToEnd,
+    jumpToPly,
     togglePausePlay,
     replay,
   };

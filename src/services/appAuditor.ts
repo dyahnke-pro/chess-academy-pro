@@ -66,7 +66,10 @@ export type AuditKind =
   // Walk-the-game review trail (WO-REVIEW-02)
   | 'review-opened'
   | 'review-narration-spoken'
-  | 'review-nav';
+  | 'review-nav'
+  // Additional review trail (WO-REVIEW-02a)
+  | 'review-segments-generated'
+  | 'review-segments-parse-failed';
 
 export interface AuditEntry {
   timestamp: number;

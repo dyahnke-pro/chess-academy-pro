@@ -1489,115 +1489,301 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       })();
       const badge = seg?.classification ?? null;
       const lastPly = walkNarration.segments[walkNarration.segments.length - 1].ply;
+      // Map the walk's 1-indexed ply to the move list / KeyMomentNav's
+      // 0-indexed move index. ply 0 = intro (no selected move).
+      const walkMoveIndex = walkPlayback.currentPly > 0 ? walkPlayback.currentPly - 1 : -1;
+
+      // WO-REVIEW-02a: walk-preserved handlers. When a walk-UI missed-
+      // tactic button fires a feature that renders inside the analysis
+      // phase (practice banner, best-line nav), we switch reviewPhase
+      // to 'analysis' first so the feature's UI has somewhere to render.
+      // Drill All / Show / Try It go through here. Ask, move-list,
+      // key-moment nav, and Practice in Chat work from walk directly.
+      const enterAnalysisAnd = (fn: () => void): void => {
+        setReviewPhase('analysis');
+        fn();
+      };
 
       return (
-        <div className="flex flex-col items-center w-full h-full overflow-y-auto" data-testid="coach-game-review-walk">
-          {/* Header: back + "Walk through the game" */}
-          <div className="flex items-center gap-2 w-full px-3 py-2 border-b border-theme-border shrink-0">
-            <button onClick={onBackToCoach} className="p-1 rounded-lg hover:bg-theme-surface" aria-label="Back to coach">
-              <ArrowLeft size={18} style={{ color: 'var(--color-text)' }} />
-            </button>
-            <h2 className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
-              Game Review — walk through
-            </h2>
-            <div className="ml-auto text-xs" style={{ color: 'var(--color-text-muted)' }}>
-              Ply {walkPlayback.currentPly}/{lastPly}
+        <div className="flex flex-col w-full h-full overflow-hidden" data-testid="coach-game-review-walk">
+          {/* ── Fixed top: header, board, badge, HERO nav ─────────────── */}
+          <div className="shrink-0 border-b border-theme-border">
+            <div className="flex items-center gap-2 w-full px-3 py-2">
+              <button onClick={onBackToCoach} className="p-1 rounded-lg hover:bg-theme-surface" aria-label="Back to coach">
+                <ArrowLeft size={18} style={{ color: 'var(--color-text)' }} />
+              </button>
+              <h2 className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+                Game Review
+              </h2>
+              <div className="ml-auto text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                Ply {walkPlayback.currentPly}/{lastPly}
+              </div>
+            </div>
+
+            <div className="px-2 pt-1 pb-2 flex justify-center relative">
+              <div className="w-full md:max-w-[420px] relative">
+                <ChessBoard
+                  initialFen={displayFen}
+                  orientation={playerColor}
+                  interactive={false}
+                  arrows={walkArrows}
+                  showEvalBar={false}
+                  showFlipButton
+                />
+                {badge && (
+                  <div
+                    className="absolute top-1 right-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wide pointer-events-none text-white"
+                    style={{
+                      background: CLASSIFICATION_STYLES[badge as keyof typeof CLASSIFICATION_STYLES].color,
+                    }}
+                    data-testid="review-classification-badge"
+                  >
+                    {CLASSIFICATION_STYLES[badge as keyof typeof CLASSIFICATION_STYLES].label}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* HERO nav: four big arrows centered, 64px tap targets */}
+            <div className="flex items-center justify-center gap-3 py-2" data-testid="review-nav-controls">
+              <button
+                onClick={walkPlayback.goToStart}
+                className="p-4 rounded-xl hover:bg-theme-surface disabled:opacity-30 min-w-[60px] min-h-[60px] flex items-center justify-center"
+                disabled={walkPlayback.currentPly === 0}
+                aria-label="Jump to start"
+              >
+                <SkipBack size={28} style={{ color: 'var(--color-text)' }} />
+              </button>
+              <button
+                onClick={walkPlayback.goBack}
+                className="p-4 rounded-xl hover:bg-theme-surface disabled:opacity-30 min-w-[60px] min-h-[60px] flex items-center justify-center"
+                disabled={walkPlayback.currentPly === 0}
+                aria-label="Back one move"
+                data-testid="review-back-btn"
+              >
+                <ChevronLeft size={32} style={{ color: 'var(--color-text)' }} />
+              </button>
+              <button
+                onClick={walkPlayback.goForward}
+                className="p-4 rounded-xl disabled:opacity-30 min-w-[60px] min-h-[60px] flex items-center justify-center"
+                disabled={walkPlayback.currentPly >= lastPly}
+                style={{ background: 'var(--color-accent)' }}
+                aria-label="Forward one move"
+                data-testid="review-forward-btn"
+              >
+                <ChevronRight size={32} style={{ color: 'var(--color-bg)' }} />
+              </button>
+              <button
+                onClick={walkPlayback.goToEnd}
+                className="p-4 rounded-xl hover:bg-theme-surface disabled:opacity-30 min-w-[60px] min-h-[60px] flex items-center justify-center"
+                disabled={walkPlayback.currentPly >= lastPly}
+                aria-label="Jump to end"
+              >
+                <SkipForward size={28} style={{ color: 'var(--color-text)' }} />
+              </button>
+            </div>
+
+            {/* Secondary controls row: pause/play + Ask (inline, small) */}
+            <div className="flex items-center justify-center gap-2 pb-2">
+              <button
+                onClick={walkPlayback.togglePausePlay}
+                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-theme-border hover:bg-theme-surface"
+                style={{ color: 'var(--color-text)' }}
+                aria-label={walkPlayback.narrationState === 'speaking' ? 'Pause narration' : 'Play narration'}
+              >
+                {walkPlayback.narrationState === 'speaking'
+                  ? <><Pause size={12} /> Pause</>
+                  : <><Play size={12} /> Play</>}
+              </button>
+              <button
+                onClick={() => setAskExpanded((v: boolean) => !v)}
+                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-theme-border hover:bg-theme-surface"
+                style={{ color: 'var(--color-text)' }}
+                data-testid="walk-ask-toggle-btn"
+              >
+                <MessageCircle size={12} />
+                Ask
+              </button>
             </div>
           </div>
 
-          {/* Board with optional green best-move arrow + classification badge */}
-          <div className="px-2 py-2 flex justify-center shrink-0 relative">
-            <div className="w-full md:max-w-[420px] relative">
-              <ChessBoard
-                initialFen={displayFen}
-                orientation={playerColor}
-                interactive={false}
-                arrows={walkArrows}
-                showEvalBar={false}
-              />
-              {badge && (
-                <div
-                  className="absolute top-1 left-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wide pointer-events-none text-white"
-                  style={{
-                    background: CLASSIFICATION_STYLES[badge as keyof typeof CLASSIFICATION_STYLES].color,
-                  }}
-                  data-testid="review-classification-badge"
-                >
-                  {CLASSIFICATION_STYLES[badge as keyof typeof CLASSIFICATION_STYLES].label}
+          {/* ── Scrollable middle: narration, move list, tactics, ask ── */}
+          <div className="flex-1 min-h-0 overflow-y-auto" data-testid="review-scroll-middle">
+            {/* Current-move narration banner */}
+            <div className="px-3 pt-2 pb-1">
+              <div
+                className="rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2"
+                style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(16,185,129,0.3))' }}
+                data-testid="review-narration-banner"
+              >
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                  {walkPlayback.currentText ?? '(this move passes silently — tap forward to continue)'}
+                </p>
+              </div>
+            </div>
+
+            {/* Ask panel (expandable) */}
+            {askExpanded && (
+              <div className="px-3 py-2 border-t border-theme-border" data-testid="walk-ask-panel">
+                {askResponse !== null && (
+                  <div className="mb-2">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
+                        Coach
+                      </span>
+                      {isAskStreaming && (
+                        <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
+                      )}
+                    </div>
+                    <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }} data-testid="walk-ask-response">
+                      {askResponse || (isAskStreaming ? '' : 'No response')}
+                    </p>
+                  </div>
+                )}
+                <ChatInput
+                  onSend={handleAskSend}
+                  disabled={isAskStreaming}
+                  placeholder="Ask about this position..."
+                />
+              </div>
+            )}
+
+            {/* Opening + move list */}
+            <div className="border-t border-theme-border">
+              <div className="px-3 pt-2 pb-1 flex items-center justify-between">
+                <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
+                  {openingName ?? 'Move list'}
+                </span>
+                <KeyMomentNav
+                  moves={moves}
+                  currentIndex={walkMoveIndex}
+                  onNavigate={(idx: number) => walkPlayback.jumpToPly(idx + 1)}
+                  className=""
+                />
+              </div>
+              <div className="max-h-[180px] overflow-y-auto">
+                <MoveListPanel
+                  moves={moves}
+                  openingName={openingName}
+                  currentMoveIndex={walkMoveIndex >= 0 ? walkMoveIndex : null}
+                  onMoveClick={(idx: number) => walkPlayback.jumpToPly(idx + 1)}
+                  className="h-full"
+                />
+              </div>
+            </div>
+
+            {/* Missed tactics */}
+            {missedTactics.length > 0 && (
+              <div className="border-t border-theme-border px-3 py-2" data-testid="walk-missed-tactics">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Crosshair size={12} style={{ color: 'var(--color-text-muted)' }} />
+                  <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
+                    Missed tactics ({missedTactics.length})
+                  </span>
+                  <button
+                    onClick={() => enterAnalysisAnd(handleStartMistakeDrill)}
+                    className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded hover:opacity-80"
+                    style={{ background: 'var(--color-warning)', color: 'var(--color-bg)' }}
+                    data-testid="walk-drill-all-btn"
+                  >
+                    Drill All
+                  </button>
                 </div>
-              )}
+                <div className="space-y-1.5">
+                  {missedTactics.map((tactic: MissedTactic, i: number) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-2 p-1.5 rounded-md hover:bg-theme-surface transition-colors cursor-pointer"
+                      onClick={() => walkPlayback.jumpToPly(tactic.moveIndex + 1)}
+                      data-testid={`walk-missed-tactic-${i}`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
+                          Move {Math.ceil(moves[tactic.moveIndex].moveNumber / 2)}:{' '}
+                          <span className="capitalize">{tactic.tacticType.replace(/_/g, ' ')}</span>
+                        </span>
+                        <span className="text-[10px] ml-1.5" style={{ color: 'var(--color-text-muted)' }}>
+                          ({(tactic.evalSwing / 100).toFixed(1)} pawns)
+                        </span>
+                      </div>
+                      <button
+                        onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                          e.stopPropagation();
+                          enterAnalysisAnd(() => { void handleShowMissedTactic(tactic); });
+                        }}
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap border"
+                        style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
+                        data-testid={`walk-show-tactic-${i}`}
+                      >
+                        Show
+                      </button>
+                      <button
+                        onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                          e.stopPropagation();
+                          enterAnalysisAnd(() => handleStartPractice(tactic));
+                        }}
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap"
+                        style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                        data-testid={`walk-try-it-${i}`}
+                      >
+                        Try It
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Practice in Chat */}
+            {missedTactics.length > 0 && onPracticeInChat && (
+              <div className="border-t border-theme-border px-3 py-2" data-testid="walk-practice-in-chat">
+                <button
+                  onClick={handlePracticeInChat}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium hover:opacity-90 transition-opacity"
+                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+                  data-testid="walk-practice-in-chat-btn"
+                >
+                  <Target size={12} />
+                  Practice in Chat
+                </button>
+              </div>
+            )}
+
+            {/* Full analysis escape hatch */}
+            <div className="px-3 py-2 border-t border-theme-border">
+              <button
+                onClick={() => handleStartReview('full')}
+                className="text-xs px-3 py-1.5 rounded-lg border border-theme-border hover:bg-theme-surface"
+                style={{ color: 'var(--color-text)' }}
+              >
+                Full analysis
+              </button>
             </div>
           </div>
 
-          {/* Narration banner — intro at ply 0, per-ply at ply > 0, or silent placeholder */}
-          <div className="w-full px-3 py-2 shrink-0">
-            <div
-              className="mx-auto max-w-xl rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2"
-              style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(16,185,129,0.3))' }}
-              data-testid="review-narration-banner"
-            >
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                {walkPlayback.currentText ?? '(this move passes silently — tap forward to continue)'}
-              </p>
-            </div>
-          </div>
-
-          {/* Nav controls */}
-          <div className="flex items-center justify-center gap-2 w-full py-2 shrink-0" data-testid="review-nav-controls">
+          {/* ── Fixed bottom: Play Again + Back to Coach ─────────────── */}
+          <div
+            className="shrink-0 flex items-center gap-2 px-3 py-3 border-t border-theme-border"
+            style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
+            data-testid="review-bottom-bar"
+          >
             <button
-              onClick={walkPlayback.goToStart}
-              className="p-2 rounded-lg hover:bg-theme-surface disabled:opacity-30"
-              disabled={walkPlayback.currentPly === 0}
-              aria-label="Jump to start"
+              onClick={onPlayAgain}
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90"
+              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+              data-testid="walk-play-again-btn"
             >
-              <SkipBack size={20} style={{ color: 'var(--color-text)' }} />
+              <RotateCcw size={14} />
+              Play Again
             </button>
             <button
-              onClick={walkPlayback.goBack}
-              className="p-2 rounded-lg hover:bg-theme-surface disabled:opacity-30"
-              disabled={walkPlayback.currentPly === 0}
-              aria-label="Back one move"
+              onClick={onBackToCoach}
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg border text-sm font-medium hover:opacity-90"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+              data-testid="walk-back-to-coach-btn"
             >
-              <ChevronLeft size={22} style={{ color: 'var(--color-text)' }} />
-            </button>
-            <button
-              onClick={walkPlayback.togglePausePlay}
-              className="p-2 rounded-lg hover:bg-theme-surface"
-              aria-label={walkPlayback.narrationState === 'speaking' ? 'Pause narration' : 'Play narration'}
-            >
-              {walkPlayback.narrationState === 'speaking'
-                ? <Pause size={22} style={{ color: 'var(--color-text)' }} />
-                : <Play size={22} style={{ color: 'var(--color-text)' }} />}
-            </button>
-            <button
-              onClick={walkPlayback.goForward}
-              className="p-2 rounded-lg hover:bg-theme-surface disabled:opacity-30"
-              disabled={walkPlayback.currentPly >= lastPly}
-              aria-label="Forward one move"
-              data-testid="review-forward-btn"
-            >
-              <ChevronRight size={22} style={{ color: 'var(--color-text)' }} />
-            </button>
-            <button
-              onClick={walkPlayback.goToEnd}
-              className="p-2 rounded-lg hover:bg-theme-surface disabled:opacity-30"
-              disabled={walkPlayback.currentPly >= lastPly}
-              aria-label="Jump to end"
-            >
-              <SkipForward size={20} style={{ color: 'var(--color-text)' }} />
-            </button>
-          </div>
-
-          {/* Footer: access to the deeper analysis phase + play-again */}
-          <div className="flex items-center gap-2 px-3 py-2 w-full shrink-0 border-t border-theme-border">
-            <button onClick={() => handleStartReview('full')} className="text-xs px-3 py-1.5 rounded-lg border border-theme-border hover:bg-theme-surface" style={{ color: 'var(--color-text)' }}>
-              Full analysis
-            </button>
-            <button onClick={onPlayAgain} className="text-xs px-3 py-1.5 rounded-lg border border-theme-border hover:bg-theme-surface ml-auto" style={{ color: 'var(--color-text)' }}>
-              Play again
-            </button>
-            <button onClick={onBackToCoach} className="text-xs px-3 py-1.5 rounded-lg border border-theme-border hover:bg-theme-surface" style={{ color: 'var(--color-text)' }}>
-              Back to coach
+              <Home size={14} />
+              Back to Coach
             </button>
           </div>
         </div>
