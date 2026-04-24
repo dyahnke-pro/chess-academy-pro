@@ -7,6 +7,11 @@ interface KeyMomentNavProps {
   currentIndex: number;
   onNavigate: (index: number) => void;
   className?: string;
+  /** WO-HINT-KEYMOMENT-WIRE-01: extra move indices (0-indexed) the
+   *  prev/next nav should also stop on. Used today to surface hint
+   *  plies in the same nav as blunders / mistakes / brilliancies.
+   *  Deduped against classification-derived indices, sorted ascending. */
+  extraIndices?: number[];
 }
 
 const KEY_MOMENT_CLASSIFICATIONS: MoveClassification[] = [
@@ -22,13 +27,20 @@ export function KeyMomentNav({
   currentIndex,
   onNavigate,
   className = '',
+  extraIndices,
 }: KeyMomentNavProps): JSX.Element {
   const keyMomentIndices = useMemo(
-    () => moves.reduce<number[]>((acc, move, i) => {
-      if (isKeyMoment(move)) acc.push(i);
-      return acc;
-    }, []),
-    [moves],
+    () => {
+      const set = new Set<number>();
+      moves.forEach((move, i) => { if (isKeyMoment(move)) set.add(i); });
+      if (extraIndices) {
+        for (const i of extraIndices) {
+          if (Number.isInteger(i) && i >= 0 && i < moves.length) set.add(i);
+        }
+      }
+      return Array.from(set).sort((a, b) => a - b);
+    },
+    [moves, extraIndices],
   );
 
   const prevKeyMoment = useMemo(
