@@ -5,6 +5,11 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
+import {
+  getCachedStockfish,
+  setCachedStockfish,
+  __resetStockfishFenCacheForTests,
+} from './stockfishFenCache';
 import type { CoachContext, StockfishAnalysis } from '../types';
 
 export interface UsePositionNarrationArgs {
@@ -41,29 +46,13 @@ const STOCKFISH_FAST_BUDGET_MS = 300;
  *  eval direction + top lines — not something that needs tournament
  *  depth. Shaves another few hundred ms per tap on slow positions. */
 const STOCKFISH_DEPTH = 10;
-/** Per-FEN Stockfish cache. Repeat taps on the same position reuse
- *  the prior analysis instead of burning another engine cycle. Bounded
- *  size keeps memory stable for long games (only the most-recently-
- *  narrated FENs are retained). WO-PHASE-PROSE-01. */
-const STOCKFISH_CACHE_MAX_ENTRIES = 16;
-const stockfishCache = new Map<string, StockfishAnalysis>();
-function cacheGet(fen: string): StockfishAnalysis | undefined {
-  return stockfishCache.get(fen);
-}
-function cacheSet(fen: string, analysis: StockfishAnalysis): void {
-  // Refresh recency: delete-then-set puts this entry at the tail.
-  stockfishCache.delete(fen);
-  stockfishCache.set(fen, analysis);
-  while (stockfishCache.size > STOCKFISH_CACHE_MAX_ENTRIES) {
-    const oldest = stockfishCache.keys().next().value;
-    if (oldest === undefined) break;
-    stockfishCache.delete(oldest);
-  }
-}
-/** Test-only: clear the Stockfish cache between test cases. */
-export function __resetStockfishCacheForTests(): void {
-  stockfishCache.clear();
-}
+/** Per-FEN Stockfish cache is now shared across narration hooks via
+ *  `stockfishFenCache.ts`. Extracted by WO-PHASE-LAG-02 so phase
+ *  narration can skip the engine when Read Position already ran it on
+ *  the same FEN (and vice versa). */
+/** Test-only: clear the shared Stockfish cache between test cases.
+ *  Re-exported for existing tests that import from this module. */
+export const __resetStockfishCacheForTests = __resetStockfishFenCacheForTests;
 /** Total budget for the coach LLM round-trip (network + stream). Raised
  *  30s→120s by WO-POLISH-02. A long-form narration at realistic stream
  *  rates can take well past 30s; the original cap was truncating valid
@@ -161,7 +150,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       // engine. Repeat taps on the same position (common when the
       // student re-reads a tense middlegame a few seconds apart) skip
       // the engine cycle entirely.
-      const cachedAnalysis = cacheGet(args.fen);
+      const cachedAnalysis = getCachedStockfish(args.fen);
       let stockfishAnalysis: StockfishAnalysis | null;
       if (cachedAnalysis) {
         void logAppAudit({
@@ -184,7 +173,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
           'stockfish',
         ).then(
           (r) => {
-            cacheSet(args.fen, r);
+            setCachedStockfish(args.fen, r);
             return r;
           },
           () => null as StockfishAnalysis | null,

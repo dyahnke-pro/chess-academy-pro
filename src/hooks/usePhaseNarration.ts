@@ -5,6 +5,7 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { buildChessContextMessage, PHASE_NARRATION_ADDITION } from '../services/coachPrompts';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
+import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import type { CoachContext, PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 
@@ -27,11 +28,18 @@ export interface UsePhaseNarrationResult {
  *  hung engine, fetch, or TTS call can never strand the hook and the
  *  transition is always either spoken or logged-and-forgotten. */
 const STOCKFISH_TIMEOUT_MS = 8_000;
-/** Tap-latency race budget (WO-PHASE-LAG-01, mirrors WO-POLISH-03). If
- *  Stockfish hasn't returned within this window, dispatch the LLM call
- *  without the engine analysis. PHASE_NARRATION_ADDITION tolerates a
- *  missing stockfishAnalysis block. */
-const STOCKFISH_FAST_BUDGET_MS = 500;
+/** Tap-latency race budget. PHASE-LAG-01 set 500ms mirroring POLISH-03;
+ *  PHASE-LAG-02 tightens to 300ms to match the post-PHASE-PROSE-01
+ *  Read Position budget. PHASE_NARRATION_ADDITION tolerates a missing
+ *  stockfishAnalysis block, so racing out fast is net-positive for
+ *  detection-to-first-word latency. */
+const STOCKFISH_FAST_BUDGET_MS = 300;
+/** Stockfish analysis depth for phase narration. PHASE-LAG-01 set 12;
+ *  PHASE-LAG-02 drops to 10 to match Read Position. Deterministic
+ *  tactics detection runs on every FEN in buildChessContextMessage
+ *  regardless, so the engine contributes only eval direction + top
+ *  lines — not something that benefits from deeper search here. */
+const STOCKFISH_DEPTH = 10;
 const NARRATION_API_TIMEOUT_MS = 30_000;
 const NARRATION_SPEAK_TIMEOUT_MS = 60_000;
 
@@ -128,28 +136,51 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     let apiTimedOut = false;
 
     try {
-      // WO-PHASE-LAG-01: mirror WO-POLISH-03's parallel + race pattern.
-      // Stockfish runs alongside the rest of setup; we race it against
-      // a short budget so LLM dispatch isn't blocked by engine
-      // analysis. PHASE_NARRATION_ADDITION already handles missing
-      // stockfishAnalysis gracefully. Depth dropped 16 → 12 for faster
-      // turnaround; phase narration doesn't need deep lines.
-      console.log('[PHASE-HOOK-03] stockfish analysis call (parallel)');
-      const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
-        stockfishEngine.analyzePosition(event.fen, 12),
-        STOCKFISH_TIMEOUT_MS,
-        'stockfish',
-      ).then(
-        (r) => r,
-        () => null as StockfishAnalysis | null,
-      );
-      const stockfishBudget = new Promise<null>((resolve) =>
-        setTimeout(() => resolve(null), STOCKFISH_FAST_BUDGET_MS),
-      );
-      const stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
-      console.log('[PHASE-HOOK-04] stockfish race resolved', {
-        hasAnalysis: stockfishAnalysis !== null,
-      });
+      // WO-PHASE-LAG-02: check the shared Stockfish FEN cache first.
+      // When Read Position ran the engine on this exact board a few
+      // seconds ago (or another phase transition produced the same
+      // position), we skip the engine cycle entirely and jump straight
+      // to LLM dispatch. Emits narration-stockfish-cache-hit for
+      // observability parity with usePositionNarration.
+      let stockfishAnalysis: StockfishAnalysis | null;
+      const cachedAnalysis = getCachedStockfish(event.fen);
+      if (cachedAnalysis) {
+        void logAppAudit({
+          kind: 'narration-stockfish-cache-hit',
+          category: 'subsystem',
+          source: 'usePhaseNarration',
+          summary: 'skipped Stockfish — cached analysis',
+          fen: event.fen,
+        });
+        stockfishAnalysis = cachedAnalysis;
+        console.log('[PHASE-HOOK-03] stockfish cache hit');
+      } else {
+        // WO-PHASE-LAG-01: mirror WO-POLISH-03's parallel + race pattern.
+        // Stockfish runs alongside the rest of setup; we race it against
+        // a short budget so LLM dispatch isn't blocked by engine
+        // analysis. PHASE_NARRATION_ADDITION already handles missing
+        // stockfishAnalysis gracefully. WO-PHASE-LAG-02: depth 12 → 10,
+        // budget 500ms → 300ms, successful analyses cached for reuse.
+        console.log('[PHASE-HOOK-03] stockfish analysis call (parallel)');
+        const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
+          stockfishEngine.analyzePosition(event.fen, STOCKFISH_DEPTH),
+          STOCKFISH_TIMEOUT_MS,
+          'stockfish',
+        ).then(
+          (r) => {
+            setCachedStockfish(event.fen, r);
+            return r;
+          },
+          () => null as StockfishAnalysis | null,
+        );
+        const stockfishBudget = new Promise<null>((resolve) =>
+          setTimeout(() => resolve(null), STOCKFISH_FAST_BUDGET_MS),
+        );
+        stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
+        console.log('[PHASE-HOOK-04] stockfish race resolved', {
+          hasAnalysis: stockfishAnalysis !== null,
+        });
+      }
       if (token !== activeTokenRef.current) return;
 
       const profile = await db.profiles.get('main');
