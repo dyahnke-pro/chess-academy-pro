@@ -35,7 +35,6 @@ import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
 import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
-import { useSettings } from '../../hooks/useSettings';
 import { Chess } from 'chess.js';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -103,7 +102,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     isGuidedLesson, pgn,
   } = props;
   const initialMoveIndex = props.initialMoveIndex;
-  const { settings } = useSettings();
 
   // ─── Summary-First Flow ─────────────────────────────────────────────────────
   const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
@@ -263,9 +261,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         return;
       }
       setNarrativeSummary(fullText);
-      if (settings.coachReviewVoice) {
-        void voiceService.speak(fullText);
-      }
+      // WO-REVIEW-02a-FIX: do NOT speak the legacy monolithic summary
+      // — the walk-the-game narration owns voice at review mount. The
+      // summary text is still shown as a fallback card when the walk
+      // bundle fails to load; speaking it here produced a dual-voice
+      // regression (summary + walk intro overlapping on mount).
     }).catch((err: unknown) => {
       // Surface a graceful degraded state rather than leaving the
       // review blank. Log the actual error so silent failures are
@@ -330,7 +330,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [reviewPhase, isGuidedLesson, reviewMoveInputs, playerColor, openingName, result, playerRating, walkNarration, isLoadingWalk]);
 
   // Instantiate the playback hook; drives the walk-the-game UI below.
-  const walkPlayback = useReviewPlayback({ narration: walkNarration });
+  // totalPlies is the authoritative ceiling — nav walks every move the
+  // student played, even when the LLM narrated only a subset
+  // (WO-REVIEW-02a-FIX).
+  const walkPlayback = useReviewPlayback({
+    narration: walkNarration,
+    totalPlies: moves.length,
+  });
 
   // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every
   // position in the walk (starting position + one FEN per ply) via
@@ -1491,7 +1497,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // fall through to the card so the student isn't blocked.
     if (walkNarration && walkNarration.segments.length > 0) {
       const seg = walkPlayback.currentSegment;
-      const displayFen = seg ? seg.fenAfter : (moves[0]?.fen && walkPlayback.currentPly > 0 ? moves[0].fen : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+      // Board FEN source of truth: the walk segment when available,
+      // otherwise the game's move history (moves[ply-1].fen). This
+      // keeps the board in sync even when the narration bundle is
+      // truncated or missing for the current ply (WO-REVIEW-02a-FIX).
+      const displayFen = seg
+        ? seg.fenAfter
+        : walkPlayback.currentPly > 0
+          ? moves[walkPlayback.currentPly - 1]?.fen ?? STARTING_FEN
+          : STARTING_FEN;
       const walkArrows = (() => {
         if (!seg) return undefined;
         const showBest = seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder';

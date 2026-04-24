@@ -568,12 +568,16 @@ export async function generateReviewNarration(params: {
     'fast',
   ).catch(() => '');
 
+  // max_tokens: 8000 — the per-ply JSON array scales with game length
+  // and the prior 2000 cap silently truncated output for games past ~20
+  // plies, producing unparseable JSON and empty narration. Match the
+  // "max_tokens is not a useful filter" posture from WO-POLISH-02.
   const segmentsPromise = getCoachChatResponse(
     [{ role: 'user', content: segmentsUserMessage }],
     REVIEW_MOVE_SEGMENT_ADDITION,
     undefined,
     'game_narrative_summary',
-    2000,
+    8000,
     'medium',
   ).catch((err: unknown) => {
     const msg = err instanceof Error ? err.message : String(err);
