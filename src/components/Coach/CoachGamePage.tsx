@@ -7,6 +7,7 @@ import { safeChessFromFen } from '../../services/chessSafe';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useLiveCoach } from '../../hooks/useLiveCoach';
 import { useCoachTips } from '../../hooks/useCoachTips';
 import type { TacticLineData } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
@@ -672,6 +673,15 @@ export function CoachGamePage(): JSX.Element {
     fen: game.fen,
     playerColor,
     enabled: gameState.status === 'playing' && isPlayersTurn && !game.isGameOver,
+  });
+
+  // WO-LIVE-COACH-01: live-coach interjection driver. Receives per-move
+  // analysis from this component's existing Stockfish pipeline (we do
+  // NOT re-run the engine inside the hook) and dispatches LLM speech
+  // when one of the five triggers fires.
+  const liveCoach = useLiveCoach({
+    gameId: gameState.gameId,
+    playerColor,
   });
 
   // Inject nudge text into chat when it appears
@@ -1613,6 +1623,18 @@ export function CoachGamePage(): JSX.Element {
         setLatestMateIn(postCoachAnalysis?.mateIn ?? analysis.mateIn);
         setLatestTopLines(postCoachAnalysis?.topLines ?? analysis.topLines);
 
+        // WO-LIVE-COACH-01: opponent move signal. analysis.evaluation
+        // is the eval BEFORE coach moved, postCoachEval is AFTER.
+        // The hook detects opponent-blunder only — student-side
+        // triggers fire on the student's own moves above.
+        liveCoach.notifyOpponentMove({
+          ply: moveCountRef.current,
+          san: result.san,
+          fenAfter: result.fen,
+          evalBefore: analysis.evaluation,
+          evalAfter: postCoachEval,
+        });
+
         // Proactive warning: scan for opponent threats after coach's move
         if (postCoachAnalysis && !isCancelled()) {
           const playerColorCode = playerColor === 'white' ? 'w' : 'b';
@@ -1963,6 +1985,28 @@ export function CoachGamePage(): JSX.Element {
       bestMoveEval: bestMoveEval,
       preMoveEval,
     };
+
+    // WO-LIVE-COACH-01: hand the per-move analysis to the live-coach
+    // hook so it can run the five trigger detectors and speak when
+    // one fires. We reuse the Stockfish results we already computed
+    // above (no extra engine cycle).
+    if (analysis) {
+      const realTactics = tacticResult?.tactics.filter((t) => t.type !== 'none') ?? [];
+      const bestMoveWasTactical = realTactics.length > 0;
+      const hasHangingPiece = !!(tacticResult && tacticResult.hangingPieces.length > 0);
+      liveCoach.notifyPlayerMove({
+        ply: moveCountRef.current,
+        san: moveResult.san,
+        fenAfter: moveResult.fen,
+        evalBefore: preMoveEval ?? 0,
+        evalAfter: analysis.evaluation,
+        bestMoveEval: bestMoveEval,
+        bestMoveSan: engineBestMoveSan === '?' ? null : engineBestMoveSan,
+        isBestMove: isEngineBestMove || engineBestMoveSan === moveResult.san,
+        bestMoveWasTactical,
+        hasHangingPiece,
+      });
+    }
 
     // Flash the board based on classification (map to MoveQuality type)
     const flashMap = new Map<string, 'blunder' | 'inaccuracy' | 'good'>([
