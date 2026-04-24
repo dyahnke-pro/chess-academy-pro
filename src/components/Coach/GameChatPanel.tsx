@@ -9,6 +9,7 @@ import { runAgentTurn, detectNarrationToggle, applyNarrationToggle } from '../..
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
+import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
@@ -169,6 +170,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       };
       const updatedMessages = [...messagesRef.current, userMsg];
       setMessages(updatedMessages);
+
+      // WO-COACH-MEMORY-UNIFY-01: surface-agnostic opening-intent
+      // capture. Writes to useCoachMemoryStore regardless of
+      // isGameOver, so the Home drawer instance of this component now
+      // persists intent the same way the in-game instance does. The
+      // existing detectInGameChatIntent / routeChatIntent paths below
+      // still run for navigation and conversational ack; this capture
+      // is additive.
+      const surface = isGameOver ? 'drawer-chat' : 'in-game-chat';
+      tryCaptureForgetIntent(text, surface);
+      tryCaptureOpeningIntent(text, surface, playerColor);
 
       // Narration toggle — deterministic intercept. Runs BEFORE the
       // in-game block below so "narrate while we play" reliably flips

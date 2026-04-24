@@ -33,6 +33,7 @@ import type {
 import { useReviewPlayback } from '../../hooks/useReviewPlayback';
 import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
 import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu } from 'lucide-react';
+import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { logAppAudit } from '../../services/appAuditor';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
@@ -554,6 +555,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // ─── Ask About Position handler ────────────────────────────────────────────
   const handleAskSend = useCallback((question: string) => {
     if (isAskStreaming) return;
+
+    // WO-COACH-MEMORY-UNIFY-01: opening intent can be named from the
+    // review Ask panel too — capture it into the unified memory store
+    // before dispatching the question to the LLM.
+    tryCaptureForgetIntent(question, 'review-ask');
+    tryCaptureOpeningIntent(question, 'review-ask', playerColor);
 
     // Abort previous ask
     if (askAbortRef.current) askAbortRef.current.abort();
