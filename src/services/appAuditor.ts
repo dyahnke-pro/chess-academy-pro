@@ -76,7 +76,9 @@ export type AuditKind =
   | 'review-engine-lines-analysis-started'
   | 'review-engine-lines-analysis-complete'
   | 'review-engine-lines-toggled'
-  | 'review-engine-candidate-explored';
+  | 'review-engine-candidate-explored'
+  // Position-narration Stockfish cache (WO-PHASE-PROSE-01)
+  | 'narration-stockfish-cache-hit';
 
 export interface AuditEntry {
   timestamp: number;

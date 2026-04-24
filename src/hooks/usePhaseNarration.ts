@@ -160,6 +160,13 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         ? 'Opening → Middlegame'
         : 'Middlegame → Endgame';
 
+      // WO-PHASE-PROSE-01: verbosity branching removed from the user
+      // message. The prompt now invites full prose regardless of the
+      // student's global verbosity setting — phase transitions are
+      // rich moments that deserve the whole board read. Verbosity
+      // remains a function parameter for API compatibility; a future
+      // Coach Settings WO can re-introduce it with saner semantics.
+      void verbosity;
       const context: CoachContext = {
         fen: event.fen,
         lastMoveSan: event.triggeringMoveSan,
@@ -172,8 +179,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         playerProfile: { rating, weaknesses: [] },
         additionalContext:
           `Transition: ${transitionLabel}. Student color: ${event.playerColor}. Triggering move (the student's move that just completed the transition): ${event.triggeringMoveSan}.\n` +
-          `Verbosity: ${verbosity}.\n` +
-          `Narrate the transition per the VERBOSITY rules above. Do not invent moves or pieces — every claim must be verifiable against the Position (FEN) line and the Stockfish / Tactics analysis blocks below.`,
+          `Narrate the transition as thoroughly as the position deserves. There is no length limit. Do not invent moves or pieces — every claim must be verifiable against the Position (FEN) line and the Stockfish / Tactics analysis blocks below.`,
       };
 
       const userMessage = buildChessContextMessage(context);
@@ -236,7 +242,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       console.log('[PHASE-HOOK-05] LLM call dispatched', {
         addition: 'PHASE_NARRATION_ADDITION',
         task: 'position_analysis_chat',
-        maxTokens: 2000,
+        maxTokens: 4000,
       });
       try {
         apiResponse = await withTimeout(
@@ -251,7 +257,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               flushCompletedSentences();
             },
             'position_analysis_chat',
-            2000,
+            // WO-PHASE-PROSE-01: raised 2000 → 4000 to match
+            // usePositionNarration's cap. Phase prose is full coach
+            // reads (20+ seconds of speech), not a tagline.
+            4000,
             'medium',
           ),
           NARRATION_API_TIMEOUT_MS,

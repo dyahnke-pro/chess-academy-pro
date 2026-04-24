@@ -27,11 +27,43 @@ export interface UsePositionNarrationResult {
  *  This is the outer safety timeout; the hook also races against a
  *  much shorter budget below to keep the tap→first-word latency down. */
 const STOCKFISH_TIMEOUT_MS = 8_000;
-/** Tap-latency race budget (WO-POLISH-03). If Stockfish hasn't
- *  returned within this window, dispatch the LLM call without the
- *  engine analysis. The narration prompt already handles the missing
- *  block gracefully ("narrate in plans and general shape only"). */
-const STOCKFISH_FAST_BUDGET_MS = 500;
+/** Tap-latency race budget. WO-POLISH-03 set this at 500ms; WO-PHASE-
+ *  PROSE-01 tightens to 300ms after confirming the narration prompt
+ *  handles missing analysis cleanly and most tap-to-first-word time
+ *  was spent waiting on the engine. 300ms keeps the fast path fast
+ *  without increasing analysis-missing rate noticeably for positions
+ *  where Stockfish takes >300ms to reach depth 10. */
+const STOCKFISH_FAST_BUDGET_MS = 300;
+/** Stockfish analysis depth for tap-time narration. WO-POLISH-03
+ *  dropped 16 → 12; WO-PHASE-PROSE-01 drops 12 → 10. Deterministic
+ *  tactics detection runs on every FEN regardless in
+ *  buildChessContextMessage, so the engine is only contributing an
+ *  eval direction + top lines — not something that needs tournament
+ *  depth. Shaves another few hundred ms per tap on slow positions. */
+const STOCKFISH_DEPTH = 10;
+/** Per-FEN Stockfish cache. Repeat taps on the same position reuse
+ *  the prior analysis instead of burning another engine cycle. Bounded
+ *  size keeps memory stable for long games (only the most-recently-
+ *  narrated FENs are retained). WO-PHASE-PROSE-01. */
+const STOCKFISH_CACHE_MAX_ENTRIES = 16;
+const stockfishCache = new Map<string, StockfishAnalysis>();
+function cacheGet(fen: string): StockfishAnalysis | undefined {
+  return stockfishCache.get(fen);
+}
+function cacheSet(fen: string, analysis: StockfishAnalysis): void {
+  // Refresh recency: delete-then-set puts this entry at the tail.
+  stockfishCache.delete(fen);
+  stockfishCache.set(fen, analysis);
+  while (stockfishCache.size > STOCKFISH_CACHE_MAX_ENTRIES) {
+    const oldest = stockfishCache.keys().next().value;
+    if (oldest === undefined) break;
+    stockfishCache.delete(oldest);
+  }
+}
+/** Test-only: clear the Stockfish cache between test cases. */
+export function __resetStockfishCacheForTests(): void {
+  stockfishCache.clear();
+}
 /** Total budget for the coach LLM round-trip (network + stream). Raised
  *  30s→120s by WO-POLISH-02. A long-form narration at realistic stream
  *  rates can take well past 30s; the original cap was truncating valid
@@ -125,24 +157,43 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
     let apiTimedOut = false;
 
     try {
-      // WO-POLISH-03: fire Stockfish in PARALLEL with the rest of
-      // setup. Race against a short budget so LLM dispatch isn't
-      // blocked by engine analysis; whichever finishes first is what
-      // the LLM gets. If Stockfish is late, the narration prompt
-      // already handles missing stockfishAnalysis gracefully.
-      // Depth dropped 16 → 12 for faster turnaround; tactics
-      // detection is deterministic and runs in buildChessContextMessage
-      // regardless, so grounding quality barely changes.
-      const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
-        stockfishEngine.analyzePosition(args.fen, 12),
-        STOCKFISH_TIMEOUT_MS,
-        'stockfish',
-      ).then(
-        (r) => r,
-        () => null as StockfishAnalysis | null,
-      );
-      const stockfishBudget = new Promise<null>((resolve) => setTimeout(() => resolve(null), STOCKFISH_FAST_BUDGET_MS));
-      const stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
+      // WO-PHASE-PROSE-01: per-FEN cache check before firing the
+      // engine. Repeat taps on the same position (common when the
+      // student re-reads a tense middlegame a few seconds apart) skip
+      // the engine cycle entirely.
+      const cachedAnalysis = cacheGet(args.fen);
+      let stockfishAnalysis: StockfishAnalysis | null;
+      if (cachedAnalysis) {
+        void logAppAudit({
+          kind: 'narration-stockfish-cache-hit',
+          category: 'subsystem',
+          source: 'usePositionNarration',
+          summary: 'skipped Stockfish — cached analysis',
+          fen: args.fen,
+        });
+        stockfishAnalysis = cachedAnalysis;
+      } else {
+        // WO-POLISH-03: fire Stockfish in PARALLEL with the rest of
+        // setup. Race against a short budget so LLM dispatch isn't
+        // blocked by engine analysis; whichever finishes first is what
+        // the LLM gets. If Stockfish is late, the narration prompt
+        // already handles missing stockfishAnalysis gracefully.
+        const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
+          stockfishEngine.analyzePosition(args.fen, STOCKFISH_DEPTH),
+          STOCKFISH_TIMEOUT_MS,
+          'stockfish',
+        ).then(
+          (r) => {
+            cacheSet(args.fen, r);
+            return r;
+          },
+          () => null as StockfishAnalysis | null,
+        );
+        const stockfishBudget = new Promise<null>((resolve) =>
+          setTimeout(() => resolve(null), STOCKFISH_FAST_BUDGET_MS),
+        );
+        stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
+      }
       if (token !== activeTokenRef.current) return;
 
       const profile = await db.profiles.get('main');
