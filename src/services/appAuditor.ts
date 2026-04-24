@@ -69,7 +69,12 @@ export type AuditKind =
   | 'review-nav'
   // Additional review trail (WO-REVIEW-02a)
   | 'review-segments-generated'
-  | 'review-segments-parse-failed';
+  | 'review-segments-parse-failed'
+  // Engine lines on the review screen (WO-REVIEW-02b)
+  | 'review-engine-lines-analysis-started'
+  | 'review-engine-lines-analysis-complete'
+  | 'review-engine-lines-toggled'
+  | 'review-engine-candidate-explored';
 
 export interface AuditEntry {
   timestamp: number;

@@ -31,7 +31,8 @@ import type {
   ReviewMoveInput,
 } from '../../services/coachFeatureService';
 import { useReviewPlayback } from '../../hooks/useReviewPlayback';
-import { SkipBack, SkipForward, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
+import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
 import { useSettings } from '../../hooks/useSettings';
@@ -330,6 +331,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // Instantiate the playback hook; drives the walk-the-game UI below.
   const walkPlayback = useReviewPlayback({ narration: walkNarration });
+
+  // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every
+  // position in the walk (starting position + one FEN per ply) via
+  // Stockfish MultiPV once the user toggles it on.
+  const [engineLinesEnabled, setEngineLinesEnabled] = useState(false);
+  const reviewFens = useMemo<string[] | null>(() => {
+    if (!walkNarration || walkNarration.segments.length === 0) return null;
+    const fens: string[] = [walkNarration.segments[0].fenBefore];
+    for (const seg of walkNarration.segments) fens.push(seg.fenAfter);
+    return fens;
+  }, [walkNarration]);
+  const engineLines = useReviewEngineLines({ fens: reviewFens, enabled: engineLinesEnabled });
 
   // Derived state from current move index
   const currentMove = reviewState.currentMoveIndex >= 0 && reviewState.currentMoveIndex < moves.length
@@ -1504,6 +1517,64 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         fn();
       };
 
+      // WO-REVIEW-02b — Engine lines panel helpers.
+      const currentPlyLines = engineLines.linesForPly(walkPlayback.currentPly);
+      const currentBaseFen = reviewFens ? reviewFens[walkPlayback.currentPly] : null;
+      const handleToggleEngineLines = (): void => {
+        setEngineLinesEnabled((v: boolean) => {
+          void logAppAudit({
+            kind: 'review-engine-lines-toggled',
+            category: 'subsystem',
+            source: 'CoachGameReview',
+            summary: `enabled=${!v}`,
+          });
+          return !v;
+        });
+      };
+      // Seed the existing under-board best-line nav with a tapped
+      // candidate (up to 5 plies deep) and switch to analysis phase so
+      // the nav UI renders. Reuses bestLineMoves/Sans/Index/BaseFen/Fen.
+      const handleExploreCandidate = (line: { moves: string[]; rank: number }): void => {
+        if (!currentBaseFen) return;
+        const chess = new Chess(currentBaseFen);
+        const uci = line.moves.slice(0, 5);
+        const sans: string[] = [];
+        const playedUci: string[] = [];
+        for (const move of uci) {
+          try {
+            const res = chess.move({
+              from: move.slice(0, 2),
+              to: move.slice(2, 4),
+              promotion: move.length > 4 ? move.slice(4, 5) : undefined,
+            });
+            sans.push(res.san);
+            playedUci.push(move);
+          } catch {
+            break;
+          }
+        }
+        if (sans.length === 0) return;
+        bestLineRevisionRef.current++;
+        setBestLineMoves(playedUci);
+        setBestLineSans(sans);
+        setBestLineIndex(0);
+        setBestLineBaseFen(currentBaseFen);
+        setBestLineFen(currentBaseFen);
+        setBestLineActive(true);
+        void logAppAudit({
+          kind: 'review-engine-candidate-explored',
+          category: 'subsystem',
+          source: 'CoachGameReview',
+          summary: `ply=${walkPlayback.currentPly} rank=${line.rank} plies=${sans.length}`,
+        });
+        setReviewPhase('analysis');
+      };
+      const formatEval = (line: { evaluation: number; mate: number | null }): string => {
+        if (line.mate !== null) return line.mate > 0 ? `M${line.mate}` : `-M${Math.abs(line.mate)}`;
+        const pawns = line.evaluation / 100;
+        return (pawns >= 0 ? '+' : '') + pawns.toFixed(2);
+      };
+
       return (
         <div className="flex flex-col w-full h-full overflow-hidden" data-testid="coach-game-review-walk">
           {/* ── Fixed top: header, board, badge, HERO nav ─────────────── */}
@@ -1620,6 +1691,74 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   {walkPlayback.currentText ?? '(this move passes silently — tap forward to continue)'}
                 </p>
               </div>
+            </div>
+
+            {/* Engine lines panel (WO-REVIEW-02b) */}
+            <div className="px-3 pt-2 pb-1" data-testid="review-engine-lines-section">
+              <button
+                onClick={handleToggleEngineLines}
+                className="w-full flex items-center gap-2 text-xs px-3 py-2 rounded-lg border border-theme-border hover:bg-theme-surface"
+                style={{ color: 'var(--color-text)' }}
+                data-testid="review-engine-lines-toggle"
+              >
+                <Cpu size={12} style={{ color: 'var(--color-accent)' }} />
+                <span className="font-semibold">
+                  {engineLinesEnabled ? 'Hide engine lines' : 'Show engine lines'}
+                </span>
+                {engineLinesEnabled && engineLines.loading && (
+                  <span className="ml-auto text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
+                    Analyzing {engineLines.progress.current}/{engineLines.progress.total}…
+                  </span>
+                )}
+              </button>
+              {engineLinesEnabled && (
+                <div className="mt-2 space-y-1.5" data-testid="review-engine-lines-panel">
+                  {currentPlyLines && currentPlyLines.length > 0 ? (
+                    currentPlyLines.map((line, i) => {
+                      const previewSans: string[] = [];
+                      if (currentBaseFen) {
+                        try {
+                          const c = new Chess(currentBaseFen);
+                          for (const u of line.moves.slice(0, 5)) {
+                            const r = c.move({
+                              from: u.slice(0, 2),
+                              to: u.slice(2, 4),
+                              promotion: u.length > 4 ? u.slice(4, 5) : undefined,
+                            });
+                            previewSans.push(r.san);
+                          }
+                        } catch {
+                          // ignore — bad fen/uci, preview stays empty
+                        }
+                      }
+                      return (
+                        <button
+                          key={`${line.rank}-${i}`}
+                          onClick={() => handleExploreCandidate(line)}
+                          className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md border border-theme-border hover:bg-theme-surface text-left"
+                          data-testid={`review-engine-line-${i}`}
+                        >
+                          <span
+                            className="text-[11px] font-bold font-mono min-w-[52px]"
+                            style={{ color: 'var(--color-accent)' }}
+                          >
+                            {formatEval(line)}
+                          </span>
+                          <span className="text-xs font-mono truncate" style={{ color: 'var(--color-text)' }}>
+                            {previewSans.length > 0 ? previewSans.join(' ') : '—'}
+                          </span>
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="text-[11px] px-2 py-1" style={{ color: 'var(--color-text-muted)' }}>
+                      {engineLines.loading
+                        ? 'Analyzing this position…'
+                        : 'No engine lines for this ply.'}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Ask panel (expandable) */}
