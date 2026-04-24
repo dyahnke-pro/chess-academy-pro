@@ -73,8 +73,9 @@ vi.mock('../services/coachApi', () => ({
   ),
 }));
 
-import { usePositionNarration } from './usePositionNarration';
+import { usePositionNarration, __resetStockfishCacheForTests } from './usePositionNarration';
 import { POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
+import { stockfishEngine } from '../services/stockfishEngine';
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 
@@ -95,6 +96,8 @@ beforeEach(() => {
   chatResolver = null;
   chatRejecter = null;
   auditCalls.length = 0;
+  __resetStockfishCacheForTests();
+  vi.mocked(stockfishEngine.analyzePosition).mockClear();
 });
 
 // ── Tests ─────────────────────────────────────────────────────────────────
@@ -310,5 +313,69 @@ describe('usePositionNarration', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  // WO-PHASE-PROSE-01: per-FEN Stockfish cache. Repeat taps on the
+  // same position should skip the engine cycle entirely.
+  it('second narration on the same FEN skips Stockfish and logs cache-hit audit', async () => {
+    const args = defaultArgs();
+    const { result } = renderHook(() => usePositionNarration(args));
+
+    // First tap: engine runs.
+    act(() => {
+      void result.current.narrate();
+    });
+    await waitFor(() => expect(chatCalls.length).toBe(1));
+    chatResolver?.('Opening look.');
+    await waitFor(() => expect(speakRecords.length).toBe(1));
+    const firstCallCount = vi.mocked(stockfishEngine.analyzePosition).mock.calls.length;
+    expect(firstCallCount).toBe(1);
+
+    // Finish first speak so the hook is idle again.
+    speakRecords[0].resolve();
+    await waitFor(() => expect(result.current.isNarrating).toBe(false));
+
+    chatResolver = null;
+    chatCalls.length = 0;
+
+    // Second tap on the same FEN.
+    act(() => {
+      void result.current.narrate();
+    });
+    await waitFor(() => expect(chatCalls.length).toBe(1));
+
+    // Stockfish NOT called again — cache hit.
+    expect(vi.mocked(stockfishEngine.analyzePosition).mock.calls.length).toBe(firstCallCount);
+    expect(auditCalls.some((c) => c.kind === 'narration-stockfish-cache-hit')).toBe(true);
+  });
+
+  it('narration on a different FEN re-runs Stockfish (cache miss)', async () => {
+    const firstArgs = defaultArgs();
+    const { result, rerender } = renderHook(
+      (args: Parameters<typeof usePositionNarration>[0]) => usePositionNarration(args),
+      { initialProps: firstArgs },
+    );
+
+    act(() => {
+      void result.current.narrate();
+    });
+    await waitFor(() => expect(chatCalls.length).toBe(1));
+    chatResolver?.('one.');
+    await waitFor(() => expect(speakRecords.length).toBe(1));
+    speakRecords[0].resolve();
+    await waitFor(() => expect(result.current.isNarrating).toBe(false));
+
+    const firstCallCount = vi.mocked(stockfishEngine.analyzePosition).mock.calls.length;
+    chatResolver = null;
+    chatCalls.length = 0;
+
+    rerender({ ...firstArgs, fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2' });
+    act(() => {
+      void result.current.narrate();
+    });
+    await waitFor(() => expect(chatCalls.length).toBe(1));
+
+    // New FEN → engine runs again, no cache-hit audit for THIS call.
+    expect(vi.mocked(stockfishEngine.analyzePosition).mock.calls.length).toBe(firstCallCount + 1);
   });
 });
