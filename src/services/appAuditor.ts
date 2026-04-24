@@ -89,7 +89,10 @@ export type AuditKind =
   // historical audit logs.
   | 'coach-memory-intent-set'
   | 'coach-memory-intent-consulted'
-  | 'coach-memory-intent-cleared';
+  | 'coach-memory-intent-cleared'
+  // Progressive hint tiers (WO-HINT-REDESIGN-01)
+  | 'coach-memory-hint-requested'
+  | 'coach-memory-hint-recorded';
 
 export interface AuditEntry {
   timestamp: number;

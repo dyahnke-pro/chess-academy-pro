@@ -51,12 +51,35 @@ export interface CoachPreferences {
   style: 'sharp' | 'positional' | 'solid' | null;
 }
 
-/** Schema-only — not populated in this WO. */
+/** Per-position hint request. Populated by WO-HINT-REDESIGN-01.
+ *  Each entry survives across games and sessions so the coach can
+ *  surface patterns ("you've needed help on forks three times this
+ *  week"). One record per position-of-asking; if the user escalates
+ *  through tiers, the same record's `tierReached` increments. */
 export interface HintRequestRecord {
+  /** Stable id for the position-of-asking. Re-used across tier
+   *  escalations on the same FEN. */
   id: string;
+  timestamp: number;
+  /** Game id from `gameState.gameId` so future cross-game queries can
+   *  filter by game. Empty string if the caller didn't provide one. */
+  gameId: string;
+  moveNumber: number;
+  ply: number;
   fen: string;
-  pattern: string | null;
-  ts: number;
+  bestMoveUci: string;
+  bestMoveSan: string;
+  tierReached: 1 | 2 | 3;
+  /** Where the user actually stopped — equals tierReached at request
+   *  time, finalized on the next move played. */
+  tierStoppedAt: 1 | 2 | 3;
+  /** Filled when the user plays their next move on the same FEN.
+   *  Null until finalized. */
+  userPlayedBestMove: boolean | null;
+  /** Optional LLM-assigned tag describing the position type
+   *  ("fork", "pin", "center-collapse"). Reserved for future
+   *  classification — not populated in this WO. */
+  classificationTag: string | null;
 }
 
 /** Schema-only — not populated in this WO. */
@@ -104,6 +127,23 @@ interface CoachMemoryActions {
     next: Omit<IntendedOpening, 'setAt'> & { setAt?: number },
   ) => void;
   clearIntendedOpening: (reason: IntentClearReason) => void;
+  /** Append a new hint request, OR escalate the tier on an existing
+   *  same-FEN record. Returns the id of the (new or existing) record. */
+  recordHintRequest: (input: {
+    gameId: string;
+    moveNumber: number;
+    ply: number;
+    fen: string;
+    bestMoveUci: string;
+    bestMoveSan: string;
+    tier: 1 | 2 | 3;
+  }) => string;
+  /** Finalize the most recent hint record after the user plays their
+   *  next move. Sets `userPlayedBestMove` and locks `tierStoppedAt`. */
+  finalizeHintRequest: (input: {
+    fen: string;
+    playedMoveUci: string | null;
+  }) => void;
   hydrate: () => Promise<void>;
 }
 
@@ -152,6 +192,89 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
         source: 'useCoachMemoryStore.clearIntendedOpening',
         summary: `cleared ${prev.name} reason=${reason}`,
         details: JSON.stringify({ prev, reason }),
+      });
+      schedulePersist(get);
+    },
+
+    recordHintRequest: (input) => {
+      const records = get().hintRequests;
+      // Re-use the existing record if the user is escalating tiers on
+      // the same FEN. Otherwise create a new one.
+      const existing = records.find(
+        (r) => r.fen === input.fen && r.userPlayedBestMove === null,
+      );
+      const now = Date.now();
+      if (existing) {
+        const next = records.map((r) =>
+          r.id === existing.id
+            ? {
+                ...r,
+                tierReached: input.tier,
+                tierStoppedAt: input.tier,
+                bestMoveUci: input.bestMoveUci,
+                bestMoveSan: input.bestMoveSan,
+              }
+            : r,
+        );
+        set({ hintRequests: next });
+        void logAppAudit({
+          kind: 'coach-memory-hint-requested',
+          category: 'subsystem',
+          source: 'useCoachMemoryStore.recordHintRequest',
+          summary: `escalated tier=${input.tier} ply=${input.ply}`,
+          details: JSON.stringify({ id: existing.id, tier: input.tier, ply: input.ply, fen: input.fen }),
+        });
+        schedulePersist(get);
+        return existing.id;
+      }
+      const id = `hint-${now}-${Math.random().toString(36).slice(2, 8)}`;
+      const record: HintRequestRecord = {
+        id,
+        timestamp: now,
+        gameId: input.gameId,
+        moveNumber: input.moveNumber,
+        ply: input.ply,
+        fen: input.fen,
+        bestMoveUci: input.bestMoveUci,
+        bestMoveSan: input.bestMoveSan,
+        tierReached: input.tier,
+        tierStoppedAt: input.tier,
+        userPlayedBestMove: null,
+        classificationTag: null,
+      };
+      set({ hintRequests: [...records, record] });
+      void logAppAudit({
+        kind: 'coach-memory-hint-requested',
+        category: 'subsystem',
+        source: 'useCoachMemoryStore.recordHintRequest',
+        summary: `tier=${input.tier} ply=${input.ply}`,
+        details: JSON.stringify({ id, tier: input.tier, ply: input.ply, fen: input.fen }),
+      });
+      schedulePersist(get);
+      return id;
+    },
+
+    finalizeHintRequest: ({ fen, playedMoveUci }) => {
+      const records = get().hintRequests;
+      const target = records.find(
+        (r) => r.fen === fen && r.userPlayedBestMove === null,
+      );
+      if (!target) return;
+      const userPlayedBestMove = playedMoveUci === target.bestMoveUci;
+      const finalized: HintRequestRecord = {
+        ...target,
+        userPlayedBestMove,
+      };
+      set({
+        hintRequests: records.map((r) => (r.id === target.id ? finalized : r)),
+      });
+      void logAppAudit({
+        kind: 'coach-memory-hint-recorded',
+        category: 'subsystem',
+        source: 'useCoachMemoryStore.finalizeHintRequest',
+        summary: `tierStoppedAt=${finalized.tierStoppedAt} userPlayedBest=${userPlayedBestMove}`,
+        details: JSON.stringify(finalized),
+        fen,
       });
       schedulePersist(get);
     },
