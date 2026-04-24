@@ -209,6 +209,44 @@ export function hasMajorPieceCaptured(fen: string): boolean {
 }
 
 /**
+ * True iff both d-pawns AND both e-pawns have left their starting
+ * squares (moved or captured). When the central tension is resolved
+ * and minor pieces are out, the position is structurally past opening
+ * even when neither side has castled — the WO-PHASE-FIX-02 fix for
+ * games where the king stays central.
+ *
+ * Pawns at game start: white d2 e2, black d7 e7. We just check those
+ * four FEN squares; promotion to a pawn isn't legal so a missing pawn
+ * here is unambiguous.
+ */
+export function centralPawnsResolved(fen: string): boolean {
+  const board = fen.split(' ')[0] ?? '';
+  const ranks = board.split('/');
+  if (ranks.length !== 8) return false;
+  const expandRank = (rank: string): (string | null)[] => {
+    const out: (string | null)[] = [];
+    for (const ch of rank) {
+      if (ch >= '1' && ch <= '8') {
+        for (let i = 0; i < Number(ch); i++) out.push(null);
+      } else {
+        out.push(ch);
+      }
+    }
+    return out.length === 8 ? out : [];
+  };
+  // FEN ranks are stored 8..1 top-down; rank index 0 = rank 8, index 6 = rank 2, index 1 = rank 7.
+  const rank2 = expandRank(ranks[6] ?? '');
+  const rank7 = expandRank(ranks[1] ?? '');
+  if (rank2.length !== 8 || rank7.length !== 8) return false;
+  // file index: a=0, b=1, c=2, d=3, e=4, ...
+  const whiteDPawnGone = rank2[3] !== 'P';
+  const whiteEPawnGone = rank2[4] !== 'P';
+  const blackDPawnGone = rank7[3] !== 'p';
+  const blackEPawnGone = rank7[4] !== 'p';
+  return whiteDPawnGone && whiteEPawnGone && blackDPawnGone && blackEPawnGone;
+}
+
+/**
  * Detect a phase transition produced by the most recent STUDENT move.
  * Returns `null` when no transition should fire, otherwise returns the
  * event AND mutates `state` so the boundary is marked fired. Never
@@ -239,31 +277,57 @@ export function detectPhaseTransition(
   const phase = classifyPhase(lastMove.fen, lastMove.moveNumber);
 
   // ── Opening → middlegame ─────────────────────────────────────────
-  // Per WO-PHASE-FIX-03: four-rule OR, first match wins. classifyPhase
-  // is NOT a gate here — the four rules ARE the opening-end definition.
-  // classifyPhase remains in use for middlegame → endgame only.
+  // Per WO-PHASE-FIX-03 + WO-PHASE-FIX-02: seven-rule OR, first match
+  // wins. classifyPhase is NOT a gate here — these rules ARE the
+  // opening-end definition. classifyPhase remains in use for
+  // middlegame → endgame only.
   //
   //   Rule 1: Both sides developed ≥ 3 of 4 minors AND full move ≥ 8.
   //   Rule 2: Student has castled AND their rooks on the back rank
-  //           (existing rule, preserved).
+  //           (handles O-O AND O-O-O via hasCastled).
   //   Rule 3: A queen or rook has been captured at any point.
-  //   Rule 4: Full move ≥ 15 (safety net; opening is over by now per
-  //           every chess authority we consulted).
+  //   Rule 4: Full move ≥ 15 (absolute safety net; opening is over).
+  //   Rule 5 (NEW, FIX-02): Central pawns resolved AND total minor
+  //          development ≥ 5. Catches games where the king stays
+  //          central but the structure is clearly past opening.
+  //   Rule 6 (NEW, FIX-02): Either side has all 4 minors developed
+  //          AND full move ≥ 10. Catches asymmetric games where one
+  //          side is fully out before the other.
+  //   Rule 7 (NEW, FIX-02): Full move ≥ 12 AND total minors ≥ 5.
+  //          Earlier-than-15 tempo trigger when development is
+  //          obviously complete; the absolute safety net at Rule 4
+  //          remains as the lower-bound floor.
   if (!state.openingToMiddlegameFired) {
     const fullMoveNumber = Math.ceil(lastMove.moveNumber / 2);
     const dev = countDevelopedMinors(lastMove.fen);
     const castled = hasCastled(lastMove.fen, playerColor);
     const connected = rooksConnected(lastMove.fen, playerColor);
     const majorCaptured = hasMajorPieceCaptured(lastMove.fen);
+    const centralResolved = centralPawnsResolved(lastMove.fen);
 
     const rule1 = dev.white >= 3 && dev.black >= 3 && fullMoveNumber >= 8;
     const rule2 = castled && connected;
     const rule3 = majorCaptured;
     const rule4 = fullMoveNumber >= 15;
+    const rule5 = centralResolved && dev.total >= 5;
+    const rule6 = (dev.white >= 4 || dev.black >= 4) && fullMoveNumber >= 10;
+    const rule7 = fullMoveNumber >= 12 && dev.total >= 5;
 
-    if (rule1 || rule2 || rule3 || rule4) {
+    if (rule1 || rule2 || rule3 || rule4 || rule5 || rule6 || rule7) {
       state.openingToMiddlegameFired = true;
-      const triggeringRule = rule1 ? 'development' : rule2 ? 'castled-connected' : rule3 ? 'major-captured' : 'move-15-safety';
+      const triggeringRule = rule1
+        ? 'development'
+        : rule2
+          ? 'castled-connected'
+          : rule3
+            ? 'major-captured'
+            : rule4
+              ? 'move-15-safety'
+              : rule5
+                ? 'central-pawns-resolved'
+                : rule6
+                  ? 'asymmetric-full-development'
+                  : 'early-tempo';
       console.log('[PHASE-DETECT-03] EVENT EMITTED: opening-to-middlegame', {
         fen: lastMove.fen,
         moveNumber: lastMove.moveNumber,
@@ -289,10 +353,14 @@ export function detectPhaseTransition(
       castled,
       connected,
       majorCaptured,
+      centralResolved,
       rule1,
       rule2,
       rule3,
       rule4,
+      rule5,
+      rule6,
+      rule7,
     });
   } else {
     console.log('[PHASE-DETECT-02] reject: already fired opening→middlegame');
