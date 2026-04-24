@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+  centralPawnsResolved,
   countDevelopedMinors,
   createPhaseTransitionState,
   detectPhaseTransition,
@@ -368,5 +369,97 @@ describe('WO-PHASE-FIX-03 — opening-end rule set', () => {
     );
     expect(event).not.toBeNull();
     expect(event?.kind).toBe('opening-to-middlegame');
+  });
+});
+
+describe('WO-PHASE-FIX-02 — broadened opening→middlegame triggers', () => {
+  function ply(fullMove: number, side: 'white' | 'black'): number {
+    return side === 'white' ? fullMove * 2 - 1 : fullMove * 2;
+  }
+
+  // Real middlegame position from Dave's "never-castled" pattern:
+  // King still on e1, but central pawns are gone, both sides have 5+
+  // minors developed. Rule 5 should fire. (Castling rights cleared so
+  // hasCastled returns false but king is still on e-file → not castled.)
+  const NEVER_CASTLED_FEN = 'r2qk2r/pp3ppp/2nb1n2/2pPp3/2P1P3/2N1BN2/PP3PPP/R2QK2R w Kkq - 0 9';
+
+  it('centralPawnsResolved: true when both d-pawns and both e-pawns have moved', () => {
+    expect(centralPawnsResolved(NEVER_CASTLED_FEN)).toBe(true);
+  });
+
+  it('centralPawnsResolved: false at the starting position', () => {
+    expect(centralPawnsResolved('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')).toBe(false);
+  });
+
+  it('centralPawnsResolved: false when only one e-pawn has moved', () => {
+    expect(centralPawnsResolved('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1')).toBe(false);
+  });
+
+  it('Rule 5: fires when central pawns are resolved AND minors ≥ 5 (Dave never-castled scenario)', () => {
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      { fen: NEVER_CASTLED_FEN, san: 'Be3', moveNumber: ply(9, 'white'), isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('opening-to-middlegame');
+  });
+
+  it('Rule 6: fires when one side has all 4 minors developed AND fullMove ≥ 10', () => {
+    // White has all four minors out (Nf3, Nc3, Bf4, Be2), black has only one knight out.
+    // No castling. fullMove 10. Rule 1 wouldn't fire (black dev = 1). Rule 6 should.
+    const fen = 'r1bqkbnr/pppppppp/2n5/8/8/2N1BN2/PPPPBPPP/R2QK2R w KQkq - 0 10';
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      { fen, san: 'Nf3', moveNumber: ply(10, 'white'), isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('opening-to-middlegame');
+  });
+
+  it('Rule 7: fires at fullMove 12 when total minor development ≥ 5', () => {
+    // King uncastled, no major captures, dev.total = 6 (3 each side), fullMove 12.
+    const fen = 'r2qkb1r/pppbpppp/2np1n2/8/3P4/2N1BN2/PPP1PPPP/R2QKB1R w KQkq - 0 12';
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      { fen, san: 'Be3', moveNumber: ply(12, 'white'), isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('opening-to-middlegame');
+  });
+
+  it('Never-castled regression: a 13+ move game with central pawns gone fires before Rule 4', () => {
+    // Composite scenario — confirms the new rules close the gap Dave
+    // identified: phase fires WITHOUT requiring castling and WITHOUT
+    // waiting for fullMove 15.
+    const state = createPhaseTransitionState();
+    const event = detectPhaseTransition(
+      { fen: NEVER_CASTLED_FEN, san: 'Be3', moveNumber: ply(13, 'white'), isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(event).not.toBeNull();
+  });
+
+  it('preserves the deterministic-fire-once invariant across all new rules', () => {
+    const state = createPhaseTransitionState();
+    const first = detectPhaseTransition(
+      { fen: NEVER_CASTLED_FEN, san: 'Be3', moveNumber: ply(9, 'white'), isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(first).not.toBeNull();
+    // A second qualifying position must NOT re-fire.
+    const second = detectPhaseTransition(
+      { fen: NEVER_CASTLED_FEN, san: 'Bc4', moveNumber: ply(11, 'white'), isCoachMove: false },
+      state,
+      'white',
+    );
+    expect(second).toBeNull();
   });
 });
