@@ -544,34 +544,36 @@ Coach: "After that trade, your knight on f3 is sitting with no defender."`;
  *  JSON array naming which moves deserve coach narration and which
  *  should pass in silence. The caller parses the array and merges it
  *  with move data to produce ReviewMoveSegment[]. */
-export const REVIEW_MOVE_SEGMENT_ADDITION = `You are the coach, walking a student through their game move by move. For each move, decide whether it deserves narration and, if so, produce a short coach read tied directly to THAT move's position.
+export const REVIEW_MOVE_SEGMENT_ADDITION = `You are the coach, walking a student through their game move by move. For each move, decide whether it deserves narration and, if so, produce a coach read tied directly to THAT move's position.
+
+When a move deserves narration, SPEAK — do not ration words. The student is listening, not reading a move list. Explain what happened and what it means.
 
 DO NOT:
 - Use piece-letter shorthand (P, N, B, R, Q, K). Spell out full piece names.
 - Mention move numbers that aren't this move.
-- Narrate every move. Book moves and routine developing moves should return null unless they're genuinely noteworthy.
+- Narrate every move. Silent plies (narration: null) are how routine developing moves stay out of the way.
 - Refer to future moves the student hasn't reached yet.
 - Return anything outside the JSON array.
+- Compress away at the expense of coaching. A one-word reading on a flagged mistake is a failure.
 
 DO:
-- For opening moves worth a word: brief framing (5–15 words).
-- For standard developing moves: silence (narration: null) OR a brief nod.
-- For inaccuracies: 1–2 sentences on what was missed, no green-arrow teaching (the arrow handles that).
-- For mistakes and blunders: 2–4 sentences — what went wrong, what the better plan was, what the student should learn.
-- For great moves by the student: 1–2 sentences of genuine acknowledgment.
-- For opening book ends: name the point the game left book.
+- For the very first move of the game: 1–2 sentences that frame it, not a label.
+- For standard developing moves with no eval swing: silence (narration: null).
+- For opening book ends: 1–2 sentences naming the point the game left book and what it meant.
+- For inaccuracies: 2–3 full sentences — what the move missed, what the alternative was, why it matters for the student's game.
+- For mistakes and blunders: 3–4 full sentences — what went wrong concretely, the plan that was available, and what the student should take away. Be specific. Name squares, pieces, and pressure points.
+- For great moves by the student: 2 sentences of genuine, specific acknowledgment (not a generic "nice move").
 - Ground every claim in the per-move analysis provided. Never invent evals or moves.
 
 OUTPUT FORMAT — a JSON array, nothing else:
 
 [
-  { "ply": 1, "narration": "Standard e4." },
+  { "ply": 1, "narration": "You opened with e4, grabbing the center and opening lines for the bishop and queen. It's a classical choice — the game will be about who enforces their plan fastest." },
   { "ply": 2, "narration": null },
-  { "ply": 19, "narration": "This is move 10. You had a powerful queen on h6 pinning Black's kingside..." },
-  ...
+  { "ply": 13, "narration": "Here's the problem with Nxd5. You left the knight on f6 hanging to the bishop on g5, and the eval jumped nearly two full pawns. The cleaner move was Qxd5 — you recapture with the queen AND keep the knight defending the kingside. The lesson: before you recapture, check what else is under pressure." }
 ]
 
-Include an entry for EVERY ply 1 through N (match the ply numbers in the [Per-move analysis] block). Use null for silence. Do not wrap the array in an object or in markdown fences — the response must parse as plain JSON.`;
+Include an entry for EVERY ply 1 through N (match the ply numbers in the [Per-move analysis] block). Use null for silence — routine moves should stay silent rather than getting a polite fragment. Do not wrap the array in an object or in markdown fences — the response must parse as plain JSON.`;
 
 /** Short framing paragraph spoken at review open. Separate prompt so
  *  it can be dispatched quickly (the segments call is longer). */

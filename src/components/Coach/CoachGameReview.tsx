@@ -31,10 +31,10 @@ import type {
   ReviewMoveInput,
 } from '../../services/coachFeatureService';
 import { useReviewPlayback } from '../../hooks/useReviewPlayback';
-import { SkipBack, SkipForward, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
+import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
-import { useSettings } from '../../hooks/useSettings';
 import { Chess } from 'chess.js';
 import type { KeyMoment, CoachGameMove, ReviewState, GameAccuracy, MoveClassificationCounts, CoachContext, PhaseAccuracy, MissedTactic } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -102,7 +102,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     isGuidedLesson, pgn,
   } = props;
   const initialMoveIndex = props.initialMoveIndex;
-  const { settings } = useSettings();
 
   // ─── Summary-First Flow ─────────────────────────────────────────────────────
   const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
@@ -262,9 +261,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         return;
       }
       setNarrativeSummary(fullText);
-      if (settings.coachReviewVoice) {
-        void voiceService.speak(fullText);
-      }
+      // WO-REVIEW-02a-FIX: do NOT speak the legacy monolithic summary
+      // — the walk-the-game narration owns voice at review mount. The
+      // summary text is still shown as a fallback card when the walk
+      // bundle fails to load; speaking it here produced a dual-voice
+      // regression (summary + walk intro overlapping on mount).
     }).catch((err: unknown) => {
       // Surface a graceful degraded state rather than leaving the
       // review blank. Log the actual error so silent failures are
@@ -329,7 +330,25 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [reviewPhase, isGuidedLesson, reviewMoveInputs, playerColor, openingName, result, playerRating, walkNarration, isLoadingWalk]);
 
   // Instantiate the playback hook; drives the walk-the-game UI below.
-  const walkPlayback = useReviewPlayback({ narration: walkNarration });
+  // totalPlies is the authoritative ceiling — nav walks every move the
+  // student played, even when the LLM narrated only a subset
+  // (WO-REVIEW-02a-FIX).
+  const walkPlayback = useReviewPlayback({
+    narration: walkNarration,
+    totalPlies: moves.length,
+  });
+
+  // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every
+  // position in the walk (starting position + one FEN per ply) via
+  // Stockfish MultiPV once the user toggles it on.
+  const [engineLinesEnabled, setEngineLinesEnabled] = useState(false);
+  const reviewFens = useMemo<string[] | null>(() => {
+    if (!walkNarration || walkNarration.segments.length === 0) return null;
+    const fens: string[] = [walkNarration.segments[0].fenBefore];
+    for (const seg of walkNarration.segments) fens.push(seg.fenAfter);
+    return fens;
+  }, [walkNarration]);
+  const engineLines = useReviewEngineLines({ fens: reviewFens, enabled: engineLinesEnabled });
 
   // Derived state from current move index
   const currentMove = reviewState.currentMoveIndex >= 0 && reviewState.currentMoveIndex < moves.length
@@ -1478,7 +1497,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // fall through to the card so the student isn't blocked.
     if (walkNarration && walkNarration.segments.length > 0) {
       const seg = walkPlayback.currentSegment;
-      const displayFen = seg ? seg.fenAfter : (moves[0]?.fen && walkPlayback.currentPly > 0 ? moves[0].fen : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+      // Board FEN source of truth: the walk segment when available,
+      // otherwise the game's move history (moves[ply-1].fen). This
+      // keeps the board in sync even when the narration bundle is
+      // truncated or missing for the current ply (WO-REVIEW-02a-FIX).
+      const displayFen = seg
+        ? seg.fenAfter
+        : walkPlayback.currentPly > 0
+          ? moves[walkPlayback.currentPly - 1]?.fen ?? STARTING_FEN
+          : STARTING_FEN;
       const walkArrows = (() => {
         if (!seg) return undefined;
         const showBest = seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder';
@@ -1502,6 +1529,64 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const enterAnalysisAnd = (fn: () => void): void => {
         setReviewPhase('analysis');
         fn();
+      };
+
+      // WO-REVIEW-02b — Engine lines panel helpers.
+      const currentPlyLines = engineLines.linesForPly(walkPlayback.currentPly);
+      const currentBaseFen = reviewFens ? reviewFens[walkPlayback.currentPly] : null;
+      const handleToggleEngineLines = (): void => {
+        setEngineLinesEnabled((v: boolean) => {
+          void logAppAudit({
+            kind: 'review-engine-lines-toggled',
+            category: 'subsystem',
+            source: 'CoachGameReview',
+            summary: `enabled=${!v}`,
+          });
+          return !v;
+        });
+      };
+      // Seed the existing under-board best-line nav with a tapped
+      // candidate (up to 5 plies deep) and switch to analysis phase so
+      // the nav UI renders. Reuses bestLineMoves/Sans/Index/BaseFen/Fen.
+      const handleExploreCandidate = (line: { moves: string[]; rank: number }): void => {
+        if (!currentBaseFen) return;
+        const chess = new Chess(currentBaseFen);
+        const uci = line.moves.slice(0, 5);
+        const sans: string[] = [];
+        const playedUci: string[] = [];
+        for (const move of uci) {
+          try {
+            const res = chess.move({
+              from: move.slice(0, 2),
+              to: move.slice(2, 4),
+              promotion: move.length > 4 ? move.slice(4, 5) : undefined,
+            });
+            sans.push(res.san);
+            playedUci.push(move);
+          } catch {
+            break;
+          }
+        }
+        if (sans.length === 0) return;
+        bestLineRevisionRef.current++;
+        setBestLineMoves(playedUci);
+        setBestLineSans(sans);
+        setBestLineIndex(0);
+        setBestLineBaseFen(currentBaseFen);
+        setBestLineFen(currentBaseFen);
+        setBestLineActive(true);
+        void logAppAudit({
+          kind: 'review-engine-candidate-explored',
+          category: 'subsystem',
+          source: 'CoachGameReview',
+          summary: `ply=${walkPlayback.currentPly} rank=${line.rank} plies=${sans.length}`,
+        });
+        setReviewPhase('analysis');
+      };
+      const formatEval = (line: { evaluation: number; mate: number | null }): string => {
+        if (line.mate !== null) return line.mate > 0 ? `M${line.mate}` : `-M${Math.abs(line.mate)}`;
+        const pawns = line.evaluation / 100;
+        return (pawns >= 0 ? '+' : '') + pawns.toFixed(2);
       };
 
       return (
@@ -1620,6 +1705,74 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   {walkPlayback.currentText ?? '(this move passes silently — tap forward to continue)'}
                 </p>
               </div>
+            </div>
+
+            {/* Engine lines panel (WO-REVIEW-02b) */}
+            <div className="px-3 pt-2 pb-1" data-testid="review-engine-lines-section">
+              <button
+                onClick={handleToggleEngineLines}
+                className="w-full flex items-center gap-2 text-xs px-3 py-2 rounded-lg border border-theme-border hover:bg-theme-surface"
+                style={{ color: 'var(--color-text)' }}
+                data-testid="review-engine-lines-toggle"
+              >
+                <Cpu size={12} style={{ color: 'var(--color-accent)' }} />
+                <span className="font-semibold">
+                  {engineLinesEnabled ? 'Hide engine lines' : 'Show engine lines'}
+                </span>
+                {engineLinesEnabled && engineLines.loading && (
+                  <span className="ml-auto text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
+                    Analyzing {engineLines.progress.current}/{engineLines.progress.total}…
+                  </span>
+                )}
+              </button>
+              {engineLinesEnabled && (
+                <div className="mt-2 space-y-1.5" data-testid="review-engine-lines-panel">
+                  {currentPlyLines && currentPlyLines.length > 0 ? (
+                    currentPlyLines.map((line, i) => {
+                      const previewSans: string[] = [];
+                      if (currentBaseFen) {
+                        try {
+                          const c = new Chess(currentBaseFen);
+                          for (const u of line.moves.slice(0, 5)) {
+                            const r = c.move({
+                              from: u.slice(0, 2),
+                              to: u.slice(2, 4),
+                              promotion: u.length > 4 ? u.slice(4, 5) : undefined,
+                            });
+                            previewSans.push(r.san);
+                          }
+                        } catch {
+                          // ignore — bad fen/uci, preview stays empty
+                        }
+                      }
+                      return (
+                        <button
+                          key={`${line.rank}-${i}`}
+                          onClick={() => handleExploreCandidate(line)}
+                          className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md border border-theme-border hover:bg-theme-surface text-left"
+                          data-testid={`review-engine-line-${i}`}
+                        >
+                          <span
+                            className="text-[11px] font-bold font-mono min-w-[52px]"
+                            style={{ color: 'var(--color-accent)' }}
+                          >
+                            {formatEval(line)}
+                          </span>
+                          <span className="text-xs font-mono truncate" style={{ color: 'var(--color-text)' }}>
+                            {previewSans.length > 0 ? previewSans.join(' ') : '—'}
+                          </span>
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="text-[11px] px-2 py-1" style={{ color: 'var(--color-text-muted)' }}>
+                      {engineLines.loading
+                        ? 'Analyzing this position…'
+                        : 'No engine lines for this ply.'}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Ask panel (expandable) */}

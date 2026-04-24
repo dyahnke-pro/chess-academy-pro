@@ -9,6 +9,12 @@ export interface UseReviewPlaybackArgs {
   /** Loaded narration bundle — may be null while still fetching. When
    *  it arrives, the hook speaks the intro and sets currentPly to 0. */
   narration: ReviewNarration | null;
+  /** Authoritative total ply count for the game. Nav walks 0..totalPlies
+   *  regardless of how many segments the LLM narrated — plies without
+   *  a matching segment advance the board silently (narration === null).
+   *  When omitted, falls back to segments.length, which can silently
+   *  truncate nav if segment generation was partial (WO-REVIEW-02a-FIX). */
+  totalPlies?: number;
   /** Optional callback whenever the selected ply changes (for the
    *  parent to sync the board FEN / arrows). Called with the new
    *  currentPly (0 = starting position). */
@@ -52,14 +58,18 @@ export interface UseReviewPlaybackResult {
  * enough.
  */
 export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybackResult {
-  const { narration, onPlyChange } = args;
+  const { narration, totalPlies, onPlyChange } = args;
   const [currentPly, setCurrentPly] = useState(0);
   const [narrationState, setNarrationState] = useState<ReviewNarrationState>('idle');
   const introSpokenRef = useRef(false);
   const activeTokenRef = useRef(0);
 
   const segments = useMemo(() => narration?.segments ?? [], [narration]);
-  const lastPly = segments.length > 0 ? segments[segments.length - 1].ply : 0;
+  // lastPly is the authoritative nav ceiling. Prefer the caller-supplied
+  // totalPlies (= full game length), falling back to segments' trailing
+  // ply only when no count was provided. This decouples nav from the
+  // LLM's segment completeness — silent plies still walk the board.
+  const lastPly = totalPlies ?? (segments.length > 0 ? segments[segments.length - 1].ply : 0);
 
   // Reset when a new narration bundle loads (e.g. user reopens review).
   useEffect(() => {
@@ -80,18 +90,19 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   }, []);
 
   const currentSegment = useMemo<ReviewMoveSegment | null>(() => {
-    if (currentPly <= 0 || currentPly > segments.length) return null;
-    // segments are ply-indexed; find by ply rather than array index so
-    // a non-contiguous ply list (shouldn't happen, but defensive) still works.
-    return segments.find((s) => s.ply === currentPly) ?? segments[currentPly - 1];
+    if (currentPly <= 0) return null;
+    // Find by ply rather than array index. Returns null when the nav
+    // walks past the segments the LLM produced — the parent falls back
+    // to the game's move history for the board FEN.
+    return segments.find((s) => s.ply === currentPly) ?? null;
   }, [currentPly, segments]);
 
   const currentText = useMemo<string | null>(() => {
     if (!narration) return null;
     if (currentPly === 0) return narration.intro;
-    if (currentPly > segments.length && narration.closing) return narration.closing;
+    if (currentPly > lastPly && narration.closing) return narration.closing;
     return currentSegment?.narration ?? null;
-  }, [narration, currentPly, segments.length, currentSegment]);
+  }, [narration, currentPly, lastPly, currentSegment]);
 
   // Dispatch speech for the current ply's text. Supersedes any prior
   // utterance via token-counter cancellation + voiceService.stop().
@@ -153,15 +164,17 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       setNarrationState('idle');
       return;
     }
-    // Determine what text to speak for the new ply.
+    // Determine what text to speak for the new ply. When totalPlies
+    // exceeds segments.length (truncated LLM output), plies without a
+    // matching segment advance silently — speakCurrent(null) idles.
     let text: string | null = null;
     if (bounded === 0) {
       text = narration?.intro ?? null;
     } else if (bounded > lastPly) {
       text = narration?.closing ?? null;
     } else {
-      const seg = segments.find((s) => s.ply === bounded) ?? segments[bounded - 1];
-      text = seg.narration ?? null;
+      const seg = segments.find((s) => s.ply === bounded);
+      text = seg?.narration ?? null;
     }
     speakCurrent(text);
   }, [lastPly, narration, onPlyChange, segments, speakCurrent]);

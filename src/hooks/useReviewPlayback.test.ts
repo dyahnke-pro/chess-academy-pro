@@ -211,4 +211,58 @@ describe('useReviewPlayback', () => {
     await waitFor(() => expect(auditCalls.some((c) => c.kind === 'review-opened')).toBe(true));
     expect(auditCalls.filter((c) => c.kind === 'review-opened')).toHaveLength(1);
   });
+
+  // WO-REVIEW-02a-FIX regression: nav must walk the whole game even
+  // when segments are truncated (LLM hit max_tokens or parse failed).
+  it('totalPlies is the authoritative nav ceiling — walks past truncated segments', async () => {
+    const narration = makeNarration({
+      segments: [
+        makeSegment({ ply: 1, narration: 'One.' }),
+        makeSegment({ ply: 2, narration: 'Two.' }),
+      ],
+    });
+    const { result } = renderHook(() =>
+      useReviewPlayback({ narration, totalPlies: 10 }),
+    );
+    await waitFor(() => expect(speakRecords.length).toBe(1)); // intro
+
+    // Walk all the way to ply 10 — should never throw, even for plies
+    // 3–10 where no segment exists.
+    for (let i = 0; i < 10; i++) {
+      act(() => {
+        result.current.goForward();
+      });
+    }
+    expect(result.current.currentPly).toBe(10);
+
+    // goForward once more: clamped to totalPlies + 1 (closing slot).
+    act(() => {
+      result.current.goForward();
+    });
+    expect(result.current.currentPly).toBeLessThanOrEqual(11);
+  });
+
+  it('silent advance (ply past segments.length) speaks nothing and does not crash', async () => {
+    const narration = makeNarration({
+      segments: [makeSegment({ ply: 1, narration: 'Only move narrated.' })],
+    });
+    const { result } = renderHook(() =>
+      useReviewPlayback({ narration, totalPlies: 5 }),
+    );
+    await waitFor(() => expect(speakRecords.length).toBe(1)); // intro
+
+    act(() => {
+      result.current.goForward(); // ply 1: has narration
+    });
+    await waitFor(() => expect(speakRecords.length).toBe(2));
+
+    const speaksBefore = speakRecords.length;
+    act(() => {
+      result.current.goForward(); // ply 2: no segment → silent
+    });
+    expect(result.current.currentPly).toBe(2);
+    expect(speakRecords.length).toBe(speaksBefore);
+    expect(result.current.currentSegment).toBeNull();
+    expect(result.current.narrationState).toBe('idle');
+  });
 });
