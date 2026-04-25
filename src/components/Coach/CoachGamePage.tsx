@@ -2058,10 +2058,47 @@ export function CoachGamePage(): JSX.Element {
         currentHintLevel: 0,
       }));
 
-      // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
-      // "Read this position" narration. Text surface retained: the blunder
-      // interception overlay already renders `explanation` on the board.
-      void explanation;
+      // WO-BLUNDER-COACH-READ — speak the blunder prose aloud with the
+      // same sentence-streaming pattern as phase narration / hints
+      // (first sentence via speakForced, follow-ups queued behind it
+      // via speakQueuedForced so they don't interleave). Voice is
+      // additive — the chat overlay above still renders the text. The
+      // NARRATION-03 overlap concern doesn't apply: blunder pause
+      // interrupts the move flow, so per-move commentary won't fire
+      // simultaneously, and "Read this position" is manual.
+      voiceService.stop();
+      const blunderSentences =
+        explanation.match(/([^.!?]+[.!?])(?=\s|$)/g) ?? [explanation];
+      const firstBlunderSentence = blunderSentences[0]?.trim() ?? '';
+      if (firstBlunderSentence) {
+        const firstBlunderPromise = voiceService
+          .speakForced(firstBlunderSentence)
+          .catch(() => undefined);
+        for (let i = 1; i < blunderSentences.length; i++) {
+          const next = blunderSentences[i].trim();
+          if (!next) continue;
+          void firstBlunderPromise.finally(() =>
+            voiceService.speakQueuedForced(next),
+          );
+        }
+      }
+
+      // Persist the spoken alert into the unified coach memory so the
+      // coach can reason over past blunders across games and sessions.
+      // Surface is 'blunder' — its own surface, not a live-coach
+      // trigger, so `trigger` is null. LIVE-COACH-01 (when it ships)
+      // will treat blunder priority by suppressing its eval-swing
+      // trigger on the same ply; nothing to do here for that yet.
+      useCoachMemoryStore.getState().appendConversationMessage({
+        surface: 'blunder',
+        role: 'coach',
+        text: explanation,
+        gameId: gameState.gameId,
+        ply: moveCountRef.current,
+        fen: moveResult.fen,
+        trigger: null,
+      });
+
       return;
     }
 

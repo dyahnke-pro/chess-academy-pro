@@ -36,12 +36,31 @@ export interface IntendedOpening {
   capturedFromSurface: string;
 }
 
-/** Schema-only — not populated in this WO. */
+/** A coach-or-user turn the memory store remembers across surfaces and
+ *  sessions. WO-BLUNDER-COACH-READ wires the first writer (the blunder
+ *  alert). Future surfaces (live coach, hints, post-game review) plug
+ *  in by calling `appendConversationMessage` with their own `surface`. */
+export type CoachMemorySurface =
+  | 'blunder'
+  | 'live-coach'
+  | 'phase'
+  | 'hint'
+  | 'review'
+  | 'chat';
+
 export interface CoachMemoryMessage {
   id: string;
-  role: 'user' | 'assistant';
-  content: string;
+  role: 'user' | 'coach';
+  text: string;
   ts: number;
+  surface: CoachMemorySurface;
+  gameId: string | null;
+  ply: number | null;
+  fen: string | null;
+  /** Live-coach trigger label when this entry came from a trigger
+   *  (e.g. 'eval-swing-wrong'). Null for self-surfaces like blunder
+   *  which are their own surface, not a live-coach trigger. */
+  trigger: string | null;
 }
 
 /** Schema-only — not populated in this WO. */
@@ -144,6 +163,19 @@ interface CoachMemoryActions {
     fen: string;
     playedMoveUci: string | null;
   }) => void;
+  /** Append a coach-or-user turn to the conversation history. Persists
+   *  across reloads so the coach can reason over past surfaces ("you
+   *  hung your bishop in three games this week"). Emits
+   *  `coach-memory-conversation-appended`. */
+  appendConversationMessage: (input: {
+    surface: CoachMemorySurface;
+    role: 'user' | 'coach';
+    text: string;
+    gameId?: string | null;
+    ply?: number | null;
+    fen?: string | null;
+    trigger?: string | null;
+  }) => string;
   hydrate: () => Promise<void>;
 }
 
@@ -277,6 +309,41 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
         fen,
       });
       schedulePersist(get);
+    },
+
+    appendConversationMessage: (input) => {
+      const ts = Date.now();
+      const id = `msg-${ts}-${Math.random().toString(36).slice(2, 8)}`;
+      const message: CoachMemoryMessage = {
+        id,
+        role: input.role,
+        text: input.text,
+        ts,
+        surface: input.surface,
+        gameId: input.gameId ?? null,
+        ply: input.ply ?? null,
+        fen: input.fen ?? null,
+        trigger: input.trigger ?? null,
+      };
+      set({ conversationHistory: [...get().conversationHistory, message] });
+      void logAppAudit({
+        kind: 'coach-memory-conversation-appended',
+        category: 'subsystem',
+        source: 'useCoachMemoryStore.appendConversationMessage',
+        summary: `surface=${message.surface} role=${message.role} len=${message.text.length}`,
+        details: JSON.stringify({
+          id,
+          surface: message.surface,
+          role: message.role,
+          gameId: message.gameId,
+          ply: message.ply,
+          trigger: message.trigger,
+          textPreview: message.text.slice(0, 80),
+        }),
+        fen: message.fen ?? undefined,
+      });
+      schedulePersist(get);
+      return id;
     },
 
     hydrate: async () => {

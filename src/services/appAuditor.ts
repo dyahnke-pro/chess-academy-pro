@@ -92,7 +92,9 @@ export type AuditKind =
   | 'coach-memory-intent-cleared'
   // Progressive hint tiers (WO-HINT-REDESIGN-01)
   | 'coach-memory-hint-requested'
-  | 'coach-memory-hint-recorded';
+  | 'coach-memory-hint-recorded'
+  // Spoken/written coach turns appended to memory (WO-BLUNDER-COACH-READ)
+  | 'coach-memory-conversation-appended';
 
 export interface AuditEntry {
   timestamp: number;

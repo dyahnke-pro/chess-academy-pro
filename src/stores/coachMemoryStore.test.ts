@@ -1,11 +1,23 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-const auditCalls: { kind: string; summary: string }[] = [];
+const auditCalls: {
+  kind: string;
+  summary: string;
+  details?: string;
+  fen?: string;
+}[] = [];
 vi.mock('../services/appAuditor', () => ({
-  logAppAudit: vi.fn((entry: { kind: string; summary: string }) => {
-    auditCalls.push({ kind: entry.kind, summary: entry.summary });
-    return Promise.resolve();
-  }),
+  logAppAudit: vi.fn(
+    (entry: { kind: string; summary: string; details?: string; fen?: string }) => {
+      auditCalls.push({
+        kind: entry.kind,
+        summary: entry.summary,
+        details: entry.details,
+        fen: entry.fen,
+      });
+      return Promise.resolve();
+    },
+  ),
 }));
 
 import {
@@ -138,6 +150,100 @@ describe('tryCaptureOpeningIntent', () => {
     );
     expect(result).toBeNull();
     expect(useCoachMemoryStore.getState().intendedOpening).toBeNull();
+  });
+});
+
+describe('useCoachMemoryStore.appendConversationMessage', () => {
+  it('appends a blunder coach turn and emits coach-memory-conversation-appended', () => {
+    const text =
+      'Your knight on f6 is hanging — Black can grab it with the bishop.';
+    const id = useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'blunder',
+      role: 'coach',
+      text,
+      gameId: 'game-123',
+      ply: 14,
+      fen: 'rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      trigger: null,
+    });
+
+    const history = useCoachMemoryStore.getState().conversationHistory;
+    expect(history).toHaveLength(1);
+    const entry = history[0];
+    expect(entry.id).toBe(id);
+    expect(entry.surface).toBe('blunder');
+    expect(entry.role).toBe('coach');
+    expect(entry.text).toBe(text);
+    expect(entry.gameId).toBe('game-123');
+    expect(entry.ply).toBe(14);
+    expect(entry.trigger).toBeNull();
+    expect(entry.fen).toMatch(/^rnbqkb1r/);
+    expect(entry.ts).toBeGreaterThan(0);
+
+    const audit = auditCalls.find(
+      (c) => c.kind === 'coach-memory-conversation-appended',
+    );
+    expect(audit).toBeTruthy();
+    expect(audit?.summary).toMatch(/surface=blunder/);
+    expect(audit?.summary).toMatch(/role=coach/);
+    expect(audit?.fen).toMatch(/^rnbqkb1r/);
+  });
+
+  it('preserves order across multiple appends', () => {
+    const s = useCoachMemoryStore.getState();
+    s.appendConversationMessage({ surface: 'blunder', role: 'coach', text: 'first' });
+    s.appendConversationMessage({ surface: 'hint', role: 'user', text: 'second' });
+    s.appendConversationMessage({ surface: 'blunder', role: 'coach', text: 'third' });
+
+    const history = useCoachMemoryStore.getState().conversationHistory;
+    expect(history.map((m) => m.text)).toEqual(['first', 'second', 'third']);
+    expect(history.map((m) => m.surface)).toEqual(['blunder', 'hint', 'blunder']);
+  });
+
+  it('defaults gameId / ply / fen / trigger to null when omitted', () => {
+    useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'blunder',
+      role: 'coach',
+      text: 'Bare-minimum payload.',
+    });
+    const entry = useCoachMemoryStore.getState().conversationHistory[0];
+    expect(entry.gameId).toBeNull();
+    expect(entry.ply).toBeNull();
+    expect(entry.fen).toBeNull();
+    expect(entry.trigger).toBeNull();
+  });
+
+  it('roundtrips conversation history through Dexie via hydrate', async () => {
+    useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'blunder',
+      role: 'coach',
+      text: 'Persist me across reloads.',
+      gameId: 'game-persist',
+      ply: 8,
+      fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+      trigger: null,
+    });
+    await __flushCoachMemoryPersistForTests();
+
+    // Cold start: wipe in-memory state, then re-hydrate from Dexie.
+    useCoachMemoryStore.setState({
+      intendedOpening: null,
+      conversationHistory: [],
+      preferences: { likes: [], dislikes: [], style: null },
+      hintRequests: [],
+      blunderPatterns: [],
+      growthMap: [],
+      gameHistory: [],
+      hydrated: false,
+    });
+    await useCoachMemoryStore.getState().hydrate();
+
+    const restored = useCoachMemoryStore.getState().conversationHistory;
+    expect(restored).toHaveLength(1);
+    expect(restored[0].surface).toBe('blunder');
+    expect(restored[0].text).toBe('Persist me across reloads.');
+    expect(restored[0].gameId).toBe('game-persist');
+    expect(restored[0].ply).toBe(8);
   });
 });
 
