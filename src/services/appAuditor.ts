@@ -96,7 +96,13 @@ export type AuditKind =
   // Live coach interjections (WO-LIVE-COACH-01)
   | 'coach-memory-conversation-appended'
   | 'live-coach-trigger-fired'
-  | 'live-coach-trigger-suppressed';
+  | 'live-coach-trigger-suppressed'
+  // Coach Brain spine (WO-BRAIN-01)
+  | 'coach-brain-ask-received'
+  | 'coach-brain-envelope-assembled'
+  | 'coach-brain-provider-called'
+  | 'coach-brain-tool-called'
+  | 'coach-brain-answer-returned';
 
 export interface AuditEntry {
   timestamp: number;
