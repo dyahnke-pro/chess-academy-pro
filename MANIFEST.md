@@ -1,12 +1,44 @@
 # MANIFEST.md — Chess Academy Pro Progress Tracker
 
-Last updated: 2026-04-20
+Last updated: 2026-04-25
 
 > **⚠️ Coach persona entries are SUPERSEDED by WO-CLEANUP-01.**
 > Any WO row referencing Danya / Kasparov / Fischer, a
 > `CoachPersonalitySelector`, or per-personality voice IDs is
 > historical. The app ships one unified coach (Amazon Polly).
 > Current coach prompt: `src/services/coachPrompts.ts`.
+
+---
+
+## North star: COACH-BRAIN-00 (the Unified Coach)
+
+Foundational vision document — every future Chess Academy Pro WO builds
+TO this. Full text: [`docs/COACH-BRAIN-00.md`](docs/COACH-BRAIN-00.md).
+One coach, one voice, one brain. Four sources of truth (Supabase memory,
+routes manifest, live game state, identity prompt). Cerebrum = LLM
+(provider-abstracted, DeepSeek primary, Anthropic dark). Cerebellum =
+Stockfish + Lichess (read-only tools). Every surface routes through one
+`coachService.ask({ surface, ask, liveState })` call.
+
+### Brain Spine phases
+
+| Phase | WO | Status | Felt-experience acceptance |
+|-------|----|--------|----------------------------|
+| 1 | WO-BRAIN-01 — Coach Service | Not started | Dev can call `coachService.ask(...)` from anywhere; full memory + app awareness in the response. |
+| 2 | WO-BRAIN-02 — Migrate game chat | Not started | In-game chat feels identical, plumbing is unified spine. |
+| 3 | WO-BRAIN-03 — Migrate home / dashboard | Not started | "Play Caro-Kann from dashboard" commits + navigates + plays c6. "Take me to Bird's" navigates. |
+| 4 | WO-BRAIN-04 — Move selector through brain | Not started | Coach plays its committed opening from any commitment surface. |
+| 5 | WO-BRAIN-05 — Migrate remaining surfaces | Not started | Review, hints, phase narration, blunder alert, position narration, live-coach triggers all speak one voice. |
+| 6 | WO-BRAIN-06 — Retire the old | Not started | Audit log confirms zero LLM calls bypass `coachService`. Per-surface prompts deleted. |
+
+### Open migration debt (folds into BRAIN-05)
+
+See `docs/COACH-BRAIN-00.md` → "Migration debt" table for the live list
+of per-surface LLM call sites that need to route through `coachService`.
+Today's debt includes blunder alert, game chat, home chat, move
+selector, phase narration, position narration, hint tiers, and review
+playback. New per-surface LLM calls landed before the spine ships
+must be appended to that table so BRAIN-05 doesn't lose them.
 
 ---
 
