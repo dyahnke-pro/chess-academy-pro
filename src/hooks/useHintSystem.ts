@@ -193,6 +193,10 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
   const fenRef = useRef(fen);
   const bestMoveRef = useRef<BestMoveCacheEntry | null>(null);
   const inFlightRef = useRef(false);
+  // Mirrors hintState.level synchronously so back-to-back clicks see
+  // the freshly-bumped tier without waiting for React to re-render
+  // requestHint with a new closure.
+  const levelRef = useRef<HintLevel>(0);
 
   // Reset per-position state when the FEN changes. Memory store records
   // are NOT cleared — they persist so the post-game review can surface
@@ -202,6 +206,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
     const previousFen = fenRef.current;
     fenRef.current = fen;
     bestMoveRef.current = null;
+    levelRef.current = 0;
     setHintState((prev) => ({
       ...INITIAL_STATE,
       hintsUsed: prev.hintsUsed,
@@ -222,15 +227,32 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
 
   const requestHint = useCallback((): void => {
     if (!enabled) return;
-    if (inFlightRef.current) return;
-    if (hintState.level >= 3) return;
+    if (levelRef.current >= 3) return;
 
-    const nextLevel = (hintState.level + 1) as 1 | 2 | 3;
-    inFlightRef.current = true;
-    setHintState((s) => ({ ...s, isAnalyzing: true }));
+    const nextLevel = (levelRef.current + 1) as 1 | 2 | 3;
+    levelRef.current = nextLevel;
+    // Bump the tier synchronously so the UI reflects the user's click
+    // immediately. The brain call below populates nudgeText / arrows
+    // when it returns; until then the tier is "active but loading."
+    // isAnalyzing is intentionally NOT set here — HintButton has
+    // disabled={hintState.isAnalyzing}, so setting it synchronously
+    // would block any back-to-back click before the next render. It
+    // flips one microtask later inside the async IIFE.
+    setHintState((s) => ({
+      ...s,
+      level: nextLevel,
+      hintsUsed: s.hintsUsed + 1,
+    }));
 
     void (async () => {
+      // inFlightRef set inside the async block (not the synchronous
+      // prologue) so a fast second tap bumps the tier counter even
+      // while the prior brain call is still streaming. Tradeoff: a
+      // fast double-tap can fire two brain calls in parallel; the
+      // later resolution wins.
+      inFlightRef.current = true;
       try {
+        setHintState((s) => ({ ...s, isAnalyzing: true }));
         const best = bestMoveRef.current ?? (await resolveBestMove(fen, knownMove));
         if (!best || fenRef.current !== fen) {
           setHintState((s) => ({ ...s, isAnalyzing: false }));
@@ -383,12 +405,11 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
 
         setHintState((s) => ({
           ...s,
-          level: nextLevel,
+          // level + hintsUsed already set synchronously on click
           nudgeText: text || s.nudgeText,
           arrows,
           ghostMove: null,
           isAnalyzing: false,
-          hintsUsed: s.hintsUsed + 1,
         }));
         // Suppress unused-var lint while preserving the reference for
         // future tier prompts that may key off student color.
@@ -397,10 +418,11 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
         inFlightRef.current = false;
       }
     })();
-  }, [enabled, knownMove, fen, hintState.level, gameId, moveNumber, ply, playerColor]);
+  }, [enabled, knownMove, fen, gameId, moveNumber, ply, playerColor]);
 
   const resetHints = useCallback((): void => {
     bestMoveRef.current = null;
+    levelRef.current = 0;
     voiceService.stop();
     setHintState((prev) => ({
       ...INITIAL_STATE,
