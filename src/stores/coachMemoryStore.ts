@@ -57,6 +57,7 @@ export interface CoachMessage {
     | 'chat-in-game'
     | 'chat-review-ask'
     | 'chat-review-practice'
+    | 'chat-smart-search'
     | 'phase'
     | 'hint'
     | 'review-walk'
