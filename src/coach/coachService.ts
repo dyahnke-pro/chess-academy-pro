@@ -64,6 +64,12 @@ export interface CoachServiceOptions {
   identity?: CoachIdentity;
   /** Inject a custom provider instance (used by tests with a mock). */
   providerOverride?: Provider;
+  /** When provided, the service routes through the provider's
+   *  streaming path (if implemented) and pipes raw token chunks
+   *  here as they arrive. The final returned `CoachAnswer.text` is
+   *  the post-action-stripped, full response — same semantics as
+   *  `runAgentTurn`'s `onChunk`. WO-BRAIN-02. */
+  onChunk?: (chunk: string) => void;
 }
 
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
@@ -98,14 +104,17 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   const providerName = options.provider ?? resolveProviderName();
   const provider = options.providerOverride ?? pickProvider(providerName);
 
+  const streaming = !!options.onChunk && typeof provider.callStreaming === 'function';
   void logAppAudit({
     kind: 'coach-brain-provider-called',
     category: 'subsystem',
     source: 'coachService.ask',
-    summary: `provider=${provider.name}`,
+    summary: `provider=${provider.name} streaming=${streaming}`,
   });
 
-  const response = await provider.call(envelope);
+  const response = streaming && options.onChunk && provider.callStreaming
+    ? await provider.callStreaming(envelope, options.onChunk)
+    : await provider.call(envelope);
 
   // Dispatch tool calls (single-pass; no loop-back into LLM).
   const dispatchedIds: string[] = [];

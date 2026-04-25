@@ -10,10 +10,10 @@ import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
+import { coachService } from '../../coach/coachService';
+import type { LiveState } from '../../coach/types';
+import { logAppAudit } from '../../services/appAuditor';
 import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
-import { stockfishEngine } from '../../services/stockfishEngine';
-import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
-import { assessPosition } from '../../services/positionAssessor';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -103,7 +103,6 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const initialPromptSentRef = useRef(false);
     const [streamingContent, setStreamingContent] = useState('');
     const speechBufferRef = useRef('');
-    const prevEvalRef = useRef<number>(0);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesRef = useRef<ChatMessageType[]>(messages);
 
@@ -171,16 +170,22 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       const updatedMessages = [...messagesRef.current, userMsg];
       setMessages(updatedMessages);
 
-      // WO-COACH-MEMORY-UNIFY-01: surface-agnostic opening-intent
-      // capture. Writes to useCoachMemoryStore regardless of
-      // isGameOver, so the Home drawer instance of this component now
-      // persists intent the same way the in-game instance does. The
-      // existing detectInGameChatIntent / routeChatIntent paths below
-      // still run for navigation and conversational ack; this capture
-      // is additive.
+      // WO-COACH-MEMORY-UNIFY-01 + WO-BRAIN-02:
+      // - `tryCaptureForgetIntent` runs on BOTH branches as a
+      //   belt-and-suspenders for now. The brain envelope also
+      //   exposes `clear_memory` as a tool, so the LLM can clear via
+      //   tag — but the regex path stays until BRAIN-06 cleanup.
+      // - `tryCaptureOpeningIntent` runs ONLY on the drawer-chat
+      //   branch (`isGameOver === true`). The in-game branch is
+      //   migrated to coachService.ask, where the LLM emits
+      //   `set_intended_opening` via tool with full memory + manifest
+      //   awareness in the envelope. BRAIN-03 will collapse the
+      //   drawer branch the same way.
       const surface = isGameOver ? 'drawer-chat' : 'in-game-chat';
       tryCaptureForgetIntent(text, surface);
-      tryCaptureOpeningIntent(text, surface, playerColor);
+      if (isGameOver) {
+        tryCaptureOpeningIntent(text, surface, playerColor);
+      }
 
       // Narration toggle — deterministic intercept. Runs BEFORE the
       // in-game block below so "narrate while we play" reliably flips
@@ -299,88 +304,123 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         }
       }
 
-      // Run Stockfish analysis so the coach has engine-backed suggestions
-      let engineData: EngineData | undefined;
+      // ── WO-BRAIN-02 — IN-GAME BRANCH ROUTES THROUGH coachService ─────
+      // Mid-game chat goes through the unified Coach Brain spine. The
+      // envelope assembled in coachService.ask carries the four sources
+      // of truth (identity, memory, app map, live state) plus the full
+      // toolbelt — so memory + manifest awareness arrive on every call.
+      // The drawer/post-game branch below still uses runAgentTurn until
+      // BRAIN-03 collapses it the same way.
       if (!isGameOver) {
+        onBoardAnnotation?.([{ type: 'clear' }]);
+        setIsStreaming(true);
+        setStreamingContent('');
+        speechBufferRef.current = '';
+        let fullResponse = '';
         try {
-          const analysis = await stockfishEngine.analyzePosition(fen, 16);
-          engineData = {
-            bestMove: analysis.bestMove,
-            evaluation: analysis.evaluation,
-            isMate: analysis.isMate,
-            mateIn: analysis.mateIn,
-            topLines: analysis.topLines.map((l) => ({
-              moves: l.moves,
-              evaluation: l.evaluation,
-              mate: l.mate,
-            })),
-          };
-        } catch {
-          // If Stockfish fails, continue without engine data
-        }
-      }
-
-      // Run tactic classification on the last move + scan for upcoming tactics
-      let tacticAnalysis: TacticAnalysisContext | undefined;
-      if (!isGameOver && lastMove && previousFen && engineData) {
-        try {
-          const playerColorCode = playerColor === 'white' ? 'w' : 'b';
-          // Use cached previous eval for accurate eval swing (fix #1)
-          const evalBefore = prevEvalRef.current;
-          const classification = classifyPosition(
-            previousFen,
+          const liveState: LiveState = {
+            surface: 'game-chat',
             fen,
-            lastMove.san,
-            evalBefore,
-            engineData.evaluation,
-          );
-
-          const upcoming = scanUpcomingTactics(
-            fen,
-            engineData.topLines,
-            playerColorCode,
-          );
-
-          tacticAnalysis = {
-            moveQuality: classification.moveQuality,
-            evalSwing: classification.evalSwing,
-            hangingPieces: classification.hangingPieces.map((p) => ({
-              square: p.square,
-              piece: p.piece,
-              color: p.color,
-            })),
-            currentTactics: classification.tactics
-              .filter((t) => t.type !== 'none')
-              .map((t) => t.description),
-            upcomingForPlayer: upcoming
-              .filter((u) => u.beneficiary === 'player')
-              .map((u) => `In ${u.depthAhead} move${u.depthAhead > 1 ? 's' : ''}: ${u.pattern.description} (after ${u.line.join(' ')})`),
-            upcomingForOpponent: upcoming
-              .filter((u) => u.beneficiary === 'opponent')
-              .map((u) => `In ${u.depthAhead} move${u.depthAhead > 1 ? 's' : ''}: ${u.pattern.description} (after ${u.line.join(' ')})`),
+            moveHistory: history,
+            userJustDid: text,
+            currentRoute: '/coach/play',
           };
-        } catch {
-          // Tactic analysis failed, continue without it
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'GameChatPanel.handleSend',
+            summary: 'surface=game-chat viaSpine=true',
+            details: JSON.stringify({
+              surface: 'game-chat',
+              viaSpine: true,
+              timestamp: Date.now(),
+              fenIfPresent: fen,
+            }),
+            fen,
+          });
+          const answer = await coachService.ask(
+            { surface: 'game-chat', ask: text, liveState },
+            {
+              onChunk: (chunk: string) => {
+                fullResponse += chunk;
+                const displayText = fullResponse
+                  .replace(BOARD_TAG_STRIP_RE, '')
+                  .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
+                  .trim();
+                setStreamingContent(displayText);
+                if (useAppStore.getState().coachVoiceOn) {
+                  speechBufferRef.current += chunk;
+                  const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+                  if (sentenceEnd) {
+                    const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
+                    speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
+                    void voiceService.speak(sentence.trim());
+                  }
+                }
+              },
+            },
+          );
+          if (speechBufferRef.current.trim()) {
+            flushSpeechBuffer();
+          }
+          // The spine already strips [[ACTION:]] tags via parseActions;
+          // [BOARD:] tags are surface-local so we still parse them here.
+          const { cleanText: textWithoutBoardTags, commands: annotations } =
+            parseBoardTags(answer.text);
+          const hasExplicitArrows = annotations.some(
+            (c) => c.type === 'arrow' && (c.arrows?.length ?? 0) > 0,
+          );
+          if (!hasExplicitArrows) {
+            const autoArrows = extractMoveArrows(textWithoutBoardTags, { fen });
+            if (autoArrows.length > 0) {
+              annotations.push({ type: 'arrow', arrows: autoArrows });
+            }
+          }
+          const assistantMsg: ChatMessageType = {
+            id: `gmsg-${Date.now()}-resp`,
+            role: 'assistant',
+            content: textWithoutBoardTags,
+            timestamp: Date.now(),
+            metadata: {
+              annotations: annotations.length > 0 ? annotations : undefined,
+            },
+          };
+          setMessages((prev) => [...prev, assistantMsg]);
+          if (annotations.length > 0) {
+            onBoardAnnotation?.(annotations);
+          }
+        } catch (err: unknown) {
+          console.error('[GameChatPanel] coachService.ask failed:', err);
+          const errMsg: ChatMessageType = {
+            id: `gmsg-${Date.now()}-err`,
+            role: 'assistant',
+            content: 'Sorry — I couldn\'t reach the coach just now. Try again in a moment.',
+            timestamp: Date.now(),
+          };
+          setMessages((prev) => [...prev, errMsg]);
+        } finally {
+          setIsStreaming(false);
+          setStreamingContent('');
         }
+        return;
       }
 
-      // Cache current eval for next move's eval swing calculation
-      if (engineData) {
-        prevEvalRef.current = engineData.evaluation;
-      }
+      // ── DRAWER / POST-GAME BRANCH (isGameOver === true) ──────────────
+      // Unchanged. Migrated by BRAIN-03.
 
-      // Run position assessment (pawn structure, king safety, piece activity)
-      let positionAssessment: PositionAssessmentContext | undefined;
-      if (!isGameOver) {
-        try {
-          const assessment = assessPosition(fen);
-          positionAssessment = { summary: assessment.summary };
-        } catch {
-          // Position assessment failed, continue without it
-        }
-      }
+      // WO-BRAIN-02: in-game branch already returned above. Anything
+      // below here runs only for `isGameOver === true` (drawer / post-
+      // game). The engine prefetch + tactic classifier + position
+      // assessment that used to live here were guarded by `!isGameOver`
+      // — now redundant since the brain-routing block early-returns for
+      // that case. Dropped to keep the post-return code statically
+      // reachable. Drawer/post-game does not need engine prefetch
+      // (runAgentTurn handles its own context), so no behavior loss.
+      const engineData: EngineData | undefined = undefined;
+      const tacticAnalysis: TacticAnalysisContext | undefined = undefined;
+      const positionAssessment: PositionAssessmentContext | undefined = undefined;
 
-      // Build game context with lastMove, history, tactic analysis, and position assessment
+      // Build game context for the drawer / post-game runAgentTurn call.
       const gameContext = {
         fen,
         pgn,
@@ -475,15 +515,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         // the board visually in sync with "consider Nf3 / the key move
         // is Bxc4" without relying on the LLM emitting [BOARD: arrow]
         // tags. Explicit arrows always win (no override).
-        const hasExplicitArrows = annotations.some(
-          (c) => c.type === 'arrow' && (c.arrows?.length ?? 0) > 0,
-        );
-        if (!hasExplicitArrows && !isGameOver) {
-          const autoArrows = extractMoveArrows(textWithoutBoardTags, { fen });
-          if (autoArrows.length > 0) {
-            annotations.push({ type: 'arrow', arrows: autoArrows });
-          }
-        }
+        // WO-BRAIN-02: auto-arrow extraction is in-game-only; the
+        // drawer / post-game branch (the only path reaching this code
+        // post-migration) has no live board to draw arrows on. The
+        // in-game branch above runs its own auto-arrow pass after the
+        // brain response.
 
         const assistantMsg: ChatMessageType = {
           ...result.assistantMessage,
