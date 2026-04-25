@@ -1,0 +1,114 @@
+name: E2E (Playwright vs. Vercel Preview)
+
+# We trigger on deployment_status rather than pull_request so the job
+# only runs once Vercel's preview deploy is actually live and we can
+# read its URL straight from the event payload. pull_request wants a
+# separate "wait for preview" action, which is flakier than letting
+# GitHub route the event to us.
+on:
+  deployment_status:
+
+concurrency:
+  group: e2e-${{ github.event.deployment.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  deployments: read
+
+jobs:
+  e2e:
+    name: Smoke tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Only run when Vercel reports a healthy preview. Skip production
+    # deploys (they don't need the E2E gate on merge) and any non-
+    # Vercel environment (e.g. if someone wires another deployer).
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment != 'Production' &&
+      contains(github.event.deployment_status.environment_url, 'vercel.app')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Check out the deploy's ref so the tests run against the code
+          # that produced the preview URL, not the branch's HEAD at the
+          # time the workflow happens to fire.
+          ref: ${{ github.event.deployment.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # Cache the Playwright browser binaries keyed on package-lock so
+      # the first CI run downloads chromium and subsequent runs hit the
+      # cache — measurably ~2x faster past the first install.
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright chromium (if not cached)
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install OS deps for Playwright (when cached binary exists)
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      # Health-check the preview URL before firing up Playwright. Emits
+      # the resolved URL + HTTP status so a flat-out unreachable or
+      # auth-gated preview fails loud and fast rather than 14 specs each
+      # timing out for 30s.
+      - name: Probe Vercel preview URL
+        env:
+          PREVIEW_URL: ${{ github.event.deployment_status.environment_url }}
+          VERCEL_BYPASS_TOKEN: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          echo "::notice::Preview URL: $PREVIEW_URL"
+          if [ -n "$VERCEL_BYPASS_TOKEN" ]; then
+            status=$(curl -sS -o /tmp/preview-body -w '%{http_code}' \
+              -H "x-vercel-protection-bypass: $VERCEL_BYPASS_TOKEN" \
+              -H "x-vercel-set-bypass-cookie: true" \
+              "$PREVIEW_URL/")
+          else
+            status=$(curl -sS -o /tmp/preview-body -w '%{http_code}' "$PREVIEW_URL/")
+          fi
+          echo "HTTP $status"
+          head -c 400 /tmp/preview-body || true
+          echo
+          # Fail the job early with a clear message if the preview is
+          # gated or down — no point running Playwright against a 401.
+          if [ "$status" != "200" ]; then
+            echo "::error::Preview returned HTTP $status — not running Playwright. If this is 401, set VERCEL_AUTOMATION_BYPASS_SECRET in repo secrets."
+            exit 1
+          fi
+
+      - name: Run Playwright tests
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ github.event.deployment_status.environment_url }}
+          VERCEL_BYPASS_TOKEN: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          CI: 'true'
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload Playwright traces / videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-trace
+          path: test-results/
+          retention-days: 7

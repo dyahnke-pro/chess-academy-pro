@@ -21,6 +21,29 @@ import type { AiProvider, CoachVerbosity, UserProfile } from '../types';
 
 type AppState = ReturnType<typeof useAppStore.getState>;
 
+// ─── Canonical contract (WO-FOUND-02) ────────────────────────────────────────
+//
+// The 7 selectors below plus the existing ones form the read-surface
+// every feature WO should consume. They all return sensible defaults
+// when the backing column/table does not exist yet (missing column ≠
+// error) so later WOs can wire them up without breaking callers.
+
+export type DefaultCoach = 'danya' | 'kasparov' | 'fischer' | 'kid_coach';
+
+export type LearnerType = 'adult' | 'kid';
+
+export interface StreakState {
+  current: number;
+  longest: number;
+  lastActiveISO: string | null;
+}
+
+export const STREAK_DEFAULT: StreakState = {
+  current: 0,
+  longest: 0,
+  lastActiveISO: null,
+};
+
 // ─── Defaults ────────────────────────────────────────────────────────────────
 //
 // Centralized defaults for "user hasn't set this yet" reads. Keep in
@@ -134,4 +157,117 @@ export function useCoachVoiceOn(): boolean {
 
 export function useHasLlmKey(): boolean {
   return useAppStore(selectHasLlmKey);
+}
+
+// ─── Canonical 7-selector contract (WO-FOUND-02) ─────────────────────────────
+//
+// These layer on top of #302's selectors. They read from fields /
+// tables that future WOs will populate; until then they return the
+// documented safe defaults. The underlying Supabase queries (when
+// wired) MUST be wrapped in try/catch and report to Sentry with
+// tag { subsystem: 'userContext', selector: '<name>' } — the raw
+// selector itself stays pure and synchronous.
+
+/**
+ * The currently authenticated user / active local profile. Identical
+ * semantics to selectActiveProfile; exported under the contract name
+ * so feature code can read "the current user" without depending on
+ * the activeProfile / currentUser naming coincidence. Returns null
+ * during cold start or when not logged in.
+ */
+export const selectCurrentUser = (state: AppState): UserProfile | null =>
+  state.activeProfile;
+
+/**
+ * User's preferred coach persona. Sourced from
+ * `profiles.default_coach` once WO-PROGRESS-01 ships the column; for
+ * now we read `preferences.defaultCoach` if set locally, else null.
+ * Missing column / unset → null.
+ */
+export const selectDefaultCoach = (state: AppState): DefaultCoach | null => {
+  const prefs = state.activeProfile?.preferences as
+    | { defaultCoach?: DefaultCoach | null }
+    | undefined;
+  return prefs?.defaultCoach ?? null;
+};
+
+/**
+ * Current / longest / last-active streak. Sourced from the
+ * `user_streaks` table once WO-PROGRESS-01 ships it. Until then
+ * returns the zero-streak default so nudge logic and UI can render
+ * without guards.
+ */
+export const selectStreak = (_state: AppState): StreakState => STREAK_DEFAULT;
+
+/**
+ * Learner type gates kid-mode vs. adult-mode UI. Sourced from
+ * `profiles.learner_type`; missing column → 'adult' (safe default
+ * for the existing single-user install which is an adult).
+ */
+export const selectLearnerType = (state: AppState): LearnerType => {
+  if (state.activeProfile?.isKidMode) return 'kid';
+  const prefs = state.activeProfile?.preferences as
+    | { learnerType?: LearnerType }
+    | undefined;
+  return prefs?.learnerType ?? 'adult';
+};
+
+/**
+ * Whether the user has completed onboarding. Sourced from
+ * `profiles.has_onboarded`; missing column → true so existing users
+ * are not force-routed through an onboarding flow that does not exist
+ * yet. (The legacy local flag in Dexie.meta table is the current
+ * source of truth until WO-ONBOARDING ships.)
+ */
+export const selectHasOnboarded = (state: AppState): boolean => {
+  const prefs = state.activeProfile?.preferences as
+    | { hasOnboarded?: boolean }
+    | undefined;
+  return prefs?.hasOnboarded ?? true;
+};
+
+/**
+ * Count of mistake puzzles due for review today. Wired to the
+ * `mistakes` table once WO-MISTAKES-UNIFIED-01 ships it. Until then
+ * returns 0. Consumed by the nudge engine's "mistakes due" rule.
+ */
+export const selectMistakesDueToday = (_state: AppState): number => 0;
+
+/**
+ * Keys of nudges / changelog versions / new-feature pins the user
+ * has dismissed. Backed by the `user_dismissals` Supabase table
+ * (0002_user_dismissals.sql) — the store is hydrated from Supabase
+ * on login and stays empty when the user is not logged in.
+ */
+export const selectDismissals = (state: AppState): Set<string> =>
+  state.dismissals;
+
+// ─── Convenience hooks for the canonical contract ────────────────────────────
+
+export function useCurrentUser(): UserProfile | null {
+  return useAppStore(selectCurrentUser);
+}
+
+export function useDefaultCoach(): DefaultCoach | null {
+  return useAppStore(selectDefaultCoach);
+}
+
+export function useStreak(): StreakState {
+  return useAppStore(selectStreak);
+}
+
+export function useLearnerType(): LearnerType {
+  return useAppStore(selectLearnerType);
+}
+
+export function useHasOnboarded(): boolean {
+  return useAppStore(selectHasOnboarded);
+}
+
+export function useMistakesDueToday(): number {
+  return useAppStore(selectMistakesDueToday);
+}
+
+export function useDismissals(): Set<string> {
+  return useAppStore(selectDismissals);
 }
