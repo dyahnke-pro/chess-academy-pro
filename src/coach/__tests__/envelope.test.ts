@@ -108,4 +108,36 @@ describe('formatEnvelopeAsUserMessage', () => {
     expect(msg).toMatch(/\[Ask\]/);
     expect(msg).toMatch(/What opening do I have set\?/);
   });
+
+  it('includes recent conversation history when present (BRAIN-04 punt #3)', () => {
+    // Append a back-and-forth from a chat surface — both user and
+    // coach roles should land in the envelope's memory block.
+    const store = useCoachMemoryStore.getState();
+    store.appendConversationMessage({
+      surface: 'chat-in-game',
+      role: 'user',
+      text: "Why did you play Bxh6?",
+      trigger: null,
+    });
+    store.appendConversationMessage({
+      surface: 'chat-in-game',
+      role: 'coach',
+      text: "It opens the king position and trades a bishop for the defender.",
+      trigger: null,
+    });
+    const env = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      input: {
+        surface: 'game-chat',
+        ask: 'What was the followup plan?',
+        liveState: { surface: 'game-chat' },
+      },
+    });
+    const msg = formatEnvelopeAsUserMessage(env);
+    expect(msg).toMatch(/Recent conversation/);
+    expect(msg).toMatch(/chat-in-game\/user/);
+    expect(msg).toMatch(/Why did you play Bxh6\?/);
+    expect(msg).toMatch(/chat-in-game\/coach/);
+    expect(msg).toMatch(/opens the king position/);
+  });
 });
