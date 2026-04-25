@@ -1,12 +1,14 @@
 /**
- * useHintSystem tests — WO-HINT-REDESIGN-01.
+ * useHintSystem tests — WO-HINT-REDESIGN-01 + WO-BRAIN-05b.
  *
- * Verifies the progressive hint pipeline:
- *   - Tier 1 prompt sent on first tap, no arrow rendered.
+ * Verifies the progressive hint pipeline post-spine-migration:
+ *   - Tier 1 ask carries HINT_TIER_1_ADDITION; no arrow rendered.
  *   - Tier 2 escalates the same FEN's record, still no arrow.
  *   - Tier 3 escalates and now an arrow appears.
- *   - Each tap appends a `coach-memory-hint-requested` audit and the
- *     unified memory store's `hintRequests` reflects the highest tier.
+ *   - Each tap dispatches `coachService.ask({ surface: 'hint', ... },
+ *     { maxToolRoundTrips: 2 })` and the brain's `record_hint_request`
+ *     tool call (mocked here as if the LLM emitted it) writes the tap
+ *     to coach memory.
  *   - Resetting the hook between FENs finalizes the pending record.
  *   - Tier prompt strings still hold the discipline guarantees the
  *     WO requires (no piece names at Tier 1, no destination at Tier 2,
@@ -66,20 +68,69 @@ vi.mock('../services/appAuditor', () => ({
   }),
 }));
 
-const llmCalls: { addition: string; userMessage: string }[] = [];
-const llmResponses: string[] = [];
-vi.mock('../services/coachApi', () => ({
-  getCoachChatResponse: vi.fn(
-    (
-      messages: { role: 'user' | 'assistant'; content: string }[],
-      addition: string,
-    ) => {
-      llmCalls.push({ addition, userMessage: messages[0]?.content ?? '' });
-      const response = llmResponses.shift() ?? 'mock hint';
-      return Promise.resolve(response);
+interface SpineCall {
+  surface: string;
+  ask: string;
+  maxToolRoundTrips: number | undefined;
+  fen: string | undefined;
+}
+const spineCalls: SpineCall[] = [];
+const spineResponses: string[] = [];
+
+// Mock the spine. The brain's job is to emit a `record_hint_request`
+// tool call when the surface includes the canonical instruction in
+// the ask body — we simulate that here so the memory store reflects
+// production behavior. If the surface stops including the instruction
+// (regression), the test will catch it because hintRequests stays
+// empty.
+vi.mock('../coach/coachService', async () => {
+  const { useCoachMemoryStore } = await import('../stores/coachMemoryStore');
+  return {
+    coachService: {
+      ask: vi.fn(
+        async (
+          input: { surface: string; ask: string; liveState?: { fen?: string } },
+          options?: { maxToolRoundTrips?: number; onChunk?: (chunk: string) => void },
+        ) => {
+          spineCalls.push({
+            surface: input.surface,
+            ask: input.ask,
+            maxToolRoundTrips: options?.maxToolRoundTrips,
+            fen: input.liveState?.fen,
+          });
+          // Brain-emitted tool call simulator: parse the canonical
+          // record_hint_request action embedded in the ask text and
+          // dispatch it through the same store action the cerebrum
+          // tool would use. Mirrors the production behavior the
+          // identity prompt steers the brain into.
+          const match = /\[\[ACTION:record_hint_request (\{.*?\})\]\]/.exec(input.ask);
+          if (match) {
+            try {
+              const args = JSON.parse(match[1]) as {
+                gameId: string;
+                moveNumber: number;
+                ply: number;
+                fen: string;
+                bestMoveUci: string;
+                bestMoveSan: string;
+                tier: 1 | 2 | 3;
+              };
+              useCoachMemoryStore.getState().recordHintRequest(args);
+            } catch {
+              /* malformed args — let the test fail on the assertion */
+            }
+          }
+          const response = spineResponses.shift() ?? 'mock hint';
+          // Stream the response chunk-by-chunk so the surface's TTS
+          // sentence-buffer logic fires the same way it would in
+          // production.
+          options?.onChunk?.(response);
+          return { text: response, toolCallIds: [], provider: 'deepseek' as const };
+        },
+      ),
     },
-  ),
-}));
+  };
+});
 
 import { useHintSystem } from './useHintSystem';
 import {
@@ -91,8 +142,8 @@ import { db } from '../db/schema';
 beforeEach(async () => {
   speakRecords.length = 0;
   auditCalls.length = 0;
-  llmCalls.length = 0;
-  llmResponses.length = 0;
+  spineCalls.length = 0;
+  spineResponses.length = 0;
   __resetCoachMemoryStoreForTests();
   await db.meta.delete('coachMemory.v1');
 });
@@ -106,8 +157,8 @@ afterEach(() => {
 const FEN_AFTER_E4 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 describe('useHintSystem — Tier 1 (the WHY)', () => {
-  it('sends HINT_TIER_1_ADDITION on first tap and renders no arrows', async () => {
-    llmResponses.push('Your center is begging for reinforcement — find the piece that can defend it.');
+  it('sends HINT_TIER_1_ADDITION via coachService.ask on first tap and renders no arrows', async () => {
+    spineResponses.push('Your center is begging for reinforcement — find the piece that can defend it.');
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
@@ -123,17 +174,20 @@ describe('useHintSystem — Tier 1 (the WHY)', () => {
       result.current.requestHint();
     });
 
-    await waitFor(() => expect(llmCalls.length).toBe(1));
-    expect(llmCalls[0].addition).toBe(HINT_TIER_1_ADDITION);
+    await waitFor(() => expect(spineCalls.length).toBe(1));
+    expect(spineCalls[0].surface).toBe('hint');
+    expect(spineCalls[0].maxToolRoundTrips).toBe(2);
+    expect(spineCalls[0].fen).toBe(FEN_AFTER_E4);
+    expect(spineCalls[0].ask).toContain(HINT_TIER_1_ADDITION);
     await waitFor(() => expect(result.current.hintState.level).toBe(1));
     expect(result.current.hintState.arrows).toEqual([]);
     expect(result.current.hintState.ghostMove).toBeNull();
-    // Spoken via Polly as the first sentence.
+    // Sentence-streamed via Polly as the first sentence (chunk-driven).
     expect(speakRecords.some((r) => r.method === 'speakForced')).toBe(true);
   });
 
-  it('records the request to coach memory and emits the audit', async () => {
-    llmResponses.push('Your center is collapsing.');
+  it('records the request to coach memory via the brain-emitted tool call', async () => {
+    spineResponses.push('Your center is collapsing.');
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
@@ -155,13 +209,16 @@ describe('useHintSystem — Tier 1 (the WHY)', () => {
     expect(records[0].tierReached).toBe(1);
     expect(records[0].fen).toBe(FEN_AFTER_E4);
     expect(records[0].userPlayedBestMove).toBeNull();
+    // Surface fires the migration audit; store action fires the
+    // memory-record audit.
+    expect(auditCalls.some((c) => c.kind === 'coach-surface-migrated')).toBe(true);
     expect(auditCalls.some((c) => c.kind === 'coach-memory-hint-requested')).toBe(true);
   });
 });
 
 describe('useHintSystem — Tier 2 escalation (the WHICH)', () => {
   it('uses HINT_TIER_2_ADDITION on second tap, still no arrow', async () => {
-    llmResponses.push('Tier 1 prose.', 'Tier 2 prose.');
+    spineResponses.push('Tier 1 prose.', 'Tier 2 prose.');
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
@@ -182,9 +239,10 @@ describe('useHintSystem — Tier 2 escalation (the WHICH)', () => {
       result.current.requestHint();
     });
     await waitFor(() => expect(result.current.hintState.level).toBe(2));
-    expect(llmCalls[1].addition).toBe(HINT_TIER_2_ADDITION);
+    expect(spineCalls[1].ask).toContain(HINT_TIER_2_ADDITION);
     expect(result.current.hintState.arrows).toEqual([]);
-    // Memory store records the same FEN once with escalated tier.
+    // Memory store records the same FEN once with escalated tier
+    // (the store ratchets monotonically on the same FEN).
     const records = useCoachMemoryStore.getState().hintRequests;
     expect(records).toHaveLength(1);
     expect(records[0].tierReached).toBe(2);
@@ -193,7 +251,7 @@ describe('useHintSystem — Tier 2 escalation (the WHICH)', () => {
 
 describe('useHintSystem — Tier 3 (the FULL ANSWER)', () => {
   it('uses HINT_TIER_3_ADDITION on third tap and renders an arrow', async () => {
-    llmResponses.push('Tier 1 prose.', 'Tier 2 prose.', 'Tier 3 prose.');
+    spineResponses.push('Tier 1 prose.', 'Tier 2 prose.', 'Tier 3 prose.');
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
@@ -212,7 +270,7 @@ describe('useHintSystem — Tier 3 (the FULL ANSWER)', () => {
     act(() => { result.current.requestHint(); });
     await waitFor(() => expect(result.current.hintState.level).toBe(3));
 
-    expect(llmCalls[2].addition).toBe(HINT_TIER_3_ADDITION);
+    expect(spineCalls[2].ask).toContain(HINT_TIER_3_ADDITION);
     expect(result.current.hintState.arrows).toHaveLength(1);
     expect(result.current.hintState.arrows[0].startSquare).toBe('g1');
     expect(result.current.hintState.arrows[0].endSquare).toBe('f3');
@@ -221,7 +279,7 @@ describe('useHintSystem — Tier 3 (the FULL ANSWER)', () => {
   });
 
   it('does not escalate beyond Tier 3 on additional taps', async () => {
-    llmResponses.push('a', 'b', 'c');
+    spineResponses.push('a', 'b', 'c');
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
@@ -242,13 +300,13 @@ describe('useHintSystem — Tier 3 (the FULL ANSWER)', () => {
     // Extra tap is a no-op.
     act(() => { result.current.requestHint(); });
     expect(result.current.hintState.level).toBe(3);
-    expect(llmCalls.length).toBe(3);
+    expect(spineCalls.length).toBe(3);
   });
 });
 
 describe('useHintSystem — FEN-change finalization', () => {
   it('finalizes the pending hint record when the FEN changes', async () => {
-    llmResponses.push('Tier 1 prose.');
+    spineResponses.push('Tier 1 prose.');
     const { result, rerender } = renderHook(
       (props: Parameters<typeof useHintSystem>[0]) => useHintSystem(props),
       {

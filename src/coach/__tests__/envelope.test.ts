@@ -140,4 +140,40 @@ describe('formatEnvelopeAsUserMessage', () => {
     expect(msg).toMatch(/chat-in-game\/coach/);
     expect(msg).toMatch(/opens the king position/);
   });
+
+  it('renders recent hint requests as a compact summary (BRAIN-05b)', () => {
+    // Three hint events at plies 12, 14, 16 with tiers 1 / 2 / 3.
+    // Envelope should render: "Recent hint requests: 3 in the last
+    // 10 plies (T1, T1→T2, T1→T2→T3)" — the per-record verbose
+    // format from BRAIN-01..04 is replaced by this single summary
+    // line so the envelope stays compact even when the user taps a
+    // lot of hints.
+    const store = useCoachMemoryStore.getState();
+    store.recordHintRequest({
+      gameId: 'g1', moveNumber: 6, ply: 12,
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      bestMoveUci: 'e2e4', bestMoveSan: 'e4', tier: 1,
+    });
+    store.recordHintRequest({
+      gameId: 'g1', moveNumber: 7, ply: 14,
+      fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+      bestMoveUci: 'e7e5', bestMoveSan: 'e5', tier: 2,
+    });
+    store.recordHintRequest({
+      gameId: 'g1', moveNumber: 8, ply: 16,
+      fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
+      bestMoveUci: 'g1f3', bestMoveSan: 'Nf3', tier: 3,
+    });
+    const env = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      input: { surface: 'hint', ask: 'tier 1 hint please', liveState: { surface: 'hint' } },
+    });
+    const msg = formatEnvelopeAsUserMessage(env);
+    expect(msg).toMatch(
+      /Recent hint requests: 3 in the last 10 plies \(T1, T1→T2, T1→T2→T3\)/,
+    );
+    // Per-record verbose format from BRAIN-01..04 is gone — should
+    // not see "ply 12 tier=1" anywhere in the envelope.
+    expect(msg).not.toMatch(/ply 12 tier=/);
+  });
 });
