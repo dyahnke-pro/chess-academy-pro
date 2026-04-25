@@ -26,12 +26,12 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import {
-  buildChessContextMessage,
   HINT_TIER_1_ADDITION,
   HINT_TIER_2_ADDITION,
   HINT_TIER_3_ADDITION,
 } from '../services/coachPrompts';
-import { getCoachChatResponse } from '../services/coachApi';
+import { coachService } from '../coach/coachService';
+import type { LiveState } from '../coach/types';
 import { voiceService } from '../services/voiceService';
 import {
   getCachedStockfish,
@@ -44,8 +44,12 @@ import type {
   BoardArrow,
   GhostMoveData,
   StockfishAnalysis,
-  CoachContext,
 } from '../types';
+
+/** Strip the brain's `[BOARD:...]` and `[[ACTION:...]]` tags from any
+ *  spoken / displayed text — never read action tags out loud, never
+ *  show them to the user in the hint nudge. */
+const TAG_STRIP_RE = /\[BOARD:[^\]]*\]|\[\[ACTION:[^\]]*\]\]/gi;
 
 export interface UseHintSystemConfig {
   fen: string;
@@ -182,24 +186,6 @@ async function resolveBestMove(
   };
 }
 
-function speakHintText(text: string): void {
-  // Sentence-streaming TTS: first sentence via Polly (speakForced),
-  // rest queued via Web Speech (speakQueuedForced) behind the Polly
-  // promise so they don't interleave. Mirrors the pattern used by
-  // usePositionNarration / usePhaseNarration.
-  voiceService.stop();
-  const sentences = text.match(/([^.!?]+[.!?])(?=\s|$)/g) ?? [text];
-  if (sentences.length === 0) return;
-  const first = sentences[0].trim();
-  if (!first) return;
-  const firstPromise = voiceService.speakForced(first).catch(() => undefined);
-  for (let i = 1; i < sentences.length; i++) {
-    const next = sentences[i].trim();
-    if (!next) continue;
-    void firstPromise.finally(() => voiceService.speakQueuedForced(next));
-  }
-}
-
 export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn {
   const { fen, enabled, knownMove, gameId, moveNumber, ply, playerColor } = config;
 
@@ -252,22 +238,14 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
         }
         bestMoveRef.current = best;
 
-        // Build the chess context used by every tier. Each tier injects
-        // its own additionalContext line so the LLM gets exactly what
-        // that tier needs.
-        const baseCtx: CoachContext = {
-          fen,
-          lastMoveSan: null,
-          moveNumber: moveNumber ?? 0,
-          pgn: '',
-          openingName: null,
-          stockfishAnalysis: best.analysis,
-          playerMove: null,
-          moveClassification: null,
-          playerProfile: { rating: 1200, weaknesses: [] },
-        };
-
-        let addition = HINT_TIER_1_ADDITION;
+        // Build the per-tier framing that goes inside the `ask` text.
+        // Post WO-BRAIN-05b the spine assembles the four-source
+        // envelope (identity prompt with calibration framing,
+        // memory snapshot with recent-hints summary, routes manifest,
+        // live state); the surface only provides the tier-specific
+        // ask + the engine context the brain needs to answer it.
+        let tierAddition = HINT_TIER_1_ADDITION;
+        let tierContextLine: string;
         if (nextLevel === 2) {
           // Determine piece + origin for Tier 2's prompt.
           const { from } = uciToSquares(best.bestMoveUci);
@@ -277,34 +255,26 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             const sq = chess.get(from as Parameters<typeof chess.get>[0]);
             if (sq) pieceSymbol = sq.type;
           } catch {
-            // Fall back; LLM will work from SAN.
+            // Fall back; brain will work from SAN.
           }
-          const ctx: CoachContext = {
-            ...baseCtx,
-            additionalContext:
-              `Best move (for your reference, used to derive the piece): ${best.bestMoveSan}.\n` +
-              `Piece to move: ${pieceNameFromSymbol(pieceSymbol)} on ${from}.`,
-          };
-          addition = HINT_TIER_2_ADDITION;
-          baseCtx.additionalContext = ctx.additionalContext;
+          tierAddition = HINT_TIER_2_ADDITION;
+          tierContextLine =
+            `Best move (for your reference, used to derive the piece): ${best.bestMoveSan}.\n` +
+            `Piece to move: ${pieceNameFromSymbol(pieceSymbol)} on ${from}.`;
         } else if (nextLevel === 3) {
-          const ctx: CoachContext = {
-            ...baseCtx,
-            additionalContext: `Best move: ${best.bestMoveSan}. Explain WHY it's best with concrete depth — what it defends, attacks, or changes; the plan it enables next.`,
-          };
-          addition = HINT_TIER_3_ADDITION;
-          baseCtx.additionalContext = ctx.additionalContext;
+          tierAddition = HINT_TIER_3_ADDITION;
+          tierContextLine = `Best move: ${best.bestMoveSan}. Explain WHY it's best with concrete depth — what it defends, attacks, or changes; the plan it enables next.`;
         } else {
-          // Tier 1
-          baseCtx.additionalContext = `Best move (for your reference, DO NOT state it): ${best.bestMoveSan}. Diagnose the WHY in 1-2 sentences without naming any piece or square.`;
+          tierContextLine = `Best move (for your reference, DO NOT state it): ${best.bestMoveSan}. Diagnose the WHY in 1-2 sentences without naming any piece or square.`;
         }
 
-        const userMessage = buildChessContextMessage(baseCtx);
-
-        // Record the request in the memory store BEFORE the LLM call
-        // so the audit trail captures every tap, even if the LLM
-        // errors out mid-stream.
-        useCoachMemoryStore.getState().recordHintRequest({
+        // The full ask: tier framing + per-tier context + an explicit
+        // record_hint_request instruction so the brain reliably logs
+        // the tap to memory via its cerebrum tool. Memory writes are
+        // the brain's responsibility now (BRAIN-05b retired the
+        // deterministic `useCoachMemoryStore.recordHintRequest`
+        // call that ran before the LLM).
+        const recordHintArgs = JSON.stringify({
           gameId: gameId ?? '',
           moveNumber: moveNumber ?? 0,
           ply: ply ?? 0,
@@ -313,24 +283,82 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           bestMoveSan: best.bestMoveSan,
           tier: nextLevel,
         });
+        const askText = [
+          tierAddition,
+          '',
+          tierContextLine,
+          '',
+          `Also call record_hint_request with these args so this tap lands in memory: [[ACTION:record_hint_request ${recordHintArgs}]]`,
+        ].join('\n');
+
+        const liveState: LiveState = {
+          surface: 'hint',
+          fen,
+          moveHistory: [],
+          userJustDid: `requested hint tier ${nextLevel}`,
+          currentRoute: '/coach/play',
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'useHintSystem.requestHint',
+          summary: `surface=hint viaSpine=true tier=${nextLevel}`,
+          details: JSON.stringify({
+            surface: 'hint',
+            viaSpine: true,
+            tier: nextLevel,
+            bestMoveSan: best.bestMoveSan,
+          }),
+          fen,
+        });
+
+        // Stream chunks straight into sentence-buffered TTS so the
+        // student hears the hint as the brain produces it. Tag-strip
+        // both the spoken text and the final nudge text so action
+        // tags never reach the user.
+        let speechBuffer = '';
+        let firstSpeakPromise: Promise<void> | null = null;
+        const speakSentence = (sentence: string): void => {
+          const cleaned = sentence.replace(TAG_STRIP_RE, '').trim();
+          if (!cleaned) return;
+          if (!firstSpeakPromise) {
+            firstSpeakPromise = Promise.resolve(voiceService.speakForced(cleaned))
+              .catch(() => undefined);
+          } else {
+            void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(cleaned));
+          }
+        };
+        voiceService.stop();
 
         let response = '';
         try {
-          response = await getCoachChatResponse(
-            [{ role: 'user', content: userMessage }],
-            addition,
-            undefined,
-            'hint',
-            800,
-            'medium',
+          const answer = await coachService.ask(
+            { surface: 'hint', ask: askText, liveState },
+            {
+              maxToolRoundTrips: 2,
+              onChunk: (chunk: string) => {
+                speechBuffer += chunk;
+                const sentenceEnd = /[.!?\n]/.exec(speechBuffer);
+                if (sentenceEnd) {
+                  const sentence = speechBuffer.slice(0, sentenceEnd.index + 1).trim();
+                  speechBuffer = speechBuffer.slice(sentenceEnd.index + 1).trimStart();
+                  speakSentence(sentence);
+                }
+              },
+            },
           );
+          // Flush any trailing text (no terminator) via the same gate.
+          const tail = speechBuffer.replace(TAG_STRIP_RE, '').trim();
+          if (tail) speakSentence(tail);
+          speechBuffer = '';
+          response = answer.text.replace(TAG_STRIP_RE, '').trim();
         } catch (err) {
           const msg = err instanceof Error ? err.message : String(err);
           void logAppAudit({
             kind: 'llm-error',
             category: 'subsystem',
             source: 'useHintSystem',
-            summary: `tier ${nextLevel} LLM failed`,
+            summary: `tier ${nextLevel} spine call failed`,
             details: msg,
           });
         }
@@ -349,7 +377,9 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           }
         }
 
-        if (text) speakHintText(text);
+        // Streaming TTS already happened in the spine `onChunk` above
+        // — no additional speak call here. The text below is the
+        // post-strip nudge for the visual bubble.
 
         setHintState((s) => ({
           ...s,

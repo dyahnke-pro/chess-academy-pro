@@ -68,7 +68,18 @@ export function assembleEnvelope(args: AssembleEnvelopeArgs): AssembledEnvelope 
 // ─── Formatters ─────────────────────────────────────────────────────────────
 
 const MAX_RECENT_MESSAGES = 12;
-const MAX_RECENT_HINT_REQUESTS = 5;
+const RECENT_HINT_PLY_WINDOW = 10;
+
+/** Render the escalation path implied by a record's tier. The store
+ *  ratchets monotonically through tiers on the same FEN, so a record
+ *  with tierReached=N visited every tier from 1 to N. T1 = "T1",
+ *  T2 = "T1→T2", T3 = "T1→T2→T3" — matches WO-BRAIN-05b §"Hint
+ *  history visible in the envelope". */
+function formatHintEscalation(tier: 1 | 2 | 3): string {
+  if (tier === 1) return 'T1';
+  if (tier === 2) return 'T1→T2';
+  return 'T1→T2→T3';
+}
 
 function formatMemoryBlock(memory: CoachMemorySnapshot): string {
   const parts: string[] = ['[Coach memory]'];
@@ -85,10 +96,22 @@ function formatMemoryBlock(memory: CoachMemorySnapshot): string {
     );
   }
   if (memory.hintRequests.length > 0) {
-    const recent = memory.hintRequests.slice(-MAX_RECENT_HINT_REQUESTS);
-    parts.push('- Recent hint requests:');
-    for (const r of recent) {
-      parts.push(`  • ply ${r.ply} tier=${r.tierStoppedAt} bestSan=${r.bestMoveSan} userPlayedBest=${r.userPlayedBestMove ?? 'pending'}`);
+    // Compact summary per WO-BRAIN-05b. Window = the last
+    // RECENT_HINT_PLY_WINDOW plies (anchored on the highest ply we've
+    // seen), so a long game's tail of hint events doesn't grow
+    // unbounded in the envelope. Records with `ply: 0` (legacy taps
+    // without a ply) are excluded from the window calc but still
+    // counted in the recent escalation list — better noisy than
+    // silent for hint-aware reasoning.
+    const maxPly = Math.max(...memory.hintRequests.map((r) => r.ply));
+    const recent = memory.hintRequests.filter(
+      (r) => r.ply === 0 || maxPly - r.ply <= RECENT_HINT_PLY_WINDOW,
+    );
+    if (recent.length > 0) {
+      const escalations = recent.map((r) => formatHintEscalation(r.tierStoppedAt));
+      parts.push(
+        `- Recent hint requests: ${recent.length} in the last ${RECENT_HINT_PLY_WINDOW} plies (${escalations.join(', ')})`,
+      );
     }
   }
   if (memory.conversationHistory.length > 0) {
