@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render as rtlRender, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render as rtlRender, screen, waitFor, fireEvent, act } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { JourneyChapterPage } from './JourneyChapterPage';
@@ -344,12 +344,21 @@ describe('JourneyChapterPage', () => {
     // No hint text before clicking
     expect(screen.queryByTestId('chapter-hint-text')).not.toBeInTheDocument();
 
-    // Click 1: level 0→1 (arrows only, no text yet)
-    fireEvent.click(screen.getByTestId('hint-button'));
+    // Click 1: level 0→1 (arrows only, no text yet). Wrap in `act` so
+    // React flushes the synchronous tier bump AND the async IIFE inside
+    // requestHint (the post-await setHintState that lands nudgeText)
+    // before the next assertion fires. The previous synchronous
+    // fireEvent.click pattern raced the disable-on-isAnalyzing render
+    // and blocked click 2; mirroring PracticeMode's `await act` flow.
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('hint-button'));
+    });
     expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
 
     // Click 2: level 1→2 (nudge text appears)
-    fireEvent.click(screen.getByTestId('hint-button'));
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('hint-button'));
+    });
     expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '2');
     expect(screen.getByTestId('chapter-hint-text')).toBeInTheDocument();
   });
