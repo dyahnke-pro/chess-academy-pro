@@ -44,6 +44,8 @@ export interface RouteManifestEntry {
 export type CoachSurface =
   | 'home-chat'
   | 'game-chat'
+  | 'standalone-chat'
+  | 'smart-search'
   | 'move-selector'
   | 'hint'
   | 'phase-narration'

@@ -3,11 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { Search, X, Sparkles, BookOpen, Swords, Target, Puzzle, Loader2, MessageCircle, Play, Mic, MicOff } from 'lucide-react';
 import { useSmartSearch } from '../../hooks/useSmartSearch';
 import { useAppStore, selectFreshBoardSnapshot } from '../../stores/appStore';
+import { useCoachSessionStore } from '../../stores/coachSessionStore';
+import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { parseCoachIntent } from '../../services/coachAgent';
 import { voiceInputService } from '../../services/voiceInputService';
-import { runCoachTurn } from '../../services/coachAgentRunner';
+import { coachService } from '../../coach/coachService';
+import type { LiveState } from '../../coach/types';
+import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
 import type { SmartSearchResult, SmartSearchCategory } from '../../types';
+
+/** Strip the brain's `[BOARD:...]` and `[[ACTION:...]]` tags from any
+ *  spoken / persisted text — never read action tags out loud, never
+ *  show them in chat history. */
+const TAG_STRIP_RE = /\[BOARD:[^\]]*\]|\[\[ACTION:[^\]]*\]\]/gi;
 
 interface SmartSearchBarProps {
   scope?: SmartSearchCategory;
@@ -205,18 +214,38 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
         inputRef.current?.blur();
         void navigate(`/coach/session/explain-position${qs ? `?${qs}` : ''}`);
       } else {
-        // No structured intent — voice-only QA. Run the coach turn
+        // ── WO-BRAIN-05a — VOICE-ONLY QA ROUTES THROUGH coachService ────
+        // No structured intent — voice-only QA. The brain handles it
         // in the BACKGROUND (no drawer, no chat panel) so a text box
         // doesn't pop up just because the user said something. The
-        // coach reply streams via TTS only. The exchange is still
-        // saved to the session store so it's part of the persistent
-        // history if the user opens the chat later.
+        // coach reply streams via TTS only. The exchange persists to
+        // both the session store (so the chat page renders it later)
+        // and the memory store's conversationHistory (so the next
+        // brain envelope sees the back-and-forth).
         clear();
         setShowDropdown(false);
         inputRef.current?.blur();
+
+        // Persist the user's voice ask immediately. If the spine call
+        // fails or the page unmounts mid-reply, at least the question
+        // is preserved.
+        const userMsgId = `msg-${Date.now()}-u`;
+        useCoachSessionStore.getState().appendMessage({
+          id: userMsgId,
+          role: 'user',
+          content: text,
+          modality: 'voice',
+          timestamp: Date.now(),
+        });
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-smart-search',
+          role: 'user',
+          text,
+          trigger: null,
+        });
+
         // Stream the reply straight to TTS, sentence-by-sentence,
-        // queueing each so they don't cut each other off. No drawer
-        // opens; no text bubble appears.
+        // queueing each so they don't cut each other off.
         //
         // CRITICAL: speakForced must settle its stop()+start cycle
         // before any speakQueuedForced fires. Otherwise queue() lands
@@ -231,6 +260,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           // the bug pattern users see most often — cleaner to suppress
           // at the boundary than hope the model behaves.
           const cleaned = sentence
+            .replace(TAG_STRIP_RE, '')
             .replace(/^(great question!?|excellent!?|good question!?|nice (one|question)!?|interesting!?|that'?s a (great|good|nice) (question|one)!?)\s*/i, '')
             .trim();
           if (!cleaned) return;
@@ -246,28 +276,71 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           }
         };
         voiceService.stop();
-        void runCoachTurn({
-          userText: text,
-          userModality: 'voice',
-          navigate: (path: string) => { void navigate(path); },
-          onChunk: (chunk: string) => {
-            speechBuffer += chunk;
-            // Flush on ANY sentence terminator (.!?\n) — no whitespace
-            // requirement. Earlier regex required `[.!?]\s` which
-            // delayed first audio until the second word arrived.
-            const sentenceEnd = /[.!?\n]/.exec(speechBuffer);
-            if (sentenceEnd) {
-              const sentence = speechBuffer.slice(0, sentenceEnd.index + 1).trim();
-              speechBuffer = speechBuffer.slice(sentenceEnd.index + 1).trimStart();
-              speakOrQueue(sentence);
-            }
-          },
-        }).then(() => {
-          const tail = speechBuffer.trim();
-          if (tail) speakOrQueue(tail);
-        }).catch((err: unknown) => {
-          console.warn('[SmartSearchBar] background voice turn failed:', err);
+
+        const liveState: LiveState = {
+          surface: 'smart-search',
+          currentRoute: '/',
+          userJustDid: text,
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'SmartSearchBar.handleMicToggle.voiceQA',
+          summary: 'surface=smart-search viaSpine=true',
+          details: JSON.stringify({
+            surface: 'smart-search',
+            viaSpine: true,
+            modality: 'voice',
+            timestamp: Date.now(),
+          }),
         });
+        void coachService
+          .ask(
+            { surface: 'smart-search', ask: text, liveState },
+            {
+              maxToolRoundTrips: 1,
+              onNavigate: (path: string) => {
+                void navigate(path);
+              },
+              onChunk: (chunk: string) => {
+                speechBuffer += chunk;
+                // Flush on ANY sentence terminator (.!?\n) — no whitespace
+                // requirement. Earlier regex required `[.!?]\s` which
+                // delayed first audio until the second word arrived.
+                const sentenceEnd = /[.!?\n]/.exec(speechBuffer);
+                if (sentenceEnd) {
+                  const sentence = speechBuffer.slice(0, sentenceEnd.index + 1).trim();
+                  speechBuffer = speechBuffer.slice(sentenceEnd.index + 1).trimStart();
+                  speakOrQueue(sentence);
+                }
+              },
+            },
+          )
+          .then((answer) => {
+            const tail = speechBuffer.replace(TAG_STRIP_RE, '').trim();
+            if (tail) speakOrQueue(tail);
+            // Persist the coach reply (post-strip) into both stores
+            // mirroring the user-side appends above. Voice modality
+            // tells the chat renderer to hide the text bubble for
+            // voice-originated turns.
+            const cleanText = answer.text.replace(TAG_STRIP_RE, '').trim();
+            useCoachSessionStore.getState().appendMessage({
+              id: `msg-${Date.now()}-resp`,
+              role: 'assistant',
+              content: cleanText,
+              modality: 'voice',
+              timestamp: Date.now(),
+            });
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-smart-search',
+              role: 'coach',
+              text: cleanText,
+              trigger: null,
+            });
+          })
+          .catch((err: unknown) => {
+            console.warn('[SmartSearchBar] background voice turn failed:', err);
+          });
       }
     });
     const ok = voiceInputService.startListening({

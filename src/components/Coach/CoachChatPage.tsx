@@ -4,14 +4,21 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeOff } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
-import { getChatSystemPromptAdditions, loadAnalysisContext } from '../../services/coachChatService';
+import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { routeChatIntent } from '../../services/coachIntentRouter';
-import { runCoachTurn, detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
-import { buildCoachMemoryBlock } from '../../services/coachMemoryService';
+import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
+import { coachService } from '../../coach/coachService';
+import type { LiveState } from '../../coach/types';
+import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType } from '../../types';
+
+/** Strip the brain's `[BOARD:...]` and `[[ACTION:...]]` tags from
+ *  display text. Tags are parsed and dispatched by the spine; the
+ *  user shouldn't see them in the chat bubble. */
+const TAG_STRIP_RE = /\[BOARD:[^\]]*\]|\[\[ACTION:[^\]]*\]\]/gi;
 
 const STARTER_CHIPS = [
   'Play the Italian against me',
@@ -58,7 +65,6 @@ export function CoachChatPage(): JSX.Element {
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [streamingModality, setStreamingModality] = useState<'voice' | 'text'>('text');
-  const [analysisContext, setAnalysisContext] = useState('');
   const [voiceMuted, setVoiceMuted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechBufferRef = useRef('');
@@ -74,13 +80,6 @@ export function CoachChatPage(): JSX.Element {
   useEffect(() => {
     voiceMutedRef.current = voiceMuted;
   }, [voiceMuted]);
-
-  // Load game analysis context on mount
-  useEffect(() => {
-    const username = activeProfile?.preferences.chessComUsername
-      ?? activeProfile?.preferences.lichessUsername;
-    void loadAnalysisContext(username ?? undefined).then(setAnalysisContext);
-  }, [activeProfile]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -189,22 +188,35 @@ export function CoachChatPage(): JSX.Element {
       console.warn('[CoachChatPage] intent routing failed:', err);
     }
 
-    // Agent loop: build snapshot, call LLM, dispatch any [[ACTION:]]
-    // tags it emits. The runner appends both user + assistant messages
-    // to the session store; this view just renders them.
+    // ── WO-BRAIN-05a — STANDALONE CHAT ROUTES THROUGH coachService ────
+    // The legacy `runCoachTurn` path that built its own system prompt
+    // (chat additions + analysis context + memory block) is gone. The
+    // spine assembles the four-source envelope (identity, memory,
+    // routes manifest, live state) on every call; this surface just
+    // dispatches the ask. `navigate_to_route` graduates from stub to
+    // real here too — the brain can take the user anywhere.
     setIsStreaming(true);
     setStreamingContent('');
     setStreamingModality(modality);
     speechBufferRef.current = '';
 
-    // Persistent coach memory (cross-session observations about this
-     // student). Appended to the system prompt so advice stays
-     // consistent across days/weeks.
-    const memoryBlock = await buildCoachMemoryBlock();
-    const chatAdditions = analysisContext
-      ? `${getChatSystemPromptAdditions(true)}\n\n${analysisContext}`
-      : getChatSystemPromptAdditions(false);
-    const extraSystem = memoryBlock ? `${chatAdditions}\n\n${memoryBlock}` : chatAdditions;
+    // Append the user message into BOTH stores: session store (for
+    // chat rendering) and memory store's conversationHistory (so the
+    // brain envelope on the next ask reflects the back-and-forth).
+    const userMsg: ChatMessageType = {
+      id: `msg-${Date.now()}-u`,
+      role: 'user',
+      content: text,
+      modality,
+      timestamp: Date.now(),
+    };
+    appendMessage(userMsg);
+    useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'chat-coach-tab',
+      role: 'user',
+      text,
+      trigger: null,
+    });
 
     let streamed = '';
     // Stop any in-flight TTS at the START of the turn so we don't
@@ -232,37 +244,85 @@ export function CoachChatPage(): JSX.Element {
     };
     if (shouldSpeak) voiceService.stop();
 
-    try {
-      await runCoachTurn({
-        userText: text,
-        userModality: modality,
-        navigate: (path: string) => { void navigate(path); },
-        extraSystemPrompt: extraSystem,
-        onChunk: (chunk: string) => {
-          streamed += chunk;
-          setStreamingContent(streamed);
+    const liveState: LiveState = {
+      surface: 'standalone-chat',
+      currentRoute: '/coach/chat',
+      userJustDid: text,
+    };
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachChatPage.handleSend',
+      summary: 'surface=standalone-chat viaSpine=true',
+      details: JSON.stringify({
+        surface: 'standalone-chat',
+        viaSpine: true,
+        modality,
+        timestamp: Date.now(),
+      }),
+    });
 
-          if (shouldSpeak) {
-            speechBufferRef.current += chunk;
-            // Flush on any terminator including newline — no trailing
-            // whitespace requirement. Matches VoiceChatMic and
-            // SmartSearchBar; saves 200-400ms of first-word latency.
-            const sentenceEnd = /[.!?\n]/.exec(speechBufferRef.current);
-            if (sentenceEnd) {
-              const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1).trim();
-              speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 1).trimStart();
-              speakOrQueue(sentence);
+    try {
+      const answer = await coachService.ask(
+        { surface: 'standalone-chat', ask: text, liveState },
+        {
+          maxToolRoundTrips: 1,
+          onNavigate: (path: string) => {
+            void navigate(path);
+          },
+          onChunk: (chunk: string) => {
+            streamed += chunk;
+            // Display side: strip [BOARD:] / [[ACTION:]] tags so the
+            // user sees only narrative text in the bubble.
+            const displayText = streamed.replace(TAG_STRIP_RE, '').trim();
+            setStreamingContent(displayText);
+
+            if (shouldSpeak) {
+              speechBufferRef.current += chunk;
+              // Flush on any terminator including newline — no trailing
+              // whitespace requirement. Matches VoiceChatMic and
+              // SmartSearchBar; saves 200-400ms of first-word latency.
+              const sentenceEnd = /[.!?\n]/.exec(speechBufferRef.current);
+              if (sentenceEnd) {
+                const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1).trim();
+                speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 1).trimStart();
+                // Strip tags from spoken text too — never read action
+                // tags out loud.
+                const spoken = sentence.replace(TAG_STRIP_RE, '').trim();
+                if (spoken) speakOrQueue(spoken);
+              }
             }
-          }
+          },
         },
-      });
+      );
       // Flush any trailing text (no sentence terminator) via the same
       // gating so a tail-only reply still fires.
-      const tail = speechBufferRef.current.trim();
-      if (shouldSpeak && tail) speakOrQueue(tail);
+      if (shouldSpeak) {
+        const tail = speechBufferRef.current.replace(TAG_STRIP_RE, '').trim();
+        if (tail) speakOrQueue(tail);
+      }
       speechBufferRef.current = '';
+
+      // Strip tags from the final text and append the assistant
+      // message into both stores (session + memory). Inherit modality
+      // so the renderer can hide the text bubble for voice asks.
+      const cleanText = answer.text.replace(TAG_STRIP_RE, '').trim();
+      const assistantMsg: ChatMessageType = {
+        id: `msg-${Date.now()}-resp`,
+        role: 'assistant',
+        content: cleanText,
+        modality,
+        timestamp: Date.now(),
+      };
+      appendMessage(assistantMsg);
+      useCoachMemoryStore.getState().appendConversationMessage({
+        surface: 'chat-coach-tab',
+        role: 'coach',
+        text: cleanText,
+        trigger: null,
+      });
     } catch (err) {
-      console.warn('[CoachChatPage] agent turn failed:', err);
+      console.warn('[CoachChatPage] coachService.ask failed:', err);
       // Surface the failure to the student instead of leaving a stuck
       // spinner + orphaned user message. Refresh-loses-chat was the
       // prior behaviour; now they see what went wrong.
@@ -277,7 +337,7 @@ export function CoachChatPage(): JSX.Element {
       setIsStreaming(false);
       setStreamingContent('');
     }
-  }, [activeProfile, hydrated, chatMessages, isStreaming, appendMessage, flushSpeechBuffer, analysisContext, navigate]);
+  }, [activeProfile, hydrated, chatMessages, isStreaming, appendMessage, flushSpeechBuffer, navigate]);
 
   // Auto-send a query carried in the URL (e.g., from the Game Insights
   // search bar navigating here with ?q=...). Runs once per distinct
