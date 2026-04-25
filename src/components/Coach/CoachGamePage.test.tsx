@@ -45,20 +45,24 @@ vi.mock('../../services/stockfishEngine', () => ({
 }));
 
 vi.mock('../../services/coachGameEngine', () => ({
-  getAdaptiveMove: vi.fn().mockResolvedValue({
-    move: 'e7e5',
-    analysis: {
-      bestMove: 'e7e5',
-      evaluation: -20,
-      isMate: false,
-      mateIn: null,
-      depth: 10,
-      topLines: [{ rank: 1, evaluation: -20, moves: ['e7e5'], mate: null }],
-      nodesPerSecond: 1000000,
-    },
-  }),
+  // Post-tightening (WO-BRAIN-04): the move-selector no longer calls
+  // getAdaptiveMove or tryOpeningBookMove — the brain owns the move
+  // via coachService.ask. getRandomLegalMove is the safety fallback
+  // when the brain emits no play_move.
   getTargetStrength: vi.fn().mockReturnValue(1320),
   getRandomLegalMove: vi.fn().mockReturnValue('e7e5'),
+}));
+
+vi.mock('../../coach/coachService', () => ({
+  // Render-only tests don't reach the move-selector path, but the
+  // module import has to resolve. Default ask is a no-op.
+  coachService: {
+    ask: vi.fn().mockResolvedValue({
+      text: '',
+      toolCallIds: [],
+      provider: 'deepseek',
+    }),
+  },
 }));
 
 vi.mock('../../services/coachApi', () => ({
@@ -75,6 +79,14 @@ vi.mock('../../services/coachPrompts', () => ({
   EXPLORE_REACTION_ADDITION: 'Test explore reaction prompt',
   SYSTEM_PROMPT: 'Test system prompt',
   buildChessContextMessage: vi.fn().mockReturnValue('test context'),
+  // LIVE-COACH-01 system-prompt additions consumed by useLiveCoach.
+  // Render-only tests don't exercise these branches, but the module
+  // import has to resolve.
+  LIVE_COACH_GREAT_MOVE_ADDITION: 'great move',
+  LIVE_COACH_MISSED_TACTIC_ADDITION: 'missed tactic',
+  LIVE_COACH_OPPONENT_BLUNDER_ADDITION: 'opp blunder',
+  LIVE_COACH_EVAL_SWING_WRONG_ADDITION: 'eval swing',
+  LIVE_COACH_RECOVERY_ADDITION: 'recovery',
 }));
 
 vi.mock('../../services/openingDetectionService', () => ({

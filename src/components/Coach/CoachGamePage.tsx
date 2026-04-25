@@ -43,7 +43,7 @@ import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
-import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, tryOpeningBookMove } from '../../services/coachGameEngine';
+import { getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
@@ -373,18 +373,13 @@ export function CoachGamePage(): JSX.Element {
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   const moveCountRef = useRef(0);
 
-  // Requested opening — WO-COACH-MEMORY-UNIFY-01 replaced the old
-  // component-local useState with a derived value read from the
-  // `useCoachMemoryStore` singleton. Every chat surface writes to the
-  // store via `tryCaptureOpeningIntent`; the move-selector reads it
-  // back here. The store persists across games and sessions, so Dave's
-  // "Caro-Kann from Home dashboard → game from Coach tab" scenario
-  // works regardless of URL plumbing.
+  // Requested opening — read live from the memory store. Post-tightening
+  // (WO-BRAIN-04) the move-selector no longer derives a parallel SAN
+  // array here; the brain consults `local_opening_book` itself when it
+  // wants the line. Narration still asks for the line LENGTH to size
+  // its "still in opening teaching mode" window, which is computed
+  // inline at the call site below.
   const intendedOpening = useCoachMemoryStore((s) => s.intendedOpening);
-  const requestedOpeningMoves = useMemo<string[] | null>(() => {
-    if (!intendedOpening) return null;
-    return getOpeningMoves(intendedOpening.name);
-  }, [intendedOpening]);
 
   // Legacy shim: URL params (`?opening=…`, `?subject=…`) and resumed
   // games still call `handleOpeningRequest(name)`. We keep the name
@@ -1117,8 +1112,9 @@ export function CoachGamePage(): JSX.Element {
     // too. The user can switch sides and still want the same opening
     // repertoire — a Caro-Kann player will happily play the White side
     // of a position they just defended. Opening validity for the new
-    // color is enforced downstream by tryOpeningBookMove (which only
-    // returns a move when it's the coach's turn in the book line).
+    // color is enforced inside `local_opening_book` (which returns
+    // null when it isn't the AI's book turn), so the brain naturally
+    // falls back to Stockfish when sides flip.
     resetHints();
     prevNudgeRef.current = null;
     handleBackToGame();
@@ -1493,93 +1489,35 @@ export function CoachGamePage(): JSX.Element {
           return;
         }
 
-        // ── WO-BRAIN-04 — MOVE SELECTOR ROUTES THROUGH coachService ────
-        // Constitutional ask: every coach decision flows through the
-        // brain's spine. We compute the deterministic move (book +
-        // Stockfish) on this turn, then register the choice with the
-        // spine via `coachService.ask({ surface: 'move-selector' })`.
-        // The brain's `play_move` cerebrum tool fires `onPlayMove`;
-        // the SAN is validated against the live FEN inside the tool
-        // and again here as belt-and-suspenders. If the brain emits a
-        // *different* legal SAN it overrides the deterministic pick —
-        // the brain's call wins. If the brain fails to emit play_move
-        // for any reason (network, parser miss), the deterministic
-        // pick is still the source of truth and the move lands.
-        const bookMoveUci = tryOpeningBookMove(game.fen, game.history, requestedOpeningMoves, aiColor);
+        // ── WO-BRAIN-04 (post-tightening) — BRAIN OWNS MOVE SELECTION ──
+        // The deterministic hybrid (book + Stockfish, then optional
+        // brain override) is gone. The brain consults
+        // `local_opening_book` and / or `stockfish_eval` itself and
+        // emits `play_move`; `onPlayMove` validates the SAN against
+        // the live FEN and records the choice in `brainPickSan`. The
+        // pre-move Stockfish eval below is purely informational —
+        // eval bar, move classification, opponent-threat scan — and
+        // does NOT pick the move. If the brain fails to emit
+        // `play_move` (network error, parse miss, illegal SAN), the
+        // safety fallback is a random legal move so the game never
+        // freezes.
+        const preAnalysisPromise: Promise<StockfishAnalysis> = stockfishEngine
+          .analyzePosition(game.fen, 10)
+          .catch(() => ({
+            bestMove: '',
+            evaluation: 0,
+            isMate: false,
+            mateIn: null,
+            depth: 0,
+            topLines: [],
+            nodesPerSecond: 0,
+          }));
 
-        let move: string;
-        let analysis: StockfishAnalysis;
-
-        if (bookMoveUci) {
-          console.log('[CoachGame] Playing opening book move:', bookMoveUci);
-          move = bookMoveUci;
-          void logAppAudit({
-            kind: 'coach-memory-intent-consulted',
-            category: 'subsystem',
-            source: 'CoachGamePage.makeCoachMove',
-            summary: `played book move ${bookMoveUci}`,
-            details: JSON.stringify({
-              moveChosen: bookMoveUci,
-              source: 'book',
-              gameHistory: game.history.join(' '),
-              plyCount: game.history.length,
-            }),
-            fen: game.fen,
-          });
-          try {
-            analysis = await stockfishEngine.analyzePosition(game.fen, 10);
-          } catch {
-            analysis = { bestMove: bookMoveUci, evaluation: 0, isMate: false, mateIn: null, depth: 0, topLines: [], nodesPerSecond: 0 };
-          }
-        } else {
-          const adaptive = await getAdaptiveMove(game.fen, targetStrength);
-          move = adaptive.move;
-          analysis = adaptive.analysis;
-          if (requestedOpeningMoves) {
-            console.log('[CoachGame] Left opening book, clearing requested opening');
-            void logAppAudit({
-              kind: 'coach-memory-intent-consulted',
-              category: 'subsystem',
-              source: 'CoachGamePage.makeCoachMove',
-              summary: `left book — fallback to Stockfish`,
-              details: JSON.stringify({
-                moveChosen: move,
-                source: 'fallback',
-                gameHistory: game.history.join(' '),
-                plyCount: game.history.length,
-              }),
-              fen: game.fen,
-            });
-            useCoachMemoryStore.getState().clearIntendedOpening('intent-left-book');
-          }
-        }
-
-        // Convert the deterministic pick (UCI) into SAN for the
-        // brain's context — the brain reasons in SAN.
-        let recommendedSan: string;
-        try {
-          const probe = new Chess(game.fen);
-          const m = probe.move({
-            from: move.slice(0, 2),
-            to: move.slice(2, 4),
-            promotion: move.length > 4 ? move[4] : undefined,
-          });
-          recommendedSan = m?.san ?? move;
-        } catch {
-          recommendedSan = move;
-        }
-
-        // Run the spine call — this fires the audit trail, lets the
-        // brain see the position, and lets it call `play_move` to
-        // pick a different SAN if it disagrees with the deterministic
-        // engine. Captured override SAN (if any) lives in
-        // `brainPickSan`. Errors here never block the move — the
-        // deterministic move is already locked in above.
         let brainPickSan: string | null = null;
-        const moveSelectorAsk =
-          requestedOpeningMoves
-            ? `It is your turn (${aiColor}). The user committed to playing the opening per memory; the deterministic engine recommends ${recommendedSan}. Confirm by calling play_move with that SAN, or call play_move with a different legal SAN if you have a strong reason to deviate.`
-            : `It is your turn (${aiColor}). The deterministic engine (Stockfish ~${targetStrength}) recommends ${recommendedSan}. Confirm by calling play_move with that SAN, or call play_move with a different legal SAN. Use stockfish_eval if you need more depth.`;
+        const intendedOpeningName = useCoachMemoryStore.getState().intendedOpening?.name ?? null;
+        const moveSelectorAsk = intendedOpeningName
+          ? `It is your turn (${aiColor}). The student is rated about ${targetStrength} and has committed to ${intendedOpeningName}. Consult local_opening_book first; if we are still in book, play that move via play_move. If we are out of book, use stockfish_eval and pick a move calibrated to the student's rating, then play it via play_move.`
+          : `It is your turn (${aiColor}). The student is rated about ${targetStrength}. Use stockfish_eval if you want depth, then pick a move calibrated to the student's rating and play it via play_move.`;
         const moveSelectorLiveState: LiveState = {
           surface: 'move-selector',
           fen: game.fen,
@@ -1591,12 +1529,13 @@ export function CoachGamePage(): JSX.Element {
           kind: 'coach-surface-migrated',
           category: 'subsystem',
           source: 'CoachGamePage.makeCoachMove',
-          summary: `surface=move-selector viaSpine=true recommend=${recommendedSan}`,
+          summary: `surface=move-selector viaSpine=true intent=${intendedOpeningName ?? 'none'}`,
           details: JSON.stringify({
             surface: 'move-selector',
             viaSpine: true,
-            recommendedSan,
+            intendedOpening: intendedOpeningName,
             plyCount: game.history.length,
+            targetStrength,
           }),
           fen: game.fen,
         });
@@ -1611,8 +1550,8 @@ export function CoachGamePage(): JSX.Element {
               maxToolRoundTrips: 3,
               onPlayMove: (san: string) => {
                 // Validate against the live FEN. The play_move tool
-                // already validated, but board state may have been
-                // cancelled or shifted between turns; double-check.
+                // already validated, but board state may have shifted
+                // between turns; double-check.
                 try {
                   const probe = new Chess(game.fen);
                   const result = probe.move(san);
@@ -1632,24 +1571,34 @@ export function CoachGamePage(): JSX.Element {
           console.warn('[CoachGame] move-selector spine call failed:', err);
         }
 
-        // If the brain emitted play_move with a legal SAN that
-        // differs from the deterministic pick, swap to its choice.
-        // Otherwise keep `move` as-is (the deterministic UCI).
-        if (brainPickSan && brainPickSan !== recommendedSan) {
+        if (isCancelled()) return;
+
+        // Convert the brain's SAN to UCI for tryMakeMove. If the brain
+        // emitted no play_move (or an illegal one), fall back to a
+        // random legal move so the game never freezes.
+        let move: string | null = null;
+        if (brainPickSan) {
           try {
             const probe = new Chess(game.fen);
             const m = probe.move(brainPickSan);
             if (m) {
               const promo = m.promotion ?? '';
               move = `${m.from}${m.to}${promo}`;
-              console.log('[CoachGame] Brain overrode deterministic pick:', recommendedSan, '→', brainPickSan);
             }
           } catch {
-            /* keep deterministic move */
+            /* fall through to random fallback */
           }
         }
-
-        if (isCancelled()) return;
+        if (!move) {
+          console.warn(
+            '[CoachGame] Brain emitted no usable play_move; falling back to random legal move',
+          );
+          move = getRandomLegalMove(game.fen);
+        }
+        if (!move) {
+          console.error('[CoachGame] No legal moves available');
+          return;
+        }
 
         let result = tryMakeMove(move);
 
@@ -1670,6 +1619,12 @@ export function CoachGamePage(): JSX.Element {
         if (isCancelled()) return;
 
         console.log('[CoachGame] Coach played:', result.san);
+
+        // Pre-move analysis is awaited only now — it ran in parallel
+        // with the spine call so the round-trip didn't double the
+        // wait. It is purely informational: classification, eval bar,
+        // opponent-threat scan.
+        const analysis = await preAnalysisPromise;
 
         // Analyze the position AFTER the coach moved — this gives:
         // 1. Accurate eval/top lines for the player's upcoming turn (voice chat needs this)
@@ -1781,7 +1736,7 @@ export function CoachGamePage(): JSX.Element {
       setIsCoachThinking(false);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally depend on specific game properties, not the whole object
-  }, [game.turn, game.fen, game.isGameOver, gameState.status, playerColor, targetStrength, game.makeMove, requestedOpeningMoves]);
+  }, [game.turn, game.fen, game.isGameOver, gameState.status, playerColor, targetStrength, game.makeMove]);
 
   // Handle player move
   const handlePlayerMove = useCallback(async (moveResult: MoveResult) => {
@@ -1925,7 +1880,9 @@ export function CoachGamePage(): JSX.Element {
     // we'd throw away.
     const narrationDensity =
       useAppStore.getState().activeProfile?.preferences.coachVerbosity ?? 'unlimited';
-    const bookDepth = requestedOpeningMoves?.length ?? 0;
+    const bookDepth = intendedOpening
+      ? (getOpeningMoves(intendedOpening.name)?.length ?? 0)
+      : 0;
     const inOpeningTeaching =
       !!subjectParam && game.history.length <= Math.max(bookDepth, 12);
     const shouldFire =
