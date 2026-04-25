@@ -11,14 +11,18 @@
  *   4. Dispatches any tool calls the LLM emitted (via the existing
  *      `[[ACTION:name {args}]]` tag protocol parsed inside the
  *      provider).
- *   5. Returns the cleaned text + a list of tool-call ids.
+ *   5. If `maxToolRoundTrips > 1` (BRAIN-04), feeds the tool results
+ *      back to the provider as a follow-up turn, allowing the LLM to
+ *      see what each tool returned and react with another tool call
+ *      or a final answer. Capped at `maxToolRoundTrips` to prevent
+ *      runaway loops.
+ *   6. Returns the cleaned text from the FINAL turn + a list of every
+ *      tool-call id dispatched across all turns.
  *
- * BRAIN-01 ships a single round-trip: the service does NOT loop on
- * tool results back into a follow-up LLM call. Tool results are
- * dispatched and audit-logged; if the LLM needs to react to a tool
- * result, the calling surface dispatches a follow-up ask. Multi-turn
- * tool loops are a future WO once we know how often surfaces actually
- * need them.
+ * Surface-specific callbacks (`onPlayMove`, `onNavigate`) are threaded
+ * into each tool dispatch via `ToolExecutionContext`. Tools that need
+ * a real side effect (cerebrum) consume the context; cerebellum tools
+ * ignore it.
  *
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
@@ -28,11 +32,14 @@ import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
 import type {
+  AssembledEnvelope,
   CoachAnswer,
   CoachAskInput,
   CoachIdentity,
   Provider,
   ProviderName,
+  ProviderResponse,
+  ToolExecutionContext,
 } from './types';
 
 /** Read provider name from `import.meta.env.COACH_PROVIDER`, falling
@@ -68,8 +75,57 @@ export interface CoachServiceOptions {
    *  streaming path (if implemented) and pipes raw token chunks
    *  here as they arrive. The final returned `CoachAnswer.text` is
    *  the post-action-stripped, full response — same semantics as
-   *  `runAgentTurn`'s `onChunk`. WO-BRAIN-02. */
+   *  `runAgentTurn`'s `onChunk`. WO-BRAIN-02.
+   *
+   *  Streaming only applies to the FIRST turn of a multi-turn loop.
+   *  Follow-up turns (when `maxToolRoundTrips > 1`) always run
+   *  non-streaming — intermediate text isn't user-facing. */
   onChunk?: (chunk: string) => void;
+  /** Maximum number of provider round-trips for tool result loop-back.
+   *  Default `1` preserves BRAIN-01..03 single-pass behavior. Move-
+   *  selector surface uses `3` so the brain can fetch data via
+   *  cerebellum tools, see results, and emit a `play_move` decision in
+   *  a follow-up turn. WO-BRAIN-04. */
+  maxToolRoundTrips?: number;
+  /** Callback the `play_move` cerebrum tool uses to actually play a
+   *  move on the calling surface. Returning `{ ok: false, reason }`
+   *  surfaces the failure back to the LLM in the next round-trip so it
+   *  can choose differently. WO-BRAIN-04. */
+  onPlayMove?: ToolExecutionContext['onPlayMove'];
+  /** Callback the `navigate_to_route` cerebrum tool uses to actually
+   *  push the user-validated route via react-router. WO-BRAIN-04. */
+  onNavigate?: ToolExecutionContext['onNavigate'];
+}
+
+/** Format a list of tool results plus the LLM's previous text into a
+ *  follow-up `ask` body. The follow-up envelope keeps the same
+ *  identity, memory, app map, live state, and toolbelt — only the
+ *  ask changes. */
+function formatToolResultsAsFollowUpAsk(
+  originalAsk: string,
+  previousAssistantText: string,
+  results: { name: string; ok: boolean; result?: unknown; error?: string }[],
+): string {
+  const lines: string[] = [
+    '[Original ask]',
+    originalAsk,
+    '',
+  ];
+  if (previousAssistantText.trim().length > 0) {
+    lines.push('[Your previous response]', previousAssistantText, '');
+  }
+  lines.push('[Tool results from previous turn]');
+  for (const r of results) {
+    const payload: string[] = [`ok=${r.ok}`];
+    if (r.result !== undefined) payload.push(`result=${JSON.stringify(r.result)}`);
+    if (r.error) payload.push(`error=${r.error}`);
+    lines.push(`- ${r.name}: ${payload.join(' ')}`);
+  }
+  lines.push(
+    '',
+    'Use these results to decide. Either call additional tools or give your final answer.',
+  );
+  return lines.join('\n');
 }
 
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
@@ -104,50 +160,96 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   const providerName = options.provider ?? resolveProviderName();
   const provider = options.providerOverride ?? pickProvider(providerName);
 
-  const streaming = !!options.onChunk && typeof provider.callStreaming === 'function';
-  void logAppAudit({
-    kind: 'coach-brain-provider-called',
-    category: 'subsystem',
-    source: 'coachService.ask',
-    summary: `provider=${provider.name} streaming=${streaming}`,
-  });
+  const ctx: ToolExecutionContext = {
+    onPlayMove: options.onPlayMove,
+    onNavigate: options.onNavigate,
+    liveFen: input.liveState.fen,
+  };
 
-  const response = streaming && options.onChunk && provider.callStreaming
-    ? await provider.callStreaming(envelope, options.onChunk)
-    : await provider.call(envelope);
-
-  // Dispatch tool calls (single-pass; no loop-back into LLM).
+  const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
   const dispatchedIds: string[] = [];
-  for (const call of response.toolCalls) {
-    const tool = getTool(call.name);
-    if (!tool) {
-      void logAppAudit({
-        kind: 'coach-brain-tool-called',
-        category: 'subsystem',
-        source: 'coachService.ask',
-        summary: `unknown tool ${call.name}`,
-        details: JSON.stringify({ id: call.id, args: call.args }),
-      });
-      continue;
+
+  let currentEnvelope: AssembledEnvelope = envelope;
+  let useStreaming = !!options.onChunk && typeof provider.callStreaming === 'function';
+  let lastResponse: ProviderResponse = { text: '', toolCalls: [] };
+
+  for (let trip = 1; trip <= maxRoundTrips; trip++) {
+    void logAppAudit({
+      kind: 'coach-brain-provider-called',
+      category: 'subsystem',
+      source: 'coachService.ask',
+      summary: `provider=${provider.name} streaming=${useStreaming} trip=${trip}/${maxRoundTrips}`,
+    });
+
+    lastResponse = useStreaming && options.onChunk && provider.callStreaming
+      ? await provider.callStreaming(currentEnvelope, options.onChunk)
+      : await provider.call(currentEnvelope);
+
+    if (lastResponse.toolCalls.length === 0) {
+      // No tools emitted — terminal turn. Exit the loop.
+      break;
     }
-    try {
-      const result = await tool.execute(call.args);
-      dispatchedIds.push(call.id);
-      void logAppAudit({
-        kind: 'coach-brain-tool-called',
-        category: 'subsystem',
-        source: 'coachService.ask',
-        summary: `${call.name} ${result.ok ? 'ok' : 'error'}`,
-        details: JSON.stringify({ id: call.id, name: call.name, ok: result.ok, error: result.error }),
-      });
-    } catch (err) {
-      void logAppAudit({
-        kind: 'coach-brain-tool-called',
-        category: 'subsystem',
-        source: 'coachService.ask',
-        summary: `${call.name} threw`,
-        details: err instanceof Error ? err.message : String(err),
-      });
+
+    // Dispatch tool calls (each gets the surface context).
+    const toolResults: { name: string; ok: boolean; result?: unknown; error?: string }[] = [];
+    for (const call of lastResponse.toolCalls) {
+      const tool = getTool(call.name);
+      if (!tool) {
+        void logAppAudit({
+          kind: 'coach-brain-tool-called',
+          category: 'subsystem',
+          source: 'coachService.ask',
+          summary: `unknown tool ${call.name}`,
+          details: JSON.stringify({ id: call.id, args: call.args }),
+        });
+        continue;
+      }
+      try {
+        const result = await tool.execute(call.args, ctx);
+        dispatchedIds.push(call.id);
+        toolResults.push({
+          name: call.name,
+          ok: result.ok,
+          result: result.result,
+          error: result.error,
+        });
+        void logAppAudit({
+          kind: 'coach-brain-tool-called',
+          category: 'subsystem',
+          source: 'coachService.ask',
+          summary: `${call.name} ${result.ok ? 'ok' : 'error'}`,
+          details: JSON.stringify({ id: call.id, name: call.name, ok: result.ok, error: result.error }),
+        });
+      } catch (err) {
+        void logAppAudit({
+          kind: 'coach-brain-tool-called',
+          category: 'subsystem',
+          source: 'coachService.ask',
+          summary: `${call.name} threw`,
+          details: err instanceof Error ? err.message : String(err),
+        });
+        toolResults.push({
+          name: call.name,
+          ok: false,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    }
+
+    // If we have round-trips remaining AND we dispatched any tools,
+    // build a follow-up envelope and loop. Otherwise terminate.
+    if (trip < maxRoundTrips && toolResults.length > 0) {
+      const followUpAsk = formatToolResultsAsFollowUpAsk(
+        envelope.ask,
+        lastResponse.text,
+        toolResults,
+      );
+      currentEnvelope = { ...currentEnvelope, ask: followUpAsk };
+      // Streaming the follow-up turns would surface intermediate
+      // tool-orchestration text to the user. Suppress.
+      useStreaming = false;
+    } else {
+      break;
     }
   }
 
@@ -155,11 +257,11 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     kind: 'coach-brain-answer-returned',
     category: 'subsystem',
     source: 'coachService.ask',
-    summary: `provider=${provider.name} text=${response.text.length}c tools=${dispatchedIds.length}`,
+    summary: `provider=${provider.name} text=${lastResponse.text.length}c tools=${dispatchedIds.length}`,
   });
 
   return {
-    text: response.text,
+    text: lastResponse.text,
     toolCallIds: dispatchedIds,
     provider: provider.name,
   };

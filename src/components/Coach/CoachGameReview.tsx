@@ -33,9 +33,11 @@ import type {
 import { useReviewPlayback } from '../../hooks/useReviewPlayback';
 import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
 import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
+import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { logAppAudit } from '../../services/appAuditor';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
@@ -105,6 +107,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     isGuidedLesson, pgn,
   } = props;
   const initialMoveIndex = props.initialMoveIndex;
+  const navigate = useNavigate();
 
   // ─── Summary-First Flow ─────────────────────────────────────────────────────
   const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
@@ -598,6 +601,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }),
       fen: fenForQ,
     });
+    // WO-BRAIN-04: thread the user ask into conversation history.
+    useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'chat-review-ask',
+      role: 'user',
+      text: question,
+      fen: fenForQ,
+      trigger: null,
+    });
     void coachService
       .ask(
         { surface: 'review', ask: question, liveState: reviewLiveState },
@@ -607,14 +618,29 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               setAskResponse((prev: string | null) => (prev ?? '') + chunk);
             }
           },
+          onNavigate: (path: string) => {
+            void navigate(path);
+          },
         },
       )
+      .then((answer) => {
+        // WO-BRAIN-04: persist coach reply into conversation history.
+        if (!abortSignal.aborted && answer.text.trim().length > 0) {
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-review-ask',
+            role: 'coach',
+            text: answer.text,
+            fen: fenForQ,
+            trigger: null,
+          });
+        }
+      })
       .finally(() => {
         if (!abortSignal.aborted) {
           setIsAskStreaming(false);
         }
       });
-  }, [isAskStreaming, reviewState.currentMoveIndex, moves]);
+  }, [isAskStreaming, reviewState.currentMoveIndex, moves, navigate]);
 
   // Reset ask state and best-move reveal when navigating to a different move
   useEffect(() => {

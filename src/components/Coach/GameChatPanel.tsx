@@ -10,6 +10,7 @@ import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
+import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
@@ -159,6 +160,20 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       };
       const updatedMessages = [...messagesRef.current, userMsg];
       setMessages(updatedMessages);
+
+      // WO-BRAIN-04: thread the user ask into the coach memory store so
+      // the brain envelope sees the back-and-forth on the next call.
+      // Surface labels follow `CoachMessage.surface` enum.
+      const conversationSurface: 'chat-in-game' | 'chat-home' = isGameOver
+        ? 'chat-home'
+        : 'chat-in-game';
+      useCoachMemoryStore.getState().appendConversationMessage({
+        surface: conversationSurface,
+        role: 'user',
+        text,
+        fen: fen || undefined,
+        trigger: null,
+      });
 
       // WO-BRAIN-03: both branches now route through the brain. The
       // deterministic `tryCaptureOpeningIntent` regex shortcut is
@@ -340,6 +355,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   }
                 }
               },
+              onNavigate: (path: string) => {
+                void navigate(path);
+              },
             },
           );
           if (speechBufferRef.current.trim()) {
@@ -368,6 +386,15 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             },
           };
           setMessages((prev) => [...prev, assistantMsg]);
+          // WO-BRAIN-04: thread the coach reply into conversation
+          // history so future envelopes carry the back-and-forth.
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-in-game',
+            role: 'coach',
+            text: textWithoutBoardTags,
+            fen: fen || undefined,
+            trigger: null,
+          });
           if (annotations.length > 0) {
             onBoardAnnotation?.(annotations);
           }
@@ -441,6 +468,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 }
               }
             },
+            onNavigate: (path: string) => {
+              void navigate(path);
+            },
           },
         );
         if (speechBufferRef.current.trim()) {
@@ -456,6 +486,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           timestamp: Date.now(),
         };
         setMessages((prev) => [...prev, assistantMsg]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-home',
+          role: 'coach',
+          text: drawerCleanText,
+          fen: fen || undefined,
+          trigger: null,
+        });
       } catch (err: unknown) {
         console.error('[GameChatPanel] coachService.ask (drawer) failed:', err);
         const errMsg: ChatMessageType = {

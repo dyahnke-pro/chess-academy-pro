@@ -89,9 +89,36 @@ export interface ToolDefinition {
 
 export type ToolCategory = 'cerebellum' | 'cerebrum';
 
+/** Surface-supplied callbacks + context the spine threads into every
+ *  tool dispatch. Cerebrum tools use these to invoke real side
+ *  effects (play a move, navigate the router) on behalf of the calling
+ *  surface. Cerebellum tools ignore the context. WO-BRAIN-04. */
+export interface ToolExecutionContext {
+  /** Called by `play_move` to actually play the chosen SAN. The
+   *  callback returns `{ ok, reason? }` to tell the brain whether the
+   *  move landed (e.g. legal) so the LLM can react in a follow-up
+   *  round-trip. Boolean returns are also accepted. */
+  onPlayMove?: (
+    san: string,
+  ) =>
+    | Promise<{ ok: boolean; reason?: string } | boolean>
+    | { ok: boolean; reason?: string }
+    | boolean;
+  /** Called by `navigate_to_route` to actually push the route via
+   *  react-router. Path has already been validated against the app
+   *  manifest before this runs. */
+  onNavigate?: (path: string) => void;
+  /** FEN at the time of the call — used by `play_move` to validate SAN
+   *  legality before invoking `onPlayMove`. */
+  liveFen?: string;
+}
+
 export interface Tool extends ToolDefinition {
   category: ToolCategory;
-  execute: (args: Record<string, unknown>) => Promise<ToolExecutionResult>;
+  execute: (
+    args: Record<string, unknown>,
+    ctx?: ToolExecutionContext,
+  ) => Promise<ToolExecutionResult>;
 }
 
 export interface ToolExecutionResult {
