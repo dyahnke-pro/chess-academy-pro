@@ -102,7 +102,11 @@ export type AuditKind =
   | 'coach-brain-envelope-assembled'
   | 'coach-brain-provider-called'
   | 'coach-brain-tool-called'
-  | 'coach-brain-answer-returned';
+  | 'coach-brain-answer-returned'
+  // Surface migration trail (WO-BRAIN-02 onwards). Fired once per call
+  // from a surface that has been migrated to coachService.ask. Used in
+  // production logs to confirm the migrated path is the one running.
+  | 'coach-surface-migrated';
 
 export interface AuditEntry {
   timestamp: number;

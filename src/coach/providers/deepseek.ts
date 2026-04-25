@@ -26,43 +26,57 @@ import { formatEnvelopeAsSystemPrompt, formatEnvelopeAsUserMessage } from '../en
 
 const PROVIDER_TIMEOUT_MS = 30_000;
 
+function buildResponse(raw: string): ProviderResponse {
+  const parsed = parseActions(raw);
+  const toolCalls: ProviderToolCall[] = parsed.actions.map((a, i) => ({
+    id: `tc-${Date.now()}-${i}`,
+    name: a.name,
+    args: a.args,
+  }));
+  return {
+    text: parsed.cleanText.trim(),
+    toolCalls,
+    raw: { fullResponse: raw },
+  };
+}
+
+async function callDeepSeek(
+  envelope: AssembledEnvelope,
+  onChunk?: (chunk: string) => void,
+): Promise<ProviderResponse> {
+  const systemPrompt = formatEnvelopeAsSystemPrompt(envelope);
+  const userMessage = formatEnvelopeAsUserMessage(envelope);
+  const promise = getCoachChatResponse(
+    [{ role: 'user', content: userMessage }],
+    systemPrompt,
+    onChunk,
+    'chat_response',
+    2000,
+    'medium',
+  );
+  const timeout = new Promise<string>((_, reject) =>
+    setTimeout(() => reject(new Error('coach-brain-deepseek-timeout')), PROVIDER_TIMEOUT_MS),
+  );
+  let raw: string;
+  try {
+    raw = await Promise.race([promise, timeout]);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return {
+      text: `(coach-brain provider error: ${message})`,
+      toolCalls: [],
+      raw: { error: message },
+    };
+  }
+  return buildResponse(raw);
+}
+
 export const deepseekProvider: Provider = {
   name: 'deepseek',
   async call(envelope: AssembledEnvelope): Promise<ProviderResponse> {
-    const systemPrompt = formatEnvelopeAsSystemPrompt(envelope);
-    const userMessage = formatEnvelopeAsUserMessage(envelope);
-    const promise = getCoachChatResponse(
-      [{ role: 'user', content: userMessage }],
-      systemPrompt,
-      undefined,
-      'chat_response',
-      2000,
-      'medium',
-    );
-    const timeout = new Promise<string>((_, reject) =>
-      setTimeout(() => reject(new Error('coach-brain-deepseek-timeout')), PROVIDER_TIMEOUT_MS),
-    );
-    let raw: string;
-    try {
-      raw = await Promise.race([promise, timeout]);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      return {
-        text: `(coach-brain provider error: ${message})`,
-        toolCalls: [],
-        raw: { error: message },
-      };
-    }
-    const parsed = parseActions(raw);
-    const toolCalls: ProviderToolCall[] = parsed.actions.map((a, i) => ({
-      id: `tc-${Date.now()}-${i}`,
-      name: a.name,
-      args: a.args,
-    }));
-    return {
-      text: parsed.cleanText.trim(),
-      toolCalls,
-      raw: { fullResponse: raw },
-    };
+    return callDeepSeek(envelope, undefined);
+  },
+  async callStreaming(envelope, onChunk) {
+    return callDeepSeek(envelope, onChunk);
   },
 };

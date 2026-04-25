@@ -121,6 +121,13 @@ export interface ProviderResponse {
 export interface Provider {
   name: ProviderName;
   call(envelope: AssembledEnvelope): Promise<ProviderResponse>;
+  /** Optional streaming variant. WO-BRAIN-02 added this so migrated
+   *  surfaces (in-game chat first) can preserve token-by-token UX.
+   *  When omitted, callers fall back to `call(...)`. */
+  callStreaming?(
+    envelope: AssembledEnvelope,
+    onChunk: (chunk: string) => void,
+  ): Promise<ProviderResponse>;
 }
 
 // ─── Service entry point ────────────────────────────────────────────────────
