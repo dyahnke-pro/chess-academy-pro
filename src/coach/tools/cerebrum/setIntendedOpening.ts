@@ -20,9 +20,9 @@ export const setIntendedOpeningTool: Tool = {
   },
   // eslint-disable-next-line @typescript-eslint/require-await
   async execute(args) {
-    const name = typeof args.name === 'string' ? args.name : ''.trim();
-    const colorRaw = typeof args.color === 'string' ? args.color : ''.toLowerCase();
-    const surface = String(args.surface ?? 'coach-brain');
+    const name = (typeof args.name === 'string' ? args.name : '').trim();
+    const colorRaw = (typeof args.color === 'string' ? args.color : '').toLowerCase();
+    const surface = typeof args.surface === 'string' ? args.surface : 'coach-brain';
     if (!name) return { ok: false, error: 'name is required' };
     if (colorRaw !== 'white' && colorRaw !== 'black') {
       return { ok: false, error: 'color must be "white" or "black"' };
