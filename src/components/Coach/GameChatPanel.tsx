@@ -1,19 +1,16 @@
 import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
-import { buildGameContextBlock, getGameSystemPromptAddition } from '../../services/coachChatService';
-import { fetchRelevantGames } from '../../services/gameContextService';
 import { routeChatIntent } from '../../services/coachIntentRouter';
-import { runAgentTurn, detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
+import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
-import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
+import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
 import { logAppAudit } from '../../services/appAuditor';
-import type { EngineData, TacticAnalysisContext, PositionAssessmentContext } from '../../services/coachChatService';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -72,21 +69,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
   function GameChatPanel(
     {
       fen,
-      pgn,
-      moveNumber,
       playerColor,
-      turn,
       isGameOver,
-      gameResult,
-      lastMove,
       history,
-      previousFen,
       className,
       onBoardAnnotation,
       onRestartGame,
       onPlayOpening,
-      onPlayVariation,
-      onReturnToGame,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -97,6 +86,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
   ) {
     const activeProfile = useAppStore((s) => s.activeProfile);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [messages, setMessagesInternal] = useState<ChatMessageType[]>(initialMessages ?? []);
     const [isStreaming, setIsStreaming] = useState(false);
@@ -170,22 +160,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       const updatedMessages = [...messagesRef.current, userMsg];
       setMessages(updatedMessages);
 
-      // WO-COACH-MEMORY-UNIFY-01 + WO-BRAIN-02:
-      // - `tryCaptureForgetIntent` runs on BOTH branches as a
-      //   belt-and-suspenders for now. The brain envelope also
-      //   exposes `clear_memory` as a tool, so the LLM can clear via
-      //   tag — but the regex path stays until BRAIN-06 cleanup.
-      // - `tryCaptureOpeningIntent` runs ONLY on the drawer-chat
-      //   branch (`isGameOver === true`). The in-game branch is
-      //   migrated to coachService.ask, where the LLM emits
-      //   `set_intended_opening` via tool with full memory + manifest
-      //   awareness in the envelope. BRAIN-03 will collapse the
-      //   drawer branch the same way.
+      // WO-BRAIN-03: both branches now route through the brain. The
+      // deterministic `tryCaptureOpeningIntent` regex shortcut is
+      // retired entirely — `set_intended_opening` is in the brain's
+      // toolbelt and the LLM emits it from either surface. The
+      // `tryCaptureForgetIntent` regex stays for one more WO as a
+      // belt-and-suspenders safety net. Removed in BRAIN-06 cleanup.
       const surface = isGameOver ? 'drawer-chat' : 'in-game-chat';
       tryCaptureForgetIntent(text, surface);
-      if (isGameOver) {
-        tryCaptureOpeningIntent(text, surface, playerColor);
-      }
 
       // Narration toggle — deterministic intercept. Runs BEFORE the
       // in-game block below so "narrate while we play" reliably flips
@@ -405,141 +387,89 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         return;
       }
 
-      // ── DRAWER / POST-GAME BRANCH (isGameOver === true) ──────────────
-      // Unchanged. Migrated by BRAIN-03.
-
-      // WO-BRAIN-02: in-game branch already returned above. Anything
-      // below here runs only for `isGameOver === true` (drawer / post-
-      // game). The engine prefetch + tactic classifier + position
-      // assessment that used to live here were guarded by `!isGameOver`
-      // — now redundant since the brain-routing block early-returns for
-      // that case. Dropped to keep the post-return code statically
-      // reachable. Drawer/post-game does not need engine prefetch
-      // (runAgentTurn handles its own context), so no behavior loss.
-      const engineData: EngineData | undefined = undefined;
-      const tacticAnalysis: TacticAnalysisContext | undefined = undefined;
-      const positionAssessment: PositionAssessmentContext | undefined = undefined;
-
-      // Build game context for the drawer / post-game runAgentTurn call.
-      const gameContext = {
-        fen,
-        pgn,
-        moveNumber,
-        playerColor,
-        turn,
-        isGameOver,
-        gameResult,
-        lastMove,
-        history,
-        engineData,
-        tacticAnalysis,
-        positionAssessment,
-      };
-
-      // Clear previous annotations when a new message is sent
+      // ── WO-BRAIN-03 — DRAWER / POST-GAME BRANCH (migrated) ───────────
+      // Mirrors the in-game branch above. Differences kept to a
+      // minimum: the surface label is `'drawer-chat'`; the live state
+      // captures `currentRoute = location.pathname` (matters for "take
+      // me to X" intents); FEN / move history are passed only when
+      // they're meaningful (post-game review has them, home dashboard
+      // typically doesn't).
       onBoardAnnotation?.([{ type: 'clear' }]);
-
-      // Start streaming
       setIsStreaming(true);
       setStreamingContent('');
       speechBufferRef.current = '';
-
-      const gameContextBlock = buildGameContextBlock(gameContext, activeProfile);
-      const baseAddition = getGameSystemPromptAddition();
-
-      let relevantGamesBlock = '';
+      let drawerFullResponse = '';
       try {
-        const relevant = await fetchRelevantGames({
-          query: text,
-          fen,
-          username: activeProfile.preferences.chessComUsername
-            ?? activeProfile.preferences.lichessUsername
-            ?? activeProfile.name,
+        const drawerLiveState: LiveState = {
+          surface: 'home-chat',
+          fen: fen || undefined,
+          moveHistory: history && history.length > 0 ? history : undefined,
+          userJustDid: text,
+          currentRoute: location.pathname,
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'GameChatPanel.handleSend',
+          summary: 'surface=home-chat viaSpine=true',
+          details: JSON.stringify({
+            surface: 'home-chat',
+            viaSpine: true,
+            timestamp: Date.now(),
+            fenIfPresent: fen || null,
+            currentRoute: location.pathname,
+          }),
+          fen: fen || undefined,
         });
-        relevantGamesBlock = relevant.promptBlock;
-      } catch (err: unknown) {
-        console.warn('[GameChatPanel] fetchRelevantGames failed', err);
-      }
-      const systemAddition = [gameContextBlock, baseAddition, relevantGamesBlock]
-        .filter(Boolean)
-        .join('\n\n');
-
-      let fullResponse = '';
-
-      try {
-        const result = await runAgentTurn({
-          history: updatedMessages,
-          navigate: (path: string) => { void navigate(path); },
-          extraSystemPrompt: systemAddition,
-          game: onPlayVariation
-            ? {
-                playVariation: (vArgs) => onPlayVariation(vArgs),
-                returnToGame: () => (onReturnToGame ? onReturnToGame() : false),
-                getCurrentFen: () => fen,
+        const answer = await coachService.ask(
+          { surface: 'home-chat', ask: text, liveState: drawerLiveState },
+          {
+            onChunk: (chunk: string) => {
+              drawerFullResponse += chunk;
+              const displayText = drawerFullResponse
+                .replace(BOARD_TAG_STRIP_RE, '')
+                .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
+                .trim();
+              setStreamingContent(displayText);
+              if (useAppStore.getState().coachVoiceOn) {
+                speechBufferRef.current += chunk;
+                const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+                if (sentenceEnd) {
+                  const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
+                  speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
+                  void voiceService.speak(sentence.trim());
+                }
               }
-            : undefined,
-          onChunk: (chunk: string) => {
-            fullResponse += chunk;
-            // Strip [BOARD:] and [[ACTION:]] tags in real-time so
-            // they don't flash during streaming.
-            const displayText = fullResponse
-              .replace(BOARD_TAG_STRIP_RE, '')
-              .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
-              .trim();
-            setStreamingContent(displayText);
-
-            if (useAppStore.getState().coachVoiceOn) {
-              speechBufferRef.current += chunk;
-              const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
-              if (sentenceEnd) {
-                const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
-                speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                void voiceService.speak(sentence.trim());
-              }
-            }
+            },
           },
-        });
-
+        );
         if (speechBufferRef.current.trim()) {
           flushSpeechBuffer();
         }
-
-        // Strip board annotation tags from the user-visible message
-        // (the agent runner already stripped action tags). Capture
-        // the parsed annotation commands so the board can react.
-        const { cleanText: textWithoutBoardTags, commands: annotations } =
-          parseBoardTags(result.assistantMessage.content);
-
-        // If the coach didn't explicitly draw any arrows, auto-extract
-        // SAN-like move references from its reply and draw them. Keeps
-        // the board visually in sync with "consider Nf3 / the key move
-        // is Bxc4" without relying on the LLM emitting [BOARD: arrow]
-        // tags. Explicit arrows always win (no override).
-        // WO-BRAIN-02: auto-arrow extraction is in-game-only; the
-        // drawer / post-game branch (the only path reaching this code
-        // post-migration) has no live board to draw arrows on. The
-        // in-game branch above runs its own auto-arrow pass after the
-        // brain response.
-
+        // Drawer surface has no live board to draw arrows on; just
+        // strip the [BOARD:] tags out of display text and append.
+        const { cleanText: drawerCleanText } = parseBoardTags(answer.text);
         const assistantMsg: ChatMessageType = {
-          ...result.assistantMessage,
           id: `gmsg-${Date.now()}-resp`,
-          content: textWithoutBoardTags,
-          metadata: {
-            actions: result.assistantMessage.metadata?.actions,
-            annotations: annotations.length > 0 ? annotations : undefined,
-          },
+          role: 'assistant',
+          content: drawerCleanText,
+          timestamp: Date.now(),
         };
         setMessages((prev) => [...prev, assistantMsg]);
-
-        if (annotations.length > 0) {
-          onBoardAnnotation?.(annotations);
-        }
+      } catch (err: unknown) {
+        console.error('[GameChatPanel] coachService.ask (drawer) failed:', err);
+        const errMsg: ChatMessageType = {
+          id: `gmsg-${Date.now()}-err`,
+          role: 'assistant',
+          content: 'Sorry — I couldn\'t reach the coach just now. Try again in a moment.',
+          timestamp: Date.now(),
+        };
+        setMessages((prev) => [...prev, errMsg]);
       } finally {
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, pgn, moveNumber, playerColor, turn, isGameOver, gameResult, lastMove, history, previousFen, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayVariation, onReturnToGame, setMessages, navigate]);
+    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, setMessages, navigate, location, playerColor]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {

@@ -11,9 +11,9 @@ import { KeyMomentNav } from './KeyMomentNav';
 import { MoveActionButtons } from './MoveActionButtons';
 import { ChatInput } from './ChatInput';
 import { getAdaptiveMove } from '../../services/coachGameEngine';
-import { getCoachCommentary, getCoachChatResponse } from '../../services/coachApi';
+import { getCoachCommentary } from '../../services/coachApi';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
-import { buildChessContextMessage, POSITION_ANALYSIS_ADDITION, INTERACTIVE_REVIEW_ADDITION } from '../../services/coachPrompts';
+import { INTERACTIVE_REVIEW_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
@@ -33,7 +33,9 @@ import type {
 import { useReviewPlayback } from '../../hooks/useReviewPlayback';
 import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
 import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu } from 'lucide-react';
-import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
+import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
+import { coachService } from '../../coach/coachService';
+import type { LiveState } from '../../coach/types';
 import { logAppAudit } from '../../services/appAuditor';
 import { getClassificationHighlightColor, CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
@@ -556,11 +558,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const handleAskSend = useCallback((question: string) => {
     if (isAskStreaming) return;
 
-    // WO-COACH-MEMORY-UNIFY-01: opening intent can be named from the
-    // review Ask panel too — capture it into the unified memory store
-    // before dispatching the question to the LLM.
+    // WO-BRAIN-03: review-ask now routes through coachService.ask. The
+    // brain envelope carries the same memory + manifest awareness as
+    // every other migrated surface; the LLM emits set_intended_opening
+    // via tool when it should, so the deterministic regex is retired
+    // here too. tryCaptureForgetIntent stays as belt-and-suspenders
+    // until BRAIN-06 cleanup.
     tryCaptureForgetIntent(question, 'review-ask');
-    tryCaptureOpeningIntent(question, 'review-ask', playerColor);
 
     // Abort previous ask
     if (askAbortRef.current) askAbortRef.current.abort();
@@ -572,45 +576,45 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const moveIdx = reviewState.currentMoveIndex;
     const move = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
     const fenForQ = move?.fen ?? STARTING_FEN;
-    const moveNum = moveIdx >= 0 ? Math.floor(moveIdx / 2) + 1 : 0;
-
-    const ctx: CoachContext = {
-      fen: fenForQ,
-      lastMoveSan: move?.san ?? null,
-      moveNumber: moveNum,
-      pgn: moves.slice(0, Math.max(0, moveIdx + 1)).map((m) => m.san).join(' '),
-      openingName,
-      stockfishAnalysis: move?.evaluation !== null && move?.evaluation !== undefined ? {
-        evaluation: move.evaluation,
-        bestMove: move.bestMove ?? '',
-        isMate: false,
-        mateIn: null,
-        depth: 0,
-        topLines: [],
-        nodesPerSecond: 0,
-      } : null,
-      playerMove: null,
-      moveClassification: null,
-      playerProfile: { rating: playerRating, weaknesses: [] },
-    };
-
-    const contextMessage = buildChessContextMessage(ctx);
-    const messages: { role: 'user' | 'assistant'; content: string }[] = [
-      { role: 'user', content: `${contextMessage}\n\nStudent's question: ${question}` },
-    ];
 
     const abortSignal = askAbortRef.current.signal;
-
-    void getCoachChatResponse(messages, POSITION_ANALYSIS_ADDITION, (chunk) => {
-      if (!abortSignal.aborted) {
-        setAskResponse((prev: string | null) => (prev ?? '') + chunk);
-      }
-    }).finally(() => {
-      if (!abortSignal.aborted) {
-        setIsAskStreaming(false);
-      }
+    const reviewLiveState: LiveState = {
+      surface: 'review',
+      fen: fenForQ,
+      moveHistory: moves.slice(0, Math.max(0, moveIdx + 1)).map((m) => m.san),
+      userJustDid: question,
+      currentRoute: '/coach/play',
+    };
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachGameReview.handleAskSend',
+      summary: 'surface=review viaSpine=true',
+      details: JSON.stringify({
+        surface: 'review',
+        viaSpine: true,
+        timestamp: Date.now(),
+        fenIfPresent: fenForQ,
+      }),
+      fen: fenForQ,
     });
-  }, [isAskStreaming, reviewState.currentMoveIndex, moves, openingName, playerRating]);
+    void coachService
+      .ask(
+        { surface: 'review', ask: question, liveState: reviewLiveState },
+        {
+          onChunk: (chunk: string) => {
+            if (!abortSignal.aborted) {
+              setAskResponse((prev: string | null) => (prev ?? '') + chunk);
+            }
+          },
+        },
+      )
+      .finally(() => {
+        if (!abortSignal.aborted) {
+          setIsAskStreaming(false);
+        }
+      });
+  }, [isAskStreaming, reviewState.currentMoveIndex, moves]);
 
   // Reset ask state and best-move reveal when navigating to a different move
   useEffect(() => {
