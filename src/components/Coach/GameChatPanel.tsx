@@ -100,7 +100,6 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onTakeBackMove,
       onSetBoardPosition,
       onResetBoard,
-      onPlayVariation,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -277,35 +276,55 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               break;
             }
             case 'take_back_move': {
-              if (!onPlayVariation) {
-                dispatchError = 'no onPlayVariation callback wired';
+              if (!onTakeBackMove) {
+                dispatchError = 'no onTakeBackMove callback wired';
                 break;
               }
-              dispatchOk = onPlayVariation({ undo: routedIntent.count, moves: [] });
+              const result = await Promise.resolve(onTakeBackMove(routedIntent.count));
+              dispatchOk = typeof result === 'boolean' ? result : result.ok;
               if (dispatchOk) {
                 ackText =
                   routedIntent.count > 1 ? 'Taken back.' : 'Taken back — your move.';
               } else {
-                dispatchError = 'nothing to take back';
+                dispatchError =
+                  typeof result === 'object' && 'reason' in result
+                    ? (result.reason ?? 'nothing to take back')
+                    : 'nothing to take back';
               }
               break;
             }
             case 'reset_board': {
-              if (!onRestartGame) {
-                dispatchError = 'no onRestartGame callback wired';
+              if (!onResetBoard) {
+                dispatchError = 'no onResetBoard callback wired';
                 break;
               }
-              onRestartGame();
-              dispatchOk = true;
-              ackText = 'Fresh board — your move.';
+              const result = await Promise.resolve(onResetBoard());
+              dispatchOk = typeof result === 'boolean' ? result : result.ok;
+              if (dispatchOk) {
+                ackText = 'Fresh board — your move.';
+              } else {
+                dispatchError =
+                  typeof result === 'object' && 'reason' in result
+                    ? (result.reason ?? 'reset rejected')
+                    : 'reset rejected';
+              }
               break;
             }
             case 'set_board_position': {
-              // Set-position from chat surface not yet wired here.
-              // Let it fall through to the LLM so the brain can
-              // handle position-set requests via the cerebrum tool.
-              dispatchOk = false;
-              dispatchError = 'set_board_position not yet wired on chat surface';
+              if (!onSetBoardPosition) {
+                dispatchError = 'no onSetBoardPosition callback wired';
+                break;
+              }
+              const result = await Promise.resolve(onSetBoardPosition(routedIntent.fen));
+              dispatchOk = typeof result === 'boolean' ? result : result.ok;
+              if (dispatchOk) {
+                ackText = 'Position loaded.';
+              } else {
+                dispatchError =
+                  typeof result === 'object' && 'reason' in result
+                    ? (result.reason ?? 'set-position rejected')
+                    : 'set-position rejected';
+              }
               break;
             }
             case 'navigate_to_route': {
@@ -660,11 +679,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 case 'take_back_move': {
                   const count =
                     typeof action.args.count === 'number' ? action.args.count : 1;
-                  onPlayVariation?.({ undo: count, moves: [] });
+                  void onTakeBackMove?.(count);
                   break;
                 }
                 case 'reset_board': {
-                  onRestartGame?.();
+                  void onResetBoard?.();
+                  break;
+                }
+                case 'set_board_position': {
+                  const fen =
+                    typeof action.args.fen === 'string' ? action.args.fen : null;
+                  if (fen) void onSetBoardPosition?.(fen);
                   break;
                 }
                 case 'navigate_to_route': {
@@ -875,11 +900,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               case 'take_back_move': {
                 const count =
                   typeof action.args.count === 'number' ? action.args.count : 1;
-                onPlayVariation?.({ undo: count, moves: [] });
+                void onTakeBackMove?.(count);
                 break;
               }
               case 'reset_board': {
-                onRestartGame?.();
+                void onResetBoard?.();
+                break;
+              }
+              case 'set_board_position': {
+                const fen =
+                  typeof action.args.fen === 'string' ? action.args.fen : null;
+                if (fen) void onSetBoardPosition?.(fen);
                 break;
               }
               case 'navigate_to_route': {
