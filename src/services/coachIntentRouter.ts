@@ -115,7 +115,7 @@ function matchPlayMove(text: string, currentFen?: string): string | null {
   const afterVerb = text.replace(/^.*?\b(play|move|make|do|push)\b\s+/i, '').trim();
   if (!afterVerb) return null;
 
-  const cleanedAfterVerb = afterVerb.replace(/^(the|my|a|an)\s+/i, '');
+  const cleanedAfterVerb = afterVerb.replace(/^(the|my|an)\s+|^a\s+(?=[a-z])/i, '');
 
   // Pattern 1: bare SAN. "play Nf3", "play e4", "play O-O", "play exd5".
   const SAN_RE = /^([NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?)\b/;
