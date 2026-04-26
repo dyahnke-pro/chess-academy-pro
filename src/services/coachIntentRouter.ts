@@ -112,12 +112,14 @@ function matchPlayMove(text: string, currentFen?: string): string | null {
   if (!VERB_RE.test(text)) return null;
 
   // Strip everything up to and including the verb (and an optional "the").
-  const afterVerb = text.replace(/^\s*.*?\b(play|move|make|do|push)\b\s+(the\s+)?/i, '').trim();
+  const afterVerb = text.replace(/^.*?\b(play|move|make|do|push)\b\s+/i, '').trim();
   if (!afterVerb) return null;
+
+  const cleanedAfterVerb = afterVerb.replace(/^(the|my|a|an)\s+/i, '');
 
   // Pattern 1: bare SAN. "play Nf3", "play e4", "play O-O", "play exd5".
   const SAN_RE = /^([NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?)\b/;
-  const sanMatch = afterVerb.match(SAN_RE);
+  const sanMatch = cleanedAfterVerb.match(SAN_RE);
   if (sanMatch) {
     const candidate = sanMatch[1];
     if (validateSan(candidate, currentFen)) return candidate;
@@ -127,7 +129,7 @@ function matchPlayMove(text: string, currentFen?: string): string | null {
   // "pawn to e4", "queen on h5".
   const NL_PIECE_RE =
     /^(?:(?:my|the)\s+)?(knight|bishop|rook|queen|king|pawn)\s+(?:to|on)\s+([a-h][1-8])\b/i;
-  const nlMatch = afterVerb.match(NL_PIECE_RE);
+  const nlMatch = cleanedAfterVerb.match(NL_PIECE_RE);
   if (nlMatch) {
     const piece = nlMatch[1].toLowerCase();
     const square = nlMatch[2].toLowerCase();
