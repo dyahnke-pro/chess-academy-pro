@@ -27,6 +27,17 @@ export const playMoveTool: Tool = {
     required: ['san'],
   },
   async execute(args, ctx) {
+    // WO-FOUNDATION-02 diagnostic: log entry into execute so we can
+    // verify whether the spine even reaches this tool when the LLM
+    // emits play_move. Pairs with the ctx-built audit in
+    // coachService.ask.
+    void logAppAudit({
+      kind: 'coach-brain-tool-called',
+      category: 'subsystem',
+      source: 'playMoveTool.execute',
+      summary: `entered: san=${typeof args.san === 'string' ? args.san : 'undef'} hasCallback=${typeof ctx?.onPlayMove === 'function'}`,
+    });
+
     const san = typeof args.san === 'string' ? args.san.trim() : '';
     if (!san) return { ok: false, error: 'san is required' };
 

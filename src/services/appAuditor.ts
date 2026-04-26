@@ -104,6 +104,7 @@ export type AuditKind =
   | 'coach-brain-tool-called'
   | 'coach-brain-intent-routed'
   | 'coach-intent-router-input'
+  | 'coach-brain-tool-parse-result'
   | 'chat-panel-message-received'
   | 'coach-brain-answer-returned'
   // Surface migration trail (WO-BRAIN-02 onwards). Fired once per call

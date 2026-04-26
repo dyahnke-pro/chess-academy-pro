@@ -84,6 +84,9 @@ describe('ping: spine assembles envelope, calls provider, returns answer', () =>
     expect(brainKinds).toEqual([
       'coach-brain-ask-received',
       'coach-brain-envelope-assembled',
+      // WO-FOUNDATION-02 diagnostic: ctx-built audit fires after the
+      // envelope assembly and before the provider call.
+      'coach-brain-tool-parse-result',
       'coach-brain-provider-called',
       'coach-brain-answer-returned',
     ]);
