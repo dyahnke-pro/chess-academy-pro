@@ -32,7 +32,6 @@ import {
   createPhaseTransitionState,
   detectPhaseTransition,
   phaseTransitionDiagnostic,
-  type PhaseTransitionEvent,
   type PhaseTransitionState,
 } from '../../services/phaseTransitionDetector';
 import { logAppAudit } from '../../services/appAuditor';
