@@ -475,3 +475,75 @@ Same shape as WeaknessPuzzle but the queue is filtered by `state.filterThemes` f
 **Pages NOT covered in Round 3a** (will need follow-up if foundation work touches them): `/tactics/profile` (TacticalProfilePage), `/tactics/setup` (TacticSetupPage), `/tactics/create` (TacticCreatePage), `/tactics/classic` (PuzzleTrainerPage — the daily-training drill), `/tactics/weakness-themes` (WeaknessThemesPage — theme-picker between hub and drill), `/tactics/lichess` (LichessDashboardPage).
 
 Round 3b (chat intents) follows in next message.
+
+---
+
+## Round 3b-1 — In-game chat intercepts (`detectInGameChatIntent`)
+
+Source: `src/services/inGameChatIntent.ts`. Fired in `GameChatPanel.handleSend` BEFORE any brain dispatch. When matched, mutates the live game directly via parent callbacks; the LLM is never called.
+
+Returns one of four intent kinds: `mute` | `narrate` | `restart` | `play-opening`. Order matters — mute checked before narrate so "turn off voice" doesn't false-match the narrate branch.
+
+### Intent: `mute`
+- **Trigger regex** (`MUTE_RE`, file: `inGameChatIntent.ts:81-82`):
+  ```
+  /\b(?:mute|be\s+quiet|stop\s+talking|shut\s+up|silence|silent|turn\s+off\s+(?:the\s+)?voice|voice\s+off|disable\s+(?:voice|tts|narration|text[- ]to[- ]speech))\b/i
+  ```
+- **Sample phrases that match:** "mute", "be quiet", "stop talking", "shut up", "silence", "voice off", "turn off the voice", "disable narration", "disable tts", "disable text-to-speech"
+- **Action:** Calls `applyNarrationToggle(false)` (defined in `coachAgentRunner.ts`) which flips both `appStore.coachVoiceOn` AND `coachSessionStore.narrationMode` to off, plus injects a chat ack
+
+### Intent: `narrate`
+- **Trigger regex** (`NARRATE_RE`, file: `inGameChatIntent.ts:73-74`):
+  ```
+  /\b(?:narrate|read\s+(?:it\s+)?(?:out\s+)?(?:aloud|out\s+loud)|speak\s+(?:to\s+me|aloud|out\s+loud)|talk\s+(?:to\s+me|through)|say\s+it\s+out\s+loud|out\s+loud|voice\s+(?:on|narration)|turn\s+on\s+(?:the\s+)?voice|enable\s+(?:voice|tts|text[- ]to[- ]speech|narration)|use\s+(?:voice|tts|text[- ]to[- ]speech)|text[- ]to[- ]speech)\b/i
+  ```
+- **Sample phrases:** "narrate", "read it aloud", "read out loud", "speak to me", "talk to me", "talk through it", "say it out loud", "voice on", "voice narration", "turn on the voice", "enable voice", "enable narration", "enable tts", "use text-to-speech"
+- **Action:** Calls `applyNarrationToggle(true)` — same shape as mute, opposite direction
+
+### Intent: `restart`
+- **Trigger regex** (`RESTART_RE`, file: `inGameChatIntent.ts:65-66`):
+  ```
+  /\b(?:restart|reset|new\s+game|start\s+over|start\s+(?:a\s+)?new|fresh\s+(?:game|start|board)|from\s+the\s+start|back\s+to\s+(?:the\s+)?start(?:ing\s+position)?|take\s+back\s+to\s+(?:the\s+)?start(?:ing\s+position)?)\b/i
+  ```
+- **Sample phrases:** "restart", "reset", "new game", "start over", "start a new", "fresh game", "fresh start", "fresh board", "from the start", "back to the start", "back to the starting position", "take back to the start"
+- **Action:** Fires `onRestartGame()` callback (passed into `<GameChatPanel>` from `CoachGamePage`), which invokes `handleRestart()` — wipes board, clears coach state, drops resumable snapshot
+
+### Intent: `play-opening`
+- **Trigger sources** (two paths, file: `inGameChatIntent.ts:101-127`):
+  1. **Primary:** Reuses `parseCoachIntent(text)` and accepts `kind === 'play-against'` OR `kind === 'walkthrough'` when `intent.subject` is set. Subject is alias-expanded via the `OPENING_ALIASES` table (see below) and validated against `getOpeningMoves()` — must resolve to actual book moves to count.
+  2. **Fallback regex** (`PLAY_OPENING_RE`, file: `:91-92`):
+     ```
+     /^\s*(?:let'?s\s+)?(?:play|try|do|use|go\s+with|switch\s+to)\s+(?:the\s+|a\s+|an\s+)?([a-z][a-z\s'’üäö-]{1,40}?)(?:\s+(?:against\s+me|now|please))?\s*[.!?]*\s*$/i
+     ```
+     Catches bare phrasings parseCoachIntent misses: "play the KID", "let's play the French", "try the Sicilian", "go with the London", "switch to the Caro-Kann"
+- **Sample phrases:** "play the King's Indian against me", "let's play the Sicilian", "play the KID", "try the London", "go with the Najdorf", "switch to the Caro-Kann", "let's play the French now"
+- **Action:** Fires `onPlayOpening(openingName)` callback. Triggers `handleRestart()` first then loads the opening book moves so the AI plays the named line out
+
+### `OPENING_ALIASES` (canonical-name expansion table)
+
+File: `inGameChatIntent.ts:35-62`. Used by both detectInGameChatIntent and `expandAlias()`. Lower-case keys, canonical-name values:
+
+| Alias typed | Canonical opening |
+|---|---|
+| `kid` | King's Indian Defense |
+| `kia` | King's Indian Attack |
+| `qgd` | Queen's Gambit Declined |
+| `qga` | Queen's Gambit Accepted |
+| `qg` | Queen's Gambit |
+| `qid` | Queen's Indian Defense |
+| `ruy lopez` | Ruy Lopez |
+| `najdorf` | Sicilian Defense: Najdorf Variation |
+| `grunfeld` / `grünfeld` | Grünfeld Defense |
+| `benoni` | Benoni Defense |
+| `nimzo` | Nimzo-Indian Defense |
+| `caro` / `caro-kann` | Caro-Kann Defense |
+| `french` | French Defense |
+| `sicilian` | Sicilian Defense |
+| `london` | London System |
+| `scandi` / `scandinavian` | Scandinavian Defense |
+| `pirc` | Pirc Defense |
+| `alekhine` | Alekhine Defense |
+| `king's indian` / `kings indian` | King's Indian Defense |
+
+Anything else that lowers/strips down to a key NOT in this table passes through unchanged — `getOpeningMoves` then decides whether the raw subject is recognised.
+
