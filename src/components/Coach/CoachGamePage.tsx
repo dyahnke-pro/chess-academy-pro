@@ -2199,6 +2199,36 @@ export function CoachGamePage(): JSX.Element {
     }
   }, [isExploreMode, handleExploreMove, practicePosition, handlePracticeMove, handlePlayerMove]);
 
+  // WO-TEACH-FIX-01 — chat-driven student move. The student says "play
+  // knight to f3" in the in-game chat panel and the brain emits
+  // play_move with that SAN. We validate against the live FEN, commit
+  // through the same `game.makeMove` the board uses, then route the
+  // result through `handleBoardMoveRouted` so the post-move analysis
+  // pipeline (classification, blunder interception, coach reaction)
+  // runs identically to a board-drag move. chess.js's turn-check is
+  // the gate: if it's not the student's turn or the move is illegal,
+  // `game.makeMove` returns null and we surface that to the brain.
+  const handleChatPlayMove = useCallback(
+    (san: string): { ok: boolean; reason?: string } => {
+      try {
+        // Probe the SAN in a sandbox first to extract from/to/promotion;
+        // the live game's `makeMove` takes from/to, not SAN.
+        const probe = new Chess(game.fen);
+        const probed = probe.move(san);
+        if (!probed) return { ok: false, reason: `illegal SAN "${san}" from current FEN` };
+        const moveResult = game.makeMove(probed.from, probed.to, probed.promotion);
+        if (!moveResult) {
+          return { ok: false, reason: `commit rejected for "${san}" — likely a turn or state mismatch` };
+        }
+        handleBoardMoveRouted(moveResult);
+        return { ok: true };
+      } catch (err) {
+        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      }
+    },
+    [game, handleBoardMoveRouted],
+  );
+
   // Handle practice-in-chat from post-game review
   const handlePracticeInChat = useCallback((prompt: string) => {
     // Transition from postgame back to playing mode with chat
@@ -3134,6 +3164,7 @@ export function CoachGamePage(): JSX.Element {
               onBoardAnnotation={handleBoardAnnotation}
               onRestartGame={handleRestart}
               onPlayOpening={handleOpeningRequest}
+              onPlayMove={handleChatPlayMove}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}
@@ -3192,6 +3223,7 @@ export function CoachGamePage(): JSX.Element {
               onBoardAnnotation={handleBoardAnnotation}
               onRestartGame={handleRestart}
               onPlayOpening={handleOpeningRequest}
+              onPlayMove={handleChatPlayMove}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}

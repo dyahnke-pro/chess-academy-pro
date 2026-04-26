@@ -40,6 +40,12 @@ interface GameChatPanelProps {
    *  against them. The opening name is passed through to the board's
    *  opening-book hook. */
   onPlayOpening?: (openingName: string) => void;
+  /** Called when the brain emits play_move from the chat surface — e.g.
+   *  the student says "play knight to f3" and the brain executes it on
+   *  their behalf. Validate the SAN against the live FEN before applying.
+   *  Return { ok: true } if the move landed, { ok: false, reason } if not.
+   *  Same shape as CoachGamePage's move-selector onPlayMove. */
+  onPlayMove?: (san: string) => { ok: boolean; reason?: string } | Promise<{ ok: boolean; reason?: string }>;
   /** Apply a what-if variation: take back `undo` half-moves, then play
    *  `moves` (SAN) forward. Returns true on success, false if any move
    *  was invalid or there was nothing to undo. Powers the coach's
@@ -77,6 +83,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onBoardAnnotation,
       onRestartGame,
       onPlayOpening,
+      onPlayMove,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -358,6 +365,23 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               onNavigate: (path: string) => {
                 void navigate(path);
               },
+              // WO-TEACH-FIX-01 — student says "play knight to f3" in chat,
+              // brain emits play_move, this callback executes it on the board.
+              // Mirrors the move-selector wiring in CoachGamePage. Wrapped so
+              // a thrown error from the parent surfaces as a tool error rather
+              // than escaping the spine.
+              onPlayMove: onPlayMove
+                ? async (san: string): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      return await Promise.resolve(onPlayMove(san));
+                    } catch (err) {
+                      return {
+                        ok: false,
+                        reason: err instanceof Error ? err.message : String(err),
+                      };
+                    }
+                  }
+                : undefined,
             },
           );
           if (speechBufferRef.current.trim()) {
@@ -506,7 +530,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, setMessages, navigate, location, playerColor]);
+    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, setMessages, navigate, location, playerColor]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {
