@@ -39,6 +39,13 @@ export const POLLY_VOICES = [
 // Web Speech fallback settings
 const WEB_SPEECH_FALLBACK = { rate: 0.95, pitch: 0.78 };
 
+/** Master kill-switch for the Web Speech tier. Disabled because the
+ *  current sentence-streaming pattern was firing Polly AND Web Speech
+ *  on the same content, producing overlapping coach voices. Re-enable
+ *  once the dual-engine queueing is repaired so only one tier speaks
+ *  any given chunk. */
+const WEB_SPEECH_FALLBACK_ENABLED = false;
+
 /** How long to cool down Polly after a failed call before trying again.
  *  A one-off 429 / 503 from AWS or a transient network hiccup shouldn't
  *  permanently disable Polly for the session — we retry after this
@@ -353,7 +360,9 @@ class VoiceService {
     if (this.cachedPrefs?.systemVoiceURI) {
       speechService.setVoice(this.cachedPrefs.systemVoiceURI);
     }
-    await speechService.speak(sanitizeForTTS(text), { ...WEB_SPEECH_FALLBACK, rate: speed });
+    if (WEB_SPEECH_FALLBACK_ENABLED) {
+      await speechService.speak(sanitizeForTTS(text), { ...WEB_SPEECH_FALLBACK, rate: speed });
+    }
   }
 
   /** Speak regardless of the voiceEnabled preference.
@@ -370,7 +379,9 @@ class VoiceService {
       speechService.setVoice(this.cachedPrefs.systemVoiceURI);
     }
     const speed = this.cachedPrefs?.voiceSpeed ?? this.speed;
-    speechService.queue(sanitizeForTTS(text), { rate: speed, pitch: 0.78 });
+    if (WEB_SPEECH_FALLBACK_ENABLED) {
+      speechService.queue(sanitizeForTTS(text), { rate: speed, pitch: 0.78 });
+    }
   }
 
   private async speakInternal(text: string, force: boolean): Promise<void> {
@@ -630,7 +641,9 @@ class VoiceService {
   }
 
   private async speakFallback(text: string): Promise<void> {
-    await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
+    if (WEB_SPEECH_FALLBACK_ENABLED) {
+      await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
+    }
   }
 
   /**
