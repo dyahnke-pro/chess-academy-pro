@@ -185,6 +185,24 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       ? await provider.callStreaming(currentEnvelope, options.onChunk)
       : await provider.call(currentEnvelope);
 
+    // WO-TEACH-FIX-02 — diagnostic audit so we can verify whether
+    // streaming responses are correctly emitting parsed tool calls.
+    // If the brain's text contains [[ACTION:...]] but toolCalls is
+    // empty, parseActions failed to extract — that's a different bug
+    // than "brain didn't emit any actions."
+    void logAppAudit({
+      kind: 'coach-brain-tool-parse-result',
+      category: 'subsystem',
+      source: 'coachService.ask',
+      summary: `streaming=${useStreaming} parsed=${lastResponse.toolCalls.length} text=${lastResponse.text.length}c`,
+      details: JSON.stringify({
+        streaming: useStreaming,
+        parsedCount: lastResponse.toolCalls.length,
+        toolNames: lastResponse.toolCalls.map((c) => c.name),
+        textPreview: lastResponse.text.slice(0, 200),
+      }),
+    });
+
     if (lastResponse.toolCalls.length === 0) {
       // No tools emitted — terminal turn. Exit the loop.
       break;

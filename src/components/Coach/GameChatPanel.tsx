@@ -346,12 +346,23 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   .trim();
                 setStreamingContent(displayText);
                 if (useAppStore.getState().coachVoiceOn) {
+                  // Strip action and board tags from speech, same as displayText.
+                  // Never read [[ACTION:...]] or [BOARD:...] aloud — those are
+                  // machine-readable directives, not coach speech. Buffer the
+                  // STRIPPED text and emit complete sentences. Tags can span
+                  // chunks; we only strip when both opening and closing markers
+                  // are present, so a partial tag stays in the buffer until
+                  // the rest arrives.
                   speechBufferRef.current += chunk;
+                  speechBufferRef.current = speechBufferRef.current
+                    .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
+                    .replace(BOARD_TAG_STRIP_RE, '');
                   const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
                   if (sentenceEnd) {
                     const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
                     speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                    void voiceService.speak(sentence.trim());
+                    const cleaned = sentence.trim();
+                    if (cleaned) void voiceService.speak(cleaned);
                   }
                 }
               },

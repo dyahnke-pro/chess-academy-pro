@@ -85,6 +85,8 @@ describe('ping: spine assembles envelope, calls provider, returns answer', () =>
       'coach-brain-ask-received',
       'coach-brain-envelope-assembled',
       'coach-brain-provider-called',
+      // WO-TEACH-FIX-02 — diagnostic audit fires after every provider call.
+      'coach-brain-tool-parse-result',
       'coach-brain-answer-returned',
     ]);
 

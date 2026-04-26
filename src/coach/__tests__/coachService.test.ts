@@ -62,6 +62,10 @@ describe('coachService.ask', () => {
       'coach-brain-ask-received',
       'coach-brain-envelope-assembled',
       'coach-brain-provider-called',
+      // WO-TEACH-FIX-02 — diagnostic audit fires after every provider call,
+      // before the toolCalls-empty break, so non-tool responses show
+      // parsed=0 and tool responses show their parsed count + names.
+      'coach-brain-tool-parse-result',
       'coach-brain-answer-returned',
     ]);
   });
