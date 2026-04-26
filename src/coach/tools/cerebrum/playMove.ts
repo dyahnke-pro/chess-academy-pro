@@ -31,6 +31,11 @@ export const playMoveTool: Tool = {
     // verify whether the spine even reaches this tool when the LLM
     // emits play_move. Pairs with the ctx-built audit in
     // coachService.ask.
+    // eslint-disable-next-line no-console
+    console.log('[playMoveTool.execute] entered:', {
+      san: typeof args.san === 'string' ? args.san : 'undef',
+      hasCallback: typeof ctx?.onPlayMove === 'function',
+    });
     void logAppAudit({
       kind: 'coach-brain-tool-called',
       category: 'subsystem',

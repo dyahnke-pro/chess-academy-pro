@@ -190,6 +190,14 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // ctx-build time so we can verify the surface plumbing reached the
   // spine. If onPlayMove is `undefined` here, the surface didn't
   // pass it; if it's `function`, the chain up to here is intact.
+  // eslint-disable-next-line no-console
+  console.log('[coachService.ask] ctx-built:', {
+    onPlayMove: typeof ctx.onPlayMove,
+    onTakeBackMove: typeof ctx.onTakeBackMove,
+    onResetBoard: typeof ctx.onResetBoard,
+    onSetBoardPosition: typeof ctx.onSetBoardPosition,
+    onNavigate: typeof ctx.onNavigate,
+  });
   void logAppAudit({
     kind: 'coach-brain-tool-parse-result',
     category: 'subsystem',
