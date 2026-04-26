@@ -2,12 +2,14 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
-import { routeChatIntent } from '../../services/coachIntentRouter';
+import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
+import { tryRouteIntent } from '../../services/coachIntentRouter';
+import { parseActions } from '../../services/coachActionDispatcher';
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -40,6 +42,23 @@ interface GameChatPanelProps {
    *  against them. The opening name is passed through to the board's
    *  opening-book hook. */
   onPlayOpening?: (openingName: string) => void;
+  /** Called when the brain (or the Layer 1 intent router) emits
+   *  play_move from the chat surface — e.g. the student says "play
+   *  knight to f3" and the spine executes it on their behalf.
+   *  WO-COACH-OPERATOR-FOUNDATION-01. */
+  onPlayMove?: (san: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Called when the brain (or router) emits take_back_move. The
+   *  parent reverts `count` half-moves on the live game.
+   *  WO-COACH-OPERATOR-FOUNDATION-01. */
+  onTakeBackMove?: (count: number) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Called when the brain (or router) emits set_board_position. The
+   *  parent jumps the board to the supplied FEN.
+   *  WO-COACH-OPERATOR-FOUNDATION-01. */
+  onSetBoardPosition?: (fen: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Called when the brain (or router) emits reset_board. The parent
+   *  restarts the game from the starting position.
+   *  WO-COACH-OPERATOR-FOUNDATION-01. */
+  onResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
   /** Apply a what-if variation: take back `undo` half-moves, then play
    *  `moves` (SAN) forward. Returns true on success, false if any move
    *  was invalid or there was nothing to undo. Powers the coach's
@@ -77,6 +96,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onBoardAnnotation,
       onRestartGame,
       onPlayOpening,
+      onPlayMove,
+      onTakeBackMove,
+      onSetBoardPosition,
+      onResetBoard,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -151,6 +174,33 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const handleSend = useCallback(async (text: string) => {
       if (!activeProfile || isStreaming) return;
 
+      // WO-FOUNDATION-02 trace harness — generate one UUID per
+      // user message and thread it through every audit emit so the
+      // pipeline can be reconstructed end-to-end. crypto.randomUUID
+      // is available in modern browsers and JSDOM via webcrypto.
+      const traceId =
+        typeof crypto !== 'undefined' && 'randomUUID' in crypto
+          ? crypto.randomUUID()
+          : `trace-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+       
+      console.log('[TRACE-1]', traceId, 'handleSend:', text);
+      void logAppAudit({
+        kind: 'trace-handle-send',
+        category: 'subsystem',
+        source: 'GameChatPanel.handleSend',
+        summary: `text=${text.slice(0, 80)} traceId=${traceId}`,
+      });
+
+      // WO-FOUNDATION-02 — log every message that reaches the surface
+      // so we can verify the router is seeing real user input (not
+      // assembled context strings) on every chat send.
+      void logAppAudit({
+        kind: 'chat-panel-message-received',
+        category: 'subsystem',
+        source: 'GameChatPanel.handleSend',
+        summary: `text="${text.slice(0, 100)}"`,
+      });
+
       // Add user message
       const userMsg: ChatMessageType = {
         id: `gmsg-${Date.now()}`,
@@ -175,6 +225,152 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         trigger: null,
       });
 
+      // ─── WO-FOUNDATION-02: Layer 1 intent-router pre-emit ────────
+      // Pattern-match high-confidence command shapes BEFORE running
+      // any existing pre-LLM intercepts. Matched commands dispatch
+      // the surface callback directly. Zero LLM round-trip; zero
+      // hallucination risk. Falls through to the existing intercepts
+      // (and ultimately coachService.ask) on miss.
+      void logAppAudit({
+        kind: 'trace-intercept-check',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=tryRouteIntent traceId=${traceId}`,
+      });
+      const routedIntent = tryRouteIntent(text, { currentFen: fen });
+      void logAppAudit({
+        kind: 'trace-intercept-result',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=tryRouteIntent matched=${routedIntent ? 'true' : 'false'} traceId=${traceId}`,
+      });
+      if (routedIntent) {
+        void logAppAudit({
+          kind: 'coach-brain-intent-routed',
+          category: 'subsystem',
+          source: 'GameChatPanel.handleSend',
+          summary: `routed=${routedIntent.kind} bypass-llm=true`,
+        });
+
+        let ackText = 'Done.';
+        let dispatchOk = false;
+        let dispatchError: string | undefined;
+
+        try {
+          switch (routedIntent.kind) {
+            case 'play_move': {
+              if (!onPlayMove) {
+                dispatchError = 'no onPlayMove callback wired';
+                break;
+              }
+              const result = await Promise.resolve(onPlayMove(routedIntent.san));
+              dispatchOk = typeof result === 'boolean' ? result : result.ok;
+              if (dispatchOk) {
+                ackText = `${routedIntent.san} — your move.`;
+              } else {
+                dispatchError =
+                  typeof result === 'object' && 'reason' in result
+                    ? (result.reason ?? 'rejected')
+                    : 'rejected';
+              }
+              break;
+            }
+            case 'take_back_move': {
+              if (!onTakeBackMove) {
+                dispatchError = 'no onTakeBackMove callback wired';
+                break;
+              }
+              const result = await Promise.resolve(onTakeBackMove(routedIntent.count));
+              dispatchOk = typeof result === 'boolean' ? result : result.ok;
+              if (dispatchOk) {
+                ackText =
+                  routedIntent.count > 1 ? 'Taken back.' : 'Taken back — your move.';
+              } else {
+                dispatchError =
+                  typeof result === 'object' && 'reason' in result
+                    ? (result.reason ?? 'nothing to take back')
+                    : 'nothing to take back';
+              }
+              break;
+            }
+            case 'reset_board': {
+              if (!onResetBoard) {
+                dispatchError = 'no onResetBoard callback wired';
+                break;
+              }
+              const result = await Promise.resolve(onResetBoard());
+              dispatchOk = typeof result === 'boolean' ? result : result.ok;
+              if (dispatchOk) {
+                ackText = 'Fresh board — your move.';
+              } else {
+                dispatchError =
+                  typeof result === 'object' && 'reason' in result
+                    ? (result.reason ?? 'reset rejected')
+                    : 'reset rejected';
+              }
+              break;
+            }
+            case 'set_board_position': {
+              if (!onSetBoardPosition) {
+                dispatchError = 'no onSetBoardPosition callback wired';
+                break;
+              }
+              const result = await Promise.resolve(onSetBoardPosition(routedIntent.fen));
+              dispatchOk = typeof result === 'boolean' ? result : result.ok;
+              if (dispatchOk) {
+                ackText = 'Position loaded.';
+              } else {
+                dispatchError =
+                  typeof result === 'object' && 'reason' in result
+                    ? (result.reason ?? 'set-position rejected')
+                    : 'set-position rejected';
+              }
+              break;
+            }
+            case 'navigate_to_route': {
+              try {
+                void navigate(routedIntent.route);
+                dispatchOk = true;
+                ackText = 'On it.';
+              } catch (err) {
+                dispatchError = err instanceof Error ? err.message : String(err);
+              }
+              break;
+            }
+          }
+        } catch (err) {
+          dispatchError = err instanceof Error ? err.message : String(err);
+        }
+
+        void logAppAudit({
+          kind: 'coach-brain-tool-called',
+          category: 'subsystem',
+          source: 'GameChatPanel.handleSend',
+          summary: `${routedIntent.kind} ${dispatchOk ? 'ok' : 'failed'} (router-direct)`,
+          details: dispatchError ? `error=${dispatchError}` : undefined,
+        });
+
+        if (dispatchOk) {
+          // Append a brief assistant ack to the chat so the user sees
+          // a response. Mirrors the pattern existing intercepts use
+          // (e.g., the restart-game / play-opening ack blocks below).
+          const ackMsg: ChatMessageType = {
+            id: `gmsg-${Date.now()}-routed`,
+            role: 'assistant',
+            content: ackText,
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ackMsg]);
+          if (useAppStore.getState().coachVoiceOn) {
+            void voiceService.speak(ackText);
+          }
+          return;
+        }
+        // Match-but-failed (e.g., illegal SAN, nothing to take back):
+        // fall through so the LLM can elaborate on why the command
+        // didn't land. The user's original text is still in scope.
+      }
+
       // WO-BRAIN-03: both branches now route through the brain. The
       // deterministic `tryCaptureOpeningIntent` regex shortcut is
       // retired entirely — `set_intended_opening` is in the brain's
@@ -182,7 +378,19 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // `tryCaptureForgetIntent` regex stays for one more WO as a
       // belt-and-suspenders safety net. Removed in BRAIN-06 cleanup.
       const surface = isGameOver ? 'drawer-chat' : 'in-game-chat';
-      tryCaptureForgetIntent(text, surface);
+      void logAppAudit({
+        kind: 'trace-intercept-check',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=tryCaptureForgetIntent traceId=${traceId}`,
+      });
+      const forgetMatched = tryCaptureForgetIntent(text, surface);
+      void logAppAudit({
+        kind: 'trace-intercept-result',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=tryCaptureForgetIntent matched=${forgetMatched ? 'true' : 'false'} traceId=${traceId}`,
+      });
 
       // Narration toggle — deterministic intercept. Runs BEFORE the
       // in-game block below so "narrate while we play" reliably flips
@@ -190,7 +398,19 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // would otherwise handle via its own narrate case). This path
       // uses applyNarrationToggle from coachAgentRunner for consistency
       // with CoachChatPage.
+      void logAppAudit({
+        kind: 'trace-intercept-check',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=detectNarrationToggle traceId=${traceId}`,
+      });
       const narrationToggle = detectNarrationToggle(text);
+      void logAppAudit({
+        kind: 'trace-intercept-result',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=detectNarrationToggle matched=${narrationToggle ? 'true' : 'false'} traceId=${traceId}`,
+      });
       if (narrationToggle) {
         const ack = applyNarrationToggle(narrationToggle.enable);
         const ackMsg: ChatMessageType = {
@@ -214,7 +434,19 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // reply but the board stayed where it was — the chat had no way
       // to mutate game state. Handle those here.
       if (!isGameOver) {
+        void logAppAudit({
+          kind: 'trace-intercept-check',
+          category: 'subsystem',
+          source: 'GameChatPanel',
+          summary: `intercept=detectInGameChatIntent traceId=${traceId}`,
+        });
         const inGame = detectInGameChatIntent(text);
+        void logAppAudit({
+          kind: 'trace-intercept-result',
+          category: 'subsystem',
+          source: 'GameChatPanel',
+          summary: `intercept=detectInGameChatIntent matched=${inGame ? `true(${inGame.kind})` : 'false'} traceId=${traceId}`,
+        });
         if (inGame?.kind === 'mute') {
           useAppStore.getState().setCoachVoiceOn(false);
           voiceService.stop();
@@ -335,6 +567,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             }),
             fen,
           });
+           
+          console.log('[TRACE-4]', traceId, 'coachService.ask invoking, ask=', text.slice(0, 100));
+          void logAppAudit({
+            kind: 'trace-ask-invoking',
+            category: 'subsystem',
+            source: 'GameChatPanel',
+            summary: `surface=in-game traceId=${traceId}`,
+          });
           const answer = await coachService.ask(
             { surface: 'game-chat', ask: text, liveState },
             {
@@ -346,7 +586,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   .trim();
                 setStreamingContent(displayText);
                 if (useAppStore.getState().coachVoiceOn) {
-                  speechBufferRef.current += chunk;
+                  // WO-FOUNDATION-02 (continued): strip [BOARD:...] and
+                  // [[ACTION:...]] tags from each chunk before it reaches
+                  // the speech buffer. Without this, the action / board
+                  // directives get spoken aloud verbatim.
+                  const cleanedChunk = chunk
+                    .replace(BOARD_TAG_STRIP_RE, '')
+                    .replace(/\[\[ACTION:[^\]]*\]\]/gi, '');
+                  speechBufferRef.current += cleanedChunk;
                   const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
                   if (sentenceEnd) {
                     const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
@@ -358,15 +605,110 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               onNavigate: (path: string) => {
                 void navigate(path);
               },
+              // WO-COACH-OPERATOR-FOUNDATION-01 — board-state callbacks.
+              // Wrapped so a thrown error from the parent surfaces as
+              // a structured tool error instead of escaping the spine.
+              onPlayMove: onPlayMove
+                ? async (san: string): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onPlayMove(san));
+                      return typeof r === 'boolean' ? { ok: r } : r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
+              onTakeBackMove: onTakeBackMove
+                ? async (count: number): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onTakeBackMove(count));
+                      return typeof r === 'boolean' ? { ok: r } : r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
+              onSetBoardPosition: onSetBoardPosition
+                ? async (fen: string): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onSetBoardPosition(fen));
+                      return typeof r === 'boolean' ? { ok: r } : r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
+              onResetBoard: onResetBoard
+                ? async (): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onResetBoard());
+                      return typeof r === 'boolean' ? { ok: r } : r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
+              traceId,
             },
           );
           if (speechBufferRef.current.trim()) {
             flushSpeechBuffer();
           }
-          // The spine already strips [[ACTION:]] tags via parseActions;
-          // [BOARD:] tags are surface-local so we still parse them here.
+          // The spine parses tool calls emitted via the provider's
+          // toolCalls channel, but the LLM frequently emits
+          // [[ACTION:...]] in streamed text instead. We need a
+          // surface-side dispatcher to catch those and fire the
+          // matching callback. WO-FOUNDATION-02 (continued).
           const { cleanText: textWithoutBoardTags, commands: annotations } =
             parseBoardTags(answer.text);
+          const { actions: streamedActions } = parseActions(answer.text);
+          for (const action of streamedActions) {
+            void logAppAudit({
+              kind: 'coach-brain-tool-called',
+              category: 'subsystem',
+              source: 'GameChatPanel.parseActionsDispatch',
+              summary: `${action.name} (post-stream)`,
+            });
+            try {
+              switch (action.name) {
+                case 'play_move': {
+                  const san = typeof action.args.san === 'string' ? action.args.san : null;
+                  if (san) void onPlayMove?.(san);
+                  break;
+                }
+                case 'take_back_move': {
+                  const count =
+                    typeof action.args.count === 'number' ? action.args.count : 1;
+                  void onTakeBackMove?.(count);
+                  break;
+                }
+                case 'reset_board': {
+                  void onResetBoard?.();
+                  break;
+                }
+                case 'set_board_position': {
+                  const fen =
+                    typeof action.args.fen === 'string' ? action.args.fen : null;
+                  if (fen) void onSetBoardPosition?.(fen);
+                  break;
+                }
+                case 'navigate_to_route': {
+                  const route =
+                    typeof action.args.route === 'string' ? action.args.route : null;
+                  if (route) void navigate(route);
+                  break;
+                }
+              }
+            } catch (err) {
+              void logAppAudit({
+                kind: 'coach-brain-tool-called',
+                category: 'subsystem',
+                source: 'GameChatPanel.parseActionsDispatch',
+                summary: `${action.name} threw`,
+                details: err instanceof Error ? err.message : String(err),
+              });
+            }
+          }
           const hasExplicitArrows = annotations.some(
             (c) => c.type === 'arrow' && (c.arrows?.length ?? 0) > 0,
           );
@@ -448,6 +790,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           }),
           fen: fen || undefined,
         });
+         
+        console.log('[TRACE-4-drawer]', traceId, 'coachService.ask invoking, ask=', text.slice(0, 100));
+        void logAppAudit({
+          kind: 'trace-ask-invoking',
+          category: 'subsystem',
+          source: 'GameChatPanel',
+          summary: `surface=drawer traceId=${traceId}`,
+        });
         const answer = await coachService.ask(
           { surface: 'home-chat', ask: text, liveState: drawerLiveState },
           {
@@ -459,7 +809,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 .trim();
               setStreamingContent(displayText);
               if (useAppStore.getState().coachVoiceOn) {
-                speechBufferRef.current += chunk;
+                // WO-FOUNDATION-02 (continued): same tag-strip as the
+                // in-game branch — see comment above.
+                const cleanedChunk = chunk
+                  .replace(BOARD_TAG_STRIP_RE, '')
+                  .replace(/\[\[ACTION:[^\]]*\]\]/gi, '');
+                speechBufferRef.current += cleanedChunk;
                 const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
                 if (sentenceEnd) {
                   const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
@@ -471,6 +826,51 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             onNavigate: (path: string) => {
               void navigate(path);
             },
+            // WO-COACH-OPERATOR-FOUNDATION-01 — same callback set as
+            // the in-game branch. The drawer surface (post-game / home
+            // chat) might trigger a play-against / position-set when
+            // the user is mid-review and wants to try a line.
+            onPlayMove: onPlayMove
+              ? async (san: string): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onPlayMove(san));
+                    return typeof r === 'boolean' ? { ok: r } : r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
+            onTakeBackMove: onTakeBackMove
+              ? async (count: number): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onTakeBackMove(count));
+                    return typeof r === 'boolean' ? { ok: r } : r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
+            onSetBoardPosition: onSetBoardPosition
+              ? async (fen: string): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onSetBoardPosition(fen));
+                    return typeof r === 'boolean' ? { ok: r } : r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
+            onResetBoard: onResetBoard
+              ? async (): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onResetBoard());
+                    return typeof r === 'boolean' ? { ok: r } : r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
+            traceId,
           },
         );
         if (speechBufferRef.current.trim()) {
@@ -479,6 +879,57 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         // Drawer surface has no live board to draw arrows on; just
         // strip the [BOARD:] tags out of display text and append.
         const { cleanText: drawerCleanText } = parseBoardTags(answer.text);
+        // Same parseActions dispatch as in-game branch — the LLM may
+        // emit action tags in streamed text from any surface.
+        // WO-FOUNDATION-02 (continued).
+        const { actions: drawerStreamedActions } = parseActions(answer.text);
+        for (const action of drawerStreamedActions) {
+          void logAppAudit({
+            kind: 'coach-brain-tool-called',
+            category: 'subsystem',
+            source: 'GameChatPanel.parseActionsDispatch',
+            summary: `${action.name} (post-stream, drawer)`,
+          });
+          try {
+            switch (action.name) {
+              case 'play_move': {
+                const san = typeof action.args.san === 'string' ? action.args.san : null;
+                if (san) void onPlayMove?.(san);
+                break;
+              }
+              case 'take_back_move': {
+                const count =
+                  typeof action.args.count === 'number' ? action.args.count : 1;
+                void onTakeBackMove?.(count);
+                break;
+              }
+              case 'reset_board': {
+                void onResetBoard?.();
+                break;
+              }
+              case 'set_board_position': {
+                const fen =
+                  typeof action.args.fen === 'string' ? action.args.fen : null;
+                if (fen) void onSetBoardPosition?.(fen);
+                break;
+              }
+              case 'navigate_to_route': {
+                const route =
+                  typeof action.args.route === 'string' ? action.args.route : null;
+                if (route) void navigate(route);
+                break;
+              }
+            }
+          } catch (err) {
+            void logAppAudit({
+              kind: 'coach-brain-tool-called',
+              category: 'subsystem',
+              source: 'GameChatPanel.parseActionsDispatch',
+              summary: `${action.name} threw`,
+              details: err instanceof Error ? err.message : String(err),
+            });
+          }
+        }
         const assistantMsg: ChatMessageType = {
           id: `gmsg-${Date.now()}-resp`,
           role: 'assistant',
@@ -506,7 +957,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, setMessages, navigate, location, playerColor]);
+    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, setMessages, navigate, location, playerColor]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {

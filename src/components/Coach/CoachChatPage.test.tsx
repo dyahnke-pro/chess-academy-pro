@@ -28,10 +28,10 @@ vi.mock('../../services/coachChatService', async (importOriginal) => {
   };
 });
 
-vi.mock('../../services/coachIntentRouter', () => ({
+vi.mock('../../services/coachSessionRouter', () => ({
   routeChatIntent: vi.fn(),
 }));
-import { routeChatIntent } from '../../services/coachIntentRouter';
+import { routeChatIntent } from '../../services/coachSessionRouter';
 import { getCoachChatResponse } from '../../services/coachApi';
 
 const mockedNavigate = vi.fn();

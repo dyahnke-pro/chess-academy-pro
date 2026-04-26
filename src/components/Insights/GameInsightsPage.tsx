@@ -10,7 +10,7 @@ import {
 } from '../../services/gameInsightsService';
 import { runBackgroundAnalysis } from '../../services/gameAnalysisService';
 import { useAppStore } from '../../stores/appStore';
-import { routeChatIntent } from '../../services/coachIntentRouter';
+import { routeChatIntent } from '../../services/coachSessionRouter';
 import { OverviewTab } from './OverviewTab';
 import { ShareableInsightsStrip } from './ShareableInsightsStrip';
 import { OpeningsTab } from './OpeningsTab';

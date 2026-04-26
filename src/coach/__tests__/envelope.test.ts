@@ -33,7 +33,7 @@ describe('assembleEnvelope', () => {
     expect(env.memory).toBeTruthy();
     expect(env.appMap.length).toBeGreaterThan(5);
     expect(env.liveState.surface).toBe('ping');
-    expect(env.toolbelt.length).toBe(14);
+    expect(env.toolbelt.length).toBe(17);
     expect(env.ask).toBe('hello');
   });
 
@@ -76,7 +76,9 @@ describe('formatEnvelopeAsSystemPrompt', () => {
       input: { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
     });
     const prompt = formatEnvelopeAsSystemPrompt(env);
-    expect(prompt).toMatch(/Danya/);
+    // WO-COACH-OPERATOR-FOUNDATION-01: identity rewritten to
+    // operator-mode body; no longer "Danya"-prefixed.
+    expect(prompt).toMatch(/OPERATOR MODE/);
     expect(prompt).toMatch(/\[App map\]/);
     expect(prompt).toMatch(/\[Toolbelt\]/);
     expect(prompt).toMatch(/stockfish_eval/);
