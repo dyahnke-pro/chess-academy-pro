@@ -313,3 +313,165 @@ Component: `src/components/Openings/OpeningDetailPage.tsx`.
 ---
 
 _Round 2 ends. Rounds 3+ to cover Tactics surface (`/tactics/*`), Weaknesses (`/weaknesses`), Coach sub-surfaces (chat, analyse, session, plan, train), Settings tabs (Profile, Board, Coach, Appearance, About), Onboarding, Stats, Kid mode, hidden/dev surfaces, voice command intents, and cross-surface gestures._
+
+---
+
+## Round 3a — Tactics surface (`/tactics/*`)
+
+Surface-level inventory of the hub plus the four highest-traffic drill pages. Detail flagged where a control has non-obvious parameter values; otherwise just the trigger.
+
+### `/tactics` — Tactics Hub
+
+Component: `src/components/Tactics/TacticsPage.tsx` (testid `tactics-page`).
+
+Three rows of cards.
+
+**Row 1 — fixed actions (`FIXED_BUTTONS` array, 4 entries):**
+- **My Profile** (col-span-2, big card) — Navigate to `/tactics/profile` | testid `section-spot` | file: `:108-115`
+- **Daily Training** — Navigate to `/tactics/classic` (PuzzleTrainerPage) | testid `section-daily`
+- **Setup Trainer** — Navigate to `/tactics/setup` (TacticSetupPage) | testid `section-setup`
+- **Random Mix** (col-span-2) — Navigate to `/tactics/drill` with state `{ filterThemes: ['fork','pin','skewer','discoveredAttack','backRankMate','sacrifice','deflection'] }` | testid `section-random-mix`
+
+**Row 2 — theme cards (`THEME_CARDS`, dynamic from `THEME_MAP`, 10 entries):**
+Each card is a button that navigates to `/tactics/drill` with state `{ filterThemes: <themes> }`. testid pattern `section-{label-lower}`. file: `:128-135`.
+- ⚔️ **Forks**
+- 📌 **Pins & Skewers**
+- 💥 **Discovered Attacks**
+- 🏰 **Back Rank Mates**
+- 🔥 **Sacrifices**
+- ↪️ **Deflection & Decoy**
+- ⚡ **Zugzwang**
+- 🏁 **Endgame Technique**
+- 🪤 **Opening Traps**
+- 👑 **Mating Nets**
+
+**Row 3 — bottom buttons (`BOTTOM_BUTTONS`, 2 entries):**
+- **My Weaknesses** — Navigate to `/tactics/weakness-themes` | testid `section-my-weaknesses` | file: `:149-156`
+- **My Mistakes** — Navigate to `/tactics/mistakes` | testid `section-my mistakes` (literal space — leave it)
+
+Total controls on the hub: **16** (4 fixed + 10 theme + 2 bottom). All are nav targets — no in-page state changes.
+
+---
+
+### `/tactics/adaptive` — Adaptive Puzzles
+
+Component: `src/components/Puzzles/AdaptivePuzzlePage.tsx` (testid `adaptive-puzzle-page`).
+
+Three states: difficulty-select, in-session, checkpoint.
+
+**Header (always visible):**
+- **Back to difficulty select** — Returns to the difficulty picker | testid `back-button` | file: `:191-200`
+- **Player rating header** — Display only; shows current rating + delta animation when rating changes | testid `player-rating-header` / `player-rating-value` / `rating-delta`
+
+**Difficulty-select state:**
+- **Classic Trainer link** — Navigate to `/tactics/classic` | testid `classic-trainer-link` | file: `:238`
+- **My Mistakes link** — Navigate to `/tactics/mistakes` | testid `my-mistakes-link` | file: `:246`
+- (Difficulty preset cards — easy / medium / hard / adaptive — rendered above; testids on those weren't pulled in this round)
+
+**In-session state:**
+- **Loading spinner** — Display while puzzle loads | testid `loading`
+- **End session** — Bail out of the current adaptive session | testid `end-session` | file: `:273-279`
+- **Puzzle board** — Drag-drop / click-move (delegated to the puzzle board component)
+- **Hint button** — On the puzzle board (delegated)
+- **Solution / "show answer"** — On the puzzle board (delegated)
+
+**Checkpoint state (after every N puzzles):**
+- **Checkpoint summary** — Stats display | testid `checkpoint`
+- **End at checkpoint** — End the session here | testid `checkpoint-end` | file: `:300-306`
+- **Continue past checkpoint** — Keep going for another batch | testid `checkpoint-continue` | file: `:307-313`
+
+---
+
+### `/tactics/mistakes` — My Mistakes
+
+Component: `src/components/Puzzles/MyMistakesPage.tsx` (testid `my-mistakes-page`).
+
+The richest filter UI in the Tactics surface.
+
+**Header:**
+- **Back to puzzles** — Navigate to `/tactics` | aria-label `Back to puzzles` | file: `:185-191`
+- **Reanalyze** — Re-run AI analysis on imported games to mine new mistakes | testid `reanalyze-button` | file: `:193-201`
+
+**Status displays:**
+- **Analysis progress card** — Shown while a re-analysis is in flight | testid `analysis-progress`
+- **Analysis warning** — Shown when there's a known issue (no API key, etc.) | testid `analysis-warning`
+- **Stats bar** — Total mistakes, by classification, etc. | testid `stats-bar` (display)
+
+**Phase tabs (4):**
+- **Phase tab Opening / Middlegame / Endgame / All** — Filter mistakes by game phase | testid pattern `phase-tab-{phase}` | file: `:255-272`
+- **Phase description** — Helper text under selected tab | testid `phase-description`
+
+**Filter row:**
+- **Classification filter** — Dropdown (blunder / mistake / inaccuracy / all) | testid `classification-filter` | file: `:291`
+- **Source filter** — Dropdown (lichess / chess.com / coach / all) | testid `source-filter` | file: `:304`
+- **Status filter** — Dropdown (unsolved / solved / all) | testid `status-filter` | file: `:316`
+- **Opening filter chip** — Removable chip when scoped by opening | testid `opening-filter-badge` | file: `:325-332`
+
+**Results:**
+- **Empty state** — When no mistakes detected at all | shows "Import games" CTA | testid `empty-state` (CTA navigates to `/games/import`) | file: `:338-352`
+- **No matches state** — When filters exclude all mistakes | testid `no-matches`
+- **Puzzle list** — Grid/list of mistake cards | testid `puzzle-list` (each card testid `puzzle-card`)
+- **Solve button** (per card) — Open this mistake as a puzzle | testid `solve-button` | file: `:376-382`
+- **Narration preview** (per card) — One-line preview of coach commentary | testid `narration-preview`
+- **Delete button** (per card) — Remove this mistake from the list | aria-label `Delete puzzle` | testid `delete-button` | file: `:413-419`
+
+**Solving mode (overlay when a card is opened):**
+- **Back-from-solving** — Close the active puzzle | (sets `activePuzzle` to null) | file: `:166-172`
+- **Puzzle board** — Drag-drop / click-move (delegated)
+- **Hint / try again** — On the puzzle board (delegated)
+
+---
+
+### `/tactics/weakness` — Weakness Puzzles
+
+Component: `src/components/Puzzles/WeaknessPuzzlePage.tsx` (testid `tactic-drill-page` reused from the shared drill template).
+
+**Header:**
+- **Back** — Navigate to `/tactics` | testid `back-btn` | file: `:119-125`
+
+**Loading state:**
+- **Loading spinner** | testid `loading` | file: `:132`
+
+**In-session navigation:**
+- **Puzzle nav prev** — Previous puzzle in the queue | testid `nav-prev` | file: `:203-211`
+- **Puzzle nav next** — Next puzzle | testid `nav-next` | file: `:215-221`
+- **Puzzle board + hint + solve** — Delegated to the shared puzzle board component
+
+**Session-summary state (end of queue):**
+- **Session summary card** | testid `session-summary` | file: `:240`
+- **Play again** — Reload the queue and start over | testid `play-again` | file: `:270-276`
+- **Back to report** — Navigate back to `/tactics` | testid `back-to-report` | file: `:278-285`
+
+---
+
+### `/tactics/drill` — Tactic Drill (theme-filtered drills, also the random-mix target)
+
+Component: `src/components/Tactics/TacticDrillPage.tsx` (testid `tactic-drill-page`).
+
+Same shape as WeaknessPuzzle but the queue is filtered by `state.filterThemes` from the navigating link.
+
+**Header:**
+- **Back** — Navigate to `/tactics` | testid `back-btn` | file: `:213`
+
+**In-session:**
+- **Puzzle nav prev** — testid `nav-prev` | file: `:251-262`
+- **Puzzle nav next** — testid `nav-next` | file: `:264-272`
+- **Puzzle board + hint + solve** — Delegated to the shared puzzle-board component
+
+**Session-summary state:**
+- **Session summary** | testid `session-summary` | file: `:289`
+- **Play again** — Restart the same drill | testid `play-again` | file: `:310-316`
+- **View profile** — Navigate to `/tactics/profile` | file: `:318-322`
+
+---
+
+**Tactics-surface coverage summary:**
+- Hub `/tactics`: 16 controls (all nav)
+- Adaptive `/tactics/adaptive`: ~10 controls (tri-state UI: select → in-session → checkpoint)
+- Mistakes `/tactics/mistakes`: ~20 controls (the richest filter set in Tactics — 3 dropdowns + phase tabs + opening chip + per-card solve/delete)
+- Weakness `/tactics/weakness`: ~7 controls (back + nav + summary triad)
+- Drill `/tactics/drill`: ~7 controls (same shape as Weakness)
+
+**Pages NOT covered in Round 3a** (will need follow-up if foundation work touches them): `/tactics/profile` (TacticalProfilePage), `/tactics/setup` (TacticSetupPage), `/tactics/create` (TacticCreatePage), `/tactics/classic` (PuzzleTrainerPage — the daily-training drill), `/tactics/weakness-themes` (WeaknessThemesPage — theme-picker between hub and drill), `/tactics/lichess` (LichessDashboardPage).
+
+Round 3b (chat intents) follows in next message.
