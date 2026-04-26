@@ -40,6 +40,12 @@ interface GameChatPanelProps {
    *  against them. The opening name is passed through to the board's
    *  opening-book hook. */
   onPlayOpening?: (openingName: string) => void;
+  /** Called when the brain emits play_move from the chat surface — e.g.
+   *  the student says "play knight to f3" and the brain executes it on
+   *  their behalf. Validate the SAN against the live FEN before applying.
+   *  Return { ok: true } if the move landed, { ok: false, reason } if not.
+   *  Same shape as CoachGamePage's move-selector onPlayMove. */
+  onPlayMove?: (san: string) => { ok: boolean; reason?: string } | Promise<{ ok: boolean; reason?: string }>;
   /** Apply a what-if variation: take back `undo` half-moves, then play
    *  `moves` (SAN) forward. Returns true on success, false if any move
    *  was invalid or there was nothing to undo. Powers the coach's
@@ -77,6 +83,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onBoardAnnotation,
       onRestartGame,
       onPlayOpening,
+      onPlayMove,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -345,39 +352,48 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
                   .trim();
                 setStreamingContent(displayText);
-                if (useAppStore.getState().coachVoiceOn) {
-                  // Strip action and board tags from speech, same as displayText.
-                  // Never read [[ACTION:...]] or [BOARD:...] aloud — those are
-                  // machine-readable directives, not coach speech. Buffer the
-                  // STRIPPED text and emit complete sentences. Tags can span
-                  // chunks; we only strip when both opening and closing markers
-                  // are present, so a partial tag stays in the buffer until
-                  // the rest arrives.
-                  speechBufferRef.current += chunk;
-                  speechBufferRef.current = speechBufferRef.current
-                    .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
-                    .replace(BOARD_TAG_STRIP_RE, '');
-                  const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
-                  if (sentenceEnd) {
-                    const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
-                    speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                    const cleaned = sentence.trim();
-                    if (cleaned) void voiceService.speak(cleaned);
-                  }
-                }
+                // WO-TEACH-FIX-02 (revised): voice waits for stream completion,
+                // not sentence-by-sentence emission. Each speakService.speak()
+                // opens its own audio request — when chunks arrive carrying
+                // multiple sentences, multiple speak() calls race in parallel
+                // and the user hears two coach voices overlapping. The display
+                // still streams progressively; only the audio waits for the
+                // full response. Standard voice-assistant pattern.
               },
               onNavigate: (path: string) => {
                 void navigate(path);
               },
+              // WO-TEACH-FIX-01 — student says "play knight to f3" in chat,
+              // brain emits play_move, this callback executes it on the board.
+              // Mirrors the move-selector wiring in CoachGamePage. Wrapped so
+              // a thrown error from the parent surfaces as a tool error rather
+              // than escaping the spine.
+              onPlayMove: onPlayMove
+                ? async (san: string): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      return await Promise.resolve(onPlayMove(san));
+                    } catch (err) {
+                      return {
+                        ok: false,
+                        reason: err instanceof Error ? err.message : String(err),
+                      };
+                    }
+                  }
+                : undefined,
             },
           );
-          if (speechBufferRef.current.trim()) {
-            flushSpeechBuffer();
-          }
+          // Speak the full cleaned response once, after streaming completes.
+          // Replaces both the per-sentence streaming speak (now removed from
+          // onChunk) and the residual flushSpeechBuffer call. One audio
+          // request, no overlap, natural Polly prosody on the full text.
           // The spine already strips [[ACTION:]] tags via parseActions;
           // [BOARD:] tags are surface-local so we still parse them here.
           const { cleanText: textWithoutBoardTags, commands: annotations } =
             parseBoardTags(answer.text);
+          if (useAppStore.getState().coachVoiceOn && textWithoutBoardTags.trim()) {
+            void voiceService.speak(textWithoutBoardTags.trim());
+          }
+          speechBufferRef.current = '';
           const hasExplicitArrows = annotations.some(
             (c) => c.type === 'arrow' && (c.arrows?.length ?? 0) > 0,
           );
@@ -469,27 +485,24 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
                 .trim();
               setStreamingContent(displayText);
-              if (useAppStore.getState().coachVoiceOn) {
-                speechBufferRef.current += chunk;
-                const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
-                if (sentenceEnd) {
-                  const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
-                  speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                  void voiceService.speak(sentence.trim());
-                }
-              }
+              // WO-TEACH-FIX-02 (revised): voice waits for stream completion
+              // — see in-game branch above for rationale. Same fix mirrored
+              // here for the drawer/post-game surface.
             },
             onNavigate: (path: string) => {
               void navigate(path);
             },
           },
         );
-        if (speechBufferRef.current.trim()) {
-          flushSpeechBuffer();
-        }
-        // Drawer surface has no live board to draw arrows on; just
-        // strip the [BOARD:] tags out of display text and append.
+        // Speak the full cleaned response once, after streaming completes.
+        // Same pattern as the in-game branch — one audio request, no
+        // overlap. Drawer surface has no live board to draw arrows on;
+        // just strip the [BOARD:] tags out of display text and append.
         const { cleanText: drawerCleanText } = parseBoardTags(answer.text);
+        if (useAppStore.getState().coachVoiceOn && drawerCleanText.trim()) {
+          void voiceService.speak(drawerCleanText.trim());
+        }
+        speechBufferRef.current = '';
         const assistantMsg: ChatMessageType = {
           id: `gmsg-${Date.now()}-resp`,
           role: 'assistant',
@@ -517,7 +530,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, setMessages, navigate, location, playerColor]);
+    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, setMessages, navigate, location, playerColor]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {
