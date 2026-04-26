@@ -2,6 +2,7 @@ import 'fake-indexeddb/auto';
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi, beforeAll } from 'vitest';
+import { webcrypto } from 'node:crypto';
 
 // Cleanup after each test
 afterEach(() => {
@@ -134,6 +135,15 @@ beforeAll(() => {
             return Promise.resolve(output.buffer);
           },
         ),
+        // Real digest from node:crypto's webcrypto. Dexie 4.x calls
+        // `crypto.subtle.digest("SHA-512", ...)` at module-load time
+        // inside its top-level IIFE; the mock above lacks it, so any
+        // test file that dynamically imports a module transitively
+        // pulling in `dexie` (e.g. CoachGameReview via coachApi)
+        // crashes the IIFE during beforeEach — after beforeAll has
+        // installed this stub. Delegating to webcrypto produces a
+        // real ArrayBuffer hash.
+        digest: webcrypto.subtle.digest.bind(webcrypto.subtle),
       },
     },
     writable: true,
