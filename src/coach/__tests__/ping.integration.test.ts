@@ -89,7 +89,9 @@ describe('ping: spine assembles envelope, calls provider, returns answer', () =>
     ]);
 
     // The system prompt the provider saw includes identity + app map + toolbelt.
-    expect(seenSystemPrompt[0]).toMatch(/Danya/);
+    // WO-COACH-OPERATOR-FOUNDATION-01: identity rewritten to
+    // operator-mode body; no longer name-prefixed.
+    expect(seenSystemPrompt[0]).toMatch(/OPERATOR MODE/);
     expect(seenSystemPrompt[0]).toMatch(/\[App map\]/);
     expect(seenSystemPrompt[0]).toMatch(/\[Toolbelt\]/);
 

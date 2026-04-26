@@ -5,7 +5,7 @@ import { ArrowLeft, Volume2, VolumeOff } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
-import { routeChatIntent } from '../../services/coachIntentRouter';
+import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';

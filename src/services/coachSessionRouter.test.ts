@@ -5,7 +5,7 @@ import {
   __test__extractFocus,
   __test__extractProposedOpening,
   __test__extractProposedUserSide,
-} from './coachIntentRouter';
+} from './coachSessionRouter';
 
 // Mock the resource-lookup layer so tests don't hit Dexie.
 vi.mock('./walkthroughResolver', () => ({

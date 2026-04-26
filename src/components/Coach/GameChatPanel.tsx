@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
-import { routeChatIntent } from '../../services/coachIntentRouter';
+import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
@@ -40,6 +40,23 @@ interface GameChatPanelProps {
    *  against them. The opening name is passed through to the board's
    *  opening-book hook. */
   onPlayOpening?: (openingName: string) => void;
+  /** Called when the brain (or the Layer 1 intent router) emits
+   *  play_move from the chat surface — e.g. the student says "play
+   *  knight to f3" and the spine executes it on their behalf.
+   *  WO-COACH-OPERATOR-FOUNDATION-01. */
+  onPlayMove?: (san: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Called when the brain (or router) emits take_back_move. The
+   *  parent reverts `count` half-moves on the live game.
+   *  WO-COACH-OPERATOR-FOUNDATION-01. */
+  onTakeBackMove?: (count: number) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Called when the brain (or router) emits set_board_position. The
+   *  parent jumps the board to the supplied FEN.
+   *  WO-COACH-OPERATOR-FOUNDATION-01. */
+  onSetBoardPosition?: (fen: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Called when the brain (or router) emits reset_board. The parent
+   *  restarts the game from the starting position.
+   *  WO-COACH-OPERATOR-FOUNDATION-01. */
+  onResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
   /** Apply a what-if variation: take back `undo` half-moves, then play
    *  `moves` (SAN) forward. Returns true on success, false if any move
    *  was invalid or there was nothing to undo. Powers the coach's
@@ -77,6 +94,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onBoardAnnotation,
       onRestartGame,
       onPlayOpening,
+      onPlayMove,
+      onTakeBackMove,
+      onSetBoardPosition,
+      onResetBoard,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -358,6 +379,49 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               onNavigate: (path: string) => {
                 void navigate(path);
               },
+              // WO-COACH-OPERATOR-FOUNDATION-01 — board-state callbacks.
+              // Wrapped so a thrown error from the parent surfaces as
+              // a structured tool error instead of escaping the spine.
+              onPlayMove: onPlayMove
+                ? async (san: string): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onPlayMove(san));
+                      return typeof r === 'boolean' ? { ok: r } : r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
+              onTakeBackMove: onTakeBackMove
+                ? async (count: number): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onTakeBackMove(count));
+                      return typeof r === 'boolean' ? { ok: r } : r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
+              onSetBoardPosition: onSetBoardPosition
+                ? async (fen: string): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onSetBoardPosition(fen));
+                      return typeof r === 'boolean' ? { ok: r } : r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
+              onResetBoard: onResetBoard
+                ? async (): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onResetBoard());
+                      return typeof r === 'boolean' ? { ok: r } : r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
             },
           );
           if (speechBufferRef.current.trim()) {
@@ -471,6 +535,50 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             onNavigate: (path: string) => {
               void navigate(path);
             },
+            // WO-COACH-OPERATOR-FOUNDATION-01 — same callback set as
+            // the in-game branch. The drawer surface (post-game / home
+            // chat) might trigger a play-against / position-set when
+            // the user is mid-review and wants to try a line.
+            onPlayMove: onPlayMove
+              ? async (san: string): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onPlayMove(san));
+                    return typeof r === 'boolean' ? { ok: r } : r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
+            onTakeBackMove: onTakeBackMove
+              ? async (count: number): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onTakeBackMove(count));
+                    return typeof r === 'boolean' ? { ok: r } : r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
+            onSetBoardPosition: onSetBoardPosition
+              ? async (fen: string): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onSetBoardPosition(fen));
+                    return typeof r === 'boolean' ? { ok: r } : r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
+            onResetBoard: onResetBoard
+              ? async (): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onResetBoard());
+                    return typeof r === 'boolean' ? { ok: r } : r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
           },
         );
         if (speechBufferRef.current.trim()) {
@@ -506,7 +614,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, setMessages, navigate, location, playerColor]);
+    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, setMessages, navigate, location, playerColor]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {

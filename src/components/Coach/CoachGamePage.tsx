@@ -2199,6 +2199,87 @@ export function CoachGamePage(): JSX.Element {
     }
   }, [isExploreMode, handleExploreMove, practicePosition, handlePracticeMove, handlePlayerMove]);
 
+  // ─── WO-COACH-OPERATOR-FOUNDATION-01 — chat-driven board commands ───
+  // The Layer 1 intent router (in coachService.ask) pattern-matches
+  // commands like "play e4" / "take that back" / "reset the board"
+  // BEFORE the LLM and dispatches via these callbacks. Each handler
+  // delegates to existing chess.js + game-state machinery — no new
+  // mutation paths.
+
+  const handleChatPlayMove = useCallback(
+    (san: string): { ok: boolean; reason?: string } => {
+      try {
+        // Probe SAN in a sandbox to extract from/to/promotion; the
+        // live `game.makeMove` API takes from/to, not SAN.
+        const probe = new Chess(game.fen);
+        const probed = probe.move(san);
+        if (!probed) return { ok: false, reason: `illegal SAN "${san}" from current FEN` };
+        const moveResult = game.makeMove(probed.from, probed.to, probed.promotion);
+        if (!moveResult) {
+          return {
+            ok: false,
+            reason: `commit rejected for "${san}" — likely a turn or state mismatch`,
+          };
+        }
+        // Route through the same post-move analysis pipeline a
+        // board-drag move takes.
+        handleBoardMoveRouted(moveResult);
+        return { ok: true };
+      } catch (err) {
+        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      }
+    },
+    [game, handleBoardMoveRouted],
+  );
+
+  const handleChatTakeBackMove = useCallback(
+    (count: number): { ok: boolean; reason?: string } => {
+      try {
+        const target = Math.max(1, Math.floor(count));
+        for (let i = 0; i < target; i++) {
+          if (game.history.length === 0) {
+            // Nothing more to undo — half-success if we already
+            // reverted at least one move; full failure otherwise.
+            return i === 0
+              ? { ok: false, reason: 'nothing to take back' }
+              : { ok: true };
+          }
+          game.undoMove();
+        }
+        return { ok: true };
+      } catch (err) {
+        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      }
+    },
+    [game],
+  );
+
+  const handleChatSetBoardPosition = useCallback(
+    (fen: string): { ok: boolean; reason?: string } => {
+      try {
+        const ok = game.loadFen(fen);
+        return ok
+          ? { ok: true }
+          : { ok: false, reason: 'game.loadFen rejected the FEN' };
+      } catch (err) {
+        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      }
+    },
+    [game],
+  );
+
+  const handleChatResetBoard = useCallback(
+    (): { ok: boolean; reason?: string } => {
+      try {
+        handleRestart();
+        return { ok: true };
+      } catch (err) {
+        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      }
+    },
+    [handleRestart],
+  );
+
   // Handle practice-in-chat from post-game review
   const handlePracticeInChat = useCallback((prompt: string) => {
     // Transition from postgame back to playing mode with chat
@@ -3134,6 +3215,10 @@ export function CoachGamePage(): JSX.Element {
               onBoardAnnotation={handleBoardAnnotation}
               onRestartGame={handleRestart}
               onPlayOpening={handleOpeningRequest}
+              onPlayMove={handleChatPlayMove}
+              onTakeBackMove={handleChatTakeBackMove}
+              onSetBoardPosition={handleChatSetBoardPosition}
+              onResetBoard={handleChatResetBoard}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}
@@ -3192,6 +3277,10 @@ export function CoachGamePage(): JSX.Element {
               onBoardAnnotation={handleBoardAnnotation}
               onRestartGame={handleRestart}
               onPlayOpening={handleOpeningRequest}
+              onPlayMove={handleChatPlayMove}
+              onTakeBackMove={handleChatTakeBackMove}
+              onSetBoardPosition={handleChatSetBoardPosition}
+              onResetBoard={handleChatResetBoard}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}

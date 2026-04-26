@@ -31,6 +31,7 @@ import { assembleEnvelope } from './envelope';
 import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
+import { tryRouteIntent, type RoutedIntent } from '../services/coachIntentRouter';
 import type {
   AssembledEnvelope,
   CoachAnswer,
@@ -92,6 +93,15 @@ export interface CoachServiceOptions {
    *  surfaces the failure back to the LLM in the next round-trip so it
    *  can choose differently. WO-BRAIN-04. */
   onPlayMove?: ToolExecutionContext['onPlayMove'];
+  /** Callback the `take_back_move` cerebrum tool uses to revert the
+   *  board by N half-moves. WO-COACH-OPERATOR-FOUNDATION-01. */
+  onTakeBackMove?: ToolExecutionContext['onTakeBackMove'];
+  /** Callback the `set_board_position` cerebrum tool uses to jump the
+   *  board to an arbitrary FEN. WO-COACH-OPERATOR-FOUNDATION-01. */
+  onSetBoardPosition?: ToolExecutionContext['onSetBoardPosition'];
+  /** Callback the `reset_board` cerebrum tool uses to restart the game
+   *  from the starting position. WO-COACH-OPERATOR-FOUNDATION-01. */
+  onResetBoard?: ToolExecutionContext['onResetBoard'];
   /** Callback the `navigate_to_route` cerebrum tool uses to actually
    *  push the user-validated route via react-router. WO-BRAIN-04. */
   onNavigate?: ToolExecutionContext['onNavigate'];
@@ -137,6 +147,27 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     details: JSON.stringify({ surface: input.surface, askLen: input.ask.length }),
   });
 
+  // ─── Layer 1: Intent-router pre-emit ─────────────────────────────
+  // Try to match a high-confidence command pattern before calling the
+  // LLM. If matched, dispatch the tool directly and return. This is
+  // the deterministic backstop for operator-mode discipline — patterns
+  // like "play e4", "take that back", "reset the board" should NEVER
+  // hit the LLM because the LLM has been observed to narrate them
+  // instead of dispatching. WO-COACH-OPERATOR-FOUNDATION-01.
+  const routed = tryRouteIntent(input.ask, {
+    currentFen: input.liveState.fen,
+  });
+  if (routed) {
+    void logAppAudit({
+      kind: 'coach-brain-intent-routed',
+      category: 'subsystem',
+      source: 'coachService.ask',
+      summary: `routed=${routed.kind} bypass-llm=true`,
+      details: JSON.stringify({ intent: routed, surface: input.surface }),
+    });
+    return await dispatchRoutedIntent(routed, options, input);
+  }
+
   const envelope = assembleEnvelope({
     identity: options.identity,
     toolbelt: getToolDefinitions(),
@@ -162,6 +193,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
 
   const ctx: ToolExecutionContext = {
     onPlayMove: options.onPlayMove,
+    onTakeBackMove: options.onTakeBackMove,
+    onSetBoardPosition: options.onSetBoardPosition,
+    onResetBoard: options.onResetBoard,
     onNavigate: options.onNavigate,
     liveFen: input.liveState.fen,
   };
@@ -264,6 +298,138 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     text: lastResponse.text,
     toolCallIds: dispatchedIds,
     provider: provider.name,
+  };
+}
+
+/**
+ * Dispatch a router-matched intent directly via the surface callbacks.
+ * Skips envelope assembly, provider call, and tool-loop entirely. The
+ * answer text is a brief, generic acknowledgment; the surface can
+ * choose to display or speak it. WO-COACH-OPERATOR-FOUNDATION-01.
+ */
+async function dispatchRoutedIntent(
+  intent: RoutedIntent,
+  options: CoachServiceOptions,
+  input: CoachAskInput,
+): Promise<CoachAnswer> {
+  const ctx: ToolExecutionContext = {
+    onPlayMove: options.onPlayMove,
+    onTakeBackMove: options.onTakeBackMove,
+    onSetBoardPosition: options.onSetBoardPosition,
+    onResetBoard: options.onResetBoard,
+    onNavigate: options.onNavigate,
+    liveFen: input.liveState.fen,
+  };
+
+  let ackText = 'Done.';
+  let ok = false;
+  let error: string | undefined;
+
+  try {
+    switch (intent.kind) {
+      case 'play_move': {
+        if (!ctx.onPlayMove) {
+          error = 'no onPlayMove callback wired';
+          break;
+        }
+        const result = await Promise.resolve(ctx.onPlayMove(intent.san));
+        ok = typeof result === 'boolean' ? result : result.ok;
+        if (!ok) {
+          error =
+            typeof result === 'object' && 'reason' in result
+              ? result.reason
+              : `surface rejected ${intent.san}`;
+        } else {
+          ackText = `${intent.san} — your move.`;
+        }
+        break;
+      }
+      case 'take_back_move': {
+        if (!ctx.onTakeBackMove) {
+          error = 'no onTakeBackMove callback wired';
+          break;
+        }
+        const result = await Promise.resolve(ctx.onTakeBackMove(intent.count));
+        ok = typeof result === 'boolean' ? result : result.ok;
+        if (ok) {
+          ackText = intent.count > 1 ? 'Taken back.' : 'Taken back — your move.';
+        } else {
+          error =
+            typeof result === 'object' && 'reason' in result
+              ? result.reason
+              : 'nothing to take back';
+        }
+        break;
+      }
+      case 'reset_board': {
+        if (!ctx.onResetBoard) {
+          error = 'no onResetBoard callback wired';
+          break;
+        }
+        const result = await Promise.resolve(ctx.onResetBoard());
+        ok = typeof result === 'boolean' ? result : result.ok;
+        if (ok) {
+          ackText = 'Fresh board — your move.';
+        } else {
+          error =
+            typeof result === 'object' && 'reason' in result
+              ? result.reason
+              : 'reset failed';
+        }
+        break;
+      }
+      case 'set_board_position': {
+        if (!ctx.onSetBoardPosition) {
+          error = 'no onSetBoardPosition callback wired';
+          break;
+        }
+        const result = await Promise.resolve(ctx.onSetBoardPosition(intent.fen));
+        ok = typeof result === 'boolean' ? result : result.ok;
+        if (ok) {
+          ackText = 'Position set.';
+        } else {
+          error =
+            typeof result === 'object' && 'reason' in result
+              ? result.reason
+              : 'position set failed';
+        }
+        break;
+      }
+      case 'navigate_to_route': {
+        if (!ctx.onNavigate) {
+          error = 'no onNavigate callback wired';
+          break;
+        }
+        ctx.onNavigate(intent.route);
+        ok = true;
+        ackText = 'On it.';
+        break;
+      }
+    }
+  } catch (err) {
+    error = err instanceof Error ? err.message : String(err);
+  }
+
+  void logAppAudit({
+    kind: 'coach-brain-tool-called',
+    category: 'subsystem',
+    source: 'coachService.dispatchRoutedIntent',
+    summary: `${intent.kind} ${ok ? 'ok' : 'failed'} (router-direct)`,
+    details: error ? `error=${error}` : undefined,
+  });
+
+  if (!ok && error) {
+    return {
+      text: `Couldn't do that — ${error}.`,
+      toolCallIds: [],
+      provider: 'router-direct',
+    };
+  }
+
+  return {
+    text: ackText,
+    toolCallIds: [`router-${intent.kind}`],
+    provider: 'router-direct',
   };
 }
 

@@ -1,13 +1,14 @@
 /**
- * Tool registry — exports the full 14-tool toolbelt the spine
- * dispatches. Six cerebellum (read-only deterministic), eight
+ * Tool registry — exports the full 17-tool toolbelt the spine
+ * dispatches. Six cerebellum (read-only deterministic), eleven
  * cerebrum (decisions / side effects). See COACH-BRAIN-00 §"The
  * Cerebellum" and §"The Cerebrum Toolbelt".
  *
- * Spine wires these as (post WO-BRAIN-04 + tightening):
+ * Spine wires these as (post WO-COACH-OPERATOR-FOUNDATION-01):
  *   FULLY IMPLEMENTED — stockfish_eval, stockfish_classify_move,
  *     lichess_opening_lookup, lichess_master_games,
  *     local_opening_book, navigate_to_route, play_move,
+ *     take_back_move, set_board_position, reset_board,
  *     set_intended_opening, clear_memory, record_hint_request,
  *     record_blunder
  *   PUNTED w/ flag    — lichess_puzzle_fetch (no theme API)
@@ -26,6 +27,9 @@ import { navigateToRouteTool } from './cerebrum/navigateToRoute';
 import { setIntendedOpeningTool } from './cerebrum/setIntendedOpening';
 import { clearMemoryTool } from './cerebrum/clearMemory';
 import { playMoveTool } from './cerebrum/playMove';
+import { takeBackMoveTool } from './cerebrum/takeBackMove';
+import { setBoardPositionTool } from './cerebrum/setBoardPosition';
+import { resetBoardTool } from './cerebrum/resetBoard';
 import { speakTool } from './cerebrum/speak';
 import { requestHintTierTool } from './cerebrum/requestHintTier';
 import { recordHintRequestTool } from './cerebrum/recordHintRequest';
@@ -45,6 +49,9 @@ export const COACH_TOOLS: Tool[] = [
   setIntendedOpeningTool,
   clearMemoryTool,
   playMoveTool,
+  takeBackMoveTool,
+  setBoardPositionTool,
+  resetBoardTool,
   speakTool,
   requestHintTierTool,
   recordHintRequestTool,

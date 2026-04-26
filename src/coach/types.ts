@@ -106,6 +106,28 @@ export interface ToolExecutionContext {
     | Promise<{ ok: boolean; reason?: string } | boolean>
     | { ok: boolean; reason?: string }
     | boolean;
+  /** Called by `take_back_move` to revert the board by N half-moves.
+   *  WO-COACH-OPERATOR-FOUNDATION-01. */
+  onTakeBackMove?: (
+    count: number,
+  ) =>
+    | Promise<{ ok: boolean; reason?: string } | boolean>
+    | { ok: boolean; reason?: string }
+    | boolean;
+  /** Called by `set_board_position` to jump the board to an arbitrary
+   *  FEN. WO-COACH-OPERATOR-FOUNDATION-01. */
+  onSetBoardPosition?: (
+    fen: string,
+  ) =>
+    | Promise<{ ok: boolean; reason?: string } | boolean>
+    | { ok: boolean; reason?: string }
+    | boolean;
+  /** Called by `reset_board` to restart the game from the starting
+   *  position. WO-COACH-OPERATOR-FOUNDATION-01. */
+  onResetBoard?: ()
+    => Promise<{ ok: boolean; reason?: string } | boolean>
+    | { ok: boolean; reason?: string }
+    | boolean;
   /** Called by `navigate_to_route` to actually push the route via
    *  react-router. Path has already been validated against the app
    *  manifest before this runs. */
@@ -132,7 +154,7 @@ export interface ToolExecutionResult {
 
 // ─── Provider abstraction ───────────────────────────────────────────────────
 
-export type ProviderName = 'deepseek' | 'anthropic';
+export type ProviderName = 'deepseek' | 'anthropic' | 'router-direct';
 
 export interface ProviderToolCall {
   id: string;
