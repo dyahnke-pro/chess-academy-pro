@@ -175,6 +175,23 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const handleSend = useCallback(async (text: string) => {
       if (!activeProfile || isStreaming) return;
 
+      // WO-FOUNDATION-02 trace harness — generate one UUID per
+      // user message and thread it through every audit emit so the
+      // pipeline can be reconstructed end-to-end. crypto.randomUUID
+      // is available in modern browsers and JSDOM via webcrypto.
+      const traceId =
+        typeof crypto !== 'undefined' && 'randomUUID' in crypto
+          ? crypto.randomUUID()
+          : `trace-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+       
+      console.log('[TRACE-1]', traceId, 'handleSend:', text);
+      void logAppAudit({
+        kind: 'trace-handle-send',
+        category: 'subsystem',
+        source: 'GameChatPanel.handleSend',
+        summary: `text=${text.slice(0, 80)} traceId=${traceId}`,
+      });
+
       // WO-FOUNDATION-02 — log every message that reaches the surface
       // so we can verify the router is seeing real user input (not
       // assembled context strings) on every chat send.
@@ -215,7 +232,19 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // the surface callback directly. Zero LLM round-trip; zero
       // hallucination risk. Falls through to the existing intercepts
       // (and ultimately coachService.ask) on miss.
+      void logAppAudit({
+        kind: 'trace-intercept-check',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=tryRouteIntent traceId=${traceId}`,
+      });
       const routedIntent = tryRouteIntent(text, { currentFen: fen });
+      void logAppAudit({
+        kind: 'trace-intercept-result',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=tryRouteIntent matched=${routedIntent ? 'true' : 'false'} traceId=${traceId}`,
+      });
       if (routedIntent) {
         void logAppAudit({
           kind: 'coach-brain-intent-routed',
@@ -330,7 +359,19 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // `tryCaptureForgetIntent` regex stays for one more WO as a
       // belt-and-suspenders safety net. Removed in BRAIN-06 cleanup.
       const surface = isGameOver ? 'drawer-chat' : 'in-game-chat';
-      tryCaptureForgetIntent(text, surface);
+      void logAppAudit({
+        kind: 'trace-intercept-check',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=tryCaptureForgetIntent traceId=${traceId}`,
+      });
+      const forgetMatched = tryCaptureForgetIntent(text, surface);
+      void logAppAudit({
+        kind: 'trace-intercept-result',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=tryCaptureForgetIntent matched=${forgetMatched ? 'true' : 'false'} traceId=${traceId}`,
+      });
 
       // Narration toggle — deterministic intercept. Runs BEFORE the
       // in-game block below so "narrate while we play" reliably flips
@@ -338,7 +379,19 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // would otherwise handle via its own narrate case). This path
       // uses applyNarrationToggle from coachAgentRunner for consistency
       // with CoachChatPage.
+      void logAppAudit({
+        kind: 'trace-intercept-check',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=detectNarrationToggle traceId=${traceId}`,
+      });
       const narrationToggle = detectNarrationToggle(text);
+      void logAppAudit({
+        kind: 'trace-intercept-result',
+        category: 'subsystem',
+        source: 'GameChatPanel',
+        summary: `intercept=detectNarrationToggle matched=${narrationToggle ? 'true' : 'false'} traceId=${traceId}`,
+      });
       if (narrationToggle) {
         const ack = applyNarrationToggle(narrationToggle.enable);
         const ackMsg: ChatMessageType = {
@@ -362,7 +415,19 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // reply but the board stayed where it was — the chat had no way
       // to mutate game state. Handle those here.
       if (!isGameOver) {
+        void logAppAudit({
+          kind: 'trace-intercept-check',
+          category: 'subsystem',
+          source: 'GameChatPanel',
+          summary: `intercept=detectInGameChatIntent traceId=${traceId}`,
+        });
         const inGame = detectInGameChatIntent(text);
+        void logAppAudit({
+          kind: 'trace-intercept-result',
+          category: 'subsystem',
+          source: 'GameChatPanel',
+          summary: `intercept=detectInGameChatIntent matched=${inGame ? `true(${inGame.kind})` : 'false'} traceId=${traceId}`,
+        });
         if (inGame?.kind === 'mute') {
           useAppStore.getState().setCoachVoiceOn(false);
           voiceService.stop();
@@ -483,6 +548,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             }),
             fen,
           });
+           
+          console.log('[TRACE-4]', traceId, 'coachService.ask invoking, ask=', text.slice(0, 100));
+          void logAppAudit({
+            kind: 'trace-ask-invoking',
+            category: 'subsystem',
+            source: 'GameChatPanel',
+            summary: `surface=in-game traceId=${traceId}`,
+          });
           const answer = await coachService.ask(
             { surface: 'game-chat', ask: text, liveState },
             {
@@ -556,6 +629,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                     }
                   }
                 : undefined,
+              traceId,
             },
           );
           if (speechBufferRef.current.trim()) {
@@ -691,6 +765,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           }),
           fen: fen || undefined,
         });
+         
+        console.log('[TRACE-4-drawer]', traceId, 'coachService.ask invoking, ask=', text.slice(0, 100));
+        void logAppAudit({
+          kind: 'trace-ask-invoking',
+          category: 'subsystem',
+          source: 'GameChatPanel',
+          summary: `surface=drawer traceId=${traceId}`,
+        });
         const answer = await coachService.ask(
           { surface: 'home-chat', ask: text, liveState: drawerLiveState },
           {
@@ -763,6 +845,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   }
                 }
               : undefined,
+            traceId,
           },
         );
         if (speechBufferRef.current.trim()) {

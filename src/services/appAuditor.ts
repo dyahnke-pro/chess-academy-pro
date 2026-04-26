@@ -107,6 +107,22 @@ export type AuditKind =
   | 'coach-brain-tool-parse-result'
   | 'chat-panel-message-received'
   | 'coach-brain-answer-returned'
+  // WO-FOUNDATION-02 trace harness — comprehensive per-message trace
+  // checkpoints. Every audit in this group carries a traceId so the
+  // pipeline can be reconstructed end-to-end. Temporary; removed once
+  // the cerebrum-dispatch chain question is answered.
+  | 'trace-handle-send'
+  | 'trace-intercept-check'
+  | 'trace-intercept-result'
+  | 'trace-ask-invoking'
+  | 'trace-ask-received'
+  | 'trace-ctx-built'
+  | 'trace-toolbelt'
+  | 'trace-provider-response'
+  | 'trace-tool-dispatch'
+  | 'trace-tool-entered'
+  | 'trace-surface-callback-invoked'
+  | 'trace-surface-callback-result'
   // Surface migration trail (WO-BRAIN-02 onwards). Fired once per call
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
@@ -224,7 +240,7 @@ export function installConsoleBackdoor(): void {
     dump: async (): Promise<AuditEntry[]> => {
       const log = await getAppAuditLog();
       (api as unknown as { count: () => number }).count = () => log.length;
-      // eslint-disable-next-line no-console
+       
       console.log('[appAuditor] dump:', log.length, 'entries', log);
       return log;
     },
@@ -233,18 +249,18 @@ export function installConsoleBackdoor(): void {
       const md = formatAuditLogAsMarkdown(log);
       try {
         await navigator.clipboard.writeText(md);
-        // eslint-disable-next-line no-console
+         
         console.log('[appAuditor] copied', log.length, 'entries to clipboard');
       } catch (err) {
-        // eslint-disable-next-line no-console
+         
         console.warn('[appAuditor] clipboard write failed:', err);
-        // eslint-disable-next-line no-console
+         
         console.log(md);
       }
     },
     clear: async (): Promise<void> => {
       await clearAppAuditLog();
-      // eslint-disable-next-line no-console
+       
       console.log('[appAuditor] cleared');
     },
     count: () => -1,

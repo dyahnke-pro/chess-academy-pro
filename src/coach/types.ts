@@ -135,6 +135,12 @@ export interface ToolExecutionContext {
   /** FEN at the time of the call — used by `play_move` to validate SAN
    *  legality before invoking `onPlayMove`. */
   liveFen?: string;
+  /** WO-FOUNDATION-02 trace harness — per-message UUID generated at
+   *  GameChatPanel.handleSend, threaded through CoachServiceOptions
+   *  into the spine and onto every tool's ToolExecutionContext so
+   *  audit trail entries can be joined end-to-end. Optional;
+   *  callers that don't generate one omit it. */
+  traceId?: string;
 }
 
 export interface Tool extends ToolDefinition {

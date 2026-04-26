@@ -1294,7 +1294,7 @@ export function CoachGamePage(): JSX.Element {
       details: JSON.stringify({ ...event, verbosity }),
       fen: event.fen,
     });
-    void phaseNarration.narrate(event as PhaseTransitionEvent, verbosity);
+    void phaseNarration.narrate(event, verbosity);
     // Dependencies: we watch moves.length so this fires exactly once
     // per new move. blunderPause + status are read inside the effect
     // via live reads — deliberate, so the guard always reflects the
@@ -2208,25 +2208,43 @@ export function CoachGamePage(): JSX.Element {
 
   const handleChatPlayMove = useCallback(
     (san: string): { ok: boolean; reason?: string } => {
+      // WO-FOUNDATION-02 trace harness.
+      console.log('[TRACE-12a]', 'handleChatPlayMove invoked, san:', san);
+      void logAppAudit({
+        kind: 'trace-surface-callback-invoked',
+        category: 'subsystem',
+        source: 'CoachGamePage.handleChatPlayMove',
+        summary: `args=${JSON.stringify({ san }).slice(0, 100)}`,
+      });
+      const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
+        console.log('[TRACE-13a]', 'handleChatPlayMove result:', result);
+        void logAppAudit({
+          kind: 'trace-surface-callback-result',
+          category: 'subsystem',
+          source: 'CoachGamePage.handleChatPlayMove',
+          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
+        });
+        return result;
+      };
       try {
         // Probe SAN in a sandbox to extract from/to/promotion; the
         // live `game.makeMove` API takes from/to, not SAN.
         const probe = new Chess(game.fen);
         const probed = probe.move(san);
-        if (!probed) return { ok: false, reason: `illegal SAN "${san}" from current FEN` };
+        if (!probed) return finish({ ok: false, reason: `illegal SAN "${san}" from current FEN` });
         const moveResult = game.makeMove(probed.from, probed.to, probed.promotion);
         if (!moveResult) {
-          return {
+          return finish({
             ok: false,
             reason: `commit rejected for "${san}" — likely a turn or state mismatch`,
-          };
+          });
         }
         // Route through the same post-move analysis pipeline a
         // board-drag move takes.
         handleBoardMoveRouted(moveResult);
-        return { ok: true };
+        return finish({ ok: true });
       } catch (err) {
-        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+        return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
       }
     },
     [game, handleBoardMoveRouted],
@@ -2234,6 +2252,24 @@ export function CoachGamePage(): JSX.Element {
 
   const handleChatTakeBackMove = useCallback(
     (count: number): { ok: boolean; reason?: string } => {
+      // WO-FOUNDATION-02 trace harness.
+      console.log('[TRACE-12b]', 'handleChatTakeBackMove invoked, count:', count);
+      void logAppAudit({
+        kind: 'trace-surface-callback-invoked',
+        category: 'subsystem',
+        source: 'CoachGamePage.handleChatTakeBackMove',
+        summary: `args=${JSON.stringify({ count }).slice(0, 100)}`,
+      });
+      const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
+        console.log('[TRACE-13b]', 'handleChatTakeBackMove result:', result);
+        void logAppAudit({
+          kind: 'trace-surface-callback-result',
+          category: 'subsystem',
+          source: 'CoachGamePage.handleChatTakeBackMove',
+          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
+        });
+        return result;
+      };
       try {
         const target = Math.max(1, Math.floor(count));
         for (let i = 0; i < target; i++) {
@@ -2241,14 +2277,14 @@ export function CoachGamePage(): JSX.Element {
             // Nothing more to undo — half-success if we already
             // reverted at least one move; full failure otherwise.
             return i === 0
-              ? { ok: false, reason: 'nothing to take back' }
-              : { ok: true };
+              ? finish({ ok: false, reason: 'nothing to take back' })
+              : finish({ ok: true });
           }
           game.undoMove();
         }
-        return { ok: true };
+        return finish({ ok: true });
       } catch (err) {
-        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+        return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
       }
     },
     [game],
@@ -2256,13 +2292,31 @@ export function CoachGamePage(): JSX.Element {
 
   const handleChatSetBoardPosition = useCallback(
     (fen: string): { ok: boolean; reason?: string } => {
+      // WO-FOUNDATION-02 trace harness.
+      console.log('[TRACE-12c]', 'handleChatSetBoardPosition invoked, fen:', fen);
+      void logAppAudit({
+        kind: 'trace-surface-callback-invoked',
+        category: 'subsystem',
+        source: 'CoachGamePage.handleChatSetBoardPosition',
+        summary: `args=${JSON.stringify({ fen }).slice(0, 100)}`,
+      });
+      const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
+        console.log('[TRACE-13c]', 'handleChatSetBoardPosition result:', result);
+        void logAppAudit({
+          kind: 'trace-surface-callback-result',
+          category: 'subsystem',
+          source: 'CoachGamePage.handleChatSetBoardPosition',
+          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
+        });
+        return result;
+      };
       try {
         const ok = game.loadFen(fen);
         return ok
-          ? { ok: true }
-          : { ok: false, reason: 'game.loadFen rejected the FEN' };
+          ? finish({ ok: true })
+          : finish({ ok: false, reason: 'game.loadFen rejected the FEN' });
       } catch (err) {
-        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+        return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
       }
     },
     [game],
@@ -2270,11 +2324,29 @@ export function CoachGamePage(): JSX.Element {
 
   const handleChatResetBoard = useCallback(
     (): { ok: boolean; reason?: string } => {
+      // WO-FOUNDATION-02 trace harness.
+      console.log('[TRACE-12d]', 'handleChatResetBoard invoked');
+      void logAppAudit({
+        kind: 'trace-surface-callback-invoked',
+        category: 'subsystem',
+        source: 'CoachGamePage.handleChatResetBoard',
+        summary: 'args={}',
+      });
+      const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
+        console.log('[TRACE-13d]', 'handleChatResetBoard result:', result);
+        void logAppAudit({
+          kind: 'trace-surface-callback-result',
+          category: 'subsystem',
+          source: 'CoachGamePage.handleChatResetBoard',
+          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
+        });
+        return result;
+      };
       try {
         handleRestart();
-        return { ok: true };
+        return finish({ ok: true });
       } catch (err) {
-        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+        return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
       }
     },
     [handleRestart],

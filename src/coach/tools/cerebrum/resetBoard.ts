@@ -15,6 +15,16 @@ export const resetBoardTool: Tool = {
     "Reset the board to the starting position and start a fresh game. REQUIRED whenever you say you'll start over, reset, or play a fresh game; words without action are failure.",
   parameters: { type: 'object', properties: {}, required: [] },
   async execute(_args, ctx) {
+    // WO-FOUNDATION-02 trace harness.
+     
+    console.log('[TRACE-11c]', ctx?.traceId, 'resetBoardTool entered, hasCallback:', typeof ctx?.onResetBoard);
+    void logAppAudit({
+      kind: 'trace-tool-entered',
+      category: 'subsystem',
+      source: 'resetBoardTool',
+      summary: `hasCallback=${typeof ctx?.onResetBoard === 'function'} traceId=${ctx?.traceId ?? 'none'}`,
+    });
+
     if (!ctx?.onResetBoard) {
       return { ok: false, error: 'no onResetBoard callback wired' };
     }

@@ -27,14 +27,14 @@ export const playMoveTool: Tool = {
     required: ['san'],
   },
   async execute(args, ctx) {
-    // WO-FOUNDATION-02 diagnostic: log entry into execute so we can
-    // verify whether the spine even reaches this tool when the LLM
-    // emits play_move. Pairs with the ctx-built audit in
-    // coachService.ask.
-    // eslint-disable-next-line no-console
-    console.log('[playMoveTool.execute] entered:', {
-      san: typeof args.san === 'string' ? args.san : 'undef',
-      hasCallback: typeof ctx?.onPlayMove === 'function',
+    // WO-FOUNDATION-02 trace harness.
+     
+    console.log('[TRACE-11a]', ctx?.traceId, 'playMoveTool entered, san:', args.san, 'hasCallback:', typeof ctx?.onPlayMove);
+    void logAppAudit({
+      kind: 'trace-tool-entered',
+      category: 'subsystem',
+      source: 'playMoveTool',
+      summary: `san=${typeof args.san === 'string' ? args.san : 'undef'} hasCallback=${typeof ctx?.onPlayMove === 'function'} traceId=${ctx?.traceId ?? 'none'}`,
     });
     void logAppAudit({
       kind: 'coach-brain-tool-called',

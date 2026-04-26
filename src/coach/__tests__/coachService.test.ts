@@ -57,12 +57,15 @@ describe('coachService.ask', () => {
       { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
       { providerOverride: mockProvider({ text: 'A.', toolCalls: [] }) },
     );
-    const kinds = auditCalls.map((c) => c.kind);
+    // WO-FOUNDATION-02 trace harness mixes trace-* audits between the
+    // five lifecycle stages. Filter to coach-brain-* only so the
+    // lifecycle assertion stays focused on canonical pipeline stages.
+    const kinds = auditCalls
+      .map((c) => c.kind)
+      .filter((k) => k.startsWith('coach-brain-'));
     expect(kinds).toEqual([
       'coach-brain-ask-received',
       'coach-brain-envelope-assembled',
-      // WO-FOUNDATION-02 diagnostic: ctx-built audit fires after the
-      // envelope assembly and before the provider call.
       'coach-brain-tool-parse-result',
       'coach-brain-provider-called',
       'coach-brain-answer-returned',

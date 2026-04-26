@@ -104,6 +104,9 @@ export interface CoachServiceOptions {
   /** Callback the `navigate_to_route` cerebrum tool uses to actually
    *  push the user-validated route via react-router. WO-BRAIN-04. */
   onNavigate?: ToolExecutionContext['onNavigate'];
+  /** WO-FOUNDATION-02 trace harness — surface-supplied UUID for
+   *  joining audit entries across the pipeline. */
+  traceId?: string;
 }
 
 /** Format a list of tool results plus the LLM's previous text into a
@@ -146,6 +149,18 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     details: JSON.stringify({ surface: input.surface, askLen: input.ask.length }),
   });
 
+  // WO-FOUNDATION-02 trace harness — fires at the start of every
+  // ask, mirroring coach-brain-ask-received but carrying the
+  // traceId so the audit pipeline can be reconstructed.
+   
+  console.log('[TRACE-5]', options.traceId, 'ask received, input.ask:', input.ask);
+  void logAppAudit({
+    kind: 'trace-ask-received',
+    category: 'subsystem',
+    source: 'coachService.ask',
+    summary: `ask="${input.ask.slice(0, 80)}" surface=${input.surface} traceId=${options.traceId ?? 'none'}`,
+  });
+
   // WO-FOUNDATION-02: Layer 1 routing moved upstream to
   // GameChatPanel.handleSend. Most user messages never reached this
   // entry point — pre-LLM intercepts at the surface short-circuit
@@ -174,6 +189,16 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     }),
   });
 
+  // WO-FOUNDATION-02 trace harness — list the tool names the LLM
+  // sees in the toolbelt so we can verify play_move / take_back_move
+  // / reset_board / set_board_position are present.
+  void logAppAudit({
+    kind: 'trace-toolbelt',
+    category: 'subsystem',
+    source: 'coachService.ask',
+    summary: `tools=${envelope.toolbelt.map((t) => t.name).join(',')} traceId=${options.traceId ?? 'none'}`,
+  });
+
   const providerName = options.provider ?? resolveProviderName();
   const provider = options.providerOverride ?? pickProvider(providerName);
 
@@ -184,13 +209,14 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     onResetBoard: options.onResetBoard,
     onNavigate: options.onNavigate,
     liveFen: input.liveState.fen,
+    traceId: options.traceId,
   };
 
   // WO-FOUNDATION-02 diagnostic: log the typeof every callback at
   // ctx-build time so we can verify the surface plumbing reached the
   // spine. If onPlayMove is `undefined` here, the surface didn't
   // pass it; if it's `function`, the chain up to here is intact.
-  // eslint-disable-next-line no-console
+   
   console.log('[coachService.ask] ctx-built:', {
     onPlayMove: typeof ctx.onPlayMove,
     onTakeBackMove: typeof ctx.onTakeBackMove,
@@ -203,6 +229,23 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     category: 'subsystem',
     source: 'coachService.ask',
     summary: `ctx-built: onPlayMove=${typeof ctx.onPlayMove} onTakeBackMove=${typeof ctx.onTakeBackMove} onResetBoard=${typeof ctx.onResetBoard} onSetBoardPosition=${typeof ctx.onSetBoardPosition} onNavigate=${typeof ctx.onNavigate}`,
+  });
+
+  // WO-FOUNDATION-02 trace harness — same shape as the audit above
+  // but carries the traceId so it joins the per-message trace.
+   
+  console.log('[TRACE-6]', options.traceId, 'ctx-built:', {
+    onPlayMove: typeof ctx.onPlayMove,
+    onTakeBackMove: typeof ctx.onTakeBackMove,
+    onResetBoard: typeof ctx.onResetBoard,
+    onSetBoardPosition: typeof ctx.onSetBoardPosition,
+    onNavigate: typeof ctx.onNavigate,
+  });
+  void logAppAudit({
+    kind: 'trace-ctx-built',
+    category: 'subsystem',
+    source: 'coachService.ask',
+    summary: `onPlayMove=${typeof ctx.onPlayMove} onTakeBackMove=${typeof ctx.onTakeBackMove} onResetBoard=${typeof ctx.onResetBoard} traceId=${options.traceId ?? 'none'}`,
   });
 
   const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
@@ -224,6 +267,21 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       ? await provider.callStreaming(currentEnvelope, options.onChunk)
       : await provider.call(currentEnvelope);
 
+    // WO-FOUNDATION-02 trace harness — what tool calls did the
+    // provider return? Critical signal for diagnosing why play_move
+    // doesn't dispatch.
+     
+    console.log('[TRACE-9]', options.traceId, 'provider response:', {
+      toolCalls: lastResponse.toolCalls,
+      textPreview: lastResponse.text.slice(0, 200),
+    });
+    void logAppAudit({
+      kind: 'trace-provider-response',
+      category: 'subsystem',
+      source: 'coachService.ask',
+      summary: `toolCallNames=${lastResponse.toolCalls.map((c) => c.name).join(',')} textLen=${lastResponse.text.length} traceId=${options.traceId ?? 'none'}`,
+    });
+
     if (lastResponse.toolCalls.length === 0) {
       // No tools emitted — terminal turn. Exit the loop.
       break;
@@ -232,6 +290,17 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     // Dispatch tool calls (each gets the surface context).
     const toolResults: { name: string; ok: boolean; result?: unknown; error?: string }[] = [];
     for (const call of lastResponse.toolCalls) {
+      // WO-FOUNDATION-02 trace harness — fires before each tool
+      // execute so we can see whether the dispatch loop reached the
+      // tool when the provider emitted it.
+       
+      console.log('[TRACE-10]', options.traceId, 'tool dispatch:', call.name, call.args);
+      void logAppAudit({
+        kind: 'trace-tool-dispatch',
+        category: 'subsystem',
+        source: 'coachService.ask',
+        summary: `tool=${call.name} traceId=${options.traceId ?? 'none'}`,
+      });
       const tool = getTool(call.name);
       if (!tool) {
         void logAppAudit({
