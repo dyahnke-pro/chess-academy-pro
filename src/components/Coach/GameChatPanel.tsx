@@ -8,6 +8,7 @@ import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
+import { tryRouteIntent } from '../../services/coachIntentRouter';
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -98,6 +99,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onTakeBackMove,
       onSetBoardPosition,
       onResetBoard,
+      onPlayVariation,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -172,6 +174,16 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const handleSend = useCallback(async (text: string) => {
       if (!activeProfile || isStreaming) return;
 
+      // WO-FOUNDATION-02 — log every message that reaches the surface
+      // so we can verify the router is seeing real user input (not
+      // assembled context strings) on every chat send.
+      void logAppAudit({
+        kind: 'chat-panel-message-received',
+        category: 'subsystem',
+        source: 'GameChatPanel.handleSend',
+        summary: `text="${text.slice(0, 100)}"`,
+      });
+
       // Add user message
       const userMsg: ChatMessageType = {
         id: `gmsg-${Date.now()}`,
@@ -195,6 +207,120 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         fen: fen || undefined,
         trigger: null,
       });
+
+      // ─── WO-FOUNDATION-02: Layer 1 intent-router pre-emit ────────
+      // Pattern-match high-confidence command shapes BEFORE running
+      // any existing pre-LLM intercepts. Matched commands dispatch
+      // the surface callback directly. Zero LLM round-trip; zero
+      // hallucination risk. Falls through to the existing intercepts
+      // (and ultimately coachService.ask) on miss.
+      const routedIntent = tryRouteIntent(text, { currentFen: fen });
+      if (routedIntent) {
+        void logAppAudit({
+          kind: 'coach-brain-intent-routed',
+          category: 'subsystem',
+          source: 'GameChatPanel.handleSend',
+          summary: `routed=${routedIntent.kind} bypass-llm=true`,
+        });
+
+        let ackText = 'Done.';
+        let dispatchOk = false;
+        let dispatchError: string | undefined;
+
+        try {
+          switch (routedIntent.kind) {
+            case 'play_move': {
+              if (!onPlayMove) {
+                dispatchError = 'no onPlayMove callback wired';
+                break;
+              }
+              const result = await Promise.resolve(onPlayMove(routedIntent.san));
+              dispatchOk = typeof result === 'boolean' ? result : result.ok;
+              if (dispatchOk) {
+                ackText = `${routedIntent.san} — your move.`;
+              } else {
+                dispatchError =
+                  typeof result === 'object' && 'reason' in result
+                    ? (result.reason ?? 'rejected')
+                    : 'rejected';
+              }
+              break;
+            }
+            case 'take_back_move': {
+              if (!onPlayVariation) {
+                dispatchError = 'no onPlayVariation callback wired';
+                break;
+              }
+              dispatchOk = onPlayVariation({ undo: routedIntent.count, moves: [] });
+              if (dispatchOk) {
+                ackText =
+                  routedIntent.count > 1 ? 'Taken back.' : 'Taken back — your move.';
+              } else {
+                dispatchError = 'nothing to take back';
+              }
+              break;
+            }
+            case 'reset_board': {
+              if (!onRestartGame) {
+                dispatchError = 'no onRestartGame callback wired';
+                break;
+              }
+              onRestartGame();
+              dispatchOk = true;
+              ackText = 'Fresh board — your move.';
+              break;
+            }
+            case 'set_board_position': {
+              // Set-position from chat surface not yet wired here.
+              // Let it fall through to the LLM so the brain can
+              // handle position-set requests via the cerebrum tool.
+              dispatchOk = false;
+              dispatchError = 'set_board_position not yet wired on chat surface';
+              break;
+            }
+            case 'navigate_to_route': {
+              try {
+                void navigate(routedIntent.route);
+                dispatchOk = true;
+                ackText = 'On it.';
+              } catch (err) {
+                dispatchError = err instanceof Error ? err.message : String(err);
+              }
+              break;
+            }
+          }
+        } catch (err) {
+          dispatchError = err instanceof Error ? err.message : String(err);
+        }
+
+        void logAppAudit({
+          kind: 'coach-brain-tool-called',
+          category: 'subsystem',
+          source: 'GameChatPanel.handleSend',
+          summary: `${routedIntent.kind} ${dispatchOk ? 'ok' : 'failed'} (router-direct)`,
+          details: dispatchError ? `error=${dispatchError}` : undefined,
+        });
+
+        if (dispatchOk) {
+          // Append a brief assistant ack to the chat so the user sees
+          // a response. Mirrors the pattern existing intercepts use
+          // (e.g., the restart-game / play-opening ack blocks below).
+          const ackMsg: ChatMessageType = {
+            id: `gmsg-${Date.now()}-routed`,
+            role: 'assistant',
+            content: ackText,
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ackMsg]);
+          if (useAppStore.getState().coachVoiceOn) {
+            void voiceService.speak(ackText);
+          }
+          return;
+        }
+        // Match-but-failed (e.g., illegal SAN, nothing to take back):
+        // fall through so the LLM can elaborate on why the command
+        // didn't land. The user's original text is still in scope.
+      }
 
       // WO-BRAIN-03: both branches now route through the brain. The
       // deterministic `tryCaptureOpeningIntent` regex shortcut is
