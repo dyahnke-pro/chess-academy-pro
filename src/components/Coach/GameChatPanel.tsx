@@ -9,6 +9,7 @@ import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { tryRouteIntent } from '../../services/coachIntentRouter';
+import { parseActions } from '../../services/coachActionDispatcher';
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -493,7 +494,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   .trim();
                 setStreamingContent(displayText);
                 if (useAppStore.getState().coachVoiceOn) {
-                  speechBufferRef.current += chunk;
+                  // WO-FOUNDATION-02 (continued): strip [BOARD:...] and
+                  // [[ACTION:...]] tags from each chunk before it reaches
+                  // the speech buffer. Without this, the action / board
+                  // directives get spoken aloud verbatim.
+                  const cleanedChunk = chunk
+                    .replace(BOARD_TAG_STRIP_RE, '')
+                    .replace(/\[\[ACTION:[^\]]*\]\]/gi, '');
+                  speechBufferRef.current += cleanedChunk;
                   const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
                   if (sentenceEnd) {
                     const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
@@ -553,10 +561,55 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           if (speechBufferRef.current.trim()) {
             flushSpeechBuffer();
           }
-          // The spine already strips [[ACTION:]] tags via parseActions;
-          // [BOARD:] tags are surface-local so we still parse them here.
+          // The spine parses tool calls emitted via the provider's
+          // toolCalls channel, but the LLM frequently emits
+          // [[ACTION:...]] in streamed text instead. We need a
+          // surface-side dispatcher to catch those and fire the
+          // matching callback. WO-FOUNDATION-02 (continued).
           const { cleanText: textWithoutBoardTags, commands: annotations } =
             parseBoardTags(answer.text);
+          const { actions: streamedActions } = parseActions(answer.text);
+          for (const action of streamedActions) {
+            void logAppAudit({
+              kind: 'coach-brain-tool-called',
+              category: 'subsystem',
+              source: 'GameChatPanel.parseActionsDispatch',
+              summary: `${action.name} (post-stream)`,
+            });
+            try {
+              switch (action.name) {
+                case 'play_move': {
+                  const san = typeof action.args.san === 'string' ? action.args.san : null;
+                  if (san) void onPlayMove?.(san);
+                  break;
+                }
+                case 'take_back_move': {
+                  const count =
+                    typeof action.args.count === 'number' ? action.args.count : 1;
+                  onPlayVariation?.({ undo: count, moves: [] });
+                  break;
+                }
+                case 'reset_board': {
+                  onRestartGame?.();
+                  break;
+                }
+                case 'navigate_to_route': {
+                  const route =
+                    typeof action.args.route === 'string' ? action.args.route : null;
+                  if (route) void navigate(route);
+                  break;
+                }
+              }
+            } catch (err) {
+              void logAppAudit({
+                kind: 'coach-brain-tool-called',
+                category: 'subsystem',
+                source: 'GameChatPanel.parseActionsDispatch',
+                summary: `${action.name} threw`,
+                details: err instanceof Error ? err.message : String(err),
+              });
+            }
+          }
           const hasExplicitArrows = annotations.some(
             (c) => c.type === 'arrow' && (c.arrows?.length ?? 0) > 0,
           );
@@ -649,7 +702,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 .trim();
               setStreamingContent(displayText);
               if (useAppStore.getState().coachVoiceOn) {
-                speechBufferRef.current += chunk;
+                // WO-FOUNDATION-02 (continued): same tag-strip as the
+                // in-game branch — see comment above.
+                const cleanedChunk = chunk
+                  .replace(BOARD_TAG_STRIP_RE, '')
+                  .replace(/\[\[ACTION:[^\]]*\]\]/gi, '');
+                speechBufferRef.current += cleanedChunk;
                 const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
                 if (sentenceEnd) {
                   const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
@@ -713,6 +771,51 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         // Drawer surface has no live board to draw arrows on; just
         // strip the [BOARD:] tags out of display text and append.
         const { cleanText: drawerCleanText } = parseBoardTags(answer.text);
+        // Same parseActions dispatch as in-game branch — the LLM may
+        // emit action tags in streamed text from any surface.
+        // WO-FOUNDATION-02 (continued).
+        const { actions: drawerStreamedActions } = parseActions(answer.text);
+        for (const action of drawerStreamedActions) {
+          void logAppAudit({
+            kind: 'coach-brain-tool-called',
+            category: 'subsystem',
+            source: 'GameChatPanel.parseActionsDispatch',
+            summary: `${action.name} (post-stream, drawer)`,
+          });
+          try {
+            switch (action.name) {
+              case 'play_move': {
+                const san = typeof action.args.san === 'string' ? action.args.san : null;
+                if (san) void onPlayMove?.(san);
+                break;
+              }
+              case 'take_back_move': {
+                const count =
+                  typeof action.args.count === 'number' ? action.args.count : 1;
+                onPlayVariation?.({ undo: count, moves: [] });
+                break;
+              }
+              case 'reset_board': {
+                onRestartGame?.();
+                break;
+              }
+              case 'navigate_to_route': {
+                const route =
+                  typeof action.args.route === 'string' ? action.args.route : null;
+                if (route) void navigate(route);
+                break;
+              }
+            }
+          } catch (err) {
+            void logAppAudit({
+              kind: 'coach-brain-tool-called',
+              category: 'subsystem',
+              source: 'GameChatPanel.parseActionsDispatch',
+              summary: `${action.name} threw`,
+              details: err instanceof Error ? err.message : String(err),
+            });
+          }
+        }
         const assistantMsg: ChatMessageType = {
           id: `gmsg-${Date.now()}-resp`,
           role: 'assistant',
