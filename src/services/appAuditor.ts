@@ -103,6 +103,7 @@ export type AuditKind =
   | 'coach-brain-provider-called'
   | 'coach-brain-tool-called'
   | 'coach-brain-intent-routed'
+  | 'coach-intent-router-input'
   | 'coach-brain-answer-returned'
   // Surface migration trail (WO-BRAIN-02 onwards). Fired once per call
   // from a surface that has been migrated to coachService.ask. Used in

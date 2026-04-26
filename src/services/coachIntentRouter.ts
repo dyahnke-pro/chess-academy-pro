@@ -51,6 +51,18 @@ export function tryRouteIntent(
   const lowered = text.trim().toLowerCase();
   if (!lowered) return null;
 
+  // Diagnostic — show every input the router sees and whether it matched.
+  // Dynamic-imported so this file stays free of static appAuditor coupling.
+  // Will be removed once the matching bug is diagnosed.
+  void import('./appAuditor').then(({ logAppAudit }) => {
+    void logAppAudit({
+      kind: 'coach-intent-router-input',
+      category: 'subsystem',
+      source: 'coachIntentRouter.tryRouteIntent',
+      summary: `text="${text.slice(0, 60)}"`,
+    });
+  });
+
   // ─── play_move ──────────────────────────────────────────────────
   // "play e4", "play knight to f3", "move bishop c4", "i'll play Nf6",
   // "make the move Nc3", "push pawn to e4", etc.
