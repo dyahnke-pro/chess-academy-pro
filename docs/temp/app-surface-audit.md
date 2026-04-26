@@ -547,3 +547,101 @@ File: `inGameChatIntent.ts:35-62`. Used by both detectInGameChatIntent and `expa
 
 Anything else that lowers/strips down to a key NOT in this table passes through unchanged — `getOpeningMoves` then decides whether the raw subject is recognised.
 
+
+---
+
+## Round 3b-2 — Narration toggle (`detectNarrationToggle`)
+
+Source: `src/services/coachAgentRunner.ts`. Imported and called by **both** `CoachChatPage.tsx` and `GameChatPanel.tsx` (lines 6 / 6 of each file). Runs BEFORE the brain — when matched, the surface flips voice flags and injects an ack message; the LLM is never called for the toggle itself.
+
+Unlike the in-game intercepts in `inGameChatIntent.ts`, this is a **heuristic detector** with compositional logic — three input checks combined.
+
+### The detector (full source, file: `coachAgentRunner.ts:49-65`)
+
+```ts
+export function detectNarrationToggle(text: string): { enable: boolean } | null {
+  const lower = text.toLowerCase();
+  const hasNarrationTopic =
+    /\b(narrat|commentat|commentar|voice|speak|talk|announc)/i.test(lower);
+  // "shut up" stands on its own.
+  if (/\bshut\s+up\b/i.test(lower)) return { enable: false };
+  const offSignal =
+    /\b(stop|turn\s+off|disable|silence|mute|quiet|no\s+more|cease|end)\b/i;
+  if (offSignal.test(lower) && hasNarrationTopic) return { enable: false };
+  const hasVerb =
+    /\b(narrat|commentat|speak|voice|announce|talk\s+through)/i.test(lower);
+  const hasPlayContext =
+    /\b(game|play|we|move|each\s+move|during|while|turn\s+on)\b/i.test(lower);
+  if (hasVerb && hasPlayContext) return { enable: true };
+  return null;
+}
+```
+
+### Three matching paths
+
+| Path | Trigger | Returns |
+|---|---|---|
+| **1 — "shut up" standalone** | `/\bshut\s+up\b/i` (any sentence containing "shut up") | `{ enable: false }` |
+| **2 — off-signal × narration topic** | `(stop\|turn off\|disable\|silence\|mute\|quiet\|no more\|cease\|end)` AND `(narrat\|commentat\|commentar\|voice\|speak\|talk\|announc)` both present | `{ enable: false }` |
+| **3 — verb × play-context** | `(narrat\|commentat\|speak\|voice\|announce\|talk through)` AND `(game\|play\|we\|move\|each move\|during\|while\|turn on)` both present | `{ enable: true }` |
+| _(no match)_ | none of the above | `null` (caller continues to brain dispatch) |
+
+### Sample matches
+
+**Returns `{ enable: false }`:**
+- "shut up"
+- "stop talking"
+- "turn off the voice"
+- "mute the coach"
+- "quiet voice please"
+- "disable commentary"
+- "no more narration"
+- "silence the announcer"
+- "cease commentating"
+- "end the voiceover"
+
+**Returns `{ enable: true }`:**
+- "narrate the game"
+- "speak during play"
+- "announce each move"
+- "talk through the moves while we play"
+- "turn on voice for the game"
+- "commentate the moves"
+
+**Returns `null` (passes through to brain):**
+- "stop the game" — has off-signal but no narration topic
+- "shut down the engine" — no "shut UP"
+- "talk to me about the Sicilian" — has verb but the play-context regex requires `game/play/we/move/...`; "Sicilian" isn't in the context list (could false-negative)
+
+### Action — `applyNarrationToggle(enable)` (file: `coachAgentRunner.ts:71-85`)
+
+When the surface gets a non-null result, it calls:
+
+```ts
+applyNarrationToggle(enable);
+```
+
+Which atomically:
+1. Sets `useCoachSessionStore.getState().setNarrationMode(enable)` — the session-level narration mode flag
+2. Reads `useAppStore.getState().coachVoiceOn` — the app-level voice flag
+3. Calls `toggleCoachVoice()` if the two flags disagree with the desired state (keeps both in sync)
+4. Returns the ack string:
+   - **enable=true:** `"Got it — I'll narrate each move out loud as we play. Starting a game now."`
+   - **enable=false:** `"Narration off — I'll stay quiet and let you focus."`
+5. **Side effect when enabling:** speaks the ack via `voiceService.speak(ack)` so the user hears narration immediately confirming itself. (Disabling does NOT speak — silent ack only.)
+
+### Difference from in-game `MUTE_RE` / `NARRATE_RE` (Round 3b-1)
+
+| Dimension | `detectInGameChatIntent` (in-game) | `detectNarrationToggle` (chat surfaces) |
+|---|---|---|
+| Match style | Flat single-purpose regex per intent | Compositional — multiple checks combined |
+| Ambiguity tolerance | Strict — phrase must match the literal regex | Permissive — any topic word + any signal word |
+| Where used | `GameChatPanel.tsx` only, inside `handleSend`'s in-game branch | Both `CoachChatPage.tsx` (home/standalone chat) AND `GameChatPanel.tsx` (called after the in-game intent check) |
+| Action shape | Returns `{ kind: 'mute' }` / `{ kind: 'narrate' }`; surface dispatches to `applyNarrationToggle` | Returns `{ enable: bool }` directly; same `applyNarrationToggle` is called |
+| False-positive risk | Low — has to literally say "mute" / "narrate aloud" / etc. | Medium — "stop talking about the Sicilian" hits both off-signal AND narration topic ("talk") and would mute the coach |
+| False-negative risk | Medium — misses paraphrases | Lower — broader topic word list (commentat\|announc\|etc.) |
+
+### Practical implication for foundation work (3B intent-router pre-emit)
+
+The two detectors **overlap** in the in-game chat branch. `detectInGameChatIntent` runs first (returns `kind: mute` for `MUTE_RE`); if that doesn't match, `detectNarrationToggle` runs. Result: both pre-emit gates already cover narration — but they have slightly different acceptance criteria, so a 3B intent router should pick ONE of them (probably `detectNarrationToggle`'s heuristic since it's broader) and retire the duplicate to avoid surface-vs-shared-detector drift.
+
