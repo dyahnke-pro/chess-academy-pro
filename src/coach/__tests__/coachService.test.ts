@@ -121,4 +121,198 @@ describe('coachService.ask', () => {
       ),
     ).rejects.toThrow(/surface is required/);
   });
+
+  // WO-MANDATORY-GROUNDING — the question classifier flags tactical /
+  // opening questions and the spine pre-fetches grounding data so the
+  // LLM physically receives engine + opening output alongside the
+  // question. These tests verify the classifier + fetcher integration
+  // attaches `envelope.groundingContext` before the provider sees the
+  // envelope.
+
+  const STARTING_FEN =
+    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  it('forces stockfish_eval grounding when ask=is Qxg5 good? and FEN is provided', async () => {
+    let receivedEnvelope:
+      | { groundingContext?: string }
+      | undefined;
+    const provider: Provider = {
+      name: 'deepseek',
+      call: vi.fn(async (env: { groundingContext?: string }) => {
+        receivedEnvelope = env;
+        return { text: 'looking', toolCalls: [] };
+      }),
+    };
+    const stockfishStub = vi.fn(async () =>
+      JSON.stringify({ bestMove: 'h7h5', evaluation: -240, depth: 12 }),
+    );
+    const lichessStub = vi.fn(async () => null);
+    await coachService.ask(
+      {
+        surface: 'game-chat',
+        ask: 'is Qxg5 good?',
+        liveState: { surface: 'game-chat', fen: STARTING_FEN },
+      },
+      {
+        providerOverride: provider,
+        groundingFetcher: {
+          stockfishEval: stockfishStub,
+          lichessOpeningLookup: lichessStub,
+        },
+      },
+    );
+    expect(stockfishStub).toHaveBeenCalledWith(STARTING_FEN);
+    expect(receivedEnvelope?.groundingContext).toBeDefined();
+    expect(receivedEnvelope?.groundingContext).toContain('Engine analysis:');
+    expect(receivedEnvelope?.groundingContext).toContain('h7h5');
+    // Lichess wasn't requested — formatter still emits the line but
+    // marks it unavailable (since the classifier didn't trigger it,
+    // we passed null through).
+    expect(receivedEnvelope?.groundingContext).toContain('Opening database:');
+    // grounding-forced audit fired
+    expect(
+      auditCalls.some((c) => c.kind === 'grounding-forced'),
+    ).toBe(true);
+  });
+
+  it('forces lichess grounding when ask=what opening is this? and FEN is provided', async () => {
+    let receivedEnvelope:
+      | { groundingContext?: string }
+      | undefined;
+    const provider: Provider = {
+      name: 'deepseek',
+      call: vi.fn(async (env: { groundingContext?: string }) => {
+        receivedEnvelope = env;
+        return { text: 'looking', toolCalls: [] };
+      }),
+    };
+    const stockfishStub = vi.fn(async () => null);
+    const lichessStub = vi.fn(async () =>
+      JSON.stringify({ opening: { eco: 'C25', name: 'Vienna Game' }, moves: [] }),
+    );
+    await coachService.ask(
+      {
+        surface: 'game-chat',
+        ask: 'what opening is this?',
+        liveState: { surface: 'game-chat', fen: STARTING_FEN },
+      },
+      {
+        providerOverride: provider,
+        groundingFetcher: {
+          stockfishEval: stockfishStub,
+          lichessOpeningLookup: lichessStub,
+        },
+      },
+    );
+    expect(lichessStub).toHaveBeenCalledWith(STARTING_FEN);
+    expect(receivedEnvelope?.groundingContext).toBeDefined();
+    expect(receivedEnvelope?.groundingContext).toContain('Vienna Game');
+  });
+
+  it('skips grounding when classifier matches but FEN is absent', async () => {
+    let receivedEnvelope:
+      | { groundingContext?: string }
+      | undefined;
+    const provider: Provider = {
+      name: 'deepseek',
+      call: vi.fn(async (env: { groundingContext?: string }) => {
+        receivedEnvelope = env;
+        return { text: 'no fen', toolCalls: [] };
+      }),
+    };
+    const stockfishStub = vi.fn(async () => 'should-not-be-called');
+    const lichessStub = vi.fn(async () => 'should-not-be-called');
+    await coachService.ask(
+      {
+        surface: 'ping',
+        ask: 'is this winning?',
+        liveState: { surface: 'ping' }, // no FEN
+      },
+      {
+        providerOverride: provider,
+        groundingFetcher: {
+          stockfishEval: stockfishStub,
+          lichessOpeningLookup: lichessStub,
+        },
+      },
+    );
+    expect(stockfishStub).not.toHaveBeenCalled();
+    expect(lichessStub).not.toHaveBeenCalled();
+    expect(receivedEnvelope?.groundingContext).toBeUndefined();
+    // Audit still fires with skipped=no-fen so we can track misses.
+    expect(
+      auditCalls.some(
+        (c) => c.kind === 'grounding-forced' && /fen=none/.test(c.summary),
+      ),
+    ).toBe(true);
+  });
+
+  it('skips grounding when the classifier finds nothing tactical or opening-related', async () => {
+    let receivedEnvelope:
+      | { groundingContext?: string }
+      | undefined;
+    const provider: Provider = {
+      name: 'deepseek',
+      call: vi.fn(async (env: { groundingContext?: string }) => {
+        receivedEnvelope = env;
+        return { text: 'hi', toolCalls: [] };
+      }),
+    };
+    const stockfishStub = vi.fn(async () => 'should-not-be-called');
+    const lichessStub = vi.fn(async () => 'should-not-be-called');
+    await coachService.ask(
+      {
+        surface: 'game-chat',
+        ask: 'hello, how are you?',
+        liveState: { surface: 'game-chat', fen: STARTING_FEN },
+      },
+      {
+        providerOverride: provider,
+        groundingFetcher: {
+          stockfishEval: stockfishStub,
+          lichessOpeningLookup: lichessStub,
+        },
+      },
+    );
+    expect(stockfishStub).not.toHaveBeenCalled();
+    expect(lichessStub).not.toHaveBeenCalled();
+    expect(receivedEnvelope?.groundingContext).toBeUndefined();
+    // No grounding-forced audit at all when nothing matched.
+    expect(
+      auditCalls.some((c) => c.kind === 'grounding-forced'),
+    ).toBe(false);
+  });
+
+  it('emits "unavailable" markers when the fetcher returns null (Stockfish crash, Lichess 401)', async () => {
+    let receivedEnvelope:
+      | { groundingContext?: string }
+      | undefined;
+    const provider: Provider = {
+      name: 'deepseek',
+      call: vi.fn(async (env: { groundingContext?: string }) => {
+        receivedEnvelope = env;
+        return { text: 'partial', toolCalls: [] };
+      }),
+    };
+    const stockfishStub = vi.fn(async () => null);
+    const lichessStub = vi.fn(async () =>
+      JSON.stringify({ opening: { eco: 'C25', name: 'Vienna Game' }, moves: [] }),
+    );
+    await coachService.ask(
+      {
+        surface: 'game-chat',
+        ask: "what's the best move in the Vienna?",
+        liveState: { surface: 'game-chat', fen: STARTING_FEN },
+      },
+      {
+        providerOverride: provider,
+        groundingFetcher: {
+          stockfishEval: stockfishStub,
+          lichessOpeningLookup: lichessStub,
+        },
+      },
+    );
+    expect(receivedEnvelope?.groundingContext).toContain('Engine analysis: unavailable');
+    expect(receivedEnvelope?.groundingContext).toContain('Vienna Game');
+  });
 });
