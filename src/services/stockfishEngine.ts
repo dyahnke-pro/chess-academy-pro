@@ -49,6 +49,12 @@ const INIT_TIMEOUT_MS = 45_000;
 const STOCKFISH_MT_URL = '/stockfish/stockfish-18-lite.js';
 const STOCKFISH_ST_URL = '/stockfish/stockfish-18-lite-single.js';
 const MAX_CRASH_RETRIES = 3;
+/** How long to wait after spawning the multi-threaded worker before
+ *  declaring it broken. The bundle hangs / throws inside pthread
+ *  spawn very quickly when the host environment can't actually run
+ *  it, so 5s is enough to catch real failures while still allowing
+ *  slow first-load WASM compilation to finish. */
+const MT_EARLY_FAILURE_WINDOW_MS = 5_000;
 
 export type StockfishVariant = 'multi' | 'single';
 
@@ -107,6 +113,12 @@ class StockfishEngine {
   // mutex (they are dropped when a brain is in flight, or supersede
   // an in-flight prefetch).
   private _brainMutex: Promise<void> = Promise.resolve();
+  // Sticky once the multi-thread bundle has failed at runtime in
+  // this app session. Capped at one fallback attempt — once true,
+  // every subsequent initialize() call goes straight to the single-
+  // threaded variant without probing multi again. Prevents a
+  // multi → single → multi → single oscillation across crash retries.
+  private _runtimeFallbackAttempted = false;
 
   get status(): StockfishStatus {
     return this._status;
@@ -137,93 +149,183 @@ class StockfishEngine {
     console.log('[Stockfish] Initializing worker...');
 
     this.initPromise = new Promise((resolve, reject) => {
-      const timeoutId = setTimeout(() => {
+      const overallTimeoutId = setTimeout(() => {
         const msg = 'Stockfish initialization timed out after 45s';
         console.error('[Stockfish]', msg);
         this.setStatus('error', msg);
         reject(new Error(msg));
       }, INIT_TIMEOUT_MS);
 
-      const resolved = resolveWorkerUrl();
-      this.workerVariant = resolved.variant;
-      console.log(
-        `[Stockfish] Using ${resolved.variant}-threaded variant: ${resolved.reason}`,
-      );
-      void logAppAudit({
-        kind: 'stockfish-variant-resolved',
-        category: 'subsystem',
-        source: 'stockfishEngine.initialize',
-        summary: `variant=${resolved.variant} reason=${resolved.reason}`,
-      });
+      const threadCount =
+        (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 4;
+      const hashMb = 64;
 
-      try {
-        this.worker = new Worker(resolved.url);
+      // Track the early-failure timer for the multi-thread variant so
+      // we can clear it once uciok is received OR when fallback runs.
+      let earlyFailureTimer: ReturnType<typeof setTimeout> | null = null;
 
-        this.worker.onmessage = (event: MessageEvent<string>) => {
-          this.handleMessage(event.data);
+      const tryStart = (forceSingle: boolean): void => {
+        let resolved: ResolvedWorker;
+        if (forceSingle) {
+          resolved = {
+            url: STOCKFISH_ST_URL,
+            variant: 'single',
+            reason: 'runtime fallback after multi-thread bundle failure',
+          };
+        } else if (this._runtimeFallbackAttempted) {
+          // Sticky: a previous initialize() in this session already
+          // discovered that multi-thread is broken on this host. Skip
+          // probing it again.
+          resolved = {
+            url: STOCKFISH_ST_URL,
+            variant: 'single',
+            reason: 'sticky fallback (multi previously failed at runtime)',
+          };
+        } else {
+          resolved = resolveWorkerUrl();
+        }
+
+        this.workerVariant = resolved.variant;
+        console.log(
+          `[Stockfish] Using ${resolved.variant}-threaded variant: ${resolved.reason}`,
+        );
+        void logAppAudit({
+          kind: 'stockfish-variant-resolved',
+          category: 'subsystem',
+          source: 'stockfishEngine.initialize',
+          summary: `variant=${resolved.variant} reason=${resolved.reason}`,
+        });
+
+        // Fallback is only meaningful for the multi-thread variant; if
+        // we're already on single, a failure is a real init failure.
+        const handleEarlyMultiFailure = (reason: string): void => {
+          if (this.workerVariant !== 'multi') return;
+          if (this._runtimeFallbackAttempted) return;
+          this._runtimeFallbackAttempted = true;
+          if (earlyFailureTimer !== null) {
+            clearTimeout(earlyFailureTimer);
+            earlyFailureTimer = null;
+          }
+          console.warn(
+            '[Stockfish] Multi-thread variant failed at runtime, falling back to single-threaded',
+          );
+          void logAppAudit({
+            kind: 'stockfish-variant-fallback',
+            category: 'subsystem',
+            source: 'stockfishEngine.initialize',
+            summary: `multi failed at runtime, fell back to single (reason: ${reason})`,
+          });
+          this.worker?.terminate();
+          this.worker = null;
+          tryStart(true);
         };
 
-        this.worker.onerror = (error) => {
-          clearTimeout(timeoutId);
-          const msg =
-            error.message ||
-            'Uncaught RuntimeError or worker load failure';
-          console.error('[Stockfish] worker.onerror:', msg);
-          this.setStatus('error', msg);
-          this.initPromise = null;
-          reject(new Error(msg));
-        };
+        try {
+          this.worker = new Worker(resolved.url);
 
-        // Multi-threaded NNUE init flow:
-        //   send `uci` → wait for `uciok` → send setoption Threads/Hash/MultiPV
-        //   → send `isready` → wait for `readyok`
-        // Setting Threads/Hash before isready ensures the engine
-        // allocates the right TT size and worker pool before the
-        // first analysis request lands.
-        const threadCount =
-          (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 4;
-        const hashMb = 64;
+          this.worker.onmessage = (event: MessageEvent<string>) => {
+            this.handleMessage(event.data);
+          };
 
-        const initHandler = (event: MessageEvent<string>): void => {
-          if (event.data === 'uciok') {
-            if (this.workerVariant === 'multi') {
-              this.send(`setoption name Threads value ${threadCount}`);
-              this.send(`setoption name Hash value ${hashMb}`);
-              console.log(
-                `[Stockfish] threads=${threadCount} hash=${hashMb}MB`,
-              );
-            } else {
-              console.log(
-                '[Stockfish] single-threaded variant — skipping Threads/Hash setup',
-              );
+          this.worker.onerror = (error) => {
+            const msg =
+              error.message ||
+              'Uncaught RuntimeError or worker load failure';
+            console.error('[Stockfish] worker.onerror:', msg);
+            // Multi-thread bundle failed early — try the runtime
+            // fallback before treating this as a fatal init error.
+            if (
+              this.workerVariant === 'multi' &&
+              !this._runtimeFallbackAttempted
+            ) {
+              handleEarlyMultiFailure(msg);
+              return;
             }
-            this.send('setoption name MultiPV value 3');
-            this.send('isready');
+            clearTimeout(overallTimeoutId);
+            if (earlyFailureTimer !== null) {
+              clearTimeout(earlyFailureTimer);
+              earlyFailureTimer = null;
+            }
+            this.setStatus('error', msg);
+            this.initPromise = null;
+            reject(new Error(msg));
+          };
+
+          // 5-second early-failure window. If multi-thread doesn't
+          // reach `uciok` in that time, the bundle is hung in pthread
+          // spawn — fall back instead of waiting for the 45s overall
+          // timeout. Single-threaded init has no early window; it
+          // either initializes within 45s or it doesn't.
+          if (resolved.variant === 'multi') {
+            earlyFailureTimer = setTimeout(() => {
+              handleEarlyMultiFailure('no uciok within 5s of spawn');
+            }, MT_EARLY_FAILURE_WINDOW_MS);
+          }
+
+          const initHandler = (event: MessageEvent<string>): void => {
+            if (event.data === 'uciok') {
+              // uciok received — multi is past the danger zone.
+              if (earlyFailureTimer !== null) {
+                clearTimeout(earlyFailureTimer);
+                earlyFailureTimer = null;
+              }
+              if (this.workerVariant === 'multi') {
+                this.send(`setoption name Threads value ${threadCount}`);
+                this.send(`setoption name Hash value ${hashMb}`);
+                console.log(
+                  `[Stockfish] threads=${threadCount} hash=${hashMb}MB`,
+                );
+              } else {
+                console.log(
+                  '[Stockfish] single-threaded variant — skipping Threads/Hash setup',
+                );
+              }
+              this.send('setoption name MultiPV value 3');
+              this.send('isready');
+              return;
+            }
+            if (event.data === 'readyok') {
+              clearTimeout(overallTimeoutId);
+              this.worker?.removeEventListener('message', initHandler);
+              this.isReady = true;
+              this._crashRetries = 0;
+              console.log(
+                `[Stockfish] Engine ready (${this.workerVariant}-threaded WASM)`,
+              );
+              this.setStatus('ready');
+              resolve();
+            }
+          };
+
+          this.worker.addEventListener('message', initHandler);
+          this.send('uci');
+        } catch (error) {
+          // Synchronous throw during worker construction (rare, e.g.
+          // the worker URL itself is malformed). Multi-thread gets
+          // the runtime-fallback chance; single-thread cannot.
+          if (
+            this.workerVariant === 'multi' &&
+            !this._runtimeFallbackAttempted
+          ) {
+            handleEarlyMultiFailure(
+              error instanceof Error ? error.message : String(error),
+            );
             return;
           }
-          if (event.data === 'readyok') {
-            clearTimeout(timeoutId);
-            this.worker?.removeEventListener('message', initHandler);
-            this.isReady = true;
-            this._crashRetries = 0;
-            console.log(
-              `[Stockfish] Engine ready (${this.workerVariant}-threaded WASM)`,
-            );
-            this.setStatus('ready');
-            resolve();
+          clearTimeout(overallTimeoutId);
+          if (earlyFailureTimer !== null) {
+            clearTimeout(earlyFailureTimer);
+            earlyFailureTimer = null;
           }
-        };
+          const msg = error instanceof Error ? error.message : String(error);
+          console.error('[Stockfish] Init error:', msg);
+          this.setStatus('error', msg);
+          this.initPromise = null;
+          reject(error instanceof Error ? error : new Error(msg));
+        }
+      };
 
-        this.worker.addEventListener('message', initHandler);
-        this.send('uci');
-      } catch (error) {
-        clearTimeout(timeoutId);
-        const msg = error instanceof Error ? error.message : String(error);
-        console.error('[Stockfish] Init error:', msg);
-        this.setStatus('error', msg);
-        this.initPromise = null;
-        reject(error instanceof Error ? error : new Error(msg));
-      }
+      tryStart(false);
     });
 
     return this.initPromise.catch((err) => {

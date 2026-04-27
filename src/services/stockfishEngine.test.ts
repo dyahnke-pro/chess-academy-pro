@@ -1224,3 +1224,143 @@ describe('analyzePosition priority', () => {
     await first;
   });
 });
+
+// ---------------------------------------------------------------------------
+// Runtime fallback — multi-thread bundle fails despite capabilities
+// ---------------------------------------------------------------------------
+
+describe('runtime fallback (multi → single)', () => {
+  // Helper: install COI + SAB so resolveWorkerUrl picks 'multi', and
+  // a Worker stub that captures every URL passed to `new Worker(...)`.
+  // Returns the URL log so tests can assert which bundle was spawned.
+  function installMultiCapableEnv(): { workerUrls: string[] } {
+    vi.stubGlobal('window', {
+      crossOriginIsolated: true,
+      location: { pathname: '/' },
+    });
+    vi.stubGlobal('SharedArrayBuffer', class {});
+
+    const workerUrls: string[] = [];
+    vi.stubGlobal(
+      'Worker',
+      // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+      class MockWorkerClass {
+        constructor(url: string) {
+          workerUrls.push(url);
+          workerConstructorCallCount++;
+          return mockWorker.instance as unknown as MockWorkerClass;
+        }
+      },
+    );
+
+    return { workerUrls };
+  }
+
+  it('selects multi-thread when capabilities are present and uciok arrives', async () => {
+    const { workerUrls } = installMultiCapableEnv();
+    const { stockfishEngine } = await getEngine();
+
+    completeInit();
+    await stockfishEngine.initialize();
+
+    expect(workerUrls).toEqual(['/stockfish/stockfish-18-lite.js']);
+    expect(workerConstructorCallCount).toBe(1);
+    expect(mockWorker.postMessageCalls).toContain(
+      'setoption name Threads value 4',
+    );
+  });
+
+  it('falls back to single when multi-thread worker.onerror fires before uciok', async () => {
+    const { workerUrls } = installMultiCapableEnv();
+    const { stockfishEngine } = await getEngine();
+
+    const initPromise = stockfishEngine.initialize();
+
+    // Let the multi-thread worker construct and the engine send 'uci'.
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(workerUrls).toEqual(['/stockfish/stockfish-18-lite.js']);
+
+    // Multi-thread bundle throws before responding with uciok.
+    mockWorker.emitError('runtime crash in pthread spawn');
+
+    // Microtasks settle, fallback kicks off, second worker is spawned.
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(workerUrls).toEqual([
+      '/stockfish/stockfish-18-lite.js',
+      '/stockfish/stockfish-18-lite-single.js',
+    ]);
+
+    // Drive the single-thread handshake to completion.
+    queueMicrotask(() => {
+      mockWorker.emit('uciok');
+      queueMicrotask(() => mockWorker.emit('readyok'));
+    });
+    await initPromise;
+
+    expect(stockfishEngine.status).toBe('ready');
+    // Threads/Hash setoption should NOT have been sent — single-thread
+    // skips them.
+    expect(mockWorker.postMessageCalls).not.toContain(
+      'setoption name Threads value 4',
+    );
+  });
+
+  it('does not retry the multi bundle on subsequent initialize() calls (sticky fallback)', async () => {
+    const { workerUrls } = installMultiCapableEnv();
+    const { stockfishEngine } = await getEngine();
+
+    // First initialize: multi fails → fallback to single → success.
+    const first = stockfishEngine.initialize();
+    await Promise.resolve();
+    await Promise.resolve();
+    mockWorker.emitError('runtime crash');
+    await Promise.resolve();
+    await Promise.resolve();
+    queueMicrotask(() => {
+      mockWorker.emit('uciok');
+      queueMicrotask(() => mockWorker.emit('readyok'));
+    });
+    await first;
+    expect(workerUrls).toEqual([
+      '/stockfish/stockfish-18-lite.js',
+      '/stockfish/stockfish-18-lite-single.js',
+    ]);
+
+    // Force a fresh init by destroying.
+    stockfishEngine.destroy();
+
+    // Second initialize: should go straight to single, no multi probe.
+    completeInit();
+    await stockfishEngine.initialize();
+
+    expect(workerUrls).toEqual([
+      '/stockfish/stockfish-18-lite.js',
+      '/stockfish/stockfish-18-lite-single.js',
+      '/stockfish/stockfish-18-lite-single.js',
+    ]);
+  });
+
+  it('treats single-thread worker.onerror as a real init failure (no fallback loop)', async () => {
+    // Capabilities present so resolveWorkerUrl picks multi, but we
+    // immediately push the engine into the single variant by
+    // simulating a multi failure first. After fallback succeeds,
+    // pretend single also crashes — should NOT try multi again.
+    installMultiCapableEnv();
+    const { stockfishEngine } = await getEngine();
+
+    const initPromise = stockfishEngine.initialize();
+    await Promise.resolve();
+    await Promise.resolve();
+    mockWorker.emitError('multi crash');
+    await Promise.resolve();
+    await Promise.resolve();
+
+    // Now simulate the SINGLE-thread worker also failing.
+    mockWorker.emitError('single crash too');
+
+    // Init should reject; no further worker constructions.
+    await expect(initPromise).rejects.toThrow();
+  });
+});
