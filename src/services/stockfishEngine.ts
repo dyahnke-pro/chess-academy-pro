@@ -7,6 +7,18 @@ type StockfishMessageHandler = (analysis: StockfishAnalysis) => void;
 type StockfishStatus = 'idle' | 'loading' | 'ready' | 'error';
 type StatusChangeHandler = (status: StockfishStatus, error?: string) => void;
 
+export type AnalysisPriority = 'brain' | 'prefetch';
+
+/** Surface error thrown when a `priority='prefetch'` analysis is
+ *  dropped because a `priority='brain'` analysis is already in flight.
+ *  Callers (the speculative-prefetch path) should catch and ignore. */
+export class PrefetchDroppedError extends Error {
+  constructor() {
+    super('prefetch dropped: brain eval in flight');
+    this.name = 'PrefetchDroppedError';
+  }
+}
+
 interface PendingAnalysis {
   resolve: (analysis: StockfishAnalysis) => void;
   reject: (error: Error) => void;
@@ -14,6 +26,11 @@ interface PendingAnalysis {
   bestMove: string;
   depth: number;
   blackToMove: boolean;
+  /** Caller's priority. Used by `analyzePosition`'s contention rules:
+   *  brain calls preempt prefetch; prefetch is dropped when a brain
+   *  eval is already in flight; brain-on-brain serializes via the
+   *  brain mutex instead of cancelling. */
+  priority: AnalysisPriority;
   /** FEN + requested depth, captured so the bestmove handler can
    *  populate the LRU cache once analysis completes. Skipped when
    *  the call carried per-analysis options (Skill Level, etc.). */
@@ -84,6 +101,12 @@ class StockfishEngine {
   // Which Stockfish bundle the current worker was spawned from. Used
   // to gate multi-thread-only setoptions during the init handshake.
   private workerVariant: StockfishVariant = 'single';
+  // Serialization chain for brain-priority analyses. Each new brain
+  // call appends a fresh promise; the previous one is awaited before
+  // the new call enters its handshake. Prefetch calls bypass the
+  // mutex (they are dropped when a brain is in flight, or supersede
+  // an in-flight prefetch).
+  private _brainMutex: Promise<void> = Promise.resolve();
 
   get status(): StockfishStatus {
     return this._status;
@@ -250,6 +273,7 @@ class StockfishEngine {
     fen: string,
     depth: number = 18,
     options?: Record<string, string | number>,
+    priority: AnalysisPriority = 'brain',
   ): Promise<StockfishAnalysis> {
     // FEN cache short-circuit — if we've already analyzed this exact
     // position+depth, return the cached result without invoking the
@@ -276,16 +300,64 @@ class StockfishEngine {
       });
     }
 
+    // Priority contention rules:
+    //   1. Incoming brain call cancels any in-flight prefetch.
+    //   2. Incoming prefetch is DROPPED if a brain call is in flight
+    //      (real coaching work must not be preempted by speculative
+    //      warming).
+    //   3. Brain-on-brain serializes via `_brainMutex` — the in-flight
+    //      brain eval runs to completion before the new one starts,
+    //      since both are providing real coaching value.
+    if (priority === 'prefetch' && this.pending?.priority === 'brain') {
+      throw new PrefetchDroppedError();
+    }
+
+    if (priority === 'brain') {
+      // Append to the brain serialization chain. The previous entry
+      // resolves either when the prior brain eval finishes or when it
+      // fails — either way we're cleared to start. Prefetch in-flight
+      // is fine; the Promise body below cancels it on entry.
+      const prev = this._brainMutex;
+      let release!: () => void;
+      this._brainMutex = new Promise<void>((r) => {
+        release = r;
+      });
+      try {
+        await prev;
+      } catch {
+        /* prior brain rejected — we still proceed */
+      }
+      try {
+        return await this._dispatchAnalysis(fen, depth, options, priority);
+      } finally {
+        release();
+      }
+    }
+
+    return this._dispatchAnalysis(fen, depth, options, priority);
+  }
+
+  private async _dispatchAnalysis(
+    fen: string,
+    depth: number,
+    options: Record<string, string | number> | undefined,
+    priority: AnalysisPriority,
+  ): Promise<StockfishAnalysis> {
     await this.initialize();
 
     return new Promise((resolve, reject) => {
       // If a previous analysis is pending, stop it and wait for bestmove
-      // before starting the new one
+      // before starting the new one. With priority gating, the only
+      // remaining cases here are:
+      //   - incoming brain over in-flight prefetch (cancel prefetch)
+      //   - incoming prefetch over in-flight prefetch (newer move's
+      //     prefetch supersedes)
+      //   - incoming brain after another brain's mutex released but
+      //     before this entry runs (race; cancel)
       if (this.pending) {
         const oldPending = this.pending;
         this.pending = null;
         this.send('stop');
-        // Reject the old pending so callers don't hang
         oldPending.reject(new Error('Analysis interrupted by new request'));
       }
 
@@ -302,6 +374,7 @@ class StockfishEngine {
         bestMove: '',
         depth: 0,
         blackToMove,
+        priority,
         cacheFen: options ? undefined : fen,
         cacheDepth: options ? undefined : depth,
       };

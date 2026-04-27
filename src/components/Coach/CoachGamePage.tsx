@@ -2205,9 +2205,12 @@ export function CoachGamePage(): JSX.Element {
         summary: `fen=${prefetchFen.slice(0, 30)}... depth=12`,
       });
       void stockfishEngine
-        .analyzePosition(prefetchFen, 12)
+        .analyzePosition(prefetchFen, 12, undefined, 'prefetch')
         .catch(() => {
-          /* prefetch is best-effort; engine errors handled by retry path */
+          /* prefetch is best-effort: dropped when brain eval is in
+             flight (PrefetchDroppedError), or cancelled by a newer
+             prefetch / brain call. All swallowed silently — the brain
+             will run its own depth-18 eval next anyway. */
         });
     }
     if (isExploreMode) {
