@@ -578,6 +578,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           const answer = await coachService.ask(
             { surface: 'game-chat', ask: text, liveState },
             {
+              // WO-COACH-GROUNDING (PR #338 part C): chat surfaces need
+              // multiple round-trips so the brain can call stockfish_eval
+              // (or any cerebellum lookup), see the result, and synthesize
+              // a final answer. With the previous default of 1, a tool
+              // call orphans the result with no follow-up turn — the LLM
+              // correctly skipped tools and answered narratively, which
+              // is the structural cause of tactical hallucinations.
+              maxToolRoundTrips: 3,
               onChunk: (chunk: string) => {
                 fullResponse += chunk;
                 const displayText = fullResponse
@@ -801,6 +809,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         const answer = await coachService.ask(
           { surface: 'home-chat', ask: text, liveState: drawerLiveState },
           {
+            // WO-COACH-GROUNDING (PR #338 part C): see the in-game branch
+            // above for rationale. Drawer surface needs the same budget
+            // so tactical questions during a walkthrough or pre-game
+            // chat get engine-grounded answers.
+            maxToolRoundTrips: 3,
             onChunk: (chunk: string) => {
               drawerFullResponse += chunk;
               const displayText = drawerFullResponse

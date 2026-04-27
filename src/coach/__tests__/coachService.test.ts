@@ -121,4 +121,68 @@ describe('coachService.ask', () => {
       ),
     ).rejects.toThrow(/surface is required/);
   });
+
+  // WO-COACH-GROUNDING (PR #338 part C): the spine default stays at 1 so
+  // narrative-only callers (e.g. ping, short hint asks) keep their existing
+  // single-trip behavior. Chat surfaces opt in to 3 explicitly via the
+  // CoachServiceOptions.maxToolRoundTrips field.
+  it('default round-trip budget is 1 — provider is called once when no tools fire', async () => {
+    const call = vi.fn(async () => ({ text: 'A.', toolCalls: [] }));
+    const provider: Provider = { name: 'deepseek', call };
+    await coachService.ask(
+      { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
+      { providerOverride: provider },
+    );
+    expect(call).toHaveBeenCalledTimes(1);
+  });
+
+  it('default round-trip budget caps at 1 even when the first turn emits a tool call', async () => {
+    // First (and only) turn emits a tool. With budget=1, the spine
+    // dispatches the tool but does not loop back for a synthesis turn,
+    // so the provider is only called once.
+    const responses: ProviderResponse[] = [
+      {
+        text: 'looking up',
+        toolCalls: [
+          { id: 'tc-1', name: 'set_intended_opening', args: { name: 'Caro-Kann Defense', color: 'black' } },
+        ],
+      },
+      // Sentinel — should never be reached at budget=1.
+      { text: 'should not reach', toolCalls: [] },
+    ];
+    const call = vi.fn(async () => responses.shift() ?? { text: '', toolCalls: [] });
+    const provider: Provider = { name: 'deepseek', call };
+    await coachService.ask(
+      { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
+      { providerOverride: provider },
+    );
+    expect(call).toHaveBeenCalledTimes(1);
+  });
+
+  it('honors maxToolRoundTrips=3 — loops back through the provider after tools resolve', async () => {
+    const responses: ProviderResponse[] = [
+      {
+        text: 'turn 1: calling tool',
+        toolCalls: [
+          { id: 'tc-1', name: 'set_intended_opening', args: { name: 'Caro-Kann Defense', color: 'black' } },
+        ],
+      },
+      {
+        text: 'turn 2: calling another tool',
+        toolCalls: [
+          { id: 'tc-2', name: 'set_intended_opening', args: { name: 'Sicilian Defense', color: 'black' } },
+        ],
+      },
+      // Final turn — no tools, just a narrative answer.
+      { text: 'turn 3: final', toolCalls: [] },
+    ];
+    const call = vi.fn(async () => responses.shift() ?? { text: '', toolCalls: [] });
+    const provider: Provider = { name: 'deepseek', call };
+    const answer = await coachService.ask(
+      { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
+      { providerOverride: provider, maxToolRoundTrips: 3 },
+    );
+    expect(call).toHaveBeenCalledTimes(3);
+    expect(answer.text).toContain('turn 3');
+  });
 });
