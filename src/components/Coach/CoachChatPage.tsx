@@ -15,10 +15,11 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType } from '../../types';
 
-/** Strip the brain's `[BOARD:...]` and `[[ACTION:...]]` tags from
- *  display text. Tags are parsed and dispatched by the spine; the
- *  user shouldn't see them in the chat bubble. */
-const TAG_STRIP_RE = /\[BOARD:[^\]]*\]|\[\[ACTION:[^\]]*\]\]/gi;
+/** Strip the brain's `[BOARD:...]` and `[ACTION:...]` / `[[ACTION:...]]`
+ *  tags from display text. Tags are parsed and dispatched by the spine;
+ *  the user shouldn't see them in the chat bubble. WO-COACH-RESILIENCE
+ *  part C added the single-bracket form (Audit Finding 32). */
+const TAG_STRIP_RE = /\[BOARD:[^\]]*\]|\[\[ACTION:[^\]]*\]\]|\[ACTION:[^\]]*\]/gi;
 
 const STARTER_CHIPS = [
   'Play the Italian against me',
@@ -39,6 +40,10 @@ const READ_THIS_RE =
 function stripMarkdownForTts(text: string): string {
   return text
     .replace(/\[BOARD:[^\]]*\]/gi, '')
+    // WO-COACH-RESILIENCE part C: strip BOTH bracket variants. The
+    // double-bracket form was leaking through to Polly (Audit
+    // Finding 32: '[[ACTION:play_move {"san":"e4"}]] Done.').
+    .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
     .replace(/\[ACTION:[^\]]*\]/gi, '')
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/\*(.+?)\*/g, '$1')
