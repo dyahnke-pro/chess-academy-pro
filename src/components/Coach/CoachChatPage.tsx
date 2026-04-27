@@ -266,7 +266,11 @@ export function CoachChatPage(): JSX.Element {
       const answer = await coachService.ask(
         { surface: 'standalone-chat', ask: text, liveState },
         {
-          maxToolRoundTrips: 1,
+          // WO-COACH-GROUNDING (PR #338 part C): bumped from 1 to 3 so
+          // the brain can call stockfish_eval / lichess_opening_lookup,
+          // see the result, and synthesize a grounded answer instead of
+          // skipping tools to fit a single round-trip budget.
+          maxToolRoundTrips: 3,
           onNavigate: (path: string) => {
             void navigate(path);
           },
