@@ -15,6 +15,7 @@ import { getCoachCommentary } from '../../services/coachApi';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { INTERACTIVE_REVIEW_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { withTimeout } from '../../coach/withTimeout';
 import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
@@ -753,12 +754,27 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // the LLM isn't configured; we only surface real analysis, never
     // generic template filler.
     try {
-      const [analysisBefore, analysisAfter] = await Promise.all([
-        startFen
-          ? stockfishEngine.queueAnalysis(startFen, 12).catch(() => null)
-          : Promise.resolve(null),
+      // WO-REVIEW-CASCADE-ENGINE part A — wrap each per-position
+      // queueAnalysis with withTimeout so a slow / hung engine
+      // doesn't block the what-if commentary indefinitely. The
+      // inner .catch(() => null) handles rejections; withTimeout
+      // adds a 5 s upper bound. On either failure mode we fall
+      // through with a null analysis (existing code already handles
+      // null gracefully).
+      const wrappedBefore = startFen
+        ? await withTimeout(
+            stockfishEngine.queueAnalysis(startFen, 12).catch(() => null),
+            5_000,
+            'review-whatif-before',
+          )
+        : ({ ok: true, value: null } as const);
+      const wrappedAfter = await withTimeout(
         stockfishEngine.queueAnalysis(moveResult.fen, 12).catch(() => null),
-      ]);
+        5_000,
+        'review-whatif-after',
+      );
+      const analysisBefore = wrappedBefore.ok ? wrappedBefore.value : null;
+      const analysisAfter = wrappedAfter.ok ? wrappedAfter.value : null;
       const probe = new Chess();
       probe.load(moveResult.fen);
       const moverThatJustMoved: 'w' | 'b' =
@@ -954,7 +970,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // existing prev/next arrows under the board.
     setBestLineLoading(true);
     try {
-      const analysis = await stockfishEngine.analyzePosition(tactic.fen, 18);
+      // WO-REVIEW-CASCADE-ENGINE part A — wrap so a hung Stockfish
+      // doesn't leave the missed-tactic flow spinning forever.
+      const wrapped = await withTimeout(
+        stockfishEngine.analyzePosition(tactic.fen, 18),
+        5_000,
+        `review-missed-tactic-${tactic.moveIndex}`,
+      );
+      if (!wrapped.ok) {
+        console.warn(`[CoachGameReview] missed-tactic analysis timed out (${wrapped.label})`);
+        setBestLineLoading(false);
+        return;
+      }
+      const analysis = wrapped.value;
       const pvMoves = analysis.topLines[0]?.moves ?? [];
       if (pvMoves.length > 0) {
         // UCI → SAN for display in the best-line strip.
@@ -1042,9 +1070,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const thisRevision = bestLineRevisionRef.current;
     setBestLineLoading(true);
     try {
-      const analysis = await stockfishEngine.analyzePosition(preFen, 18);
+      // WO-REVIEW-CASCADE-ENGINE part A — wrap so a hung Stockfish
+      // doesn't leave the show-best-line click spinning forever.
+      const wrapped = await withTimeout(
+        stockfishEngine.analyzePosition(preFen, 18),
+        5_000,
+        `review-move-${moveIdx}`,
+      );
       // Discard stale response if user navigated away during analysis
       if (bestLineRevisionRef.current !== thisRevision) return;
+      if (!wrapped.ok) {
+        console.warn(`[CoachGameReview] best-line analysis timed out (${wrapped.label})`);
+        setBestLineLoading(false);
+        return;
+      }
+      const analysis = wrapped.value;
       const pvMoves = analysis.topLines[0]?.moves ?? [];
       if (pvMoves.length === 0) {
         setBestLineLoading(false);

@@ -19,9 +19,17 @@ export function reconstructMovesFromGame(
   } catch {
     return [];
   }
-  const sanMoves = loader.history();
 
-  if (sanMoves.length === 0) {
+  // WO-REVIEW-CASCADE-ENGINE part A — use verbose history so we get
+  // each move's `after` FEN directly from the loader. The previous
+  // implementation built a second Chess instance and re-walked the
+  // SAN list via chess.move(san) — that walk would `break` on any
+  // throw, truncating the moves array to a partial prefix and
+  // silently disabling the review's Next button after the first
+  // move. The loader has already validated the whole game; trusting
+  // its verbose history removes the second walk and the failure mode.
+  const verbose = loader.history({ verbose: true });
+  if (verbose.length === 0) {
     return [];
   }
 
@@ -39,26 +47,17 @@ export function reconstructMovesFromGame(
   // and mis-mark every user-as-black move as a coach move.
   const inferredPlayerIsWhite = game.white !== 'AI Coach' && game.white !== 'Stockfish Bot';
   const playerIsWhite = playerColor ? playerColor === 'white' : inferredPlayerIsWhite;
-  const chess = new Chess();
   const moves: CoachGameMove[] = [];
   let previousEval: number | null = null;
 
-  for (let i = 0; i < sanMoves.length; i++) {
-    const san = sanMoves[i];
-    const turnBeforeMove = chess.turn();
-
-    try {
-      chess.move(san);
-    } catch {
-      // Illegal move — stop reconstruction
-      break;
-    }
-
+  for (let i = 0; i < verbose.length; i++) {
+    const move = verbose[i];
     const moveNumber = i + 1;
-    const color: 'white' | 'black' = turnBeforeMove === 'w' ? 'white' : 'black';
+    // Verbose move's `color` is 'w' or 'b'.
+    const color: 'white' | 'black' = move.color === 'w' ? 'white' : 'black';
     const isCoachMove = playerIsWhite ? color !== 'white' : color !== 'black';
 
-    // Look up annotation by chess move number + color
+    // Look up annotation by chess move number + color.
     const chessMoveNumber = Math.ceil(moveNumber / 2);
     const annotation = annotationMap.get(`${chessMoveNumber}-${color}`);
 
@@ -72,8 +71,11 @@ export function reconstructMovesFromGame(
 
     moves.push({
       moveNumber,
-      san,
-      fen: chess.fen(),
+      san: move.san,
+      // chess.js verbose history: `after` is the FEN AFTER this move.
+      // Falls back to recomputing if `after` is missing (older
+      // chess.js versions). Both branches give the same result.
+      fen: move.after,
       isCoachMove,
       commentary: comment,
       evaluation,
