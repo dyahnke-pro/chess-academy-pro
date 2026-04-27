@@ -65,7 +65,18 @@ export function getTool(name: string): Tool | undefined {
 }
 
 /** Strip executors so the toolbelt can be safely embedded in the
- *  envelope — the LLM only needs the contract, not the dispatcher. */
-export function getToolDefinitions(): ToolDefinition[] {
-  return COACH_TOOLS.map(({ category: _category, execute: _execute, ...def }) => def);
+ *  envelope — the LLM only needs the contract, not the dispatcher.
+ *  WO-COACH-RESILIENCE: optional `exclude` filter lets the spine ship
+ *  a reduced toolbelt during fallback retries (e.g. drop
+ *  `stockfish_eval` when the engine is hung so the LLM stops
+ *  blocking on the tool). */
+export function getToolDefinitions(opts?: { exclude?: readonly string[] }): ToolDefinition[] {
+  const exclude = opts?.exclude;
+  if (!exclude || exclude.length === 0) {
+    return COACH_TOOLS.map(({ category: _category, execute: _execute, ...def }) => def);
+  }
+  const excludeSet = new Set(exclude);
+  return COACH_TOOLS
+    .filter((t) => !excludeSet.has(t.name))
+    .map(({ category: _category, execute: _execute, ...def }) => def);
 }
