@@ -19,8 +19,12 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../../types';
 
-/** Strip [BOARD: ...] tags from text so they don't flash during streaming */
-const BOARD_TAG_STRIP_RE = /\[BOARD:\s*(?:arrow|highlight|position|practice|clear)(?::[^\]]*)?\]/gi;
+/** Strip [BOARD: ...] and legacy [ARROW: ...] tags from text so they
+ *  don't flash during streaming or get spoken aloud by Polly. The
+ *  [ARROW:...] form is leftover from a pre-cerebrum-tool prototype
+ *  the brain still occasionally regresses to; the proper replacement
+ *  is the `draw_arrows` cerebrum tool (WO-COACH-ARROWS). */
+const BOARD_TAG_STRIP_RE = /\[BOARD:\s*(?:arrow|highlight|position|practice|clear)(?::[^\]]*)?\]|\[ARROW:[^\]]*\]/gi;
 
 interface GameChatPanelProps {
   fen: string;
@@ -59,6 +63,11 @@ interface GameChatPanelProps {
    *  restarts the game from the starting position.
    *  WO-COACH-OPERATOR-FOUNDATION-01. */
   onResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Called when the brain emits draw_arrows. The parent renders the
+   *  arrows on the active board. WO-COACH-ARROWS. */
+  onDrawArrows?: (arrows: import('../../coach/types').ArrowSpec[]) => void;
+  /** Called when the brain emits clear_arrows. WO-COACH-ARROWS. */
+  onClearArrows?: () => void;
   /** Apply a what-if variation: take back `undo` half-moves, then play
    *  `moves` (SAN) forward. Returns true on success, false if any move
    *  was invalid or there was nothing to undo. Powers the coach's
@@ -100,6 +109,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onTakeBackMove,
       onSetBoardPosition,
       onResetBoard,
+      onDrawArrows,
+      onClearArrows,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -648,6 +659,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                     }
                   }
                 : undefined,
+              // WO-COACH-ARROWS — visual annotation tools.
+              onDrawArrows,
+              onClearArrows,
               traceId,
             },
           );
@@ -870,6 +884,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   }
                 }
               : undefined,
+            // WO-COACH-ARROWS — visual annotation tools.
+            onDrawArrows,
+            onClearArrows,
             traceId,
           },
         );

@@ -21,6 +21,8 @@ import { HintButton } from './HintButton';
 import { CoachGameReview } from './CoachGameReview';
 import { GameChatPanel } from './GameChatPanel';
 import type { GameChatPanelHandle } from './GameChatPanel';
+import { useArrowState } from './useArrowState';
+import type { ArrowSpec } from '../../coach/types';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveListPanel } from './MoveListPanel';
 import { MobileChatDrawer } from './MobileChatDrawer';
@@ -313,6 +315,21 @@ export function CoachGamePage(): JSX.Element {
 
   // Ref to inject messages into GameChatPanel (hints, takeback msgs)
   const gameChatRef = useRef<GameChatPanelHandle>(null);
+
+  // WO-COACH-ARROWS — coach-drawn arrows from the draw_arrows tool.
+  // The hook is backed by the appStore so the global drawer's chat
+  // (which is rendered outside this component) and this page's board
+  // share the same source of truth. Auto-clears on user move via the
+  // appStore's setGlobalBoardContext action.
+  const { arrows: coachArrows, setArrows: setCoachArrows, clearArrows: clearCoachArrows } = useArrowState();
+  const coachArrowsForBoard = useMemo(
+    () => coachArrows.map((a: ArrowSpec) => ({
+      startSquare: a.from,
+      endSquare: a.to,
+      color: a.color === 'red' ? '#ef4444' : '#10b981',
+    })),
+    [coachArrows],
+  );
 
   const playerRating = activeProfile?.currentRating ?? 1420;
 
@@ -1547,6 +1564,12 @@ export function CoachGamePage(): JSX.Element {
             },
             {
               maxToolRoundTrips: 3,
+              // WO-COACH-ARROWS — wire arrow callbacks for parity
+              // with chat surfaces. The move-selector turn rarely
+              // emits draw_arrows, but if a future prompt does,
+              // we don't want a "no callback" stub fallback.
+              onDrawArrows: setCoachArrows,
+              onClearArrows: clearCoachArrows,
               onPlayMove: (san: string) => {
                 // Validate against the live FEN. The play_move tool
                 // already validated, but board state may have shifted
@@ -3076,7 +3099,7 @@ export function CoachGamePage(): JSX.Element {
               showFlipButton={false}
               showVoiceMic={false}
               highlightSquares={coachLastMove}
-              arrows={[...hintState.arrows, ...annotationArrows, ...voiceArrows].length > 0 ? [...hintState.arrows, ...annotationArrows, ...voiceArrows] : undefined}
+              arrows={[...hintState.arrows, ...annotationArrows, ...voiceArrows, ...coachArrowsForBoard].length > 0 ? [...hintState.arrows, ...annotationArrows, ...voiceArrows, ...coachArrowsForBoard] : undefined}
               annotationHighlights={annotationHighlights.length > 0 ? annotationHighlights : undefined}
               ghostMove={hintState.ghostMove}
               pgnForChat={game.history.join(' ')}
@@ -3311,6 +3334,8 @@ export function CoachGamePage(): JSX.Element {
               onTakeBackMove={handleChatTakeBackMove}
               onSetBoardPosition={handleChatSetBoardPosition}
               onResetBoard={handleChatResetBoard}
+              onDrawArrows={setCoachArrows}
+              onClearArrows={clearCoachArrows}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}
@@ -3373,6 +3398,8 @@ export function CoachGamePage(): JSX.Element {
               onTakeBackMove={handleChatTakeBackMove}
               onSetBoardPosition={handleChatSetBoardPosition}
               onResetBoard={handleChatResetBoard}
+              onDrawArrows={setCoachArrows}
+              onClearArrows={clearCoachArrows}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}

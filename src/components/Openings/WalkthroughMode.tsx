@@ -501,15 +501,31 @@ export function WalkthroughMode({
     };
   }, [currentAnnotation, computeCharTriggers, autoPlaySpeed]);
 
+  // WO-COACH-ARROWS: brain-emitted arrows from the global drawer's
+  // chat (via the draw_arrows cerebrum tool) land in
+  // appStore.coachArrows. Merge them with the walkthrough's own
+  // narration arrows so both render simultaneously. Auto-clear on
+  // user move is handled by the appStore's setGlobalBoardContext
+  // action.
+  const coachArrows = useAppStore((s) => s.coachArrows);
+
   // Convert visible arrows/highlights to board format
   const boardArrows = useMemo(() => {
-    if (!currentAnnotation?.arrows || visibleArrowCount === 0) return undefined;
-    return currentAnnotation.arrows.slice(0, visibleArrowCount).map((a) => ({
+    const ownArrows = currentAnnotation?.arrows && visibleArrowCount > 0
+      ? currentAnnotation.arrows.slice(0, visibleArrowCount).map((a) => ({
+          startSquare: a.from,
+          endSquare: a.to,
+          color: a.color ?? 'rgba(0, 180, 80, 0.8)',
+        }))
+      : [];
+    const coachOverlay = coachArrows.map((a) => ({
       startSquare: a.from,
       endSquare: a.to,
-      color: a.color ?? 'rgba(0, 180, 80, 0.8)',
+      color: a.color === 'red' ? '#ef4444' : '#10b981',
     }));
-  }, [currentAnnotation, visibleArrowCount]);
+    const merged = [...ownArrows, ...coachOverlay];
+    return merged.length > 0 ? merged : undefined;
+  }, [currentAnnotation, visibleArrowCount, coachArrows]);
 
   const boardHighlights = useMemo(() => {
     if (!currentAnnotation?.highlights || visibleHighlightCount === 0) return undefined;

@@ -34,6 +34,8 @@ import { speakTool } from './cerebrum/speak';
 import { requestHintTierTool } from './cerebrum/requestHintTier';
 import { recordHintRequestTool } from './cerebrum/recordHintRequest';
 import { recordBlunderTool } from './cerebrum/recordBlunder';
+import { drawArrowsTool } from './cerebrum/drawArrows';
+import { clearArrowsTool } from './cerebrum/clearArrows';
 
 /** Registered tools, ordered as in COACH-BRAIN-00. */
 export const COACH_TOOLS: Tool[] = [
@@ -56,6 +58,8 @@ export const COACH_TOOLS: Tool[] = [
   requestHintTierTool,
   recordHintRequestTool,
   recordBlunderTool,
+  drawArrowsTool,
+  clearArrowsTool,
 ];
 
 const TOOL_INDEX: Map<string, Tool> = new Map(COACH_TOOLS.map((t) => [t.name, t]));
