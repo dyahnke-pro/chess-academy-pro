@@ -138,7 +138,20 @@ export type AuditKind =
   // (capabilities present) but failed at runtime, so the engine
   // re-spawned the single-threaded bundle. Capped at one attempt
   // per session. (WO-STOCKFISH-RUNTIME-FALLBACK).
-  | 'stockfish-variant-fallback';
+  | 'stockfish-variant-fallback'
+  // Coach-turn resilience tiers (WO-COACH-TURN-RESILIENCE-ON-STOCKFISH-FAIL).
+  // The full coachService.ask returned a play_move but the
+  // Stockfish engine itself was not in the 'ready' state — i.e. the
+  // brain played without engine ground truth.
+  | 'coach-move-stockfish-bypassed'
+  // Tier 1 (full ask) didn't return a play_move within 15s, so the
+  // engine fell through to a tighter LLM-only ask with a strong
+  // "play directly via play_move" instruction and a 5s budget.
+  | 'coach-move-llm-fallback'
+  // Tier 2 also didn't return a play_move within 5s. Last-resort
+  // deterministic pick: top of local opening book if intendedOpening
+  // is set, otherwise a random legal move so the game never freezes.
+  | 'coach-move-emergency-pick';
 
 export interface AuditEntry {
   timestamp: number;
