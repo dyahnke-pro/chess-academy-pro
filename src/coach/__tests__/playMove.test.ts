@@ -1,10 +1,10 @@
 /**
- * play_move tool tests (WO-BRAIN-04).
+ * play_move tool tests (WO-BRAIN-04 + WO-CEREBRUM-GRACEFUL-NOOP).
  *
  * Verifies the tool, post-stub:
  *   - Rejects empty SAN.
- *   - Errors when no `onPlayMove` callback is wired (the tool can't
- *     silently no-op or surfaces would think their move played).
+ *   - Returns ok=true with stub=true when no `onPlayMove` callback
+ *     is wired (constitution: surface absence is not a failure).
  *   - Validates SAN against `liveFen` via chess.js before invoking
  *     the surface callback (illegal SANs never reach the callback).
  *   - Invokes `onPlayMove` with the SAN and surfaces its result.
@@ -28,10 +28,13 @@ describe('play_move tool (real)', () => {
     expect(result.error).toMatch(/san is required/);
   });
 
-  it('errors when no onPlayMove callback is wired', async () => {
+  it('graceful no-op when no onPlayMove callback is wired (stub=true)', async () => {
     const result = await playMoveTool.execute({ san: 'e4' }, { liveFen: STARTING_FEN });
-    expect(result.ok).toBe(false);
-    expect(result.error).toMatch(/no onPlayMove callback/);
+    expect(result.ok).toBe(true);
+    const payload = result.result as { stub?: boolean; requested?: { san?: string }; reason?: string };
+    expect(payload.stub).toBe(true);
+    expect(payload.requested?.san).toBe('e4');
+    expect(payload.reason).toMatch(/no onPlayMove callback/);
   });
 
   it('rejects illegal SAN against the live FEN before calling the callback', async () => {

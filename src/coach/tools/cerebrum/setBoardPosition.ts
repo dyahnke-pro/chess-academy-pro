@@ -36,7 +36,23 @@ export const setBoardPositionTool: Tool = {
     }
 
     if (!ctx?.onSetBoardPosition) {
-      return { ok: false, error: 'no onSetBoardPosition callback wired' };
+      // Constitution: graceful no-op when the surface didn't wire
+      // a position-set callback. See navigateToRouteTool for the
+      // canonical pattern.
+      void logAppAudit({
+        kind: 'coach-brain-tool-called',
+        category: 'subsystem',
+        source: 'setBoardPositionTool.execute',
+        summary: `STUB set_board_position (no onSetBoardPosition callback)`,
+      });
+      return {
+        ok: true,
+        result: {
+          stub: true,
+          requested: { fen },
+          reason: 'no onSetBoardPosition callback on this surface',
+        },
+      };
     }
 
     try {

@@ -45,13 +45,23 @@ export const takeBackMoveTool: Tool = {
     const count = Math.max(1, Math.floor(rawCount));
 
     if (!ctx?.onTakeBackMove) {
+      // Constitution: graceful no-op when the surface didn't wire
+      // a take-back callback. See navigateToRouteTool for the
+      // canonical pattern.
       void logAppAudit({
         kind: 'coach-brain-tool-called',
         category: 'subsystem',
-        source: 'takeBackMoveTool',
-        summary: `take_back_move count=${count} — no callback wired`,
+        source: 'takeBackMoveTool.execute',
+        summary: `STUB take_back_move count=${count} (no onTakeBackMove callback)`,
       });
-      return { ok: false, error: 'no onTakeBackMove callback wired' };
+      return {
+        ok: true,
+        result: {
+          stub: true,
+          requested: { count },
+          reason: 'no onTakeBackMove callback on this surface',
+        },
+      };
     }
 
     try {

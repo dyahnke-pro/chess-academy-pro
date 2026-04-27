@@ -47,18 +47,25 @@ export const playMoveTool: Tool = {
     if (!san) return { ok: false, error: 'san is required' };
 
     if (!ctx?.onPlayMove) {
+      // Constitution: surface absence is not a failure. Match the
+      // navigateToRoute stub pattern so the LLM sees ok=true and
+      // continues the turn instead of apologizing for a missing
+      // callback. Surfaces that genuinely need the move played (live
+      // game) wire onPlayMove; surfaces that don't (walkthrough,
+      // ping, phase-narration) get a synthetic ack.
       void logAppAudit({
         kind: 'coach-brain-tool-called',
         category: 'subsystem',
-        source: 'playMoveTool',
-        summary: `play_move ${san} — no onPlayMove callback`,
-        details:
-          'The calling surface did not pass an onPlayMove callback to coachService.ask, so the move cannot be played.',
+        source: 'playMoveTool.execute',
+        summary: `STUB play_move ${san} (no onPlayMove callback)`,
       });
       return {
-        ok: false,
-        error:
-          'no onPlayMove callback wired — calling surface must pass one in coachService.ask options',
+        ok: true,
+        result: {
+          stub: true,
+          requested: { san },
+          reason: 'no onPlayMove callback on this surface',
+        },
       };
     }
 

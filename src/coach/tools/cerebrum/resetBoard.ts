@@ -26,7 +26,22 @@ export const resetBoardTool: Tool = {
     });
 
     if (!ctx?.onResetBoard) {
-      return { ok: false, error: 'no onResetBoard callback wired' };
+      // Constitution: graceful no-op when the surface didn't wire
+      // a reset callback. See navigateToRouteTool for the canonical
+      // pattern.
+      void logAppAudit({
+        kind: 'coach-brain-tool-called',
+        category: 'subsystem',
+        source: 'resetBoardTool.execute',
+        summary: 'STUB reset_board (no onResetBoard callback)',
+      });
+      return {
+        ok: true,
+        result: {
+          stub: true,
+          reason: 'no onResetBoard callback on this surface',
+        },
+      };
     }
     try {
       const result = await Promise.resolve(ctx.onResetBoard());
