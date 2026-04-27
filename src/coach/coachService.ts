@@ -31,6 +31,12 @@ import { assembleEnvelope } from './envelope';
 import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
+import { classifyQuestion } from './grounding/questionClassifier';
+import {
+  defaultGroundingFetcher,
+  formatGroundingContext,
+  type GroundingFetcher,
+} from './grounding/forceGrounding';
 import type {
   AssembledEnvelope,
   CoachAnswer,
@@ -107,6 +113,11 @@ export interface CoachServiceOptions {
   /** WO-FOUNDATION-02 trace harness — surface-supplied UUID for
    *  joining audit entries across the pipeline. */
   traceId?: string;
+  /** WO-MANDATORY-GROUNDING — override the Stockfish + Lichess
+   *  fetcher used to populate `envelope.groundingContext` on tactical /
+   *  opening questions. Tests inject stubs; production uses the
+   *  default that lazy-imports the real services. */
+  groundingFetcher?: GroundingFetcher;
 }
 
 /** Format a list of tool results plus the LLM's previous text into a
@@ -169,23 +180,77 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // surface chose to forward (real LLM round-trips), so router
   // bypass-LLM logic at this layer was dead code.
 
-  const envelope = assembleEnvelope({
+  const baseEnvelope = assembleEnvelope({
     identity: options.identity,
     toolbelt: getToolDefinitions(),
     input,
   });
 
+  // WO-MANDATORY-GROUNDING — classify the user's ask and pre-fetch
+  // Stockfish / Lichess grounding when the question is tactical or
+  // opening-related. The result lands on `envelope.groundingContext`
+  // which the system-prompt formatter prepends after the identity
+  // block. The LLM then physically receives the grounding alongside
+  // the question and cannot answer evaluation-flavored asks without
+  // it being in context.
+  //
+  // Failure mode: if either fetcher returns null (Stockfish crash,
+  // Lichess 401, network timeout), the formatter emits explicit
+  // "unavailable" markers so the LLM knows what's missing rather than
+  // fabricating an eval. Belt-and-suspenders with the existing
+  // identity rule that mandates engine grounding for tactical claims.
+  const classification = classifyQuestion(input.ask);
+  const fen = input.liveState.fen;
+  let groundingContext: string | undefined;
+  if ((classification.needsStockfish || classification.needsLichess) && fen) {
+    const fetcher = options.groundingFetcher ?? defaultGroundingFetcher;
+    const [stockfish, lichess] = await Promise.all([
+      classification.needsStockfish ? fetcher.stockfishEval(fen) : Promise.resolve(null),
+      classification.needsLichess ? fetcher.lichessOpeningLookup(fen) : Promise.resolve(null),
+    ]);
+    groundingContext = formatGroundingContext({ stockfish, lichess });
+    void logAppAudit({
+      kind: 'grounding-forced',
+      category: 'subsystem',
+      source: 'coachService.classifier',
+      summary: `needsStockfish=${classification.needsStockfish} needsLichess=${classification.needsLichess} fen=${fen.slice(0, 30)}`,
+      details: JSON.stringify({
+        reason: classification.reason,
+        stockfishOk: stockfish !== null,
+        lichessOk: lichess !== null,
+      }),
+    });
+  } else if (classification.needsStockfish || classification.needsLichess) {
+    // Classifier matched but no FEN — record it so we can see how often
+    // a tactical question lands on a surface that didn't supply a FEN.
+    void logAppAudit({
+      kind: 'grounding-forced',
+      category: 'subsystem',
+      source: 'coachService.classifier',
+      summary: `needsStockfish=${classification.needsStockfish} needsLichess=${classification.needsLichess} fen=none`,
+      details: JSON.stringify({
+        reason: classification.reason,
+        skipped: 'no-fen',
+      }),
+    });
+  }
+
+  const envelope: AssembledEnvelope = groundingContext
+    ? { ...baseEnvelope, groundingContext }
+    : baseEnvelope;
+
   void logAppAudit({
     kind: 'coach-brain-envelope-assembled',
     category: 'subsystem',
     source: 'coachService.ask',
-    summary: `assembled (${envelope.toolbelt.length} tools, ${envelope.appMap.length} routes)`,
+    summary: `assembled (${envelope.toolbelt.length} tools, ${envelope.appMap.length} routes${groundingContext ? ', grounded' : ''})`,
     details: JSON.stringify({
       toolbeltSize: envelope.toolbelt.length,
       appMapSize: envelope.appMap.length,
       hasIntendedOpening: envelope.memory.intendedOpening !== null,
       hintRequestCount: envelope.memory.hintRequests.length,
       conversationHistorySize: envelope.memory.conversationHistory.length,
+      grounded: !!groundingContext,
     }),
   });
 

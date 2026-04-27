@@ -72,6 +72,13 @@ export interface AssembledEnvelope {
   liveState: LiveState;
   toolbelt: ToolDefinition[];
   ask: string;
+  /** Pre-fetched grounding data the spine attaches when the question
+   *  classifier flags the user's ask as tactical (Stockfish) and/or
+   *  opening-related (Lichess). The provider's prompt builder prepends
+   *  this block to the system message so the LLM physically sees the
+   *  engine + opening data alongside the question and cannot answer
+   *  without it being in context. WO-MANDATORY-GROUNDING. */
+  groundingContext?: string;
 }
 
 // ─── Tools ──────────────────────────────────────────────────────────────────

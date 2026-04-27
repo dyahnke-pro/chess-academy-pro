@@ -126,7 +126,12 @@ export type AuditKind =
   // Surface migration trail (WO-BRAIN-02 onwards). Fired once per call
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
-  | 'coach-surface-migrated';
+  | 'coach-surface-migrated'
+  // WO-MANDATORY-GROUNDING — fired when the spine pre-fetches Stockfish
+  // / Lichess data based on the question classifier and injects it into
+  // `envelope.groundingContext`. Carries which channel(s) fired and
+  // whether each fetch succeeded so we can audit grounding coverage.
+  | 'grounding-forced';
 
 export interface AuditEntry {
   timestamp: number;

@@ -172,15 +172,21 @@ function formatToolbeltBlock(toolbelt: ToolDefinition[]): string {
 
 /** Render the envelope's stable parts (identity, app map, toolbelt) as
  *  a system prompt. Memory + live state + ask go in the user message
- *  so they don't bloat the system-prompt cache. */
+ *  so they don't bloat the system-prompt cache.
+ *
+ *  WO-MANDATORY-GROUNDING: when the spine pre-fetched Stockfish /
+ *  Lichess data based on the question classifier, the result is
+ *  prepended after the identity prompt. Per-call data, so it does
+ *  break the system-prompt cache for that call — accepted as the cost
+ *  of structural grounding that the LLM physically cannot ignore. */
 export function formatEnvelopeAsSystemPrompt(envelope: AssembledEnvelope): string {
-  return [
-    envelope.identity,
-    '',
-    formatAppMapBlock(envelope.appMap),
-    '',
-    formatToolbeltBlock(envelope.toolbelt),
-  ].join('\n');
+  const sections: string[] = [envelope.identity];
+  if (envelope.groundingContext) {
+    sections.push('', envelope.groundingContext);
+  }
+  sections.push('', formatAppMapBlock(envelope.appMap));
+  sections.push('', formatToolbeltBlock(envelope.toolbelt));
+  return sections.join('\n');
 }
 
 /** Render the envelope's per-call parts (memory, live state, ask) as
