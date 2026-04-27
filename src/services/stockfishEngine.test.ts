@@ -966,3 +966,54 @@ describe('StockfishEngine', () => {
     });
   });
 });
+
+// ---------------------------------------------------------------------------
+// resolveWorkerUrl — runtime detection of multi vs single-threaded variant
+// ---------------------------------------------------------------------------
+
+describe('resolveWorkerUrl', () => {
+  it('returns single-threaded variant when window is undefined (SSR / no-window)', async () => {
+    vi.stubGlobal('window', undefined);
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('single');
+    expect(result.url).toBe('/stockfish/stockfish-18-lite-single.js');
+    expect(result.reason).toBe('no-window');
+  });
+
+  it('returns multi-threaded variant when crossOriginIsolated and SharedArrayBuffer are both available', async () => {
+    vi.stubGlobal('window', { crossOriginIsolated: true });
+    vi.stubGlobal('SharedArrayBuffer', class {});
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('multi');
+    expect(result.url).toBe('/stockfish/stockfish-18-lite.js');
+    expect(result.reason).toContain('crossOriginIsolated');
+    expect(result.reason).toContain('SharedArrayBuffer');
+  });
+
+  it('falls back to single-threaded variant when crossOriginIsolated is false', async () => {
+    vi.stubGlobal('window', { crossOriginIsolated: false });
+    vi.stubGlobal('SharedArrayBuffer', class {});
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('single');
+    expect(result.url).toBe('/stockfish/stockfish-18-lite-single.js');
+    expect(result.reason).toContain('multi-thread requirements not met');
+    expect(result.reason).toContain('crossOriginIsolated=false');
+  });
+
+  it('falls back to single-threaded variant when SharedArrayBuffer is undefined (even with isolation)', async () => {
+    vi.stubGlobal('window', { crossOriginIsolated: true });
+    vi.stubGlobal('SharedArrayBuffer', undefined);
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('single');
+    expect(result.url).toBe('/stockfish/stockfish-18-lite-single.js');
+    expect(result.reason).toContain('SharedArrayBuffer=false');
+  });
+});

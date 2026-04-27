@@ -29,8 +29,38 @@ interface QueueEntry {
 }
 
 const INIT_TIMEOUT_MS = 45_000;
-const WORKER_URL = '/stockfish/stockfish-18-lite.js';
+const STOCKFISH_MT_URL = '/stockfish/stockfish-18-lite.js';
+const STOCKFISH_ST_URL = '/stockfish/stockfish-18-lite-single.js';
 const MAX_CRASH_RETRIES = 3;
+
+export type StockfishVariant = 'multi' | 'single';
+
+export interface ResolvedWorker {
+  url: string;
+  variant: StockfishVariant;
+  reason: string;
+}
+
+export function resolveWorkerUrl(): ResolvedWorker {
+  if (typeof window === 'undefined') {
+    return { url: STOCKFISH_ST_URL, variant: 'single', reason: 'no-window' };
+  }
+  const isolated =
+    (window as { crossOriginIsolated?: boolean }).crossOriginIsolated === true;
+  const sabAvailable = typeof SharedArrayBuffer !== 'undefined';
+  if (isolated && sabAvailable) {
+    return {
+      url: STOCKFISH_MT_URL,
+      variant: 'multi',
+      reason: 'crossOriginIsolated + SharedArrayBuffer available',
+    };
+  }
+  return {
+    url: STOCKFISH_ST_URL,
+    variant: 'single',
+    reason: `multi-thread requirements not met (crossOriginIsolated=${isolated}, SharedArrayBuffer=${sabAvailable})`,
+  };
+}
 
 class StockfishEngine {
   private worker: Worker | null = null;
@@ -51,6 +81,9 @@ class StockfishEngine {
   // Set true once the engine has surfaced "engine unavailable" so we
   // don't keep trying to reinit on every analyze call.
   private _permanentlyUnavailable = false;
+  // Which Stockfish bundle the current worker was spawned from. Used
+  // to gate multi-thread-only setoptions during the init handshake.
+  private workerVariant: StockfishVariant = 'single';
 
   get status(): StockfishStatus {
     return this._status;
@@ -88,8 +121,20 @@ class StockfishEngine {
         reject(new Error(msg));
       }, INIT_TIMEOUT_MS);
 
+      const resolved = resolveWorkerUrl();
+      this.workerVariant = resolved.variant;
+      console.log(
+        `[Stockfish] Using ${resolved.variant}-threaded variant: ${resolved.reason}`,
+      );
+      void logAppAudit({
+        kind: 'stockfish-variant-resolved',
+        category: 'subsystem',
+        source: 'stockfishEngine.initialize',
+        summary: `variant=${resolved.variant} reason=${resolved.reason}`,
+      });
+
       try {
-        this.worker = new Worker(WORKER_URL);
+        this.worker = new Worker(resolved.url);
 
         this.worker.onmessage = (event: MessageEvent<string>) => {
           this.handleMessage(event.data);
@@ -118,12 +163,18 @@ class StockfishEngine {
 
         const initHandler = (event: MessageEvent<string>): void => {
           if (event.data === 'uciok') {
-            this.send(`setoption name Threads value ${threadCount}`);
-            this.send(`setoption name Hash value ${hashMb}`);
+            if (this.workerVariant === 'multi') {
+              this.send(`setoption name Threads value ${threadCount}`);
+              this.send(`setoption name Hash value ${hashMb}`);
+              console.log(
+                `[Stockfish] threads=${threadCount} hash=${hashMb}MB`,
+              );
+            } else {
+              console.log(
+                '[Stockfish] single-threaded variant — skipping Threads/Hash setup',
+              );
+            }
             this.send('setoption name MultiPV value 3');
-            console.log(
-              `[Stockfish] threads=${threadCount} hash=${hashMb}MB`,
-            );
             this.send('isready');
             return;
           }
@@ -132,7 +183,9 @@ class StockfishEngine {
             this.worker?.removeEventListener('message', initHandler);
             this.isReady = true;
             this._crashRetries = 0;
-            console.log('[Stockfish] Engine ready (lite multi-threaded WASM)');
+            console.log(
+              `[Stockfish] Engine ready (${this.workerVariant}-threaded WASM)`,
+            );
             this.setStatus('ready');
             resolve();
           }
