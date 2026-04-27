@@ -27,7 +27,13 @@ export const stockfishEvalTool: Tool = {
       return { ok: false, error: 'fen is required' };
     }
     try {
-      const analysis = await stockfishEngine.queueAnalysis(fen, depth);
+      // WO-STOCKFISH-SWAP-AND-PERF (part 5): brain-facing eval
+      // budgets at 300ms. If the search hasn't returned by then,
+      // Stockfish is forced to emit bestmove from its current best
+      // line (sent via `stop`), and we return what it had. Direct
+      // engine callers (post-game review, hint system) keep using
+      // queueAnalysis / analyzePosition without a budget.
+      const analysis = await stockfishEngine.analyzeWithBudget(fen, depth, 300);
       return {
         ok: true,
         result: {

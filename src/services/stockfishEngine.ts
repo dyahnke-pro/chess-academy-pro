@@ -328,6 +328,49 @@ class StockfishEngine {
     }
   }
 
+  /**
+   * WO-STOCKFISH-SWAP-AND-PERF (part 5): brain-facing budgeted eval.
+   *
+   * 1. Cache hit → return synchronously via a resolved promise.
+   * 2. Cache miss → fire `analyzePosition` and start a budget timer.
+   *    When the timer fires, send `stop` to Stockfish so it emits
+   *    `bestmove` with whatever depth it reached. The engine's
+   *    bestmove handler resolves the underlying promise normally —
+   *    the budget just cuts the deepening search short.
+   *
+   * The budget intentionally affects the engine globally (any
+   * concurrent analysis will be interrupted). Brain calls go through
+   * here; UI eval calls (post-game review, hint system) keep
+   * `analyzePosition` directly so they aren't budget-capped.
+   */
+  async analyzeWithBudget(
+    fen: string,
+    depth: number,
+    budgetMs: number = 300,
+  ): Promise<StockfishAnalysis> {
+    const cached = stockfishCache.get(fen, depth);
+    if (cached) {
+      void logAppAudit({
+        kind: 'stockfish-cache-hit',
+        category: 'subsystem',
+        source: 'stockfishEngine.analyzeWithBudget',
+        summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
+      });
+      return cached;
+    }
+    const promise = this.analyzePosition(fen, depth);
+    const timer = setTimeout(() => {
+      // Force Stockfish to emit bestmove from current best line.
+      this.stop();
+    }, budgetMs);
+    try {
+      const result = await promise;
+      return result;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   destroy(): void {
     this.stop();
     // Reject the currently running analysis, if any
