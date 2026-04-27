@@ -1,5 +1,7 @@
 import type { StockfishAnalysis, AnalysisLine } from '../types';
 import { MATE_EVAL_VALUE } from './engineConstants';
+import { stockfishCache } from './stockfishCache';
+import { logAppAudit } from './appAuditor';
 
 type StockfishMessageHandler = (analysis: StockfishAnalysis) => void;
 type StockfishStatus = 'idle' | 'loading' | 'ready' | 'error';
@@ -12,6 +14,11 @@ interface PendingAnalysis {
   bestMove: string;
   depth: number;
   blackToMove: boolean;
+  /** FEN + requested depth, captured so the bestmove handler can
+   *  populate the LRU cache once analysis completes. Skipped when
+   *  the call carried per-analysis options (Skill Level, etc.). */
+  cacheFen?: string;
+  cacheDepth?: number;
 }
 
 interface QueueEntry {
@@ -191,6 +198,31 @@ class StockfishEngine {
     depth: number = 18,
     options?: Record<string, string | number>,
   ): Promise<StockfishAnalysis> {
+    // FEN cache short-circuit — if we've already analyzed this exact
+    // position+depth, return the cached result without invoking the
+    // worker. Per-analysis `options` (e.g. Skill Level overrides) are
+    // intentionally NOT part of the key — those callers should bypass
+    // by passing a cache-skip sentinel if needed. Today only the brain
+    // and prefetch path call without options.
+    if (!options) {
+      const hit = stockfishCache.get(fen, depth);
+      if (hit) {
+        void logAppAudit({
+          kind: 'stockfish-cache-hit',
+          category: 'subsystem',
+          source: 'stockfishCache',
+          summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
+        });
+        return hit;
+      }
+      void logAppAudit({
+        kind: 'stockfish-cache-miss',
+        category: 'subsystem',
+        source: 'stockfishCache',
+        summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
+      });
+    }
+
     await this.initialize();
 
     return new Promise((resolve, reject) => {
@@ -217,6 +249,8 @@ class StockfishEngine {
         bestMove: '',
         depth: 0,
         blackToMove,
+        cacheFen: options ? undefined : fen,
+        cacheDepth: options ? undefined : depth,
       };
 
       this.send('ucinewgame');
@@ -387,6 +421,10 @@ class StockfishEngine {
         topLines: normalizedLines,
         nodesPerSecond: 0,
       };
+
+      if (this.pending.cacheFen !== undefined && this.pending.cacheDepth !== undefined) {
+        stockfishCache.set(this.pending.cacheFen, this.pending.cacheDepth, analysis);
+      }
 
       this.pending.resolve(analysis);
       this.pending = null;

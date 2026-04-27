@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { stockfishCache } from './stockfishCache';
 import type { StockfishAnalysis } from '../types';
 
 // ---------------------------------------------------------------------------
@@ -74,6 +75,10 @@ let workerConstructorCallCount: number;
 beforeEach(() => {
   mockWorker = createMockWorker();
   workerConstructorCallCount = 0;
+  // The engine populates a module-level FEN cache on bestmove. Clear
+  // it between tests so a previous test's analysis result doesn't
+  // short-circuit the worker dispatch under test.
+  stockfishCache.clear();
 
   // Use a class so `new Worker(...)` works properly
   vi.stubGlobal(
@@ -911,11 +916,18 @@ describe('StockfishEngine', () => {
         }
       });
 
-      const p1 = stockfishEngine.queueAnalysis(STARTING_FEN).then((r) => {
+      // Distinct FENs so the LRU cache can't short-circuit the second
+      // analysis — we're testing serialization through the worker, not
+      // cache hits. Same FEN at the same depth would be a cache hit on
+      // the second request after the first populates the cache.
+      const FEN_A = STARTING_FEN;
+      const FEN_B =
+        'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
+      const p1 = stockfishEngine.queueAnalysis(FEN_A).then((r) => {
         order.push('p1-resolved');
         return r;
       });
-      const p2 = stockfishEngine.queueAnalysis(STARTING_FEN).then((r) => {
+      const p2 = stockfishEngine.queueAnalysis(FEN_B).then((r) => {
         order.push('p2-resolved');
         return r;
       });
