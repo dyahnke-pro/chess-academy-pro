@@ -44,6 +44,8 @@ import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { coachService } from '../../coach/coachService';
+import { withTimeout } from '../../coach/withTimeout';
+import { emergencyPickMove } from '../../coach/coachTurnFallback';
 import type { LiveState } from '../../coach/types';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { getScenarioTemplate } from '../../services/coachTemplates';
@@ -64,10 +66,14 @@ import { detectTrapInPosition, formatTrapForPrompt, type MoveEvaluation } from '
  *  degrades to ungrounded prose rather than stalling the turn. */
 const LICHESS_FETCH_TIMEOUT_MS = 2500;
 
-/** Race a promise against a timeout. Matches coachContextEnricher's
- *  withTimeout helper — not imported to avoid cross-module coupling
- *  for a 3-line util. */
-function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+/** Race a fetch-style promise against a timeout, throwing 'timeout'
+ *  on expiry. Matches coachContextEnricher's withFetchTimeout helper.
+ *  Distinct from `../../coach/withTimeout` (which returns a
+ *  discriminated `{ ok: true | false }` result) — this one is used
+ *  by Lichess cloud-eval / explorer fetches that already use
+ *  try / catch and want a thrown error on timeout, not a
+ *  status-coded value. */
+function withFetchTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return Promise.race([
     promise,
     new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
@@ -105,7 +111,7 @@ async function evaluateExplorerCandidates(
       const moved = board.move(san);
       if (!moved) return null;
       const resultingFen = board.fen();
-      const eval_ = await withTimeout(fetchCloudEval(resultingFen, 1), LICHESS_FETCH_TIMEOUT_MS);
+      const eval_ = await withFetchTimeout(fetchCloudEval(resultingFen, 1), LICHESS_FETCH_TIMEOUT_MS);
       if (!eval_ || !eval_.pvs || eval_.pvs.length === 0) return null;
       // cloud-eval cp is from WHITE's POV. Flip for black movers so
       // the detector gets a "this was good/bad for the MOVER" number.
@@ -1538,34 +1544,108 @@ export function CoachGamePage(): JSX.Element {
           }),
           fen: game.fen,
         });
+        // WO-COACH-RESILIENCE — three-tier fallback chain so the
+        // coach never hangs mid-game. PR #344 shipped audit kind
+        // names without implementation; this is the real layer.
+        // Primary ask = 15 s; Level 1 (no stockfish) = 10 s;
+        // Level 2 (no data tools, system addendum) = 8 s;
+        // Level 3 = deterministic legal move from chess.js.
+        const askInput = {
+          surface: 'move-selector' as const,
+          ask: moveSelectorAsk,
+          liveState: moveSelectorLiveState,
+        };
+        const onPlayMoveCallback = (san: string): { ok: boolean; reason?: string } => {
+          // Validate against the live FEN. The play_move tool already
+          // validated, but board state may have shifted between
+          // turns; double-check.
+          try {
+            const probe = new Chess(game.fen);
+            const result = probe.move(san);
+            if (!result) return { ok: false, reason: 'illegal at apply time' };
+            brainPickSan = san;
+            return { ok: true };
+          } catch (err) {
+            return {
+              ok: false,
+              reason: err instanceof Error ? err.message : String(err),
+            };
+          }
+        };
+        const baseOptions = {
+          maxToolRoundTrips: 3,
+          onPlayMove: onPlayMoveCallback,
+        };
+
         try {
-          await coachService.ask(
-            {
-              surface: 'move-selector',
-              ask: moveSelectorAsk,
-              liveState: moveSelectorLiveState,
-            },
-            {
-              maxToolRoundTrips: 3,
-              onPlayMove: (san: string) => {
-                // Validate against the live FEN. The play_move tool
-                // already validated, but board state may have shifted
-                // between turns; double-check.
-                try {
-                  const probe = new Chess(game.fen);
-                  const result = probe.move(san);
-                  if (!result) return { ok: false, reason: 'illegal at apply time' };
-                  brainPickSan = san;
-                  return { ok: true };
-                } catch (err) {
-                  return {
-                    ok: false,
-                    reason: err instanceof Error ? err.message : String(err),
-                  };
-                }
-              },
-            },
+          // Primary: full toolbelt, 15 s budget.
+          const primary = await withTimeout(
+            coachService.ask(askInput, baseOptions),
+            15_000,
+            'coach-turn-ask',
           );
+          if (!primary.ok) {
+            // Level 1 — Stockfish bypass.
+            void logAppAudit({
+              kind: 'coach-move-stockfish-bypassed',
+              category: 'subsystem',
+              source: 'CoachGamePage.coachTurn',
+              summary: 'primary ask timed out, retrying without stockfish_eval',
+              fen: game.fen,
+            });
+            const lvl1 = await withTimeout(
+              coachService.ask(askInput, {
+                ...baseOptions,
+                excludeTools: ['stockfish_eval'],
+              }),
+              10_000,
+              'coach-move-stockfish-bypassed',
+            );
+            if (!lvl1.ok && !brainPickSan) {
+              // Level 2 — pure-LLM, no data tools, system addendum.
+              const llmOnlyAsk =
+                moveSelectorAsk +
+                "\n\nEngine and database are unavailable. Play a sensible move at this student's level using your own chess knowledge. Use the play_move tool.";
+              void logAppAudit({
+                kind: 'coach-move-llm-fallback',
+                category: 'subsystem',
+                source: 'CoachGamePage.coachTurn',
+                summary: 'level 1 also timed out, retrying with LLM only (no data tools)',
+                fen: game.fen,
+              });
+              const lvl2 = await withTimeout(
+                coachService.ask(
+                  { ...askInput, ask: llmOnlyAsk },
+                  {
+                    ...baseOptions,
+                    excludeTools: [
+                      'stockfish_eval',
+                      'lichess_opening_lookup',
+                      'lichess_master_games',
+                      'lichess_puzzle_fetch',
+                      'local_opening_book',
+                    ],
+                  },
+                ),
+                8_000,
+                'coach-move-llm-fallback',
+              );
+              if (!lvl2.ok && !brainPickSan) {
+                // Level 3 — deterministic emergency pick.
+                const emergencySan = emergencyPickMove(game.fen, game.history);
+                void logAppAudit({
+                  kind: 'coach-move-emergency-pick',
+                  category: 'subsystem',
+                  source: 'CoachGamePage.coachTurn',
+                  summary: `level 2 also timed out, deterministic pick=${emergencySan ?? 'null'}`,
+                  fen: game.fen,
+                });
+                if (emergencySan) {
+                  brainPickSan = emergencySan;
+                }
+              }
+            }
+          }
         } catch (err: unknown) {
           console.warn('[CoachGame] move-selector spine call failed:', err);
         }
@@ -1914,7 +1994,7 @@ export function CoachGamePage(): JSX.Element {
         const groundedNotes: string[] = [];
         if (inOpeningTeaching) {
           try {
-            const explorer = await withTimeout(
+            const explorer = await withFetchTimeout(
               fetchLichessExplorer(probe.fen(), 'lichess'),
               LICHESS_FETCH_TIMEOUT_MS,
             );
