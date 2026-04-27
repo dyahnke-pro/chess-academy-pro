@@ -2189,6 +2189,27 @@ export function CoachGamePage(): JSX.Element {
 
   // Handle board move routing — explore mode, practice mode, or normal gameplay
   const handleBoardMoveRouted = useCallback((moveResult: MoveResult) => {
+    // WO-STOCKFISH-SWAP-AND-PERF (part 4): speculative prefetch.
+    // Kick off a depth-12 Stockfish eval against the post-move FEN
+    // before the brain runs. The full depth-18 eval the brain will
+    // request next is a different cache key, but Stockfish's internal
+    // hash table carries information across the two searches, so the
+    // deeper search lands faster. Fire-and-forget — failure is not
+    // fatal to the move flow.
+    const prefetchFen = moveResult.fen;
+    if (prefetchFen) {
+      void logAppAudit({
+        kind: 'stockfish-prefetch-fired',
+        category: 'subsystem',
+        source: 'CoachGamePage.prefetch',
+        summary: `fen=${prefetchFen.slice(0, 30)}... depth=12`,
+      });
+      void stockfishEngine
+        .analyzePosition(prefetchFen, 12)
+        .catch(() => {
+          /* prefetch is best-effort; engine errors handled by retry path */
+        });
+    }
     if (isExploreMode) {
       handleExploreMove(moveResult);
     } else if (practicePosition) {
