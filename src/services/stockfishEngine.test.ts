@@ -705,11 +705,11 @@ describe('StockfishEngine', () => {
   // Concurrent analysis
   // -----------------------------------------------------------------------
   describe('concurrent analysis', () => {
-    it('sends stop when a second analyzePosition interrupts the first', async () => {
+    it('sends stop when a brain analyzePosition interrupts an in-flight prefetch', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
-      // First analysis: respond to isready but let "go" hang
+      // First (prefetch) analysis: respond to isready but let "go" hang
       const pmMock = mockWorker.instance.postMessage as ReturnType<
         typeof vi.fn
       >;
@@ -720,12 +720,17 @@ describe('StockfishEngine', () => {
         }
       });
 
-      const firstAnalysis = stockfishEngine.analyzePosition(STARTING_FEN);
+      const firstAnalysis = stockfishEngine.analyzePosition(
+        STARTING_FEN,
+        12,
+        undefined,
+        'prefetch',
+      );
 
       // Let microtasks settle so first analysis is fully set up
       await new Promise((r) => setTimeout(r, 10));
 
-      // Second analysis: respond to everything
+      // Second (brain) analysis: respond to everything
       pmMock.mockImplementation((msg: string) => {
         mockWorker.postMessageCalls.push(msg);
         if (msg === 'isready') {
@@ -749,7 +754,7 @@ describe('StockfishEngine', () => {
       expect(mockWorker.postMessageCalls).toContain('stop');
     });
 
-    it('rejects the previous pending analysis', async () => {
+    it('rejects the previous pending prefetch when a brain call arrives', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
@@ -763,7 +768,12 @@ describe('StockfishEngine', () => {
         }
       });
 
-      const first = stockfishEngine.analyzePosition(STARTING_FEN);
+      const first = stockfishEngine.analyzePosition(
+        STARTING_FEN,
+        12,
+        undefined,
+        'prefetch',
+      );
 
       await new Promise((r) => setTimeout(r, 10));
 
@@ -964,5 +974,253 @@ describe('StockfishEngine', () => {
       await expect(p1).rejects.toThrow();
       await expect(p2).rejects.toThrow();
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// resolveWorkerUrl — runtime detection of multi vs single-threaded variant
+// ---------------------------------------------------------------------------
+
+describe('resolveWorkerUrl', () => {
+  it('returns single-threaded variant when window is undefined (SSR / no-window)', async () => {
+    vi.stubGlobal('window', undefined);
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('single');
+    expect(result.url).toBe('/stockfish/stockfish-18-lite-single.js');
+    expect(result.reason).toBe('no-window');
+  });
+
+  it('returns multi-threaded variant when crossOriginIsolated and SharedArrayBuffer are both available', async () => {
+    vi.stubGlobal('window', { crossOriginIsolated: true });
+    vi.stubGlobal('SharedArrayBuffer', class {});
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('multi');
+    expect(result.url).toBe('/stockfish/stockfish-18-lite.js');
+    expect(result.reason).toContain('crossOriginIsolated');
+    expect(result.reason).toContain('SharedArrayBuffer');
+  });
+
+  it('falls back to single-threaded variant when crossOriginIsolated is false', async () => {
+    vi.stubGlobal('window', { crossOriginIsolated: false });
+    vi.stubGlobal('SharedArrayBuffer', class {});
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('single');
+    expect(result.url).toBe('/stockfish/stockfish-18-lite-single.js');
+    expect(result.reason).toContain('multi-thread requirements not met');
+    expect(result.reason).toContain('crossOriginIsolated=false');
+  });
+
+  it('falls back to single-threaded variant when SharedArrayBuffer is undefined (even with isolation)', async () => {
+    vi.stubGlobal('window', { crossOriginIsolated: true });
+    vi.stubGlobal('SharedArrayBuffer', undefined);
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('single');
+    expect(result.url).toBe('/stockfish/stockfish-18-lite-single.js');
+    expect(result.reason).toContain('SharedArrayBuffer=false');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// analyzePosition — priority-based contention rules
+// ---------------------------------------------------------------------------
+
+describe('analyzePosition priority', () => {
+  it('drops an incoming prefetch when a brain eval is in flight', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+
+    // Hook postMessage to defer responses so we can inspect the
+    // intermediate state. The brain eval starts but does not resolve
+    // until we manually emit bestmove.
+    let goSeen = false;
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'isready') {
+        queueMicrotask(() => mockWorker.emit('readyok'));
+      }
+      if (msg.startsWith('go ')) {
+        goSeen = true;
+      }
+    });
+
+    const brain = stockfishEngine.analyzePosition(STARTING_FEN, 18);
+    // Let the brain eval reach `go` so this.pending is set with brain priority.
+    await vi.waitFor(() => {
+      expect(goSeen).toBe(true);
+    });
+
+    // Prefetch arrives while brain is in flight — should be dropped
+    // immediately with PrefetchDroppedError.
+    await expect(
+      stockfishEngine.analyzePosition(STARTING_FEN, 12, undefined, 'prefetch'),
+    ).rejects.toThrow(/prefetch dropped/i);
+
+    // Brain eval should still complete normally.
+    queueMicrotask(() =>
+      mockWorker.emit(
+        'info depth 18 multipv 1 score cp 30 pv e2e4 e7e5',
+      ),
+    );
+    queueMicrotask(() => mockWorker.emit('bestmove e2e4'));
+    const result = await brain;
+    expect(result.bestMove).toBe('e2e4');
+  });
+
+  it('cancels an in-flight prefetch when a brain call arrives', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+
+    let goCount = 0;
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'isready') {
+        queueMicrotask(() => mockWorker.emit('readyok'));
+      }
+      if (msg.startsWith('go ')) {
+        goCount++;
+      }
+    });
+
+    // Start a prefetch that we leave hanging.
+    const prefetch = stockfishEngine.analyzePosition(
+      STARTING_FEN,
+      12,
+      undefined,
+      'prefetch',
+    );
+    await vi.waitFor(() => {
+      expect(goCount).toBe(1);
+    });
+
+    // Brain arrives — should cancel the prefetch.
+    const brain = stockfishEngine.analyzePosition(STARTING_FEN, 18);
+
+    await expect(prefetch).rejects.toThrow(/Analysis interrupted/i);
+
+    // Drive brain to completion.
+    await vi.waitFor(() => {
+      expect(goCount).toBe(2);
+    });
+    queueMicrotask(() =>
+      mockWorker.emit(
+        'info depth 18 multipv 1 score cp 30 pv e2e4 e7e5',
+      ),
+    );
+    queueMicrotask(() => mockWorker.emit('bestmove e2e4'));
+    const result = await brain;
+    expect(result.bestMove).toBe('e2e4');
+  });
+
+  it('serializes brain-on-brain — in-flight brain completes before new brain starts', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+
+    const goFens: string[] = [];
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    let lastPositionFen = '';
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'isready') {
+        queueMicrotask(() => mockWorker.emit('readyok'));
+      }
+      const posMatch = /^position fen (.+)$/.exec(msg);
+      if (posMatch) {
+        lastPositionFen = posMatch[1];
+      }
+      if (msg.startsWith('go ')) {
+        goFens.push(lastPositionFen);
+      }
+    });
+
+    const FEN_A =
+      'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+    const FEN_B =
+      'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+    const brainA = stockfishEngine.analyzePosition(FEN_A, 18);
+    // Wait until brainA reaches `go`.
+    await vi.waitFor(() => {
+      expect(goFens).toEqual([FEN_A]);
+    });
+
+    // Brain B arrives while A is in flight. With cancel-on-new
+    // behavior it would supersede A; with serialization it must wait.
+    const brainB = stockfishEngine.analyzePosition(FEN_B, 18);
+
+    // Give the microtask queue a tick to process. B must NOT have
+    // started yet — only A's `go` should be on the wire.
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(goFens).toEqual([FEN_A]);
+
+    // Resolve brainA.
+    queueMicrotask(() =>
+      mockWorker.emit(
+        'info depth 18 multipv 1 score cp 30 pv e2e4 e7e5',
+      ),
+    );
+    queueMicrotask(() => mockWorker.emit('bestmove e2e4'));
+    const resultA = await brainA;
+    expect(resultA.bestMove).toBe('e2e4');
+
+    // Now B should start.
+    await vi.waitFor(() => {
+      expect(goFens).toEqual([FEN_A, FEN_B]);
+    });
+    queueMicrotask(() =>
+      mockWorker.emit(
+        'info depth 18 multipv 1 score cp 25 pv g1f3 b8c6',
+      ),
+    );
+    queueMicrotask(() => mockWorker.emit('bestmove g1f3'));
+    const resultB = await brainB;
+    expect(resultB.bestMove).toBe('g1f3');
+  });
+
+  it('default priority is brain (no explicit priority arg behaves like brain)', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+
+    let goCount = 0;
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'isready') {
+        queueMicrotask(() => mockWorker.emit('readyok'));
+      }
+      if (msg.startsWith('go ')) {
+        goCount++;
+      }
+    });
+
+    // No explicit priority — defaults to 'brain'.
+    const first = stockfishEngine.analyzePosition(STARTING_FEN, 18);
+    await vi.waitFor(() => {
+      expect(goCount).toBe(1);
+    });
+
+    // A subsequent prefetch must be dropped — proving the first
+    // call was treated as brain priority.
+    await expect(
+      stockfishEngine.analyzePosition(STARTING_FEN, 12, undefined, 'prefetch'),
+    ).rejects.toThrow(/prefetch dropped/i);
+
+    queueMicrotask(() =>
+      mockWorker.emit(
+        'info depth 18 multipv 1 score cp 30 pv e2e4 e7e5',
+      ),
+    );
+    queueMicrotask(() => mockWorker.emit('bestmove e2e4'));
+    await first;
   });
 });

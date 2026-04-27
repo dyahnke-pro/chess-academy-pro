@@ -130,7 +130,10 @@ export type AuditKind =
   // Stockfish performance instrumentation (WO-STOCKFISH-SWAP-AND-PERF).
   | 'stockfish-cache-hit'
   | 'stockfish-cache-miss'
-  | 'stockfish-prefetch-fired';
+  | 'stockfish-prefetch-fired'
+  // Stockfish multi-thread / single-thread variant resolution
+  // (WO-STOCKFISH-SAB-FALLBACK).
+  | 'stockfish-variant-resolved';
 
 export interface AuditEntry {
   timestamp: number;
