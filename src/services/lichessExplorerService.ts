@@ -8,6 +8,20 @@ const LICHESS_API_BASE = 'https://lichess.org/api';
  *  with their own timeout still get protection at the service edge. */
 const LICHESS_FETCH_TIMEOUT_MS = 5000;
 
+/** Lichess API ToS asks for an identifying User-Agent. Audit Finding
+ *  28 from production showed `lichess_opening_lookup` returning 401
+ *  on the explorer endpoints; per Lichess docs the public explorer
+ *  doesn't actually require auth, but the gateway will refuse
+ *  requests without a User-Agent it recognizes as a real client.
+ *  WO-COACH-RESILIENCE part D. */
+const LICHESS_USER_AGENT =
+  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app)';
+
+const LICHESS_HEADERS: Record<string, string> = {
+  Accept: 'application/json',
+  'User-Agent': LICHESS_USER_AGENT,
+};
+
 export type ExplorerSource = 'lichess' | 'masters';
 
 /**
@@ -25,7 +39,7 @@ export async function fetchLichessExplorer(
   }
   const url = `${EXPLORER_BASE}/${source}?${params.toString()}`;
   const response = await fetch(url, {
-    headers: { Accept: 'application/json' },
+    headers: LICHESS_HEADERS,
     signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
   });
   if (!response.ok) {
@@ -46,7 +60,7 @@ export async function fetchCloudEval(
   const params = new URLSearchParams({ fen, multiPv: String(multiPv) });
   const url = `${LICHESS_API_BASE}/cloud-eval?${params.toString()}`;
   const response = await fetch(url, {
-    headers: { Accept: 'application/json' },
+    headers: LICHESS_HEADERS,
     signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
   });
   if (response.status === 404) return null;

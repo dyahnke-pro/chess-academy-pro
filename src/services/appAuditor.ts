@@ -138,7 +138,21 @@ export type AuditKind =
   // (capabilities present) but failed at runtime, so the engine
   // re-spawned the single-threaded bundle. Capped at one attempt
   // per session. (WO-STOCKFISH-RUNTIME-FALLBACK).
-  | 'stockfish-variant-fallback';
+  | 'stockfish-variant-fallback'
+  // Coach-turn resilience — three-tier fallback chain that ensures
+  // the coach never hangs mid-game when Stockfish stalls or any
+  // other tool dispatch hangs. (WO-COACH-RESILIENCE).
+  // Level 1: primary 15 s ask timed out; retrying without
+  // stockfish_eval (the most common stall vector when the engine is
+  // hung).
+  | 'coach-move-stockfish-bypassed'
+  // Level 2: Level 1 also timed out; retrying with NO data tools
+  // and a system addendum telling the brain to play from its own
+  // chess knowledge.
+  | 'coach-move-llm-fallback'
+  // Level 3: Level 2 also timed out; picking a deterministic legal
+  // move from chess.js so the game never freezes. Last-resort.
+  | 'coach-move-emergency-pick';
 
 export interface AuditEntry {
   timestamp: number;

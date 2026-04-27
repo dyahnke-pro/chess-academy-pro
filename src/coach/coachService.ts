@@ -107,6 +107,13 @@ export interface CoachServiceOptions {
   /** WO-FOUNDATION-02 trace harness — surface-supplied UUID for
    *  joining audit entries across the pipeline. */
   traceId?: string;
+  /** Tool names to exclude from the toolbelt for THIS call. Used by
+   *  the coach-turn fallback chain to retry without tools that are
+   *  suspected of hanging (e.g. `stockfish_eval` when the engine is
+   *  stuck). The LLM physically does not see excluded tools in its
+   *  toolbelt, AND the spine refuses to dispatch them if the LLM
+   *  hallucinates a call. WO-COACH-RESILIENCE. */
+  excludeTools?: readonly string[];
 }
 
 /** Format a list of tool results plus the LLM's previous text into a
@@ -171,7 +178,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
 
   const envelope = assembleEnvelope({
     identity: options.identity,
-    toolbelt: getToolDefinitions(),
+    toolbelt: getToolDefinitions({ exclude: options.excludeTools }),
     input,
   });
 
@@ -300,7 +307,24 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const toolResults: { name: string; ok: boolean; result?: unknown; error?: string }[] = [];
     const readCalls: typeof lastResponse.toolCalls = [];
     const writeCalls: typeof lastResponse.toolCalls = [];
+    // WO-COACH-RESILIENCE: refuse to dispatch tools the caller asked
+    // to exclude even if the LLM hallucinates a call. Belt and
+    // suspenders — the LLM doesn't see the tool in its envelope, but
+    // model-side regressions emit unknown calls all the time.
+    const excludeSet = options.excludeTools && options.excludeTools.length > 0
+      ? new Set(options.excludeTools)
+      : null;
     for (const call of lastResponse.toolCalls) {
+      if (excludeSet?.has(call.name)) {
+        void logAppAudit({
+          kind: 'coach-brain-tool-called',
+          category: 'subsystem',
+          source: 'coachService.ask',
+          summary: `excluded tool ${call.name} skipped (resilience fallback)`,
+          details: JSON.stringify({ id: call.id, args: call.args }),
+        });
+        continue;
+      }
       const tool = getTool(call.name);
       if (!tool) {
         void logAppAudit({

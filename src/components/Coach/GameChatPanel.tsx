@@ -11,6 +11,7 @@ import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { tryRouteIntent } from '../../services/coachIntentRouter';
 import { parseActions } from '../../services/coachActionDispatcher';
 import { coachService } from '../../coach/coachService';
+import { withTimeout } from '../../coach/withTimeout';
 import type { LiveState } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { logAppAudit } from '../../services/appAuditor';
@@ -19,8 +20,16 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../../types';
 
-/** Strip [BOARD: ...] tags from text so they don't flash during streaming */
+/** Strip [BOARD: ...] tags so they don't flash during streaming.
+ *  Action tags ([[ACTION:...]] and [ACTION:...]) are stripped via a
+ *  separate regex (`ACTION_TAG_STRIP_RE`) so each replace call can
+ *  target one concern. WO-COACH-RESILIENCE part C added the
+ *  single-bracket variant to ACTION_TAG_STRIP_RE — Audit Finding 32
+ *  showed `[[ACTION:play_move {"san":"e4"}]] Done.` being spoken
+ *  aloud because the previous regex only matched the double-bracket
+ *  form. */
 const BOARD_TAG_STRIP_RE = /\[BOARD:\s*(?:arrow|highlight|position|practice|clear)(?::[^\]]*)?\]/gi;
+const ACTION_TAG_STRIP_RE = /\[\[ACTION:[^\]]*\]\]|\[ACTION:[^\]]*\]/gi;
 
 interface GameChatPanelProps {
   fen: string;
@@ -575,7 +584,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             source: 'GameChatPanel',
             summary: `surface=in-game traceId=${traceId}`,
           });
-          const answer = await coachService.ask(
+          // WO-COACH-RESILIENCE: wrap the in-game chat ask with the
+          // shared withTimeout so a hung spine surfaces a graceful
+          // error to the user instead of a forever-spinning indicator.
+          const askResult = await withTimeout(
+            coachService.ask(
             { surface: 'game-chat', ask: text, liveState },
             {
               // WO-COACH-GROUNDING (PR #338 part C): chat surfaces need
@@ -590,7 +603,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 fullResponse += chunk;
                 const displayText = fullResponse
                   .replace(BOARD_TAG_STRIP_RE, '')
-                  .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
+                  .replace(ACTION_TAG_STRIP_RE, '')
                   .trim();
                 setStreamingContent(displayText);
                 if (useAppStore.getState().coachVoiceOn) {
@@ -600,7 +613,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   // directives get spoken aloud verbatim.
                   const cleanedChunk = chunk
                     .replace(BOARD_TAG_STRIP_RE, '')
-                    .replace(/\[\[ACTION:[^\]]*\]\]/gi, '');
+                    .replace(ACTION_TAG_STRIP_RE, '');
                   speechBufferRef.current += cleanedChunk;
                   const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
                   if (sentenceEnd) {
@@ -658,7 +671,30 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 : undefined,
               traceId,
             },
+          ),
+            15_000,
+            'coach-turn-ask',
           );
+          if (!askResult.ok) {
+            console.warn(
+              `[GameChatPanel] in-game ask timed out (${askResult.label}) — surfacing error to user`,
+            );
+            void logAppAudit({
+              kind: 'llm-error',
+              category: 'subsystem',
+              source: 'GameChatPanel.handleSend.in-game',
+              summary: `coach-turn-ask timeout label=${askResult.label}`,
+            });
+            const timeoutMsg: ChatMessageType = {
+              id: `gmsg-${Date.now()}-timeout`,
+              role: 'assistant',
+              content: '⚠️ Coach is taking too long to respond. Try again in a moment.',
+              timestamp: Date.now(),
+            };
+            setMessages((prev) => [...prev, timeoutMsg]);
+            return;
+          }
+          const answer = askResult.value;
           if (speechBufferRef.current.trim()) {
             flushSpeechBuffer();
           }
@@ -806,7 +842,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           source: 'GameChatPanel',
           summary: `surface=drawer traceId=${traceId}`,
         });
-        const answer = await coachService.ask(
+        // WO-COACH-RESILIENCE: same withTimeout wrap as the in-game
+        // branch.
+        const drawerAskResult = await withTimeout(
+          coachService.ask(
           { surface: 'home-chat', ask: text, liveState: drawerLiveState },
           {
             // WO-COACH-GROUNDING (PR #338 part C): see the in-game branch
@@ -818,7 +857,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               drawerFullResponse += chunk;
               const displayText = drawerFullResponse
                 .replace(BOARD_TAG_STRIP_RE, '')
-                .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
+                .replace(ACTION_TAG_STRIP_RE, '')
                 .trim();
               setStreamingContent(displayText);
               if (useAppStore.getState().coachVoiceOn) {
@@ -826,7 +865,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 // in-game branch — see comment above.
                 const cleanedChunk = chunk
                   .replace(BOARD_TAG_STRIP_RE, '')
-                  .replace(/\[\[ACTION:[^\]]*\]\]/gi, '');
+                  .replace(ACTION_TAG_STRIP_RE, '');
                 speechBufferRef.current += cleanedChunk;
                 const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
                 if (sentenceEnd) {
@@ -885,7 +924,30 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               : undefined,
             traceId,
           },
+        ),
+          15_000,
+          'coach-turn-ask',
         );
+        if (!drawerAskResult.ok) {
+          console.warn(
+            `[GameChatPanel] drawer ask timed out (${drawerAskResult.label}) — surfacing error to user`,
+          );
+          void logAppAudit({
+            kind: 'llm-error',
+            category: 'subsystem',
+            source: 'GameChatPanel.handleSend.drawer',
+            summary: `coach-turn-ask timeout label=${drawerAskResult.label}`,
+          });
+          const timeoutMsg: ChatMessageType = {
+            id: `gmsg-${Date.now()}-timeout-drawer`,
+            role: 'assistant',
+            content: '⚠️ Coach is taking too long to respond. Try again in a moment.',
+            timestamp: Date.now(),
+          };
+          setMessages((prev) => [...prev, timeoutMsg]);
+          return;
+        }
+        const answer = drawerAskResult.value;
         if (speechBufferRef.current.trim()) {
           flushSpeechBuffer();
         }
