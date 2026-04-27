@@ -8,6 +8,7 @@ import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { MobileChatDrawer } from './MobileChatDrawer';
 import { GameChatPanel } from './GameChatPanel';
+import { useArrowState } from './useArrowState';
 import type { BoardAnnotationCommand, ChatMessage } from '../../types';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -24,6 +25,11 @@ export function GlobalCoachDrawer(): JSX.Element | null {
   const isOpen = useAppStore((s) => s.coachDrawerOpen);
   const setOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const boardCtx = useAppStore((s) => s.globalBoardContext);
+  // WO-COACH-ARROWS — wire the arrow callbacks so the brain's
+  // draw_arrows tool reaches whatever board is currently visible
+  // (CoachGamePage, WalkthroughMode, OpeningExplorer, etc.) via the
+  // shared appStore.coachArrows slice.
+  const { setArrows: setCoachArrowsFromDrawer, clearArrows: clearCoachArrowsFromDrawer } = useArrowState();
   const setGlobalPractice = useAppStore((s) => s.setGlobalPracticePosition);
   const initialMessage = useAppStore((s) => s.coachDrawerInitialMessage);
   const setInitialMessage = useAppStore((s) => s.setCoachDrawerInitialMessage);
@@ -273,6 +279,8 @@ export function GlobalCoachDrawer(): JSX.Element | null {
             lastMove={ctxLastMove}
             history={ctxHistory}
             onBoardAnnotation={handleBoardAnnotation}
+            onDrawArrows={setCoachArrowsFromDrawer}
+            onClearArrows={clearCoachArrowsFromDrawer}
             className="h-full"
             hideHeader
             initialPrompt={initialMessage}

@@ -33,7 +33,9 @@ describe('assembleEnvelope', () => {
     expect(env.memory).toBeTruthy();
     expect(env.appMap.length).toBeGreaterThan(5);
     expect(env.liveState.surface).toBe('ping');
-    expect(env.toolbelt.length).toBe(17);
+    // 17 base tools + 2 added by WO-COACH-ARROWS (draw_arrows,
+    // clear_arrows). Bump if a future WO adds more.
+    expect(env.toolbelt.length).toBe(19);
     expect(env.ask).toBe('hello');
   });
 

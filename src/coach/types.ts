@@ -102,6 +102,16 @@ export type ToolCategory = 'cerebellum' | 'cerebrum';
  *  read-only tools have settled, to preserve causality. */
 export type ToolKind = 'read' | 'write';
 
+/** Coach-drawn arrow spec — the shape the `draw_arrows` cerebrum tool
+ *  ships to the surface callback. Surfaces translate `from`/`to`/`color`
+ *  into whatever shape their board library expects (react-chessboard
+ *  uses `{ startSquare, endSquare, color }`). WO-COACH-ARROWS. */
+export interface ArrowSpec {
+  from: string;
+  to: string;
+  color: 'green' | 'red';
+}
+
 /** Surface-supplied callbacks + context the spine threads into every
  *  tool dispatch. Cerebrum tools use these to invoke real side
  *  effects (play a move, navigate the router) on behalf of the calling
@@ -143,6 +153,13 @@ export interface ToolExecutionContext {
    *  react-router. Path has already been validated against the app
    *  manifest before this runs. */
   onNavigate?: (path: string) => void;
+  /** Called by `draw_arrows` to render coach-suggested arrows on the
+   *  active board. WO-COACH-ARROWS. */
+  onDrawArrows?: (arrows: ArrowSpec[]) => void;
+  /** Called by `clear_arrows` to wipe any coach arrows currently on
+   *  the board. Rarely needed — boards auto-clear on user move via
+   *  the lastMove subscription in `useArrowState`. WO-COACH-ARROWS. */
+  onClearArrows?: () => void;
   /** FEN at the time of the call — used by `play_move` to validate SAN
    *  legality before invoking `onPlayMove`. */
   liveFen?: string;

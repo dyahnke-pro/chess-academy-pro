@@ -95,6 +95,13 @@ interface AppState {
     label?: string;
     timestamp: number;
   } | null;
+  /** Coach-drawn arrows that any active board can render. Set by the
+   *  `draw_arrows` cerebrum tool through the surface callback;
+   *  auto-clears when the global board context's lastMove changes
+   *  (i.e. the user just made a move). Empty array on default —
+   *  using array, not null, so consumers can spread without
+   *  null-guarding every render. WO-COACH-ARROWS. */
+  coachArrows: import('../coach/types').ArrowSpec[];
 }
 
 /** Snapshots older than this are considered stale (15 min). */
@@ -134,6 +141,12 @@ interface AppActions {
    */
   setLastBoardSnapshot: (snapshot: { fen: string; source: string; label?: string }) => void;
   clearLastBoardSnapshot: () => void;
+  /** Set the coach arrows to render across all active boards. Replaces
+   *  any previous coach arrows. WO-COACH-ARROWS. */
+  setCoachArrows: (arrows: import('../coach/types').ArrowSpec[]) => void;
+  /** Wipe coach arrows. Called by the `clear_arrows` tool and
+   *  automatically by `setGlobalBoardContext` when lastMove changes. */
+  clearCoachArrows: () => void;
   reset: () => void;
 }
 
@@ -163,6 +176,7 @@ const DEFAULT_STATE: AppState = {
   globalBoardContext: null,
   globalPracticePosition: null,
   lastBoardSnapshot: null,
+  coachArrows: [],
 };
 
 export const useAppStore = create<AppState & AppActions>()(
@@ -242,7 +256,23 @@ export const useAppStore = create<AppState & AppActions>()(
 
     setCoachEdgeTabPercent: (percent) => set({ coachEdgeTabPercent: Math.max(10, Math.min(90, percent)) }),
 
-    setGlobalBoardContext: (ctx) => set({ globalBoardContext: ctx }),
+    setGlobalBoardContext: (ctx) =>
+      set((state) => {
+        // WO-COACH-ARROWS: any move on the active board (lastMove
+        // changed) clears coach arrows, so the brain's "highlight
+        // these squares while I explain" annotations don't linger
+        // past the explanation. The board library's
+        // clearArrowsOnPositionChange handles the visual side; this
+        // keeps React state in sync so a re-render doesn't re-show
+        // them.
+        const prevSan = state.globalBoardContext?.lastMove?.san ?? null;
+        const nextSan = ctx?.lastMove?.san ?? null;
+        const moveChanged = prevSan !== nextSan;
+        return {
+          globalBoardContext: ctx,
+          coachArrows: moveChanged && state.coachArrows.length > 0 ? [] : state.coachArrows,
+        };
+      }),
 
     setGlobalPracticePosition: (pos) => set({ globalPracticePosition: pos }),
 
@@ -250,6 +280,9 @@ export const useAppStore = create<AppState & AppActions>()(
       set({ lastBoardSnapshot: { fen, source, label, timestamp: Date.now() } }),
 
     clearLastBoardSnapshot: () => set({ lastBoardSnapshot: null }),
+
+    setCoachArrows: (arrows) => set({ coachArrows: arrows }),
+    clearCoachArrows: () => set({ coachArrows: [] }),
 
     reset: () => set(DEFAULT_STATE),
   })),
