@@ -18,6 +18,7 @@ import { logAppAudit } from '../../../services/appAuditor';
 export const takeBackMoveTool: Tool = {
   name: 'take_back_move',
   category: 'cerebrum',
+  kind: 'write',
   description:
     "Revert the board by N half-moves. count=1 undoes the user's last move. count=2 undoes the whole exchange. REQUIRED whenever you say you'll take a move back; saying it without calling this means the move did not get taken back.",
   parameters: {

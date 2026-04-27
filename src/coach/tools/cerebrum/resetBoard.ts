@@ -11,6 +11,7 @@ import { logAppAudit } from '../../../services/appAuditor';
 export const resetBoardTool: Tool = {
   name: 'reset_board',
   category: 'cerebrum',
+  kind: 'write',
   description:
     "Reset the board to the starting position and start a fresh game. REQUIRED whenever you say you'll start over, reset, or play a fresh game; words without action are failure.",
   parameters: { type: 'object', properties: {}, required: [] },

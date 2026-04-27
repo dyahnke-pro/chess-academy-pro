@@ -9,6 +9,7 @@ import { memoryRecordHintRequest } from '../../sources/memory';
 export const recordHintRequestTool: Tool = {
   name: 'record_hint_request',
   category: 'cerebrum',
+  kind: 'read',
   description: 'Log a hint request to coach memory. Captures position, tier, best move, and game id so cross-game patterns can surface later.',
   parameters: {
     type: 'object',

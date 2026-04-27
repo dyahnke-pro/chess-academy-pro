@@ -22,6 +22,7 @@ import type { Tool } from '../../types';
 export const localOpeningBookTool: Tool = {
   name: 'local_opening_book',
   category: 'cerebellum',
+  kind: 'read',
   description:
     "Look up the next book move for the AI in the app's bundled opening book. Synchronous and zero-latency — call this on every move during the opening when the student has committed to an opening. Returns { nextMoveSan, lineLength, currentPly, openingName, source } where nextMoveSan is null if the line has been left, the AI is not on move, or no opening is set. Prefer this over lichess_opening_lookup when the goal is to play the line; lichess_opening_lookup is for naming an arbitrary position.",
   parameters: {

@@ -17,6 +17,7 @@ import { logAppAudit } from '../../../services/appAuditor';
 export const playMoveTool: Tool = {
   name: 'play_move',
   category: 'cerebrum',
+  kind: 'write',
   description:
     "Make a move in the live game on the coach's behalf. Pass SAN; the move is validated against the current FEN before being played. Returns { ok, played, reason? } so you can react to a rejected move on the next turn.",
   parameters: {

@@ -10,6 +10,7 @@ import type { Tool } from '../../types';
 export const lichessMasterGamesTool: Tool = {
   name: 'lichess_master_games',
   category: 'cerebellum',
+  kind: 'read',
   description: 'Master-database stats for a FEN: top moves played by titled players, their frequency, and sample top games when available.',
   parameters: {
     type: 'object',

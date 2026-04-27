@@ -8,6 +8,7 @@ import { logAppAudit } from '../../../services/appAuditor';
 export const requestHintTierTool: Tool = {
   name: 'request_hint_tier',
   category: 'cerebrum',
+  kind: 'read',
   description: 'Escalate the hint tier on the live game. Stub today — lands in WO-BRAIN-05 when the hint system migrates through the brain.',
   parameters: {
     type: 'object',

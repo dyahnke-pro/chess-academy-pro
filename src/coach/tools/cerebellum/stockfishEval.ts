@@ -10,6 +10,7 @@ import type { Tool } from '../../types';
 export const stockfishEvalTool: Tool = {
   name: 'stockfish_eval',
   category: 'cerebellum',
+  kind: 'read',
   description: 'Run Stockfish on a FEN at a chosen depth. Returns centipawn eval, best move, and the top principal variation. Read-only — does not change the game state.',
   parameters: {
     type: 'object',

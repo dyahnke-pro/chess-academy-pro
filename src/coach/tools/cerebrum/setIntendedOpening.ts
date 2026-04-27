@@ -8,6 +8,7 @@ import { memorySetIntendedOpening } from '../../sources/memory';
 export const setIntendedOpeningTool: Tool = {
   name: 'set_intended_opening',
   category: 'cerebrum',
+  kind: 'read',
   description: 'Commit the coach to playing a named opening. Persists across games and sessions until cleared. Use when the user asks the coach to play a specific opening.',
   parameters: {
     type: 'object',

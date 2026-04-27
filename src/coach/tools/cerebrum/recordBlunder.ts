@@ -14,6 +14,7 @@ import { memoryAppendConversationMessage } from '../../sources/memory';
 export const recordBlunderTool: Tool = {
   name: 'record_blunder',
   category: 'cerebrum',
+  kind: 'read',
   description: 'Log a blunder pattern to coach memory (FEN, move, classification). Used so the coach can surface recurring blunder themes across games.',
   parameters: {
     type: 'object',

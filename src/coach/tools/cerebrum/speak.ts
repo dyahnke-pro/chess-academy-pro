@@ -8,6 +8,7 @@ import { logAppAudit } from '../../../services/appAuditor';
 export const speakTool: Tool = {
   name: 'speak',
   category: 'cerebrum',
+  kind: 'read',
   description: 'Speak text aloud to the student. Stub today — lands in WO-BRAIN-05 when narration migrates through the brain.',
   parameters: {
     type: 'object',

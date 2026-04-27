@@ -12,6 +12,7 @@ import { logAppAudit } from '../../../services/appAuditor';
 export const setBoardPositionTool: Tool = {
   name: 'set_board_position',
   category: 'cerebrum',
+  kind: 'write',
   description:
     "Jump the board to a specific FEN position. REQUIRED whenever you say you'll set up a position; saying it without calling this means the position did not change. The FEN must be valid; this tool validates before dispatching.",
   parameters: {
