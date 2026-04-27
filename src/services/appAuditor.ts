@@ -133,7 +133,12 @@ export type AuditKind =
   | 'stockfish-prefetch-fired'
   // Stockfish multi-thread / single-thread variant resolution
   // (WO-STOCKFISH-SAB-FALLBACK).
-  | 'stockfish-variant-resolved';
+  | 'stockfish-variant-resolved'
+  // Stockfish runtime fallback — multi-thread bundle was selected
+  // (capabilities present) but failed at runtime, so the engine
+  // re-spawned the single-threaded bundle. Capped at one attempt
+  // per session. (WO-STOCKFISH-RUNTIME-FALLBACK).
+  | 'stockfish-variant-fallback';
 
 export interface AuditEntry {
   timestamp: number;
