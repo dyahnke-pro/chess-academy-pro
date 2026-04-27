@@ -9,6 +9,7 @@ import type { Tool } from '../../types';
 export const lichessOpeningLookupTool: Tool = {
   name: 'lichess_opening_lookup',
   category: 'cerebellum',
+  kind: 'read',
   description: 'Look up the opening at a given FEN. Returns ECO code, opening name, and the top candidate moves with their amateur-database frequency.',
   parameters: {
     type: 'object',

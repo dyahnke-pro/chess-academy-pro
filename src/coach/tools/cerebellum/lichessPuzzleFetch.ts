@@ -18,6 +18,7 @@ import { logAppAudit } from '../../../services/appAuditor';
 export const lichessPuzzleFetchTool: Tool = {
   name: 'lichess_puzzle_fetch',
   category: 'cerebellum',
+  kind: 'read',
   description: 'Fetch a Lichess puzzle by theme (fork, pin, skewer, mate-in-2, etc.) and student rating. Returns puzzle FEN + best move + theme tags.',
   parameters: {
     type: 'object',

@@ -8,6 +8,7 @@ import { memoryClear, type ClearMemoryScope } from '../../sources/memory';
 export const clearMemoryTool: Tool = {
   name: 'clear_memory',
   category: 'cerebrum',
+  kind: 'read',
   description: 'Clear a scope of coach memory. Use when the user says things like "forget that" or "play anything." Scopes: intended-opening (drops the active opening commitment), conversation (clears recent chat), all (everything).',
   parameters: {
     type: 'object',

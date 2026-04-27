@@ -91,6 +91,17 @@ export interface ToolDefinition {
 
 export type ToolCategory = 'cerebellum' | 'cerebrum';
 
+/** Read vs write classification for spine dispatch parallelization
+ *  (WO-STOCKFISH-SWAP-AND-PERF). Read-only tools (stockfish_eval,
+ *  lichess lookups, local_opening_book, set_intended_opening) can
+ *  run concurrently when the LLM emits multiple in one trip — none
+ *  of them mutate board state or depend on each other's results.
+ *  Write tools (play_move, take_back_move, reset_board,
+ *  set_board_position, navigate_to_route) mutate state and MUST run
+ *  sequentially in the order the LLM emitted them, after all
+ *  read-only tools have settled, to preserve causality. */
+export type ToolKind = 'read' | 'write';
+
 /** Surface-supplied callbacks + context the spine threads into every
  *  tool dispatch. Cerebrum tools use these to invoke real side
  *  effects (play a move, navigate the router) on behalf of the calling
@@ -145,6 +156,9 @@ export interface ToolExecutionContext {
 
 export interface Tool extends ToolDefinition {
   category: ToolCategory;
+  /** Spine dispatch hint. Read tools dispatch in parallel within a
+   *  toolCalls batch; write tools serialize after the read wave. */
+  kind: ToolKind;
   execute: (
     args: Record<string, unknown>,
     ctx?: ToolExecutionContext,

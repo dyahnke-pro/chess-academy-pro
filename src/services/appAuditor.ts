@@ -126,7 +126,11 @@ export type AuditKind =
   // Surface migration trail (WO-BRAIN-02 onwards). Fired once per call
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
-  | 'coach-surface-migrated';
+  | 'coach-surface-migrated'
+  // Stockfish performance instrumentation (WO-STOCKFISH-SWAP-AND-PERF).
+  | 'stockfish-cache-hit'
+  | 'stockfish-cache-miss'
+  | 'stockfish-prefetch-fired';
 
 export interface AuditEntry {
   timestamp: number;

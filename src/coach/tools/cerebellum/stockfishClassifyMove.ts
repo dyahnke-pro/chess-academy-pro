@@ -16,6 +16,7 @@ import type { Tool } from '../../types';
 export const stockfishClassifyMoveTool: Tool = {
   name: 'stockfish_classify_move',
   category: 'cerebellum',
+  kind: 'read',
   description: 'Classify a single move as blunder/mistake/inaccuracy/good/excellent/book. Provide FEN before the move and the move in SAN or UCI.',
   parameters: {
     type: 'object',

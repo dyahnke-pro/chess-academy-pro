@@ -287,20 +287,20 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       break;
     }
 
-    // Dispatch tool calls (each gets the surface context).
+    // Dispatch tool calls. WO-STOCKFISH-SWAP-AND-PERF (part 3):
+    // read-only tools (stockfish_eval, lichess lookups, opening book,
+    // set_intended_opening, ...) run concurrently via Promise.allSettled
+    // so a single LLM trip emitting "look it up + eval the position"
+    // doesn't pay sequential network + worker latency. Write tools
+    // (play_move, take_back_move, reset_board, set_board_position,
+    // navigate_to_route) run sequentially after the read wave to
+    // preserve causality — the LLM's intent for these is order-
+    // dependent. Tool classification lives on the Tool definition
+    // (kind: 'read' | 'write').
     const toolResults: { name: string; ok: boolean; result?: unknown; error?: string }[] = [];
+    const readCalls: typeof lastResponse.toolCalls = [];
+    const writeCalls: typeof lastResponse.toolCalls = [];
     for (const call of lastResponse.toolCalls) {
-      // WO-FOUNDATION-02 trace harness — fires before each tool
-      // execute so we can see whether the dispatch loop reached the
-      // tool when the provider emitted it.
-       
-      console.log('[TRACE-10]', options.traceId, 'tool dispatch:', call.name, call.args);
-      void logAppAudit({
-        kind: 'trace-tool-dispatch',
-        category: 'subsystem',
-        source: 'coachService.ask',
-        summary: `tool=${call.name} traceId=${options.traceId ?? 'none'}`,
-      });
       const tool = getTool(call.name);
       if (!tool) {
         void logAppAudit({
@@ -312,6 +312,26 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         });
         continue;
       }
+      if (tool.kind === 'write') {
+        writeCalls.push(call);
+      } else {
+        readCalls.push(call);
+      }
+    }
+
+    const dispatchOne = async (call: typeof lastResponse.toolCalls[number]) => {
+      // eslint-disable-next-line no-console
+      console.log('[TRACE-10]', options.traceId, 'tool dispatch:', call.name, call.args);
+      void logAppAudit({
+        kind: 'trace-tool-dispatch',
+        category: 'subsystem',
+        source: 'coachService.ask',
+        summary: `tool=${call.name} traceId=${options.traceId ?? 'none'}`,
+      });
+      const tool = getTool(call.name);
+      // Existence already verified above; non-null assertion is safe
+      // here because unknown tools were filtered out.
+      if (!tool) return;
       try {
         const result = await tool.execute(call.args, ctx);
         dispatchedIds.push(call.id);
@@ -342,6 +362,15 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           error: err instanceof Error ? err.message : String(err),
         });
       }
+    };
+
+    // Phase 1: read-only tools in parallel.
+    if (readCalls.length > 0) {
+      await Promise.allSettled(readCalls.map(dispatchOne));
+    }
+    // Phase 2: write tools sequentially, in original emit order.
+    for (const call of writeCalls) {
+      await dispatchOne(call);
     }
 
     // If we have round-trips remaining AND we dispatched any tools,

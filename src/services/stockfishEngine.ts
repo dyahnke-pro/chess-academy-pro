@@ -1,5 +1,7 @@
 import type { StockfishAnalysis, AnalysisLine } from '../types';
 import { MATE_EVAL_VALUE } from './engineConstants';
+import { stockfishCache } from './stockfishCache';
+import { logAppAudit } from './appAuditor';
 
 type StockfishMessageHandler = (analysis: StockfishAnalysis) => void;
 type StockfishStatus = 'idle' | 'loading' | 'ready' | 'error';
@@ -12,6 +14,11 @@ interface PendingAnalysis {
   bestMove: string;
   depth: number;
   blackToMove: boolean;
+  /** FEN + requested depth, captured so the bestmove handler can
+   *  populate the LRU cache once analysis completes. Skipped when
+   *  the call carried per-analysis options (Skill Level, etc.). */
+  cacheFen?: string;
+  cacheDepth?: number;
 }
 
 interface QueueEntry {
@@ -22,6 +29,8 @@ interface QueueEntry {
 }
 
 const INIT_TIMEOUT_MS = 45_000;
+const WORKER_URL = '/stockfish/stockfish-18-lite.js';
+const MAX_CRASH_RETRIES = 3;
 
 class StockfishEngine {
   private worker: Worker | null = null;
@@ -37,6 +46,11 @@ class StockfishEngine {
   private _queueRunning = false;
   // Gate to ignore stale bestmove/info from a stopped analysis
   private _analysisStarted = false;
+  // Worker-crash retry counter; resets on successful initialize.
+  private _crashRetries = 0;
+  // Set true once the engine has surfaced "engine unavailable" so we
+  // don't keep trying to reinit on every analyze call.
+  private _permanentlyUnavailable = false;
 
   get status(): StockfishStatus {
     return this._status;
@@ -58,6 +72,9 @@ class StockfishEngine {
   }
 
   async initialize(): Promise<void> {
+    if (this._permanentlyUnavailable) {
+      throw new Error('Stockfish engine unavailable (exhausted crash retries)');
+    }
     if (this.initPromise) return this.initPromise;
 
     this.setStatus('loading');
@@ -72,7 +89,7 @@ class StockfishEngine {
       }, INIT_TIMEOUT_MS);
 
       try {
-        this.worker = new Worker('/stockfish/stockfish-18-lite-single.js');
+        this.worker = new Worker(WORKER_URL);
 
         this.worker.onmessage = (event: MessageEvent<string>) => {
           this.handleMessage(event.data);
@@ -80,29 +97,49 @@ class StockfishEngine {
 
         this.worker.onerror = (error) => {
           clearTimeout(timeoutId);
-          const msg = `Worker failed to load: ${error.message}`;
-          console.error('[Stockfish]', msg);
+          const msg =
+            error.message ||
+            'Uncaught RuntimeError or worker load failure';
+          console.error('[Stockfish] worker.onerror:', msg);
           this.setStatus('error', msg);
           this.initPromise = null;
           reject(new Error(msg));
         };
 
-        // Wait for readyok
-        const readyHandler = (event: MessageEvent<string>): void => {
+        // Multi-threaded NNUE init flow:
+        //   send `uci` → wait for `uciok` → send setoption Threads/Hash/MultiPV
+        //   → send `isready` → wait for `readyok`
+        // Setting Threads/Hash before isready ensures the engine
+        // allocates the right TT size and worker pool before the
+        // first analysis request lands.
+        const threadCount =
+          (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 4;
+        const hashMb = 64;
+
+        const initHandler = (event: MessageEvent<string>): void => {
+          if (event.data === 'uciok') {
+            this.send(`setoption name Threads value ${threadCount}`);
+            this.send(`setoption name Hash value ${hashMb}`);
+            this.send('setoption name MultiPV value 3');
+            console.log(
+              `[Stockfish] threads=${threadCount} hash=${hashMb}MB`,
+            );
+            this.send('isready');
+            return;
+          }
           if (event.data === 'readyok') {
             clearTimeout(timeoutId);
-            this.worker?.removeEventListener('message', readyHandler);
+            this.worker?.removeEventListener('message', initHandler);
             this.isReady = true;
-            this.send('setoption name MultiPV value 3');
-            console.log('[Stockfish] Engine ready (lite-single WASM)');
+            this._crashRetries = 0;
+            console.log('[Stockfish] Engine ready (lite multi-threaded WASM)');
             this.setStatus('ready');
             resolve();
           }
         };
 
-        this.worker.addEventListener('message', readyHandler);
+        this.worker.addEventListener('message', initHandler);
         this.send('uci');
-        this.send('isready');
       } catch (error) {
         clearTimeout(timeoutId);
         const msg = error instanceof Error ? error.message : String(error);
@@ -113,7 +150,47 @@ class StockfishEngine {
       }
     });
 
-    return this.initPromise;
+    return this.initPromise.catch((err) => {
+      // Surface init failures as crash events so the retry path can run.
+      this.handleWorkerCrash(err instanceof Error ? err.message : String(err));
+      throw err;
+    });
+  }
+
+  /**
+   * Wipe the broken worker and try once more, up to MAX_CRASH_RETRIES.
+   * After the cap, mark the engine permanently unavailable so callers
+   * (the brain, post-game review, hint system) can degrade gracefully.
+   */
+  private handleWorkerCrash(reason: string): void {
+    this._crashRetries += 1;
+    console.error(
+      `[Stockfish] Worker crashed (attempt ${this._crashRetries}/${MAX_CRASH_RETRIES}): ${reason}`,
+    );
+    if (this.pending) {
+      this.pending.reject(new Error(`worker crashed: ${reason}`));
+      this.pending = null;
+    }
+    this.worker?.terminate();
+    this.worker = null;
+    this.isReady = false;
+    this.initPromise = null;
+    if (this._crashRetries >= MAX_CRASH_RETRIES) {
+      this._permanentlyUnavailable = true;
+      this.setStatus(
+        'error',
+        'engine unavailable, coaching from position only',
+      );
+      // Reject every queued analysis so no caller hangs forever.
+      for (const entry of this._queue) {
+        entry.reject(new Error('engine unavailable'));
+      }
+      this._queue = [];
+      this._queueRunning = false;
+      return;
+    }
+    console.log('[Stockfish] Worker crashed, reinitializing...');
+    // Don't await — let the next analyze call drive reinit naturally.
   }
 
   async analyzePosition(
@@ -121,6 +198,31 @@ class StockfishEngine {
     depth: number = 18,
     options?: Record<string, string | number>,
   ): Promise<StockfishAnalysis> {
+    // FEN cache short-circuit — if we've already analyzed this exact
+    // position+depth, return the cached result without invoking the
+    // worker. Per-analysis `options` (e.g. Skill Level overrides) are
+    // intentionally NOT part of the key — those callers should bypass
+    // by passing a cache-skip sentinel if needed. Today only the brain
+    // and prefetch path call without options.
+    if (!options) {
+      const hit = stockfishCache.get(fen, depth);
+      if (hit) {
+        void logAppAudit({
+          kind: 'stockfish-cache-hit',
+          category: 'subsystem',
+          source: 'stockfishCache',
+          summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
+        });
+        return hit;
+      }
+      void logAppAudit({
+        kind: 'stockfish-cache-miss',
+        category: 'subsystem',
+        source: 'stockfishCache',
+        summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
+      });
+    }
+
     await this.initialize();
 
     return new Promise((resolve, reject) => {
@@ -147,6 +249,8 @@ class StockfishEngine {
         bestMove: '',
         depth: 0,
         blackToMove,
+        cacheFen: options ? undefined : fen,
+        cacheDepth: options ? undefined : depth,
       };
 
       this.send('ucinewgame');
@@ -221,6 +325,49 @@ class StockfishEngine {
   stop(): void {
     if (this.worker && this.isReady) {
       this.send('stop');
+    }
+  }
+
+  /**
+   * WO-STOCKFISH-SWAP-AND-PERF (part 5): brain-facing budgeted eval.
+   *
+   * 1. Cache hit → return synchronously via a resolved promise.
+   * 2. Cache miss → fire `analyzePosition` and start a budget timer.
+   *    When the timer fires, send `stop` to Stockfish so it emits
+   *    `bestmove` with whatever depth it reached. The engine's
+   *    bestmove handler resolves the underlying promise normally —
+   *    the budget just cuts the deepening search short.
+   *
+   * The budget intentionally affects the engine globally (any
+   * concurrent analysis will be interrupted). Brain calls go through
+   * here; UI eval calls (post-game review, hint system) keep
+   * `analyzePosition` directly so they aren't budget-capped.
+   */
+  async analyzeWithBudget(
+    fen: string,
+    depth: number,
+    budgetMs: number = 300,
+  ): Promise<StockfishAnalysis> {
+    const cached = stockfishCache.get(fen, depth);
+    if (cached) {
+      void logAppAudit({
+        kind: 'stockfish-cache-hit',
+        category: 'subsystem',
+        source: 'stockfishEngine.analyzeWithBudget',
+        summary: `fen=${fen.slice(0, 30)}... depth=${depth}`,
+      });
+      return cached;
+    }
+    const promise = this.analyzePosition(fen, depth);
+    const timer = setTimeout(() => {
+      // Force Stockfish to emit bestmove from current best line.
+      this.stop();
+    }, budgetMs);
+    try {
+      const result = await promise;
+      return result;
+    } finally {
+      clearTimeout(timer);
     }
   }
 
@@ -317,6 +464,10 @@ class StockfishEngine {
         topLines: normalizedLines,
         nodesPerSecond: 0,
       };
+
+      if (this.pending.cacheFen !== undefined && this.pending.cacheDepth !== undefined) {
+        stockfishCache.set(this.pending.cacheFen, this.pending.cacheDepth, analysis);
+      }
 
       this.pending.resolve(analysis);
       this.pending = null;

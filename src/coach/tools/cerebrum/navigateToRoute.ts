@@ -21,6 +21,7 @@ import { logAppAudit } from '../../../services/appAuditor';
 export const navigateToRouteTool: Tool = {
   name: 'navigate_to_route',
   category: 'cerebrum',
+  kind: 'write',
   description:
     'Navigate the user to a route in the app. Pass the exact path from the [App map] block. Returns success with the resolved path.',
   parameters: {
