@@ -131,7 +131,7 @@ import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachComm
 import { getCoachChatResponse } from '../../services/coachApi';
 import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
+import { detectOpening, getOpeningMoves, getNextOpeningBookMove } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
@@ -1538,43 +1538,173 @@ export function CoachGamePage(): JSX.Element {
           }),
           fen: game.fen,
         });
+        // ── Three-tier coach-turn resilience (WO-COACH-TURN-RESILIENCE) ──
+        // Stockfish can hang or crash mid-turn (e.g. iOS Safari
+        // pthread issues), and `coachService.ask`'s tool dispatch
+        // awaits stockfish_eval before resolving. Without these
+        // timeouts a single engine hang freezes the coach for the
+        // rest of the game. The orchestration here guarantees the
+        // coach plays a move within ~20s no matter what.
+        //
+        //   Tier 1: full ask + all tools, 15s race timeout.
+        //   Tier 2: LLM-only "just play a move" ask, 5s race timeout.
+        //   Tier 3: deterministic emergency pick — local opening
+        //           book if intended opening set, else random legal.
+        const TIER1_TIMEOUT_MS = 15_000;
+        const TIER2_TIMEOUT_MS = 5_000;
+
+        const onPlayMoveValidator = (san: string): { ok: true } | { ok: false; reason: string } => {
+          // Validate against the live FEN. The play_move tool
+          // already validated, but board state may have shifted
+          // between turns; double-check.
+          try {
+            const probe = new Chess(game.fen);
+            const result = probe.move(san);
+            if (!result) return { ok: false, reason: 'illegal at apply time' };
+            brainPickSan = san;
+            return { ok: true };
+          } catch (err) {
+            return {
+              ok: false,
+              reason: err instanceof Error ? err.message : String(err),
+            };
+          }
+        };
+
+        const withDeadline = async <T,>(
+          work: Promise<T>,
+          deadlineMs: number,
+          label: string,
+        ): Promise<T> => {
+          let timer: ReturnType<typeof setTimeout> | null = null;
+          const timeout = new Promise<never>((_, reject) => {
+            timer = setTimeout(() => {
+              reject(new Error(`${label} timed out after ${deadlineMs}ms`));
+            }, deadlineMs);
+          });
+          try {
+            return await Promise.race([work, timeout]);
+          } finally {
+            if (timer !== null) clearTimeout(timer);
+          }
+        };
+
+        // ── Tier 1: full ask with all 17 tools ──
         try {
-          await coachService.ask(
-            {
-              surface: 'move-selector',
-              ask: moveSelectorAsk,
-              liveState: moveSelectorLiveState,
-            },
-            {
-              maxToolRoundTrips: 3,
-              onPlayMove: (san: string) => {
-                // Validate against the live FEN. The play_move tool
-                // already validated, but board state may have shifted
-                // between turns; double-check.
-                try {
-                  const probe = new Chess(game.fen);
-                  const result = probe.move(san);
-                  if (!result) return { ok: false, reason: 'illegal at apply time' };
-                  brainPickSan = san;
-                  return { ok: true };
-                } catch (err) {
-                  return {
-                    ok: false,
-                    reason: err instanceof Error ? err.message : String(err),
-                  };
-                }
+          await withDeadline(
+            coachService.ask(
+              {
+                surface: 'move-selector',
+                ask: moveSelectorAsk,
+                liveState: moveSelectorLiveState,
               },
-            },
+              {
+                maxToolRoundTrips: 3,
+                onPlayMove: onPlayMoveValidator,
+              },
+            ),
+            TIER1_TIMEOUT_MS,
+            'coach-move tier1 (full ask)',
           );
         } catch (err: unknown) {
-          console.warn('[CoachGame] move-selector spine call failed:', err);
+          console.warn('[CoachGame] Tier 1 (full ask) failed/timed out:', err);
         }
 
         if (isCancelled()) return;
 
-        // Convert the brain's SAN to UCI for tryMakeMove. If the brain
-        // emitted no play_move (or an illegal one), fall back to a
-        // random legal move so the game never freezes.
+        // If the engine wasn't 'ready' but Tier 1 still produced a
+        // move, the brain played without engine ground truth. Audit
+        // the bypass so we can see how often this happens in prod.
+        if (brainPickSan && stockfishEngine.status !== 'ready') {
+          void logAppAudit({
+            kind: 'coach-move-stockfish-bypassed',
+            category: 'subsystem',
+            source: 'CoachGamePage.makeCoachMove',
+            summary: `tier1 produced ${brainPickSan} with engine status=${stockfishEngine.status}`,
+            fen: game.fen,
+          });
+        }
+
+        // ── Tier 2: LLM-only ask (no analysis tools), 5s budget ──
+        if (!brainPickSan) {
+          void logAppAudit({
+            kind: 'coach-move-llm-fallback',
+            category: 'subsystem',
+            source: 'CoachGamePage.makeCoachMove',
+            summary: `tier1 produced no play_move within ${TIER1_TIMEOUT_MS}ms; falling back to LLM-only`,
+            fen: game.fen,
+          });
+          const tier2Ask = `It is your turn (${aiColor}). The student is rated about ${targetStrength}. Play a sensible move at the student's level. Do NOT call stockfish_eval, lichess_*, or any analysis tools — those are unavailable right now. Emit play_move with your chosen SAN immediately.`;
+          try {
+            await withDeadline(
+              coachService.ask(
+                {
+                  surface: 'move-selector',
+                  ask: tier2Ask,
+                  liveState: moveSelectorLiveState,
+                },
+                {
+                  maxToolRoundTrips: 1,
+                  onPlayMove: onPlayMoveValidator,
+                },
+              ),
+              TIER2_TIMEOUT_MS,
+              'coach-move tier2 (LLM-only)',
+            );
+          } catch (err: unknown) {
+            console.warn('[CoachGame] Tier 2 (LLM-only) failed/timed out:', err);
+          }
+        }
+
+        if (isCancelled()) return;
+
+        // ── Tier 3: deterministic emergency pick ──
+        if (!brainPickSan) {
+          let emergencySource = 'random-legal';
+          let emergencySan: string | null = null;
+
+          // Try the local opening book first if the student is
+          // following an opening.
+          if (intendedOpeningName) {
+            const openingMoves = getOpeningMoves(intendedOpeningName);
+            if (openingMoves) {
+              const bookSan = getNextOpeningBookMove(
+                openingMoves,
+                game.history,
+                aiColor,
+              );
+              if (bookSan) {
+                // Validate book SAN is legal in the current FEN.
+                try {
+                  const probe = new Chess(game.fen);
+                  if (probe.move(bookSan)) {
+                    emergencySan = bookSan;
+                    emergencySource = `local-opening-book (${intendedOpeningName})`;
+                  }
+                } catch {
+                  /* fall through to random */
+                }
+              }
+            }
+          }
+
+          if (emergencySan) {
+            brainPickSan = emergencySan;
+          }
+
+          void logAppAudit({
+            kind: 'coach-move-emergency-pick',
+            category: 'subsystem',
+            source: 'CoachGamePage.makeCoachMove',
+            summary: `tier3 emergency pick — source=${emergencySource} san=${emergencySan ?? '(falling through to random legal)'}`,
+            fen: game.fen,
+          });
+        }
+
+        // Convert the brain's SAN to UCI for tryMakeMove. If still
+        // no usable pick (book lookup failed too), fall through to
+        // a random legal move — guaranteed to find SOMETHING as
+        // long as the position has any legal moves at all.
         let move: string | null = null;
         if (brainPickSan) {
           try {
@@ -1590,7 +1720,7 @@ export function CoachGamePage(): JSX.Element {
         }
         if (!move) {
           console.warn(
-            '[CoachGame] Brain emitted no usable play_move; falling back to random legal move',
+            '[CoachGame] All tiers exhausted; falling back to random legal move',
           );
           move = getRandomLegalMove(game.fen);
         }
