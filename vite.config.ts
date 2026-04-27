@@ -93,6 +93,20 @@ export default defineConfig(({ mode }) => {
         changeOrigin: true,
       },
     },
+    // Cross-origin isolation — required for SharedArrayBuffer, which
+    // Stockfish multi-threaded WASM uses for its worker pool. Without
+    // these headers the multi-threaded build silently falls back to
+    // single-thread or fails to instantiate.
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+  },
+  preview: {
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
   },
 };
 });

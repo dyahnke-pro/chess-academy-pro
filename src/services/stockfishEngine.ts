@@ -22,6 +22,8 @@ interface QueueEntry {
 }
 
 const INIT_TIMEOUT_MS = 45_000;
+const WORKER_URL = '/stockfish/stockfish-18-lite.js';
+const MAX_CRASH_RETRIES = 3;
 
 class StockfishEngine {
   private worker: Worker | null = null;
@@ -37,6 +39,11 @@ class StockfishEngine {
   private _queueRunning = false;
   // Gate to ignore stale bestmove/info from a stopped analysis
   private _analysisStarted = false;
+  // Worker-crash retry counter; resets on successful initialize.
+  private _crashRetries = 0;
+  // Set true once the engine has surfaced "engine unavailable" so we
+  // don't keep trying to reinit on every analyze call.
+  private _permanentlyUnavailable = false;
 
   get status(): StockfishStatus {
     return this._status;
@@ -58,6 +65,9 @@ class StockfishEngine {
   }
 
   async initialize(): Promise<void> {
+    if (this._permanentlyUnavailable) {
+      throw new Error('Stockfish engine unavailable (exhausted crash retries)');
+    }
     if (this.initPromise) return this.initPromise;
 
     this.setStatus('loading');
@@ -72,7 +82,7 @@ class StockfishEngine {
       }, INIT_TIMEOUT_MS);
 
       try {
-        this.worker = new Worker('/stockfish/stockfish-18-lite-single.js');
+        this.worker = new Worker(WORKER_URL);
 
         this.worker.onmessage = (event: MessageEvent<string>) => {
           this.handleMessage(event.data);
@@ -80,29 +90,49 @@ class StockfishEngine {
 
         this.worker.onerror = (error) => {
           clearTimeout(timeoutId);
-          const msg = `Worker failed to load: ${error.message}`;
-          console.error('[Stockfish]', msg);
+          const msg =
+            error.message ||
+            'Uncaught RuntimeError or worker load failure';
+          console.error('[Stockfish] worker.onerror:', msg);
           this.setStatus('error', msg);
           this.initPromise = null;
           reject(new Error(msg));
         };
 
-        // Wait for readyok
-        const readyHandler = (event: MessageEvent<string>): void => {
+        // Multi-threaded NNUE init flow:
+        //   send `uci` → wait for `uciok` → send setoption Threads/Hash/MultiPV
+        //   → send `isready` → wait for `readyok`
+        // Setting Threads/Hash before isready ensures the engine
+        // allocates the right TT size and worker pool before the
+        // first analysis request lands.
+        const threadCount =
+          (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 4;
+        const hashMb = 64;
+
+        const initHandler = (event: MessageEvent<string>): void => {
+          if (event.data === 'uciok') {
+            this.send(`setoption name Threads value ${threadCount}`);
+            this.send(`setoption name Hash value ${hashMb}`);
+            this.send('setoption name MultiPV value 3');
+            console.log(
+              `[Stockfish] threads=${threadCount} hash=${hashMb}MB`,
+            );
+            this.send('isready');
+            return;
+          }
           if (event.data === 'readyok') {
             clearTimeout(timeoutId);
-            this.worker?.removeEventListener('message', readyHandler);
+            this.worker?.removeEventListener('message', initHandler);
             this.isReady = true;
-            this.send('setoption name MultiPV value 3');
-            console.log('[Stockfish] Engine ready (lite-single WASM)');
+            this._crashRetries = 0;
+            console.log('[Stockfish] Engine ready (lite multi-threaded WASM)');
             this.setStatus('ready');
             resolve();
           }
         };
 
-        this.worker.addEventListener('message', readyHandler);
+        this.worker.addEventListener('message', initHandler);
         this.send('uci');
-        this.send('isready');
       } catch (error) {
         clearTimeout(timeoutId);
         const msg = error instanceof Error ? error.message : String(error);
@@ -113,7 +143,47 @@ class StockfishEngine {
       }
     });
 
-    return this.initPromise;
+    return this.initPromise.catch((err) => {
+      // Surface init failures as crash events so the retry path can run.
+      this.handleWorkerCrash(err instanceof Error ? err.message : String(err));
+      throw err;
+    });
+  }
+
+  /**
+   * Wipe the broken worker and try once more, up to MAX_CRASH_RETRIES.
+   * After the cap, mark the engine permanently unavailable so callers
+   * (the brain, post-game review, hint system) can degrade gracefully.
+   */
+  private handleWorkerCrash(reason: string): void {
+    this._crashRetries += 1;
+    console.error(
+      `[Stockfish] Worker crashed (attempt ${this._crashRetries}/${MAX_CRASH_RETRIES}): ${reason}`,
+    );
+    if (this.pending) {
+      this.pending.reject(new Error(`worker crashed: ${reason}`));
+      this.pending = null;
+    }
+    this.worker?.terminate();
+    this.worker = null;
+    this.isReady = false;
+    this.initPromise = null;
+    if (this._crashRetries >= MAX_CRASH_RETRIES) {
+      this._permanentlyUnavailable = true;
+      this.setStatus(
+        'error',
+        'engine unavailable, coaching from position only',
+      );
+      // Reject every queued analysis so no caller hangs forever.
+      for (const entry of this._queue) {
+        entry.reject(new Error('engine unavailable'));
+      }
+      this._queue = [];
+      this._queueRunning = false;
+      return;
+    }
+    console.log('[Stockfish] Worker crashed, reinitializing...');
+    // Don't await — let the next analyze call drive reinit naturally.
   }
 
   async analyzePosition(

@@ -112,7 +112,12 @@ async function getEngine(): Promise<{
 
 function completeInit(): void {
   queueMicrotask(() => {
-    mockWorker.emit('readyok');
+    // New init protocol: engine waits for `uciok` before sending
+    // setoptions + `isready`. Drive both events from the mock.
+    mockWorker.emit('uciok');
+    queueMicrotask(() => {
+      mockWorker.emit('readyok');
+    });
   });
 }
 
@@ -213,6 +218,9 @@ describe('StockfishEngine', () => {
 
       expect(resolved).toBe(false);
 
+      // New init protocol: emit uciok first so the engine sends
+      // setoptions + isready, then emit readyok.
+      mockWorker.emit('uciok');
       mockWorker.emit('readyok');
       await promise;
 
@@ -666,7 +674,10 @@ describe('StockfishEngine', () => {
       );
 
       const initPromise = stockfishEngine.initialize();
-      queueMicrotask(() => newMockWorker.emit('readyok'));
+      queueMicrotask(() => {
+        newMockWorker.emit('uciok');
+        queueMicrotask(() => newMockWorker.emit('readyok'));
+      });
       await initPromise;
 
       expect(workerConstructorCallCount).toBe(2);
@@ -780,9 +791,7 @@ describe('StockfishEngine', () => {
 
       mockWorker.emitError('WASM load failed');
 
-      await expect(initPromise).rejects.toThrow(
-        'Worker failed to load: WASM load failed',
-      );
+      await expect(initPromise).rejects.toThrow('WASM load failed');
     });
   });
 
