@@ -1416,6 +1416,19 @@ export function CoachGamePage(): JSX.Element {
       ((playerColor === 'white' && game.turn === 'b') ||
        (playerColor === 'black' && game.turn === 'w'));
 
+    // DIAG-FREEZE A — coach-turn useEffect tick (every render)
+    // eslint-disable-next-line no-console
+    console.log('[DIAG-FREEZE A] coach-turn useEffect tick', {
+      isCoachTurn,
+      gameStatus: gameState.status,
+      isGameOver: game.isGameOver,
+      playerColor,
+      turn: game.turn,
+      historyLen: game.history.length,
+      lastMove: game.history[game.history.length - 1] ?? null,
+      ts: Date.now(),
+    });
+
     if (!isCoachTurn) return;
 
     setIsCoachThinking(true);
@@ -1475,6 +1488,14 @@ export function CoachGamePage(): JSX.Element {
 
     const makeCoachMove = async (): Promise<void> => {
       if (isCancelled()) return;
+
+      // DIAG-FREEZE A2 — makeCoachMove entered (after the 800 ms delay)
+      // eslint-disable-next-line no-console
+      console.log('[DIAG-FREEZE A2] makeCoachMove entered', {
+        fen: game.fen,
+        historyLen: game.history.length,
+        ts: Date.now(),
+      });
 
       try {
         console.log('[CoachGame] Coach thinking... FEN:', game.fen);
@@ -1575,12 +1596,27 @@ export function CoachGamePage(): JSX.Element {
         };
 
         try {
+          // DIAG-FREEZE B — about to invoke primary coach-turn ask
+          // eslint-disable-next-line no-console
+          console.log('[DIAG-FREEZE B] about to call coachService.ask (primary)', {
+            fen: game.fen,
+            historyLen: game.history.length,
+            ts: Date.now(),
+          });
           // Primary: full toolbelt, 15 s budget.
           const primary = await withTimeout(
             coachService.ask(askInput, baseOptions),
             15_000,
             'coach-turn-ask',
           );
+          // DIAG-FREEZE C — primary ask resolved (ok or timeout)
+          // eslint-disable-next-line no-console
+          console.log('[DIAG-FREEZE C] primary ask resolved', {
+            ok: primary.ok,
+            label: primary.ok ? 'value' : primary.label,
+            brainPickSan,
+            ts: Date.now(),
+          });
           if (!primary.ok) {
             // Level 1 — Stockfish bypass.
             void logAppAudit({
@@ -1647,6 +1683,14 @@ export function CoachGamePage(): JSX.Element {
           console.warn('[CoachGame] move-selector spine call failed:', err);
         }
 
+        // DIAG-FREEZE D — exited the resilience block
+        // eslint-disable-next-line no-console
+        console.log('[DIAG-FREEZE D] resilience block exited', {
+          brainPickSan,
+          isCancelled: isCancelled(),
+          ts: Date.now(),
+        });
+
         if (isCancelled()) return;
 
         // Convert the brain's SAN to UCI for tryMakeMove. If the brain
@@ -1675,6 +1719,10 @@ export function CoachGamePage(): JSX.Element {
           console.error('[CoachGame] No legal moves available');
           return;
         }
+
+        // DIAG-FREEZE E — about to apply coach move to the board
+        // eslint-disable-next-line no-console
+        console.log('[DIAG-FREEZE E] about to tryMakeMove', { uci: move, ts: Date.now() });
 
         let result = tryMakeMove(move);
 
@@ -1850,6 +1898,19 @@ export function CoachGamePage(): JSX.Element {
     setCoachLastMove({ from: moveResult.from, to: moveResult.to });
     moveCountRef.current += 1;
 
+    // DIAG-FREEZE P1 — entering player-move post-analysis section.
+    // This is the prime suspect for the freeze: TWO sequential
+    // `await stockfishEngine.analyzePosition()` calls with NO timeout.
+    // If Stockfish hangs here, game.makeMove() at line ~2301 never
+    // runs, game.turn never flips, the coach-turn useEffect never
+    // sees its trigger, and the coach 'freezes'. PR #347's withTimeout
+    // wraps the COACH'S OWN ask — not these post-player-move analyses.
+    // eslint-disable-next-line no-console
+    console.log('[DIAG-FREEZE P1] handlePlayerMove: about to call analyzePosition(moveResult.fen, 12)', {
+      moveResultFen: moveResult.fen,
+      ts: Date.now(),
+    });
+
     // Analyze the position AFTER the player's move (for eval bar + post-move eval)
     let analysis: StockfishAnalysis | null = null;
     try {
@@ -1858,6 +1919,13 @@ export function CoachGamePage(): JSX.Element {
       // If analysis fails, default to 'good'
     }
 
+    // DIAG-FREEZE P2 — first analyzePosition resolved (or threw).
+    // eslint-disable-next-line no-console
+    console.log('[DIAG-FREEZE P2] handlePlayerMove: post-move analyzePosition returned', {
+      hadAnalysis: analysis !== null,
+      ts: Date.now(),
+    });
+
     // Analyze the position BEFORE the player's move (for best move comparison)
     let preAnalysis: StockfishAnalysis | null = null;
     try {
@@ -1865,6 +1933,13 @@ export function CoachGamePage(): JSX.Element {
     } catch {
       // If pre-analysis fails, we'll use simpler classification
     }
+
+    // DIAG-FREEZE P3 — second analyzePosition resolved.
+    // eslint-disable-next-line no-console
+    console.log('[DIAG-FREEZE P3] handlePlayerMove: pre-move analyzePosition returned', {
+      hadPreAnalysis: preAnalysis !== null,
+      ts: Date.now(),
+    });
 
     // Update eval bar + engine lines
     if (analysis) {
@@ -2248,6 +2323,18 @@ export function CoachGamePage(): JSX.Element {
       void explanation;
       return;
     }
+
+    // DIAG-FREEZE P4 — non-blunder path: about to commit player's move.
+    // If P1/P2/P3 fire but P4 does not, the freeze is in the synchronous
+    // classification block between P3 and here. If P4 fires, game.turn
+    // flips and the coach-turn useEffect should pick up immediately
+    // (DIAG-FREEZE A should fire right after).
+    // eslint-disable-next-line no-console
+    console.log('[DIAG-FREEZE P4] handlePlayerMove: about to game.makeMove', {
+      from: moveResult.from,
+      to: moveResult.to,
+      ts: Date.now(),
+    });
 
     // Non-blunder: sync the move and let the coach-move useEffect respond.
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
