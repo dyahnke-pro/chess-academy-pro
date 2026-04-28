@@ -434,9 +434,35 @@ export function CoachGamePage(): JSX.Element {
     if (hasExplicitStart) return;
     // Disabled by WO-CLEANUP-01 — resume produces ghost squares; see WO-RESUME-01 for rebuild.
     const RESUME_ENABLED = false;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!RESUME_ENABLED) return;
+    // WO-VISIBLE-POLISH (audit cycle 3) — even with resume disabled,
+    // surface the *fact* that the user just lost an in-flight game to
+    // a page reload (almost always a service-worker auto-update with
+    // skipWaiting/clientsClaim, the very thing we just turned off in
+    // vite.config.ts). loadCoachPlayState reads the snapshot saved on
+    // every player move; finding one at mount with moves > 0 means
+    // the prior session ended without a graceful close (game-over,
+    // explicit restart, color change all clear it). This matches the
+    // user-visible symptom "board went back to starting position
+    // mid-game" with no game-state-reset audit fire.
     void loadCoachPlayState().then((saved) => {
+      if (saved && saved.halfMoveCount > 0) {
+        void logAppAudit({
+          kind: 'game-state-reset',
+          category: 'subsystem',
+          source: 'CoachGamePage.mount',
+          summary: `session-reload detected — prior game with halfMoves=${saved.halfMoveCount} found at mount; resumeEnabled=${RESUME_ENABLED}`,
+          details: JSON.stringify({
+            fen: saved.fen,
+            playerColor: saved.playerColor,
+            difficulty: saved.difficulty,
+            halfMoveCount: saved.halfMoveCount,
+            updatedAt: saved.updatedAt,
+            ageMs: Date.now() - saved.updatedAt,
+          }),
+        });
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (!RESUME_ENABLED) return;
       if (!saved) return;
       // Only restore when we haven't made any moves yet (mount state).
       if (moveCountRef.current > 0) return;

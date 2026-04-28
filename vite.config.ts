@@ -15,8 +15,18 @@ export default defineConfig(({ mode }) => {
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        skipWaiting: true,
-        clientsClaim: true,
+        // skipWaiting + clientsClaim were removed in WO-VISIBLE-POLISH
+        // (audit cycle 3 board-reset report). The combination forced
+        // every new build to take over active clients immediately,
+        // which fired `controllerchange` → vite-plugin-pwa's
+        // auto-update registrar reloaded the page. For an interactive
+        // chess app, a mid-game reload is destructive (resume is
+        // disabled per WO-RESUME-01, so the game is lost). Without
+        // these flags the new SW installs but stays in `waiting`
+        // until the tab is closed and reopened, so updates land
+        // between sessions instead of during them. Trade-off: long-
+        // lived tabs need a manual refresh to pick up new builds —
+        // acceptable for this app.
         cleanupOutdatedCaches: true,
         // TODO: Replace with code-splitting + exclude Stockfish WASM from precache — see backlog item WO-PERF-BUNDLE-01.
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,

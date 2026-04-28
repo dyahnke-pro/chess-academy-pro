@@ -173,9 +173,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     // Buffer speech to sentence boundaries
     const flushSpeechBuffer = useCallback(() => {
       const buffer = speechBufferRef.current;
+      // Strip on the assembled buffer here too. WO-VISIBLE-POLISH
+      // audit cycle 3 / Finding 53 caught
+      // `[[ACTION:stockfish_eval {"fen":...}]]` getting spoken from
+      // this path on stream-end when a partial action tag was sitting
+      // in the buffer.
+      const cleaned = buffer
+        .replace(BOARD_TAG_STRIP_RE, '')
+        .replace(ACTION_TAG_STRIP_RE, '');
       // Read latest voice state directly from store to avoid stale closures
-      if (buffer.trim() && useAppStore.getState().coachVoiceOn) {
-        void voiceService.speak(buffer.trim());
+      if (cleaned.trim() && useAppStore.getState().coachVoiceOn) {
+        void voiceService.speak(cleaned.trim());
       }
       speechBufferRef.current = '';
     }, []);
@@ -607,19 +615,28 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   .trim();
                 setStreamingContent(displayText);
                 if (useAppStore.getState().coachVoiceOn) {
-                  // WO-FOUNDATION-02 (continued): strip [BOARD:...] and
-                  // [[ACTION:...]] tags from each chunk before it reaches
-                  // the speech buffer. Without this, the action / board
-                  // directives get spoken aloud verbatim.
-                  const cleanedChunk = chunk
+                  // WO-FOUNDATION-02 strips [BOARD:...] and
+                  // [[ACTION:...]] before the buffer reaches voice.
+                  // WO-VISIBLE-POLISH cycle 3 (Finding 53):
+                  // accumulate the RAW chunk first, then strip on the
+                  // assembled buffer. The previous shape stripped per
+                  // chunk, but action tags often span chunk boundaries
+                  // (the JSON payload alone is hundreds of bytes), so
+                  // a chunk like `[[ACTION:stockfish_eval` then
+                  // `{"fen":"..."}]]` would never match the regex on
+                  // either fragment and the whole tag fell through to
+                  // Polly. Stripping on the assembled buffer catches
+                  // multi-chunk tags; partial tags pass through
+                  // unchanged and complete on the next chunk.
+                  speechBufferRef.current += chunk;
+                  const stripped = speechBufferRef.current
                     .replace(BOARD_TAG_STRIP_RE, '')
                     .replace(ACTION_TAG_STRIP_RE, '');
-                  speechBufferRef.current += cleanedChunk;
-                  const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+                  const sentenceEnd = /[.!?]\s/.exec(stripped);
                   if (sentenceEnd) {
-                    const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
-                    speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                    void voiceService.speak(sentence.trim());
+                    const sentence = stripped.slice(0, sentenceEnd.index + 1);
+                    speechBufferRef.current = stripped.slice(sentenceEnd.index + 2);
+                    if (sentence.trim()) void voiceService.speak(sentence.trim());
                   }
                 }
               },
@@ -861,17 +878,18 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 .trim();
               setStreamingContent(displayText);
               if (useAppStore.getState().coachVoiceOn) {
-                // WO-FOUNDATION-02 (continued): same tag-strip as the
-                // in-game branch — see comment above.
-                const cleanedChunk = chunk
+                // WO-VISIBLE-POLISH cycle 3 — see the in-game branch
+                // above. Strip on the ASSEMBLED buffer, not per chunk,
+                // so multi-chunk action tags can't slip through.
+                speechBufferRef.current += chunk;
+                const stripped = speechBufferRef.current
                   .replace(BOARD_TAG_STRIP_RE, '')
                   .replace(ACTION_TAG_STRIP_RE, '');
-                speechBufferRef.current += cleanedChunk;
-                const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+                const sentenceEnd = /[.!?]\s/.exec(stripped);
                 if (sentenceEnd) {
-                  const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
-                  speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                  void voiceService.speak(sentence.trim());
+                  const sentence = stripped.slice(0, sentenceEnd.index + 1);
+                  speechBufferRef.current = stripped.slice(sentenceEnd.index + 2);
+                  if (sentence.trim()) void voiceService.speak(sentence.trim());
                 }
               }
             },
