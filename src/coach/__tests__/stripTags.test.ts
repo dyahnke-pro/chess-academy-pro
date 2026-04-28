@@ -43,4 +43,17 @@ describe('stripCoachOutputTags', () => {
     expect(stripCoachOutputTags('[[action:foo]] x')).toBe(' x');
     expect(stripCoachOutputTags('[action:foo] x')).toBe(' x');
   });
+
+  // WO-VISIBLE-POLISH bug 2 / Audit Finding 48 — payload with nested
+  // `]` characters (JSON arrays, FEN slashes are fine on their own
+  // but escapes / inner brackets break a non-lazy `[^\]]*` group).
+  it('strips [[ACTION:...]] when the payload contains nested brackets (Finding 48)', () => {
+    const input = 'Let me check [[ACTION:stockfish_eval {"fen":"r2qk2r/p1p1nQpp/2npB3"}]] hmm';
+    expect(stripCoachOutputTags(input)).toBe('Let me check  hmm');
+  });
+
+  it('strips [[ACTION:...]] when the payload contains JSON arrays / escapes', () => {
+    const input = 'see [[ACTION:set_intended_opening {"name":"Italian","aliases":["italian","Italian Game"]}]] done';
+    expect(stripCoachOutputTags(input)).toBe('see  done');
+  });
 });

@@ -24,12 +24,12 @@ import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../
  *  Action tags ([[ACTION:...]] and [ACTION:...]) are stripped via a
  *  separate regex (`ACTION_TAG_STRIP_RE`) so each replace call can
  *  target one concern. WO-COACH-RESILIENCE part C added the
- *  single-bracket variant to ACTION_TAG_STRIP_RE — Audit Finding 32
- *  showed `[[ACTION:play_move {"san":"e4"}]] Done.` being spoken
- *  aloud because the previous regex only matched the double-bracket
- *  form. */
+ *  single-bracket variant. WO-VISIBLE-POLISH (Audit Finding 48)
+ *  swapped the inner class to lazy `[\s\S]*?` so a payload that
+ *  contains nested `]` (JSON arrays, escapes, etc.) no longer
+ *  terminates the match early — the closing `]]` is what ends it. */
 const BOARD_TAG_STRIP_RE = /\[BOARD:\s*(?:arrow|highlight|position|practice|clear)(?::[^\]]*)?\]/gi;
-const ACTION_TAG_STRIP_RE = /\[\[ACTION:[^\]]*\]\]|\[ACTION:[^\]]*\]/gi;
+const ACTION_TAG_STRIP_RE = /\[\[ACTION:[\s\S]*?\]\]|\[ACTION:[\s\S]*?\]/gi;
 
 interface GameChatPanelProps {
   fen: string;

@@ -8,6 +8,11 @@ export interface EvalBarProps {
   mateIn: number | null;
   /** Render as a horizontal bar (left = black, right = white). */
   horizontal?: boolean;
+  /** WO-VISIBLE-POLISH bug 4 — when the displayed value is held over
+   *  from a prior tick (Stockfish failed on the current position), the
+   *  bar renders at reduced opacity and the label gets a `?` suffix
+   *  so the user knows the value is approximate, not engine-grounded. */
+  approximate?: boolean;
   className?: string;
 }
 
@@ -50,6 +55,7 @@ export function EvalBar({
   isMate,
   mateIn,
   horizontal = false,
+  approximate = false,
   className = '',
 }: EvalBarProps): JSX.Element {
   const whitePercent = useMemo(
@@ -57,10 +63,12 @@ export function EvalBar({
     [evaluation, isMate, mateIn],
   );
   const blackPercent = 100 - whitePercent;
-  const label = useMemo(
+  const baseLabel = useMemo(
     () => getEvalLabel(evaluation, isMate, mateIn),
     [evaluation, isMate, mateIn],
   );
+  const label = approximate ? `${baseLabel}?` : baseLabel;
+  const opacityClass = approximate ? 'opacity-60' : '';
 
   // Show label on the winning side's segment (wherever there's more room)
   const whiteIsWinning = whitePercent >= 50;
@@ -68,9 +76,10 @@ export function EvalBar({
   if (horizontal) {
     return (
       <div
-        className={`relative flex flex-row h-5 w-full rounded overflow-hidden select-none ${className}`}
+        className={`relative flex flex-row h-5 w-full rounded overflow-hidden select-none ${opacityClass} ${className}`}
         data-testid="eval-bar"
         aria-label={`Evaluation: ${label}`}
+        data-approximate={approximate ? 'true' : 'false'}
       >
         {/* Black segment (left) */}
         <motion.div
@@ -105,9 +114,10 @@ export function EvalBar({
 
   return (
     <div
-      className={`relative flex flex-col w-4 rounded overflow-hidden select-none ${className}`}
+      className={`relative flex flex-col w-4 rounded overflow-hidden select-none ${opacityClass} ${className}`}
       data-testid="eval-bar"
       aria-label={`Evaluation: ${label}`}
+      data-approximate={approximate ? 'true' : 'false'}
       style={{ minHeight: '100%' }}
     >
       {/* Black segment (top) */}

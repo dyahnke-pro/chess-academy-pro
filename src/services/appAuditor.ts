@@ -152,7 +152,29 @@ export type AuditKind =
   | 'coach-move-llm-fallback'
   // Level 3: Level 2 also timed out; picking a deterministic legal
   // move from chess.js so the game never freezes. Last-resort.
-  | 'coach-move-emergency-pick';
+  | 'coach-move-emergency-pick'
+  // Visible-polish batch (WO-VISIBLE-POLISH).
+  // Bug 1 diagnostic — fires when the post-game review next-button
+  // doesn't advance after a click, capturing currentIndex / movesLen
+  // / classification snapshot so we can see the actual UI state.
+  | 'review-step-blocked'
+  // Bug 3 diagnostic — fires after every Lichess explorer fetch with
+  // the resolved URL and HTTP status code so we can see what the
+  // gateway is actually returning when a 401 / non-2xx surfaces.
+  | 'lichess-fetch-attempt'
+  // Bug 4 diagnostic — fires whenever the eval bar value is set or
+  // explicitly held, with the source (stockfish | last-known | reset)
+  // so we can see why the bar appears stuck at +0.0 in production.
+  | 'eval-bar-source'
+  // Bug 5 fallback — fires when the phase-narration LLM call times
+  // out / errors and we render a generic transition template instead
+  // of nothing.
+  | 'phase-narration-fallback-shown'
+  // Audit-log diagnostic — fires whenever the play-surface board is
+  // reset (game.resetGame, gameId rotated, viewedMoveIndex=-1,
+  // temporaryFen flipped) so a "board went back to starting
+  // position" report names the exact path that triggered it.
+  | 'game-state-reset';
 
 export interface AuditEntry {
   timestamp: number;

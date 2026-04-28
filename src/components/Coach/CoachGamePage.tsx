@@ -622,6 +622,14 @@ export function CoachGamePage(): JSX.Element {
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
   const [latestTopLines, setLatestTopLines] = useState<AnalysisLine[]>([]);
+  // WO-VISIBLE-POLISH bug 4 — when Stockfish fails on a move and we
+  // hold the prior eval (sticky-last-good), flag the bar visually so
+  // the user knows the value is approximate. Set true when an
+  // analysis attempt fails AND we keep the previous value; cleared
+  // when a fresh Stockfish result lands. Initial value is true (the
+  // bar starts at 0 with no engine input — we shouldn't pretend
+  // that's an evaluated 0.0).
+  const [latestEvalIsStale, setLatestEvalIsStale] = useState<boolean>(true);
 
   // Pre-computed engine snapshot for voice chat (avoids re-running Stockfish)
   const voiceEngineSnapshot: EngineSnapshot | null = useMemo(() => {
@@ -966,6 +974,12 @@ export function CoachGamePage(): JSX.Element {
           break;
         case 'show_position':
           if (cmd.fen) {
+            void logAppAudit({
+              kind: 'game-state-reset',
+              category: 'subsystem',
+              source: 'CoachGamePage.handleBoardAnnotation',
+              summary: `[BOARD:position] cmd → temporaryFen=${cmd.fen.slice(0, 40)}, label="${cmd.label ?? ''}"`,
+            });
             setTemporaryFen(cmd.fen);
             setTemporaryLabel(cmd.label ?? 'Analysis position');
           }
@@ -1061,6 +1075,12 @@ export function CoachGamePage(): JSX.Element {
     // Reset the phase-transition ledger so the new game can fire its
     // transitions fresh (WO-PHASE-NARRATION-01).
     phaseStateRef.current = createPhaseTransitionState();
+    void logAppAudit({
+      kind: 'game-state-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handleResetGame',
+      summary: `restart-button → new gameId, prevMoves=${gameState.moves.length}`,
+    });
     game.resetGame();
     moveCountRef.current = 0;
     setGameState({
@@ -1076,6 +1096,7 @@ export function CoachGamePage(): JSX.Element {
       keyMoments: [],
     });
     setLatestEval(0);
+    setLatestEvalIsStale(true);
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
@@ -1092,6 +1113,12 @@ export function CoachGamePage(): JSX.Element {
 
   // Color change handler — resets the game with the new color
   const handleColorChange = useCallback((color: 'white' | 'black') => {
+    void logAppAudit({
+      kind: 'game-state-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handleColorChange',
+      summary: `color-change → ${color}, new gameId, prevMoves=${gameState.moves.length}`,
+    });
     setPlayerColor(color);
     game.resetGame();
     moveCountRef.current = 0;
@@ -1108,6 +1135,7 @@ export function CoachGamePage(): JSX.Element {
       keyMoments: [],
     });
     setLatestEval(0);
+    setLatestEvalIsStale(true);
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
@@ -1128,6 +1156,12 @@ export function CoachGamePage(): JSX.Element {
 
   const goToFirstMove = useCallback(() => {
     if (gameState.moves.length === 0) return;
+    void logAppAudit({
+      kind: 'game-state-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.goToFirstMove',
+      summary: `viewedMoveIndex=-1 (board shows START_FEN), movesLen=${gameState.moves.length}`,
+    });
     setViewedMoveIndex(-1);
     handleBackToGame();
   }, [gameState.moves.length, handleBackToGame]);
@@ -1809,6 +1843,14 @@ export function CoachGamePage(): JSX.Element {
         setLatestIsMate(postCoachAnalysis?.isMate ?? analysis.isMate);
         setLatestMateIn(postCoachAnalysis?.mateIn ?? analysis.mateIn);
         setLatestTopLines(postCoachAnalysis?.topLines ?? analysis.topLines);
+        // WO-VISIBLE-POLISH bug 4 — coach-turn eval bar source.
+        setLatestEvalIsStale(false);
+        void logAppAudit({
+          kind: 'eval-bar-source',
+          category: 'subsystem',
+          source: 'CoachGamePage.makeCoachMove',
+          summary: `value=${postCoachEval} source=stockfish (post-coach)`,
+        });
 
         // WO-LIVE-COACH-01: opponent move signal. analysis.evaluation
         // is the eval BEFORE coach moved, postCoachEval is AFTER.
@@ -1966,12 +2008,31 @@ export function CoachGamePage(): JSX.Element {
       ts: Date.now(),
     });
 
-    // Update eval bar + engine lines
+    // Update eval bar + engine lines. WO-VISIBLE-POLISH bug 4: when
+    // Stockfish failed (analysis === null) we hold the previous value
+    // and flag the bar as stale; when it succeeds we clear the flag.
+    // Audit emits the resolved source on every move so a stuck bar
+    // shows up as "source=last-known" runs in the production log.
     if (analysis) {
       setLatestEval(analysis.evaluation);
       setLatestIsMate(analysis.isMate);
       setLatestMateIn(analysis.mateIn);
       setLatestTopLines(analysis.topLines);
+      setLatestEvalIsStale(false);
+      void logAppAudit({
+        kind: 'eval-bar-source',
+        category: 'subsystem',
+        source: 'CoachGamePage.handlePlayerMove',
+        summary: `value=${analysis.evaluation} source=stockfish`,
+      });
+    } else {
+      setLatestEvalIsStale(true);
+      void logAppAudit({
+        kind: 'eval-bar-source',
+        category: 'subsystem',
+        source: 'CoachGamePage.handlePlayerMove',
+        summary: `value=${latestEval} source=last-known (stockfish failed)`,
+      });
     }
 
     // Check if the player played the engine's best move
@@ -2574,6 +2635,12 @@ export function CoachGamePage(): JSX.Element {
 
   // Handle practice-in-chat from post-game review
   const handlePracticeInChat = useCallback((prompt: string) => {
+    void logAppAudit({
+      kind: 'game-state-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handlePracticeInChat',
+      summary: `practice-in-chat → new gameId, prompt="${prompt.slice(0, 60)}"`,
+    });
     // Transition from postgame back to playing mode with chat
     game.resetGame();
     moveCountRef.current = 0;
@@ -2590,6 +2657,7 @@ export function CoachGamePage(): JSX.Element {
       keyMoments: [],
     });
     setLatestEval(0);
+    setLatestEvalIsStale(true);
     setLatestIsMate(false);
     setLatestMateIn(null);
     setViewedMoveIndex(null);
@@ -2810,6 +2878,7 @@ export function CoachGamePage(): JSX.Element {
                 interactive={false}
                 showEvalBar={showEvalBarEffective}
                 evaluation={latestEval}
+                evaluationApproximate={latestEvalIsStale}
                 isMate={latestIsMate}
                 mateIn={latestMateIn}
                 showFlipButton={false}
@@ -2886,6 +2955,12 @@ export function CoachGamePage(): JSX.Element {
           playerRating={playerRating}
           opponentRating={targetStrength}
           onPlayAgain={() => {
+            void logAppAudit({
+              kind: 'game-state-reset',
+              category: 'subsystem',
+              source: 'CoachGamePage.onPlayAgain',
+              summary: `play-again button → new gameId`,
+            });
             game.resetGame();
             moveCountRef.current = 0;
             // Reset phase-transition ledger for the fresh game
@@ -3270,6 +3345,7 @@ export function CoachGamePage(): JSX.Element {
               onMove={handleBoardMoveRouted}
               showEvalBar={showEvalBarEffective || isExploreMode}
               evaluation={isExploreMode && exploreEval !== null ? exploreEval : latestEval}
+              evaluationApproximate={!isExploreMode && latestEvalIsStale}
               isMate={isExploreMode ? exploreIsMate : latestIsMate}
               mateIn={isExploreMode ? exploreMateIn : latestMateIn}
               moveQualityFlash={moveFlash}

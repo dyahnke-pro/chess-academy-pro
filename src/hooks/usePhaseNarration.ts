@@ -43,6 +43,18 @@ const STOCKFISH_DEPTH = 10;
 const NARRATION_API_TIMEOUT_MS = 30_000;
 const NARRATION_SPEAK_TIMEOUT_MS = 60_000;
 
+/** WO-VISIBLE-POLISH bug 5 — when the phase-narration LLM call times
+ *  out (Audit Finding 61) we used to render NOTHING and the user
+ *  silently saw / heard nothing at the transition. These templates
+ *  are deterministic, local, and prefixed with a leading `*` so the
+ *  banner subtly flags it as a fallback rather than a tailored read. */
+const PHASE_FALLBACK_TEMPLATES: Record<'opening-to-middlegame' | 'middlegame-to-endgame', string> = {
+  'opening-to-middlegame':
+    "* We're entering the middlegame. The opening is set, now it's about plans and piece coordination.",
+  'middlegame-to-endgame':
+    "* Endgame territory. King activity and pawn structure decide it from here.",
+};
+
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error(`${label}-timeout`)), ms);
@@ -330,18 +342,53 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // Fallback: if nothing streamed and nothing dispatched but the
       // API returned a usable response (non-streaming provider, rare),
       // dispatch that as a single speak.
+      let fallbackPath = false;
       if (sentenceCount === 0) {
         const apiTrimmed = apiResponse.trim();
         if (apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
           setCurrentText(apiTrimmed);
           dispatchSentence(apiTrimmed);
-        } else if (apiTimedOut) {
-          setCurrentText('Phase narration timed out.');
-          return;
+        } else if (apiTimedOut || apiTrimmed.startsWith('⚠️') || !apiTrimmed) {
+          // WO-VISIBLE-POLISH bug 5 — Audit Finding 61: silent failure
+          // when the phase-narration API hung. Render the deterministic
+          // template so the user sees / hears SOMETHING for the
+          // transition. Audio uses the local text — no API round-trip.
+          fallbackPath = true;
+          const fallback = PHASE_FALLBACK_TEMPLATES[event.kind];
+          const reason = apiTimedOut
+            ? 'api-timeout'
+            : apiTrimmed.startsWith('⚠️')
+              ? 'api-warning'
+              : 'empty-response';
+          void logAppAudit({
+            kind: 'phase-narration-fallback-shown',
+            category: 'subsystem',
+            source: 'usePhaseNarration',
+            summary: `transition=${event.kind} reason=${reason}`,
+            fen: event.fen,
+          });
+          setCurrentText(fallback);
+          // Fire-and-forget speak. Audit Finding 1 (next cycle showed
+          // a 60 s phase-narration-speak-timeout when the audio device
+          // had failed earlier) — awaiting firstSpeakPromise on the
+          // fallback path keeps `isNarrating` true for the entire
+          // NARRATION_SPEAK_TIMEOUT_MS window, blocking the board.
+          // The fallback text is deterministic and short; we don't
+          // need to gate the UI on its delivery.
+          voiceService.speakForced(fallback).catch(() => {
+            /* swallow — TTS hangs / device failures audit elsewhere */
+          });
         } else {
           console.log('[PHASE-HOOK-07] speech SKIPPED: no speakable text');
           return;
         }
+      }
+      // Fallback path: don't block the UI on Polly. Skip the
+      // firstSpeakPromise await below — it's null anyway since we
+      // didn't go through dispatchSentence — but be explicit so a
+      // future reader doesn't reintroduce the await.
+      if (fallbackPath) {
+        return;
       }
 
       console.log('[PHASE-HOOK-07] streaming speech dispatched', {

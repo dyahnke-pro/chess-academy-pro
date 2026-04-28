@@ -1,4 +1,5 @@
 import type { LichessExplorerResult, LichessCloudEval } from '../types';
+import { logAppAudit } from './appAuditor';
 
 const EXPLORER_BASE = 'https://explorer.lichess.ovh';
 const LICHESS_API_BASE = 'https://lichess.org/api';
@@ -8,18 +9,17 @@ const LICHESS_API_BASE = 'https://lichess.org/api';
  *  with their own timeout still get protection at the service edge. */
 const LICHESS_FETCH_TIMEOUT_MS = 5000;
 
-/** Lichess API ToS asks for an identifying User-Agent. Audit Finding
- *  28 from production showed `lichess_opening_lookup` returning 401
- *  on the explorer endpoints; per Lichess docs the public explorer
- *  doesn't actually require auth, but the gateway will refuse
- *  requests without a User-Agent it recognizes as a real client.
- *  WO-COACH-RESILIENCE part D. */
-const LICHESS_USER_AGENT =
-  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app)';
-
+/** Lichess API ToS asks for an identifying client. Audit Finding 28
+ *  showed `lichess_opening_lookup` returning 401, and Finding 113
+ *  re-confirmed the same after PR #347's User-Agent attempt — which
+ *  was always a no-op because `User-Agent` is on the browser fetch
+ *  forbidden-header list (the value is silently dropped, never
+ *  reaches the wire). WO-VISIBLE-POLISH bug 3 swaps to `X-Client`
+ *  (allowed) so the request is still labelled but no header is
+ *  silently filtered. */
 const LICHESS_HEADERS: Record<string, string> = {
   Accept: 'application/json',
-  'User-Agent': LICHESS_USER_AGENT,
+  'X-Client': 'chess-academy-pro/1.0 (https://chess-academy-pro.vercel.app)',
 };
 
 export type ExplorerSource = 'lichess' | 'masters';
@@ -42,6 +42,16 @@ export async function fetchLichessExplorer(
     headers: LICHESS_HEADERS,
     signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
   });
+  // WO-VISIBLE-POLISH bug 3 diagnostic — log every Lichess attempt
+  // with its resolved URL + status so the next test cycle shows
+  // exactly what the gateway returned, even when the caller swallows
+  // the throw.
+  void logAppAudit({
+    kind: 'lichess-fetch-attempt',
+    category: 'subsystem',
+    source: 'lichessExplorerService.fetchLichessExplorer',
+    summary: `url=${url} status=${response.status}`,
+  });
   if (!response.ok) {
     throw new Error(`Explorer API error: ${response.status}`);
   }
@@ -62,6 +72,12 @@ export async function fetchCloudEval(
   const response = await fetch(url, {
     headers: LICHESS_HEADERS,
     signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
+  });
+  void logAppAudit({
+    kind: 'lichess-fetch-attempt',
+    category: 'subsystem',
+    source: 'lichessExplorerService.fetchCloudEval',
+    summary: `url=${url} status=${response.status}`,
   });
   if (response.status === 404) return null;
   if (!response.ok) {

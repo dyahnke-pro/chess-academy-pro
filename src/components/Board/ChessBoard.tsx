@@ -39,6 +39,11 @@ export interface ChessBoardProps {
   evaluation?: number | null;
   isMate?: boolean;
   mateIn?: number | null;
+  /** When true, the eval bar renders at reduced opacity with a `?`
+   *  suffix on the label — used to flag values held over from a
+   *  previous tick because the engine failed on the current
+   *  position. WO-VISIBLE-POLISH bug 4. */
+  evaluationApproximate?: boolean;
   onMove?: (move: MoveResult) => void;
   onUndo?: () => void;
   onReset?: () => void;
@@ -94,6 +99,7 @@ export function ChessBoard({
   evaluation = null,
   isMate = false,
   mateIn = null,
+  evaluationApproximate = false,
   onMove,
   onUndo,
   onReset,
@@ -300,6 +306,7 @@ export function ChessBoard({
           isMate={isMate}
           mateIn={mateIn}
           horizontal
+          approximate={evaluationApproximate}
         />
       )}
 
@@ -311,6 +318,7 @@ export function ChessBoard({
             evaluation={evaluation}
             isMate={isMate}
             mateIn={mateIn}
+            approximate={evaluationApproximate}
             className="self-stretch"
           />
         )}
