@@ -174,7 +174,15 @@ export type AuditKind =
   // reset (game.resetGame, gameId rotated, viewedMoveIndex=-1,
   // temporaryFen flipped) so a "board went back to starting
   // position" report names the exact path that triggered it.
-  | 'game-state-reset';
+  | 'game-state-reset'
+  // Stockfish WASM runtime crash. Fires from worker.onerror so the
+  // crash shows up as a subsystem entry (not just a bare
+  // runtime/uncaught-error from the global hook), and carries the
+  // variant + source URL for triage. iOS Safari produces
+  // `RuntimeError: Unreachable code should not be executed` from
+  // `stockfish-18-lite-single.js` on every analysis once the bundle
+  // is loaded — see audit cycle 2 Findings 76, 122, 138, 150, 154.
+  | 'stockfish-runtime-crash';
 
 export interface AuditEntry {
   timestamp: number;

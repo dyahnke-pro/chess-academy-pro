@@ -38,24 +38,37 @@ export async function fetchLichessExplorer(
     params.set('ratings', '1600,1800,2000,2200,2500');
   }
   const url = `${EXPLORER_BASE}/${source}?${params.toString()}`;
-  const response = await fetch(url, {
-    headers: LICHESS_HEADERS,
-    signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
-  });
-  // WO-VISIBLE-POLISH bug 3 diagnostic — log every Lichess attempt
-  // with its resolved URL + status so the next test cycle shows
-  // exactly what the gateway returned, even when the caller swallows
-  // the throw.
-  void logAppAudit({
-    kind: 'lichess-fetch-attempt',
-    category: 'subsystem',
-    source: 'lichessExplorerService.fetchLichessExplorer',
-    summary: `url=${url} status=${response.status}`,
-  });
-  if (!response.ok) {
-    throw new Error(`Explorer API error: ${response.status}`);
+  // WO-VISIBLE-POLISH follow-up — try/finally so the audit fires even
+  // when fetch throws (AbortSignal timeout, network unreachable, CORS
+  // preflight fail, etc.). The previous shape only logged on
+  // resolution; production audit (cycle 2) showed 6 trace-tool-dispatch
+  // entries for Lichess but ZERO `lichess-fetch-attempt` — meaning
+  // every fetch was throwing before reaching the log line.
+  let status: number | null = null;
+  let errorMsg: string | null = null;
+  try {
+    const response = await fetch(url, {
+      headers: LICHESS_HEADERS,
+      signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
+    });
+    status = response.status;
+    if (!response.ok) {
+      throw new Error(`Explorer API error: ${response.status}`);
+    }
+    return await (response.json() as Promise<LichessExplorerResult>);
+  } catch (err) {
+    errorMsg = err instanceof Error ? err.message : String(err);
+    throw err;
+  } finally {
+    void logAppAudit({
+      kind: 'lichess-fetch-attempt',
+      category: 'subsystem',
+      source: 'lichessExplorerService.fetchLichessExplorer',
+      summary: status !== null
+        ? `url=${url} status=${status}`
+        : `url=${url} status=throw error="${errorMsg ?? 'unknown'}"`,
+    });
   }
-  return response.json() as Promise<LichessExplorerResult>;
 }
 
 /**
@@ -69,21 +82,32 @@ export async function fetchCloudEval(
 ): Promise<LichessCloudEval | null> {
   const params = new URLSearchParams({ fen, multiPv: String(multiPv) });
   const url = `${LICHESS_API_BASE}/cloud-eval?${params.toString()}`;
-  const response = await fetch(url, {
-    headers: LICHESS_HEADERS,
-    signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
-  });
-  void logAppAudit({
-    kind: 'lichess-fetch-attempt',
-    category: 'subsystem',
-    source: 'lichessExplorerService.fetchCloudEval',
-    summary: `url=${url} status=${response.status}`,
-  });
-  if (response.status === 404) return null;
-  if (!response.ok) {
-    throw new Error(`Cloud eval API error: ${response.status}`);
+  let status: number | null = null;
+  let errorMsg: string | null = null;
+  try {
+    const response = await fetch(url, {
+      headers: LICHESS_HEADERS,
+      signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
+    });
+    status = response.status;
+    if (response.status === 404) return null;
+    if (!response.ok) {
+      throw new Error(`Cloud eval API error: ${response.status}`);
+    }
+    return await (response.json() as Promise<LichessCloudEval>);
+  } catch (err) {
+    errorMsg = err instanceof Error ? err.message : String(err);
+    throw err;
+  } finally {
+    void logAppAudit({
+      kind: 'lichess-fetch-attempt',
+      category: 'subsystem',
+      source: 'lichessExplorerService.fetchCloudEval',
+      summary: status !== null
+        ? `url=${url} status=${status}`
+        : `url=${url} status=throw error="${errorMsg ?? 'unknown'}"`,
+    });
   }
-  return response.json() as Promise<LichessCloudEval>;
 }
 
 /**

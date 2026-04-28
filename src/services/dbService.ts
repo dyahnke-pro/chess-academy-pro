@@ -182,7 +182,12 @@ export async function generateFlashcardsForOpening(
     srsLastReview: null,
   }));
 
-  await db.flashcards.bulkAdd(cards);
+  // bulkPut (upsert) instead of bulkAdd so re-invocations on the same
+  // opening don't throw `ConstraintError: Key already exists` — the
+  // ids are deterministic (`${openingId}-card-${i}`) so a re-run is a
+  // no-op on the rows. Audit cycle 2 Findings 158, 252-253 caught
+  // bulkAdd unhandled-rejection three times across sessions.
+  await db.flashcards.bulkPut(cards);
 }
 
 // ─── Sessions ─────────────────────────────────────────────────────────────────

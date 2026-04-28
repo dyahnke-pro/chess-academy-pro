@@ -232,6 +232,24 @@ class StockfishEngine {
               error.message ||
               'Uncaught RuntimeError or worker load failure';
             console.error('[Stockfish] worker.onerror:', msg);
+            // WO-VISIBLE-POLISH follow-up — surface the crash as a
+            // subsystem audit entry alongside the global
+            // runtime/uncaught-error. iOS Safari fires this from
+            // `stockfish-18-lite-single.js` on every analysis call
+            // once the WASM bundle is dead; the bare runtime entry
+            // doesn't carry the variant / location, so triage was
+            // harder than it needed to be.
+            void logAppAudit({
+              kind: 'stockfish-runtime-crash',
+              category: 'subsystem',
+              source: 'stockfishEngine.worker.onerror',
+              summary: `variant=${this.workerVariant ?? 'unknown'} msg="${msg.slice(0, 120)}"`,
+              details: [
+                `filename: ${error.filename ?? '(none)'}`,
+                `line:col:  ${error.lineno ?? '?'}:${error.colno ?? '?'}`,
+                `runtimeFallbackAttempted: ${this._runtimeFallbackAttempted}`,
+              ].join('\n'),
+            });
             // Multi-thread bundle failed early — try the runtime
             // fallback before treating this as a fatal init error.
             if (

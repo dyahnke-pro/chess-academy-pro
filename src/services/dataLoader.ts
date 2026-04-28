@@ -369,7 +369,11 @@ function generateFlashcardsForOpening(opening: OpeningRecord): Promise<void> {
     });
   });
 
-  return db.flashcards.bulkAdd(cards).then(() => undefined);
+  // bulkPut (upsert) — see dbService.populateFromOpenings for the
+  // matching rationale. The ids `${opening.id}-var-${i}` are
+  // deterministic, so a second loader run on the same opening must
+  // be a no-op rather than a ConstraintError.
+  return db.flashcards.bulkPut(cards).then(() => undefined);
 }
 
 // ─── Opening Narrations ──────────────────────────────────────────────────────

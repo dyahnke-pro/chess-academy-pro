@@ -342,7 +342,50 @@ class VoiceService {
 
   async speak(text: string): Promise<void> {
     this.logSpeakInvoked('speak', text);
-    return this.speakInternal(sanitizeForTTS(text), false);
+    return this.speakWithSafetyTimeout(sanitizeForTTS(text), false);
+  }
+
+  /** WO-VISIBLE-POLISH follow-up — speakInternal can hang indefinitely
+   *  when iOS Safari rejects `audioContext.resume()` with "Failed to
+   *  start the audio device" (see audit cycle 2 Findings 158, 159).
+   *  Polly's catch returns false, but the Web Speech fallback can also
+   *  hang on the same dead audio device. Without this safety timeout
+   *  the narration hooks (phase, position) can't ever clear
+   *  `isNarrating`, which gates the play surface's interactive prop —
+   *  user perceives a frozen / "reset" board. 30 s is a hard upper
+   *  bound chosen to be longer than any realistic Polly+webspeech
+   *  combined speak (~25 s for a long phase narration) but short
+   *  enough that a stuck UI is recoverable. On expiry we audit and
+   *  resolve normally so callers see a successful no-op rather than a
+   *  rejection. */
+  private async speakWithSafetyTimeout(text: string, force: boolean): Promise<void> {
+    const SAFETY_MS = 30_000;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const safety = new Promise<'safety-timeout'>((resolve) => {
+      timer = setTimeout(() => resolve('safety-timeout'), SAFETY_MS);
+    });
+    try {
+      const winner = await Promise.race([
+        this.speakInternal(text, force).then(() => 'ok' as const),
+        safety,
+      ]);
+      if (winner === 'safety-timeout') {
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'tts-failure',
+            category: 'subsystem',
+            source: 'voiceService.speakWithSafetyTimeout',
+            summary: `speak hung past ${SAFETY_MS}ms — likely dead audio device. Resolving as no-op.`,
+            details: `text(60): ${text.slice(0, 60)}`,
+          });
+        });
+        // Cancel any in-flight playback so callers that re-call speak
+        // aren't fighting a zombie source. stop() is idempotent.
+        try { this.stop(); } catch { /* swallow */ }
+      }
+    } finally {
+      if (timer !== null) clearTimeout(timer);
+    }
   }
 
   /** Low-latency speak for training modes — skips Polly/voice-packs and DB reads.
@@ -369,7 +412,7 @@ class VoiceService {
    *  Used by the voice-chat mic where the user explicitly opted into voice. */
   async speakForced(text: string): Promise<void> {
     this.logSpeakInvoked('speakForced', text);
-    return this.speakInternal(sanitizeForTTS(text), true);
+    return this.speakWithSafetyTimeout(sanitizeForTTS(text), true);
   }
 
   /** Queue a sentence without stopping current speech. For streaming voice responses. */
