@@ -8,18 +8,28 @@ const LICHESS_API_BASE = 'https://lichess.org/api';
  *  with their own timeout still get protection at the service edge. */
 const LICHESS_FETCH_TIMEOUT_MS = 5000;
 
-/** Lichess API ToS asks for an identifying User-Agent. Audit Finding
- *  28 from production showed `lichess_opening_lookup` returning 401
- *  on the explorer endpoints; per Lichess docs the public explorer
- *  doesn't actually require auth, but the gateway will refuse
- *  requests without a User-Agent it recognizes as a real client.
- *  WO-COACH-RESILIENCE part D. */
-const LICHESS_USER_AGENT =
-  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app)';
-
+/** WO-LICHESS-CORS-FIX — only `Accept: application/json` is sent.
+ *
+ *  Earlier shapes set a custom `User-Agent` per Lichess ToS recommen-
+ *  dation, but `User-Agent` is on the browser fetch forbidden-header
+ *  list. Two failure modes flowed from this:
+ *    1. Older iOS WKWebView throws "Load failed" on the fetch call
+ *       when the page tries to set a forbidden header — production
+ *       audit findings 40 / 90 / 125 (cycle 5) all show
+ *       `lichess_opening_lookup error: "Load failed"` from this
+ *       exact path.
+ *    2. Even when the forbidden header is silently dropped, some
+ *       earlier custom-header attempts (`X-Client`) trigger CORS
+ *       preflight, which Lichess does not advertise for the
+ *       explorer endpoint — so the preflight 404s, the GET never
+ *       fires, and the app surfaces a network failure that looks
+ *       like an outage.
+ *  The public Lichess explorer doesn't require any identifying
+ *  header for read-only queries; `Accept: application/json` is on
+ *  the CORS-safelist so it doesn't trigger preflight, and the
+ *  endpoint returns JSON regardless. */
 const LICHESS_HEADERS: Record<string, string> = {
   Accept: 'application/json',
-  'User-Agent': LICHESS_USER_AGENT,
 };
 
 export type ExplorerSource = 'lichess' | 'masters';
