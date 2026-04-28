@@ -685,12 +685,30 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       switch (direction) {
         case 'first': newIndex = -1; break;
         case 'prev': newIndex = Math.max(-1, prev.currentMoveIndex - 1); break;
+        // Gating intentionally moves-based only — analysis presence is
+        // decorative, not a stepper precondition. The Next button in
+        // MoveNavigationControls disables on `currentIndex >= totalMoves - 1`
+        // (no analyzedMoves dependency), so a click that DOES reach
+        // navigateMove with no advance means the upstream state is
+        // already at the end. WO-VISIBLE-POLISH bug 1.
         case 'next': newIndex = Math.min(moves.length - 1, prev.currentMoveIndex + 1); break;
         case 'last': newIndex = moves.length - 1; break;
       }
+      // WO-VISIBLE-POLISH bug 1 diagnostic — fire when a next/last
+      // click did NOT advance, so the next test cycle shows the exact
+      // UI state when the user reported "step button grays out".
+      if ((direction === 'next' || direction === 'last') && newIndex === prev.currentMoveIndex) {
+        const nextMove = prev.currentMoveIndex + 1 < moves.length ? moves[prev.currentMoveIndex + 1] : null;
+        void logAppAudit({
+          kind: 'review-step-blocked',
+          category: 'subsystem',
+          source: 'CoachGameReview.navigateMove',
+          summary: `currentIndex=${prev.currentMoveIndex} movesLen=${moves.length} direction=${direction} nextEntry=${JSON.stringify(nextMove)}`,
+        });
+      }
       return { ...prev, currentMoveIndex: newIndex, mode: 'analysis' };
     });
-  }, [moves.length]);
+  }, [moves]);
 
   // Keyboard navigation. Dep array is REQUIRED — without it the effect
   // re-runs on every render and stacks keydown listeners, so one key

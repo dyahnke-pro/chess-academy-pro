@@ -14,13 +14,21 @@
  * by Polly, which is exactly the leak this defends against.
  *
  * Regex strategy: alternation with the double-bracket form FIRST so
- * input like `[[ACTION:foo]]` doesn't get half-stripped to `]`.
+ * input like `[[ACTION:foo]]` doesn't get half-stripped to `]`. The
+ * ACTION payload uses `[\s\S]*?` (lazy, dot-all-equivalent) instead
+ * of `[^\]]*` because Audit Finding 48 caught
+ * `[[ACTION:stockfish_eval {"fen":"r2qk2r/p1p..."}]]` being spoken in
+ * full — the FEN's `/` chars and the JSON's nested `{}` were fine,
+ * but the JSON's nested `]` (in arrays / escapes) terminated the
+ * `[^\]]*` match early so the closing `]]` was never consumed and
+ * the whole tag fell through. Lazy `[\s\S]*?` consumes everything up
+ * to the first `]]` regardless of inner brackets.
  */
 
 /** Strip `[BOARD:...]` AND both `[[ACTION:...]]` and `[ACTION:...]`
  *  variants. */
 export const COACH_OUTPUT_TAG_STRIP_RE =
-  /\[BOARD:\s*(?:arrow|highlight|position|practice|clear)(?::[^\]]*)?\]|\[\[ACTION:[^\]]*\]\]|\[ACTION:[^\]]*\]/gi;
+  /\[BOARD:\s*(?:arrow|highlight|position|practice|clear)(?::[^\]]*)?\]|\[\[ACTION:[\s\S]*?\]\]|\[ACTION:[\s\S]*?\]/gi;
 
 export function stripCoachOutputTags(text: string): string {
   return text.replace(COACH_OUTPUT_TAG_STRIP_RE, '');
