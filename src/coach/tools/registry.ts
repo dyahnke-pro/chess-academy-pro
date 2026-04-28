@@ -1,12 +1,14 @@
 /**
- * Tool registry — exports the full 17-tool toolbelt the spine
- * dispatches. Six cerebellum (read-only deterministic), eleven
+ * Tool registry — exports the full 21-tool toolbelt the spine
+ * dispatches. Ten cerebellum (read-only deterministic), eleven
  * cerebrum (decisions / side effects). See COACH-BRAIN-00 §"The
  * Cerebellum" and §"The Cerebrum Toolbelt".
  *
  * Spine wires these as (post WO-COACH-OPERATOR-FOUNDATION-01):
  *   FULLY IMPLEMENTED — stockfish_eval, stockfish_classify_move,
  *     lichess_opening_lookup, lichess_master_games,
+ *     lichess_cloud_eval, lichess_tablebase_lookup,
+ *     legal_moves_for_piece, material_count,
  *     local_opening_book, navigate_to_route, play_move,
  *     take_back_move, set_board_position, reset_board,
  *     set_intended_opening, clear_memory, record_hint_request,
@@ -21,6 +23,10 @@ import { stockfishClassifyMoveTool } from './cerebellum/stockfishClassifyMove';
 import { lichessOpeningLookupTool } from './cerebellum/lichessOpeningLookup';
 import { lichessMasterGamesTool } from './cerebellum/lichessMasterGames';
 import { lichessPuzzleFetchTool } from './cerebellum/lichessPuzzleFetch';
+import { lichessCloudEvalTool } from './cerebellum/lichessCloudEval';
+import { lichessTablebaseLookupTool } from './cerebellum/lichessTablebaseLookup';
+import { legalMovesForPieceTool } from './cerebellum/legalMovesForPiece';
+import { materialCountTool } from './cerebellum/materialCount';
 import { localOpeningBookTool } from './cerebellum/localOpeningBook';
 
 import { navigateToRouteTool } from './cerebrum/navigateToRoute';
@@ -43,6 +49,10 @@ export const COACH_TOOLS: Tool[] = [
   lichessOpeningLookupTool,
   lichessMasterGamesTool,
   lichessPuzzleFetchTool,
+  lichessCloudEvalTool,
+  lichessTablebaseLookupTool,
+  legalMovesForPieceTool,
+  materialCountTool,
   localOpeningBookTool,
   // Cerebrum
   navigateToRouteTool,
