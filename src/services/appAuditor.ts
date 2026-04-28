@@ -169,7 +169,12 @@ export type AuditKind =
   // Bug 5 fallback — fires when the phase-narration LLM call times
   // out / errors and we render a generic transition template instead
   // of nothing.
-  | 'phase-narration-fallback-shown';
+  | 'phase-narration-fallback-shown'
+  // Audit-log diagnostic — fires whenever the play-surface board is
+  // reset (game.resetGame, gameId rotated, viewedMoveIndex=-1,
+  // temporaryFen flipped) so a "board went back to starting
+  // position" report names the exact path that triggered it.
+  | 'game-state-reset';
 
 export interface AuditEntry {
   timestamp: number;

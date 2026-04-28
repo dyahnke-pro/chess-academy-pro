@@ -342,6 +342,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // Fallback: if nothing streamed and nothing dispatched but the
       // API returned a usable response (non-streaming provider, rare),
       // dispatch that as a single speak.
+      let fallbackPath = false;
       if (sentenceCount === 0) {
         const apiTrimmed = apiResponse.trim();
         if (apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
@@ -352,6 +353,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           // when the phase-narration API hung. Render the deterministic
           // template so the user sees / hears SOMETHING for the
           // transition. Audio uses the local text — no API round-trip.
+          fallbackPath = true;
           const fallback = PHASE_FALLBACK_TEMPLATES[event.kind];
           const reason = apiTimedOut
             ? 'api-timeout'
@@ -366,11 +368,27 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             fen: event.fen,
           });
           setCurrentText(fallback);
-          dispatchSentence(fallback);
+          // Fire-and-forget speak. Audit Finding 1 (next cycle showed
+          // a 60 s phase-narration-speak-timeout when the audio device
+          // had failed earlier) — awaiting firstSpeakPromise on the
+          // fallback path keeps `isNarrating` true for the entire
+          // NARRATION_SPEAK_TIMEOUT_MS window, blocking the board.
+          // The fallback text is deterministic and short; we don't
+          // need to gate the UI on its delivery.
+          voiceService.speakForced(fallback).catch(() => {
+            /* swallow — TTS hangs / device failures audit elsewhere */
+          });
         } else {
           console.log('[PHASE-HOOK-07] speech SKIPPED: no speakable text');
           return;
         }
+      }
+      // Fallback path: don't block the UI on Polly. Skip the
+      // firstSpeakPromise await below — it's null anyway since we
+      // didn't go through dispatchSentence — but be explicit so a
+      // future reader doesn't reintroduce the await.
+      if (fallbackPath) {
+        return;
       }
 
       console.log('[PHASE-HOOK-07] streaming speech dispatched', {

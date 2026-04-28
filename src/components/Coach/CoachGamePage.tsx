@@ -974,6 +974,12 @@ export function CoachGamePage(): JSX.Element {
           break;
         case 'show_position':
           if (cmd.fen) {
+            void logAppAudit({
+              kind: 'game-state-reset',
+              category: 'subsystem',
+              source: 'CoachGamePage.handleBoardAnnotation',
+              summary: `[BOARD:position] cmd → temporaryFen=${cmd.fen.slice(0, 40)}, label="${cmd.label ?? ''}"`,
+            });
             setTemporaryFen(cmd.fen);
             setTemporaryLabel(cmd.label ?? 'Analysis position');
           }
@@ -1069,6 +1075,12 @@ export function CoachGamePage(): JSX.Element {
     // Reset the phase-transition ledger so the new game can fire its
     // transitions fresh (WO-PHASE-NARRATION-01).
     phaseStateRef.current = createPhaseTransitionState();
+    void logAppAudit({
+      kind: 'game-state-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handleResetGame',
+      summary: `restart-button → new gameId, prevMoves=${gameState.moves.length}`,
+    });
     game.resetGame();
     moveCountRef.current = 0;
     setGameState({
@@ -1101,6 +1113,12 @@ export function CoachGamePage(): JSX.Element {
 
   // Color change handler — resets the game with the new color
   const handleColorChange = useCallback((color: 'white' | 'black') => {
+    void logAppAudit({
+      kind: 'game-state-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handleColorChange',
+      summary: `color-change → ${color}, new gameId, prevMoves=${gameState.moves.length}`,
+    });
     setPlayerColor(color);
     game.resetGame();
     moveCountRef.current = 0;
@@ -1138,6 +1156,12 @@ export function CoachGamePage(): JSX.Element {
 
   const goToFirstMove = useCallback(() => {
     if (gameState.moves.length === 0) return;
+    void logAppAudit({
+      kind: 'game-state-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.goToFirstMove',
+      summary: `viewedMoveIndex=-1 (board shows START_FEN), movesLen=${gameState.moves.length}`,
+    });
     setViewedMoveIndex(-1);
     handleBackToGame();
   }, [gameState.moves.length, handleBackToGame]);
@@ -2611,6 +2635,12 @@ export function CoachGamePage(): JSX.Element {
 
   // Handle practice-in-chat from post-game review
   const handlePracticeInChat = useCallback((prompt: string) => {
+    void logAppAudit({
+      kind: 'game-state-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handlePracticeInChat',
+      summary: `practice-in-chat → new gameId, prompt="${prompt.slice(0, 60)}"`,
+    });
     // Transition from postgame back to playing mode with chat
     game.resetGame();
     moveCountRef.current = 0;
@@ -2925,6 +2955,12 @@ export function CoachGamePage(): JSX.Element {
           playerRating={playerRating}
           opponentRating={targetStrength}
           onPlayAgain={() => {
+            void logAppAudit({
+              kind: 'game-state-reset',
+              category: 'subsystem',
+              source: 'CoachGamePage.onPlayAgain',
+              summary: `play-again button → new gameId`,
+            });
             game.resetGame();
             moveCountRef.current = 0;
             // Reset phase-transition ledger for the fresh game
