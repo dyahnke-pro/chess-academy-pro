@@ -1753,9 +1753,18 @@ export function CoachGamePage(): JSX.Element {
         // Analyze the position AFTER the coach moved — this gives:
         // 1. Accurate eval/top lines for the player's upcoming turn (voice chat needs this)
         // 2. preMoveEval for the player's next move classification
+        // WO-COACH-FREEZE-FIX (PR #349): wrap with withTimeout. If this
+        // hangs the user can't move (isCoachThinking stays true and the
+        // board stays non-interactive), so the freeze is just deferred
+        // by one turn. 5 s is plenty for depth-10.
         let postCoachAnalysis: StockfishAnalysis | null = null;
         try {
-          postCoachAnalysis = await stockfishEngine.analyzePosition(result.fen, 10);
+          const wrappedPost = await withTimeout(
+            stockfishEngine.analyzePosition(result.fen, 10),
+            5_000,
+            'post-coach-move-analysis',
+          );
+          postCoachAnalysis = wrappedPost.ok ? wrappedPost.value : null;
         } catch {
           // Fall back to pre-coach analysis if post-analysis fails
         }
@@ -1912,11 +1921,21 @@ export function CoachGamePage(): JSX.Element {
     });
 
     // Analyze the position AFTER the player's move (for eval bar + post-move eval)
+    // WO-COACH-FREEZE-FIX (PR #349): wrap with withTimeout so a hung
+    // Stockfish doesn't block game.makeMove at line ~2301 from running,
+    // which is what was causing the 'coach freezes after first move'
+    // report. If the analysis times out we proceed with null analysis;
+    // existing classification logic already handles null gracefully.
     let analysis: StockfishAnalysis | null = null;
     try {
-      analysis = await stockfishEngine.analyzePosition(moveResult.fen, 12);
+      const wrapped = await withTimeout(
+        stockfishEngine.analyzePosition(moveResult.fen, 12),
+        5_000,
+        'player-move-analysis-after',
+      );
+      analysis = wrapped.ok ? wrapped.value : null;
     } catch {
-      // If analysis fails, default to 'good'
+      // If analysis throws, default to null (existing classification handles it)
     }
 
     // DIAG-FREEZE P2 — first analyzePosition resolved (or threw).
@@ -1927,11 +1946,17 @@ export function CoachGamePage(): JSX.Element {
     });
 
     // Analyze the position BEFORE the player's move (for best move comparison)
+    // Same withTimeout wrap.
     let preAnalysis: StockfishAnalysis | null = null;
     try {
-      preAnalysis = await stockfishEngine.analyzePosition(preFen, 12);
+      const wrappedPre = await withTimeout(
+        stockfishEngine.analyzePosition(preFen, 12),
+        5_000,
+        'player-move-analysis-before',
+      );
+      preAnalysis = wrappedPre.ok ? wrappedPre.value : null;
     } catch {
-      // If pre-analysis fails, we'll use simpler classification
+      // If pre-analysis throws, we'll use simpler classification
     }
 
     // DIAG-FREEZE P3 — second analyzePosition resolved.
