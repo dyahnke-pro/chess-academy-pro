@@ -606,28 +606,9 @@ class VoiceService {
       let arrayBuffer = this.touchAudioCacheEntry(key);
 
       if (!arrayBuffer) {
-        // Combine caller-abort signal (new speak() supersedes current)
-        // with a 10s timeout so slow-network Polly can't hang the
-        // voice pipeline indefinitely. Matches the prefetchAudio
-        // pattern (5s) but longer because real speech may be a
-        // longer sentence than prefetched annotations.
-        this.abortController = new AbortController();
-        const timeoutSignal = AbortSignal.timeout(10_000);
-        // AbortSignal.any is Chrome 116+/Safari 17.4+ — older browsers
-        // (and some WKWebView builds) still need the caller-only
-        // signal. Types mark `any` as always present; reality differs.
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        const combinedSignal = AbortSignal.any
-          ? AbortSignal.any([this.abortController.signal, timeoutSignal])
-          : this.abortController.signal;
-        const url = getTtsUrl(text, voice);
-        const response = await fetch(url, { signal: combinedSignal });
-        if (!response.ok) {
-          this.coolDownPolly(`API error ${response.status}`);
-          return false;
-        }
-        arrayBuffer = await response.arrayBuffer();
-        this.abortController = null;
+        const fetched = await this.fetchPollyAudioWithRetry(text, voice);
+        if (!fetched) return false;
+        arrayBuffer = fetched;
         this.setAudioCacheEntry(key, arrayBuffer);
       }
 
@@ -651,6 +632,57 @@ class VoiceService {
       this.currentSource = null;
       return false;
     }
+  }
+
+  /** WO-VISIBLE-POLISH cycle 4 — one-shot retry for Polly fetch on
+   *  transient errors (e.g., the iOS Safari "Load failed" reported in
+   *  cycle 4 audit Finding 2 that triggered a 15s cooldown mid-stream
+   *  and dropped the rest of a phase narration to web-speech). The
+   *  previous shape went straight to coolDown on any non-2xx or
+   *  network throw, so a single transient hiccup downgraded the next
+   *  15s of speech. The retry uses a fresh AbortController so an
+   *  orphaned signal from the first attempt doesn't poison the
+   *  second. Returns the audio buffer on success, null after both
+   *  attempts fail (caller decides whether to cool down). */
+  private async fetchPollyAudioWithRetry(
+    text: string,
+    voice: string,
+  ): Promise<ArrayBuffer | null> {
+    const url = getTtsUrl(text, voice);
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      this.abortController = new AbortController();
+      const timeoutSignal = AbortSignal.timeout(10_000);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      const combinedSignal = AbortSignal.any
+        ? AbortSignal.any([this.abortController.signal, timeoutSignal])
+        : this.abortController.signal;
+      try {
+        const response = await fetch(url, { signal: combinedSignal });
+        if (!response.ok) {
+          // Non-2xx: don't retry on 4xx (likely auth/quota); retry on 5xx.
+          if (response.status >= 500 && attempt === 1) {
+            continue;
+          }
+          this.coolDownPolly(`API error ${response.status}`);
+          return null;
+        }
+        const buffer = await response.arrayBuffer();
+        this.abortController = null;
+        return buffer;
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          // Caller aborted — propagate by returning null without cooldown.
+          return null;
+        }
+        // Network throw / "Load failed" — retry once before cooling down.
+        if (attempt === 1) {
+          continue;
+        }
+        this.coolDownPolly(err instanceof Error ? err.message : String(err));
+        return null;
+      }
+    }
+    return null;
   }
 
   /** Pre-fetch Polly audio for a list of texts. Call on mount when all

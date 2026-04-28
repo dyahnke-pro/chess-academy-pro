@@ -13,20 +13,21 @@ export default defineConfig(({ mode }) => {
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // WO-VISIBLE-POLISH cycle 4 — switched from 'autoUpdate' to
+      // 'prompt' because the autoUpdate registration code in the
+      // page bundle (NOT the SW itself) calls `updateSW(true)`
+      // automatically when it detects a new SW, which forces a
+      // window.location.reload() — destructive mid-game. Removing
+      // skipWaiting/clientsClaim from workbox in cycle 3 wasn't
+      // enough because the auto-reload is driven by the page-side
+      // registration code, not the SW lifecycle. With 'prompt' the
+      // new SW installs and stays in waiting until the user closes
+      // and reopens the tab. We don't currently render an "Update
+      // available" UI, but the SW will still activate naturally on
+      // next tab close/reopen — acceptable trade-off for never
+      // losing an active game to a deploy.
+      registerType: 'prompt',
       workbox: {
-        // skipWaiting + clientsClaim were removed in WO-VISIBLE-POLISH
-        // (audit cycle 3 board-reset report). The combination forced
-        // every new build to take over active clients immediately,
-        // which fired `controllerchange` → vite-plugin-pwa's
-        // auto-update registrar reloaded the page. For an interactive
-        // chess app, a mid-game reload is destructive (resume is
-        // disabled per WO-RESUME-01, so the game is lost). Without
-        // these flags the new SW installs but stays in `waiting`
-        // until the tab is closed and reopened, so updates land
-        // between sessions instead of during them. Trade-off: long-
-        // lived tabs need a manual refresh to pick up new builds —
-        // acceptable for this app.
         cleanupOutdatedCaches: true,
         // TODO: Replace with code-splitting + exclude Stockfish WASM from precache — see backlog item WO-PERF-BUNDLE-01.
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,

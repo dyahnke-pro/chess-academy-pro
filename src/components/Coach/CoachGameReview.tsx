@@ -126,6 +126,25 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     whatIfStartFen: null,
   });
 
+  // WO-VISIBLE-POLISH cycle 4 — diagnostic on review mount. User
+  // reports the next button "still grays out after first move".
+  // MoveNavigationControls gates on `currentIndex >= totalMoves - 1`,
+  // so a length-1 moves array makes the next button disabled at
+  // index 0. If the PGN saved by the play surface is truncated, the
+  // review reconstructs only 1 move and the symptom appears even
+  // though the gating logic is correct. Audit the actual moves
+  // array length + first/last SAN so the next cycle's log proves
+  // whether reconstruction is the bug.
+  useEffect(() => {
+    void logAppAudit({
+      kind: 'review-step-blocked',
+      category: 'subsystem',
+      source: 'CoachGameReview.mount',
+      summary: `mount: movesLen=${moves.length} startIdx=${startIndex} firstSan=${moves[0]?.san ?? 'none'} lastSan=${moves[moves.length - 1]?.san ?? 'none'}`,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [whatIfFen, setWhatIfFen] = useState<string | null>(null);
   const [whatIfCommentary, setWhatIfCommentary] = useState<string | null>(null);
   const [isThinking, setIsThinking] = useState(false);

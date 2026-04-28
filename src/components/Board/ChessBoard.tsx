@@ -80,6 +80,12 @@ export interface ChessBoardProps {
   onVoiceActiveChange?: (active: boolean) => void;
   /** Called when the voice chat LLM response includes arrow annotations. */
   onVoiceArrows?: (arrows: Array<{ startSquare: string; endSquare: string; color: string }>) => void;
+  // WO-VISIBLE-POLISH cycle 4 — voice intent-routed tool callbacks.
+  // Without these the voice path can't actually execute commands;
+  // see VoiceChatMic.handleUserMessage.
+  onVoicePlayMove?: (san: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  onVoiceTakeBackMove?: (count: number) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  onVoiceResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -120,6 +126,9 @@ export function ChessBoard({
   voicePlayerColor,
   onVoiceActiveChange,
   onVoiceArrows,
+  onVoicePlayMove,
+  onVoiceTakeBackMove,
+  onVoiceResetBoard,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -432,6 +441,9 @@ export function ChessBoard({
               playerColor={voicePlayerColor}
               onListeningChange={onVoiceActiveChange}
               onArrows={onVoiceArrows}
+              onPlayMove={onVoicePlayMove}
+              onTakeBackMove={onVoiceTakeBackMove}
+              onResetBoard={onVoiceResetBoard}
             />
           )}
         </div>

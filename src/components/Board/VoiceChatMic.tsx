@@ -6,6 +6,8 @@ import { voiceService } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
+import { tryRouteIntent } from '../../services/coachIntentRouter';
+import { logAppAudit } from '../../services/appAuditor';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildStudentStateBlock } from '../../services/studentStateBlock';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from '../../services/coachMemoryService';
@@ -73,6 +75,16 @@ interface VoiceChatMicProps {
   onListeningChange?: (listening: boolean) => void;
   /** Called when the LLM response includes arrow annotations for the board. */
   onArrows?: (arrows: BoardArrow[]) => void;
+  // WO-VISIBLE-POLISH cycle 4 — the voice path was bypassing the
+  // intent router and `coachService.ask`'s tool dispatch entirely;
+  // utterances went straight to `getCoachChatResponse` which has no
+  // tool-call surface, so "take back" etc. produced LLM chat ABOUT
+  // taking back instead of an actual `take_back_move` dispatch.
+  // These callbacks let the mic pre-route deterministic commands the
+  // same way GameChatPanel.handleSend does.
+  onPlayMove?: (san: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  onTakeBackMove?: (count: number) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  onResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
 }
 
 const MAX_HISTORY_PAIRS = 3;
@@ -238,7 +250,7 @@ function detectOpeningRequest(text: string): string | null {
   return nameMap[raw] ?? raw;
 }
 
-export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows }: VoiceChatMicProps): JSX.Element {
+export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows, onPlayMove, onTakeBackMove, onResetBoard }: VoiceChatMicProps): JSX.Element {
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -270,6 +282,80 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
   }, [messages]);
 
   const handleUserMessage = useCallback(async (text: string) => {
+    // WO-VISIBLE-POLISH cycle 4 — intent-route the voice transcript
+    // BEFORE building the LLM prompt. The voice path used to go
+    // straight to getCoachChatResponse, which has no tool-call
+    // surface, so "take back the move" / "play knight to f3" / etc.
+    // produced LLM chat ABOUT the action instead of an actual
+    // dispatch. tryRouteIntent matches the same regex patterns
+    // GameChatPanel uses; on match we dispatch the surface callback
+    // directly, ack via a short spoken confirmation, and skip the
+    // LLM round-trip entirely. Audit log proves the route fired.
+    const routedIntent = tryRouteIntent(text, { currentFen: fen });
+    if (routedIntent) {
+      void logAppAudit({
+        kind: 'coach-brain-intent-routed',
+        category: 'subsystem',
+        source: 'VoiceChatMic.handleUserMessage',
+        summary: `routed=${routedIntent.kind} bypass-llm=true source=voice`,
+      });
+      const userMsg: ChatMessage = {
+        id: `voice-${Date.now()}`,
+        role: 'user',
+        content: text,
+        timestamp: Date.now(),
+      };
+      setMessages([...messagesRef.current, userMsg]);
+      let ackText = 'Done.';
+      let ok = false;
+      let reason: string | undefined;
+      try {
+        switch (routedIntent.kind) {
+          case 'play_move': {
+            if (!onPlayMove) { reason = 'no onPlayMove callback'; break; }
+            const r = await Promise.resolve(onPlayMove(routedIntent.san));
+            ok = typeof r === 'boolean' ? r : r.ok;
+            if (ok) ackText = `${routedIntent.san}.`;
+            else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
+            break;
+          }
+          case 'take_back_move': {
+            if (!onTakeBackMove) { reason = 'no onTakeBackMove callback'; break; }
+            const r = await Promise.resolve(onTakeBackMove(routedIntent.count));
+            ok = typeof r === 'boolean' ? r : r.ok;
+            if (ok) ackText = routedIntent.count > 1 ? 'Took both back.' : 'Took it back.';
+            else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
+            break;
+          }
+          case 'reset_board': {
+            if (!onResetBoard) { reason = 'no onResetBoard callback'; break; }
+            const r = await Promise.resolve(onResetBoard());
+            ok = typeof r === 'boolean' ? r : r.ok;
+            if (ok) ackText = 'Reset.';
+            else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
+            break;
+          }
+          default:
+            reason = `intent ${routedIntent.kind} not wired in voice path`;
+        }
+      } catch (err) {
+        reason = err instanceof Error ? err.message : String(err);
+      }
+      if (!ok && reason) {
+        ackText = `Couldn't do that — ${reason}.`;
+      }
+      const ack: ChatMessage = {
+        id: `voice-ack-${Date.now()}`,
+        role: 'assistant',
+        content: ackText,
+        timestamp: Date.now(),
+      };
+      setMessages([...messagesRef.current, userMsg, ack]);
+      voiceService.stop();
+      void voiceService.speakForced(ackText);
+      return;
+    }
+
     // Detect opening requests (e.g. "play the French Defense")
     const requestedOpening = detectOpeningRequest(text);
     if (requestedOpening && onOpeningRequest) {
@@ -459,7 +545,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     };
     setMessages((prev) => [...prev, assistantMsg]);
     setIsStreaming(false);
-  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows]);
+  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows, onPlayMove, onTakeBackMove, onResetBoard]);
 
   // Keep a ref to handleUserMessage so the onResult callback always uses the latest
   const handleUserMessageRef = useRef(handleUserMessage);

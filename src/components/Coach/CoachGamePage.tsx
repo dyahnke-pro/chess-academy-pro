@@ -3529,6 +3529,9 @@ export function CoachGamePage(): JSX.Element {
                 playerColor={playerColor}
                 onListeningChange={setVoiceActive}
                 onArrows={handleVoiceArrows}
+                onPlayMove={handleChatPlayMove}
+                onTakeBackMove={handleChatTakeBackMove}
+                onResetBoard={handleChatResetBoard}
               />
             </div>
 
