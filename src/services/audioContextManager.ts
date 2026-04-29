@@ -10,17 +10,28 @@
 // speech all benefit from the same unlock.
 
 let _ctx: AudioContext | null = null;
+let _lastResumeError: string | null = null;
+
+export function getLastAudioContextError(): string | null {
+  return _lastResumeError;
+}
 
 function _tryResume(ctx: AudioContext): void {
   if (ctx.state === 'suspended') {
-    void ctx.resume();
+    // resume() rejects on iOS when the system audio session can't start
+    // (foreground audio interruption, hardware unavailable). We catch
+    // it here so it doesn't propagate as an unhandled rejection — the
+    // voice service's per-call playAudioBuffer detects suspended state
+    // separately and falls through to Web Speech.
+    void ctx.resume().catch((err: unknown) => {
+      _lastResumeError = err instanceof Error ? err.message : String(err);
+    });
   }
 }
 
 function _attachUnlockListeners(ctx: AudioContext): void {
   const handler = (): void => {
     _tryResume(ctx);
-    // Only remove listeners once the context is actually running
     if (ctx.state === 'running') {
       document.removeEventListener('touchstart', handler, true);
       document.removeEventListener('mousedown', handler, true);

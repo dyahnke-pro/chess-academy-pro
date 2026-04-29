@@ -689,10 +689,19 @@ class VoiceService {
     }
   }
 
+  /** Tier-3 fallback: Web Speech API (system speech synthesizer).
+   *
+   *  This path is reached ONLY when Polly + voice-packs both fail —
+   *  there's no "dual engine overlap" concern because by the time we
+   *  get here, no other tier produced audio. Always-on so iOS audio-
+   *  device failures (where AudioContext can't unlock) don't produce
+   *  total silence — the user at least hears native speech.
+   *
+   *  The flag-gated paths (speakFast / speakQueuedForced) still
+   *  respect WEB_SPEECH_FALLBACK_ENABLED so the original streaming-
+   *  overlap bug doesn't reappear in the coach chat. */
   private async speakFallback(text: string): Promise<void> {
-    if (WEB_SPEECH_FALLBACK_ENABLED) {
-      await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
-    }
+    await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
   }
 
   /**
