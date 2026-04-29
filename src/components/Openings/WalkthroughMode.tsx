@@ -281,7 +281,12 @@ export function WalkthroughMode({
       const effectiveKey = subLineKey ?? (isVariation ? `variation-${variationIndex}` : undefined);
       let data: OpeningMoveAnnotation[] | null;
       if (effectiveKey) {
-        data = await loadSubLineAnnotations(opening.id, effectiveKey, variation?.name);
+        // Pass both name and PGN so the loader can match by literal
+        // move-prefix (most reliable) before falling back to name or
+        // index lookup. Without PGN, fuzzy name matches were
+        // selecting the wrong subline ("Declined" → "Accepted") and
+        // producing narration that didn't match the board.
+        data = await loadSubLineAnnotations(opening.id, effectiveKey, variation?.name, activePgn);
       } else {
         data = await loadAnnotationsForPgn(opening.id, activePgn);
       }
