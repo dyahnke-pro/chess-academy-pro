@@ -143,6 +143,37 @@ export interface ToolExecutionContext {
    *  react-router. Path has already been validated against the app
    *  manifest before this runs. */
   onNavigate?: (path: string) => void;
+  /** WO-COACH-LICHESS-OPENINGS — called by `quiz_user_for_move`. Puts
+   *  the live board into "find the move" mode for a specific
+   *  expected SAN. Surface displays the prompt, waits for the user's
+   *  move, and resolves with `{ ok: true, played }` when the user
+   *  played the expected (or alternative) move, or `{ ok: false,
+   *  played, expected }` when they played something else. The coach
+   *  reads the result on the next LLM round-trip and narrates
+   *  feedback. */
+  onQuizUserForMove?: (args: {
+    expectedSan: string;
+    prompt: string;
+    allowAlternatives?: readonly string[];
+  }) =>
+    | Promise<
+        | { ok: true; played: string }
+        | { ok: false; played: string; expected: string }
+        | { ok: false; reason: string }
+      >;
+  /** WO-COACH-LICHESS-OPENINGS — called by
+   *  `start_walkthrough_for_opening`. Hands off to the existing
+   *  WalkthroughMode UI seeded by an opening name (and optional
+   *  variation / orientation / PGN). Surface navigates and returns
+   *  `{ ok: true }` once the route push is dispatched. */
+  onStartWalkthroughForOpening?: (args: {
+    opening: string;
+    variation?: string;
+    orientation?: 'white' | 'black';
+    pgn?: string;
+  }) =>
+    | Promise<{ ok: boolean; reason?: string }>
+    | { ok: boolean; reason?: string };
   /** FEN at the time of the call — used by `play_move` to validate SAN
    *  legality before invoking `onPlayMove`. */
   liveFen?: string;

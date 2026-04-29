@@ -23,6 +23,7 @@ const LICHESS_FETCH_TIMEOUT_MS = 8000;
  *  same-origin so no CORS / no preflight / no forbidden-header. */
 const EXPLORER_PROXY_PATH = '/api/lichess-explorer';
 const CLOUD_EVAL_PROXY_PATH = '/api/lichess-cloud-eval';
+const GAME_EXPORT_PROXY_PATH = '/api/lichess-game-export';
 
 /** Capacitor needs absolute URLs — the page protocol is
  *  `capacitor://app.chessacademy.pro` which can't relative-resolve
@@ -161,4 +162,37 @@ export function formatCloudEval(pv: { cp?: number; mate?: number }): string {
     return pawns >= 0 ? `+${pawns.toFixed(2)}` : pawns.toFixed(2);
   }
   return '0.00';
+}
+
+/**
+ * Fetch a master game's PGN by Lichess game ID. Routes through our
+ * Edge proxy at /api/lichess-game-export so the iOS Safari fetch
+ * forbidden-header issue doesn't bite us. The id is typically
+ * sourced from a `lichess_master_games` topGames[].id entry.
+ */
+export async function fetchLichessGameExport(id: string): Promise<string> {
+  const cleaned = id.trim();
+  if (!cleaned) throw new Error('id is required');
+  const params = new URLSearchParams({ id: cleaned });
+  const url = withApiBase(`${GAME_EXPORT_PROXY_PATH}?${params.toString()}`);
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers: { Accept: 'application/x-chess-pgn' },
+      signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
+    });
+  } catch (err) {
+    emitLichessFailure('lichessExplorerService.fetchLichessGameExport', url, err, null);
+    throw err;
+  }
+  if (!response.ok) {
+    emitLichessFailure(
+      'lichessExplorerService.fetchLichessGameExport',
+      url,
+      new Error(`HTTP ${response.status}`),
+      response.status,
+    );
+    throw new Error(`Game export API error: ${response.status}`);
+  }
+  return response.text();
 }
