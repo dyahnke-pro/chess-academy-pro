@@ -1592,7 +1592,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         return [{ startSquare, endSquare, color: '#22c55e' }];
       })();
       const badge = seg?.classification ?? null;
-      const lastPly = walkNarration.segments[walkNarration.segments.length - 1].ply;
+      // Authoritative nav ceiling = the full game length, not the
+      // segments' trailing ply. The LLM frequently truncates segment
+      // generation (audit cycle 8: a 32-ply game came back with only
+      // segment 1, which froze the forward button after the first
+      // move). The hook itself already walks past missing segments —
+      // see useReviewPlayback's `totalPlies` plumbing — so the UI
+      // ceiling needs to match or the buttons grey out prematurely.
+      const lastPly = moves.length;
       // Map the walk's 1-indexed ply to the move list / KeyMomentNav's
       // 0-indexed move index. ply 0 = intro (no selected move).
       const walkMoveIndex = walkPlayback.currentPly > 0 ? walkPlayback.currentPly - 1 : -1;

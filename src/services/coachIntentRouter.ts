@@ -63,21 +63,26 @@ export function tryRouteIntent(
     });
   });
 
-  // ─── play_move ──────────────────────────────────────────────────
-  // "play e4", "play knight to f3", "move bishop c4", "i'll play Nf6",
-  // "make the move Nc3", "push pawn to e4", etc.
-  const playMoveSan = matchPlayMove(text, ctx.currentFen);
-  if (playMoveSan) {
-    return { kind: 'play_move', san: playMoveSan };
-  }
-
   // ─── take_back_move ─────────────────────────────────────────────
+  // Checked BEFORE play_move so "take it back" / "take that move back"
+  // doesn't get caught by the new "take" capture verb in matchPlayMove.
+  // Window widened to 15 chars so phrasings like "take both back" /
+  // "take that move back" / "take the move back" all match.
   if (
-    /\b(take.{0,5}back|undo|let me try (that |this )?again|go back|rewind)\b/i.test(text)
+    /\b(take.{0,15}back|undo|let me try (that |this )?again|go back|rewind)\b/i.test(text)
   ) {
     // "two" / "both" / "2" / "two moves" / "both moves" / "whole exchange" → count=2
     const twoBack = /\b(both|two|2|two\s+moves|both\s+moves|whole\s+exchange)\b/i.test(text);
     return { kind: 'take_back_move', count: twoBack ? 2 : 1 };
+  }
+
+  // ─── play_move ──────────────────────────────────────────────────
+  // "play e4", "play knight to f3", "move bishop c4", "i'll play Nf6",
+  // "make the move Nc3", "push pawn to e4", "take the knight on e5",
+  // "capture on f3", "grab the bishop", etc.
+  const playMoveSan = matchPlayMove(text, ctx.currentFen);
+  if (playMoveSan) {
+    return { kind: 'play_move', san: playMoveSan };
   }
 
   // ─── reset_board ────────────────────────────────────────────────
@@ -108,11 +113,21 @@ export function tryRouteIntent(
  * "move the bishop to c4", "play pawn to e4" → translates to SAN.
  */
 function matchPlayMove(text: string, currentFen?: string): string | null {
-  const VERB_RE = /\b(play|move|make|do|push)\b/i;
+  // `take|capture|grab` are capture-intent verbs — when they fire, we
+  // try the SAN with an `x` (capture form) before the move form, so
+  // "take the knight on f3" → Nxf3 rather than Nf3 (which chess.js
+  // rejects when the destination is occupied).
+  const VERB_RE = /\b(play|move|make|do|push|take|capture|grab)\b/i;
   if (!VERB_RE.test(text)) return null;
 
+  const verbMatch = text.match(VERB_RE);
+  const verb = verbMatch ? verbMatch[1].toLowerCase() : '';
+  const isCaptureVerb = verb === 'take' || verb === 'capture' || verb === 'grab';
+
   // Strip everything up to and including the verb (and an optional "the").
-  const afterVerb = text.replace(/^.*?\b(play|move|make|do|push)\b\s+/i, '').trim();
+  const afterVerb = text
+    .replace(/^.*?\b(play|move|make|do|push|take|capture|grab)\b\s+/i, '')
+    .trim();
   if (!afterVerb) return null;
 
   const cleanedAfterVerb = afterVerb.replace(/^(the|my|an)\s+|^a\s+(?=[a-z])/i, '');
@@ -126,9 +141,12 @@ function matchPlayMove(text: string, currentFen?: string): string | null {
   }
 
   // Pattern 2: natural language. "knight to f3", "the bishop to c4",
-  // "pawn to e4", "queen on h5".
-  const NL_PIECE_RE =
-    /^(?:(?:my|the)\s+)?(knight|bishop|rook|queen|king|pawn)\s+(?:to|on)\s+([a-h][1-8])\b/i;
+  // "pawn to e4", "queen on h5". Capture verbs accept "knight on f3"
+  // / "bishop f3" / "knight at f3" too — they imply the destination
+  // even without "to".
+  const NL_PIECE_RE = isCaptureVerb
+    ? /^(?:(?:my|the)\s+)?(knight|bishop|rook|queen|king|pawn)\s+(?:(?:to|on|at)\s+)?([a-h][1-8])\b/i
+    : /^(?:(?:my|the)\s+)?(knight|bishop|rook|queen|king|pawn)\s+(?:to|on)\s+([a-h][1-8])\b/i;
   const nlMatch = cleanedAfterVerb.match(NL_PIECE_RE);
   if (nlMatch) {
     const piece = nlMatch[1].toLowerCase();
@@ -141,11 +159,57 @@ function matchPlayMove(text: string, currentFen?: string): string | null {
       king: 'K',
       pawn: '',
     };
-    const candidate = `${pieceLetter[piece] ?? ''}${square}`;
-    if (validateSan(candidate, currentFen)) return candidate;
+    const letter = pieceLetter[piece] ?? '';
+    if (isCaptureVerb) {
+      // Try capture form first (Nxf3, exd5), then non-capture as a
+      // fallback in case the move actually isn't a capture but the
+      // user phrased it that way.
+      const captureSan = letter ? `${letter}x${square}` : `x${square}`;
+      if (validateSan(captureSan, currentFen)) return captureSan;
+      const moveSan = `${letter}${square}`;
+      if (validateSan(moveSan, currentFen)) return moveSan;
+    } else {
+      const candidate = `${letter}${square}`;
+      if (validateSan(candidate, currentFen)) return candidate;
+    }
+  }
+
+  // Pattern 3 (capture-only): bare destination square. "take on f3",
+  // "capture e5", "grab f7". Tries every legal capture into that
+  // square from the current FEN — if exactly one legal move lands
+  // there, route it; otherwise let the LLM disambiguate.
+  if (isCaptureVerb) {
+    // Strip a leading preposition first so "on e5" / "at e5" both
+    // reduce to "e5" before the square match.
+    const stripped = cleanedAfterVerb.replace(/^(on|at|to)\s+/i, '');
+    const BARE_SQ_RE = /^([a-h][1-8])\b/i;
+    const sqMatch = stripped.match(BARE_SQ_RE);
+    if (sqMatch && currentFen) {
+      const target = sqMatch[1].toLowerCase();
+      const legal = listLegalMovesTo(target, currentFen);
+      if (legal.length === 1) return legal[0];
+    }
   }
 
   return null;
+}
+
+/** Enumerate every legal CAPTURE SAN that lands on `target` from the
+ *  given FEN. Used by the bare-square capture path ("take on e5") to
+ *  pick a unique move when the user doesn't name the piece. We filter
+ *  to captures only — "take on e4" from the starting position should
+ *  NOT route to the e4 pawn push, since the user clearly meant to
+ *  capture something. */
+function listLegalMovesTo(target: string, fen: string): string[] {
+  try {
+    const chess = new Chess(fen);
+    return chess
+      .moves({ verbose: true })
+      .filter((m) => m.to === target && (m.captured !== undefined || m.isEnPassant()))
+      .map((m) => m.san);
+  } catch {
+    return [];
+  }
 }
 
 /**
