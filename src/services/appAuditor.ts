@@ -325,6 +325,19 @@ function getBuildId(): string {
   }
 }
 
+/** Serializing chain for read-modify-write. Each logAppAudit call
+ *  attaches its work to the chain so two concurrent calls can never
+ *  interleave the read+push+put steps. Without this serialization,
+ *  fire-and-forget writes (`void logAppAudit(...)`) raced and only
+ *  the last writer's entry survived — the production audit log was
+ *  silently losing every audit that fired alongside another (e.g.
+ *  `coach-move-narration-fired` was always overwritten by the
+ *  `voice-speak-invoked` audit emitted microseconds later from
+ *  voiceService.speakInternal). Verified by appAuditor.test.ts —
+ *  20 concurrent calls now persist all 20 entries; pre-fix only 1
+ *  survived. Fire-and-forget callers continue to work unchanged. */
+let auditWriteChain: Promise<void> = Promise.resolve();
+
 /** Log one entry. Fire-and-forget. Also streams the entry to
  *  `/api/audit-stream` when the user has opted in by setting
  *  `auditStreamUrl` + `auditStreamSecret` in localStorage. Stream
@@ -338,17 +351,24 @@ export async function logAppAudit(
     route: typeof window !== 'undefined' ? window.location?.pathname : undefined,
     buildId: getBuildId(),
   };
-  try {
-    const current = await readLog();
-    current.push(filled);
-    const trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
-    await db.meta.put({
-      key: APP_AUDIT_LOG_META_KEY,
-      value: JSON.stringify(trimmed),
-    });
-  } catch {
-    /* swallow — auditor failures must not affect the feature path */
-  }
+  const next = auditWriteChain.then(async () => {
+    try {
+      const current = await readLog();
+      current.push(filled);
+      const trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
+      await db.meta.put({
+        key: APP_AUDIT_LOG_META_KEY,
+        value: JSON.stringify(trimmed),
+      });
+    } catch {
+      /* swallow — auditor failures must not affect the feature path */
+    }
+  });
+  // Re-assign so the next caller chains onto the latest. Swallow the
+  // chain's own errors here so a single failed write doesn't poison
+  // every subsequent audit.
+  auditWriteChain = next.catch(() => undefined);
+  await next;
   // Opt-in remote stream — used for live-watch sessions where Claude
   // polls the backend for new entries. Off by default.
   void streamAuditEntry(filled);
