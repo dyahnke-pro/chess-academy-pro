@@ -303,7 +303,15 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     // Stage 2: try to route the transcript as a direct command.
     // This pipeline matches what GameChatPanel.handleSend does on the
     // text side, so voice and chat see the same regex shapes.
-    const routedIntent = tryRouteIntent(text, { currentFen: fen });
+    // `lastMoveBy` is derived from `lastMoveContext.player` so the
+    // router can map "take back your move" / "take back my move" onto
+    // the correct ply count.
+    const lastMoveBy: 'user' | 'coach' | undefined = lastMoveContext
+      ? lastMoveContext.player === 'you'
+        ? 'user'
+        : 'coach'
+      : undefined;
+    const routedIntent = tryRouteIntent(text, { currentFen: fen, lastMoveBy });
     void logAppAudit({
       kind: 'voice-route-result',
       category: 'subsystem',

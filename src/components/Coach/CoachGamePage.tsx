@@ -1310,6 +1310,16 @@ export function CoachGamePage(): JSX.Element {
     () => getCapturedPieces(game.fen),
     [game.fen],
   );
+
+  // WO-AUDIT-CYCLE-8: who made the most recent move? Threads into
+  // the chat / voice intent routers so phrases like "take back your
+  // move" / "take back my move" resolve to the right ply count
+  // (1 if the named side is the most-recent mover, 2 otherwise).
+  const lastMoveBy = useMemo<'user' | 'coach' | undefined>(() => {
+    if (gameState.moves.length === 0) return undefined;
+    const last = gameState.moves[gameState.moves.length - 1];
+    return last.isCoachMove ? 'coach' : 'user';
+  }, [gameState.moves]);
   const materialAdv = useMemo(
     () => getMaterialAdvantage(game.fen),
     [game.fen],
@@ -3418,6 +3428,7 @@ export function CoachGamePage(): JSX.Element {
               isGameOver={game.isGameOver}
               gameResult={gameState.result}
               lastMove={game.lastMove && game.history.length > 0 ? { ...game.lastMove, san: game.history[game.history.length - 1] } : undefined}
+              lastMoveBy={lastMoveBy}
               history={game.history}
               previousFen={previousFenRef.current}
               onBoardAnnotation={handleBoardAnnotation}
@@ -3480,6 +3491,7 @@ export function CoachGamePage(): JSX.Element {
               isGameOver={game.isGameOver}
               gameResult={gameState.result}
               lastMove={game.lastMove && game.history.length > 0 ? { ...game.lastMove, san: game.history[game.history.length - 1] } : undefined}
+              lastMoveBy={lastMoveBy}
               history={game.history}
               previousFen={previousFenRef.current}
               onBoardAnnotation={handleBoardAnnotation}

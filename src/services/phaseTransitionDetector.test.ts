@@ -205,6 +205,26 @@ describe('detectPhaseTransition — middlegame → endgame', () => {
     );
     expect(event).toBeNull();
   });
+
+  it('fires on lopsided material even when queens are still on (audit cycle 8 regression)', () => {
+    // Position from the audit log: black is reduced to king + 2 pawns
+    // while white still has Q + R + B + 5P. Material total is 24 (well
+    // above classifyPhase's 13 threshold) and queens are on, so the
+    // original detector kept reporting middlegame. The lopsided clause
+    // catches this — the losing side has 0 pieces (kings/pawns don't
+    // count) so the boundary should fire.
+    const LOPSIDED_FEN = 'kQ6/8/p7/P7/4PB2/1p6/1PP2PPP/R3K2R b KQ - 1 34';
+    const state = createPhaseTransitionState();
+    state.openingToMiddlegameFired = true;
+    const event = detectPhaseTransition(
+      moveSnapshot({ fen: LOPSIDED_FEN, moveNumber: 67, san: 'Ka8' }),
+      state,
+      'black',
+    );
+    expect(event).not.toBeNull();
+    expect(event?.kind).toBe('middlegame-to-endgame');
+    expect(state.middlegameToEndgameFired).toBe(true);
+  });
 });
 
 // ── Starting position sanity ─────────────────────────────────────────────
