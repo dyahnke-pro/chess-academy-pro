@@ -43,12 +43,17 @@ export type ExplorerSource = 'lichess' | 'masters';
 /** Capture the actual error fields whenever a Lichess fetch fails.
  *  Inherited from PR #355's diagnostic instrumentation — preserves
  *  the `error.name` / `error.cause` / `navigator.onLine` signal that
- *  distinguishes proxy outages from upstream Lichess outages. */
+ *  distinguishes proxy outages from upstream Lichess outages. The
+ *  `responseBody` arg captures the upstream response payload (passed
+ *  through verbatim by /api/lichess-explorer) so 401 / 429 messages
+ *  from Lichess are visible in the audit log instead of being
+ *  swallowed by the throw-on-!ok path. */
 function emitLichessFailure(
   source: string,
   url: string,
   err: unknown,
   statusIfReachable: number | null,
+  responseBody?: string | null,
 ): void {
   const e = err as { name?: string; message?: string; cause?: unknown } | null;
   const errorName = e?.name ?? 'UnknownError';
@@ -59,11 +64,19 @@ function emitLichessFailure(
         ? e.cause
         : JSON.stringify(e.cause)
       : null;
+  // Trim the body to a manageable size — Lichess's HTML 401 page can
+  // be many KB; the first ~500 chars are enough to identify the
+  // failure mode (Cloudflare challenge page, rate-limit JSON,
+  // Lichess auth message, etc.).
+  const bodyPreview =
+    typeof responseBody === 'string' && responseBody.length > 0
+      ? responseBody.slice(0, 500)
+      : null;
   void logAppAudit({
     kind: 'lichess-error',
     category: 'subsystem',
     source,
-    summary: `url=${url} status=${statusIfReachable ?? 'throw'} error=${errorName}: ${errorMessage}`,
+    summary: `url=${url} status=${statusIfReachable ?? 'throw'} error=${errorName}: ${errorMessage}${bodyPreview ? ` body="${bodyPreview.replace(/\s+/g, ' ').slice(0, 80)}"` : ''}`,
     details: JSON.stringify(
       {
         url,
@@ -73,6 +86,7 @@ function emitLichessFailure(
         cause,
         online: typeof navigator !== 'undefined' ? navigator.onLine : null,
         userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+        responseBodyPreview: bodyPreview,
       },
       null,
       2,
@@ -105,11 +119,23 @@ export async function fetchLichessExplorer(
     throw err;
   }
   if (!response.ok) {
+    // Read the body so the audit captures Lichess's actual error
+    // payload — the proxy passes upstream bodies through verbatim,
+    // so 401 / 429 / Cloudflare challenge messages from Lichess
+    // land here. Best-effort: a body read failure (already-consumed
+    // stream, etc.) just logs null.
+    let body: string | null = null;
+    try {
+      body = await response.text();
+    } catch {
+      body = null;
+    }
     emitLichessFailure(
       'lichessExplorerService.fetchLichessExplorer',
       url,
       new Error(`HTTP ${response.status}`),
       response.status,
+      body,
     );
     throw new Error(`Explorer API error: ${response.status}`);
   }
@@ -139,11 +165,18 @@ export async function fetchCloudEval(
   }
   if (response.status === 404) return null;
   if (!response.ok) {
+    let body: string | null = null;
+    try {
+      body = await response.text();
+    } catch {
+      body = null;
+    }
     emitLichessFailure(
       'lichessExplorerService.fetchCloudEval',
       url,
       new Error(`HTTP ${response.status}`),
       response.status,
+      body,
     );
     throw new Error(`Cloud eval API error: ${response.status}`);
   }
