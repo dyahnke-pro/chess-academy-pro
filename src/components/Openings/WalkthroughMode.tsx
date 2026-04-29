@@ -3,6 +3,7 @@ import { useAppStore } from '../../stores/appStore';
 import { Chess } from 'chess.js';
 import { motion } from 'framer-motion';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { VoiceDebugPanel } from './VoiceDebugPanel';
 import { useChessGame } from '../../hooks/useChessGame';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
@@ -133,13 +134,35 @@ export function WalkthroughMode({
   const applyStep = useCallback((_idx: number) => { /* board derives from hook state */ }, []);
 
   const getNarrationFor = useCallback((idx: number): string => {
-    if (idx === 0 || !NARRATE[autoPlaySpeed]) return '';
-    const ann = annotations?.[idx - 1];
-    if (!ann) return '';
+    // Audit-log every empty return so silent rapid-fire bugs surface
+    // in the in-app audit log with a specific reason — no need to
+    // open DevTools to triage.
+    const logEmpty = (reason: string, detail?: string): '' => {
+      void import('../../services/appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'walkthrough-narration-empty',
+          category: 'subsystem',
+          source: 'WalkthroughMode.getNarrationFor',
+          summary: `step ${idx}: ${reason}`,
+          details: detail,
+        });
+      }).catch(() => { /* never break narration on a log failure */ });
+      return '';
+    };
+
+    if (idx === 0) return '';
+    if (!NARRATE[autoPlaySpeed]) return logEmpty('drill mode (NARRATE flag is false)', `autoPlaySpeed=${autoPlaySpeed}`);
+    if (!annotations) return logEmpty('annotations not loaded yet', `total=null`);
+    const ann = annotations[idx - 1];
+    if (!ann) return logEmpty('no annotation at this index', `idx=${idx} of ${annotations.length}`);
     const fullText = ann.narration ?? ann.annotation;
+    if (!fullText) return logEmpty('annotation has no text', `narration=${ann.narration === undefined ? 'undef' : `"${(ann.narration ?? '').slice(0, 20)}"`} annotation=${!ann.annotation ? '<empty>' : `"${ann.annotation.slice(0, 20)}"`}`);
+
     const limit = SENTENCE_LIMIT[autoPlaySpeed];
     if (limit !== null) {
-      return ann.shortNarration ?? trimToSentences(fullText, limit);
+      const out = ann.shortNarration ?? trimToSentences(fullText, limit);
+      if (!out) return logEmpty('sentence-trim produced empty', `limit=${limit} from "${fullText.slice(0, 30)}"`);
+      return out;
     }
     return fullText;
   }, [annotations, autoPlaySpeed]);
@@ -174,7 +197,10 @@ export function WalkthroughMode({
 
   // Analysis toggle overrides
   const { settings } = useSettings();
-  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  // Default to ON in walkthrough mode — students learning openings benefit
+  // from seeing eval shift across each move. Toggle still respects user
+  // input via AnalysisToggles.
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(true);
   const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
   const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
   const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
@@ -232,23 +258,74 @@ export function WalkthroughMode({
   const ctxHistory = expectedMoves.slice(0, currentMoveIndex).map((m) => m.san);
   useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, turn, ctxLastMove, ctxHistory);
 
+  // Synthesise a minimal annotation array from the active PGN. Used as
+  // a last-resort when neither index nor name-based lookup finds a
+  // matching subline — the contract between repertoire.json variations
+  // and src/data/annotations/<id>.json subLines is broken in 34/40
+  // openings (variations get added to repertoire without matching
+  // annotation subLines). Without this fallback, those variations play
+  // silent rapid-fire because annotations stays null forever.
+  //
+  // Each stub's annotation is just the bare SAN (no trailing
+  // punctuation) so it matches the bare-SAN GENERIC_ANNOTATION_PATTERN
+  // entry. That makes needsFill below see it as filler and call the
+  // LLM enricher, which writes a real narration into the `narration`
+  // field. End result: From's Gambit Declined goes from no annotations
+  // (silent) → bare-SAN stubs (matches board, sounds robotic) → real
+  // LLM-generated narration (matches board, sounds like teaching).
+  const synthesisedFromPgn = useMemo((): OpeningMoveAnnotation[] => {
+    return expectedMoves.map((m) => ({
+      san: m.san,
+      annotation: m.san,
+    }));
+  }, [expectedMoves]);
+
   // Load annotations — sub-line-specific if key provided, otherwise main line
   useEffect(() => {
     const guard: { cancelled: boolean } = { cancelled: false };
-    // Pre-warm voice service (caches DB prefs + primes AudioContext)
     void voiceService.warmup();
+
+    // Kick off the LLM narration call IMMEDIATELY in parallel with the
+    // annotation file load. The LLM call takes ~7s while loadSubLine
+    // returns within a few ms; running them in parallel saves the
+    // sequential tail. Combined with the pre-warm fired by
+    // OpeningDetailPage when the variation card is selected, the LLM
+    // result usually lands by the time the user hits Play, so we skip
+    // the bare-SAN stub window entirely on first visit.
+    const llmPromise = generateWalkthroughNarrations({
+      openingName: opening.name,
+      variationName: variation?.name,
+      pgn: activePgn,
+    }).catch(() => null as null | { narrations: string[]; fromCache: boolean });
+
     void (async () => {
       const effectiveKey = subLineKey ?? (isVariation ? `variation-${variationIndex}` : undefined);
       let data: OpeningMoveAnnotation[] | null;
       if (effectiveKey) {
-        data = await loadSubLineAnnotations(opening.id, effectiveKey);
+        data = await loadSubLineAnnotations(opening.id, effectiveKey, variation?.name, activePgn);
       } else {
-        // Use PGN-aware loader to find best-matching annotation set
         data = await loadAnnotationsForPgn(opening.id, activePgn);
       }
-      if (guard.cancelled || !data) {
-        if (!guard.cancelled) setAnnotations(data);
-        return;
+      if (guard.cancelled) return;
+      // Last-resort fallback: synthesise from the PGN so the user never
+      // hits silent rapid-fire even when curated annotations are missing.
+      // The LLM enricher below will replace these stubs with real text.
+      if (!data || data.length === 0) {
+        if (synthesisedFromPgn.length === 0) {
+          setAnnotations(null);
+          return;
+        }
+        data = synthesisedFromPgn;
+        const stubCount = data.length;
+        void import('../../services/appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'walkthrough-narration-empty',
+            category: 'subsystem',
+            source: 'WalkthroughMode.loadAnnotations',
+            summary: `synthesised PGN-only stubs for ${opening.id}/${effectiveKey ?? 'main'}`,
+            details: `variation="${variation?.name ?? '<none>'}" plies=${stubCount}`,
+          });
+        }).catch(() => {/* never break */});
       }
       // Show raw annotations immediately so the UI isn't blocked while the
       // LLM narrator does its work. Pre-fetch audio based on whatever text
@@ -261,49 +338,61 @@ export function WalkthroughMode({
       // real content is preserved. This is what gives trap/warning and
       // variation walkthroughs the same teaching depth as the dynamic
       // coach-session walkthroughs.
-      const needsFill = data.some(
-        (a) => !a.narration?.trim() || isGenericAnnotationText(a.narration ?? a.annotation),
-      );
+      //
+      // We treat `annotation` as a fallback for `narration` because the
+      // curated JSON files write to `annotation` only. Without this
+      // fallback the LLM would override good curated annotations with
+      // its own (potentially filler) output, leaving sublines silent
+      // when the LLM result trips isGenericAnnotationText at playback.
+      const needsFill = data.some((a) => {
+        const text = (a.narration ?? a.annotation ?? '').trim();
+        return !text || isGenericAnnotationText(text);
+      });
       if (!needsFill) return;
-      try {
-        const { narrations } = await generateWalkthroughNarrations({
-          openingName: opening.name,
-          variationName: variation?.name,
-          pgn: activePgn,
-          existingNarrations: data.map((a) => a.narration ?? a.annotation),
-        });
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (guard.cancelled) return;
-        const enriched: OpeningMoveAnnotation[] = data.map((ann, i) => {
-          const existing = (ann.narration ?? '').trim();
-          if (existing && !isGenericAnnotationText(existing)) return ann;
-          const fromLlm = narrations[i]?.trim();
-          if (!fromLlm) return ann;
-          return { ...ann, narration: fromLlm };
-        });
-        setAnnotations(enriched);
-        void voiceService.prefetchAudio(enriched.map((a) => a.narration ?? a.annotation));
-      } catch (err: unknown) {
-        console.warn('[WalkthroughMode] LLM narration fill failed:', err);
+
+      // Use the parallel-fetched LLM result kicked off above. If
+      // OpeningDetailPage pre-warmed this variation, the cache hit
+      // returns immediately and the user never sees bare-SAN stubs.
+      const llmResult = await llmPromise;
+      if (guard.cancelled) return;
+      if (!llmResult) {
+        console.warn('[WalkthroughMode] LLM narration fill failed');
+        return;
       }
+      const narrations = llmResult.narrations;
+      const enriched: OpeningMoveAnnotation[] = data.map((ann, i) => {
+        const existing = (ann.narration ?? ann.annotation ?? '').trim();
+        if (existing && !isGenericAnnotationText(existing)) return ann;
+        const fromLlm = narrations[i]?.trim();
+        if (!fromLlm || isGenericAnnotationText(fromLlm)) return ann;
+        return { ...ann, narration: fromLlm };
+      });
+      setAnnotations(enriched);
+      void voiceService.prefetchAudio(enriched.map((a) => a.narration ?? a.annotation));
     })();
     return () => { guard.cancelled = true; };
   }, [opening.id, opening.name, activePgn, subLineKey, isVariation, variationIndex, variation?.name]);
 
-  // Analyze position when it changes
+  // Analyze each position with Stockfish so the eval bar reflects
+  // whatever's on the board. Re-runs whenever the displayed FEN changes
+  // (advance, rewind, jump). Failures used to be swallowed silently —
+  // now they surface to the console so a stuck-at-0.0 eval bar can be
+  // diagnosed.
   useEffect(() => {
     const guard = { cancelled: false };
     void (async () => {
       try {
-        const analysis = await stockfishEngine.analyzePosition(currentFen, 12);
+        const analysis = await stockfishEngine.analyzePosition(currentFen, 14);
         if (!guard.cancelled) {
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
           setLatestMateIn(analysis.mateIn);
           setLatestTopLines(analysis.topLines);
         }
-      } catch {
-        // Stockfish not ready yet
+      } catch (err) {
+        if (typeof console !== 'undefined') {
+          console.warn('[WalkthroughMode] stockfish analyze failed:', err);
+        }
       }
     })();
     return () => { guard.cancelled = true; };
@@ -501,9 +590,13 @@ export function WalkthroughMode({
     };
   }, [currentAnnotation, computeCharTriggers, autoPlaySpeed]);
 
-  // Convert visible arrows/highlights to board format
+  // Convert visible arrows/highlights to board format. Returns [] (not
+  // undefined) when no arrows so ConsistentChessboard's controlled
+  // arrow path still fires — without this, switching from a step with
+  // arrows to one without leaves the previous step's arrows on the
+  // board (react-chessboard treats missing prop as uncontrolled).
   const boardArrows = useMemo(() => {
-    if (!currentAnnotation?.arrows || visibleArrowCount === 0) return undefined;
+    if (!currentAnnotation?.arrows || visibleArrowCount === 0) return [];
     return currentAnnotation.arrows.slice(0, visibleArrowCount).map((a) => ({
       startSquare: a.from,
       endSquare: a.to,
@@ -738,15 +831,27 @@ export function WalkthroughMode({
     )
   ) : undefined;
 
+  // Show the diagnostic panel on any non-production deploy or when
+  // ?debug=1 is in the URL. Production hostname omits it so end-users
+  // never see it.
+  const showDebugPanel =
+    typeof window !== 'undefined' &&
+    (window.location.search.includes('debug=1') ||
+      (window.location.hostname.includes('vercel.app') &&
+        !window.location.hostname.startsWith('chess-academy-pro.')));
+
   return (
-    <ChessLessonLayout
-      data-testid="walkthrough-mode"
-      header={header}
-      aboveBoard={aboveBoard}
-      board={board}
-      belowBoard={belowBoard}
-      controls={controls}
-      belowControls={belowControls}
-    />
+    <>
+      <ChessLessonLayout
+        data-testid="walkthrough-mode"
+        header={header}
+        aboveBoard={aboveBoard}
+        board={board}
+        belowBoard={belowBoard}
+        controls={controls}
+        belowControls={belowControls}
+      />
+      {showDebugPanel && <VoiceDebugPanel />}
+    </>
   );
 }

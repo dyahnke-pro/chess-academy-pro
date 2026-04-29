@@ -1,6 +1,6 @@
 # Structural Audit Report
 
-Generated: 2026-04-20T15:36:39.338Z
+Generated: 2026-04-28T23:18:10.266Z
 Total scripted-move records scanned: **43141**
 
 ## Counts

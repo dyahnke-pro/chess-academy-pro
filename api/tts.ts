@@ -5,6 +5,22 @@ const ALLOWED_ORIGINS = [
   'https://chess-academy-pro.vercel.app',
 ];
 
+/** Vercel preview deployments use auto-generated subdomains under
+ *  the project's vercel.app namespace. Allowlist them so the voice
+ *  service can reach Polly during PR-preview testing — without this
+ *  every preview build silently rapid-fires through narrations
+ *  because the browser blocks the /api/tts response by CORS, voice
+ *  packs aren't cached in Incognito, and Web Speech fallback is
+ *  disabled. The rest of the project keeps the wildcard-rejection
+ *  behaviour intact for real production. */
+const PREVIEW_ORIGIN_RE = /^https:\/\/chess-academy-pro(?:-git-[a-z0-9-]+)?-dyahnke-pros-projects\.vercel\.app$/;
+
+function isAllowedOrigin(origin: string): boolean {
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  if (PREVIEW_ORIGIN_RE.test(origin)) return true;
+  return false;
+}
+
 /**
  * Build CORS headers — reject unrecognised origins instead of
  * falling back to `*`. The prior wildcard fallback let any site
@@ -19,7 +35,7 @@ function getCorsHeaders(req?: Request): Record<string, string> {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
-  if (ALLOWED_ORIGINS.includes(origin)) {
+  if (isAllowedOrigin(origin)) {
     base['Access-Control-Allow-Origin'] = origin;
     base['Vary'] = 'Origin';
   }
@@ -32,7 +48,7 @@ function getCorsHeaders(req?: Request): Record<string, string> {
 function isOriginAllowed(req?: Request): boolean {
   const origin = req?.headers.get('Origin');
   if (!origin) return true;
-  return ALLOWED_ORIGINS.includes(origin);
+  return isAllowedOrigin(origin);
 }
 
 interface VoiceConfig {

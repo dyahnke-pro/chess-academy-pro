@@ -249,26 +249,64 @@ export async function loadAnnotationsForPgn(
 export async function loadSubLineAnnotations(
   openingId: string,
   subLineKey: string,
+  // Optional name AND pgn from repertoire.json's variation entry. The
+  // index-based subLineKey lookup misses for 34/40 openings because
+  // variations get added to repertoire without matching annotation
+  // subLine entries. variationPgn is the safest fallback: we only
+  // accept a subline if its move sequence is a strict prefix of the
+  // repertoire variation's PGN. Name match alone is unreliable —
+  // "From's Gambit Declined" vs "From's Gambit" share a name stem but
+  // are completely different lines, and a fuzzy name match was returning
+  // the WRONG annotation, producing narration-doesn't-match-board.
+  variationName?: string,
+  variationPgn?: string,
 ): Promise<OpeningMoveAnnotation[] | null> {
   const data = await loadModule(openingId);
   if (!data?.subLines || data.subLines.length === 0) return null;
 
-  // subLineKey format: 'variation-N', 'trap-N', 'warning-N'
+  // Strategy 1 (most reliable): the annotation's own move sequence
+  // must be a literal prefix of the repertoire variation's PGN. If a
+  // subline walks 16 plies and they all match the first 16 SAN tokens
+  // of variationPgn exactly, it's the right annotation regardless of
+  // name. If no subline's moves are a clean prefix, NONE is right —
+  // because mismatched moves means the board would play one line and
+  // narration would describe a different one.
+  if (variationPgn) {
+    const repSans = variationPgn.trim().split(/\s+/).filter(Boolean);
+    for (const sl of data.subLines) {
+      const annSans = (sl.moveAnnotations ?? []).map((m) => m.san);
+      if (annSans.length === 0) continue;
+      let isPrefix = true;
+      for (let i = 0; i < annSans.length; i++) {
+        if (annSans[i] !== repSans[i]) { isPrefix = false; break; }
+      }
+      if (isPrefix) return sl.moveAnnotations;
+    }
+  }
+
+  // Strategy 2: exact name match — only used when no PGN was supplied
+  // (e.g. trap/warning callers that don't carry a repertoire entry).
+  // Fuzzy normalization is intentionally NOT used here; "Declined" and
+  // "Accepted" sublines share a stem but are different lines.
+  if (variationName) {
+    const direct = data.subLines.find((sl) => sl.name === variationName);
+    if (direct?.moveAnnotations) return direct.moveAnnotations;
+  }
+
+  // Strategy 3: legacy index-based lookup — supports the trap-N /
+  // warning-N case where there's no PGN to verify against.
   const match = /^(variation|trap|warning)-(\d+)$/.exec(subLineKey);
   if (!match) return null;
 
   const type = match[1] as 'variation' | 'trap' | 'warning';
   const localIdx = parseInt(match[2], 10);
 
-  // If subLines have type fields, do type-aware lookup
   const hasTypes = data.subLines.some((sl) => sl.type != null);
   if (hasTypes) {
     const matching = data.subLines.filter((sl) => sl.type === type);
     return matching[localIdx]?.moveAnnotations ?? null;
   }
 
-  // Legacy fallback: subLines are ordered [variations...] only, no type field.
-  // variation-N → direct index. trap/warning → not available.
   if (type !== 'variation') return null;
   return data.subLines[localIdx]?.moveAnnotations ?? null;
 }

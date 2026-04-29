@@ -918,7 +918,7 @@
       "moveAnnotations": [
         {
           "san": "f4",
-          "annotation": "The Bird's: From's Gambit is an important variation of the Bird's Opening. From's Gambit is Black's most aggressive response. After fxe5 d6, Black sacrifices a pawn for rapid development and attacking chances. White must play precisely to hold the extra material. Let's walk through the key ideas."
+          "annotation": "White opens with the Bird's Opening, advancing the f-pawn two squares to f4. This ambitious flank thrust stakes an immediate claim on the center and kingside, giving White influence over the e5 square. It is an unconventional choice that signals aggressive, unorthodox intent from the very first move."
         },
         {
           "san": "e5",
@@ -926,7 +926,7 @@
         },
         {
           "san": "fxe5",
-          "annotation": "fxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White accepts the challenge by capturing on e5, sending the f4-pawn forward to seize the center square. This bold acceptance of the From's Gambit gives White a pawn planted on e5 and an extra unit of material, though Black will look to generate quick piece activity in return. The tension is set early, with the game already departing from quieter paths.",
           "arrows": [
             {
               "from": "f4",
@@ -937,11 +937,11 @@
         },
         {
           "san": "d6",
-          "annotation": ""
+          "annotation": "Black strikes back in the spirit of From's Gambit by advancing the d-pawn one square to d6, directly targeting White's advanced pawn on e5. The challenge is immediate and confrontational, putting pressure on that outpost pawn in the center. Black's d-pawn now stands ready to contest control of the central squares."
         },
         {
           "san": "exd6",
-          "annotation": "exd6 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "annotation": "White's pawn strikes again, snapping off the black pawn on d6 in a second consecutive capture. With this move, White has removed a central pawn and now plants a passed pawn deep in Black's half of the board. The tension that defines From's Gambit is already taking shape just three moves in.",
           "arrows": [
             {
               "from": "e5",
@@ -952,7 +952,7 @@
         },
         {
           "san": "Bxd6",
-          "annotation": "",
+          "annotation": "Black recaptures on d6 with the bishop, sweeping in from f8 to claim the pawn that had advanced deep into Black's half of the board. The bishop now stands boldly in the center on d6, an active and imposing piece from the very first few moves. This recapture is the defining moment of From's Gambit, as Black willingly trades a pawn for rapid, aggressive development.",
           "arrows": [
             {
               "from": "f8",
@@ -963,27 +963,27 @@
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White develops the knight from g1 to f3, claiming a natural and active central post in the aftermath of From's Gambit's sharp early exchanges. The knight settles on f3 with good central influence, contributing to White's effort to consolidate and bring pieces off the back rank. Black's bishop sits aggressively on d6, but White is now beginning to organize a measured response with solid development."
         },
         {
           "san": "g5",
-          "annotation": "g5 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "The black g-pawn lunges forward two squares to g5, a bold and provocative thrust that immediately bears on White's knight posted at f3. This aggressive advance is very much in the spirit of From's Gambit, Black seizing space and generating kingside pressure just a few moves into the game, with the bishop already active on d6 lending support to the advance."
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "White advances the d-pawn two squares to d4, planting a solid stake in the center of the board. This gives White a firm central foundation alongside the knight already developed on f3, and opens a diagonal for the bishop on c1. In the sharp territory of From's Gambit, White uses this moment to consolidate central control after the earlier pawn exchanges have left the position open and dynamic."
         },
         {
           "san": "g4",
-          "annotation": "g4 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "Black's g-pawn surges forward from g5 to g4, landing squarely in the face of the white knight on f3 and putting it under immediate attack. This aggressive pawn thrust is a signature of From's Gambit, reflecting Black's intent to disrupt White's piece coordination and claim space on the kingside."
         },
         {
           "san": "Ne5",
-          "annotation": ""
+          "annotation": "White's knight springs forward to e5, claiming a commanding post in the heart of the board. From this central square, the knight radiates influence across the position, and its arrival on e5 directly confronts Black's active bishop on d6."
         },
         {
           "san": "Bxe5",
-          "annotation": "Bxe5 captures the knight. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "annotation": "Black's bishop sweeps from d6 to e5, snapping off the white knight and planting itself on a commanding central square. This capture is the fruit of From's Gambit aggression — Black recovers material while posting the bishop on a dominant outpost deep in White's half of the board. The bishop on e5 now eyes both flanks and exerts immediate pressure across the center.",
           "arrows": [
             {
               "from": "d6",
@@ -994,7 +994,7 @@
         },
         {
           "san": "dxe5",
-          "annotation": "dxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White's d-pawn strikes forward to e5, snapping off the black bishop that had ventured to that square and winning material in the process. The pawn now stands aggressively in the center, a passed-looking piece cutting across the fourth rank's influence. In the chaotic middlegame typical of From's Gambit, White has managed to pocket a bishop while keeping the pawn structure relatively intact.",
           "arrows": [
             {
               "from": "d4",
@@ -1005,7 +1005,7 @@
         },
         {
           "san": "Qxd1+",
-          "annotation": "",
+          "annotation": "Black's queen sweeps all the way down the d-file from d8 to d1, snatching the white queen and delivering check to the king on e1. This spectacular capture is the tactical payoff Black has been building toward in the From's Gambit, winning the most powerful piece on the board. White's king now sits in check with the newly arrived black queen right beside it on d1.",
           "arrows": [
             {
               "from": "d8",
@@ -1052,19 +1052,19 @@
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White develops the kingside knight to f3, a natural and flexible square from which it helps support the center and keeps an eye on d4 and e5. The move continues White's development in the spirit of the Bird's: Nimzo-Larsen Hybrid, complementing the already-advanced f-pawn on f4. The knight on f3 is well-placed and harmonizes with the pieces still waiting behind the pawns."
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "Black develops the knight from g8 to f6, claiming a strong central post and immediately contesting the e4 square. The knight on f6 is a natural and principled response to White's setup, keeping the center under pressure while completing a smooth developing move."
         },
         {
           "san": "b3",
-          "annotation": ""
+          "annotation": "White nudges the b-pawn forward to b3, carving out space to develop the queen's bishop along the long diagonal. This subtle advance is the \"Larsen\" ingredient in this hybrid setup, blending it with the f4 pawn already on the board to give White a distinctive, hypermodern grip on the position."
         },
         {
           "san": "g6",
-          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "Black nudges the g-pawn forward to g6, carving out the diagonal for the dark-squared bishop in a classic fianchetto setup. The move pairs naturally with the knight already posted on f6, giving Black a compact and resilient kingside structure. In this Nimzo-Larsen Hybrid, Black signals an intent to meet White's unorthodox pawn formation with an equally independent piece arrangement."
         },
         {
           "san": "Bb2",
@@ -1076,27 +1076,27 @@
         },
         {
           "san": "e3",
-          "annotation": ""
+          "annotation": "White nudges the e-pawn one square forward to e3, knitting together a solid central foundation. The pawn now stands shoulder to shoulder with the d2 pawn and braces the f4 pawn already posted further up the board, giving White a compact and well-supported structure. With the bishop already active on b2 along the long diagonal, this modest advance quietly reinforces the position without overextending."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "Black tucks the king away with kingside castling, sliding it from e8 to g8 while the rook swings over to f8. The king now rests snugly behind the fianchettoed bishop on g7, a compact and solid shelter well suited to the pawn structure Black has been building. This natural developing sequence completes Black's kingside coordination in this hybrid system."
         },
         {
           "san": "Be2",
-          "annotation": ""
+          "annotation": "White tucks the bishop modestly back to e2, a quiet development that clears the f1 square and keeps the kingside structure sound. Paired with the bishop already posted on b2, this dual-bishop setup reflects the hybrid character of the variation, covering both key diagonals without overcommitting. The king on e1 now has a cleaner path toward safety along the kingside."
         },
         {
           "san": "c5",
-          "annotation": ""
+          "annotation": "Black thrusts the c-pawn forward to c5, planting it alongside the pawn already on d5 to build a commanding central pawn duo. This advance in the spirit of the Nimzo-Larsen Hybrid asserts Black's ambitions in the heart of the board, staking out space and giving the position a dynamic, aggressive character."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "White castles kingside in this Nimzo-Larsen Hybrid, sliding the king to g1 and the rook to f1 in one smooth motion. The king finds shelter behind the pawns on g2 and h2, while the rook is now actively posted on the f-file, where it already stands behind the advanced f4 pawn."
         },
         {
           "san": "Nc6",
-          "annotation": "",
+          "annotation": "Black develops the knight from b8 to c6, bringing a second piece into active play and bolstering the central pawn duo on c5 and d5. The knight on c6 works in tandem with its counterpart on f6, giving Black a coordinated piece presence aimed at the heart of the board. Together with the fianchettoed bishop on g7, Black's minor pieces form a coherent and solid setup in this Nimzo-Larsen Hybrid middlegame.",
           "arrows": [
             {
               "from": "b8",
@@ -1135,7 +1135,7 @@
       "moveAnnotations": [
         {
           "san": "f4",
-          "annotation": "The Bird's: Stonewall Formation is an important variation of the Bird's Opening. The Stonewall setup with d4, e3, f4 creates a wall of pawns. White gets a solid center and prepares a kingside attack. The weakness on e4 is compensated by attacking chances. Let's walk through the key ideas."
+          "annotation": "White opens with the Bird's Opening, advancing the f-pawn two squares to f4. This bold kingside pawn thrust immediately stakes a claim in the center and signals White's intention to control the e5 square from the very first move. It is a distinctive and somewhat unconventional choice that sets the tone for the Stonewall Formation to come."
         },
         {
           "san": "d5",
@@ -1143,51 +1143,51 @@
         },
         {
           "san": "e3",
-          "annotation": ""
+          "annotation": "White advances the e-pawn one square to e3, reinforcing the center and beginning to stake out the Stonewall pawn formation alongside the f4-pawn already on the board. This modest step gives the pawn chain a solid, interlocking foundation and frees the diagonal for the dark-squared bishop on f1. The two white pawns on f4 and e3 now form the backbone of the coming structure."
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "Black's knight springs from g8 to f6, taking up an active post in the center and joining the d5 pawn in contesting the key central squares. The knight on f6 bears down on e4, giving Black a solid foothold in the position as both sides begin to define their territorial claims in this Stonewall Formation."
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White develops the knight from g1 to f3, finding a natural and active central post. In the spirit of the Bird's Stonewall Formation, this piece complements the pawns already placed on f4 and e3, helping White build a cohesive structure. The knight now stands firmly in the center, adding pressure and coordination to White's growing setup."
         },
         {
           "san": "e6",
-          "annotation": ""
+          "annotation": "Black advances the e-pawn one square to e6, reinforcing the d5-pawn and locking in a solid central structure. Together with the knight already posted on f6, this pawn duo on d5 and e6 gives Black a compact, well-supported foothold in the center. The position now has the hallmarks of the Stonewall Formation taking shape on both sides of the board."
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "White advances the d-pawn two squares to d4, completing the characteristic pawn triangle alongside the pawns already standing on e3 and f4. This sturdy formation, the backbone of the Stonewall, grants White a firm grip on the central light squares while accepting a degree of structural inflexibility in return."
         },
         {
           "san": "c5",
-          "annotation": ""
+          "annotation": "Black thrusts the c-pawn forward to c5, directly challenging the d4 pawn that sits at the heart of White's Stonewall formation. Together with the pawn already on d5, this creates an imposing central pawn duo that puts immediate pressure on White's position. Black is not content to wait passively and instead strikes at the foundation of the Stonewall structure."
         },
         {
           "san": "c3",
-          "annotation": ""
+          "annotation": "White advances the c-pawn one square to c3, reinforcing the d4 pawn and cementing the Stonewall pawn formation that defines this variation. The chain of pawns on c3, d4, e3, and f4 now forms a compact, interlocking structure that anchors White's central presence. This solid foundation denies Black's pieces easy access to the d4 square while giving White a stable platform in the heart of the board."
         },
         {
           "san": "Nc6",
-          "annotation": ""
+          "annotation": "Black swings the queenside knight out to c6, a natural developing move that gives the piece an active post in the heart of the board. From c6, the knight lends additional support to the d5 pawn, reinforcing Black's central stake in the Stonewall structure."
         },
         {
           "san": "Bd3",
-          "annotation": ""
+          "annotation": "White's bishop steps out to d3, settling onto a natural and active post in the heart of the Stonewall Formation. From there it supports the central pawn chain and trains its sights along the diagonal toward the kingside. The piece fits snugly into the compact white structure, complementing the knights and the interlocking pawn network."
         },
         {
           "san": "Bd6",
-          "annotation": ""
+          "annotation": "Black's dark-squared bishop strides out to d6, a dynamic central square from which it eyes the kingside along the long diagonal toward h2. The bishop dovetails naturally with the pawn trio on c5, d5, and e6, reinforcing Black's compact structure in this Stonewall-style setup. From d6 it also lends additional support to the knight on f6 and keeps Black's development purposeful and coordinated."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "White tucks the king away to g1 with kingside castling, the rook sliding over to f1 in the process. This is a natural step in the Bird's Stonewall Formation, connecting the rooks and placing the king behind the solid pawn structure of c3, d4, e3, and f4. With the king now safely sheltered, White's pieces are well coordinated on the kingside."
         },
         {
           "san": "O-O",
-          "annotation": "",
+          "annotation": "Black tucks the king away with kingside castling in this Stonewall Formation, bringing the monarch from e8 to the safer g8 square while the rook slides over to f8. With both sides having established their central pawn structures, securing the king is a natural and important priority. The black king is now sheltered behind the kingside pawn chain with the rook actively placed on the f-file.",
           "arrows": [
             {
               "from": "e8",
@@ -1198,7 +1198,7 @@
         },
         {
           "san": "Nbd2",
-          "annotation": "",
+          "annotation": "White develops the knight to d2, a natural home in the Bird's Stonewall Formation where it reinforces the central pawn structure without obstructing the bishop on d3. Placed here, the knight keeps the c1-bishop's diagonal unobstructed while adding a second defender to the critical d4 pawn.",
           "arrows": [
             {
               "from": "b1",
@@ -1226,7 +1226,7 @@
       "moveAnnotations": [
         {
           "san": "f4",
-          "annotation": "The Bird's: Swiss Gambit is an important variation of the Bird's Opening. An aggressive gambit where White sacrifices a pawn for rapid development and open lines. The bishop on d3 and pawn on f3 create immediate threats against Black's king. Let's walk through the key ideas."
+          "annotation": "White opens with the f-pawn advancing two squares to f4, the signature first move of the Bird's Opening. This bold pawn thrust stakes an immediate claim on the e5 square and shifts the game away from conventional king-pawn or queen-pawn territory. The position is asymmetrical from the very first move, signaling that White intends an aggressive, flank-oriented game."
         },
         {
           "san": "f5",
@@ -1234,11 +1234,11 @@
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "White thrusts the e-pawn all the way to e4, staking an immediate and aggressive claim in the center of the board. Now White has pawns on both e4 and f4, creating a bold two-pawn front that directly challenges Black's f5 pawn. This central lunge is the hallmark of the Swiss Gambit, where White responds to Black's early f5 push with sharp central energy rather than quiet development."
         },
         {
           "san": "fxe4",
-          "annotation": "fxe4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black's f-pawn sweeps across to e4, snapping off the white pawn and planting itself deep in White's half of the board. This capture is the defining moment of the Swiss Gambit — Black accepts the offered material without hesitation, claiming a pawn and a central outpost in one stroke. White's remaining pawn on f4 now stands without its e-pawn companion, giving the position an immediately unbalanced character.",
           "arrows": [
             {
               "from": "f5",
@@ -1249,11 +1249,11 @@
         },
         {
           "san": "d3",
-          "annotation": ""
+          "annotation": "White nudges the d-pawn one square forward to d3 in this Bird's Swiss Gambit position, placing it on the diagonal that bears directly on Black's aggressively advanced pawn sitting on e4. The move is a sturdy, grounded response that reinforces White's central presence while immediately contesting Black's bold pawn outpost. Black's e4 pawn now faces direct pressure from its new neighbor on d3."
         },
         {
           "san": "exd3",
-          "annotation": "exd3 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "annotation": "Black's pawn, already planted on e4 after snapping up the white e-pawn in the previous move, now sweeps diagonally once more to capture the white d-pawn and settle on d3. In this sharp Swiss Gambit line, Black has harvested two central pawns in rapid succession, driving a bold intruder deep into White's half of the board.",
           "arrows": [
             {
               "from": "e4",
@@ -1264,7 +1264,7 @@
         },
         {
           "san": "Bxd3",
-          "annotation": "",
+          "annotation": "White recaptures on d3 with the bishop, drawing the piece out from f1 to an active central post in a single stroke. The bishop now sits on d3 commanding open diagonals toward both wings, and White has recovered one of the pawns invested to crack open the position in this Bird's Swiss Gambit.",
           "arrows": [
             {
               "from": "f1",
@@ -1275,23 +1275,23 @@
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "Black develops the knight from g8 to f6, claiming an active central post in this sharp variation of the Bird's Opening. The knight on f6 enters the game with purpose, joining Black's already-developed pieces while keeping the position fluid. White's bishop, planted on d3, stands as a testament to the pawn give-and-take that has already defined this gambit."
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White develops the kingside knight to f3, a natural and flexible square from which it guards the center and supports the f4 pawn. The knight joins the bishop already posted on d3, adding further coordination to White's developing pieces. With this move, White's kingside begins to take shape as the pieces find active posts."
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "Black strikes boldly in the center, advancing the d-pawn all the way to d5 in one aggressive lunge. This central thrust immediately contests space and puts pressure on White's position, with the pawn now firmly planted in the heart of the board. The Swiss Gambit tension is beginning to crystallize as Black asserts a strong central presence alongside the knight already posted on f6."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "White tucks the king to safety with kingside castling, sliding the monarch from e1 to g1 while the rook swings over to f1. In the tactical complications typical of the Swiss Gambit, getting the king off the open central files is a sensible priority. The rook on f1 now eyes the half-open f-file, lending the kingside some immediate activity."
         },
         {
           "san": "Bg4",
-          "annotation": "",
+          "annotation": "Black swings the dark-squared bishop all the way out to g4, a sharp developing sortie in the spirit of the Swiss Gambit. The bishop bears down on the white knight at f3, creating immediate tension in the center. With pieces now actively posted, Black is pressing White to deal with this pressure before consolidating.",
           "arrows": [
             {
               "from": "c8",
@@ -1302,7 +1302,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "",
+          "annotation": "White develops the queen's knight to c3, a natural square from which it supports the center and keeps pace with Black's active setup. The knight joins the already-developed bishop on d3 and knight on f3, giving White a more harmonious and coordinated position on the queenside and center.",
           "arrows": [
             {
               "from": "b1",
@@ -1330,75 +1330,75 @@
       "moveAnnotations": [
         {
           "san": "f4",
-          "annotation": "In the Bird's Opening, the Qg3 Kingside Pressure is a tactical pattern you should know. The Qe1-g3 maneuver creates immediate pressure on g7 and the kingside. If Black plays ...Nh5 to chase the queen, Qf2 maintains the pressure while the knight has moved away from the center. Let's walk through how it works."
+          "annotation": "White opens with the bold advance of the f-pawn to f4, staking an immediate claim on the kingside in the spirit of the Bird's Opening. This early pawn thrust stakes space in front of White's king while targeting the central e5 square. It is an assertive, combative choice that signals White's intention to play an active, pressure-oriented game from the very first move."
         },
         {
           "san": "d5",
-          "annotation": ""
+          "annotation": "Black advances the d-pawn two squares to d5, immediately staking a claim in the center and contesting the important e4 square. This classical response to White's f4 meets flank activity with central counterplay, a principled approach that places a solid pawn on d5 while keeping Black's options flexible."
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White develops the knight from g1 to f3, a natural and efficient step that brings a piece toward the center of the board. The knight on f3 reinforces White's presence in the middle of the board while completing a harmonious partnership with the pawn already posted on f4."
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "Black's knight leaps from g8 to f6, staking a claim in the center and adding a second defender to the pawn on d5. Planted on f6, the knight also eyes the e4 square, contesting White's potential central expansion. It is a natural and principled developing move that gives Black a firm foothold in the early game."
         },
         {
           "san": "e3",
-          "annotation": ""
+          "annotation": "White nudges the e-pawn forward one square to e3, knitting together a compact pawn formation alongside the f4 pawn and keeping White's grip on the central squares intact. The move also clears the e2 square, giving the bishop on f1 a potential avenue into the game as White's pieces look to find their best posts. It is a measured, structural step in the early build-up of this kingside-oriented setup."
         },
         {
           "san": "g6",
-          "annotation": ""
+          "annotation": "Black nudges the g-pawn forward to g6, carving out space for a kingside fianchetto and signaling a solid defensive approach. The pawn on g6 forms a sturdy chain with its neighbor on f7 and complements the knight already posted on f6. Together they establish a compact barrier along the kingside that will anchor Black's position."
         },
         {
           "san": "Be2",
-          "annotation": ""
+          "annotation": "White tucks the bishop back to e2, a solid and unassuming square where it sits comfortably behind the pawn on e3. The move clears the f1 square and lends quiet support to the central structure, fitting naturally into the methodical setup White has been constructing. It is a patient, purposeful development that keeps the white pieces well-coordinated on the kingside."
         },
         {
           "san": "Bg7",
-          "annotation": ""
+          "annotation": "Black completes the kingside fianchetto by sliding the dark-squared bishop from f8 to g7, where it settles behind the pawn on g6. Nestled on g7, the bishop commands the long diagonal and adds a layer of protection to the kingside structure. This bishop placement is a cornerstone of Black's setup in this variation, giving the king a future safe haven and reinforcing the center from a distance."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "White tucks the king to safety with kingside castling, swinging the rook from h1 to f1 in the same motion. The king finds a secure haven on g1, sheltered behind the pawns on g2 and h2. With the rook now actively placed on f1, White's pieces are well coordinated along the central and kingside files."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "Black tucks the king away with kingside castling, swinging the rook from h8 to f8 in the process. In the Qg3 Kingside Pressure variation, getting the king off the open central files is a natural priority, and castling accomplishes that in one efficient move. The king now rests on g8, sheltered behind the pawns on f7, g6, and h7."
         },
         {
           "san": "d3",
-          "annotation": ""
+          "annotation": "White quietly nudges the d-pawn to d3, reinforcing the pawn on e3 and lending the central pawn chain a sturdier backbone. This unhurried advance ensures that Black's pawn on d5 cannot easily lever into White's center and create immediate complications. The position remains compact and controlled as White consolidates before applying further kingside pressure."
         },
         {
           "san": "c5",
-          "annotation": ""
+          "annotation": "Black advances the c-pawn two squares to c5, planting a second pawn in the center alongside the one already on d5. This bold thrust stakes out significant central territory and challenges White's pawn structure directly, giving Black a powerful duo that controls key light squares in the heart of the board."
         },
         {
           "san": "Qe1",
-          "annotation": ""
+          "annotation": "White slides the queen one square to e1, a quiet but purposeful repositioning that clears the d1 square and tucks the queen away from any potential central exchanges. From e1 the queen gains flexibility, able to redeploy toward the kingside along the first rank or shift up toward h4 depending on how the position evolves. It is a subtle preparatory move, keeping the tension in the center intact while improving piece coordination behind White's solid pawn structure."
         },
         {
           "san": "Nc6",
-          "annotation": ""
+          "annotation": "Black's knight strides from b8 to c6, completing a natural development and adding a second defender to the d5 pawn. The knight occupies a strong central outpost, coordinating with its companion on f6 to give Black a solid presence in the middle of the board."
         },
         {
           "san": "Qg3",
-          "annotation": ""
+          "annotation": "White slides the queen from e1 all the way to g3, a bold diagonal leap that places it on an active central square with sights trained along the g-file toward Black's king on g8. The queen also keeps watch over the e5 square and coordinates naturally with the knight on f3 and the pawn structure in the center. This is the defining moment of the variation, as White establishes immediate kingside presence while Black's monarch has not yet found safety."
         },
         {
           "san": "Nh5",
-          "annotation": ""
+          "annotation": "Black swings the knight from f6 to h5, parking it on the rim where it directly attacks the white queen on g3. This bold leap forces White to address the threat to the queen immediately, disrupting any comfortable development. The knight on h5, though on the edge of the board, earns its keep by challenging one of White's most active pieces."
         },
         {
           "san": "Qf2",
-          "annotation": ""
+          "annotation": "White retreats the queen from g3 to f2, tucking it into a more sheltered and purposeful post. From f2, the queen reinforces the pawn on f4 and aligns with the rook on f1, tightening White's grip on the f-file. The repositioning also sidesteps any nuisance the black knight on h5 might have caused by hovering near g3."
         },
         {
           "san": "f5",
-          "annotation": "",
+          "annotation": "Black boldly thrusts the f-pawn two squares forward to f5, placing it in direct confrontation with White's pawn on f4 and generating immediate tension in the center. Rather than yielding space, Black stakes an aggressive claim on the kingside, daring White to clarify the pawn structure.",
           "arrows": [
             {
               "from": "f7",
@@ -1409,11 +1409,11 @@
         },
         {
           "san": "Nc3",
-          "annotation": ""
+          "annotation": "White develops the knight from b1 to c3, bringing it into active play in the center of the board. The knight now stands alongside its companion on f3, with both pieces bearing down on key central squares and reinforcing White's solid pawn structure on the third and fourth ranks."
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "The black knight pulls back from h5, planting itself firmly on f6 where it commands important central and kingside squares. Retreating may look modest, but the knight finds a far more influential home here, coordinating naturally with its partner on c6 and the fianchettoed bishop on g7. Black consolidates the position and restores harmony to the piece arrangement."
         }
       ]
     },
@@ -1423,15 +1423,15 @@
       "moveAnnotations": [
         {
           "san": "f4",
-          "annotation": "In the Bird's Opening, the From's Gambit Refutation is a tactical pattern you should know. After taking the From's Gambit pawn, precise play with d4 and Bg5 neutralizes Black's initiative. White emerges with a healthy extra pawn if Black doesn't find the best moves. Let's walk through how it works."
+          "annotation": "White opens with the Bird's Opening, pushing the f-pawn two squares forward to f4 on the very first move. This bold flank advance stakes an immediate claim on the center and kingside, seizing control of the e5 square from the outset. It is an aggressive and unconventional choice that sets the stage for the sharp play associated with From's Gambit territory."
         },
         {
           "san": "e5",
-          "annotation": ""
+          "annotation": "Black boldly advances the e-pawn two squares to e5, immediately staking a claim in the center and directly confronting White's f4 pawn. This energetic thrust is the hallmark of From's Gambit, where Black offers the e-pawn as a lure to unbalance the position from the very first move. The tension between the two pawns is now the defining feature of the board."
         },
         {
           "san": "fxe5",
-          "annotation": "",
+          "annotation": "White accepts the challenge, snapping off the pawn on e5 with the f-pawn and staking an immediate claim in the center. In the From's Gambit Refutation, this capture is White's practical answer to Black's bold second-move pawn offer. The white pawn now stands aggressively on e5, having cleared the f-file in the process.",
           "arrows": [
             {
               "from": "f4",
@@ -1442,11 +1442,11 @@
         },
         {
           "san": "d6",
-          "annotation": ""
+          "annotation": "Black advances the d-pawn one square to d6, immediately putting pressure on White's pawn that has pushed deep into Black's half of the board on e5. This central challenge is the defining idea of the From's Gambit Refutation, as Black refuses to let the advanced pawn sit comfortably and instead contests it at once. The tension in the center is now sharp, with Black's newly posted pawn on d6 directly confronting its white counterpart."
         },
         {
           "san": "exd6",
-          "annotation": "",
+          "annotation": "White snaps off the pawn on d6, trading the advanced e5-pawn for Black's central challenger. This capture is the backbone of the refutation line — rather than retreating or holding the pawn passively, White exchanges it for concrete material, leaving Black without the dynamic compensation the gambit was designed to create.",
           "arrows": [
             {
               "from": "e5",
@@ -1457,55 +1457,55 @@
         },
         {
           "san": "Bxd6",
-          "annotation": ""
+          "annotation": "Black's dark-squared bishop swings out from f8 to d6, capturing the pawn that had ventured there and immediately recouping the material. The bishop now occupies a commanding central post, settled on d6 with open lines radiating across the board."
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White develops the knight from g1 to f3, a crisp and principled response in this line of the From's Gambit Refutation. The knight takes up an active post on f3, bearing down on the central squares d4 and e5 while contributing to harmonious piece development. With Black's bishop already posted aggressively on d6, White wastes no time in organizing a solid, well-coordinated setup."
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "Black's knight springs from g8 to f6, claiming an active post in the center and mirroring White's own knight already stationed on f3. Paired with the bishop already placed on d6, this development gives Black a pair of well-placed pieces that compensate for the pawns surrendered in the opening."
         },
         {
           "san": "d4",
-          "annotation": ""
+          "annotation": "White plants a pawn on d4, staking out a firm claim in the center and directly challenging the black bishop that sits on d6. The advance pairs naturally with the knight already developed to f3, giving White a classical central formation. In this refutation of From's Gambit, such straightforward development keeps the initiative and denies Black easy compensation for the sacrificed pawn."
         },
         {
           "san": "Nc6",
-          "annotation": ""
+          "annotation": "Black develops the queenside knight to c6, a natural and active post from which it lends support to the bishop already stationed on d6. The knight also trains an eye on the d4 pawn, beginning to contest White's central control and coordinating with the rest of Black's developing pieces."
         },
         {
           "san": "Bg5",
-          "annotation": ""
+          "annotation": "White's bishop glides from c1 all the way out to g5, immediately pinning Black's knight on f6 against the queen sitting back on d8. This active development is a hallmark of the From's Gambit Refutation, where White seizes the initiative by posting pieces on aggressive squares rather than defending passively."
         },
         {
           "san": "h6",
-          "annotation": ""
+          "annotation": "Black advances the h-pawn one square to h6, directly challenging the white bishop that sits on g5. This modest pawn nudge is a practical response, gaining space on the kingside and forcing the bishop to declare its intentions. The move is a natural way for Black to contest White's piece activity without committing to more drastic measures."
         },
         {
           "san": "Bh4",
-          "annotation": ""
+          "annotation": "White's bishop steps back from g5 to h4, a quiet retreat that sidesteps any further harassment while keeping the bishop active along the long diagonal toward f6 and e7. Rather than exchanging the bishop immediately, White preserves it and maintains indirect pressure on Black's developed pieces. The move is a subtle repositioning, keeping the bishop in the game without committing to a trade."
         },
         {
           "san": "g5",
-          "annotation": ""
+          "annotation": "Black's g-pawn storms forward to g5, directly attacking the white bishop sitting on h4. The advance is sharp and confrontational, demanding an immediate response from White about the bishop's fate."
         },
         {
           "san": "Bg3",
-          "annotation": ""
+          "annotation": "White's bishop steps back from h4 to g3, a quiet but purposeful retreat that keeps the piece safe and well-placed on the long diagonal. With Black's pawn already advanced to g5, the bishop on h4 was at risk of being harassed by a further g4 push, so withdrawing to g3 sidesteps that threat while maintaining the bishop's influence across the center. The light-squared bishop now stands comfortably, supporting White's solid pawn structure anchored by the pawn on d4."
         },
         {
           "san": "Ne4",
-          "annotation": ""
+          "annotation": "Black's knight leaps to e4, planting itself on a commanding central outpost where it exerts immediate pressure and demands White's attention. From this square the knight sits aggressively in the heart of the board, supported by the structure Black has built up across the center and kingside. It is a bold bid for active counterplay in a line where White has been trying to refute Black's early aggression."
         },
         {
           "san": "Bxd6",
-          "annotation": ""
+          "annotation": "White's bishop sweeps from g3 to d6, snapping off Black's bishop and planting itself on a dominant central outpost deep inside Black's position. The bishop on d6 sits aggressively between Black's uncastled king on e8 and the queenside pieces, making it a menacing fixture in the heart of Black's camp."
         },
         {
           "san": "Qxd6",
-          "annotation": ""
+          "annotation": "Black recaptures on d6 with the queen, snatching back the bishop that had ventured into the center and restoring material equality. The queen lands on an active central square, surveying both flanks, while the knight on e4 adds further pressure in the heart of the board. Black has fought hard to stay in the game through this sharp From's Gambit Refutation line."
         }
       ]
     },
@@ -1519,63 +1519,63 @@
         },
         {
           "san": "d5",
-          "annotation": ""
+          "annotation": "Black responds to White's f4 with the natural central thrust d5, advancing the pawn from d7 to d5 and staking an immediate claim in the center. This assertive reply meets the Bird's Opening head-on, contesting space rather than allowing White to dictate the pace. The black pawn on d5 now stands firmly in the middle of the board, giving Black a solid central presence from the very first move."
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White develops the king's knight to f3, a natural and flexible square where it supports central control and guards the e5 square. From f3, the knight reinforces White's presence in the center while keeping the position solid after the early f4 advance. This is a principled developing move, bringing a piece into the game before committing to more concrete plans."
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "Black develops the knight from g8 to its most natural outpost on f6, where it reinforces the d5 pawn and actively contests the center. In this line associated with the Premature f5 Push, Black takes a moment to bring out a piece rather than rushing forward with pawns. The knight on f6 is a solid, flexible choice that keeps Black's options open."
         },
         {
           "san": "e3",
-          "annotation": ""
+          "annotation": "White advances the e-pawn one square to e3, quietly reinforcing the pawn already posted on f4 and giving the structure a solid, interlocking foundation. This modest step also clears the way for the dark-squared bishop on f1 to enter the game when the moment is right. Together with the knight already developed to f3, White's position is taking on the compact, methodical character typical of the Bird's Opening."
         },
         {
           "san": "c5",
-          "annotation": ""
+          "annotation": "Black thrusts the c-pawn two squares forward to c5, joining the pawn already posted on d5 to form an imposing central duo. This bold advance claims considerable space in the heart of the board, making clear that Black intends to contest the center actively rather than passively defend."
         },
         {
           "san": "b3",
-          "annotation": ""
+          "annotation": "White nudges the b-pawn forward to b3, clearing the path for the light-squared bishop to develop to b2 along the long diagonal. This quiet preparatory step reflects a deliberate, solid approach to the position, reinforcing the center from behind rather than through direct confrontation. The pawn now anchors a stable foundation on the queenside while White organizes the pieces."
         },
         {
           "san": "Nc6",
-          "annotation": ""
+          "annotation": "Black's queen's knight strides forward from b8 to c6, completing a pair of developed knights that now both stand ready in the center. From c6, the knight lends additional support to the d5 pawn and eyes the key central squares, reinforcing the solid pawn structure Black has already established with pawns on c5 and d5. It is a natural, principled developing move that keeps Black's position compact and well-coordinated."
         },
         {
           "san": "Bb2",
-          "annotation": ""
+          "annotation": "White tucks the light-squared bishop to b2, nestling it behind the pawn on b3 and onto the long a1–h8 diagonal. From this square the bishop gains immediate scope across the center, bearing down toward the kingside. It is a composed, purposeful developing move that gives the bishop an active post without committing to a pawn exchange."
         },
         {
           "san": "g6",
-          "annotation": ""
+          "annotation": "Black nudges the g-pawn forward to g6, claiming a foothold over the f5 and h5 squares and adding firmness to the kingside pawn structure. With White's pawn already sitting on f4, this prophylactic step asserts Black's presence in that zone of the board. The move is quiet but purposeful, tightening Black's formation as both sides continue to develop."
         },
         {
           "san": "Be2",
-          "annotation": ""
+          "annotation": "White tucks the bishop back to e2, a calm and solid developing square that clears the path toward kingside castling. Rather than venturing the bishop to a more ambitious outpost, White opts for reliability, keeping the piece safe and well-coordinated with the knight already on f3. This quiet retreat reflects White's steady approach in the face of Black's early pawn advances on the queenside and center."
         },
         {
           "san": "Bg7",
-          "annotation": ""
+          "annotation": "Black slides the bishop from f8 to g7, completing a natural kingside fianchetto and planting a powerful piece on the long diagonal. The bishop on g7 is well-placed, bearing down toward the center and supporting Black's solid pawn structure."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "White tucks the king away safely with kingside castling, relocating it from e1 to g1 while the rook swings over to f1. This gets the king off the open central files and connects the rooks, a natural piece of development in a position where Black has already committed pawns aggressively on the queenside and kingside. The king on g1 is well sheltered behind the pawns on f4, g2, and h2."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "Black tucks the king away with kingside castling, landing it safely on g8 with the rook swinging to f8. This sensible precaution gets the king off the central files, which have grown tense with pawns locked on d5 and c5. Black's structure is ambitious but now at least the king is sheltered behind its kingside pawns."
         },
         {
           "san": "d3",
-          "annotation": ""
+          "annotation": "White nudges the d-pawn one square forward to d3, knitting together the central pawns on c2, d3, and e3 into a compact, interlocking chain. This restrained advance reinforces White's control of the center without immediately challenging Black's pawns on c5 and d5. The pawn structure now presents a firm foundation that limits the impact of Black's early kingside and central activity."
         },
         {
           "san": "d4",
-          "annotation": "",
+          "annotation": "Black's pawn strides forward from d5 to d4, staking an imposing claim in the center of the board. Paired with the pawn already on c5, this advance gives Black a commanding space advantage on the queenside and in the middle of the board. The newcomer on d4 now presses directly against White's pawn on d3, intensifying the structural tension at the heart of the position.",
           "arrows": [
             {
               "from": "d5",
@@ -1586,7 +1586,7 @@
         },
         {
           "san": "e4",
-          "annotation": "",
+          "annotation": "White advances the e-pawn one square to e4, seizing more central space and placing immediate pressure on Black's pawn sitting on d4. The new post is well anchored, backed by its neighbor on d3, and together with the pawn on f4 it gives White a broad, interlocking presence across the heart of the board. This firm central thrust is White's answer to Black's early pawn activity, asserting control over the most contested squares.",
           "arrows": [
             {
               "from": "e3",
@@ -1597,7 +1597,7 @@
         },
         {
           "san": "Nd5",
-          "annotation": ""
+          "annotation": "Black's knight strides from f6 to d5, planting itself on a commanding central outpost deep in White's half of the board. The square is well supported by the pawn on c5 and the companion knight on c6, giving the piece a stable and imposing presence. From d5 the knight exerts pressure across a wide swath of the position, challenging White's pawns on e4 and f4 while the advanced pawn on d4 adds to Black's grip on the center."
         }
       ]
     },
@@ -1611,71 +1611,71 @@
         },
         {
           "san": "d5",
-          "annotation": ""
+          "annotation": "Black's d-pawn advances boldly to d5, staking an immediate claim in the center of the board. Facing White's flank pawn already posted on f4, this direct central thrust is a principled reply, contesting the most important squares from the very first move. The black pawn now stands firmly on d5, backed by the full array of Black's undeveloped pieces still on the back ranks."
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White develops the knight from g1 to f3, a natural and harmonious move that brings a piece toward the center of the board. The knight on f3 eyes the central squares d4 and e5, reinforcing White's presence in that region while also lending indirect support to the pawn already posted on f4."
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "Black's knight strides forward from g8 to f6, claiming a strong central post and joining the d5 pawn in contesting the middle of the board. From f6, the knight eyes the center and adds pressure to the position, while also helping coordinate Black's pieces toward development. It is a natural, principled response in this structure, keeping Black's options flexible."
         },
         {
           "san": "e3",
-          "annotation": ""
+          "annotation": "White advances the pawn one square to e3, quietly reinforcing the f4 pawn and giving the central structure a firmer foundation. The move also unblocks the diagonal for the bishop on f1, which now has a path toward the center or kingside."
         },
         {
           "san": "g6",
-          "annotation": ""
+          "annotation": "Black nudges the g-pawn one square forward to g6, staking out space on the kingside and opening the long diagonal for the bishop on f8. The move is a deliberate structural choice, though it does leave the f6-square and the h6-square with slightly less pawn cover than a more restrained setup would provide — the very tension that gives this variation its name."
         },
         {
           "san": "Be2",
-          "annotation": ""
+          "annotation": "White tucks the bishop back to e2, a quiet but purposeful developing move that clears the f1 square and prepares the king for eventual safety. Nestled on e2, the bishop lends sturdy support to the central structure while keeping options flexible. It is a composed, classical retreat that completes White's minor-piece development on the kingside."
         },
         {
           "san": "Bg7",
-          "annotation": ""
+          "annotation": "Black slides the dark-squared bishop from f8 to g7, completing the kingside fianchetto that is a hallmark of this setup. Nestled on g7, the bishop takes up a powerful post along the long diagonal, bearing down toward the center. This development also brings Black one step closer to connecting the rooks by clearing the back rank between king and bishop."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "White tucks the king to safety with kingside castling, sliding the monarch to g1 while the rook swings into action on f1. This gets the king off the open central files and brings the rook to a post where it naturally supports the pawn on f4. The king's new home on g1 is well sheltered behind the pawn chain, a sensible priority before the middlegame tensions sharpen."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "Black castles kingside, tucking the king safely to g8 while the rook swings over to f8. With the fianchettoed bishop on g7 now fully activated as a shield for the king, Black's monarch finds a natural home behind its pawns. This is a thematic response in the Kingside Weakness variation, where Black's king finds refuge even as the pawn structure on that side of the board invites scrutiny."
         },
         {
           "san": "d3",
-          "annotation": ""
+          "annotation": "White nudges the d-pawn forward one square to d3, joining the pawns already posted on e3 and f4 to form a compact three-pawn cluster across the center and kingside. This quiet advance shores up the central squares and gives White a solid, interlocking pawn structure. The move reflects a patient, consolidating approach rather than an immediate thrust."
         },
         {
           "san": "c5",
-          "annotation": ""
+          "annotation": "Black's c-pawn strides forward two squares to c5, immediately staking a claim in the center and joining the pawn already posted on d5. Together these two pawns form a powerful duo that presses against White's position and contests space on both the c- and d-files. The advance signals Black's intention to fight for central control rather than concede the middle of the board."
         },
         {
           "san": "c3",
-          "annotation": ""
+          "annotation": "White advances the c-pawn to c3, lending additional support to the d3 pawn and knitting together a compact central structure. This quiet but purposeful step solidifies the foundation beneath White's pawn chain, reducing the immediate influence of Black's well-placed pawns on c5 and d5."
         },
         {
           "san": "Nc6",
-          "annotation": ""
+          "annotation": "Black's knight swings out from b8 to c6, completing a natural piece of development and lending immediate support to the pawns on d5 and c5 that anchor Black's central foothold. From c6, the knight is actively placed in the heart of the board, contributing to Black's solid central structure. This move completes development of both Black knights, with the other already posted on f6."
         },
         {
           "san": "Na3",
-          "annotation": ""
+          "annotation": "White nudges the knight out to a3, an offbeat square dictated by the pawn already sitting on c3, which closes the more conventional development route. From the rim, the knight retains the possibility of swinging inward via c2 or pressing toward b5, giving White a flexible piece that does not immediately commit to the center."
         },
         {
           "san": "Qc7",
-          "annotation": ""
+          "annotation": "Black slides the queen from d8 to c7, tucking it onto a more active and sheltered diagonal while clearing the back rank between the rooks. From c7, the queen supports the pawn on c5 and keeps an eye on the central tension. It is a consolidating, purposeful move that improves the coordination of Black's pieces without overextending."
         },
         {
           "san": "Nc2",
-          "annotation": ""
+          "annotation": "White's knight withdraws from the rim at a3 and settles on c2, a far more harmonious square nestled behind the pawn chain. The knight is now better coordinated with the compact central pawns on c3, d3, and e3, and no longer languishing on the edge of the board. This quiet repositioning improves White's piece coordination in a position that demands careful maneuvering."
         },
         {
           "san": "b5",
-          "annotation": "",
+          "annotation": "Black thrusts the b-pawn all the way to b5, staking immediate claim to queenside territory and joining a formidable pawn mass alongside the pawns already posted on c5 and d5. The advance signals Black's intent to seize space on that flank, stretching White's attention while the kingside tension remains unresolved.",
           "arrows": [
             {
               "from": "b7",
@@ -1692,7 +1692,7 @@
       "moveAnnotations": [
         {
           "san": "f4",
-          "annotation": "",
+          "annotation": "White opens by advancing the f-pawn two squares to f4, immediately staking a claim on the kingside and signaling the Stonewall Kingside Attack. This bold pawn thrust stakes control over the e5 square and gives White's position a distinctly aggressive character from the very first move. The rest of White's pieces remain on their starting squares, waiting to be developed behind this early pawn commitment.",
           "arrows": [
             {
               "from": "f2",
@@ -1709,7 +1709,7 @@
         },
         {
           "san": "d5",
-          "annotation": "",
+          "annotation": "Black's d-pawn strides forward two squares to d5, immediately planting a stake in the center of the board. This bold advance answers White's kingside pawn on f4 by seizing central ground rather than ceding it. The black pawn now stands firmly on d5, giving Black a solid presence in the heart of the position.",
           "arrows": [
             {
               "from": "d7",
@@ -1726,7 +1726,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White brings the knight to its natural square on f3. The knight on f3 improves White's piece coordination and flexibility.",
+          "annotation": "White develops the knight from g1 to f3, establishing a natural post that supports the center and adds a second piece to the game. Alongside the pawn already planted on f4, the knight on f3 contributes to a growing presence in the middle of the board. This is a principled developing move consistent with the Stonewall Kingside Attack's early ambitions.",
           "arrows": [
             {
               "from": "g1",
@@ -1747,7 +1747,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black activates the knight on f6. The knight on f6 improves Black's piece coordination and flexibility.",
+          "annotation": "Black develops the knight from g8 to f6, bringing it to an active central post on only the second move of the game. From f6, the knight contests the e4 square and complements the pawn already stationed on d5, giving Black a solid presence in the middle of the board. This natural developing move is a principled response to White's early Stonewall setup.",
           "arrows": [
             {
               "from": "g8",
@@ -1768,7 +1768,7 @@
         },
         {
           "san": "e3",
-          "annotation": "",
+          "annotation": "White nudges the e-pawn one square forward to e3, reinforcing the f4-pawn and beginning to knit together the hallmark Stonewall pawn chain. The move solidifies White's central foothold, ensuring that the f4-pawn is well-supported and the position grows more compact. Together, the pawns on e3 and f4 already hint at the rigid, fortress-like structure that defines this variation.",
           "arrows": [
             {
               "from": "e2",
@@ -1788,7 +1788,7 @@
         },
         {
           "san": "e6",
-          "annotation": "",
+          "annotation": "Black advances the e-pawn one square to e6, solidifying the central pawn chain alongside the pawn already anchored on d5. This careful, compact structure is a hallmark of the Stonewall, giving Black a firm grip on the center while keeping the position closed and resilient. The pawn on e6 now shields d5 and supports Black's developing pieces tucked behind this fortified wall.",
           "arrows": [
             {
               "from": "e7",
@@ -1805,7 +1805,7 @@
         },
         {
           "san": "d4",
-          "annotation": "",
+          "annotation": "White completes the early foundation of the Stonewall pawn structure by advancing the d-pawn two squares to d4, where it immediately confronts Black's pawn on d5. Together with the pawns already on e3 and f4, this creates the characteristic triangle of pawns that defines White's setup. The center is now locked in a tense stand-off, giving White a compact and solid formation to build upon.",
           "arrows": [
             {
               "from": "d2",
@@ -1822,7 +1822,7 @@
         },
         {
           "san": "c5",
-          "annotation": "",
+          "annotation": "Black advances the c-pawn two squares to c5, directly challenging White's central anchor on d4. This thrust is a principled response to the Stonewall formation, as Black seeks to undermine the foundation of White's pawn structure from the queenside. With pawns now on c5 and d5, Black has staked out a strong central presence of their own.",
           "arrows": [
             {
               "from": "c7",
@@ -1835,7 +1835,7 @@
         },
         {
           "san": "c3",
-          "annotation": "White pushes the pawn to c3. This pawn move supports a future d-pawn advance, a key central plan.",
+          "annotation": "White advances the c-pawn one square to c3, reinforcing the d4 pawn and lending extra solidity to the center. This sturdy support square ensures the d4 anchor is well protected against any central pressure Black might apply with the pawns already posted on c5 and d5. The move is a hallmark of the Stonewall setup, where White prioritizes a compact, resilient pawn formation over rapid piece development.",
           "arrows": [
             {
               "from": "c2",
@@ -1851,7 +1851,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black places the knight on the active c6 square. The knight on c6 improves Black's piece coordination and flexibility.",
+          "annotation": "Black develops the queen's knight from b8 to c6, bringing it into active play in the center of the board. The knight on c6 adds a second defender to the d4 pawn's neighboring squares and completes a solid cluster of black pieces eyeing the central tension. This natural development continues Black's effort to contest the center while maintaining the pawn structure typical of the Stonewall setup.",
           "arrows": [
             {
               "from": "b8",
@@ -1872,7 +1872,7 @@
         },
         {
           "san": "Bd3",
-          "annotation": "",
+          "annotation": "White develops the bishop to d3, where it takes up an active post on the long diagonal aimed at the kingside. Nestled comfortably behind the e3 pawn and reinforced by the solid Stonewall pawn chain, this bishop is a key attacking piece in the system. From d3 it bears down toward the h7 square, putting immediate pressure on Black's kingside.",
           "arrows": [
             {
               "from": "f1",
@@ -1906,7 +1906,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "",
+          "annotation": "White completes kingside castling, tucking the king safely to g1 while the rook slides into the active f1 square. This is a natural and important step in the Stonewall Kingside Attack, connecting the rooks and removing the king from the center. With the pawn structure already locked in, the king finds a secure home behind the g2 and h2 pawns.",
           "arrows": [
             {
               "from": "e1",
@@ -1931,7 +1931,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "",
+          "annotation": "Black completes kingside castling in the Stonewall Kingside Attack, tucking the king safely to g8 while the rook slides over to f8. This classic sheltering move connects the rooks and removes the king from the open central files where the tension is highest. With the king now nestled behind the pawns on f7, g7, and h7, Black has secured the monarch before the middlegame complications intensify.",
           "arrows": [
             {
               "from": "e8",
@@ -1948,7 +1948,7 @@
         },
         {
           "san": "Nbd2",
-          "annotation": "White develops the knight to d2. The knight on d2 improves White's piece coordination and flexibility.",
+          "annotation": "White tucks the knight from b1 to d2, a characteristic development in the Stonewall Kingside Attack that avoids placing the piece on c3 where it would obstruct the pawn chain. From d2, the knight fits neatly behind the solid wall of pawns on c3, d4, e3, and f4, keeping the position compact and harmonious. The c1 bishop remains unobstructed, and White's central structure stays intact.",
           "arrows": [
             {
               "from": "b1",
@@ -1965,7 +1965,7 @@
         },
         {
           "san": "Qc7",
-          "annotation": "",
+          "annotation": "Black slides the queen from d8 to c7, tucking it onto a more active square where it reinforces the central pawn on d5 and aligns with the bishop on d6 along the same rank. The d8 square is now vacated, giving Black's rooks more room to coordinate behind the solid pawn structure. This quiet but purposeful queen maneuver is a natural part of Black's setup in the Stonewall, centralizing the most powerful piece without committing it prematurely.",
           "arrows": [
             {
               "from": "d8",
@@ -2006,7 +2006,7 @@
         },
         {
           "san": "cxd4",
-          "annotation": "Black captures the pawn on d4. Black improves piece placement heading into the critical phase of the game.",
+          "annotation": "Black's c5-pawn sweeps across to d4, eliminating a White pawn and planting a wedge deep in the center of the board. This capture gives Black a supported, advanced pawn on d4 that sits just one square from White's third rank, bearing down on the c3 pawn and cramping White's queenside pieces. The move signals Black's intention to contest the center aggressively rather than allowing White to dictate the pace of the game.",
           "arrows": [
             {
               "from": "c5",
@@ -2024,7 +2024,7 @@
         },
         {
           "san": "exd4",
-          "annotation": "",
+          "annotation": "The white pawn on e3 captures the pawn on d4, anchoring itself firmly in the center between the c3 and f4 pawns. This recapture solidifies White's central formation and opens the diagonal for the bishop already posted on d3. Together with the knight entrenched on e5, the newly placed pawn on d4 gives White a commanding grip on the middle of the board.",
           "arrows": [
             {
               "from": "e3",
@@ -2046,7 +2046,7 @@
         },
         {
           "san": "Nd7",
-          "annotation": "",
+          "annotation": "Black's knight pulls back from f6 to d7, a deliberate retreat that places it in direct confrontation with White's strongly posted knight on e5. This regrouping is a thematic resource in the Stonewall Kingside Attack, as Black seeks to challenge the advanced White knight while also freeing the f6 square for other purposes.",
           "arrows": [
             {
               "from": "f6",
@@ -2063,7 +2063,7 @@
         },
         {
           "san": "Ndf3",
-          "annotation": "",
+          "annotation": "White repositions the knight from d2 to f3, a natural square where it adds support to the advanced knight already posted on e5. This regrouping tightens White's grip on the central complex while also lending the f3-knight to any future kingside operations. The two knights now work in tandem, placing meaningful pressure on Black's central structure.",
           "arrows": [
             {
               "from": "d2",
@@ -2083,7 +2083,7 @@
         },
         {
           "san": "f6",
-          "annotation": "",
+          "annotation": "Black advances the f-pawn to f6, directly challenging White's powerful knight posted on e5 in this Stonewall Kingside Attack. The thrust is a principled reaction, forcing a decision about the knight's fate at the heart of the board. By staking ground on f6, Black also stakes a claim in the center, though the advance does leave some squares around the black king slightly more exposed.",
           "arrows": [
             {
               "from": "f7",
@@ -2100,7 +2100,7 @@
         },
         {
           "san": "Nxd7",
-          "annotation": "",
+          "annotation": "The white knight leaps from e5 to d7, snatching the black knight that had been posted there and planting itself deep in enemy territory. This aggressive exchange is a hallmark of the Stonewall's attacking ambitions, as White uses the advanced knight to disrupt the coordination of Black's pieces. The white knight now sits on d7, a menacing intruder wedged between Black's rooks and queen on the back ranks.",
           "arrows": [
             {
               "from": "e5",
@@ -2214,7 +2214,7 @@
         },
         {
           "san": "f5",
-          "annotation": "",
+          "annotation": "White's pawn strides boldly to f5, driving a wedge into Black's kingside and claiming valuable space in the Stonewall Kingside Attack. The pawn now sits aggressively against Black's pawn chain, pressing on the e6 square and restricting Black's defensive options. The queen on h4 and the bishop on d3 stand ready to complement this advance, as White's kingside forces grow increasingly coordinated around Black's king on g8.",
           "arrows": [
             {
               "from": "f4",
@@ -2230,7 +2230,7 @@
         },
         {
           "san": "e5",
-          "annotation": "",
+          "annotation": "Black advances the pawn from e6 to e5, driving it forward to stake a commanding claim in the center alongside the pawn already standing on d5. The thrust directly challenges White's d4 pawn and gives Black a broad, space-gaining duo right in the heart of the board, disrupting the usual rhythm of the Stonewall Kingside Attack.",
           "arrows": [
             {
               "from": "e6",
