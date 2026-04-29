@@ -202,7 +202,14 @@ export type AuditKind =
   // (≤ 2 plies). Override is the engine bestmove. Counting these in
   // production tells us how often the LLM picks losing moves — a
   // high rate means the prompt or rating-tier calibration needs work.
-  | 'coach-move-mate-floor-triggered';
+  | 'coach-move-mate-floor-triggered'
+  // WO-COACH-RATING-FLOOR. Fires when the coach's quality-floor safety
+  // check vetoed the LLM's pick because the centipawn loss vs the
+  // engine's bestmove exceeded the student's rating-tier threshold.
+  // Counting these tells us whether the cp-loss thresholds are tuned
+  // correctly per tier (too many at intermediate = floor too tight;
+  // too few at master = floor too loose).
+  | 'coach-move-quality-floor-triggered';
 
 export interface AuditEntry {
   timestamp: number;
