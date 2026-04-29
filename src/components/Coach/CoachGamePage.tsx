@@ -2533,6 +2533,11 @@ export function CoachGamePage(): JSX.Element {
           profanity: activePrefs?.coachProfanity,
           mockery: activePrefs?.coachMockery,
           flirt: activePrefs?.coachFlirt,
+          // Explicit perspective: the student plays `playerColor`; the
+          // coach plays the opposite. Without this, the LLM was
+          // inferring (audit log build ac20cc5 caught it narrating
+          // the student's e4 as "Alright, I'm playing e4...").
+          studentColor: playerColor === 'white' ? 'w' : 'b',
         });
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
         // Mirror the commentary into the shared session so the next

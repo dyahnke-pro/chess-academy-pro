@@ -126,6 +126,9 @@ export function CoachPlaySessionView({
         profanity: activePrefs?.coachProfanity,
         mockery: activePrefs?.coachMockery,
         flirt: activePrefs?.coachFlirt,
+        // Student plays `orientation`; coach plays the opposite. Tells
+        // the LLM unambiguously who's narrating from which side.
+        studentColor: orientation === 'white' ? 'w' : 'b',
       });
       if (!isMountedRef.current) return;
       // Store the new eval as the baseline for the NEXT move's swing.

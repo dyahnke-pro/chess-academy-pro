@@ -18,7 +18,7 @@
  * review view.
  */
 import type { Chess } from 'chess.js';
-import { getCoachChatResponse } from './coachApi';
+import { getCoachChatResponse, consumeLastLlmMetadata } from './coachApi';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
 import { buildStudentStateBlock } from './studentStateBlock';
 import { recordAudit } from './narrationAuditor';
@@ -90,6 +90,14 @@ export interface MoveCommentaryInput {
   profanity?: IntensityLevel;
   mockery?: IntensityLevel;
   flirt?: IntensityLevel;
+  /** Color the STUDENT is playing as. The coach plays the opposite
+   *  color. Without this, the user prompt only said "White just
+   *  played e4." and the LLM had to infer who was who from the
+   *  PLAY_SYSTEM_PROMPT phrasing. Production audit showed the LLM
+   *  guessing wrong — narrating the student's e4 as "I played e4"
+   *  when the student played e4 (the student is white, the coach
+   *  is black). Now we tell the LLM explicitly. */
+  studentColor?: 'w' | 'b';
 }
 
 /** How many prior chat messages to include in the commentary prompt.
@@ -238,7 +246,7 @@ async function getLlmCommentary(
     gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone,
     chatHistory, verbosity = 'medium', groundedNotes = [],
     recentMoveClassifications, lastUserInteractionMs,
-    personality, profanity, mockery, flirt,
+    personality, profanity, mockery, flirt, studentColor,
   } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
@@ -338,8 +346,20 @@ async function getLlmCommentary(
     turn: gameAfter.turn() === mover ? 'coach' : 'student',
   });
 
+  // Explicit perspective line — without this, the LLM has to infer
+  // from PLAY_SYSTEM_PROMPT phrasing whether the student or the
+  // coach is the mover. Production audit (build ac20cc5) showed the
+  // LLM narrating the student's e4 as "Alright, I'm playing e4 — the
+  // Bishop's Opening kicks off..." when the student played e4 (i.e.
+  // the LLM thought IT played the move). Telling the LLM the student
+  // is white/black and the coach is the opposite removes the
+  // ambiguity.
+  const studentColorBlock = studentColor
+    ? `Color assignment: the student is playing as ${studentColor === 'w' ? 'White' : 'Black'}; you (the coach) are playing as ${studentColor === 'w' ? 'Black' : 'White'}. When ${studentColor === 'w' ? 'White' : 'Black'} plays a move below, it was the STUDENT's move (narrate as "you"); when ${studentColor === 'w' ? 'Black' : 'White'} plays a move below, it was YOUR move (narrate as "I").`
+    : '';
   const user = [
     subject ? `Session subject: ${subject}.` : '',
+    studentColorBlock,
     studentStateBlock,
     chatContext
       ? `[Recent chat between you and the student — stay consistent with it]\n${chatContext}`
@@ -378,17 +398,36 @@ async function getLlmCommentary(
     verbosity,
   );
   const llmDurationMs = Date.now() - llmStartedAt;
+  // Consume the metadata snapshot from the LLM call we just awaited.
+  // Single-threaded JS guarantees the snapshot is from THIS call, not
+  // a racing one — the await→consumption pair runs in one tick.
+  // Captures finish_reason and reasoning_content length so an empty
+  // content response has a definitive cause:
+  //   finish_reason="length" + reasoningContentLength≈max_tokens →
+  //     reasoner exhausted budget on chain-of-thought
+  //   finish_reason="stop" + reasoningContentLength=0 + content="" →
+  //     model intentionally returned empty (refusal? no useful prose?)
+  //   finish_reason="stop" + reasoningContentLength>0 + content="" →
+  //     reasoner produced reasoning but emitted empty content (model
+  //     bug or our parser dropped it)
+  const llmMetadata = consumeLastLlmMetadata();
   const trimmed = response.trim();
   const startsWithWarning = trimmed.startsWith('⚠️');
   void logAppAudit({
     kind: 'llm-response',
     category: 'subsystem',
     source: 'coachMoveCommentary.getLlmCommentary',
-    summary: `length=${trimmed.length} latencyMs=${llmDurationMs} verbosity=${verbosity} personality=${personality ?? 'undefined'} profanity=${profanity ?? 'none'} mockery=${mockery ?? 'none'} flirt=${flirt ?? 'none'} warning=${startsWithWarning}`,
+    summary: `length=${trimmed.length} latencyMs=${llmDurationMs} finish=${llmMetadata?.finishReason ?? 'unknown'} reasoningLen=${llmMetadata?.reasoningContentLength ?? 0} model=${llmMetadata?.model ?? 'unknown'} verbosity=${verbosity} personality=${personality ?? 'undefined'} warning=${startsWithWarning}`,
     details: JSON.stringify({
       length: trimmed.length,
       preview: trimmed.slice(0, 200),
       latencyMs: llmDurationMs,
+      finishReason: llmMetadata?.finishReason ?? null,
+      reasoningContentLength: llmMetadata?.reasoningContentLength ?? 0,
+      promptTokens: llmMetadata?.promptTokens ?? null,
+      completionTokens: llmMetadata?.completionTokens ?? null,
+      model: llmMetadata?.model ?? null,
+      provider: llmMetadata?.provider ?? null,
       verbosity,
       personality: personality ?? null,
       dials: {
