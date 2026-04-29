@@ -1,24 +1,257 @@
 {
   "summary": {
     "target": "birds-opening",
-    "generatedAt": "2026-04-29T02:39:54.489Z",
-    "elapsedMs": 20475,
+    "generatedAt": "2026-04-29T03:06:14.619Z",
+    "elapsedMs": 1076385,
     "totalRecords": 78,
-    "totalClaims": 0,
-    "contradicted": 0,
-    "verified": 0,
+    "totalClaims": 176,
+    "contradicted": 14,
+    "verified": 162,
     "unverifiable": 0,
-    "errors": 78,
+    "errors": 0,
     "usage": {
-      "input": 0,
-      "output": 0,
+      "input": 203424,
+      "output": 52582,
       "cacheRead": 0,
-      "cacheWrite": 0
+      "cacheWrite": 96474,
+      "cliCostUSD": 1.7988494999999993
     },
-    "estimatedCostUSD": 0,
-    "model": "deepseek-chat"
+    "estimatedCostUSD": 1.7988494999999993,
+    "model": "deepseek-chat (via claude --print)"
   },
-  "findings": [],
+  "findings": [
+    {
+      "source": "subline",
+      "sublineName": "Bird's: Leningrad Formation",
+      "moveIndex": 8,
+      "moveNumber": 5,
+      "san": "O-O",
+      "piece": "king",
+      "to": "g1",
+      "text": "White castles kingside, securing the king's safety while connecting the rooks and completing the essential development phase. This move also brings the f1 rook into play, potentially supporting f4 or preparing central operations. With the king safely tucked away, White can now focus on central expansion and piece activity without worrying about king safety.",
+      "claim": {
+        "type": "piece_from_square",
+        "piece": "rook",
+        "square": "f1",
+        "color": "white"
+      },
+      "reason": "narration says rook left f1, board says king left e1"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Bird's: From's Gambit",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "The Bird's: From's Gambit is an important variation of the Bird's Opening. From's Gambit is Black's most aggressive response. After fxe5 d6, Black sacrifices a pawn for rapid development and attacking chances. White must play precisely to hold the extra material. Let's walk through the key ideas.",
+      "claim": {
+        "type": "capture",
+        "capturer_piece": "pawn",
+        "square": "e5"
+      },
+      "reason": "narration claims a capture, no capture occurred"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Bird's: From's Gambit",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "The Bird's: From's Gambit is an important variation of the Bird's Opening. From's Gambit is Black's most aggressive response. After fxe5 d6, Black sacrifices a pawn for rapid development and attacking chances. White must play precisely to hold the extra material. Let's walk through the key ideas.",
+      "claim": {
+        "type": "piece_to_square",
+        "piece": "pawn",
+        "square": "e5"
+      },
+      "reason": "narration says destination e5, board says f4"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Bird's: From's Gambit",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "The Bird's: From's Gambit is an important variation of the Bird's Opening. From's Gambit is Black's most aggressive response. After fxe5 d6, Black sacrifices a pawn for rapid development and attacking chances. White must play precisely to hold the extra material. Let's walk through the key ideas.",
+      "claim": {
+        "type": "piece_to_square",
+        "piece": "pawn",
+        "square": "d6",
+        "color": "black"
+      },
+      "reason": "narration says destination d6, board says f4"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Bird's: Stonewall Formation",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "The Bird's: Stonewall Formation is an important variation of the Bird's Opening. The Stonewall setup with d4, e3, f4 creates a wall of pawns. White gets a solid center and prepares a kingside attack. The weakness on e4 is compensated by attacking chances. Let's walk through the key ideas.",
+      "claim": {
+        "type": "piece_on_square",
+        "piece": "pawn",
+        "square": "d4",
+        "color": "white"
+      },
+      "reason": "narration claims pawn on d4, square is empty"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Bird's: Stonewall Formation",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "The Bird's: Stonewall Formation is an important variation of the Bird's Opening. The Stonewall setup with d4, e3, f4 creates a wall of pawns. White gets a solid center and prepares a kingside attack. The weakness on e4 is compensated by attacking chances. Let's walk through the key ideas.",
+      "claim": {
+        "type": "piece_on_square",
+        "piece": "pawn",
+        "square": "e3",
+        "color": "white"
+      },
+      "reason": "narration claims pawn on e3, square is empty"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Bird's: Swiss Gambit",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "The Bird's: Swiss Gambit is an important variation of the Bird's Opening. An aggressive gambit where White sacrifices a pawn for rapid development and open lines. The bishop on d3 and pawn on f3 create immediate threats against Black's king. Let's walk through the key ideas.",
+      "claim": {
+        "type": "piece_on_square",
+        "piece": "bishop",
+        "square": "d3"
+      },
+      "reason": "narration claims bishop on d3, square is empty"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Bird's: Swiss Gambit",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "The Bird's: Swiss Gambit is an important variation of the Bird's Opening. An aggressive gambit where White sacrifices a pawn for rapid development and open lines. The bishop on d3 and pawn on f3 create immediate threats against Black's king. Let's walk through the key ideas.",
+      "claim": {
+        "type": "piece_on_square",
+        "piece": "pawn",
+        "square": "f3"
+      },
+      "reason": "narration claims pawn on f3, square is empty"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Qg3 Kingside Pressure",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "In the Bird's Opening, the Qg3 Kingside Pressure is a tactical pattern you should know. The Qe1-g3 maneuver creates immediate pressure on g7 and the kingside. If Black plays ...Nh5 to chase the queen, Qf2 maintains the pressure while the knight has moved away from the center. Let's walk through how it works.",
+      "claim": {
+        "type": "piece_to_square",
+        "piece": "queen",
+        "from": "e1",
+        "square": "g3"
+      },
+      "reason": "narration says queen, board says pawn moved"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Qg3 Kingside Pressure",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "In the Bird's Opening, the Qg3 Kingside Pressure is a tactical pattern you should know. The Qe1-g3 maneuver creates immediate pressure on g7 and the kingside. If Black plays ...Nh5 to chase the queen, Qf2 maintains the pressure while the knight has moved away from the center. Let's walk through how it works.",
+      "claim": {
+        "type": "piece_to_square",
+        "piece": "knight",
+        "square": "h5",
+        "color": "black"
+      },
+      "reason": "narration says knight, board says pawn moved"
+    },
+    {
+      "source": "subline",
+      "sublineName": "Qg3 Kingside Pressure",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "In the Bird's Opening, the Qg3 Kingside Pressure is a tactical pattern you should know. The Qe1-g3 maneuver creates immediate pressure on g7 and the kingside. If Black plays ...Nh5 to chase the queen, Qf2 maintains the pressure while the knight has moved away from the center. Let's walk through how it works.",
+      "claim": {
+        "type": "piece_to_square",
+        "piece": "queen",
+        "square": "f2"
+      },
+      "reason": "narration says queen, board says pawn moved"
+    },
+    {
+      "source": "subline",
+      "sublineName": "From's Gambit Refutation",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "In the Bird's Opening, the From's Gambit Refutation is a tactical pattern you should know. After taking the From's Gambit pawn, precise play with d4 and Bg5 neutralizes Black's initiative. White emerges with a healthy extra pawn if Black doesn't find the best moves. Let's walk through how it works.",
+      "claim": {
+        "type": "capture",
+        "captured_piece": "pawn"
+      },
+      "reason": "narration claims a capture, no capture occurred"
+    },
+    {
+      "source": "subline",
+      "sublineName": "From's Gambit Refutation",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "In the Bird's Opening, the From's Gambit Refutation is a tactical pattern you should know. After taking the From's Gambit pawn, precise play with d4 and Bg5 neutralizes Black's initiative. White emerges with a healthy extra pawn if Black doesn't find the best moves. Let's walk through how it works.",
+      "claim": {
+        "type": "piece_to_square",
+        "piece": "pawn",
+        "square": "d4",
+        "color": "white"
+      },
+      "reason": "narration says destination d4, board says f4"
+    },
+    {
+      "source": "subline",
+      "sublineName": "From's Gambit Refutation",
+      "moveIndex": 0,
+      "moveNumber": 1,
+      "san": "f4",
+      "piece": "pawn",
+      "to": "f4",
+      "text": "In the Bird's Opening, the From's Gambit Refutation is a tactical pattern you should know. After taking the From's Gambit pawn, precise play with d4 and Bg5 neutralizes Black's initiative. White emerges with a healthy extra pawn if Black doesn't find the best moves. Let's walk through how it works.",
+      "claim": {
+        "type": "piece_to_square",
+        "piece": "bishop",
+        "square": "g5",
+        "color": "white"
+      },
+      "reason": "narration says bishop, board says pawn moved"
+    }
+  ],
   "audited": [
     {
       "source": "main",
@@ -31,7 +264,31 @@
       "to": "f4",
       "piece": "pawn",
       "text": "This is Bird's Opening, an aggressive flank opening where White seizes the e5 square with 1.f4. The f4 pawn controls e5 and prepares a kingside fianchetto or a direct central advance. Bird's leads to unbalanced positions where White gets kingside space at the cost of slightly weakening the king's position.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "move_number",
+            "number": 1
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -44,7 +301,24 @@
       "to": "d5",
       "piece": "pawn",
       "text": "Black responds with d5, occupying the center immediately. The d5 pawn controls c4 and e4, establishing a strong central presence while White has committed to a flank pawn move.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -57,7 +331,33 @@
       "to": "f3",
       "piece": "knight",
       "text": "White develops Nf3, controlling e5 and d4 while preparing to develop the kingside. The Nf3 is essential — it supports the f4 pawn's control of e5 and prepares castling.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "f3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -70,7 +370,24 @@
       "to": "f6",
       "piece": "knight",
       "text": "Black develops Nf6, contesting the e4 square and developing naturally. The Nf6 is the most flexible response — it pressures the center and prepares the ...g6 setup.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "f6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -83,7 +400,33 @@
       "to": "e3",
       "piece": "pawn",
       "text": "White plays e3, a solid supporting move that opens the f1-a6 diagonal for the bishop. The e3 pawn supports d4 if White decides to push, and creates a flexible central structure.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "e3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "bishop",
+            "square": "f1",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -96,7 +439,33 @@
       "to": "g6",
       "piece": "pawn",
       "text": "Black plays g6, preparing to fianchetto the bishop. The Bg7 will be powerful on the long diagonal, especially since White's f4 pawn has weakened the dark squares around the kingside.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "g6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -109,7 +478,24 @@
       "to": "e2",
       "piece": "bishop",
       "text": "White develops Be2, preparing to castle immediately. The Be2 is a solid choice that prioritizes king safety and keeps options flexible.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "e2",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -122,7 +508,24 @@
       "to": "g7",
       "piece": "bishop",
       "text": "The bishop fianchettoes to g7, controlling the long a1-h8 diagonal. The Bg7 targets d4 and the dark squares that White's f4 has weakened — a strategic asset for Black.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "g7",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -135,7 +538,41 @@
       "to": "g1",
       "piece": "king",
       "text": "White castles, getting the king safe behind the f4+e3 pawn shield. Despite the f4 pawn slightly weakening the king position, castling is essential for connecting the rooks.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "castles",
+            "side": "kingside",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "e3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -148,7 +585,23 @@
       "to": "g8",
       "piece": "king",
       "text": "Black castles, completing mutual development. Both kings are safe and the Bird's Opening middlegame begins — White has kingside space, Black has central solidity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "castles",
+            "side": "kingside",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -161,7 +614,51 @@
       "to": "d3",
       "piece": "pawn",
       "text": "White plays d3, supporting e4 and keeping the position flexible. The d3 pawn creates the standard Bird's structure — f4+e3+d3 forming a pyramid that can later support an e4 advance.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "e3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "d3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -174,7 +671,33 @@
       "to": "c5",
       "piece": "pawn",
       "text": "Black plays c5, claiming queenside space and preparing to open lines. The c5 pawn controls d4 and b4, and creates counterplay on the queenside where White is less developed.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "c5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "c5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -187,7 +710,33 @@
       "to": "e1",
       "piece": "queen",
       "text": "White plays Qe1, a typical Bird's maneuver. The queen moves off the d-file and heads for the kingside via Qe1-g3 or Qe1-h4, where it supports the f4 pawn and creates attacking chances.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "queen",
+            "square": "e1",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -200,7 +749,32 @@
       "to": "c6",
       "piece": "knight",
       "text": "Black develops Nc6, completing the queenside development and adding pressure to the center. The Nc6 eyes d4 and e5, creating tactical possibilities.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "c6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "knight",
+            "square": "c6"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -213,7 +787,32 @@
       "to": "g3",
       "piece": "queen",
       "text": "White plays Qg3, arriving on the kingside where the queen supports f4 and eyes the g7 bishop. The Qg3 creates latent threats and prepares kingside expansion with f5 or e4.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "queen",
+            "square": "g3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "bishop",
+            "square": "g7"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "main",
@@ -226,7 +825,24 @@
       "to": "e8",
       "piece": "rook",
       "text": "Black plays Re8, placing the rook on the central e-file. The Re8 is a flexible move that supports ...e5 and prepares to contest the e-file if it opens.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "rook",
+            "square": "e8",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -239,7 +855,23 @@
       "to": "f4",
       "piece": "pawn",
       "text": "Bird's Opening launches immediately with this aggressive pawn thrust, claiming space in the center and preparing to support a future e4-e5 pawn storm. This move controls the crucial e5 and g5 squares while opening the f1-a6 diagonal for the light-squared bishop. Unlike 1.e4 or 1.d4, Bird's Opening creates an asymmetrical position from move one, leading to sharp tactical play.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "f4"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "move_number",
+            "number": 1
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -252,7 +884,24 @@
       "to": "d5",
       "piece": "pawn",
       "text": "Black immediately strikes at the center, challenging White's plan to dominate with e4. This solid central pawn controls c4 and e4, preventing White from easily advancing the e-pawn. By occupying d5 early, Black ensures a firm foothold in the center and prepares to develop pieces with purpose rather than allowing White free rein.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -265,7 +914,33 @@
       "to": "f3",
       "piece": "knight",
       "text": "White develops the knight to its ideal square, controlling the vital e5 and g5 squares while preparing kingside castling. This move supports the f4 pawn and keeps pressure on Black's center, particularly eyeing the e5 square that could become a powerful outpost. The knight from f3 also supports future tactical operations and maintains flexibility for White's setup.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "f3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -278,7 +953,24 @@
       "to": "g6",
       "piece": "pawn",
       "text": "Black adopts the flexible fianchetto setup, preparing to develop the bishop to g7 where it will control the long diagonal and support the central d5 pawn. This move also prepares kingside castling and creates a solid pawn shelter for the black king. The g6-Bg7 formation is particularly effective against Bird's Opening as it challenges White's light-squared bishop.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "g6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -291,7 +983,24 @@
       "to": "g3",
       "piece": "pawn",
       "text": "White mirrors Black's fianchetto plan, preparing to develop the bishop to g2 where it will become a powerful piece controlling the long diagonal and supporting the center. This move creates the characteristic Leningrad setup that gives White excellent piece coordination. The bishop on g2 will be particularly strong in supporting central advances and controlling key squares like e4 and h3.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "g3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -304,7 +1013,33 @@
       "to": "g7",
       "piece": "bishop",
       "text": "Black completes the fianchetto development, placing the bishop on its ideal square where it controls the long diagonal and supports the central d5 pawn. This bishop becomes a key defensive piece, protecting the black king and maintaining pressure on White's center. From g7, the bishop also eyes potential tactics along the diagonal and provides excellent piece coordination with Black's pawn structure.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "g7",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "d5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -317,7 +1052,33 @@
       "to": "g2",
       "piece": "bishop",
       "text": "White completes the fianchetto setup, positioning the bishop on g2 where it becomes a monster piece controlling the long diagonal and supporting all of White's central operations. This bishop works in perfect harmony with the f4 pawn, controlling e5 and supporting future e4 advances. The Leningrad formation is now complete, giving White excellent piece coordination and flexibility.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "g2",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -330,7 +1091,42 @@
       "to": "f6",
       "piece": "knight",
       "text": "Black develops the knight to its most active square, attacking the f4 pawn and preparing to support the central d5 pawn. This active move also prepares kingside castling while putting immediate pressure on White's pawn structure. The knight from f6 controls important central squares and keeps White honest about the f4 pawn's security.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "f6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "d5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -343,7 +1139,33 @@
       "to": "g1",
       "piece": "king",
       "text": "White castles kingside, securing the king's safety while connecting the rooks and completing the essential development phase. This move also brings the f1 rook into play, potentially supporting f4 or preparing central operations. With the king safely tucked away, White can now focus on central expansion and piece activity without worrying about king safety.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "castles",
+            "side": "kingside",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_from_square",
+            "piece": "rook",
+            "square": "f1",
+            "color": "white"
+          },
+          "verdict": "contradicted",
+          "reason": "narration says rook left f1, board says king left e1"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -356,7 +1178,23 @@
       "to": "g8",
       "piece": "king",
       "text": "Black mirrors White's castling, securing king safety and completing basic development. This move connects the rooks and prepares Black for the middle game battle ahead. With both kings safely castled, the real strategic struggle can begin as both sides will now focus on central control and piece activity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "castles",
+            "side": "kingside",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -369,7 +1207,33 @@
       "to": "d3",
       "piece": "pawn",
       "text": "White establishes a solid pawn chain and prepares to support the f4 pawn while opening lines for piece development. This move controls the important e4 square and prepares for potential c3-c4 advances or Be3 development. The d3 pawn also supports future central operations and provides a stable foundation for White's position.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -382,7 +1246,24 @@
       "to": "c5",
       "piece": "pawn",
       "text": "Black launches a central counterattack, challenging White's space advantage and preparing to create pressure on the queenside. This pawn advance opens lines for the queen and prepares potential piece activity on the c-file. By playing c5, Black also prevents White from easily advancing with c4 and creates dynamic tension in the position.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "c5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -395,7 +1276,24 @@
       "to": "c3",
       "piece": "pawn",
       "text": "White solidifies the position and prepares to support the center with d4 if needed, while also preventing Black from advancing ...b5-b4. This move provides flexibility for future operations and ensures White maintains central control. The c3 pawn also supports potential knight development to a4 or b5 via the b2 square.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "c3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -408,7 +1306,41 @@
       "to": "c6",
       "piece": "knight",
       "text": "Black develops the knight to its ideal square, supporting the d5 pawn and preparing to challenge White's central control. This move also opens up possibilities for queenside piece play and maintains pressure on White's position. The knight from c6 controls important squares and prepares potential tactical operations.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "c6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "d5"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "knight",
+            "square": "c6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -421,7 +1353,24 @@
       "to": "a3",
       "piece": "knight",
       "text": "White develops the knight to a slightly unusual square, but Na3 serves multiple purposes: it can reroute to c4 to pressure Black's center, supports b5 advances, and keeps options open for various plans. While not the most natural development, this knight can become very active and supports White's overall strategic goals in the position.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "a3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -434,7 +1383,33 @@
       "to": "b8",
       "piece": "rook",
       "text": "Black activates the rook and prepares potential queenside expansion with ...b5, putting pressure on White's position and creating counterplay. This move also supports the b7 pawn and prepares to challenge White's control of the queenside. The rook from b8 can support various pawn advances and creates tactical possibilities along the b-file.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "rook",
+            "square": "b8",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "b7",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -447,7 +1422,36 @@
       "to": "f4",
       "piece": "pawn",
       "text": "The Bird's: From's Gambit is an important variation of the Bird's Opening. From's Gambit is Black's most aggressive response. After fxe5 d6, Black sacrifices a pawn for rapid development and attacking chances. White must play precisely to hold the extra material. Let's walk through the key ideas.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "capture",
+            "capturer_piece": "pawn",
+            "square": "e5"
+          },
+          "verdict": "contradicted",
+          "reason": "narration claims a capture, no capture occurred"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "e5"
+          },
+          "verdict": "contradicted",
+          "reason": "narration says destination e5, board says f4"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d6",
+            "color": "black"
+          },
+          "verdict": "contradicted",
+          "reason": "narration says destination d6, board says f4"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -460,7 +1464,24 @@
       "to": "e5",
       "piece": "pawn",
       "text": "Black responds with e5, contesting the center. This is the move that defines the Bird's: From's Gambit.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "e5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -473,7 +1494,24 @@
       "to": "e5",
       "piece": "pawn",
       "text": "fxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "e5"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "capture",
+            "capturer_piece": "pawn",
+            "square": "e5"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -486,7 +1524,33 @@
       "to": "d6",
       "piece": "pawn",
       "text": "exd6 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "capture",
+            "capturer_piece": "pawn",
+            "captured_piece": "pawn",
+            "square": "d6"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d6",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -499,7 +1563,16 @@
       "to": "g5",
       "piece": "pawn",
       "text": "g5 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "g5"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -512,7 +1585,16 @@
       "to": "d4",
       "piece": "pawn",
       "text": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d4"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -525,7 +1607,16 @@
       "to": "g4",
       "piece": "pawn",
       "text": "g4 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "g4"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -538,7 +1629,25 @@
       "to": "e5",
       "piece": "bishop",
       "text": "Bxe5 captures the knight. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "e5"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "capture",
+            "capturer_piece": "bishop",
+            "captured_piece": "knight",
+            "square": "e5"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -551,7 +1660,24 @@
       "to": "e5",
       "piece": "pawn",
       "text": "dxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "e5"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "capture",
+            "capturer_piece": "pawn",
+            "square": "e5"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -564,7 +1690,25 @@
       "to": "d1",
       "piece": "king",
       "text": "Kxd1 captures the queen. This exchange is thematic in the Bird's: From's Gambit — it defines the resulting pawn structure and piece activity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "king",
+            "square": "d1"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "capture",
+            "capturer_piece": "king",
+            "captured_piece": "queen",
+            "square": "d1"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -577,7 +1721,16 @@
       "to": "c6",
       "piece": "knight",
       "text": "Nc6. This is the typical position arising from the Bird's: From's Gambit. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "c6"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -603,7 +1756,24 @@
       "to": "d5",
       "piece": "pawn",
       "text": "Black responds with d5, contesting the center. This is the move that defines the Bird's: Nimzo-Larsen Hybrid.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -616,7 +1786,16 @@
       "to": "g6",
       "piece": "pawn",
       "text": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "g6"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -629,7 +1808,24 @@
       "to": "b2",
       "piece": "bishop",
       "text": "Bb2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "b2",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -642,7 +1838,24 @@
       "to": "g7",
       "piece": "bishop",
       "text": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "g7",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -655,7 +1868,16 @@
       "to": "e1",
       "piece": "queen",
       "text": "Qe1 activates the queen. From e1, the queen has maximum influence across multiple diagonals and files. Notice how the pieces coordinate in this position.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "queen",
+            "square": "e1"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -668,7 +1890,16 @@
       "to": "d4",
       "piece": "pawn",
       "text": "d4. This is the typical position arising from the Bird's: Nimzo-Larsen Hybrid. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d4"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -681,7 +1912,44 @@
       "to": "f4",
       "piece": "pawn",
       "text": "The Bird's: Stonewall Formation is an important variation of the Bird's Opening. The Stonewall setup with d4, e3, f4 creates a wall of pawns. White gets a solid center and prepares a kingside attack. The weakness on e4 is compensated by attacking chances. Let's walk through the key ideas.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "f4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "d4",
+            "color": "white"
+          },
+          "verdict": "contradicted",
+          "reason": "narration claims pawn on d4, square is empty"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "e3",
+            "color": "white"
+          },
+          "verdict": "contradicted",
+          "reason": "narration claims pawn on e3, square is empty"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -694,7 +1962,24 @@
       "to": "d5",
       "piece": "pawn",
       "text": "Black responds with d5, contesting the center. This is the move that defines the Bird's: Stonewall Formation.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -707,7 +1992,16 @@
       "to": "d4",
       "piece": "pawn",
       "text": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d4"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -720,7 +2014,16 @@
       "to": "c7",
       "piece": "queen",
       "text": "Qc7. This is the typical position arising from the Bird's: Stonewall Formation. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "queen",
+            "square": "c7"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -733,7 +2036,26 @@
       "to": "f4",
       "piece": "pawn",
       "text": "The Bird's: Swiss Gambit is an important variation of the Bird's Opening. An aggressive gambit where White sacrifices a pawn for rapid development and open lines. The bishop on d3 and pawn on f3 create immediate threats against Black's king. Let's walk through the key ideas.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "bishop",
+            "square": "d3"
+          },
+          "verdict": "contradicted",
+          "reason": "narration claims bishop on d3, square is empty"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "pawn",
+            "square": "f3"
+          },
+          "verdict": "contradicted",
+          "reason": "narration claims pawn on f3, square is empty"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -746,7 +2068,24 @@
       "to": "f5",
       "piece": "pawn",
       "text": "Black replies with f5. This is the defining move of the Bird's: Swiss Gambit — it shapes the pawn structure and determines the resulting plans.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "f5",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -759,7 +2098,16 @@
       "to": "e4",
       "piece": "pawn",
       "text": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "e4"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -772,7 +2120,24 @@
       "to": "e4",
       "piece": "pawn",
       "text": "fxe4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "e4"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "capture",
+            "capturer_piece": "pawn",
+            "square": "e4"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -785,7 +2150,25 @@
       "to": "d3",
       "piece": "pawn",
       "text": "exd3 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "capture",
+            "capturer_piece": "pawn",
+            "captured_piece": "pawn",
+            "square": "d3"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d3"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -798,7 +2181,16 @@
       "to": "d5",
       "piece": "pawn",
       "text": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d5"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -811,7 +2203,16 @@
       "to": "e6",
       "piece": "pawn",
       "text": "e6. This is the typical position arising from the Bird's: Swiss Gambit. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "e6"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -824,7 +2225,37 @@
       "to": "f4",
       "piece": "pawn",
       "text": "In the Bird's Opening, the Qg3 Kingside Pressure is a tactical pattern you should know. The Qe1-g3 maneuver creates immediate pressure on g7 and the kingside. If Black plays ...Nh5 to chase the queen, Qf2 maintains the pressure while the knight has moved away from the center. Let's walk through how it works.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "queen",
+            "from": "e1",
+            "square": "g3"
+          },
+          "verdict": "contradicted",
+          "reason": "narration says queen, board says pawn moved"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "h5",
+            "color": "black"
+          },
+          "verdict": "contradicted",
+          "reason": "narration says knight, board says pawn moved"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "queen",
+            "square": "f2"
+          },
+          "verdict": "contradicted",
+          "reason": "narration says queen, board says pawn moved"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -837,7 +2268,36 @@
       "to": "f4",
       "piece": "pawn",
       "text": "In the Bird's Opening, the From's Gambit Refutation is a tactical pattern you should know. After taking the From's Gambit pawn, precise play with d4 and Bg5 neutralizes Black's initiative. White emerges with a healthy extra pawn if Black doesn't find the best moves. Let's walk through how it works.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "capture",
+            "captured_piece": "pawn"
+          },
+          "verdict": "contradicted",
+          "reason": "narration claims a capture, no capture occurred"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "d4",
+            "color": "white"
+          },
+          "verdict": "contradicted",
+          "reason": "narration says destination d4, board says f4"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "g5",
+            "color": "white"
+          },
+          "verdict": "contradicted",
+          "reason": "narration says bishop, board says pawn moved"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -850,7 +2310,16 @@
       "to": "f4",
       "piece": "pawn",
       "text": "In the Bird's Opening, the Premature f5 Push is a dangerous line you must be aware of. Pushing the center pawns prematurely can backfire. The f4 pawn should stay as a support piece, not push forward too early. Keep the position flexible and build up slowly. Let's see why.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "f4"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -863,7 +2332,16 @@
       "to": "f4",
       "piece": "pawn",
       "text": "In the Bird's Opening, the Kingside Weakness is a dangerous line you must be aware of. The f4 pawn creates a natural weakness on the a7-g1 diagonal and e3 square. If Black exploits this with ...d4, White can get into trouble. Keep the center stable before attacking. Let's see why.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "f4"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -876,7 +2354,33 @@
       "to": "f3",
       "piece": "knight",
       "text": "White brings the knight to its natural square on f3. The knight on f3 improves White's piece coordination and flexibility.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "f3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "knight",
+            "square": "f3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -889,7 +2393,33 @@
       "to": "f6",
       "piece": "knight",
       "text": "Black activates the knight on f6. The knight on f6 improves Black's piece coordination and flexibility.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "f6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "knight",
+            "square": "f6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -902,7 +2432,24 @@
       "to": "c3",
       "piece": "pawn",
       "text": "White pushes the pawn to c3. This pawn move supports a future d-pawn advance, a key central plan.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "pawn",
+            "square": "c3",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -915,7 +2462,33 @@
       "to": "c6",
       "piece": "knight",
       "text": "Black places the knight on the active c6 square. The knight on c6 improves Black's piece coordination and flexibility.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "c6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "knight",
+            "square": "c6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -928,7 +2501,33 @@
       "to": "d6",
       "piece": "bishop",
       "text": "Black activates the bishop on d6. The bishop on d6 controls key diagonal squares and maintains active piece play.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "d6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "bishop",
+            "square": "d6",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -941,7 +2540,33 @@
       "to": "d2",
       "piece": "knight",
       "text": "White develops the knight to d2. The knight on d2 improves White's piece coordination and flexibility.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "d2",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "knight",
+            "square": "d2",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -954,7 +2579,24 @@
       "to": "e5",
       "piece": "knight",
       "text": "White moves the knight to e5. The knight reaches a powerful central outpost on e5, controlling multiple key squares.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "knight",
+            "square": "e5",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -967,7 +2609,23 @@
       "to": "d4",
       "piece": "pawn",
       "text": "Black captures the pawn on d4. Black improves piece placement heading into the critical phase of the game.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "capture",
+            "captured_piece": "pawn",
+            "square": "d4"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -980,7 +2638,33 @@
       "to": "d7",
       "piece": "bishop",
       "text": "Black removes the defender on d7, removing White's knight. The bishop on d7 controls key diagonal squares and maintains active piece play.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "capture",
+            "capturer_piece": "bishop",
+            "captured_piece": "knight",
+            "square": "d7"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "bishop",
+            "square": "d7",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -993,7 +2677,24 @@
       "to": "e1",
       "piece": "queen",
       "text": "White moves the queen to e1. The queen takes up an influential position on e1, eyeing multiple targets.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "queen",
+            "square": "e1",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -1006,7 +2707,24 @@
       "to": "e8",
       "piece": "rook",
       "text": "Black moves the rook to e8. The rook takes up a powerful position on the e-file, pressuring White's position.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "rook",
+            "square": "e8",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -1019,7 +2737,24 @@
       "to": "h4",
       "piece": "queen",
       "text": "White moves the queen to h4. The queen takes up an influential position on h4, eyeing multiple targets.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "white"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "queen",
+            "square": "h4",
+            "color": "white"
+          },
+          "verdict": "verified"
+        }
+      ]
     },
     {
       "source": "subline",
@@ -1032,399 +2767,34 @@
       "to": "e7",
       "piece": "bishop",
       "text": "Black moves the bishop to e7. The bishop on e7 controls key diagonal squares and maintains active piece play.",
-      "claims": []
+      "claims": [
+        {
+          "claim": {
+            "type": "color_to_move",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_to_square",
+            "piece": "bishop",
+            "square": "e7",
+            "color": "black"
+          },
+          "verdict": "verified"
+        },
+        {
+          "claim": {
+            "type": "piece_on_square",
+            "piece": "bishop",
+            "square": "e7",
+            "color": "black"
+          },
+          "verdict": "verified"
+        }
+      ]
     }
   ],
-  "errors": [
-    {
-      "index": 0,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 1,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 2,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 3,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 4,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 5,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 6,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 7,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 8,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 9,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 10,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 11,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 12,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 13,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 14,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 15,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 16,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 17,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 18,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 19,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 20,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 21,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 22,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 23,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 24,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 25,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 26,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 27,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 28,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 29,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 30,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 31,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 32,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 33,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 34,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 35,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 36,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 37,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 38,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 39,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 40,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 41,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 42,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 43,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 44,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 45,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 46,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 47,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 48,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 49,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 50,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 51,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 52,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 53,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 54,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 55,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 56,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 57,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 58,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 59,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 60,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 61,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 62,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 63,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 64,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 65,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 66,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 67,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 68,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 69,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 70,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 71,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 72,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 73,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 74,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 75,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 76,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    },
-    {
-      "index": 77,
-      "kind": "api",
-      "message": "403 Host not in allowlist"
-    }
-  ]
+  "errors": []
 }
