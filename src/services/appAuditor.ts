@@ -288,6 +288,16 @@ export type AuditKind =
   // which path returned empty. Joins with the existing
   // `coach-move-narration-skipped` on timestamp + fen.
   | 'commentary-skipped'
+  // LLM response trail (move commentary). Fires inside
+  // coachMoveCommentary.getLlmCommentary right after
+  // getCoachChatResponse returns. Captures length, preview, latency,
+  // and the personality+dial values that were sent in the prompt.
+  // Closes the observability gap between `verbosity-resolved` (LLM
+  // dispatched) and `commentary-skipped` (we returned empty) — if
+  // the LLM is returning short / generic / non-personality output
+  // despite the dials being set, this audit shows it directly
+  // instead of forcing inference from "voice was bland."
+  | 'llm-response'
   // Personality dials reaching the move-commentary prompt
   // (WO-PERSONALITY-IN-COMMENTARY). Mirrors coach-narration-spoken at
   // the prompt-assembly side so we can confirm in production logs that
