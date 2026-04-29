@@ -84,6 +84,45 @@ describe('formatEnvelopeAsSystemPrompt', () => {
     expect(prompt).toMatch(/stockfish_eval/);
     expect(prompt).toMatch(/set_intended_opening/);
   });
+
+  it('threads personality + dial settings into the assembled identity (WO-COACH-PERSONALITIES PR B)', () => {
+    const env = assembleEnvelope({
+      personality: 'drill-sergeant',
+      profanity: 'hard',
+      mockery: 'hard',
+      flirt: 'none',
+      toolbelt: getToolDefinitions(),
+      input: { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
+    });
+    const prompt = formatEnvelopeAsSystemPrompt(env);
+    // OPERATOR contract still present.
+    expect(prompt).toMatch(/OPERATOR MODE/);
+    // Personality body landed.
+    expect(prompt).toMatch(/Drill Sergeant/);
+    expect(prompt).toMatch(/Full Metal Jacket/);
+    // Dial clauses match the requested levels.
+    expect(prompt).toMatch(/PROFANITY DIAL: HARD/);
+    expect(prompt).toMatch(/MOCKERY DIAL: HARD/);
+    expect(prompt).toMatch(/FLIRT DIAL: NONE/);
+  });
+
+  it('omitted personality settings produce the same prompt as the legacy default path', () => {
+    const legacy = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      input: { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
+    });
+    const explicit = assembleEnvelope({
+      personality: 'default',
+      profanity: 'none',
+      mockery: 'none',
+      flirt: 'none',
+      toolbelt: getToolDefinitions(),
+      input: { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
+    });
+    expect(formatEnvelopeAsSystemPrompt(legacy)).toBe(
+      formatEnvelopeAsSystemPrompt(explicit),
+    );
+  });
 });
 
 describe('formatEnvelopeAsUserMessage', () => {

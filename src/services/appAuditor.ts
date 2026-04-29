@@ -184,7 +184,13 @@ export type AuditKind =
   | 'quiz-started'
   | 'quiz-resolved'
   | 'quiz-cancelled'
-  | 'walkthrough-started-from-coach';
+  | 'walkthrough-started-from-coach'
+  // WO-COACH-PERSONALITIES (PR B). Fires when the user picks a new
+  // personality OR adjusts a dial in Settings — joined with the
+  // existing coach-brain-envelope-assembled audits so a "why does the
+  // coach sound different in this build?" report can be answered
+  // by walking the timeline.
+  | 'coach-personality-changed';
 
 export interface AuditEntry {
   timestamp: number;

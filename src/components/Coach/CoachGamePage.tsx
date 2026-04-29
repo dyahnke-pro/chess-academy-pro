@@ -1686,9 +1686,18 @@ export function CoachGamePage(): JSX.Element {
             };
           }
         };
+        // WO-COACH-PERSONALITIES (PR B): thread the user's personality
+        // + dial settings into every coach-turn ask. Defaults preserve
+        // the original Danya prompt verbatim — no behavior change for
+        // profiles that haven't opted in.
+        const prefs = useAppStore.getState().activeProfile?.preferences;
         const baseOptions = {
           maxToolRoundTrips: 3,
           onPlayMove: onPlayMoveCallback,
+          personality: prefs?.coachPersonality,
+          profanity: prefs?.coachProfanity,
+          mockery: prefs?.coachMockery,
+          flirt: prefs?.coachFlirt,
         };
 
         try {

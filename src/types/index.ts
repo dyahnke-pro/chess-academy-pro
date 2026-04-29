@@ -521,6 +521,19 @@ export interface UserPreferences {
    *  coach at phase boundaries; 'brief'/'standard'/'full' set the
    *  depth. Default 'standard'. Added by WO-PHASE-NARRATION-01. */
   phaseNarrationVerbosity?: PhaseNarrationVerbosity;
+  /** Coach personality voice — picks the body of the system prompt.
+   *  See `src/coach/sources/personalities.ts`. Defaults to 'default'
+   *  (the original Danya voice). WO-COACH-PERSONALITIES (PR B). */
+  coachPersonality?: import('../coach/types').CoachPersonality;
+  /** Profanity dial. Default 'none'. Settings UI seeds the dial with
+   *  the per-personality default at first selection (e.g.
+   *  drill-sergeant → 'hard'), but once a value is stored here it
+   *  overrides the personality default until the user resets it. */
+  coachProfanity?: import('../coach/types').IntensityLevel;
+  /** Mockery dial. Default 'none'. */
+  coachMockery?: import('../coach/types').IntensityLevel;
+  /** Flirt dial. Default 'none'. */
+  coachFlirt?: import('../coach/types').IntensityLevel;
   /**
    * Controls when the coach invokes the LLM for per-move commentary
    * during play-against games.
