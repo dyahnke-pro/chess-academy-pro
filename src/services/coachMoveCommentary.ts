@@ -122,22 +122,75 @@ export function classifyEvalSwing(
  * treat empty as "do not narrate" rather than painting a generic line.
  */
 export async function generateMoveCommentary(input: MoveCommentaryInput): Promise<string> {
-  if (input.offline) return '';
+  // Audit every early-return path so an "empty commentary" report has
+  // a definitive cause. The audit kinds + summaries name the exact
+  // branch that fired so we never guess again.
+  const fen = input.gameAfter.fen();
+  if (input.offline) {
+    void logAppAudit({
+      kind: 'commentary-skipped',
+      category: 'subsystem',
+      source: 'coachMoveCommentary.generateMoveCommentary',
+      summary: 'reason=offline',
+      fen,
+    });
+    return '';
+  }
   // Safety net: caller shouldn't be invoking us when the student has
   // set verbosity to 'none', but if they do we short-circuit here
   // rather than burning a token call for output we'd throw away.
-  if (input.verbosity === 'none') return '';
+  if (input.verbosity === 'none') {
+    void logAppAudit({
+      kind: 'commentary-skipped',
+      category: 'subsystem',
+      source: 'coachMoveCommentary.generateMoveCommentary',
+      summary: 'reason=verbosity-none',
+      fen,
+    });
+    return '';
+  }
 
   const history = input.gameAfter.history({ verbose: true });
-  if (history.length === 0) return '';
+  if (history.length === 0) {
+    // Caller passed a Chess instance with no move history — usually
+    // because it was constructed from a FEN (e.g. `new Chess(fen)`)
+    // rather than replayed from move 1. Production fingerprint of the
+    // bug fixed by routing CoachGamePage through a replay-based probe.
+    void logAppAudit({
+      kind: 'commentary-skipped',
+      category: 'subsystem',
+      source: 'coachMoveCommentary.generateMoveCommentary',
+      summary: 'reason=empty-history (gameAfter has no move history — caller likely passed a FEN-only Chess instance)',
+      fen,
+    });
+    return '';
+  }
 
   try {
     const response = await getLlmCommentary(input, history);
-    if (!response) return '';
+    if (!response) {
+      void logAppAudit({
+        kind: 'commentary-skipped',
+        category: 'subsystem',
+        source: 'coachMoveCommentary.generateMoveCommentary',
+        summary: 'reason=empty-llm-response',
+        fen,
+      });
+      return '';
+    }
     const trimmed = response.trim();
     // The coachApi returns a warning banner string when no key is
     // configured; surface that as "not available" rather than speaking it.
-    if (trimmed.startsWith('⚠️')) return '';
+    if (trimmed.startsWith('⚠️')) {
+      void logAppAudit({
+        kind: 'commentary-skipped',
+        category: 'subsystem',
+        source: 'coachMoveCommentary.generateMoveCommentary',
+        summary: `reason=api-warning preview="${trimmed.slice(0, 80)}"`,
+        fen,
+      });
+      return '';
+    }
     // Strip any [[REMEMBER: ...]] tags the LLM embedded and persist
     // them — the coach can now grow its memory of the student mid-game.
     const cleaned = extractAndRememberNotes(trimmed);
@@ -156,7 +209,14 @@ export async function generateMoveCommentary(input: MoveCommentaryInput): Promis
       });
     }
     return cleaned;
-  } catch {
+  } catch (err: unknown) {
+    void logAppAudit({
+      kind: 'commentary-skipped',
+      category: 'subsystem',
+      source: 'coachMoveCommentary.generateMoveCommentary',
+      summary: `reason=api-error ${err instanceof Error ? err.message : String(err)}`,
+      fen,
+    });
     return '';
   }
 }

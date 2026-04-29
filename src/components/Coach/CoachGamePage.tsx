@@ -2384,11 +2384,38 @@ export function CoachGamePage(): JSX.Element {
       (inOpeningTeaching || shouldCallLlmForMove(verbosity, classification));
     if (shouldFire) {
       try {
-        // safeChessFromFen returns null on malformed FEN instead of
-        // throwing — a corrupt FEN here would previously tank the
-        // whole narration pipeline for the move. Now we bail early
-        // and still announce the SAN via the fallback path.
-        const probe = safeChessFromFen(moveResult.fen);
+        // Build a probe Chess instance that carries the FULL move
+        // history. The LLM commentary path uses
+        // `gameAfter.history({ verbose: true })` to extract the last
+        // move's SAN + flags + recent SAN list. A FEN-only probe
+        // (`new Chess(fen)`) has empty history, so
+        // generateMoveCommentary returned '' immediately at its
+        // history.length===0 guard — every move silently skipped the
+        // LLM. Audit-log evidence for the bug: zero `verbosity-resolved`
+        // audits despite `coach-opening-teaching-active` firing on
+        // every move (so shouldFire was true and generateMoveCommentary
+        // WAS being called — just bailing before the LLM call).
+        // Replay from the starting position so chess.js generates a
+        // real verbose history; fall back to the FEN-only probe if
+        // any SAN doesn't validate (rare — chess.js produced these
+        // SANs in the first place, but defensive in case the URL
+        // import path ever feeds in a non-replayable history).
+        let probe: Chess | null;
+        try {
+          const replay = new Chess();
+          for (const san of game.history) replay.move(san);
+          replay.move(moveResult.san);
+          probe = replay;
+        } catch (err: unknown) {
+          void logAppAudit({
+            kind: 'bad-fen',
+            category: 'subsystem',
+            source: 'CoachGamePage.move.probe-replay',
+            summary: `replay failed; falling back to FEN probe — ${err instanceof Error ? err.message : String(err)}`,
+            fen: moveResult.fen,
+          });
+          probe = safeChessFromFen(moveResult.fen);
+        }
         if (!probe) {
           console.warn('[CoachGame] bad FEN for narration probe:', moveResult.fen);
           return;

@@ -275,6 +275,15 @@ export type AuditKind =
   // "aiColor must be 'white' or 'black'" we saw on local_opening_book
   // by surfacing the exact arg that failed.
   | 'tool-call-error'
+  // Move-commentary skip reasons. Fires from every early-return in
+  // generateMoveCommentary so the previously-silent paths
+  // (`offline`, `verbosity===none`, empty history, ⚠️ banner, LLM
+  // exception, empty-after-trim) leave a record. Evidence-driven —
+  // saves a debug round-trip the next time `coach-move-narration-skipped
+  // reason=empty-commentary` shows up: the new audit names exactly
+  // which path returned empty. Joins with the existing
+  // `coach-move-narration-skipped` on timestamp + fen.
+  | 'commentary-skipped'
   // Personality dials reaching the move-commentary prompt
   // (WO-PERSONALITY-IN-COMMENTARY). Mirrors coach-narration-spoken at
   // the prompt-assembly side so we can confirm in production logs that
