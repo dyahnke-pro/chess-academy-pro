@@ -30,11 +30,16 @@ interface SoundParams {
   freq: number; freq2?: number; dur: number; dec: number;
   tp: OscillatorType; ns?: number; v?: number;
 }
+// WO-COACH-CLICK-SND — phone-keyboard-click character: sharp transient,
+// broadband noise burst at the start, very short total duration. The
+// previous params (250 ms `move`, 300 Hz, sine wave, light noise) read
+// as "boop" rather than "click". New defaults: ~50 ms total, mid-high
+// fundamental, heavy noise component for the click attack, fast decay.
 const SOUND_PARAMS: Record<SoundSet, Record<SoundType, SoundParams>> = {
-  classic:  { move: {freq:300,dur:.25,dec:18,tp:'sine',ns:.3,v:.7}, capture: {freq:220,dur:.35,dec:14,tp:'sine',ns:.4,v:.8}, castle: {freq:260,freq2:320,dur:.45,dec:12,tp:'sine',ns:.25,v:.75}, check: {freq:550,freq2:660,dur:.3,dec:16,tp:'sine',v:.9} },
-  metallic: { move: {freq:800,dur:.2,dec:25,tp:'triangle',v:.6},   capture: {freq:600,dur:.3,dec:20,tp:'triangle',v:.7},       castle: {freq:700,freq2:900,dur:.4,dec:18,tp:'triangle',v:.65},   check: {freq:900,freq2:1100,dur:.25,dec:22,tp:'sawtooth',v:.75} },
-  marble:   { move: {freq:200,dur:.3,dec:16,tp:'sine',ns:.2,v:.8}, capture: {freq:160,dur:.4,dec:12,tp:'sine',ns:.3,v:.85},    castle: {freq:180,freq2:240,dur:.5,dec:10,tp:'sine',ns:.2,v:.8},  check: {freq:400,freq2:500,dur:.3,dec:14,tp:'sine',v:.9} },
-  cartoon:  { move: {freq:500,dur:.18,dec:30,tp:'square',v:.5},    capture: {freq:350,freq2:500,dur:.25,dec:25,tp:'square',v:.6}, castle: {freq:450,freq2:600,dur:.35,dec:20,tp:'square',v:.55}, check: {freq:650,freq2:900,dur:.3,dec:28,tp:'square',v:.65} },
+  classic:  { move: {freq:1500,dur:.05,dec:60,tp:'triangle',ns:.7,v:.55}, capture: {freq:900,dur:.07,dec:45,tp:'triangle',ns:.8,v:.65}, castle: {freq:1100,freq2:1400,dur:.09,dec:35,tp:'triangle',ns:.5,v:.6}, check: {freq:1800,freq2:2200,dur:.08,dec:40,tp:'triangle',ns:.4,v:.7} },
+  metallic: { move: {freq:2200,dur:.04,dec:65,tp:'triangle',ns:.6,v:.5},  capture: {freq:1600,dur:.06,dec:50,tp:'triangle',ns:.7,v:.6},  castle: {freq:1800,freq2:2400,dur:.08,dec:40,tp:'triangle',ns:.5,v:.55}, check: {freq:2400,freq2:3000,dur:.07,dec:45,tp:'sawtooth',ns:.4,v:.65} },
+  marble:   { move: {freq:1200,dur:.06,dec:55,tp:'sine',ns:.6,v:.6},      capture: {freq:800,dur:.08,dec:42,tp:'sine',ns:.75,v:.7},      castle: {freq:900,freq2:1200,dur:.1,dec:32,tp:'sine',ns:.5,v:.65},        check: {freq:1500,freq2:1900,dur:.08,dec:42,tp:'sine',ns:.4,v:.75} },
+  cartoon:  { move: {freq:1700,dur:.05,dec:60,tp:'square',ns:.5,v:.5},    capture: {freq:1100,freq2:1400,dur:.07,dec:48,tp:'square',ns:.6,v:.6}, castle: {freq:1300,freq2:1700,dur:.1,dec:35,tp:'square',ns:.4,v:.55},     check: {freq:2000,freq2:2500,dur:.08,dec:42,tp:'square',ns:.4,v:.65} },
 };
 export class SoundService {
   private enabled = true;
@@ -92,23 +97,31 @@ export class SoundService {
       lpf.Q.setValueAtTime(0.7, n);
       lpf.connect(c.destination);
 
+      // WO-COACH-CLICK-SND: snappier envelope. Attack 1.5 ms (was 8 ms)
+      // gives the transient "click" character; tone decays exponentially
+      // over the full duration. Noise burst stays very short (5 % of
+      // duration) so the broadband click hits cleanly without lingering.
       const play = (freq: number, gain: number): void => {
         const o = c.createOscillator(), g = c.createGain();
         o.type = p.tp; o.frequency.setValueAtTime(freq, n);
         g.gain.setValueAtTime(0, n);
-        g.gain.linearRampToValueAtTime(gain, n + 0.008);
+        g.gain.linearRampToValueAtTime(gain, n + 0.0015);
         g.gain.exponentialRampToValueAtTime(0.001, n + p.dur);
         o.connect(g); g.connect(lpf); o.start(n); o.stop(n + p.dur);
       };
       play(p.freq, mv);
       if (p.freq2) play(p.freq2, mv * 0.6);
       if (p.ns && p.ns > 0) {
-        const bs = Math.floor(c.sampleRate * p.dur * 0.4), nb = c.createBuffer(1, bs, c.sampleRate);
+        // Click-style noise: fill the first 8 % of the duration only,
+        // hard-attack at 0.5 ms and fast exponential tail. Previously
+        // the noise burst stretched 40 % of duration which read as a
+        // "shaker" rather than a tap.
+        const bs = Math.floor(c.sampleRate * p.dur * 0.08), nb = c.createBuffer(1, bs, c.sampleRate);
         const d = nb.getChannelData(0); for (let i = 0; i < bs; i++) d[i] = Math.random() * 2 - 1;
         const ns = c.createBufferSource(), ng = c.createGain();
         ns.buffer = nb; ng.gain.setValueAtTime(0, n);
-        ng.gain.linearRampToValueAtTime(mv * p.ns * 0.6, n + 0.005);
-        ng.gain.exponentialRampToValueAtTime(0.001, n + p.dur * 0.3);
+        ng.gain.linearRampToValueAtTime(mv * p.ns * 0.9, n + 0.0005);
+        ng.gain.exponentialRampToValueAtTime(0.001, n + p.dur * 0.12);
         ns.connect(ng); ng.connect(lpf); ns.start(n); ns.stop(n + p.dur);
       }
     } catch { /* swallow – synthesis failed */ }
