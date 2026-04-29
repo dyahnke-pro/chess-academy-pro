@@ -258,6 +258,20 @@ export function WalkthroughMode({
   const ctxHistory = expectedMoves.slice(0, currentMoveIndex).map((m) => m.san);
   useBoardContext(currentFen, activePgn, Math.floor(currentMoveIndex / 2) + 1, opening.color, turn, ctxLastMove, ctxHistory);
 
+  // Synthesise a minimal annotation array from the active PGN. Used as
+  // a last-resort when neither index nor name-based lookup finds a
+  // matching subline — the contract between repertoire.json variations
+  // and src/data/annotations/<id>.json subLines is broken in 34/40
+  // openings (variations get added to repertoire without matching
+  // annotation subLines). Without this fallback, those variations play
+  // silent rapid-fire because annotations stays null forever.
+  const synthesisedFromPgn = useMemo((): OpeningMoveAnnotation[] => {
+    return expectedMoves.map((m) => ({
+      san: m.san,
+      annotation: `${m.san}.`,
+    }));
+  }, [expectedMoves]);
+
   // Load annotations — sub-line-specific if key provided, otherwise main line
   useEffect(() => {
     const guard: { cancelled: boolean } = { cancelled: false };
@@ -267,14 +281,30 @@ export function WalkthroughMode({
       const effectiveKey = subLineKey ?? (isVariation ? `variation-${variationIndex}` : undefined);
       let data: OpeningMoveAnnotation[] | null;
       if (effectiveKey) {
-        data = await loadSubLineAnnotations(opening.id, effectiveKey);
+        data = await loadSubLineAnnotations(opening.id, effectiveKey, variation?.name);
       } else {
-        // Use PGN-aware loader to find best-matching annotation set
         data = await loadAnnotationsForPgn(opening.id, activePgn);
       }
-      if (guard.cancelled || !data) {
-        if (!guard.cancelled) setAnnotations(data);
-        return;
+      if (guard.cancelled) return;
+      // Last-resort fallback: synthesise from the PGN so the user never
+      // hits silent rapid-fire even when curated annotations are missing.
+      // The LLM enricher below will replace these stubs with real text.
+      if (!data || data.length === 0) {
+        if (synthesisedFromPgn.length === 0) {
+          setAnnotations(null);
+          return;
+        }
+        data = synthesisedFromPgn;
+        const stubCount = data.length;
+        void import('../../services/appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'walkthrough-narration-empty',
+            category: 'subsystem',
+            source: 'WalkthroughMode.loadAnnotations',
+            summary: `synthesised PGN-only stubs for ${opening.id}/${effectiveKey ?? 'main'}`,
+            details: `variation="${variation?.name ?? '<none>'}" plies=${stubCount}`,
+          });
+        }).catch(() => {/* never break */});
       }
       // Show raw annotations immediately so the UI isn't blocked while the
       // LLM narrator does its work. Pre-fetch audio based on whatever text

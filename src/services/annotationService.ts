@@ -249,9 +249,33 @@ export async function loadAnnotationsForPgn(
 export async function loadSubLineAnnotations(
   openingId: string,
   subLineKey: string,
+  // Optional name from repertoire.json's variation entry. When the
+  // index-based lookup misses (the variation arrays in repertoire.json
+  // and the annotation file go out of sync — 34/40 openings have a
+  // count mismatch), we fall back to matching the subline by name.
+  // When neither hits, callers should synthesise a minimal stub from
+  // the PGN so the walkthrough never produces silent rapid-fire.
+  variationName?: string,
 ): Promise<OpeningMoveAnnotation[] | null> {
   const data = await loadModule(openingId);
   if (!data?.subLines || data.subLines.length === 0) return null;
+
+  // Name-based lookup runs first when a name is supplied — this
+  // recovers cases like Bird's Opening where repertoire variation[1]
+  // is "Bird's: From's Gambit Accepted" but the annotation subLine[1]
+  // is "Bird's: From's Gambit". Direct equality, then a normalized
+  // comparison that strips trailing qualifiers and punctuation.
+  if (variationName) {
+    const direct = data.subLines.find((sl) => sl.name === variationName);
+    if (direct?.moveAnnotations) return direct.moveAnnotations;
+    const normalize = (s: string): string =>
+      s.toLowerCase().replace(/\s*(accepted|declined|main line|variation)\b.*$/i, '').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+    const normTarget = normalize(variationName);
+    if (normTarget.length > 0) {
+      const fuzzy = data.subLines.find((sl) => normalize(sl.name ?? '') === normTarget);
+      if (fuzzy?.moveAnnotations) return fuzzy.moveAnnotations;
+    }
+  }
 
   // subLineKey format: 'variation-N', 'trap-N', 'warning-N'
   const match = /^(variation|trap|warning)-(\d+)$/.exec(subLineKey);
@@ -260,15 +284,12 @@ export async function loadSubLineAnnotations(
   const type = match[1] as 'variation' | 'trap' | 'warning';
   const localIdx = parseInt(match[2], 10);
 
-  // If subLines have type fields, do type-aware lookup
   const hasTypes = data.subLines.some((sl) => sl.type != null);
   if (hasTypes) {
     const matching = data.subLines.filter((sl) => sl.type === type);
     return matching[localIdx]?.moveAnnotations ?? null;
   }
 
-  // Legacy fallback: subLines are ordered [variations...] only, no type field.
-  // variation-N → direct index. trap/warning → not available.
   if (type !== 'variation') return null;
   return data.subLines[localIdx]?.moveAnnotations ?? null;
 }
