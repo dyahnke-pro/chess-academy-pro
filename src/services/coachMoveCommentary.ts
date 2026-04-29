@@ -279,15 +279,20 @@ async function getLlmCommentary(
         flirt: flirt ?? 'none',
       })
     : '';
-  if (personalityBlock) {
-    void logAppAudit({
-      kind: 'coach-move-personality-applied',
-      category: 'subsystem',
-      source: 'coachMoveCommentary.getLlmCommentary',
-      summary: `personality=${personality} profanity=${profanity ?? 'none'} mockery=${mockery ?? 'none'} flirt=${flirt ?? 'none'}`,
-      fen: gameAfter.fen(),
-    });
-  }
+  // Always fire so the absence of an audit means "code never ran",
+  // not "personality undefined." Captures the resolved values
+  // (`personality=undefined` is a meaningful diagnostic — it tells
+  // us the dial isn't propagating from Settings → profile → caller
+  // arg, which was previously indistinguishable from a race-eaten
+  // audit). The `applied=true|false` flag indicates whether the
+  // personality block actually got prepended to the system prompt.
+  void logAppAudit({
+    kind: 'coach-move-personality-applied',
+    category: 'subsystem',
+    source: 'coachMoveCommentary.getLlmCommentary',
+    summary: `applied=${Boolean(personalityBlock)} personality=${personality ?? 'undefined'} profanity=${profanity ?? 'none'} mockery=${mockery ?? 'none'} flirt=${flirt ?? 'none'}`,
+    fen: gameAfter.fen(),
+  });
   // Verbosity-resolved audit — captures what verbosity arg the LLM
   // call is dispatched with, alongside the caller-supplied subject and
   // reviewTone. Diagnoses "Settings verbosity dial doesn't work"
@@ -357,7 +362,14 @@ async function getLlmCommentary(
   // Pass verbosity through so the system prompt's VERBOSITY_INSTRUCTIONS
   // matches the caller's intent — avoids a redundant DB fetch and
   // keeps length-directive behaviour deterministic on this path.
-  return getCoachChatResponse(
+  // Audit the response (length / preview / latency / dials) so a
+  // "voice is bland" report shows the LLM's actual output instead
+  // of forcing inference from the speak text. Joins
+  // `verbosity-resolved` (dispatched) with `commentary-skipped` /
+  // `coach-move-narration-fired` (final disposition) into a
+  // complete LLM call trail.
+  const llmStartedAt = Date.now();
+  const response = await getCoachChatResponse(
     [{ role: 'user', content: user }],
     system,
     undefined,
@@ -365,6 +377,33 @@ async function getLlmCommentary(
     420,
     verbosity,
   );
+  const llmDurationMs = Date.now() - llmStartedAt;
+  const trimmed = response.trim();
+  const startsWithWarning = trimmed.startsWith('⚠️');
+  void logAppAudit({
+    kind: 'llm-response',
+    category: 'subsystem',
+    source: 'coachMoveCommentary.getLlmCommentary',
+    summary: `length=${trimmed.length} latencyMs=${llmDurationMs} verbosity=${verbosity} personality=${personality ?? 'undefined'} profanity=${profanity ?? 'none'} mockery=${mockery ?? 'none'} flirt=${flirt ?? 'none'} warning=${startsWithWarning}`,
+    details: JSON.stringify({
+      length: trimmed.length,
+      preview: trimmed.slice(0, 200),
+      latencyMs: llmDurationMs,
+      verbosity,
+      personality: personality ?? null,
+      dials: {
+        profanity: profanity ?? 'none',
+        mockery: mockery ?? 'none',
+        flirt: flirt ?? 'none',
+      },
+      personalityBlockApplied: Boolean(personalityBlock),
+      startsWithWarning,
+      subject: subject ?? null,
+      reviewTone: Boolean(reviewTone),
+    }),
+    fen: gameAfter.fen(),
+  });
+  return response;
 }
 
 const COMMON_RULES = [
