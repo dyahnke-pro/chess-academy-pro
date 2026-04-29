@@ -438,12 +438,104 @@ ${record.text}
   };
 }
 
+// JSON schema enforcing the exact claim shape the deterministic
+// verifier expects. Used by the claude-cli extractor and (informally)
+// echoed by the SDK extractors via the system prompt.
+const CLAIM_SCHEMA = {
+  type: 'object',
+  properties: {
+    claims: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          type: {
+            type: 'string',
+            enum: [
+              'piece_to_square', 'piece_from_square', 'piece_on_square',
+              'capture', 'check', 'checkmate', 'castles',
+              'color_to_move', 'move_number', 'en_passant', 'promotion',
+            ],
+          },
+          piece: { type: 'string', enum: ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king'] },
+          captured_piece: { type: 'string', enum: ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king'] },
+          capturer_piece: { type: 'string', enum: ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king'] },
+          to_piece: { type: 'string', enum: ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king'] },
+          square: { type: 'string', pattern: '^[a-h][1-8]$' },
+          from: { type: 'string', pattern: '^[a-h][1-8]$' },
+          color: { type: 'string', enum: ['white', 'black'] },
+          side: { type: 'string', enum: ['kingside', 'queenside'] },
+          number: { type: 'number' },
+        },
+        required: ['type'],
+      },
+    },
+  },
+  required: ['claims'],
+};
+
+// Uses the local `claude --print --tools "" --json-schema ...` CLI as
+// the LLM transport when no direct API key is available. Slower per
+// call (subprocess + Sonnet orchestration) but reuses the session's
+// existing auth. Cost is reported per-call from total_cost_usd in the
+// CLI's JSON output.
+async function buildClaudeCliExtractor() {
+  const { spawn } = await import('node:child_process');
+  return async function extract(record, gt) {
+    const userMessage = `Move played (SAN): ${gt.san}\nNarration:\n"""\n${record.text}\n"""`;
+    return new Promise((resolve, reject) => {
+      const args = [
+        '--print',
+        '--tools', '',
+        '--system-prompt', EXTRACTION_SYSTEM_PROMPT,
+        '--json-schema', JSON.stringify(CLAIM_SCHEMA),
+        '--output-format', 'json',
+      ];
+      // cwd=/tmp prevents CLAUDE.md auto-discovery from loading the
+      // project's huge memory file (and any recent stop-hook feedback)
+      // into the extractor's context — that bloats cost and confuses
+      // the model into treating session context as the input.
+      const proc = spawn('claude', args, { stdio: ['pipe', 'pipe', 'pipe'], cwd: '/tmp' });
+      let stdout = '';
+      let stderr = '';
+      proc.stdout.on('data', (d) => { stdout += d.toString(); });
+      proc.stderr.on('data', (d) => { stderr += d.toString(); });
+      proc.on('error', reject);
+      proc.on('close', (code) => {
+        if (code !== 0) return reject(new Error(`claude CLI exit ${code}: ${stderr.slice(0, 200)}`));
+        try {
+          const env = JSON.parse(stdout);
+          const claims = env.structured_output?.claims ?? [];
+          // Convert costUSD/usage into the script's usage shape so the
+          // summary still prints something meaningful. We treat the
+          // CLI's reported total_cost_usd as authoritative.
+          resolve({
+            raw: JSON.stringify({ claims }),
+            usage: {
+              input_tokens: env.usage?.input_tokens ?? 0,
+              output_tokens: env.usage?.output_tokens ?? 0,
+              cache_read_input_tokens: env.usage?.cache_read_input_tokens ?? 0,
+              cache_creation_input_tokens: env.usage?.cache_creation_input_tokens ?? 0,
+              cli_cost_usd: env.total_cost_usd ?? 0,
+            },
+            preParsed: claims,
+          });
+        } catch (e) {
+          reject(new Error(`claude CLI output parse error: ${e?.message ?? e}; stdout="${stdout.slice(0, 200)}"`));
+        }
+      });
+      proc.stdin.write(userMessage);
+      proc.stdin.end();
+    });
+  };
+}
+
 async function buildExtractor() {
+  if (process.env.AUDIT_LLM_PROVIDER === 'claude-cli') return buildClaudeCliExtractor();
   if (process.env.ANTHROPIC_API_KEY) return buildAnthropicExtractor();
   if (process.env.DEEPSEEK_API_KEY) return buildDeepseekExtractor();
-  throw new Error(
-    'No LLM key set. Export ANTHROPIC_API_KEY or DEEPSEEK_API_KEY before running.',
-  );
+  // Last resort: try the local Claude Code CLI (uses session auth).
+  return buildClaudeCliExtractor();
 }
 
 function parseClaims(raw) {
@@ -507,17 +599,23 @@ async function main() {
     const reqStart = Date.now();
     let extracted;
     try {
-      const { raw, usage: u } = await extract(r, gt);
+      const result = await extract(r, gt);
+      const u = result.usage ?? {};
       usage.input += u.input_tokens ?? 0;
       usage.output += u.output_tokens ?? 0;
       usage.cacheRead += u.cache_read_input_tokens ?? 0;
       usage.cacheWrite += u.cache_creation_input_tokens ?? 0;
-      const claims = parseClaims(raw);
-      if (!claims) {
-        errors.push({ index: i, kind: 'parse', raw: raw.slice(0, 240) });
-        extracted = [];
+      usage.cliCostUSD = (usage.cliCostUSD ?? 0) + (u.cli_cost_usd ?? 0);
+      if (Array.isArray(result.preParsed)) {
+        extracted = result.preParsed;
       } else {
-        extracted = claims;
+        const claims = parseClaims(result.raw ?? '');
+        if (!claims) {
+          errors.push({ index: i, kind: 'parse', raw: (result.raw ?? '').slice(0, 240) });
+          extracted = [];
+        } else {
+          extracted = claims;
+        }
       }
     } catch (e) {
       errors.push({ index: i, kind: 'api', message: String(e?.message ?? e) });
@@ -589,8 +687,8 @@ async function main() {
     ),
     errors: errors.length,
     usage,
-    estimatedCostUSD: estimateCost(usage, MODEL_ID),
-    model: MODEL_ID,
+    estimatedCostUSD: usage.cliCostUSD ?? estimateCost(usage, MODEL_ID),
+    model: usage.cliCostUSD != null ? `${MODEL_ID} (via claude --print)` : MODEL_ID,
   };
 
   const outBase = join(outDir, `llm-claims-${target}`);
