@@ -14,7 +14,9 @@ import { ArrowLeft, Flag } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { getCoachMove, setSkill } from '../../services/coachPlaySession';
-// voiceService import removed by WO-COACH-NARRATION-03 — per-move speak muted.
+import { voiceService } from '../../services/voiceService';
+import { resolveVerbosity } from '../../services/coachCommentaryPolicy';
+import { useAppStore } from '../../stores/appStore';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -119,9 +121,18 @@ export function CoachPlaySessionView({
       // Store the new eval as the baseline for the NEXT move's swing.
       evalBeforeRef.current = evalAfter;
       if (commentary) {
-        // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
-        // "Read this position" narration. Text surface retained via setStatus.
         setStatus(commentary);
+        // Per-move narration. Honors coachCommentaryVerbosity === 'off'
+        // by skipping speech (the text still surfaces via setStatus).
+        // Phase narration takes precedence — voiceService.speakInternal
+        // calls stop() before each utterance, so a phase summary kicking
+        // in cleanly cuts off move narration.
+        const verbosity = resolveVerbosity(useAppStore.getState().activeProfile);
+        if (verbosity !== 'off') {
+          void voiceService.speak(commentary).catch((err: unknown) => {
+            console.warn('[CoachPlaySession] move narration TTS failed:', err);
+          });
+        }
       } else {
         // No LLM available — keep the board moving but do not paint filler.
         // Clear any stale commentary so the student isn't misled.

@@ -105,13 +105,15 @@ export function narrateMove(opts: {
     : opts.mover === opts.playerColor
       ? `You played ${opts.san}.`
       : `I played ${opts.san}.`;
-  // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
-  // "Read this position" narration. Text surface retained via session
-  // store / chat messages; only TTS is muted.
-  void text;
-  // void voiceService.speak(text).catch((err: unknown) => {
-  //   console.warn('[narrateMove] TTS failed:', err);
-  // });
+  // Per-move narration. Already gated above by narrationMode so
+  // non-narrated games stay silent. Phase narration takes precedence:
+  // usePhaseNarration.narrate() calls voiceService.stop() on entry, and
+  // voiceService.speakInternal stops in-flight speech before starting —
+  // so a phase summary firing will cleanly cut this off and the two
+  // surfaces never talk over each other.
+  void voiceService.speak(text).catch((err: unknown) => {
+    console.warn('[narrateMove] TTS failed:', err);
+  });
 }
 
 export interface RunAgentTurnOptions {

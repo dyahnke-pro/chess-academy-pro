@@ -2618,22 +2618,34 @@ export function CoachGamePage(): JSX.Element {
         currentHintLevel: 0,
       }));
 
-      // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
-      // "Read this position" narration. Text surface retained: the blunder
-      // interception overlay already renders `explanation` on the board.
-      void explanation;
+      // Per-move narration. A blunder is always a "key moment" so we
+      // speak the explanation whenever the user hasn't fully muted
+      // commentary (`coachCommentaryVerbosity !== 'off'`). Phase
+      // narration takes precedence: usePhaseNarration calls
+      // voiceService.stop() on entry, and voiceService.speakInternal
+      // also stops in-flight speech before starting — so a phase
+      // summary firing will cleanly cut this off.
+      if (verbosity !== 'off' && explanation.trim()) {
+        void voiceService.speak(explanation).catch((err: unknown) => {
+          console.warn('[CoachGame] blunder narration TTS failed:', err);
+        });
+      }
       return;
     }
 
     // Non-blunder: sync the move and let the coach-move useEffect respond.
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
-    // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
-    // "Read this position" narration. The narrateMove() speak path is
-    // muted internally (see coachAgentRunner.narrateMove); the legacy
-    // voiceService.speak(commentary) path is silenced here. Text
-    // surfaces (chat message, commentary row) are retained elsewhere.
-    void commentary;
+    // Per-move narration. `commentary` was already gated above by
+    // `shouldFire` (which respects coachCommentaryVerbosity), so it's
+    // non-empty exactly when the user wants spoken feedback for this
+    // move. Phase narration cuts in via voiceService.stop() if a phase
+    // boundary fires — no simultaneous speech.
+    if (commentary.trim()) {
+      void voiceService.speak(commentary).catch((err: unknown) => {
+        console.warn('[CoachGame] move narration TTS failed:', err);
+      });
+    }
 
     setGameState((prev) => ({
       ...prev,
