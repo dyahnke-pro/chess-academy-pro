@@ -288,6 +288,34 @@ function buildAnalysisSummary(
   };
 }
 
+/** WO-COACH-RATING-FLOOR. Maximum centipawn loss the coach is allowed
+ *  to take vs. Stockfish's bestmove, indexed by the student's rating.
+ *
+ *  Lower-rated students intentionally get a higher tolerance — letting
+ *  the coach blunder a bit makes early-rating play feel human and gives
+ *  the student real winning chances. Higher-rated students get a tighter
+ *  floor so the coach stays sharp and the practice has teeth.
+ *
+ *  Returns `Infinity` for ratings under 1000 — eval floor disengaged
+ *  entirely. See `enforceMateFloor` for the matching beginner exemption
+ *  on mate-walk: beginners NEED to see the coach hang itself into mate
+ *  so they get pattern recognition reps. */
+function maxCpLossFor(rating: number): number {
+  if (rating < 1000) return Infinity;
+  if (rating < 1400) return 350;
+  if (rating < 1800) return 200;
+  if (rating < 2200) return 100;
+  return 50;
+}
+
+/** Whether the coach should refuse to walk into mate-in-≤-2 at this
+ *  rating. Below 1000 the coach is allowed to be Scholar's-Mated by
+ *  the student — that's a teaching moment, not a bug. At and above
+ *  1000 the floor is active so the coach plays at least competently. */
+function enforceMateFloor(rating: number): boolean {
+  return rating >= 1000;
+}
+
 export function CoachGamePage(): JSX.Element {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -1831,25 +1859,84 @@ export function CoachGamePage(): JSX.Element {
               );
               if (mateProbe.ok) {
                 const post = mateProbe.value;
-                // Stockfish reports `mateIn` from the side-to-move's
-                // perspective. After the coach's move, side-to-move is
-                // the student — so `mateIn > 0` means the student has
-                // mate, which is exactly the situation we want to
-                // veto. Cap at 2 plies to keep this an ANTI-BLUNDER
-                // check, not a deep tactical engine.
-                if (post.isMate && post.mateIn !== null && post.mateIn > 0 && post.mateIn <= 2) {
+                // Two-tier veto:
+                //
+                //   Mate floor (universal, all ratings): if the student
+                //   has mate-in-≤-2 from this position, override.
+                //   Audit cycle 9 caught Scholar's Mate at move 5 — even
+                //   beginner students shouldn't watch the coach get
+                //   instamated.
+                //
+                //   Quality floor (rating-tier, WO-COACH-RATING-FLOOR):
+                //   compare the coach's eval after the LLM's pick to
+                //   the eval if it had played the engine bestmove. If
+                //   cp loss exceeds the student's rating threshold,
+                //   override. Lower-rated students get a higher cp-loss
+                //   tolerance so the coach can blunder for them; higher-
+                //   rated students get a tighter floor so they get
+                //   sharper play.
+                //
+                //   Stockfish reports `evaluation` and `mateIn` from
+                //   the side-to-move's perspective. The probe is at
+                //   FEN-after where side-to-move = student, so `post`
+                //   is from student's perspective. To get coach's view,
+                //   flip the sign.
+                let vetoReason: string | null = null;
+                let auditKind: 'coach-move-mate-floor-triggered' | 'coach-move-quality-floor-triggered' =
+                  'coach-move-mate-floor-triggered';
+                let auditDetails: Record<string, unknown> = {};
+
+                if (
+                  enforceMateFloor(targetStrength) &&
+                  post.isMate &&
+                  post.mateIn !== null &&
+                  post.mateIn > 0 &&
+                  post.mateIn <= 2
+                ) {
+                  vetoReason = `student mate-in-${post.mateIn}`;
+                  auditKind = 'coach-move-mate-floor-triggered';
+                  auditDetails = {
+                    llmPickSan: brainPickSan,
+                    mateIn: post.mateIn,
+                    override: seededAnalysis.bestMove,
+                    rating: targetStrength,
+                    fenBefore: game.fen,
+                    fenAfter,
+                  };
+                } else if (!post.isMate) {
+                  // Quality floor — only meaningful when neither side
+                  // has a forced mate (otherwise mate dominates and the
+                  // cp comparison is degenerate).
+                  const maxCpLoss = maxCpLossFor(targetStrength);
+                  if (Number.isFinite(maxCpLoss)) {
+                    const coachEvalAfter = -post.evaluation;
+                    const coachEvalIfBest = seededAnalysis.evaluation;
+                    const cpLoss = coachEvalIfBest - coachEvalAfter;
+                    if (cpLoss > maxCpLoss) {
+                      vetoReason = `cpLoss=${cpLoss.toFixed(0)} > tier=${maxCpLoss} for rating ${targetStrength}`;
+                      auditKind = 'coach-move-quality-floor-triggered';
+                      auditDetails = {
+                        llmPickSan: brainPickSan,
+                        targetStrength,
+                        maxCpLoss,
+                        cpLoss: Math.round(cpLoss),
+                        coachEvalIfBest,
+                        coachEvalAfter,
+                        override: seededAnalysis.bestMove,
+                        fenBefore: game.fen,
+                        fenAfter,
+                      };
+                    }
+                  }
+                }
+
+                if (vetoReason) {
                   void logAppAudit({
-                    kind: 'coach-move-mate-floor-triggered',
+                    kind: auditKind,
                     category: 'subsystem',
                     source: 'CoachGamePage.coachTurn',
-                    summary: `LLM picked ${brainPickSan} → student mate-in-${post.mateIn}; overriding with engine bestmove ${seededAnalysis.bestMove}`,
-                    details: JSON.stringify({
-                      llmPickSan: brainPickSan,
-                      mateIn: post.mateIn,
-                      override: seededAnalysis.bestMove,
-                      fenBefore: game.fen,
-                      fenAfter,
-                    }),
+                    summary: `LLM picked ${brainPickSan} → ${vetoReason}; overriding with engine bestmove ${seededAnalysis.bestMove}`,
+                    details: JSON.stringify(auditDetails),
                     fen: game.fen,
                   });
                   // Convert engine bestmove (UCI) into SAN for re-validation
