@@ -20,12 +20,22 @@ export const stockfishEvalTool: Tool = {
     },
     required: ['fen'],
   },
-  async execute(args) {
-    const fen = typeof args.fen === 'string' ? args.fen : '';
+  async execute(args, ctx) {
+    // WO-CYCLE7-FOLLOWUPS — fall back to the live FEN when the brain
+    // emits stockfish_eval without supplying one. Cycle 7 audit
+    // Finding 87 caught the brain calling stockfish_eval() with no
+    // args; the previous shape returned `fen is required` and the
+    // brain had to retry with a roundtrip. Now the spine fills the
+    // gap: the call still gets the live position evaluated, just
+    // with a synthetic-arg note so triage can spot the brain's
+    // omission in the audit log.
+    const argFen = typeof args.fen === 'string' ? args.fen.trim() : '';
+    const fen = argFen || (ctx?.liveFen ?? '');
     const depth = typeof args.depth === 'number' ? args.depth : 12;
-    if (!fen.trim()) {
-      return { ok: false, error: 'fen is required' };
+    if (!fen) {
+      return { ok: false, error: 'fen is required (no liveFen available either)' };
     }
+    const usedLiveFen = !argFen && fen === ctx?.liveFen;
     try {
       // WO-STOCKFISH-SWAP-AND-PERF (part 5): brain-facing eval
       // budgets at 300ms. If the search hasn't returned by then,
@@ -43,6 +53,9 @@ export const stockfishEvalTool: Tool = {
           mateIn: analysis.mateIn,
           depth: analysis.depth,
           topLines: analysis.topLines.slice(0, 3),
+          ...(usedLiveFen
+            ? { note: 'fen arg was missing; analyzed live board FEN instead' }
+            : {}),
         },
       };
     } catch (err) {

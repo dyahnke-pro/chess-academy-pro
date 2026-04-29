@@ -176,7 +176,15 @@ export type AuditKind =
   // WO-REAL-FIXES — phase narration deterministic fallback. Fires
   // when the LLM call times out / errors and we render a built-in
   // transition template instead of leaving the user with silence.
-  | 'phase-narration-fallback-shown';
+  | 'phase-narration-fallback-shown'
+  // WO-CYCLE7-FOLLOWUPS — defense-in-depth detector. Fires when
+  // voice output (post-strip) still contains a tag-shaped substring
+  // matching /\[\w+:.*?\]/. Cycle 7 audit caught `[ARROW:g8:f6]`
+  // getting spoken aloud because the streaming sentence-flush
+  // dispatched a chunk before the assembled-buffer arrow stripper
+  // ran. This audit catches future leak classes we forget to strip
+  // explicitly — independent of the regex registry.
+  | 'tag-leak-detected';
 
 export interface AuditEntry {
   timestamp: number;

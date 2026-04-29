@@ -522,8 +522,19 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       // rule. A sentence of just "Great question!" leaves the user hearing
       // only that while the rest of the reply gets wiped by the race that
       // the gating below prevents; belt-and-suspenders.
+      // WO-CYCLE7-FOLLOWUPS — also strip [ARROW:...], [BOARD:...],
+      // and [[ACTION:...]] tags here. Cycle 7 audit Finding 162
+      // caught `[ARROW:g8:f6]` getting spoken aloud through
+      // speakQueuedForced because the streaming sentence-flush
+      // dispatched chunks before extractArrows() ran on the
+      // assembled response. This per-sentence strip is the
+      // streaming-side defense; extractArrows() at the end of the
+      // stream stays as the authoritative arrow-collection pass.
+      const TAG_STRIP_RE = /\[ARROW:[a-h][1-8]:[a-h][1-8]\]|\[BOARD:[^\]]*\]|\[\[ACTION:[\s\S]*?\]\]|\[ACTION:[\s\S]*?\]/gi;
       const trimmed = sentence
+        .replace(TAG_STRIP_RE, '')
         .replace(/^(great question!?|excellent!?|good question!?|nice (one|question)!?|interesting!?|that'?s a (great|good|nice) (question|one)!?)\s*/i, '')
+        .replace(/\s{2,}/g, ' ')
         .trim();
       if (!trimmed) return;
       if (!firstSpeakPromise) {

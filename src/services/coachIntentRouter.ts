@@ -72,8 +72,22 @@ export function tryRouteIntent(
   }
 
   // ─── take_back_move ─────────────────────────────────────────────
+  // WO-CYCLE7-FOLLOWUPS — broaden the regex. The previous shape
+  // `take.{0,5}back` only allowed 0-5 chars between "take" and "back",
+  // which meant common phrasings the user actually says — "take your
+  // move back" (11 chars), "take that back" (6 chars), "take that
+  // move back" (11 chars) — all failed to match. Cycle 7 audit
+  // Findings 156 + 159 caught two of these phrasings going
+  // unmatched and falling through to the LLM, which then said
+  // "I can't take moves back" (Finding 155) instead of dispatching
+  // the take-back tool.
+  // Allow up to 30 chars between "take" and "back" — covers any
+  // realistic 3-4 word phrasing without false-positive matching on
+  // unrelated long sentences (chess discussion rarely has both
+  // "take" and "back" within 30 chars unless the user is actually
+  // asking for a take-back).
   if (
-    /\b(take.{0,5}back|undo|let me try (that |this )?again|go back|rewind)\b/i.test(text)
+    /\btake\b.{0,30}\bback\b|\b(undo|let me try (that |this )?again|go back|rewind)\b/i.test(text)
   ) {
     // "two" / "both" / "2" / "two moves" / "both moves" / "whole exchange" → count=2
     const twoBack = /\b(both|two|2|two\s+moves|both\s+moves|whole\s+exchange)\b/i.test(text);
