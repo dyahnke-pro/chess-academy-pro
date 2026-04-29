@@ -57,20 +57,57 @@ export function tryRouteIntent(
   text: string,
   ctx: IntentRouterContext = {},
 ): RoutedIntent | null {
-  const lowered = text.trim().toLowerCase();
-  if (!lowered) return null;
-
-  // Diagnostic — show every input the router sees and whether it matched.
-  // Dynamic-imported so this file stays free of static appAuditor coupling.
-  // Will be removed once the matching bug is diagnosed.
+  const intent = computeRoutedIntent(text, ctx);
+  // Single diagnostic line per call — input + ctx + resolved intent.
+  // Audit cycle 8 follow-up: the prior version emitted only `text=...`
+  // before routing ran, so a "did the router pick count=2 because of
+  // `lastMoveBy=coach` or because of the literal word `both`?" question
+  // had to be answered by joining downstream audits. Now one entry
+  // tells you exactly what came in and what came out.
   void import('./appAuditor').then(({ logAppAudit }) => {
     void logAppAudit({
       kind: 'coach-intent-router-input',
       category: 'subsystem',
       source: 'coachIntentRouter.tryRouteIntent',
-      summary: `text="${text.slice(0, 60)}"`,
+      summary: `text="${text.slice(0, 60)}" lastMoveBy=${ctx.lastMoveBy ?? 'unknown'} → ${formatIntentSummary(intent)}`,
+      details: JSON.stringify({
+        text,
+        lastMoveBy: ctx.lastMoveBy ?? null,
+        currentFen: ctx.currentFen ?? null,
+        intent,
+      }),
     });
   });
+  return intent;
+}
+
+/** Short rendering of a `RoutedIntent` (or null) for the audit summary
+ *  line. Kept inline so the audit log reads as one self-contained
+ *  string rather than requiring a second hop into `details`. */
+function formatIntentSummary(intent: RoutedIntent | null): string {
+  if (!intent) return 'matched=none';
+  switch (intent.kind) {
+    case 'play_move':
+      return `matched=play_move san=${intent.san}`;
+    case 'take_back_move':
+      return `matched=take_back_move count=${intent.count}`;
+    case 'reset_board':
+      return 'matched=reset_board';
+    case 'set_board_position':
+      return `matched=set_board_position fen=${intent.fen.slice(0, 40)}`;
+    case 'navigate_to_route':
+      return `matched=navigate_to_route route=${intent.route}`;
+  }
+}
+
+/** The actual matching logic — extracted so `tryRouteIntent` can
+ *  audit a single line with both the input and the resolved intent. */
+function computeRoutedIntent(
+  text: string,
+  ctx: IntentRouterContext,
+): RoutedIntent | null {
+  const lowered = text.trim().toLowerCase();
+  if (!lowered) return null;
 
   // ─── take_back_move ─────────────────────────────────────────────
   // Checked BEFORE play_move so "take it back" / "take that move back"
