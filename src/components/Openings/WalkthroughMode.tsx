@@ -265,10 +265,18 @@ export function WalkthroughMode({
   // openings (variations get added to repertoire without matching
   // annotation subLines). Without this fallback, those variations play
   // silent rapid-fire because annotations stays null forever.
+  //
+  // Each stub's annotation is just the bare SAN (no trailing
+  // punctuation) so it matches the bare-SAN GENERIC_ANNOTATION_PATTERN
+  // entry. That makes needsFill below see it as filler and call the
+  // LLM enricher, which writes a real narration into the `narration`
+  // field. End result: From's Gambit Declined goes from no annotations
+  // (silent) → bare-SAN stubs (matches board, sounds robotic) → real
+  // LLM-generated narration (matches board, sounds like teaching).
   const synthesisedFromPgn = useMemo((): OpeningMoveAnnotation[] => {
     return expectedMoves.map((m) => ({
       san: m.san,
-      annotation: `${m.san}.`,
+      annotation: m.san,
     }));
   }, [expectedMoves]);
 
