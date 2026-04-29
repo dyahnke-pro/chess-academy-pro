@@ -29,11 +29,14 @@ export interface UsePhaseNarrationResult {
  *  transition is always either spoken or logged-and-forgotten. */
 const STOCKFISH_TIMEOUT_MS = 8_000;
 /** Tap-latency race budget. PHASE-LAG-01 set 500ms mirroring POLISH-03;
- *  PHASE-LAG-02 tightens to 300ms to match the post-PHASE-PROSE-01
- *  Read Position budget. PHASE_NARRATION_ADDITION tolerates a missing
- *  stockfishAnalysis block, so racing out fast is net-positive for
- *  detection-to-first-word latency. */
-const STOCKFISH_FAST_BUDGET_MS = 300;
+ *  PHASE-LAG-02 tightened to 300ms; PHASE-LAG-03 drops to 150ms.
+ *  PHASE_NARRATION_ADDITION tolerates a missing stockfishAnalysis block,
+ *  so racing out fast is net-positive for detection-to-first-word
+ *  latency — at typical depth-10 Stockfish times, most cold-cache runs
+ *  exceed 300ms and we'd ship a stale analysis anyway. The race still
+ *  lets fast cache hits through, so warm positions retain the engine
+ *  signal at zero latency cost. */
+const STOCKFISH_FAST_BUDGET_MS = 150;
 /** Stockfish analysis depth for phase narration. PHASE-LAG-01 set 12;
  *  PHASE-LAG-02 drops to 10 to match Read Position. Deterministic
  *  tactics detection runs on every FEN in buildChessContextMessage
