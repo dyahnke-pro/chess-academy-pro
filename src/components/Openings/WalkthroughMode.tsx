@@ -141,6 +141,15 @@ export function WalkthroughMode({
     if (limit !== null) {
       return ann.shortNarration ?? trimToSentences(fullText, limit);
     }
+    // Diagnostic: log what's about to be spoken so silent rapid-fire
+    // bugs are easy to triage from the user's browser console. Keeps
+    // the log to ~30 chars so it doesn't spam.
+    if (typeof console !== 'undefined') {
+      console.debug(
+        `[Walkthrough] step=${idx} text="${(fullText ?? '').slice(0, 30)}" ` +
+          `(narration=${ann.narration ? 'set' : 'none'}, annotation=${ann.annotation ? 'set' : 'none'})`,
+      );
+    }
     return fullText;
   }, [annotations, autoPlaySpeed]);
 
