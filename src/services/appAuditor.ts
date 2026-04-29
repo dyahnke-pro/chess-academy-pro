@@ -209,7 +209,15 @@ export type AuditKind =
   // Counting these tells us whether the cp-loss thresholds are tuned
   // correctly per tier (too many at intermediate = floor too tight;
   // too few at master = floor too loose).
-  | 'coach-move-quality-floor-triggered';
+  | 'coach-move-quality-floor-triggered'
+  // WO-COACH-PERSONALITY-VOICE. One entry per Polly speak() call with
+  // the resolved voice + active personality + dial settings. Captures
+  // the cross-product of voice × personality × dials in production so
+  // we can see which combinations users actually run (and whether any
+  // pairing produces empirically bad output we should warn about).
+  // Joins with the existing `voice-speak-invoked` audit on timestamp
+  // for the full picture.
+  | 'coach-narration-spoken';
 
 export interface AuditEntry {
   timestamp: number;

@@ -6,6 +6,40 @@ import { speechService } from './speechService';
 import { voicePackService } from './voicePackService';
 import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
+import type { CoachPersonality } from '../coach/types';
+
+// WO-COACH-PERSONALITY-VOICE — voice and personality are orthogonal
+// dials. Each personality has a default voice (the one that matches
+// its base mood best out of the box), but the user can override any
+// pairing in Settings. The personality drives the *prompt* (what the
+// coach says); the voice drives the *timbre* (who says it). Any voice
+// can deliver any personality — Ruth doing drill-sergeant, Stephen
+// doing flirtatious, etc.
+export const PERSONALITY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
+  default: 'ruth',         // generative — sultry, low female (current pre-personality default)
+  soft: 'joanna',          // neural — warm, encouraging female
+  edgy: 'stephen',         // neural — dry, sharper male
+  flirtatious: 'ruth',     // generative — sultry, low female
+  'drill-sergeant': 'matthew', // generative — direct, deep male
+};
+
+/** Resolve which Polly voice to send to the API for the active
+ *  personality. The user's per-personality override map (from
+ *  Settings → Coach → Personality) wins when set; otherwise we use
+ *  the personality's hardcoded default. The legacy `pollyVoice`
+ *  preference acts as the "default personality" voice when no
+ *  per-personality override exists for `default`. */
+export function resolvePollyVoice(
+  personality: CoachPersonality | undefined,
+  personalityVoices: Partial<Record<CoachPersonality, string>> | undefined,
+  legacyPollyVoice: string,
+): string {
+  const p: CoachPersonality = personality ?? 'default';
+  const override = personalityVoices?.[p];
+  if (override) return override;
+  if (p === 'default') return legacyPollyVoice || PERSONALITY_VOICE_DEFAULTS.default;
+  return PERSONALITY_VOICE_DEFAULTS[p];
+}
 
 /** Absolute URL for Polly TTS — needed when running inside Capacitor WKWebView */
 const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
@@ -244,6 +278,13 @@ class VoiceService {
     voiceEnabled: boolean;
     pollyEnabled: boolean;
     pollyVoice: string;
+    /** WO-COACH-PERSONALITY-VOICE: cached for resolvePollyVoice() at
+     *  speak time. Defaults to undefined / 'default' so behavior is
+     *  unchanged for users who haven't touched personality settings. */
+    coachPersonality: CoachPersonality | undefined;
+    /** Per-personality voice override map. Empty / missing entries
+     *  fall back to PERSONALITY_VOICE_DEFAULTS. */
+    coachPersonalityVoices: Partial<Record<CoachPersonality, string>> | undefined;
     systemVoiceURI: string | null;
     voiceSpeed: number;
   } | null = null;
@@ -307,6 +348,8 @@ class VoiceService {
       voiceEnabled: prefs.voiceEnabled ?? true,
       pollyEnabled: prefs.pollyEnabled ?? false,
       pollyVoice: prefs.pollyVoice || 'ruth',
+      coachPersonality: prefs.coachPersonality,
+      coachPersonalityVoices: prefs.coachPersonalityVoices,
       systemVoiceURI: prefs.systemVoiceURI ?? null,
       voiceSpeed: prefs.voiceSpeed ?? 1.0,
     };
@@ -443,7 +486,20 @@ class VoiceService {
     // Tier 1: Amazon Polly. `isPollyLive()` handles cooldown expiry
     // so a transient failure doesn't drop us to Web Speech forever.
     if (prefs.pollyEnabled && this.isPollyLive()) {
-      const success = await this.speakPolly(text, prefs.pollyVoice);
+      // WO-COACH-PERSONALITY-VOICE: resolve voice from active
+      // personality + per-personality override map, falling back to
+      // the legacy pollyVoice when on the 'default' personality with
+      // no override.
+      const voiceForSpeak = resolvePollyVoice(
+        prefs.coachPersonality,
+        prefs.coachPersonalityVoices,
+        prefs.pollyVoice,
+      );
+      // Narration trace audit — captures the cross-product of voice ×
+      // personality × dials at speak time. Loaded lazily so the audit
+      // module isn't a hard import for the voice path.
+      void this.logNarrationSpoken(text, voiceForSpeak, prefs);
+      const success = await this.speakPolly(text, voiceForSpeak);
       if (success) {
         this.lastTier = 'polly';
         return;
@@ -553,6 +609,49 @@ class VoiceService {
     });
   }
 
+  /** WO-COACH-PERSONALITY-VOICE: emit a `coach-narration-spoken` audit
+   *  with the resolved voice + active personality + dial settings.
+   *  Fires once per Polly speak attempt regardless of whether the
+   *  fetch / playback eventually succeeds — a separate `tts-failure`
+   *  fires on actual error. */
+  private async logNarrationSpoken(
+    text: string,
+    voice: string,
+    prefs: NonNullable<typeof this.cachedPrefs>,
+  ): Promise<void> {
+    try {
+      const { logAppAudit } = await import('./appAuditor');
+      // Re-read full prefs from the live store so we can include the
+      // dial settings without forcing them through the cached prefs
+      // object — the cache only holds the fields voiceService needs at
+      // speak time.
+      const profile = await db.profiles.get('main');
+      const p = (profile?.preferences ?? {}) as Partial<{
+        coachProfanity: string;
+        coachMockery: string;
+        coachFlirt: string;
+      }>;
+      const personality = prefs.coachPersonality ?? 'default';
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'subsystem',
+        source: 'voiceService.speakPolly',
+        summary: `voice=${voice} personality=${personality} text="${text.slice(0, 40)}"`,
+        details: JSON.stringify({
+          voice,
+          personality,
+          profanity: p?.coachProfanity ?? 'none',
+          mockery: p?.coachMockery ?? 'none',
+          flirt: p?.coachFlirt ?? 'none',
+          textLength: text.length,
+          textPreview: text.slice(0, 120),
+        }),
+      });
+    } catch {
+      // Audit failures must not break narration.
+    }
+  }
+
   private async speakPolly(text: string, voice: string): Promise<boolean> {
     try {
       const key = this.pollyKey(text, voice);
@@ -616,7 +715,11 @@ class VoiceService {
     const prefs = await this.loadPrefs();
     if (!prefs?.pollyEnabled || !this.isPollyLive() || !prefs.voiceEnabled) return;
 
-    const voice = prefs.pollyVoice;
+    const voice = resolvePollyVoice(
+      prefs.coachPersonality,
+      prefs.coachPersonalityVoices,
+      prefs.pollyVoice,
+    );
     const uncached = texts.filter(t => t && !this.audioCache.has(this.pollyKey(t, voice)));
     if (uncached.length === 0) return;
 

@@ -18,7 +18,7 @@
  * UserPreferences (added in PR B). Prompt-assembly machinery shipped
  * in PR A.
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, X } from 'lucide-react';
 import { db } from '../../db/schema';
@@ -28,6 +28,7 @@ import {
   type CoachPersonality,
   type IntensityLevel,
 } from '../../coach/types';
+import { POLLY_VOICES, PERSONALITY_VOICE_DEFAULTS, voiceService } from '../../services/voiceService';
 import type { UserProfile } from '../../types';
 
 interface PersonalityOption {
@@ -80,6 +81,22 @@ interface PersonalityPanelProps {
 export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps): JSX.Element {
   const [open, setOpen] = useState(false);
 
+  // Per-personality voice override map. Empty / missing entries fall
+  // back to PERSONALITY_VOICE_DEFAULTS at speak time. Stored as a full
+  // map in draft state for UI simplicity (every card always shows a
+  // selected voice) but only the entries that DIFFER from defaults
+  // need to persist.
+  const currentVoiceMap: Record<CoachPersonality, string> = useMemo(() => {
+    const stored = profile.preferences.coachPersonalityVoices ?? {};
+    return {
+      default: stored.default ?? PERSONALITY_VOICE_DEFAULTS.default,
+      soft: stored.soft ?? PERSONALITY_VOICE_DEFAULTS.soft,
+      edgy: stored.edgy ?? PERSONALITY_VOICE_DEFAULTS.edgy,
+      flirtatious: stored.flirtatious ?? PERSONALITY_VOICE_DEFAULTS.flirtatious,
+      'drill-sergeant': stored['drill-sergeant'] ?? PERSONALITY_VOICE_DEFAULTS['drill-sergeant'],
+    };
+  }, [profile.preferences.coachPersonalityVoices]);
+
   // Read current settings from profile, defaulting to 'default' / 'none'.
   const currentPersonality: CoachPersonality =
     profile.preferences.coachPersonality ?? 'default';
@@ -96,6 +113,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
   const [draftProfanity, setDraftProfanity] = useState<IntensityLevel>(currentProfanity);
   const [draftMockery, setDraftMockery] = useState<IntensityLevel>(currentMockery);
   const [draftFlirt, setDraftFlirt] = useState<IntensityLevel>(currentFlirt);
+  const [draftVoiceMap, setDraftVoiceMap] = useState<Record<CoachPersonality, string>>(currentVoiceMap);
 
   // Re-seed drafts every time the panel opens so a previous Cancel
   // doesn't leak stale draft values into the next open.
@@ -105,8 +123,9 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       setDraftProfanity(currentProfanity);
       setDraftMockery(currentMockery);
       setDraftFlirt(currentFlirt);
+      setDraftVoiceMap(currentVoiceMap);
     }
-  }, [open, currentPersonality, currentProfanity, currentMockery, currentFlirt]);
+  }, [open, currentPersonality, currentProfanity, currentMockery, currentFlirt, currentVoiceMap]);
 
   const summaryLabel = PERSONALITY_OPTIONS.find((p) => p.id === currentPersonality)?.label ?? 'Default';
   const summaryDials =
@@ -144,21 +163,32 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       mockery: draftMockery,
       flirt: draftFlirt,
     };
+    // Only persist voice-map entries that DIFFER from defaults so the
+    // stored object stays compact and a future default change picks up
+    // automatically for users who never overrode that personality.
+    const voiceOverrides: Partial<Record<CoachPersonality, string>> = {};
+    for (const [key, value] of Object.entries(draftVoiceMap) as [CoachPersonality, string][]) {
+      if (value !== PERSONALITY_VOICE_DEFAULTS[key]) voiceOverrides[key] = value;
+    }
     const updatedPrefs = {
       ...profile.preferences,
       coachPersonality: draftPersonality,
       coachProfanity: draftProfanity,
       coachMockery: draftMockery,
       coachFlirt: draftFlirt,
+      coachPersonalityVoices: voiceOverrides,
     };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
+    // Invalidate the voice cache so the new pairings take effect on
+    // the next coach speak() without waiting for the 5-min TTL.
+    voiceService.clearCache();
     void logAppAudit({
       kind: 'coach-personality-changed',
       category: 'subsystem',
       source: 'PersonalityPanel.handleSave',
-      summary: `${before.personality} (${before.profanity}/${before.mockery}/${before.flirt}) → ${after.personality} (${after.profanity}/${after.mockery}/${after.flirt})`,
-      details: JSON.stringify({ before, after }),
+      summary: `${before.personality} (${before.profanity}/${before.mockery}/${before.flirt}) → ${after.personality} (${after.profanity}/${after.mockery}/${after.flirt}); voice@active=${draftVoiceMap[draftPersonality]}`,
+      details: JSON.stringify({ before, after, voiceOverrides, voiceMap: draftVoiceMap }),
     });
     setOpen(false);
   };
@@ -244,6 +274,42 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Per-personality voice picker — voice and personality
+                  are orthogonal, so any voice can be paired with any
+                  personality. WO-COACH-PERSONALITY-VOICE. */}
+              <div className="mb-4">
+                <div className="text-sm font-medium mb-2">Voice per personality</div>
+                <div className="space-y-1.5" data-testid="personality-voice-list">
+                  {PERSONALITY_OPTIONS.map((opt) => (
+                    <div key={opt.id} className="flex items-center gap-2">
+                      <span className="text-xs flex-shrink-0 w-28" style={{ color: 'var(--color-text-muted)' }}>
+                        {opt.label}
+                      </span>
+                      <select
+                        value={draftVoiceMap[opt.id]}
+                        onChange={(e) =>
+                          setDraftVoiceMap((prev) => ({ ...prev, [opt.id]: e.target.value }))
+                        }
+                        className="flex-1 px-2 py-1 rounded-md border text-xs"
+                        style={{
+                          background: 'var(--color-bg)',
+                          borderColor: 'var(--color-border)',
+                          color: 'var(--color-text)',
+                        }}
+                        data-testid={`personality-voice-${opt.id}`}
+                        aria-label={`${opt.label} voice`}
+                      >
+                        {POLLY_VOICES.map((v) => (
+                          <option key={v.id} value={v.id}>
+                            {v.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Dial controls */}
