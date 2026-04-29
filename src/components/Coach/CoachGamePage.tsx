@@ -2340,11 +2340,20 @@ export function CoachGamePage(): JSX.Element {
     // we'd throw away.
     const narrationDensity =
       useAppStore.getState().activeProfile?.preferences.coachVerbosity ?? 'unlimited';
-    const bookDepth = intendedOpening
-      ? (getOpeningMoves(intendedOpening.name)?.length ?? 0)
+    // Auto-detect the opening from the SAN move history so opening
+    // teaching mode activates whenever the position matches a known
+    // book line — even if the student didn't pick a subject from the
+    // dropdown. Detection is fast (trie lookup over the bundled
+    // Lichess openings DB) and safe to run every move. Resolution
+    // precedence: explicit URL subject > committed intent > auto-detect.
+    const detectedOpening = detectOpening(game.history);
+    const resolvedSubject =
+      subjectParam ?? intendedOpening?.name ?? detectedOpening?.name ?? null;
+    const bookDepth = resolvedSubject
+      ? (getOpeningMoves(resolvedSubject)?.length ?? 0)
       : 0;
     const inOpeningTeaching =
-      !!subjectParam && game.history.length <= Math.max(bookDepth, 12);
+      !!resolvedSubject && game.history.length <= Math.max(bookDepth, 12);
     const shouldFire =
       narrationDensity !== 'none' &&
       (inOpeningTeaching || shouldCallLlmForMove(verbosity, classification));
@@ -2454,9 +2463,11 @@ export function CoachGamePage(): JSX.Element {
           evalAfter: analysis?.evaluation ?? null,
           bestReplySan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
           chatHistory: sessionMessages,
-          // Threading the URL subject here activates the OPENING
-          // TEACHING MODE branch of PLAY_SYSTEM_PROMPT.
-          subject: subjectParam ?? undefined,
+          // Threading the resolved subject (URL > committed intent >
+          // auto-detected) activates the OPENING TEACHING MODE branch
+          // of PLAY_SYSTEM_PROMPT whenever the student is playing a
+          // recognizable book line — no dropdown pick required.
+          subject: resolvedSubject ?? undefined,
           verbosity: narrationDensity,
           groundedNotes,
           recentMoveClassifications,
