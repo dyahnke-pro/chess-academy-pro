@@ -50,7 +50,12 @@ describe('lichessExplorerService', () => {
       } as Response);
 
       await fetchLichessExplorer('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'masters');
-      expect(fetchSpy.mock.calls[0][0]).toContain('explorer.lichess.ovh/masters');
+      // WO-REAL-FIXES — fetches now go through our Edge proxy at
+      // `/api/lichess-explorer?source=masters&...` instead of the
+      // bare `explorer.lichess.ovh` host. The proxy talks to Lichess
+      // server-side where User-Agent isn't a forbidden header.
+      expect(fetchSpy.mock.calls[0][0]).toContain('/api/lichess-explorer');
+      expect(fetchSpy.mock.calls[0][0]).toContain('source=masters');
     });
 
     it('throws on non-ok response', async () => {

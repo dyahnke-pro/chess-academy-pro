@@ -1,39 +1,48 @@
 import type { LichessExplorerResult, LichessCloudEval } from '../types';
 import { logAppAudit } from './appAuditor';
 
-const EXPLORER_BASE = 'https://explorer.lichess.ovh';
-const LICHESS_API_BASE = 'https://lichess.org/api';
-
 /** Network timeout for any Lichess call. Keeps slow / unresponsive
  *  Lichess endpoints from stalling the UI — callers that don't wrap
  *  with their own timeout still get protection at the service edge. */
-const LICHESS_FETCH_TIMEOUT_MS = 5000;
+const LICHESS_FETCH_TIMEOUT_MS = 8000;
 
-/** WO-DEEP-DIAGNOSTICS — only `Accept: application/json` is sent.
+/** WO-REAL-FIXES — route every Lichess call through our own Edge
+ *  proxies (`/api/lichess-explorer`, `/api/lichess-cloud-eval`)
+ *  instead of the bare `explorer.lichess.ovh` host.
  *
- *  Earlier shapes set a custom `User-Agent` per Lichess ToS recommen-
- *  dation, but `User-Agent` is on the browser fetch forbidden-header
- *  list — older iOS WKWebView throws "Load failed" on the fetch call
- *  when the page tries to set a forbidden header (audit cycle 5
- *  Findings 40 / 90 / 125 are exactly this).
- *
- *  `Accept: application/json` is on the CORS-safelist regardless of
- *  value, so it doesn't trigger an OPTIONS preflight, and the
- *  endpoint returns JSON for read-only queries without any
- *  identifying header. */
-const LICHESS_HEADERS: Record<string, string> = {
-  Accept: 'application/json',
-};
+ *  Why: production audit cycle 6 ran the 3-shape probe (PR #355) and
+ *  proved Lichess returns HTTP 401 to a bare GET from iOS Safari's
+ *  default User-Agent — `Mozilla/5.0 (iPhone; CPU iPhone OS 18_7…)`.
+ *  Every browser-side header trick fails because:
+ *    - `User-Agent` is on the fetch forbidden-header list (silently
+ *      dropped or thrown by older WebKit)
+ *    - any custom header (`X-Client`, etc.) triggers CORS preflight,
+ *      which Lichess explorer doesn't advertise
+ *  The Edge proxy talks to Lichess from Vercel-side Node, where
+ *  `User-Agent` can be set freely; the browser fetches the proxy
+ *  same-origin so no CORS / no preflight / no forbidden-header. */
+const EXPLORER_PROXY_PATH = '/api/lichess-explorer';
+const CLOUD_EVAL_PROXY_PATH = '/api/lichess-cloud-eval';
+
+/** Capacitor needs absolute URLs — the page protocol is
+ *  `capacitor://app.chessacademy.pro` which can't relative-resolve
+ *  `/api/...`. Web stays on relative paths so the same-origin proxy
+ *  CORS short-circuit applies. Mirrors `getTtsUrl()` in
+ *  voiceService.ts. */
+const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
+function isCapacitor(): boolean {
+  return typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
+}
+function withApiBase(path: string): string {
+  return isCapacitor() ? `${VERCEL_ORIGIN}${path}` : path;
+}
 
 export type ExplorerSource = 'lichess' | 'masters';
 
-/** WO-DEEP-DIAGNOSTICS — capture the actual error fields whenever a
- *  Lichess fetch fails. The legacy "Explorer API error: 401" shape
- *  loses the WebKit `error.name` / `error.cause` / `navigator.onLine`
- *  signal that distinguishes forbidden-header throw from CORS
- *  preflight from real outage. Production audit is emitted from
- *  here so we never lose the diagnostic data even when the caller
- *  swallows the throw. */
+/** Capture the actual error fields whenever a Lichess fetch fails.
+ *  Inherited from PR #355's diagnostic instrumentation — preserves
+ *  the `error.name` / `error.cause` / `navigator.onLine` signal that
+ *  distinguishes proxy outages from upstream Lichess outages. */
 function emitLichessFailure(
   source: string,
   url: string,
@@ -78,16 +87,16 @@ export async function fetchLichessExplorer(
   fen: string,
   source: ExplorerSource = 'lichess',
 ): Promise<LichessExplorerResult> {
-  const params = new URLSearchParams({ fen });
+  const params = new URLSearchParams({ fen, source });
   if (source === 'lichess') {
     params.set('speeds', 'blitz,rapid,classical');
     params.set('ratings', '1600,1800,2000,2200,2500');
   }
-  const url = `${EXPLORER_BASE}/${source}?${params.toString()}`;
+  const url = withApiBase(`${EXPLORER_PROXY_PATH}?${params.toString()}`);
   let response: Response;
   try {
     response = await fetch(url, {
-      headers: LICHESS_HEADERS,
+      headers: { Accept: 'application/json' },
       signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
     });
   } catch (err) {
@@ -116,11 +125,11 @@ export async function fetchCloudEval(
   multiPv: number = 3,
 ): Promise<LichessCloudEval | null> {
   const params = new URLSearchParams({ fen, multiPv: String(multiPv) });
-  const url = `${LICHESS_API_BASE}/cloud-eval?${params.toString()}`;
+  const url = withApiBase(`${CLOUD_EVAL_PROXY_PATH}?${params.toString()}`);
   let response: Response;
   try {
     response = await fetch(url, {
-      headers: LICHESS_HEADERS,
+      headers: { Accept: 'application/json' },
       signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
     });
   } catch (err) {
