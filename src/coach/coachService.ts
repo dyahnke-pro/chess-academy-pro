@@ -36,6 +36,8 @@ import type {
   CoachAnswer,
   CoachAskInput,
   CoachIdentity,
+  CoachPersonality,
+  IntensityLevel,
   Provider,
   ProviderName,
   ProviderResponse,
@@ -67,8 +69,21 @@ function pickProvider(name: ProviderName): Provider {
 export interface CoachServiceOptions {
   /** Override the active provider. Useful for tests. */
   provider?: ProviderName;
-  /** Override the coach identity (default: 'danya'). */
+  /** Override the legacy coach identity (default: 'danya'). Kept for
+   *  backward compat with pre-personality call sites; new callers use
+   *  `personality` + the three intensity dials below. */
   identity?: CoachIdentity;
+  /** Personality voice for this call. Defaults to 'default' which
+   *  produces the same prompt as the pre-personality build (modulo
+   *  three "no-op" dial clauses reinforcing the default behavior).
+   *  WO-COACH-PERSONALITIES. */
+  personality?: CoachPersonality;
+  /** Profanity intensity dial. Default: 'none'. */
+  profanity?: IntensityLevel;
+  /** Mockery intensity dial. Default: 'none'. */
+  mockery?: IntensityLevel;
+  /** Flirt intensity dial. Default: 'none'. */
+  flirt?: IntensityLevel;
   /** Inject a custom provider instance (used by tests with a mock). */
   providerOverride?: Provider;
   /** When provided, the service routes through the provider's
@@ -178,6 +193,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
 
   const envelope = assembleEnvelope({
     identity: options.identity,
+    personality: options.personality,
+    profanity: options.profanity,
+    mockery: options.mockery,
+    flirt: options.flirt,
     toolbelt: getToolDefinitions({ exclude: options.excludeTools }),
     input,
   });

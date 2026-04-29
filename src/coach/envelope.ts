@@ -26,13 +26,23 @@ import type {
   RouteManifestEntry,
   ToolDefinition,
 } from './types';
-import { loadIdentityPrompt } from './sources/identity';
+import { loadIdentityPrompt, loadIdentityPromptForPersonality } from './sources/identity';
 import { readMemorySnapshot } from './sources/memory';
 import { loadRoutesManifest } from './sources/routesManifest';
 import { prepareLiveState } from './sources/liveState';
+import type { CoachPersonality, IntensityLevel } from './types';
 
 export interface AssembleEnvelopeArgs {
   identity?: CoachIdentity;
+  /** Personality voice for this call. When supplied, the envelope's
+   *  identity prompt is composed from `OPERATOR base + personality
+   *  block + dial modulators`. When omitted, the legacy
+   *  `loadIdentityPrompt(identity)` path is used (default-personality
+   *  prompt with all dials at 'none'). WO-COACH-PERSONALITIES. */
+  personality?: CoachPersonality;
+  profanity?: IntensityLevel;
+  mockery?: IntensityLevel;
+  flirt?: IntensityLevel;
   toolbelt: ToolDefinition[];
   input: CoachAskInput;
 }
@@ -41,7 +51,21 @@ export interface AssembleEnvelopeArgs {
  *  caller's ask. Throws when any of the six envelope parts is missing
  *  — the constitution forbids partial envelopes. */
 export function assembleEnvelope(args: AssembleEnvelopeArgs): AssembledEnvelope {
-  const identity = loadIdentityPrompt(args.identity);
+  // Prefer the personality-aware path when ANY personality field is
+  // supplied; fall back to the legacy `identity` argument otherwise.
+  // Both paths converge on the same prompt when settings are at their
+  // defaults — the personality dimension is purely additive.
+  const identity =
+    args.personality !== undefined ||
+    args.profanity !== undefined ||
+    args.mockery !== undefined ||
+    args.flirt !== undefined
+      ? loadIdentityPromptForPersonality(args.personality ?? 'default', {
+          profanity: args.profanity,
+          mockery: args.mockery,
+          flirt: args.flirt,
+        })
+      : loadIdentityPrompt(args.identity);
   const memory = readMemorySnapshot();
   const appMap = loadRoutesManifest();
   const liveState = prepareLiveState(args.input.liveState);

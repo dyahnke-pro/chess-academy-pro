@@ -9,6 +9,49 @@ import type { CoachMessage, HintRequestRecord, IntendedOpening } from '../stores
 
 export type CoachIdentity = 'danya' | 'kasparov' | 'fischer';
 
+// ─── Personality (WO-COACH-PERSONALITIES) ───────────────────────────────────
+//
+// Personality is the VOICE of the coach — tone, register, style. It's an
+// orthogonal axis to `CoachIdentity` (which was a never-implemented
+// name-based switch). The OPERATOR-mode hard rules (user sovereignty over
+// moves, play_move-when-mentioned, stockfish_eval grounding) hold across
+// every personality; only the way the coach SAYS things changes.
+//
+// Three intensity dials modulate independently of personality, so a user
+// can run e.g. "soft personality" with "medium flirt" if that's the vibe
+// they want. Each personality ships sensible per-dial defaults but every
+// dial is independently overridable from Settings.
+
+export type CoachPersonality =
+  | 'default'
+  | 'soft'
+  | 'edgy'
+  | 'flirtatious'
+  | 'drill-sergeant';
+
+export type IntensityLevel = 'none' | 'medium' | 'hard';
+
+export interface PersonalitySettings {
+  personality: CoachPersonality;
+  profanity: IntensityLevel;
+  mockery: IntensityLevel;
+  flirt: IntensityLevel;
+}
+
+/** The defaults that get applied when the user picks a personality but
+ *  hasn't explicitly overridden a specific dial. Lives here next to the
+ *  type so consumers (settings UI, envelope assembly, tests) never drift. */
+export const PERSONALITY_DIAL_DEFAULTS: Record<
+  CoachPersonality,
+  Pick<PersonalitySettings, 'profanity' | 'mockery' | 'flirt'>
+> = {
+  default: { profanity: 'none', mockery: 'none', flirt: 'none' },
+  soft: { profanity: 'none', mockery: 'none', flirt: 'none' },
+  edgy: { profanity: 'medium', mockery: 'hard', flirt: 'none' },
+  flirtatious: { profanity: 'medium', mockery: 'none', flirt: 'hard' },
+  'drill-sergeant': { profanity: 'hard', mockery: 'hard', flirt: 'none' },
+};
+
 // ─── Memory snapshot ─────────────────────────────────────────────────────────
 
 /** Read-only snapshot of the four-source coach memory at envelope-
