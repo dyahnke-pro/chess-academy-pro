@@ -58,6 +58,10 @@ export type AuditKind =
   | 'fen-desync'
   // Voice instrumentation (WO-LEGACY-VOICE-01)
   | 'voice-speak-invoked'
+  // Walkthrough narration diagnostic — fires when getNarrationFor
+  // returns empty so silent rapid-fire bugs can be triaged from the
+  // audit log alone.
+  | 'walkthrough-narration-empty'
   // Phase-transition narration trail (WO-PHASE-FIX-02)
   | 'phase-transition-detected'
   | 'phase-transition-suppressed'

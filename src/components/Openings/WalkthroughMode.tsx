@@ -134,22 +134,35 @@ export function WalkthroughMode({
   const applyStep = useCallback((_idx: number) => { /* board derives from hook state */ }, []);
 
   const getNarrationFor = useCallback((idx: number): string => {
-    if (idx === 0 || !NARRATE[autoPlaySpeed]) return '';
-    const ann = annotations?.[idx - 1];
-    if (!ann) return '';
+    // Audit-log every empty return so silent rapid-fire bugs surface
+    // in the in-app audit log with a specific reason — no need to
+    // open DevTools to triage.
+    const logEmpty = (reason: string, detail?: string): '' => {
+      void import('../../services/appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'walkthrough-narration-empty',
+          category: 'subsystem',
+          source: 'WalkthroughMode.getNarrationFor',
+          summary: `step ${idx}: ${reason}`,
+          details: detail,
+        });
+      }).catch(() => { /* never break narration on a log failure */ });
+      return '';
+    };
+
+    if (idx === 0) return '';
+    if (!NARRATE[autoPlaySpeed]) return logEmpty('drill mode (NARRATE flag is false)', `autoPlaySpeed=${autoPlaySpeed}`);
+    if (!annotations) return logEmpty('annotations not loaded yet', `total=null`);
+    const ann = annotations[idx - 1];
+    if (!ann) return logEmpty('no annotation at this index', `idx=${idx} of ${annotations.length}`);
     const fullText = ann.narration ?? ann.annotation;
+    if (!fullText) return logEmpty('annotation has no text', `narration=${ann.narration === undefined ? 'undef' : `"${(ann.narration ?? '').slice(0, 20)}"`} annotation=${!ann.annotation ? '<empty>' : `"${ann.annotation.slice(0, 20)}"`}`);
+
     const limit = SENTENCE_LIMIT[autoPlaySpeed];
     if (limit !== null) {
-      return ann.shortNarration ?? trimToSentences(fullText, limit);
-    }
-    // Diagnostic: log what's about to be spoken so silent rapid-fire
-    // bugs are easy to triage from the user's browser console. Keeps
-    // the log to ~30 chars so it doesn't spam.
-    if (typeof console !== 'undefined') {
-      console.debug(
-        `[Walkthrough] step=${idx} text="${(fullText ?? '').slice(0, 30)}" ` +
-          `(narration=${ann.narration ? 'set' : 'none'}, annotation=${ann.annotation ? 'set' : 'none'})`,
-      );
+      const out = ann.shortNarration ?? trimToSentences(fullText, limit);
+      if (!out) return logEmpty('sentence-trim produced empty', `limit=${limit} from "${fullText.slice(0, 30)}"`);
+      return out;
     }
     return fullText;
   }, [annotations, autoPlaySpeed]);
