@@ -66,6 +66,74 @@ describe('tryRouteIntent — take/capture verbs (regression: audit cycle 8)', ()
   });
 });
 
+describe('tryRouteIntent — take-back target distinction (your vs my)', () => {
+  // After 1.e4 — coach plays as black, hasn't moved yet. Used for
+  // contexts where lastMoveBy=user.
+  const FEN_AFTER_E4 =
+    'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+
+  it('"take back my move" with lastMoveBy=user → count 1 (undo my own)', () => {
+    const r = tryRouteIntent('take back my move', {
+      currentFen: FEN_AFTER_E4,
+      lastMoveBy: 'user',
+    });
+    expect(r).toEqual({ kind: 'take_back_move', count: 1 });
+  });
+
+  it('"take back my move" with lastMoveBy=coach → count 2 (skip coach + my prior)', () => {
+    const r = tryRouteIntent('take back my move', {
+      currentFen: FEN_AFTER_E4,
+      lastMoveBy: 'coach',
+    });
+    expect(r).toEqual({ kind: 'take_back_move', count: 2 });
+  });
+
+  it('"take back your move" with lastMoveBy=coach → count 1 (undo coach\'s)', () => {
+    const r = tryRouteIntent('take back your move', {
+      currentFen: FEN_AFTER_E4,
+      lastMoveBy: 'coach',
+    });
+    expect(r).toEqual({ kind: 'take_back_move', count: 1 });
+  });
+
+  it('"take back your move" with lastMoveBy=user → count 2 (skip my move + coach prior)', () => {
+    const r = tryRouteIntent('take back your move', {
+      currentFen: FEN_AFTER_E4,
+      lastMoveBy: 'user',
+    });
+    expect(r).toEqual({ kind: 'take_back_move', count: 2 });
+  });
+
+  it('"take back the coach\'s move" with lastMoveBy=coach → count 1', () => {
+    const r = tryRouteIntent("take back the coach's move", {
+      currentFen: FEN_AFTER_E4,
+      lastMoveBy: 'coach',
+    });
+    expect(r).toEqual({ kind: 'take_back_move', count: 1 });
+  });
+
+  it('"take back opponent\'s move" with lastMoveBy=user → count 2', () => {
+    const r = tryRouteIntent("take back opponent's move", {
+      currentFen: FEN_AFTER_E4,
+      lastMoveBy: 'user',
+    });
+    expect(r).toEqual({ kind: 'take_back_move', count: 2 });
+  });
+
+  it('falls back to count 1 when lastMoveBy is unknown', () => {
+    const r = tryRouteIntent('take back my move', { currentFen: FEN_AFTER_E4 });
+    expect(r).toEqual({ kind: 'take_back_move', count: 1 });
+  });
+
+  it('"take both my moves back" still returns count 2 regardless of target words', () => {
+    const r = tryRouteIntent('take both my moves back', {
+      currentFen: FEN_AFTER_E4,
+      lastMoveBy: 'user',
+    });
+    expect(r).toEqual({ kind: 'take_back_move', count: 2 });
+  });
+});
+
 describe('tryRouteIntent — non-matches fall through to LLM', () => {
   it('returns null for question-style asks', () => {
     expect(tryRouteIntent('what should I play here?', { currentFen: STARTING_FEN })).toBeNull();

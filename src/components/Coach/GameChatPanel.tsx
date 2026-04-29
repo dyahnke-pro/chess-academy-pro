@@ -40,6 +40,10 @@ interface GameChatPanelProps {
   isGameOver: boolean;
   gameResult: string;
   lastMove?: { from: string; to: string; san: string } | null;
+  /** Whose move was the most recent half-ply, if known. Threads into
+   *  the intent router so "take back your move" / "take back my move"
+   *  pick the correct ply count. WO-AUDIT-CYCLE-8 follow-up. */
+  lastMoveBy?: 'user' | 'coach';
   history?: string[];
   /** FEN of the position before the last move (for tactic classification) */
   previousFen?: string | null;
@@ -101,6 +105,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       playerColor,
       isGameOver,
       history,
+      lastMoveBy,
       className,
       onBoardAnnotation,
       onRestartGame,
@@ -246,7 +251,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         source: 'GameChatPanel',
         summary: `intercept=tryRouteIntent traceId=${traceId}`,
       });
-      const routedIntent = tryRouteIntent(text, { currentFen: fen });
+      const routedIntent = tryRouteIntent(text, { currentFen: fen, lastMoveBy });
       void logAppAudit({
         kind: 'trace-intercept-result',
         category: 'subsystem',
@@ -1032,7 +1037,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, setMessages, navigate, location, playerColor]);
+    }, [activeProfile, isStreaming, fen, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, setMessages, navigate, location, playerColor]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {

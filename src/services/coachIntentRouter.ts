@@ -36,6 +36,15 @@ export interface IntentRouterContext {
    *  matching `play_move`. When omitted, the router still matches but
    *  defers legality validation to the surface callback. */
   currentFen?: string;
+  /** Whose move was the most recent half-ply. Used by `take_back_move`
+   *  to map "take back my move" / "take back your move" onto a
+   *  ply-count: when the user asks to undo their own move and the
+   *  most-recent move was the coach's, we have to walk back 2 plies
+   *  (their move + the user's prior move) to land on the user's
+   *  previous turn. Symmetrical for "your move". When omitted (no
+   *  game context, e.g. chat-only surfaces), the target distinction
+   *  collapses back to the legacy 1-ply default. */
+  lastMoveBy?: 'user' | 'coach';
 }
 
 /**
@@ -73,7 +82,27 @@ export function tryRouteIntent(
   ) {
     // "two" / "both" / "2" / "two moves" / "both moves" / "whole exchange" → count=2
     const twoBack = /\b(both|two|2|two\s+moves|both\s+moves|whole\s+exchange)\b/i.test(text);
-    return { kind: 'take_back_move', count: twoBack ? 2 : 1 };
+    if (twoBack) return { kind: 'take_back_move', count: 2 };
+
+    // Target detection: "your move" / "the coach('s) move" / "opponent's
+    // move" → undo the coach's last move; "my move" / "the user('s)
+    // move" / "the move I made" → undo the student's last move. When
+    // we know `lastMoveBy`, we can produce the precise count to land
+    // on the requested player's prior turn:
+    //
+    //   target = mine,     lastMoveBy = user  → 1 (most recent IS mine)
+    //   target = mine,     lastMoveBy = coach → 2 (skip coach + user)
+    //   target = opponent, lastMoveBy = coach → 1 (most recent IS theirs)
+    //   target = opponent, lastMoveBy = user  → 2 (skip user + coach)
+    //
+    // Without `lastMoveBy` we fall back to the legacy 1-ply behavior
+    // — the surface still gets the takeback, just on the most-recent
+    // half-move regardless of side.
+    const targetMine = /\b(my (last\s+)?move|the move (i|i'?ve|i\s+just)\s+\w+|user'?s?\s+move)\b/i.test(text);
+    const targetOpponent = /\b(your (last\s+)?move|the (coach|opponent)'?s?\s+move|opponent'?s?\s+move|coach'?s?\s+move)\b/i.test(text);
+    if (targetMine && ctx.lastMoveBy === 'coach') return { kind: 'take_back_move', count: 2 };
+    if (targetOpponent && ctx.lastMoveBy === 'user') return { kind: 'take_back_move', count: 2 };
+    return { kind: 'take_back_move', count: 1 };
   }
 
   // ─── play_move ──────────────────────────────────────────────────
