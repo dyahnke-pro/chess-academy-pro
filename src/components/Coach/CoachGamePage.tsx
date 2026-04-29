@@ -1653,9 +1653,22 @@ export function CoachGamePage(): JSX.Element {
 
         let brainPickSan: string | null = null;
         const intendedOpeningName = useCoachMemoryStore.getState().intendedOpening?.name ?? null;
+        // WO-COACH-MATE-FLOOR: pre-seed the LLM with Stockfish's
+        // bestmove + eval so it has a strong nudge from the start.
+        // The post-move floor below catches obvious mate-walks; this
+        // reduces how often the floor has to fire.
+        const seededAnalysis = await Promise.race([
+          preAnalysisPromise,
+          new Promise<StockfishAnalysis | null>((resolve) =>
+            setTimeout(() => resolve(null), 2_000),
+          ),
+        ]);
+        const engineHint = seededAnalysis && seededAnalysis.bestMove
+          ? ` Engine analysis at depth ${seededAnalysis.depth}: bestmove ${seededAnalysis.bestMove}, eval ${(seededAnalysis.evaluation / 100).toFixed(2)}. Use this as your primary signal — deviations are fine for variety at the student's rating, but never walk into a forced mate.`
+          : '';
         const moveSelectorAsk = intendedOpeningName
-          ? `It is your turn (${aiColor}). The student is rated about ${targetStrength} and has committed to ${intendedOpeningName}. Consult local_opening_book first; if we are still in book, play that move via play_move. If we are out of book, use stockfish_eval and pick a move calibrated to the student's rating, then play it via play_move.`
-          : `It is your turn (${aiColor}). The student is rated about ${targetStrength}. Use stockfish_eval if you want depth, then pick a move calibrated to the student's rating and play it via play_move.`;
+          ? `It is your turn (${aiColor}). The student is rated about ${targetStrength} and has committed to ${intendedOpeningName}. Consult local_opening_book first; if we are still in book, play that move via play_move. If we are out of book, use stockfish_eval and pick a move calibrated to the student's rating, then play it via play_move.${engineHint}`
+          : `It is your turn (${aiColor}). The student is rated about ${targetStrength}. Use stockfish_eval if you want depth, then pick a move calibrated to the student's rating and play it via play_move.${engineHint}`;
         const moveSelectorLiveState: LiveState = {
           surface: 'move-selector',
           fen: game.fen,
@@ -1796,6 +1809,78 @@ export function CoachGamePage(): JSX.Element {
         // Convert the brain's SAN to UCI for tryMakeMove. If the brain
         // emitted no play_move (or an illegal one), fall back to a
         // random legal move so the game never freezes.
+        //
+        // WO-COACH-MATE-FLOOR: hard safety check. Audit cycle 9 caught
+        // the coach walking into Scholar's Mate as Black at move 5
+        // because the LLM's pick wasn't validated against the engine.
+        // Run a quick Stockfish probe on the position AFTER the LLM's
+        // pick — if the student has mate-in-≤-2 from that position,
+        // override with the engine's bestmove. Cheap (depth 8, 1500ms
+        // budget) compared to the cost of letting the coach get mated
+        // mid-tutorial.
+        if (brainPickSan && seededAnalysis && seededAnalysis.bestMove) {
+          try {
+            const probe = new Chess(game.fen);
+            const probedMove = probe.move(brainPickSan);
+            if (probedMove) {
+              const fenAfter = probe.fen();
+              const mateProbe = await withTimeout(
+                stockfishEngine.analyzePosition(fenAfter, 8),
+                1_500,
+                'coach-mate-floor',
+              );
+              if (mateProbe.ok) {
+                const post = mateProbe.value;
+                // Stockfish reports `mateIn` from the side-to-move's
+                // perspective. After the coach's move, side-to-move is
+                // the student — so `mateIn > 0` means the student has
+                // mate, which is exactly the situation we want to
+                // veto. Cap at 2 plies to keep this an ANTI-BLUNDER
+                // check, not a deep tactical engine.
+                if (post.isMate && post.mateIn !== null && post.mateIn > 0 && post.mateIn <= 2) {
+                  void logAppAudit({
+                    kind: 'coach-move-mate-floor-triggered',
+                    category: 'subsystem',
+                    source: 'CoachGamePage.coachTurn',
+                    summary: `LLM picked ${brainPickSan} → student mate-in-${post.mateIn}; overriding with engine bestmove ${seededAnalysis.bestMove}`,
+                    details: JSON.stringify({
+                      llmPickSan: brainPickSan,
+                      mateIn: post.mateIn,
+                      override: seededAnalysis.bestMove,
+                      fenBefore: game.fen,
+                      fenAfter,
+                    }),
+                    fen: game.fen,
+                  });
+                  // Convert engine bestmove (UCI) into SAN for re-validation
+                  // through the same probe path below.
+                  try {
+                    const overrideProbe = new Chess(game.fen);
+                    const overrideMove = overrideProbe.move({
+                      from: seededAnalysis.bestMove.slice(0, 2),
+                      to: seededAnalysis.bestMove.slice(2, 4),
+                      promotion: seededAnalysis.bestMove.length > 4
+                        ? seededAnalysis.bestMove.slice(4, 5)
+                        : undefined,
+                    });
+                    if (overrideMove) {
+                      brainPickSan = overrideMove.san;
+                    }
+                  } catch {
+                    // If we can't convert the engine bestmove, leave
+                    // brainPickSan as-is — at least the audit logged it
+                    // and the user can see the floor fired.
+                  }
+                }
+              }
+            }
+          } catch {
+            // Probe failed (Stockfish hang, illegal state) — fall
+            // through with the LLM's original pick. The floor is a
+            // best-effort safety net, not a hard requirement.
+          }
+        }
+
         let move: string | null = null;
         if (brainPickSan) {
           try {

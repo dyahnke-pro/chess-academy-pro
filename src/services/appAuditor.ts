@@ -196,7 +196,13 @@ export type AuditKind =
   // highlight) ran — joined with the absence/presence of a matching
   // voice/sound event in the next audit window to diagnose which leg
   // of the FX is missing if the user reports silence.
-  | 'coach-move-fx-emitted';
+  | 'coach-move-fx-emitted'
+  // WO-COACH-MATE-FLOOR. Fires when the coach's mate-floor safety
+  // check vetoed the LLM's pick because it walked into a forced mate
+  // (≤ 2 plies). Override is the engine bestmove. Counting these in
+  // production tells us how often the LLM picks losing moves — a
+  // high rate means the prompt or rating-tier calibration needs work.
+  | 'coach-move-mate-floor-triggered';
 
 export interface AuditEntry {
   timestamp: number;
