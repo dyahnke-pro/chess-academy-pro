@@ -1,0 +1,137 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '../../test/utils';
+import { PersonalityPanel } from './PersonalityPanel';
+import { db } from '../../db/schema';
+import { buildUserProfile } from '../../test/factories';
+import * as appAuditor from '../../services/appAuditor';
+import type { UserProfile } from '../../types';
+
+const logAppAuditSpy = vi.spyOn(appAuditor, 'logAppAudit').mockImplementation(async () => {});
+
+describe('PersonalityPanel', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+    logAppAuditSpy.mockClear();
+  });
+
+  function setup(): { profile: UserProfile; setProfile: ReturnType<typeof vi.fn> } {
+    const profile = buildUserProfile();
+    const setProfile = vi.fn();
+    render(<PersonalityPanel profile={profile} setProfile={setProfile} />);
+    return { profile, setProfile };
+  }
+
+  it('renders the row with current personality summary', () => {
+    setup();
+    expect(screen.getByTestId('personality-row')).toBeInTheDocument();
+    // Default profile → "Default · all dials off"
+    expect(screen.getByText(/Default · all dials off/i)).toBeInTheDocument();
+  });
+
+  it('opens the modal panel on row click', () => {
+    setup();
+    fireEvent.click(screen.getByTestId('personality-row'));
+    expect(screen.getByTestId('personality-panel')).toBeInTheDocument();
+    // All 5 picker cards present.
+    expect(screen.getByTestId('personality-card-default')).toBeInTheDocument();
+    expect(screen.getByTestId('personality-card-soft')).toBeInTheDocument();
+    expect(screen.getByTestId('personality-card-edgy')).toBeInTheDocument();
+    expect(screen.getByTestId('personality-card-flirtatious')).toBeInTheDocument();
+    expect(screen.getByTestId('personality-card-drill-sergeant')).toBeInTheDocument();
+  });
+
+  it('selecting a personality auto-seeds the dial defaults', () => {
+    setup();
+    fireEvent.click(screen.getByTestId('personality-row'));
+    fireEvent.click(screen.getByTestId('personality-card-drill-sergeant'));
+    // Drill sergeant defaults: profanity=hard, mockery=hard, flirt=none.
+    expect(screen.getByTestId('dial-profanity-hard')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByTestId('dial-mockery-hard')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByTestId('dial-flirt-none')).toHaveAttribute('aria-checked', 'true');
+  });
+
+  it('user can override a dial after picking a personality', () => {
+    setup();
+    fireEvent.click(screen.getByTestId('personality-row'));
+    fireEvent.click(screen.getByTestId('personality-card-drill-sergeant'));
+    fireEvent.click(screen.getByTestId('dial-flirt-medium'));
+    expect(screen.getByTestId('dial-flirt-medium')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByTestId('dial-flirt-none')).toHaveAttribute('aria-checked', 'false');
+  });
+
+  it('Save persists the draft to the profile + fires the audit', async () => {
+    const profile = buildUserProfile();
+    // Seed Dexie so the .update() call has a row to mutate. setup()
+    // uses fresh profiles, but it doesn't insert them into Dexie —
+    // for this test we want to verify the persisted side as well.
+    await db.profiles.put(profile);
+    const setProfile = vi.fn();
+    render(<PersonalityPanel profile={profile} setProfile={setProfile} />);
+    fireEvent.click(screen.getByTestId('personality-row'));
+    fireEvent.click(screen.getByTestId('personality-card-edgy'));
+    fireEvent.click(screen.getByTestId('personality-save'));
+    await waitFor(() => {
+      expect(setProfile).toHaveBeenCalledWith(
+        expect.objectContaining({
+          preferences: expect.objectContaining({
+            coachPersonality: 'edgy',
+            coachProfanity: 'medium',
+            coachMockery: 'hard',
+            coachFlirt: 'none',
+          }),
+        }),
+      );
+    });
+    // Persisted to Dexie too.
+    const stored = await db.profiles.get(profile.id);
+    expect(stored?.preferences.coachPersonality).toBe('edgy');
+    // Audit fired with the before / after summary.
+    expect(logAppAuditSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        kind: 'coach-personality-changed',
+        category: 'subsystem',
+      }),
+    );
+  });
+
+  it('Cancel discards the draft (does NOT persist or audit)', async () => {
+    const { setProfile } = setup();
+    fireEvent.click(screen.getByTestId('personality-row'));
+    fireEvent.click(screen.getByTestId('personality-card-flirtatious'));
+    fireEvent.click(screen.getByTestId('personality-cancel'));
+    await waitFor(() => {
+      expect(screen.queryByTestId('personality-panel')).not.toBeInTheDocument();
+    });
+    expect(setProfile).not.toHaveBeenCalled();
+    expect(logAppAuditSpy).not.toHaveBeenCalled();
+  });
+
+  it('Reset dials resets to current draft personality defaults', () => {
+    setup();
+    fireEvent.click(screen.getByTestId('personality-row'));
+    fireEvent.click(screen.getByTestId('personality-card-drill-sergeant'));
+    // Override a dial.
+    fireEvent.click(screen.getByTestId('dial-profanity-none'));
+    expect(screen.getByTestId('dial-profanity-none')).toHaveAttribute('aria-checked', 'true');
+    // Reset → drill sergeant default = hard.
+    fireEvent.click(screen.getByTestId('personality-reset-dials'));
+    expect(screen.getByTestId('dial-profanity-hard')).toHaveAttribute('aria-checked', 'true');
+  });
+
+  it('row summary updates after Save', async () => {
+    const profile = buildUserProfile();
+    let saved: UserProfile = profile;
+    const setProfile = vi.fn((p: UserProfile) => {
+      saved = p;
+    });
+    const { rerender } = render(<PersonalityPanel profile={profile} setProfile={setProfile} />);
+    fireEvent.click(screen.getByTestId('personality-row'));
+    fireEvent.click(screen.getByTestId('personality-card-edgy'));
+    fireEvent.click(screen.getByTestId('personality-save'));
+    await waitFor(() => expect(setProfile).toHaveBeenCalled());
+    rerender(<PersonalityPanel profile={saved} setProfile={setProfile} />);
+    expect(screen.getByText(/Edgy/)).toBeInTheDocument();
+    expect(screen.getByText(/P:Medium M:Hard F:None/)).toBeInTheDocument();
+  });
+});

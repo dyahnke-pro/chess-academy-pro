@@ -10,6 +10,7 @@ import { exportUserData } from '../../services/dbService';
 import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
+import { PersonalityPanel } from './PersonalityPanel';
 import { FeedbackForm } from '../Feedback/FeedbackForm';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
@@ -766,6 +767,12 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <VoiceSettingsPanel />
+      </div>
+
+      {/* WO-COACH-PERSONALITIES (PR C) — single row tucked next to the
+       *  voice settings; opens a modal sub-panel with picker + dials. */}
+      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+        <PersonalityPanel profile={profile} setProfile={setProfile} />
       </div>
     </div>
   );
