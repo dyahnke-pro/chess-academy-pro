@@ -3,6 +3,7 @@ import { useAppStore } from '../../stores/appStore';
 import { Chess } from 'chess.js';
 import { motion } from 'framer-motion';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { VoiceDebugPanel } from './VoiceDebugPanel';
 import { useChessGame } from '../../hooks/useChessGame';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
@@ -769,15 +770,27 @@ export function WalkthroughMode({
     )
   ) : undefined;
 
+  // Show the diagnostic panel on any non-production deploy or when
+  // ?debug=1 is in the URL. Production hostname omits it so end-users
+  // never see it.
+  const showDebugPanel =
+    typeof window !== 'undefined' &&
+    (window.location.search.includes('debug=1') ||
+      (window.location.hostname.includes('vercel.app') &&
+        !window.location.hostname.startsWith('chess-academy-pro.')));
+
   return (
-    <ChessLessonLayout
-      data-testid="walkthrough-mode"
-      header={header}
-      aboveBoard={aboveBoard}
-      board={board}
-      belowBoard={belowBoard}
-      controls={controls}
-      belowControls={belowControls}
-    />
+    <>
+      <ChessLessonLayout
+        data-testid="walkthrough-mode"
+        header={header}
+        aboveBoard={aboveBoard}
+        board={board}
+        belowBoard={belowBoard}
+        controls={controls}
+        belowControls={belowControls}
+      />
+      {showDebugPanel && <VoiceDebugPanel />}
+    </>
   );
 }

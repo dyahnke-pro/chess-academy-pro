@@ -239,6 +239,43 @@ class VoiceService {
     return this.lastTier;
   }
 
+  /** Snapshot of the last speak() attempt — what text, what tier
+   *  served it, whether Polly responded with audio, and any error
+   *  message. Surfaced via a debug panel (?debug=1) so silent rapid-
+   *  fire bugs can be diagnosed without DevTools access. */
+  getLastSpeakDiagnostic(): {
+    text: string;
+    tier: VoiceTier;
+    pollyAttempted: boolean;
+    pollyOk: boolean | null;
+    pollyStatus: number | null;
+    audioContextState: string;
+    error: string | null;
+    timestamp: number;
+  } {
+    return { ...this.lastSpeakDiagnostic };
+  }
+
+  private lastSpeakDiagnostic: {
+    text: string;
+    tier: VoiceTier;
+    pollyAttempted: boolean;
+    pollyOk: boolean | null;
+    pollyStatus: number | null;
+    audioContextState: string;
+    error: string | null;
+    timestamp: number;
+  } = {
+    text: '',
+    tier: 'muted',
+    pollyAttempted: false,
+    pollyOk: null,
+    pollyStatus: null,
+    audioContextState: 'unknown',
+    error: null,
+    timestamp: 0,
+  };
+
   // Cached preferences to avoid DB read on every speak() call
   private cachedPrefs: {
     voiceEnabled: boolean;
@@ -385,6 +422,18 @@ class VoiceService {
   }
 
   private async speakInternal(text: string, force: boolean): Promise<void> {
+    this.lastSpeakDiagnostic = {
+      text: text.slice(0, 80),
+      tier: 'muted',
+      pollyAttempted: false,
+      pollyOk: null,
+      pollyStatus: null,
+      audioContextState: typeof AudioContext !== 'undefined'
+        ? (((globalThis as unknown as { _sharedAudioContext?: AudioContext })._sharedAudioContext)?.state ?? 'no-context')
+        : 'no-AudioContext',
+      error: null,
+      timestamp: Date.now(),
+    };
     // Dev-mode guard: warn when a new speak fires while a previous one
     // is still playing. This is the root cause of every "two voices
     // overlap" bug we've fixed — callers doing `void speak(A)` then
@@ -422,11 +471,15 @@ class VoiceService {
       this.speed = 0.95;
       await this.speakFallback(text);
       this.lastTier = 'web-speech';
+      this.lastSpeakDiagnostic.tier = 'web-speech';
+      this.lastSpeakDiagnostic.error = 'no prefs loaded';
       return;
     }
 
     if (!force && !prefs.voiceEnabled) {
       this.lastTier = 'muted';
+      this.lastSpeakDiagnostic.tier = 'muted';
+      this.lastSpeakDiagnostic.error = 'prefs.voiceEnabled is false';
       return;
     }
 
@@ -440,33 +493,37 @@ class VoiceService {
 
     this.speed = prefs.voiceSpeed;
 
-    // Tier 1: Amazon Polly. `isPollyLive()` handles cooldown expiry
-    // so a transient failure doesn't drop us to Web Speech forever.
+    // Tier 1: Amazon Polly.
     if (prefs.pollyEnabled && this.isPollyLive()) {
       const success = await this.speakPolly(text, prefs.pollyVoice);
       if (success) {
         this.lastTier = 'polly';
+        this.lastSpeakDiagnostic.tier = 'polly';
         return;
       }
-      // fall through to tiers 2/3 for this call; Polly will be retried
-      // on the next call once the cooldown expires (see isPollyLive).
     }
 
-    // Tier 2: Offline voice packs (pre-rendered clips cached in IndexedDB)
+    // Tier 2: Offline voice packs.
     if (voicePackService.isReady()) {
       const played = await voicePackService.speak(text, this.speed);
       if (played) {
         this.lastTier = 'voice-pack';
+        this.lastSpeakDiagnostic.tier = 'voice-pack';
         return;
       }
     }
 
-    // Tier 3: Web Speech API (with user's selected system voice)
+    // Tier 3: Web Speech API.
     if (prefs.systemVoiceURI) {
       speechService.setVoice(prefs.systemVoiceURI);
     }
     await this.speakFallback(text);
     this.lastTier = 'web-speech';
+    this.lastSpeakDiagnostic.tier = 'web-speech';
+    if (!this.lastSpeakDiagnostic.error) {
+      this.lastSpeakDiagnostic.error =
+        'fell through to web-speech (Polly + voice-packs both failed; web-speech is disabled)';
+    }
   }
 
   /** Register MediaSession action handlers so BT headset / OS media
@@ -554,56 +611,48 @@ class VoiceService {
   }
 
   private async speakPolly(text: string, voice: string): Promise<boolean> {
+    this.lastSpeakDiagnostic.pollyAttempted = true;
     try {
       const key = this.pollyKey(text, voice);
-      // Use touchAudioCacheEntry so a hit marks the entry as
-      // most-recently-used (LRU order). Previously a plain get
-      // left the insertion order as-is — common re-speaks stayed
-      // near the eviction front even when they were hot.
       let arrayBuffer = this.touchAudioCacheEntry(key);
 
       if (!arrayBuffer) {
-        // Combine caller-abort signal (new speak() supersedes current)
-        // with a 10s timeout so slow-network Polly can't hang the
-        // voice pipeline indefinitely. Matches the prefetchAudio
-        // pattern (5s) but longer because real speech may be a
-        // longer sentence than prefetched annotations.
         this.abortController = new AbortController();
         const timeoutSignal = AbortSignal.timeout(10_000);
-        // AbortSignal.any is Chrome 116+/Safari 17.4+ — older browsers
-        // (and some WKWebView builds) still need the caller-only
-        // signal. Types mark `any` as always present; reality differs.
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const combinedSignal = AbortSignal.any
           ? AbortSignal.any([this.abortController.signal, timeoutSignal])
           : this.abortController.signal;
         const url = getTtsUrl(text, voice);
         const response = await fetch(url, { signal: combinedSignal });
+        this.lastSpeakDiagnostic.pollyStatus = response.status;
+        this.lastSpeakDiagnostic.pollyOk = response.ok;
         if (!response.ok) {
           this.coolDownPolly(`API error ${response.status}`);
+          this.lastSpeakDiagnostic.error = `Polly /api/tts returned ${response.status}`;
           return false;
         }
         arrayBuffer = await response.arrayBuffer();
         this.abortController = null;
         this.setAudioCacheEntry(key, arrayBuffer);
+      } else {
+        this.lastSpeakDiagnostic.pollyOk = true;
+        this.lastSpeakDiagnostic.pollyStatus = 200; // cache hit
       }
 
       const played = await this.playAudioBuffer(arrayBuffer.slice(0));
       if (!played) {
-        // Audio context was suspended outside a user gesture and
-        // couldn't be resumed. Don't cool down Polly — the fetch
-        // succeeded. Just signal failure so caller falls through to
-        // Web Speech for THIS call; next call may succeed if the user
-        // interacts in the meantime.
+        this.lastSpeakDiagnostic.error = 'AudioContext suspended (need user gesture)';
         return false;
       }
       return true;
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
-        // A subsequent speak() aborted this one; not a Polly failure.
         return false;
       }
-      this.coolDownPolly(error instanceof Error ? error.message : String(error));
+      const msg = error instanceof Error ? error.message : String(error);
+      this.lastSpeakDiagnostic.error = `Polly fetch threw: ${msg}`;
+      this.coolDownPolly(msg);
       this.playing = false;
       this.currentSource = null;
       return false;
