@@ -112,7 +112,7 @@ function StaticBoard({
           lightSquareStyle: theme.lightSquareStyle,
           squareStyles: mergedSquareStyles,
           ...(theme.customPieces ? { pieces: theme.customPieces } : {}),
-          ...(arrows && arrows.length > 0
+          ...(arrows !== undefined
             ? { arrows, clearArrowsOnPositionChange: true }
             : {}),
           ...(onPieceDrop ? { onPieceDrop } : {}),

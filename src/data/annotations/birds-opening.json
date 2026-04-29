@@ -926,7 +926,7 @@
         },
         {
           "san": "fxe5",
-          "annotation": "fxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White accepts the challenge by capturing on e5, sending the f4-pawn forward to seize the center square. This bold acceptance of the From's Gambit gives White a pawn planted on e5 and an extra unit of material, though Black will look to generate quick piece activity in return. The tension is set early, with the game already departing from quieter paths.",
           "arrows": [
             {
               "from": "f4",
@@ -941,7 +941,7 @@
         },
         {
           "san": "exd6",
-          "annotation": "exd6 captures the pawn. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "annotation": "White's pawn strikes again, snapping off the black pawn on d6 in a second consecutive capture. With this move, White has removed a central pawn and now plants a passed pawn deep in Black's half of the board. The tension that defines From's Gambit is already taking shape just three moves in.",
           "arrows": [
             {
               "from": "e5",
@@ -967,15 +967,15 @@
         },
         {
           "san": "g5",
-          "annotation": "g5 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "The black g-pawn lunges forward two squares to g5, a bold and provocative thrust that immediately bears on White's knight posted at f3. This aggressive advance is very much in the spirit of From's Gambit, Black seizing space and generating kingside pressure just a few moves into the game, with the bishop already active on d6 lending support to the advance."
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "White advances the d-pawn two squares to d4, planting a solid stake in the center of the board. This gives White a firm central foundation alongside the knight already developed on f3, and opens a diagonal for the bishop on c1. In the sharp territory of From's Gambit, White uses this moment to consolidate central control after the earlier pawn exchanges have left the position open and dynamic."
         },
         {
           "san": "g4",
-          "annotation": "g4 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "Black's g-pawn surges forward from g5 to g4, landing squarely in the face of the white knight on f3 and putting it under immediate attack. This aggressive pawn thrust is a signature of From's Gambit, reflecting Black's intent to disrupt White's piece coordination and claim space on the kingside."
         },
         {
           "san": "Ne5",
@@ -983,7 +983,7 @@
         },
         {
           "san": "Bxe5",
-          "annotation": "Bxe5 captures the knight. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "annotation": "Black's bishop sweeps from d6 to e5, snapping off the white knight and planting itself on a commanding central square. This capture is the fruit of From's Gambit aggression — Black recovers material while posting the bishop on a dominant outpost deep in White's half of the board. The bishop on e5 now eyes both flanks and exerts immediate pressure across the center.",
           "arrows": [
             {
               "from": "d6",
@@ -994,7 +994,7 @@
         },
         {
           "san": "dxe5",
-          "annotation": "dxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White's d-pawn strikes forward to e5, snapping off the black bishop that had ventured to that square and winning material in the process. The pawn now stands aggressively in the center, a passed-looking piece cutting across the fourth rank's influence. In the chaotic middlegame typical of From's Gambit, White has managed to pocket a bishop while keeping the pawn structure relatively intact.",
           "arrows": [
             {
               "from": "d4",
@@ -1064,7 +1064,7 @@
         },
         {
           "san": "g6",
-          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "Black nudges the g-pawn forward to g6, carving out the diagonal for the dark-squared bishop in a classic fianchetto setup. The move pairs naturally with the knight already posted on f6, giving Black a compact and resilient kingside structure. In this Nimzo-Larsen Hybrid, Black signals an intent to meet White's unorthodox pawn formation with an equally independent piece arrangement."
         },
         {
           "san": "Bb2",
@@ -1159,7 +1159,7 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "White advances the d-pawn two squares to d4, completing the characteristic pawn triangle alongside the pawns already standing on e3 and f4. This sturdy formation, the backbone of the Stonewall, grants White a firm grip on the central light squares while accepting a degree of structural inflexibility in return."
         },
         {
           "san": "c5",
@@ -1234,11 +1234,11 @@
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "White thrusts the e-pawn all the way to e4, staking an immediate and aggressive claim in the center of the board. Now White has pawns on both e4 and f4, creating a bold two-pawn front that directly challenges Black's f5 pawn. This central lunge is the hallmark of the Swiss Gambit, where White responds to Black's early f5 push with sharp central energy rather than quiet development."
         },
         {
           "san": "fxe4",
-          "annotation": "fxe4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black's f-pawn sweeps across to e4, snapping off the white pawn and planting itself deep in White's half of the board. This capture is the defining moment of the Swiss Gambit — Black accepts the offered material without hesitation, claiming a pawn and a central outpost in one stroke. White's remaining pawn on f4 now stands without its e-pawn companion, giving the position an immediately unbalanced character.",
           "arrows": [
             {
               "from": "f5",
@@ -1253,7 +1253,7 @@
         },
         {
           "san": "exd3",
-          "annotation": "exd3 captures the pawn. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "annotation": "Black's pawn, already planted on e4 after snapping up the white e-pawn in the previous move, now sweeps diagonally once more to capture the white d-pawn and settle on d3. In this sharp Swiss Gambit line, Black has harvested two central pawns in rapid succession, driving a bold intruder deep into White's half of the board.",
           "arrows": [
             {
               "from": "e4",
@@ -1283,7 +1283,7 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "Black strikes boldly in the center, advancing the d-pawn all the way to d5 in one aggressive lunge. This central thrust immediately contests space and puts pressure on White's position, with the pawn now firmly planted in the heart of the board. The Swiss Gambit tension is beginning to crystallize as Black asserts a strong central presence alongside the knight already posted on f6."
         },
         {
           "san": "O-O",
@@ -1726,7 +1726,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White brings the knight to its natural square on f3. The knight on f3 improves White's piece coordination and flexibility.",
+          "annotation": "White develops the knight from g1 to f3, establishing a natural post that supports the center and adds a second piece to the game. Alongside the pawn already planted on f4, the knight on f3 contributes to a growing presence in the middle of the board. This is a principled developing move consistent with the Stonewall Kingside Attack's early ambitions.",
           "arrows": [
             {
               "from": "g1",
@@ -1747,7 +1747,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black activates the knight on f6. The knight on f6 improves Black's piece coordination and flexibility.",
+          "annotation": "Black develops the knight from g8 to f6, bringing it to an active central post on only the second move of the game. From f6, the knight contests the e4 square and complements the pawn already stationed on d5, giving Black a solid presence in the middle of the board. This natural developing move is a principled response to White's early Stonewall setup.",
           "arrows": [
             {
               "from": "g8",
@@ -1835,7 +1835,7 @@
         },
         {
           "san": "c3",
-          "annotation": "White pushes the pawn to c3. This pawn move supports a future d-pawn advance, a key central plan.",
+          "annotation": "White advances the c-pawn one square to c3, reinforcing the d4 pawn and lending extra solidity to the center. This sturdy support square ensures the d4 anchor is well protected against any central pressure Black might apply with the pawns already posted on c5 and d5. The move is a hallmark of the Stonewall setup, where White prioritizes a compact, resilient pawn formation over rapid piece development.",
           "arrows": [
             {
               "from": "c2",
@@ -1851,7 +1851,7 @@
         },
         {
           "san": "Nc6",
-          "annotation": "Black places the knight on the active c6 square. The knight on c6 improves Black's piece coordination and flexibility.",
+          "annotation": "Black develops the queen's knight from b8 to c6, bringing it into active play in the center of the board. The knight on c6 adds a second defender to the d4 pawn's neighboring squares and completes a solid cluster of black pieces eyeing the central tension. This natural development continues Black's effort to contest the center while maintaining the pawn structure typical of the Stonewall setup.",
           "arrows": [
             {
               "from": "b8",
@@ -1948,7 +1948,7 @@
         },
         {
           "san": "Nbd2",
-          "annotation": "White develops the knight to d2. The knight on d2 improves White's piece coordination and flexibility.",
+          "annotation": "White tucks the knight from b1 to d2, a characteristic development in the Stonewall Kingside Attack that avoids placing the piece on c3 where it would obstruct the pawn chain. From d2, the knight fits neatly behind the solid wall of pawns on c3, d4, e3, and f4, keeping the position compact and harmonious. The c1 bishop remains unobstructed, and White's central structure stays intact.",
           "arrows": [
             {
               "from": "b1",
@@ -2006,7 +2006,7 @@
         },
         {
           "san": "cxd4",
-          "annotation": "Black captures the pawn on d4. Black improves piece placement heading into the critical phase of the game.",
+          "annotation": "Black's c5-pawn sweeps across to d4, eliminating a White pawn and planting a wedge deep in the center of the board. This capture gives Black a supported, advanced pawn on d4 that sits just one square from White's third rank, bearing down on the c3 pawn and cramping White's queenside pieces. The move signals Black's intention to contest the center aggressively rather than allowing White to dictate the pace of the game.",
           "arrows": [
             {
               "from": "c5",

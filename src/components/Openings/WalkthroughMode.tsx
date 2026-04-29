@@ -501,9 +501,13 @@ export function WalkthroughMode({
     };
   }, [currentAnnotation, computeCharTriggers, autoPlaySpeed]);
 
-  // Convert visible arrows/highlights to board format
+  // Convert visible arrows/highlights to board format. Returns [] (not
+  // undefined) when no arrows so ConsistentChessboard's controlled
+  // arrow path still fires — without this, switching from a step with
+  // arrows to one without leaves the previous step's arrows on the
+  // board (react-chessboard treats missing prop as uncontrolled).
   const boardArrows = useMemo(() => {
-    if (!currentAnnotation?.arrows || visibleArrowCount === 0) return undefined;
+    if (!currentAnnotation?.arrows || visibleArrowCount === 0) return [];
     return currentAnnotation.arrows.slice(0, visibleArrowCount).map((a) => ({
       startSquare: a.from,
       endSquare: a.to,

@@ -106,6 +106,32 @@ Pieces on the board after this move (only these squares are occupied):
 
 // ─── Entry collection ──────────────────────────────────────────────────────
 
+// Patterns are loaded dynamically from src/services/walkthroughNarration.ts
+// at startup so the regen script's "needs regeneration" criterion always
+// matches the runtime's `isGenericAnnotationText` exactly. Manually
+// mirroring the list drifted (mine was 45 patterns, the runtime had 83
+// — 8 entries went un-regenerated until this changed).
+function loadGenericPatterns() {
+  const ts = readFileSync(join(repoRoot, 'src/services/walkthroughNarration.ts'), 'utf-8');
+  const start = ts.indexOf('const GENERIC_ANNOTATION_PATTERNS');
+  if (start < 0) return [];
+  const end = ts.indexOf('];', start) + 2;
+  const block = ts.slice(start, end);
+  const out = [];
+  for (const line of block.split('\n')) {
+    const m = line.match(/^\s*(\/.*\/[a-z]*),?\s*$/);
+    if (!m) continue;
+    try { out.push(eval(m[1])); } catch { /* skip malformed */ }
+  }
+  return out;
+}
+
+const GENERIC_PATTERNS = loadGenericPatterns();
+
+function isGenericFiller(text) {
+  return GENERIC_PATTERNS.some((re) => re.test(text));
+}
+
 function collectEntries() {
   const entries = [];
 
@@ -118,9 +144,10 @@ function collectEntries() {
       const text = (ann.annotation ?? '').trim();
       const overrideKey = `${sublineName ?? 'main'}:${i}`;
       const isEmpty = text.length === 0;
+      const isFiller = !isEmpty && isGenericFiller(text);
       const isOverride = overrides.has(overrideKey);
       if (sublineName == null && !isOverride) continue; // never auto-regen main line
-      if (!isEmpty && !isOverride) continue;
+      if (!isEmpty && !isFiller && !isOverride) continue;
       entries.push({
         sublineName,
         moveIndex: i,
@@ -129,7 +156,7 @@ function collectEntries() {
         move,
         san: move.san,
         fenAfter: chess.fen(),
-        reason: isOverride ? 'override' : 'empty',
+        reason: isOverride ? 'override' : isEmpty ? 'empty' : 'filler',
       });
     }
   }
@@ -204,6 +231,7 @@ async function main() {
   const entries = collectEntries();
   console.log(`[regen] ${target}: ${entries.length} entries to regenerate`);
   console.log(`  empty: ${entries.filter((e) => e.reason === 'empty').length}`);
+  console.log(`  filler (runtime-suppressed): ${entries.filter((e) => e.reason === 'filler').length}`);
   console.log(`  override: ${entries.filter((e) => e.reason === 'override').length}`);
 
   if (entries.length === 0) {
