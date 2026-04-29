@@ -335,6 +335,26 @@ class VoiceService {
         summary: preview,
         details: text.length > 40 ? `length=${text.length}` : undefined,
       });
+      // WO-CYCLE7-FOLLOWUPS — tag-leak detector. Fires when the
+      // text we're about to speak still contains a tag-shaped
+      // substring like `[ARROW:g8:f6]`, `[BOARD:position:...]`, or
+      // `[[ACTION:...]]`. Independent of the strip-regex registry —
+      // catches future tag classes we forget to add to the
+      // canonical strippers. Cycle 7 caught `[ARROW:g8:f6]` getting
+      // spoken aloud through speakQueuedForced because the
+      // streaming sentence-flush dispatched a chunk before
+      // VoiceChatMic's extractArrows() ran on the assembled buffer.
+      const TAG_LEAK_RE = /\[\[?[A-Z][A-Z0-9_]+:.*?\]\]?/i;
+      const m = text.match(TAG_LEAK_RE);
+      if (m) {
+        void logAppAudit({
+          kind: 'tag-leak-detected',
+          category: 'subsystem',
+          source: `voiceService.${method}`,
+          summary: `leaked tag: ${m[0].slice(0, 60)}`,
+          details: text.slice(0, 200),
+        });
+      }
     }).catch(() => {
       // Never break speech on an audit-log failure.
     });
