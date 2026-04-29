@@ -110,6 +110,11 @@ export function CoachPlaySessionView({
         // Stockfish unavailable — LLM will still speak from the move alone.
       }
 
+      // Personality dials so move commentary respects the user's
+      // chosen voice + intensity (profanity / mockery / flirt). Read
+      // at narration time so a mid-session change takes effect on
+      // the next move.
+      const activePrefs = useAppStore.getState().activeProfile?.preferences;
       const commentary = await generateMoveCommentary({
         gameAfter: chessRef.current,
         mover,
@@ -117,6 +122,10 @@ export function CoachPlaySessionView({
         evalAfter,
         bestReplySan,
         subject,
+        personality: activePrefs?.coachPersonality,
+        profanity: activePrefs?.coachProfanity,
+        mockery: activePrefs?.coachMockery,
+        flirt: activePrefs?.coachFlirt,
       });
       if (!isMountedRef.current) return;
       // Store the new eval as the baseline for the NEXT move's swing.

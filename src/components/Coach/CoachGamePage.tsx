@@ -2347,6 +2347,13 @@ export function CoachGamePage(): JSX.Element {
     // Lichess openings DB) and safe to run every move. Resolution
     // precedence: explicit URL subject > committed intent > auto-detect.
     const detectedOpening = detectOpening(game.history);
+    const resolutionSource: 'url' | 'intent' | 'auto-detect' | 'none' = subjectParam
+      ? 'url'
+      : intendedOpening
+        ? 'intent'
+        : detectedOpening
+          ? 'auto-detect'
+          : 'none';
     const resolvedSubject =
       subjectParam ?? intendedOpening?.name ?? detectedOpening?.name ?? null;
     const bookDepth = resolvedSubject
@@ -2354,6 +2361,24 @@ export function CoachGamePage(): JSX.Element {
       : 0;
     const inOpeningTeaching =
       !!resolvedSubject && game.history.length <= Math.max(bookDepth, 12);
+    if (detectedOpening) {
+      void logAppAudit({
+        kind: 'coach-opening-auto-detected',
+        category: 'subsystem',
+        source: 'CoachGamePage.move',
+        summary: `eco=${detectedOpening.eco} name="${detectedOpening.name}" ply=${detectedOpening.plyCount} resolution=${resolutionSource}`,
+        fen: moveResult.fen,
+      });
+    }
+    if (inOpeningTeaching && resolvedSubject) {
+      void logAppAudit({
+        kind: 'coach-opening-teaching-active',
+        category: 'subsystem',
+        source: 'CoachGamePage.move',
+        summary: `subject="${resolvedSubject}" resolution=${resolutionSource} ply=${game.history.length}/${Math.max(bookDepth, 12)}`,
+        fen: moveResult.fen,
+      });
+    }
     const shouldFire =
       narrationDensity !== 'none' &&
       (inOpeningTeaching || shouldCallLlmForMove(verbosity, classification));
@@ -2456,6 +2481,11 @@ export function CoachGamePage(): JSX.Element {
           .reverse()
           .find((m) => m.role === 'user')?.timestamp;
 
+        // Personality dials — picked up at narration time (not at
+        // session start) so a mid-session settings change takes
+        // effect on the next move. Mirrors how the brain (chat) path
+        // reads dials in coach/envelope.ts.
+        const activePrefs = useAppStore.getState().activeProfile?.preferences;
         const llm = await generateMoveCommentary({
           gameAfter: probe,
           mover,
@@ -2472,6 +2502,10 @@ export function CoachGamePage(): JSX.Element {
           groundedNotes,
           recentMoveClassifications,
           lastUserInteractionMs: lastUserChatMs,
+          personality: activePrefs?.coachPersonality,
+          profanity: activePrefs?.coachProfanity,
+          mockery: activePrefs?.coachMockery,
+          flirt: activePrefs?.coachFlirt,
         });
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
         // Mirror the commentary into the shared session so the next
