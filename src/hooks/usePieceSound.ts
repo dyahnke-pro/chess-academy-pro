@@ -21,6 +21,15 @@ export function usePieceSound(): UsePieceSoundReturn {
   const pieceSet = activeProfile?.preferences.pieceSet ?? 'classic';
   const isKidMode = activeProfile?.isKidMode ?? false;
 
+  // WO-COACH-PIECE-SOUND-CUSTOM — pull the four slider values from
+  // user prefs. Defaults match PIECE_SOUND_DEFAULTS so unconfigured
+  // profiles (and existing users who haven't moved a slider) get the
+  // same sound character as before this PR.
+  const pitch = activeProfile?.preferences.pieceSoundPitch ?? 50;
+  const tone = activeProfile?.preferences.pieceSoundTone ?? 50;
+  const waveform = activeProfile?.preferences.pieceSoundWaveform ?? 50;
+  const length = activeProfile?.preferences.pieceSoundLength ?? 50;
+
   // Synchronise soundService settings whenever they change.
   useEffect(() => {
     soundService.setEnabled(soundEnabled);
@@ -28,9 +37,10 @@ export function usePieceSound(): UsePieceSoundReturn {
     soundService.setSoundSet(set);
     // Kid Mode plays slightly louder and more exaggerated.
     soundService.setVolume(isKidMode ? 1.0 : 0.7);
+    soundService.setCustomization({ pitch, tone, waveform, length });
     // Pre-warm the audio cache for the active set.
     soundService.preload();
-  }, [soundEnabled, pieceSet, isKidMode]);
+  }, [soundEnabled, pieceSet, isKidMode, pitch, tone, waveform, length]);
 
   const playMoveSound = useCallback((san: string): void => {
     if (!soundEnabled) return;

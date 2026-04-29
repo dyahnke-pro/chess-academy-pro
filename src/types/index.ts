@@ -500,6 +500,19 @@ export interface UserPreferences {
   showLegalMoves: boolean;
   showCoordinates: boolean;
   pieceAnimationSpeed: PieceAnimationSpeed;
+  // Piece Sound Customization (WO-COACH-PIECE-SOUND-CUSTOM). Layered ON
+  // TOP of the existing style-set / event-type defaults so move /
+  // capture / castle / check stay distinguishable. Each value is
+  // 0–100; defaults below produce the current sound character.
+  /** Pitch multiplier 0–100 (0 = 0.5×, 50 = 1.0×, 100 = 2.0×). */
+  pieceSoundPitch?: number;
+  /** Tone (low-pass filter brightness) 0–100 (0 = warmest, 100 = brightest). */
+  pieceSoundTone?: number;
+  /** Waveform character 0–100 — continuous blend across
+   *  sine → triangle → square → sawtooth. 0 = pure sine. */
+  pieceSoundWaveform?: number;
+  /** Length multiplier 0–100 (0 = 0.5×, 50 = 1.0×, 100 = 2.0×). */
+  pieceSoundLength?: number;
   boardOrientation: boolean;
   // Feedback & Coaching (WO-5)
   moveQualityFlash: boolean;
