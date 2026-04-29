@@ -226,7 +226,24 @@ export type AuditKind =
   // Joined with voice-speak-invoked so a "I have commentary on but
   // hear nothing after my move" report has a complete causal chain.
   | 'coach-move-narration-fired'
-  | 'coach-move-narration-skipped';
+  | 'coach-move-narration-skipped'
+  // Opening auto-detection trail (WO-CONVERSATIONAL-OPENING-COACH).
+  // Fires once per move from CoachGamePage when detectOpening() runs
+  // against the SAN history. Captures: detected eco/name/plyCount,
+  // resolution source (URL subject vs committed intent vs auto-detect
+  // vs nothing), and the resulting `inOpeningTeaching` decision. Use
+  // these to debug "why didn't the coach name my opening?" reports —
+  // either the detection trie missed the line (opening-auto-detected
+  // absent) or teaching mode didn't activate (opening-teaching-active
+  // absent).
+  | 'coach-opening-auto-detected'
+  | 'coach-opening-teaching-active'
+  // Personality dials reaching the move-commentary prompt
+  // (WO-PERSONALITY-IN-COMMENTARY). Mirrors coach-narration-spoken at
+  // the prompt-assembly side so we can confirm in production logs that
+  // profanity=hard / mockery=hard actually flowed into the LLM call —
+  // not just into the TTS layer.
+  | 'coach-move-personality-applied';
 
 export interface AuditEntry {
   timestamp: number;

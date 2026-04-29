@@ -23,6 +23,8 @@ import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemorySer
 import { buildStudentStateBlock } from './studentStateBlock';
 import { recordAudit } from './narrationAuditor';
 import { logAppAudit } from './appAuditor';
+import { renderPersonalityBlock } from '../coach/sources/personalities';
+import type { CoachPersonality, IntensityLevel } from '../coach/types';
 import { detectSanitizerLeak } from './voiceService';
 import type { ChatMessage, CoachVerbosity, MoveClassification } from '../types';
 
@@ -77,6 +79,17 @@ export interface MoveCommentaryInput {
   /** Timestamp (ms) of the most recent user move or chat message.
    *  Used to infer tempo (fast / thinking / idle). */
   lastUserInteractionMs?: number;
+  /** Active coach personality + intensity dials from user preferences.
+   *  When provided, the personality block (voice, profanity, mockery,
+   *  flirt clauses) is prepended to the system prompt so the move
+   *  commentary LLM produces output that matches the user's chosen
+   *  voice — e.g. an "edgy" coach with profanity=hard actually swears
+   *  and mocks instead of defaulting to corporate-coach tone. Mirrors
+   *  the personality plumbing in the brain (chat) path. */
+  personality?: CoachPersonality;
+  profanity?: IntensityLevel;
+  mockery?: IntensityLevel;
+  flirt?: IntensityLevel;
 }
 
 /** How many prior chat messages to include in the commentary prompt.
@@ -165,6 +178,7 @@ async function getLlmCommentary(
     gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone,
     chatHistory, verbosity = 'medium', groundedNotes = [],
     recentMoveClassifications, lastUserInteractionMs,
+    personality, profanity, mockery, flirt,
   } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
@@ -190,7 +204,35 @@ async function getLlmCommentary(
   // carries across sessions so advice stays consistent over time.
   const memoryBlock = await buildCoachMemoryBlock();
   const basePrompt = reviewTone ? REVIEW_SYSTEM_PROMPT : PLAY_SYSTEM_PROMPT;
-  const system = memoryBlock ? `${basePrompt}\n\n${memoryBlock}` : basePrompt;
+  // Personality block — voice / profanity / mockery / flirt clauses.
+  // Prepended to the system prompt so the move-commentary LLM picks up
+  // the same tone the user picked in Settings → Coach. Without this,
+  // dials read at TTS time but the LLM still produced neutral
+  // corporate-coach prose ("Nice." / "Nice catch.") regardless of
+  // profanity=hard or mockery=hard. Falls back to no block when no
+  // personality is supplied — keeps legacy behavior identical.
+  const personalityBlock = personality
+    ? renderPersonalityBlock({
+        personality,
+        profanity: profanity ?? 'none',
+        mockery: mockery ?? 'none',
+        flirt: flirt ?? 'none',
+      })
+    : '';
+  if (personalityBlock) {
+    void logAppAudit({
+      kind: 'coach-move-personality-applied',
+      category: 'subsystem',
+      source: 'coachMoveCommentary.getLlmCommentary',
+      summary: `personality=${personality} profanity=${profanity ?? 'none'} mockery=${mockery ?? 'none'} flirt=${flirt ?? 'none'}`,
+      fen: gameAfter.fen(),
+    });
+  }
+  const promptParts: string[] = [];
+  if (personalityBlock) promptParts.push(personalityBlock);
+  promptParts.push(basePrompt);
+  if (memoryBlock) promptParts.push(memoryBlock);
+  const system = promptParts.join('\n\n');
 
   // Recent chat turns from the shared session — lets the commentary
   // reference what the student just asked or what the coach just said
