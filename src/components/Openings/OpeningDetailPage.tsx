@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { sanitizeForTTS } from '../../services/voiceService';
+import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarrator';
 import { DrillMode } from './DrillMode';
 import { PracticeMode } from './PracticeMode';
 import { OpeningPlayMode } from './OpeningPlayMode';
@@ -160,10 +161,28 @@ export function OpeningDetailPage(): JSX.Element {
     setViewMode('middlegame-practice');
   }, []);
 
+  // Pre-warm the LLM narration cache when the user picks a variation
+  // — fires before WalkthroughMode mounts, so by the time they tap
+  // Play the Dexie cache hit returns instantly. Without this the
+  // first 3-4 moves play with bare-SAN stubs while the LLM call (~7s)
+  // catches up. Idempotent — already-cached results return without
+  // a fresh API call.
+  const prewarmVariationNarration = useCallback((index: number): void => {
+    if (!opening) return;
+    const variation = opening.variations?.[index];
+    if (!variation?.pgn) return;
+    void generateWalkthroughNarrations({
+      openingName: opening.name,
+      variationName: variation.name,
+      pgn: variation.pgn,
+    }).catch(() => { /* never break navigation on a pre-warm failure */ });
+  }, [opening]);
+
   const handleStartVariationWalkthrough = useCallback((index: number): void => {
     setActiveVariationIndex(index);
+    prewarmVariationNarration(index);
     setViewMode('variation-walkthrough');
-  }, []);
+  }, [prewarmVariationNarration]);
 
   const handleStartVariationLearn = useCallback((index: number): void => {
     setActiveVariationIndex(index);

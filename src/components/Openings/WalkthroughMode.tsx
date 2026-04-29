@@ -283,17 +283,25 @@ export function WalkthroughMode({
   // Load annotations — sub-line-specific if key provided, otherwise main line
   useEffect(() => {
     const guard: { cancelled: boolean } = { cancelled: false };
-    // Pre-warm voice service (caches DB prefs + primes AudioContext)
     void voiceService.warmup();
+
+    // Kick off the LLM narration call IMMEDIATELY in parallel with the
+    // annotation file load. The LLM call takes ~7s while loadSubLine
+    // returns within a few ms; running them in parallel saves the
+    // sequential tail. Combined with the pre-warm fired by
+    // OpeningDetailPage when the variation card is selected, the LLM
+    // result usually lands by the time the user hits Play, so we skip
+    // the bare-SAN stub window entirely on first visit.
+    const llmPromise = generateWalkthroughNarrations({
+      openingName: opening.name,
+      variationName: variation?.name,
+      pgn: activePgn,
+    }).catch(() => null as null | { narrations: string[]; fromCache: boolean });
+
     void (async () => {
       const effectiveKey = subLineKey ?? (isVariation ? `variation-${variationIndex}` : undefined);
       let data: OpeningMoveAnnotation[] | null;
       if (effectiveKey) {
-        // Pass both name and PGN so the loader can match by literal
-        // move-prefix (most reliable) before falling back to name or
-        // index lookup. Without PGN, fuzzy name matches were
-        // selecting the wrong subline ("Declined" → "Accepted") and
-        // producing narration that didn't match the board.
         data = await loadSubLineAnnotations(opening.id, effectiveKey, variation?.name, activePgn);
       } else {
         data = await loadAnnotationsForPgn(opening.id, activePgn);
@@ -341,29 +349,26 @@ export function WalkthroughMode({
         return !text || isGenericAnnotationText(text);
       });
       if (!needsFill) return;
-      try {
-        const { narrations } = await generateWalkthroughNarrations({
-          openingName: opening.name,
-          variationName: variation?.name,
-          pgn: activePgn,
-          existingNarrations: data.map((a) => a.narration ?? a.annotation),
-        });
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (guard.cancelled) return;
-        const enriched: OpeningMoveAnnotation[] = data.map((ann, i) => {
-          // Existing-good check uses annotation as a fallback so a
-          // curated non-filler annotation always wins over the LLM.
-          const existing = (ann.narration ?? ann.annotation ?? '').trim();
-          if (existing && !isGenericAnnotationText(existing)) return ann;
-          const fromLlm = narrations[i]?.trim();
-          if (!fromLlm || isGenericAnnotationText(fromLlm)) return ann;
-          return { ...ann, narration: fromLlm };
-        });
-        setAnnotations(enriched);
-        void voiceService.prefetchAudio(enriched.map((a) => a.narration ?? a.annotation));
-      } catch (err: unknown) {
-        console.warn('[WalkthroughMode] LLM narration fill failed:', err);
+
+      // Use the parallel-fetched LLM result kicked off above. If
+      // OpeningDetailPage pre-warmed this variation, the cache hit
+      // returns immediately and the user never sees bare-SAN stubs.
+      const llmResult = await llmPromise;
+      if (guard.cancelled) return;
+      if (!llmResult) {
+        console.warn('[WalkthroughMode] LLM narration fill failed');
+        return;
       }
+      const narrations = llmResult.narrations;
+      const enriched: OpeningMoveAnnotation[] = data.map((ann, i) => {
+        const existing = (ann.narration ?? ann.annotation ?? '').trim();
+        if (existing && !isGenericAnnotationText(existing)) return ann;
+        const fromLlm = narrations[i]?.trim();
+        if (!fromLlm || isGenericAnnotationText(fromLlm)) return ann;
+        return { ...ann, narration: fromLlm };
+      });
+      setAnnotations(enriched);
+      void voiceService.prefetchAudio(enriched.map((a) => a.narration ?? a.annotation));
     })();
     return () => { guard.cancelled = true; };
   }, [opening.id, opening.name, activePgn, subLineKey, isVariation, variationIndex, variation?.name]);
