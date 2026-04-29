@@ -174,7 +174,10 @@ export function WalkthroughMode({
 
   // Analysis toggle overrides
   const { settings } = useSettings();
-  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  // Default to ON in walkthrough mode — students learning openings benefit
+  // from seeing eval shift across each move. Toggle still respects user
+  // input via AnalysisToggles.
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(true);
   const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
   const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
   const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
@@ -290,20 +293,26 @@ export function WalkthroughMode({
     return () => { guard.cancelled = true; };
   }, [opening.id, opening.name, activePgn, subLineKey, isVariation, variationIndex, variation?.name]);
 
-  // Analyze position when it changes
+  // Analyze each position with Stockfish so the eval bar reflects
+  // whatever's on the board. Re-runs whenever the displayed FEN changes
+  // (advance, rewind, jump). Failures used to be swallowed silently —
+  // now they surface to the console so a stuck-at-0.0 eval bar can be
+  // diagnosed.
   useEffect(() => {
     const guard = { cancelled: false };
     void (async () => {
       try {
-        const analysis = await stockfishEngine.analyzePosition(currentFen, 12);
+        const analysis = await stockfishEngine.analyzePosition(currentFen, 14);
         if (!guard.cancelled) {
           setLatestEval(analysis.evaluation);
           setLatestIsMate(analysis.isMate);
           setLatestMateIn(analysis.mateIn);
           setLatestTopLines(analysis.topLines);
         }
-      } catch {
-        // Stockfish not ready yet
+      } catch (err) {
+        if (typeof console !== 'undefined') {
+          console.warn('[WalkthroughMode] stockfish analyze failed:', err);
+        }
       }
     })();
     return () => { guard.cancelled = true; };
