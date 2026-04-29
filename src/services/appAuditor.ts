@@ -176,7 +176,15 @@ export type AuditKind =
   // WO-REAL-FIXES — phase narration deterministic fallback. Fires
   // when the LLM call times out / errors and we render a built-in
   // transition template instead of leaving the user with silence.
-  | 'phase-narration-fallback-shown';
+  | 'phase-narration-fallback-shown'
+  // Opening-tour wiring (WO-COACH-TOUR-WIRING). One entry per quiz
+  // lifecycle stage so a "the coach asked me to play Nf3 and then
+  // ignored my move" report has a complete causal chain. Also fires
+  // when the coach kicks off a walkthrough from the chat surface.
+  | 'quiz-started'
+  | 'quiz-resolved'
+  | 'quiz-cancelled'
+  | 'walkthrough-started-from-coach';
 
 export interface AuditEntry {
   timestamp: number;
