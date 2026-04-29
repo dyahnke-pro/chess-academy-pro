@@ -68,6 +68,29 @@ interface GameChatPanelProps {
    *  restarts the game from the starting position.
    *  WO-COACH-OPERATOR-FOUNDATION-01. */
   onResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Called when the brain emits `quiz_user_for_move` from the chat
+   *  surface. The parent registers a pending quiz on the live board
+   *  and resolves the Promise on the student's next move so the
+   *  brain can narrate feedback in its next round-trip.
+   *  WO-COACH-LICHESS-OPENINGS. */
+  onQuizUserForMove?: (args: {
+    expectedSan: string;
+    prompt: string;
+    allowAlternatives?: readonly string[];
+  }) => Promise<
+    | { ok: true; played: string }
+    | { ok: false; played: string; expected: string }
+    | { ok: false; reason: string }
+  >;
+  /** Called when the brain emits `start_walkthrough_for_opening`. The
+   *  parent navigates to the WalkthroughMode UI seeded with the named
+   *  opening / variation / orientation. WO-COACH-LICHESS-OPENINGS. */
+  onStartWalkthroughForOpening?: (args: {
+    opening: string;
+    variation?: string;
+    orientation?: 'white' | 'black';
+    pgn?: string;
+  }) => { ok: boolean; reason?: string } | Promise<{ ok: boolean; reason?: string }>;
   /** Apply a what-if variation: take back `undo` half-moves, then play
    *  `moves` (SAN) forward. Returns true on success, false if any move
    *  was invalid or there was nothing to undo. Powers the coach's
@@ -109,6 +132,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onTakeBackMove,
       onSetBoardPosition,
       onResetBoard,
+      onQuizUserForMove,
+      onStartWalkthroughForOpening,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -669,6 +694,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                     }
                   }
                 : undefined,
+              onQuizUserForMove,
+              onStartWalkthroughForOpening: onStartWalkthroughForOpening
+                ? async (args): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onStartWalkthroughForOpening(args));
+                      return r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
               traceId,
             },
           ),
@@ -922,6 +958,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   }
                 }
               : undefined,
+            onQuizUserForMove,
+            onStartWalkthroughForOpening: onStartWalkthroughForOpening
+              ? async (args): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onStartWalkthroughForOpening(args));
+                    return r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
             traceId,
           },
         ),
@@ -1032,7 +1079,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, setMessages, navigate, location, playerColor]);
+    }, [activeProfile, isStreaming, fen, history, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove, onStartWalkthroughForOpening, setMessages, navigate, location, playerColor]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {

@@ -318,6 +318,110 @@ export function CoachGamePage(): JSX.Element {
   // Ref to inject messages into GameChatPanel (hints, takeback msgs)
   const gameChatRef = useRef<GameChatPanelHandle>(null);
 
+  // ─── Coach-driven quiz state (WO-COACH-LICHESS-OPENINGS) ───────────
+  // When the LLM emits `quiz_user_for_move`, the surface registers a
+  // pending quiz here. The next student move resolves it: matching
+  // `expectedSan` (or any `allowAlternatives`) → `{ ok: true }`, anything
+  // else → `{ ok: false, played, expected }`. Either branch fires a
+  // `quiz-resolved` audit so the LLM's next round-trip can narrate
+  // feedback. The ref + state pair mirrors the pattern used elsewhere
+  // (phase narration, blunder pause): ref is the synchronous read,
+  // state drives the banner UI.
+  type ActiveQuiz = {
+    active: true;
+    expectedSan: string;
+    allowAlternatives: readonly string[];
+    prompt: string;
+    resolve: (
+      result:
+        | { ok: true; played: string }
+        | { ok: false; played: string; expected: string }
+        | { ok: false; reason: string },
+    ) => void;
+  };
+  type QuizState = ActiveQuiz | { active: false };
+  const [quizState, setQuizState] = useState<QuizState>({ active: false });
+  const quizStateRef = useRef<QuizState>({ active: false });
+
+  const cancelActiveQuizRef = useRef<(reason: string) => void>(() => {});
+  cancelActiveQuizRef.current = (reason: string): void => {
+    const cur = quizStateRef.current;
+    if (!cur.active) return;
+    cur.resolve({ ok: false, reason });
+    quizStateRef.current = { active: false };
+    setQuizState({ active: false });
+    void logAppAudit({
+      kind: 'quiz-cancelled',
+      category: 'subsystem',
+      source: 'CoachGamePage.cancelActiveQuiz',
+      summary: `expected=${cur.expectedSan} reason=${reason}`,
+    });
+  };
+
+  const handleQuizUserForMove = useCallback(
+    (args: {
+      expectedSan: string;
+      prompt: string;
+      allowAlternatives?: readonly string[];
+    }): Promise<
+      | { ok: true; played: string }
+      | { ok: false; played: string; expected: string }
+      | { ok: false; reason: string }
+    > => {
+      // Supersede any in-flight quiz before registering the new one.
+      cancelActiveQuizRef.current('superseded by new quiz');
+      return new Promise((resolve) => {
+        const next: ActiveQuiz = {
+          active: true,
+          expectedSan: args.expectedSan,
+          allowAlternatives: args.allowAlternatives ?? [],
+          prompt: args.prompt,
+          resolve,
+        };
+        quizStateRef.current = next;
+        setQuizState(next);
+        void logAppAudit({
+          kind: 'quiz-started',
+          category: 'subsystem',
+          source: 'CoachGamePage.handleQuizUserForMove',
+          summary: `expected=${args.expectedSan} alts=${(args.allowAlternatives ?? []).join(',') || 'none'}`,
+          details: JSON.stringify(args),
+        });
+      });
+    },
+    [],
+  );
+
+  const handleStartWalkthroughForOpening = useCallback(
+    (args: {
+      opening: string;
+      variation?: string;
+      orientation?: 'white' | 'black';
+      pgn?: string;
+    }): { ok: boolean; reason?: string } => {
+      const params = new URLSearchParams();
+      params.set('subject', args.opening);
+      if (args.variation) params.set('variation', args.variation);
+      if (args.orientation) params.set('orientation', args.orientation);
+      if (args.pgn) params.set('pgn', args.pgn);
+      const route = `/coach/session/walkthrough?${params.toString()}`;
+      void logAppAudit({
+        kind: 'walkthrough-started-from-coach',
+        category: 'subsystem',
+        source: 'CoachGamePage.handleStartWalkthroughForOpening',
+        summary: `opening=${args.opening} variation=${args.variation ?? 'none'} orientation=${args.orientation ?? 'auto'}`,
+        details: JSON.stringify({ ...args, route }),
+      });
+      try {
+        navigate(route);
+        return { ok: true };
+      } catch (err) {
+        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      }
+    },
+    [navigate],
+  );
+
   const playerRating = activeProfile?.currentRating ?? 1420;
 
   // Dynamic sessions redirect here with query params set by SmartSearchBar
@@ -1061,6 +1165,9 @@ export function CoachGamePage(): JSX.Element {
     // Reset the phase-transition ledger so the new game can fire its
     // transitions fresh (WO-PHASE-NARRATION-01).
     phaseStateRef.current = createPhaseTransitionState();
+    // Cancel any pending coach quiz — its expectedSan refers to the
+    // old position and won't match anything in the fresh game.
+    cancelActiveQuizRef.current('game-restart');
     game.resetGame();
     moveCountRef.current = 0;
     setGameState({
@@ -1825,6 +1932,43 @@ export function CoachGamePage(): JSX.Element {
 
   // Handle player move
   const handlePlayerMove = useCallback(async (moveResult: MoveResult) => {
+    // ─── Quiz interceptor (WO-COACH-LICHESS-OPENINGS) ────────────────
+    // If a coach-driven quiz is pending, the student's move resolves
+    // it before any classification / coach reply runs. The Promise
+    // result feeds back to the LLM in its next round-trip; the LLM
+    // reads it and narrates feedback ("perfect — that's the main
+    // line" or "Nf3 is the principled move here, not Nc3"). We do
+    // NOT skip the rest of the function — the move still needs
+    // analysis, eval bar update, blunder detection, etc. The quiz is
+    // a side-channel that runs in parallel with normal flow.
+    {
+      const cur = quizStateRef.current;
+      if (cur.active) {
+        const playedSan = moveResult.san;
+        const accepted =
+          playedSan === cur.expectedSan ||
+          cur.allowAlternatives.includes(playedSan);
+        const result = accepted
+          ? ({ ok: true, played: playedSan } as const)
+          : ({ ok: false, played: playedSan, expected: cur.expectedSan } as const);
+        cur.resolve(result);
+        quizStateRef.current = { active: false };
+        setQuizState({ active: false });
+        void logAppAudit({
+          kind: 'quiz-resolved',
+          category: 'subsystem',
+          source: 'CoachGamePage.handlePlayerMove',
+          summary: `played=${playedSan} expected=${cur.expectedSan} ok=${accepted}`,
+          details: JSON.stringify({
+            played: playedSan,
+            expected: cur.expectedSan,
+            allowAlternatives: cur.allowAlternatives,
+            accepted,
+          }),
+        });
+      }
+    }
+
     // Clear any coach annotations, hints, and reset move navigation when player moves
     handleBackToGame();
     setViewedMoveIndex(null);
@@ -3249,6 +3393,40 @@ export function CoachGamePage(): JSX.Element {
               )}
             </AnimatePresence>
 
+            {/* ─── Coach quiz banner (WO-COACH-LICHESS-OPENINGS) ───────── */}
+            <AnimatePresence>
+              {quizState.active && (
+                <motion.div
+                  initial={{ opacity: 0, y: -16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  className="absolute top-0 left-0 right-0 z-20 rounded-b-2xl border-b-2 border-x-2 border-amber-500/40 backdrop-blur-md overflow-hidden"
+                  style={{ background: 'color-mix(in srgb, var(--color-warning, #f59e0b) 12%, var(--color-bg) 88%)' }}
+                  data-testid="coach-quiz-banner"
+                >
+                  <div className="px-3 py-2.5">
+                    <div className="flex items-center gap-2 mb-1">
+                      <GraduationCap size={16} className="text-amber-400 flex-shrink-0" />
+                      <span className="font-bold text-amber-300 text-sm">Coach is asking</span>
+                    </div>
+                    <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                      {quizState.prompt}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 px-3 pb-3">
+                    <button
+                      onClick={() => cancelActiveQuizRef.current('user-dismissed')}
+                      className="flex-1 py-2 rounded-xl text-xs font-semibold border border-theme-border transition-colors"
+                      style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
+                      data-testid="coach-quiz-dismiss"
+                    >
+                      Skip the quiz
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
           </div>
           {isExploreMode && exploreTopLines.length > 0 && (
             <EngineLines lines={exploreTopLines} fen={exploreFen ?? ''} className="mt-1" />
@@ -3427,6 +3605,8 @@ export function CoachGamePage(): JSX.Element {
               onTakeBackMove={handleChatTakeBackMove}
               onSetBoardPosition={handleChatSetBoardPosition}
               onResetBoard={handleChatResetBoard}
+              onQuizUserForMove={handleQuizUserForMove}
+              onStartWalkthroughForOpening={handleStartWalkthroughForOpening}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}
@@ -3489,6 +3669,8 @@ export function CoachGamePage(): JSX.Element {
               onTakeBackMove={handleChatTakeBackMove}
               onSetBoardPosition={handleChatSetBoardPosition}
               onResetBoard={handleChatResetBoard}
+              onQuizUserForMove={handleQuizUserForMove}
+              onStartWalkthroughForOpening={handleStartWalkthroughForOpening}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}

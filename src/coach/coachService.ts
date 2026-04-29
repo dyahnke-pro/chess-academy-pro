@@ -104,6 +104,12 @@ export interface CoachServiceOptions {
   /** Callback the `navigate_to_route` cerebrum tool uses to actually
    *  push the user-validated route via react-router. WO-BRAIN-04. */
   onNavigate?: ToolExecutionContext['onNavigate'];
+  /** Callback the `quiz_user_for_move` cerebrum tool uses to register
+   *  a one-shot quiz on the live board. WO-COACH-LICHESS-OPENINGS. */
+  onQuizUserForMove?: ToolExecutionContext['onQuizUserForMove'];
+  /** Callback the `start_walkthrough_for_opening` cerebrum tool uses to
+   *  hand off to the WalkthroughMode UI. WO-COACH-LICHESS-OPENINGS. */
+  onStartWalkthroughForOpening?: ToolExecutionContext['onStartWalkthroughForOpening'];
   /** WO-FOUNDATION-02 trace harness — surface-supplied UUID for
    *  joining audit entries across the pipeline. */
   traceId?: string;
@@ -215,6 +221,8 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     onSetBoardPosition: options.onSetBoardPosition,
     onResetBoard: options.onResetBoard,
     onNavigate: options.onNavigate,
+    onQuizUserForMove: options.onQuizUserForMove,
+    onStartWalkthroughForOpening: options.onStartWalkthroughForOpening,
     liveFen: input.liveState.fen,
     traceId: options.traceId,
   };
