@@ -525,6 +525,14 @@ export interface UserPreferences {
    *  See `src/coach/sources/personalities.ts`. Defaults to 'default'
    *  (the original Danya voice). WO-COACH-PERSONALITIES (PR B). */
   coachPersonality?: import('../coach/types').CoachPersonality;
+  /** Per-personality Polly voice override. Empty / missing entries
+   *  fall back to PERSONALITY_VOICE_DEFAULTS in voiceService.ts.
+   *  WO-COACH-PERSONALITY-VOICE — voice + personality are orthogonal
+   *  dials. Lets the user pair any voice with any personality
+   *  ("drill-sergeant Ruth" / "flirtatious Stephen"). */
+  coachPersonalityVoices?: Partial<
+    Record<import('../coach/types').CoachPersonality, string>
+  >;
   /** Profanity dial. Default 'none'. Settings UI seeds the dial with
    *  the per-personality default at first selection (e.g.
    *  drill-sergeant → 'hard'), but once a value is stored here it

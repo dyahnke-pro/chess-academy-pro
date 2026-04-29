@@ -134,4 +134,31 @@ describe('PersonalityPanel', () => {
     expect(screen.getByText(/Edgy/)).toBeInTheDocument();
     expect(screen.getByText(/P:Medium M:Hard F:None/)).toBeInTheDocument();
   });
+
+  it('voice picker per personality renders with sensible defaults (WO-COACH-PERSONALITY-VOICE)', () => {
+    setup();
+    fireEvent.click(screen.getByTestId('personality-row'));
+    // All 5 voice pickers present with default voice pre-selected.
+    expect((screen.getByTestId('personality-voice-default') as HTMLSelectElement).value).toBe('ruth');
+    expect((screen.getByTestId('personality-voice-soft') as HTMLSelectElement).value).toBe('joanna');
+    expect((screen.getByTestId('personality-voice-edgy') as HTMLSelectElement).value).toBe('stephen');
+    expect((screen.getByTestId('personality-voice-flirtatious') as HTMLSelectElement).value).toBe('ruth');
+    expect((screen.getByTestId('personality-voice-drill-sergeant') as HTMLSelectElement).value).toBe('matthew');
+  });
+
+  it('voice override persists only when it differs from the per-personality default', async () => {
+    const profile = buildUserProfile();
+    await db.profiles.put(profile);
+    const setProfile = vi.fn();
+    render(<PersonalityPanel profile={profile} setProfile={setProfile} />);
+    fireEvent.click(screen.getByTestId('personality-row'));
+    // Override edgy to Ruth (default was Stephen).
+    fireEvent.change(screen.getByTestId('personality-voice-edgy'), { target: { value: 'ruth' } });
+    fireEvent.click(screen.getByTestId('personality-save'));
+    await waitFor(() => expect(setProfile).toHaveBeenCalled());
+    // Persisted map contains ONLY the edgy override; defaults aren't
+    // serialized so future default changes auto-apply.
+    const stored = await db.profiles.get(profile.id);
+    expect(stored?.preferences.coachPersonalityVoices).toEqual({ edgy: 'ruth' });
+  });
 });
