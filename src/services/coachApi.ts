@@ -213,6 +213,33 @@ async function callDeepSeekStream(
   return fullText;
 }
 
+/** Module-level scratch space for the last DeepSeek response's metadata.
+ *  Audit-only; read synchronously by callers right after their await on
+ *  getCoachChatResponse so the call→read pair runs in one event-loop
+ *  tick (no interleaving). Captures finish_reason and reasoning_content
+ *  length — the two fields the previous return-string-only contract
+ *  was discarding. Lets the coachMoveCommentary path log a definitive
+ *  llm-response audit instead of inferring "empty content + normal
+ *  latency = ???". */
+export interface LastLlmMetadata {
+  provider: 'deepseek' | 'anthropic';
+  model: string;
+  finishReason: string | null;
+  reasoningContentLength: number;
+  promptTokens: number | null;
+  completionTokens: number | null;
+}
+
+let lastLlmMetadata: LastLlmMetadata | null = null;
+
+/** Read the metadata from the most recent LLM call. Resets to null
+ *  after read so a stale value can't leak across unrelated callers. */
+export function consumeLastLlmMetadata(): LastLlmMetadata | null {
+  const m = lastLlmMetadata;
+  lastLlmMetadata = null;
+  return m;
+}
+
 async function callDeepSeek(
   apiKey: string,
   model: string,
@@ -235,7 +262,24 @@ async function callDeepSeek(
   if (response.usage) {
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
   }
-  return response.choices[0]?.message?.content ?? '';
+  const choice = response.choices[0];
+  // DeepSeek-reasoner emits `reasoning_content` separately from
+  // `content` — the chain-of-thought is hidden from the caller but
+  // shares the `max_tokens` budget. When max_tokens is too small for
+  // both, content can be empty even though the call succeeded. We
+  // capture the length here so coachMoveCommentary's audit can name
+  // the failure mode.
+  const message = choice?.message as { content?: string | null; reasoning_content?: string | null } | undefined;
+  const reasoningContent = message?.reasoning_content;
+  lastLlmMetadata = {
+    provider: 'deepseek',
+    model,
+    finishReason: choice?.finish_reason ?? null,
+    reasoningContentLength: typeof reasoningContent === 'string' ? reasoningContent.length : 0,
+    promptTokens: response.usage?.prompt_tokens ?? null,
+    completionTokens: response.usage?.completion_tokens ?? null,
+  };
+  return message?.content ?? '';
 }
 
 // ── Anthropic ──
