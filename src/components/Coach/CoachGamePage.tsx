@@ -37,6 +37,7 @@ import {
 import { logAppAudit } from '../../services/appAuditor';
 import type { PhaseNarrationVerbosity } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { usePieceSound } from '../../hooks/usePieceSound';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -695,6 +696,12 @@ export function CoachGamePage(): JSX.Element {
     exitPractice,
     setPracticeFromAnnotation,
   } = usePracticePosition();
+
+  // Move sound: ChessBoard already plays the sound on user drag/click,
+  // but coach moves are committed programmatically via game.makeMove
+  // and bypass that path. Hook the same audio service here so coach
+  // moves get the same audible cue as the student's. WO-COACH-OPPONENT-FX.
+  const { playMoveSound } = usePieceSound();
 
   // Post-game practice bridge prompt
   const [pendingChatPrompt, setPendingChatPrompt] = useState<string | null>(null);
@@ -1562,6 +1569,17 @@ export function CoachGamePage(): JSX.Element {
       };
 
       setCoachLastMove({ from: result.from, to: result.to });
+      // WO-COACH-OPPONENT-FX: emit the move/capture sound + an audit
+      // marker so we can verify in the audit log that this fired. The
+      // student gets the same sound on their own moves via ChessBoard's
+      // drag/click handlers; this closes the gap for coach moves.
+      playMoveSound(result.san);
+      void logAppAudit({
+        kind: 'coach-move-fx-emitted',
+        category: 'subsystem',
+        source: 'CoachGamePage.applyCoachMove',
+        summary: `san=${result.san} from=${result.from} to=${result.to}`,
+      });
       setGameState((prev) => ({
         ...prev,
         moves: [...prev.moves, coachMove],

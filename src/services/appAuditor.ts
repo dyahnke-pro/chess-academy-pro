@@ -190,7 +190,13 @@ export type AuditKind =
   // existing coach-brain-envelope-assembled audits so a "why does the
   // coach sound different in this build?" report can be answered
   // by walking the timeline.
-  | 'coach-personality-changed';
+  | 'coach-personality-changed'
+  // WO-COACH-OPPONENT-FX. Fires every time the coach commits a move on
+  // the board. Confirms the coach-move FX path (sound + last-move
+  // highlight) ran — joined with the absence/presence of a matching
+  // voice/sound event in the next audit window to diagnose which leg
+  // of the FX is missing if the user reports silence.
+  | 'coach-move-fx-emitted';
 
 export interface AuditEntry {
   timestamp: number;
