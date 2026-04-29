@@ -1,16 +1,17 @@
 /**
- * Tool registry — exports the full 17-tool toolbelt the spine
- * dispatches. Six cerebellum (read-only deterministic), eleven
+ * Tool registry — exports the full 20-tool toolbelt the spine
+ * dispatches. Seven cerebellum (read-only deterministic), thirteen
  * cerebrum (decisions / side effects). See COACH-BRAIN-00 §"The
  * Cerebellum" and §"The Cerebrum Toolbelt".
  *
- * Spine wires these as (post WO-COACH-OPERATOR-FOUNDATION-01):
+ * Spine wires these as (post WO-COACH-LICHESS-OPENINGS):
  *   FULLY IMPLEMENTED — stockfish_eval, stockfish_classify_move,
  *     lichess_opening_lookup, lichess_master_games,
- *     local_opening_book, navigate_to_route, play_move,
- *     take_back_move, set_board_position, reset_board,
+ *     lichess_game_export, local_opening_book, navigate_to_route,
+ *     play_move, take_back_move, set_board_position, reset_board,
  *     set_intended_opening, clear_memory, record_hint_request,
- *     record_blunder
+ *     record_blunder, quiz_user_for_move,
+ *     start_walkthrough_for_opening
  *   PUNTED w/ flag    — lichess_puzzle_fetch (no theme API)
  *   STUBBED until WO  — speak (BRAIN-05), request_hint_tier (BRAIN-05)
  */
@@ -21,6 +22,7 @@ import { stockfishClassifyMoveTool } from './cerebellum/stockfishClassifyMove';
 import { lichessOpeningLookupTool } from './cerebellum/lichessOpeningLookup';
 import { lichessMasterGamesTool } from './cerebellum/lichessMasterGames';
 import { lichessPuzzleFetchTool } from './cerebellum/lichessPuzzleFetch';
+import { lichessGameExportTool } from './cerebellum/lichessGameExport';
 import { localOpeningBookTool } from './cerebellum/localOpeningBook';
 
 import { navigateToRouteTool } from './cerebrum/navigateToRoute';
@@ -34,6 +36,8 @@ import { speakTool } from './cerebrum/speak';
 import { requestHintTierTool } from './cerebrum/requestHintTier';
 import { recordHintRequestTool } from './cerebrum/recordHintRequest';
 import { recordBlunderTool } from './cerebrum/recordBlunder';
+import { quizUserForMoveTool } from './cerebrum/quizUserForMove';
+import { startWalkthroughForOpeningTool } from './cerebrum/startWalkthroughForOpening';
 
 /** Registered tools, ordered as in COACH-BRAIN-00. */
 export const COACH_TOOLS: Tool[] = [
@@ -43,6 +47,7 @@ export const COACH_TOOLS: Tool[] = [
   lichessOpeningLookupTool,
   lichessMasterGamesTool,
   lichessPuzzleFetchTool,
+  lichessGameExportTool,
   localOpeningBookTool,
   // Cerebrum
   navigateToRouteTool,
@@ -56,6 +61,8 @@ export const COACH_TOOLS: Tool[] = [
   requestHintTierTool,
   recordHintRequestTool,
   recordBlunderTool,
+  quizUserForMoveTool,
+  startWalkthroughForOpeningTool,
 ];
 
 const TOOL_INDEX: Map<string, Tool> = new Map(COACH_TOOLS.map((t) => [t.name, t]));
