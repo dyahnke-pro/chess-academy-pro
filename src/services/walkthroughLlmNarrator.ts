@@ -22,8 +22,10 @@ import { isGenericAnnotationText } from './walkthroughNarration';
 import { db } from '../db/schema';
 
 /** Cache version — bump to invalidate all previously-cached narrations
- *  when the prompt / output format changes. */
-const CACHE_VERSION = 'v1';
+ *  when the prompt / output format changes. v2 invalidates entries
+ *  cached before the WalkthroughMode merge fix that lets curated
+ *  `annotation` text win over potentially-filler LLM output. */
+const CACHE_VERSION = 'v2';
 
 export interface WalkthroughNarrationInput {
   openingName: string;

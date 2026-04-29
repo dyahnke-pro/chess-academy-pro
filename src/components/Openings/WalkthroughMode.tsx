@@ -264,9 +264,16 @@ export function WalkthroughMode({
       // real content is preserved. This is what gives trap/warning and
       // variation walkthroughs the same teaching depth as the dynamic
       // coach-session walkthroughs.
-      const needsFill = data.some(
-        (a) => !a.narration?.trim() || isGenericAnnotationText(a.narration ?? a.annotation),
-      );
+      //
+      // We treat `annotation` as a fallback for `narration` because the
+      // curated JSON files write to `annotation` only. Without this
+      // fallback the LLM would override good curated annotations with
+      // its own (potentially filler) output, leaving sublines silent
+      // when the LLM result trips isGenericAnnotationText at playback.
+      const needsFill = data.some((a) => {
+        const text = (a.narration ?? a.annotation ?? '').trim();
+        return !text || isGenericAnnotationText(text);
+      });
       if (!needsFill) return;
       try {
         const { narrations } = await generateWalkthroughNarrations({
@@ -278,10 +285,12 @@ export function WalkthroughMode({
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (guard.cancelled) return;
         const enriched: OpeningMoveAnnotation[] = data.map((ann, i) => {
-          const existing = (ann.narration ?? '').trim();
+          // Existing-good check uses annotation as a fallback so a
+          // curated non-filler annotation always wins over the LLM.
+          const existing = (ann.narration ?? ann.annotation ?? '').trim();
           if (existing && !isGenericAnnotationText(existing)) return ann;
           const fromLlm = narrations[i]?.trim();
-          if (!fromLlm) return ann;
+          if (!fromLlm || isGenericAnnotationText(fromLlm)) return ann;
           return { ...ann, narration: fromLlm };
         });
         setAnnotations(enriched);
