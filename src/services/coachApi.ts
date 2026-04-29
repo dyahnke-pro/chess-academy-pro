@@ -50,7 +50,20 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   game_post_review:        'deepseek-reasoner',
   position_analysis_chat:  'deepseek-reasoner',
   session_plan_generation: 'deepseek-reasoner',
-  interactive_review:      'deepseek-reasoner',
+  // interactive_review → deepseek-chat (NOT reasoner). Audit log build
+  // 83233ab proved that deepseek-reasoner with max_tokens=420 consumes
+  // all 420 tokens on hidden `reasoning_content` (1400+ chars of CoT)
+  // for per-move commentary, leaving 0-20 tokens for visible `content`
+  // — every llm-response audit showed `finishReason="length"`,
+  // `completionTokens=420`, `reasoningContentLength≈1400`, content
+  // empty or truncated mid-sentence ("Now it's you"). Per-move
+  // narration is conversational coaching prose, not analysis — it
+  // doesn't benefit from chain-of-thought. The Anthropic side already
+  // uses non-reasoning Sonnet for the same task (see ANTHROPIC_MODEL_MAP
+  // below). Moving DeepSeek to deepseek-chat eliminates the wasted
+  // reasoning budget; the same 420 max_tokens now produces ~1500 chars
+  // of actual narration.
+  interactive_review:      'deepseek-chat',
   model_game_annotation:   'deepseek-reasoner',
   middlegame_plan_generation: 'deepseek-reasoner',
 
