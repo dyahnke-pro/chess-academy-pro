@@ -152,7 +152,27 @@ export type AuditKind =
   | 'coach-move-llm-fallback'
   // Level 3: Level 2 also timed out; picking a deterministic legal
   // move from chess.js so the game never freezes. Last-resort.
-  | 'coach-move-emergency-pick';
+  | 'coach-move-emergency-pick'
+  // WO-DEEP-DIAGNOSTICS — diagnostic-only kinds added so the next
+  // production cycle's audit log can definitively answer "which build
+  // was the user on?", "what is Lichess actually returning?", "did
+  // the voice intent dispatch reach the surface callback?".
+  // -------------------------------------------------------------
+  // App-boot snapshot. Fired once on first mount with: buildId, PWA
+  // standalone-mode flag, SW state, navigator.onLine, user-agent.
+  | 'app-boot'
+  // Lichess health probe. Fires from a Settings → debug button OR
+  // when fetchLichessExplorer / fetchCloudEval throws — captures the
+  // exact error shape (name, message, cause, navigator.onLine, the
+  // attempted URL, and the headers actually sent).
+  | 'lichess-health-probe-result'
+  // Voice flow trace. One entry per stage so a "voice take-back
+  // didn't take back" report has a complete causal chain.
+  | 'voice-transcript-received'
+  | 'voice-route-result'
+  | 'voice-callback-invoked'
+  | 'voice-callback-result'
+  | 'voice-game-state-after';
 
 export interface AuditEntry {
   timestamp: number;
@@ -170,6 +190,22 @@ export interface AuditEntry {
   context?: string;
   /** Route at capture time, for repro. */
   route?: string;
+  /** WO-DEEP-DIAGNOSTICS — auto-stamped by logAppAudit. The build
+   *  this entry was generated under (`<git-sha>+<unix-ms>`).
+   *  Production reports answer "which build was the user on?" by
+   *  reading this field instead of guessing from timestamps. */
+  buildId?: string;
+}
+
+/** Build identifier injected at vite-build time. Falls back to
+ *  'unknown' in test / SSR contexts where the define isn't applied. */
+function getBuildId(): string {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    return typeof __BUILD_ID__ !== 'undefined' ? __BUILD_ID__ : 'unknown';
+  } catch {
+    return 'unknown';
+  }
 }
 
 /** Log one entry. Fire-and-forget. Also streams the entry to
@@ -177,12 +213,13 @@ export interface AuditEntry {
  *  `auditStreamUrl` + `auditStreamSecret` in localStorage. Stream
  *  failures are silent; the local Dexie log is still written. */
 export async function logAppAudit(
-  entry: Omit<AuditEntry, 'timestamp' | 'route'>,
+  entry: Omit<AuditEntry, 'timestamp' | 'route' | 'buildId'>,
 ): Promise<void> {
   const filled: AuditEntry = {
     ...entry,
     timestamp: Date.now(),
     route: typeof window !== 'undefined' ? window.location?.pathname : undefined,
+    buildId: getBuildId(),
   };
   try {
     const current = await readLog();
@@ -305,6 +342,7 @@ function formatAuditLogAsMarkdown(log: AuditEntry[]): string {
       `### Finding ${i + 1} — [${entry.category}/${entry.kind}]`,
       `- timestamp: \`${ts}\``,
       `- source: \`${entry.source}\``,
+      entry.buildId ? `- build: \`${entry.buildId}\`` : '',
       entry.route ? `- route: \`${entry.route}\`` : '',
       entry.fen ? `- FEN: \`${entry.fen}\`` : '',
       entry.context ? `- context: \`${entry.context}\`` : '',

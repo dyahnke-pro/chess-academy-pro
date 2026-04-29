@@ -6,6 +6,8 @@ import { voiceService } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
+import { tryRouteIntent } from '../../services/coachIntentRouter';
+import { logAppAudit } from '../../services/appAuditor';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildStudentStateBlock } from '../../services/studentStateBlock';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from '../../services/coachMemoryService';
@@ -73,6 +75,24 @@ interface VoiceChatMicProps {
   onListeningChange?: (listening: boolean) => void;
   /** Called when the LLM response includes arrow annotations for the board. */
   onArrows?: (arrows: BoardArrow[]) => void;
+  // WO-DEEP-DIAGNOSTICS — voice-side intent dispatch surface callbacks.
+  // The voice path used to bypass coachService.ask's tool dispatch
+  // entirely; utterances went straight to getCoachChatResponse which
+  // has no tool-call surface, so "take back" / "play X" produced LLM
+  // chat ABOUT the action instead of an actual dispatch. These
+  // callbacks let the mic pre-route deterministic commands the same
+  // way GameChatPanel.handleSend does, and the voice-flow audit kinds
+  // surface every step so a "voice take-back didn't take back"
+  // report has a complete causal chain.
+  onPlayMove?: (san: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  onTakeBackMove?: (count: number) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  onResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Optional: live `game.history.length` getter so the
+   *  voice-game-state-after audit can prove the take-back actually
+   *  shrank the move list. */
+  getMoveCount?: () => number;
+  /** Optional: live FEN getter for the same audit. */
+  getCurrentFen?: () => string;
 }
 
 const MAX_HISTORY_PAIRS = 3;
@@ -238,7 +258,7 @@ function detectOpeningRequest(text: string): string | null {
   return nameMap[raw] ?? raw;
 }
 
-export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows }: VoiceChatMicProps): JSX.Element {
+export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen }: VoiceChatMicProps): JSX.Element {
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -270,6 +290,125 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
   }, [messages]);
 
   const handleUserMessage = useCallback(async (text: string) => {
+    // WO-DEEP-DIAGNOSTICS — full causal chain for voice utterances.
+    // Stage 1: transcript landed.
+    void logAppAudit({
+      kind: 'voice-transcript-received',
+      category: 'subsystem',
+      source: 'VoiceChatMic.handleUserMessage',
+      summary: `text="${text.slice(0, 80)}" len=${text.length}`,
+      fen,
+    });
+
+    // Stage 2: try to route the transcript as a direct command.
+    // This pipeline matches what GameChatPanel.handleSend does on the
+    // text side, so voice and chat see the same regex shapes.
+    const routedIntent = tryRouteIntent(text, { currentFen: fen });
+    void logAppAudit({
+      kind: 'voice-route-result',
+      category: 'subsystem',
+      source: 'VoiceChatMic.handleUserMessage',
+      summary: routedIntent
+        ? `matched=${routedIntent.kind} args=${JSON.stringify(routedIntent).slice(0, 80)}`
+        : 'matched=none (falling through to LLM)',
+    });
+
+    if (routedIntent) {
+      const userMsg: ChatMessage = {
+        id: `voice-${Date.now()}`,
+        role: 'user',
+        content: text,
+        timestamp: Date.now(),
+      };
+      setMessages([...messagesRef.current, userMsg]);
+      const beforeMoveCount = getMoveCount?.() ?? -1;
+      const beforeFen = getCurrentFen?.() ?? fen;
+
+      // Stage 3 — surface callback dispatch.
+      void logAppAudit({
+        kind: 'voice-callback-invoked',
+        category: 'subsystem',
+        source: 'VoiceChatMic.handleUserMessage',
+        summary: `kind=${routedIntent.kind} hasCallback=${
+          routedIntent.kind === 'play_move'
+            ? typeof onPlayMove === 'function'
+            : routedIntent.kind === 'take_back_move'
+              ? typeof onTakeBackMove === 'function'
+              : routedIntent.kind === 'reset_board'
+                ? typeof onResetBoard === 'function'
+                : 'unsupported-in-voice'
+        }`,
+      });
+
+      let ackText = 'Done.';
+      let ok = false;
+      let reason: string | undefined;
+      try {
+        switch (routedIntent.kind) {
+          case 'play_move': {
+            if (!onPlayMove) { reason = 'no onPlayMove callback'; break; }
+            const r = await Promise.resolve(onPlayMove(routedIntent.san));
+            ok = typeof r === 'boolean' ? r : r.ok;
+            if (ok) ackText = `${routedIntent.san}.`;
+            else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
+            break;
+          }
+          case 'take_back_move': {
+            if (!onTakeBackMove) { reason = 'no onTakeBackMove callback'; break; }
+            const r = await Promise.resolve(onTakeBackMove(routedIntent.count));
+            ok = typeof r === 'boolean' ? r : r.ok;
+            if (ok) ackText = routedIntent.count > 1 ? 'Took both back.' : 'Took it back.';
+            else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
+            break;
+          }
+          case 'reset_board': {
+            if (!onResetBoard) { reason = 'no onResetBoard callback'; break; }
+            const r = await Promise.resolve(onResetBoard());
+            ok = typeof r === 'boolean' ? r : r.ok;
+            if (ok) ackText = 'Reset.';
+            else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
+            break;
+          }
+          default:
+            reason = `intent ${routedIntent.kind} not wired in voice path`;
+        }
+      } catch (err) {
+        reason = err instanceof Error ? err.message : String(err);
+      }
+
+      // Stage 4 — callback result.
+      void logAppAudit({
+        kind: 'voice-callback-result',
+        category: 'subsystem',
+        source: 'VoiceChatMic.handleUserMessage',
+        summary: `kind=${routedIntent.kind} ok=${ok} reason=${reason ?? 'none'}`,
+      });
+
+      // Stage 5 — game state after dispatch. Proves the take-back
+      // actually shrank the move list (or didn't).
+      const afterMoveCount = getMoveCount?.() ?? -1;
+      const afterFen = getCurrentFen?.() ?? fen;
+      void logAppAudit({
+        kind: 'voice-game-state-after',
+        category: 'subsystem',
+        source: 'VoiceChatMic.handleUserMessage',
+        summary: `moveCount ${beforeMoveCount}→${afterMoveCount} fenChanged=${beforeFen !== afterFen}`,
+        fen: afterFen,
+      });
+
+      if (!ok && reason) ackText = `Couldn't do that — ${reason}.`;
+      const ack: ChatMessage = {
+        id: `voice-ack-${Date.now()}`,
+        role: 'assistant',
+        content: ackText,
+        timestamp: Date.now(),
+      };
+      setMessages([...messagesRef.current, userMsg, ack]);
+      voiceService.stop();
+      void voiceService.speakForced(ackText);
+      return;
+    }
+
     // Detect opening requests (e.g. "play the French Defense")
     const requestedOpening = detectOpeningRequest(text);
     if (requestedOpening && onOpeningRequest) {
@@ -459,7 +598,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     };
     setMessages((prev) => [...prev, assistantMsg]);
     setIsStreaming(false);
-  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows]);
+  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen]);
 
   // Keep a ref to handleUserMessage so the onResult callback always uses the latest
   const handleUserMessageRef = useRef(handleUserMessage);

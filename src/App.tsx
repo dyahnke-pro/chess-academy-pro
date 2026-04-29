@@ -10,6 +10,7 @@ import { speechService } from './services/speechService';
 import { voiceService } from './services/voiceService';
 import { db } from './db/schema';
 import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit } from './services/appAuditor';
+import { emitAppBootAudit } from './services/appBootAudit';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -95,6 +96,10 @@ export function App(): JSX.Element {
     // Register the __AUDIT__ DevTools back-door alongside. Also
     // available via the /debug/audit route.
     installConsoleBackdoor();
+    // WO-DEEP-DIAGNOSTICS — capture install / runtime context once
+    // per tab session so production reports name the build, the
+    // standalone mode, the SW state, and the network status at boot.
+    emitAppBootAudit();
     return uninstall;
   }, []);
 
