@@ -495,6 +495,10 @@ class VoiceService {
         prefs.coachPersonalityVoices,
         prefs.pollyVoice,
       );
+      // Narration trace audit — captures the cross-product of voice ×
+      // personality × dials at speak time. Loaded lazily so the audit
+      // module isn't a hard import for the voice path.
+      void this.logNarrationSpoken(text, voiceForSpeak, prefs);
       const success = await this.speakPolly(text, voiceForSpeak);
       if (success) {
         this.lastTier = 'polly';
@@ -603,6 +607,49 @@ class VoiceService {
         details: reason,
       });
     });
+  }
+
+  /** WO-COACH-PERSONALITY-VOICE: emit a `coach-narration-spoken` audit
+   *  with the resolved voice + active personality + dial settings.
+   *  Fires once per Polly speak attempt regardless of whether the
+   *  fetch / playback eventually succeeds — a separate `tts-failure`
+   *  fires on actual error. */
+  private async logNarrationSpoken(
+    text: string,
+    voice: string,
+    prefs: NonNullable<typeof this.cachedPrefs>,
+  ): Promise<void> {
+    try {
+      const { logAppAudit } = await import('./appAuditor');
+      // Re-read full prefs from the live store so we can include the
+      // dial settings without forcing them through the cached prefs
+      // object — the cache only holds the fields voiceService needs at
+      // speak time.
+      const profile = await db.profiles.get('main');
+      const p = (profile?.preferences ?? {}) as Partial<{
+        coachProfanity: string;
+        coachMockery: string;
+        coachFlirt: string;
+      }>;
+      const personality = prefs.coachPersonality ?? 'default';
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'subsystem',
+        source: 'voiceService.speakPolly',
+        summary: `voice=${voice} personality=${personality} text="${text.slice(0, 40)}"`,
+        details: JSON.stringify({
+          voice,
+          personality,
+          profanity: p?.coachProfanity ?? 'none',
+          mockery: p?.coachMockery ?? 'none',
+          flirt: p?.coachFlirt ?? 'none',
+          textLength: text.length,
+          textPreview: text.slice(0, 120),
+        }),
+      });
+    } catch {
+      // Audit failures must not break narration.
+    }
   }
 
   private async speakPolly(text: string, voice: string): Promise<boolean> {
