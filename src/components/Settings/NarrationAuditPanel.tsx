@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getAppAuditLog, clearAppAuditLog } from '../../services/appAuditor';
 import type { AuditCategory, AuditEntry } from '../../services/appAuditor';
-import { AlertTriangle, Trash2, Copy, Check } from 'lucide-react';
+import { runLichessHealthProbe } from '../../services/lichessHealthProbe';
+import { AlertTriangle, Trash2, Copy, Check, Activity } from 'lucide-react';
 
 /**
  * Unified debug viewer for the whole-app auditor.
@@ -21,6 +22,17 @@ export function NarrationAuditPanel(): JSX.Element {
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   const [filter, setFilter] = useState<AuditCategory | 'all'>('all');
+  const [probing, setProbing] = useState(false);
+  // WO-DEEP-DIAGNOSTICS — read the build stamp from the most recent
+  // entry that carries one (every entry will, post this WO).
+  const buildIdHint = useMemo(() => {
+    if (!log || log.length === 0) return null;
+    for (let i = log.length - 1; i >= 0; i--) {
+      const id = log[i].buildId;
+      if (id) return id;
+    }
+    return null;
+  }, [log]);
 
   const refresh = async (): Promise<void> => {
     const data = await getAppAuditLog();
@@ -36,6 +48,21 @@ export function NarrationAuditPanel(): JSX.Element {
     await clearAppAuditLog();
     await refresh();
     setBusy(false);
+  };
+
+  // WO-DEEP-DIAGNOSTICS — manual health probe. Runs the Lichess
+  // 3-shape probe; the audit it emits will appear in the log on the
+  // next refresh.
+  const handleRunDiagnostics = async (): Promise<void> => {
+    setProbing(true);
+    try {
+      await runLichessHealthProbe();
+    } catch {
+      // probe surfaces its own audit on every attempt; UI button
+      // never throws.
+    }
+    await refresh();
+    setProbing(false);
   };
 
   const filtered = useMemo(() => {
@@ -78,11 +105,22 @@ export function NarrationAuditPanel(): JSX.Element {
 
   if (log.length === 0) {
     return (
-      <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-        No issues flagged. The auditor runs continuously in the
-        background and logs narration inconsistencies, runtime
-        exceptions, TTS fallbacks, bad FENs, LLM errors, and
-        unhandled promise rejections as they happen.
+      <div className="space-y-2">
+        <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          No issues flagged. The auditor runs continuously in the
+          background and logs narration inconsistencies, runtime
+          exceptions, TTS fallbacks, bad FENs, LLM errors, and
+          unhandled promise rejections as they happen.
+        </div>
+        <button
+          onClick={() => { void handleRunDiagnostics(); }}
+          disabled={probing}
+          className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
+          data-testid="run-diagnostics"
+        >
+          <Activity size={12} />
+          {probing ? 'Running…' : 'Run Lichess health probe'}
+        </button>
       </div>
     );
   }
@@ -96,9 +134,22 @@ export function NarrationAuditPanel(): JSX.Element {
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="text-xs flex items-center gap-1.5" style={{ color: 'var(--color-text-muted)' }}>
           <AlertTriangle size={12} style={{ color: 'var(--color-accent)' }} />
-          <span>{log.length} total · {filtered.length} shown</span>
+          <span>
+            {log.length} total · {filtered.length} shown
+            {buildIdHint ? ` · build ${buildIdHint}` : ''}
+          </span>
         </div>
         <div className="flex gap-1">
+          <button
+            onClick={() => { void handleRunDiagnostics(); }}
+            disabled={probing}
+            className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
+            data-testid="run-diagnostics"
+            title="Probe Lichess explorer with 3 different fetch shapes and audit the result"
+          >
+            <Activity size={12} />
+            {probing ? 'Probing…' : 'Probe Lichess'}
+          </button>
           <button
             onClick={() => { void handleCopy(); }}
             className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
@@ -179,6 +230,11 @@ export function NarrationAuditPanel(): JSX.Element {
                 route: {entry.route}
               </div>
             )}
+            {entry.buildId && (
+              <div className="text-[10px] font-mono" style={{ color: 'var(--color-text-muted)' }}>
+                build: {entry.buildId}
+              </div>
+            )}
             {entry.details && (
               <details className="text-[10px]">
                 <summary style={{ color: 'var(--color-text-muted)' }}>details</summary>
@@ -256,6 +312,7 @@ export function formatLogAsMarkdown(log: AuditEntry[]): string {
       `### Finding ${i + 1} — [${entry.category}/${entry.kind}]`,
       `- timestamp: \`${ts}\``,
       `- source: \`${entry.source}\``,
+      entry.buildId ? `- build: \`${entry.buildId}\`` : '',
       entry.route ? `- route: \`${entry.route}\`` : '',
       entry.fen ? `- FEN: \`${entry.fen}\`` : '',
       entry.context ? `- context: \`${entry.context}\`` : '',

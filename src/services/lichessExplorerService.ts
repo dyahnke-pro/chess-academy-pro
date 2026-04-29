@@ -1,4 +1,5 @@
 import type { LichessExplorerResult, LichessCloudEval } from '../types';
+import { logAppAudit } from './appAuditor';
 
 const EXPLORER_BASE = 'https://explorer.lichess.ovh';
 const LICHESS_API_BASE = 'https://lichess.org/api';
@@ -8,21 +9,66 @@ const LICHESS_API_BASE = 'https://lichess.org/api';
  *  with their own timeout still get protection at the service edge. */
 const LICHESS_FETCH_TIMEOUT_MS = 5000;
 
-/** Lichess API ToS asks for an identifying User-Agent. Audit Finding
- *  28 from production showed `lichess_opening_lookup` returning 401
- *  on the explorer endpoints; per Lichess docs the public explorer
- *  doesn't actually require auth, but the gateway will refuse
- *  requests without a User-Agent it recognizes as a real client.
- *  WO-COACH-RESILIENCE part D. */
-const LICHESS_USER_AGENT =
-  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app)';
-
+/** WO-DEEP-DIAGNOSTICS — only `Accept: application/json` is sent.
+ *
+ *  Earlier shapes set a custom `User-Agent` per Lichess ToS recommen-
+ *  dation, but `User-Agent` is on the browser fetch forbidden-header
+ *  list — older iOS WKWebView throws "Load failed" on the fetch call
+ *  when the page tries to set a forbidden header (audit cycle 5
+ *  Findings 40 / 90 / 125 are exactly this).
+ *
+ *  `Accept: application/json` is on the CORS-safelist regardless of
+ *  value, so it doesn't trigger an OPTIONS preflight, and the
+ *  endpoint returns JSON for read-only queries without any
+ *  identifying header. */
 const LICHESS_HEADERS: Record<string, string> = {
   Accept: 'application/json',
-  'User-Agent': LICHESS_USER_AGENT,
 };
 
 export type ExplorerSource = 'lichess' | 'masters';
+
+/** WO-DEEP-DIAGNOSTICS — capture the actual error fields whenever a
+ *  Lichess fetch fails. The legacy "Explorer API error: 401" shape
+ *  loses the WebKit `error.name` / `error.cause` / `navigator.onLine`
+ *  signal that distinguishes forbidden-header throw from CORS
+ *  preflight from real outage. Production audit is emitted from
+ *  here so we never lose the diagnostic data even when the caller
+ *  swallows the throw. */
+function emitLichessFailure(
+  source: string,
+  url: string,
+  err: unknown,
+  statusIfReachable: number | null,
+): void {
+  const e = err as { name?: string; message?: string; cause?: unknown } | null;
+  const errorName = e?.name ?? 'UnknownError';
+  const errorMessage = e?.message ?? (err === null ? 'null' : String(err));
+  const cause =
+    e?.cause !== undefined && e?.cause !== null
+      ? typeof e.cause === 'string'
+        ? e.cause
+        : JSON.stringify(e.cause)
+      : null;
+  void logAppAudit({
+    kind: 'lichess-error',
+    category: 'subsystem',
+    source,
+    summary: `url=${url} status=${statusIfReachable ?? 'throw'} error=${errorName}: ${errorMessage}`,
+    details: JSON.stringify(
+      {
+        url,
+        status: statusIfReachable,
+        errorName,
+        errorMessage,
+        cause,
+        online: typeof navigator !== 'undefined' ? navigator.onLine : null,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+      },
+      null,
+      2,
+    ),
+  });
+}
 
 /**
  * Fetch opening explorer data for a FEN position.
@@ -38,11 +84,23 @@ export async function fetchLichessExplorer(
     params.set('ratings', '1600,1800,2000,2200,2500');
   }
   const url = `${EXPLORER_BASE}/${source}?${params.toString()}`;
-  const response = await fetch(url, {
-    headers: LICHESS_HEADERS,
-    signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers: LICHESS_HEADERS,
+      signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
+    });
+  } catch (err) {
+    emitLichessFailure('lichessExplorerService.fetchLichessExplorer', url, err, null);
+    throw err;
+  }
   if (!response.ok) {
+    emitLichessFailure(
+      'lichessExplorerService.fetchLichessExplorer',
+      url,
+      new Error(`HTTP ${response.status}`),
+      response.status,
+    );
     throw new Error(`Explorer API error: ${response.status}`);
   }
   return response.json() as Promise<LichessExplorerResult>;
@@ -59,12 +117,24 @@ export async function fetchCloudEval(
 ): Promise<LichessCloudEval | null> {
   const params = new URLSearchParams({ fen, multiPv: String(multiPv) });
   const url = `${LICHESS_API_BASE}/cloud-eval?${params.toString()}`;
-  const response = await fetch(url, {
-    headers: LICHESS_HEADERS,
-    signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers: LICHESS_HEADERS,
+      signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
+    });
+  } catch (err) {
+    emitLichessFailure('lichessExplorerService.fetchCloudEval', url, err, null);
+    throw err;
+  }
   if (response.status === 404) return null;
   if (!response.ok) {
+    emitLichessFailure(
+      'lichessExplorerService.fetchCloudEval',
+      url,
+      new Error(`HTTP ${response.status}`),
+      response.status,
+    );
     throw new Error(`Cloud eval API error: ${response.status}`);
   }
   return response.json() as Promise<LichessCloudEval>;

@@ -1,14 +1,36 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import { execSync } from 'node:child_process';
+
+// WO-DEEP-DIAGNOSTICS — generate a build identifier at config time so
+// every build embeds a unique stamp the audit log can attribute findings
+// to. Format: `<git-sha>+<unix-ms>`. Falls back to ms-only when git
+// isn't available (CI without full history). Auto-stamped on every
+// audit entry by appAuditor.logAppAudit so production reports answer
+// "which build was the user on?" definitively.
+function resolveBuildId(): string {
+  let sha = '';
+  try {
+    sha = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .trim();
+  } catch {
+    // Vercel build, no git in env, etc. Fall through to ms-only.
+  }
+  const ms = Date.now();
+  return sha ? `${sha}+${ms}` : `build+${ms}`;
+}
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_']);
+  const buildId = resolveBuildId();
   return {
   envPrefix: ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_'],
   define: {
     __ANTHROPIC_KEY__: JSON.stringify(env.ANTHROPIC_KEY || process.env.ANTHROPIC_KEY || ''),
     __DEEPSEEK_KEY__: JSON.stringify(env.DEEPSEEK_KEY || process.env.DEEPSEEK_KEY || ''),
+    __BUILD_ID__: JSON.stringify(buildId),
   },
   plugins: [
     react(),

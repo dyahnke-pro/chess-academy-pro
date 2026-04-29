@@ -75,6 +75,15 @@ export interface ChessBoardProps {
   onVoiceActiveChange?: (active: boolean) => void;
   /** Called when the voice chat LLM response includes arrow annotations. */
   onVoiceArrows?: (arrows: Array<{ startSquare: string; endSquare: string; color: string }>) => void;
+  // WO-DEEP-DIAGNOSTICS — voice-side intent dispatch surface callbacks.
+  // Without these the voice path can't actually execute commands.
+  onVoicePlayMove?: (san: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  onVoiceTakeBackMove?: (count: number) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  onVoiceResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Live getter for game-state-after audit. */
+  getVoiceMoveCount?: () => number;
+  /** Live getter for game-state-after audit. */
+  getVoiceCurrentFen?: () => string;
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -114,6 +123,11 @@ export function ChessBoard({
   voicePlayerColor,
   onVoiceActiveChange,
   onVoiceArrows,
+  onVoicePlayMove,
+  onVoiceTakeBackMove,
+  onVoiceResetBoard,
+  getVoiceMoveCount,
+  getVoiceCurrentFen,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   const { playMoveSound } = usePieceSound();
@@ -424,6 +438,11 @@ export function ChessBoard({
               playerColor={voicePlayerColor}
               onListeningChange={onVoiceActiveChange}
               onArrows={onVoiceArrows}
+              onPlayMove={onVoicePlayMove}
+              onTakeBackMove={onVoiceTakeBackMove}
+              onResetBoard={onVoiceResetBoard}
+              getMoveCount={getVoiceMoveCount}
+              getCurrentFen={getVoiceCurrentFen}
             />
           )}
         </div>
