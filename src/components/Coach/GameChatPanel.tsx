@@ -629,6 +629,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               // correctly skipped tools and answered narratively, which
               // is the structural cause of tactical hallucinations.
               maxToolRoundTrips: 3,
+              // WO-COACH-PERSONALITIES (PR B): thread the picked
+              // personality + dial settings into every chat ask.
+              // Defaults preserve current Danya voice.
+              personality: activeProfile.preferences.coachPersonality,
+              profanity: activeProfile.preferences.coachProfanity,
+              mockery: activeProfile.preferences.coachMockery,
+              flirt: activeProfile.preferences.coachFlirt,
               onChunk: (chunk: string) => {
                 fullResponse += chunk;
                 const displayText = fullResponse
@@ -894,6 +901,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             // so tactical questions during a walkthrough or pre-game
             // chat get engine-grounded answers.
             maxToolRoundTrips: 3,
+            // WO-COACH-PERSONALITIES (PR B): same prefs threading as
+            // the in-game ask above.
+            personality: activeProfile.preferences.coachPersonality,
+            profanity: activeProfile.preferences.coachProfanity,
+            mockery: activeProfile.preferences.coachMockery,
+            flirt: activeProfile.preferences.coachFlirt,
             onChunk: (chunk: string) => {
               drawerFullResponse += chunk;
               const displayText = drawerFullResponse
