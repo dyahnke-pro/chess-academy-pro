@@ -1626,6 +1626,39 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             source: 'CoachGameReview',
             summary: `enabled=${!v}`,
           });
+          // Layout state snapshot — captures viewport + board container
+          // dims at the moment the panel opens / closes. Diagnoses
+          // "showing engine lines shrinks the board" by making the
+          // before/after diff measurable. The panel renders on the next
+          // tick; we run after a microtask so the measurement reflects
+          // the new layout state.
+          if (typeof window !== 'undefined') {
+            const enabling = !v;
+            queueMicrotask(() => {
+              const vw = window.innerWidth;
+              const vh = window.innerHeight;
+              const orientation = vw > vh ? 'landscape' : 'portrait';
+              // Best-effort board measurement via a stable selector.
+              // Falls back to null when the wrapper can't be found —
+              // never throws, never blocks the toggle.
+              const boardEl = document.querySelector<HTMLElement>(
+                '[data-testid="consistent-chessboard"], .chessboard-wrapper, .react-chessboard',
+              );
+              const boardW = boardEl?.getBoundingClientRect().width ?? null;
+              const boardH = boardEl?.getBoundingClientRect().height ?? null;
+              void logAppAudit({
+                kind: 'engine-lines-layout-state',
+                category: 'subsystem',
+                source: 'CoachGameReview.handleToggleEngineLines',
+                summary: `panel=${enabling ? 'open' : 'closed'} orientation=${orientation} viewport=${vw}x${vh} board=${boardW ? Math.round(boardW) : '?'}x${boardH ? Math.round(boardH) : '?'}`,
+                details: JSON.stringify({
+                  panelEnabled: enabling,
+                  viewport: { width: vw, height: vh, orientation },
+                  board: { width: boardW, height: boardH },
+                }),
+              });
+            });
+          }
           return !v;
         });
       };

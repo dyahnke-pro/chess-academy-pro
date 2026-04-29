@@ -238,6 +238,43 @@ export type AuditKind =
   // absent).
   | 'coach-opening-auto-detected'
   | 'coach-opening-teaching-active'
+  // Diagnostic audits added to identify root causes for user-reported
+  // bugs WITHOUT guessing the fix. Each one captures the inputs that
+  // would otherwise require speculation. Once the audit log shows the
+  // failure mode for each, the next PR can fix from evidence.
+  // -----------------------------------------------------------------
+  // Review playback step trail. Fires from useReviewPlayback.commitPly
+  // every time the ply changes — captures from-ply, to-ply, nav source
+  // (goForward / goBack / goToStart / goToEnd / jumpToPly), the SAN at
+  // the destination, and whether speech was requested. Diagnoses
+  // "review skips two pieces" reports: if `to - from > 1` from a
+  // goForward call, the bug is concrete.
+  | 'review-playback-step'
+  // Engine-lines layout state. Fires from CoachGameReview when the
+  // engine-lines panel is toggled — captures viewport orientation,
+  // viewport width/height, board container width before/after the
+  // toggle. Diagnoses "showing lines shrinks the board" reports by
+  // making the dimension diff measurable instead of subjective.
+  | 'engine-lines-layout-state'
+  // Verbosity resolution trail. Fires inside coachMoveCommentary when
+  // the LLM call is dispatched — captures what verbosity value was
+  // received vs the user's profile preference. Diagnoses "Settings
+  // verbosity dial doesn't work" reports by making the propagation
+  // path visible (settings → preference → arg → LLM).
+  | 'verbosity-resolved'
+  // TTS overlap detection. Fires from voiceService.speakInternal when
+  // a new speak() arrives while a previous utterance is still playing.
+  // Captures the new utterance preview, the previous-tier (polly /
+  // web-speech / voice-pack), and the caller source if available.
+  // Diagnoses "two voices at once" reports — every overlap leaves a
+  // record so we can see which surfaces are racing.
+  | 'tts-concurrent-speak'
+  // Tool-call error capture. Fires from coach/coachService.ask when a
+  // tool invocation returns an error — captures tool name + full error
+  // text + arguments. Diagnoses tool dispatch issues like the
+  // "aiColor must be 'white' or 'black'" we saw on local_opening_book
+  // by surfacing the exact arg that failed.
+  | 'tool-call-error'
   // Personality dials reaching the move-commentary prompt
   // (WO-PERSONALITY-IN-COMMENTARY). Mirrors coach-narration-spoken at
   // the prompt-assembly side so we can confirm in production logs that

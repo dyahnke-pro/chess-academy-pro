@@ -228,6 +228,19 @@ async function getLlmCommentary(
       fen: gameAfter.fen(),
     });
   }
+  // Verbosity-resolved audit — captures what verbosity arg the LLM
+  // call is dispatched with, alongside the caller-supplied subject and
+  // reviewTone. Diagnoses "Settings verbosity dial doesn't work"
+  // reports: if the user's profile has coachVerbosity='fast' but this
+  // audit shows verbosity='medium' (the default-fallback below), the
+  // propagation broke between Settings → preferences → caller → here.
+  void logAppAudit({
+    kind: 'verbosity-resolved',
+    category: 'subsystem',
+    source: 'coachMoveCommentary.getLlmCommentary',
+    summary: `verbosity=${verbosity} subject="${subject ?? ''}" reviewTone=${Boolean(reviewTone)}`,
+    fen: gameAfter.fen(),
+  });
   const promptParts: string[] = [];
   if (personalityBlock) promptParts.push(personalityBlock);
   promptParts.push(basePrompt);

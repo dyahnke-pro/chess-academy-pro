@@ -399,6 +399,27 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           summary: `${call.name} ${result.ok ? 'ok' : 'error'}`,
           details: JSON.stringify({ id: call.id, name: call.name, ok: result.ok, error: result.error }),
         });
+        // Dedicated tool-call-error trail — captures full error text +
+        // the exact args that triggered it. The existing
+        // coach-brain-tool-called audit packs args into `details` JSON
+        // but for production triage we want a high-signal kind we can
+        // filter on directly. See the local_opening_book "aiColor must
+        // be 'white' or 'black'" surfaced in the audit log for an
+        // example of what this captures.
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'tool-call-error',
+            category: 'subsystem',
+            source: 'coachService.ask',
+            summary: `${call.name}: ${result.error ?? 'unknown error'}`,
+            details: JSON.stringify({
+              id: call.id,
+              name: call.name,
+              args: call.args,
+              error: result.error,
+            }),
+          });
+        }
       } catch (err) {
         void logAppAudit({
           kind: 'coach-brain-tool-called',
@@ -406,6 +427,19 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           source: 'coachService.ask',
           summary: `${call.name} threw`,
           details: err instanceof Error ? err.message : String(err),
+        });
+        void logAppAudit({
+          kind: 'tool-call-error',
+          category: 'subsystem',
+          source: 'coachService.ask',
+          summary: `${call.name} threw: ${err instanceof Error ? err.message : String(err)}`,
+          details: JSON.stringify({
+            id: call.id,
+            name: call.name,
+            args: call.args,
+            error: err instanceof Error ? err.message : String(err),
+            stack: err instanceof Error ? err.stack : undefined,
+          }),
         });
         toolResults.push({
           name: call.name,
