@@ -74,6 +74,34 @@ describe('appAuditor', () => {
     expect(await getAppAuditLog()).toEqual([]);
   });
 
+  it('persists all entries when many logAppAudit calls fire concurrently (no read-modify-write race)', async () => {
+    // Regression: production audit logs were missing the audits that
+    // fire alongside `voiceService.speak()` (e.g. `coach-move-narration-fired`
+    // beside `voice-speak-invoked`). Each `logAppAudit` call did
+    // `await readLog(); push; await db.meta.put(...)`. When multiple
+    // calls fire `void`-style without awaiting, they all read the same
+    // pre-write log and each one's put overwrites the others —
+    // last-writer-wins. Only one entry survives per concurrent batch.
+    // This test fires 20 concurrent calls and asserts all 20 survive.
+    const concurrent = Array.from({ length: 20 }, (_, i) =>
+      logAppAudit({
+        kind: 'bad-fen',
+        category: 'subsystem',
+        source: 'concurrent',
+        summary: `entry ${i}`,
+      }),
+    );
+    await Promise.all(concurrent);
+    const log = await getAppAuditLog();
+    expect(log.length).toBe(20);
+    // Every entry should be present (order is insertion order modulo
+    // serialization choice, but the SET must be complete).
+    const summaries = new Set(log.map((e) => e.summary));
+    for (let i = 0; i < 20; i++) {
+      expect(summaries.has(`entry ${i}`)).toBe(true);
+    }
+  });
+
   describe('installGlobalErrorHooks', () => {
     // The hooks attach directly to `window.addEventListener('error', ...)`
     // — which fires even when dispatchEvent synthesises an error. We
