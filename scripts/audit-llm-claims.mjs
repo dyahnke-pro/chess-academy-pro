@@ -361,19 +361,15 @@ Rules:
    return {"claims": []}.
 6. JSON only. No commentary.`;
 
-const MODEL_ID = process.env.AUDIT_LLM_MODEL ?? 'claude-haiku-4-5-20251001';
+const MODEL_ID = process.env.AUDIT_LLM_MODEL ?? (
+  process.env.ANTHROPIC_API_KEY ? 'claude-haiku-4-5-20251001' : 'deepseek-chat'
+);
 const MAX_RECORDS = parseInt(process.env.AUDIT_LLM_LIMIT ?? '0', 10); // 0 = all
 const RPS = parseInt(process.env.AUDIT_LLM_RPS ?? '4', 10);
 
-async function buildExtractor() {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error(
-      'ANTHROPIC_API_KEY is not set. Export it before running this script.',
-    );
-  }
+async function buildAnthropicExtractor() {
   const { default: Anthropic } = await import('@anthropic-ai/sdk');
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
   return async function extract(record, gt) {
     const userMessage = `Move played (SAN): ${gt.san}
 Narration:
@@ -393,8 +389,61 @@ ${record.text}
       messages: [{ role: 'user', content: userMessage }],
     });
     const raw = res.content.map((c) => (c.type === 'text' ? c.text : '')).join('');
-    return { raw, usage: res.usage };
+    return {
+      raw,
+      usage: {
+        input_tokens: res.usage?.input_tokens ?? 0,
+        output_tokens: res.usage?.output_tokens ?? 0,
+        cache_read_input_tokens: res.usage?.cache_read_input_tokens ?? 0,
+        cache_creation_input_tokens: res.usage?.cache_creation_input_tokens ?? 0,
+      },
+    };
   };
+}
+
+async function buildDeepseekExtractor() {
+  const { default: OpenAI } = await import('openai');
+  const client = new OpenAI({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL: 'https://api.deepseek.com',
+  });
+  return async function extract(record, gt) {
+    const userMessage = `Move played (SAN): ${gt.san}
+Narration:
+"""
+${record.text}
+"""`;
+    const res = await client.chat.completions.create({
+      model: MODEL_ID,
+      max_tokens: 600,
+      // DeepSeek's OpenAI-compatible API supports response_format json_object.
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: EXTRACTION_SYSTEM_PROMPT },
+        { role: 'user', content: userMessage },
+      ],
+    });
+    const raw = res.choices?.[0]?.message?.content ?? '';
+    // DeepSeek reports cache hits via prompt_cache_hit_tokens.
+    const u = res.usage ?? {};
+    return {
+      raw,
+      usage: {
+        input_tokens: u.prompt_tokens ?? 0,
+        output_tokens: u.completion_tokens ?? 0,
+        cache_read_input_tokens: u.prompt_cache_hit_tokens ?? 0,
+        cache_creation_input_tokens: 0,
+      },
+    };
+  };
+}
+
+async function buildExtractor() {
+  if (process.env.ANTHROPIC_API_KEY) return buildAnthropicExtractor();
+  if (process.env.DEEPSEEK_API_KEY) return buildDeepseekExtractor();
+  throw new Error(
+    'No LLM key set. Export ANTHROPIC_API_KEY or DEEPSEEK_API_KEY before running.',
+  );
 }
 
 function parseClaims(raw) {
@@ -411,6 +460,25 @@ function parseClaims(raw) {
 
 async function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+// Per-million-token rates. Conservative (cache miss) prices for input;
+// cached-read column applies when the provider reports cache hits.
+const PRICING = {
+  // Anthropic Haiku 4.5 — $1/M in, $5/M out, $1.25 cache write, $0.10 cache read
+  'claude-haiku-4-5-20251001': { in: 1.0, out: 5.0, cacheWrite: 1.25, cacheRead: 0.10 },
+  // DeepSeek (deepseek-chat) — $0.27/M cache miss in, $0.07/M cache hit, $1.10/M out
+  'deepseek-chat': { in: 0.27, out: 1.10, cacheWrite: 0.27, cacheRead: 0.07 },
+};
+
+function estimateCost(usage, model) {
+  const p = PRICING[model] ?? { in: 1.0, out: 5.0, cacheWrite: 1.0, cacheRead: 0.10 };
+  return (
+    (usage.input * p.in) +
+    (usage.cacheWrite * p.cacheWrite) +
+    (usage.cacheRead * p.cacheRead) +
+    (usage.output * p.out)
+  ) / 1_000_000;
 }
 
 // ─── Runner ────────────────────────────────────────────────────────────────
@@ -521,10 +589,7 @@ async function main() {
     ),
     errors: errors.length,
     usage,
-    estimatedCostUSD:
-      // Haiku 4.5: $1/M in, $5/M out, $1.25/M cache write, $0.10/M cache read
-      ((usage.input * 1.0) + (usage.cacheWrite * 1.25) + (usage.cacheRead * 0.10) + (usage.output * 5.0)) /
-      1_000_000,
+    estimatedCostUSD: estimateCost(usage, MODEL_ID),
     model: MODEL_ID,
   };
 
