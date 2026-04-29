@@ -48,6 +48,15 @@ interface QueueEntry {
 const INIT_TIMEOUT_MS = 45_000;
 const STOCKFISH_MT_URL = '/stockfish/stockfish-18-lite.js';
 const STOCKFISH_ST_URL = '/stockfish/stockfish-18-lite-single.js';
+/** WO-STOCKFISH-SWAP — lila-stockfish-web bridge worker. ES module
+ *  worker that imports `sf16-7` (Lichess's known-iOS-compatible
+ *  Stockfish 16 build) and adapts the `engine.uci()` /
+ *  `engine.listen` API to the classic postMessage worker contract
+ *  the rest of this engine speaks. Used on iOS Safari where
+ *  `stockfish-18-lite` crashes with `RuntimeError: call_indirect to
+ *  a signature that does not match` (audit cycle 6 Findings 10, 20,
+ *  29, 47, 55, 79, 97, 109, 117, 120). */
+const LILA_BRIDGE_URL = '/stockfish/lila-bridge.worker.js';
 const MAX_CRASH_RETRIES = 3;
 /** How long to wait after spawning the multi-threaded worker before
  *  declaring it broken. The bundle hangs / throws inside pthread
@@ -56,17 +65,58 @@ const MAX_CRASH_RETRIES = 3;
  *  slow first-load WASM compilation to finish. */
 const MT_EARLY_FAILURE_WINDOW_MS = 5_000;
 
-export type StockfishVariant = 'multi' | 'single';
+export type StockfishVariant = 'multi' | 'single' | 'lila';
 
 export interface ResolvedWorker {
   url: string;
   variant: StockfishVariant;
   reason: string;
+  /** WO-STOCKFISH-SWAP — `lila` variant uses a module worker; the
+   *  others use classic workers. Caller passes this through to
+   *  `new Worker(url, { type })`. */
+  workerType?: 'module' | 'classic';
+}
+
+/** WO-STOCKFISH-SWAP — iOS Safari User-Agent detection. The
+ *  `stockfish-18-lite` bundles (multi AND single) crash with
+ *  `RuntimeError: call_indirect to a signature that does not match`
+ *  on iOS Safari 26+ (audit cycle 6 confirmed across 10+ findings).
+ *  iOS Safari is detected by UA tokens that don't match other
+ *  WebKit-based engines (Chrome on iOS lies and reports Safari, but
+ *  ALSO has CriOS / FxiOS / EdgiOS in the UA — exclude those).
+ *  When detected, route to lila-stockfish-web's sf16-7 instead.
+ *  Capacitor on iOS reports user agent containing "iPhone" /
+ *  "iPad" too — same crash applies; same path applies. */
+function isIosSafari(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent ?? '';
+  // iPad Safari masquerades as Mac on iPadOS 13+ — also check
+  // maxTouchPoints to catch that.
+  const looksIos =
+    /iPhone|iPad|iPod/.test(ua) ||
+    (/Macintosh/.test(ua) &&
+      typeof navigator.maxTouchPoints === 'number' &&
+      navigator.maxTouchPoints > 1);
+  if (!looksIos) return false;
+  // Exclude Chrome, Firefox, Edge on iOS — they don't have the WASM
+  // crash and shouldn't take the lila path. They all still hit
+  // `Mozilla/5.0 ... Safari/...` but inject their own token.
+  return !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
 }
 
 export function resolveWorkerUrl(): ResolvedWorker {
   if (typeof window === 'undefined') {
-    return { url: STOCKFISH_ST_URL, variant: 'single', reason: 'no-window' };
+    return { url: STOCKFISH_ST_URL, variant: 'single', reason: 'no-window', workerType: 'classic' };
+  }
+  // WO-STOCKFISH-SWAP — iOS Safari is the only host where
+  // stockfish-18-lite is known to crash; route it to lila first.
+  if (isIosSafari()) {
+    return {
+      url: LILA_BRIDGE_URL,
+      variant: 'lila',
+      reason: 'iOS Safari detected — using lila-stockfish-web sf16-7 (stockfish-18-lite crashes on this host)',
+      workerType: 'module',
+    };
   }
   const isolated =
     (window as { crossOriginIsolated?: boolean }).crossOriginIsolated === true;
@@ -76,12 +126,14 @@ export function resolveWorkerUrl(): ResolvedWorker {
       url: STOCKFISH_MT_URL,
       variant: 'multi',
       reason: 'crossOriginIsolated + SharedArrayBuffer available',
+      workerType: 'classic',
     };
   }
   return {
     url: STOCKFISH_ST_URL,
     variant: 'single',
     reason: `multi-thread requirements not met (crossOriginIsolated=${isolated}, SharedArrayBuffer=${sabAvailable})`,
+    workerType: 'classic',
   };
 }
 
@@ -171,6 +223,7 @@ class StockfishEngine {
             url: STOCKFISH_ST_URL,
             variant: 'single',
             reason: 'runtime fallback after multi-thread bundle failure',
+            workerType: 'classic',
           };
         } else if (this._runtimeFallbackAttempted) {
           // Sticky: a previous initialize() in this session already
@@ -180,6 +233,7 @@ class StockfishEngine {
             url: STOCKFISH_ST_URL,
             variant: 'single',
             reason: 'sticky fallback (multi previously failed at runtime)',
+            workerType: 'classic',
           };
         } else {
           resolved = resolveWorkerUrl();
@@ -221,7 +275,12 @@ class StockfishEngine {
         };
 
         try {
-          this.worker = new Worker(resolved.url);
+          // WO-STOCKFISH-SWAP — module worker shape for the lila
+          // bridge (which uses ES module imports); classic worker
+          // for the legacy stockfish-18-lite bundle.
+          this.worker = resolved.workerType === 'module'
+            ? new Worker(resolved.url, { type: 'module' })
+            : new Worker(resolved.url);
 
           this.worker.onmessage = (event: MessageEvent<string>) => {
             this.handleMessage(event.data);

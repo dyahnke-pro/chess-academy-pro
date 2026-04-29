@@ -14,6 +14,9 @@ test-results
 .claude/
 public/stockfish/*.js
 public/stockfish/*.wasm
+# WO-STOCKFISH-SWAP — lila-bridge.worker.js is source-controlled
+# (it's our adapter, not auto-copied from node_modules).
+!public/stockfish/lila-bridge.worker.js
 .netlify/
 src/data/annotations-all.json
 voice_packs/
