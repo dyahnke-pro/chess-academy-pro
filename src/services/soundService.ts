@@ -46,13 +46,91 @@ const SOUND_PARAMS: Record<SoundSet, Record<SoundType, SoundParams>> = {
   marble:   { move: {freq:480,dur:.07,dec:38,tp:'sine',ns:.5,v:.6},     capture: {freq:380,dur:.09,dec:30,tp:'sine',ns:.6,v:.7},     castle: {freq:420,freq2:560,dur:.11,dec:26,tp:'sine',ns:.4,v:.65},     check: {freq:780,freq2:980,dur:.09,dec:34,tp:'sine',ns:.35,v:.75} },
   cartoon:  { move: {freq:850,dur:.06,dec:42,tp:'triangle',ns:.4,v:.5}, capture: {freq:650,freq2:850,dur:.08,dec:38,tp:'triangle',ns:.5,v:.6}, castle: {freq:780,freq2:1020,dur:.1,dec:32,tp:'triangle',ns:.35,v:.55}, check: {freq:1200,freq2:1500,dur:.08,dec:38,tp:'triangle',ns:.35,v:.65} },
 };
+/** WO-COACH-PIECE-SOUND-CUSTOM. User-driven slider values 0–100,
+ *  applied as multipliers / offsets on top of the style-set / event-
+ *  type defaults so move / capture / castle / check stay
+ *  distinguishable. 50 = "no change" baseline; 0 and 100 are the
+ *  extremes of each dimension. */
+export interface PieceSoundCustomization {
+  /** Pitch 0–100. 50 = 1.0× freq. Linear-blend to 0.5× at 0 and 2.0× at 100. */
+  pitch: number;
+  /** Tone 0–100. 50 = current low-pass cutoff. Lower = warmer (more
+   *  rolloff), higher = brighter (less rolloff). */
+  tone: number;
+  /** Waveform 0–100. Continuous blend: 0 sine, 33 triangle, 66 square,
+   *  100 sawtooth. Implementation crossfades between adjacent types. */
+  waveform: number;
+  /** Length 0–100. 50 = 1.0× duration. Linear-blend to 0.5× at 0 and 2.0× at 100. */
+  length: number;
+}
+
+export const PIECE_SOUND_DEFAULTS: PieceSoundCustomization = {
+  pitch: 50,
+  tone: 50,
+  waveform: 50, // half-blend of triangle and square — close to current "wood-on-wood" character at the classic set
+  length: 50,
+};
+
+/** Map a 0–100 slider to a multiplier in the [0.5×, 2.0×] band, where
+ *  50 = exactly 1.0× (no change). Symmetric around the midpoint so the
+ *  baseline preset feels neutral. */
+function sliderToMultiplier(slider: number): number {
+  const clamped = Math.max(0, Math.min(100, slider));
+  if (clamped <= 50) {
+    // 0 → 0.5x, 50 → 1.0x
+    return 0.5 + (clamped / 50) * 0.5;
+  }
+  // 50 → 1.0x, 100 → 2.0x
+  return 1.0 + ((clamped - 50) / 50) * 1.0;
+}
+
+/** Pick the two adjacent waveform types and the crossfade ratio for a
+ *  0–100 slider value. Returns `[primaryType, secondaryType, mixRatio]`
+ *  where `mixRatio` is the gain weight on the secondary (0 = primary
+ *  only). Implementation rules:
+ *
+ *    0–33    crossfade sine → triangle
+ *    33–66   crossfade triangle → square
+ *    66–100  crossfade square → sawtooth
+ */
+function waveformBlend(slider: number): {
+  primary: OscillatorType;
+  secondary: OscillatorType;
+  ratio: number;
+} {
+  const v = Math.max(0, Math.min(100, slider));
+  if (v <= 33) return { primary: 'sine', secondary: 'triangle', ratio: v / 33 };
+  if (v <= 66) return { primary: 'triangle', secondary: 'square', ratio: (v - 33) / 33 };
+  return { primary: 'square', secondary: 'sawtooth', ratio: (v - 66) / 34 };
+}
+
+/** Map the 0–100 tone slider to a low-pass cutoff multiplier on top
+ *  of the style-set's natural freq-derived cutoff. 50 = 1.0× (no
+ *  change), 0 = 0.4× (very warm), 100 = 2.5× (bright). */
+function toneToCutoffMultiplier(slider: number): number {
+  const v = Math.max(0, Math.min(100, slider));
+  if (v <= 50) {
+    // 0 → 0.4x, 50 → 1.0x
+    return 0.4 + (v / 50) * 0.6;
+  }
+  // 50 → 1.0x, 100 → 2.5x
+  return 1.0 + ((v - 50) / 50) * 1.5;
+}
+
 export class SoundService {
   private enabled = true;
   private volume = 0.7;
   private currentSet: SoundSet = 'classic';
+  /** WO-COACH-PIECE-SOUND-CUSTOM cached customization. Defaults map to
+   *  "no change" so behavior is unchanged for users who haven't moved
+   *  any slider. */
+  private customization: PieceSoundCustomization = PIECE_SOUND_DEFAULTS;
   setEnabled(e: boolean): void { this.enabled = e; }
   setVolume(v: number): void { this.volume = Math.min(1, Math.max(0, v)); }
   setSoundSet(s: SoundSet): void { this.currentSet = s; }
+  setCustomization(c: Partial<PieceSoundCustomization>): void {
+    this.customization = { ...this.customization, ...c };
+  }
   play(type: SoundType): void {
     if (!this.enabled) return;
     this.synth(SOUND_PARAMS[this.currentSet][type]);
@@ -95,44 +173,58 @@ export class SoundService {
     try {
       const mv = (p.v ?? 0.7) * this.volume, n = c.currentTime;
 
-      // Low-pass filter to soften harsh overtones and reduce graininess
+      // WO-COACH-PIECE-SOUND-CUSTOM: layer user customization on top
+      // of the style-set / event-type defaults. Each slider is 0–100
+      // with 50 = neutral baseline.
+      const pitchMul = sliderToMultiplier(this.customization.pitch);
+      const lengthMul = sliderToMultiplier(this.customization.length);
+      const toneMul = toneToCutoffMultiplier(this.customization.tone);
+      const blend = waveformBlend(this.customization.waveform);
+
+      const effFreq = p.freq * pitchMul;
+      const effFreq2 = p.freq2 !== undefined ? p.freq2 * pitchMul : undefined;
+      const effDur = p.dur * lengthMul;
+
+      // Low-pass filter to soften harsh overtones and reduce graininess.
+      // Cutoff scales with the pitched freq so cleaner harmonics survive
+      // when pitch is raised; tone slider then biases warmer/brighter.
       const lpf = c.createBiquadFilter();
       lpf.type = 'lowpass';
-      lpf.frequency.setValueAtTime(Math.min(p.freq * 4, 6000), n);
+      lpf.frequency.setValueAtTime(Math.min(effFreq * 4 * toneMul, 8000), n);
       lpf.Q.setValueAtTime(0.7, n);
       lpf.connect(c.destination);
 
-      // WO-COACH-CLICK-SND v2: wood-on-wood envelope. Attack 2.5 ms
-      // (was 1.5 ms in v1) gives a "thunk" rather than a "snap" —
-      // wood pieces meeting have a tiny but perceptible compression
-      // before the resonance kicks in. Tone decays exponentially over
-      // the full duration. Noise burst is shorter (10 % of duration)
-      // and quieter (peak gain mv * ns * 0.55 vs v1's 0.9), modeling
-      // the brief friction-attack of wood-on-wood instead of a hard
-      // plastic click.
+      // Wood-on-wood envelope from PR #373; the customization layer
+      // can re-shape character via waveform blend without touching
+      // the timing model.
       const play = (freq: number, gain: number): void => {
-        const o = c.createOscillator(), g = c.createGain();
-        o.type = p.tp; o.frequency.setValueAtTime(freq, n);
-        g.gain.setValueAtTime(0, n);
-        g.gain.linearRampToValueAtTime(gain, n + 0.0025);
-        g.gain.exponentialRampToValueAtTime(0.001, n + p.dur);
-        o.connect(g); g.connect(lpf); o.start(n); o.stop(n + p.dur);
+        const playOne = (oscType: OscillatorType, oscGain: number): void => {
+          if (oscGain <= 0) return;
+          const o = c.createOscillator(), g = c.createGain();
+          o.type = oscType; o.frequency.setValueAtTime(freq, n);
+          g.gain.setValueAtTime(0, n);
+          g.gain.linearRampToValueAtTime(gain * oscGain, n + 0.0025);
+          g.gain.exponentialRampToValueAtTime(0.001, n + effDur);
+          o.connect(g); g.connect(lpf); o.start(n); o.stop(n + effDur);
+        };
+        // Crossfade between two adjacent waveform types so the
+        // waveform slider feels continuous. At ratio=0 only the
+        // primary plays; at ratio=1 only the secondary; in between
+        // both play with complementary gains so total energy is
+        // roughly conserved.
+        playOne(blend.primary, 1 - blend.ratio);
+        playOne(blend.secondary, blend.ratio);
       };
-      play(p.freq, mv);
-      if (p.freq2) play(p.freq2, mv * 0.6);
+      play(effFreq, mv);
+      if (effFreq2) play(effFreq2, mv * 0.6);
       if (p.ns && p.ns > 0) {
-        // Wood-attack noise: first 10 % of duration, peak attack at
-        // 1.5 ms (was 0.5 ms — gives the transient slightly more body
-        // and less ice-pick edge), peak gain dialed back to 55 % of
-        // ns × volume so the burst supports the resonant tone instead
-        // of dominating it.
-        const bs = Math.floor(c.sampleRate * p.dur * 0.1), nb = c.createBuffer(1, bs, c.sampleRate);
+        const bs = Math.floor(c.sampleRate * effDur * 0.1), nb = c.createBuffer(1, bs, c.sampleRate);
         const d = nb.getChannelData(0); for (let i = 0; i < bs; i++) d[i] = Math.random() * 2 - 1;
         const ns = c.createBufferSource(), ng = c.createGain();
         ns.buffer = nb; ng.gain.setValueAtTime(0, n);
         ng.gain.linearRampToValueAtTime(mv * p.ns * 0.55, n + 0.0015);
-        ng.gain.exponentialRampToValueAtTime(0.001, n + p.dur * 0.15);
-        ns.connect(ng); ng.connect(lpf); ns.start(n); ns.stop(n + p.dur);
+        ng.gain.exponentialRampToValueAtTime(0.001, n + effDur * 0.15);
+        ns.connect(ng); ng.connect(lpf); ns.start(n); ns.stop(n + effDur);
       }
     } catch { /* swallow – synthesis failed */ }
   }

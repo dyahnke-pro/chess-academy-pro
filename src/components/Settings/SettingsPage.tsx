@@ -11,6 +11,7 @@ import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
 import { PersonalityPanel } from './PersonalityPanel';
+import { PieceSoundPanel } from './PieceSoundPanel';
 import { FeedbackForm } from '../Feedback/FeedbackForm';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
@@ -399,6 +400,11 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         onChange={setShowEngineLines}
         testId="engine-lines-toggle"
       />
+
+      {/* Piece Sound — WO-COACH-PIECE-SOUND-CUSTOM */}
+      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+        <PieceSoundPanel />
+      </div>
 
       {/* Feedback & Coaching */}
       <SectionHeader title="Feedback & Coaching" />
