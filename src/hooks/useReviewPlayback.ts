@@ -177,8 +177,9 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     speakCurrent(narration.intro);
   }, [narration, speakCurrent]);
 
-  const commitPly = useCallback((ply: number, opts: { speak: boolean }): void => {
+  const commitPly = useCallback((ply: number, opts: { speak: boolean; navSource?: string }): void => {
     const bounded = Math.max(0, Math.min(ply, lastPly + 1));
+    const fromPly = currentPly;
     setCurrentPly(bounded);
     onPlyChange?.(bounded);
     void logAppAudit({
@@ -187,6 +188,26 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       source: 'useReviewPlayback',
       summary: `target ply ${bounded}`,
       details: JSON.stringify({ ply: bounded, speak: opts.speak }),
+    });
+    // Step trail — captures the actual delta and nav source so a
+    // "review skipped a ply" report has concrete from→to evidence.
+    // Look for entries where (bounded - fromPly) is not 1 from a
+    // goForward call; that's the fingerprint of the skip bug.
+    const segAtTarget = segments.find((s) => s.ply === bounded);
+    void logAppAudit({
+      kind: 'review-playback-step',
+      category: 'subsystem',
+      source: 'useReviewPlayback',
+      summary: `${fromPly}→${bounded} delta=${bounded - fromPly} via=${opts.navSource ?? 'unknown'} speak=${opts.speak}`,
+      details: JSON.stringify({
+        fromPly,
+        toPly: bounded,
+        delta: bounded - fromPly,
+        navSource: opts.navSource ?? 'unknown',
+        speak: opts.speak,
+        targetSan: segAtTarget?.san ?? null,
+        lastPly,
+      }),
     });
     if (!opts.speak) {
       activeTokenRef.current += 1;
@@ -210,24 +231,24 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   }, [lastPly, narration, onPlyChange, segments, speakCurrent]);
 
   const goForward = useCallback(() => {
-    commitPly(currentPly + 1, { speak: true });
+    commitPly(currentPly + 1, { speak: true, navSource: 'goForward' });
   }, [commitPly, currentPly]);
 
   const goBack = useCallback(() => {
-    commitPly(currentPly - 1, { speak: false });
+    commitPly(currentPly - 1, { speak: false, navSource: 'goBack' });
   }, [commitPly, currentPly]);
 
   const goToStart = useCallback(() => {
-    commitPly(0, { speak: true });
+    commitPly(0, { speak: true, navSource: 'goToStart' });
   }, [commitPly]);
 
   const goToEnd = useCallback(() => {
-    commitPly(lastPly, { speak: true });
+    commitPly(lastPly, { speak: true, navSource: 'goToEnd' });
   }, [commitPly, lastPly]);
 
   const jumpToPly = useCallback((ply: number, opts?: { speak?: boolean }) => {
     const speak = opts?.speak ?? true;
-    commitPly(ply, { speak });
+    commitPly(ply, { speak, navSource: 'jumpToPly' });
   }, [commitPly]);
 
   const togglePausePlay = useCallback(() => {

@@ -441,6 +441,31 @@ class VoiceService {
         { newText: text.slice(0, 60) },
       );
     }
+    // Production audit — same condition, persisted to the rolling app
+    // audit log so "two voices at once" reports have a record of every
+    // racing call (which surface fired the overlap, what was already
+    // playing). The dev-mode warn above is invisible to production
+    // users; this audit is what we read in the next "Copy for Claude"
+    // export. Joins with voice-speak-invoked entries on timestamp for
+    // the full racing-caller chain.
+    if (this.playing) {
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'tts-concurrent-speak',
+          category: 'subsystem',
+          source: 'voiceService.speakInternal',
+          summary: `force=${force} prevTier=${this.lastTier} newPreview="${text.slice(0, 40)}"`,
+          details: JSON.stringify({
+            force,
+            prevTier: this.lastTier,
+            newTextLength: text.length,
+            newPreview: text.slice(0, 80),
+          }),
+        });
+      }).catch(() => {
+        // Never break speech on a logging failure.
+      });
+    }
     // Defense-in-depth: after sanitizeForTTS has run at the call site,
     // scan the result for piece-letter shorthand that still slipped
     // through. Different failure mode than narrationAuditor's
