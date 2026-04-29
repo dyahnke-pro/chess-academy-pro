@@ -99,7 +99,15 @@ export function narrateMove(opts: {
   playerColor: 'w' | 'b';
   commentary?: string | null;
 }): void {
-  if (!useCoachSessionStore.getState().narrationMode) return;
+  if (!useCoachSessionStore.getState().narrationMode) {
+    void logAppAudit({
+      kind: 'coach-move-narration-skipped',
+      category: 'subsystem',
+      source: 'coachAgentRunner.narrateMove',
+      summary: `san=${opts.san} reason=narrationMode-off`,
+    });
+    return;
+  }
   const text = opts.commentary?.trim()
     ? opts.commentary.trim()
     : opts.mover === opts.playerColor
@@ -111,6 +119,12 @@ export function narrateMove(opts: {
   // voiceService.speakInternal stops in-flight speech before starting —
   // so a phase summary firing will cleanly cut this off and the two
   // surfaces never talk over each other.
+  void logAppAudit({
+    kind: 'coach-move-narration-fired',
+    category: 'subsystem',
+    source: 'coachAgentRunner.narrateMove',
+    summary: `san=${opts.san} mover=${opts.mover} hasCommentary=${Boolean(opts.commentary?.trim())}`,
+  });
   void voiceService.speak(text).catch((err: unknown) => {
     console.warn('[narrateMove] TTS failed:', err);
   });

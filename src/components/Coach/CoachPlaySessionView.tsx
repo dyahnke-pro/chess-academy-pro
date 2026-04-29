@@ -17,6 +17,7 @@ import { getCoachMove, setSkill } from '../../services/coachPlaySession';
 import { voiceService } from '../../services/voiceService';
 import { resolveVerbosity } from '../../services/coachCommentaryPolicy';
 import { useAppStore } from '../../stores/appStore';
+import { logAppAudit } from '../../services/appAuditor';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -129,8 +130,23 @@ export function CoachPlaySessionView({
         // in cleanly cuts off move narration.
         const verbosity = resolveVerbosity(useAppStore.getState().activeProfile);
         if (verbosity !== 'off') {
+          void logAppAudit({
+            kind: 'coach-move-narration-fired',
+            category: 'subsystem',
+            source: 'CoachPlaySessionView',
+            summary: `verbosity=${verbosity} mover=${mover} chars=${commentary.length}`,
+            fen: chessRef.current.fen(),
+          });
           void voiceService.speak(commentary).catch((err: unknown) => {
             console.warn('[CoachPlaySession] move narration TTS failed:', err);
+          });
+        } else {
+          void logAppAudit({
+            kind: 'coach-move-narration-skipped',
+            category: 'subsystem',
+            source: 'CoachPlaySessionView',
+            summary: `verbosity=off mover=${mover}`,
+            fen: chessRef.current.fen(),
           });
         }
       } else {

@@ -217,7 +217,16 @@ export type AuditKind =
   // pairing produces empirically bad output we should warn about).
   // Joins with the existing `voice-speak-invoked` audit on timestamp
   // for the full picture.
-  | 'coach-narration-spoken';
+  | 'coach-narration-spoken'
+  // Per-move narration audit (WO-MOVE-NARRATION-REENABLE). Fires from
+  // CoachGamePage (blunder + non-blunder branches), narrateMove() in
+  // coachAgentRunner, and CoachPlaySessionView whenever a move-level
+  // speak is dispatched — and from the gating branch that skipped it
+  // (verbosity 'off' / empty commentary / narrationMode disabled).
+  // Joined with voice-speak-invoked so a "I have commentary on but
+  // hear nothing after my move" report has a complete causal chain.
+  | 'coach-move-narration-fired'
+  | 'coach-move-narration-skipped';
 
 export interface AuditEntry {
   timestamp: number;

@@ -2626,8 +2626,23 @@ export function CoachGamePage(): JSX.Element {
       // also stops in-flight speech before starting — so a phase
       // summary firing will cleanly cut this off.
       if (verbosity !== 'off' && explanation.trim()) {
+        void logAppAudit({
+          kind: 'coach-move-narration-fired',
+          category: 'subsystem',
+          source: 'CoachGamePage.blunder',
+          summary: `verbosity=${verbosity} chars=${explanation.length}`,
+          fen: moveResult.fen,
+        });
         void voiceService.speak(explanation).catch((err: unknown) => {
           console.warn('[CoachGame] blunder narration TTS failed:', err);
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-move-narration-skipped',
+          category: 'subsystem',
+          source: 'CoachGamePage.blunder',
+          summary: `verbosity=${verbosity} hasExplanation=${Boolean(explanation.trim())}`,
+          fen: moveResult.fen,
         });
       }
       return;
@@ -2642,8 +2657,23 @@ export function CoachGamePage(): JSX.Element {
     // move. Phase narration cuts in via voiceService.stop() if a phase
     // boundary fires — no simultaneous speech.
     if (commentary.trim()) {
+      void logAppAudit({
+        kind: 'coach-move-narration-fired',
+        category: 'subsystem',
+        source: 'CoachGamePage.move',
+        summary: `verbosity=${verbosity} classification=${classification} chars=${commentary.length}`,
+        fen: moveResult.fen,
+      });
       void voiceService.speak(commentary).catch((err: unknown) => {
         console.warn('[CoachGame] move narration TTS failed:', err);
+      });
+    } else {
+      void logAppAudit({
+        kind: 'coach-move-narration-skipped',
+        category: 'subsystem',
+        source: 'CoachGamePage.move',
+        summary: `verbosity=${verbosity} classification=${classification} reason=empty-commentary`,
+        fen: moveResult.fen,
       });
     }
 
