@@ -25,17 +25,33 @@ describe('voiceService', () => {
   });
 
   describe('fallback to speechService', () => {
-    it('falls back when no profile exists', async () => {
+    // Web Speech is currently kill-switched (WEB_SPEECH_FALLBACK_ENABLED
+    // = false in voiceService.ts) because the sentence-streaming
+    // pattern was firing Polly AND Web Speech on the same content,
+    // producing overlapping coach voices. Until the dual-engine
+    // queueing is repaired, `speakFallback` is a no-op — it does NOT
+    // call speechService.speak. These tests verify:
+    //   1. The code path reaches the fallback tier (via getCurrentTier
+    //      === 'web-speech'), so the tier resolution still works.
+    //   2. setVoice IS still called when systemVoiceURI is set (it
+    //      runs before the kill-switched speak).
+    //   3. speechService.speak is NOT called — if a future PR removes
+    //      the kill-switch without first fixing the dual-engine bug,
+    //      these assertions will trip and force the author to re-read
+    //      the comment in voiceService.ts.
+
+    it('reaches web-speech tier when no profile exists', async () => {
       // No profile in DB at all
       await voiceService.speak('Hello world');
 
-      expect(speechService.speak).toHaveBeenCalledWith(
-        'Hello world',
-        expect.objectContaining({ rate: 0.95, pitch: 0.78 }),
-      );
+      // Path reached the web-speech tier (the no-prefs branch sets
+      // lastTier to 'web-speech' before calling speakFallback).
+      expect(voiceService.getCurrentTier()).toBe('web-speech');
+      // Kill-switch in effect: speech was NOT actually emitted.
+      expect(speechService.speak).not.toHaveBeenCalled();
     });
 
-    it('falls back when voiceEnabled is false', async () => {
+    it('returns muted when voiceEnabled is false', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: { voiceEnabled: false },
@@ -48,7 +64,7 @@ describe('voiceService', () => {
       expect(speechService.speak).not.toHaveBeenCalled();
     });
 
-    it('falls back when Polly is disabled', async () => {
+    it('reaches web-speech tier when Polly is disabled', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: {
@@ -60,13 +76,11 @@ describe('voiceService', () => {
 
       await voiceService.speak('Fallback test');
 
-      expect(speechService.speak).toHaveBeenCalledWith(
-        'Fallback test',
-        expect.objectContaining({ rate: 1.0, pitch: 0.78 }),
-      );
+      expect(voiceService.getCurrentTier()).toBe('web-speech');
+      expect(speechService.speak).not.toHaveBeenCalled();
     });
 
-    it('falls back when Polly API returns error', async () => {
+    it('reaches web-speech tier when Polly API returns error', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: {
@@ -84,13 +98,12 @@ describe('voiceService', () => {
 
       await voiceService.speak('Error fallback');
 
-      expect(speechService.speak).toHaveBeenCalledWith(
-        'Error fallback',
-        expect.objectContaining({ rate: 1.0, pitch: 0.78 }),
-      );
+      // Polly failed → cooldown → fall through to web-speech tier.
+      expect(voiceService.getCurrentTier()).toBe('web-speech');
+      expect(speechService.speak).not.toHaveBeenCalled();
     });
 
-    it('falls back when fetch throws a network error', async () => {
+    it('reaches web-speech tier when fetch throws a network error', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: {
@@ -104,13 +117,11 @@ describe('voiceService', () => {
 
       await voiceService.speak('Network fail');
 
-      expect(speechService.speak).toHaveBeenCalledWith(
-        'Network fail',
-        expect.objectContaining({ rate: 1.0, pitch: 0.78 }),
-      );
+      expect(voiceService.getCurrentTier()).toBe('web-speech');
+      expect(speechService.speak).not.toHaveBeenCalled();
     });
 
-    it('uses system voice URI when set in preferences', async () => {
+    it('still applies system voice URI when set in preferences', async () => {
       const profile = buildUserProfile({
         id: 'main',
         preferences: {
@@ -123,8 +134,12 @@ describe('voiceService', () => {
 
       await voiceService.speak('Custom voice');
 
+      // setVoice IS called even with the speak kill-switch on — it
+      // runs before speakFallback. When the kill-switch is removed,
+      // the configured voice is already primed.
       expect(speechService.setVoice).toHaveBeenCalledWith('Microsoft Aria Online (Natural)');
-      expect(speechService.speak).toHaveBeenCalled();
+      expect(voiceService.getCurrentTier()).toBe('web-speech');
+      expect(speechService.speak).not.toHaveBeenCalled();
     });
   });
 
