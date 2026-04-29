@@ -182,7 +182,12 @@ export async function generateFlashcardsForOpening(
     srsLastReview: null,
   }));
 
-  await db.flashcards.bulkAdd(cards);
+  // WO-REAL-FIXES — bulkPut (upsert) instead of bulkAdd. Card ids are
+  // deterministic (`${openingId}-card-${i}`), so a re-run of this
+  // seeder collides on every existing row. Production audit Findings
+  // 178 (cycle 6) + 252 (cycle 1) caught the resulting unhandled
+  // ConstraintError. bulkPut makes re-seeding a no-op upsert.
+  await db.flashcards.bulkPut(cards);
 }
 
 // ─── Sessions ─────────────────────────────────────────────────────────────────

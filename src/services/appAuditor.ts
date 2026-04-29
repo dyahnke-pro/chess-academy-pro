@@ -172,7 +172,11 @@ export type AuditKind =
   | 'voice-route-result'
   | 'voice-callback-invoked'
   | 'voice-callback-result'
-  | 'voice-game-state-after';
+  | 'voice-game-state-after'
+  // WO-REAL-FIXES — phase narration deterministic fallback. Fires
+  // when the LLM call times out / errors and we render a built-in
+  // transition template instead of leaving the user with silence.
+  | 'phase-narration-fallback-shown';
 
 export interface AuditEntry {
   timestamp: number;

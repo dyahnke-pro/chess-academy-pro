@@ -369,7 +369,9 @@ function generateFlashcardsForOpening(opening: OpeningRecord): Promise<void> {
     });
   });
 
-  return db.flashcards.bulkAdd(cards).then(() => undefined);
+  // WO-REAL-FIXES — bulkPut (upsert). See dbService.populateFromOpenings
+  // for the rationale; same deterministic-id collision pattern.
+  return db.flashcards.bulkPut(cards).then(() => undefined);
 }
 
 // ─── Opening Narrations ──────────────────────────────────────────────────────
