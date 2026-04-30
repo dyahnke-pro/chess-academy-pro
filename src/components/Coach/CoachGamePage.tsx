@@ -147,7 +147,7 @@ import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
-import { voiceService } from '../../services/voiceService';
+import { voiceService, resolvePollyVoice, POLLY_VOICES } from '../../services/voiceService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
   CoachDifficulty, MoveClassification, MoveAnnotation,
@@ -2735,6 +2735,18 @@ export function CoachGamePage(): JSX.Element {
           // response (~2s latency). Long-form prose only fires for
           // the once-per-opening intro and explicit every-move mode.
           briefMode,
+          // WO-VOICE-LAYER-02: tell the LLM which Polly engine will
+          // speak its output so it embeds emotional cues for
+          // Generative voices (Ruth/Matthew/Danielle/Gregory) that
+          // ignore SSML prosody. Neural voices skip the cue block.
+          voiceEngine: (() => {
+            const activeVoice = resolvePollyVoice(
+              activePrefs?.coachPersonality,
+              activePrefs?.coachPersonalityVoices,
+              activePrefs?.pollyVoice ?? 'ruth',
+            );
+            return POLLY_VOICES.find((v) => v.id === activeVoice)?.engine as 'generative' | 'neural' | undefined;
+          })(),
         });
         // Mark this opening as introduced so subsequent moves in the
         // same line stay silent (until a key moment or phase transition).

@@ -108,6 +108,14 @@ export interface MoveCommentaryInput {
    *  produces "Oof, that's bad. You just hung the knight." instead
    *  of a 1500-char lecture. */
   briefMode?: boolean;
+  /** Polly engine type of the active voice. Generative voices
+   *  (Ruth/Matthew/Danielle/Gregory) ignore SSML prosody entirely —
+   *  they interpret emotion from text content (vocalizations, CAPS,
+   *  punctuation, pacing). When 'generative', the system prompt
+   *  appends a cue-injection block so the LLM writes prose the
+   *  engine can actually emote on. Neural voices use SSML prosody
+   *  via the TTS proxy and don't need text cues. WO-VOICE-LAYER-02. */
+  voiceEngine?: 'generative' | 'neural';
 }
 
 /** How many prior chat messages to include in the commentary prompt.
@@ -248,6 +256,80 @@ interface VerboseMove {
   flags: string;
 }
 
+/**
+ * WO-VOICE-LAYER-02: cue-injection block for Polly Generative voices.
+ * Generative engines (Ruth/Matthew/Danielle/Gregory) ignore SSML
+ * prosody — they read tone from the text itself. To make them feel
+ * emotive, the LLM has to embed natural cues: vocalizations
+ * ("mmm," "oh," sighs), heavy punctuation (em-dashes, ellipses),
+ * CAPS for stress, and rhythm variation.
+ *
+ * Cue density scales with the dial settings — hard-flirt should
+ * sound noticeably more breathy than medium-flirt; hard-mockery
+ * should drip with scoffs that medium would skip.
+ *
+ * Returns null when all dials are 'none' / undefined — no point
+ * injecting the block if there's nothing to amplify.
+ */
+function renderGenerativeVoiceCueBlock(args: {
+  profanity?: IntensityLevel;
+  mockery?: IntensityLevel;
+  flirt?: IntensityLevel;
+}): string | null {
+  const profanity = args.profanity ?? 'none';
+  const mockery = args.mockery ?? 'none';
+  const flirt = args.flirt ?? 'none';
+
+  // Skip when nothing's amplified — keep the prompt lean.
+  if (profanity === 'none' && mockery === 'none' && flirt === 'none') {
+    return null;
+  }
+
+  const lines: string[] = [
+    `GENERATIVE VOICE EMOTIONAL CUES — your TTS engine reads emotion from the TEXT, not from SSML tags. Embed cues naturally so the voice can inflect:`,
+    `• Vocalizations: "mmm," "oh," "ha," "ugh," "huh," "fuck," ellipses for trailing thought ("...")`,
+    `• Em-dashes for sharp pauses or interjection — like this — and short. punchy. fragments. for emphasis.`,
+    `• CAPS sparingly on the punchword in a sentence ("that was BRILLIANT", "you HUNG the bishop") — engine reads it as stress.`,
+    `• Rhythm: vary sentence length deliberately. A short jab, then a longer line that breathes.`,
+    `Keep cues NATURAL — embed them in real sentences, never list them, never use stage directions in asterisks ("*sighs*").`,
+  ];
+
+  // Per-dial intensity guidance. The LLM gets explicit cue-frequency
+  // bands so medium/hard feel distinct rather than collapsing into
+  // the same prose.
+  if (flirt === 'medium') {
+    lines.push(
+      `Flirt cues (medium): light teasing inflections — "interesting," "mmm... that's bold," "oh you," at most ONE per response.`,
+    );
+  } else if (flirt === 'hard') {
+    lines.push(
+      `Flirt cues (HARD) — lay them on thick. Breathy vocalizations openly: "mmm," "oh fuck," "god," "yes...," "nasty." Drop "sweetheart" / "baby" / "good boy" naturally. Use em-dashes for the pause-and-breathe rhythm of seduction. 2-4 cues per response is the target — the voice should sound like she's getting turned on by the chess. Sultry low register; the engine will hear "mmm" and lower the pitch on its own.`,
+    );
+  }
+
+  if (mockery === 'medium') {
+    lines.push(
+      `Mockery cues (medium): occasional "oof," "really?," "come on" — friendly ribbing.`,
+    );
+  } else if (mockery === 'hard') {
+    lines.push(
+      `Mockery cues (HARD): scoffs and dismissive vocalizations — "ha," "ugh," "Jesus Christ," "are you serious," "...wow." Use ellipses to let the contempt land. Repeat-roast patterns ("ANOTHER hung pawn?"). 2-3 cues per response.`,
+    );
+  }
+
+  if (profanity === 'medium') {
+    lines.push(
+      `Profanity cues (medium): drop a "shit" or "damn" once when the moment earns it. The engine reads profanity as elevated emotion.`,
+    );
+  } else if (profanity === 'hard') {
+    lines.push(
+      `Profanity cues (HARD): "fuck" / "shit" / "goddamn" / "bullshit" land naturally throughout. The engine inflects more strongly on profanity — let it do the emotional work for you. 2-3 swears per response feels native at this dial.`,
+    );
+  }
+
+  return lines.join('\n');
+}
+
 async function getLlmCommentary(
   input: MoveCommentaryInput,
   history: VerboseMove[],
@@ -257,7 +339,7 @@ async function getLlmCommentary(
     chatHistory, verbosity = 'medium', groundedNotes = [],
     recentMoveClassifications, lastUserInteractionMs,
     personality, profanity, mockery, flirt, studentColor,
-    briefMode = false,
+    briefMode = false, voiceEngine,
   } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
@@ -361,6 +443,18 @@ async function getLlmCommentary(
       `LIVE PLAY — keep your response under ~1800 characters. Cover the general idea + things to watch for, then stop. If you're approaching the limit, wrap it up; do NOT let the response get clipped at finish=length. Personality-driven prose, no bullets, no headers.`,
     );
   }
+
+  // WO-VOICE-LAYER-02: Generative-voice emotional cue block.
+  // Generative engines (Ruth/Matthew/Danielle/Gregory) ignore SSML
+  // prosody — they read emotion from the prose itself. Inject a
+  // cue-density instruction that scales with the dial settings so
+  // hard-flirt prose gets heavier breathy vocalizations than
+  // medium, etc. Neural voices use SSML prosody and skip this block.
+  if (voiceEngine === 'generative' && !reviewTone) {
+    const cueBlock = renderGenerativeVoiceCueBlock({ profanity, mockery, flirt });
+    if (cueBlock) promptParts.push(cueBlock);
+  }
+
   const system = promptParts.join('\n\n');
 
   // Recent chat turns from the shared session — lets the commentary
