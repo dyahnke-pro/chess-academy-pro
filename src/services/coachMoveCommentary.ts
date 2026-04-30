@@ -343,12 +343,22 @@ async function getLlmCommentary(
   // moments (blunders, mistakes, brilliants). The personality block
   // above already sets the voice / profanity / mockery clauses; this
   // just tightens the length and pushes the LLM to lean into critique
-  // rather than analysis. Combined with max_tokens=200 below, output
-  // is 1-2 sentences arriving in ~2s instead of a 1500-char essay
-  // arriving in 5-7s.
+  // rather than analysis. Combined with the max_tokens cap below,
+  // output is 2-4 sentences arriving in ~2-3s instead of a 1500-char
+  // essay arriving in 5-7s.
+  //
+  // Tell the LLM the actual char budget so it lands a punchline
+  // instead of being cut off mid-sentence at finish=length.
   if (briefMode) {
     promptParts.push(
-      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with ONE short pithy sentence (or two at most). Lean hard into your personality: mock, critique, react with feeling. The student just made a notable move (blunder / mistake / brilliant / great) and wants to hear something fast and reactive, not a paragraph of analysis. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction.`,
+      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with 2-4 short punchy sentences and STOP. You have a hard ~900 character ceiling — write something that LANDS within that budget. If you're approaching the limit, finish your sentence; do NOT let the response get clipped. Lean hard into your personality: mock, critique, react with feeling. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction.`,
+    );
+  } else if (!reviewTone) {
+    // Long-mode addendum for live play (not review). The 500-token
+    // cap = ~1800 chars; tell the LLM so it shapes the response to
+    // land cleanly instead of running over and getting truncated.
+    promptParts.push(
+      `LIVE PLAY — keep your response under ~1800 characters. Cover the general idea + things to watch for, then stop. If you're approaching the limit, wrap it up; do NOT let the response get clipped at finish=length. Personality-driven prose, no bullets, no headers.`,
     );
   }
   const system = promptParts.join('\n\n');
@@ -429,7 +439,11 @@ async function getLlmCommentary(
   // with — the narration would get clipped because they played the
   // next move before the previous narration finished. New caps for
   // live play:
-  //   briefMode  150 tokens ≈ 1-2 sentences (~10-15s of speech).
+  //   briefMode  250 tokens ≈ 2-4 sentences (~15-25s of speech).
+  //              Bumped from 150 after audit build 9b74213 caught a
+  //              great-classification personality zinger getting cut
+  //              mid-punchline at finish=length. 250 lands the joke
+  //              without dragging into a lecture.
   //   long mode  500 tokens ≈ 4-6 sentences (~25-35s of speech, fits
   //              an opening intro with general ideas + things to
   //              watch for without dragging into a 90s lecture).
@@ -441,7 +455,7 @@ async function getLlmCommentary(
   // can dive deep on each key moment.
   const maxTokens = reviewTone
     ? (briefMode ? 200 : 1500)
-    : (briefMode ? 150 : 500);
+    : (briefMode ? 250 : 500);
   const response = await getCoachChatResponse(
     [{ role: 'user', content: user }],
     system,

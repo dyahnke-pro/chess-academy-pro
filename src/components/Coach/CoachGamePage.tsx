@@ -2156,7 +2156,7 @@ export function CoachGamePage(): JSX.Element {
         });
 
         // Proactive tactic alert: scan for opponent threats after coach's
-        // move. Fires the alert as soon as the threat lands on the board
+        // move. Fires the alert as soon as the threat is brewing
         // — BEFORE the student plays into it — which is the only useful
         // moment per the user. Stockfish-driven (no LLM round-trip), so
         // it speaks within ~100ms of the coach's reply.
@@ -2166,6 +2166,17 @@ export function CoachGamePage(): JSX.Element {
         // silent. Cancellation is intentionally NOT a gate — same
         // reasoning as the FX path: chess.js is mutated, the threat
         // exists on the board, the player needs to hear it.
+        //
+        // Wording (audit build 9b74213 caught the bug): the pattern
+        // description is generated from the FUTURE FEN where the
+        // tactic exists ("Queen on h4 pins pawn on h2") but the queen
+        // ISN'T on h4 yet — so a present-tense announcement was
+        // confusing. Prefix with the move that would set it up so the
+        // student hears "if I play Qh4, [description]" — clearly a
+        // threat to watch, not a fait accompli. Also verify the move
+        // setting up the threat is legal on the current board (it
+        // already is, since scanUpcomingTactics walks chess.js — but
+        // the explicit check guards against any future regression).
         if (postCoachAnalysis) {
           const playerColorCode = playerColor === 'white' ? 'w' : 'b';
           const upcoming = scanUpcomingTactics(
@@ -2175,7 +2186,20 @@ export function CoachGamePage(): JSX.Element {
           );
           const threats = upcoming.filter((u) => u.beneficiary === 'opponent' && u.depthAhead <= 2);
           if (threats.length > 0) {
-            const warning = `Be careful — ${threats[0].pattern.description}.`;
+            const threat = threats[0];
+            // The opponent's move that sets up the tactic. line[i]
+            // alternates side-to-move; depthAhead=1 → line[0] is the
+            // student's move and the threat emerges from that, depthAhead=2
+            // → line[1] is the opponent's move that creates the threat.
+            const threatMoveIdx = threat.depthAhead - 1;
+            const threatMove = threat.line[threatMoveIdx] ?? '';
+            const isOppMove = threatMoveIdx % 2 === 1;
+            const lowerDesc = threat.pattern.description.charAt(0).toLowerCase() + threat.pattern.description.slice(1);
+            const warning = isOppMove && threatMove
+              ? `Watch out — if I play ${threatMove}, ${lowerDesc}.`
+              : threatMove
+                ? `Watch out — ${threatMove} from you would let ${lowerDesc}.`
+                : `Watch out — ${threat.pattern.description}.`;
             gameChatRef.current?.injectAssistantMessage(warning);
             const tacticVerbosity = resolveVerbosity(useAppStore.getState().activeProfile);
             if (tacticVerbosity !== 'off') {
@@ -2183,8 +2207,17 @@ export function CoachGamePage(): JSX.Element {
                 kind: 'coach-tactic-alert-spoken',
                 category: 'subsystem',
                 source: 'CoachGamePage.coachTurn',
-                summary: `pattern=${threats[0].pattern.description} verbosity=${tacticVerbosity}`,
+                summary: `pattern=${threat.pattern.description} threatMove=${threatMove} depthAhead=${threat.depthAhead} verbosity=${tacticVerbosity}`,
                 fen: result.fen,
+              });
+              // Mirror into the coach's session memory so when the user
+              // asks "what did you just say?" the brain can recall the
+              // alert it just spoke. WO-NARR-POLICY-02.
+              useCoachSessionStore.getState().appendMessage({
+                id: `tactic-alert-${Date.now()}`,
+                role: 'assistant',
+                content: warning,
+                timestamp: Date.now(),
               });
               void voiceService.speak(warning).catch((err: unknown) => {
                 console.warn('[tactic-alert] TTS failed:', err);
