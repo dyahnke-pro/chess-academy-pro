@@ -222,6 +222,15 @@ export type AuditKind =
   // Joins with the existing `voice-speak-invoked` audit on timestamp
   // for the full picture.
   | 'coach-narration-spoken'
+  // WO-COACH-FX-DIAG. Diagnostic checkpoints inside the coach-turn
+  // flow so the next audit log can pinpoint exactly where the FX
+  // path breaks. Joined with the existing coach-move-fx-emitted
+  // audit: if a checkpoint fires "reached applyCoachMove" but no
+  // coach-move-fx-emitted follows, the bug is inside applyCoachMove
+  // itself; if a "cancelled-at" checkpoint fires before the FX, the
+  // coach-turn cleanup is firing too aggressively. Temporary —
+  // remove once the FX-missing root cause is fixed and verified.
+  | 'coach-turn-checkpoint'
   // Per-move narration audit (WO-MOVE-NARRATION-REENABLE). Fires from
   // CoachGamePage (blunder + non-blunder branches), narrateMove() in
   // coachAgentRunner, and CoachPlaySessionView whenever a move-level

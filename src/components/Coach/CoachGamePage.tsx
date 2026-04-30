@@ -2018,7 +2018,32 @@ export function CoachGamePage(): JSX.Element {
           return;
         }
 
-        if (isCancelled()) return;
+        // WO-COACH-FX-DIAG — log every coach-move flow checkpoint so the
+        // next audit log can pinpoint exactly where the FX path breaks.
+        // The user reported missing sound + highlight on coach moves
+        // even though `applyCoachMove` has both wired; the audit log
+        // showed zero `coach-move-fx-emitted` events despite the moves
+        // landing on the board. Suspecting an `isCancelled()` early
+        // return between tryMakeMove and applyCoachMove (the useEffect
+        // dependency on `game.fen` could re-run cleanup mid-flow).
+        void logAppAudit({
+          kind: 'coach-turn-checkpoint',
+          category: 'subsystem',
+          source: 'CoachGamePage.coachTurn',
+          summary: `move-committed san=${result.san} cancelled=${isCancelled()}`,
+          fen: result.fen,
+        });
+
+        if (isCancelled()) {
+          void logAppAudit({
+            kind: 'coach-turn-checkpoint',
+            category: 'subsystem',
+            source: 'CoachGamePage.coachTurn',
+            summary: `cancelled-at=post-tryMakeMove (gate 1) — applyCoachMove will be skipped`,
+            fen: result.fen,
+          });
+          return;
+        }
 
         console.log('[CoachGame] Coach played:', result.san);
 
@@ -2047,7 +2072,24 @@ export function CoachGamePage(): JSX.Element {
           // Fall back to pre-coach analysis if post-analysis fails
         }
 
-        if (isCancelled()) return;
+        if (isCancelled()) {
+          void logAppAudit({
+            kind: 'coach-turn-checkpoint',
+            category: 'subsystem',
+            source: 'CoachGamePage.coachTurn',
+            summary: `cancelled-at=post-postCoachAnalysis (gate 2) — applyCoachMove will be skipped`,
+            fen: result.fen,
+          });
+          return;
+        }
+
+        void logAppAudit({
+          kind: 'coach-turn-checkpoint',
+          category: 'subsystem',
+          source: 'CoachGamePage.coachTurn',
+          summary: `reached applyCoachMove call — about to fire FX (sound + highlight + audit)`,
+          fen: result.fen,
+        });
 
         const postCoachEval = postCoachAnalysis?.evaluation ?? analysis.evaluation;
         applyCoachMove(result, postCoachEval, analysis.evaluation, analysis.bestMove);
