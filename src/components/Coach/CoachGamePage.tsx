@@ -2018,14 +2018,16 @@ export function CoachGamePage(): JSX.Element {
           return;
         }
 
-        // WO-COACH-FX-DIAG — log every coach-move flow checkpoint so the
-        // next audit log can pinpoint exactly where the FX path breaks.
-        // The user reported missing sound + highlight on coach moves
-        // even though `applyCoachMove` has both wired; the audit log
-        // showed zero `coach-move-fx-emitted` events despite the moves
-        // landing on the board. Suspecting an `isCancelled()` early
-        // return between tryMakeMove and applyCoachMove (the useEffect
-        // dependency on `game.fen` could re-run cleanup mid-flow).
+        // WO-COACH-FX-DIAG checkpoint — keep the diagnostic trace so the
+        // audit log retains the FX flow signal, but do NOT bail on
+        // cancellation: chess.js was already mutated by tryMakeMove, so
+        // applyCoachMove MUST run to keep gameState.moves in sync and
+        // fire the last-move highlight, sound, narration, and move-list
+        // entry. Cancellation at this gate is expected — game.fen
+        // flipped during tryMakeMove, the useEffect re-fired, and the
+        // previous run's controller was aborted. Let the in-flight call
+        // commit its FX; the FEN-turn guard at the top of makeCoachMove
+        // prevents the next effect run from double-firing.
         void logAppAudit({
           kind: 'coach-turn-checkpoint',
           category: 'subsystem',
@@ -2036,13 +2038,11 @@ export function CoachGamePage(): JSX.Element {
 
         if (isCancelled()) {
           void logAppAudit({
-            kind: 'coach-turn-checkpoint',
+            kind: 'coach-move-fx-cancellation-ignored',
             category: 'subsystem',
-            source: 'CoachGamePage.coachTurn',
-            summary: `cancelled-at=post-tryMakeMove (gate 1) — applyCoachMove will be skipped`,
-            fen: result.fen,
+            source: 'CoachGamePage',
+            summary: `gate=post-tryMakeMove san=${result.san} — committing FX path`,
           });
-          return;
         }
 
         console.log('[CoachGame] Coach played:', result.san);
@@ -2072,15 +2072,16 @@ export function CoachGamePage(): JSX.Element {
           // Fall back to pre-coach analysis if post-analysis fails
         }
 
+        // Same reasoning as the gate above — the move is already on the
+        // board, so applyCoachMove must run regardless of whether the
+        // effect was cancelled during the post-move analysis await.
         if (isCancelled()) {
           void logAppAudit({
-            kind: 'coach-turn-checkpoint',
+            kind: 'coach-move-fx-cancellation-ignored',
             category: 'subsystem',
-            source: 'CoachGamePage.coachTurn',
-            summary: `cancelled-at=post-postCoachAnalysis (gate 2) — applyCoachMove will be skipped`,
-            fen: result.fen,
+            source: 'CoachGamePage',
+            summary: `gate=post-postCoachAnalysis san=${result.san} — committing FX path`,
           });
-          return;
         }
 
         void logAppAudit({

@@ -312,7 +312,14 @@ export type AuditKind =
   // the prompt-assembly side so we can confirm in production logs that
   // profanity=hard / mockery=hard actually flowed into the LLM call —
   // not just into the TTS layer.
-  | 'coach-move-personality-applied';
+  | 'coach-move-personality-applied'
+  // Coach FX cancellation race — fires when the coach-turn effect was
+  // aborted (game.fen changed, useEffect re-fired) AFTER chess.js was
+  // already mutated. We commit the FX path anyway to keep
+  // gameState.moves in sync with the chess instance and to ensure the
+  // last-move highlight, sound, narration, and move-list entry land
+  // on the coach's move.
+  | 'coach-move-fx-cancellation-ignored';
 
 export interface AuditEntry {
   timestamp: number;
