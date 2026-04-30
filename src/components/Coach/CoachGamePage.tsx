@@ -508,6 +508,13 @@ export function CoachGamePage(): JSX.Element {
   const previousFenRef = useRef<string | null>(null);
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   const moveCountRef = useRef(0);
+  // Track which openings we've already introduced this game so the
+  // long teaching narration only fires ONCE per opening, not on
+  // every move in book. Routine book moves stay silent until a key
+  // moment (blunder / mistake / brilliant) or a phase transition
+  // (handled by usePhaseNarration). Reset on game restart below
+  // so a fresh game can re-introduce the opening.
+  const introducedOpeningsRef = useRef<Set<string>>(new Set());
 
   // Requested opening — read live from the memory store. Post-tightening
   // (WO-BRAIN-04) the move-selector no longer derives a parallel SAN
@@ -1200,6 +1207,9 @@ export function CoachGamePage(): JSX.Element {
     // Reset the phase-transition ledger so the new game can fire its
     // transitions fresh (WO-PHASE-NARRATION-01).
     phaseStateRef.current = createPhaseTransitionState();
+    // Reset the introduced-openings tracker so the next opening gets
+    // its long teaching intro again.
+    introducedOpeningsRef.current = new Set();
     // Cancel any pending coach quiz — its expectedSan refers to the
     // old position and won't match anything in the fresh game.
     cancelActiveQuizRef.current('game-restart');
@@ -2389,9 +2399,41 @@ export function CoachGamePage(): JSX.Element {
         fen: moveResult.fen,
       });
     }
+    // Sparse-cadence narration (WO-NARRATION-CADENCE).
+    //
+    // The previous behavior fired the LLM on every move while in
+    // opening teaching mode, which made the game feel like waiting
+    // for the coach to monologue between every move (5-7s latency
+    // per call, ~1700-char response). Player flow died.
+    //
+    // New cadence:
+    //   1. ONCE per opening — fire the long teaching narration the
+    //      first time we see a recognizable opening name. Subsequent
+    //      moves in the same opening stay silent unless a key moment
+    //      fires.
+    //   2. KEY MOMENTS — blunders / mistakes / inaccuracies /
+    //      brilliants / greats trigger a short personality-laden
+    //      zinger (briefMode below). Latency budget: ~2s for a
+    //      1-2 sentence response with mockery / critique.
+    //   3. PHASE TRANSITIONS — handled by usePhaseNarration. Fires
+    //      automatically at opening→middlegame and
+    //      middlegame→endgame, giving the next teaching beat.
+    //   4. EXPLICIT every-move setting — power users who set
+    //      `coachCommentaryVerbosity = 'every-move'` still get the
+    //      old per-move running commentary.
+    const isFirstSeeingOpening =
+      inOpeningTeaching &&
+      !!resolvedSubject &&
+      !introducedOpeningsRef.current.has(resolvedSubject);
+    const isKeyMoment = shouldCallLlmForMove(verbosity, classification);
+    const userWantsEveryMove = verbosity === 'every-move';
+    // briefMode: short personality-laden response. Skipped for the
+    // big opening intro (wants long prose) and for explicit
+    // every-move (user wants normal length).
+    const briefMode = isKeyMoment && !isFirstSeeingOpening && !userWantsEveryMove;
     const shouldFire =
       narrationDensity !== 'none' &&
-      (inOpeningTeaching || shouldCallLlmForMove(verbosity, classification));
+      (isFirstSeeingOpening || isKeyMoment || userWantsEveryMove);
     if (shouldFire) {
       try {
         // Build a probe Chess instance that carries the FULL move
@@ -2548,7 +2590,19 @@ export function CoachGamePage(): JSX.Element {
           // inferring (audit log build ac20cc5 caught it narrating
           // the student's e4 as "Alright, I'm playing e4...").
           studentColor: playerColor === 'white' ? 'w' : 'b',
+          // Brief mode for key-moment zingers (blunders, mistakes,
+          // brilliants etc.) — short personality-laden 1-2 sentence
+          // response (~2s latency). Long-form prose only fires for
+          // the once-per-opening intro and explicit every-move mode.
+          briefMode,
         });
+        // Mark this opening as introduced so subsequent moves in the
+        // same line stay silent (until a key moment or phase transition).
+        // Only mark on success — if the LLM returned empty / errored,
+        // we'll retry on the next move.
+        if (llm && resolvedSubject && isFirstSeeingOpening) {
+          introducedOpeningsRef.current.add(resolvedSubject);
+        }
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
         // Mirror the commentary into the shared session so the next
         // chat turn (or the next move's narration) sees what we just
@@ -2970,6 +3024,7 @@ export function CoachGamePage(): JSX.Element {
     // Transition from postgame back to playing mode with chat
     game.resetGame();
     moveCountRef.current = 0;
+    introducedOpeningsRef.current = new Set();
     setGameState({
       gameId: `game-${Date.now()}`,
       playerColor,
@@ -3284,6 +3339,7 @@ export function CoachGamePage(): JSX.Element {
             // Reset phase-transition ledger for the fresh game
             // (WO-PHASE-NARRATION-01).
             phaseStateRef.current = createPhaseTransitionState();
+            introducedOpeningsRef.current = new Set();
             setGameState({
               gameId: `game-${Date.now()}`,
               playerColor,
