@@ -1188,15 +1188,15 @@
         },
         {
           "san": "a4",
-          "annotation": ""
+          "annotation": "White advances the a-pawn two squares to a4, immediately confronting the black pawn posted on b5. This queenside thrust — the defining idea of the a4 Pawn Break — creates direct tension on the flank and demands that Black make a concrete decision about that advanced pawn. The move stakes a claim to queenside space at a critical moment in the opening."
         },
         {
           "san": "Bb7",
-          "annotation": ""
+          "annotation": "Black develops the bishop to b7, sliding it out of the back rank and onto the long a8-h1 diagonal. From b7, the bishop eyes the center and adds pressure down that diagonal, complementing the pawn structure that has taken shape with the b5-a6 chain on the queenside."
         },
         {
           "san": "axb5",
-          "annotation": "",
+          "annotation": "White's a-pawn strikes out with axb5, snapping off the pawn that stood on b5 and planting itself deep into Black's half of the board. The capture opens the a-file and leaves Black's pawn on a6 somewhat stranded, no longer supported by its former neighbor.",
           "arrows": [
             {
               "from": "a4",
@@ -1207,7 +1207,7 @@
         },
         {
           "san": "axb5",
-          "annotation": "",
+          "annotation": "Black recaptures on b5 with the a-pawn, snatching the pawn White had pushed there in the a4 pawn break. The black pawn now stands firmly on b5, and the a6 square is left vacant behind it. This recapture keeps Black's pawn count intact while restoring a measure of central and queenside stability.",
           "arrows": [
             {
               "from": "a6",
@@ -1218,31 +1218,31 @@
         },
         {
           "san": "Rxa8",
-          "annotation": ""
+          "annotation": "White's rook sweeps all the way to a8, capturing the black rook that stood there and planting itself deep inside Black's camp. The exchange is the direct payoff of the a-file pressure White has been building, and the rook now sits aggressively on the eighth rank right beside the black knight on b8. Black's back rank is suddenly quite crowded, with the king, queen, bishop, and remaining rook all jostling for space on that final row."
         },
         {
           "san": "Bxa8",
-          "annotation": ""
+          "annotation": "Black's dark-squared bishop sweeps diagonally from b7 all the way to a8, snatching the white rook in the corner. This is a striking material decision — Black wins the exchange, trading a bishop for a rook. The bishop now sits entrenched on a8, though it is somewhat hemmed in by its own pieces clustered on the back rank."
         },
         {
           "san": "Ne5",
-          "annotation": ""
+          "annotation": "White's knight strides forward from f3 to e5, seizing a commanding central outpost deep in the heart of the board. Planted on e5, the knight dominates a powerful square and puts immediate pressure on Black's position, while remaining well-supported by the pawn on d4. This active leap is a natural and ambitious idea for White in the a4 Pawn Break variation."
         },
         {
           "san": "Nd5",
-          "annotation": ""
+          "annotation": "Black centralizes the knight with purpose, swinging it from f6 to the commanding d5 outpost. From there it sits deep in White's half of the board, supported by the pawn chain stretching from e6 through b5, and directly confronts the White knight stationed on e5. It is a compact, assertive repositioning that gives Black a strong foothold in the heart of the position."
         },
         {
           "san": "Nc3",
-          "annotation": ""
+          "annotation": "White develops the knight from b1 to c3, a natural square where it shores up the d4 pawn and immediately eyes the well-posted black knight on d5. With this move, White now has two knights actively placed in the center, the one on c3 working in tandem with its counterpart already established on e5."
         },
         {
           "san": "Nxc3",
-          "annotation": ""
+          "annotation": "Black's knight sweeps from d5 to c3, snapping off the white knight that had been stationed there. The capture removes a piece from White's queenside and plants the black knight on an aggressive central outpost, where it bears down on several key squares."
         },
         {
           "san": "bxc3",
-          "annotation": "",
+          "annotation": "White's b-pawn steps forward to capture the black knight that had ventured deep into White's territory on c3, removing a potentially disruptive piece from the heart of the position. The recapture leaves White with a pawn now standing on c3, backed by the pawn on d4, restoring material balance while consolidating the central pawn structure.",
           "arrows": [
             {
               "from": "b2",
@@ -1253,19 +1253,19 @@
         },
         {
           "san": "Bd5",
-          "annotation": ""
+          "annotation": "Black's bishop makes a sweeping journey from the corner on a8 all the way to the dynamic central square d5, claiming a commanding post in the heart of the board. From d5, the bishop trains its sights directly down the long diagonal toward White's fianchettoed bishop on g2, immediately generating tension along that critical diagonal. The bishop is well supported by Black's advanced pawn chain, and its arrival on d5 transforms it from a passive piece into a powerful central force."
         },
         {
           "san": "Nxc4",
-          "annotation": ""
+          "annotation": "White's knight swoops from e5 to c4, snatching the pawn and landing on a firm, centrally placed square. The knight now stands directly adjacent to Black's bishop on d5, injecting immediate tension into the heart of the position. This energetic capture is a signature moment in the a4 Pawn Break variation, as White gains material while asserting a commanding presence in the center."
         },
         {
           "san": "Bxg2",
-          "annotation": ""
+          "annotation": "Black's bishop sweeps across the board from d5 to g2, snapping off White's bishop and eliminating a piece that had been part of White's kingside structure. The dark-squared bishop now sits boldly on g2, deep in White's own camp and just one square from the white king on g1."
         },
         {
           "san": "Kxg2",
-          "annotation": "",
+          "annotation": "The white king strides forward from g1 to g2, capturing the black bishop that had infiltrated that square. With the a4 Pawn Break variation in full swing, White opts to reclaim material immediately rather than allow the bishop to linger. The king now stands on g2, having cleared the intruder and steadied the kingside pawn structure around it.",
           "arrows": [
             {
               "from": "g1",
@@ -1276,7 +1276,7 @@
         },
         {
           "san": "bxc4",
-          "annotation": "",
+          "annotation": "Black snaps off the white knight with the b-pawn, landing on c4 deep in White's half of the board. The capture wins material and plants a passed pawn on an advanced square, disrupting the structure around White's center. It is a concrete payoff for Black's patient queenside expansion in this line.",
           "arrows": [
             {
               "from": "b5",
@@ -1287,15 +1287,15 @@
         },
         {
           "san": "Qa4+",
-          "annotation": ""
+          "annotation": "White's queen makes a bold leap to a4, delivering check to the black king on e8 along the a4–e8 diagonal. The move is doubly purposeful, as the queen now also bears down on Black's advanced pawn sitting on c4, combining an immediate royal threat with pressure on that outpost."
         },
         {
           "san": "Nd7",
-          "annotation": ""
+          "annotation": "Black's knight stirs from its idle post on b8 and advances to d7, at last joining the game. Settled in the center, the knight finds a stable and influential outpost from which it can participate in the unfolding queenside tension created by Black's advanced c4 pawn."
         },
         {
           "san": "Qxc4",
-          "annotation": ""
+          "annotation": "White's queen swoops from a4 to c4, snapping off the pawn that stood there. The queen now occupies a commanding central post on c4, bearing down on both the c-file and the long diagonal toward the kingside."
         }
       ]
     },
@@ -1309,71 +1309,71 @@
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "Black develops the knight from g8 to f6, placing it on a natural and active central square. From f6, the knight exerts immediate influence over the e4 and d5 squares, staking a claim in the heart of the board from the very first move. This classical developing gesture is a reliable cornerstone of many Indian and Catalan defenses."
         },
         {
           "san": "c4",
-          "annotation": ""
+          "annotation": "White advances the c-pawn two squares to c4, joining the pawn already posted on d4 to stake out a commanding presence in the center. Together these two pawns form the classic broad pawn duo that characterizes the Catalan's ambitions, controlling key central squares and granting White a spatial edge from the outset."
         },
         {
           "san": "e6",
-          "annotation": ""
+          "annotation": "Black advances the e-pawn one square to e6, a solid and restrained choice that reinforces control of the central dark squares. The move opens the diagonal for the bishop on f8 while keeping the pawn structure compact and resilient, a hallmark of the patient defensive philosophy suggested by this variation's name."
         },
         {
           "san": "g3",
-          "annotation": ""
+          "annotation": "White advances the g-pawn one square to g3, the defining moment that stamps this game with the Catalan's identity. This quiet push opens the long diagonal running through f1, giving the bishop there a future home on the kingside flank and anchoring White's plan to control the center from a distance."
         },
         {
           "san": "d5",
-          "annotation": ""
+          "annotation": "Black advances the d-pawn two squares to d5, planting a second pawn in the center alongside the one already on e6. The move directly contests White's c4 pawn and establishes a firm central foothold that is a hallmark of Black's solid approach in the Closed Catalan. With the knight already posted on f6, Black's central duo on d5 and e6 works in coordination to restrain White's initiative."
         },
         {
           "san": "Bg2",
-          "annotation": ""
+          "annotation": "White completes the fianchetto by sliding the bishop from f1 to g2, where it rests on the long diagonal behind the pawn on g3. This is the defining move of the Catalan — the bishop on g2 exerts quiet but lasting pressure along the a8–g2 diagonal, bearing down on the center and queenside. The Closed Catalan Patience variation takes shape as White's bishop finds its ideal home."
         },
         {
           "san": "Be7",
-          "annotation": ""
+          "annotation": "Black tucks the bishop back from f8 to e7, a modest but purposeful development that clears the path for kingside castling. Rather than posting the bishop on a more ambitious diagonal, Black chooses solidity in the spirit of the Closed Catalan Patience, keeping the structure compact and secure. The bishop on e7 comfortably supports the central pawn on e6 while the king's route to safety remains open."
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White brings the king's knight to f3, its most natural square in the Closed Catalan, where it adds support to the central pawns on c4 and d4. The knight also joins the fianchettoed bishop on g2 in putting pressure on the long diagonal and the heart of the position. With this move, White's kingside development takes clear shape."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "Black tucks the king away to safety with kingside castling, a natural and important step in this Closed Catalan structure. The king finds a secure home on g8 while the rook slides to f8, connecting Black's forces and removing the king from the central tension revolving around the d5 pawn."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "White completes kingside castling, carrying the king to g1 and sliding the rook to f1 in one smooth motion. The king nestles securely behind the fianchettoed bishop on g2, a fitting home in this Closed Catalan Patience structure. With the rooks now able to communicate, White's pieces are well coordinated across the board."
         },
         {
           "san": "Nbd7",
-          "annotation": ""
+          "annotation": "Black develops the knight from b8 to d7, where it takes up a solid supporting role in the center. The two knights on d7 and f6 now form a coordinated pair that reinforces the important pawn on d5, a key feature of Black's structure in the Closed Catalan Patience. This patient, methodical development keeps Black's position compact and well-defended without overextending."
         },
         {
           "san": "Qc2",
-          "annotation": ""
+          "annotation": "White slides the queen from d1 to c2, a hallmark move of the Closed Catalan Patience. From c2, the queen lends additional support to the c4 pawn while occupying a flexible central post that keeps White's options open. The move is unhurried and purposeful, reflecting the methodical, long-term pressure that defines this variation."
         },
         {
           "san": "c6",
-          "annotation": ""
+          "annotation": "Black advances the c-pawn one square to c6, throwing an extra layer of protection behind the d5 pawn and tightening the center. This solid, unhurried approach is characteristic of the Closed Catalan Patience, where Black opts for structural reliability rather than early piece activity. With both the e6 pawn and now c6 bolstering d5, Black's central formation becomes a sturdy foundation."
         },
         {
           "san": "Nbd2",
-          "annotation": ""
+          "annotation": "White develops the queen's knight to d2, a modest but purposeful square in the spirit of the Closed Catalan Patience. From d2, the knight avoids blocking the c1-bishop while lending quiet support to the central pawn structure. The two white knights now stand on f3 and d2, coordinating behind the broad pawn duo on c4 and d4."
         },
         {
           "san": "b6",
-          "annotation": ""
+          "annotation": "Black nudges the b-pawn forward to b6, reinforcing the c6 pawn and giving the dark-squared bishop on c8 a potential diagonal to emerge. The move also tightens the queenside pawn structure, making it harder for White to find immediate breaks in that area. It is a patient, consolidating step in keeping with the slow, methodical character of this Closed Catalan line."
         },
         {
           "san": "e4",
-          "annotation": ""
+          "annotation": "White advances the e-pawn two squares to e4, staking out a commanding presence in the center alongside the pawns already on d4 and c4. This bold thrust gives White a massive three-pawn center, putting immediate pressure on Black's position. The Closed Catalan's patient buildup has now culminated in a direct central challenge."
         },
         {
           "san": "dxe4",
-          "annotation": "dxe4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black seizes the moment by snapping off the white pawn, advancing the former d5-pawn all the way to e4 where it now sits as an aggressive outpost deep in White's half of the board. This central capture fundamentally transforms the pawn structure, giving Black a mobile passer in the heart of the position. The Closed Catalan Patience has now reached a critical crossroads, with the e4-pawn demanding an immediate response from White.",
           "arrows": [
             {
               "from": "d5",
@@ -1384,27 +1384,27 @@
         },
         {
           "san": "Nxe4",
-          "annotation": "Nxe4 — this capture changes the character of the position. Be alert."
+          "annotation": "White's knight on d2 strikes into the center, snapping off the pawn on e4 and planting itself on a powerful central outpost. From e4 the knight commands a broad swath of the board, and its arrival there also opens the diagonal for the fianchettoed bishop on g2. This recapture is a critical moment in the Closed Catalan Patience, as White seizes space and piece activity in one energetic stroke."
         },
         {
           "san": "Nxe4",
-          "annotation": "Nxe4 — this capture changes the character of the position. Be alert."
+          "annotation": "Black's knight on f6 sweeps into the center, capturing the white knight on e4 and planting itself on that active square. This bold exchange plants a black piece directly in the heart of the board, putting immediate pressure on White's pawn structure. The tension in the Closed Catalan sharpens as Black seizes the initiative in the middle of the board."
         },
         {
           "san": "Qxe4",
-          "annotation": "Qxe4 — this capture changes the character of the position. Be alert."
+          "annotation": "White recaptures on e4 with the queen, sweeping from c2 to snap off the knight that had landed there. The queen now occupies a powerful central post on e4, surveying broad diagonals and files from the heart of the board. Material balance is restored, and White's central pawns on c4 and d4 lend the queen a sturdy foundation."
         },
         {
           "san": "Bb7",
-          "annotation": ""
+          "annotation": "Black's light-squared bishop slides from c8 to b7, finding a more active home on the long diagonal. From b7 the bishop exerts pressure along the a8–h1 diagonal, where the white queen currently stands on e4. It is a patient, restrained developing move in keeping with the positional character of the Closed Catalan."
         },
         {
           "san": "Qe2",
-          "annotation": ""
+          "annotation": "White quietly retreats the queen from e4 back to e2, a patient regrouping move in the spirit of this variation's name. From e2, the queen lends additional support to the d4 pawn and keeps the central structure stable without overextending. It is a modest but purposeful step, consolidating White's position before committing to a more active plan."
         },
         {
           "san": "c5",
-          "annotation": "",
+          "annotation": "Black thrusts the c-pawn forward to c5, directly confronting White's pawns on c4 and d4 and injecting immediate tension into the center. After several moves of careful preparation in the Closed Catalan Patience, this advance marks Black's first concrete challenge to White's pawn structure. The black pawn now stands boldly on c5, creating a dynamic central confrontation.",
           "arrows": [
             {
               "from": "c6",
@@ -1415,11 +1415,11 @@
         },
         {
           "san": "Rd1",
-          "annotation": ""
+          "annotation": "White slides the rook from f1 to d1, planting it on the central d-file where it lines up against Black's queen on d8. The rook also lends additional support to the d4 pawn, reinforcing White's central presence in this patient, structured Catalan setup."
         },
         {
           "san": "Rc8",
-          "annotation": ""
+          "annotation": "Black slides the rook from a8 to c8, planting it on the half-open c-file directly opposite White's c4 pawn. This quiet but purposeful repositioning is characteristic of the patient maneuvering style the Closed Catalan Patience variation demands of both sides, as Black seeks to generate queenside counterplay by pressuring that advanced pawn."
         }
       ]
     },
@@ -1433,27 +1433,27 @@
         },
         {
           "san": "Nf6",
-          "annotation": ""
+          "annotation": "Black develops the knight from g8 to f6, placing it on one of the most active squares available in the early game. From f6, the knight bears down on central territory while completing a smooth piece development off the back rank. This natural response to White's d4 signals Black's intent to contest the center actively from the very first move."
         },
         {
           "san": "c4",
-          "annotation": ""
+          "annotation": "White advances the c-pawn to c4, planting it beside the d4 pawn to carve out a commanding central presence. Together these two pawns stake a broad claim in the heart of the board, a hallmark of the Queen's Gambit and related systems. This dual-pawn center immediately pressures Black to decide how to respond to White's spatial ambitions."
         },
         {
           "san": "e6",
-          "annotation": ""
+          "annotation": "Black's pawn steps forward to e6, reinforcing the central structure and lending firm support to a potential advance of the d-pawn. The move also opens the long diagonal for the dark-squared bishop on f8, giving it a future path into the game. In the spirit of the b5 Hold Attempt, this quiet but solid advance signals that Black intends to build a resilient pawn chain before committing to sharper operations."
         },
         {
           "san": "g3",
-          "annotation": ""
+          "annotation": "White nudges the pawn one square forward to g3, staking out space on the kingside and preparing to develop the bishop along the long diagonal. It is a calm, structural move that signals White's intention to build a solid foundation before committing to more direct action. The pawn on g3 also lends extra support to the center, reinforcing White's imposing duo on c4 and d4."
         },
         {
           "san": "d5",
-          "annotation": ""
+          "annotation": "Black's d-pawn advances two squares to d5, planting itself at the center of the board and directly challenging both of White's central pawns on c4 and d4. This confident thrust creates immediate tension in the middle of the board, as the new pawn on d5 stands side by side with White's c4 pawn. Together with the black pawn already on e6 and the knight on f6, Black now commands a meaningful share of the central squares."
         },
         {
           "san": "Bg2",
-          "annotation": ""
+          "annotation": "White tucks the bishop to g2, completing the kingside fianchetto that the earlier g3 pawn advance prepared. Settled behind the g3 pawn, the bishop now stretches along the long diagonal, adding pressure to the center from a safe, reinforced post. This development is a hallmark of the b5 Hold Attempt setup, lending White's position both flexibility and long-diagonal control."
         },
         {
           "san": "dxc4",
