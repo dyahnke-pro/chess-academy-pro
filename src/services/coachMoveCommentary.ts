@@ -423,12 +423,25 @@ async function getLlmCommentary(
   // `coach-move-narration-fired` (final disposition) into a
   // complete LLM call trail.
   const llmStartedAt = Date.now();
-  // 200 max_tokens for brief mode (key-moment zingers — 1-2
-  // sentences at ~2s latency); 1500 for the long teaching narration
-  // path. 1500 was bumped from 420 (audit build 1f23808 caught
-  // truncation at the cap with deepseek-reasoner; with deepseek-chat
-  // the budget all goes to content so 1500 ≈ 5500-6000 chars).
-  const maxTokens = briefMode ? 200 : 1500;
+  // WO-NARR-POLICY-01: tightened caps for LIVE play. Production audit
+  // caught narrations running 1300-2200 chars (~50-90s of TTS audio)
+  // at the old 1500-token cap, faster than the user could keep up
+  // with — the narration would get clipped because they played the
+  // next move before the previous narration finished. New caps for
+  // live play:
+  //   briefMode  150 tokens ≈ 1-2 sentences (~10-15s of speech).
+  //   long mode  500 tokens ≈ 4-6 sentences (~25-35s of speech, fits
+  //              an opening intro with general ideas + things to
+  //              watch for without dragging into a 90s lecture).
+  // Generation latency drops in proportion: long-mode prompts that
+  // used to take 5-8s now finish in ~2-3s.
+  //
+  // Post-game review (reviewTone=true) keeps the original 1500-token
+  // ceiling — Dave wants the review narration uncapped so the coach
+  // can dive deep on each key moment.
+  const maxTokens = reviewTone
+    ? (briefMode ? 200 : 1500)
+    : (briefMode ? 150 : 500);
   const response = await getCoachChatResponse(
     [{ role: 'user', content: user }],
     system,

@@ -319,7 +319,11 @@ export type AuditKind =
   // gameState.moves in sync with the chess instance and to ensure the
   // last-move highlight, sound, narration, and move-list entry land
   // on the coach's move.
-  | 'coach-move-fx-cancellation-ignored';
+  | 'coach-move-fx-cancellation-ignored'
+  // WO-NARR-POLICY-01 — proactive tactic alert spoken after the coach
+  // sets up a threat on the board. Stockfish-driven (no LLM round-trip),
+  // fires under verbosity in {'key-moments', 'every-move'}.
+  | 'coach-tactic-alert-spoken';
 
 export interface AuditEntry {
   timestamp: number;

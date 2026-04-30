@@ -514,7 +514,16 @@ export function CoachGamePage(): JSX.Element {
   // moment (blunder / mistake / brilliant) or a phase transition
   // (handled by usePhaseNarration). Reset on game restart below
   // so a fresh game can re-introduce the opening.
-  const introducedOpeningsRef = useRef<Set<string>>(new Set());
+  //
+  // NB (WO-NARR-POLICY-01): collapsed from a Set<openingName> to a
+  // single boolean. The auto-detector refines the opening name as more
+  // moves are played ("Italian Game" → "King's Pawn Game" → "Damiano
+  // Defense"), so the per-name set was firing the long intro three
+  // times in a row for what the user perceives as one opening. One
+  // intro per GAME aligns with what was asked for. Only fires under
+  // verbosity='every-move' — under 'key-moments' the user explicitly
+  // asked for silence except on actual events.
+  const openingIntroSpokenRef = useRef<boolean>(false);
 
   // Requested opening — read live from the memory store. Post-tightening
   // (WO-BRAIN-04) the move-selector no longer derives a parallel SAN
@@ -1209,7 +1218,7 @@ export function CoachGamePage(): JSX.Element {
     phaseStateRef.current = createPhaseTransitionState();
     // Reset the introduced-openings tracker so the next opening gets
     // its long teaching intro again.
-    introducedOpeningsRef.current = new Set();
+    openingIntroSpokenRef.current = false;
     // Cancel any pending coach quiz — its expectedSan refers to the
     // old position and won't match anything in the fresh game.
     cancelActiveQuizRef.current('game-restart');
@@ -1622,16 +1631,19 @@ export function CoachGamePage(): JSX.Element {
         ...prev,
         moves: [...prev.moves, coachMove],
       }));
-      // Narrate the coach's move when narration mode is on. Falls
-      // back to a short SAN announcement since applyCoachMove doesn't
-      // generate LLM commentary on the engine's side.
-      // Stop any in-flight TTS (a stale voice-chat reply still playing,
-      // the previous move's narration that overran) before the coach's
-      // move speaks. Without this the coach narration and a prior
-      // voice-chat reply can overlap — the student hears two voices
-      // at once. Matches the player-move path's guard below.
+      // Narrate the coach's move when narration mode is on. Coach moves
+      // almost never have LLM commentary attached — applyCoachMove
+      // doesn't run the LLM on the engine's side — so narrateMove
+      // typically returns early with reason=empty-commentary. We used
+      // to call voiceService.stop() unconditionally before narrateMove
+      // to prevent overlap, but that clipped the student's in-flight
+      // narration about THEIR last move every time the coach replied
+      // (~5s into a 50-90s narration), which was the user-reported
+      // "narration keeps getting cut off" symptom. WO-NARR-POLICY-01:
+      // let voiceService.speak handle interruption itself — it already
+      // stops the previous utterance before starting a new one — and
+      // only when narrateMove actually produces speech.
       const coachSide: 'w' | 'b' = playerColor === 'white' ? 'b' : 'w';
-      voiceService.stop();
       narrateMove({
         san: result.san,
         mover: coachSide,
@@ -2143,8 +2155,18 @@ export function CoachGamePage(): JSX.Element {
           evalAfter: postCoachEval,
         });
 
-        // Proactive warning: scan for opponent threats after coach's move
-        if (postCoachAnalysis && !isCancelled()) {
+        // Proactive tactic alert: scan for opponent threats after coach's
+        // move. Fires the alert as soon as the threat lands on the board
+        // — BEFORE the student plays into it — which is the only useful
+        // moment per the user. Stockfish-driven (no LLM round-trip), so
+        // it speaks within ~100ms of the coach's reply.
+        //
+        // WO-NARR-POLICY-01: gated on verbosity !== 'off'. Both
+        // 'key-moments' and 'every-move' speak the alert; 'off' stays
+        // silent. Cancellation is intentionally NOT a gate — same
+        // reasoning as the FX path: chess.js is mutated, the threat
+        // exists on the board, the player needs to hear it.
+        if (postCoachAnalysis) {
           const playerColorCode = playerColor === 'white' ? 'w' : 'b';
           const upcoming = scanUpcomingTactics(
             result.fen,
@@ -2155,6 +2177,19 @@ export function CoachGamePage(): JSX.Element {
           if (threats.length > 0) {
             const warning = `Be careful — ${threats[0].pattern.description}.`;
             gameChatRef.current?.injectAssistantMessage(warning);
+            const tacticVerbosity = resolveVerbosity(useAppStore.getState().activeProfile);
+            if (tacticVerbosity !== 'off') {
+              void logAppAudit({
+                kind: 'coach-tactic-alert-spoken',
+                category: 'subsystem',
+                source: 'CoachGamePage.coachTurn',
+                summary: `pattern=${threats[0].pattern.description} verbosity=${tacticVerbosity}`,
+                fen: result.fen,
+              });
+              void voiceService.speak(warning).catch((err: unknown) => {
+                console.warn('[tactic-alert] TTS failed:', err);
+              });
+            }
           }
         }
       } catch (error) {
@@ -2468,14 +2503,25 @@ export function CoachGamePage(): JSX.Element {
     // Settings → Coach → Commentary Frequency drives this:
     //   'off'         → all three triggers gated off (silent except
     //                   for deterministic tactic suffix)
-    //   'key-moments' → smart cadence (opening intro + key moments
-    //                   + phase transitions)
-    //   'every-move'  → narrate every move (legacy chatty mode)
+    //   'key-moments' → blunder/mistake/brilliant/great only. NO
+    //                   opening intro, NO phase transition prose.
+    //                   Tactic alerts still speak from the post-coach
+    //                   scan — those are Stockfish-driven, no LLM
+    //                   latency, and the user wants them as soon as
+    //                   the threat lands on the board.
+    //   'every-move'  → opening intro once per game + every player
+    //                   move + key moments + tactic alerts.
+    //
+    // WO-NARR-POLICY-01: opening intro gated to 'every-move' only.
+    // Under 'key-moments' the user explicitly asked for silence except
+    // on actual events. The intro flag is also collapsed from per-name
+    // to per-game so a refining auto-detect doesn't trigger three
+    // intros for one opening.
     const isFirstSeeingOpening =
-      verbosity !== 'off' &&
+      verbosity === 'every-move' &&
       inOpeningTeaching &&
       !!resolvedSubject &&
-      !introducedOpeningsRef.current.has(resolvedSubject);
+      !openingIntroSpokenRef.current;
     const isKeyMoment = shouldCallLlmForMove(verbosity, classification);
     const userWantsEveryMove = verbosity === 'every-move';
     // briefMode: short personality-laden response. Skipped for the
@@ -2652,7 +2698,7 @@ export function CoachGamePage(): JSX.Element {
         // Only mark on success — if the LLM returned empty / errored,
         // we'll retry on the next move.
         if (llm && resolvedSubject && isFirstSeeingOpening) {
-          introducedOpeningsRef.current.add(resolvedSubject);
+          openingIntroSpokenRef.current = true;
         }
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
         // Mirror the commentary into the shared session so the next
@@ -3075,7 +3121,7 @@ export function CoachGamePage(): JSX.Element {
     // Transition from postgame back to playing mode with chat
     game.resetGame();
     moveCountRef.current = 0;
-    introducedOpeningsRef.current = new Set();
+    openingIntroSpokenRef.current = false;
     setGameState({
       gameId: `game-${Date.now()}`,
       playerColor,
@@ -3390,7 +3436,7 @@ export function CoachGamePage(): JSX.Element {
             // Reset phase-transition ledger for the fresh game
             // (WO-PHASE-NARRATION-01).
             phaseStateRef.current = createPhaseTransitionState();
-            introducedOpeningsRef.current = new Set();
+            openingIntroSpokenRef.current = false;
             setGameState({
               gameId: `game-${Date.now()}`,
               playerColor,
