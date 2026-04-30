@@ -18,7 +18,7 @@
  * UserPreferences (added in PR B). Prompt-assembly machinery shipped
  * in PR A.
  */
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, X } from 'lucide-react';
 import { db } from '../../db/schema';
@@ -107,8 +107,10 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
   const currentFlirt: IntensityLevel =
     profile.preferences.coachFlirt ?? 'none';
 
-  // Draft state mirrors the persisted state until the user clicks Save.
-  // Cancel discards drafts.
+  // WO-AUTOSAVE-01: drop the draft / Save-button gate. Settings now
+  // persist on every change (debounced 250ms). The local state still
+  // exists for instant UI feedback; the autosave effect below mirrors
+  // it back into Dexie + the parent profile store.
   const [draftPersonality, setDraftPersonality] = useState<CoachPersonality>(currentPersonality);
   const [draftProfanity, setDraftProfanity] = useState<IntensityLevel>(currentProfanity);
   const [draftMockery, setDraftMockery] = useState<IntensityLevel>(currentMockery);
@@ -150,7 +152,24 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
     setDraftFlirt(defaults.flirt);
   };
 
-  const handleSave = async (): Promise<void> => {
+  // Auto-save effect: persist every change to draft state with a
+  // 250ms debounce so a rapid sequence of toggles doesn't fan out
+  // into N Dexie writes. Skips the initial mount (where draft state
+  // is just mirroring loaded prefs) via skipFirstSaveRef.
+  const skipFirstSaveRef = useRef(true);
+  useEffect(() => {
+    if (skipFirstSaveRef.current) {
+      skipFirstSaveRef.current = false;
+      return;
+    }
+    const handle = setTimeout(() => {
+      void persistPersonality();
+    }, 250);
+    return () => clearTimeout(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [draftPersonality, draftProfanity, draftMockery, draftFlirt, draftVoiceMap]);
+
+  const persistPersonality = async (): Promise<void> => {
     const before = {
       personality: currentPersonality,
       profanity: currentProfanity,
@@ -186,14 +205,13 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
     void logAppAudit({
       kind: 'coach-personality-changed',
       category: 'subsystem',
-      source: 'PersonalityPanel.handleSave',
+      source: 'PersonalityPanel.autosave',
       summary: `${before.personality} (${before.profanity}/${before.mockery}/${before.flirt}) → ${after.personality} (${after.profanity}/${after.mockery}/${after.flirt}); voice@active=${draftVoiceMap[draftPersonality]}`,
       details: JSON.stringify({ before, after, voiceOverrides, voiceMap: draftVoiceMap }),
     });
-    setOpen(false);
   };
 
-  const handleCancel = (): void => {
+  const handleClose = (): void => {
     setOpen(false);
   };
 
@@ -223,11 +241,11 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={handleCancel}
+            onClick={handleClose}
             data-testid="personality-panel-backdrop"
           >
             <motion.div
-              className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border-2 p-4"
+              className="w-full max-w-2xl max-h-[90dvh] overflow-y-auto rounded-2xl border-2 p-4"
               style={{
                 background: 'var(--color-bg)',
                 borderColor: 'var(--color-border)',
@@ -241,7 +259,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-bold">Coach Personality</h2>
                 <button
-                  onClick={handleCancel}
+                  onClick={handleClose}
                   className="p-1 rounded-lg hover:bg-theme-surface"
                   aria-label="Close personality settings"
                   data-testid="personality-panel-close"
@@ -345,27 +363,21 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
                 </button>
               </div>
 
-              {/* Save / Cancel */}
+              {/* Done — settings auto-save on change, this just closes
+                  the modal. Single full-width button for tap clarity on
+                  mobile. WO-AUTOSAVE-01. */}
               <div className="flex gap-2 pt-3 border-t" style={{ borderColor: 'var(--color-border)' }}>
                 <button
-                  onClick={handleCancel}
-                  className="flex-1 py-2 rounded-xl border text-sm"
-                  style={{ borderColor: 'var(--color-border)' }}
-                  data-testid="personality-cancel"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => void handleSave()}
+                  onClick={handleClose}
                   className="flex-1 py-2 rounded-xl border-2 text-sm font-semibold"
                   style={{
                     borderColor: 'var(--color-accent)',
                     background: 'var(--color-accent)',
                     color: 'var(--color-bg)',
                   }}
-                  data-testid="personality-save"
+                  data-testid="personality-done"
                 >
-                  Save
+                  Done
                 </button>
               </div>
             </motion.div>

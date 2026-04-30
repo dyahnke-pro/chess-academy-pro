@@ -201,7 +201,7 @@ function SettingsModalRow({
           data-testid={`${testId}-backdrop`}
         >
           <div
-            className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border-2 p-4"
+            className="w-full max-w-2xl max-h-[90dvh] overflow-y-auto rounded-2xl border-2 p-4"
             style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)' }}
             onClick={(e) => e.stopPropagation()}
             data-testid={`${testId}-modal`}
@@ -762,7 +762,26 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
   // the Voice & Personality panel. Nothing about the underlying
   // controls / handlers / persistence changed; this is purely a UI
   // re-arrangement.
+  // Live summaries on each modal row so the user sees the actual
+  // current selection without having to open the modal. WO-AUTOSAVE-01.
   const aiSummary = `${isAnthropic ? 'Anthropic' : 'DeepSeek'}${hasExistingKey ? ' · key saved' : ''}`;
+  const verbosityLabels: Record<string, string> = {
+    none: 'None',
+    fast: 'Fast',
+    medium: 'Medium',
+    slow: 'Slow',
+    unlimited: 'Unlimited',
+  };
+  const commentaryFreqLabels: Record<string, string> = {
+    'off': 'Off',
+    'key-moments': 'Key moments',
+    'every-move': 'Every move',
+  };
+  const verbosityValue = profile.preferences.coachVerbosity ?? 'unlimited';
+  const commentaryFreq = profile.preferences.coachCommentaryVerbosity ?? 'key-moments';
+  const tacticAlerts = profile.preferences.coachTacticAlerts !== false ? 'Tactic alerts on' : 'Tactic alerts off';
+  const gameplaySummary = `${verbosityLabels[verbosityValue] ?? verbosityValue} · ${commentaryFreqLabels[commentaryFreq] ?? commentaryFreq} · ${tacticAlerts}`;
+
   return (
     <div className="space-y-3" data-testid="coach-tab">
       {/* Row 1: AI Provider & Models — modal */}
@@ -874,7 +893,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
       {/* Row 2: Gameplay Coaching — modal containing CoachGameplaySection */}
       <SettingsModalRow
         label="Gameplay Coaching"
-        summary="Verbosity, alerts, hints, review voice"
+        summary={gameplaySummary}
         title="Gameplay Coaching"
         testId="gameplay-coaching-row"
       >

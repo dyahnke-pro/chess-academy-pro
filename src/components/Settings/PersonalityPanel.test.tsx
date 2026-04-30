@@ -60,7 +60,7 @@ describe('PersonalityPanel', () => {
     expect(screen.getByTestId('dial-flirt-none')).toHaveAttribute('aria-checked', 'false');
   });
 
-  it('Save persists the draft to the profile + fires the audit', async () => {
+  it('auto-saves picker change to the profile + fires the audit (WO-AUTOSAVE-01)', async () => {
     const profile = buildUserProfile();
     // Seed Dexie so the .update() call has a row to mutate. setup()
     // uses fresh profiles, but it doesn't insert them into Dexie —
@@ -70,7 +70,8 @@ describe('PersonalityPanel', () => {
     render(<PersonalityPanel profile={profile} setProfile={setProfile} />);
     fireEvent.click(screen.getByTestId('personality-row'));
     fireEvent.click(screen.getByTestId('personality-card-edgy'));
-    fireEvent.click(screen.getByTestId('personality-save'));
+    // Auto-save is debounced 250ms. waitFor polls until the parent
+    // setProfile was called with the persisted preferences.
     await waitFor(() => {
       expect(setProfile).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -95,16 +96,17 @@ describe('PersonalityPanel', () => {
     );
   });
 
-  it('Cancel discards the draft (does NOT persist or audit)', async () => {
+  it('Done button closes the modal (settings already auto-persisted)', async () => {
     const { setProfile } = setup();
     fireEvent.click(screen.getByTestId('personality-row'));
     fireEvent.click(screen.getByTestId('personality-card-flirtatious'));
-    fireEvent.click(screen.getByTestId('personality-cancel'));
+    // Wait for auto-save to fire.
+    await waitFor(() => expect(setProfile).toHaveBeenCalled());
+    // Done closes the modal — there's no longer a Cancel-discards path.
+    fireEvent.click(screen.getByTestId('personality-done'));
     await waitFor(() => {
       expect(screen.queryByTestId('personality-panel')).not.toBeInTheDocument();
     });
-    expect(setProfile).not.toHaveBeenCalled();
-    expect(logAppAuditSpy).not.toHaveBeenCalled();
   });
 
   it('Reset dials resets to current draft personality defaults', () => {
@@ -119,7 +121,7 @@ describe('PersonalityPanel', () => {
     expect(screen.getByTestId('dial-profanity-hard')).toHaveAttribute('aria-checked', 'true');
   });
 
-  it('row summary updates after Save', async () => {
+  it('row summary updates after auto-save', async () => {
     const profile = buildUserProfile();
     let saved: UserProfile = profile;
     const setProfile = vi.fn((p: UserProfile) => {
@@ -128,11 +130,15 @@ describe('PersonalityPanel', () => {
     const { rerender } = render(<PersonalityPanel profile={profile} setProfile={setProfile} />);
     fireEvent.click(screen.getByTestId('personality-row'));
     fireEvent.click(screen.getByTestId('personality-card-edgy'));
-    fireEvent.click(screen.getByTestId('personality-save'));
     await waitFor(() => expect(setProfile).toHaveBeenCalled());
+    // Close the modal so only the row summary remains in the DOM
+    // (otherwise the picker card label collides with the row text).
+    fireEvent.click(screen.getByTestId('personality-done'));
+    await waitFor(() => expect(screen.queryByTestId('personality-panel')).not.toBeInTheDocument());
     rerender(<PersonalityPanel profile={saved} setProfile={setProfile} />);
-    expect(screen.getByText(/Edgy/)).toBeInTheDocument();
-    expect(screen.getByText(/P:Medium M:Hard F:None/)).toBeInTheDocument();
+    const row = screen.getByTestId('personality-row');
+    expect(row.textContent).toMatch(/Edgy/);
+    expect(row.textContent).toMatch(/P:Medium M:Hard F:None/);
   });
 
   it('voice picker per personality renders with sensible defaults (WO-COACH-PERSONALITY-VOICE)', () => {
@@ -154,7 +160,7 @@ describe('PersonalityPanel', () => {
     fireEvent.click(screen.getByTestId('personality-row'));
     // Override edgy to Ruth (default was Stephen).
     fireEvent.change(screen.getByTestId('personality-voice-edgy'), { target: { value: 'ruth' } });
-    fireEvent.click(screen.getByTestId('personality-save'));
+    // Auto-save fires after the 250ms debounce.
     await waitFor(() => expect(setProfile).toHaveBeenCalled());
     // Persisted map contains ONLY the edgy override; defaults aren't
     // serialized so future default changes auto-apply.
