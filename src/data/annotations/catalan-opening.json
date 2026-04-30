@@ -535,23 +535,23 @@
         },
         {
           "san": "Qc2",
-          "annotation": ""
+          "annotation": "White's queen steps forward to c2, a natural and active post in the Closed Catalan. From this square the queen supports the c4 pawn and eyes the long diagonal opened by the fianchettoed bishop on g2. The move also clears d1, improving coordination between White's rooks."
         },
         {
           "san": "c6",
-          "annotation": ""
+          "annotation": "Black advances the c-pawn one square to c6, giving the d5 pawn a sturdy second defender and tightening the central pawn chain. This is a principled choice in the Closed Catalan, where Black prioritizes solidity over dynamic piece play, denying White easy central breaks. The pawn on c6 knits together the structure alongside the pawns on d5 and e6, creating a compact and resilient formation."
         },
         {
           "san": "Nbd2",
-          "annotation": ""
+          "annotation": "White develops the queen's knight to d2 rather than the more natural-looking c3, a subtle but purposeful decision in the Closed Catalan. Stationed on d2, the knight keeps the c1 bishop's diagonal unobstructed while lending firm support to the center. The two knights on d2 and f3 now coordinate harmoniously, reinforcing White's grip on the key central squares."
         },
         {
           "san": "b6",
-          "annotation": ""
+          "annotation": "Black advances the b-pawn one square to b6, reinforcing the queenside pawn chain and adding another layer of structure to an already solid formation. The move connects with the pawns on c6 and a7, consolidating Black's grip on the queenside in this Closed Catalan setup. With the pawn now on b6, Black's position has a firm, interlocking quality across the board."
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "White thrusts the e-pawn all the way to e4, completing a commanding three-pawn center alongside the pawns already on c4 and d4. This energetic advance in the Closed Catalan stakes out maximum central territory and puts direct pressure on Black's d5 pawn, which now finds itself under attack."
         },
         {
           "san": "Bb7",
@@ -566,7 +566,7 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Notice how the pieces coordinate in this position.",
+          "annotation": "The white pawn advances boldly to e5, planting itself deep in the center and directly bearing down on the black knight stationed on f6. This aggressive space-claiming thrust is a hallmark of White's ambitions in the Closed Catalan, where central control becomes a concrete weapon. The pawn's arrival on e5 immediately cramps Black's position and sharpens the tension across the board.",
           "arrows": [
             {
               "from": "e4",
