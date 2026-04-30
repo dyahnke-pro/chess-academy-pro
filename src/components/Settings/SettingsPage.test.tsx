@@ -58,6 +58,10 @@ describe('SettingsPage', () => {
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-coach'));
     expect(screen.getByTestId('coach-tab')).toBeInTheDocument();
+    // Post WO-SETTINGS-CLEANUP: API key + provider live inside the
+    // "AI Provider & Models" modal. Open it to surface the input.
+    expect(screen.getByTestId('ai-provider-row')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('ai-provider-row'));
     expect(screen.getByTestId('api-key-input')).toBeInTheDocument();
   });
 

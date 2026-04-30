@@ -6,6 +6,7 @@ import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import type { PhaseNarrationVerbosity } from '../../types';
 import { Volume2, Play, Mic, Sparkles, AlertCircle } from 'lucide-react';
+import { PersonalityPanel } from './PersonalityPanel';
 
 /** Curated quality voice names — prioritized at top of system voice list */
 const QUALITY_VOICES = [
@@ -213,6 +214,11 @@ export function VoiceSettingsPanel(): JSX.Element {
           When enabled, the coach reads messages and commentary aloud during games and chat.
         </p>
       </div>
+
+      {/* ── Coach Personality (between Coach Voice and Cloud Voice) ── */}
+      {activeProfile && (
+        <PersonalityPanel profile={activeProfile} setProfile={setActiveProfile} />
+      )}
 
       {/* ── Amazon Polly (Cloud Voice) ──────────────────────────── */}
       <div className="space-y-3">
