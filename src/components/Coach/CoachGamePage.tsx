@@ -1702,7 +1702,23 @@ export function CoachGamePage(): JSX.Element {
           return;
         }
 
-        if (isCancelled()) return;
+        // NB: do NOT bail on isCancelled() once tryMakeMove has succeeded.
+        // chess.js was already mutated, so the coach move IS on the board
+        // — bailing here would skip applyCoachMove, leaving gameState.moves
+        // out of sync with the chess instance and silently dropping the
+        // last-move highlight, sound, narration, and move-list entry.
+        // Cancellation here is expected: game.fen flipped during
+        // tryMakeMove, the useEffect re-fired, and the previous run's
+        // controller was aborted. We let the in-flight call commit its
+        // FX rather than the next effect run try to reproduce them.
+        if (isCancelled()) {
+          void logAppAudit({
+            kind: 'coach-move-fx-cancellation-ignored',
+            category: 'subsystem',
+            source: 'CoachGamePage',
+            summary: `gate=post-tryMakeMove san=${result.san} — committing FX path`,
+          });
+        }
 
         console.log('[CoachGame] Coach played:', result.san);
 
@@ -1731,7 +1747,17 @@ export function CoachGamePage(): JSX.Element {
           // Fall back to pre-coach analysis if post-analysis fails
         }
 
-        if (isCancelled()) return;
+        // Same reasoning as the gate above — the move is already on the
+        // board, so applyCoachMove must run regardless of whether the
+        // effect was cancelled during the post-move analysis await.
+        if (isCancelled()) {
+          void logAppAudit({
+            kind: 'coach-move-fx-cancellation-ignored',
+            category: 'subsystem',
+            source: 'CoachGamePage',
+            summary: `gate=post-postCoachAnalysis san=${result.san} — committing FX path`,
+          });
+        }
 
         const postCoachEval = postCoachAnalysis?.evaluation ?? analysis.evaluation;
         applyCoachMove(result, postCoachEval, analysis.evaluation, analysis.bestMove);

@@ -176,7 +176,14 @@ export type AuditKind =
   // WO-REAL-FIXES — phase narration deterministic fallback. Fires
   // when the LLM call times out / errors and we render a built-in
   // transition template instead of leaving the user with silence.
-  | 'phase-narration-fallback-shown';
+  | 'phase-narration-fallback-shown'
+  // Coach FX cancellation race — fires when the coach-turn effect was
+  // aborted (game.fen changed, useEffect re-fired) AFTER chess.js was
+  // already mutated. We commit the FX path anyway to keep
+  // gameState.moves in sync with the chess instance and to ensure the
+  // last-move highlight, sound, narration, and move-list entry land
+  // on the coach's move.
+  | 'coach-move-fx-cancellation-ignored';
 
 export interface AuditEntry {
   timestamp: number;
