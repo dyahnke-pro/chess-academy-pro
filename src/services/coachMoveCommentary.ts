@@ -261,6 +261,16 @@ async function getLlmCommentary(
   const moverName = mover === 'w' ? 'White' : 'Black';
   const recentSan = history.slice(-8).map((m) => m.san).join(' ');
 
+  // Piece roster derived from the actual board state. Production
+  // audit log on build 1f23808 caught the LLM hallucinating
+  // positions (`piece-on-square` audits: "claims bishop on c4, but
+  // c4 is empty" / "claims pawn on e5, but e5 is empty"). The LLM
+  // was inferring "Italian Game → Bc4 must be there" without
+  // checking the FEN. Listing pieces explicitly removes the
+  // ambiguity — the LLM can't say "your bishop on c4" when the
+  // roster shows the bishop is still on f1.
+  const pieceRoster = formatPieceRoster(gameAfter);
+
   // Legal moves from the resulting position — gives the LLM a
   // concrete ground-truth list so it never invents moves that
   // contradict the board. Capped at 40 to avoid bloating the prompt.
@@ -370,6 +380,7 @@ async function getLlmCommentary(
     `${moverName} just played ${last.san}.`,
     `Move flags: ${describeMoveFlags(last)}.`,
     `FEN after the move: ${gameAfter.fen()}.`,
+    `[Piece roster — these are the ONLY pieces on the board right now. Do NOT reference any piece on a square not listed here]\n${pieceRoster}`,
     `Last 8 moves (SAN): ${recentSan}.`,
     `Legal moves right now (SAN): ${legalMovesSan}. Do NOT describe any move not in this list.`,
     `Stockfish eval after (pawns, White's POV): ${pawnPerspective(evalAfter)}.`,
@@ -394,7 +405,14 @@ async function getLlmCommentary(
     system,
     undefined,
     'interactive_review',
-    420,
+    // 1500 max_tokens — bumped from 420 because the audit log on
+    // build 1f23808 showed long unlimited-verbosity narrations
+    // (1700+ chars) hitting the cap and getting truncated
+    // mid-sentence. With deepseek-chat (no reasoning_content
+    // overhead) we can use the full budget for content; 1500 tokens
+    // ≈ 5500-6000 chars, comfortably above what the longest
+    // unlimited-verbosity move-1 introduction needs.
+    1500,
     verbosity,
   );
   const llmDurationMs = Date.now() - llmStartedAt;
@@ -599,4 +617,46 @@ function describeMoveFlags(move: VerboseMove): string {
   if (move.flags.includes('b')) parts.push('double pawn push');
   if (parts.length === 0) parts.push('quiet move');
   return parts.join(', ');
+}
+
+/** Human-readable piece roster derived from the actual board state.
+ *  LLMs are unreliable at parsing FEN strings — production audit on
+ *  build 1f23808 caught the LLM saying "your bishop on c4" / "my
+ *  pawn on e5" when those squares were empty in the FEN. This
+ *  formatter enumerates each side's pieces with their squares so
+ *  the LLM can't infer positions from opening name alone. Matches
+ *  the chess.js verbose history shape so a stale FEN doesn't lie
+ *  here either — every piece comes from chess.board(). */
+function formatPieceRoster(chess: Chess): string {
+  const board = chess.board();
+  const PIECE_NAMES: Record<string, string> = {
+    p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+  };
+  const white: Record<string, string[]> = {};
+  const black: Record<string, string[]> = {};
+  for (let rank = 0; rank < 8; rank++) {
+    for (let file = 0; file < 8; file++) {
+      const cell = board[rank][file];
+      if (!cell) continue;
+      const name = PIECE_NAMES[cell.type] ?? cell.type;
+      const square = `${'abcdefgh'[file]}${8 - rank}`;
+      const bucket = cell.color === 'w' ? white : black;
+      if (!bucket[name]) bucket[name] = [];
+      bucket[name].push(square);
+    }
+  }
+  const order: Array<keyof typeof PIECE_NAMES> = ['k', 'q', 'r', 'b', 'n', 'p'] as const;
+  const formatSide = (side: Record<string, string[]>): string => {
+    const segments: string[] = [];
+    for (const t of order) {
+      const name = PIECE_NAMES[t];
+      const squares = side[name];
+      if (squares && squares.length > 0) {
+        const label = squares.length > 1 ? `${name}s` : name;
+        segments.push(`${label} ${squares.join(' ')}`);
+      }
+    }
+    return segments.join(', ');
+  };
+  return `White: ${formatSide(white)}\nBlack: ${formatSide(black)}`;
 }

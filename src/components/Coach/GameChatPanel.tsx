@@ -156,6 +156,23 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const initialPromptSentRef = useRef(false);
     const [streamingContent, setStreamingContent] = useState('');
     const speechBufferRef = useRef('');
+    // Sequential TTS chain — sentence-by-sentence streaming used to fire
+    // `void voiceService.speak(sentence)` as parallel calls. Each speak
+    // internally calls voiceService.stop() before starting, so two
+    // sentences arriving microseconds apart could interleave / cut off /
+    // produce overlapping audio (the "two voices at once" pattern caught
+    // by tts-concurrent-speak audits on build 1f23808). Chaining each
+    // speak onto the previous one's resolution ensures each sentence
+    // plays IN FULL before the next starts. catch() the chain so a
+    // single TTS failure doesn't poison every subsequent speak.
+    const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+    const queueSpeak = useCallback((text: string): void => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      speechChainRef.current = speechChainRef.current
+        .then(() => voiceService.speak(trimmed))
+        .catch(() => undefined);
+    }, []);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesRef = useRef<ChatMessageType[]>(messages);
 
@@ -205,10 +222,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       const buffer = speechBufferRef.current;
       // Read latest voice state directly from store to avoid stale closures
       if (buffer.trim() && useAppStore.getState().coachVoiceOn) {
-        void voiceService.speak(buffer.trim());
+        queueSpeak(buffer);
       }
       speechBufferRef.current = '';
-    }, []);
+    }, [queueSpeak]);
 
     const handleSend = useCallback(async (text: string) => {
       if (!activeProfile || isStreaming) return;
@@ -656,7 +673,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   if (sentenceEnd) {
                     const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
                     speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                    void voiceService.speak(sentence.trim());
+                    queueSpeak(sentence);
                   }
                 }
               },
