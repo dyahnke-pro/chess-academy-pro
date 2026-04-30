@@ -1923,7 +1923,7 @@
         },
         {
           "san": "dxc4",
-          "annotation": "",
+          "annotation": "Black snaps off the pawn on c4, accepting the Catalan gambit and claiming a temporary material advantage. The black pawn now sits boldly on c4, deep in White's half of the board, though it has moved far from its own supporting pieces. By doing so, Black has also flung open the long diagonal where White's bishop already stands on g2.",
           "arrows": [
             {
               "from": "d5",
@@ -1941,7 +1941,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White brings the knight to its natural square on f3. The knight on f3 improves White's piece coordination and flexibility.",
+          "annotation": "White develops the knight from g1 to f3, claiming a strong central post and reinforcing the d4 pawn. The knight joins the bishop already stationed on g2, forming a coordinated setup along the long diagonal that is characteristic of the Catalan structure. With this move, White's kingside pieces are taking shape and the knight actively contests the central squares.",
           "arrows": [
             {
               "from": "g1",
@@ -1982,7 +1982,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "",
+          "annotation": "White castles kingside in this Open Catalan position, sliding the king to g1 and activating the rook to f1. With the fianchettoed bishop already posted on g2, the king tucks neatly behind a solid pawn shield, finding immediate safety while Black has already scooped up the c4 pawn. The rook now stands ready on the f-file, and White's king position is fully secured.",
           "arrows": [
             {
               "from": "e1",
@@ -1999,7 +1999,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "",
+          "annotation": "Black tucks the king away to safety with kingside castling, a natural and principled response in the Open Catalan. The king finds shelter on g8 while the rook slides to f8, connecting Black's pieces and removing the king from the center where the position remains fluid. With the pawn on c4 still in Black's hands and the structure still being contested, getting the king to safety was a high priority.",
           "arrows": [
             {
               "from": "e8",
@@ -2041,7 +2041,7 @@
         },
         {
           "san": "a6",
-          "annotation": "",
+          "annotation": "Black advances the a-pawn one square to a6, a quiet but purposeful move in this Catalan pawn-grab variation. With White's queen already committed to c2 to reclaim the pawn on c4, Black uses this moment to seal off the b5 square, preventing any white piece from using it as an outpost. The move also lays the groundwork for a future queenside expansion, keeping the extra pawn on c4 better defended.",
           "arrows": [
             {
               "from": "a7",
@@ -2071,7 +2071,7 @@
         },
         {
           "san": "b5",
-          "annotation": "",
+          "annotation": "Black strikes with the bold queenside lunge b7–b5, immediately challenging the White queen on c4 and staking a claim to queenside territory. The pawn advance is a fighting response in the Open Catalan, signaling that Black intends to contest the initiative rather than simply consolidate the extra material.",
           "arrows": [
             {
               "from": "b7",
@@ -2108,7 +2108,7 @@
         },
         {
           "san": "Bb7",
-          "annotation": "",
+          "annotation": "Black's dark-squared bishop glides from c8 to b7, finding a natural home on the long diagonal where it bears down through c6 and d5 toward the center. This development completes a purposeful regrouping of Black's pieces, giving the bishop genuine scope rather than leaving it hemmed in behind the pawn structure.",
           "arrows": [
             {
               "from": "c8",
@@ -2184,7 +2184,7 @@
         },
         {
           "san": "Bb7",
-          "annotation": "",
+          "annotation": "Black's bishop retreats from e4 to b7, settling onto the long diagonal where it eyes the center from a safer, more stable square. The bishop had been exposed on e4, and pulling it back to b7 consolidates Black's piece coordination while keeping pressure aimed along the b7–g2 diagonal toward White's fianchettoed bishop.",
           "arrows": [
             {
               "from": "e4",
@@ -2222,7 +2222,7 @@
         },
         {
           "san": "Nbd7",
-          "annotation": "Black moves the knight to d7. The knight on d7 improves Black's piece coordination and flexibility.",
+          "annotation": "Black brings the b8-knight into play with Nbd7, completing the development of the minor pieces and giving the position greater solidity. Settled on d7, the knight shores up the central pawn on e6 while adding a second defender to the f6-knight's territory. The move also connects the rooks on a8 and f8, tidying up black's coordination across the back rank.",
           "arrows": [
             {
               "from": "b8",
@@ -2239,7 +2239,7 @@
         },
         {
           "san": "Nc3",
-          "annotation": "White moves the knight to c3. The knight on c3 improves White's piece coordination and flexibility.",
+          "annotation": "White brings the knight from b1 to c3, adding another defender to the d4 pawn and completing a natural development of the queenside pieces. The knight joins the f3 knight and g2 bishop in forming a solid central presence, while the bishop already posted on a5 keeps pressure on Black's queenside. This straightforward developing move gives White a well-coordinated set of pieces without overextending.",
           "arrows": [
             {
               "from": "b1",
@@ -2264,7 +2264,7 @@
         },
         {
           "san": "c5",
-          "annotation": "",
+          "annotation": "Black plants the c-pawn boldly on c5, striking directly at White's d4 pawn and immediately creating central tension. This queenside counter-thrust is a natural way for Black to contest the center after completing development, leveraging the already-advanced b5 pawn to support the new outpost. The position now crackles with pawn friction as both sides must weigh their next commitments carefully.",
           "arrows": [
             {
               "from": "c7",
@@ -2277,7 +2277,7 @@
         },
         {
           "san": "dxc5",
-          "annotation": "",
+          "annotation": "White's pawn sweeps from d4 to c5, capturing the black pawn and planting itself deep in Black's half of the board. The advanced pawn on c5 immediately controls the key squares b6 and d6, putting a squeeze on Black's queenside pieces. This is a thematic thrust in the Open Catalan, where White converts queenside space into lasting pressure.",
           "arrows": [
             {
               "from": "d4",
@@ -2322,7 +2322,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "",
+          "annotation": "White opens the game by advancing the pawn from d2 to d4, staking an immediate claim to the center. This central thrust is the first step toward the Catalan setup, signaling White's intention to control key central squares from the very first move.",
           "arrows": [
             {
               "from": "d2",
@@ -2339,7 +2339,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black deploys the knight to f6. The knight on f6 improves Black's piece coordination and flexibility.",
+          "annotation": "Black springs the knight from g8 to f6, immediately staking a claim on the central squares e4 and d5. This crisp developing move is one of the most common replies to 1.d4, putting pressure on the center while keeping Black's options flexible.",
           "arrows": [
             {
               "from": "g8",
@@ -2360,7 +2360,7 @@
         },
         {
           "san": "c4",
-          "annotation": "",
+          "annotation": "White advances the c-pawn two squares to c4, planting it alongside the pawn already on d4 to stake out an imposing presence in the center. Together these two pawns command a broad swath of central territory, a hallmark of the Catalan's ambitious approach to the opening. Black's knight on f6 eyes the center in response, but White has already secured a firm spatial foothold.",
           "arrows": [
             {
               "from": "c2",
@@ -2377,7 +2377,7 @@
         },
         {
           "san": "e6",
-          "annotation": "",
+          "annotation": "Black advances the e-pawn to e6, a cornerstone of the Open Catalan structure, firming up the center and giving the position a classical, solid character. The move also unblocks the diagonal for the dark-squared bishop on f8, which now has a potential path toward the kingside.",
           "arrows": [
             {
               "from": "e7",
@@ -2394,7 +2394,7 @@
         },
         {
           "san": "g3",
-          "annotation": "",
+          "annotation": "White nudges the g-pawn forward to g3, the defining gesture of the Catalan approach. This modest advance stakes out space on the kingside and carves open the long diagonal for the bishop that still sits on f1. The quiet push signals a positional ambition — control of the center through piece activity rather than immediate pawn confrontation.",
           "arrows": [
             {
               "from": "g2",
@@ -2414,7 +2414,7 @@
         },
         {
           "san": "d5",
-          "annotation": "",
+          "annotation": "Black advances the d-pawn all the way from d7 to d5, directly challenging White's c4 pawn and planting a flag in the center of the board. This assertive thrust is what defines the Open Catalan — rather than allowing White to dominate the center unchallenged, Black immediately stakes a claim there. Supported by the pawn on e6 and the knight on f6, the new arrival on d5 gives Black a solid and active central foothold.",
           "arrows": [
             {
               "from": "d7",
@@ -2431,7 +2431,7 @@
         },
         {
           "san": "Bg2",
-          "annotation": "",
+          "annotation": "White tucks the bishop to g2, settling it into the fianchetto square created by the earlier pawn advance to g3. This is the defining moment of the Catalan structure, as the bishop now occupies the long diagonal stretching across the board. The piece is firmly established on g2, supported by the pawn in front of it on g3.",
           "arrows": [
             {
               "from": "f1",
@@ -2453,7 +2453,7 @@
         },
         {
           "san": "dxc4",
-          "annotation": "",
+          "annotation": "Black's pawn sweeps from d5 to c4, capturing White's Catalan pawn and immediately opening the long diagonal that runs straight toward White's fianchettoed bishop on g2. This is the defining moment of the Open Catalan — Black accepts the pawn, temporarily gaining material while leaving White with the bishop staring down an unobstructed diagonal and a powerful central pawn on d4.",
           "arrows": [
             {
               "from": "d5",
@@ -2471,7 +2471,7 @@
         },
         {
           "san": "Nf3",
-          "annotation": "White deploys the knight to f3. The knight on f3 improves White's piece coordination and flexibility.",
+          "annotation": "White develops the knight to f3, a natural and harmonious square from which it supports the d4 pawn and eyes the center. In the Open Catalan, where Black has grabbed the c4 pawn, this quiet development keeps steady pressure on the position while White continues to build a cohesive setup around the fianchettoed bishop on g2.",
           "arrows": [
             {
               "from": "g1",
@@ -2491,7 +2491,7 @@
         },
         {
           "san": "a6",
-          "annotation": "",
+          "annotation": "Black advances the a-pawn one square to a6, quietly claiming extra space on the queenside in this Open Catalan struggle. The move plants a firm sentinel on the sixth rank, bolstering Black's queenside structure alongside the pawn already standing on c4. This modest but purposeful step is the defining motif of the a6-b5 variation, signaling Black's ambitions on that flank.",
           "arrows": [
             {
               "from": "a7",
@@ -2508,7 +2508,7 @@
         },
         {
           "san": "O-O",
-          "annotation": "",
+          "annotation": "White completes kingside castling in this Open Catalan, swinging the king to g1 and bringing the rook to f1 in one smooth operation. This tucks the king into safety behind the pawns on f2, g3, and h2, while the bishop on g2 adds a solid defensive layer. With the king secured, White's pieces are now well coordinated across the board.",
           "arrows": [
             {
               "from": "e1",
@@ -2525,7 +2525,7 @@
         },
         {
           "san": "b5",
-          "annotation": "",
+          "annotation": "Black boldly advances the b-pawn two squares to b5, linking it with the pawn already sitting on a6 to form a protective shield around the extra pawn on c4. This assertive queenside push is the defining idea of this variation, as Black works to consolidate the material advantage rather than return the pawn quietly.",
           "arrows": [
             {
               "from": "b7",
@@ -2580,7 +2580,7 @@
         },
         {
           "san": "a4",
-          "annotation": "",
+          "annotation": "White advances the a-pawn two squares to a4, directly targeting the b5 pawn that Black pushed forward as part of the queenside expansion beginning with ...a6. This sharp thrust is a hallmark of the a4 Break variation in the Open Catalan, immediately putting Black's queenside structure under pressure and forcing a decision about how to handle the tension.",
           "arrows": [
             {
               "from": "a2",
@@ -2593,7 +2593,7 @@
         },
         {
           "san": "Bb7",
-          "annotation": "",
+          "annotation": "Black's dark-squared bishop slides out from c8 to b7, finally stepping clear of the queenside pawn chain that had kept it hemmed in. Stationed on b7, it now bears down the long diagonal toward White's fianchettoed bishop on g2, introducing genuine tension in the center. This development gives Black's queenside structure a more active, coordinated feel.",
           "arrows": [
             {
               "from": "c8",
