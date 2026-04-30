@@ -2453,6 +2453,13 @@ export function CoachGamePage(): JSX.Element {
     // time. "Key moments only" would skip most opening book moves
     // because they classify as 'book' / 'best', killing the feature.
     let commentary = '';
+    // Tracks whether the LLM produced speech-worthy content for this
+    // move. The deterministic tactic suffix ("Hanging: Black rook on
+    // h8 ...") is fine in the move-list display but NEVER gets spoken
+    // — it's a robotic readout that breaks the personality voice and
+    // fires on every player move regardless of verbosity setting.
+    // Bug observed in production audit ac8088d. WO-NARR-POLICY-03.
+    let llmProducedSpeech = false;
     const verbosity = resolveVerbosity(useAppStore.getState().activeProfile);
     // Narration density — separate from the commentary-gate verbosity
     // above. Honors the user's Settings toggle (none/fast/medium/slow)
@@ -2734,6 +2741,10 @@ export function CoachGamePage(): JSX.Element {
           openingIntroSpokenRef.current = true;
         }
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
+        // Only the LLM portion is speech-worthy. tacticSuffix is a
+        // deterministic readout meant for the move list display, NOT
+        // for TTS.
+        llmProducedSpeech = Boolean(llm.trim());
         // Mirror the commentary into the shared session so the next
         // chat turn (or the next move's narration) sees what we just
         // said. Skip empties and pure tactic suffixes — we only record
@@ -2922,12 +2933,14 @@ export function CoachGamePage(): JSX.Element {
     // Non-blunder: sync the move and let the coach-move useEffect respond.
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
-    // Per-move narration. `commentary` was already gated above by
-    // `shouldFire` (which respects coachCommentaryVerbosity), so it's
-    // non-empty exactly when the user wants spoken feedback for this
-    // move. Phase narration cuts in via voiceService.stop() if a phase
-    // boundary fires — no simultaneous speech.
-    if (commentary.trim()) {
+    // Per-move narration. ONLY speak when the LLM actually produced
+    // personality-driven prose. The deterministic tactic suffix
+    // ("Hanging: Black rook on h8, ...") is great for the move-list
+    // display but is robotic and breaks the voice when read aloud —
+    // and it would fire on every move regardless of the
+    // 'key-moments' setting. Audit build ac8088d caught this bug.
+    // WO-NARR-POLICY-03.
+    if (llmProducedSpeech) {
       void logAppAudit({
         kind: 'coach-move-narration-fired',
         category: 'subsystem',
@@ -2943,7 +2956,7 @@ export function CoachGamePage(): JSX.Element {
         kind: 'coach-move-narration-skipped',
         category: 'subsystem',
         source: 'CoachGamePage.move',
-        summary: `verbosity=${verbosity} classification=${classification} reason=empty-commentary`,
+        summary: `verbosity=${verbosity} classification=${classification} reason=${commentary.trim() ? 'tactic-suffix-only' : 'empty-commentary'}`,
         fen: moveResult.fen,
       });
     }

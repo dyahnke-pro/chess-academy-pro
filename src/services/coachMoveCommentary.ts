@@ -351,7 +351,7 @@ async function getLlmCommentary(
   // instead of being cut off mid-sentence at finish=length.
   if (briefMode) {
     promptParts.push(
-      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with 2-4 short punchy sentences and STOP. You have a hard ~900 character ceiling — write something that LANDS within that budget. If you're approaching the limit, finish your sentence; do NOT let the response get clipped. Lean hard into your personality: mock, critique, react with feeling. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction.`,
+      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with 2-4 short punchy sentences and STOP. You have a hard ~900 character ceiling — write something that LANDS within that budget. If you're approaching the limit, finish your sentence; do NOT let the response get clipped. Lean fully into the personality and dials defined above — if you're flirtatious, FLIRT; if you're a drill sergeant, BARK; if you're edgy, ROAST. Do NOT default to generic mock-and-critique unless that matches the configured personality. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction in the configured voice.`,
     );
   } else if (!reviewTone) {
     // Long-mode addendum for live play (not review). The 500-token
