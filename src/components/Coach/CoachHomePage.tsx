@@ -8,7 +8,7 @@ export function CoachHomePage(): JSX.Element {
 
   return (
     <motion.div
-      className="flex flex-col gap-6 p-6 pb-20 md:pb-6 max-w-2xl mx-auto w-full"
+      className="flex flex-col gap-6 p-6 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-2xl mx-auto w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}

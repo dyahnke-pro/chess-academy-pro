@@ -80,7 +80,10 @@ src/
 - Each section button: `border-2 rounded-2xl`, tinted bg (`bg-{color}-500/10`), tinted border (`border-{color}-500/30`), centered icon + bold label
 - First item spans 2 columns (`col-span-2 py-10`), rest are `aspect-square`
 - Each section owns a color (Tailwind opacity classes, not CSS variables)
-- Container: `flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-20 md:pb-6`
+- Container: `flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6`
+  (the `pb-[calc(...)]` reserves room for the fixed mobile bottom nav
+  PLUS the iOS home-indicator safe-area inset; `pb-20` alone clips
+  the last row on iPhones with the gesture bar)
 - Content constrained to `max-w-lg mx-auto`
 
 **When "clean up" or "make it match" is requested, match BOTH structure AND visual.** Don't just reorganize information flow — replicate the actual layout, grid, card style, spacing, and interaction patterns of the reference page. Study the reference's exact JSX, Tailwind classes, and component hierarchy before writing new code.

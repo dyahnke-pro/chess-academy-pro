@@ -3,7 +3,7 @@
 // Users should only see user-facing preferences. Core settings that could break
 // the app experience must be hidden or admin-only.
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { exportUserData } from '../../services/dbService';
@@ -40,7 +40,7 @@ export function SettingsPage(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col gap-6 p-6 flex-1 overflow-y-auto pb-20 md:pb-6"
+      className="flex flex-col gap-6 p-6 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
       style={{ color: 'var(--color-text)' }}
       data-testid="settings-page"
     >
@@ -283,32 +283,52 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
     }
   };
 
-  const handleSave = async (): Promise<void> => {
-    const updatedPrefs = {
-      ...prefs,
-      highlightLastMove,
-      showLegalMoves,
-      showCoordinates,
-      pieceAnimationSpeed,
-      boardOrientation,
-      boardColor,
-      pieceSet,
-      soundEnabled,
-      showEvalBar,
-      showEngineLines,
-      moveQualityFlash,
-      showHints,
-      voiceEnabled,
-      moveMethod,
-      moveConfirmation,
-      autoPromoteQueen,
-      masterAllOff,
-    };
-    await db.profiles.update(profile.id, { preferences: updatedPrefs });
-    setProfile({ ...profile, preferences: updatedPrefs });
-    setBoardSaveStatus('Board settings saved');
-    setTimeout(() => setBoardSaveStatus(null), 2000);
-  };
+  // Auto-save: persist on every change, debounced 300ms. WO-AUTOSAVE-01:
+  // user explicitly asked to drop the Save button — "If user selected
+  // it, then save it." The skipFirstSaveRef guard keeps the initial
+  // mount (where local state mirrors the loaded prefs) from triggering
+  // a phantom write.
+  const skipFirstSaveRef = useRef(true);
+  useEffect(() => {
+    if (skipFirstSaveRef.current) {
+      skipFirstSaveRef.current = false;
+      return;
+    }
+    const handle = setTimeout(() => {
+      const updatedPrefs = {
+        ...profile.preferences,
+        highlightLastMove,
+        showLegalMoves,
+        showCoordinates,
+        pieceAnimationSpeed,
+        boardOrientation,
+        boardColor,
+        pieceSet,
+        soundEnabled,
+        showEvalBar,
+        showEngineLines,
+        moveQualityFlash,
+        showHints,
+        voiceEnabled,
+        moveMethod,
+        moveConfirmation,
+        autoPromoteQueen,
+        masterAllOff,
+      };
+      void db.profiles.update(profile.id, { preferences: updatedPrefs }).then(() => {
+        setProfile({ ...profile, preferences: updatedPrefs });
+        setBoardSaveStatus('Saved ✓');
+        setTimeout(() => setBoardSaveStatus(null), 1500);
+      });
+    }, 300);
+    return () => clearTimeout(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    highlightLastMove, showLegalMoves, showCoordinates, pieceAnimationSpeed,
+    boardOrientation, boardColor, pieceSet, soundEnabled, showEvalBar,
+    showEngineLines, moveQualityFlash, showHints, voiceEnabled, moveMethod,
+    moveConfirmation, autoPromoteQueen, masterAllOff,
+  ]);
 
   const affectedByMaster = masterAllOff;
 
@@ -527,16 +547,8 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         testId="auto-promote-queen-toggle"
       />
 
-      <button
-        onClick={() => void handleSave()}
-        className="w-full py-2 rounded-lg text-sm font-medium mt-4"
-        style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-        data-testid="save-board-btn"
-      >
-        Save Board Settings
-      </button>
       {boardSaveStatus && (
-        <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }} data-testid="board-save-status">
+        <p className="text-sm font-medium mt-2" style={{ color: 'var(--color-accent)' }} data-testid="board-save-status">
           {boardSaveStatus}
         </p>
       )}
@@ -552,22 +564,35 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
   const [dailyMin, setDailyMin] = useState(profile.preferences.dailySessionMinutes);
   const [profileSaveStatus, setProfileSaveStatus] = useState<string | null>(null);
 
-  const handleSaveProfile = async (): Promise<void> => {
-    const updated = {
-      ...profile,
-      name,
-      currentRating: elo,
-      preferences: { ...profile.preferences, dailySessionMinutes: dailyMin },
-    };
-    await db.profiles.update(profile.id, {
-      name,
-      currentRating: elo,
-      preferences: updated.preferences,
-    });
-    setProfile(updated);
-    setProfileSaveStatus('Profile saved');
-    setTimeout(() => setProfileSaveStatus(null), 2000);
-  };
+  // Auto-save profile on change, debounced 400ms (slightly longer than
+  // Board because the name/elo inputs fire on every keystroke). The
+  // skipFirstSaveProfileRef gates the initial mount.
+  const skipFirstSaveProfileRef = useRef(true);
+  useEffect(() => {
+    if (skipFirstSaveProfileRef.current) {
+      skipFirstSaveProfileRef.current = false;
+      return;
+    }
+    const handle = setTimeout(() => {
+      const updated = {
+        ...profile,
+        name,
+        currentRating: elo,
+        preferences: { ...profile.preferences, dailySessionMinutes: dailyMin },
+      };
+      void db.profiles.update(profile.id, {
+        name,
+        currentRating: elo,
+        preferences: updated.preferences,
+      }).then(() => {
+        setProfile(updated);
+        setProfileSaveStatus('Saved ✓');
+        setTimeout(() => setProfileSaveStatus(null), 1500);
+      });
+    }, 400);
+    return () => clearTimeout(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, elo, dailyMin]);
 
   const handleExport = async (): Promise<void> => {
     const data = await exportUserData();
@@ -618,14 +643,6 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
           ))}
         </select>
       </div>
-      <button
-        onClick={() => void handleSaveProfile()}
-        className="w-full py-2 rounded-lg text-sm font-medium"
-        style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-        data-testid="save-profile-btn"
-      >
-        Save Profile
-      </button>
       {profileSaveStatus && (
         <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }} data-testid="profile-save-status">
           {profileSaveStatus}
@@ -711,21 +728,34 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
     setTimeout(() => setStatus(null), 4000);
   };
 
-  const handleSaveCoachSettings = async (): Promise<void> => {
-    const updatedPrefs = {
-      ...profile.preferences,
-      monthlyBudgetCap: budgetCap,
-      preferredModel: {
-        commentary: commentaryModel,
-        analysis: analysisModel,
-        reports: reportsModel,
-      },
-    };
-    await db.profiles.update(profile.id, { preferences: updatedPrefs });
-    setProfile({ ...profile, preferences: updatedPrefs });
-    setStatus('Settings saved');
-    setTimeout(() => setStatus(null), 2000);
-  };
+  // Auto-save coach budget + model selections, debounced 300ms. The
+  // API key path stays explicit (encrypted, requires non-empty input)
+  // — only the dropdowns / number inputs auto-save.
+  const skipFirstSaveCoachRef = useRef(true);
+  useEffect(() => {
+    if (skipFirstSaveCoachRef.current) {
+      skipFirstSaveCoachRef.current = false;
+      return;
+    }
+    const handle = setTimeout(() => {
+      const updatedPrefs = {
+        ...profile.preferences,
+        monthlyBudgetCap: budgetCap,
+        preferredModel: {
+          commentary: commentaryModel,
+          analysis: analysisModel,
+          reports: reportsModel,
+        },
+      };
+      void db.profiles.update(profile.id, { preferences: updatedPrefs }).then(() => {
+        setProfile({ ...profile, preferences: updatedPrefs });
+        setStatus('Saved ✓');
+        setTimeout(() => setStatus(null), 1500);
+      });
+    }, 300);
+    return () => clearTimeout(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [budgetCap, commentaryModel, analysisModel, reportsModel]);
 
   // WO-SETTINGS-CLEANUP — collapse the dense Coach tab into three top-
   // level rows (each opens a modal containing the original block) plus
@@ -836,15 +866,6 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
               </select>
             </div>
           ))}
-
-          <button
-            onClick={() => void handleSaveCoachSettings()}
-            className="w-full py-2 rounded-lg text-sm font-medium"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-            data-testid="save-coach-settings-btn"
-          >
-            Save Coach Settings
-          </button>
 
           {status && <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>{status}</p>}
         </div>
