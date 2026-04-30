@@ -10,7 +10,6 @@ import { exportUserData } from '../../services/dbService';
 import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
-import { PersonalityPanel } from './PersonalityPanel';
 import { PieceSoundPanel } from './PieceSoundPanel';
 import { FeedbackForm } from '../Feedback/FeedbackForm';
 import { encryptApiKey } from '../../services/cryptoService';
@@ -157,6 +156,72 @@ function SectionHeader({ title }: { title: string }): JSX.Element {
     >
       {title}
     </h3>
+  );
+}
+
+/** Generic row+modal pattern (matches the PersonalityPanel UI). The
+ *  caller renders a single tappable row showing `label` + `summary`;
+ *  tapping opens a centered modal with `title` and the children. Used
+ *  to consolidate dense Settings sections without dropping detail. */
+function SettingsModalRow({
+  label,
+  summary,
+  title,
+  children,
+  testId,
+}: {
+  label: string;
+  summary: string;
+  title: string;
+  children: React.ReactNode;
+  testId: string;
+}): JSX.Element {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center justify-between py-2 px-3 w-full rounded-lg border hover:bg-theme-surface transition-colors"
+        style={{ borderColor: 'var(--color-border)' }}
+        data-testid={testId}
+      >
+        <div className="flex flex-col items-start text-left">
+          <span className="text-sm font-medium">{label}</span>
+          <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            {summary}
+          </span>
+        </div>
+        <span style={{ color: 'var(--color-text-muted)' }}>›</span>
+      </button>
+      {open && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0, 0, 0, 0.6)' }}
+          onClick={() => setOpen(false)}
+          data-testid={`${testId}-backdrop`}
+        >
+          <div
+            className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border-2 p-4"
+            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)' }}
+            onClick={(e) => e.stopPropagation()}
+            data-testid={`${testId}-modal`}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-bold">{title}</h2>
+              <button
+                onClick={() => setOpen(false)}
+                className="px-2 py-1 rounded-lg hover:bg-theme-surface text-sm"
+                aria-label="Close"
+                data-testid={`${testId}-close`}
+              >
+                ✕
+              </button>
+            </div>
+            {children}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -662,123 +727,144 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
     setTimeout(() => setStatus(null), 2000);
   };
 
+  // WO-SETTINGS-CLEANUP — collapse the dense Coach tab into three top-
+  // level rows (each opens a modal containing the original block) plus
+  // the Voice & Personality panel. Nothing about the underlying
+  // controls / handlers / persistence changed; this is purely a UI
+  // re-arrangement.
+  const aiSummary = `${isAnthropic ? 'Anthropic' : 'DeepSeek'}${hasExistingKey ? ' · key saved' : ''}`;
   return (
-    <div className="space-y-4" data-testid="coach-tab">
-      <div>
-        <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-          AI Provider
-        </label>
-        <div className="flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--color-border)' }} data-testid="provider-toggle">
-          {(['deepseek', 'anthropic'] as const).map((p) => (
-            <button
-              key={p}
-              onClick={() => void handleProviderChange(p)}
-              className="flex-1 px-4 py-2 text-sm font-medium transition-colors"
-              style={{
-                background: provider === p ? 'var(--color-accent)' : 'var(--color-bg)',
-                color: provider === p ? 'var(--color-bg)' : 'var(--color-text)',
-              }}
-              data-testid={`provider-${p}`}
-            >
-              {p === 'deepseek' ? 'DeepSeek' : 'Anthropic'}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-          {isAnthropic ? 'Anthropic' : 'DeepSeek'} API Key {hasExistingKey && '(saved)'}
-        </label>
-        <div className="flex gap-2">
-          <input
-            type={showKey ? 'text' : 'password'}
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder={hasExistingKey ? '••••••••' : (isAnthropic ? 'sk-ant-...' : 'sk-...')}
-            className="flex-1 px-3 py-2 rounded-lg border text-sm"
-            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid="api-key-input"
-          />
-          <button onClick={() => setShowKey((s) => !s)} className="px-3 py-2 rounded-lg border text-xs" style={{ borderColor: 'var(--color-border)' }}>
-            {showKey ? 'Hide' : 'Show'}
-          </button>
-          <button
-            onClick={() => void handleSaveApiKey()}
-            className="px-4 py-2 rounded-lg text-sm font-medium"
-            style={{
-              background: keySaved ? '#16a34a' : 'var(--color-accent)',
-              color: 'var(--color-bg)',
-              transition: 'background 0.3s',
-            }}
-            data-testid="save-api-key-btn"
-          >
-            {keySaved ? 'Saved ✓' : 'Save'}
-          </button>
-        </div>
-        <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-          {isAnthropic ? 'Get a key at console.anthropic.com' : 'Get a key at platform.deepseek.com'}
-        </p>
-      </div>
-
-      <div>
-        <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>Monthly Budget Cap ($)</label>
-        <input
-          type="number"
-          value={budgetCap ?? ''}
-          onChange={(e) => setBudgetCap(e.target.value ? Number(e.target.value) : null)}
-          placeholder="No limit"
-          className="w-full px-3 py-2 rounded-lg border text-sm"
-          style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-          data-testid="budget-input"
-        />
-      </div>
-      <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-        Estimated spend this month: ${profile.preferences.estimatedSpend.toFixed(2)}
-      </div>
-
-      {[
-        { label: 'Commentary Model', value: commentaryModel, setter: setCommentaryModel, testId: 'model-commentary' },
-        { label: 'Analysis Model', value: analysisModel, setter: setAnalysisModel, testId: 'model-analysis' },
-        { label: 'Reports Model', value: reportsModel, setter: setReportsModel, testId: 'model-reports' },
-      ].map(({ label, value, setter, testId }) => (
-        <div key={testId}>
-          <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>{label}</label>
-          <select
-            value={value}
-            onChange={(e) => setter(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border text-sm"
-            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid={testId}
-          >
-            {modelOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-        </div>
-      ))}
-
-      <button
-        onClick={() => void handleSaveCoachSettings()}
-        className="w-full py-2 rounded-lg text-sm font-medium"
-        style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-        data-testid="save-coach-settings-btn"
+    <div className="space-y-3" data-testid="coach-tab">
+      {/* Row 1: AI Provider & Models — modal */}
+      <SettingsModalRow
+        label="AI Provider & Models"
+        summary={aiSummary}
+        title="AI Provider & Models"
+        testId="ai-provider-row"
       >
-        Save Coach Settings
-      </button>
+        <div className="space-y-4">
+          <div>
+            <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
+              AI Provider
+            </label>
+            <div className="flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--color-border)' }} data-testid="provider-toggle">
+              {(['deepseek', 'anthropic'] as const).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => void handleProviderChange(p)}
+                  className="flex-1 px-4 py-2 text-sm font-medium transition-colors"
+                  style={{
+                    background: provider === p ? 'var(--color-accent)' : 'var(--color-bg)',
+                    color: provider === p ? 'var(--color-bg)' : 'var(--color-text)',
+                  }}
+                  data-testid={`provider-${p}`}
+                >
+                  {p === 'deepseek' ? 'DeepSeek' : 'Anthropic'}
+                </button>
+              ))}
+            </div>
+          </div>
 
-      {status && <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>{status}</p>}
+          <div>
+            <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
+              {isAnthropic ? 'Anthropic' : 'DeepSeek'} API Key {hasExistingKey && '(saved)'}
+            </label>
+            <div className="flex gap-2">
+              <input
+                type={showKey ? 'text' : 'password'}
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder={hasExistingKey ? '••••••••' : (isAnthropic ? 'sk-ant-...' : 'sk-...')}
+                className="flex-1 px-3 py-2 rounded-lg border text-sm"
+                style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid="api-key-input"
+              />
+              <button onClick={() => setShowKey((s) => !s)} className="px-3 py-2 rounded-lg border text-xs" style={{ borderColor: 'var(--color-border)' }}>
+                {showKey ? 'Hide' : 'Show'}
+              </button>
+              <button
+                onClick={() => void handleSaveApiKey()}
+                className="px-4 py-2 rounded-lg text-sm font-medium"
+                style={{
+                  background: keySaved ? '#16a34a' : 'var(--color-accent)',
+                  color: 'var(--color-bg)',
+                  transition: 'background 0.3s',
+                }}
+                data-testid="save-api-key-btn"
+              >
+                {keySaved ? 'Saved ✓' : 'Save'}
+              </button>
+            </div>
+            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+              {isAnthropic ? 'Get a key at console.anthropic.com' : 'Get a key at platform.deepseek.com'}
+            </p>
+          </div>
 
-      <CoachGameplaySection profile={profile} setProfile={setProfile} />
+          <div>
+            <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>Monthly Budget Cap ($)</label>
+            <input
+              type="number"
+              value={budgetCap ?? ''}
+              onChange={(e) => setBudgetCap(e.target.value ? Number(e.target.value) : null)}
+              placeholder="No limit"
+              className="w-full px-3 py-2 rounded-lg border text-sm"
+              style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+              data-testid="budget-input"
+            />
+          </div>
+          <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Estimated spend this month: ${profile.preferences.estimatedSpend.toFixed(2)}
+          </div>
 
+          {[
+            { label: 'Commentary Model', value: commentaryModel, setter: setCommentaryModel, testId: 'model-commentary' },
+            { label: 'Analysis Model', value: analysisModel, setter: setAnalysisModel, testId: 'model-analysis' },
+            { label: 'Reports Model', value: reportsModel, setter: setReportsModel, testId: 'model-reports' },
+          ].map(({ label, value, setter, testId }) => (
+            <div key={testId}>
+              <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>{label}</label>
+              <select
+                value={value}
+                onChange={(e) => setter(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border text-sm"
+                style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid={testId}
+              >
+                {modelOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+          ))}
+
+          <button
+            onClick={() => void handleSaveCoachSettings()}
+            className="w-full py-2 rounded-lg text-sm font-medium"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            data-testid="save-coach-settings-btn"
+          >
+            Save Coach Settings
+          </button>
+
+          {status && <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>{status}</p>}
+        </div>
+      </SettingsModalRow>
+
+      {/* Row 2: Gameplay Coaching — modal containing CoachGameplaySection */}
+      <SettingsModalRow
+        label="Gameplay Coaching"
+        summary="Verbosity, alerts, hints, review voice"
+        title="Gameplay Coaching"
+        testId="gameplay-coaching-row"
+      >
+        <CoachGameplaySection profile={profile} setProfile={setProfile} />
+      </SettingsModalRow>
+
+      {/* Row 3 (inline): Voice & Personality. PersonalityPanel is now
+       *  rendered INSIDE VoiceSettingsPanel between the Coach Voice
+       *  toggle and the Cloud Voice section, per WO-SETTINGS-CLEANUP. */}
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <VoiceSettingsPanel />
-      </div>
-
-      {/* WO-COACH-PERSONALITIES (PR C) — single row tucked next to the
-       *  voice settings; opens a modal sub-panel with picker + dials. */}
-      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
-        <PersonalityPanel profile={profile} setProfile={setProfile} />
       </div>
     </div>
   );
