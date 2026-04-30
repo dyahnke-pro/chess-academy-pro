@@ -1884,7 +1884,7 @@
         },
         {
           "san": "d5",
-          "annotation": "",
+          "annotation": "Black stakes a claim in the center by advancing the d-pawn two squares to d5, directly challenging White's pawn on c4 and the broader Catalan pawn structure. This move is the defining response that characterizes the Open Catalan, where Black does not shy away from central tension. The pawn on d5 now stands alongside the one on e6, forming a solid duo that contests White's ambitions in the heart of the board.",
           "arrows": [
             {
               "from": "d7",
@@ -1901,7 +1901,7 @@
         },
         {
           "san": "Bg2",
-          "annotation": "",
+          "annotation": "White slides the bishop from f1 to g2, nestling it into the fianchetto square prepared by the earlier g3 advance. From g2, the bishop occupies a commanding diagonal that stretches across the center toward the queenside, a hallmark of Catalan structure. This development gives the king's bishop an active post while keeping the position flexible as the opening unfolds.",
           "arrows": [
             {
               "from": "f1",
