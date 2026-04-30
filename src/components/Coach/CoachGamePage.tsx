@@ -2347,15 +2347,25 @@ export function CoachGamePage(): JSX.Element {
     // Lichess openings DB) and safe to run every move. Resolution
     // precedence: explicit URL subject > committed intent > auto-detect.
     const detectedOpening = detectOpening(game.history);
-    const resolutionSource: 'url' | 'intent' | 'auto-detect' | 'none' = subjectParam
+    // Resolution precedence: URL > auto-detect > intent. Auto-detect
+    // is always accurate to the actual moves on the board, so it wins
+    // over a (potentially stale) committed intent. Production audit
+    // build cb018c0 caught the bug: a sticky `intendedOpening =
+    // "Italian Game"` from a prior session was overriding the
+    // auto-detected "Scandinavian Defense" on a fresh 1.e4 d5 game,
+    // and the LLM was being told "Italian Game" while narrating
+    // moves that weren't Italian. Auto-detect-first eliminates the
+    // mismatch — intent only fires when the position is too generic
+    // for the trie to name (rare, very early game).
+    const resolutionSource: 'url' | 'auto-detect' | 'intent' | 'none' = subjectParam
       ? 'url'
-      : intendedOpening
-        ? 'intent'
-        : detectedOpening
-          ? 'auto-detect'
+      : detectedOpening
+        ? 'auto-detect'
+        : intendedOpening
+          ? 'intent'
           : 'none';
     const resolvedSubject =
-      subjectParam ?? intendedOpening?.name ?? detectedOpening?.name ?? null;
+      subjectParam ?? detectedOpening?.name ?? intendedOpening?.name ?? null;
     const bookDepth = resolvedSubject
       ? (getOpeningMoves(resolvedSubject)?.length ?? 0)
       : 0;
