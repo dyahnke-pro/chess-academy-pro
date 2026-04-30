@@ -1457,7 +1457,7 @@
         },
         {
           "san": "dxc4",
-          "annotation": "dxc4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black's d-pawn strikes forward to capture the white pawn on c4, snatching a material advantage and immediately posing the question of how White will react. The black pawn now sits as a deep outpost on c4, firmly planted in White's territory with the central tension partially released.",
           "arrows": [
             {
               "from": "d5",
@@ -1468,31 +1468,31 @@
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White develops the knight from g1 to f3, placing it on one of its most natural squares where it immediately lends support to the pawn on d4. The knight on f3 also contests central territory and stands ready to influence events in the heart of the board. With Black's advanced pawn on c4 already staking out space, White uses this move to consolidate its own central presence rather than rush into immediate action."
         },
         {
           "san": "b5",
-          "annotation": ""
+          "annotation": "Black thrusts the b-pawn all the way to b5, staking out additional queenside space and beginning to brace the advanced c4 pawn from behind. This bold lunge is the defining idea of the hold attempt, as Black seeks to anchor the queenside pawn chain rather than allow White to undermine it at leisure."
         },
         {
           "san": "a4",
-          "annotation": ""
+          "annotation": "White's a-pawn surges forward two squares to a4, immediately putting pressure on Black's advanced b5-pawn in what is the defining moment of this b5 Hold Attempt. The thrust creates direct queenside tension, forcing Black to confront how to maintain that pawn's foothold. With pawns now clashing on the a4–b5 diagonal, the queenside structure becomes the critical battleground."
         },
         {
           "san": "c6",
-          "annotation": ""
+          "annotation": "Black nudges the c-pawn forward to c6, lending additional structure to the queenside and asserting influence over the d5 square. The move knits together the cluster of black pawns spread across the queenside, as b5, c4, and c6 now form a broad, interlocking presence that complicates White's task of breaking through."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "White castles kingside, whisking the king to g1 behind the fianchettoed bishop on g2 and swinging the rook over to f1. In this b5 Hold Attempt, where Black has scooped up the c-pawn and anchored it with the b5 advance, White takes the moment to secure the king rather than chase immediate complications. The king finds a safe shelter on g1, well protected by the pawn shelter on f2, g3, and h2."
         },
         {
           "san": "Bb7",
-          "annotation": ""
+          "annotation": "Black's dark-squared bishop slides out to b7, finding an active home on the long diagonal and lending indirect support to the advanced b5 pawn. The bishop joins the knight on f6 in Black's developing effort while simultaneously eyeing the center from its new post."
         },
         {
           "san": "axb5",
-          "annotation": "axb5 — this capture changes the character of the position. Be alert.",
+          "annotation": "White's a-pawn snaps off the b5 pawn, accepting Black's bold attempt to hold that square and planting a white pawn deep on the queenside. The capture also cracks open the a-file, where White's rook on a1 now has a half-open lane toward Black's pawn on a7.",
           "arrows": [
             {
               "from": "a4",
@@ -1503,7 +1503,7 @@
         },
         {
           "san": "cxb5",
-          "annotation": "cxb5 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black recaptures on b5 with the c6 pawn, removing White's advanced piece from that square and staking a claim on the queenside with a pawn of their own. The capture is central to the b5 Hold Attempt — rather than allowing White to maintain a foothold there, Black immediately contests it and now posts pawns on both b5 and c4, pressing deep into White's territory.",
           "arrows": [
             {
               "from": "c6",
@@ -1514,19 +1514,19 @@
         },
         {
           "san": "Ne5",
-          "annotation": ""
+          "annotation": "White plants the knight on e5, staking a commanding claim in the very heart of the board. Supported by the pawn on d4, the knight on e5 sits on a powerful outpost with no black pawn able to immediately challenge it from that angle. This aggressive leap asserts White's central authority just as Black has been pushing queenside space with the b5-c4 pawn advance."
         },
         {
           "san": "a5",
-          "annotation": ""
+          "annotation": "Black advances the a-pawn two squares to a5, bracing the b5 pawn from behind and cementing Black's queenside foothold. This is the defining idea of the b5 Hold Attempt — by denying White the option of undermining with a2-a4, Black keeps the queenside pawn structure intact and maintains the space gained there."
         },
         {
           "san": "b3",
-          "annotation": ""
+          "annotation": "White nudges the b-pawn forward to b3, immediately training it on Black's boldly advanced pawn at c4. This direct challenge strikes at the base of Black's extended pawn chain — the c4 pawn that has pushed deep into White's half of the board now finds itself under attack."
         },
         {
           "san": "cxb3",
-          "annotation": "cxb3 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black captures on b3 with the c-pawn, planting a passed pawn deep inside White's half of the board. The intruder on b3 sits just a step from the second rank, pressing directly against the pieces clustered on White's back row. This bold lunge is the heart of the b5 Hold Attempt, as Black sacrifices material and positional tidiness to create concrete, immediate threats.",
           "arrows": [
             {
               "from": "c4",
@@ -1537,19 +1537,19 @@
         },
         {
           "san": "Qxb3",
-          "annotation": "Qxb3 — this capture changes the character of the position. Be alert."
+          "annotation": "White's queen swoops from d1 to b3, snapping off the advanced black pawn that had pushed deep into White's half of the board. The queen now sits aggressively on b3, a central and open diagonal that gives it immediate presence across the queenside. White has recovered the material while placing the queen on an active square."
         },
         {
           "san": "Bd5",
-          "annotation": ""
+          "annotation": "The black bishop slides from b7 to the powerful central outpost on d5, planting itself aggressively in the heart of the board. From d5, it stares directly at the white knight posted on e5, creating an immediate tension between the two pieces. This active centralization is Black's way of contesting control rather than playing passively on the queenside."
         },
         {
           "san": "Qb2",
-          "annotation": ""
+          "annotation": "White slides the queen one step back from b3 to b2, keeping it firmly posted along the b-file with an eye trained on Black's advanced pawns on a5 and b5. The subtle repositioning places the queen on a more sheltered square along the second rank, tightening White's grip on the queenside without loosening anything elsewhere."
         },
         {
           "san": "Bd6",
-          "annotation": ""
+          "annotation": "Black develops the dark-squared bishop from f8 to d6, immediately placing pressure on White's well-posted knight at e5. The bishop stakes a direct diagonal claim on that square, challenging White's central outpost while completing further development along the back rank. With two bishops now actively placed on d5 and d6, Black is working to generate counterplay against the knight rather than simply conceding its dominance."
         }
       ]
     },
@@ -1792,7 +1792,7 @@
       "moveAnnotations": [
         {
           "san": "d4",
-          "annotation": "",
+          "annotation": "White opens the game by advancing the pawn to d4, staking an immediate claim to the center. This queen's pawn advance is the foundational first step of the Catalan Opening, signaling White's intention to control the central squares from the outset. Both sides have yet to develop any pieces, and the position remains symmetrical and full of possibility.",
           "arrows": [
             {
               "from": "d2",
@@ -1809,7 +1809,7 @@
         },
         {
           "san": "Nf6",
-          "annotation": "Black develops the knight to f6. The knight on f6 improves Black's piece coordination and flexibility.",
+          "annotation": "Black's knight springs forward from g8 to f6, staking an immediate claim in the center and putting pressure on the d5 square. This active developing move is one of the most natural responses in the Open Catalan, keeping Black's options flexible while bringing a piece into the game with tempo. The knight on f6 is well-placed to influence the central struggle that will unfold as both sides develop.",
           "arrows": [
             {
               "from": "g8",
@@ -1830,7 +1830,7 @@
         },
         {
           "san": "c4",
-          "annotation": "",
+          "annotation": "White advances the c-pawn two squares to c4, immediately staking a claim in the center alongside the d4 pawn already in place. Together these two pawns exert powerful pressure across the central squares, a hallmark of the Catalan's ambitious opening strategy. Black's knight on f6 eyes the center, but White has already established a commanding pawn presence.",
           "arrows": [
             {
               "from": "c2",
@@ -1847,7 +1847,7 @@
         },
         {
           "san": "e6",
-          "annotation": "",
+          "annotation": "Black advances the e-pawn one square to e6, a classical and solid central deployment that reinforces the d5-square and prepares a sturdy pawn structure. This move is a cornerstone of the Catalan setup for Black, signaling an intent to build carefully rather than contest the center with immediate aggression.",
           "arrows": [
             {
               "from": "e7",
@@ -1864,7 +1864,7 @@
         },
         {
           "san": "g3",
-          "annotation": "",
+          "annotation": "White nudges the g-pawn one square forward to g3, a quiet but characteristic gesture that signals the Catalan spirit from the very start. The pawn settles on the third rank, gently opening the long diagonal that runs from g2 through the heart of the board. Combined with the pawns already planted on d4 and c4, this understated advance begins shaping White's spatial ambitions in the center and on the kingside.",
           "arrows": [
             {
               "from": "g2",
