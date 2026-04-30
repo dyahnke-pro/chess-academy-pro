@@ -2421,7 +2421,15 @@ export function CoachGamePage(): JSX.Element {
     //   4. EXPLICIT every-move setting — power users who set
     //      `coachCommentaryVerbosity = 'every-move'` still get the
     //      old per-move running commentary.
+    //
+    // Settings → Coach → Commentary Frequency drives this:
+    //   'off'         → all three triggers gated off (silent except
+    //                   for deterministic tactic suffix)
+    //   'key-moments' → smart cadence (opening intro + key moments
+    //                   + phase transitions)
+    //   'every-move'  → narrate every move (legacy chatty mode)
     const isFirstSeeingOpening =
+      verbosity !== 'off' &&
       inOpeningTeaching &&
       !!resolvedSubject &&
       !introducedOpeningsRef.current.has(resolvedSubject);

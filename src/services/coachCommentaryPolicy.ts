@@ -38,14 +38,31 @@ export function resolveVerbosity(profile: UserProfile | null | undefined): Comme
 }
 
 /**
- * Should we invoke the LLM for this particular move?
+ * Should we invoke the LLM for this particular move's
+ * key-moment branch?
  *
- * Rules:
- *   - 'off'         — never. Commentary comes purely from the local
- *                     tactic classifier (tacticSuffix in CoachGamePage).
- *   - 'key-moments' — only when the move classification is blunder /
- *                     mistake / brilliant / great.
- *   - 'every-move'  — always (legacy, expensive).
+ * Note: this gates ONLY the key-moment trigger inside CoachGamePage's
+ * sparse-cadence decision tree. The full cadence is composed at the
+ * call site:
+ *
+ *   shouldFire = isFirstSeeingOpening || isKeyMoment || userWantsEveryMove
+ *
+ * Where:
+ *   - isFirstSeeingOpening fires the long opening intro once per opening
+ *     (gated separately on verbosity !== 'off' in CoachGamePage).
+ *   - isKeyMoment is what THIS function returns — true on blunder /
+ *     mistake / brilliant / great when verbosity is 'key-moments'
+ *     or 'every-move'.
+ *   - userWantsEveryMove triggers the legacy chatty mode.
+ *
+ * So the per-mode behaviors composed at the call site are:
+ *   - 'off'         — silent (no opening intro, no key moments, no
+ *                     every-move). Deterministic tactic suffix still
+ *                     surfaces in chat.
+ *   - 'key-moments' — opening intro once + reactive key-moment zingers
+ *                     + existing phase-transition narrations. Routine
+ *                     book moves silent.
+ *   - 'every-move'  — long narration on every move (legacy, expensive).
  */
 export function shouldCallLlmForMove(
   verbosity: CommentaryVerbosity,

@@ -826,12 +826,12 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
       />
       <SelectRow
         label="Commentary Frequency"
-        tooltip="How often the coach generates AI commentary during a game. Key moments only saves tokens and keeps sessions snappy."
+        tooltip="How often the coach narrates during a game. Smart introduces the opening once, reacts to blunders / brilliants with short personality-laden zingers, and announces phase transitions — so you can play without waiting between every move. Every move keeps the old chatty cadence (long narration on every move, more tokens). Off is silent except for deterministic tactic alerts."
         value={profile.preferences.coachCommentaryVerbosity ?? 'key-moments'}
         options={[
-          { value: 'key-moments', label: 'Key moments — Only blunders, brilliants, turning points' },
-          { value: 'every-move', label: 'Every move — AI commentary after every move (uses more tokens)' },
-          { value: 'off', label: 'Off — Deterministic tactic hints only' },
+          { value: 'key-moments', label: 'Smart — Opening intro + key moments + phase transitions (recommended)' },
+          { value: 'every-move', label: 'Every move — Long narration after every move (chatty, more tokens)' },
+          { value: 'off', label: 'Off — Silent (deterministic tactic alerts only)' },
         ]}
         onChange={(v) => void handleCommentaryVerbosityChange(v as 'key-moments' | 'every-move' | 'off')}
         testId="coach-commentary-verbosity-select"
