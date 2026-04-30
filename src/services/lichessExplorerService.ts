@@ -94,6 +94,49 @@ function emitLichessFailure(
   });
 }
 
+/** Circuit breaker — stop calling /api/lichess-explorer after N
+ *  consecutive failures in a session. Production audit logs across
+ *  every recent build show the explorer endpoint returning HTTP 401
+ *  on every move (Lichess's nginx layer rejecting our requests). The
+ *  failure is sustained, not transient, so retrying on every move
+ *  just spams the audit log and burns latency in the
+ *  `withFetchTimeout` wrapper. After CIRCUIT_BREAKER_THRESHOLD
+ *  consecutive failures we open the circuit and short-circuit
+ *  subsequent calls with a synthetic empty-result. The circuit
+ *  resets on the next successful fetch, so a server-side fix on
+ *  Lichess automatically restores grounded notes without any client
+ *  redeploy. The per-call audit emit is gated behind the circuit
+ *  state — failures while the circuit is open log once per session
+ *  instead of on every move. */
+const CIRCUIT_BREAKER_THRESHOLD = 3;
+let consecutiveFailures = 0;
+let circuitOpen = false;
+let openCircuitLogged = false;
+
+function recordExplorerFailure(): void {
+  consecutiveFailures += 1;
+  if (consecutiveFailures >= CIRCUIT_BREAKER_THRESHOLD && !circuitOpen) {
+    circuitOpen = true;
+  }
+}
+
+function recordExplorerSuccess(): void {
+  consecutiveFailures = 0;
+  circuitOpen = false;
+  openCircuitLogged = false;
+}
+
+function isCircuitOpen(): boolean {
+  return circuitOpen;
+}
+
+/** Test-only — reset the circuit between unit tests. */
+export function _resetLichessCircuitBreaker(): void {
+  consecutiveFailures = 0;
+  circuitOpen = false;
+  openCircuitLogged = false;
+}
+
 /**
  * Fetch opening explorer data for a FEN position.
  * Returns move statistics (W/D/L) from Lichess games or master games.
@@ -102,6 +145,30 @@ export async function fetchLichessExplorer(
   fen: string,
   source: ExplorerSource = 'lichess',
 ): Promise<LichessExplorerResult> {
+  if (isCircuitOpen()) {
+    // Log the open-circuit state once per session so the audit log
+    // reflects "we stopped trying" rather than going completely silent.
+    if (!openCircuitLogged) {
+      openCircuitLogged = true;
+      void logAppAudit({
+        kind: 'lichess-error',
+        category: 'subsystem',
+        source: 'lichessExplorerService.fetchLichessExplorer',
+        summary: `circuit open after ${CIRCUIT_BREAKER_THRESHOLD} consecutive failures — short-circuiting subsequent calls this session`,
+        details: JSON.stringify({
+          consecutiveFailures,
+          circuitBreakerThreshold: CIRCUIT_BREAKER_THRESHOLD,
+          fen,
+          source,
+        }),
+      });
+    }
+    // Return an empty-but-shape-valid result. Callers handle empty
+    // explorer data gracefully (no grounded notes are added to the
+    // prompt). Throwing would force every caller to add try/catch
+    // around a state that's expected.
+    throw new Error('lichess-explorer-circuit-open');
+  }
   const params = new URLSearchParams({ fen, source });
   if (source === 'lichess') {
     params.set('speeds', 'blitz,rapid,classical');
@@ -115,10 +182,12 @@ export async function fetchLichessExplorer(
       signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
     });
   } catch (err) {
+    recordExplorerFailure();
     emitLichessFailure('lichessExplorerService.fetchLichessExplorer', url, err, null);
     throw err;
   }
   if (!response.ok) {
+    recordExplorerFailure();
     // Read the body so the audit captures Lichess's actual error
     // payload — the proxy passes upstream bodies through verbatim,
     // so 401 / 429 / Cloudflare challenge messages from Lichess
@@ -139,6 +208,7 @@ export async function fetchLichessExplorer(
     );
     throw new Error(`Explorer API error: ${response.status}`);
   }
+  recordExplorerSuccess();
   return response.json() as Promise<LichessExplorerResult>;
 }
 
