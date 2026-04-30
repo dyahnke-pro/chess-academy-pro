@@ -2,36 +2,7 @@
 
 This file is loaded automatically in every Claude Code session. Follow these instructions exactly.
 
-## ⏰ Open launch reminders (surface these proactively every session)
-
-**Lemon Squeezy signup pending.** User chose Lemon Squeezy as the payment
-processor (merchant of record — handles sales tax and VAT for them). They
-have NOT signed up yet. At the start of every session until this is
-resolved, proactively remind them:
-
-> "Reminder: still need to sign up for Lemon Squeezy
-> (https://lemonsqueezy.com) so I can wire the paywall. ~10 minutes.
-> Once you have the API key and two subscription product IDs ($7.99/mo
-> and $79.99/yr), share them and I'll implement the integration."
-
-**Domain not purchased.** `chessacademy.pro` recommended (Cloudflare
-Registrar, ~$15/year). Remind if not yet bought.
-
-**Pricing needs a rethink before launch.** The original plan was
-$7.99/mo and $79.99/yr. Since then the voice coach has grown
-significantly more expensive per session (Polly TTS + longer
-unlimited-verbosity LLM turns + Stockfish + Lichess calls). Before
-wiring the Lemon Squeezy paywall, revisit the price points against
-realistic per-user monthly cost:
-
-> "Reminder: pricing should be revisited before paywall wiring.
-> Voice coach is now Polly + long LLM responses + Stockfish +
-> Lichess per turn. Likely needs a higher tier or usage caps to
-> keep margins healthy. Want to sketch the new pricing together?"
-
-**Stop reminding** once the relevant item is complete — update or
-remove the corresponding reminder when the user confirms signup,
-shares keys, buys the domain, or locks in the new pricing.
+## ⏰ Standing notes
 
 **iOS AVAudioSession patch — DONE.** Lives in
 `ios-patches/App/AppDelegate.swift` and is copied over the Capacitor
