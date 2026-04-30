@@ -98,6 +98,16 @@ export interface MoveCommentaryInput {
    *  when the student played e4 (the student is white, the coach
    *  is black). Now we tell the LLM explicitly. */
   studentColor?: 'w' | 'b';
+  /** Brief mode — short personality-laden zinger instead of a full
+   *  teaching paragraph. Used by CoachGamePage for key-moment
+   *  reactions (blunders, mistakes, brilliants) where the player
+   *  needs fast feedback (~2s latency, 1-2 sentences) rather than
+   *  the long opening-intro narration. The prompt gets a brief-mode
+   *  addendum and max_tokens drops from 1500 to 200. Personality
+   *  dials still apply, so an "edgy" coach with mockery=hard
+   *  produces "Oof, that's bad. You just hung the knight." instead
+   *  of a 1500-char lecture. */
+  briefMode?: boolean;
 }
 
 /** How many prior chat messages to include in the commentary prompt.
@@ -247,6 +257,7 @@ async function getLlmCommentary(
     chatHistory, verbosity = 'medium', groundedNotes = [],
     recentMoveClassifications, lastUserInteractionMs,
     personality, profanity, mockery, flirt, studentColor,
+    briefMode = false,
   } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
@@ -328,6 +339,18 @@ async function getLlmCommentary(
   if (personalityBlock) promptParts.push(personalityBlock);
   promptParts.push(basePrompt);
   if (memoryBlock) promptParts.push(memoryBlock);
+  // Brief-mode addendum — short personality-laden zinger for key
+  // moments (blunders, mistakes, brilliants). The personality block
+  // above already sets the voice / profanity / mockery clauses; this
+  // just tightens the length and pushes the LLM to lean into critique
+  // rather than analysis. Combined with max_tokens=200 below, output
+  // is 1-2 sentences arriving in ~2s instead of a 1500-char essay
+  // arriving in 5-7s.
+  if (briefMode) {
+    promptParts.push(
+      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with ONE short pithy sentence (or two at most). Lean hard into your personality: mock, critique, react with feeling. The student just made a notable move (blunder / mistake / brilliant / great) and wants to hear something fast and reactive, not a paragraph of analysis. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction.`,
+    );
+  }
   const system = promptParts.join('\n\n');
 
   // Recent chat turns from the shared session — lets the commentary
@@ -400,19 +423,18 @@ async function getLlmCommentary(
   // `coach-move-narration-fired` (final disposition) into a
   // complete LLM call trail.
   const llmStartedAt = Date.now();
+  // 200 max_tokens for brief mode (key-moment zingers — 1-2
+  // sentences at ~2s latency); 1500 for the long teaching narration
+  // path. 1500 was bumped from 420 (audit build 1f23808 caught
+  // truncation at the cap with deepseek-reasoner; with deepseek-chat
+  // the budget all goes to content so 1500 ≈ 5500-6000 chars).
+  const maxTokens = briefMode ? 200 : 1500;
   const response = await getCoachChatResponse(
     [{ role: 'user', content: user }],
     system,
     undefined,
     'interactive_review',
-    // 1500 max_tokens — bumped from 420 because the audit log on
-    // build 1f23808 showed long unlimited-verbosity narrations
-    // (1700+ chars) hitting the cap and getting truncated
-    // mid-sentence. With deepseek-chat (no reasoning_content
-    // overhead) we can use the full budget for content; 1500 tokens
-    // ≈ 5500-6000 chars, comfortably above what the longest
-    // unlimited-verbosity move-1 introduction needs.
-    1500,
+    maxTokens,
     verbosity,
   );
   const llmDurationMs = Date.now() - llmStartedAt;
