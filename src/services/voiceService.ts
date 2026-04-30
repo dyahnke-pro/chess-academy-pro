@@ -23,6 +23,19 @@ export const PERSONALITY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
   'drill-sergeant': 'matthew', // generative — direct, deep male
 };
 
+/** Per-personality SECONDARY voice — used for short alerts /
+ *  interjections (tactic warnings, opponent-blunder live-coach
+ *  calls) so a different timbre cuts through the main narration.
+ *  Defaults pair a contrasting timbre (different gender / engine)
+ *  for each personality. WO-VOICE-LAYER-01 (b). */
+export const PERSONALITY_SECONDARY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
+  default: 'matthew',          // generative male contrasts Ruth (default primary)
+  soft: 'stephen',             // neural male contrasts Joanna
+  edgy: 'kendra',              // neural female contrasts Stephen
+  flirtatious: 'gregory',      // generative male contrasts Ruth — sultry partner-voice
+  'drill-sergeant': 'salli',   // neural female contrasts Matthew
+};
+
 /** Resolve which Polly voice to send to the API for the active
  *  personality. The user's per-personality override map (from
  *  Settings → Coach → Personality) wins when set; otherwise we use
@@ -41,17 +54,36 @@ export function resolvePollyVoice(
   return PERSONALITY_VOICE_DEFAULTS[p];
 }
 
+/** Resolve the secondary voice (used for tactic alerts + short
+ *  interjections so they cut through with a different timbre). When
+ *  the user hasn't picked an override, falls back to
+ *  PERSONALITY_SECONDARY_VOICE_DEFAULTS. WO-VOICE-LAYER-01 (b). */
+export function resolvePollySecondaryVoice(
+  personality: CoachPersonality | undefined,
+  secondaryVoices: Partial<Record<CoachPersonality, string>> | undefined,
+): string {
+  const p: CoachPersonality = personality ?? 'default';
+  const override = secondaryVoices?.[p];
+  if (override) return override;
+  return PERSONALITY_SECONDARY_VOICE_DEFAULTS[p];
+}
+
 /** Absolute URL for Polly TTS — needed when running inside Capacitor WKWebView */
 const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
 const isCapacitor = typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
 
-export function getTtsUrl(text: string, voice: string, useSsml = true): string {
+export function getTtsUrl(text: string, voice: string, useSsml = true, style?: string): string {
   const base = isCapacitor ? VERCEL_ORIGIN : '';
   // SSML default-on so Polly gets engine-aware structure (paragraph
   // on generative voices, prosody slowdown on neural). Short clips
   // / warmups opt out to avoid empty-SSML edge cases.
+  // The optional `style` param tunes per-personality prosody on
+  // Neural voices (rate / pitch / volume) — e.g., flirtatious ⇒
+  // slower + lower pitch (sultry register), drill-sergeant ⇒
+  // faster + louder. Generative voices ignore it.
   const ssmlParam = useSsml ? '&ssml=1' : '';
-  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}`;
+  const styleParam = style ? `&style=${encodeURIComponent(style)}` : '';
+  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}`;
 }
 
 /** Available Amazon Polly voices (served via /api/tts endpoint) */
@@ -322,6 +354,9 @@ class VoiceService {
     /** Per-personality voice override map. Empty / missing entries
      *  fall back to PERSONALITY_VOICE_DEFAULTS. */
     coachPersonalityVoices: Partial<Record<CoachPersonality, string>> | undefined;
+    /** Per-personality SECONDARY voice override map. Used by speakAlert
+     *  for tactic alerts / interjections. WO-VOICE-LAYER-01 (b). */
+    coachPersonalitySecondaryVoices: Partial<Record<CoachPersonality, string>> | undefined;
     systemVoiceURI: string | null;
     voiceSpeed: number;
   } | null = null;
@@ -387,6 +422,7 @@ class VoiceService {
       pollyVoice: prefs.pollyVoice || 'ruth',
       coachPersonality: prefs.coachPersonality,
       coachPersonalityVoices: prefs.coachPersonalityVoices,
+      coachPersonalitySecondaryVoices: prefs.coachPersonalitySecondaryVoices,
       systemVoiceURI: prefs.systemVoiceURI ?? null,
       voiceSpeed: prefs.voiceSpeed ?? 1.0,
     };
@@ -423,6 +459,15 @@ class VoiceService {
   async speak(text: string): Promise<void> {
     this.logSpeakInvoked('speak', text);
     return this.speakInternal(sanitizeForTTS(text), false);
+  }
+
+  /** Speak using the personality's SECONDARY voice — for short tactic
+   *  alerts / interjections that should cut through main narration
+   *  with a different timbre. WO-VOICE-LAYER-01 (b). Falls back to
+   *  the primary speak path if no prefs are loaded. */
+  async speakAlert(text: string): Promise<void> {
+    this.logSpeakInvoked('speakAlert', text);
+    return this.speakInternal(sanitizeForTTS(text), false, { useSecondary: true });
   }
 
   /** Low-latency speak for training modes — skips Polly/voice-packs and DB reads.
@@ -464,7 +509,7 @@ class VoiceService {
     }
   }
 
-  private async speakInternal(text: string, force: boolean): Promise<void> {
+  private async speakInternal(text: string, force: boolean, opts?: { useSecondary?: boolean }): Promise<void> {
     this.lastSpeakDiagnostic = {
       text: text.slice(0, 80),
       tier: 'muted',
@@ -567,16 +612,29 @@ class VoiceService {
       // personality + per-personality override map, falling back to
       // the legacy pollyVoice when on the 'default' personality with
       // no override.
-      const voiceForSpeak = resolvePollyVoice(
-        prefs.coachPersonality,
-        prefs.coachPersonalityVoices,
-        prefs.pollyVoice,
-      );
+      // WO-VOICE-LAYER-01 (b): when speakAlert was the entry point,
+      // use the SECONDARY voice instead so short alerts cut through
+      // main narration with a different timbre.
+      const voiceForSpeak = opts?.useSecondary
+        ? resolvePollySecondaryVoice(
+            prefs.coachPersonality,
+            prefs.coachPersonalitySecondaryVoices,
+          )
+        : resolvePollyVoice(
+            prefs.coachPersonality,
+            prefs.coachPersonalityVoices,
+            prefs.pollyVoice,
+          );
       // Narration trace audit — captures the cross-product of voice ×
       // personality × dials at speak time. Loaded lazily so the audit
       // module isn't a hard import for the voice path.
       void this.logNarrationSpoken(text, voiceForSpeak, prefs);
-      const success = await this.speakPolly(text, voiceForSpeak);
+      // WO-VOICE-LAYER-01 (a): per-personality SSML prosody. Neural
+      // voices respect rate/pitch/volume so the same Joanna can sound
+      // sultry under flirtatious, clipped under drill-sergeant, etc.
+      // Generative voices (Ruth/Matthew/Danielle/Gregory) ignore
+      // prosody — pass the style through anyway for consistency.
+      const success = await this.speakPolly(text, voiceForSpeak, prefs.coachPersonality ?? 'default');
       if (success) {
         this.lastTier = 'polly';
         this.lastSpeakDiagnostic.tier = 'polly';
@@ -734,10 +792,12 @@ class VoiceService {
     }
   }
 
-  private async speakPolly(text: string, voice: string): Promise<boolean> {
+  private async speakPolly(text: string, voice: string, style?: string): Promise<boolean> {
     this.lastSpeakDiagnostic.pollyAttempted = true;
     try {
-      const key = this.pollyKey(text, voice);
+      // Cache key includes style so a style change doesn't return
+      // a stale audio buffer from an earlier prosody setting.
+      const key = this.pollyKey(text, voice) + (style ? `|${style}` : '');
       let arrayBuffer = this.touchAudioCacheEntry(key);
 
       if (!arrayBuffer) {
@@ -747,7 +807,7 @@ class VoiceService {
         const combinedSignal = AbortSignal.any
           ? AbortSignal.any([this.abortController.signal, timeoutSignal])
           : this.abortController.signal;
-        const url = getTtsUrl(text, voice);
+        const url = getTtsUrl(text, voice, true, style);
         const response = await fetch(url, { signal: combinedSignal });
         this.lastSpeakDiagnostic.pollyStatus = response.status;
         this.lastSpeakDiagnostic.pollyOk = response.ok;

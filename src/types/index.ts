@@ -546,6 +546,15 @@ export interface UserPreferences {
   coachPersonalityVoices?: Partial<
     Record<import('../coach/types').CoachPersonality, string>
   >;
+  /** Per-personality SECONDARY voice override. Used for short alerts
+   *  / interjections (tactic warnings, opponent-blunder live-coach
+   *  calls) so the user hears a different timbre for "watch out"
+   *  than for the main narration. WO-VOICE-LAYER-01 (b). When unset,
+   *  falls back to PERSONALITY_SECONDARY_VOICE_DEFAULTS in
+   *  voiceService.ts. */
+  coachPersonalitySecondaryVoices?: Partial<
+    Record<import('../coach/types').CoachPersonality, string>
+  >;
   /** Profanity dial. Default 'none'. Settings UI seeds the dial with
    *  the per-personality default at first selection (e.g.
    *  drill-sergeant → 'hard'), but once a value is stored here it

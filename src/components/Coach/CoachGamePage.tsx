@@ -2219,7 +2219,10 @@ export function CoachGamePage(): JSX.Element {
                 content: warning,
                 timestamp: Date.now(),
               });
-              void voiceService.speak(warning).catch((err: unknown) => {
+              // WO-VOICE-LAYER-01 (b): use the personality's secondary
+              // voice so the alert cuts through with a different timbre
+              // than the main narration.
+              void voiceService.speakAlert(warning).catch((err: unknown) => {
                 console.warn('[tactic-alert] TTS failed:', err);
               });
             }

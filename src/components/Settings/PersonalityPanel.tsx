@@ -28,7 +28,7 @@ import {
   type CoachPersonality,
   type IntensityLevel,
 } from '../../coach/types';
-import { POLLY_VOICES, PERSONALITY_VOICE_DEFAULTS, voiceService } from '../../services/voiceService';
+import { POLLY_VOICES, PERSONALITY_VOICE_DEFAULTS, PERSONALITY_SECONDARY_VOICE_DEFAULTS, voiceService } from '../../services/voiceService';
 import type { UserProfile } from '../../types';
 
 interface PersonalityOption {
@@ -97,6 +97,20 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
     };
   }, [profile.preferences.coachPersonalityVoices]);
 
+  // WO-VOICE-LAYER-01 (b): per-personality SECONDARY voice — used
+  // for short tactic alerts and interjections so they cut through
+  // main narration with a different timbre.
+  const currentSecondaryVoiceMap: Record<CoachPersonality, string> = useMemo(() => {
+    const stored = profile.preferences.coachPersonalitySecondaryVoices ?? {};
+    return {
+      default: stored.default ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS.default,
+      soft: stored.soft ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS.soft,
+      edgy: stored.edgy ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS.edgy,
+      flirtatious: stored.flirtatious ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS.flirtatious,
+      'drill-sergeant': stored['drill-sergeant'] ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS['drill-sergeant'],
+    };
+  }, [profile.preferences.coachPersonalitySecondaryVoices]);
+
   // Read current settings from profile, defaulting to 'default' / 'none'.
   const currentPersonality: CoachPersonality =
     profile.preferences.coachPersonality ?? 'default';
@@ -116,6 +130,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
   const [draftMockery, setDraftMockery] = useState<IntensityLevel>(currentMockery);
   const [draftFlirt, setDraftFlirt] = useState<IntensityLevel>(currentFlirt);
   const [draftVoiceMap, setDraftVoiceMap] = useState<Record<CoachPersonality, string>>(currentVoiceMap);
+  const [draftSecondaryVoiceMap, setDraftSecondaryVoiceMap] = useState<Record<CoachPersonality, string>>(currentSecondaryVoiceMap);
 
   // Re-seed drafts every time the panel opens so a previous Cancel
   // doesn't leak stale draft values into the next open.
@@ -126,8 +141,9 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       setDraftMockery(currentMockery);
       setDraftFlirt(currentFlirt);
       setDraftVoiceMap(currentVoiceMap);
+      setDraftSecondaryVoiceMap(currentSecondaryVoiceMap);
     }
-  }, [open, currentPersonality, currentProfanity, currentMockery, currentFlirt, currentVoiceMap]);
+  }, [open, currentPersonality, currentProfanity, currentMockery, currentFlirt, currentVoiceMap, currentSecondaryVoiceMap]);
 
   const summaryLabel = PERSONALITY_OPTIONS.find((p) => p.id === currentPersonality)?.label ?? 'Default';
   const summaryDials =
@@ -167,7 +183,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
     }, 250);
     return () => clearTimeout(handle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [draftPersonality, draftProfanity, draftMockery, draftFlirt, draftVoiceMap]);
+  }, [draftPersonality, draftProfanity, draftMockery, draftFlirt, draftVoiceMap, draftSecondaryVoiceMap]);
 
   const persistPersonality = async (): Promise<void> => {
     const before = {
@@ -189,6 +205,10 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
     for (const [key, value] of Object.entries(draftVoiceMap) as [CoachPersonality, string][]) {
       if (value !== PERSONALITY_VOICE_DEFAULTS[key]) voiceOverrides[key] = value;
     }
+    const secondaryVoiceOverrides: Partial<Record<CoachPersonality, string>> = {};
+    for (const [key, value] of Object.entries(draftSecondaryVoiceMap) as [CoachPersonality, string][]) {
+      if (value !== PERSONALITY_SECONDARY_VOICE_DEFAULTS[key]) secondaryVoiceOverrides[key] = value;
+    }
     const updatedPrefs = {
       ...profile.preferences,
       coachPersonality: draftPersonality,
@@ -196,6 +216,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       coachMockery: draftMockery,
       coachFlirt: draftFlirt,
       coachPersonalityVoices: voiceOverrides,
+      coachPersonalitySecondaryVoices: secondaryVoiceOverrides,
     };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -298,7 +319,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
                   are orthogonal, so any voice can be paired with any
                   personality. WO-COACH-PERSONALITY-VOICE. */}
               <div className="mb-4">
-                <div className="text-sm font-medium mb-2">Voice per personality</div>
+                <div className="text-sm font-medium mb-2">Primary voice (main narration)</div>
                 <div className="space-y-1.5" data-testid="personality-voice-list">
                   {PERSONALITY_OPTIONS.map((opt) => (
                     <div key={opt.id} className="flex items-center gap-2">
@@ -317,7 +338,45 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
                           color: 'var(--color-text)',
                         }}
                         data-testid={`personality-voice-${opt.id}`}
-                        aria-label={`${opt.label} voice`}
+                        aria-label={`${opt.label} primary voice`}
+                      >
+                        {POLLY_VOICES.map((v) => (
+                          <option key={v.id} value={v.id}>
+                            {v.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Secondary voice picker — a contrasting timbre used for
+                  short tactic alerts and live-coach interjections so
+                  warnings cut through the main narration. Same voice
+                  list; defaults pair a different gender / engine.
+                  WO-VOICE-LAYER-01 (b). */}
+              <div className="mb-4">
+                <div className="text-sm font-medium mb-2">Secondary voice (alerts &amp; interjections)</div>
+                <div className="space-y-1.5" data-testid="personality-secondary-voice-list">
+                  {PERSONALITY_OPTIONS.map((opt) => (
+                    <div key={opt.id} className="flex items-center gap-2">
+                      <span className="text-xs flex-shrink-0 w-28" style={{ color: 'var(--color-text-muted)' }}>
+                        {opt.label}
+                      </span>
+                      <select
+                        value={draftSecondaryVoiceMap[opt.id]}
+                        onChange={(e) =>
+                          setDraftSecondaryVoiceMap((prev) => ({ ...prev, [opt.id]: e.target.value }))
+                        }
+                        className="flex-1 px-2 py-1 rounded-md border text-xs"
+                        style={{
+                          background: 'var(--color-bg)',
+                          borderColor: 'var(--color-border)',
+                          color: 'var(--color-text)',
+                        }}
+                        data-testid={`personality-secondary-voice-${opt.id}`}
+                        aria-label={`${opt.label} secondary voice`}
                       >
                         {POLLY_VOICES.map((v) => (
                           <option key={v.id} value={v.id}>
