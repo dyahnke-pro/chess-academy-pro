@@ -495,19 +495,19 @@
         },
         {
           "san": "c4",
-          "annotation": ""
+          "annotation": "White advances the c-pawn to c4, planting a second pawn in the center alongside the one already on d4. This duo stakes an immediate claim to central space, a defining characteristic of the Catalan setup. Together, the two pawns exert considerable pressure across the middle of the board."
         },
         {
           "san": "e6",
-          "annotation": ""
+          "annotation": "Black advances the e-pawn one square to e6, a measured and classical choice in the Closed Catalan. The pawn on e6 fortifies the center and lends solid support to the d5 square, keeping Black's structure compact and resilient. This quiet step inward reflects Black's intent to build a sturdy foundation before committing to further central action."
         },
         {
           "san": "g3",
-          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king."
+          "annotation": "White nudges the pawn one square forward to g3, the defining gesture of the Closed Catalan. This modest advance clears the way for the bishop on f1 to be developed along the long diagonal. The pawn on g3 now anchors what will become a powerful fianchetto structure at the heart of White's setup."
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+          "annotation": "Black advances the d-pawn two squares to d5, claiming a firm foothold in the center and creating a classic pawn duo alongside the pawn already on e6. This central stake directly challenges White's pawn on c4 and stands square against the d4 pawn, giving Black a solid, symmetrical structure to build from in the Closed Catalan."
         },
         {
           "san": "Bg2",
@@ -515,23 +515,23 @@
         },
         {
           "san": "Be7",
-          "annotation": ""
+          "annotation": "Black develops the dark-squared bishop from f8 to e7, a modest but solid placement that is a hallmark of the Closed Catalan. Rather than venturing to a more ambitious square, the bishop settles comfortably on e7, where it supports the kingside and clears the path for Black to castle. This careful, restrained development keeps Black's position sturdy and compact."
         },
         {
           "san": "Nf3",
-          "annotation": ""
+          "annotation": "White's knight strides out to f3, a natural and active square where it supports the d4 pawn and reinforces White's grip on the central complex. Alongside the fianchettoed bishop on g2 and the pawn duo on c4 and d4, the knight joins a harmonious Catalan setup that exerts quiet but persistent pressure on the center."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "Black tucks the king away to safety with kingside castling, sliding the king to g8 and bringing the rook to f8 in one fluid motion. This is a natural and solid response in the Closed Catalan, prioritizing king security before committing to a concrete central plan. With the king no longer on the open e-file, Black can now focus attention on the tension in the center."
         },
         {
           "san": "O-O",
-          "annotation": ""
+          "annotation": "White tucks the king safely away with kingside castling, the king settling on g1 while the rook swings over to f1. This is a natural and important step in the Closed Catalan, connecting the rooks and completing development of the kingside pieces. The king finds a secure home behind the pawn on g3 and the fianchettoed bishop on g2."
         },
         {
           "san": "Nbd7",
-          "annotation": ""
+          "annotation": "Black develops the knight from b8 to d7, giving additional support to the central pawn on d5, which faces pressure from White's pawn on c4. The knight on d7 works in tandem with the one already posted on f6, creating a solid defensive structure around Black's central foothold. This patient, consolidating approach is characteristic of Black's strategy in the Closed Catalan."
         },
         {
           "san": "Qc2",
