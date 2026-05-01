@@ -22,11 +22,9 @@ describe('CoachHomePage', () => {
     expect(screen.getByTestId('coach-home-page')).toBeInTheDocument();
   });
 
-  it('shows "Work with Coach" action card', () => {
+  it('does not show the legacy "Work with Coach" tile (folded into Learn / Training Plan)', () => {
     render(<CoachHomePage />);
-    const card = screen.getByTestId('coach-action-train');
-    expect(card).toBeInTheDocument();
-    expect(card).toHaveTextContent('Work with Coach');
+    expect(screen.queryByTestId('coach-action-train')).not.toBeInTheDocument();
   });
 
   it('shows "Play" action card', () => {
@@ -66,13 +64,7 @@ describe('CoachHomePage', () => {
     expect(chat).toHaveTextContent('Chat');
   });
 
-  it('navigates to /coach/train when "Work with Coach" is clicked', () => {
-    render(<CoachHomePage />);
-    fireEvent.click(screen.getByTestId('coach-action-train'));
-    expect(mockNavigate).toHaveBeenCalledWith('/coach/train');
-  });
-
-  it('navigates to /coach/play when "Play & Review" is clicked', () => {
+  it('navigates to /coach/play when "Play" is clicked', () => {
     render(<CoachHomePage />);
     fireEvent.click(screen.getByTestId('coach-action-play'));
     expect(mockNavigate).toHaveBeenCalledWith('/coach/play');

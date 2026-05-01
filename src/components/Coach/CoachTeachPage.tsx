@@ -21,8 +21,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { Send, RotateCcw, GraduationCap, Loader2 } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Loader2 } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { ChatMessage } from './ChatMessage';
+import { ChatInput } from './ChatInput';
+import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
 import { logAppAudit } from '../../services/appAuditor';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
@@ -32,12 +35,7 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { db } from '../../db/schema';
 import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import type { LiveState } from '../../coach/types';
-
-interface ChatTurn {
-  id: string;
-  role: 'student' | 'coach';
-  text: string;
-}
+import type { ChatMessage as ChatMessageType } from '../../types';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -57,8 +55,7 @@ export function CoachTeachPage(): JSX.Element {
   const chessRef = useRef<Chess>(new Chess());
   const [fen, setFen] = useState<string>(STARTING_FEN);
 
-  const [turns, setTurns] = useState<ChatTurn[]>([]);
-  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   // Kickoff progress: opaque label + step counter so the student sees
@@ -121,13 +118,17 @@ export function CoachTeachPage(): JSX.Element {
   const handleSubmit = useCallback(async (text: string, opts?: { kickoff?: boolean }): Promise<void> => {
     if (!text.trim() || busy) return;
     setBusy(true);
-    setInput('');
     const turnId = `t-${Date.now()}`;
     // Kickoff sends a system-style ask to seed the lesson — don't
     // render it as a "student said" turn in the transcript. Only the
     // coach's reply (the actual lesson plan) shows up.
     if (!opts?.kickoff) {
-      setTurns((prev) => [...prev, { id: `${turnId}-u`, role: 'student', text }]);
+      setMessages((prev) => [...prev, {
+        id: `${turnId}-u`,
+        role: 'user',
+        content: text,
+        timestamp: Date.now(),
+      }]);
     }
     setStreaming('');
 
@@ -230,7 +231,12 @@ export function CoachTeachPage(): JSX.Element {
       // unsanitized text would teach the LLM that markup is normal.
       const finalText = sanitizeCoachText(result.text);
       if (finalText) {
-        setTurns((prev) => [...prev, { id: `${turnId}-c`, role: 'coach', text: finalText }]);
+        setMessages((prev) => [...prev, {
+          id: `${turnId}-c`,
+          role: 'assistant',
+          content: finalText,
+          timestamp: Date.now(),
+        }]);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach',
           role: 'coach',
@@ -241,10 +247,11 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch (err) {
       console.error('[CoachTeachPage] ask failed:', err);
-      setTurns((prev) => [...prev, {
+      setMessages((prev) => [...prev, {
         id: `${turnId}-c`,
-        role: 'coach',
-        text: 'Hit a snag — say it again?',
+        role: 'assistant',
+        content: 'Hit a snag — say it again?',
+        timestamp: Date.now(),
       }]);
     } finally {
       setStreaming(null);
@@ -355,139 +362,149 @@ export function CoachTeachPage(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeProfile]);
 
+  // Layout mirrors CoachGamePage (Play with Coach) — same outer column
+  // structure, same header bar shape (back + title + reset), same
+  // PlayerInfoBar, same chess board container, same ChatMessage /
+  // ChatInput chat primitives. Only the coaching actions differ:
+  // there's no engine-driven move clock here — every coach message
+  // comes from the LLM via the teach-mode prompt.
   return (
     <div
-      className="flex flex-col gap-3 p-4 flex-1 overflow-hidden max-w-2xl mx-auto w-full pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-4"
+      className="flex flex-col md:flex-row h-full overflow-hidden pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
       data-testid="coach-teach-page"
     >
-      <header className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <GraduationCap size={22} style={{ color: 'rgb(6, 182, 212)' }} />
-          <h1 className="text-lg font-bold">Learn with Coach</h1>
-        </div>
-        <button
-          onClick={() => { void resetBoard(); }}
-          className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border"
-          style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}
-          data-testid="teach-reset-board"
-          aria-label="Reset board"
-        >
-          <RotateCcw size={14} />
-          Reset
-        </button>
-      </header>
-
-      <div className="flex-shrink-0">
-        <ConsistentChessboard
-          fen={fen}
-          interactive={!busy}
-          onPieceDrop={handleStudentDrop}
-        />
-      </div>
-
-      <div className="flex-1 overflow-y-auto rounded-lg border p-3 space-y-2"
-           style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
-           data-testid="teach-transcript">
-        {kickoffStatus && (
-          <div
-            className="rounded-lg border p-3 space-y-2"
-            style={{ borderColor: 'rgb(6, 182, 212)', background: 'rgba(6, 182, 212, 0.06)' }}
-            data-testid="teach-kickoff-progress"
-            role="status"
-            aria-live="polite"
-          >
-            <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-              <Loader2 size={14} className="animate-spin" style={{ color: 'rgb(6, 182, 212)' }} />
-              <span>{kickoffStatus.label}</span>
-            </div>
-            <div
-              className="h-1.5 rounded-full overflow-hidden"
-              style={{ background: 'rgba(6, 182, 212, 0.15)' }}
-            >
-              <div
-                className="h-full transition-all duration-300"
-                style={{
-                  width: `${(kickoffStatus.step / kickoffStatus.total) * 100}%`,
-                  background: 'rgb(6, 182, 212)',
-                }}
-              />
-            </div>
-            <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-              Step {kickoffStatus.step} of {kickoffStatus.total} — this can take a few seconds.
-            </div>
-          </div>
-        )}
-        {turns.length === 0 && !streaming && !kickoffStatus && (
-          <div className="text-xs space-y-2" style={{ color: 'var(--color-text-muted)' }}>
-            <div>Ask your coach to teach you anything chess. Try:</div>
-            {SUGGESTIONS.map((s) => (
+      {/* Left column: header + board (matches CoachGamePage flex pattern) */}
+      <div className="flex flex-col flex-1 md:flex-none md:w-3/5 min-h-0 overflow-y-auto">
+        {/* Header — same shape as the play page's header row 1 */}
+        <div className="px-3 py-2 md:p-4 border-b border-theme-border">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 md:gap-3">
               <button
-                key={s}
-                onClick={() => void handleSubmit(s)}
-                className="block w-full text-left px-2 py-1.5 rounded-md border text-xs hover:bg-theme-bg"
-                style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-                data-testid={`teach-suggestion-${s.slice(0, 12).replace(/\W+/g, '-').toLowerCase()}`}
+                onClick={() => void navigate('/coach/home')}
+                className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label="Back to coach hub"
               >
-                "{s}"
+                <ArrowLeft size={20} className="text-theme-text" />
               </button>
-            ))}
-          </div>
-        )}
-        {turns.map((t) => (
-          <div
-            key={t.id}
-            className={`text-sm ${t.role === 'student' ? 'text-right' : ''}`}
-            data-testid={`teach-turn-${t.role}`}
-          >
-            <div
-              className="inline-block px-3 py-2 rounded-2xl max-w-[85%]"
-              style={{
-                background: t.role === 'student' ? 'rgb(6, 182, 212)' : 'var(--color-bg)',
-                color: t.role === 'student' ? '#fff' : 'var(--color-text)',
-                border: t.role === 'coach' ? '1px solid var(--color-border)' : 'none',
-              }}
-            >
-              {t.text}
+              <div>
+                <h2 className="text-sm font-semibold text-theme-text">
+                  Learn with Coach
+                </h2>
+                <p className="text-xs text-theme-text-muted">
+                  Lessons + analysis
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
-        {streaming !== null && (
-          <div className="text-sm" data-testid="teach-streaming">
-            <div
-              className="inline-block px-3 py-2 rounded-2xl max-w-[85%]"
-              style={{ background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+            <button
+              onClick={() => { void resetBoard(); }}
+              className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border text-theme-text-muted"
+              data-testid="teach-reset-board"
+              aria-label="Reset board"
             >
-              {streaming || <span style={{ opacity: 0.5 }}>thinking...</span>}
-            </div>
+              <RotateCcw size={14} />
+              Reset
+            </button>
           </div>
-        )}
+        </div>
+
+        {/* Coach (opponent) info bar — same component the Play page uses */}
+        <div className="px-2 pt-1">
+          <PlayerInfoBar
+            name="Coach"
+            isBot
+            capturedPieces={[]}
+            isActive={busy}
+          />
+        </div>
+
+        {/* Board */}
+        <div className="px-2 py-1 flex justify-center w-full">
+          <div className="w-full md:max-w-[420px]">
+            <ConsistentChessboard
+              fen={fen}
+              interactive={!busy}
+              onPieceDrop={handleStudentDrop}
+            />
+          </div>
+        </div>
       </div>
 
-      <form
-        className="flex items-center gap-2"
-        onSubmit={(e) => { e.preventDefault(); void handleSubmit(input); }}
-      >
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask the coach to teach you something..."
-          disabled={busy}
-          className="flex-1 px-3 py-2 rounded-lg border text-sm"
-          style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-          data-testid="teach-input"
-        />
-        <button
-          type="submit"
-          disabled={busy || !input.trim()}
-          className="p-2 rounded-lg disabled:opacity-40"
-          style={{ background: 'rgb(6, 182, 212)', color: '#fff' }}
-          data-testid="teach-submit"
-          aria-label="Send"
+      {/* Right column: chat panel (kickoff progress + ChatMessage list + ChatInput) */}
+      <div className="flex flex-col flex-1 md:w-2/5 min-h-0 border-t md:border-t-0 md:border-l border-theme-border bg-theme-bg">
+        <div
+          className="flex-1 overflow-y-auto px-3 py-3 space-y-3"
+          data-testid="teach-transcript"
         >
-          <Send size={16} />
-        </button>
-      </form>
+          {kickoffStatus && (
+            <div
+              className="rounded-lg border p-3 space-y-2"
+              style={{ borderColor: 'rgb(6, 182, 212)', background: 'rgba(6, 182, 212, 0.06)' }}
+              data-testid="teach-kickoff-progress"
+              role="status"
+              aria-live="polite"
+            >
+              <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                <Loader2 size={14} className="animate-spin" style={{ color: 'rgb(6, 182, 212)' }} />
+                <span>{kickoffStatus.label}</span>
+              </div>
+              <div
+                className="h-1.5 rounded-full overflow-hidden"
+                style={{ background: 'rgba(6, 182, 212, 0.15)' }}
+              >
+                <div
+                  className="h-full transition-all duration-300"
+                  style={{
+                    width: `${(kickoffStatus.step / kickoffStatus.total) * 100}%`,
+                    background: 'rgb(6, 182, 212)',
+                  }}
+                />
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                Step {kickoffStatus.step} of {kickoffStatus.total} — this can take a few seconds.
+              </div>
+            </div>
+          )}
+
+          {messages.length === 0 && !streaming && !kickoffStatus && (
+            <div className="text-xs space-y-2" style={{ color: 'var(--color-text-muted)' }}>
+              <div>Ask your coach to teach you anything chess. Try:</div>
+              {SUGGESTIONS.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => void handleSubmit(s)}
+                  className="block w-full text-left px-2 py-1.5 rounded-md border text-xs hover:bg-theme-bg"
+                  style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                  data-testid={`teach-suggestion-${s.slice(0, 12).replace(/\W+/g, '-').toLowerCase()}`}
+                >
+                  "{s}"
+                </button>
+              ))}
+            </div>
+          )}
+
+          {messages.map((msg) => (
+            <ChatMessage key={msg.id} message={msg} />
+          ))}
+
+          {streaming !== null && (
+            <ChatMessage
+              message={{
+                id: 'teach-streaming',
+                role: 'assistant',
+                content: streaming,
+                timestamp: Date.now(),
+              }}
+              isStreaming
+            />
+          )}
+        </div>
+
+        <ChatInput
+          onSend={(text) => void handleSubmit(text)}
+          disabled={busy}
+          placeholder="Ask the coach to teach you something..."
+        />
+      </div>
     </div>
   );
 }
