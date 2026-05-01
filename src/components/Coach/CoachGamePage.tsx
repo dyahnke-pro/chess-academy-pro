@@ -3223,16 +3223,24 @@ export function CoachGamePage(): JSX.Element {
     }));
   }, [requestHint]);
 
-  // Takeback — always undo two half-moves (opponent's reply + player's move)
+  // Takeback — undo only enough plies to revert the STUDENT's most
+  // recent move. Production audit: user reported "Taking back a move
+  // should only take back my move. Not opponents." Old code blindly
+  // undid 2 plies, which on a state like [user1, coach1, user2]
+  // (coach hasn't replied yet) would undo user2 AND coach1 — the
+  // student's last move plus the opponent's PRIOR move. Now we undo
+  // exactly: 1 ply if the student's move is the most recent (no
+  // coach reply yet), 2 plies if the coach has already replied
+  // (coach reply + student move). Coach's earlier moves stay put.
   const handleTakeback = useCallback(() => {
     const moves = gameState.moves;
     if (moves.length === 0) return;
-    // Undo the coach's reply + the player's previous move so it's the
-    // player's turn again. When only the player's move exists (coach
-    // hasn't replied, or we're taking the first half-move of the game
-    // back), undo just that one. Lets the user tap Takeback repeatedly
-    // all the way back to the starting position.
-    const undoCount = Math.min(2, moves.length);
+    const lastMove = moves[moves.length - 1];
+    const lastWasCoach = lastMove.isCoachMove === true;
+    // Coach just replied → undo coach + student. Student's move was
+    // the most recent → undo student only. Either way, anything
+    // before the student's most recent move stays untouched.
+    const undoCount = lastWasCoach ? Math.min(2, moves.length) : 1;
 
     for (let i = 0; i < undoCount; i++) {
       game.undoMove();
