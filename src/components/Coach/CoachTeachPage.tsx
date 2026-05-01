@@ -25,6 +25,7 @@ import { Send, RotateCcw, GraduationCap } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { coachService } from '../../coach/coachService';
 import { logAppAudit } from '../../services/appAuditor';
+import { sanitizeCoachText, sanitizeCoachStream } from '../../services/sanitizeCoachText';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -126,7 +127,13 @@ export function CoachTeachPage(): JSX.Element {
     voiceService.stop();
 
     let firstSpeakPromise: Promise<void> | null = null;
-    let buffer = '';
+    // Two-stage buffer: `markupBuffer` holds raw streamed chunks until
+    // any in-flight `[[DIRECTIVE...]]` tag closes (sanitizeCoachStream
+    // returns it as `pending`); `sentenceBuffer` collects sanitized
+    // prose for sentence-by-sentence TTS dispatch. WO-COACH-TTS-STRIP-01.
+    let markupBuffer = '';
+    let sentenceBuffer = '';
+    let displayBuffer = '';
     const SENTENCE_END = /([^.!?\n]+[.!?\n])(?=\s|$)/;
     const speakOrQueue = (sentence: string): void => {
       if (!sentence) return;
@@ -177,22 +184,36 @@ export function CoachTeachPage(): JSX.Element {
           onResetBoard: async () => handleResetBoard(),
           onNavigate: (path: string) => { void navigate(path); },
           onChunk: (chunk: string) => {
-            buffer += chunk;
-            setStreaming((prev) => (prev ?? '') + chunk);
+            markupBuffer += chunk;
+            const { safe, pending } = sanitizeCoachStream(markupBuffer);
+            markupBuffer = pending;
+            if (!safe) return;
+            // Render in chat — sanitized only.
+            displayBuffer += safe;
+            setStreaming(displayBuffer);
+            // Append to sentence buffer for TTS dispatch.
+            sentenceBuffer += safe;
             let match: RegExpExecArray | null;
-            while ((match = SENTENCE_END.exec(buffer)) !== null) {
+            while ((match = SENTENCE_END.exec(sentenceBuffer)) !== null) {
               speakOrQueue(match[1].trim());
-              buffer = buffer.slice(match.index + match[1].length);
+              sentenceBuffer = sentenceBuffer.slice(match.index + match[1].length);
             }
           },
         },
       );
 
-      // Flush any tail.
-      const tail = buffer.trim();
+      // Flush: anything left in the markup buffer is either an
+      // unclosed marker (which we don't want to speak/render) or
+      // trailing prose. Sanitize once more to drop any unclosed
+      // markup, then flush as a final sentence.
+      const tail = sanitizeCoachText(markupBuffer + sentenceBuffer);
       if (tail) speakOrQueue(tail);
 
-      const finalText = result.text.trim();
+      // Sanitize the FINAL response too — both for transcript display
+      // and for the conversation memory record. Memory rehydration on
+      // the next turn re-feeds prior assistant text into the prompt;
+      // unsanitized text would teach the LLM that markup is normal.
+      const finalText = sanitizeCoachText(result.text);
       if (finalText) {
         setTurns((prev) => [...prev, { id: `${turnId}-c`, role: 'coach', text: finalText }]);
         useCoachMemoryStore.getState().appendConversationMessage({

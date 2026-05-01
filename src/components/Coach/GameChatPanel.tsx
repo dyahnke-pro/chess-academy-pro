@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
+import { sanitizeCoachText, sanitizeCoachStream } from '../../services/sanitizeCoachText';
 import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
@@ -28,8 +29,11 @@ import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../
  *  showed `[[ACTION:play_move {"san":"e4"}]] Done.` being spoken
  *  aloud because the previous regex only matched the double-bracket
  *  form. */
-const BOARD_TAG_STRIP_RE = /\[BOARD:\s*(?:arrow|highlight|position|practice|clear)(?::[^\]]*)?\]/gi;
-const ACTION_TAG_STRIP_RE = /\[\[ACTION:[^\]]*\]\]|\[ACTION:[^\]]*\]/gi;
+// WO-COACH-TTS-STRIP-01: legacy in-file regexes replaced by the
+// shared sanitizeCoachText / sanitizeCoachStream module. Old shapes
+// (single-`[ACTION:]`, single-`[BOARD:...]`) are still covered there.
+// The streaming version buffers chunks across in-flight `[[...]]`
+// boundaries so half-arrived markers never reach Polly.
 
 interface GameChatPanelProps {
   fen: string;
@@ -602,6 +606,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setStreamingContent('');
         speechBufferRef.current = '';
         let fullResponse = '';
+        // WO-COACH-TTS-STRIP-01: streaming sanitization state.
+        // streamMarkupBuf holds raw text that includes an in-flight
+        // `[[DIRECTIVE...` we haven't seen the `]]` for yet. streamSafeBuf
+        // accumulates only sanitized prose for display.
+        let streamMarkupBuf = '';
+        let streamSafeBuf = '';
         try {
           const liveState: LiveState = {
             surface: 'game-chat',
@@ -655,20 +665,18 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               flirt: activeProfile.preferences.coachFlirt,
               onChunk: (chunk: string) => {
                 fullResponse += chunk;
-                const displayText = fullResponse
-                  .replace(BOARD_TAG_STRIP_RE, '')
-                  .replace(ACTION_TAG_STRIP_RE, '')
-                  .trim();
-                setStreamingContent(displayText);
-                if (useAppStore.getState().coachVoiceOn) {
-                  // WO-FOUNDATION-02 (continued): strip [BOARD:...] and
-                  // [[ACTION:...]] tags from each chunk before it reaches
-                  // the speech buffer. Without this, the action / board
-                  // directives get spoken aloud verbatim.
-                  const cleanedChunk = chunk
-                    .replace(BOARD_TAG_STRIP_RE, '')
-                    .replace(ACTION_TAG_STRIP_RE, '');
-                  speechBufferRef.current += cleanedChunk;
+                // WO-COACH-TTS-STRIP-01: sanitize the streaming buffer
+                // for both display and TTS. sanitizeCoachStream holds
+                // back any in-flight `[[DIRECTIVE...` until the
+                // closing `]]` arrives, so chunk-split markers never
+                // reach the user.
+                streamMarkupBuf += chunk;
+                const { safe, pending } = sanitizeCoachStream(streamMarkupBuf);
+                streamMarkupBuf = pending;
+                streamSafeBuf += safe;
+                setStreamingContent(streamSafeBuf.trim());
+                if (useAppStore.getState().coachVoiceOn && safe) {
+                  speechBufferRef.current += safe;
                   const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
                   if (sentenceEnd) {
                     const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
@@ -827,10 +835,16 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               annotations.push({ type: 'arrow', arrows: autoArrows });
             }
           }
+          // WO-COACH-TTS-STRIP-01: sanitize the final message text
+          // for both the chat bubble AND the conversation memory.
+          // Memory rehydration on the next turn re-feeds prior
+          // assistant text into the prompt; if [[ACTION:...]] markup
+          // is in there, the LLM learns the wrong protocol.
+          const assistantText = sanitizeCoachText(textWithoutBoardTags);
           const assistantMsg: ChatMessageType = {
             id: `gmsg-${Date.now()}-resp`,
             role: 'assistant',
-            content: textWithoutBoardTags,
+            content: assistantText,
             timestamp: Date.now(),
             metadata: {
               annotations: annotations.length > 0 ? annotations : undefined,
@@ -842,7 +856,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           useCoachMemoryStore.getState().appendConversationMessage({
             surface: 'chat-in-game',
             role: 'coach',
-            text: textWithoutBoardTags,
+            text: assistantText,
             fen: fen || undefined,
             trigger: null,
           });
@@ -877,6 +891,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       setStreamingContent('');
       speechBufferRef.current = '';
       let drawerFullResponse = '';
+      // WO-COACH-TTS-STRIP-01: same streaming-sanitize buffers as the
+      // in-game branch above.
+      let drawerMarkupBuf = '';
+      let drawerSafeBuf = '';
       try {
         const drawerLiveState: LiveState = {
           surface: 'home-chat',
@@ -926,18 +944,15 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             flirt: activeProfile.preferences.coachFlirt,
             onChunk: (chunk: string) => {
               drawerFullResponse += chunk;
-              const displayText = drawerFullResponse
-                .replace(BOARD_TAG_STRIP_RE, '')
-                .replace(ACTION_TAG_STRIP_RE, '')
-                .trim();
-              setStreamingContent(displayText);
-              if (useAppStore.getState().coachVoiceOn) {
-                // WO-FOUNDATION-02 (continued): same tag-strip as the
-                // in-game branch — see comment above.
-                const cleanedChunk = chunk
-                  .replace(BOARD_TAG_STRIP_RE, '')
-                  .replace(ACTION_TAG_STRIP_RE, '');
-                speechBufferRef.current += cleanedChunk;
+              // WO-COACH-TTS-STRIP-01: same streaming-sanitize as the
+              // in-game branch.
+              drawerMarkupBuf += chunk;
+              const { safe, pending } = sanitizeCoachStream(drawerMarkupBuf);
+              drawerMarkupBuf = pending;
+              drawerSafeBuf += safe;
+              setStreamingContent(drawerSafeBuf.trim());
+              if (useAppStore.getState().coachVoiceOn && safe) {
+                speechBufferRef.current += safe;
                 const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
                 if (sentenceEnd) {
                   const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
@@ -1087,17 +1102,19 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             });
           }
         }
+        // WO-COACH-TTS-STRIP-01: sanitize before bubble + memory.
+        const drawerAssistantText = sanitizeCoachText(drawerCleanText);
         const assistantMsg: ChatMessageType = {
           id: `gmsg-${Date.now()}-resp`,
           role: 'assistant',
-          content: drawerCleanText,
+          content: drawerAssistantText,
           timestamp: Date.now(),
         };
         setMessages((prev) => [...prev, assistantMsg]);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-home',
           role: 'coach',
-          text: drawerCleanText,
+          text: drawerAssistantText,
           fen: fen || undefined,
           trigger: null,
         });

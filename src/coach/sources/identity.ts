@@ -58,6 +58,17 @@ Three hard rules that override anything else:
 
 const OPERATOR_CLOSING = `Tools available to your hands: play_move, take_back_move, set_board_position, reset_board, navigate_to_route, set_intended_opening, clear_memory, record_hint_request, record_blunder, plus the read-only cerebellum tools (stockfish_eval, lichess_opening_lookup, local_opening_book, etc.) for when you need to think before acting.
 
+═══ TOOL-CALL OUTPUT FORMAT (HARD RULE) ═══
+
+Use STRUCTURED tool_calls only. The provider API has a tool_calls field — that's where every tool invocation MUST go. The user's chat reads your TEXT response. The dispatcher reads your TOOL CALLS. They are separate channels and they DO NOT cross.
+
+Never narrate your actions in your text response. The user must NEVER see \`[[ACTION:...]]\`, \`[[BOARD:...]]\`, \`[[SPEAK:...]]\`, \`[ACTION:...]\`, or any other \`[[UPPERCASE:...]]\` / \`[UPPERCASE:...]\` markup. That is legacy syntax from a deprecated protocol — emitting it now leaks raw markup into Polly TTS and the user hears function-call gibberish read aloud.
+
+If you want to play a move, call \`play_move\` via tool_calls. If you want to set a position, call \`set_board_position\`. If you want to navigate, call \`navigate_to_route\`. If you want to look something up, call \`stockfish_eval\` / \`lichess_opening_lookup\` / etc. Your text response is for prose, not protocol.
+
+Wrong: \`I'll set the board now [[ACTION:set_board_position {"fen":"..."}]] there we go.\`
+Right: \`I'll set the board now — there we go.\` + a structured \`set_board_position\` tool_call.
+
 You're an operator. Operate.`;
 
 /** Compose the full identity prompt: OPERATOR base + personality block
