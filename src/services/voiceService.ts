@@ -528,6 +528,22 @@ class VoiceService {
     return this.speakInternal(sanitizeForTTS(text), true);
   }
 
+  /** Polly-only speakForced. Identical to speakForced but skips the
+   *  Web Speech fallback when Polly transiently fails. Used by the
+   *  /coach/teach streaming sentence chain so a brief Polly cooldown
+   *  doesn't cause the iOS Safari speech-synth tail to overlap with
+   *  the next Polly sentence — the production audit (build 30fe8c8)
+   *  showed `tts-concurrent-speak prevTier=web-speech` 4× in one
+   *  session, which the user heard as "two voices." With this method,
+   *  a sentence whose Polly call fails is simply skipped audibly
+   *  (still rendered in chat); Polly recovers naturally after the
+   *  15s cooldown for the next sentence. Single-engine consistency,
+   *  no cancel-tail race. */
+  async speakForcedPollyOnly(text: string): Promise<void> {
+    this.logSpeakInvoked('speakForcedPollyOnly', text);
+    return this.speakInternal(sanitizeForTTS(text), true, { noFallback: true });
+  }
+
   /** Queue a sentence without stopping current speech. For streaming voice responses. */
   speakQueuedForced(text: string): void {
     this.logSpeakInvoked('speakQueuedForced', text);
@@ -540,7 +556,11 @@ class VoiceService {
     }
   }
 
-  private async speakInternal(text: string, force: boolean, opts?: { useSecondary?: boolean }): Promise<void> {
+  private async speakInternal(
+    text: string,
+    force: boolean,
+    opts?: { useSecondary?: boolean; noFallback?: boolean },
+  ): Promise<void> {
     this.lastSpeakDiagnostic = {
       text: text.slice(0, 80),
       tier: 'muted',
@@ -683,7 +703,27 @@ class VoiceService {
       }
     }
 
-    // Tier 3: Web Speech API.
+    // Tier 3: Web Speech API. Skipped when the caller asked for
+    // Polly-only mode (the streaming chain on /coach/teach passes
+    // `noFallback: true` so a Polly cooldown doesn't cause the iOS
+    // Safari speech-synth tail to overlap with the next Polly
+    // sentence — that was the "two voices" complaint).
+    if (opts?.noFallback) {
+      this.lastTier = 'muted';
+      this.lastSpeakDiagnostic.tier = 'muted';
+      this.lastSpeakDiagnostic.error =
+        'noFallback set; Polly+voice-pack failed; sentence skipped audibly';
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'polly-fallback',
+          category: 'subsystem',
+          source: 'voiceService.speakInternal',
+          summary: 'Polly+voice-pack failed; noFallback skipped web-speech',
+          details: `text: ${text.slice(0, 80)}`,
+        });
+      }).catch(() => undefined);
+      return;
+    }
     if (prefs.systemVoiceURI) {
       speechService.setVoice(prefs.systemVoiceURI);
     }

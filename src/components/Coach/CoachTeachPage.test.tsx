@@ -31,6 +31,11 @@ const mockSpeak = vi.fn().mockResolvedValue(undefined);
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
     speakForced: (text: string) => mockSpeakForced(text),
+    // CoachTeachPage's chain uses the Polly-only variant (no Web
+    // Speech fallback). Both spies count as "Polly path" for the
+    // regression assertion: every sentence reaches Polly, none
+    // get dropped to the dead speakQueuedForced.
+    speakForcedPollyOnly: (text: string) => mockSpeakForced(text),
     speakQueuedForced: (text: string) => mockSpeakQueuedForced(text),
     speak: (text: string) => mockSpeak(text),
     stop: () => mockStop(),

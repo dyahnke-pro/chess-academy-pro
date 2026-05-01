@@ -164,7 +164,13 @@ export function CoachTeachPage(): JSX.Element {
       const sentence = formatForSpeech(raw);
       if (!sentence) return;
       speechChainRef.current = speechChainRef.current
-        .then(() => voiceService.speakForced(sentence))
+        // Polly-only — no Web Speech fallback. Production audit
+        // showed Polly cooldowns triggering Web Speech mid-chain,
+        // and Safari's speechSynth cancel-tail overlapped the next
+        // Polly sentence ("two voices"). Skipping the sentence
+        // audibly when Polly fails is preferable; chat bubble still
+        // shows the text. Polly recovers naturally after cooldown.
+        .then(() => voiceService.speakForcedPollyOnly(sentence))
         .catch(() => undefined);
     };
 
