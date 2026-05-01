@@ -16,7 +16,7 @@ export const config = { runtime: 'edge' };
 
 const UPSTREAM_BASE = 'https://lichess.org/game/export';
 const UPSTREAM_USER_AGENT =
-  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app)';
+  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app; contact: dyahnke@gmail.com)';
 const PROXY_TIMEOUT_MS = 8_000;
 
 /** Lichess game IDs are 8-char base62. Reject anything else as a
