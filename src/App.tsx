@@ -180,7 +180,7 @@ export function App(): JSX.Element {
               on a playable game instead of a card hub. The old hub
               (CoachHomePage / CoachPage) is still reachable at
               /coach/home for anyone who wants the action grid. */}
-          <Route path="/coach" element={<Navigate to="/coach/play" replace />} />
+          <Route path="/coach" element={<Navigate to="/coach/home" replace />} />
           <Route path="/coach/home" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
           <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
