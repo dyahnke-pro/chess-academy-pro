@@ -13,7 +13,6 @@ import type { TacticLineData } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
 import { VoiceChatMic } from '../Board/VoiceChatMic';
 import type { EngineSnapshot, LastMoveContext } from '../Board/VoiceChatMic';
-import { normalizePieceShorthand } from '../../services/voiceService';
 import { EngineLines } from '../Board/EngineLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { DifficultyToggle } from './DifficultyToggle';
@@ -2428,17 +2427,14 @@ export function CoachGamePage(): JSX.Element {
         if (realTactics.length > 0) {
           tacticSuffix = ` (${realTactics.map((t) => t.description).join('; ')})`;
         }
-        if (tacticResult.hangingPieces.length > 0) {
-          // normalizePieceShorthand ensures bare piece letters ("p", "N")
-          // are expanded to words ("pawn", "knight") so the banner reads
-          // "White pawn on h7" instead of "White p on h7" (WO-COACH-NARRATION-06).
-          const hangingDescs = tacticResult.hangingPieces.map((p) =>
-            normalizePieceShorthand(
-              `${p.color === 'w' ? 'White' : 'Black'} ${p.piece} on ${p.square}`,
-            ),
-          );
-          tacticSuffix += ` Hanging: ${hangingDescs.join(', ')}.`;
-        }
+        // WO-NARR-POLICY-06: dropped the "Hanging: White pawn on h7"
+        // listing from tacticSuffix entirely. The robotic enumeration
+        // was bleeding into the move-list / chat surfaces and the user
+        // explicitly asked for it removed. The hanging-piece info is
+        // still passed to the live-coach blunder detector (via
+        // `tacticResult.hangingPieces` directly) and to the LLM
+        // commentary path as grounded context — only the deterministic
+        // banner text is gone.
       } catch {
         // Tactic classification failed, continue without it
       }
