@@ -46,8 +46,8 @@ export function CoachHomePage(): JSX.Element {
           />
           <ActionCard
             icon={<GraduationCap size={24} />}
-            label="Teach Me"
-            description="Coach walks you through positions & lines"
+            label="Learn with Coach"
+            description="Lesson plan + walkthrough — coach drives the board"
             rgb="6, 182, 212"
             accentColor="rgb(6, 182, 212)"
             onClick={() => void navigate('/coach/teach')}

@@ -82,7 +82,14 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   game_opening_line:       'claude-haiku-4-5-20251001',
   whatif_commentary:       'claude-haiku-4-5-20251001',
   game_narrative_summary:  'claude-haiku-4-5-20251001',
-  chat_response:           'claude-haiku-4-5-20251001',  // was 'claude-sonnet-4-6' — biggest single cost win
+  // chat_response runs on Sonnet 4.6 because chat is where TEACHING
+  // happens (in-game ask, standalone chat, /coach/teach lesson surface).
+  // Haiku is fast but formulaic; Sonnet does the creative leaps a real
+  // coach makes — pattern naming, opening trap callouts, "if you do X,
+  // I respond Y" multi-step walkthroughs. Per-move live narration
+  // (interactive_review task) stays on Haiku for speed; chat depth
+  // beats chat speed for teaching surfaces.
+  chat_response:           'claude-sonnet-4-6',
   sideline_explanation:    'claude-haiku-4-5-20251001',
   smart_search:            'claude-haiku-4-5-20251001',
   explore_reaction:        'claude-haiku-4-5-20251001',

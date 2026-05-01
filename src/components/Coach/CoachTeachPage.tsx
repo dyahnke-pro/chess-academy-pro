@@ -18,7 +18,7 @@
  *   3. surface='teach' on every coachService.ask so the brain can
  *      tune later if needed.
  */
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { Send, RotateCcw, GraduationCap } from 'lucide-react';
@@ -28,6 +28,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
+import { db } from '../../db/schema';
 import type { LiveState } from '../../coach/types';
 
 interface ChatTurn {
@@ -108,12 +109,17 @@ export function CoachTeachPage(): JSX.Element {
     return resetBoard();
   }, [resetBoard]);
 
-  const handleSubmit = useCallback(async (text: string): Promise<void> => {
+  const handleSubmit = useCallback(async (text: string, opts?: { kickoff?: boolean }): Promise<void> => {
     if (!text.trim() || busy) return;
     setBusy(true);
     setInput('');
     const turnId = `t-${Date.now()}`;
-    setTurns((prev) => [...prev, { id: `${turnId}-u`, role: 'student', text }]);
+    // Kickoff sends a system-style ask to seed the lesson — don't
+    // render it as a "student said" turn in the transcript. Only the
+    // coach's reply (the actual lesson plan) shows up.
+    if (!opts?.kickoff) {
+      setTurns((prev) => [...prev, { id: `${turnId}-u`, role: 'student', text }]);
+    }
     setStreaming('');
 
     // Stop in-flight speech so the new teaching response starts clean.
@@ -210,6 +216,56 @@ export function CoachTeachPage(): JSX.Element {
     }
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate]);
 
+  // ─── Lesson-plan kickoff ─────────────────────────────────────────────────
+  // On mount, pull the student's last 5 games + weakness profile and ask
+  // the coach to open with a personalized lesson plan. The coach's first
+  // line is "based on your last few games, here's what we should work on
+  // today." If there are no games yet, fire a generic kickoff that asks
+  // the student what they want to learn.
+  const kickoffFiredRef = useRef(false);
+  useEffect(() => {
+    if (kickoffFiredRef.current) return;
+    if (!activeProfile) return;
+    kickoffFiredRef.current = true;
+    void (async () => {
+      const recent = await db.games
+        .reverse()
+        .limit(5)
+        .toArray()
+        .catch(() => []);
+      const summaryLines: string[] = [];
+      if (recent.length > 0) {
+        summaryLines.push(`Recent games (${recent.length}):`);
+        for (const g of recent) {
+          const opening = g.openingId || g.eco || 'unknown opening';
+          const result = g.result ?? 'unknown';
+          const playerColor = g.white === activeProfile.name ? 'white' : 'black';
+          summaryLines.push(`- ${opening} as ${playerColor}, result: ${result}`);
+        }
+      } else {
+        summaryLines.push('Student has no completed games yet.');
+      }
+      const prefs = activeProfile.preferences;
+      // weaknessProfile stored on prefs as freeform notes — pass through.
+      const weakness = (prefs as { weaknessProfile?: { weaknesses?: string[] } }).weaknessProfile;
+      if (weakness?.weaknesses && weakness.weaknesses.length > 0) {
+        summaryLines.push(`Weakness profile: ${weakness.weaknesses.slice(0, 5).join(', ')}`);
+      }
+      summaryLines.push(`Rating: ${activeProfile.currentRating ?? 'unknown'}.`);
+
+      const kickoffAsk =
+        recent.length > 0
+          ? `The student just walked into your classroom. Here's their data:\n\n${summaryLines.join('\n')}\n\nOpen with a PERSONALIZED LESSON PLAN. Pick 1-2 specific things from their recent games or weaknesses to work on TODAY. Be concrete — name a pattern, name a square, name a typical mistake. Set up the relevant board position via set_board_position if it helps. Then ask them: "want to start there, or pick something else?" Don't generic-coach. Don't lecture. Walk in like you've watched their games and you know what they need.`
+          : `The student just walked into your classroom for the first time. They have no game history yet. Open warmly and ask ONE direct scoping question: tactics drill, opening study, or endgame technique? When they answer, drive into the lesson with the full teaching shape (set up positions, demonstrate, ground in Stockfish, name the IDEA).`;
+
+      // Pipe kickoff through handleSubmit with the kickoff flag so it
+      // uses the same streaming TTS + tool callbacks but doesn't
+      // render the system-flavored ask as a student turn.
+      void handleSubmit(kickoffAsk, { kickoff: true });
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeProfile]);
+
   return (
     <div
       className="flex flex-col gap-3 p-4 flex-1 overflow-hidden max-w-2xl mx-auto w-full"
@@ -218,7 +274,7 @@ export function CoachTeachPage(): JSX.Element {
       <header className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <GraduationCap size={22} style={{ color: 'rgb(6, 182, 212)' }} />
-          <h1 className="text-lg font-bold">Teach Me</h1>
+          <h1 className="text-lg font-bold">Learn with Coach</h1>
         </div>
         <button
           onClick={() => { void resetBoard(); }}
