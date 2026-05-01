@@ -67,6 +67,12 @@ export function CoachTeachPage(): JSX.Element {
     total: number;
   } | null>(null);
 
+  // Auto-scroll target: the reverse-flow chat shows newest at the top,
+  // so when a new message arrives we snap the scroll container back to
+  // 0 (the top). Without this, a student scrolled down reading history
+  // would never see the new coach reply land. WO-COACH-TEACH-RFC-01.
+  const transcriptRef = useRef<HTMLDivElement | null>(null);
+
   // Stable chained promise so streaming sentences play in order through
   // the SAME Polly pipeline that handles the first sentence. Replaces
   // the previous design that used `voiceService.speakQueuedForced` for
@@ -214,6 +220,18 @@ export function CoachTeachPage(): JSX.Element {
           onSetBoardPosition: async (newFen: string) => handleSetBoardPosition(newFen),
           onResetBoard: async () => handleResetBoard(),
           onNavigate: (path: string) => { void navigate(path); },
+          // Walkthrough handoff: when the LLM decides "let's drill this
+          // opening line as a guided walkthrough," route the student
+          // to the walkthrough surface seeded with the opening name.
+          // Without this wired the brain tool would no-op and the
+          // teach session couldn't escalate to a focused drill.
+          onStartWalkthroughForOpening: ({ opening, orientation }) => {
+            const params = new URLSearchParams();
+            params.set('subject', opening);
+            if (orientation) params.set('orientation', orientation);
+            void navigate(`/coach/session/walkthrough?${params.toString()}`);
+            return { ok: true };
+          },
           onChunk: (chunk: string) => {
             markupBuffer += chunk;
             const { safe, pending } = sanitizeCoachStream(markupBuffer);
@@ -312,6 +330,15 @@ export function CoachTeachPage(): JSX.Element {
   // line is "based on your last few games, here's what we should work on
   // today." If there are no games yet, fire a generic kickoff that asks
   // the student what they want to learn.
+  // Snap to top when a new message lands or while the reply is
+  // streaming in. Reverse-flow puts newest at the top so scrollTop=0
+  // is always the active turn.
+  useEffect(() => {
+    const el = transcriptRef.current;
+    if (!el) return;
+    el.scrollTop = 0;
+  }, [messages.length, streaming]);
+
   const kickoffFiredRef = useRef(false);
   useEffect(() => {
     if (kickoffFiredRef.current) return;
@@ -509,6 +536,7 @@ export function CoachTeachPage(): JSX.Element {
             Streaming bubble renders FIRST so the in-progress reply is
             always visible. */}
         <div
+          ref={transcriptRef}
           className="flex-1 overflow-y-auto p-3 min-h-0 flex flex-col gap-3"
           role="log"
           aria-live="polite"

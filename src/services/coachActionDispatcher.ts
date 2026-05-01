@@ -73,7 +73,16 @@ type ActionHandler = (
 
 // ─── Tag parser ─────────────────────────────────────────────────────────────
 
-const ACTION_TAG_RE = /\[\[ACTION:([a-z_]+)(?:\s+(\{[^\]]*\}))?\]\]/gi;
+// Matches `[[ACTION:name {jsonArgs}]]` markers. The args group uses a
+// non-greedy `[\s\S]*?` body and a closing-context lookahead `(?=\]\])`
+// instead of the older `[^\]]*` pattern — that previous pattern silently
+// dropped any tool call whose JSON args contained `]` (e.g. arrays like
+// `{"speeds":["blitz","rapid"]}` for lichess_opening_lookup or
+// `{"themes":["fork","pin"]}` for record_blunder), since the regex
+// would fail to find the closing `}`. The new shape stops at the first
+// `}` followed by `]]`, which correctly handles arrays AND nested
+// objects in args.
+const ACTION_TAG_RE = /\[\[ACTION:([a-z_]+)(?:\s*(\{[\s\S]*?\}))?\s*(?=\]\])\]\]/gi;
 
 /**
  * Extract action tags from coach output and return the cleaned prose

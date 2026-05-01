@@ -80,4 +80,35 @@ describe('OPERATOR prompt — tool-call protocol', () => {
       fen: expect.stringContaining('rnbqkbnr/pppppppp'),
     });
   });
+
+  it('round-trips a marker with ARRAY args (lichess_opening_lookup)', () => {
+    // The previous regex `\{[^\]]*\}` excluded `]`, which silently
+    // dropped any tool call whose JSON args contained `]` — including
+    // every lichess_opening_lookup / lichess_master_games call with
+    // a `speeds` or `ratings` array. This locks the new regex.
+    const llmResponse = `Pulling master games. [[ACTION:lichess_opening_lookup {"fen":"r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 4 4","speeds":["blitz","rapid","classical"],"ratings":[1600,1800,2000]}]]`;
+    const { actions } = parseActions(llmResponse);
+    expect(actions).toHaveLength(1);
+    expect(actions[0].name).toBe('lichess_opening_lookup');
+    expect(actions[0].args).toMatchObject({
+      fen: expect.stringContaining('r1bqkbnr'),
+      speeds: ['blitz', 'rapid', 'classical'],
+      ratings: [1600, 1800, 2000],
+    });
+  });
+
+  it('round-trips a marker with NESTED OBJECT args', () => {
+    const llmResponse = `[[ACTION:foo {"outer":{"inner":"value"}}]]`;
+    const { actions } = parseActions(llmResponse);
+    expect(actions).toHaveLength(1);
+    expect(actions[0].args).toEqual({ outer: { inner: 'value' } });
+  });
+
+  it('round-trips MULTIPLE markers in one response', () => {
+    const llmResponse = `Setting up. [[ACTION:set_board_position {"fen":"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"}]] Then checking. [[ACTION:stockfish_eval {"fen":"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"}]]`;
+    const { actions } = parseActions(llmResponse);
+    expect(actions).toHaveLength(2);
+    expect(actions[0].name).toBe('set_board_position');
+    expect(actions[1].name).toBe('stockfish_eval');
+  });
 });
