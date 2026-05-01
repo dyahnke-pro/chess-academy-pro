@@ -1,42 +1,34 @@
 /**
- * CoachTeachPage — dedicated teaching surface where the coach drives
- * the board. The student types or speaks a question ("walk me through
- * the Vienna," "show me the Italian opening," "teach me about pins"),
- * and the coach uses the full toolbelt to set up positions, play
- * candidate moves, take them back, narrate the IDEA — exactly the
- * shape mandated by OPERATOR_BASE_BODY's TEACHING MODE block.
- *
- * Design principles:
- *   1. The board state belongs to the coach during teaching. The
- *      student watches; the coach demonstrates. play_move /
- *      take_back_move / set_board_position / reset_board callbacks
- *      mutate this page's local Chess instance directly.
- *   2. The board is a static-mode `<ConsistentChessboard fen={fen} />`
- *      — pieces don't drag-and-drop. Teaching is the coach's hands;
- *      the student types or speaks. (Future: add a "free-play"
- *      override toggle for when the student wants to try a move.)
- *   3. surface='teach' on every coachService.ask so the brain can
- *      tune later if needed.
+ * CoachTeachPage — dedicated teaching surface using the SAME board
+ * primitives as Play with Coach (`/coach/play`). Chess state runs
+ * through `useChessGame()`; the board renders via `ControlledChessBoard`
+ * with all the same affordances Play has — click-to-move, legal-move
+ * dots, drag-and-drop, last-move highlight. The student plays moves
+ * exactly as they would in Play; the LLM coach drives the board from
+ * the OTHER side via play_move / take_back_move / set_board_position
+ * / reset_board markers parsed from its response. Same room, different
+ * actions.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { ArrowLeft, RotateCcw, Loader2 } from 'lucide-react';
-import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
-import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
 import { anthropicProvider } from '../../coach/providers/anthropic';
 import { logAppAudit } from '../../services/appAuditor';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
+import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { db } from '../../db/schema';
 import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import type { LiveState } from '../../coach/types';
-import type { ChatMessage as ChatMessageType } from '../../types';
+import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -52,83 +44,82 @@ export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
 
-  // Local Chess instance — the coach's hands move pieces here.
-  const chessRef = useRef<Chess>(new Chess());
-  const [fen, setFen] = useState<string>(STARTING_FEN);
+  // Game state via the canonical hook — same primitive Play uses. Gives
+  // us click-to-move + legal dots + drag, plus loadFen/resetGame/undoMove
+  // for LLM-driven mutations.
+  const game = useChessGame(STARTING_FEN, 'white');
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  // Kickoff progress: opaque label + step counter so the student sees
-  // why nothing has appeared yet (DB query → LLM call can take 5–30s).
+  // Coach-drawn arrows + square highlights. The LLM uses
+  // `[BOARD: arrow:e2-e4:green]` markers to suggest hypothetical
+  // moves WITHOUT committing them on the board — the arrow channel
+  // for "you could play Nf3 here, attacking the queen" beats
+  // play_move for not-yet-decided lines. parseBoardTags strips the
+  // markers from the prose; the parsed annotations get rendered on
+  // the board until the next coach turn clears them.
+  const [arrows, setArrows] = useState<BoardArrow[]>([]);
+  const [highlights, setHighlights] = useState<BoardHighlight[]>([]);
   const [kickoffStatus, setKickoffStatus] = useState<{
     label: string;
     step: number;
     total: number;
   } | null>(null);
 
-  // Auto-scroll target: the reverse-flow chat shows newest at the top,
-  // so when a new message arrives we snap the scroll container back to
-  // 0 (the top). Without this, a student scrolled down reading history
-  // would never see the new coach reply land. WO-COACH-TEACH-RFC-01.
   const transcriptRef = useRef<HTMLDivElement | null>(null);
-
-  // Stable chained promise so streaming sentences play in order through
-  // the SAME Polly pipeline that handles the first sentence. Replaces
-  // the previous design that used `voiceService.speakQueuedForced` for
-  // sentences 2+, which is silently a no-op because
-  // `WEB_SPEECH_FALLBACK_ENABLED = false` in voiceService — the audit
-  // proved sentence 1 spoke and every later sentence was dropped.
   const speechChainRef = useRef<Promise<void>>(Promise.resolve());
 
-  const resetBoard = useCallback((): { ok: boolean } => {
-    chessRef.current = new Chess();
-    setFen(STARTING_FEN);
-    return { ok: true };
-  }, []);
+  // ─── LLM-driven board mutations ─────────────────────────────────────
+  // The brain emits [[ACTION:play_move {"san":"Nf3"}]] etc. These
+  // handlers translate the marker into useChessGame mutations. SAN →
+  // from/to is resolved via a probe Chess instance against the current
+  // FEN (chess.js's verbose move list), then routed through
+  // `game.makeMove` so lastMove highlight + selection state stay
+  // consistent with the manual move path.
 
-  // Callback wires for the coach's tools. All four: play, take-back,
-  // set-position, reset. The brain uses these to demonstrate
-  // variations exactly the way a human coach would push pieces around.
   const handlePlayMove = useCallback((san: string): { ok: boolean; reason?: string } => {
     try {
-      const result = chessRef.current.move(san);
-      if (!result) return { ok: false, reason: `illegal SAN "${san}"` };
-      setFen(chessRef.current.fen());
+      const probe = new Chess(game.fen);
+      const verboseMoves = probe.moves({ verbose: true });
+      const match = verboseMoves.find((m) => m.san === san);
+      if (!match) {
+        return { ok: false, reason: `chess.js rejected "${san}" from FEN ${game.fen}: Invalid move: ${san}` };
+      }
+      const result = game.makeMove(match.from, match.to, match.promotion);
+      if (!result) return { ok: false, reason: `makeMove failed for ${san}` };
       return { ok: true };
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
     }
-  }, []);
+  }, [game]);
 
   const handleTakeBack = useCallback((count: number): { ok: boolean; reason?: string } => {
     try {
       for (let i = 0; i < count; i++) {
-        const undone = chessRef.current.undo();
-        if (!undone) return { ok: false, reason: 'nothing to undo' };
+        game.undoMove();
       }
-      setFen(chessRef.current.fen());
       return { ok: true };
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
     }
-  }, []);
+  }, [game]);
 
   const handleSetBoardPosition = useCallback((newFen: string): { ok: boolean; reason?: string } => {
     try {
-      const probe = new Chess();
-      probe.load(newFen);
-      chessRef.current = probe;
-      setFen(probe.fen());
-      return { ok: true };
+      // chess.js validates FEN on construction.
+      new Chess(newFen);
+      const ok = game.loadFen(newFen);
+      return ok ? { ok: true } : { ok: false, reason: 'loadFen returned false' };
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
     }
-  }, []);
+  }, [game]);
 
   const handleResetBoard = useCallback((): { ok: boolean } => {
-    return resetBoard();
-  }, [resetBoard]);
+    game.resetGame(STARTING_FEN);
+    return { ok: true };
+  }, [game]);
 
   const handleSubmit = useCallback(async (text: string, opts?: { kickoff?: boolean }): Promise<void> => {
     if (!text.trim() || busy) return;
@@ -180,9 +171,14 @@ export function CoachTeachPage(): JSX.Element {
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
-      fen: chessRef.current.fen(),
-      moveHistory: chessRef.current.history(),
+      fen: game.fen,
+      moveHistory: game.history,
       userJustDid: text,
+      // Tell the brain explicitly whose turn it is. Without this the
+      // LLM was confusing sides — emitting `play_move {"san":"e5"}`
+      // when it was Black's turn but the position needed White's
+      // response, then chess.js rejected it 5 trips in a row.
+      whoseTurn: game.turn === 'w' ? 'white' : 'black',
     };
 
     void logAppAudit({
@@ -190,14 +186,14 @@ export function CoachTeachPage(): JSX.Element {
       category: 'subsystem',
       source: 'CoachTeachPage',
       summary: `surface=teach viaSpine=true ask="${text.slice(0, 60)}"`,
-      details: JSON.stringify({ fen: chessRef.current.fen() }),
+      details: JSON.stringify({ fen: game.fen, turn: game.turn }),
     });
 
     useCoachMemoryStore.getState().appendConversationMessage({
       surface: 'chat-teach',
       role: 'user',
       text,
-      fen: chessRef.current.fen(),
+      fen: game.fen,
       trigger: null,
     });
 
@@ -261,6 +257,27 @@ export function CoachTeachPage(): JSX.Element {
       const tail = sanitizeCoachText(markupBuffer + sentenceBuffer);
       if (tail) queueSpeak(tail);
 
+      // Parse [BOARD: arrow:e2-e4:green] / highlight: / clear markers
+      // out of the LLM's response and render them on the board. Each
+      // new coach turn clears prior annotations and applies fresh
+      // ones, so the board never accumulates stale arrows.
+      const board = parseBoardTags(result.text);
+      const nextArrows: BoardArrow[] = [];
+      const nextHighlights: BoardHighlight[] = [];
+      let cleared = false;
+      for (const cmd of board.commands) {
+        if (cmd.type === 'clear') cleared = true;
+        if (cmd.type === 'arrow' && cmd.arrows) nextArrows.push(...cmd.arrows);
+        if (cmd.type === 'highlight' && cmd.highlights) nextHighlights.push(...cmd.highlights);
+      }
+      // Always replace prior arrows/highlights with this turn's set —
+      // a turn with no annotations clears the board (cleared=true is
+      // the explicit form). Caller has the option to leave them by
+      // emitting the same arrow markers in the follow-up turn.
+      void cleared;
+      setArrows(nextArrows);
+      setHighlights(nextHighlights);
+
       // Sanitize the FINAL response too — both for transcript display
       // and for the conversation memory record. Memory rehydration on
       // the next turn re-feeds prior assistant text into the prompt;
@@ -277,7 +294,7 @@ export function CoachTeachPage(): JSX.Element {
           surface: 'chat-teach',
           role: 'coach',
           text: finalText,
-          fen: chessRef.current.fen(),
+          fen: game.fen,
           trigger: null,
         });
       }
@@ -296,32 +313,13 @@ export function CoachTeachPage(): JSX.Element {
     }
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus]);
 
-  // Student-driven move from the interactive board. Plays the move
-  // locally then notifies the coach via a short ask so the brain can
-  // evaluate it ("the student just played Nxe5 — was that the right
-  // call here?"). Returns false if illegal so react-chessboard
-  // bounces the piece back to the source square.
-  const handleStudentDrop = useCallback(({
-    sourceSquare,
-    targetSquare,
-  }: { sourceSquare: string; targetSquare: string | null }): boolean => {
-    if (!targetSquare || busy) return false;
-    let san: string | null = null;
-    try {
-      const result = chessRef.current.move({
-        from: sourceSquare,
-        to: targetSquare,
-        promotion: 'q',
-      });
-      san = result.san;
-    } catch {
-      return false;
-    }
-    setFen(chessRef.current.fen());
-    if (san) {
-      void handleSubmit(`I played ${san}. What do you think?`);
-    }
-    return true;
+  // Student-driven moves go through ControlledChessBoard's onMove
+  // callback (below). useChessGame already handles the click-to-move
+  // + drag + legal-dot UI internally, so the parent just needs to
+  // observe completed moves and tell the coach about them.
+  const handleStudentMove = useCallback((move: MoveResult): void => {
+    if (busy) return;
+    void handleSubmit(`I played ${move.san}. What do you think?`);
   }, [busy, handleSubmit]);
 
   // ─── Lesson-plan kickoff ─────────────────────────────────────────────────
@@ -441,7 +439,7 @@ export function CoachTeachPage(): JSX.Element {
               </div>
             </div>
             <button
-              onClick={() => { void resetBoard(); }}
+              onClick={() => { void handleResetBoard(); }}
               className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border text-theme-text-muted"
               data-testid="teach-reset-board"
               aria-label="Reset board"
@@ -452,52 +450,43 @@ export function CoachTeachPage(): JSX.Element {
           </div>
         </div>
 
-        {/* Coach (opponent) info bar — same component the Play page uses */}
-        <div className="px-2 pt-1">
-          <PlayerInfoBar
-            name="Coach"
-            isBot
-            capturedPieces={[]}
-            isActive={busy}
-          />
-        </div>
-
-        {/* Board */}
+        {/* Board — same `<ControlledChessBoard>` Play uses, so click-
+            to-move, legal-move dots, drag-and-drop, last-move highlight
+            all work identically. No eval bar, no flip/undo/reset chrome
+            (chrome on this surface is just the small Reset button in
+            the header above). showVoiceMic={false} so the mic doesn't
+            draw under the board (we already have the chat input). */}
         <div className="px-2 py-1 flex justify-center w-full">
           <div className="w-full md:max-w-[420px]">
-            <ConsistentChessboard
-              fen={fen}
+            <ControlledChessBoard
+              game={game}
               interactive={!busy}
-              onPieceDrop={handleStudentDrop}
+              showFlipButton={false}
+              showUndoButton={false}
+              showResetButton={false}
+              showEvalBar={false}
+              showVoiceMic={false}
+              showLastMoveHighlight
+              onMove={handleStudentMove}
+              arrows={arrows.length > 0 ? arrows : undefined}
+              annotationHighlights={highlights.length > 0 ? highlights : undefined}
             />
           </div>
         </div>
       </div>
 
-      {/* Right column: input-on-top reverse-flow chat. The text input
-          is pinned right under the board so the student never has to
-          scroll to type. The newest message renders immediately under
-          the input (highlighted), older messages scroll DOWN.
-          Chronologically newest-first ─ "you don't hunt for what just
-          arrived." Board stays fully visible. */}
+      {/* Right column: stationary chat input directly under the board,
+          reverse-flow messages list below. No avatar header, no
+          intervening chrome — the input sits flush against the board
+          so the student can type without scrolling. Older messages
+          scroll DOWN. */}
       <div className="flex flex-col flex-1 md:w-2/5 min-h-0 border-t md:border-t-0 md:border-l border-theme-border bg-theme-bg">
-        {/* Slim avatar header */}
-        <div className="flex items-center gap-2 px-4 py-2 border-b border-theme-border">
-          <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-bold bg-theme-accent">
-            C
-          </div>
-          <span className="text-sm font-semibold text-theme-text">Coach</span>
-          <span className="text-xs text-theme-text-muted">
-            {busy ? '· typing…' : '· online'}
-          </span>
-        </div>
-
-        {/* Pinned input — always reachable, zero scroll to type. */}
+        {/* Pinned input — first thing under the board. */}
         <div className="border-b border-theme-border">
           <ChatInput
             onSend={(text) => void handleSubmit(text)}
             disabled={busy}
-            placeholder="Ask your coach…"
+            placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
           />
         </div>
 

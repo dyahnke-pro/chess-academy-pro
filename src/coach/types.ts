@@ -105,6 +105,13 @@ export interface LiveState {
   /** Free text describing what triggered this call. */
   userJustDid?: string;
   currentRoute?: string;
+  /** Whose turn it is right now in the live position. The /coach/teach
+   *  surface threads this through so the brain stops emitting moves
+   *  for the wrong side — production audit (build 30fe8c8) showed
+   *  the LLM trying to play `play_move {"san":"e5"}` from a
+   *  black-to-move position with the white-side mental model, and
+   *  chess.js correctly rejected it 5 trips in a row. */
+  whoseTurn?: 'white' | 'black';
 }
 
 // ─── Envelope (what every LLM call contains) ─────────────────────────────────

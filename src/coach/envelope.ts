@@ -216,6 +216,13 @@ function formatLiveStateBlock(state: LiveState): string {
   parts.push(`- Surface: ${state.surface}`);
   if (state.currentRoute) parts.push(`- Current route: ${state.currentRoute}`);
   if (state.fen) parts.push(`- FEN: ${state.fen}`);
+  if (state.whoseTurn) {
+    // Surface this prominently above moveHistory so the LLM cannot
+    // emit play_move for the wrong side. Production audit (build
+    // 30fe8c8) showed the brain repeatedly emitting `e5` for black
+    // while reasoning as white; chess.js rejected every attempt.
+    parts.push(`- Whose turn: ${state.whoseTurn} TO MOVE — ANY play_move you emit must be a legal move for ${state.whoseTurn}.`);
+  }
   if (state.phase) parts.push(`- Phase: ${state.phase}`);
   if (typeof state.evalCp === 'number') parts.push(`- Eval (centipawns, white-perspective): ${state.evalCp}`);
   if (state.moveHistory && state.moveHistory.length > 0) {

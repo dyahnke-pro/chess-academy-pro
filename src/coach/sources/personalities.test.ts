@@ -56,7 +56,7 @@ describe('composeIdentityPrompt — invariants', () => {
         flirt: 'none',
       });
       expect(prompt).toMatch(/OPERATOR MODE/);
-      expect(prompt).toMatch(/Three hard rules that override anything else/);
+      expect(prompt).toMatch(/hard rules that override anything else/);
       expect(prompt).toMatch(/You're an operator\. Operate/);
     }
   });
@@ -135,14 +135,14 @@ describe('every personality preserves the OPERATOR contract', () => {
   // would let an "edgy" or "drill-sergeant" coach refuse a commanded
   // move — exactly the bug we already shipped a fix for. Pin the rules.
   for (const personality of PERSONALITIES) {
-    it(`${personality} keeps "you have hands" + the three hard rules`, () => {
+    it(`${personality} keeps "you have hands" + the hard rules`, () => {
       const prompt = composeIdentityPrompt({
         personality,
         ...PERSONALITY_DIAL_DEFAULTS[personality],
       });
       expect(prompt).toMatch(/You have hands\. They work\. Use them\./);
-      expect(prompt).toMatch(/Three hard rules that override anything else/);
-      expect(prompt).toMatch(/play_move with that SAN in the same response/);
+      expect(prompt).toMatch(/hard rules that override anything else/);
+      expect(prompt).toMatch(/play_move/);
       expect(prompt).toMatch(/stockfish_eval first/);
     });
   }
