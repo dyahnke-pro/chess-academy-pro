@@ -34,7 +34,10 @@ import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
 import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { CoachTrainPage } from './components/Coach/CoachTrainPage';
-import { CoachTeachPage } from './components/Coach/CoachTeachPage';
+// Learn with Coach renders the SAME component as Play with Coach —
+// identical UI, board, info bars, buttons, chat. Only difference:
+// `surfaceMode='teach'` swaps the LLM brain to Anthropic Sonnet
+// (richer commentary) for coach-turn asks. "No walls in this house."
 import { CoachPage } from './components/Coach/CoachPage';
 import { TacticsPage } from './components/Tactics/TacticsPage';
 import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
@@ -202,7 +205,7 @@ export function App(): JSX.Element {
           <Route path="/coach/plan" element={<ErrorBoundary><CoachSessionPlanPage /></ErrorBoundary>} />
           {/* /coach/report is a legacy alias — redirect lives below in the redirects block */}
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
-          <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage /></ErrorBoundary>} />
+          <Route path="/coach/teach" element={<ErrorBoundary><CoachGamePage surfaceMode="teach" /></ErrorBoundary>} />
           {/* Tactics (absorbs former Puzzles tab) */}
           <Route path="/tactics" element={<ErrorBoundary><TacticsPage /></ErrorBoundary>} />
           <Route path="/tactics/profile" element={<ErrorBoundary><TacticalProfilePage /></ErrorBoundary>} />

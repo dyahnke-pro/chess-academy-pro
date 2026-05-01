@@ -44,6 +44,7 @@ import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { coachService } from '../../coach/coachService';
+import { anthropicProvider } from '../../coach/providers/anthropic';
 import { withTimeout } from '../../coach/withTimeout';
 import { emergencyPickMove } from '../../coach/coachTurnFallback';
 import type { LiveState } from '../../coach/types';
@@ -316,7 +317,21 @@ function enforceMateFloor(rating: number): boolean {
   return rating >= 1000;
 }
 
-export function CoachGamePage(): JSX.Element {
+export interface CoachGamePageProps {
+  /** Which surface this render is for. Same UI for both — every button,
+   *  every info bar, every chrome element renders identically. The
+   *  ONLY difference is the coach brain:
+   *    - 'play'  → DeepSeek default + live commentary on key moments
+   *    - 'teach' → Anthropic Sonnet + teaching-mode prompt that
+   *                explains every move in depth, suggests with arrows,
+   *                cites master games, etc.
+   *  Stockfish stays as the opponent in both modes — it's still a
+   *  real game; the coach just teaches more in teach mode.
+   *  Default: 'play'. */
+  surfaceMode?: 'play' | 'teach';
+}
+
+export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {}): JSX.Element {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const reviewGameId = searchParams.get('review');
@@ -1844,6 +1859,12 @@ export function CoachGamePage(): JSX.Element {
           profanity: prefs?.coachProfanity,
           mockery: prefs?.coachMockery,
           flirt: prefs?.coachFlirt,
+          // Teach mode: route the same coach-turn ask through Sonnet
+          // instead of DeepSeek for richer commentary + deeper line
+          // explanations. Stockfish stays as the opponent; only the
+          // narration brain swaps. Play mode keeps the cheaper
+          // DeepSeek default.
+          ...(surfaceMode === 'teach' ? { providerOverride: anthropicProvider } : {}),
         };
 
         if (!brainPickSan) try {

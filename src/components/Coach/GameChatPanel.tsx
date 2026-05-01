@@ -197,12 +197,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       });
     }, [onMessagesUpdate]);
 
-    // Auto-scroll to bottom when messages change
+    // Reverse-flow chat: snap the scroll container to the TOP when a
+    // new message lands (newest is at index 0, rendered at top).
+    // Otherwise a student scrolled down reading history wouldn't see
+    // the new coach reply.
     useEffect(() => {
       const el = messagesEndRef.current;
-      if (el && 'scrollIntoView' in el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+      if (el) el.scrollTop = 0;
     }, [messages, streamingContent]);
 
     // Expose method for parent to inject assistant messages (hints, takeback msgs)
@@ -1173,14 +1174,66 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           </div>
         )}
 
-        {/* Messages */}
+        {/* Pinned input — first thing under the surface chrome.
+            Reverse-flow design: typing is always reachable without
+            scrolling, the newest message lands directly under the
+            input, older messages scroll DOWN. Same shape used on
+            /coach/teach so both surfaces feel like one room. */}
+        <ChatInput
+          onSend={(text) => void handleSend(text)}
+          disabled={isStreaming}
+          placeholder={isStreaming ? 'Coach is typing…' : 'Ask about the position…'}
+        />
+
+        {/* Messages — reverse chronological. Newest at top with a
+            subtle highlight; older messages dim to 70% so the active
+            turn is the visual focus. */}
         <div
-          className="flex-1 overflow-y-auto p-4 min-h-0 flex flex-col gap-4"
+          ref={messagesEndRef}
+          className="flex-1 overflow-y-auto p-3 min-h-0 flex flex-col gap-3"
           role="log"
           aria-live="polite"
           aria-relevant="additions"
           aria-label="In-game coach chat messages"
         >
+          {isStreaming && (
+            <div
+              className="rounded-lg p-1 -m-1"
+              style={{
+                background: 'rgba(0, 229, 255, 0.05)',
+                outline: '1px solid rgba(0, 229, 255, 0.25)',
+              }}
+            >
+              <ChatMessage
+                message={{
+                  id: 'game-streaming',
+                  role: 'assistant',
+                  content: streamingContent,
+                  timestamp: Date.now(),
+                }}
+                isStreaming
+              />
+            </div>
+          )}
+
+          {[...messages].reverse().map((msg, idxFromTop) => (
+            <div
+              key={msg.id}
+              className={
+                idxFromTop === 0 && !isStreaming
+                  ? 'rounded-lg p-1 -m-1'
+                  : ''
+              }
+              style={
+                idxFromTop === 0 && !isStreaming
+                  ? { background: 'rgba(0, 229, 255, 0.05)', outline: '1px solid rgba(0, 229, 255, 0.25)' }
+                  : { opacity: 0.7 }
+              }
+            >
+              <ChatMessage message={msg} />
+            </div>
+          ))}
+
           {messages.length === 0 && !isStreaming && (
             <motion.div
               className="flex flex-col items-center gap-3 py-8"
@@ -1197,44 +1250,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               </div>
             </motion.div>
           )}
-
-          {messages.map((msg) => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
-
-          {isStreaming && streamingContent && (
-            <ChatMessage
-              message={{
-                id: 'game-streaming',
-                role: 'assistant',
-                content: streamingContent,
-                timestamp: Date.now(),
-              }}
-              isStreaming
-            />
-          )}
-
-          {isStreaming && !streamingContent && (
-            <ChatMessage
-              message={{
-                id: 'game-streaming-empty',
-                role: 'assistant',
-                content: '',
-                timestamp: Date.now(),
-              }}
-              isStreaming
-            />
-          )}
-
-          <div ref={messagesEndRef} />
         </div>
-
-        {/* Input */}
-        <ChatInput
-          onSend={(text) => void handleSend(text)}
-          disabled={isStreaming}
-          placeholder="Ask about the position..."
-        />
       </div>
     );
   },
