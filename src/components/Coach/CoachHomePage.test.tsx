@@ -29,11 +29,18 @@ describe('CoachHomePage', () => {
     expect(card).toHaveTextContent('Work with Coach');
   });
 
-  it('shows "Play & Review" action card', () => {
+  it('shows "Play" action card', () => {
     render(<CoachHomePage />);
     const card = screen.getByTestId('coach-action-play');
     expect(card).toBeInTheDocument();
-    expect(card).toHaveTextContent('Play & Review');
+    expect(card).toHaveTextContent('Play');
+  });
+
+  it('shows "Learn" action card', () => {
+    render(<CoachHomePage />);
+    const card = screen.getByTestId('coach-action-teach');
+    expect(card).toBeInTheDocument();
+    expect(card).toHaveTextContent('Learn');
   });
 
   it('shows "Game Insights" action card', () => {

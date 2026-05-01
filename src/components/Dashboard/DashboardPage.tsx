@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
-import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, Swords } from 'lucide-react';
+import { BookOpen, GraduationCap, Target, AlertTriangle, Upload } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
@@ -27,20 +27,12 @@ const SECTIONS: SectionItem[] = [
     rgb: '6, 182, 212',
   },
   {
-    label: 'Play with Coach',
-    icon: Swords,
-    route: '/coach/play',
+    label: 'Coach',
+    icon: GraduationCap,
+    route: '/coach/home',
     color: 'text-rose-400',
     bgColor: 'bg-rose-500/10',
     rgb: '251, 113, 133',
-  },
-  {
-    label: 'Learn with Coach',
-    icon: GraduationCap,
-    route: '/coach/teach',
-    color: 'text-amber-400',
-    bgColor: 'bg-amber-500/10',
-    rgb: '251, 191, 36',
   },
   {
     label: 'Tactics',

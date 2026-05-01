@@ -37,7 +37,7 @@ export function CoachHomePage(): JSX.Element {
         <div className="grid grid-cols-2 gap-3">
           <ActionCard
             icon={<Swords size={24} />}
-            label="Play & Review"
+            label="Play"
             description="Play a game, then review it move by move"
             rgb="52, 211, 153"
             accentColor="rgb(52, 211, 153)"
@@ -46,7 +46,7 @@ export function CoachHomePage(): JSX.Element {
           />
           <ActionCard
             icon={<GraduationCap size={24} />}
-            label="Learn with Coach"
+            label="Learn"
             description="Lesson plan + walkthrough — coach drives the board"
             rgb="6, 182, 212"
             accentColor="rgb(6, 182, 212)"

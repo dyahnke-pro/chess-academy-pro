@@ -72,7 +72,7 @@ describe('DashboardPage', () => {
     render(<DashboardPage />);
     await waitFor(() => {
       expect(screen.getByTestId('section-openings')).toBeInTheDocument();
-      expect(screen.getByTestId('section-play-with-coach')).toBeInTheDocument();
+      expect(screen.getByTestId('section-coach')).toBeInTheDocument();
       expect(screen.getByTestId('section-tactics')).toBeInTheDocument();
       expect(screen.getByTestId('section-weaknesses')).toBeInTheDocument();
     });
@@ -89,8 +89,9 @@ describe('DashboardPage', () => {
     fireEvent.click(screen.getByTestId('section-openings'));
     expect(mockNavigate).toHaveBeenCalledWith('/openings');
 
-    fireEvent.click(screen.getByTestId('section-play-with-coach'));
-    expect(mockNavigate).toHaveBeenCalledWith('/coach/play');
+    // Coach tile now leads to the hub (Play + Learn squares live there)
+    fireEvent.click(screen.getByTestId('section-coach'));
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/home');
 
     fireEvent.click(screen.getByTestId('section-tactics'));
     expect(mockNavigate).toHaveBeenCalledWith('/tactics');
