@@ -146,7 +146,7 @@ export function CoachTeachPage(): JSX.Element {
     const turnId = `t-${Date.now()}`;
     // Kickoff sends a system-style ask to seed the lesson — don't
     // render it as a "student said" turn in the transcript. Only the
-    // coach's reply (the actual lesson plan) shows up.
+    // coach's reply (the spoken greeting) shows up.
     if (!opts?.kickoff) {
       setMessages((prev) => [...prev, {
         id: `${turnId}-u`,
@@ -349,12 +349,12 @@ export function CoachTeachPage(): JSX.Element {
     void handleSubmit(`I played ${move.san}. Your move.`);
   }, [busy, handleSubmit]);
 
-  // ─── Lesson-plan kickoff ─────────────────────────────────────────────────
-  // On mount, pull the student's last 5 games + weakness profile and ask
-  // the coach to open with a personalized lesson plan. The coach's first
-  // line is "based on your last few games, here's what we should work on
-  // today." If there are no games yet, fire a generic kickoff that asks
-  // the student what they want to learn.
+  // ─── Guided-opening-play kickoff ─────────────────────────────────────────
+  // On mount, pull the student's last 5 games + weakness profile so the
+  // brain has private context (which openings they've been playing,
+  // their rating). The kickoff itself is a short greeting + "your move"
+  // prompt — the lesson IS the game from the starting position. The
+  // coach plays Black; the student plays White and moves first.
   // Snap to top when a new message lands or while the reply is
   // streaming in. Reverse-flow puts newest at the top so scrollTop=0
   // is always the active turn.
@@ -426,7 +426,7 @@ export function CoachTeachPage(): JSX.Element {
       // teaching mode rules; the kickoff just asks for the opener.
       const kickoffAsk = `The student just walked into your classroom for a guided opening lesson. The board is the starting position; they play White, you play Black. Greet them in ONE short sentence (≤12 words) and prompt them to play their first move. No lesson plan, no past-games stats, no bullet points. Just the greeting.\n\nFor your context only (do NOT cite aloud): rating ${activeProfile.currentRating}${summaryLines.length > 0 ? `, recent: ${summaryLines.slice(0, 3).join('; ')}` : ''}.`;
 
-      setKickoffStatus({ label: 'Coach is preparing your lesson plan…', step: 4, total: 4 });
+      setKickoffStatus({ label: 'Coach is ready to play…', step: 4, total: 4 });
       // Pipe kickoff through handleSubmit with the kickoff flag so it
       // uses the same streaming TTS + tool callbacks but doesn't
       // render the system-flavored ask as a student turn.
