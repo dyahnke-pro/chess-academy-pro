@@ -313,6 +313,12 @@ export type AuditKind =
   // profanity=hard / mockery=hard actually flowed into the LLM call —
   // not just into the TTS layer.
   | 'coach-move-personality-applied'
+  // WO-PLAN-B coach-move fast path. Fires when the coach-turn skips
+  // the LLM spine entirely and uses opening book / Stockfish bestmove
+  // directly. Replaces 8s of multi-trip LLM tool dance with ~250ms of
+  // deterministic move selection. Spine still runs as fallback if the
+  // fast path can't produce a legal move.
+  | 'coach-move-fastpath'
   // Coach FX cancellation race — fires when the coach-turn effect was
   // aborted (game.fen changed, useEffect re-fired) AFTER chess.js was
   // already mutated. We commit the FX path anyway to keep

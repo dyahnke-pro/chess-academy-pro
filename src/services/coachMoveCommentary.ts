@@ -116,6 +116,12 @@ export interface MoveCommentaryInput {
    *  engine can actually emote on. Neural voices use SSML prosody
    *  via the TTS proxy and don't need text cues. WO-VOICE-LAYER-02. */
   voiceEngine?: 'generative' | 'neural';
+  /** Optional streaming callback. Fires for each chunk the LLM emits
+   *  so the caller can dispatch sentences to TTS as they arrive,
+   *  cutting first-audio latency from full-response wait (~3-5s) down
+   *  to first-sentence wait (~0.5-1s). WO-PLAN-B. The full response
+   *  is still returned via the Promise; onStream is purely additive. */
+  onStream?: (chunk: string) => void;
 }
 
 /** How many prior chat messages to include in the commentary prompt.
@@ -339,7 +345,7 @@ async function getLlmCommentary(
     chatHistory, verbosity = 'medium', groundedNotes = [],
     recentMoveClassifications, lastUserInteractionMs,
     personality, profanity, mockery, flirt, studentColor,
-    briefMode = false, voiceEngine,
+    briefMode = false, voiceEngine, onStream,
   } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
@@ -474,7 +480,15 @@ ACTION-FIRST RULE — narration is a guide for what to do NEXT, not a recap of w
   // verbosity we pass through below. Keeping only one source of
   // truth prevents the two copies from drifting out of sync.
 
-  const groundedBlock = groundedNotes.filter(Boolean).join('\n\n');
+  // WO-PLAN-B: drop heavy grounded notes (Lichess opening explorer
+  // dumps, master-game databases) in brief mode. These can run 1500+
+  // chars and dominate the prompt — every extra prompt-token slows
+  // first-token latency. Brief-mode reactions are 2-4 punchy sentences
+  // that don't need full opening theory in the prompt; the LLM has
+  // chess knowledge baked in. Long-mode + review keep the full notes.
+  const groundedBlock = briefMode
+    ? ''
+    : groundedNotes.filter(Boolean).join('\n\n');
 
   // [StudentState] lets the coach read the room before replying —
   // what's the student's rhythm, sentiment, tempo? Trainer feel #2:
@@ -557,7 +571,7 @@ ACTION-FIRST RULE — narration is a guide for what to do NEXT, not a recap of w
   const response = await getCoachChatResponse(
     [{ role: 'user', content: user }],
     system,
-    undefined,
+    onStream,
     'interactive_review',
     maxTokens,
     verbosity,

@@ -135,6 +135,7 @@ import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachComm
 import { getCoachChatResponse } from '../../services/coachApi';
 import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
 import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
@@ -1739,6 +1740,68 @@ export function CoachGamePage(): JSX.Element {
           }),
           fen: game.fen,
         });
+        // ── WO-PLAN-B fast path: Stockfish + opening book directly ──
+        // The LLM spine spent ~8 seconds making 3 tool round-trips
+        // (local_opening_book → stockfish_eval → play_move) when all
+        // it actually does is route data the engine already has. Skip
+        // it for routine moves: pick the opening-book move when the
+        // student's intended opening is set + we're still in book,
+        // otherwise pick Stockfish's best move at the strength
+        // calibrated to the student's rating. Both run in <250ms.
+        // The full LLM spine still acts as a fallback if the fast
+        // path fails to produce a legal move.
+        if (intendedOpeningName) {
+          try {
+            const bookMoves = getOpeningMoves(intendedOpeningName);
+            if (bookMoves && game.history.length < bookMoves.length) {
+              const next = bookMoves[game.history.length];
+              const probe = new Chess(game.fen);
+              if (probe.move(next)) {
+                brainPickSan = next;
+                void logAppAudit({
+                  kind: 'coach-move-fastpath',
+                  category: 'subsystem',
+                  source: 'CoachGamePage.coachTurn.fastpath',
+                  summary: `book: ${next} (${intendedOpeningName} ply ${game.history.length})`,
+                  fen: game.fen,
+                });
+              }
+            }
+          } catch {
+            /* fall through */
+          }
+        }
+        if (!brainPickSan) {
+          try {
+            const config = resolvePlayConfig(difficulty, playerRating);
+            const uciResult = await withTimeout(
+              stockfishEngine.getBestMove(game.fen, config.moveTimeMs),
+              Math.max(2_000, config.moveTimeMs + 1_000),
+              'fastpath-bestmove',
+            );
+            if (uciResult.ok && uciResult.value) {
+              const probe = new Chess(game.fen);
+              const result = probe.move({
+                from: uciResult.value.slice(0, 2),
+                to: uciResult.value.slice(2, 4),
+                promotion: uciResult.value.length > 4 ? uciResult.value.slice(4, 5) : undefined,
+              });
+              if (result) {
+                brainPickSan = result.san;
+                void logAppAudit({
+                  kind: 'coach-move-fastpath',
+                  category: 'subsystem',
+                  source: 'CoachGamePage.coachTurn.fastpath',
+                  summary: `stockfish: ${result.san} at strength ${targetStrength} (skill ${config.skill}, ${config.moveTimeMs}ms)`,
+                  fen: game.fen,
+                });
+              }
+            }
+          } catch {
+            /* fall through to spine */
+          }
+        }
+
         // WO-COACH-RESILIENCE — three-tier fallback chain so the
         // coach never hangs mid-game. PR #344 shipped audit-kind
         // names without implementation; this is the real layer.
@@ -1749,6 +1812,9 @@ export function CoachGamePage(): JSX.Element {
           ask: moveSelectorAsk,
           liveState: moveSelectorLiveState,
         };
+        // Spine fallback path — only runs when the fast path above
+        // didn't produce a legal move (rare: Stockfish hung, no book
+        // move available + Stockfish errored, etc.)
         const onPlayMoveCallback = (san: string): { ok: boolean; reason?: string } => {
           // Validate against the live FEN. The play_move tool already
           // validated, but board state may have shifted between
@@ -1780,7 +1846,7 @@ export function CoachGamePage(): JSX.Element {
           flirt: prefs?.coachFlirt,
         };
 
-        try {
+        if (!brainPickSan) try {
           // Primary: full toolbelt, 15 s budget.
           const primary = await withTimeout(
             coachService.ask(askInput, baseOptions),
@@ -2701,6 +2767,10 @@ export function CoachGamePage(): JSX.Element {
         // effect on the next move. Mirrors how the brain (chat) path
         // reads dials in coach/envelope.ts.
         const activePrefs = useAppStore.getState().activeProfile?.preferences;
+        // Track whether streaming actually dispatched a sentence to TTS.
+        // If yes, the post-LLM speak path below skips (the streamed
+        // sentences ARE the narration; speaking again would double up).
+        let streamedAnything = false;
         const llm = await generateMoveCommentary({
           gameAfter: probe,
           mover,
@@ -2743,6 +2813,34 @@ export function CoachGamePage(): JSX.Element {
             );
             return POLLY_VOICES.find((v) => v.id === activeVoice)?.engine as 'generative' | 'neural' | undefined;
           })(),
+          // WO-PLAN-B: stream the LLM and ship each completed sentence
+          // to Polly the moment it lands. First audio at ~700-1000ms
+          // instead of waiting ~3-5s for the full response. The first
+          // sentence drops behind speakIfFree (so it doesn't clip an
+          // in-flight phase narration); subsequent sentences queue
+          // sequentially via speakQueuedForced for clean playback.
+          onStream: (() => {
+            let buffer = '';
+            let firstSentenceDispatched = false;
+            const SENTENCE_END = /([^.!?\n]+[.!?\n])(?=\s|$)/;
+            return (chunk: string): void => {
+              buffer += chunk;
+              let match: RegExpExecArray | null;
+              while ((match = SENTENCE_END.exec(buffer)) !== null) {
+                const sentence = match[1].trim();
+                if (sentence) {
+                  streamedAnything = true;
+                  if (!firstSentenceDispatched) {
+                    firstSentenceDispatched = true;
+                    void voiceService.speakIfFree(sentence).catch(() => undefined);
+                  } else {
+                    voiceService.speakQueuedForced(sentence);
+                  }
+                }
+                buffer = buffer.slice(match.index + match[1].length);
+              }
+            };
+          })(),
         });
         // Mark this opening as introduced so subsequent moves in the
         // same line stay silent (until a key moment or phase transition).
@@ -2755,7 +2853,12 @@ export function CoachGamePage(): JSX.Element {
         // Only the LLM portion is speech-worthy. tacticSuffix is a
         // deterministic readout meant for the move list display, NOT
         // for TTS.
-        llmProducedSpeech = Boolean(llm.trim());
+        // If we already streamed sentences to TTS during generation,
+        // mark llmProducedSpeech=false so the post-LLM speakIfFree
+        // below DOESN'T fire — the streamed sentences ARE the
+        // narration; speaking the full string again would double up.
+        // WO-PLAN-B.
+        llmProducedSpeech = Boolean(llm.trim()) && !streamedAnything;
         // Mirror the commentary into the shared session so the next
         // chat turn (or the next move's narration) sees what we just
         // said. Skip empties and pure tactic suffixes — we only record

@@ -96,7 +96,7 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   game_post_review:        'claude-sonnet-4-6',
   position_analysis_chat:  'claude-sonnet-4-6',
   session_plan_generation: 'claude-sonnet-4-6',
-  interactive_review:      'claude-sonnet-4-6',
+  interactive_review:      'claude-haiku-4-5-20251001',
   model_game_annotation:   'claude-sonnet-4-6',
   middlegame_plan_generation: 'claude-sonnet-4-6',
 
@@ -137,7 +137,16 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     const deepseekEnvKey = getDeepseekKey();
 
     const profile = await db.profiles.get('main');
-    const provider: AiProvider = profile?.preferences.aiProvider ?? (anthropicEnvKey ? 'anthropic' : 'deepseek');
+    // WO-PLAN-B: prefer Anthropic whenever the embedded/env key is
+    // available, regardless of any prior `aiProvider` preference
+    // stored on the profile. The user explicitly asked NOT to manage
+    // keys via Settings — both providers' keys live in coachApi.ts
+    // already, and Anthropic Haiku is the faster + cheaper-in-aggregate
+    // path now that the spine bypasses the LLM for routine coach moves.
+    // DeepSeek remains the auto-fallback if the Anthropic call errors.
+    const provider: AiProvider = anthropicEnvKey
+      ? 'anthropic'
+      : (profile?.preferences.aiProvider ?? 'deepseek');
 
     if (provider === 'anthropic') {
       if (anthropicEnvKey) return { provider, apiKey: anthropicEnvKey };
