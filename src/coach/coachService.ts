@@ -467,9 +467,18 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         toolResults,
       );
       currentEnvelope = { ...currentEnvelope, ask: followUpAsk };
-      // Streaming the follow-up turns would surface intermediate
-      // tool-orchestration text to the user. Suppress.
-      useStreaming = false;
+      // Keep streaming on for follow-up trips. The user perceives
+      // each non-streamed trip as a 2–3s silent pause followed by a
+      // burst — production audit shows that's the "choppy" feel.
+      // Streaming all trips lets each trip's prose start playing
+      // within ~500ms of the trip beginning, which is what makes
+      // the coach feel like a continuous lesson instead of a
+      // sequence of stuttering replies. The previous concern
+      // ("intermediate tool-orchestration text leaks to the user")
+      // is fine — that prose IS the lesson; the coach narrating
+      // "let me check the engine" while the engine call is in
+      // flight reads as natural pacing, not orchestration noise.
+      // Suppression turned out to be the bigger UX problem.
     } else {
       break;
     }

@@ -54,6 +54,21 @@ export default defineConfig(({ mode }) => {
               expiration: { maxEntries: 5, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
+          {
+            // Lichess piece SVGs (Staunton/Neo/Alpha/etc) load from
+            // their CDN. On a flaky network the board falls back to
+            // react-chessboard's "?" placeholder — production audit
+            // showed the Tactics drill page rendering the entire
+            // position as "?" icons. Cache them at the SW so a one-time
+            // load is enough for offline / slow-network use.
+            urlPattern: /^https:\/\/lichess1\.org\/assets\/piece\/.*\.svg$/i,
+            handler: 'CacheFirst' as const,
+            options: {
+              cacheName: 'lichess-piece-cache',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
         ],
       },
       manifest: {
