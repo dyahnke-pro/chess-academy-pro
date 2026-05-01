@@ -237,15 +237,12 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
 
       const userMessage = buildChessContextMessage(context);
 
-      // WO-PHASE-LAG-01: sentence-buffered streaming TTS (mirror of
-      // WO-POLISH-03 in usePositionNarration). First complete sentence
-      // goes to Polly (speakForced) so the premium voice lands on the
-      // first impression; subsequent sentences chain through Web Speech
-      // (speakQueuedForced) behind the Polly promise so they don't talk
-      // over it. Net effect: voice starts within one sentence of the
-      // first LLM token instead of waiting for the full response.
+      // Sentence-buffered streaming TTS. Every sentence chains through
+      // speakForced so each Polly call awaits the previous one's
+      // audio. Single-engine consistency: no Polly+Web-Speech overlap,
+      // no dropped sentences from the dead speakQueuedForced path.
       let sentenceBuffer = '';
-      let firstSpeakPromise: Promise<void> | null = null;
+      let speechChain: Promise<void> = Promise.resolve();
       let sentenceCount = 0;
       const dispatchSentence = (sentence: string): void => {
         const trimmed = sentence.trim();
@@ -266,16 +263,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             }),
             fen: event.fen,
           });
-          firstSpeakPromise = voiceService.speakForced(trimmed).catch(() => {
-            /* swallow — error handled via logAppAudit path */
-          });
-        } else {
-          if (firstSpeakPromise) {
-            void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(trimmed));
-          } else {
-            voiceService.speakQueuedForced(trimmed);
-          }
         }
+        speechChain = speechChain
+          .then(() => voiceService.speakForced(trimmed))
+          .catch(() => undefined);
       };
       // `+` (not `*`) so a bare terminator like "..." can't match a
       // zero-char sentence. Requires ≥1 non-terminator char before the
@@ -405,34 +396,30 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       console.log('[PHASE-HOOK-07] streaming speech dispatched', {
         sentenceCount,
       });
-      // Block isNarrating true until the first (Polly) sentence
-      // finishes — preserves the "board frozen while main voice speaks"
-      // invariant. Queued Web Speech sentences continue playing after
-      // the board unfreezes, which is fine.
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (firstSpeakPromise) {
-        try {
-          await withTimeout(
-            firstSpeakPromise,
-            NARRATION_SPEAK_TIMEOUT_MS,
-            'phase-narration-speak',
-          );
-          console.log('[PHASE-HOOK-08] first-sentence speech complete');
-        } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : String(err);
-          console.log('[PHASE-HOOK-08] speech errored / timed out', msg);
-          setError(msg);
-          if (msg.endsWith('-timeout')) {
-            voiceService.stop();
-            void logAppAudit({
-              kind: 'tts-failure',
-              category: 'subsystem',
-              source: 'usePhaseNarration',
-              summary: 'phase narration TTS playback timed out',
-              details: msg,
-              fen: event.fen,
-            });
-          }
+      // Block isNarrating true until the speech chain drains —
+      // preserves the "board frozen while main voice speaks"
+      // invariant. Single-engine Polly chain plays under this gate.
+      try {
+        await withTimeout(
+          speechChain,
+          NARRATION_SPEAK_TIMEOUT_MS,
+          'phase-narration-speak',
+        );
+        console.log('[PHASE-HOOK-08] speech chain drained');
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.log('[PHASE-HOOK-08] speech errored / timed out', msg);
+        setError(msg);
+        if (msg.endsWith('-timeout')) {
+          voiceService.stop();
+          void logAppAudit({
+            kind: 'tts-failure',
+            category: 'subsystem',
+            source: 'usePhaseNarration',
+            summary: 'phase narration TTS playback timed out',
+            details: msg,
+            fen: event.fen,
+          });
         }
       }
     } finally {

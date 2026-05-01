@@ -513,44 +513,23 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     // relevant on the next move.
     voiceService.stop();
 
-    // Stream sentences to speech as they arrive — speak starts on first sentence,
-    // subsequent sentences queue without canceling, so speech finishes ~when tokens do.
-    //
-    // CRITICAL: speakForced must be awaited before any speakQueuedForced can
-    // safely fire. speakInternal calls this.stop() (wipes current speech and
-    // the queue), then loads prefs asynchronously, then kicks off playback.
-    // If a queued sentence arrives during the async gap, stop() will wipe it.
-    // Gate the first sentence with a promise so subsequent queues only run
-    // after speakForced has definitively started its playback.
+    // Stream sentences to speech as they arrive. Every sentence chains
+    // through speakForced via a Promise chain so each Polly call awaits
+    // the previous one's audio. Single-engine consistency (no Web Speech
+    // tail talking over Polly), no sentences dropped silently.
     let sentenceBuffer = '';
-    let firstSpeakPromise: Promise<void> | null = null;
+    let speechChain: Promise<void> = Promise.resolve();
 
     const flushSentence = (sentence: string): void => {
-      // Strip stock filler openers even if the LLM ignores the no-filler
-      // rule. A sentence of just "Great question!" leaves the user hearing
-      // only that while the rest of the reply gets wiped by the race that
-      // the gating below prevents; belt-and-suspenders.
       const trimmed = sentence
         .replace(/^(great question!?|excellent!?|good question!?|nice (one|question)!?|interesting!?|that'?s a (great|good|nice) (question|one)!?)\s*/i, '')
         .trim();
       if (!trimmed) return;
-      if (!firstSpeakPromise) {
-        // .catch returns a resolved promise so subsequent .finally
-        // chains always fire. Without this swallow, a speakForced
-        // rejection (e.g. iOS AudioContext blocked) would cause
-        // every queued sentence to be dropped — user hears only the
-        // first sentence then silence mid-reply.
-        firstSpeakPromise = Promise.resolve(voiceService.speakForced(trimmed))
-          .catch((err: unknown) => {
-            console.warn('[VoiceChatMic] speakForced failed:', err);
-          });
-      } else {
-        // Use .finally so the queue fires whether speakForced
-        // resolved or rejected. Even if first-speak failed, Web
-        // Speech can still play subsequent sentences via the
-        // fallback chain — better partial audio than silence.
-        void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(trimmed));
-      }
+      speechChain = speechChain
+        .then(() => voiceService.speakForced(trimmed))
+        .catch((err: unknown) => {
+          console.warn('[VoiceChatMic] speakForced failed:', err);
+        });
     };
 
     const onChunk = (chunk: string): void => {

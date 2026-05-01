@@ -2834,15 +2834,16 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
             );
             return POLLY_VOICES.find((v) => v.id === activeVoice)?.engine as 'generative' | 'neural' | undefined;
           })(),
-          // WO-PLAN-B: stream the LLM and ship each completed sentence
-          // to Polly the moment it lands. First audio at ~700-1000ms
-          // instead of waiting ~3-5s for the full response. The first
-          // sentence drops behind speakIfFree (so it doesn't clip an
-          // in-flight phase narration); subsequent sentences queue
-          // sequentially via speakQueuedForced for clean playback.
+          // Stream the LLM and ship each completed sentence to Polly
+          // the moment it lands. Single chained pipeline through
+          // speakForced so each Polly call awaits the previous
+          // sentence's audio. First sentence drops behind speakIfFree
+          // so it doesn't clip an in-flight phase narration; once the
+          // chain is established, every subsequent sentence chains via
+          // speakForced (no Web Speech overlap, no dropped sentences).
           onStream: (() => {
             let buffer = '';
-            let firstSentenceDispatched = false;
+            let chain: Promise<void> | null = null;
             const SENTENCE_END = /([^.!?\n]+[.!?\n])(?=\s|$)/;
             return (chunk: string): void => {
               buffer += chunk;
@@ -2851,11 +2852,12 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
                 const sentence = match[1].trim();
                 if (sentence) {
                   streamedAnything = true;
-                  if (!firstSentenceDispatched) {
-                    firstSentenceDispatched = true;
-                    void voiceService.speakIfFree(sentence).catch(() => undefined);
+                  if (!chain) {
+                    chain = voiceService.speakIfFree(sentence).catch(() => undefined);
                   } else {
-                    voiceService.speakQueuedForced(sentence);
+                    chain = chain
+                      .then(() => voiceService.speakForced(sentence))
+                      .catch(() => undefined);
                   }
                 }
                 buffer = buffer.slice(match.index + match[1].length);

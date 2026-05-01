@@ -344,7 +344,9 @@ export function CoachTeachPage(): JSX.Element {
   // observe completed moves and tell the coach about them.
   const handleStudentMove = useCallback((move: MoveResult): void => {
     if (busy) return;
-    void handleSubmit(`I played ${move.san}. What do you think?`);
+    // Prompt the coach to play (not lecture). The teaching-mode rules
+    // in OPERATOR_BASE_BODY enforce ≤15 words + a play_move response.
+    void handleSubmit(`I played ${move.san}. Your move.`);
   }, [busy, handleSubmit]);
 
   // ─── Lesson-plan kickoff ─────────────────────────────────────────────────
@@ -416,10 +418,13 @@ export function CoachTeachPage(): JSX.Element {
       }
       summaryLines.push(`Rating: ${activeProfile.currentRating ?? 'unknown'}.`);
 
-      const kickoffAsk =
-        recent.length > 0
-          ? `The student just walked into your classroom. Here's their data:\n\n${summaryLines.join('\n')}\n\nOpen with a PERSONALIZED LESSON PLAN. Pick 1-2 specific things from their recent games or weaknesses to work on TODAY. Be concrete — name a pattern, name a square, name a typical mistake. Set up the relevant board position via set_board_position if it helps. Then ask them: "want to start there, or pick something else?" Don't generic-coach. Don't lecture. Walk in like you've watched their games and you know what they need.`
-          : `The student just walked into your classroom for the first time. They have no game history yet. Open warmly and ask ONE direct scoping question: tactics drill, opening study, or endgame technique? When they answer, drive into the lesson with the full teaching shape (set up positions, demonstrate, ground in Stockfish, name the IDEA).`;
+      // The lesson IS a game from the starting position. Kickoff is a
+      // single short greeting — no lesson plan, no past-games stats.
+      // Student plays White (first move), coach plays Black, coach
+      // reacts in ≤15 words per turn and plays the response via
+      // play_move. The detailed shape lives in OPERATOR_BASE_BODY's
+      // teaching mode rules; the kickoff just asks for the opener.
+      const kickoffAsk = `The student just walked into your classroom for a guided opening lesson. The board is the starting position; they play White, you play Black. Greet them in ONE short sentence (≤12 words) and prompt them to play their first move. No lesson plan, no past-games stats, no bullet points. Just the greeting.\n\nFor your context only (do NOT cite aloud): rating ${activeProfile.currentRating}${summaryLines.length > 0 ? `, recent: ${summaryLines.slice(0, 3).join('; ')}` : ''}.`;
 
       setKickoffStatus({ label: 'Coach is preparing your lesson plan…', step: 4, total: 4 });
       // Pipe kickoff through handleSubmit with the kickoff flag so it

@@ -225,27 +225,18 @@ export function CoachChatPage(): JSX.Element {
 
     let streamed = '';
     // Stop any in-flight TTS at the START of the turn so we don't
-    // stack replies. First sentence will be spoken via speakForced;
-    // subsequent sentences QUEUE via speakQueuedForced so they don't
-    // cut each other off mid-word — the prior code used .speak()
-    // which stops whatever's playing, truncating sentence N-1 every
-    // time sentence N arrives.
+    // stack replies. Every sentence chains through speakForced via a
+    // Promise chain — single Polly engine, no Web-Speech overlap, no
+    // dropped sentences from the dead speakQueuedForced path.
     const shouldSpeak = !voiceMutedRef.current || modality === 'voice';
-    // firstSpeakPromise gates queued sentences so they fire AFTER the
-    // first-speak settles (resolve OR reject). Using .finally means a
-    // Polly failure on sentence 1 still lets sentence 2+ play via Web
-    // Speech — partial audio beats mid-reply silence.
-    let firstSpeakPromise: Promise<void> | null = null;
+    let speechChain: Promise<void> = Promise.resolve();
     const speakOrQueue = (sentence: string): void => {
       if (!sentence) return;
-      if (!firstSpeakPromise) {
-        firstSpeakPromise = Promise.resolve(voiceService.speakForced(sentence))
-          .catch((err: unknown) => {
-            console.warn('[CoachChatPage] speakForced failed:', err);
-          });
-      } else {
-        void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(sentence));
-      }
+      speechChain = speechChain
+        .then(() => voiceService.speakForced(sentence))
+        .catch((err: unknown) => {
+          console.warn('[CoachChatPage] speakForced failed:', err);
+        });
     };
     if (shouldSpeak) voiceService.stop();
 

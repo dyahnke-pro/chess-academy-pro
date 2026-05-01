@@ -339,16 +339,13 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
         // both the spoken text and the final nudge text so action
         // tags never reach the user.
         let speechBuffer = '';
-        let firstSpeakPromise: Promise<void> | null = null;
+        let speechChain: Promise<void> = Promise.resolve();
         const speakSentence = (sentence: string): void => {
           const cleaned = sentence.replace(TAG_STRIP_RE, '').trim();
           if (!cleaned) return;
-          if (!firstSpeakPromise) {
-            firstSpeakPromise = Promise.resolve(voiceService.speakForced(cleaned))
-              .catch(() => undefined);
-          } else {
-            void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(cleaned));
-          }
+          speechChain = speechChain
+            .then(() => voiceService.speakForced(cleaned))
+            .catch(() => undefined);
         };
         voiceService.stop();
 

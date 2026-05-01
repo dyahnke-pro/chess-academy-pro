@@ -244,36 +244,24 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           trigger: null,
         });
 
-        // Stream the reply straight to TTS, sentence-by-sentence,
-        // queueing each so they don't cut each other off.
-        //
-        // CRITICAL: speakForced must settle its stop()+start cycle
-        // before any speakQueuedForced fires. Otherwise queue() lands
-        // during speakInternal's async gap and gets wiped by the
-        // subsequent stop(). Gate queued sentences on the first-speak
-        // promise so they only queue after playback has actually begun.
+        // Stream the reply straight to TTS, sentence-by-sentence.
+        // Every sentence chains through speakForced via a Promise chain
+        // so each Polly call awaits the previous one's audio —
+        // single-engine consistency, no Web-Speech tail overlap, no
+        // dropped sentences from the dead speakQueuedForced path.
         let speechBuffer = '';
-        let firstSpeakPromise: Promise<void> | null = null;
+        let speechChain: Promise<void> = Promise.resolve();
         const speakOrQueue = (sentence: string): void => {
-          // Strip stock filler openers even if the LLM disobeys the
-          // no-filler prompt. Speaking "Great question!" by itself is
-          // the bug pattern users see most often — cleaner to suppress
-          // at the boundary than hope the model behaves.
           const cleaned = sentence
             .replace(TAG_STRIP_RE, '')
             .replace(/^(great question!?|excellent!?|good question!?|nice (one|question)!?|interesting!?|that'?s a (great|good|nice) (question|one)!?)\s*/i, '')
             .trim();
           if (!cleaned) return;
-          if (!firstSpeakPromise) {
-            firstSpeakPromise = Promise.resolve(voiceService.speakForced(cleaned))
-              .catch((err: unknown) => {
-                console.warn('[SmartSearchBar] speakForced failed:', err);
-              });
-          } else {
-            // .finally so queued sentences fire whether first-speak
-            // resolved or rejected — no silence mid-reply on errors.
-            void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(cleaned));
-          }
+          speechChain = speechChain
+            .then(() => voiceService.speakForced(cleaned))
+            .catch((err: unknown) => {
+              console.warn('[SmartSearchBar] speakForced failed:', err);
+            });
         };
         voiceService.stop();
 

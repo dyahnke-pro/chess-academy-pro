@@ -162,13 +162,13 @@ function speakStreamed(text: string): void {
   const sentences = text.match(/([^.!?]+[.!?])(?=\s|$)/g) ?? [text];
   if (sentences.length === 0) return;
   voiceService.stop();
-  const first = sentences[0].trim();
-  if (!first) return;
-  const firstPromise = voiceService.speakForced(first).catch(() => undefined);
-  for (let i = 1; i < sentences.length; i++) {
-    const next = sentences[i].trim();
-    if (!next) continue;
-    void firstPromise.finally(() => voiceService.speakQueuedForced(next));
+  let chain: Promise<void> = Promise.resolve();
+  for (const sentence of sentences) {
+    const trimmed = sentence.trim();
+    if (!trimmed) continue;
+    chain = chain
+      .then(() => voiceService.speakForced(trimmed))
+      .catch(() => undefined);
   }
 }
 
