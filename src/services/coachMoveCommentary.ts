@@ -433,14 +433,18 @@ async function getLlmCommentary(
   // instead of being cut off mid-sentence at finish=length.
   if (briefMode) {
     promptParts.push(
-      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with 2-4 short punchy sentences and STOP. You have a hard ~900 character ceiling — write something that LANDS within that budget. If you're approaching the limit, finish your sentence; do NOT let the response get clipped. Lean fully into the personality and dials defined above — if you're flirtatious, FLIRT; if you're a drill sergeant, BARK; if you're edgy, ROAST. Do NOT default to generic mock-and-critique unless that matches the configured personality. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction in the configured voice.`,
+      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with 2-4 short punchy sentences and STOP. You have a hard ~900 character ceiling — write something that LANDS within that budget. If you're approaching the limit, finish your sentence; do NOT let the response get clipped. Lean fully into the personality and dials defined above — if you're flirtatious, FLIRT; if you're a drill sergeant, BARK; if you're edgy, ROAST. Do NOT default to generic mock-and-critique unless that matches the configured personality. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction in the configured voice.
+
+ACTION-FIRST RULE — every sentence must either (a) tell the student WHAT TO DO next, (b) tell them WHAT TO LOOK FOR on the next move, or (c) react with personality. Do NOT recap the move they just played ("you played Bc4," "that was a great move"). The student already saw the move. They need direction, not a replay.`,
     );
   } else if (!reviewTone) {
     // Long-mode addendum for live play (not review). The 500-token
     // cap = ~1800 chars; tell the LLM so it shapes the response to
     // land cleanly instead of running over and getting truncated.
     promptParts.push(
-      `LIVE PLAY — keep your response under ~1800 characters. Cover the general idea + things to watch for, then stop. If you're approaching the limit, wrap it up; do NOT let the response get clipped at finish=length. Personality-driven prose, no bullets, no headers.`,
+      `LIVE PLAY — keep your response under ~1800 characters. Cover the general idea + things to watch for, then stop. If you're approaching the limit, wrap it up; do NOT let the response get clipped at finish=length. Personality-driven prose, no bullets, no headers.
+
+ACTION-FIRST RULE — narration is a guide for what to do NEXT, not a recap of what just happened. Every sentence is either a directive ("aim for d4 — it lifts your bishop into the game"), a thing to watch for ("if I push f5 the file opens against your king"), or a piece of orientation that sets up a directive. Do NOT recap moves the student saw on the board. Do NOT describe what just happened in past tense beyond a one-clause setup. The student is paying attention to the voice because they want to know WHAT TO DO NEXT.`,
     );
   }
 

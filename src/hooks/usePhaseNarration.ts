@@ -43,7 +43,13 @@ const STOCKFISH_FAST_BUDGET_MS = 150;
  *  regardless, so the engine contributes only eval direction + top
  *  lines — not something that benefits from deeper search here. */
 const STOCKFISH_DEPTH = 10;
-const NARRATION_API_TIMEOUT_MS = 30_000;
+// WO-NARR-POLICY-04: bumped 30s → 12s. With max_tokens dropped to
+// 600 the real LLM response returns in ~3-5s; the old 30s timeout
+// existed because phase prose used to be 4000 tokens of streaming
+// narration. A tighter timeout means the deterministic fallback
+// fires faster on a true outage instead of letting the student wait
+// 30s with no audio at all.
+const NARRATION_API_TIMEOUT_MS = 12_000;
 const NARRATION_SPEAK_TIMEOUT_MS = 60_000;
 
 /** WO-REAL-FIXES — when the phase-narration LLM call times out
@@ -304,10 +310,16 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               flushCompletedSentences();
             },
             'position_analysis_chat',
-            // WO-PHASE-PROSE-01: raised 2000 → 4000 to match
-            // usePositionNarration's cap. Phase prose is full coach
-            // reads (20+ seconds of speech), not a tagline.
-            4000,
+            // WO-NARR-POLICY-04: dropped 4000 → 600 tokens. Production
+            // audit e177da1 caught phase narration taking 32-35
+            // seconds end-to-end (LLM emitting 4000 tokens of prose),
+            // long enough that the deterministic fallback fires
+            // FIRST and the student hears generic filler before the
+            // real narration even arrives. 600 tokens (~2200 chars,
+            // ~30s of speech) returns in ~3-5s and the new prompt
+            // shape is action-first, idea-driven, every sentence a
+            // directive — no recap of moves the student already saw.
+            600,
             'medium',
           ),
           NARRATION_API_TIMEOUT_MS,
