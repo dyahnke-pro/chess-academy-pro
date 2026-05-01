@@ -141,13 +141,17 @@ export function App(): JSX.Element {
         void seedDatabase();
         void seedPuzzles();
 
-        // Biweekly chess.com / lichess auto-import. Fire-and-forget;
-        // dedupes by record id so re-runs are cheap. Refreshes the
-        // active profile in the store when the timestamp bumps so
-        // settings UI sees the new "last import" time without reload.
-        void runAutoImportIfDue(profile, {
-          onProfileUpdated: (next) => setActiveProfile(next),
-        });
+        // Biweekly chess.com / lichess auto-import. Fire-and-forget,
+        // deferred 30s after boot so it never competes with the user's
+        // first action (especially the /coach/teach kickoff which
+        // wants the engine free for stockfish_eval tool calls).
+        // Skips post-import puzzle/analysis runs — those happen on
+        // explicit Game Insights navigation instead.
+        setTimeout(() => {
+          void runAutoImportIfDue(profile, {
+            onProfileUpdated: (next) => setActiveProfile(next),
+          });
+        }, 30_000);
 
       } catch (error) {
         console.error('App initialization failed:', error);

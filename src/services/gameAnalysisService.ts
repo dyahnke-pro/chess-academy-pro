@@ -386,6 +386,59 @@ export async function countGamesNeedingAnalysis(): Promise<number> {
 }
 
 /**
+ * Analyze ONLY the N most-recent unanalyzed games, sequentially, on
+ * the singleton engine. Used by the /coach/teach kickoff so the
+ * lesson can start the moment the games the coach actually references
+ * are ready — instead of waiting for hundreds of older games to
+ * finish via `analyzeAllGames`'s 6-worker pool.
+ *
+ * `onProgress({ current, total, label })` fires once before each game
+ * and once after the batch completes. Returns the count actually
+ * analyzed (≤ n).
+ */
+export async function analyzeRecentGames(
+  n: number,
+  onProgress?: (p: { current: number; total: number; label: string }) => void,
+): Promise<number> {
+  const allGames = await db.games
+    .filter((g) => gameNeedsAnalysis(g))
+    .toArray();
+
+  if (allGames.length === 0) {
+    onProgress?.({ current: 0, total: 0, label: 'No games to analyze.' });
+    return 0;
+  }
+
+  const sorted = allGames.sort((a, b) => {
+    const dateA = a.date ? new Date(a.date).getTime() : 0;
+    const dateB = b.date ? new Date(b.date).getTime() : 0;
+    return dateB - dateA;
+  });
+  const batch = sorted.slice(0, Math.max(0, n));
+  let analyzed = 0;
+
+  for (let i = 0; i < batch.length; i++) {
+    const game = batch[i];
+    onProgress?.({
+      current: i + 1,
+      total: batch.length,
+      label: `Analyzing game ${i + 1} of ${batch.length}…`,
+    });
+    try {
+      const annotations = await analyzeGamePositions(game);
+      if (annotations && annotations.length > 0) {
+        await db.games.update(game.id, { annotations, fullyAnalyzed: true });
+        analyzed++;
+      }
+    } catch (err) {
+      console.warn('[analyzeRecentGames] failed for', game.id, err);
+    }
+  }
+  onProgress?.({ current: batch.length, total: batch.length, label: 'Ready.' });
+  return analyzed;
+}
+
+/**
  * Batch-analyze all imported/played games that lack annotations.
  * Spins up WORKER_POOL_SIZE dedicated Stockfish workers, each analyzing
  * a different game simultaneously for true parallel throughput.

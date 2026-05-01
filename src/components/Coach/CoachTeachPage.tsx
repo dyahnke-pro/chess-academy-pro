@@ -30,6 +30,7 @@ import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { db } from '../../db/schema';
+import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import type { LiveState } from '../../coach/types';
 
 interface ChatTurn {
@@ -252,6 +253,34 @@ export function CoachTeachPage(): JSX.Element {
     }
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus]);
 
+  // Student-driven move from the interactive board. Plays the move
+  // locally then notifies the coach via a short ask so the brain can
+  // evaluate it ("the student just played Nxe5 — was that the right
+  // call here?"). Returns false if illegal so react-chessboard
+  // bounces the piece back to the source square.
+  const handleStudentDrop = useCallback(({
+    sourceSquare,
+    targetSquare,
+  }: { sourceSquare: string; targetSquare: string | null }): boolean => {
+    if (!targetSquare || busy) return false;
+    let san: string | null = null;
+    try {
+      const result = chessRef.current.move({
+        from: sourceSquare,
+        to: targetSquare,
+        promotion: 'q',
+      });
+      san = result.san;
+    } catch {
+      return false;
+    }
+    setFen(chessRef.current.fen());
+    if (san) {
+      void handleSubmit(`I played ${san}. What do you think?`);
+    }
+    return true;
+  }, [busy, handleSubmit]);
+
   // ─── Lesson-plan kickoff ─────────────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile and ask
   // the coach to open with a personalized lesson plan. The coach's first
@@ -264,13 +293,34 @@ export function CoachTeachPage(): JSX.Element {
     if (!activeProfile) return;
     kickoffFiredRef.current = true;
     void (async () => {
-      setKickoffStatus({ label: 'Reviewing your last games…', step: 1, total: 3 });
+      setKickoffStatus({ label: 'Pulling your last 5 games…', step: 1, total: 4 });
       const recent = await db.games
         .reverse()
         .limit(5)
         .toArray()
         .catch(() => []);
-      setKickoffStatus({ label: 'Loading your weakness profile…', step: 2, total: 3 });
+
+      // Analyze any of the 5 most-recent games that aren't already
+      // Stockfish-analyzed. Sequential on the singleton engine so the
+      // coach's stockfish_eval calls during the lesson don't compete
+      // with a 6-worker batch chewing through hundreds of older games.
+      // Lesson kicks off the moment these 5 are done — the rest of
+      // the unanalyzed backlog stays untouched here and is processed
+      // when the user navigates to Game Insights.
+      const needsAnalysis = recent.filter(gameNeedsAnalysis).length;
+      if (needsAnalysis > 0) {
+        await analyzeRecentGames(5, ({ current, total, label }) => {
+          // Encode per-game progress into the step bar so the user
+          // sees "Analyzing game X of Y" with the bar moving forward.
+          setKickoffStatus({
+            label,
+            step: Math.min(2 + current, 3 + total),
+            total: 3 + total,
+          });
+        });
+      }
+
+      setKickoffStatus({ label: 'Loading your weakness profile…', step: 3, total: 4 });
       const summaryLines: string[] = [];
       if (recent.length > 0) {
         summaryLines.push(`Recent games (${recent.length}):`);
@@ -296,7 +346,7 @@ export function CoachTeachPage(): JSX.Element {
           ? `The student just walked into your classroom. Here's their data:\n\n${summaryLines.join('\n')}\n\nOpen with a PERSONALIZED LESSON PLAN. Pick 1-2 specific things from their recent games or weaknesses to work on TODAY. Be concrete — name a pattern, name a square, name a typical mistake. Set up the relevant board position via set_board_position if it helps. Then ask them: "want to start there, or pick something else?" Don't generic-coach. Don't lecture. Walk in like you've watched their games and you know what they need.`
           : `The student just walked into your classroom for the first time. They have no game history yet. Open warmly and ask ONE direct scoping question: tactics drill, opening study, or endgame technique? When they answer, drive into the lesson with the full teaching shape (set up positions, demonstrate, ground in Stockfish, name the IDEA).`;
 
-      setKickoffStatus({ label: 'Coach is preparing your lesson plan…', step: 3, total: 3 });
+      setKickoffStatus({ label: 'Coach is preparing your lesson plan…', step: 4, total: 4 });
       // Pipe kickoff through handleSubmit with the kickoff flag so it
       // uses the same streaming TTS + tool callbacks but doesn't
       // render the system-flavored ask as a student turn.
@@ -330,7 +380,8 @@ export function CoachTeachPage(): JSX.Element {
       <div className="flex-shrink-0">
         <ConsistentChessboard
           fen={fen}
-          interactive={false}
+          interactive={!busy}
+          onPieceDrop={handleStudentDrop}
         />
       </div>
 

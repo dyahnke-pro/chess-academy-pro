@@ -41,12 +41,23 @@ interface LichessPerf {
 const MAX_LICHESS_GAMES = 200;
 
 /**
+ * Auto-import scheduler opts. `skipPostProcessing` skips the
+ * `generateMistakePuzzlesForBatch` + `runBackgroundAnalysis` chain so
+ * the biweekly background sync doesn't queue hundreds of games into
+ * Stockfish while the student is on /coach/teach.
+ */
+export interface ImportLichessOptions {
+  skipPostProcessing?: boolean;
+}
+
+/**
  * Import recent games from a Lichess account.
  * Fetches up to 200 games (vs the old limit of 20).
  */
 export async function importLichessGames(
   username: string,
   onProgress?: (count: number, status?: string) => void,
+  opts: ImportLichessOptions = {},
 ): Promise<number> {
   onProgress?.(0, 'Fetching games from Lichess...');
 
@@ -113,8 +124,10 @@ export async function importLichessGames(
     }
   }
 
-  // Generate mistake puzzles and run Stockfish analysis in background
-  if (importedGameIds.length > 0) {
+  // Generate mistake puzzles + run full background analysis. The
+  // auto-import scheduler opts out via skipPostProcessing so the
+  // engine stays free for the coach's stockfish_eval calls.
+  if (importedGameIds.length > 0 && !opts.skipPostProcessing) {
     void generateMistakePuzzlesForBatch(importedGameIds, username);
     runBackgroundAnalysis();
   }

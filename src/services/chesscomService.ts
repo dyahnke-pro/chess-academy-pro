@@ -81,12 +81,32 @@ function mapTimeControl(tc: ChessComTimeControl): TimeControlStats {
 // ─── Import Games ───────────────────────────────────────────────────────────
 
 /**
+ * Optional knobs passed by the auto-import scheduler so the biweekly
+ * background sync doesn't race the coach for the engine.
+ *
+ * `skipPostProcessing` — when true, skip `generateMistakePuzzlesForBatch`
+ *   and `runBackgroundAnalysis` after the import. The auto-import sets
+ *   this so 556 unanalyzed games don't flood the Stockfish queue while
+ *   the user is on /coach/teach waiting for the coach to play a move.
+ *
+ * `maxArchives` — cap on how many monthly archives to fetch
+ *   (most-recent first). Defaults to all archives. The auto-import passes
+ *   2 so a biweekly run covers the 14-day window without re-pulling
+ *   years of history every boot.
+ */
+export interface ImportChessComOptions {
+  skipPostProcessing?: boolean;
+  maxArchives?: number;
+}
+
+/**
  * Import ALL games from a Chess.com account by fetching the archives list,
  * then downloading each monthly archive (most recent first).
  */
 export async function importChessComGames(
   username: string,
   onProgress?: (count: number, status?: string) => void,
+  opts: ImportChessComOptions = {},
 ): Promise<number> {
   // Step 1: Fetch archives list
   onProgress?.(0, 'Fetching game archives...');
@@ -110,8 +130,12 @@ export async function importChessComGames(
     return 0;
   }
 
-  // Step 2: Fetch each archive (most recent first for better UX)
-  const reversedArchives = [...archives].reverse();
+  // Step 2: Fetch each archive (most recent first for better UX).
+  // The auto-import scheduler caps this via `opts.maxArchives` so we
+  // only fetch the last N months instead of years of history.
+  const reversedArchives = opts.maxArchives
+    ? [...archives].reverse().slice(0, opts.maxArchives)
+    : [...archives].reverse();
   let imported = 0;
   const importedGameIds: string[] = [];
 
@@ -149,8 +173,11 @@ export async function importChessComGames(
     }
   }
 
-  // Generate mistake puzzles and run Stockfish analysis in background
-  if (importedGameIds.length > 0) {
+  // Generate mistake puzzles + run full background analysis. The
+  // auto-import scheduler opts out of both via skipPostProcessing so
+  // 556 unanalyzed games don't flood the Stockfish worker pool while
+  // the student is on /coach/teach waiting for the coach to move.
+  if (importedGameIds.length > 0 && !opts.skipPostProcessing) {
     void generateMistakePuzzlesForBatch(importedGameIds, username);
     runBackgroundAnalysis();
   }

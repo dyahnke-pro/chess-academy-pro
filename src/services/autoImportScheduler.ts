@@ -67,7 +67,13 @@ export function runAutoImportIfDue(
       results.push({ service: 'chesscom', username: ccUser, imported: 0, skipped: 'too-soon' });
     } else {
       try {
-        const imported = await importChessComGames(ccUser);
+        // skipPostProcessing avoids queueing hundreds of games into
+        // Stockfish via runBackgroundAnalysis(); maxArchives=2 covers
+        // the 14-day biweekly window without re-pulling years of games.
+        const imported = await importChessComGames(ccUser, undefined, {
+          skipPostProcessing: true,
+          maxArchives: 2,
+        });
         updates.lastChessComAutoImportAt = now;
         results.push({ service: 'chesscom', username: ccUser, imported, skipped: null });
         void logAppAudit({
@@ -96,7 +102,10 @@ export function runAutoImportIfDue(
       results.push({ service: 'lichess', username: liUser, imported: 0, skipped: 'too-soon' });
     } else {
       try {
-        const imported = await importLichessGames(liUser);
+        // Same opt-out as chess.com — keep Stockfish free for the coach.
+        const imported = await importLichessGames(liUser, undefined, {
+          skipPostProcessing: true,
+        });
         updates.lastLichessAutoImportAt = now;
         results.push({ service: 'lichess', username: liUser, imported, skipped: null });
         void logAppAudit({

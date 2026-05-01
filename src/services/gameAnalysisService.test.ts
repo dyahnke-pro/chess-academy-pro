@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { countGamesNeedingAnalysis, analyzeAllGames } from './gameAnalysisService';
+import { countGamesNeedingAnalysis, analyzeAllGames, analyzeRecentGames } from './gameAnalysisService';
 import { buildGameRecord, buildUserProfile } from '../test/factories';
 import { useAppStore } from '../stores/appStore';
 import type { StockfishAnalysis } from '../types';
@@ -158,6 +158,52 @@ describe('gameAnalysisService', () => {
       const result = await analyzeAllGames();
       expect(result).toBe(0);
       expect(mockAnalyzePosition).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('analyzeRecentGames', () => {
+    it('returns 0 when no games need analysis', async () => {
+      const result = await analyzeRecentGames(5);
+      expect(result).toBe(0);
+      expect(mockAnalyzePosition).not.toHaveBeenCalled();
+    });
+
+    it('analyzes only the N most-recent unanalyzed games', async () => {
+      // Add 4 games dated oldest → newest. Only the 2 newest should
+      // be analyzed when n=2.
+      const games = [
+        buildGameRecord({ id: 'g-old-1', date: '2024-01-01', pgn: '1. e4 e5 1/2-1/2', annotations: null, isMasterGame: false }),
+        buildGameRecord({ id: 'g-old-2', date: '2024-02-01', pgn: '1. e4 e5 1/2-1/2', annotations: null, isMasterGame: false }),
+        buildGameRecord({ id: 'g-new-1', date: '2025-12-01', pgn: '1. e4 e5 1/2-1/2', annotations: null, isMasterGame: false }),
+        buildGameRecord({ id: 'g-new-2', date: '2026-04-01', pgn: '1. e4 e5 1/2-1/2', annotations: null, isMasterGame: false }),
+      ];
+      for (const g of games) await db.games.add(g);
+
+      mockAnalyzePosition.mockResolvedValue(mockAnalysis(0, 'e2e4'));
+
+      const result = await analyzeRecentGames(2);
+      expect(result).toBe(2);
+
+      const newest = await db.games.get('g-new-2');
+      const second = await db.games.get('g-new-1');
+      const older = await db.games.get('g-old-2');
+      expect(newest?.fullyAnalyzed).toBe(true);
+      expect(second?.fullyAnalyzed).toBe(true);
+      expect(older?.fullyAnalyzed).toBeUndefined();
+    });
+
+    it('reports per-game progress', async () => {
+      await db.games.add(buildGameRecord({
+        id: 'r1', date: '2026-01-01', pgn: '1. e4 e5 1/2-1/2', annotations: null, isMasterGame: false,
+      }));
+      mockAnalyzePosition.mockResolvedValue(mockAnalysis(0, 'e2e4'));
+
+      const updates: Array<{ current: number; total: number; label: string }> = [];
+      await analyzeRecentGames(5, (p) => updates.push(p));
+
+      expect(updates.length).toBeGreaterThanOrEqual(2);
+      expect(updates[0].label).toMatch(/Analyzing game/);
+      expect(updates[updates.length - 1].label).toMatch(/Ready/);
     });
   });
 });

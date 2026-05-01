@@ -47,7 +47,10 @@ describe('autoImportScheduler', () => {
     const results = await runAutoImportIfDue(profile, { now: 1_000_000 });
     const cc = results.find((r) => r.service === 'chesscom');
     expect(cc).toMatchObject({ username: 'magnus', imported: 7, skipped: null });
-    expect(importChessComGames).toHaveBeenCalledWith('magnus');
+    expect(importChessComGames).toHaveBeenCalledWith('magnus', undefined, {
+      skipPostProcessing: true,
+      maxArchives: 2,
+    });
     expect(updateProfile).toHaveBeenCalledWith(
       profile.id,
       expect.objectContaining({
@@ -83,7 +86,10 @@ describe('autoImportScheduler', () => {
     const cc = results.find((r) => r.service === 'chesscom');
     expect(cc?.skipped).toBeNull();
     expect(cc?.imported).toBe(3);
-    expect(importChessComGames).toHaveBeenCalledWith('magnus');
+    expect(importChessComGames).toHaveBeenCalledWith('magnus', undefined, {
+      skipPostProcessing: true,
+      maxArchives: 2,
+    });
   });
 
   it('records error but does not bump timestamp on failure', async () => {
