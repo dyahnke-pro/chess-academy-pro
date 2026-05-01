@@ -2963,7 +2963,14 @@ export function CoachGamePage(): JSX.Element {
         summary: `verbosity=${verbosity} classification=${classification} chars=${commentary.length}`,
         fen: moveResult.fen,
       });
-      void voiceService.speak(commentary).catch((err: unknown) => {
+      // WO-NARR-POLICY-05: speakIfFree drops the new utterance when
+      // a previous narration is still playing — the long opening
+      // intro / phase summary gets to FINISH instead of being cut
+      // mid-sentence the moment the student plays their next move.
+      // The student can keep playing while the coach finishes its
+      // thought; the per-move zinger about the new move just gets
+      // skipped. They asked for this explicitly.
+      void voiceService.speakIfFree(commentary).catch((err: unknown) => {
         console.warn('[CoachGame] move narration TTS failed:', err);
       });
     } else {

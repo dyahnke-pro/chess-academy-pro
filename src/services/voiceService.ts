@@ -461,6 +461,33 @@ class VoiceService {
     return this.speakInternal(sanitizeForTTS(text), false);
   }
 
+  /** Speak only when nothing is currently playing — DROPS the request
+   *  silently if audio is already in flight. Use this for per-move
+   *  narrations where the user has explicitly asked the previous
+   *  narration to keep playing through subsequent moves. WO-NARR-POLICY-05.
+   *
+   *  Production audit caught a long opening narration getting cut
+   *  mid-sentence the moment the student made their next move,
+   *  because every speak() runs `this.stop()` first. speakIfFree
+   *  short-circuits before the stop, so the in-flight utterance
+   *  finishes naturally. */
+  async speakIfFree(text: string): Promise<void> {
+    this.logSpeakInvoked('speakIfFree', text);
+    if (this.isPlaying() || speechService.isSpeaking) {
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'voice-speak-invoked',
+          category: 'subsystem',
+          source: 'voiceService.speakIfFree',
+          summary: `dropped (busy): ${text.slice(0, 40)}`,
+          details: `length=${text.length} reason=already-playing`,
+        });
+      }).catch(() => undefined);
+      return;
+    }
+    return this.speakInternal(sanitizeForTTS(text), false);
+  }
+
   /** Speak using the personality's SECONDARY voice — for short tactic
    *  alerts / interjections that should cut through main narration
    *  with a different timbre. WO-VOICE-LAYER-01 (b). Falls back to
