@@ -93,6 +93,7 @@ export type CoachSurface =
   | 'hint'
   | 'phase-narration'
   | 'review'
+  | 'teach'
   | 'ping';
 
 export interface LiveState {

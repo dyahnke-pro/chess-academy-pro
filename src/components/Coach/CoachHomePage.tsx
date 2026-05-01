@@ -45,6 +45,15 @@ export function CoachHomePage(): JSX.Element {
             testId="coach-action-play"
           />
           <ActionCard
+            icon={<GraduationCap size={24} />}
+            label="Teach Me"
+            description="Coach walks you through positions & lines"
+            rgb="6, 182, 212"
+            accentColor="rgb(6, 182, 212)"
+            onClick={() => void navigate('/coach/teach')}
+            testId="coach-action-teach"
+          />
+          <ActionCard
             icon={<BarChart3 size={24} />}
             label="Game Insights"
             description="Full analysis of your games, openings & tactics"
