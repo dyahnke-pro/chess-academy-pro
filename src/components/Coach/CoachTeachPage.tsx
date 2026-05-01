@@ -21,11 +21,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { Send, RotateCcw, GraduationCap } from 'lucide-react';
+import { Send, RotateCcw, GraduationCap, Loader2 } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { coachService } from '../../coach/coachService';
 import { logAppAudit } from '../../services/appAuditor';
-import { sanitizeCoachText, sanitizeCoachStream } from '../../services/sanitizeCoachText';
+import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -60,6 +60,13 @@ export function CoachTeachPage(): JSX.Element {
   const [input, setInput] = useState('');
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Kickoff progress: opaque label + step counter so the student sees
+  // why nothing has appeared yet (DB query → LLM call can take 5–30s).
+  const [kickoffStatus, setKickoffStatus] = useState<{
+    label: string;
+    step: number;
+    total: number;
+  } | null>(null);
 
   const resetBoard = useCallback((): { ok: boolean } => {
     chessRef.current = new Chess();
@@ -134,8 +141,12 @@ export function CoachTeachPage(): JSX.Element {
     let markupBuffer = '';
     let sentenceBuffer = '';
     let displayBuffer = '';
-    const SENTENCE_END = /([^.!?\n]+[.!?\n])(?=\s|$)/;
-    const speakOrQueue = (sentence: string): void => {
+    // Negative lookbehind on `\d` keeps SAN move numbers (e.g. "1.",
+    // "12.") from being treated as sentence terminators — without it
+    // Polly voices "1." / "Nc3 Nc6 3." / "Bc4" as separate utterances.
+    const SENTENCE_END = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
+    const speakOrQueue = (raw: string): void => {
+      const sentence = formatForSpeech(raw);
       if (!sentence) return;
       if (!firstSpeakPromise) {
         firstSpeakPromise = Promise.resolve(voiceService.speakForced(sentence))
@@ -188,6 +199,9 @@ export function CoachTeachPage(): JSX.Element {
             const { safe, pending } = sanitizeCoachStream(markupBuffer);
             markupBuffer = pending;
             if (!safe) return;
+            // First real prose chunk → tear down the kickoff progress
+            // banner (the lesson is now visibly arriving).
+            if (kickoffStatus) setKickoffStatus(null);
             // Render in chat — sanitized only.
             displayBuffer += safe;
             setStreaming(displayBuffer);
@@ -234,8 +248,9 @@ export function CoachTeachPage(): JSX.Element {
     } finally {
       setStreaming(null);
       setBusy(false);
+      setKickoffStatus(null);
     }
-  }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate]);
+  }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus]);
 
   // ─── Lesson-plan kickoff ─────────────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile and ask
@@ -249,11 +264,13 @@ export function CoachTeachPage(): JSX.Element {
     if (!activeProfile) return;
     kickoffFiredRef.current = true;
     void (async () => {
+      setKickoffStatus({ label: 'Reviewing your last games…', step: 1, total: 3 });
       const recent = await db.games
         .reverse()
         .limit(5)
         .toArray()
         .catch(() => []);
+      setKickoffStatus({ label: 'Loading your weakness profile…', step: 2, total: 3 });
       const summaryLines: string[] = [];
       if (recent.length > 0) {
         summaryLines.push(`Recent games (${recent.length}):`);
@@ -279,6 +296,7 @@ export function CoachTeachPage(): JSX.Element {
           ? `The student just walked into your classroom. Here's their data:\n\n${summaryLines.join('\n')}\n\nOpen with a PERSONALIZED LESSON PLAN. Pick 1-2 specific things from their recent games or weaknesses to work on TODAY. Be concrete — name a pattern, name a square, name a typical mistake. Set up the relevant board position via set_board_position if it helps. Then ask them: "want to start there, or pick something else?" Don't generic-coach. Don't lecture. Walk in like you've watched their games and you know what they need.`
           : `The student just walked into your classroom for the first time. They have no game history yet. Open warmly and ask ONE direct scoping question: tactics drill, opening study, or endgame technique? When they answer, drive into the lesson with the full teaching shape (set up positions, demonstrate, ground in Stockfish, name the IDEA).`;
 
+      setKickoffStatus({ label: 'Coach is preparing your lesson plan…', step: 3, total: 3 });
       // Pipe kickoff through handleSubmit with the kickoff flag so it
       // uses the same streaming TTS + tool callbacks but doesn't
       // render the system-flavored ask as a student turn.
@@ -289,7 +307,7 @@ export function CoachTeachPage(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col gap-3 p-4 flex-1 overflow-hidden max-w-2xl mx-auto w-full"
+      className="flex flex-col gap-3 p-4 flex-1 overflow-hidden max-w-2xl mx-auto w-full pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-4"
       data-testid="coach-teach-page"
     >
       <header className="flex items-center justify-between gap-3">
@@ -319,7 +337,36 @@ export function CoachTeachPage(): JSX.Element {
       <div className="flex-1 overflow-y-auto rounded-lg border p-3 space-y-2"
            style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
            data-testid="teach-transcript">
-        {turns.length === 0 && !streaming && (
+        {kickoffStatus && (
+          <div
+            className="rounded-lg border p-3 space-y-2"
+            style={{ borderColor: 'rgb(6, 182, 212)', background: 'rgba(6, 182, 212, 0.06)' }}
+            data-testid="teach-kickoff-progress"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+              <Loader2 size={14} className="animate-spin" style={{ color: 'rgb(6, 182, 212)' }} />
+              <span>{kickoffStatus.label}</span>
+            </div>
+            <div
+              className="h-1.5 rounded-full overflow-hidden"
+              style={{ background: 'rgba(6, 182, 212, 0.15)' }}
+            >
+              <div
+                className="h-full transition-all duration-300"
+                style={{
+                  width: `${(kickoffStatus.step / kickoffStatus.total) * 100}%`,
+                  background: 'rgb(6, 182, 212)',
+                }}
+              />
+            </div>
+            <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              Step {kickoffStatus.step} of {kickoffStatus.total} — this can take a few seconds.
+            </div>
+          </div>
+        )}
+        {turns.length === 0 && !streaming && !kickoffStatus && (
           <div className="text-xs space-y-2" style={{ color: 'var(--color-text-muted)' }}>
             <div>Ask your coach to teach you anything chess. Try:</div>
             {SUGGESTIONS.map((s) => (

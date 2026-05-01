@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeCoachText, sanitizeCoachStream } from './sanitizeCoachText';
+import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from './sanitizeCoachText';
 
 describe('sanitizeCoachText', () => {
   describe('passthrough', () => {
@@ -231,5 +231,55 @@ describe('sanitizeCoachStream', () => {
     expect(sanitizeCoachStream('')).toEqual({ safe: '', pending: '' });
     expect(sanitizeCoachStream(null)).toEqual({ safe: '', pending: '' });
     expect(sanitizeCoachStream(undefined)).toEqual({ safe: '', pending: '' });
+  });
+});
+
+describe('formatForSpeech', () => {
+  it('passes plain prose through unchanged', () => {
+    expect(formatForSpeech('Knight to f3 develops the kingside.')).toBe(
+      'Knight to f3 develops the kingside.',
+    );
+  });
+
+  it('strips markdown bold markers around inline emphasis', () => {
+    expect(formatForSpeech('The **f7 square** is the weak point.')).toBe(
+      'The f7 square is the weak point.',
+    );
+  });
+
+  it('strips italic markers', () => {
+    expect(formatForSpeech('You need to know __when__ to break.')).toBe(
+      'You need to know when to break.',
+    );
+  });
+
+  it('drops standalone bold-marker fragments like ****', () => {
+    expect(formatForSpeech('****')).toBe('');
+    expect(formatForSpeech('**')).toBe('');
+  });
+
+  it('drops bare numbered-list leaders on their own line', () => {
+    expect(formatForSpeech('1. The first thing')).toBe('The first thing');
+    expect(formatForSpeech('12.  Twelfth point')).toBe('Twelfth point');
+  });
+
+  it('drops horizontal rules', () => {
+    expect(formatForSpeech('---')).toBe('');
+    expect(formatForSpeech('***')).toBe('');
+    expect(formatForSpeech('___')).toBe('');
+  });
+
+  it('drops bullet markers but keeps the bullet content', () => {
+    expect(formatForSpeech('* foo bar')).toBe('foo bar');
+    expect(formatForSpeech('- foo bar')).toBe('foo bar');
+  });
+
+  it('preserves inline SAN move-numbers', () => {
+    expect(formatForSpeech('After 1. e4 e5 2. Nc3 Nc6 3. Bc4 we reach the Vienna.'))
+      .toBe('After 1. e4 e5 2. Nc3 Nc6 3. Bc4 we reach the Vienna.');
+  });
+
+  it('handles empty / null input', () => {
+    expect(formatForSpeech('')).toBe('');
   });
 });

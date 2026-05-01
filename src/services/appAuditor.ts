@@ -131,6 +131,9 @@ export type AuditKind =
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
   | 'coach-surface-migrated'
+  // Biweekly chess.com / lichess auto-import scheduler.
+  | 'auto-import-completed'
+  | 'auto-import-failed'
   // Stockfish performance instrumentation (WO-STOCKFISH-SWAP-AND-PERF).
   | 'stockfish-cache-hit'
   | 'stockfish-cache-miss'

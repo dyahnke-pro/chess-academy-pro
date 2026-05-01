@@ -60,6 +60,37 @@ export function sanitizeCoachText(text: string | null | undefined): string {
   return stripMarkup(text).trim();
 }
 
+/**
+ * Prepare a sanitized prose chunk for Polly TTS. Strips formatting
+ * tokens that have no spoken value (markdown bold `**word**`, italic
+ * `__word__`, horizontal rules `---`, list bullets `* `, leading
+ * `1.` / `2.` from numbered lists when on their own line).
+ *
+ * The streaming sentence dispatcher otherwise ships these tokens as
+ * standalone "sentences" (Polly voices `**1.**` and `---` literally),
+ * which makes the lesson sound like it stalled on a single chunk.
+ */
+export function formatForSpeech(text: string): string {
+  if (!text) return '';
+  return text
+    // Markdown bold / italic — keep the inner words, drop the markers.
+    .replace(/\*\*\*([^*]+)\*\*\*/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    // Stray bold/italic marker pairs with no inner content.
+    .replace(/\*{1,3}/g, '')
+    .replace(/_{2,}/g, '')
+    // Horizontal rules — drop entirely.
+    .replace(/^\s*[-*_]{3,}\s*$/gm, '')
+    // Leading list bullet on its own line: "* foo" → "foo".
+    .replace(/^\s*[-*]\s+/gm, '')
+    // Numbered-list leader on its own line: "1. foo" → "foo". Only
+    // strip when followed by space + word so we don't eat "3.Bc4" SAN.
+    .replace(/^\s*\d+\.\s+/gm, '')
+    .replace(/[ \t]{2,}/g, ' ')
+    .trim();
+}
+
 /** Streaming-safe sanitize. The caller buffers chunk text, calls this
  *  on the buffer after each chunk arrives, and:
  *   - dispatches `result.safe` to TTS / chat (sanitized prose)

@@ -5,6 +5,7 @@ import { getOrCreateMainProfile } from './services/dbService';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
 import { seedPuzzles } from './services/puzzleService';
+import { runAutoImportIfDue } from './services/autoImportScheduler';
 import { getSharedAudioContext } from './services/audioContextManager';
 import { speechService } from './services/speechService';
 import { voiceService } from './services/voiceService';
@@ -139,6 +140,14 @@ export function App(): JSX.Element {
         // Seed data in background (no-op if already seeded)
         void seedDatabase();
         void seedPuzzles();
+
+        // Biweekly chess.com / lichess auto-import. Fire-and-forget;
+        // dedupes by record id so re-runs are cheap. Refreshes the
+        // active profile in the store when the timestamp bumps so
+        // settings UI sees the new "last import" time without reload.
+        void runAutoImportIfDue(profile, {
+          onProfileUpdated: (next) => setActiveProfile(next),
+        });
 
       } catch (error) {
         console.error('App initialization failed:', error);

@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
-import { sanitizeCoachText, sanitizeCoachStream } from '../../services/sanitizeCoachText';
+import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
@@ -171,7 +171,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     // single TTS failure doesn't poison every subsequent speak.
     const speechChainRef = useRef<Promise<void>>(Promise.resolve());
     const queueSpeak = useCallback((text: string): void => {
-      const trimmed = text.trim();
+      // Drop markdown bold/italic markers, horizontal rules, and bare
+      // list-bullet chunks before they reach Polly — otherwise the
+      // sentence streamer voices "**1.**" / "---" / "**" as separate
+      // utterances and the lesson sounds stuck on a fragment.
+      const trimmed = formatForSpeech(text);
       if (!trimmed) return;
       speechChainRef.current = speechChainRef.current
         .then(() => voiceService.speak(trimmed))
@@ -677,7 +681,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 setStreamingContent(streamSafeBuf.trim());
                 if (useAppStore.getState().coachVoiceOn && safe) {
                   speechBufferRef.current += safe;
-                  const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+                  // Negative lookbehind keeps SAN move numbers ("1.",
+                  // "12.") from triggering a sentence break — without
+                  // it Polly voices "1." then "Nc3 Nc6 3." then "Bc4"
+                  // as three separate utterances.
+                  const sentenceEnd = /(?<!\d)[.!?]\s/.exec(speechBufferRef.current);
                   if (sentenceEnd) {
                     const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
                     speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
@@ -953,11 +961,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               setStreamingContent(drawerSafeBuf.trim());
               if (useAppStore.getState().coachVoiceOn && safe) {
                 speechBufferRef.current += safe;
-                const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+                const sentenceEnd = /(?<!\d)[.!?]\s/.exec(speechBufferRef.current);
                 if (sentenceEnd) {
                   const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
                   speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                  void voiceService.speak(sentence.trim());
+                  const speechReady = formatForSpeech(sentence);
+                  if (speechReady) void voiceService.speak(speechReady);
                 }
               }
             },

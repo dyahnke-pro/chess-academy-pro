@@ -586,6 +586,13 @@ export interface UserPreferences {
   // Import accounts
   chessComUsername?: string;
   lichessUsername?: string;
+  // Auto-import scheduler — bookkeeping for the biweekly background sync
+  // started at app boot. Epoch ms timestamp of the most recent successful
+  // import per service; the scheduler skips a service whose stamp is less
+  // than AUTO_IMPORT_INTERVAL_MS old. Set to null/undefined to force a
+  // run on next boot.
+  lastChessComAutoImportAt?: number | null;
+  lastLichessAutoImportAt?: number | null;
   // Lichess API token (encrypted, for puzzle activity/dashboard)
   lichessTokenEncrypted?: string | null;
   lichessTokenIv?: string | null;
