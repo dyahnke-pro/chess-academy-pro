@@ -422,8 +422,14 @@ export function CoachTeachPage(): JSX.Element {
       className="flex flex-col md:flex-row h-full overflow-hidden pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
       data-testid="coach-teach-page"
     >
-      {/* Left column: header + board (matches CoachGamePage flex pattern) */}
-      <div className="flex flex-col flex-1 md:flex-none md:w-3/5 min-h-0 overflow-y-auto">
+      {/* Left column: header + board. flex-none on mobile so this
+          column is exactly board+header tall — without it the column
+          grabbed flex-1 (half the screen) and left a big empty gap
+          below the board, pushing the chat input down as the right
+          column's content grew. With flex-none, board+header sit
+          flush at the top and the right column takes ALL remaining
+          space, planting the chat input directly under the board. */}
+      <div className="flex flex-col flex-none md:w-3/5 min-h-0">
         {/* Header — same shape as the play page's header row 1 */}
         <div className="px-3 py-2 md:p-4 border-b border-theme-border">
           <div className="flex items-center justify-between">
