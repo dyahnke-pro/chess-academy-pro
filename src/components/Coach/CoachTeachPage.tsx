@@ -66,6 +66,14 @@ export function CoachTeachPage(): JSX.Element {
     total: number;
   } | null>(null);
 
+  // Stable chained promise so streaming sentences play in order through
+  // the SAME Polly pipeline that handles the first sentence. Replaces
+  // the previous design that used `voiceService.speakQueuedForced` for
+  // sentences 2+, which is silently a no-op because
+  // `WEB_SPEECH_FALLBACK_ENABLED = false` in voiceService — the audit
+  // proved sentence 1 spoke and every later sentence was dropped.
+  const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+
   const resetBoard = useCallback((): { ok: boolean } => {
     chessRef.current = new Chess();
     setFen(STARTING_FEN);
@@ -133,9 +141,12 @@ export function CoachTeachPage(): JSX.Element {
     setStreaming('');
 
     // Stop in-flight speech so the new teaching response starts clean.
+    // Then reset the speech chain so the next queued sentence starts
+    // a fresh sequence (otherwise it'd be `.then(...)`-chained off a
+    // dead promise from the previous turn).
     voiceService.stop();
+    speechChainRef.current = Promise.resolve();
 
-    let firstSpeakPromise: Promise<void> | null = null;
     // Two-stage buffer: `markupBuffer` holds raw streamed chunks until
     // any in-flight `[[DIRECTIVE...]]` tag closes (sanitizeCoachStream
     // returns it as `pending`); `sentenceBuffer` collects sanitized
@@ -147,15 +158,16 @@ export function CoachTeachPage(): JSX.Element {
     // "12.") from being treated as sentence terminators — without it
     // Polly voices "1." / "Nc3 Nc6 3." / "Bc4" as separate utterances.
     const SENTENCE_END = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
-    const speakOrQueue = (raw: string): void => {
+    // Chain every sentence through speakForced. Each call's audio is
+    // awaited inside the chain so subsequent sentences only start
+    // after the previous one finishes — preventing speakInternal's
+    // unconditional this.stop() from cutting itself off mid-utterance.
+    const queueSpeak = (raw: string): void => {
       const sentence = formatForSpeech(raw);
       if (!sentence) return;
-      if (!firstSpeakPromise) {
-        firstSpeakPromise = Promise.resolve(voiceService.speakForced(sentence))
-          .catch(() => undefined);
-      } else {
-        void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(sentence));
-      }
+      speechChainRef.current = speechChainRef.current
+        .then(() => voiceService.speakForced(sentence))
+        .catch(() => undefined);
     };
 
     const liveState: LiveState = {
@@ -211,7 +223,7 @@ export function CoachTeachPage(): JSX.Element {
             sentenceBuffer += safe;
             let match: RegExpExecArray | null;
             while ((match = SENTENCE_END.exec(sentenceBuffer)) !== null) {
-              speakOrQueue(match[1].trim());
+              queueSpeak(match[1].trim());
               sentenceBuffer = sentenceBuffer.slice(match.index + match[1].length);
             }
           },
@@ -223,7 +235,7 @@ export function CoachTeachPage(): JSX.Element {
       // trailing prose. Sanitize once more to drop any unclosed
       // markup, then flush as a final sentence.
       const tail = sanitizeCoachText(markupBuffer + sentenceBuffer);
-      if (tail) speakOrQueue(tail);
+      if (tail) queueSpeak(tail);
 
       // Sanitize the FINAL response too — both for transcript display
       // and for the conversation memory record. Memory rehydration on
