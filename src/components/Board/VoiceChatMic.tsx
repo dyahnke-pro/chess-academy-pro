@@ -641,7 +641,21 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
   // cut the mic so the "listening" chrome doesn't reappear stale on
   // the next mount and the browser doesn't keep the microphone hot.
   useEffect(() => {
+    // Stop the mic when the app goes to the background. iOS keeps the
+    // getUserMedia stream alive when Safari backgrounds, which (a)
+    // burns battery, (b) leaves the privacy indicator on, and (c)
+    // confuses the user when they return. Visibilitychange is the
+    // most reliable signal across iOS Safari + Chrome + standalone
+    // PWA. When the page comes back to the foreground we don't auto-
+    // restart listening — the user re-taps the mic explicitly.
+    const onVisibility = (): void => {
+      if (document.visibilityState === 'hidden' && listeningRef.current) {
+        voiceInputService.stopListening();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
     return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
       if (listeningRef.current) {
         voiceInputService.stopListening();
       }

@@ -161,7 +161,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const [streamingContent, setStreamingContent] = useState('');
     const speechBufferRef = useRef('');
     // Sequential TTS chain — sentence-by-sentence streaming used to fire
-    // `void voiceService.speak(sentence)` as parallel calls. Each speak
+    // `if (!speechAbortedRef.current) void voiceService.speak(sentence)` as parallel calls. Each speak
     // internally calls voiceService.stop() before starting, so two
     // sentences arriving microseconds apart could interleave / cut off /
     // produce overlapping audio (the "two voices at once" pattern caught
@@ -170,6 +170,20 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     // plays IN FULL before the next starts. catch() the chain so a
     // single TTS failure doesn't poison every subsequent speak.
     const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+    // Abort flag for the speech chain. Set to true when the component
+    // unmounts (the user navigated away from /coach/play or
+    // /coach/teach). Each chained .then() checks this before invoking
+    // a new speak — so even if the chain has 5 sentences queued at
+    // unmount time, none of them fire after the user leaves. Without
+    // this the coach kept talking after leaving the classroom and
+    // collided with whatever the user did next on return.
+    const speechAbortedRef = useRef(false);
+    useEffect(() => {
+      return () => {
+        speechAbortedRef.current = true;
+        voiceService.stop();
+      };
+    }, []);
     const queueSpeak = useCallback((text: string): void => {
       // Drop markdown bold/italic markers, horizontal rules, and bare
       // list-bullet chunks before they reach Polly — otherwise the
@@ -177,8 +191,21 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // utterances and the lesson sounds stuck on a fragment.
       const trimmed = formatForSpeech(text);
       if (!trimmed) return;
+      // Snapshot the current stop-generation when we QUEUE this
+      // utterance. If voiceService.stop() fires before our .then()
+      // dispatches (route change, mic barge-in, manual interrupt),
+      // the generation counter advances and we abort cleanly. Without
+      // this, calling stop() cuts the current audio but the chain's
+      // next .then() fires shortly after and the next sentence plays
+      // anyway — exactly what made the coach "keep talking" after
+      // the user left the classroom or started speaking.
+      const myGen = voiceService.currentStopGeneration;
       speechChainRef.current = speechChainRef.current
-        .then(() => voiceService.speak(trimmed))
+        .then(() => {
+          if (speechAbortedRef.current) return;
+          if (voiceService.currentStopGeneration !== myGen) return;
+          return voiceService.speak(trimmed);
+        })
         .catch(() => undefined);
     }, []);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -427,7 +454,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           };
           setMessages([...updatedMessages, ackMsg]);
           if (useAppStore.getState().coachVoiceOn) {
-            void voiceService.speak(ackText);
+            if (!speechAbortedRef.current) void voiceService.speak(ackText);
           }
           return;
         }
@@ -486,7 +513,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         };
         setMessages([...updatedMessages, ackMsg]);
         if (narrationToggle.enable) {
-          void voiceService.speak(ack);
+          if (!speechAbortedRef.current) void voiceService.speak(ack);
         } else {
           voiceService.stop();
         }
@@ -535,7 +562,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           };
           setMessages([...updatedMessages, ack]);
           if (useAppStore.getState().coachVoiceOn) {
-            void voiceService.speak(ack.content);
+            if (!speechAbortedRef.current) void voiceService.speak(ack.content);
           }
           return;
         }
@@ -556,7 +583,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           };
           setMessages([...updatedMessages, ack]);
           if (useAppStore.getState().coachVoiceOn) {
-            void voiceService.speak(ack.content);
+            if (!speechAbortedRef.current) void voiceService.speak(ack.content);
           }
           return;
         }
@@ -967,7 +994,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
                   speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
                   const speechReady = formatForSpeech(sentence);
-                  if (speechReady) void voiceService.speak(speechReady);
+                  if (speechReady) if (!speechAbortedRef.current) void voiceService.speak(speechReady);
                 }
               }
             },

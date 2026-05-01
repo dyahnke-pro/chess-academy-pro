@@ -237,6 +237,16 @@ class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
   private abortController: AbortController | null = null;
   private playing = false;
+  /** Monotonic counter incremented on every `stop()`. Speech chains
+   *  can capture this when they queue an utterance and check it
+   *  before actually playing — if it advanced, a stop() happened
+   *  meanwhile (route change, mic barge-in, manual interrupt) and
+   *  the queued utterance should abort. */
+  private stopGeneration = 0;
+  /** Read-only accessor for chain code. */
+  get currentStopGeneration(): number {
+    return this.stopGeneration;
+  }
   // Default Polly playback rate. Bumped from 1.0 → 1.15 because the
   // production audit feedback was "voice sounds plodding." 1.15 stays
   // intelligible while feeling like a human coach pacing a lesson.
@@ -765,6 +775,9 @@ class VoiceService {
   }
 
   stop(): void {
+    // Bump the generation counter FIRST so any queued chain sees the
+    // bump before it would otherwise dispatch its next utterance.
+    this.stopGeneration++;
     // Abort any in-flight Polly fetch
     if (this.abortController) {
       this.abortController.abort();
