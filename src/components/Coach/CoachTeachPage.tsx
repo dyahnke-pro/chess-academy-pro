@@ -12,11 +12,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, RotateCcw, Loader2 } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2 } from 'lucide-react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
+import { DifficultyToggle } from './DifficultyToggle';
+import type { CoachDifficulty } from '../../types';
+import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
 import { anthropicProvider } from '../../coach/providers/anthropic';
 import { logAppAudit } from '../../services/appAuditor';
@@ -25,6 +29,7 @@ import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
+import { useSettings } from '../../hooks/useSettings';
 import { db } from '../../db/schema';
 import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import type { LiveState } from '../../coach/types';
@@ -69,6 +74,20 @@ export function CoachTeachPage(): JSX.Element {
 
   const transcriptRef = useRef<HTMLDivElement | null>(null);
   const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+
+  // Chrome state — kept here so the layout matches /coach/play
+  // button-for-button. Color selector picks who the student plays
+  // (orientation hand-off), difficulty + coach-tips are visually
+  // present for parity even though teach mode doesn't run engine
+  // moves; eval-bar / engine-lines toggles drive the board overlays.
+  const { settings } = useSettings();
+  const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
+  const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
+  const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
+  const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
+  const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
 
   // ─── LLM-driven board mutations ─────────────────────────────────────
   // The brain emits [[ACTION:play_move {"san":"Nf3"}]] etc. These
@@ -430,8 +449,10 @@ export function CoachTeachPage(): JSX.Element {
           flush at the top and the right column takes ALL remaining
           space, planting the chat input directly under the board. */}
       <div className="flex flex-col flex-none md:w-3/5 min-h-0">
-        {/* Header — same shape as the play page's header row 1 */}
-        <div className="px-3 py-2 md:p-4 border-b border-theme-border">
+        {/* Header — mirrors CoachGamePage's two-row pattern. Row 1:
+            back + title + color selector + analysis toggles. Row 2:
+            difficulty + coach tips. Same chrome as /coach/play. */}
+        <div className="px-3 py-2 md:p-4 border-b border-theme-border space-y-1.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3">
               <button
@@ -450,16 +471,82 @@ export function CoachTeachPage(): JSX.Element {
                 </p>
               </div>
             </div>
+            <div className="flex items-center gap-1 md:gap-2">
+              {/* Color selector — matches Play. Disabled once a move
+                  has been played in this session. */}
+              <div className="flex items-center gap-0.5 rounded-lg border border-theme-border p-0.5" data-testid="color-selector">
+                <button
+                  onClick={() => { setPlayerColor('white'); game.setOrientation('white'); }}
+                  disabled={game.history.length > 0}
+                  className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
+                    playerColor === 'white' ? 'ring-2 ring-theme-accent ring-inset' : ''
+                  }`}
+                  aria-label="Play as white"
+                  data-testid="color-white-btn"
+                >
+                  <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-white border border-neutral-300" />
+                </button>
+                <button
+                  onClick={() => { setPlayerColor('black'); game.setOrientation('black'); }}
+                  disabled={game.history.length > 0}
+                  className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
+                    playerColor === 'black' ? 'ring-2 ring-theme-accent ring-inset' : ''
+                  }`}
+                  aria-label="Play as black"
+                  data-testid="color-black-btn"
+                >
+                  <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-neutral-800 border border-neutral-600" />
+                </button>
+              </div>
+              <AnalysisToggles
+                showEvalBar={showEvalBarEffective}
+                onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
+                showEngineLines={showEngineLinesEffective}
+                onToggleEngineLines={() => setEngineLinesOverride((prev) => !(prev ?? settings.showEngineLines))}
+              />
+            </div>
+          </div>
+          {/* Row 2: Difficulty toggle + Coach Tips button — same widgets
+              Play has. Difficulty is cosmetic in teach (LLM teaches
+              regardless), but kept for visual parity. */}
+          <div className="flex items-center justify-between pl-12 md:pl-14">
+            <DifficultyToggle
+              value={difficulty}
+              onChange={setDifficulty}
+              disabled={game.history.length > 0}
+            />
             <button
-              onClick={() => { void handleResetBoard(); }}
-              className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border text-theme-text-muted"
-              data-testid="teach-reset-board"
-              aria-label="Reset board"
+              onClick={() => setCoachTipsOn((v) => !v)}
+              className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+              style={{
+                background: coachTipsOn ? 'var(--color-accent)' : 'var(--color-surface)',
+                color: coachTipsOn ? 'var(--color-bg)' : 'var(--color-text-muted)',
+                borderTop: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+                borderRight: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+                borderLeft: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
+                borderBottom: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
+                boxShadow: coachTipsOn
+                  ? '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)'
+                  : '0 0 6px rgba(234, 179, 8, 0.35), 0 0 14px rgba(234, 179, 8, 0.2), 0 0 24px rgba(234, 179, 8, 0.1)',
+              }}
+              aria-label={coachTipsOn ? 'Disable coach tips' : 'Enable coach tips'}
+              aria-pressed={coachTipsOn}
+              data-testid="coach-tips-toggle"
             >
-              <RotateCcw size={14} />
-              Reset
+              <Lightbulb size={16} />
+              <span className="hidden sm:inline">Tips</span>
             </button>
           </div>
+        </div>
+
+        {/* Coach (opponent) info bar */}
+        <div className="px-2 pt-1">
+          <PlayerInfoBar
+            name="Coach"
+            isBot
+            capturedPieces={[]}
+            isActive={busy}
+          />
         </div>
 
         {/* Board — same `<ControlledChessBoard>` Play uses, so click-
@@ -476,7 +563,7 @@ export function CoachTeachPage(): JSX.Element {
               showFlipButton={false}
               showUndoButton={false}
               showResetButton={false}
-              showEvalBar={false}
+              showEvalBar={showEvalBarEffective}
               showVoiceMic={false}
               showLastMoveHighlight
               onMove={handleStudentMove}
@@ -484,6 +571,53 @@ export function CoachTeachPage(): JSX.Element {
               annotationHighlights={highlights.length > 0 ? highlights : undefined}
             />
           </div>
+        </div>
+
+        {/* Player (David) info bar — matches Play's layout below the
+            board. */}
+        <div className="px-2 pb-1">
+          <PlayerInfoBar
+            name={activeProfile?.name ?? 'You'}
+            rating={activeProfile?.currentRating ?? undefined}
+            capturedPieces={[]}
+            isActive={!busy}
+          />
+        </div>
+
+        {/* Control buttons row — Takeback / Restart / Resign, same as
+            Play. Resign on the teach surface ends the lesson and pops
+            back to the coach hub. */}
+        <div className="flex items-center justify-center gap-2 px-3 pb-3">
+          <button
+            onClick={() => game.undoMove()}
+            disabled={busy || game.history.length === 0}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+            aria-label="Take back last move"
+            data-testid="teach-takeback"
+          >
+            <SkipBack size={14} />
+            <span>Takeback</span>
+          </button>
+          <button
+            onClick={() => { void handleResetBoard(); }}
+            disabled={busy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+            aria-label="Restart"
+            data-testid="teach-restart"
+          >
+            <RefreshCw size={14} />
+            <span>Restart</span>
+          </button>
+          <button
+            onClick={() => void navigate('/coach/home')}
+            disabled={busy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+            aria-label="End lesson"
+            data-testid="teach-resign"
+          >
+            <Flag size={14} />
+            <span>End Lesson</span>
+          </button>
         </div>
       </div>
 
