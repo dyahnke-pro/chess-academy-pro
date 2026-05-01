@@ -46,6 +46,11 @@ async function callDeepSeek(
 ): Promise<ProviderResponse> {
   const systemPrompt = formatEnvelopeAsSystemPrompt(envelope);
   const userMessage = formatEnvelopeAsUserMessage(envelope);
+  // Pin DeepSeek at the API layer. Non-Learn surfaces stay on DeepSeek
+  // even though the Anthropic env key is also present — Learn is the
+  // only surface that uses Anthropic (see anthropicProvider for the
+  // mirror call with 'anthropic'). The fallback chain still kicks in
+  // if DeepSeek's call errors.
   const promise = getCoachChatResponse(
     [{ role: 'user', content: userMessage }],
     systemPrompt,
@@ -53,6 +58,7 @@ async function callDeepSeek(
     'chat_response',
     2000,
     'medium',
+    'deepseek',
   );
   const timeout = new Promise<string>((_, reject) =>
     setTimeout(() => reject(new Error('coach-brain-deepseek-timeout')), PROVIDER_TIMEOUT_MS),

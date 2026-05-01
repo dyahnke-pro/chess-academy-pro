@@ -185,6 +185,44 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
   }
 }
 
+/** Pin the provider for a single call. Used by the brain's per-surface
+ *  routing (e.g. /coach/teach forces 'anthropic'). Walks the same key
+ *  resolution order as `getProviderConfig` for that provider only:
+ *  env key → encrypted profile key → null. NEVER falls back to the
+ *  other provider — that's the caller's job via `getFallbackConfig`. */
+async function getForcedProviderConfig(provider: AiProvider): Promise<ProviderConfig | null> {
+  try {
+    const profile = await db.profiles.get('main');
+    if (provider === 'anthropic') {
+      const envKey = getAnthropicKey();
+      if (envKey) return { provider, apiKey: envKey };
+      if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
+        return null;
+      }
+      const { decryptApiKey } = await import('./cryptoService');
+      const apiKey = await decryptApiKey(
+        profile.preferences.anthropicApiKeyEncrypted,
+        profile.preferences.anthropicApiKeyIv,
+      );
+      return { provider, apiKey };
+    } else {
+      const envKey = getDeepseekKey();
+      if (envKey) return { provider, apiKey: envKey };
+      if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
+        return null;
+      }
+      const { decryptApiKey } = await import('./cryptoService');
+      const apiKey = await decryptApiKey(
+        profile.preferences.apiKeyEncrypted,
+        profile.preferences.apiKeyIv,
+      );
+      return { provider, apiKey };
+    }
+  } catch {
+    return null;
+  }
+}
+
 /** Get a fallback config using the OTHER provider. Returns null if no alternate key available. */
 function getFallbackConfig(failedProvider: AiProvider): ProviderConfig | null {
   try {
@@ -428,8 +466,18 @@ export async function getCoachChatResponse(
    *  (e.g. per-move commentary) can avoid a redundant lookup and
    *  guarantee a single source of truth for the length directive. */
   verbosityOverride?: CoachVerbosity,
+  /** Force a specific API provider for this call, overriding the
+   *  default `getProviderConfig()` selection. Used by the brain's
+   *  per-surface routing — `/coach/teach` forces Anthropic so the
+   *  Learn tab always gets Sonnet/Haiku regardless of the global
+   *  default, while every other surface stays on DeepSeek. The
+   *  fallback chain still kicks in if the forced provider's call
+   *  errors. */
+  forceProvider?: AiProvider,
 ): Promise<string> {
-  const config = await getProviderConfig();
+  const config = forceProvider
+    ? await getForcedProviderConfig(forceProvider)
+    : await getProviderConfig();
   if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
 
   const verbosity = verbosityOverride ?? await getCoachVerbosity();

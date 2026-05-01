@@ -27,6 +27,7 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
+import { anthropicProvider } from '../../coach/providers/anthropic';
 import { logAppAudit } from '../../services/appAuditor';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { voiceService } from '../../services/voiceService';
@@ -198,6 +199,11 @@ export function CoachTeachPage(): JSX.Element {
       const result = await coachService.ask(
         { surface: 'teach', ask: text, liveState },
         {
+          // /coach/teach is the ONLY surface that uses Anthropic. Every
+          // other surface stays on DeepSeek (the brain default). Anthropic
+          // gives Sonnet/Haiku for the teaching content; DeepSeek stays
+          // cost-effective for play, chat, hints, etc.
+          providerOverride: anthropicProvider,
           maxToolRoundTrips: 6,
           personality: activeProfile?.preferences.coachPersonality,
           profanity: activeProfile?.preferences.coachProfanity,
@@ -441,41 +447,115 @@ export function CoachTeachPage(): JSX.Element {
         </div>
       </div>
 
-      {/* Right column: chat panel (kickoff progress + ChatMessage list + ChatInput) */}
+      {/* Right column: input-on-top reverse-flow chat. The text input
+          is pinned right under the board so the student never has to
+          scroll to type. The newest message renders immediately under
+          the input (highlighted), older messages scroll DOWN.
+          Chronologically newest-first ─ "you don't hunt for what just
+          arrived." Board stays fully visible. */}
       <div className="flex flex-col flex-1 md:w-2/5 min-h-0 border-t md:border-t-0 md:border-l border-theme-border bg-theme-bg">
+        {/* Slim avatar header */}
+        <div className="flex items-center gap-2 px-4 py-2 border-b border-theme-border">
+          <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-bold bg-theme-accent">
+            C
+          </div>
+          <span className="text-sm font-semibold text-theme-text">Coach</span>
+          <span className="text-xs text-theme-text-muted">
+            {busy ? '· typing…' : '· online'}
+          </span>
+        </div>
+
+        {/* Pinned input — always reachable, zero scroll to type. */}
+        <div className="border-b border-theme-border">
+          <ChatInput
+            onSend={(text) => void handleSubmit(text)}
+            disabled={busy}
+            placeholder="Ask your coach…"
+          />
+        </div>
+
+        {/* Kickoff progress banner — sticky right under the input so
+            the student sees what's happening without losing input
+            access. */}
+        {kickoffStatus && (
+          <div
+            className="px-4 py-2 border-b border-theme-border space-y-1.5"
+            style={{ background: 'rgba(6, 182, 212, 0.06)' }}
+            data-testid="teach-kickoff-progress"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="flex items-center gap-2 text-xs font-medium" style={{ color: 'var(--color-text)' }}>
+              <Loader2 size={12} className="animate-spin" style={{ color: 'rgb(6, 182, 212)' }} />
+              <span>{kickoffStatus.label}</span>
+            </div>
+            <div
+              className="h-1 rounded-full overflow-hidden"
+              style={{ background: 'rgba(6, 182, 212, 0.15)' }}
+            >
+              <div
+                className="h-full transition-all duration-300"
+                style={{
+                  width: `${(kickoffStatus.step / kickoffStatus.total) * 100}%`,
+                  background: 'rgb(6, 182, 212)',
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Reverse-chronological message list. Newest at top
+            (immediately under input), older messages scroll down.
+            Streaming bubble renders FIRST so the in-progress reply is
+            always visible. */}
         <div
-          className="flex-1 overflow-y-auto px-3 py-3 space-y-3"
+          className="flex-1 overflow-y-auto p-3 min-h-0 flex flex-col gap-3"
+          role="log"
+          aria-live="polite"
+          aria-relevant="additions"
+          aria-label="Learn with Coach chat messages"
           data-testid="teach-transcript"
         >
-          {kickoffStatus && (
+          {streaming !== null && (
             <div
-              className="rounded-lg border p-3 space-y-2"
-              style={{ borderColor: 'rgb(6, 182, 212)', background: 'rgba(6, 182, 212, 0.06)' }}
-              data-testid="teach-kickoff-progress"
-              role="status"
-              aria-live="polite"
+              className="rounded-lg p-1 -m-1"
+              style={{
+                background: 'rgba(6, 182, 212, 0.05)',
+                outline: '1px solid rgba(6, 182, 212, 0.25)',
+              }}
             >
-              <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                <Loader2 size={14} className="animate-spin" style={{ color: 'rgb(6, 182, 212)' }} />
-                <span>{kickoffStatus.label}</span>
-              </div>
-              <div
-                className="h-1.5 rounded-full overflow-hidden"
-                style={{ background: 'rgba(6, 182, 212, 0.15)' }}
-              >
-                <div
-                  className="h-full transition-all duration-300"
-                  style={{
-                    width: `${(kickoffStatus.step / kickoffStatus.total) * 100}%`,
-                    background: 'rgb(6, 182, 212)',
-                  }}
-                />
-              </div>
-              <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                Step {kickoffStatus.step} of {kickoffStatus.total} — this can take a few seconds.
-              </div>
+              <ChatMessage
+                message={{
+                  id: 'teach-streaming',
+                  role: 'assistant',
+                  content: streaming,
+                  timestamp: Date.now(),
+                }}
+                isStreaming
+              />
             </div>
           )}
+
+          {[...messages].reverse().map((msg, idxFromTop) => (
+            // Newest finished message gets the same subtle highlight
+            // as the streaming bubble. Everything older fades to
+            // 70% opacity so the focus stays on the active turn.
+            <div
+              key={msg.id}
+              className={
+                idxFromTop === 0 && streaming === null
+                  ? 'rounded-lg p-1 -m-1'
+                  : ''
+              }
+              style={
+                idxFromTop === 0 && streaming === null
+                  ? { background: 'rgba(6, 182, 212, 0.05)', outline: '1px solid rgba(6, 182, 212, 0.25)' }
+                  : { opacity: 0.7 }
+              }
+            >
+              <ChatMessage message={msg} />
+            </div>
+          ))}
 
           {messages.length === 0 && !streaming && !kickoffStatus && (
             <div className="text-xs space-y-2" style={{ color: 'var(--color-text-muted)' }}>
@@ -493,29 +573,7 @@ export function CoachTeachPage(): JSX.Element {
               ))}
             </div>
           )}
-
-          {messages.map((msg) => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
-
-          {streaming !== null && (
-            <ChatMessage
-              message={{
-                id: 'teach-streaming',
-                role: 'assistant',
-                content: streaming,
-                timestamp: Date.now(),
-              }}
-              isStreaming
-            />
-          )}
         </div>
-
-        <ChatInput
-          onSend={(text) => void handleSubmit(text)}
-          disabled={busy}
-          placeholder="Ask the coach to teach you something..."
-        />
       </div>
     </div>
   );

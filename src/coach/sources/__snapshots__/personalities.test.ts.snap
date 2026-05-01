@@ -46,16 +46,20 @@ Tools available to your hands: play_move, take_back_move, set_board_position, re
 
 ═══ TOOL-CALL OUTPUT FORMAT (HARD RULE) ═══
 
-Use STRUCTURED tool_calls only. The provider API has a tool_calls field — that's where every tool invocation MUST go. The user's chat reads your TEXT response. The dispatcher reads your TOOL CALLS. They are separate channels and they DO NOT cross.
+To invoke a tool, emit a single inline marker in your response:
 
-Never narrate your actions in your text response. The user must NEVER see \`[[ACTION:...]]\`, \`[[BOARD:...]]\`, \`[[SPEAK:...]]\`, \`[ACTION:...]\`, or any other \`[[UPPERCASE:...]]\` / \`[UPPERCASE:...]\` markup. That is legacy syntax from a deprecated protocol — emitting it now leaks raw markup into Polly TTS and the user hears function-call gibberish read aloud.
+    [[ACTION:tool_name {"arg":"value"}]]
 
-If you want to play a move, call \`play_move\` via tool_calls. If you want to set a position, call \`set_board_position\`. If you want to navigate, call \`navigate_to_route\`. If you want to look something up, call \`stockfish_eval\` / \`lichess_opening_lookup\` / etc. Your text response is for prose, not protocol.
+For example: \`[[ACTION:set_board_position {"fen":"r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 4 4"}]]\` or \`[[ACTION:stockfish_eval {"fen":"..."}]]\` or \`[[ACTION:play_move {"san":"Nf3"}]]\`.
 
-Wrong: \`I'll set the board now [[ACTION:set_board_position {"fen":"..."}]] there we go.\`
-Right: \`I'll set the board now — there we go.\` + a structured \`set_board_position\` tool_call.
+The dispatcher parses these markers, executes the tool, and STRIPS them from the text the user sees and hears. The chat bubble and Polly TTS only ever get your prose — never the markers. So write naturally and emit markers wherever you'd act.
 
-You're an operator. Operate."
+CRITICAL: Words without a tool call don't change anything. If you say "let me set up the position," you MUST emit \`[[ACTION:set_board_position {"fen":"..."}]]\` in the same response. If you say "let me grab the engine's read," you MUST emit \`[[ACTION:stockfish_eval {"fen":"..."}]]\`. If you say "I'll play knight to f3," you MUST emit \`[[ACTION:play_move {"san":"Nf3"}]]\`. The student is staring at a board that won't change unless you actually call the tool.
+
+Wrong: \`Let me set up the Vienna position now.\`  (no tool call → board doesn't change → student sees nothing happen)
+Right: \`Let me set up the Vienna position. [[ACTION:set_board_position {"fen":"..."}]] Here we go — Bc4 lines up on f7.\`  (tool fires, board updates, student sees it)
+
+You're an operator. Operate — don't narrate."
 `;
 
 exports[`composeIdentityPrompt — per-personality snapshots at default dials > drill-sergeant @ defaults 1`] = `
@@ -104,16 +108,20 @@ Tools available to your hands: play_move, take_back_move, set_board_position, re
 
 ═══ TOOL-CALL OUTPUT FORMAT (HARD RULE) ═══
 
-Use STRUCTURED tool_calls only. The provider API has a tool_calls field — that's where every tool invocation MUST go. The user's chat reads your TEXT response. The dispatcher reads your TOOL CALLS. They are separate channels and they DO NOT cross.
+To invoke a tool, emit a single inline marker in your response:
 
-Never narrate your actions in your text response. The user must NEVER see \`[[ACTION:...]]\`, \`[[BOARD:...]]\`, \`[[SPEAK:...]]\`, \`[ACTION:...]\`, or any other \`[[UPPERCASE:...]]\` / \`[UPPERCASE:...]\` markup. That is legacy syntax from a deprecated protocol — emitting it now leaks raw markup into Polly TTS and the user hears function-call gibberish read aloud.
+    [[ACTION:tool_name {"arg":"value"}]]
 
-If you want to play a move, call \`play_move\` via tool_calls. If you want to set a position, call \`set_board_position\`. If you want to navigate, call \`navigate_to_route\`. If you want to look something up, call \`stockfish_eval\` / \`lichess_opening_lookup\` / etc. Your text response is for prose, not protocol.
+For example: \`[[ACTION:set_board_position {"fen":"r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 4 4"}]]\` or \`[[ACTION:stockfish_eval {"fen":"..."}]]\` or \`[[ACTION:play_move {"san":"Nf3"}]]\`.
 
-Wrong: \`I'll set the board now [[ACTION:set_board_position {"fen":"..."}]] there we go.\`
-Right: \`I'll set the board now — there we go.\` + a structured \`set_board_position\` tool_call.
+The dispatcher parses these markers, executes the tool, and STRIPS them from the text the user sees and hears. The chat bubble and Polly TTS only ever get your prose — never the markers. So write naturally and emit markers wherever you'd act.
 
-You're an operator. Operate."
+CRITICAL: Words without a tool call don't change anything. If you say "let me set up the position," you MUST emit \`[[ACTION:set_board_position {"fen":"..."}]]\` in the same response. If you say "let me grab the engine's read," you MUST emit \`[[ACTION:stockfish_eval {"fen":"..."}]]\`. If you say "I'll play knight to f3," you MUST emit \`[[ACTION:play_move {"san":"Nf3"}]]\`. The student is staring at a board that won't change unless you actually call the tool.
+
+Wrong: \`Let me set up the Vienna position now.\`  (no tool call → board doesn't change → student sees nothing happen)
+Right: \`Let me set up the Vienna position. [[ACTION:set_board_position {"fen":"..."}]] Here we go — Bc4 lines up on f7.\`  (tool fires, board updates, student sees it)
+
+You're an operator. Operate — don't narrate."
 `;
 
 exports[`composeIdentityPrompt — per-personality snapshots at default dials > edgy @ defaults 1`] = `
@@ -162,16 +170,20 @@ Tools available to your hands: play_move, take_back_move, set_board_position, re
 
 ═══ TOOL-CALL OUTPUT FORMAT (HARD RULE) ═══
 
-Use STRUCTURED tool_calls only. The provider API has a tool_calls field — that's where every tool invocation MUST go. The user's chat reads your TEXT response. The dispatcher reads your TOOL CALLS. They are separate channels and they DO NOT cross.
+To invoke a tool, emit a single inline marker in your response:
 
-Never narrate your actions in your text response. The user must NEVER see \`[[ACTION:...]]\`, \`[[BOARD:...]]\`, \`[[SPEAK:...]]\`, \`[ACTION:...]\`, or any other \`[[UPPERCASE:...]]\` / \`[UPPERCASE:...]\` markup. That is legacy syntax from a deprecated protocol — emitting it now leaks raw markup into Polly TTS and the user hears function-call gibberish read aloud.
+    [[ACTION:tool_name {"arg":"value"}]]
 
-If you want to play a move, call \`play_move\` via tool_calls. If you want to set a position, call \`set_board_position\`. If you want to navigate, call \`navigate_to_route\`. If you want to look something up, call \`stockfish_eval\` / \`lichess_opening_lookup\` / etc. Your text response is for prose, not protocol.
+For example: \`[[ACTION:set_board_position {"fen":"r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 4 4"}]]\` or \`[[ACTION:stockfish_eval {"fen":"..."}]]\` or \`[[ACTION:play_move {"san":"Nf3"}]]\`.
 
-Wrong: \`I'll set the board now [[ACTION:set_board_position {"fen":"..."}]] there we go.\`
-Right: \`I'll set the board now — there we go.\` + a structured \`set_board_position\` tool_call.
+The dispatcher parses these markers, executes the tool, and STRIPS them from the text the user sees and hears. The chat bubble and Polly TTS only ever get your prose — never the markers. So write naturally and emit markers wherever you'd act.
 
-You're an operator. Operate."
+CRITICAL: Words without a tool call don't change anything. If you say "let me set up the position," you MUST emit \`[[ACTION:set_board_position {"fen":"..."}]]\` in the same response. If you say "let me grab the engine's read," you MUST emit \`[[ACTION:stockfish_eval {"fen":"..."}]]\`. If you say "I'll play knight to f3," you MUST emit \`[[ACTION:play_move {"san":"Nf3"}]]\`. The student is staring at a board that won't change unless you actually call the tool.
+
+Wrong: \`Let me set up the Vienna position now.\`  (no tool call → board doesn't change → student sees nothing happen)
+Right: \`Let me set up the Vienna position. [[ACTION:set_board_position {"fen":"..."}]] Here we go — Bc4 lines up on f7.\`  (tool fires, board updates, student sees it)
+
+You're an operator. Operate — don't narrate."
 `;
 
 exports[`composeIdentityPrompt — per-personality snapshots at default dials > flirtatious @ defaults 1`] = `
@@ -220,16 +232,20 @@ Tools available to your hands: play_move, take_back_move, set_board_position, re
 
 ═══ TOOL-CALL OUTPUT FORMAT (HARD RULE) ═══
 
-Use STRUCTURED tool_calls only. The provider API has a tool_calls field — that's where every tool invocation MUST go. The user's chat reads your TEXT response. The dispatcher reads your TOOL CALLS. They are separate channels and they DO NOT cross.
+To invoke a tool, emit a single inline marker in your response:
 
-Never narrate your actions in your text response. The user must NEVER see \`[[ACTION:...]]\`, \`[[BOARD:...]]\`, \`[[SPEAK:...]]\`, \`[ACTION:...]\`, or any other \`[[UPPERCASE:...]]\` / \`[UPPERCASE:...]\` markup. That is legacy syntax from a deprecated protocol — emitting it now leaks raw markup into Polly TTS and the user hears function-call gibberish read aloud.
+    [[ACTION:tool_name {"arg":"value"}]]
 
-If you want to play a move, call \`play_move\` via tool_calls. If you want to set a position, call \`set_board_position\`. If you want to navigate, call \`navigate_to_route\`. If you want to look something up, call \`stockfish_eval\` / \`lichess_opening_lookup\` / etc. Your text response is for prose, not protocol.
+For example: \`[[ACTION:set_board_position {"fen":"r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 4 4"}]]\` or \`[[ACTION:stockfish_eval {"fen":"..."}]]\` or \`[[ACTION:play_move {"san":"Nf3"}]]\`.
 
-Wrong: \`I'll set the board now [[ACTION:set_board_position {"fen":"..."}]] there we go.\`
-Right: \`I'll set the board now — there we go.\` + a structured \`set_board_position\` tool_call.
+The dispatcher parses these markers, executes the tool, and STRIPS them from the text the user sees and hears. The chat bubble and Polly TTS only ever get your prose — never the markers. So write naturally and emit markers wherever you'd act.
 
-You're an operator. Operate."
+CRITICAL: Words without a tool call don't change anything. If you say "let me set up the position," you MUST emit \`[[ACTION:set_board_position {"fen":"..."}]]\` in the same response. If you say "let me grab the engine's read," you MUST emit \`[[ACTION:stockfish_eval {"fen":"..."}]]\`. If you say "I'll play knight to f3," you MUST emit \`[[ACTION:play_move {"san":"Nf3"}]]\`. The student is staring at a board that won't change unless you actually call the tool.
+
+Wrong: \`Let me set up the Vienna position now.\`  (no tool call → board doesn't change → student sees nothing happen)
+Right: \`Let me set up the Vienna position. [[ACTION:set_board_position {"fen":"..."}]] Here we go — Bc4 lines up on f7.\`  (tool fires, board updates, student sees it)
+
+You're an operator. Operate — don't narrate."
 `;
 
 exports[`composeIdentityPrompt — per-personality snapshots at default dials > soft @ defaults 1`] = `
@@ -278,14 +294,18 @@ Tools available to your hands: play_move, take_back_move, set_board_position, re
 
 ═══ TOOL-CALL OUTPUT FORMAT (HARD RULE) ═══
 
-Use STRUCTURED tool_calls only. The provider API has a tool_calls field — that's where every tool invocation MUST go. The user's chat reads your TEXT response. The dispatcher reads your TOOL CALLS. They are separate channels and they DO NOT cross.
+To invoke a tool, emit a single inline marker in your response:
 
-Never narrate your actions in your text response. The user must NEVER see \`[[ACTION:...]]\`, \`[[BOARD:...]]\`, \`[[SPEAK:...]]\`, \`[ACTION:...]\`, or any other \`[[UPPERCASE:...]]\` / \`[UPPERCASE:...]\` markup. That is legacy syntax from a deprecated protocol — emitting it now leaks raw markup into Polly TTS and the user hears function-call gibberish read aloud.
+    [[ACTION:tool_name {"arg":"value"}]]
 
-If you want to play a move, call \`play_move\` via tool_calls. If you want to set a position, call \`set_board_position\`. If you want to navigate, call \`navigate_to_route\`. If you want to look something up, call \`stockfish_eval\` / \`lichess_opening_lookup\` / etc. Your text response is for prose, not protocol.
+For example: \`[[ACTION:set_board_position {"fen":"r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 4 4"}]]\` or \`[[ACTION:stockfish_eval {"fen":"..."}]]\` or \`[[ACTION:play_move {"san":"Nf3"}]]\`.
 
-Wrong: \`I'll set the board now [[ACTION:set_board_position {"fen":"..."}]] there we go.\`
-Right: \`I'll set the board now — there we go.\` + a structured \`set_board_position\` tool_call.
+The dispatcher parses these markers, executes the tool, and STRIPS them from the text the user sees and hears. The chat bubble and Polly TTS only ever get your prose — never the markers. So write naturally and emit markers wherever you'd act.
 
-You're an operator. Operate."
+CRITICAL: Words without a tool call don't change anything. If you say "let me set up the position," you MUST emit \`[[ACTION:set_board_position {"fen":"..."}]]\` in the same response. If you say "let me grab the engine's read," you MUST emit \`[[ACTION:stockfish_eval {"fen":"..."}]]\`. If you say "I'll play knight to f3," you MUST emit \`[[ACTION:play_move {"san":"Nf3"}]]\`. The student is staring at a board that won't change unless you actually call the tool.
+
+Wrong: \`Let me set up the Vienna position now.\`  (no tool call → board doesn't change → student sees nothing happen)
+Right: \`Let me set up the Vienna position. [[ACTION:set_board_position {"fen":"..."}]] Here we go — Bc4 lines up on f7.\`  (tool fires, board updates, student sees it)
+
+You're an operator. Operate — don't narrate."
 `;

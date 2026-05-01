@@ -57,7 +57,7 @@ describe('composeIdentityPrompt — invariants', () => {
       });
       expect(prompt).toMatch(/OPERATOR MODE/);
       expect(prompt).toMatch(/Three hard rules that override anything else/);
-      expect(prompt).toMatch(/You're an operator\. Operate\./);
+      expect(prompt).toMatch(/You're an operator\. Operate/);
     }
   });
 

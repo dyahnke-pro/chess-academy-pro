@@ -107,6 +107,27 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
   });
 
+  it('forces the Anthropic provider for every coachService.ask call (Learn-only routing)', async () => {
+    vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
+      options?.onChunk?.('Pulling the position.');
+      return { text: 'Pulling the position.', toolCallIds: [], provider: 'anthropic' };
+    });
+
+    render(<CoachTeachPage />);
+
+    await waitFor(() => {
+      expect(coachService.ask).toHaveBeenCalled();
+    }, { timeout: 4000 });
+
+    // Every call from /coach/teach must pin Anthropic via providerOverride.
+    // DeepSeek stays the global default; Learn is the only surface that
+    // upgrades to Sonnet/Haiku.
+    for (const call of vi.mocked(coachService.ask).mock.calls) {
+      const opts = call[1] as { providerOverride?: { name: string } } | undefined;
+      expect(opts?.providerOverride?.name).toBe('anthropic');
+    }
+  });
+
   it('flushes the trailing fragment through speakForced when the response ends mid-sentence-buffer', async () => {
     // Final ".finally" tail: a chunk arriving without a sentence
     // terminator must still be spoken on flush.
