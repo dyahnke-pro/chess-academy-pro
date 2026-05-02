@@ -123,7 +123,57 @@ const OFFLINE_FALLBACKS: Record<string, string> = {
 interface ProviderConfig {
   provider: AiProvider;
   apiKey: string;
+  /** User-selected per-category model overrides from Settings →
+   *  Provider Settings (preferredModel.commentary / .analysis /
+   *  .reports). When unset, falls back to the per-task defaults in
+   *  ANTHROPIC_MODEL_MAP / DEEPSEEK_MODEL_MAP. Lets the user pin
+   *  Opus for thinking + Haiku for short prose without us hard-coding
+   *  the choice. */
+  preferredModel?: { commentary: string; analysis: string; reports: string };
 }
+
+/** Maps each `CoachTask` to one of three user-facing categories so the
+ *  preferredModel preference (Settings → Provider) actually flows
+ *  through to the wire. Today every Anthropic call hardcoded Sonnet 4.6
+ *  via ANTHROPIC_MODEL_MAP regardless of what the user picked — this
+ *  is the bridge.
+ *
+ *  - 'commentary' → quick, high-frequency prose (per-move chat,
+ *    hint, puzzle reaction, intent classification, smart-search
+ *    autocomplete). The "language center."
+ *  - 'analysis'   → reasoning-heavy turns (the chat brain, position
+ *    deep-dives, opening overviews, plan generation, /coach/teach
+ *    lesson turns). The "thought process."
+ *  - 'reports'    → rare deep artifacts read as references (weakness
+ *    report, weekly digest, deep_analysis, bad-habit summary).
+ */
+const TASK_CATEGORY: Record<CoachTask, 'commentary' | 'analysis' | 'reports'> = {
+  move_commentary:           'commentary',
+  hint:                      'commentary',
+  puzzle_feedback:           'commentary',
+  game_commentary:           'commentary',
+  game_opening_line:         'commentary',
+  whatif_commentary:         'commentary',
+  game_narrative_summary:    'commentary',
+  sideline_explanation:      'commentary',
+  smart_search:              'commentary',
+  explore_reaction:          'commentary',
+  intent_classify:           'commentary',
+  interactive_review:        'commentary',
+  chat_response:             'analysis',
+  position_analysis_chat:    'analysis',
+  opening_overview:          'analysis',
+  game_post_review:          'analysis',
+  post_game_analysis:        'analysis',
+  daily_lesson:              'analysis',
+  session_plan_generation:   'analysis',
+  model_game_annotation:     'analysis',
+  middlegame_plan_generation:'analysis',
+  bad_habit_report:          'reports',
+  weakness_report:           'reports',
+  weekly_report:             'reports',
+  deep_analysis:             'reports',
+};
 
 // Embedded keys (split + reversed) — assembled at runtime as fallback
 const _P = ['AAg3tjc6-QloxqPVoiya_sIlFe1BjOsVJGQz', 'vBBV66KIx6FbPmIuCxO1TLStej-Kt44jL5DD', 'UB9cvx5Mx30pFR0x3xVYmg8-30ipa-tna-ks'];
@@ -155,10 +205,12 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
       ? 'anthropic'
       : (profile?.preferences.aiProvider ?? 'deepseek');
 
+    const preferredModel = profile?.preferences.preferredModel;
+
     if (provider === 'anthropic') {
-      if (anthropicEnvKey) return { provider, apiKey: anthropicEnvKey };
+      if (anthropicEnvKey) return { provider, apiKey: anthropicEnvKey, preferredModel };
       if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
-        if (deepseekEnvKey) return { provider: 'deepseek', apiKey: deepseekEnvKey };
+        if (deepseekEnvKey) return { provider: 'deepseek', apiKey: deepseekEnvKey, preferredModel };
         return null;
       }
       const { decryptApiKey } = await import('./cryptoService');
@@ -166,11 +218,11 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
         profile.preferences.anthropicApiKeyEncrypted,
         profile.preferences.anthropicApiKeyIv,
       );
-      return { provider, apiKey };
+      return { provider, apiKey, preferredModel };
     } else {
-      if (deepseekEnvKey) return { provider, apiKey: deepseekEnvKey };
+      if (deepseekEnvKey) return { provider, apiKey: deepseekEnvKey, preferredModel };
       if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
-        if (anthropicEnvKey) return { provider: 'anthropic', apiKey: anthropicEnvKey };
+        if (anthropicEnvKey) return { provider: 'anthropic', apiKey: anthropicEnvKey, preferredModel };
         return null;
       }
       const { decryptApiKey } = await import('./cryptoService');
@@ -178,7 +230,7 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
         profile.preferences.apiKeyEncrypted,
         profile.preferences.apiKeyIv,
       );
-      return { provider, apiKey };
+      return { provider, apiKey, preferredModel };
     }
   } catch {
     return null;
@@ -193,9 +245,10 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
 async function getForcedProviderConfig(provider: AiProvider): Promise<ProviderConfig | null> {
   try {
     const profile = await db.profiles.get('main');
+    const preferredModel = profile?.preferences.preferredModel;
     if (provider === 'anthropic') {
       const envKey = getAnthropicKey();
-      if (envKey) return { provider, apiKey: envKey };
+      if (envKey) return { provider, apiKey: envKey, preferredModel };
       if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
         return null;
       }
@@ -204,10 +257,10 @@ async function getForcedProviderConfig(provider: AiProvider): Promise<ProviderCo
         profile.preferences.anthropicApiKeyEncrypted,
         profile.preferences.anthropicApiKeyIv,
       );
-      return { provider, apiKey };
+      return { provider, apiKey, preferredModel };
     } else {
       const envKey = getDeepseekKey();
-      if (envKey) return { provider, apiKey: envKey };
+      if (envKey) return { provider, apiKey: envKey, preferredModel };
       if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
         return null;
       }
@@ -216,7 +269,7 @@ async function getForcedProviderConfig(provider: AiProvider): Promise<ProviderCo
         profile.preferences.apiKeyEncrypted,
         profile.preferences.apiKeyIv,
       );
-      return { provider, apiKey };
+      return { provider, apiKey, preferredModel };
     }
   } catch {
     return null;
@@ -241,7 +294,34 @@ function getFallbackConfig(failedProvider: AiProvider): ProviderConfig | null {
   }
 }
 
-function getModel(task: CoachTask, provider: AiProvider): string {
+function getModel(
+  task: CoachTask,
+  provider: AiProvider,
+  preferredModel?: ProviderConfig['preferredModel'],
+): string {
+  // 1. Honor the user's per-category preference from Settings →
+  //    Provider when set. This is what makes "Opus for analysis,
+  //    Haiku for commentary" actually flow through to the wire —
+  //    until this layer existed, every Anthropic call was hardcoded
+  //    to ANTHROPIC_MODEL_MAP[task] regardless of Settings.
+  // 2. Validate that the preferred model is compatible with the
+  //    active provider — Anthropic models start with "claude-",
+  //    DeepSeek models start with "deepseek-". If the user picked
+  //    an Anthropic model but we're falling back to DeepSeek (or
+  //    vice versa), use the per-task default for the active provider
+  //    so we don't send a "claude-opus-4-6" string to DeepSeek.
+  if (preferredModel) {
+    const category = TASK_CATEGORY[task];
+    const userChoice = preferredModel[category];
+    if (userChoice) {
+      const isAnthropicModel = userChoice.startsWith('claude-');
+      const isDeepSeekModel = userChoice.startsWith('deepseek-');
+      const compatible =
+        (provider === 'anthropic' && isAnthropicModel) ||
+        (provider === 'deepseek' && isDeepSeekModel);
+      if (compatible) return userChoice;
+    }
+  }
   return provider === 'anthropic'
     ? ANTHROPIC_MODEL_MAP[task]
     : DEEPSEEK_MODEL_MAP[task];
@@ -424,7 +504,25 @@ async function callChatWithConfig(
   task: CoachTask = 'chat_response',
   maxTokens: number = 1024,
 ): Promise<string> {
-  const model = getModel(task, config.provider);
+  const model = getModel(task, config.provider, config.preferredModel);
+  // Audit which model actually went out on the wire so you can verify
+  // Settings → preferredModel is being honored. Joins to brain trips
+  // by timestamp.
+  void import('./appAuditor').then(({ logAppAudit }) => {
+    void logAppAudit({
+      kind: 'coach-llm-model-selected',
+      category: 'subsystem',
+      source: 'coachApi.callChatWithConfig',
+      summary: `task=${task} category=${TASK_CATEGORY[task]} model=${model} provider=${config.provider}`,
+      details: JSON.stringify({
+        task,
+        category: TASK_CATEGORY[task],
+        model,
+        provider: config.provider,
+        userPick: config.preferredModel?.[TASK_CATEGORY[task]] ?? null,
+      }),
+    });
+  }).catch(() => undefined);
   if (config.provider === 'anthropic') {
     if (onStream) {
       return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, maxTokens, onStream);
@@ -509,7 +607,7 @@ async function callCommentaryWithConfig(
   systemPrompt: string,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  const model = getModel(task, config.provider);
+  const model = getModel(task, config.provider, config.preferredModel);
   if (config.provider === 'anthropic') {
     const messages: { role: 'user' | 'assistant'; content: string }[] = [
       { role: 'user', content: userMessage },

@@ -106,6 +106,7 @@ export type AuditKind =
   | 'coach-brain-envelope-assembled'
   | 'coach-brain-provider-called'
   | 'coach-brain-tool-called'
+  | 'coach-llm-model-selected'
   | 'coach-brain-intent-routed'
   | 'coach-intent-router-input'
   | 'coach-brain-tool-parse-result'

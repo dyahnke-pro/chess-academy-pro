@@ -426,40 +426,44 @@ export function CoachTeachPage(): JSX.Element {
         });
       }
 
-      setKickoffStatus({ label: 'Loading your weakness profile…', step: 3, total: 4 });
-      const summaryLines: string[] = [];
-      if (recent.length > 0) {
-        summaryLines.push(`Recent games (${recent.length}):`);
-        for (const g of recent) {
-          const opening = g.openingId || g.eco || 'unknown opening';
-          const result = g.result ?? 'unknown';
-          const playerColor = g.white === activeProfile.name ? 'white' : 'black';
-          summaryLines.push(`- ${opening} as ${playerColor}, result: ${result}`);
-        }
-      } else {
-        summaryLines.push('Student has no completed games yet.');
-      }
-      const prefs = activeProfile.preferences;
-      // weaknessProfile stored on prefs as freeform notes — pass through.
-      const weakness = (prefs as { weaknessProfile?: { weaknesses?: string[] } }).weaknessProfile;
-      if (weakness?.weaknesses && weakness.weaknesses.length > 0) {
-        summaryLines.push(`Weakness profile: ${weakness.weaknesses.slice(0, 5).join(', ')}`);
-      }
-      summaryLines.push(`Rating: ${activeProfile.currentRating ?? 'unknown'}.`);
+      // Game pulling + analysis above is kept as a cache-warmer: it
+      // populates the stockfish cache with the student's recent games
+      // so the brain's first eval call during the lesson lands in
+      // ms instead of seconds. The OLD code also built a summaryLines
+      // block to seed the kickoff prompt with "you played the Vienna
+      // 5x" stats; that prompt is gone now (canned greeting below) so
+      // the summaryLines computation is gone too. Recent-game context
+      // still reaches the brain organically through coach memory on
+      // the first real round-trip.
 
-      // The lesson IS a game from the starting position. Kickoff is a
-      // single short greeting — no lesson plan, no past-games stats.
-      // Student plays White (first move), coach plays Black, coach
-      // reacts in ≤15 words per turn and plays the response via
-      // play_move. The detailed shape lives in OPERATOR_BASE_BODY's
-      // teaching mode rules; the kickoff just asks for the opener.
-      const kickoffAsk = `The student just walked into your classroom for a guided opening lesson. The board is the starting position; they play White, you play Black. Greet them in ONE short sentence (≤12 words) and prompt them to play their first move. No lesson plan, no past-games stats, no bullet points. Just the greeting.\n\nFor your context only (do NOT cite aloud): rating ${activeProfile.currentRating}${summaryLines.length > 0 ? `, recent: ${summaryLines.slice(0, 3).join('; ')}` : ''}.`;
-
-      setKickoffStatus({ label: 'Coach is ready to play…', step: 4, total: 4 });
-      // Pipe kickoff through handleSubmit with the kickoff flag so it
-      // uses the same streaming TTS + tool callbacks but doesn't
-      // render the system-flavored ask as a student turn.
-      void handleSubmit(kickoffAsk, { kickoff: true });
+      // Hard-coded welcome line. Skipping the LLM here means:
+      //   (a) the student always hears the SAME greeting (canon),
+      //   (b) no token spend on a deterministic line,
+      //   (c) the brain doesn't get a chance to ramble before the
+      //       student's first input — they speak first now.
+      // The greeting is appended to the transcript, voiced through
+      // the same Polly pipeline as any other coach turn, and seeded
+      // into conversation memory so the brain knows the greeting
+      // already happened on the next round-trip.
+      const welcomeLine = 'Welcome to my classroom — what would you like to learn today?';
+      setKickoffStatus(null);
+      const turnId = `t-${Date.now()}-welcome`;
+      setMessages((prev) => [...prev, {
+        id: `${turnId}-c`,
+        role: 'assistant',
+        content: welcomeLine,
+        timestamp: Date.now(),
+      }]);
+      useCoachMemoryStore.getState().appendConversationMessage({
+        surface: 'chat-teach',
+        role: 'coach',
+        text: welcomeLine,
+        fen: gameRef.current.fen,
+        trigger: null,
+      });
+      voiceService.stop();
+      speechChainRef.current = Promise.resolve(voiceService.speakForcedPollyOnly(welcomeLine))
+        .catch(() => undefined);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeProfile]);
