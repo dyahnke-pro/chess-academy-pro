@@ -521,7 +521,17 @@ class VoiceService {
    *  the primary speak path if no prefs are loaded. */
   async speakAlert(text: string): Promise<void> {
     this.logSpeakInvoked('speakAlert', text);
-    return this.speakInternal(sanitizeForTTS(text), false, { useSecondary: true });
+    // WO-VOICE-LAYER-01 (b) was originally meant to give tactic alerts
+    // a different timbre via a SECONDARY voice. Production audit
+    // (build 06b6d5d) showed users hearing "two voices" — the regular
+    // coach voice AND the alert voice — which reads as a second
+    // character chiming in rather than a coach with a single voice.
+    // Drop the secondary-voice override; alerts now use the same
+    // primary personality voice as everything else. The
+    // PERSONALITY_SECONDARY_VOICE_DEFAULTS map + supporting state
+    // is left in place in case we revisit this with a clearer UX
+    // signal (e.g. a distinct chime *before* the alert plays).
+    return this.speakInternal(sanitizeForTTS(text), false, { useSecondary: false });
   }
 
   /** Low-latency speak for training modes — skips Polly/voice-packs and DB reads.
