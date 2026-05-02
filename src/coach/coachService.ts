@@ -302,14 +302,22 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   let lastResponse: ProviderResponse = { text: '', toolCalls: [] };
 
   for (let trip = 1; trip <= maxRoundTrips; trip++) {
-    // Refresh liveFen between trips. After trip 1 successfully calls
-    // play_move, the board has moved on — trip 2's tool validation
-    // (chess.js .move() in playMoveTool) needs the post-move FEN or
-    // it'll reject the brain's next attempt as "wrong side to move."
-    // Production audit (build 38d4ace) showed the brain playing Nf6
-    // for black, then trying to play another black move 4 trips in a
-    // row because liveFen never advanced past the pre-Nf6 position.
-    if (options.getLiveFen) {
+    // Refresh liveFen between trips ONLY (trip > 1). Trip 1 uses the
+    // surface-supplied `input.liveState.fen` already wired into
+    // ctx.liveFen above — that value carries the surface's authoritative
+    // FEN at ask time, including any explicit fenOverride
+    // handleStudentMove passed for the post-board-move case. Calling
+    // getLiveFen on trip 1 would clobber the correct override with a
+    // stale ref value because React hasn't re-rendered yet at the
+    // moment coachService.ask runs synchronously inside the same
+    // event-handler tick (production audit, build 5df4252: brain saw
+    // post-e4 FEN at envelope assembly but starting-position FEN at
+    // playMoveTool validation, rejecting "e5" as illegal for white).
+    // From trip 2 on, the surface has long since re-rendered AND the
+    // brain itself may have played a move via play_move, so the latest
+    // gameRef value is the truth and the refresh is what keeps
+    // chess.js validation in sync with the live board.
+    if (trip > 1 && options.getLiveFen) {
       const fresh = options.getLiveFen();
       if (fresh) ctx.liveFen = fresh;
     }
