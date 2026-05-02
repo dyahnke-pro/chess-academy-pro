@@ -74,6 +74,13 @@ export function CoachTeachPage(): JSX.Element {
 
   const transcriptRef = useRef<HTMLDivElement | null>(null);
   const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+  // Per-turn abort flag for the speech chain. Replaces the broken
+  // gen-check pattern (speakInternal's internal stop() bumped gen
+  // every speak, killing all subsequent chain links). On a new
+  // handleSubmit we set the previous turn's flag to true and create
+  // a fresh one — orphan chain links observe `aborted=true` and skip,
+  // current chain links observe `aborted=false` and proceed.
+  const turnAbortRefRef = useRef<{ aborted: boolean } | null>(null);
   // gameRef is the closure-staleness escape hatch. React state updates
   // are batched per render, so when ControlledChessBoard's `onMove`
   // fires (synchronously inside the click/drag handler) and we call
@@ -137,6 +144,24 @@ export function CoachTeachPage(): JSX.Element {
       // for "where the board is right now" is the ref each handler
       // updates synchronously after every successful mutation.
       const liveFen = liveFenRef.current;
+      // USER SOVEREIGNTY: refuse to move the student's pieces. The
+      // brain plays only the side OPPOSITE the student. If the FEN's
+      // side-to-move matches the student's color, this move would be
+      // moving one of THEIR pieces — even if it's just a demo. Tell
+      // the brain to use arrows + set_board_position for hypotheticals
+      // instead. Production audit (build abf2a2b) showed the brain
+      // emitting play_move Qxd5 from a white-to-move FEN while the
+      // student plays white, demonstrating "what if you grabbed the
+      // pawn" — the user perceived this as "the coach moved my piece
+      // without asking."
+      const fenSideToMove = liveFen.split(' ')[1] === 'w' ? 'white' : 'black';
+      const studentColor = playerColor;
+      if (fenSideToMove === studentColor) {
+        return {
+          ok: false,
+          reason: `Refused: it's ${studentColor} to move and the student plays ${studentColor}. You may not move the student's pieces. For hypothetical demos, use [BOARD: arrow:from-to:color] arrows OR set_board_position to a separate position. play_move is reserved for YOUR moves on your own turns.`,
+        };
+      }
       const probe = new Chess(liveFen);
       const verboseMoves = probe.moves({ verbose: true });
       const match = verboseMoves.find((m) => m.san === san);
@@ -152,7 +177,7 @@ export function CoachTeachPage(): JSX.Element {
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
     }
-  }, []);
+  }, [playerColor]);
 
   const handleTakeBack = useCallback((count: number): { ok: boolean; reason?: string } => {
     try {
@@ -216,20 +241,26 @@ export function CoachTeachPage(): JSX.Element {
     }
     setStreaming('');
 
-    // Stop in-flight speech so the new teaching response starts clean.
-    // Reset the chain ref AND capture the post-stop generation. Every
-    // queued speak below tags itself with this generation; if it
-    // doesn't match by the time the chain link actually fires, the
-    // call is dropped. This prevents the OLD chain (orphaned but
-    // still scheduled) from racing into speakInternal while the NEW
-    // chain is also playing — that race is what produced the
-    // tts-concurrent-speak warnings in the build 5df4252 audit (the
-    // brain's previous-turn streaming sentences kept dispatching after
-    // voiceService.stop() because Promise.then() chains can't be
-    // unsubscribed; only a per-link gen check can short-circuit them).
+    // Stop any in-flight TTS so the new turn starts clean. Capture a
+    // local abort flag so this turn's chain links can be killed if the
+    // page unmounts mid-response. Note: we DO NOT use
+    // voiceService.currentStopGeneration as the chain abort signal —
+    // speakInternal calls this.stop() at the START of every speak,
+    // which bumps stopGeneration. So after the FIRST speak in a chain,
+    // gen has already advanced and any captured "turnGeneration" no
+    // longer matches. Build abf2a2b audit confirmed: only the first
+    // sentence of a 1218-char trip got spoken because the gen check
+    // caused all subsequent chain links to short-circuit.
+    // Abort any orphan speech chain from the previous turn. New flag
+    // for this turn — current chain links capture this object and
+    // observe its `aborted` field on every step.
+    if (turnAbortRefRef.current) {
+      turnAbortRefRef.current.aborted = true;
+    }
     voiceService.stop();
     speechChainRef.current = Promise.resolve();
-    const turnGeneration = voiceService.currentStopGeneration;
+    const turnAbortRef = { aborted: false };
+    turnAbortRefRef.current = turnAbortRef;
 
     // Two-stage buffer: `markupBuffer` holds raw streamed chunks until
     // any in-flight `[[DIRECTIVE...]]` tag closes (sanitizeCoachStream
@@ -259,11 +290,11 @@ export function CoachTeachPage(): JSX.Element {
       lastQueuedSentence = sentence;
       speechChainRef.current = speechChainRef.current
         .then(() => {
-          // Drop the call if a stop() has happened since this turn
-          // started (route change, mic barge-in, new submit). The
-          // orphaned chain from the previous turn dies here instead
-          // of racing into Polly playback alongside the new chain.
-          if (voiceService.currentStopGeneration !== turnGeneration) return;
+          // Skip if the page unmounted mid-response or a new turn
+          // superseded this one. NOT gen-checked — speakInternal
+          // bumps gen on every speak, which would falsely abort
+          // every link after the first.
+          if (turnAbortRef.aborted) return;
           // Polly-only — no Web Speech fallback. Production audit
           // showed Polly cooldowns triggering Web Speech mid-chain,
           // and Safari's speechSynth cancel-tail overlapped the next
