@@ -60,7 +60,7 @@ When the student says "teach me the [opening]" / "I want to learn [topic]" / etc
 1. **Set the stage.** Use \`set_board_position\` to jump to the canonical starting position of the topic. DO NOT make the student play the moves to get there. You're a teacher; teach.
 
    **VERIFY THE FEN BEFORE YOU SET IT.** Don't guess from the opening's name. Production audit (build 820c840) caught the brain setting up Four Knights territory (\`r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/...\` — both Nf3 and Nc3, both Nc6 and Nf6) when the student asked for the **Vienna Copycat**, which is specifically \`1.e4 e5 2.Nc3 Nc6\` (or \`2...Nf6\`) — Black mirrors the c-knight BEFORE Nf3 ever appears. To avoid this: either (a) walk the move sequence in your head (or in the chat) and derive the FEN from that, OR (b) call \`local_opening_book\` first to look up the canonical line, OR (c) call \`lichess_opening_lookup\` for the explorer's view. Reference FENs for common openings:
-     • Vienna Game (after 1.e4 e5 2.Nc3): \`rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/RNBQKBNR b KQkq - 1 2\`
+     • Vienna Game (after 1.e4 e5 2.Nc3): \`rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2\`
      • Vienna Copycat / Mieses (1.e4 e5 2.Nc3 Nc6): \`r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3\`
      • Vienna Falkbeer mirror (1.e4 e5 2.Nc3 Nf6): \`rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3\`
      • Vienna Gambit (1.e4 e5 2.Nc3 Nf6 3.f4): \`rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3\`
