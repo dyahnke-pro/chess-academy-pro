@@ -3,15 +3,18 @@ import {
   fetchLichessExplorer,
   fetchCloudEval,
   formatCloudEval,
+  _resetLichessCircuitBreaker,
 } from './lichessExplorerService';
 
 describe('lichessExplorerService', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    _resetLichessCircuitBreaker();
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    _resetLichessCircuitBreaker();
   });
 
   describe('fetchLichessExplorer', () => {
@@ -75,6 +78,82 @@ describe('lichessExplorerService', () => {
       const url = fetchSpy.mock.calls[0][0] as string;
       expect(url).toContain('speeds=');
       expect(url).toContain('ratings=');
+    });
+  });
+
+  describe('circuit breaker', () => {
+    it('opens after 3 consecutive failures and short-circuits the next call', async () => {
+      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+        ok: false,
+        status: 401,
+        text: () => Promise.resolve('nginx 401'),
+      } as Response);
+      for (let i = 0; i < 3; i += 1) {
+        await expect(fetchLichessExplorer('fen')).rejects.toThrow('Explorer API error: 401');
+      }
+      await expect(fetchLichessExplorer('fen')).rejects.toThrow('lichess-explorer-circuit-open');
+      expect(fetchSpy).toHaveBeenCalledTimes(3);
+    });
+
+    it('auto-resets after CIRCUIT_RESET_AFTER_MS so a transient outage does not block the rest of the session', async () => {
+      vi.useFakeTimers();
+      try {
+        vi.setSystemTime(new Date('2026-05-02T12:00:00Z'));
+        const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+          ok: false,
+          status: 401,
+          text: () => Promise.resolve('nginx 401'),
+        } as Response);
+        for (let i = 0; i < 3; i += 1) {
+          await expect(fetchLichessExplorer('fen')).rejects.toThrow('Explorer API error: 401');
+        }
+        await expect(fetchLichessExplorer('fen')).rejects.toThrow('lichess-explorer-circuit-open');
+        expect(fetchSpy).toHaveBeenCalledTimes(3);
+
+        vi.setSystemTime(new Date('2026-05-02T12:02:01Z'));
+        fetchSpy.mockResolvedValueOnce({
+          ok: true,
+          json: () =>
+            Promise.resolve({ white: 0, draws: 0, black: 0, moves: [], topGames: [], opening: null }),
+        } as Response);
+        const result = await fetchLichessExplorer('fen');
+        expect(result.moves).toEqual([]);
+        expect(fetchSpy).toHaveBeenCalledTimes(4);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('resets immediately on a successful fetch', async () => {
+      const fetchSpy = vi
+        .spyOn(globalThis, 'fetch')
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 401,
+          text: () => Promise.resolve('nginx 401'),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 401,
+          text: () => Promise.resolve('nginx 401'),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () =>
+            Promise.resolve({ white: 0, draws: 0, black: 0, moves: [], topGames: [], opening: null }),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 401,
+          text: () => Promise.resolve('nginx 401'),
+        } as Response);
+
+      await expect(fetchLichessExplorer('fen')).rejects.toThrow('Explorer API error: 401');
+      await expect(fetchLichessExplorer('fen')).rejects.toThrow('Explorer API error: 401');
+      const ok = await fetchLichessExplorer('fen');
+      expect(ok.moves).toEqual([]);
+      await expect(fetchLichessExplorer('fen')).rejects.toThrow('Explorer API error: 401');
+      expect(fetchSpy).toHaveBeenCalledTimes(4);
     });
   });
 
