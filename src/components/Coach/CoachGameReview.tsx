@@ -610,6 +610,32 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       fen: fenForQ,
       trigger: null,
     });
+
+    // WO-REVIEW-MERGE: per-turn voice marker extraction. The brain's
+    // REVIEW_MODE_ADDITION asks for one `[VOICE: ...]` per response;
+    // we capture the first closed marker as it streams and speak it
+    // via Polly so the surface matches the /coach/teach voice cue.
+    let voiceRawBuffer = '';
+    let voiceSpokenForTurn = false;
+    const VOICE_MARKER_RE = /\[VOICE:\s*([\s\S]*?)\]/g;
+    const tryExtractVoiceMarker = (): void => {
+      if (voiceSpokenForTurn) return;
+      VOICE_MARKER_RE.lastIndex = 0;
+      const match = VOICE_MARKER_RE.exec(voiceRawBuffer);
+      if (!match) return;
+      const inner = match[1].trim();
+      if (!inner) return;
+      voiceSpokenForTurn = true;
+      void logAppAudit({
+        kind: 'coach-voice-marker-extracted',
+        category: 'subsystem',
+        source: 'CoachGameReview.tryExtractVoiceMarker',
+        summary: `extracted [VOICE: ...] block (${inner.length} chars)`,
+        details: JSON.stringify({ length: inner.length, preview: inner.slice(0, 80) }),
+      });
+      void voiceService.speakForcedPollyOnly(inner);
+    };
+
     void coachService
       .ask(
         { surface: 'review', ask: question, liveState: reviewLiveState },
@@ -621,9 +647,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           // chat got via the OPERATOR_BASE_BODY teaching directive.
           maxToolRoundTrips: 6,
           onChunk: (chunk: string) => {
-            if (!abortSignal.aborted) {
-              setAskResponse((prev: string | null) => (prev ?? '') + chunk);
-            }
+            if (abortSignal.aborted) return;
+            // WO-REVIEW-MERGE: extract `[VOICE: ...]` markers from the
+            // streamed response and route them to Polly. Mirrors the
+            // /coach/teach pattern so the new REVIEW_MODE_ADDITION's
+            // mandate ("emit one [VOICE: ...] per turn") actually
+            // produces spoken summaries here too. The marker text is
+            // also stripped from the chat display so the bubble shows
+            // clean prose instead of leaking the directive.
+            voiceRawBuffer += chunk;
+            tryExtractVoiceMarker();
+            const visible = chunk.replace(VOICE_MARKER_RE, '');
+            setAskResponse((prev: string | null) => (prev ?? '') + visible);
           },
           onNavigate: (path: string) => {
             void navigate(path);

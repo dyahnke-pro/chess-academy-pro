@@ -1,0 +1,263 @@
+/**
+ * CoachReviewSessionPage — review a previously played game with the
+ * teaching coach.
+ *
+ * The actual review surface IS the existing `CoachGameReview` — same
+ * layout, same big nav buttons, same eval bar, same MoveListPanel,
+ * same auto-review controls, same accuracy/material bars. We just
+ * adapt a `GameRecord` (chess.com / lichess / coach game) into the
+ * `CoachGameMove[] + KeyMoment[]` shape `CoachGameReview` already
+ * understands.
+ *
+ * The "new teaching style" merger is handled at the envelope level —
+ * `REVIEW_MODE_ADDITION` in `src/coach/envelope.ts` fires whenever
+ * `surface === 'review'`, so both the new picker entry point AND the
+ * post-game review path (after a finished coach game) get the same
+ * Stockfish-grounded, [VOICE: ...]-marker pedagogy automatically.
+ */
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
+import { Chess } from 'chess.js';
+import { CoachGameReview } from './CoachGameReview';
+import { db } from '../../db/schema';
+import { gameNeedsAnalysis, analyzeSingleGame } from '../../services/gameAnalysisService';
+import { useAppStore } from '../../stores/appStore';
+import { logAppAudit } from '../../services/appAuditor';
+import type {
+  GameRecord,
+  CoachGameMove,
+  KeyMoment,
+  MoveAnnotation,
+  MoveClassification,
+} from '../../types';
+
+interface AdaptedReviewProps {
+  moves: CoachGameMove[];
+  keyMoments: KeyMoment[];
+  playerColor: 'white' | 'black';
+  result: string;
+  openingName: string | null;
+  playerName: string;
+  playerRating: number;
+  opponentRating: number;
+  pgn: string;
+}
+
+const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+function inferPlayerColor(game: GameRecord, profileName?: string): 'white' | 'black' {
+  if (game.source === 'coach') {
+    if (game.black.toLowerCase().includes('coach') || game.black.toLowerCase().includes('bot')) {
+      return 'white';
+    }
+    if (game.white.toLowerCase().includes('coach') || game.white.toLowerCase().includes('bot')) {
+      return 'black';
+    }
+  }
+  if (profileName) {
+    const lower = profileName.toLowerCase();
+    if (game.white.toLowerCase().includes(lower)) return 'white';
+    if (game.black.toLowerCase().includes(lower)) return 'black';
+  }
+  return 'white';
+}
+
+function annotationFor(
+  annotations: MoveAnnotation[] | null,
+  moveNumber: number,
+  color: 'white' | 'black',
+): MoveAnnotation | null {
+  if (!annotations) return null;
+  return (
+    annotations.find((a) => a.moveNumber === moveNumber && a.color === color) ?? null
+  );
+}
+
+function adaptGameRecord(
+  game: GameRecord,
+  playerColor: 'white' | 'black',
+): AdaptedReviewProps | null {
+  const chess = new Chess();
+  try {
+    chess.loadPgn(game.pgn);
+  } catch {
+    return null;
+  }
+  const history = chess.history();
+  if (history.length === 0) return null;
+
+  // Re-walk to capture FEN after each ply.
+  const replay = new Chess();
+  const moves: CoachGameMove[] = [];
+  let prevEval: number | null = null;
+  for (let i = 0; i < history.length; i += 1) {
+    const san = history[i];
+    const moveResult = replay.move(san);
+    if (!moveResult) break;
+    const moveNumber = Math.floor(i / 2) + 1;
+    const color: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';
+    const annot = annotationFor(game.annotations, moveNumber, color);
+    const evaluation = annot?.evaluation ?? null;
+    const isCoachMove = color !== playerColor;
+    moves.push({
+      moveNumber,
+      san: moveResult.san,
+      fen: replay.fen(),
+      isCoachMove,
+      commentary: annot?.comment ?? '',
+      evaluation,
+      classification: (annot?.classification as MoveClassification | null) ?? null,
+      expanded: false,
+      bestMove: annot?.bestMove ?? null,
+      bestMoveEval: null,
+      preMoveEval: prevEval,
+    });
+    prevEval = evaluation;
+  }
+
+  const keyMoments: KeyMoment[] = (game.annotations ?? [])
+    .filter(
+      (a) =>
+        a.classification === 'blunder' ||
+        a.classification === 'brilliant' ||
+        a.classification === 'mistake',
+    )
+    .slice(0, 8)
+    .map((a) => {
+      const idx = (a.moveNumber - 1) * 2 + (a.color === 'white' ? 0 : 1);
+      const fen = moves[idx]?.fen ?? STARTING_FEN;
+      return {
+        moveNumber: a.moveNumber,
+        fen,
+        explanation: a.comment ?? '',
+        type:
+          a.classification === 'brilliant'
+            ? ('brilliant' as const)
+            : a.classification === 'blunder'
+            ? ('blunder' as const)
+            : ('turning_point' as const),
+      };
+    });
+
+  return {
+    moves,
+    keyMoments,
+    playerColor,
+    result: game.result,
+    openingName: game.eco ? `${game.eco}` : null,
+    playerName: playerColor === 'white' ? game.white : game.black,
+    playerRating: playerColor === 'white' ? game.whiteElo ?? 1500 : game.blackElo ?? 1500,
+    opponentRating: playerColor === 'white' ? game.blackElo ?? 1500 : game.whiteElo ?? 1500,
+    pgn: game.pgn,
+  };
+}
+
+export function CoachReviewSessionPage(): JSX.Element {
+  const navigate = useNavigate();
+  const { gameId } = useParams<{ gameId: string }>();
+  const { activeProfile } = useAppStore();
+  const [game, setGame] = useState<GameRecord | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load(): Promise<void> {
+      if (!gameId) {
+        setLoadError('No game id in URL.');
+        return;
+      }
+      try {
+        const rec = await db.games.get(gameId);
+        if (cancelled) return;
+        if (!rec) {
+          setLoadError('That game is no longer in your library.');
+          return;
+        }
+        setGame(rec);
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachReviewSessionPage.load',
+          summary: `loaded game id=${rec.id} source=${rec.source} moves=${rec.annotations?.length ?? 0}`,
+          details: JSON.stringify({ gameId, source: rec.source, fullyAnalyzed: rec.fullyAnalyzed }),
+        });
+        if (gameNeedsAnalysis(rec)) {
+          void (async () => {
+            try {
+              await analyzeSingleGame(rec.id);
+              const refreshed = await db.games.get(rec.id);
+              if (refreshed && !cancelled) setGame(refreshed);
+            } catch (err) {
+              void logAppAudit({
+                kind: 'lichess-error',
+                category: 'subsystem',
+                source: 'CoachReviewSessionPage.analyze',
+                summary: `analyzeSingleGame failed: ${err instanceof Error ? err.message : String(err)}`,
+                details: JSON.stringify({ gameId }),
+              });
+            }
+          })();
+        }
+      } catch (err) {
+        if (cancelled) return;
+        setLoadError(err instanceof Error ? err.message : String(err));
+      }
+    }
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [gameId]);
+
+  const playerColor = useMemo(
+    () => (game ? inferPlayerColor(game, activeProfile?.name) : 'white'),
+    [game, activeProfile?.name],
+  );
+
+  const adapted = useMemo(
+    () => (game ? adaptGameRecord(game, playerColor) : null),
+    [game, playerColor],
+  );
+
+  if (loadError) {
+    return (
+      <div className="flex flex-col items-center justify-center p-6 gap-3 flex-1">
+        <p className="text-sm text-red-400">{loadError}</p>
+        <button
+          onClick={() => navigate('/coach/review')}
+          className="px-3 py-1.5 rounded-lg bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 text-xs font-medium"
+        >
+          Back to game list
+        </button>
+      </div>
+    );
+  }
+
+  if (!game || !adapted) {
+    return (
+      <div className="flex items-center justify-center p-6 flex-1 gap-2 text-theme-text-muted text-sm">
+        <Loader2 size={16} className="animate-spin" /> Loading game…
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col md:flex-row flex-1 min-h-0">
+      <CoachGameReview
+        moves={adapted.moves}
+        keyMoments={adapted.keyMoments}
+        playerColor={adapted.playerColor}
+        result={adapted.result}
+        openingName={adapted.openingName}
+        playerName={adapted.playerName}
+        playerRating={adapted.playerRating}
+        opponentRating={adapted.opponentRating}
+        onPlayAgain={() => navigate('/coach/play')}
+        onBackToCoach={() => navigate('/coach/review')}
+        pgn={adapted.pgn}
+        initialMoveIndex={-1}
+      />
+    </div>
+  );
+}

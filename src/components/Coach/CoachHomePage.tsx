@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, MessageCircle, GraduationCap } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, MessageCircle, GraduationCap, History } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
@@ -128,6 +128,17 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-chat"
+        />
+        <SecondaryTile
+          icon={<History size={28} className="text-teal-400" />}
+          label="Review with Coach"
+          rgb="45, 212, 191"
+          bgClass="bg-teal-500/10"
+          textColorClass="text-teal-400"
+          onClick={() => void navigate('/coach/review')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-review"
         />
       </div>
     </div>

@@ -55,6 +55,12 @@ export const APP_ROUTES_MANIFEST: RouteManifestEntry[] = [
     featuresAvailable: ['training'],
   },
   {
+    path: '/coach/review',
+    title: 'Review with Coach',
+    description: 'Pick a previously played game (vs Coach, lichess, chess.com) and walk through it move-by-move with the teaching coach. Same teaching style as /coach/teach: Stockfish-grounded claims, [VOICE: ...] spoken summaries, [BOARD: arrow] suggestions for better moves. The student drives navigation; the coach narrates.',
+    featuresAvailable: ['game-review', 'teaching-coach', 'voice-narration'],
+  },
+  {
     path: '/coach/teach',
     title: 'Teach Me',
     description: 'Coach-led teaching surface. The student types or speaks a question ("walk me through the Vienna," "show me the Italian Game"); the coach drives a board, sets up positions, plays candidate moves, takes them back, and explains the IDEA. Full toolbelt: stockfish_eval, lichess_opening_lookup, lichess_master_games, play_move, take_back_move, set_board_position, reset_board.',
