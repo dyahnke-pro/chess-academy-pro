@@ -614,6 +614,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       .ask(
         { surface: 'review', ask: question, liveState: reviewLiveState },
         {
+          // WO-COACH-TEACHING-01: review chat now also wires the
+          // board-state callbacks so the brain can demonstrate
+          // variations on the review board — play a candidate,
+          // narrate, take back. Same teaching loop the in-game
+          // chat got via the OPERATOR_BASE_BODY teaching directive.
+          maxToolRoundTrips: 6,
           onChunk: (chunk: string) => {
             if (!abortSignal.aborted) {
               setAskResponse((prev: string | null) => (prev ?? '') + chunk);
@@ -621,6 +627,36 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           },
           onNavigate: (path: string) => {
             void navigate(path);
+          },
+          onPlayMove: async (san: string): Promise<{ ok: boolean; reason?: string }> => {
+            try {
+              const moveResult = handleBoardMove
+                ? await Promise.resolve(handleBoardMove({ san } as MoveResult))
+                : null;
+              return moveResult ? { ok: true } : { ok: false, reason: 'review board did not accept move' };
+            } catch (err) {
+              return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+            }
+          },
+          onTakeBackMove: async (count: number): Promise<{ ok: boolean; reason?: string }> => {
+            try {
+              for (let i = 0; i < count; i++) navigateMove('prev');
+              return { ok: true };
+            } catch (err) {
+              return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+            }
+          },
+          onSetBoardPosition: async (fen: string): Promise<{ ok: boolean; reason?: string }> => {
+            try {
+              setWhatIfFen(fen);
+              return { ok: true };
+            } catch (err) {
+              return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+            }
+          },
+          onResetBoard: async (): Promise<{ ok: boolean }> => {
+            navigateMove('first');
+            return { ok: true };
           },
         },
       )
@@ -1626,6 +1662,39 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             source: 'CoachGameReview',
             summary: `enabled=${!v}`,
           });
+          // Layout state snapshot — captures viewport + board container
+          // dims at the moment the panel opens / closes. Diagnoses
+          // "showing engine lines shrinks the board" by making the
+          // before/after diff measurable. The panel renders on the next
+          // tick; we run after a microtask so the measurement reflects
+          // the new layout state.
+          if (typeof window !== 'undefined') {
+            const enabling = !v;
+            queueMicrotask(() => {
+              const vw = window.innerWidth;
+              const vh = window.innerHeight;
+              const orientation = vw > vh ? 'landscape' : 'portrait';
+              // Best-effort board measurement via a stable selector.
+              // Falls back to null when the wrapper can't be found —
+              // never throws, never blocks the toggle.
+              const boardEl = document.querySelector<HTMLElement>(
+                '[data-testid="consistent-chessboard"], .chessboard-wrapper, .react-chessboard',
+              );
+              const boardW = boardEl?.getBoundingClientRect().width ?? null;
+              const boardH = boardEl?.getBoundingClientRect().height ?? null;
+              void logAppAudit({
+                kind: 'engine-lines-layout-state',
+                category: 'subsystem',
+                source: 'CoachGameReview.handleToggleEngineLines',
+                summary: `panel=${enabling ? 'open' : 'closed'} orientation=${orientation} viewport=${vw}x${vh} board=${boardW ? Math.round(boardW) : '?'}x${boardH ? Math.round(boardH) : '?'}`,
+                details: JSON.stringify({
+                  panelEnabled: enabling,
+                  viewport: { width: vw, height: vh, orientation },
+                  board: { width: boardW, height: boardH },
+                }),
+              });
+            });
+          }
           return !v;
         });
       };

@@ -58,6 +58,10 @@ export type AuditKind =
   | 'fen-desync'
   // Voice instrumentation (WO-LEGACY-VOICE-01)
   | 'voice-speak-invoked'
+  // Walkthrough narration diagnostic — fires when getNarrationFor
+  // returns empty so silent rapid-fire bugs can be triaged from the
+  // audit log alone.
+  | 'walkthrough-narration-empty'
   // Phase-transition narration trail (WO-PHASE-FIX-02)
   | 'phase-transition-detected'
   | 'phase-transition-suppressed'
@@ -90,6 +94,10 @@ export type AuditKind =
   | 'coach-memory-intent-set'
   | 'coach-memory-intent-consulted'
   | 'coach-memory-intent-cleared'
+  | 'coach-memory-position-saved'
+  | 'coach-memory-position-cleared'
+  | 'coach-memory-position-restored'
+  | 'coach-voice-marker-extracted'
   // Progressive hint tiers (WO-HINT-REDESIGN-01)
   | 'coach-memory-hint-requested'
   | 'coach-memory-hint-recorded'
@@ -102,6 +110,7 @@ export type AuditKind =
   | 'coach-brain-envelope-assembled'
   | 'coach-brain-provider-called'
   | 'coach-brain-tool-called'
+  | 'coach-llm-model-selected'
   | 'coach-brain-intent-routed'
   | 'coach-intent-router-input'
   | 'coach-brain-tool-parse-result'
@@ -127,6 +136,9 @@ export type AuditKind =
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
   | 'coach-surface-migrated'
+  // Biweekly chess.com / lichess auto-import scheduler.
+  | 'auto-import-completed'
+  | 'auto-import-failed'
   // Stockfish performance instrumentation (WO-STOCKFISH-SWAP-AND-PERF).
   | 'stockfish-cache-hit'
   | 'stockfish-cache-miss'
@@ -177,13 +189,155 @@ export type AuditKind =
   // when the LLM call times out / errors and we render a built-in
   // transition template instead of leaving the user with silence.
   | 'phase-narration-fallback-shown'
+  // Opening-tour wiring (WO-COACH-TOUR-WIRING). One entry per quiz
+  // lifecycle stage so a "the coach asked me to play Nf3 and then
+  // ignored my move" report has a complete causal chain. Also fires
+  // when the coach kicks off a walkthrough from the chat surface.
+  | 'quiz-started'
+  | 'quiz-resolved'
+  | 'quiz-cancelled'
+  | 'walkthrough-started-from-coach'
+  // WO-COACH-PERSONALITIES (PR B). Fires when the user picks a new
+  // personality OR adjusts a dial in Settings — joined with the
+  // existing coach-brain-envelope-assembled audits so a "why does the
+  // coach sound different in this build?" report can be answered
+  // by walking the timeline.
+  | 'coach-personality-changed'
+  // WO-COACH-OPPONENT-FX. Fires every time the coach commits a move on
+  // the board. Confirms the coach-move FX path (sound + last-move
+  // highlight) ran — joined with the absence/presence of a matching
+  // voice/sound event in the next audit window to diagnose which leg
+  // of the FX is missing if the user reports silence.
+  | 'coach-move-fx-emitted'
+  // WO-COACH-MATE-FLOOR. Fires when the coach's mate-floor safety
+  // check vetoed the LLM's pick because it walked into a forced mate
+  // (≤ 2 plies). Override is the engine bestmove. Counting these in
+  // production tells us how often the LLM picks losing moves — a
+  // high rate means the prompt or rating-tier calibration needs work.
+  | 'coach-move-mate-floor-triggered'
+  // WO-COACH-RATING-FLOOR. Fires when the coach's quality-floor safety
+  // check vetoed the LLM's pick because the centipawn loss vs the
+  // engine's bestmove exceeded the student's rating-tier threshold.
+  // Counting these tells us whether the cp-loss thresholds are tuned
+  // correctly per tier (too many at intermediate = floor too tight;
+  // too few at master = floor too loose).
+  | 'coach-move-quality-floor-triggered'
+  // WO-COACH-PERSONALITY-VOICE. One entry per Polly speak() call with
+  // the resolved voice + active personality + dial settings. Captures
+  // the cross-product of voice × personality × dials in production so
+  // we can see which combinations users actually run (and whether any
+  // pairing produces empirically bad output we should warn about).
+  // Joins with the existing `voice-speak-invoked` audit on timestamp
+  // for the full picture.
+  | 'coach-narration-spoken'
+  // WO-COACH-FX-DIAG. Diagnostic checkpoints inside the coach-turn
+  // flow so the next audit log can pinpoint exactly where the FX
+  // path breaks. Joined with the existing coach-move-fx-emitted
+  // audit: if a checkpoint fires "reached applyCoachMove" but no
+  // coach-move-fx-emitted follows, the bug is inside applyCoachMove
+  // itself; if a "cancelled-at" checkpoint fires before the FX, the
+  // coach-turn cleanup is firing too aggressively. Temporary —
+  // remove once the FX-missing root cause is fixed and verified.
+  | 'coach-turn-checkpoint'
+  // Per-move narration audit (WO-MOVE-NARRATION-REENABLE). Fires from
+  // CoachGamePage (blunder + non-blunder branches), narrateMove() in
+  // coachAgentRunner, and CoachPlaySessionView whenever a move-level
+  // speak is dispatched — and from the gating branch that skipped it
+  // (verbosity 'off' / empty commentary / narrationMode disabled).
+  // Joined with voice-speak-invoked so a "I have commentary on but
+  // hear nothing after my move" report has a complete causal chain.
+  | 'coach-move-narration-fired'
+  | 'coach-move-narration-skipped'
+  // Opening auto-detection trail (WO-CONVERSATIONAL-OPENING-COACH).
+  // Fires once per move from CoachGamePage when detectOpening() runs
+  // against the SAN history. Captures: detected eco/name/plyCount,
+  // resolution source (URL subject vs committed intent vs auto-detect
+  // vs nothing), and the resulting `inOpeningTeaching` decision. Use
+  // these to debug "why didn't the coach name my opening?" reports —
+  // either the detection trie missed the line (opening-auto-detected
+  // absent) or teaching mode didn't activate (opening-teaching-active
+  // absent).
+  | 'coach-opening-auto-detected'
+  | 'coach-opening-teaching-active'
+  // Diagnostic audits added to identify root causes for user-reported
+  // bugs WITHOUT guessing the fix. Each one captures the inputs that
+  // would otherwise require speculation. Once the audit log shows the
+  // failure mode for each, the next PR can fix from evidence.
+  // -----------------------------------------------------------------
+  // Review playback step trail. Fires from useReviewPlayback.commitPly
+  // every time the ply changes — captures from-ply, to-ply, nav source
+  // (goForward / goBack / goToStart / goToEnd / jumpToPly), the SAN at
+  // the destination, and whether speech was requested. Diagnoses
+  // "review skips two pieces" reports: if `to - from > 1` from a
+  // goForward call, the bug is concrete.
+  | 'review-playback-step'
+  // Engine-lines layout state. Fires from CoachGameReview when the
+  // engine-lines panel is toggled — captures viewport orientation,
+  // viewport width/height, board container width before/after the
+  // toggle. Diagnoses "showing lines shrinks the board" reports by
+  // making the dimension diff measurable instead of subjective.
+  | 'engine-lines-layout-state'
+  // Verbosity resolution trail. Fires inside coachMoveCommentary when
+  // the LLM call is dispatched — captures what verbosity value was
+  // received vs the user's profile preference. Diagnoses "Settings
+  // verbosity dial doesn't work" reports by making the propagation
+  // path visible (settings → preference → arg → LLM).
+  | 'verbosity-resolved'
+  // TTS overlap detection. Fires from voiceService.speakInternal when
+  // a new speak() arrives while a previous utterance is still playing.
+  // Captures the new utterance preview, the previous-tier (polly /
+  // web-speech / voice-pack), and the caller source if available.
+  // Diagnoses "two voices at once" reports — every overlap leaves a
+  // record so we can see which surfaces are racing.
+  | 'tts-concurrent-speak'
+  // Tool-call error capture. Fires from coach/coachService.ask when a
+  // tool invocation returns an error — captures tool name + full error
+  // text + arguments. Diagnoses tool dispatch issues like the
+  // "aiColor must be 'white' or 'black'" we saw on local_opening_book
+  // by surfacing the exact arg that failed.
+  | 'tool-call-error'
+  // Move-commentary skip reasons. Fires from every early-return in
+  // generateMoveCommentary so the previously-silent paths
+  // (`offline`, `verbosity===none`, empty history, ⚠️ banner, LLM
+  // exception, empty-after-trim) leave a record. Evidence-driven —
+  // saves a debug round-trip the next time `coach-move-narration-skipped
+  // reason=empty-commentary` shows up: the new audit names exactly
+  // which path returned empty. Joins with the existing
+  // `coach-move-narration-skipped` on timestamp + fen.
+  | 'commentary-skipped'
+  // LLM response trail (move commentary). Fires inside
+  // coachMoveCommentary.getLlmCommentary right after
+  // getCoachChatResponse returns. Captures length, preview, latency,
+  // and the personality+dial values that were sent in the prompt.
+  // Closes the observability gap between `verbosity-resolved` (LLM
+  // dispatched) and `commentary-skipped` (we returned empty) — if
+  // the LLM is returning short / generic / non-personality output
+  // despite the dials being set, this audit shows it directly
+  // instead of forcing inference from "voice was bland."
+  | 'llm-response'
+  // Personality dials reaching the move-commentary prompt
+  // (WO-PERSONALITY-IN-COMMENTARY). Mirrors coach-narration-spoken at
+  // the prompt-assembly side so we can confirm in production logs that
+  // profanity=hard / mockery=hard actually flowed into the LLM call —
+  // not just into the TTS layer.
+  | 'coach-move-personality-applied'
+  // WO-PLAN-B coach-move fast path. Fires when the coach-turn skips
+  // the LLM spine entirely and uses opening book / Stockfish bestmove
+  // directly. Replaces 8s of multi-trip LLM tool dance with ~250ms of
+  // deterministic move selection. Spine still runs as fallback if the
+  // fast path can't produce a legal move.
+  | 'coach-move-fastpath'
   // Coach FX cancellation race — fires when the coach-turn effect was
   // aborted (game.fen changed, useEffect re-fired) AFTER chess.js was
   // already mutated. We commit the FX path anyway to keep
   // gameState.moves in sync with the chess instance and to ensure the
   // last-move highlight, sound, narration, and move-list entry land
   // on the coach's move.
-  | 'coach-move-fx-cancellation-ignored';
+  | 'coach-move-fx-cancellation-ignored'
+  // WO-NARR-POLICY-01 — proactive tactic alert spoken after the coach
+  // sets up a threat on the board. Stockfish-driven (no LLM round-trip),
+  // fires under verbosity in {'key-moments', 'every-move'}.
+  | 'coach-tactic-alert-spoken';
 
 export interface AuditEntry {
   timestamp: number;
@@ -219,6 +373,19 @@ function getBuildId(): string {
   }
 }
 
+/** Serializing chain for read-modify-write. Each logAppAudit call
+ *  attaches its work to the chain so two concurrent calls can never
+ *  interleave the read+push+put steps. Without this serialization,
+ *  fire-and-forget writes (`void logAppAudit(...)`) raced and only
+ *  the last writer's entry survived — the production audit log was
+ *  silently losing every audit that fired alongside another (e.g.
+ *  `coach-move-narration-fired` was always overwritten by the
+ *  `voice-speak-invoked` audit emitted microseconds later from
+ *  voiceService.speakInternal). Verified by appAuditor.test.ts —
+ *  20 concurrent calls now persist all 20 entries; pre-fix only 1
+ *  survived. Fire-and-forget callers continue to work unchanged. */
+let auditWriteChain: Promise<void> = Promise.resolve();
+
 /** Log one entry. Fire-and-forget. Also streams the entry to
  *  `/api/audit-stream` when the user has opted in by setting
  *  `auditStreamUrl` + `auditStreamSecret` in localStorage. Stream
@@ -232,17 +399,24 @@ export async function logAppAudit(
     route: typeof window !== 'undefined' ? window.location?.pathname : undefined,
     buildId: getBuildId(),
   };
-  try {
-    const current = await readLog();
-    current.push(filled);
-    const trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
-    await db.meta.put({
-      key: APP_AUDIT_LOG_META_KEY,
-      value: JSON.stringify(trimmed),
-    });
-  } catch {
-    /* swallow — auditor failures must not affect the feature path */
-  }
+  const next = auditWriteChain.then(async () => {
+    try {
+      const current = await readLog();
+      current.push(filled);
+      const trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
+      await db.meta.put({
+        key: APP_AUDIT_LOG_META_KEY,
+        value: JSON.stringify(trimmed),
+      });
+    } catch {
+      /* swallow — auditor failures must not affect the feature path */
+    }
+  });
+  // Re-assign so the next caller chains onto the latest. Swallow the
+  // chain's own errors here so a single failed write doesn't poison
+  // every subsequent audit.
+  auditWriteChain = next.catch(() => undefined);
+  await next;
   // Opt-in remote stream — used for live-watch sessions where Claude
   // polls the backend for new entries. Off by default.
   void streamAuditEntry(filled);

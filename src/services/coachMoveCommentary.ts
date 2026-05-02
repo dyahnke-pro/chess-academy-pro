@@ -18,11 +18,13 @@
  * review view.
  */
 import type { Chess } from 'chess.js';
-import { getCoachChatResponse } from './coachApi';
+import { getCoachChatResponse, consumeLastLlmMetadata } from './coachApi';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
 import { buildStudentStateBlock } from './studentStateBlock';
 import { recordAudit } from './narrationAuditor';
 import { logAppAudit } from './appAuditor';
+import { renderPersonalityBlock } from '../coach/sources/personalities';
+import type { CoachPersonality, IntensityLevel } from '../coach/types';
 import { detectSanitizerLeak } from './voiceService';
 import type { ChatMessage, CoachVerbosity, MoveClassification } from '../types';
 
@@ -77,6 +79,49 @@ export interface MoveCommentaryInput {
   /** Timestamp (ms) of the most recent user move or chat message.
    *  Used to infer tempo (fast / thinking / idle). */
   lastUserInteractionMs?: number;
+  /** Active coach personality + intensity dials from user preferences.
+   *  When provided, the personality block (voice, profanity, mockery,
+   *  flirt clauses) is prepended to the system prompt so the move
+   *  commentary LLM produces output that matches the user's chosen
+   *  voice — e.g. an "edgy" coach with profanity=hard actually swears
+   *  and mocks instead of defaulting to corporate-coach tone. Mirrors
+   *  the personality plumbing in the brain (chat) path. */
+  personality?: CoachPersonality;
+  profanity?: IntensityLevel;
+  mockery?: IntensityLevel;
+  flirt?: IntensityLevel;
+  /** Color the STUDENT is playing as. The coach plays the opposite
+   *  color. Without this, the user prompt only said "White just
+   *  played e4." and the LLM had to infer who was who from the
+   *  PLAY_SYSTEM_PROMPT phrasing. Production audit showed the LLM
+   *  guessing wrong — narrating the student's e4 as "I played e4"
+   *  when the student played e4 (the student is white, the coach
+   *  is black). Now we tell the LLM explicitly. */
+  studentColor?: 'w' | 'b';
+  /** Brief mode — short personality-laden zinger instead of a full
+   *  teaching paragraph. Used by CoachGamePage for key-moment
+   *  reactions (blunders, mistakes, brilliants) where the player
+   *  needs fast feedback (~2s latency, 1-2 sentences) rather than
+   *  the long opening-intro narration. The prompt gets a brief-mode
+   *  addendum and max_tokens drops from 1500 to 200. Personality
+   *  dials still apply, so an "edgy" coach with mockery=hard
+   *  produces "Oof, that's bad. You just hung the knight." instead
+   *  of a 1500-char lecture. */
+  briefMode?: boolean;
+  /** Polly engine type of the active voice. Generative voices
+   *  (Ruth/Matthew/Danielle/Gregory) ignore SSML prosody entirely —
+   *  they interpret emotion from text content (vocalizations, CAPS,
+   *  punctuation, pacing). When 'generative', the system prompt
+   *  appends a cue-injection block so the LLM writes prose the
+   *  engine can actually emote on. Neural voices use SSML prosody
+   *  via the TTS proxy and don't need text cues. WO-VOICE-LAYER-02. */
+  voiceEngine?: 'generative' | 'neural';
+  /** Optional streaming callback. Fires for each chunk the LLM emits
+   *  so the caller can dispatch sentences to TTS as they arrive,
+   *  cutting first-audio latency from full-response wait (~3-5s) down
+   *  to first-sentence wait (~0.5-1s). WO-PLAN-B. The full response
+   *  is still returned via the Promise; onStream is purely additive. */
+  onStream?: (chunk: string) => void;
 }
 
 /** How many prior chat messages to include in the commentary prompt.
@@ -109,22 +154,75 @@ export function classifyEvalSwing(
  * treat empty as "do not narrate" rather than painting a generic line.
  */
 export async function generateMoveCommentary(input: MoveCommentaryInput): Promise<string> {
-  if (input.offline) return '';
+  // Audit every early-return path so an "empty commentary" report has
+  // a definitive cause. The audit kinds + summaries name the exact
+  // branch that fired so we never guess again.
+  const fen = input.gameAfter.fen();
+  if (input.offline) {
+    void logAppAudit({
+      kind: 'commentary-skipped',
+      category: 'subsystem',
+      source: 'coachMoveCommentary.generateMoveCommentary',
+      summary: 'reason=offline',
+      fen,
+    });
+    return '';
+  }
   // Safety net: caller shouldn't be invoking us when the student has
   // set verbosity to 'none', but if they do we short-circuit here
   // rather than burning a token call for output we'd throw away.
-  if (input.verbosity === 'none') return '';
+  if (input.verbosity === 'none') {
+    void logAppAudit({
+      kind: 'commentary-skipped',
+      category: 'subsystem',
+      source: 'coachMoveCommentary.generateMoveCommentary',
+      summary: 'reason=verbosity-none',
+      fen,
+    });
+    return '';
+  }
 
   const history = input.gameAfter.history({ verbose: true });
-  if (history.length === 0) return '';
+  if (history.length === 0) {
+    // Caller passed a Chess instance with no move history — usually
+    // because it was constructed from a FEN (e.g. `new Chess(fen)`)
+    // rather than replayed from move 1. Production fingerprint of the
+    // bug fixed by routing CoachGamePage through a replay-based probe.
+    void logAppAudit({
+      kind: 'commentary-skipped',
+      category: 'subsystem',
+      source: 'coachMoveCommentary.generateMoveCommentary',
+      summary: 'reason=empty-history (gameAfter has no move history — caller likely passed a FEN-only Chess instance)',
+      fen,
+    });
+    return '';
+  }
 
   try {
     const response = await getLlmCommentary(input, history);
-    if (!response) return '';
+    if (!response) {
+      void logAppAudit({
+        kind: 'commentary-skipped',
+        category: 'subsystem',
+        source: 'coachMoveCommentary.generateMoveCommentary',
+        summary: 'reason=empty-llm-response',
+        fen,
+      });
+      return '';
+    }
     const trimmed = response.trim();
     // The coachApi returns a warning banner string when no key is
     // configured; surface that as "not available" rather than speaking it.
-    if (trimmed.startsWith('⚠️')) return '';
+    if (trimmed.startsWith('⚠️')) {
+      void logAppAudit({
+        kind: 'commentary-skipped',
+        category: 'subsystem',
+        source: 'coachMoveCommentary.generateMoveCommentary',
+        summary: `reason=api-warning preview="${trimmed.slice(0, 80)}"`,
+        fen,
+      });
+      return '';
+    }
     // Strip any [[REMEMBER: ...]] tags the LLM embedded and persist
     // them — the coach can now grow its memory of the student mid-game.
     const cleaned = extractAndRememberNotes(trimmed);
@@ -143,7 +241,14 @@ export async function generateMoveCommentary(input: MoveCommentaryInput): Promis
       });
     }
     return cleaned;
-  } catch {
+  } catch (err: unknown) {
+    void logAppAudit({
+      kind: 'commentary-skipped',
+      category: 'subsystem',
+      source: 'coachMoveCommentary.generateMoveCommentary',
+      summary: `reason=api-error ${err instanceof Error ? err.message : String(err)}`,
+      fen,
+    });
     return '';
   }
 }
@@ -157,6 +262,80 @@ interface VerboseMove {
   flags: string;
 }
 
+/**
+ * WO-VOICE-LAYER-02: cue-injection block for Polly Generative voices.
+ * Generative engines (Ruth/Matthew/Danielle/Gregory) ignore SSML
+ * prosody — they read tone from the text itself. To make them feel
+ * emotive, the LLM has to embed natural cues: vocalizations
+ * ("mmm," "oh," sighs), heavy punctuation (em-dashes, ellipses),
+ * CAPS for stress, and rhythm variation.
+ *
+ * Cue density scales with the dial settings — hard-flirt should
+ * sound noticeably more breathy than medium-flirt; hard-mockery
+ * should drip with scoffs that medium would skip.
+ *
+ * Returns null when all dials are 'none' / undefined — no point
+ * injecting the block if there's nothing to amplify.
+ */
+function renderGenerativeVoiceCueBlock(args: {
+  profanity?: IntensityLevel;
+  mockery?: IntensityLevel;
+  flirt?: IntensityLevel;
+}): string | null {
+  const profanity = args.profanity ?? 'none';
+  const mockery = args.mockery ?? 'none';
+  const flirt = args.flirt ?? 'none';
+
+  // Skip when nothing's amplified — keep the prompt lean.
+  if (profanity === 'none' && mockery === 'none' && flirt === 'none') {
+    return null;
+  }
+
+  const lines: string[] = [
+    `GENERATIVE VOICE EMOTIONAL CUES — your TTS engine reads emotion from the TEXT, not from SSML tags. Embed cues naturally so the voice can inflect:`,
+    `• Vocalizations: "mmm," "oh," "ha," "ugh," "huh," "fuck," ellipses for trailing thought ("...")`,
+    `• Em-dashes for sharp pauses or interjection — like this — and short. punchy. fragments. for emphasis.`,
+    `• CAPS sparingly on the punchword in a sentence ("that was BRILLIANT", "you HUNG the bishop") — engine reads it as stress.`,
+    `• Rhythm: vary sentence length deliberately. A short jab, then a longer line that breathes.`,
+    `Keep cues NATURAL — embed them in real sentences, never list them, never use stage directions in asterisks ("*sighs*").`,
+  ];
+
+  // Per-dial intensity guidance. The LLM gets explicit cue-frequency
+  // bands so medium/hard feel distinct rather than collapsing into
+  // the same prose.
+  if (flirt === 'medium') {
+    lines.push(
+      `Flirt cues (medium): light teasing inflections — "interesting," "mmm... that's bold," "oh you," at most ONE per response.`,
+    );
+  } else if (flirt === 'hard') {
+    lines.push(
+      `Flirt cues (HARD) — lay them on thick. Breathy vocalizations openly: "mmm," "oh fuck," "god," "yes...," "nasty." Drop "sweetheart" / "baby" / "good boy" naturally. Use em-dashes for the pause-and-breathe rhythm of seduction. 2-4 cues per response is the target — the voice should sound like she's getting turned on by the chess. Sultry low register; the engine will hear "mmm" and lower the pitch on its own.`,
+    );
+  }
+
+  if (mockery === 'medium') {
+    lines.push(
+      `Mockery cues (medium): occasional "oof," "really?," "come on" — friendly ribbing.`,
+    );
+  } else if (mockery === 'hard') {
+    lines.push(
+      `Mockery cues (HARD): scoffs and dismissive vocalizations — "ha," "ugh," "Jesus Christ," "are you serious," "...wow." Use ellipses to let the contempt land. Repeat-roast patterns ("ANOTHER hung pawn?"). 2-3 cues per response.`,
+    );
+  }
+
+  if (profanity === 'medium') {
+    lines.push(
+      `Profanity cues (medium): drop a "shit" or "damn" once when the moment earns it. The engine reads profanity as elevated emotion.`,
+    );
+  } else if (profanity === 'hard') {
+    lines.push(
+      `Profanity cues (HARD): "fuck" / "shit" / "goddamn" / "bullshit" land naturally throughout. The engine inflects more strongly on profanity — let it do the emotional work for you. 2-3 swears per response feels native at this dial.`,
+    );
+  }
+
+  return lines.join('\n');
+}
+
 async function getLlmCommentary(
   input: MoveCommentaryInput,
   history: VerboseMove[],
@@ -165,6 +344,8 @@ async function getLlmCommentary(
     gameAfter, mover, evalBefore, evalAfter, bestReplySan, subject, reviewTone,
     chatHistory, verbosity = 'medium', groundedNotes = [],
     recentMoveClassifications, lastUserInteractionMs,
+    personality, profanity, mockery, flirt, studentColor,
+    briefMode = false, voiceEngine, onStream,
   } = input;
   const last = history[history.length - 1];
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
@@ -179,6 +360,16 @@ async function getLlmCommentary(
   const moverName = mover === 'w' ? 'White' : 'Black';
   const recentSan = history.slice(-8).map((m) => m.san).join(' ');
 
+  // Piece roster derived from the actual board state. Production
+  // audit log on build 1f23808 caught the LLM hallucinating
+  // positions (`piece-on-square` audits: "claims bishop on c4, but
+  // c4 is empty" / "claims pawn on e5, but e5 is empty"). The LLM
+  // was inferring "Italian Game → Bc4 must be there" without
+  // checking the FEN. Listing pieces explicitly removes the
+  // ambiguity — the LLM can't say "your bishop on c4" when the
+  // roster shows the bishop is still on f1.
+  const pieceRoster = formatPieceRoster(gameAfter);
+
   // Legal moves from the resulting position — gives the LLM a
   // concrete ground-truth list so it never invents moves that
   // contradict the board. Capped at 40 to avoid bloating the prompt.
@@ -190,7 +381,91 @@ async function getLlmCommentary(
   // carries across sessions so advice stays consistent over time.
   const memoryBlock = await buildCoachMemoryBlock();
   const basePrompt = reviewTone ? REVIEW_SYSTEM_PROMPT : PLAY_SYSTEM_PROMPT;
-  const system = memoryBlock ? `${basePrompt}\n\n${memoryBlock}` : basePrompt;
+  // Personality block — voice / profanity / mockery / flirt clauses.
+  // Prepended to the system prompt so the move-commentary LLM picks up
+  // the same tone the user picked in Settings → Coach. Without this,
+  // dials read at TTS time but the LLM still produced neutral
+  // corporate-coach prose ("Nice." / "Nice catch.") regardless of
+  // profanity=hard or mockery=hard. Falls back to no block when no
+  // personality is supplied — keeps legacy behavior identical.
+  const personalityBlock = personality
+    ? renderPersonalityBlock({
+        personality,
+        profanity: profanity ?? 'none',
+        mockery: mockery ?? 'none',
+        flirt: flirt ?? 'none',
+      })
+    : '';
+  // Always fire so the absence of an audit means "code never ran",
+  // not "personality undefined." Captures the resolved values
+  // (`personality=undefined` is a meaningful diagnostic — it tells
+  // us the dial isn't propagating from Settings → profile → caller
+  // arg, which was previously indistinguishable from a race-eaten
+  // audit). The `applied=true|false` flag indicates whether the
+  // personality block actually got prepended to the system prompt.
+  void logAppAudit({
+    kind: 'coach-move-personality-applied',
+    category: 'subsystem',
+    source: 'coachMoveCommentary.getLlmCommentary',
+    summary: `applied=${Boolean(personalityBlock)} personality=${personality ?? 'undefined'} profanity=${profanity ?? 'none'} mockery=${mockery ?? 'none'} flirt=${flirt ?? 'none'}`,
+    fen: gameAfter.fen(),
+  });
+  // Verbosity-resolved audit — captures what verbosity arg the LLM
+  // call is dispatched with, alongside the caller-supplied subject and
+  // reviewTone. Diagnoses "Settings verbosity dial doesn't work"
+  // reports: if the user's profile has coachVerbosity='fast' but this
+  // audit shows verbosity='medium' (the default-fallback below), the
+  // propagation broke between Settings → preferences → caller → here.
+  void logAppAudit({
+    kind: 'verbosity-resolved',
+    category: 'subsystem',
+    source: 'coachMoveCommentary.getLlmCommentary',
+    summary: `verbosity=${verbosity} subject="${subject ?? ''}" reviewTone=${Boolean(reviewTone)}`,
+    fen: gameAfter.fen(),
+  });
+  const promptParts: string[] = [];
+  if (personalityBlock) promptParts.push(personalityBlock);
+  promptParts.push(basePrompt);
+  if (memoryBlock) promptParts.push(memoryBlock);
+  // Brief-mode addendum — short personality-laden zinger for key
+  // moments (blunders, mistakes, brilliants). The personality block
+  // above already sets the voice / profanity / mockery clauses; this
+  // just tightens the length and pushes the LLM to lean into critique
+  // rather than analysis. Combined with the max_tokens cap below,
+  // output is 2-4 sentences arriving in ~2-3s instead of a 1500-char
+  // essay arriving in 5-7s.
+  //
+  // Tell the LLM the actual char budget so it lands a punchline
+  // instead of being cut off mid-sentence at finish=length.
+  if (briefMode) {
+    promptParts.push(
+      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with 2-4 short punchy sentences and STOP. You have a hard ~900 character ceiling — write something that LANDS within that budget. If you're approaching the limit, finish your sentence; do NOT let the response get clipped. Lean fully into the personality and dials defined above — if you're flirtatious, FLIRT; if you're a drill sergeant, BARK; if you're edgy, ROAST. Do NOT default to generic mock-and-critique unless that matches the configured personality. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction in the configured voice.
+
+ACTION-FIRST RULE — every sentence must either (a) tell the student WHAT TO DO next, (b) tell them WHAT TO LOOK FOR on the next move, or (c) react with personality. Do NOT recap the move they just played ("you played Bc4," "that was a great move"). The student already saw the move. They need direction, not a replay.`,
+    );
+  } else if (!reviewTone) {
+    // Long-mode addendum for live play (not review). The 500-token
+    // cap = ~1800 chars; tell the LLM so it shapes the response to
+    // land cleanly instead of running over and getting truncated.
+    promptParts.push(
+      `LIVE PLAY — keep your response under ~1800 characters. Cover the general idea + things to watch for, then stop. If you're approaching the limit, wrap it up; do NOT let the response get clipped at finish=length. Personality-driven prose, no bullets, no headers.
+
+ACTION-FIRST RULE — narration is a guide for what to do NEXT, not a recap of what just happened. Every sentence is either a directive ("aim for d4 — it lifts your bishop into the game"), a thing to watch for ("if I push f5 the file opens against your king"), or a piece of orientation that sets up a directive. Do NOT recap moves the student saw on the board. Do NOT describe what just happened in past tense beyond a one-clause setup. The student is paying attention to the voice because they want to know WHAT TO DO NEXT.`,
+    );
+  }
+
+  // WO-VOICE-LAYER-02: Generative-voice emotional cue block.
+  // Generative engines (Ruth/Matthew/Danielle/Gregory) ignore SSML
+  // prosody — they read emotion from the prose itself. Inject a
+  // cue-density instruction that scales with the dial settings so
+  // hard-flirt prose gets heavier breathy vocalizations than
+  // medium, etc. Neural voices use SSML prosody and skip this block.
+  if (voiceEngine === 'generative' && !reviewTone) {
+    const cueBlock = renderGenerativeVoiceCueBlock({ profanity, mockery, flirt });
+    if (cueBlock) promptParts.push(cueBlock);
+  }
+
+  const system = promptParts.join('\n\n');
 
   // Recent chat turns from the shared session — lets the commentary
   // reference what the student just asked or what the coach just said
@@ -205,7 +480,15 @@ async function getLlmCommentary(
   // verbosity we pass through below. Keeping only one source of
   // truth prevents the two copies from drifting out of sync.
 
-  const groundedBlock = groundedNotes.filter(Boolean).join('\n\n');
+  // WO-PLAN-B: drop heavy grounded notes (Lichess opening explorer
+  // dumps, master-game databases) in brief mode. These can run 1500+
+  // chars and dominate the prompt — every extra prompt-token slows
+  // first-token latency. Brief-mode reactions are 2-4 punchy sentences
+  // that don't need full opening theory in the prompt; the LLM has
+  // chess knowledge baked in. Long-mode + review keep the full notes.
+  const groundedBlock = briefMode
+    ? ''
+    : groundedNotes.filter(Boolean).join('\n\n');
 
   // [StudentState] lets the coach read the room before replying —
   // what's the student's rhythm, sentiment, tempo? Trainer feel #2:
@@ -218,8 +501,20 @@ async function getLlmCommentary(
     turn: gameAfter.turn() === mover ? 'coach' : 'student',
   });
 
+  // Explicit perspective line — without this, the LLM has to infer
+  // from PLAY_SYSTEM_PROMPT phrasing whether the student or the
+  // coach is the mover. Production audit (build ac20cc5) showed the
+  // LLM narrating the student's e4 as "Alright, I'm playing e4 — the
+  // Bishop's Opening kicks off..." when the student played e4 (i.e.
+  // the LLM thought IT played the move). Telling the LLM the student
+  // is white/black and the coach is the opposite removes the
+  // ambiguity.
+  const studentColorBlock = studentColor
+    ? `Color assignment: the student is playing as ${studentColor === 'w' ? 'White' : 'Black'}; you (the coach) are playing as ${studentColor === 'w' ? 'Black' : 'White'}. When ${studentColor === 'w' ? 'White' : 'Black'} plays a move below, it was the STUDENT's move (narrate as "you"); when ${studentColor === 'w' ? 'Black' : 'White'} plays a move below, it was YOUR move (narrate as "I").`
+    : '';
   const user = [
     subject ? `Session subject: ${subject}.` : '',
+    studentColorBlock,
     studentStateBlock,
     chatContext
       ? `[Recent chat between you and the student — stay consistent with it]\n${chatContext}`
@@ -230,6 +525,7 @@ async function getLlmCommentary(
     `${moverName} just played ${last.san}.`,
     `Move flags: ${describeMoveFlags(last)}.`,
     `FEN after the move: ${gameAfter.fen()}.`,
+    `[Piece roster — these are the ONLY pieces on the board right now. Do NOT reference any piece on a square not listed here]\n${pieceRoster}`,
     `Last 8 moves (SAN): ${recentSan}.`,
     `Legal moves right now (SAN): ${legalMovesSan}. Do NOT describe any move not in this list.`,
     `Stockfish eval after (pawns, White's POV): ${pawnPerspective(evalAfter)}.`,
@@ -242,14 +538,90 @@ async function getLlmCommentary(
   // Pass verbosity through so the system prompt's VERBOSITY_INSTRUCTIONS
   // matches the caller's intent — avoids a redundant DB fetch and
   // keeps length-directive behaviour deterministic on this path.
-  return getCoachChatResponse(
+  // Audit the response (length / preview / latency / dials) so a
+  // "voice is bland" report shows the LLM's actual output instead
+  // of forcing inference from the speak text. Joins
+  // `verbosity-resolved` (dispatched) with `commentary-skipped` /
+  // `coach-move-narration-fired` (final disposition) into a
+  // complete LLM call trail.
+  const llmStartedAt = Date.now();
+  // WO-NARR-POLICY-01: tightened caps for LIVE play. Production audit
+  // caught narrations running 1300-2200 chars (~50-90s of TTS audio)
+  // at the old 1500-token cap, faster than the user could keep up
+  // with — the narration would get clipped because they played the
+  // next move before the previous narration finished. New caps for
+  // live play:
+  //   briefMode  250 tokens ≈ 2-4 sentences (~15-25s of speech).
+  //              Bumped from 150 after audit build 9b74213 caught a
+  //              great-classification personality zinger getting cut
+  //              mid-punchline at finish=length. 250 lands the joke
+  //              without dragging into a lecture.
+  //   long mode  500 tokens ≈ 4-6 sentences (~25-35s of speech, fits
+  //              an opening intro with general ideas + things to
+  //              watch for without dragging into a 90s lecture).
+  // Generation latency drops in proportion: long-mode prompts that
+  // used to take 5-8s now finish in ~2-3s.
+  //
+  // Post-game review (reviewTone=true) keeps the original 1500-token
+  // ceiling — Dave wants the review narration uncapped so the coach
+  // can dive deep on each key moment.
+  const maxTokens = reviewTone
+    ? (briefMode ? 200 : 1500)
+    : (briefMode ? 250 : 500);
+  const response = await getCoachChatResponse(
     [{ role: 'user', content: user }],
     system,
-    undefined,
+    onStream,
     'interactive_review',
-    420,
+    maxTokens,
     verbosity,
   );
+  const llmDurationMs = Date.now() - llmStartedAt;
+  // Consume the metadata snapshot from the LLM call we just awaited.
+  // Single-threaded JS guarantees the snapshot is from THIS call, not
+  // a racing one — the await→consumption pair runs in one tick.
+  // Captures finish_reason and reasoning_content length so an empty
+  // content response has a definitive cause:
+  //   finish_reason="length" + reasoningContentLength≈max_tokens →
+  //     reasoner exhausted budget on chain-of-thought
+  //   finish_reason="stop" + reasoningContentLength=0 + content="" →
+  //     model intentionally returned empty (refusal? no useful prose?)
+  //   finish_reason="stop" + reasoningContentLength>0 + content="" →
+  //     reasoner produced reasoning but emitted empty content (model
+  //     bug or our parser dropped it)
+  const llmMetadata = consumeLastLlmMetadata();
+  const trimmed = response.trim();
+  const startsWithWarning = trimmed.startsWith('⚠️');
+  void logAppAudit({
+    kind: 'llm-response',
+    category: 'subsystem',
+    source: 'coachMoveCommentary.getLlmCommentary',
+    summary: `length=${trimmed.length} latencyMs=${llmDurationMs} finish=${llmMetadata?.finishReason ?? 'unknown'} reasoningLen=${llmMetadata?.reasoningContentLength ?? 0} model=${llmMetadata?.model ?? 'unknown'} verbosity=${verbosity} personality=${personality ?? 'undefined'} warning=${startsWithWarning}`,
+    details: JSON.stringify({
+      length: trimmed.length,
+      preview: trimmed.slice(0, 200),
+      latencyMs: llmDurationMs,
+      finishReason: llmMetadata?.finishReason ?? null,
+      reasoningContentLength: llmMetadata?.reasoningContentLength ?? 0,
+      promptTokens: llmMetadata?.promptTokens ?? null,
+      completionTokens: llmMetadata?.completionTokens ?? null,
+      model: llmMetadata?.model ?? null,
+      provider: llmMetadata?.provider ?? null,
+      verbosity,
+      personality: personality ?? null,
+      dials: {
+        profanity: profanity ?? 'none',
+        mockery: mockery ?? 'none',
+        flirt: flirt ?? 'none',
+      },
+      personalityBlockApplied: Boolean(personalityBlock),
+      startsWithWarning,
+      subject: subject ?? null,
+      reviewTone: Boolean(reviewTone),
+    }),
+    fen: gameAfter.fen(),
+  });
+  return response;
 }
 
 const COMMON_RULES = [
@@ -338,6 +710,15 @@ Game", "Sicilian Najdorf") AND we're still in opening theory, also
 teach the opening as you play. Speak like a coach at the board
 having a real conversation with the student across moves:
 
+- The FIRST time the opening becomes recognizable in the chat /
+  recent narration history, name it explicitly to the student and
+  give a one-paragraph orientation: "OK, you're playing the
+  {subject} — the main idea here is {strategic theme}. Strengths:
+  {what this opening does well}. Weaknesses: {what to watch for /
+  what your opponent will try}. I'll point out the key ideas as we
+  go." Don't re-introduce the opening on every move after that —
+  once is enough; subsequent narrations should just teach the ideas
+  in flow.
 - Explain what White is trying to do (central control, rapid
   development, attacking ideas, specific squares they want).
 - Explain what Black is trying to do (break the center,
@@ -397,4 +778,46 @@ function describeMoveFlags(move: VerboseMove): string {
   if (move.flags.includes('b')) parts.push('double pawn push');
   if (parts.length === 0) parts.push('quiet move');
   return parts.join(', ');
+}
+
+/** Human-readable piece roster derived from the actual board state.
+ *  LLMs are unreliable at parsing FEN strings — production audit on
+ *  build 1f23808 caught the LLM saying "your bishop on c4" / "my
+ *  pawn on e5" when those squares were empty in the FEN. This
+ *  formatter enumerates each side's pieces with their squares so
+ *  the LLM can't infer positions from opening name alone. Matches
+ *  the chess.js verbose history shape so a stale FEN doesn't lie
+ *  here either — every piece comes from chess.board(). */
+function formatPieceRoster(chess: Chess): string {
+  const board = chess.board();
+  const PIECE_NAMES: Record<string, string> = {
+    p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+  };
+  const white: Record<string, string[]> = {};
+  const black: Record<string, string[]> = {};
+  for (let rank = 0; rank < 8; rank++) {
+    for (let file = 0; file < 8; file++) {
+      const cell = board[rank][file];
+      if (!cell) continue;
+      const name = PIECE_NAMES[cell.type] ?? cell.type;
+      const square = `${'abcdefgh'[file]}${8 - rank}`;
+      const bucket = cell.color === 'w' ? white : black;
+      if (!bucket[name]) bucket[name] = [];
+      bucket[name].push(square);
+    }
+  }
+  const order: Array<keyof typeof PIECE_NAMES> = ['k', 'q', 'r', 'b', 'n', 'p'] as const;
+  const formatSide = (side: Record<string, string[]>): string => {
+    const segments: string[] = [];
+    for (const t of order) {
+      const name = PIECE_NAMES[t];
+      const squares = side[name];
+      if (squares && squares.length > 0) {
+        const label = squares.length > 1 ? `${name}s` : name;
+        segments.push(`${label} ${squares.join(' ')}`);
+      }
+    }
+    return segments.join(', ');
+  };
+  return `White: ${formatSide(white)}\nBlack: ${formatSide(black)}`;
 }

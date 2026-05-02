@@ -99,19 +99,46 @@ export function narrateMove(opts: {
   playerColor: 'w' | 'b';
   commentary?: string | null;
 }): void {
-  if (!useCoachSessionStore.getState().narrationMode) return;
-  const text = opts.commentary?.trim()
-    ? opts.commentary.trim()
-    : opts.mover === opts.playerColor
-      ? `You played ${opts.san}.`
-      : `I played ${opts.san}.`;
-  // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
-  // "Read this position" narration. Text surface retained via session
-  // store / chat messages; only TTS is muted.
-  void text;
-  // void voiceService.speak(text).catch((err: unknown) => {
-  //   console.warn('[narrateMove] TTS failed:', err);
-  // });
+  if (!useCoachSessionStore.getState().narrationMode) {
+    void logAppAudit({
+      kind: 'coach-move-narration-skipped',
+      category: 'subsystem',
+      source: 'coachAgentRunner.narrateMove',
+      summary: `san=${opts.san} reason=narrationMode-off`,
+    });
+    return;
+  }
+  // Only speak when the caller has produced real LLM commentary. The
+  // legacy "I played e5." / "You played e5." fallback was generic
+  // template prose that broke the conversational-coach feel — the
+  // student wants opening ideas and reasoning, not a SAN announcement.
+  // When commentary is empty (coach-move surface that doesn't run the
+  // LLM yet, or a verbosity-gated student move with nothing useful to
+  // say), fall silent and let the next LLM-narrated move carry the
+  // conversation forward.
+  const trimmed = opts.commentary?.trim();
+  if (!trimmed) {
+    void logAppAudit({
+      kind: 'coach-move-narration-skipped',
+      category: 'subsystem',
+      source: 'coachAgentRunner.narrateMove',
+      summary: `san=${opts.san} reason=empty-commentary`,
+    });
+    return;
+  }
+  // Phase narration takes precedence: usePhaseNarration.narrate() calls
+  // voiceService.stop() on entry, and voiceService.speakInternal stops
+  // in-flight speech before starting — so a phase summary firing will
+  // cleanly cut this off and the two surfaces never talk over each other.
+  void logAppAudit({
+    kind: 'coach-move-narration-fired',
+    category: 'subsystem',
+    source: 'coachAgentRunner.narrateMove',
+    summary: `san=${opts.san} mover=${opts.mover} chars=${trimmed.length}`,
+  });
+  void voiceService.speak(trimmed).catch((err: unknown) => {
+    console.warn('[narrateMove] TTS failed:', err);
+  });
 }
 
 export interface RunAgentTurnOptions {

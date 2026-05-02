@@ -13,7 +13,6 @@ import type { TacticLineData } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
 import { VoiceChatMic } from '../Board/VoiceChatMic';
 import type { EngineSnapshot, LastMoveContext } from '../Board/VoiceChatMic';
-import { normalizePieceShorthand } from '../../services/voiceService';
 import { EngineLines } from '../Board/EngineLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { DifficultyToggle } from './DifficultyToggle';
@@ -37,6 +36,7 @@ import {
 import { logAppAudit } from '../../services/appAuditor';
 import type { PhaseNarrationVerbosity } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { usePieceSound } from '../../hooks/usePieceSound';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -44,6 +44,7 @@ import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { coachService } from '../../coach/coachService';
+import { anthropicProvider } from '../../coach/providers/anthropic';
 import { withTimeout } from '../../coach/withTimeout';
 import { emergencyPickMove } from '../../coach/coachTurnFallback';
 import type { LiveState } from '../../coach/types';
@@ -135,6 +136,7 @@ import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachComm
 import { getCoachChatResponse } from '../../services/coachApi';
 import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
 import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
@@ -146,7 +148,7 @@ import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
-import { voiceService } from '../../services/voiceService';
+import { voiceService, resolvePollyVoice, POLLY_VOICES } from '../../services/voiceService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
   CoachDifficulty, MoveClassification, MoveAnnotation,
@@ -287,7 +289,49 @@ function buildAnalysisSummary(
   };
 }
 
-export function CoachGamePage(): JSX.Element {
+/** WO-COACH-RATING-FLOOR. Maximum centipawn loss the coach is allowed
+ *  to take vs. Stockfish's bestmove, indexed by the student's rating.
+ *
+ *  Lower-rated students intentionally get a higher tolerance — letting
+ *  the coach blunder a bit makes early-rating play feel human and gives
+ *  the student real winning chances. Higher-rated students get a tighter
+ *  floor so the coach stays sharp and the practice has teeth.
+ *
+ *  Returns `Infinity` for ratings under 1000 — eval floor disengaged
+ *  entirely. See `enforceMateFloor` for the matching beginner exemption
+ *  on mate-walk: beginners NEED to see the coach hang itself into mate
+ *  so they get pattern recognition reps. */
+function maxCpLossFor(rating: number): number {
+  if (rating < 1000) return Infinity;
+  if (rating < 1400) return 350;
+  if (rating < 1800) return 200;
+  if (rating < 2200) return 100;
+  return 50;
+}
+
+/** Whether the coach should refuse to walk into mate-in-≤-2 at this
+ *  rating. Below 1000 the coach is allowed to be Scholar's-Mated by
+ *  the student — that's a teaching moment, not a bug. At and above
+ *  1000 the floor is active so the coach plays at least competently. */
+function enforceMateFloor(rating: number): boolean {
+  return rating >= 1000;
+}
+
+export interface CoachGamePageProps {
+  /** Which surface this render is for. Same UI for both — every button,
+   *  every info bar, every chrome element renders identically. The
+   *  ONLY difference is the coach brain:
+   *    - 'play'  → DeepSeek default + live commentary on key moments
+   *    - 'teach' → Anthropic Sonnet + teaching-mode prompt that
+   *                explains every move in depth, suggests with arrows,
+   *                cites master games, etc.
+   *  Stockfish stays as the opponent in both modes — it's still a
+   *  real game; the coach just teaches more in teach mode.
+   *  Default: 'play'. */
+  surfaceMode?: 'play' | 'teach';
+}
+
+export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {}): JSX.Element {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const reviewGameId = searchParams.get('review');
@@ -317,6 +361,110 @@ export function CoachGamePage(): JSX.Element {
 
   // Ref to inject messages into GameChatPanel (hints, takeback msgs)
   const gameChatRef = useRef<GameChatPanelHandle>(null);
+
+  // ─── Coach-driven quiz state (WO-COACH-LICHESS-OPENINGS) ───────────
+  // When the LLM emits `quiz_user_for_move`, the surface registers a
+  // pending quiz here. The next student move resolves it: matching
+  // `expectedSan` (or any `allowAlternatives`) → `{ ok: true }`, anything
+  // else → `{ ok: false, played, expected }`. Either branch fires a
+  // `quiz-resolved` audit so the LLM's next round-trip can narrate
+  // feedback. The ref + state pair mirrors the pattern used elsewhere
+  // (phase narration, blunder pause): ref is the synchronous read,
+  // state drives the banner UI.
+  type ActiveQuiz = {
+    active: true;
+    expectedSan: string;
+    allowAlternatives: readonly string[];
+    prompt: string;
+    resolve: (
+      result:
+        | { ok: true; played: string }
+        | { ok: false; played: string; expected: string }
+        | { ok: false; reason: string },
+    ) => void;
+  };
+  type QuizState = ActiveQuiz | { active: false };
+  const [quizState, setQuizState] = useState<QuizState>({ active: false });
+  const quizStateRef = useRef<QuizState>({ active: false });
+
+  const cancelActiveQuizRef = useRef<(reason: string) => void>(() => {});
+  cancelActiveQuizRef.current = (reason: string): void => {
+    const cur = quizStateRef.current;
+    if (!cur.active) return;
+    cur.resolve({ ok: false, reason });
+    quizStateRef.current = { active: false };
+    setQuizState({ active: false });
+    void logAppAudit({
+      kind: 'quiz-cancelled',
+      category: 'subsystem',
+      source: 'CoachGamePage.cancelActiveQuiz',
+      summary: `expected=${cur.expectedSan} reason=${reason}`,
+    });
+  };
+
+  const handleQuizUserForMove = useCallback(
+    (args: {
+      expectedSan: string;
+      prompt: string;
+      allowAlternatives?: readonly string[];
+    }): Promise<
+      | { ok: true; played: string }
+      | { ok: false; played: string; expected: string }
+      | { ok: false; reason: string }
+    > => {
+      // Supersede any in-flight quiz before registering the new one.
+      cancelActiveQuizRef.current('superseded by new quiz');
+      return new Promise((resolve) => {
+        const next: ActiveQuiz = {
+          active: true,
+          expectedSan: args.expectedSan,
+          allowAlternatives: args.allowAlternatives ?? [],
+          prompt: args.prompt,
+          resolve,
+        };
+        quizStateRef.current = next;
+        setQuizState(next);
+        void logAppAudit({
+          kind: 'quiz-started',
+          category: 'subsystem',
+          source: 'CoachGamePage.handleQuizUserForMove',
+          summary: `expected=${args.expectedSan} alts=${(args.allowAlternatives ?? []).join(',') || 'none'}`,
+          details: JSON.stringify(args),
+        });
+      });
+    },
+    [],
+  );
+
+  const handleStartWalkthroughForOpening = useCallback(
+    (args: {
+      opening: string;
+      variation?: string;
+      orientation?: 'white' | 'black';
+      pgn?: string;
+    }): { ok: boolean; reason?: string } => {
+      const params = new URLSearchParams();
+      params.set('subject', args.opening);
+      if (args.variation) params.set('variation', args.variation);
+      if (args.orientation) params.set('orientation', args.orientation);
+      if (args.pgn) params.set('pgn', args.pgn);
+      const route = `/coach/session/walkthrough?${params.toString()}`;
+      void logAppAudit({
+        kind: 'walkthrough-started-from-coach',
+        category: 'subsystem',
+        source: 'CoachGamePage.handleStartWalkthroughForOpening',
+        summary: `opening=${args.opening} variation=${args.variation ?? 'none'} orientation=${args.orientation ?? 'auto'}`,
+        details: JSON.stringify({ ...args, route }),
+      });
+      try {
+        navigate(route);
+        return { ok: true };
+      } catch (err) {
+        return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      }
+    },
+    [navigate],
+  );
 
   const playerRating = activeProfile?.currentRating ?? 1420;
 
@@ -375,6 +523,22 @@ export function CoachGamePage(): JSX.Element {
   const previousFenRef = useRef<string | null>(null);
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   const moveCountRef = useRef(0);
+  // Track which openings we've already introduced this game so the
+  // long teaching narration only fires ONCE per opening, not on
+  // every move in book. Routine book moves stay silent until a key
+  // moment (blunder / mistake / brilliant) or a phase transition
+  // (handled by usePhaseNarration). Reset on game restart below
+  // so a fresh game can re-introduce the opening.
+  //
+  // NB (WO-NARR-POLICY-01): collapsed from a Set<openingName> to a
+  // single boolean. The auto-detector refines the opening name as more
+  // moves are played ("Italian Game" → "King's Pawn Game" → "Damiano
+  // Defense"), so the per-name set was firing the long intro three
+  // times in a row for what the user perceives as one opening. One
+  // intro per GAME aligns with what was asked for. Only fires under
+  // verbosity='every-move' — under 'key-moments' the user explicitly
+  // asked for silence except on actual events.
+  const openingIntroSpokenRef = useRef<boolean>(false);
 
   // Requested opening — read live from the memory store. Post-tightening
   // (WO-BRAIN-04) the move-selector no longer derives a parallel SAN
@@ -591,6 +755,12 @@ export function CoachGamePage(): JSX.Element {
     exitPractice,
     setPracticeFromAnnotation,
   } = usePracticePosition();
+
+  // Move sound: ChessBoard already plays the sound on user drag/click,
+  // but coach moves are committed programmatically via game.makeMove
+  // and bypass that path. Hook the same audio service here so coach
+  // moves get the same audible cue as the student's. WO-COACH-OPPONENT-FX.
+  const { playMoveSound } = usePieceSound();
 
   // Post-game practice bridge prompt
   const [pendingChatPrompt, setPendingChatPrompt] = useState<string | null>(null);
@@ -1061,6 +1231,12 @@ export function CoachGamePage(): JSX.Element {
     // Reset the phase-transition ledger so the new game can fire its
     // transitions fresh (WO-PHASE-NARRATION-01).
     phaseStateRef.current = createPhaseTransitionState();
+    // Reset the introduced-openings tracker so the next opening gets
+    // its long teaching intro again.
+    openingIntroSpokenRef.current = false;
+    // Cancel any pending coach quiz — its expectedSan refers to the
+    // old position and won't match anything in the fresh game.
+    cancelActiveQuizRef.current('game-restart');
     game.resetGame();
     moveCountRef.current = 0;
     setGameState({
@@ -1455,20 +1631,34 @@ export function CoachGamePage(): JSX.Element {
       };
 
       setCoachLastMove({ from: result.from, to: result.to });
+      // WO-COACH-OPPONENT-FX: emit the move/capture sound + an audit
+      // marker so we can verify in the audit log that this fired. The
+      // student gets the same sound on their own moves via ChessBoard's
+      // drag/click handlers; this closes the gap for coach moves.
+      playMoveSound(result.san);
+      void logAppAudit({
+        kind: 'coach-move-fx-emitted',
+        category: 'subsystem',
+        source: 'CoachGamePage.applyCoachMove',
+        summary: `san=${result.san} from=${result.from} to=${result.to}`,
+      });
       setGameState((prev) => ({
         ...prev,
         moves: [...prev.moves, coachMove],
       }));
-      // Narrate the coach's move when narration mode is on. Falls
-      // back to a short SAN announcement since applyCoachMove doesn't
-      // generate LLM commentary on the engine's side.
-      // Stop any in-flight TTS (a stale voice-chat reply still playing,
-      // the previous move's narration that overran) before the coach's
-      // move speaks. Without this the coach narration and a prior
-      // voice-chat reply can overlap — the student hears two voices
-      // at once. Matches the player-move path's guard below.
+      // Narrate the coach's move when narration mode is on. Coach moves
+      // almost never have LLM commentary attached — applyCoachMove
+      // doesn't run the LLM on the engine's side — so narrateMove
+      // typically returns early with reason=empty-commentary. We used
+      // to call voiceService.stop() unconditionally before narrateMove
+      // to prevent overlap, but that clipped the student's in-flight
+      // narration about THEIR last move every time the coach replied
+      // (~5s into a 50-90s narration), which was the user-reported
+      // "narration keeps getting cut off" symptom. WO-NARR-POLICY-01:
+      // let voiceService.speak handle interruption itself — it already
+      // stops the previous utterance before starting a new one — and
+      // only when narrateMove actually produces speech.
       const coachSide: 'w' | 'b' = playerColor === 'white' ? 'b' : 'w';
-      voiceService.stop();
       narrateMove({
         san: result.san,
         mover: coachSide,
@@ -1528,9 +1718,22 @@ export function CoachGamePage(): JSX.Element {
 
         let brainPickSan: string | null = null;
         const intendedOpeningName = useCoachMemoryStore.getState().intendedOpening?.name ?? null;
+        // WO-COACH-MATE-FLOOR: pre-seed the LLM with Stockfish's
+        // bestmove + eval so it has a strong nudge from the start.
+        // The post-move floor below catches obvious mate-walks; this
+        // reduces how often the floor has to fire.
+        const seededAnalysis = await Promise.race([
+          preAnalysisPromise,
+          new Promise<StockfishAnalysis | null>((resolve) =>
+            setTimeout(() => resolve(null), 2_000),
+          ),
+        ]);
+        const engineHint = seededAnalysis && seededAnalysis.bestMove
+          ? ` Engine analysis at depth ${seededAnalysis.depth}: bestmove ${seededAnalysis.bestMove}, eval ${(seededAnalysis.evaluation / 100).toFixed(2)}. Use this as your primary signal — deviations are fine for variety at the student's rating, but never walk into a forced mate.`
+          : '';
         const moveSelectorAsk = intendedOpeningName
-          ? `It is your turn (${aiColor}). The student is rated about ${targetStrength} and has committed to ${intendedOpeningName}. Consult local_opening_book first; if we are still in book, play that move via play_move. If we are out of book, use stockfish_eval and pick a move calibrated to the student's rating, then play it via play_move.`
-          : `It is your turn (${aiColor}). The student is rated about ${targetStrength}. Use stockfish_eval if you want depth, then pick a move calibrated to the student's rating and play it via play_move.`;
+          ? `It is your turn (${aiColor}). The student is rated about ${targetStrength} and has committed to ${intendedOpeningName}. Consult local_opening_book first; if we are still in book, play that move via play_move. If we are out of book, use stockfish_eval and pick a move calibrated to the student's rating, then play it via play_move.${engineHint}`
+          : `It is your turn (${aiColor}). The student is rated about ${targetStrength}. Use stockfish_eval if you want depth, then pick a move calibrated to the student's rating and play it via play_move.${engineHint}`;
         const moveSelectorLiveState: LiveState = {
           surface: 'move-selector',
           fen: game.fen,
@@ -1552,6 +1755,68 @@ export function CoachGamePage(): JSX.Element {
           }),
           fen: game.fen,
         });
+        // ── WO-PLAN-B fast path: Stockfish + opening book directly ──
+        // The LLM spine spent ~8 seconds making 3 tool round-trips
+        // (local_opening_book → stockfish_eval → play_move) when all
+        // it actually does is route data the engine already has. Skip
+        // it for routine moves: pick the opening-book move when the
+        // student's intended opening is set + we're still in book,
+        // otherwise pick Stockfish's best move at the strength
+        // calibrated to the student's rating. Both run in <250ms.
+        // The full LLM spine still acts as a fallback if the fast
+        // path fails to produce a legal move.
+        if (intendedOpeningName) {
+          try {
+            const bookMoves = getOpeningMoves(intendedOpeningName);
+            if (bookMoves && game.history.length < bookMoves.length) {
+              const next = bookMoves[game.history.length];
+              const probe = new Chess(game.fen);
+              if (probe.move(next)) {
+                brainPickSan = next;
+                void logAppAudit({
+                  kind: 'coach-move-fastpath',
+                  category: 'subsystem',
+                  source: 'CoachGamePage.coachTurn.fastpath',
+                  summary: `book: ${next} (${intendedOpeningName} ply ${game.history.length})`,
+                  fen: game.fen,
+                });
+              }
+            }
+          } catch {
+            /* fall through */
+          }
+        }
+        if (!brainPickSan) {
+          try {
+            const config = resolvePlayConfig(difficulty, playerRating);
+            const uciResult = await withTimeout(
+              stockfishEngine.getBestMove(game.fen, config.moveTimeMs),
+              Math.max(2_000, config.moveTimeMs + 1_000),
+              'fastpath-bestmove',
+            );
+            if (uciResult.ok && uciResult.value) {
+              const probe = new Chess(game.fen);
+              const result = probe.move({
+                from: uciResult.value.slice(0, 2),
+                to: uciResult.value.slice(2, 4),
+                promotion: uciResult.value.length > 4 ? uciResult.value.slice(4, 5) : undefined,
+              });
+              if (result) {
+                brainPickSan = result.san;
+                void logAppAudit({
+                  kind: 'coach-move-fastpath',
+                  category: 'subsystem',
+                  source: 'CoachGamePage.coachTurn.fastpath',
+                  summary: `stockfish: ${result.san} at strength ${targetStrength} (skill ${config.skill}, ${config.moveTimeMs}ms)`,
+                  fen: game.fen,
+                });
+              }
+            }
+          } catch {
+            /* fall through to spine */
+          }
+        }
+
         // WO-COACH-RESILIENCE — three-tier fallback chain so the
         // coach never hangs mid-game. PR #344 shipped audit-kind
         // names without implementation; this is the real layer.
@@ -1562,6 +1827,9 @@ export function CoachGamePage(): JSX.Element {
           ask: moveSelectorAsk,
           liveState: moveSelectorLiveState,
         };
+        // Spine fallback path — only runs when the fast path above
+        // didn't produce a legal move (rare: Stockfish hung, no book
+        // move available + Stockfish errored, etc.)
         const onPlayMoveCallback = (san: string): { ok: boolean; reason?: string } => {
           // Validate against the live FEN. The play_move tool already
           // validated, but board state may have shifted between
@@ -1579,12 +1847,28 @@ export function CoachGamePage(): JSX.Element {
             };
           }
         };
+        // WO-COACH-PERSONALITIES (PR B): thread the user's personality
+        // + dial settings into every coach-turn ask. Defaults preserve
+        // the original Danya prompt verbatim — no behavior change for
+        // profiles that haven't opted in.
+        const prefs = useAppStore.getState().activeProfile?.preferences;
         const baseOptions = {
           maxToolRoundTrips: 3,
           onPlayMove: onPlayMoveCallback,
+          personality: prefs?.coachPersonality,
+          profanity: prefs?.coachProfanity,
+          mockery: prefs?.coachMockery,
+          flirt: prefs?.coachFlirt,
+          verbosity: prefs?.coachResponseLength,
+          // Teach mode: route the same coach-turn ask through Sonnet
+          // instead of DeepSeek for richer commentary + deeper line
+          // explanations. Stockfish stays as the opponent; only the
+          // narration brain swaps. Play mode keeps the cheaper
+          // DeepSeek default.
+          ...(surfaceMode === 'teach' ? { providerOverride: anthropicProvider } : {}),
         };
 
-        try {
+        if (!brainPickSan) try {
           // Primary: full toolbelt, 15 s budget.
           const primary = await withTimeout(
             coachService.ask(askInput, baseOptions),
@@ -1662,6 +1946,137 @@ export function CoachGamePage(): JSX.Element {
         // Convert the brain's SAN to UCI for tryMakeMove. If the brain
         // emitted no play_move (or an illegal one), fall back to a
         // random legal move so the game never freezes.
+        //
+        // WO-COACH-MATE-FLOOR: hard safety check. Audit cycle 9 caught
+        // the coach walking into Scholar's Mate as Black at move 5
+        // because the LLM's pick wasn't validated against the engine.
+        // Run a quick Stockfish probe on the position AFTER the LLM's
+        // pick — if the student has mate-in-≤-2 from that position,
+        // override with the engine's bestmove. Cheap (depth 8, 1500ms
+        // budget) compared to the cost of letting the coach get mated
+        // mid-tutorial.
+        if (brainPickSan && seededAnalysis && seededAnalysis.bestMove) {
+          try {
+            const probe = new Chess(game.fen);
+            const probedMove = probe.move(brainPickSan);
+            if (probedMove) {
+              const fenAfter = probe.fen();
+              const mateProbe = await withTimeout(
+                stockfishEngine.analyzePosition(fenAfter, 8),
+                1_500,
+                'coach-mate-floor',
+              );
+              if (mateProbe.ok) {
+                const post = mateProbe.value;
+                // Two-tier veto:
+                //
+                //   Mate floor (universal, all ratings): if the student
+                //   has mate-in-≤-2 from this position, override.
+                //   Audit cycle 9 caught Scholar's Mate at move 5 — even
+                //   beginner students shouldn't watch the coach get
+                //   instamated.
+                //
+                //   Quality floor (rating-tier, WO-COACH-RATING-FLOOR):
+                //   compare the coach's eval after the LLM's pick to
+                //   the eval if it had played the engine bestmove. If
+                //   cp loss exceeds the student's rating threshold,
+                //   override. Lower-rated students get a higher cp-loss
+                //   tolerance so the coach can blunder for them; higher-
+                //   rated students get a tighter floor so they get
+                //   sharper play.
+                //
+                //   Stockfish reports `evaluation` and `mateIn` from
+                //   the side-to-move's perspective. The probe is at
+                //   FEN-after where side-to-move = student, so `post`
+                //   is from student's perspective. To get coach's view,
+                //   flip the sign.
+                let vetoReason: string | null = null;
+                let auditKind: 'coach-move-mate-floor-triggered' | 'coach-move-quality-floor-triggered' =
+                  'coach-move-mate-floor-triggered';
+                let auditDetails: Record<string, unknown> = {};
+
+                if (
+                  enforceMateFloor(targetStrength) &&
+                  post.isMate &&
+                  post.mateIn !== null &&
+                  post.mateIn > 0 &&
+                  post.mateIn <= 2
+                ) {
+                  vetoReason = `student mate-in-${post.mateIn}`;
+                  auditKind = 'coach-move-mate-floor-triggered';
+                  auditDetails = {
+                    llmPickSan: brainPickSan,
+                    mateIn: post.mateIn,
+                    override: seededAnalysis.bestMove,
+                    rating: targetStrength,
+                    fenBefore: game.fen,
+                    fenAfter,
+                  };
+                } else if (!post.isMate) {
+                  // Quality floor — only meaningful when neither side
+                  // has a forced mate (otherwise mate dominates and the
+                  // cp comparison is degenerate).
+                  const maxCpLoss = maxCpLossFor(targetStrength);
+                  if (Number.isFinite(maxCpLoss)) {
+                    const coachEvalAfter = -post.evaluation;
+                    const coachEvalIfBest = seededAnalysis.evaluation;
+                    const cpLoss = coachEvalIfBest - coachEvalAfter;
+                    if (cpLoss > maxCpLoss) {
+                      vetoReason = `cpLoss=${cpLoss.toFixed(0)} > tier=${maxCpLoss} for rating ${targetStrength}`;
+                      auditKind = 'coach-move-quality-floor-triggered';
+                      auditDetails = {
+                        llmPickSan: brainPickSan,
+                        targetStrength,
+                        maxCpLoss,
+                        cpLoss: Math.round(cpLoss),
+                        coachEvalIfBest,
+                        coachEvalAfter,
+                        override: seededAnalysis.bestMove,
+                        fenBefore: game.fen,
+                        fenAfter,
+                      };
+                    }
+                  }
+                }
+
+                if (vetoReason) {
+                  void logAppAudit({
+                    kind: auditKind,
+                    category: 'subsystem',
+                    source: 'CoachGamePage.coachTurn',
+                    summary: `LLM picked ${brainPickSan} → ${vetoReason}; overriding with engine bestmove ${seededAnalysis.bestMove}`,
+                    details: JSON.stringify(auditDetails),
+                    fen: game.fen,
+                  });
+                  // Convert engine bestmove (UCI) into SAN for re-validation
+                  // through the same probe path below.
+                  try {
+                    const overrideProbe = new Chess(game.fen);
+                    const overrideMove = overrideProbe.move({
+                      from: seededAnalysis.bestMove.slice(0, 2),
+                      to: seededAnalysis.bestMove.slice(2, 4),
+                      promotion: seededAnalysis.bestMove.length > 4
+                        ? seededAnalysis.bestMove.slice(4, 5)
+                        : undefined,
+                    });
+                    if (overrideMove) {
+                      brainPickSan = overrideMove.san;
+                    }
+                  } catch {
+                    // If we can't convert the engine bestmove, leave
+                    // brainPickSan as-is — at least the audit logged it
+                    // and the user can see the floor fired.
+                  }
+                }
+              }
+            }
+          } catch {
+            // Probe failed (Stockfish hang, illegal state) — fall
+            // through with the LLM's original pick. The floor is a
+            // best-effort safety net, not a hard requirement.
+          }
+        }
+
         let move: string | null = null;
         if (brainPickSan) {
           try {
@@ -1702,15 +2117,24 @@ export function CoachGamePage(): JSX.Element {
           return;
         }
 
-        // NB: do NOT bail on isCancelled() once tryMakeMove has succeeded.
-        // chess.js was already mutated, so the coach move IS on the board
-        // — bailing here would skip applyCoachMove, leaving gameState.moves
-        // out of sync with the chess instance and silently dropping the
-        // last-move highlight, sound, narration, and move-list entry.
-        // Cancellation here is expected: game.fen flipped during
-        // tryMakeMove, the useEffect re-fired, and the previous run's
-        // controller was aborted. We let the in-flight call commit its
-        // FX rather than the next effect run try to reproduce them.
+        // WO-COACH-FX-DIAG checkpoint — keep the diagnostic trace so the
+        // audit log retains the FX flow signal, but do NOT bail on
+        // cancellation: chess.js was already mutated by tryMakeMove, so
+        // applyCoachMove MUST run to keep gameState.moves in sync and
+        // fire the last-move highlight, sound, narration, and move-list
+        // entry. Cancellation at this gate is expected — game.fen
+        // flipped during tryMakeMove, the useEffect re-fired, and the
+        // previous run's controller was aborted. Let the in-flight call
+        // commit its FX; the FEN-turn guard at the top of makeCoachMove
+        // prevents the next effect run from double-firing.
+        void logAppAudit({
+          kind: 'coach-turn-checkpoint',
+          category: 'subsystem',
+          source: 'CoachGamePage.coachTurn',
+          summary: `move-committed san=${result.san} cancelled=${isCancelled()}`,
+          fen: result.fen,
+        });
+
         if (isCancelled()) {
           void logAppAudit({
             kind: 'coach-move-fx-cancellation-ignored',
@@ -1758,6 +2182,14 @@ export function CoachGamePage(): JSX.Element {
             summary: `gate=post-postCoachAnalysis san=${result.san} — committing FX path`,
           });
         }
+
+        void logAppAudit({
+          kind: 'coach-turn-checkpoint',
+          category: 'subsystem',
+          source: 'CoachGamePage.coachTurn',
+          summary: `reached applyCoachMove call — about to fire FX (sound + highlight + audit)`,
+          fen: result.fen,
+        });
 
         const postCoachEval = postCoachAnalysis?.evaluation ?? analysis.evaluation;
         applyCoachMove(result, postCoachEval, analysis.evaluation, analysis.bestMove);
@@ -1810,8 +2242,29 @@ export function CoachGamePage(): JSX.Element {
           evalAfter: postCoachEval,
         });
 
-        // Proactive warning: scan for opponent threats after coach's move
-        if (postCoachAnalysis && !isCancelled()) {
+        // Proactive tactic alert: scan for opponent threats after coach's
+        // move. Fires the alert as soon as the threat is brewing
+        // — BEFORE the student plays into it — which is the only useful
+        // moment per the user. Stockfish-driven (no LLM round-trip), so
+        // it speaks within ~100ms of the coach's reply.
+        //
+        // WO-NARR-POLICY-01: gated on verbosity !== 'off'. Both
+        // 'key-moments' and 'every-move' speak the alert; 'off' stays
+        // silent. Cancellation is intentionally NOT a gate — same
+        // reasoning as the FX path: chess.js is mutated, the threat
+        // exists on the board, the player needs to hear it.
+        //
+        // Wording (audit build 9b74213 caught the bug): the pattern
+        // description is generated from the FUTURE FEN where the
+        // tactic exists ("Queen on h4 pins pawn on h2") but the queen
+        // ISN'T on h4 yet — so a present-tense announcement was
+        // confusing. Prefix with the move that would set it up so the
+        // student hears "if I play Qh4, [description]" — clearly a
+        // threat to watch, not a fait accompli. Also verify the move
+        // setting up the threat is legal on the current board (it
+        // already is, since scanUpcomingTactics walks chess.js — but
+        // the explicit check guards against any future regression).
+        if (postCoachAnalysis) {
           const playerColorCode = playerColor === 'white' ? 'w' : 'b';
           const upcoming = scanUpcomingTactics(
             result.fen,
@@ -1820,8 +2273,46 @@ export function CoachGamePage(): JSX.Element {
           );
           const threats = upcoming.filter((u) => u.beneficiary === 'opponent' && u.depthAhead <= 2);
           if (threats.length > 0) {
-            const warning = `Be careful — ${threats[0].pattern.description}.`;
+            const threat = threats[0];
+            // The opponent's move that sets up the tactic. line[i]
+            // alternates side-to-move; depthAhead=1 → line[0] is the
+            // student's move and the threat emerges from that, depthAhead=2
+            // → line[1] is the opponent's move that creates the threat.
+            const threatMoveIdx = threat.depthAhead - 1;
+            const threatMove = threat.line[threatMoveIdx] ?? '';
+            const isOppMove = threatMoveIdx % 2 === 1;
+            const lowerDesc = threat.pattern.description.charAt(0).toLowerCase() + threat.pattern.description.slice(1);
+            const warning = isOppMove && threatMove
+              ? `Watch out — if I play ${threatMove}, ${lowerDesc}.`
+              : threatMove
+                ? `Watch out — ${threatMove} from you would let ${lowerDesc}.`
+                : `Watch out — ${threat.pattern.description}.`;
             gameChatRef.current?.injectAssistantMessage(warning);
+            const tacticVerbosity = resolveVerbosity(useAppStore.getState().activeProfile);
+            if (tacticVerbosity !== 'off') {
+              void logAppAudit({
+                kind: 'coach-tactic-alert-spoken',
+                category: 'subsystem',
+                source: 'CoachGamePage.coachTurn',
+                summary: `pattern=${threat.pattern.description} threatMove=${threatMove} depthAhead=${threat.depthAhead} verbosity=${tacticVerbosity}`,
+                fen: result.fen,
+              });
+              // Mirror into the coach's session memory so when the user
+              // asks "what did you just say?" the brain can recall the
+              // alert it just spoke. WO-NARR-POLICY-02.
+              useCoachSessionStore.getState().appendMessage({
+                id: `tactic-alert-${Date.now()}`,
+                role: 'assistant',
+                content: warning,
+                timestamp: Date.now(),
+              });
+              // WO-VOICE-LAYER-01 (b): use the personality's secondary
+              // voice so the alert cuts through with a different timbre
+              // than the main narration.
+              void voiceService.speakAlert(warning).catch((err: unknown) => {
+                console.warn('[tactic-alert] TTS failed:', err);
+              });
+            }
           }
         }
       } catch (error) {
@@ -1861,6 +2352,43 @@ export function CoachGamePage(): JSX.Element {
 
   // Handle player move
   const handlePlayerMove = useCallback(async (moveResult: MoveResult) => {
+    // ─── Quiz interceptor (WO-COACH-LICHESS-OPENINGS) ────────────────
+    // If a coach-driven quiz is pending, the student's move resolves
+    // it before any classification / coach reply runs. The Promise
+    // result feeds back to the LLM in its next round-trip; the LLM
+    // reads it and narrates feedback ("perfect — that's the main
+    // line" or "Nf3 is the principled move here, not Nc3"). We do
+    // NOT skip the rest of the function — the move still needs
+    // analysis, eval bar update, blunder detection, etc. The quiz is
+    // a side-channel that runs in parallel with normal flow.
+    {
+      const cur = quizStateRef.current;
+      if (cur.active) {
+        const playedSan = moveResult.san;
+        const accepted =
+          playedSan === cur.expectedSan ||
+          cur.allowAlternatives.includes(playedSan);
+        const result = accepted
+          ? ({ ok: true, played: playedSan } as const)
+          : ({ ok: false, played: playedSan, expected: cur.expectedSan } as const);
+        cur.resolve(result);
+        quizStateRef.current = { active: false };
+        setQuizState({ active: false });
+        void logAppAudit({
+          kind: 'quiz-resolved',
+          category: 'subsystem',
+          source: 'CoachGamePage.handlePlayerMove',
+          summary: `played=${playedSan} expected=${cur.expectedSan} ok=${accepted}`,
+          details: JSON.stringify({
+            played: playedSan,
+            expected: cur.expectedSan,
+            allowAlternatives: cur.allowAlternatives,
+            accepted,
+          }),
+        });
+      }
+    }
+
     // Clear any coach annotations, hints, and reset move navigation when player moves
     handleBackToGame();
     setViewedMoveIndex(null);
@@ -1987,17 +2515,14 @@ export function CoachGamePage(): JSX.Element {
         if (realTactics.length > 0) {
           tacticSuffix = ` (${realTactics.map((t) => t.description).join('; ')})`;
         }
-        if (tacticResult.hangingPieces.length > 0) {
-          // normalizePieceShorthand ensures bare piece letters ("p", "N")
-          // are expanded to words ("pawn", "knight") so the banner reads
-          // "White pawn on h7" instead of "White p on h7" (WO-COACH-NARRATION-06).
-          const hangingDescs = tacticResult.hangingPieces.map((p) =>
-            normalizePieceShorthand(
-              `${p.color === 'w' ? 'White' : 'Black'} ${p.piece} on ${p.square}`,
-            ),
-          );
-          tacticSuffix += ` Hanging: ${hangingDescs.join(', ')}.`;
-        }
+        // WO-NARR-POLICY-06: dropped the "Hanging: White pawn on h7"
+        // listing from tacticSuffix entirely. The robotic enumeration
+        // was bleeding into the move-list / chat surfaces and the user
+        // explicitly asked for it removed. The hanging-piece info is
+        // still passed to the live-coach blunder detector (via
+        // `tacticResult.hangingPieces` directly) and to the LLM
+        // commentary path as grounded context — only the deterministic
+        // banner text is gone.
       } catch {
         // Tactic classification failed, continue without it
       }
@@ -2015,6 +2540,13 @@ export function CoachGamePage(): JSX.Element {
     // time. "Key moments only" would skip most opening book moves
     // because they classify as 'book' / 'best', killing the feature.
     let commentary = '';
+    // Tracks whether the LLM produced speech-worthy content for this
+    // move. The deterministic tactic suffix ("Hanging: Black rook on
+    // h8 ...") is fine in the move-list display but NEVER gets spoken
+    // — it's a robotic readout that breaks the personality voice and
+    // fires on every player move regardless of verbosity setting.
+    // Bug observed in production audit ac8088d. WO-NARR-POLICY-03.
+    let llmProducedSpeech = false;
     const verbosity = resolveVerbosity(useAppStore.getState().activeProfile);
     // Narration density — separate from the commentary-gate verbosity
     // above. Honors the user's Settings toggle (none/fast/medium/slow)
@@ -2023,21 +2555,143 @@ export function CoachGamePage(): JSX.Element {
     // we'd throw away.
     const narrationDensity =
       useAppStore.getState().activeProfile?.preferences.coachVerbosity ?? 'unlimited';
-    const bookDepth = intendedOpening
-      ? (getOpeningMoves(intendedOpening.name)?.length ?? 0)
+    // Auto-detect the opening from the SAN move history so opening
+    // teaching mode activates whenever the position matches a known
+    // book line — even if the student didn't pick a subject from the
+    // dropdown. Detection is fast (trie lookup over the bundled
+    // Lichess openings DB) and safe to run every move. Resolution
+    // precedence: explicit URL subject > committed intent > auto-detect.
+    const detectedOpening = detectOpening(game.history);
+    // Resolution precedence: URL > auto-detect > intent. Auto-detect
+    // is always accurate to the actual moves on the board, so it wins
+    // over a (potentially stale) committed intent. Production audit
+    // build cb018c0 caught the bug: a sticky `intendedOpening =
+    // "Italian Game"` from a prior session was overriding the
+    // auto-detected "Scandinavian Defense" on a fresh 1.e4 d5 game,
+    // and the LLM was being told "Italian Game" while narrating
+    // moves that weren't Italian. Auto-detect-first eliminates the
+    // mismatch — intent only fires when the position is too generic
+    // for the trie to name (rare, very early game).
+    const resolutionSource: 'url' | 'auto-detect' | 'intent' | 'none' = subjectParam
+      ? 'url'
+      : detectedOpening
+        ? 'auto-detect'
+        : intendedOpening
+          ? 'intent'
+          : 'none';
+    const resolvedSubject =
+      subjectParam ?? detectedOpening?.name ?? intendedOpening?.name ?? null;
+    const bookDepth = resolvedSubject
+      ? (getOpeningMoves(resolvedSubject)?.length ?? 0)
       : 0;
     const inOpeningTeaching =
-      !!subjectParam && game.history.length <= Math.max(bookDepth, 12);
+      !!resolvedSubject && game.history.length <= Math.max(bookDepth, 12);
+    if (detectedOpening) {
+      void logAppAudit({
+        kind: 'coach-opening-auto-detected',
+        category: 'subsystem',
+        source: 'CoachGamePage.move',
+        summary: `eco=${detectedOpening.eco} name="${detectedOpening.name}" ply=${detectedOpening.plyCount} resolution=${resolutionSource}`,
+        fen: moveResult.fen,
+      });
+    }
+    if (inOpeningTeaching && resolvedSubject) {
+      void logAppAudit({
+        kind: 'coach-opening-teaching-active',
+        category: 'subsystem',
+        source: 'CoachGamePage.move',
+        summary: `subject="${resolvedSubject}" resolution=${resolutionSource} ply=${game.history.length}/${Math.max(bookDepth, 12)}`,
+        fen: moveResult.fen,
+      });
+    }
+    // Sparse-cadence narration (WO-NARRATION-CADENCE).
+    //
+    // The previous behavior fired the LLM on every move while in
+    // opening teaching mode, which made the game feel like waiting
+    // for the coach to monologue between every move (5-7s latency
+    // per call, ~1700-char response). Player flow died.
+    //
+    // New cadence:
+    //   1. ONCE per opening — fire the long teaching narration the
+    //      first time we see a recognizable opening name. Subsequent
+    //      moves in the same opening stay silent unless a key moment
+    //      fires.
+    //   2. KEY MOMENTS — blunders / mistakes / inaccuracies /
+    //      brilliants / greats trigger a short personality-laden
+    //      zinger (briefMode below). Latency budget: ~2s for a
+    //      1-2 sentence response with mockery / critique.
+    //   3. PHASE TRANSITIONS — handled by usePhaseNarration. Fires
+    //      automatically at opening→middlegame and
+    //      middlegame→endgame, giving the next teaching beat.
+    //   4. EXPLICIT every-move setting — power users who set
+    //      `coachCommentaryVerbosity = 'every-move'` still get the
+    //      old per-move running commentary.
+    //
+    // Settings → Coach → Commentary Frequency drives this:
+    //   'off'         → all three triggers gated off (silent except
+    //                   for deterministic tactic suffix)
+    //   'key-moments' → blunder/mistake/brilliant/great only. NO
+    //                   opening intro, NO phase transition prose.
+    //                   Tactic alerts still speak from the post-coach
+    //                   scan — those are Stockfish-driven, no LLM
+    //                   latency, and the user wants them as soon as
+    //                   the threat lands on the board.
+    //   'every-move'  → opening intro once per game + every player
+    //                   move + key moments + tactic alerts.
+    //
+    // WO-NARR-POLICY-01: opening intro gated to 'every-move' only.
+    // Under 'key-moments' the user explicitly asked for silence except
+    // on actual events. The intro flag is also collapsed from per-name
+    // to per-game so a refining auto-detect doesn't trigger three
+    // intros for one opening.
+    const isFirstSeeingOpening =
+      verbosity === 'every-move' &&
+      inOpeningTeaching &&
+      !!resolvedSubject &&
+      !openingIntroSpokenRef.current;
+    const isKeyMoment = shouldCallLlmForMove(verbosity, classification);
+    const userWantsEveryMove = verbosity === 'every-move';
+    // briefMode: short personality-laden response. Skipped for the
+    // big opening intro (wants long prose) and for explicit
+    // every-move (user wants normal length).
+    const briefMode = isKeyMoment && !isFirstSeeingOpening && !userWantsEveryMove;
     const shouldFire =
       narrationDensity !== 'none' &&
-      (inOpeningTeaching || shouldCallLlmForMove(verbosity, classification));
+      (isFirstSeeingOpening || isKeyMoment || userWantsEveryMove);
     if (shouldFire) {
       try {
-        // safeChessFromFen returns null on malformed FEN instead of
-        // throwing — a corrupt FEN here would previously tank the
-        // whole narration pipeline for the move. Now we bail early
-        // and still announce the SAN via the fallback path.
-        const probe = safeChessFromFen(moveResult.fen);
+        // Build a probe Chess instance that carries the FULL move
+        // history. The LLM commentary path uses
+        // `gameAfter.history({ verbose: true })` to extract the last
+        // move's SAN + flags + recent SAN list. A FEN-only probe
+        // (`new Chess(fen)`) has empty history, so
+        // generateMoveCommentary returned '' immediately at its
+        // history.length===0 guard — every move silently skipped the
+        // LLM. Audit-log evidence for the bug: zero `verbosity-resolved`
+        // audits despite `coach-opening-teaching-active` firing on
+        // every move (so shouldFire was true and generateMoveCommentary
+        // WAS being called — just bailing before the LLM call).
+        // Replay from the starting position so chess.js generates a
+        // real verbose history; fall back to the FEN-only probe if
+        // any SAN doesn't validate (rare — chess.js produced these
+        // SANs in the first place, but defensive in case the URL
+        // import path ever feeds in a non-replayable history).
+        let probe: Chess | null;
+        try {
+          const replay = new Chess();
+          for (const san of game.history) replay.move(san);
+          replay.move(moveResult.san);
+          probe = replay;
+        } catch (err: unknown) {
+          void logAppAudit({
+            kind: 'bad-fen',
+            category: 'subsystem',
+            source: 'CoachGamePage.move.probe-replay',
+            summary: `replay failed; falling back to FEN probe — ${err instanceof Error ? err.message : String(err)}`,
+            fen: moveResult.fen,
+          });
+          probe = safeChessFromFen(moveResult.fen);
+        }
         if (!probe) {
           console.warn('[CoachGame] bad FEN for narration probe:', moveResult.fen);
           return;
@@ -2130,6 +2784,15 @@ export function CoachGamePage(): JSX.Element {
           .reverse()
           .find((m) => m.role === 'user')?.timestamp;
 
+        // Personality dials — picked up at narration time (not at
+        // session start) so a mid-session settings change takes
+        // effect on the next move. Mirrors how the brain (chat) path
+        // reads dials in coach/envelope.ts.
+        const activePrefs = useAppStore.getState().activeProfile?.preferences;
+        // Track whether streaming actually dispatched a sentence to TTS.
+        // If yes, the post-LLM speak path below skips (the streamed
+        // sentences ARE the narration; speaking again would double up).
+        let streamedAnything = false;
         const llm = await generateMoveCommentary({
           gameAfter: probe,
           mover,
@@ -2137,15 +2800,89 @@ export function CoachGamePage(): JSX.Element {
           evalAfter: analysis?.evaluation ?? null,
           bestReplySan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
           chatHistory: sessionMessages,
-          // Threading the URL subject here activates the OPENING
-          // TEACHING MODE branch of PLAY_SYSTEM_PROMPT.
-          subject: subjectParam ?? undefined,
+          // Threading the resolved subject (URL > committed intent >
+          // auto-detected) activates the OPENING TEACHING MODE branch
+          // of PLAY_SYSTEM_PROMPT whenever the student is playing a
+          // recognizable book line — no dropdown pick required.
+          subject: resolvedSubject ?? undefined,
           verbosity: narrationDensity,
           groundedNotes,
           recentMoveClassifications,
           lastUserInteractionMs: lastUserChatMs,
+          personality: activePrefs?.coachPersonality,
+          profanity: activePrefs?.coachProfanity,
+          mockery: activePrefs?.coachMockery,
+          flirt: activePrefs?.coachFlirt,
+          // Explicit perspective: the student plays `playerColor`; the
+          // coach plays the opposite. Without this, the LLM was
+          // inferring (audit log build ac20cc5 caught it narrating
+          // the student's e4 as "Alright, I'm playing e4...").
+          studentColor: playerColor === 'white' ? 'w' : 'b',
+          // Brief mode for key-moment zingers (blunders, mistakes,
+          // brilliants etc.) — short personality-laden 1-2 sentence
+          // response (~2s latency). Long-form prose only fires for
+          // the once-per-opening intro and explicit every-move mode.
+          briefMode,
+          // WO-VOICE-LAYER-02: tell the LLM which Polly engine will
+          // speak its output so it embeds emotional cues for
+          // Generative voices (Ruth/Matthew/Danielle/Gregory) that
+          // ignore SSML prosody. Neural voices skip the cue block.
+          voiceEngine: (() => {
+            const activeVoice = resolvePollyVoice(
+              activePrefs?.coachPersonality,
+              activePrefs?.coachPersonalityVoices,
+              activePrefs?.pollyVoice ?? 'ruth',
+            );
+            return POLLY_VOICES.find((v) => v.id === activeVoice)?.engine as 'generative' | 'neural' | undefined;
+          })(),
+          // Stream the LLM and ship each completed sentence to Polly
+          // the moment it lands. Single chained pipeline through
+          // speakForced so each Polly call awaits the previous
+          // sentence's audio. First sentence drops behind speakIfFree
+          // so it doesn't clip an in-flight phase narration; once the
+          // chain is established, every subsequent sentence chains via
+          // speakForced (no Web Speech overlap, no dropped sentences).
+          onStream: (() => {
+            let buffer = '';
+            let chain: Promise<void> | null = null;
+            const SENTENCE_END = /([^.!?\n]+[.!?\n])(?=\s|$)/;
+            return (chunk: string): void => {
+              buffer += chunk;
+              let match: RegExpExecArray | null;
+              while ((match = SENTENCE_END.exec(buffer)) !== null) {
+                const sentence = match[1].trim();
+                if (sentence) {
+                  streamedAnything = true;
+                  if (!chain) {
+                    chain = voiceService.speakIfFree(sentence).catch(() => undefined);
+                  } else {
+                    chain = chain
+                      .then(() => voiceService.speakForced(sentence))
+                      .catch(() => undefined);
+                  }
+                }
+                buffer = buffer.slice(match.index + match[1].length);
+              }
+            };
+          })(),
         });
+        // Mark this opening as introduced so subsequent moves in the
+        // same line stay silent (until a key moment or phase transition).
+        // Only mark on success — if the LLM returned empty / errored,
+        // we'll retry on the next move.
+        if (llm && resolvedSubject && isFirstSeeingOpening) {
+          openingIntroSpokenRef.current = true;
+        }
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
+        // Only the LLM portion is speech-worthy. tacticSuffix is a
+        // deterministic readout meant for the move list display, NOT
+        // for TTS.
+        // If we already streamed sentences to TTS during generation,
+        // mark llmProducedSpeech=false so the post-LLM speakIfFree
+        // below DOESN'T fire — the streamed sentences ARE the
+        // narration; speaking the full string again would double up.
+        // WO-PLAN-B.
+        llmProducedSpeech = Boolean(llm.trim()) && !streamedAnything;
         // Mirror the commentary into the shared session so the next
         // chat turn (or the next move's narration) sees what we just
         // said. Skip empties and pure tactic suffixes — we only record
@@ -2301,22 +3038,73 @@ export function CoachGamePage(): JSX.Element {
         currentHintLevel: 0,
       }));
 
-      // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
-      // "Read this position" narration. Text surface retained: the blunder
-      // interception overlay already renders `explanation` on the board.
-      void explanation;
+      // Per-move narration. A blunder is always a "key moment" so we
+      // speak the explanation whenever the user hasn't fully muted
+      // commentary (`coachCommentaryVerbosity !== 'off'`). Phase
+      // narration takes precedence: usePhaseNarration calls
+      // voiceService.stop() on entry, and voiceService.speakInternal
+      // also stops in-flight speech before starting — so a phase
+      // summary firing will cleanly cut this off.
+      if (verbosity !== 'off' && explanation.trim()) {
+        void logAppAudit({
+          kind: 'coach-move-narration-fired',
+          category: 'subsystem',
+          source: 'CoachGamePage.blunder',
+          summary: `verbosity=${verbosity} chars=${explanation.length}`,
+          fen: moveResult.fen,
+        });
+        void voiceService.speak(explanation).catch((err: unknown) => {
+          console.warn('[CoachGame] blunder narration TTS failed:', err);
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-move-narration-skipped',
+          category: 'subsystem',
+          source: 'CoachGamePage.blunder',
+          summary: `verbosity=${verbosity} hasExplanation=${Boolean(explanation.trim())}`,
+          fen: moveResult.fen,
+        });
+      }
       return;
     }
 
     // Non-blunder: sync the move and let the coach-move useEffect respond.
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
 
-    // Disabled by WO-COACH-NARRATION-03 — per-move voice overlaps with
-    // "Read this position" narration. The narrateMove() speak path is
-    // muted internally (see coachAgentRunner.narrateMove); the legacy
-    // voiceService.speak(commentary) path is silenced here. Text
-    // surfaces (chat message, commentary row) are retained elsewhere.
-    void commentary;
+    // Per-move narration. ONLY speak when the LLM actually produced
+    // personality-driven prose. The deterministic tactic suffix
+    // ("Hanging: Black rook on h8, ...") is great for the move-list
+    // display but is robotic and breaks the voice when read aloud —
+    // and it would fire on every move regardless of the
+    // 'key-moments' setting. Audit build ac8088d caught this bug.
+    // WO-NARR-POLICY-03.
+    if (llmProducedSpeech) {
+      void logAppAudit({
+        kind: 'coach-move-narration-fired',
+        category: 'subsystem',
+        source: 'CoachGamePage.move',
+        summary: `verbosity=${verbosity} classification=${classification} chars=${commentary.length}`,
+        fen: moveResult.fen,
+      });
+      // WO-NARR-POLICY-05: speakIfFree drops the new utterance when
+      // a previous narration is still playing — the long opening
+      // intro / phase summary gets to FINISH instead of being cut
+      // mid-sentence the moment the student plays their next move.
+      // The student can keep playing while the coach finishes its
+      // thought; the per-move zinger about the new move just gets
+      // skipped. They asked for this explicitly.
+      void voiceService.speakIfFree(commentary).catch((err: unknown) => {
+        console.warn('[CoachGame] move narration TTS failed:', err);
+      });
+    } else {
+      void logAppAudit({
+        kind: 'coach-move-narration-skipped',
+        category: 'subsystem',
+        source: 'CoachGamePage.move',
+        summary: `verbosity=${verbosity} classification=${classification} reason=${commentary.trim() ? 'tactic-suffix-only' : 'empty-commentary'}`,
+        fen: moveResult.fen,
+      });
+    }
 
     setGameState((prev) => ({
       ...prev,
@@ -2524,6 +3312,7 @@ export function CoachGamePage(): JSX.Element {
     // Transition from postgame back to playing mode with chat
     game.resetGame();
     moveCountRef.current = 0;
+    openingIntroSpokenRef.current = false;
     setGameState({
       gameId: `game-${Date.now()}`,
       playerColor,
@@ -2557,16 +3346,24 @@ export function CoachGamePage(): JSX.Element {
     }));
   }, [requestHint]);
 
-  // Takeback — always undo two half-moves (opponent's reply + player's move)
+  // Takeback — undo only enough plies to revert the STUDENT's most
+  // recent move. Production audit: user reported "Taking back a move
+  // should only take back my move. Not opponents." Old code blindly
+  // undid 2 plies, which on a state like [user1, coach1, user2]
+  // (coach hasn't replied yet) would undo user2 AND coach1 — the
+  // student's last move plus the opponent's PRIOR move. Now we undo
+  // exactly: 1 ply if the student's move is the most recent (no
+  // coach reply yet), 2 plies if the coach has already replied
+  // (coach reply + student move). Coach's earlier moves stay put.
   const handleTakeback = useCallback(() => {
     const moves = gameState.moves;
     if (moves.length === 0) return;
-    // Undo the coach's reply + the player's previous move so it's the
-    // player's turn again. When only the player's move exists (coach
-    // hasn't replied, or we're taking the first half-move of the game
-    // back), undo just that one. Lets the user tap Takeback repeatedly
-    // all the way back to the starting position.
-    const undoCount = Math.min(2, moves.length);
+    const lastMove = moves[moves.length - 1];
+    const lastWasCoach = lastMove.isCoachMove === true;
+    // Coach just replied → undo coach + student. Student's move was
+    // the most recent → undo student only. Either way, anything
+    // before the student's most recent move stays untouched.
+    const undoCount = lastWasCoach ? Math.min(2, moves.length) : 1;
 
     for (let i = 0; i < undoCount; i++) {
       game.undoMove();
@@ -2838,6 +3635,7 @@ export function CoachGamePage(): JSX.Element {
             // Reset phase-transition ledger for the fresh game
             // (WO-PHASE-NARRATION-01).
             phaseStateRef.current = createPhaseTransitionState();
+            openingIntroSpokenRef.current = false;
             setGameState({
               gameId: `game-${Date.now()}`,
               playerColor,
@@ -3285,6 +4083,40 @@ export function CoachGamePage(): JSX.Element {
               )}
             </AnimatePresence>
 
+            {/* ─── Coach quiz banner (WO-COACH-LICHESS-OPENINGS) ───────── */}
+            <AnimatePresence>
+              {quizState.active && (
+                <motion.div
+                  initial={{ opacity: 0, y: -16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  className="absolute top-0 left-0 right-0 z-20 rounded-b-2xl border-b-2 border-x-2 border-amber-500/40 backdrop-blur-md overflow-hidden"
+                  style={{ background: 'color-mix(in srgb, var(--color-warning, #f59e0b) 12%, var(--color-bg) 88%)' }}
+                  data-testid="coach-quiz-banner"
+                >
+                  <div className="px-3 py-2.5">
+                    <div className="flex items-center gap-2 mb-1">
+                      <GraduationCap size={16} className="text-amber-400 flex-shrink-0" />
+                      <span className="font-bold text-amber-300 text-sm">Coach is asking</span>
+                    </div>
+                    <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                      {quizState.prompt}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 px-3 pb-3">
+                    <button
+                      onClick={() => cancelActiveQuizRef.current('user-dismissed')}
+                      className="flex-1 py-2 rounded-xl text-xs font-semibold border border-theme-border transition-colors"
+                      style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
+                      data-testid="coach-quiz-dismiss"
+                    >
+                      Skip the quiz
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
           </div>
           {isExploreMode && exploreTopLines.length > 0 && (
             <EngineLines lines={exploreTopLines} fen={exploreFen ?? ''} className="mt-1" />
@@ -3464,6 +4296,8 @@ export function CoachGamePage(): JSX.Element {
               onTakeBackMove={handleChatTakeBackMove}
               onSetBoardPosition={handleChatSetBoardPosition}
               onResetBoard={handleChatResetBoard}
+              onQuizUserForMove={handleQuizUserForMove}
+              onStartWalkthroughForOpening={handleStartWalkthroughForOpening}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}
@@ -3527,6 +4361,8 @@ export function CoachGamePage(): JSX.Element {
               onTakeBackMove={handleChatTakeBackMove}
               onSetBoardPosition={handleChatSetBoardPosition}
               onResetBoard={handleChatResetBoard}
+              onQuizUserForMove={handleQuizUserForMove}
+              onStartWalkthroughForOpening={handleStartWalkthroughForOpening}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}

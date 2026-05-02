@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
+import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
@@ -28,8 +29,11 @@ import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../
  *  showed `[[ACTION:play_move {"san":"e4"}]] Done.` being spoken
  *  aloud because the previous regex only matched the double-bracket
  *  form. */
-const BOARD_TAG_STRIP_RE = /\[BOARD:\s*(?:arrow|highlight|position|practice|clear)(?::[^\]]*)?\]/gi;
-const ACTION_TAG_STRIP_RE = /\[\[ACTION:[^\]]*\]\]|\[ACTION:[^\]]*\]/gi;
+// WO-COACH-TTS-STRIP-01: legacy in-file regexes replaced by the
+// shared sanitizeCoachText / sanitizeCoachStream module. Old shapes
+// (single-`[ACTION:]`, single-`[BOARD:...]`) are still covered there.
+// The streaming version buffers chunks across in-flight `[[...]]`
+// boundaries so half-arrived markers never reach Polly.
 
 interface GameChatPanelProps {
   fen: string;
@@ -72,6 +76,29 @@ interface GameChatPanelProps {
    *  restarts the game from the starting position.
    *  WO-COACH-OPERATOR-FOUNDATION-01. */
   onResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
+  /** Called when the brain emits `quiz_user_for_move` from the chat
+   *  surface. The parent registers a pending quiz on the live board
+   *  and resolves the Promise on the student's next move so the
+   *  brain can narrate feedback in its next round-trip.
+   *  WO-COACH-LICHESS-OPENINGS. */
+  onQuizUserForMove?: (args: {
+    expectedSan: string;
+    prompt: string;
+    allowAlternatives?: readonly string[];
+  }) => Promise<
+    | { ok: true; played: string }
+    | { ok: false; played: string; expected: string }
+    | { ok: false; reason: string }
+  >;
+  /** Called when the brain emits `start_walkthrough_for_opening`. The
+   *  parent navigates to the WalkthroughMode UI seeded with the named
+   *  opening / variation / orientation. WO-COACH-LICHESS-OPENINGS. */
+  onStartWalkthroughForOpening?: (args: {
+    opening: string;
+    variation?: string;
+    orientation?: 'white' | 'black';
+    pgn?: string;
+  }) => { ok: boolean; reason?: string } | Promise<{ ok: boolean; reason?: string }>;
   /** Apply a what-if variation: take back `undo` half-moves, then play
    *  `moves` (SAN) forward. Returns true on success, false if any move
    *  was invalid or there was nothing to undo. Powers the coach's
@@ -114,6 +141,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onTakeBackMove,
       onSetBoardPosition,
       onResetBoard,
+      onQuizUserForMove,
+      onStartWalkthroughForOpening,
       initialPrompt,
       onInitialPromptSent,
       hideHeader,
@@ -131,6 +160,54 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const initialPromptSentRef = useRef(false);
     const [streamingContent, setStreamingContent] = useState('');
     const speechBufferRef = useRef('');
+    // Sequential TTS chain — sentence-by-sentence streaming used to fire
+    // `if (!speechAbortedRef.current) void voiceService.speak(sentence)` as parallel calls. Each speak
+    // internally calls voiceService.stop() before starting, so two
+    // sentences arriving microseconds apart could interleave / cut off /
+    // produce overlapping audio (the "two voices at once" pattern caught
+    // by tts-concurrent-speak audits on build 1f23808). Chaining each
+    // speak onto the previous one's resolution ensures each sentence
+    // plays IN FULL before the next starts. catch() the chain so a
+    // single TTS failure doesn't poison every subsequent speak.
+    const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+    // Abort flag for the speech chain. Set to true when the component
+    // unmounts (the user navigated away from /coach/play or
+    // /coach/teach). Each chained .then() checks this before invoking
+    // a new speak — so even if the chain has 5 sentences queued at
+    // unmount time, none of them fire after the user leaves. Without
+    // this the coach kept talking after leaving the classroom and
+    // collided with whatever the user did next on return.
+    const speechAbortedRef = useRef(false);
+    useEffect(() => {
+      return () => {
+        speechAbortedRef.current = true;
+        voiceService.stop();
+      };
+    }, []);
+    const queueSpeak = useCallback((text: string): void => {
+      // Drop markdown bold/italic markers, horizontal rules, and bare
+      // list-bullet chunks before they reach Polly — otherwise the
+      // sentence streamer voices "**1.**" / "---" / "**" as separate
+      // utterances and the lesson sounds stuck on a fragment.
+      const trimmed = formatForSpeech(text);
+      if (!trimmed) return;
+      // Snapshot the current stop-generation when we QUEUE this
+      // utterance. If voiceService.stop() fires before our .then()
+      // dispatches (route change, mic barge-in, manual interrupt),
+      // the generation counter advances and we abort cleanly. Without
+      // this, calling stop() cuts the current audio but the chain's
+      // next .then() fires shortly after and the next sentence plays
+      // anyway — exactly what made the coach "keep talking" after
+      // the user left the classroom or started speaking.
+      const myGen = voiceService.currentStopGeneration;
+      speechChainRef.current = speechChainRef.current
+        .then(() => {
+          if (speechAbortedRef.current) return;
+          if (voiceService.currentStopGeneration !== myGen) return;
+          return voiceService.speak(trimmed);
+        })
+        .catch(() => undefined);
+    }, []);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesRef = useRef<ChatMessageType[]>(messages);
 
@@ -147,12 +224,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       });
     }, [onMessagesUpdate]);
 
-    // Auto-scroll to bottom when messages change
+    // Reverse-flow chat: snap the scroll container to the TOP when a
+    // new message lands (newest is at index 0, rendered at top).
+    // Otherwise a student scrolled down reading history wouldn't see
+    // the new coach reply.
     useEffect(() => {
       const el = messagesEndRef.current;
-      if (el && 'scrollIntoView' in el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+      if (el) el.scrollTop = 0;
     }, [messages, streamingContent]);
 
     // Expose method for parent to inject assistant messages (hints, takeback msgs)
@@ -180,10 +258,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       const buffer = speechBufferRef.current;
       // Read latest voice state directly from store to avoid stale closures
       if (buffer.trim() && useAppStore.getState().coachVoiceOn) {
-        void voiceService.speak(buffer.trim());
+        queueSpeak(buffer);
       }
       speechBufferRef.current = '';
-    }, []);
+    }, [queueSpeak]);
 
     const handleSend = useCallback(async (text: string) => {
       if (!activeProfile || isStreaming) return;
@@ -376,7 +454,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           };
           setMessages([...updatedMessages, ackMsg]);
           if (useAppStore.getState().coachVoiceOn) {
-            void voiceService.speak(ackText);
+            if (!speechAbortedRef.current) void voiceService.speak(ackText);
           }
           return;
         }
@@ -435,7 +513,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         };
         setMessages([...updatedMessages, ackMsg]);
         if (narrationToggle.enable) {
-          void voiceService.speak(ack);
+          if (!speechAbortedRef.current) void voiceService.speak(ack);
         } else {
           voiceService.stop();
         }
@@ -484,7 +562,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           };
           setMessages([...updatedMessages, ack]);
           if (useAppStore.getState().coachVoiceOn) {
-            void voiceService.speak(ack.content);
+            if (!speechAbortedRef.current) void voiceService.speak(ack.content);
           }
           return;
         }
@@ -505,7 +583,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           };
           setMessages([...updatedMessages, ack]);
           if (useAppStore.getState().coachVoiceOn) {
-            void voiceService.speak(ack.content);
+            if (!speechAbortedRef.current) void voiceService.speak(ack.content);
           }
           return;
         }
@@ -560,6 +638,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setStreamingContent('');
         speechBufferRef.current = '';
         let fullResponse = '';
+        // WO-COACH-TTS-STRIP-01: streaming sanitization state.
+        // streamMarkupBuf holds raw text that includes an in-flight
+        // `[[DIRECTIVE...` we haven't seen the `]]` for yet. streamSafeBuf
+        // accumulates only sanitized prose for display.
+        let streamMarkupBuf = '';
+        let streamSafeBuf = '';
         try {
           const liveState: LiveState = {
             surface: 'game-chat',
@@ -604,27 +688,37 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               // correctly skipped tools and answered narratively, which
               // is the structural cause of tactical hallucinations.
               maxToolRoundTrips: 3,
+              // WO-COACH-PERSONALITIES (PR B): thread the picked
+              // personality + dial settings into every chat ask.
+              // Defaults preserve current Danya voice.
+              personality: activeProfile.preferences.coachPersonality,
+              profanity: activeProfile.preferences.coachProfanity,
+              mockery: activeProfile.preferences.coachMockery,
+              flirt: activeProfile.preferences.coachFlirt,
+              verbosity: activeProfile.preferences.coachResponseLength,
               onChunk: (chunk: string) => {
                 fullResponse += chunk;
-                const displayText = fullResponse
-                  .replace(BOARD_TAG_STRIP_RE, '')
-                  .replace(ACTION_TAG_STRIP_RE, '')
-                  .trim();
-                setStreamingContent(displayText);
-                if (useAppStore.getState().coachVoiceOn) {
-                  // WO-FOUNDATION-02 (continued): strip [BOARD:...] and
-                  // [[ACTION:...]] tags from each chunk before it reaches
-                  // the speech buffer. Without this, the action / board
-                  // directives get spoken aloud verbatim.
-                  const cleanedChunk = chunk
-                    .replace(BOARD_TAG_STRIP_RE, '')
-                    .replace(ACTION_TAG_STRIP_RE, '');
-                  speechBufferRef.current += cleanedChunk;
-                  const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+                // WO-COACH-TTS-STRIP-01: sanitize the streaming buffer
+                // for both display and TTS. sanitizeCoachStream holds
+                // back any in-flight `[[DIRECTIVE...` until the
+                // closing `]]` arrives, so chunk-split markers never
+                // reach the user.
+                streamMarkupBuf += chunk;
+                const { safe, pending } = sanitizeCoachStream(streamMarkupBuf);
+                streamMarkupBuf = pending;
+                streamSafeBuf += safe;
+                setStreamingContent(streamSafeBuf.trim());
+                if (useAppStore.getState().coachVoiceOn && safe) {
+                  speechBufferRef.current += safe;
+                  // Negative lookbehind keeps SAN move numbers ("1.",
+                  // "12.") from triggering a sentence break — without
+                  // it Polly voices "1." then "Nc3 Nc6 3." then "Bc4"
+                  // as three separate utterances.
+                  const sentenceEnd = /(?<!\d)[.!?]\s/.exec(speechBufferRef.current);
                   if (sentenceEnd) {
                     const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
                     speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                    void voiceService.speak(sentence.trim());
+                    queueSpeak(sentence);
                   }
                 }
               },
@@ -669,6 +763,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                     try {
                       const r = await Promise.resolve(onResetBoard());
                       return typeof r === 'boolean' ? { ok: r } : r;
+                    } catch (err) {
+                      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                    }
+                  }
+                : undefined,
+              onQuizUserForMove,
+              onStartWalkthroughForOpening: onStartWalkthroughForOpening
+                ? async (args): Promise<{ ok: boolean; reason?: string }> => {
+                    try {
+                      const r = await Promise.resolve(onStartWalkthroughForOpening(args));
+                      return r;
                     } catch (err) {
                       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
                     }
@@ -767,10 +872,16 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               annotations.push({ type: 'arrow', arrows: autoArrows });
             }
           }
+          // WO-COACH-TTS-STRIP-01: sanitize the final message text
+          // for both the chat bubble AND the conversation memory.
+          // Memory rehydration on the next turn re-feeds prior
+          // assistant text into the prompt; if [[ACTION:...]] markup
+          // is in there, the LLM learns the wrong protocol.
+          const assistantText = sanitizeCoachText(textWithoutBoardTags);
           const assistantMsg: ChatMessageType = {
             id: `gmsg-${Date.now()}-resp`,
             role: 'assistant',
-            content: textWithoutBoardTags,
+            content: assistantText,
             timestamp: Date.now(),
             metadata: {
               annotations: annotations.length > 0 ? annotations : undefined,
@@ -782,7 +893,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           useCoachMemoryStore.getState().appendConversationMessage({
             surface: 'chat-in-game',
             role: 'coach',
-            text: textWithoutBoardTags,
+            text: assistantText,
             fen: fen || undefined,
             trigger: null,
           });
@@ -817,6 +928,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       setStreamingContent('');
       speechBufferRef.current = '';
       let drawerFullResponse = '';
+      // WO-COACH-TTS-STRIP-01: same streaming-sanitize buffers as the
+      // in-game branch above.
+      let drawerMarkupBuf = '';
+      let drawerSafeBuf = '';
       try {
         const drawerLiveState: LiveState = {
           surface: 'home-chat',
@@ -858,25 +973,30 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             // so tactical questions during a walkthrough or pre-game
             // chat get engine-grounded answers.
             maxToolRoundTrips: 3,
+            // WO-COACH-PERSONALITIES (PR B): same prefs threading as
+            // the in-game ask above.
+            personality: activeProfile.preferences.coachPersonality,
+            profanity: activeProfile.preferences.coachProfanity,
+            mockery: activeProfile.preferences.coachMockery,
+            flirt: activeProfile.preferences.coachFlirt,
+            verbosity: activeProfile.preferences.coachResponseLength,
             onChunk: (chunk: string) => {
               drawerFullResponse += chunk;
-              const displayText = drawerFullResponse
-                .replace(BOARD_TAG_STRIP_RE, '')
-                .replace(ACTION_TAG_STRIP_RE, '')
-                .trim();
-              setStreamingContent(displayText);
-              if (useAppStore.getState().coachVoiceOn) {
-                // WO-FOUNDATION-02 (continued): same tag-strip as the
-                // in-game branch — see comment above.
-                const cleanedChunk = chunk
-                  .replace(BOARD_TAG_STRIP_RE, '')
-                  .replace(ACTION_TAG_STRIP_RE, '');
-                speechBufferRef.current += cleanedChunk;
-                const sentenceEnd = /[.!?]\s/.exec(speechBufferRef.current);
+              // WO-COACH-TTS-STRIP-01: same streaming-sanitize as the
+              // in-game branch.
+              drawerMarkupBuf += chunk;
+              const { safe, pending } = sanitizeCoachStream(drawerMarkupBuf);
+              drawerMarkupBuf = pending;
+              drawerSafeBuf += safe;
+              setStreamingContent(drawerSafeBuf.trim());
+              if (useAppStore.getState().coachVoiceOn && safe) {
+                speechBufferRef.current += safe;
+                const sentenceEnd = /(?<!\d)[.!?]\s/.exec(speechBufferRef.current);
                 if (sentenceEnd) {
                   const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
                   speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
-                  void voiceService.speak(sentence.trim());
+                  const speechReady = formatForSpeech(sentence);
+                  if (speechReady) if (!speechAbortedRef.current) void voiceService.speak(speechReady);
                 }
               }
             },
@@ -922,6 +1042,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   try {
                     const r = await Promise.resolve(onResetBoard());
                     return typeof r === 'boolean' ? { ok: r } : r;
+                  } catch (err) {
+                    return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+                  }
+                }
+              : undefined,
+            onQuizUserForMove,
+            onStartWalkthroughForOpening: onStartWalkthroughForOpening
+              ? async (args): Promise<{ ok: boolean; reason?: string }> => {
+                  try {
+                    const r = await Promise.resolve(onStartWalkthroughForOpening(args));
+                    return r;
                   } catch (err) {
                     return { ok: false, reason: err instanceof Error ? err.message : String(err) };
                   }
@@ -1010,17 +1141,19 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             });
           }
         }
+        // WO-COACH-TTS-STRIP-01: sanitize before bubble + memory.
+        const drawerAssistantText = sanitizeCoachText(drawerCleanText);
         const assistantMsg: ChatMessageType = {
           id: `gmsg-${Date.now()}-resp`,
           role: 'assistant',
-          content: drawerCleanText,
+          content: drawerAssistantText,
           timestamp: Date.now(),
         };
         setMessages((prev) => [...prev, assistantMsg]);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-home',
           role: 'coach',
-          text: drawerCleanText,
+          text: drawerAssistantText,
           fen: fen || undefined,
           trigger: null,
         });
@@ -1037,7 +1170,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setIsStreaming(false);
         setStreamingContent('');
       }
-    }, [activeProfile, isStreaming, fen, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, setMessages, navigate, location, playerColor]);
+    }, [activeProfile, isStreaming, fen, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove, onStartWalkthroughForOpening, setMessages, navigate, location, playerColor]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {
@@ -1070,14 +1203,66 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           </div>
         )}
 
-        {/* Messages */}
+        {/* Pinned input — first thing under the surface chrome.
+            Reverse-flow design: typing is always reachable without
+            scrolling, the newest message lands directly under the
+            input, older messages scroll DOWN. Same shape used on
+            /coach/teach so both surfaces feel like one room. */}
+        <ChatInput
+          onSend={(text) => void handleSend(text)}
+          disabled={isStreaming}
+          placeholder={isStreaming ? 'Coach is typing…' : 'Ask about the position…'}
+        />
+
+        {/* Messages — reverse chronological. Newest at top with a
+            subtle highlight; older messages dim to 70% so the active
+            turn is the visual focus. */}
         <div
-          className="flex-1 overflow-y-auto p-4 min-h-0 flex flex-col gap-4"
+          ref={messagesEndRef}
+          className="flex-1 overflow-y-auto p-3 min-h-0 flex flex-col gap-3"
           role="log"
           aria-live="polite"
           aria-relevant="additions"
           aria-label="In-game coach chat messages"
         >
+          {isStreaming && (
+            <div
+              className="rounded-lg p-1 -m-1"
+              style={{
+                background: 'rgba(0, 229, 255, 0.05)',
+                outline: '1px solid rgba(0, 229, 255, 0.25)',
+              }}
+            >
+              <ChatMessage
+                message={{
+                  id: 'game-streaming',
+                  role: 'assistant',
+                  content: streamingContent,
+                  timestamp: Date.now(),
+                }}
+                isStreaming
+              />
+            </div>
+          )}
+
+          {[...messages].reverse().map((msg, idxFromTop) => (
+            <div
+              key={msg.id}
+              className={
+                idxFromTop === 0 && !isStreaming
+                  ? 'rounded-lg p-1 -m-1'
+                  : ''
+              }
+              style={
+                idxFromTop === 0 && !isStreaming
+                  ? { background: 'rgba(0, 229, 255, 0.05)', outline: '1px solid rgba(0, 229, 255, 0.25)' }
+                  : { opacity: 0.7 }
+              }
+            >
+              <ChatMessage message={msg} />
+            </div>
+          ))}
+
           {messages.length === 0 && !isStreaming && (
             <motion.div
               className="flex flex-col items-center gap-3 py-8"
@@ -1094,44 +1279,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               </div>
             </motion.div>
           )}
-
-          {messages.map((msg) => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
-
-          {isStreaming && streamingContent && (
-            <ChatMessage
-              message={{
-                id: 'game-streaming',
-                role: 'assistant',
-                content: streamingContent,
-                timestamp: Date.now(),
-              }}
-              isStreaming
-            />
-          )}
-
-          {isStreaming && !streamingContent && (
-            <ChatMessage
-              message={{
-                id: 'game-streaming-empty',
-                role: 'assistant',
-                content: '',
-                timestamp: Date.now(),
-              }}
-              isStreaming
-            />
-          )}
-
-          <div ref={messagesEndRef} />
         </div>
-
-        {/* Input */}
-        <ChatInput
-          onSend={(text) => void handleSend(text)}
-          disabled={isStreaming}
-          placeholder="Ask about the position..."
-        />
       </div>
     );
   },

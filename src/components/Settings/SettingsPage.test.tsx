@@ -58,6 +58,10 @@ describe('SettingsPage', () => {
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-coach'));
     expect(screen.getByTestId('coach-tab')).toBeInTheDocument();
+    // Post WO-SETTINGS-CLEANUP: API key + provider live inside the
+    // "AI Provider & Models" modal. Open it to surface the input.
+    expect(screen.getByTestId('ai-provider-row')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('ai-provider-row'));
     expect(screen.getByTestId('api-key-input')).toBeInTheDocument();
   });
 
@@ -201,12 +205,16 @@ describe('SettingsPage', () => {
       expect(screen.getByTestId('highlight-last-move-toggle')).not.toBeDisabled();
     });
 
-    it('has a save button', () => {
+    it('auto-saves on change (no save button)', () => {
+      // WO-AUTOSAVE-01: the explicit "Save Board Settings" button was
+      // removed — settings now auto-persist on change. This test
+      // pins that contract so a future refactor can't silently re-add
+      // the save-button gate.
       useAppStore.getState().setActiveProfile(buildUserProfile());
       render(<SettingsPage />);
       fireEvent.click(screen.getByTestId('tab-board'));
 
-      expect(screen.getByTestId('save-board-btn')).toBeInTheDocument();
+      expect(screen.queryByTestId('save-board-btn')).not.toBeInTheDocument();
     });
   });
 });

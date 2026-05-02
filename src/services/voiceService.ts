@@ -6,18 +6,84 @@ import { speechService } from './speechService';
 import { voicePackService } from './voicePackService';
 import { getSharedAudioContext } from './audioContextManager';
 import { db } from '../db/schema';
+import type { CoachPersonality } from '../coach/types';
+
+// WO-COACH-PERSONALITY-VOICE — voice and personality are orthogonal
+// dials. Each personality has a default voice (the one that matches
+// its base mood best out of the box), but the user can override any
+// pairing in Settings. The personality drives the *prompt* (what the
+// coach says); the voice drives the *timbre* (who says it). Any voice
+// can deliver any personality — Ruth doing drill-sergeant, Stephen
+// doing flirtatious, etc.
+export const PERSONALITY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
+  default: 'ruth',         // generative — sultry, low female (current pre-personality default)
+  soft: 'joanna',          // neural — warm, encouraging female
+  edgy: 'stephen',         // neural — dry, sharper male
+  flirtatious: 'ruth',     // generative — sultry, low female
+  'drill-sergeant': 'matthew', // generative — direct, deep male
+};
+
+/** Per-personality SECONDARY voice — used for short alerts /
+ *  interjections (tactic warnings, opponent-blunder live-coach
+ *  calls) so a different timbre cuts through the main narration.
+ *  Defaults pair a contrasting timbre (different gender / engine)
+ *  for each personality. WO-VOICE-LAYER-01 (b). */
+export const PERSONALITY_SECONDARY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
+  default: 'matthew',          // generative male contrasts Ruth (default primary)
+  soft: 'stephen',             // neural male contrasts Joanna
+  edgy: 'kendra',              // neural female contrasts Stephen
+  flirtatious: 'gregory',      // generative male contrasts Ruth — sultry partner-voice
+  'drill-sergeant': 'salli',   // neural female contrasts Matthew
+};
+
+/** Resolve which Polly voice to send to the API for the active
+ *  personality. The user's per-personality override map (from
+ *  Settings → Coach → Personality) wins when set; otherwise we use
+ *  the personality's hardcoded default. The legacy `pollyVoice`
+ *  preference acts as the "default personality" voice when no
+ *  per-personality override exists for `default`. */
+export function resolvePollyVoice(
+  personality: CoachPersonality | undefined,
+  personalityVoices: Partial<Record<CoachPersonality, string>> | undefined,
+  legacyPollyVoice: string,
+): string {
+  const p: CoachPersonality = personality ?? 'default';
+  const override = personalityVoices?.[p];
+  if (override) return override;
+  if (p === 'default') return legacyPollyVoice || PERSONALITY_VOICE_DEFAULTS.default;
+  return PERSONALITY_VOICE_DEFAULTS[p];
+}
+
+/** Resolve the secondary voice (used for tactic alerts + short
+ *  interjections so they cut through with a different timbre). When
+ *  the user hasn't picked an override, falls back to
+ *  PERSONALITY_SECONDARY_VOICE_DEFAULTS. WO-VOICE-LAYER-01 (b). */
+export function resolvePollySecondaryVoice(
+  personality: CoachPersonality | undefined,
+  secondaryVoices: Partial<Record<CoachPersonality, string>> | undefined,
+): string {
+  const p: CoachPersonality = personality ?? 'default';
+  const override = secondaryVoices?.[p];
+  if (override) return override;
+  return PERSONALITY_SECONDARY_VOICE_DEFAULTS[p];
+}
 
 /** Absolute URL for Polly TTS — needed when running inside Capacitor WKWebView */
 const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
 const isCapacitor = typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
 
-export function getTtsUrl(text: string, voice: string, useSsml = true): string {
+export function getTtsUrl(text: string, voice: string, useSsml = true, style?: string): string {
   const base = isCapacitor ? VERCEL_ORIGIN : '';
   // SSML default-on so Polly gets engine-aware structure (paragraph
   // on generative voices, prosody slowdown on neural). Short clips
   // / warmups opt out to avoid empty-SSML edge cases.
+  // The optional `style` param tunes per-personality prosody on
+  // Neural voices (rate / pitch / volume) — e.g., flirtatious ⇒
+  // slower + lower pitch (sultry register), drill-sergeant ⇒
+  // faster + louder. Generative voices ignore it.
   const ssmlParam = useSsml ? '&ssml=1' : '';
-  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}`;
+  const styleParam = style ? `&style=${encodeURIComponent(style)}` : '';
+  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}`;
 }
 
 /** Available Amazon Polly voices (served via /api/tts endpoint) */
@@ -146,6 +212,16 @@ export function normalizePieceShorthand(text: string): string {
   return out;
 }
 
+/** Matches a full FEN string anywhere in prose — any of the 8 ranks
+ *  followed by `w` or `b`, castling rights, and en-passant + halfmove
+ *  + fullmove. Production audit (build 5df4252) showed the brain
+ *  voicing the entire FEN string out loud as "rnbqkbnr slash pppppppp
+ *  slash 8 slash 8 slash 4P3 slash..." — never wanted, always wrong.
+ *  The brain shouldn't be including FENs in prose at all (the prompt
+ *  rule says so), but this is the belt-and-suspenders strip in case
+ *  it does. Optional surrounding backticks/quotes are also stripped. */
+const FEN_PATTERN_RE = /[`'"]?\s*([rnbqkpRNBQKP1-8]+\/){7}[rnbqkpRNBQKP1-8]+\s+[wb]\s+[KQkq-]+\s+[a-h1-8-]+\s+\d+\s+\d+\s*[`'"]?/g;
+
 /** Normalise LLM output so the spoken layer never has to read chess
  *  notation aloud. Pure function — safe to call on any string. Wraps
  *  normalizePieceShorthand with the TTS-only transforms (SAN expansion,
@@ -153,7 +229,11 @@ export function normalizePieceShorthand(text: string): string {
 export function sanitizeForTTS(text: string): string {
   if (!text) return text;
   let out = text;
-  // Castling FIRST (before piece-letter substitutions mangle the O's).
+  // FEN strings FIRST so they can't get tokenized into nonsense by the
+  // SAN regex below (a FEN's "K" / "Q" / "B" / "N" letters look like
+  // piece-letter SAN to the SAN_MOVE_RE pattern).
+  out = out.replace(FEN_PATTERN_RE, '[the position]');
+  // Castling (before piece-letter substitutions mangle the O's).
   out = out.replace(CASTLE_QUEEN_RE, 'castle queenside');
   out = out.replace(CASTLE_KING_RE, 'castle kingside');
   // Pawn captures: "exd5" → "e-pawn takes d5"
@@ -163,7 +243,6 @@ export function sanitizeForTTS(text: string): string {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;
     return capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
   });
-  // Descriptive piece-letter normalization (UI-safe, reusable).
   return normalizePieceShorthand(out);
 }
 
@@ -171,7 +250,21 @@ class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
   private abortController: AbortController | null = null;
   private playing = false;
-  private speed = 1.0;
+  /** Monotonic counter incremented on every `stop()`. Speech chains
+   *  can capture this when they queue an utterance and check it
+   *  before actually playing — if it advanced, a stop() happened
+   *  meanwhile (route change, mic barge-in, manual interrupt) and
+   *  the queued utterance should abort. */
+  private stopGeneration = 0;
+  /** Read-only accessor for chain code. */
+  get currentStopGeneration(): number {
+    return this.stopGeneration;
+  }
+  // Default Polly playback rate. Bumped from 1.0 → 1.15 because the
+  // production audit feedback was "voice sounds plodding." 1.15 stays
+  // intelligible while feeling like a human coach pacing a lesson.
+  // User can override per-profile via `prefs.voiceSpeed` in Settings.
+  private speed = 1.15;
   /** Whether the Polly endpoint is currently considered usable. Set by
    *  warmup() on probe success, cleared (temporarily) by speakPolly on
    *  failure. Comes back automatically after POLLY_COOLDOWN_MS so a
@@ -239,11 +332,58 @@ class VoiceService {
     return this.lastTier;
   }
 
+  /** Snapshot of the last speak() attempt — what text, what tier
+   *  served it, whether Polly responded with audio, and any error
+   *  message. Surfaced via a debug panel (?debug=1) so silent rapid-
+   *  fire bugs can be diagnosed without DevTools access. */
+  getLastSpeakDiagnostic(): {
+    text: string;
+    tier: VoiceTier;
+    pollyAttempted: boolean;
+    pollyOk: boolean | null;
+    pollyStatus: number | null;
+    audioContextState: string;
+    error: string | null;
+    timestamp: number;
+  } {
+    return { ...this.lastSpeakDiagnostic };
+  }
+
+  private lastSpeakDiagnostic: {
+    text: string;
+    tier: VoiceTier;
+    pollyAttempted: boolean;
+    pollyOk: boolean | null;
+    pollyStatus: number | null;
+    audioContextState: string;
+    error: string | null;
+    timestamp: number;
+  } = {
+    text: '',
+    tier: 'muted',
+    pollyAttempted: false,
+    pollyOk: null,
+    pollyStatus: null,
+    audioContextState: 'unknown',
+    error: null,
+    timestamp: 0,
+  };
+
   // Cached preferences to avoid DB read on every speak() call
   private cachedPrefs: {
     voiceEnabled: boolean;
     pollyEnabled: boolean;
     pollyVoice: string;
+    /** WO-COACH-PERSONALITY-VOICE: cached for resolvePollyVoice() at
+     *  speak time. Defaults to undefined / 'default' so behavior is
+     *  unchanged for users who haven't touched personality settings. */
+    coachPersonality: CoachPersonality | undefined;
+    /** Per-personality voice override map. Empty / missing entries
+     *  fall back to PERSONALITY_VOICE_DEFAULTS. */
+    coachPersonalityVoices: Partial<Record<CoachPersonality, string>> | undefined;
+    /** Per-personality SECONDARY voice override map. Used by speakAlert
+     *  for tactic alerts / interjections. WO-VOICE-LAYER-01 (b). */
+    coachPersonalitySecondaryVoices: Partial<Record<CoachPersonality, string>> | undefined;
     systemVoiceURI: string | null;
     voiceSpeed: number;
   } | null = null;
@@ -307,8 +447,11 @@ class VoiceService {
       voiceEnabled: prefs.voiceEnabled ?? true,
       pollyEnabled: prefs.pollyEnabled ?? false,
       pollyVoice: prefs.pollyVoice || 'ruth',
+      coachPersonality: prefs.coachPersonality,
+      coachPersonalityVoices: prefs.coachPersonalityVoices,
+      coachPersonalitySecondaryVoices: prefs.coachPersonalitySecondaryVoices,
       systemVoiceURI: prefs.systemVoiceURI ?? null,
-      voiceSpeed: prefs.voiceSpeed ?? 1.0,
+      voiceSpeed: prefs.voiceSpeed ?? 1.15,
     };
     this.prefsCacheTime = now;
     return this.cachedPrefs;
@@ -345,6 +488,42 @@ class VoiceService {
     return this.speakInternal(sanitizeForTTS(text), false);
   }
 
+  /** Speak only when nothing is currently playing — DROPS the request
+   *  silently if audio is already in flight. Use this for per-move
+   *  narrations where the user has explicitly asked the previous
+   *  narration to keep playing through subsequent moves. WO-NARR-POLICY-05.
+   *
+   *  Production audit caught a long opening narration getting cut
+   *  mid-sentence the moment the student made their next move,
+   *  because every speak() runs `this.stop()` first. speakIfFree
+   *  short-circuits before the stop, so the in-flight utterance
+   *  finishes naturally. */
+  async speakIfFree(text: string): Promise<void> {
+    this.logSpeakInvoked('speakIfFree', text);
+    if (this.isPlaying() || speechService.isSpeaking) {
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'voice-speak-invoked',
+          category: 'subsystem',
+          source: 'voiceService.speakIfFree',
+          summary: `dropped (busy): ${text.slice(0, 40)}`,
+          details: `length=${text.length} reason=already-playing`,
+        });
+      }).catch(() => undefined);
+      return;
+    }
+    return this.speakInternal(sanitizeForTTS(text), false);
+  }
+
+  /** Speak using the personality's SECONDARY voice — for short tactic
+   *  alerts / interjections that should cut through main narration
+   *  with a different timbre. WO-VOICE-LAYER-01 (b). Falls back to
+   *  the primary speak path if no prefs are loaded. */
+  async speakAlert(text: string): Promise<void> {
+    this.logSpeakInvoked('speakAlert', text);
+    return this.speakInternal(sanitizeForTTS(text), false, { useSecondary: true });
+  }
+
   /** Low-latency speak for training modes — skips Polly/voice-packs and DB reads.
    *  Uses cached preferences (from warmup) and goes straight to Web Speech API. */
   async speakFast(text: string): Promise<void> {
@@ -372,6 +551,22 @@ class VoiceService {
     return this.speakInternal(sanitizeForTTS(text), true);
   }
 
+  /** Polly-only speakForced. Identical to speakForced but skips the
+   *  Web Speech fallback when Polly transiently fails. Used by the
+   *  /coach/teach streaming sentence chain so a brief Polly cooldown
+   *  doesn't cause the iOS Safari speech-synth tail to overlap with
+   *  the next Polly sentence — the production audit (build 30fe8c8)
+   *  showed `tts-concurrent-speak prevTier=web-speech` 4× in one
+   *  session, which the user heard as "two voices." With this method,
+   *  a sentence whose Polly call fails is simply skipped audibly
+   *  (still rendered in chat); Polly recovers naturally after the
+   *  15s cooldown for the next sentence. Single-engine consistency,
+   *  no cancel-tail race. */
+  async speakForcedPollyOnly(text: string): Promise<void> {
+    this.logSpeakInvoked('speakForcedPollyOnly', text);
+    return this.speakInternal(sanitizeForTTS(text), true, { noFallback: true });
+  }
+
   /** Queue a sentence without stopping current speech. For streaming voice responses. */
   speakQueuedForced(text: string): void {
     this.logSpeakInvoked('speakQueuedForced', text);
@@ -384,7 +579,23 @@ class VoiceService {
     }
   }
 
-  private async speakInternal(text: string, force: boolean): Promise<void> {
+  private async speakInternal(
+    text: string,
+    force: boolean,
+    opts?: { useSecondary?: boolean; noFallback?: boolean },
+  ): Promise<void> {
+    this.lastSpeakDiagnostic = {
+      text: text.slice(0, 80),
+      tier: 'muted',
+      pollyAttempted: false,
+      pollyOk: null,
+      pollyStatus: null,
+      audioContextState: typeof AudioContext !== 'undefined'
+        ? (((globalThis as unknown as { _sharedAudioContext?: AudioContext })._sharedAudioContext)?.state ?? 'no-context')
+        : 'no-AudioContext',
+      error: null,
+      timestamp: Date.now(),
+    };
     // Dev-mode guard: warn when a new speak fires while a previous one
     // is still playing. This is the root cause of every "two voices
     // overlap" bug we've fixed — callers doing `void speak(A)` then
@@ -397,6 +608,31 @@ class VoiceService {
         'Caller should `await speak()` or chain with .then() to prevent overlap.',
         { newText: text.slice(0, 60) },
       );
+    }
+    // Production audit — same condition, persisted to the rolling app
+    // audit log so "two voices at once" reports have a record of every
+    // racing call (which surface fired the overlap, what was already
+    // playing). The dev-mode warn above is invisible to production
+    // users; this audit is what we read in the next "Copy for Claude"
+    // export. Joins with voice-speak-invoked entries on timestamp for
+    // the full racing-caller chain.
+    if (this.playing) {
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'tts-concurrent-speak',
+          category: 'subsystem',
+          source: 'voiceService.speakInternal',
+          summary: `force=${force} prevTier=${this.lastTier} newPreview="${text.slice(0, 40)}"`,
+          details: JSON.stringify({
+            force,
+            prevTier: this.lastTier,
+            newTextLength: text.length,
+            newPreview: text.slice(0, 80),
+          }),
+        });
+      }).catch(() => {
+        // Never break speech on a logging failure.
+      });
     }
     // Defense-in-depth: after sanitizeForTTS has run at the call site,
     // scan the result for piece-letter shorthand that still slipped
@@ -422,11 +658,15 @@ class VoiceService {
       this.speed = 0.95;
       await this.speakFallback(text);
       this.lastTier = 'web-speech';
+      this.lastSpeakDiagnostic.tier = 'web-speech';
+      this.lastSpeakDiagnostic.error = 'no prefs loaded';
       return;
     }
 
     if (!force && !prefs.voiceEnabled) {
       this.lastTier = 'muted';
+      this.lastSpeakDiagnostic.tier = 'muted';
+      this.lastSpeakDiagnostic.error = 'prefs.voiceEnabled is false';
       return;
     }
 
@@ -440,33 +680,83 @@ class VoiceService {
 
     this.speed = prefs.voiceSpeed;
 
-    // Tier 1: Amazon Polly. `isPollyLive()` handles cooldown expiry
-    // so a transient failure doesn't drop us to Web Speech forever.
+    // Tier 1: Amazon Polly.
     if (prefs.pollyEnabled && this.isPollyLive()) {
-      const success = await this.speakPolly(text, prefs.pollyVoice);
+      // WO-COACH-PERSONALITY-VOICE: resolve voice from active
+      // personality + per-personality override map, falling back to
+      // the legacy pollyVoice when on the 'default' personality with
+      // no override.
+      // WO-VOICE-LAYER-01 (b): when speakAlert was the entry point,
+      // use the SECONDARY voice instead so short alerts cut through
+      // main narration with a different timbre.
+      const voiceForSpeak = opts?.useSecondary
+        ? resolvePollySecondaryVoice(
+            prefs.coachPersonality,
+            prefs.coachPersonalitySecondaryVoices,
+          )
+        : resolvePollyVoice(
+            prefs.coachPersonality,
+            prefs.coachPersonalityVoices,
+            prefs.pollyVoice,
+          );
+      // Narration trace audit — captures the cross-product of voice ×
+      // personality × dials at speak time. Loaded lazily so the audit
+      // module isn't a hard import for the voice path.
+      void this.logNarrationSpoken(text, voiceForSpeak, prefs);
+      // WO-VOICE-LAYER-01 (a): per-personality SSML prosody. Neural
+      // voices respect rate/pitch/volume so the same Joanna can sound
+      // sultry under flirtatious, clipped under drill-sergeant, etc.
+      // Generative voices (Ruth/Matthew/Danielle/Gregory) ignore
+      // prosody — pass the style through anyway for consistency.
+      const success = await this.speakPolly(text, voiceForSpeak, prefs.coachPersonality ?? 'default');
       if (success) {
         this.lastTier = 'polly';
+        this.lastSpeakDiagnostic.tier = 'polly';
         return;
       }
-      // fall through to tiers 2/3 for this call; Polly will be retried
-      // on the next call once the cooldown expires (see isPollyLive).
     }
 
-    // Tier 2: Offline voice packs (pre-rendered clips cached in IndexedDB)
+    // Tier 2: Offline voice packs.
     if (voicePackService.isReady()) {
       const played = await voicePackService.speak(text, this.speed);
       if (played) {
         this.lastTier = 'voice-pack';
+        this.lastSpeakDiagnostic.tier = 'voice-pack';
         return;
       }
     }
 
-    // Tier 3: Web Speech API (with user's selected system voice)
+    // Tier 3: Web Speech API. Skipped when the caller asked for
+    // Polly-only mode (the streaming chain on /coach/teach passes
+    // `noFallback: true` so a Polly cooldown doesn't cause the iOS
+    // Safari speech-synth tail to overlap with the next Polly
+    // sentence — that was the "two voices" complaint).
+    if (opts?.noFallback) {
+      this.lastTier = 'muted';
+      this.lastSpeakDiagnostic.tier = 'muted';
+      this.lastSpeakDiagnostic.error =
+        'noFallback set; Polly+voice-pack failed; sentence skipped audibly';
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'polly-fallback',
+          category: 'subsystem',
+          source: 'voiceService.speakInternal',
+          summary: 'Polly+voice-pack failed; noFallback skipped web-speech',
+          details: `text: ${text.slice(0, 80)}`,
+        });
+      }).catch(() => undefined);
+      return;
+    }
     if (prefs.systemVoiceURI) {
       speechService.setVoice(prefs.systemVoiceURI);
     }
     await this.speakFallback(text);
     this.lastTier = 'web-speech';
+    this.lastSpeakDiagnostic.tier = 'web-speech';
+    if (!this.lastSpeakDiagnostic.error) {
+      this.lastSpeakDiagnostic.error =
+        'fell through to web-speech (Polly + voice-packs both failed; web-speech is disabled)';
+    }
   }
 
   /** Register MediaSession action handlers so BT headset / OS media
@@ -498,6 +788,9 @@ class VoiceService {
   }
 
   stop(): void {
+    // Bump the generation counter FIRST so any queued chain sees the
+    // bump before it would otherwise dispatch its next utterance.
+    this.stopGeneration++;
     // Abort any in-flight Polly fetch
     if (this.abortController) {
       this.abortController.abort();
@@ -553,57 +846,94 @@ class VoiceService {
     });
   }
 
-  private async speakPolly(text: string, voice: string): Promise<boolean> {
+  /** WO-COACH-PERSONALITY-VOICE: emit a `coach-narration-spoken` audit
+   *  with the resolved voice + active personality + dial settings.
+   *  Fires once per Polly speak attempt regardless of whether the
+   *  fetch / playback eventually succeeds — a separate `tts-failure`
+   *  fires on actual error. */
+  private async logNarrationSpoken(
+    text: string,
+    voice: string,
+    prefs: NonNullable<typeof this.cachedPrefs>,
+  ): Promise<void> {
     try {
-      const key = this.pollyKey(text, voice);
-      // Use touchAudioCacheEntry so a hit marks the entry as
-      // most-recently-used (LRU order). Previously a plain get
-      // left the insertion order as-is — common re-speaks stayed
-      // near the eviction front even when they were hot.
+      const { logAppAudit } = await import('./appAuditor');
+      // Re-read full prefs from the live store so we can include the
+      // dial settings without forcing them through the cached prefs
+      // object — the cache only holds the fields voiceService needs at
+      // speak time.
+      const profile = await db.profiles.get('main');
+      const p = (profile?.preferences ?? {}) as Partial<{
+        coachProfanity: string;
+        coachMockery: string;
+        coachFlirt: string;
+      }>;
+      const personality = prefs.coachPersonality ?? 'default';
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'subsystem',
+        source: 'voiceService.speakPolly',
+        summary: `voice=${voice} personality=${personality} text="${text.slice(0, 40)}"`,
+        details: JSON.stringify({
+          voice,
+          personality,
+          profanity: p?.coachProfanity ?? 'none',
+          mockery: p?.coachMockery ?? 'none',
+          flirt: p?.coachFlirt ?? 'none',
+          textLength: text.length,
+          textPreview: text.slice(0, 120),
+        }),
+      });
+    } catch {
+      // Audit failures must not break narration.
+    }
+  }
+
+  private async speakPolly(text: string, voice: string, style?: string): Promise<boolean> {
+    this.lastSpeakDiagnostic.pollyAttempted = true;
+    try {
+      // Cache key includes style so a style change doesn't return
+      // a stale audio buffer from an earlier prosody setting.
+      const key = this.pollyKey(text, voice) + (style ? `|${style}` : '');
       let arrayBuffer = this.touchAudioCacheEntry(key);
 
       if (!arrayBuffer) {
-        // Combine caller-abort signal (new speak() supersedes current)
-        // with a 10s timeout so slow-network Polly can't hang the
-        // voice pipeline indefinitely. Matches the prefetchAudio
-        // pattern (5s) but longer because real speech may be a
-        // longer sentence than prefetched annotations.
         this.abortController = new AbortController();
         const timeoutSignal = AbortSignal.timeout(10_000);
-        // AbortSignal.any is Chrome 116+/Safari 17.4+ — older browsers
-        // (and some WKWebView builds) still need the caller-only
-        // signal. Types mark `any` as always present; reality differs.
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const combinedSignal = AbortSignal.any
           ? AbortSignal.any([this.abortController.signal, timeoutSignal])
           : this.abortController.signal;
-        const url = getTtsUrl(text, voice);
+        const url = getTtsUrl(text, voice, true, style);
         const response = await fetch(url, { signal: combinedSignal });
+        this.lastSpeakDiagnostic.pollyStatus = response.status;
+        this.lastSpeakDiagnostic.pollyOk = response.ok;
         if (!response.ok) {
           this.coolDownPolly(`API error ${response.status}`);
+          this.lastSpeakDiagnostic.error = `Polly /api/tts returned ${response.status}`;
           return false;
         }
         arrayBuffer = await response.arrayBuffer();
         this.abortController = null;
         this.setAudioCacheEntry(key, arrayBuffer);
+      } else {
+        this.lastSpeakDiagnostic.pollyOk = true;
+        this.lastSpeakDiagnostic.pollyStatus = 200; // cache hit
       }
 
       const played = await this.playAudioBuffer(arrayBuffer.slice(0));
       if (!played) {
-        // Audio context was suspended outside a user gesture and
-        // couldn't be resumed. Don't cool down Polly — the fetch
-        // succeeded. Just signal failure so caller falls through to
-        // Web Speech for THIS call; next call may succeed if the user
-        // interacts in the meantime.
+        this.lastSpeakDiagnostic.error = 'AudioContext suspended (need user gesture)';
         return false;
       }
       return true;
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
-        // A subsequent speak() aborted this one; not a Polly failure.
         return false;
       }
-      this.coolDownPolly(error instanceof Error ? error.message : String(error));
+      const msg = error instanceof Error ? error.message : String(error);
+      this.lastSpeakDiagnostic.error = `Polly fetch threw: ${msg}`;
+      this.coolDownPolly(msg);
       this.playing = false;
       this.currentSource = null;
       return false;
@@ -616,7 +946,11 @@ class VoiceService {
     const prefs = await this.loadPrefs();
     if (!prefs?.pollyEnabled || !this.isPollyLive() || !prefs.voiceEnabled) return;
 
-    const voice = prefs.pollyVoice;
+    const voice = resolvePollyVoice(
+      prefs.coachPersonality,
+      prefs.coachPersonalityVoices,
+      prefs.pollyVoice,
+    );
     const uncached = texts.filter(t => t && !this.audioCache.has(this.pollyKey(t, voice)));
     if (uncached.length === 0) return;
 
@@ -640,10 +974,19 @@ class VoiceService {
     }
   }
 
+  /** Tier-3 fallback: Web Speech API (system speech synthesizer).
+   *
+   *  This path is reached ONLY when Polly + voice-packs both fail —
+   *  there's no "dual engine overlap" concern because by the time we
+   *  get here, no other tier produced audio. Always-on so iOS audio-
+   *  device failures (where AudioContext can't unlock) don't produce
+   *  total silence — the user at least hears native speech.
+   *
+   *  The flag-gated paths (speakFast / speakQueuedForced) still
+   *  respect WEB_SPEECH_FALLBACK_ENABLED so the original streaming-
+   *  overlap bug doesn't reappear in the coach chat. */
   private async speakFallback(text: string): Promise<void> {
-    if (WEB_SPEECH_FALLBACK_ENABLED) {
-      await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
-    }
+    await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
   }
 
   /**

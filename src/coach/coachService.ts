@@ -36,6 +36,8 @@ import type {
   CoachAnswer,
   CoachAskInput,
   CoachIdentity,
+  CoachPersonality,
+  IntensityLevel,
   Provider,
   ProviderName,
   ProviderResponse,
@@ -67,8 +69,24 @@ function pickProvider(name: ProviderName): Provider {
 export interface CoachServiceOptions {
   /** Override the active provider. Useful for tests. */
   provider?: ProviderName;
-  /** Override the coach identity (default: 'danya'). */
+  /** Override the legacy coach identity (default: 'danya'). Kept for
+   *  backward compat with pre-personality call sites; new callers use
+   *  `personality` + the three intensity dials below. */
   identity?: CoachIdentity;
+  /** Personality voice for this call. Defaults to 'default' which
+   *  produces the same prompt as the pre-personality build (modulo
+   *  three "no-op" dial clauses reinforcing the default behavior).
+   *  WO-COACH-PERSONALITIES. */
+  personality?: CoachPersonality;
+  /** Profanity intensity dial. Default: 'none'. */
+  profanity?: IntensityLevel;
+  /** Mockery intensity dial. Default: 'none'. */
+  mockery?: IntensityLevel;
+  /** Flirt intensity dial. Default: 'none'. */
+  flirt?: IntensityLevel;
+  /** Verbosity dial — clamps how much the coach says per turn. Wired
+   *  into the identity prompt's teaching block. Default: 'normal'. */
+  verbosity?: 'minimal' | 'normal' | 'verbose';
   /** Inject a custom provider instance (used by tests with a mock). */
   providerOverride?: Provider;
   /** When provided, the service routes through the provider's
@@ -104,6 +122,12 @@ export interface CoachServiceOptions {
   /** Callback the `navigate_to_route` cerebrum tool uses to actually
    *  push the user-validated route via react-router. WO-BRAIN-04. */
   onNavigate?: ToolExecutionContext['onNavigate'];
+  /** Callback the `quiz_user_for_move` cerebrum tool uses to register
+   *  a one-shot quiz on the live board. WO-COACH-LICHESS-OPENINGS. */
+  onQuizUserForMove?: ToolExecutionContext['onQuizUserForMove'];
+  /** Callback the `start_walkthrough_for_opening` cerebrum tool uses to
+   *  hand off to the WalkthroughMode UI. WO-COACH-LICHESS-OPENINGS. */
+  onStartWalkthroughForOpening?: ToolExecutionContext['onStartWalkthroughForOpening'];
   /** WO-FOUNDATION-02 trace harness — surface-supplied UUID for
    *  joining audit entries across the pipeline. */
   traceId?: string;
@@ -114,6 +138,14 @@ export interface CoachServiceOptions {
    *  toolbelt, AND the spine refuses to dispatch them if the LLM
    *  hallucinates a call. WO-COACH-RESILIENCE. */
   excludeTools?: readonly string[];
+  /** Optional getter the spine calls between trips to refresh
+   *  `ctx.liveFen`. Without this, the FEN snapshotted at handleSubmit
+   *  time stays frozen across all round-trips — so when the brain
+   *  successfully plays a move in trip 2, trips 3+ still see the
+   *  pre-move FEN and wastes turns trying to play moves for the
+   *  side that already moved (production audit, build 38d4ace). The
+   *  surface should pass a getter that reads from a ref. */
+  getLiveFen?: () => string;
 }
 
 /** Format a list of tool results plus the LLM's previous text into a
@@ -139,6 +171,25 @@ function formatToolResultsAsFollowUpAsk(
     if (r.result !== undefined) payload.push(`result=${JSON.stringify(r.result)}`);
     if (r.error) payload.push(`error=${r.error}`);
     lines.push(`- ${r.name}: ${payload.join(' ')}`);
+  }
+  // Explicit anti-replay rule. Production audit (build a67a4eb) showed
+  // the brain emitting `play_move d5` twice in a row across trips —
+  // trip 2's d5 succeeded, then trip 3 emitted d5 again (rejected
+  // because d5 was already on the board). The brain was reading
+  // "play_move ok" as "the call worked" without realizing the move
+  // is now permanently committed. Spell it out.
+  const succeededMoves = results
+    .filter((r) => r.name === 'play_move' && r.ok)
+    .map((r) => {
+      const result = r.result as { san?: string } | undefined;
+      return result?.san ?? null;
+    })
+    .filter((san): san is string => san !== null);
+  if (succeededMoves.length > 0) {
+    lines.push(
+      '',
+      `IMPORTANT: ${succeededMoves.join(', ')} ${succeededMoves.length === 1 ? 'is' : 'are'} ALREADY ON THE BOARD. Do NOT call play_move again with ${succeededMoves.length === 1 ? 'that move' : 'those moves'} — it would either fail (the move is no longer legal from the new position) or play a different move with the same name (different piece). The board has advanced; your job now is to narrate WHAT YOU JUST DID and prompt the student's next move. Use NO more play_move calls this turn unless you genuinely want to play a NEW different move.`,
+    );
   }
   lines.push(
     '',
@@ -178,6 +229,11 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
 
   const envelope = assembleEnvelope({
     identity: options.identity,
+    personality: options.personality,
+    profanity: options.profanity,
+    mockery: options.mockery,
+    flirt: options.flirt,
+    verbosity: options.verbosity,
     toolbelt: getToolDefinitions({ exclude: options.excludeTools }),
     input,
   });
@@ -215,6 +271,8 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     onSetBoardPosition: options.onSetBoardPosition,
     onResetBoard: options.onResetBoard,
     onNavigate: options.onNavigate,
+    onQuizUserForMove: options.onQuizUserForMove,
+    onStartWalkthroughForOpening: options.onStartWalkthroughForOpening,
     liveFen: input.liveState.fen,
     traceId: options.traceId,
   };
@@ -263,6 +321,25 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   let lastResponse: ProviderResponse = { text: '', toolCalls: [] };
 
   for (let trip = 1; trip <= maxRoundTrips; trip++) {
+    // Refresh liveFen between trips ONLY (trip > 1). Trip 1 uses the
+    // surface-supplied `input.liveState.fen` already wired into
+    // ctx.liveFen above — that value carries the surface's authoritative
+    // FEN at ask time, including any explicit fenOverride
+    // handleStudentMove passed for the post-board-move case. Calling
+    // getLiveFen on trip 1 would clobber the correct override with a
+    // stale ref value because React hasn't re-rendered yet at the
+    // moment coachService.ask runs synchronously inside the same
+    // event-handler tick (production audit, build 5df4252: brain saw
+    // post-e4 FEN at envelope assembly but starting-position FEN at
+    // playMoveTool validation, rejecting "e5" as illegal for white).
+    // From trip 2 on, the surface has long since re-rendered AND the
+    // brain itself may have played a move via play_move, so the latest
+    // gameRef value is the truth and the refresh is what keeps
+    // chess.js validation in sync with the live board.
+    if (trip > 1 && options.getLiveFen) {
+      const fresh = options.getLiveFen();
+      if (fresh) ctx.liveFen = fresh;
+    }
     void logAppAudit({
       kind: 'coach-brain-provider-called',
       category: 'subsystem',
@@ -372,6 +449,27 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           summary: `${call.name} ${result.ok ? 'ok' : 'error'}`,
           details: JSON.stringify({ id: call.id, name: call.name, ok: result.ok, error: result.error }),
         });
+        // Dedicated tool-call-error trail — captures full error text +
+        // the exact args that triggered it. The existing
+        // coach-brain-tool-called audit packs args into `details` JSON
+        // but for production triage we want a high-signal kind we can
+        // filter on directly. See the local_opening_book "aiColor must
+        // be 'white' or 'black'" surfaced in the audit log for an
+        // example of what this captures.
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'tool-call-error',
+            category: 'subsystem',
+            source: 'coachService.ask',
+            summary: `${call.name}: ${result.error ?? 'unknown error'}`,
+            details: JSON.stringify({
+              id: call.id,
+              name: call.name,
+              args: call.args,
+              error: result.error,
+            }),
+          });
+        }
       } catch (err) {
         void logAppAudit({
           kind: 'coach-brain-tool-called',
@@ -379,6 +477,19 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           source: 'coachService.ask',
           summary: `${call.name} threw`,
           details: err instanceof Error ? err.message : String(err),
+        });
+        void logAppAudit({
+          kind: 'tool-call-error',
+          category: 'subsystem',
+          source: 'coachService.ask',
+          summary: `${call.name} threw: ${err instanceof Error ? err.message : String(err)}`,
+          details: JSON.stringify({
+            id: call.id,
+            name: call.name,
+            args: call.args,
+            error: err instanceof Error ? err.message : String(err),
+            stack: err instanceof Error ? err.stack : undefined,
+          }),
         });
         toolResults.push({
           name: call.name,
@@ -406,9 +517,18 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         toolResults,
       );
       currentEnvelope = { ...currentEnvelope, ask: followUpAsk };
-      // Streaming the follow-up turns would surface intermediate
-      // tool-orchestration text to the user. Suppress.
-      useStreaming = false;
+      // Keep streaming on for follow-up trips. The user perceives
+      // each non-streamed trip as a 2–3s silent pause followed by a
+      // burst — production audit shows that's the "choppy" feel.
+      // Streaming all trips lets each trip's prose start playing
+      // within ~500ms of the trip beginning, which is what makes
+      // the coach feel like a continuous lesson instead of a
+      // sequence of stuttering replies. The previous concern
+      // ("intermediate tool-orchestration text leaks to the user")
+      // is fine — that prose IS the lesson; the coach narrating
+      // "let me check the engine" while the engine call is in
+      // flight reads as natural pacing, not orchestration noise.
+      // Suppression turned out to be the bigger UX problem.
     } else {
       break;
     }

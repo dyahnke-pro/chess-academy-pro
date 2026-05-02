@@ -500,6 +500,19 @@ export interface UserPreferences {
   showLegalMoves: boolean;
   showCoordinates: boolean;
   pieceAnimationSpeed: PieceAnimationSpeed;
+  // Piece Sound Customization (WO-COACH-PIECE-SOUND-CUSTOM). Layered ON
+  // TOP of the existing style-set / event-type defaults so move /
+  // capture / castle / check stay distinguishable. Each value is
+  // 0–100; defaults below produce the current sound character.
+  /** Pitch multiplier 0–100 (0 = 0.5×, 50 = 1.0×, 100 = 2.0×). */
+  pieceSoundPitch?: number;
+  /** Tone (low-pass filter brightness) 0–100 (0 = warmest, 100 = brightest). */
+  pieceSoundTone?: number;
+  /** Waveform character 0–100 — continuous blend across
+   *  sine → triangle → square → sawtooth. 0 = pure sine. */
+  pieceSoundWaveform?: number;
+  /** Length multiplier 0–100 (0 = 0.5×, 50 = 1.0×, 100 = 2.0×). */
+  pieceSoundLength?: number;
   boardOrientation: boolean;
   // Feedback & Coaching (WO-5)
   moveQualityFlash: boolean;
@@ -521,6 +534,36 @@ export interface UserPreferences {
    *  coach at phase boundaries; 'brief'/'standard'/'full' set the
    *  depth. Default 'standard'. Added by WO-PHASE-NARRATION-01. */
   phaseNarrationVerbosity?: PhaseNarrationVerbosity;
+  /** Coach personality voice — picks the body of the system prompt.
+   *  See `src/coach/sources/personalities.ts`. Defaults to 'default'
+   *  (the original Danya voice). WO-COACH-PERSONALITIES (PR B). */
+  coachPersonality?: import('../coach/types').CoachPersonality;
+  /** Per-personality Polly voice override. Empty / missing entries
+   *  fall back to PERSONALITY_VOICE_DEFAULTS in voiceService.ts.
+   *  WO-COACH-PERSONALITY-VOICE — voice + personality are orthogonal
+   *  dials. Lets the user pair any voice with any personality
+   *  ("drill-sergeant Ruth" / "flirtatious Stephen"). */
+  coachPersonalityVoices?: Partial<
+    Record<import('../coach/types').CoachPersonality, string>
+  >;
+  /** Per-personality SECONDARY voice override. Used for short alerts
+   *  / interjections (tactic warnings, opponent-blunder live-coach
+   *  calls) so the user hears a different timbre for "watch out"
+   *  than for the main narration. WO-VOICE-LAYER-01 (b). When unset,
+   *  falls back to PERSONALITY_SECONDARY_VOICE_DEFAULTS in
+   *  voiceService.ts. */
+  coachPersonalitySecondaryVoices?: Partial<
+    Record<import('../coach/types').CoachPersonality, string>
+  >;
+  /** Profanity dial. Default 'none'. Settings UI seeds the dial with
+   *  the per-personality default at first selection (e.g.
+   *  drill-sergeant → 'hard'), but once a value is stored here it
+   *  overrides the personality default until the user resets it. */
+  coachProfanity?: import('../coach/types').IntensityLevel;
+  /** Mockery dial. Default 'none'. */
+  coachMockery?: import('../coach/types').IntensityLevel;
+  /** Flirt dial. Default 'none'. */
+  coachFlirt?: import('../coach/types').IntensityLevel;
   /**
    * Controls when the coach invokes the LLM for per-move commentary
    * during play-against games.
@@ -535,6 +578,16 @@ export interface UserPreferences {
    * the setting automatically benefit from the cost reduction.
    */
   coachCommentaryVerbosity?: 'key-moments' | 'every-move' | 'off';
+  /** How much the coach says PER TURN when it does talk. Wired through
+   *  to the brain's TEACH_MODE_ADDITION + OPERATOR_BASE_BODY teaching
+   *  block to clamp response length. (Distinct from the older
+   *  `coachVerbosity` field above, which controls speech *pace*.)
+   *    - 'minimal'  → one short sentence, ≤8 words ("Nf6 — your move.")
+   *    - 'normal'   → one short sentence, ≤15 words (default)
+   *    - 'verbose'  → full lecture shape, no length cap (set up
+   *                   positions, demonstrate, name the IDEA, etc.)
+   *  When unset, treat as 'normal'. */
+  coachResponseLength?: 'minimal' | 'normal' | 'verbose';
   // Neon Glow Settings
   glowBrightness?: number;         // 0–200, default 100 — master dimmer for all glow
   boardGlowColor?: string;         // rgb string e.g. "0, 229, 255" — single color for all squares
@@ -543,6 +596,13 @@ export interface UserPreferences {
   // Import accounts
   chessComUsername?: string;
   lichessUsername?: string;
+  // Auto-import scheduler — bookkeeping for the biweekly background sync
+  // started at app boot. Epoch ms timestamp of the most recent successful
+  // import per service; the scheduler skips a service whose stamp is less
+  // than AUTO_IMPORT_INTERVAL_MS old. Set to null/undefined to force a
+  // run on next boot.
+  lastChessComAutoImportAt?: number | null;
+  lastLichessAutoImportAt?: number | null;
   // Lichess API token (encrypted, for puzzle activity/dashboard)
   lichessTokenEncrypted?: string | null;
   lichessTokenIv?: string | null;

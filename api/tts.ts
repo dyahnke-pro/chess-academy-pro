@@ -5,6 +5,22 @@ const ALLOWED_ORIGINS = [
   'https://chess-academy-pro.vercel.app',
 ];
 
+/** Vercel preview deployments use auto-generated subdomains under
+ *  the project's vercel.app namespace. Allowlist them so the voice
+ *  service can reach Polly during PR-preview testing — without this
+ *  every preview build silently rapid-fires through narrations
+ *  because the browser blocks the /api/tts response by CORS, voice
+ *  packs aren't cached in Incognito, and Web Speech fallback is
+ *  disabled. The rest of the project keeps the wildcard-rejection
+ *  behaviour intact for real production. */
+const PREVIEW_ORIGIN_RE = /^https:\/\/chess-academy-pro(?:-git-[a-z0-9-]+)?-dyahnke-pros-projects\.vercel\.app$/;
+
+function isAllowedOrigin(origin: string): boolean {
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  if (PREVIEW_ORIGIN_RE.test(origin)) return true;
+  return false;
+}
+
 /**
  * Build CORS headers — reject unrecognised origins instead of
  * falling back to `*`. The prior wildcard fallback let any site
@@ -19,7 +35,7 @@ function getCorsHeaders(req?: Request): Record<string, string> {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
-  if (ALLOWED_ORIGINS.includes(origin)) {
+  if (isAllowedOrigin(origin)) {
     base['Access-Control-Allow-Origin'] = origin;
     base['Vary'] = 'Origin';
   }
@@ -32,7 +48,7 @@ function getCorsHeaders(req?: Request): Record<string, string> {
 function isOriginAllowed(req?: Request): boolean {
   const origin = req?.headers.get('Origin');
   if (!origin) return true;
-  return ALLOWED_ORIGINS.includes(origin);
+  return isAllowedOrigin(origin);
 }
 
 interface VoiceConfig {
@@ -126,21 +142,51 @@ function escapeForSsml(text: string): string {
  *     <sub>, <w>). They interpret punctuation, pacing and emotion
  *     from context on their own, so we only add paragraph structure
  *     to help the engine parse it cleanly.
- *   - NEURAL voices support prosody / break / emphasis. A mild
- *     `<prosody rate="95%">` slowdown makes delivery feel warmer and
- *     more coach-like.
+ *   - NEURAL voices support prosody / break / emphasis / amazon:domain.
+ *     We tune `<prosody rate>` and `<prosody pitch>` per personality
+ *     so the same Joanna voice can sound sultry for flirtatious,
+ *     clipped for drill-sergeant, etc.
  *
  * Plain text is always safe to fall back to — SSML is opt-in.
+ *
+ * @param style — optional personality string for prosody tuning. When
+ *   absent, falls back to the previous default 'rate=95%'.
  */
-function buildSsmlForEngine(text: string, engine: string): string {
+type PersonalityStyle = 'default' | 'soft' | 'edgy' | 'flirtatious' | 'drill-sergeant';
+
+const NEURAL_PROSODY_BY_STYLE: Record<PersonalityStyle, { rate: string; pitch?: string; volume?: string }> = {
+  // Default: mild slowdown for warmth — matches the previous behavior.
+  default: { rate: '95%' },
+  // Soft: gentler, slightly slower.
+  soft: { rate: '92%', volume: 'soft' },
+  // Edgy: faster, sharper. Slight pitch lift for cutting tone.
+  edgy: { rate: '105%', pitch: '+2%' },
+  // Flirtatious: slower, lower pitch — sultry register. The cap on
+  // generative engines means Ruth ignores this; Joanna / Salli /
+  // Kendra (neural) get the full effect.
+  flirtatious: { rate: '88%', pitch: '-8%' },
+  // Drill sergeant: crisp, loud, no slowdown.
+  'drill-sergeant': { rate: '108%', volume: 'x-loud' },
+};
+
+function buildSsmlForEngine(text: string, engine: string, style?: string): string {
   const escaped = escapeForSsml(text);
   if (engine === 'generative') {
+    // Generative engines don't honor prosody — paragraph wrap is the
+    // only safe enrichment. Engine handles emotion / pacing on its own.
     return `<speak><p>${escaped}</p></speak>`;
   }
-  return `<speak><prosody rate="95%"><p>${escaped}</p></prosody></speak>`;
+  const personality = (style ?? 'default') as PersonalityStyle;
+  const prosody = NEURAL_PROSODY_BY_STYLE[personality] ?? NEURAL_PROSODY_BY_STYLE.default;
+  const attrs = [
+    `rate="${prosody.rate}"`,
+    prosody.pitch ? `pitch="${prosody.pitch}"` : '',
+    prosody.volume ? `volume="${prosody.volume}"` : '',
+  ].filter(Boolean).join(' ');
+  return `<speak><prosody ${attrs}><p>${escaped}</p></prosody></speak>`;
 }
 
-async function synthesize(text: string, voice: string, req: Request, useSsml: boolean): Promise<Response> {
+async function synthesize(text: string, voice: string, req: Request, useSsml: boolean, style?: string): Promise<Response> {
   const cors = getCorsHeaders(req);
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID_POLLY;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY_POLLY;
@@ -176,7 +222,7 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
       credentials: { accessKeyId, secretAccessKey },
     });
 
-    const synthText = useSsml ? buildSsmlForEngine(text, voiceConfig.engine) : text;
+    const synthText = useSsml ? buildSsmlForEngine(text, voiceConfig.engine, style) : text;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import loses type info
     const command = new SynthesizeSpeechCommand({
@@ -258,6 +304,10 @@ export default async function handler(req: Request): Promise<Response> {
       // `ssml=1` opts in to SSML wrapping. Default off so callers
       // that don't set the flag behave exactly like before.
       const useSsml = url.searchParams.get('ssml') === '1';
+      // Personality style → SSML prosody tuning (Neural voices only).
+      // Generative voices ignore prosody; we still pass it through
+      // for consistency.
+      const style = url.searchParams.get('style') ?? undefined;
 
       // Diagnostic mode: /api/tts?diag=1 returns env var status without calling Polly
       if (url.searchParams.get('diag') === '1') {
@@ -270,20 +320,20 @@ export default async function handler(req: Request): Promise<Response> {
         );
       }
 
-      return synthesize(text, voice, req, useSsml);
+      return synthesize(text, voice, req, useSsml, style);
     }
 
     if (req.method === 'POST') {
-      let body: { text?: string; voice?: string; ssml?: boolean };
+      let body: { text?: string; voice?: string; ssml?: boolean; style?: string };
       try {
-        body = await req.json() as { text?: string; voice?: string; ssml?: boolean };
+        body = await req.json() as { text?: string; voice?: string; ssml?: boolean; style?: string };
       } catch {
         return new Response('Invalid JSON', { status: 400, headers: cors });
       }
       const text = body.text?.trim() ?? '';
       const voice = body.voice ?? 'ruth';
       const useSsml = body.ssml === true;
-      return synthesize(text, voice, req, useSsml);
+      return synthesize(text, voice, req, useSsml, body.style);
     }
 
     return new Response('Method not allowed', { status: 405, headers: cors });

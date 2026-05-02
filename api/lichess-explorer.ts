@@ -20,9 +20,15 @@ export const config = { runtime: 'edge' };
 const EXPLORER_BASE = 'https://explorer.lichess.ovh';
 const ALLOWED_SOURCES = new Set(['masters', 'lichess']);
 
-/** Full identifier used as User-Agent in the server→Lichess hop. */
+/** Full identifier used as User-Agent in the server→Lichess hop.
+ *  Lichess's bot policy expects contact info (email or maintainer URL)
+ *  in the User-Agent. Production audit (build 30fe8c8) showed Lichess
+ *  returning 401 with an nginx body for our previous URL-only UA, even
+ *  though our proxy code is otherwise correct. The bare URL identifier
+ *  passed earlier got tightened up on their end; including a contact
+ *  email here is the documented way to stay on the allow path. */
 const UPSTREAM_USER_AGENT =
-  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app)';
+  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app; contact: dyahnke@gmail.com)';
 
 const PROXY_TIMEOUT_MS = 8_000;
 

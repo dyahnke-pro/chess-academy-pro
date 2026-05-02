@@ -27,9 +27,9 @@ const SECTIONS: SectionItem[] = [
     rgb: '6, 182, 212',
   },
   {
-    label: 'Play with Coach',
+    label: 'Coach',
     icon: GraduationCap,
-    route: '/coach/play',
+    route: '/coach/home',
     color: 'text-rose-400',
     bgColor: 'bg-rose-500/10',
     rgb: '251, 113, 133',
@@ -76,7 +76,7 @@ export function DashboardPage(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-20 md:pb-6"
+      className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
       style={{ color: 'var(--color-text)' }}
       data-testid="dashboard"
     >

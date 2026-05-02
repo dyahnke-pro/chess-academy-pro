@@ -10,6 +10,7 @@ const {
   mockSetEnabled,
   mockSetVolume,
   mockSetSoundSet,
+  mockSetCustomization,
   mockPlayKidCelebration,
   mockPlayKidEncouragement,
 } = vi.hoisted(() => ({
@@ -18,6 +19,7 @@ const {
   mockSetEnabled: vi.fn(),
   mockSetVolume: vi.fn(),
   mockSetSoundSet: vi.fn(),
+  mockSetCustomization: vi.fn(),
   mockPlayKidCelebration: vi.fn(),
   mockPlayKidEncouragement: vi.fn(),
 }));
@@ -31,6 +33,7 @@ vi.mock('../services/soundService', () => ({
     setEnabled: mockSetEnabled,
     setVolume: mockSetVolume,
     setSoundSet: mockSetSoundSet,
+    setCustomization: mockSetCustomization,
     playKidCelebration: mockPlayKidCelebration,
     playKidEncouragement: mockPlayKidEncouragement,
   },

@@ -50,7 +50,20 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   game_post_review:        'deepseek-reasoner',
   position_analysis_chat:  'deepseek-reasoner',
   session_plan_generation: 'deepseek-reasoner',
-  interactive_review:      'deepseek-reasoner',
+  // interactive_review → deepseek-chat (NOT reasoner). Audit log build
+  // 83233ab proved that deepseek-reasoner with max_tokens=420 consumes
+  // all 420 tokens on hidden `reasoning_content` (1400+ chars of CoT)
+  // for per-move commentary, leaving 0-20 tokens for visible `content`
+  // — every llm-response audit showed `finishReason="length"`,
+  // `completionTokens=420`, `reasoningContentLength≈1400`, content
+  // empty or truncated mid-sentence ("Now it's you"). Per-move
+  // narration is conversational coaching prose, not analysis — it
+  // doesn't benefit from chain-of-thought. The Anthropic side already
+  // uses non-reasoning Sonnet for the same task (see ANTHROPIC_MODEL_MAP
+  // below). Moving DeepSeek to deepseek-chat eliminates the wasted
+  // reasoning budget; the same 420 max_tokens now produces ~1500 chars
+  // of actual narration.
+  interactive_review:      'deepseek-chat',
   model_game_annotation:   'deepseek-reasoner',
   middlegame_plan_generation: 'deepseek-reasoner',
 
@@ -69,7 +82,14 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   game_opening_line:       'claude-haiku-4-5-20251001',
   whatif_commentary:       'claude-haiku-4-5-20251001',
   game_narrative_summary:  'claude-haiku-4-5-20251001',
-  chat_response:           'claude-haiku-4-5-20251001',  // was 'claude-sonnet-4-6' — biggest single cost win
+  // chat_response runs on Sonnet 4.6 because chat is where TEACHING
+  // happens (in-game ask, standalone chat, /coach/teach lesson surface).
+  // Haiku is fast but formulaic; Sonnet does the creative leaps a real
+  // coach makes — pattern naming, opening trap callouts, "if you do X,
+  // I respond Y" multi-step walkthroughs. Per-move live narration
+  // (interactive_review task) stays on Haiku for speed; chat depth
+  // beats chat speed for teaching surfaces.
+  chat_response:           'claude-sonnet-4-6',
   sideline_explanation:    'claude-haiku-4-5-20251001',
   smart_search:            'claude-haiku-4-5-20251001',
   explore_reaction:        'claude-haiku-4-5-20251001',
@@ -83,7 +103,7 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   game_post_review:        'claude-sonnet-4-6',
   position_analysis_chat:  'claude-sonnet-4-6',
   session_plan_generation: 'claude-sonnet-4-6',
-  interactive_review:      'claude-sonnet-4-6',
+  interactive_review:      'claude-haiku-4-5-20251001',
   model_game_annotation:   'claude-sonnet-4-6',
   middlegame_plan_generation: 'claude-sonnet-4-6',
 
@@ -103,7 +123,57 @@ const OFFLINE_FALLBACKS: Record<string, string> = {
 interface ProviderConfig {
   provider: AiProvider;
   apiKey: string;
+  /** User-selected per-category model overrides from Settings →
+   *  Provider Settings (preferredModel.commentary / .analysis /
+   *  .reports). When unset, falls back to the per-task defaults in
+   *  ANTHROPIC_MODEL_MAP / DEEPSEEK_MODEL_MAP. Lets the user pin
+   *  Opus for thinking + Haiku for short prose without us hard-coding
+   *  the choice. */
+  preferredModel?: { commentary: string; analysis: string; reports: string };
 }
+
+/** Maps each `CoachTask` to one of three user-facing categories so the
+ *  preferredModel preference (Settings → Provider) actually flows
+ *  through to the wire. Today every Anthropic call hardcoded Sonnet 4.6
+ *  via ANTHROPIC_MODEL_MAP regardless of what the user picked — this
+ *  is the bridge.
+ *
+ *  - 'commentary' → quick, high-frequency prose (per-move chat,
+ *    hint, puzzle reaction, intent classification, smart-search
+ *    autocomplete). The "language center."
+ *  - 'analysis'   → reasoning-heavy turns (the chat brain, position
+ *    deep-dives, opening overviews, plan generation, /coach/teach
+ *    lesson turns). The "thought process."
+ *  - 'reports'    → rare deep artifacts read as references (weakness
+ *    report, weekly digest, deep_analysis, bad-habit summary).
+ */
+const TASK_CATEGORY: Record<CoachTask, 'commentary' | 'analysis' | 'reports'> = {
+  move_commentary:           'commentary',
+  hint:                      'commentary',
+  puzzle_feedback:           'commentary',
+  game_commentary:           'commentary',
+  game_opening_line:         'commentary',
+  whatif_commentary:         'commentary',
+  game_narrative_summary:    'commentary',
+  sideline_explanation:      'commentary',
+  smart_search:              'commentary',
+  explore_reaction:          'commentary',
+  intent_classify:           'commentary',
+  interactive_review:        'commentary',
+  chat_response:             'analysis',
+  position_analysis_chat:    'analysis',
+  opening_overview:          'analysis',
+  game_post_review:          'analysis',
+  post_game_analysis:        'analysis',
+  daily_lesson:              'analysis',
+  session_plan_generation:   'analysis',
+  model_game_annotation:     'analysis',
+  middlegame_plan_generation:'analysis',
+  bad_habit_report:          'reports',
+  weakness_report:           'reports',
+  weekly_report:             'reports',
+  deep_analysis:             'reports',
+};
 
 // Embedded keys (split + reversed) — assembled at runtime as fallback
 const _P = ['AAg3tjc6-QloxqPVoiya_sIlFe1BjOsVJGQz', 'vBBV66KIx6FbPmIuCxO1TLStej-Kt44jL5DD', 'UB9cvx5Mx30pFR0x3xVYmg8-30ipa-tna-ks'];
@@ -124,12 +194,23 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     const deepseekEnvKey = getDeepseekKey();
 
     const profile = await db.profiles.get('main');
-    const provider: AiProvider = profile?.preferences.aiProvider ?? (anthropicEnvKey ? 'anthropic' : 'deepseek');
+    // WO-PLAN-B: prefer Anthropic whenever the embedded/env key is
+    // available, regardless of any prior `aiProvider` preference
+    // stored on the profile. The user explicitly asked NOT to manage
+    // keys via Settings — both providers' keys live in coachApi.ts
+    // already, and Anthropic Haiku is the faster + cheaper-in-aggregate
+    // path now that the spine bypasses the LLM for routine coach moves.
+    // DeepSeek remains the auto-fallback if the Anthropic call errors.
+    const provider: AiProvider = anthropicEnvKey
+      ? 'anthropic'
+      : (profile?.preferences.aiProvider ?? 'deepseek');
+
+    const preferredModel = profile?.preferences.preferredModel;
 
     if (provider === 'anthropic') {
-      if (anthropicEnvKey) return { provider, apiKey: anthropicEnvKey };
+      if (anthropicEnvKey) return { provider, apiKey: anthropicEnvKey, preferredModel };
       if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
-        if (deepseekEnvKey) return { provider: 'deepseek', apiKey: deepseekEnvKey };
+        if (deepseekEnvKey) return { provider: 'deepseek', apiKey: deepseekEnvKey, preferredModel };
         return null;
       }
       const { decryptApiKey } = await import('./cryptoService');
@@ -137,11 +218,11 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
         profile.preferences.anthropicApiKeyEncrypted,
         profile.preferences.anthropicApiKeyIv,
       );
-      return { provider, apiKey };
+      return { provider, apiKey, preferredModel };
     } else {
-      if (deepseekEnvKey) return { provider, apiKey: deepseekEnvKey };
+      if (deepseekEnvKey) return { provider, apiKey: deepseekEnvKey, preferredModel };
       if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
-        if (anthropicEnvKey) return { provider: 'anthropic', apiKey: anthropicEnvKey };
+        if (anthropicEnvKey) return { provider: 'anthropic', apiKey: anthropicEnvKey, preferredModel };
         return null;
       }
       const { decryptApiKey } = await import('./cryptoService');
@@ -149,7 +230,46 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
         profile.preferences.apiKeyEncrypted,
         profile.preferences.apiKeyIv,
       );
-      return { provider, apiKey };
+      return { provider, apiKey, preferredModel };
+    }
+  } catch {
+    return null;
+  }
+}
+
+/** Pin the provider for a single call. Used by the brain's per-surface
+ *  routing (e.g. /coach/teach forces 'anthropic'). Walks the same key
+ *  resolution order as `getProviderConfig` for that provider only:
+ *  env key → encrypted profile key → null. NEVER falls back to the
+ *  other provider — that's the caller's job via `getFallbackConfig`. */
+async function getForcedProviderConfig(provider: AiProvider): Promise<ProviderConfig | null> {
+  try {
+    const profile = await db.profiles.get('main');
+    const preferredModel = profile?.preferences.preferredModel;
+    if (provider === 'anthropic') {
+      const envKey = getAnthropicKey();
+      if (envKey) return { provider, apiKey: envKey, preferredModel };
+      if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
+        return null;
+      }
+      const { decryptApiKey } = await import('./cryptoService');
+      const apiKey = await decryptApiKey(
+        profile.preferences.anthropicApiKeyEncrypted,
+        profile.preferences.anthropicApiKeyIv,
+      );
+      return { provider, apiKey, preferredModel };
+    } else {
+      const envKey = getDeepseekKey();
+      if (envKey) return { provider, apiKey: envKey, preferredModel };
+      if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
+        return null;
+      }
+      const { decryptApiKey } = await import('./cryptoService');
+      const apiKey = await decryptApiKey(
+        profile.preferences.apiKeyEncrypted,
+        profile.preferences.apiKeyIv,
+      );
+      return { provider, apiKey, preferredModel };
     }
   } catch {
     return null;
@@ -174,7 +294,34 @@ function getFallbackConfig(failedProvider: AiProvider): ProviderConfig | null {
   }
 }
 
-function getModel(task: CoachTask, provider: AiProvider): string {
+function getModel(
+  task: CoachTask,
+  provider: AiProvider,
+  preferredModel?: ProviderConfig['preferredModel'],
+): string {
+  // 1. Honor the user's per-category preference from Settings →
+  //    Provider when set. This is what makes "Opus for analysis,
+  //    Haiku for commentary" actually flow through to the wire —
+  //    until this layer existed, every Anthropic call was hardcoded
+  //    to ANTHROPIC_MODEL_MAP[task] regardless of Settings.
+  // 2. Validate that the preferred model is compatible with the
+  //    active provider — Anthropic models start with "claude-",
+  //    DeepSeek models start with "deepseek-". If the user picked
+  //    an Anthropic model but we're falling back to DeepSeek (or
+  //    vice versa), use the per-task default for the active provider
+  //    so we don't send a "claude-opus-4-6" string to DeepSeek.
+  if (preferredModel) {
+    const category = TASK_CATEGORY[task];
+    const userChoice = preferredModel[category];
+    if (userChoice) {
+      const isAnthropicModel = userChoice.startsWith('claude-');
+      const isDeepSeekModel = userChoice.startsWith('deepseek-');
+      const compatible =
+        (provider === 'anthropic' && isAnthropicModel) ||
+        (provider === 'deepseek' && isDeepSeekModel);
+      if (compatible) return userChoice;
+    }
+  }
   return provider === 'anthropic'
     ? ANTHROPIC_MODEL_MAP[task]
     : DEEPSEEK_MODEL_MAP[task];
@@ -213,6 +360,33 @@ async function callDeepSeekStream(
   return fullText;
 }
 
+/** Module-level scratch space for the last DeepSeek response's metadata.
+ *  Audit-only; read synchronously by callers right after their await on
+ *  getCoachChatResponse so the call→read pair runs in one event-loop
+ *  tick (no interleaving). Captures finish_reason and reasoning_content
+ *  length — the two fields the previous return-string-only contract
+ *  was discarding. Lets the coachMoveCommentary path log a definitive
+ *  llm-response audit instead of inferring "empty content + normal
+ *  latency = ???". */
+export interface LastLlmMetadata {
+  provider: 'deepseek' | 'anthropic';
+  model: string;
+  finishReason: string | null;
+  reasoningContentLength: number;
+  promptTokens: number | null;
+  completionTokens: number | null;
+}
+
+let lastLlmMetadata: LastLlmMetadata | null = null;
+
+/** Read the metadata from the most recent LLM call. Resets to null
+ *  after read so a stale value can't leak across unrelated callers. */
+export function consumeLastLlmMetadata(): LastLlmMetadata | null {
+  const m = lastLlmMetadata;
+  lastLlmMetadata = null;
+  return m;
+}
+
 async function callDeepSeek(
   apiKey: string,
   model: string,
@@ -235,7 +409,24 @@ async function callDeepSeek(
   if (response.usage) {
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
   }
-  return response.choices[0]?.message?.content ?? '';
+  const choice = response.choices[0];
+  // DeepSeek-reasoner emits `reasoning_content` separately from
+  // `content` — the chain-of-thought is hidden from the caller but
+  // shares the `max_tokens` budget. When max_tokens is too small for
+  // both, content can be empty even though the call succeeded. We
+  // capture the length here so coachMoveCommentary's audit can name
+  // the failure mode.
+  const message = choice?.message as { content?: string | null; reasoning_content?: string | null } | undefined;
+  const reasoningContent = message?.reasoning_content;
+  lastLlmMetadata = {
+    provider: 'deepseek',
+    model,
+    finishReason: choice?.finish_reason ?? null,
+    reasoningContentLength: typeof reasoningContent === 'string' ? reasoningContent.length : 0,
+    promptTokens: response.usage?.prompt_tokens ?? null,
+    completionTokens: response.usage?.completion_tokens ?? null,
+  };
+  return message?.content ?? '';
 }
 
 // ── Anthropic ──
@@ -313,7 +504,25 @@ async function callChatWithConfig(
   task: CoachTask = 'chat_response',
   maxTokens: number = 1024,
 ): Promise<string> {
-  const model = getModel(task, config.provider);
+  const model = getModel(task, config.provider, config.preferredModel);
+  // Audit which model actually went out on the wire so you can verify
+  // Settings → preferredModel is being honored. Joins to brain trips
+  // by timestamp.
+  void import('./appAuditor').then(({ logAppAudit }) => {
+    void logAppAudit({
+      kind: 'coach-llm-model-selected',
+      category: 'subsystem',
+      source: 'coachApi.callChatWithConfig',
+      summary: `task=${task} category=${TASK_CATEGORY[task]} model=${model} provider=${config.provider}`,
+      details: JSON.stringify({
+        task,
+        category: TASK_CATEGORY[task],
+        model,
+        provider: config.provider,
+        userPick: config.preferredModel?.[TASK_CATEGORY[task]] ?? null,
+      }),
+    });
+  }).catch(() => undefined);
   if (config.provider === 'anthropic') {
     if (onStream) {
       return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, maxTokens, onStream);
@@ -355,12 +564,39 @@ export async function getCoachChatResponse(
    *  (e.g. per-move commentary) can avoid a redundant lookup and
    *  guarantee a single source of truth for the length directive. */
   verbosityOverride?: CoachVerbosity,
+  /** Force a specific API provider for this call, overriding the
+   *  default `getProviderConfig()` selection. Used by the brain's
+   *  per-surface routing — `/coach/teach` forces Anthropic so the
+   *  Learn tab always gets Sonnet/Haiku regardless of the global
+   *  default, while every other surface stays on DeepSeek. The
+   *  fallback chain still kicks in if the forced provider's call
+   *  errors. */
+  forceProvider?: AiProvider,
 ): Promise<string> {
-  const config = await getProviderConfig();
+  const config = forceProvider
+    ? await getForcedProviderConfig(forceProvider)
+    : await getProviderConfig();
   if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
 
   const verbosity = verbosityOverride ?? await getCoachVerbosity();
-  const systemPrompt = buildSystemPromptWithVerbosity(SYSTEM_PROMPT, verbosity, systemPromptAddition);
+  // Pull the active profile's personality dials so EVERY surface that
+  // routes through getCoachChatResponse inherits the user's chosen
+  // voice (default / soft / edgy / flirtatious / drill-sergeant) +
+  // profanity / mockery / flirt intensities. Until this layer existed,
+  // legacy callers (walkthrough narrator, opening-section narrator,
+  // smart search, kid puzzles, middlegame planner, MiddlegamePractice,
+  // CoachGameReview) used a flat SYSTEM_PROMPT with no persona —
+  // their coach voice was identical regardless of Settings, breaking
+  // the "one coach across all tabs" feel. Failing this lookup
+  // gracefully (no profile, fresh install) keeps the legacy flat
+  // persona as the fallback so the surface still works.
+  const personalityAddition = await loadPersonalityAddition();
+  const responseLengthAddition = await loadResponseLengthAddition();
+  const systemPrompt = buildSystemPromptWithVerbosity(
+    SYSTEM_PROMPT,
+    verbosity,
+    [personalityAddition, responseLengthAddition, systemPromptAddition].filter(Boolean).join('\n\n') || undefined,
+  );
 
   try {
     return await callChatWithConfig(config, messages, systemPrompt, onStream, task, maxTokens);
@@ -381,6 +617,50 @@ export async function getCoachChatResponse(
   }
 }
 
+/** Read the active profile's personality dials and render the
+ *  surface-agnostic personality block (voice + intensity modulators).
+ *  Cached by-call — getProviderConfig already touches the same row, so
+ *  the additional read is hot in IndexedDB. Returns empty string when
+ *  the profile/dials aren't available so the legacy flat persona
+ *  remains the fallback. */
+async function loadPersonalityAddition(): Promise<string> {
+  try {
+    const profile = await db.profiles.get('main');
+    if (!profile) return '';
+    const personality = profile.preferences.coachPersonality ?? 'default';
+    const profanity = profile.preferences.coachProfanity ?? 'none';
+    const mockery = profile.preferences.coachMockery ?? 'none';
+    const flirt = profile.preferences.coachFlirt ?? 'none';
+    if (personality === 'default' && profanity === 'none' && mockery === 'none' && flirt === 'none') {
+      return '';
+    }
+    const { renderPersonalityBlock } = await import('../coach/sources/personalities');
+    return renderPersonalityBlock({ personality, profanity, mockery, flirt });
+  } catch {
+    return '';
+  }
+}
+
+/** Read the user's coachResponseLength preference (Settings →
+ *  Personality → Verbosity) and render the matching modulator. Same
+ *  shape as the verbosity blocks in `coach/envelope.ts` so legacy
+ *  callers feel identical to the chat surfaces. Default 'normal'
+ *  matches /coach/teach's tightness. */
+async function loadResponseLengthAddition(): Promise<string> {
+  try {
+    const profile = await db.profiles.get('main');
+    const level = profile?.preferences.coachResponseLength ?? 'normal';
+    const blocks: Record<'minimal' | 'normal' | 'verbose', string> = {
+      minimal: '═══ VERBOSITY: MINIMAL ═══\nHard ceiling: ONE short sentence per turn, ≤8 words. NO multi-sentence responses, NO bullet points, NO past-games stats.',
+      normal: '═══ VERBOSITY: NORMAL ═══\nDefault tightness. Ceiling: ONE short sentence per turn (≤15 words) plus an optional one-line teaching beat when the position genuinely warrants it. NO multi-paragraph commentary, NO bullet-point agendas.',
+      verbose: '═══ VERBOSITY: VERBOSE ═══\nLecture shape allowed: set up positions, demonstrate candidate moves, name the IDEA, ground in Stockfish, cite master games. No length cap.',
+    };
+    return blocks[level];
+  } catch {
+    return '';
+  }
+}
+
 async function callCommentaryWithConfig(
   config: ProviderConfig,
   task: CoachTask,
@@ -388,7 +668,7 @@ async function callCommentaryWithConfig(
   systemPrompt: string,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  const model = getModel(task, config.provider);
+  const model = getModel(task, config.provider, config.preferredModel);
   if (config.provider === 'anthropic') {
     const messages: { role: 'user' | 'assistant'; content: string }[] = [
       { role: 'user', content: userMessage },

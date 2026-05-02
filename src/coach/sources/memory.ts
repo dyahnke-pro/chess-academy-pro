@@ -55,6 +55,29 @@ export function memorySetIntendedOpening(input: {
   return stored;
 }
 
+export function memorySetSavedPosition(input: { fen: string; label?: string }): void {
+  useCoachMemoryStore.getState().setSavedPosition(input);
+}
+
+export function memoryClearSavedPosition(): void {
+  useCoachMemoryStore.getState().clearSavedPosition();
+}
+
+export function memoryReadSavedPosition(): { fen: string; label: string | null; savedAt: number; source: 'explicit' | 'auto' } | null {
+  const state = useCoachMemoryStore.getState();
+  if (state.savedPosition) {
+    return { ...state.savedPosition, source: 'explicit' };
+  }
+  if (state.autoSavedPosition) {
+    return { ...state.autoSavedPosition, source: 'auto' };
+  }
+  return null;
+}
+
+export function memorySetAutoSavedPosition(fen: string): void {
+  useCoachMemoryStore.getState().setAutoSavedPosition(fen);
+}
+
 export function memoryClearIntendedOpening(reason: 'user-said-forget' | 'user-said-play-anything' | 'intent-left-book'): void {
   useCoachMemoryStore.getState().clearIntendedOpening(reason);
 }

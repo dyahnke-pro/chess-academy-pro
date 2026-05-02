@@ -3,13 +3,14 @@
 // Users should only see user-facing preferences. Core settings that could break
 // the app experience must be hidden or admin-only.
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { exportUserData } from '../../services/dbService';
 import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
+import { PieceSoundPanel } from './PieceSoundPanel';
 import { FeedbackForm } from '../Feedback/FeedbackForm';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
@@ -39,7 +40,7 @@ export function SettingsPage(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col gap-6 p-6 flex-1 overflow-y-auto pb-20 md:pb-6"
+      className="flex flex-col gap-6 p-6 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
       style={{ color: 'var(--color-text)' }}
       data-testid="settings-page"
     >
@@ -158,6 +159,72 @@ function SectionHeader({ title }: { title: string }): JSX.Element {
   );
 }
 
+/** Generic row+modal pattern (matches the PersonalityPanel UI). The
+ *  caller renders a single tappable row showing `label` + `summary`;
+ *  tapping opens a centered modal with `title` and the children. Used
+ *  to consolidate dense Settings sections without dropping detail. */
+function SettingsModalRow({
+  label,
+  summary,
+  title,
+  children,
+  testId,
+}: {
+  label: string;
+  summary: string;
+  title: string;
+  children: React.ReactNode;
+  testId: string;
+}): JSX.Element {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center justify-between py-2 px-3 w-full rounded-lg border hover:bg-theme-surface transition-colors"
+        style={{ borderColor: 'var(--color-border)' }}
+        data-testid={testId}
+      >
+        <div className="flex flex-col items-start text-left">
+          <span className="text-sm font-medium">{label}</span>
+          <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            {summary}
+          </span>
+        </div>
+        <span style={{ color: 'var(--color-text-muted)' }}>›</span>
+      </button>
+      {open && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0, 0, 0, 0.6)' }}
+          onClick={() => setOpen(false)}
+          data-testid={`${testId}-backdrop`}
+        >
+          <div
+            className="w-full max-w-2xl max-h-[90dvh] overflow-y-auto rounded-2xl border-2 p-4"
+            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)' }}
+            onClick={(e) => e.stopPropagation()}
+            data-testid={`${testId}-modal`}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-bold">{title}</h2>
+              <button
+                onClick={() => setOpen(false)}
+                className="px-2 py-1 rounded-lg hover:bg-theme-surface text-sm"
+                aria-label="Close"
+                data-testid={`${testId}-close`}
+              >
+                ✕
+              </button>
+            </div>
+            {children}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 // ─── Tab Props ────────────────────────────────────────────────────────────────
 
 interface TabProps {
@@ -216,32 +283,52 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
     }
   };
 
-  const handleSave = async (): Promise<void> => {
-    const updatedPrefs = {
-      ...prefs,
-      highlightLastMove,
-      showLegalMoves,
-      showCoordinates,
-      pieceAnimationSpeed,
-      boardOrientation,
-      boardColor,
-      pieceSet,
-      soundEnabled,
-      showEvalBar,
-      showEngineLines,
-      moveQualityFlash,
-      showHints,
-      voiceEnabled,
-      moveMethod,
-      moveConfirmation,
-      autoPromoteQueen,
-      masterAllOff,
-    };
-    await db.profiles.update(profile.id, { preferences: updatedPrefs });
-    setProfile({ ...profile, preferences: updatedPrefs });
-    setBoardSaveStatus('Board settings saved');
-    setTimeout(() => setBoardSaveStatus(null), 2000);
-  };
+  // Auto-save: persist on every change, debounced 300ms. WO-AUTOSAVE-01:
+  // user explicitly asked to drop the Save button — "If user selected
+  // it, then save it." The skipFirstSaveRef guard keeps the initial
+  // mount (where local state mirrors the loaded prefs) from triggering
+  // a phantom write.
+  const skipFirstSaveRef = useRef(true);
+  useEffect(() => {
+    if (skipFirstSaveRef.current) {
+      skipFirstSaveRef.current = false;
+      return;
+    }
+    const handle = setTimeout(() => {
+      const updatedPrefs = {
+        ...profile.preferences,
+        highlightLastMove,
+        showLegalMoves,
+        showCoordinates,
+        pieceAnimationSpeed,
+        boardOrientation,
+        boardColor,
+        pieceSet,
+        soundEnabled,
+        showEvalBar,
+        showEngineLines,
+        moveQualityFlash,
+        showHints,
+        voiceEnabled,
+        moveMethod,
+        moveConfirmation,
+        autoPromoteQueen,
+        masterAllOff,
+      };
+      void db.profiles.update(profile.id, { preferences: updatedPrefs }).then(() => {
+        setProfile({ ...profile, preferences: updatedPrefs });
+        setBoardSaveStatus('Saved ✓');
+        setTimeout(() => setBoardSaveStatus(null), 1500);
+      });
+    }, 300);
+    return () => clearTimeout(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    highlightLastMove, showLegalMoves, showCoordinates, pieceAnimationSpeed,
+    boardOrientation, boardColor, pieceSet, soundEnabled, showEvalBar,
+    showEngineLines, moveQualityFlash, showHints, voiceEnabled, moveMethod,
+    moveConfirmation, autoPromoteQueen, masterAllOff,
+  ]);
 
   const affectedByMaster = masterAllOff;
 
@@ -399,6 +486,11 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         testId="engine-lines-toggle"
       />
 
+      {/* Piece Sound — WO-COACH-PIECE-SOUND-CUSTOM */}
+      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+        <PieceSoundPanel />
+      </div>
+
       {/* Feedback & Coaching */}
       <SectionHeader title="Feedback & Coaching" />
       <ToggleRow
@@ -455,16 +547,8 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         testId="auto-promote-queen-toggle"
       />
 
-      <button
-        onClick={() => void handleSave()}
-        className="w-full py-2 rounded-lg text-sm font-medium mt-4"
-        style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-        data-testid="save-board-btn"
-      >
-        Save Board Settings
-      </button>
       {boardSaveStatus && (
-        <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }} data-testid="board-save-status">
+        <p className="text-sm font-medium mt-2" style={{ color: 'var(--color-accent)' }} data-testid="board-save-status">
           {boardSaveStatus}
         </p>
       )}
@@ -480,22 +564,35 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
   const [dailyMin, setDailyMin] = useState(profile.preferences.dailySessionMinutes);
   const [profileSaveStatus, setProfileSaveStatus] = useState<string | null>(null);
 
-  const handleSaveProfile = async (): Promise<void> => {
-    const updated = {
-      ...profile,
-      name,
-      currentRating: elo,
-      preferences: { ...profile.preferences, dailySessionMinutes: dailyMin },
-    };
-    await db.profiles.update(profile.id, {
-      name,
-      currentRating: elo,
-      preferences: updated.preferences,
-    });
-    setProfile(updated);
-    setProfileSaveStatus('Profile saved');
-    setTimeout(() => setProfileSaveStatus(null), 2000);
-  };
+  // Auto-save profile on change, debounced 400ms (slightly longer than
+  // Board because the name/elo inputs fire on every keystroke). The
+  // skipFirstSaveProfileRef gates the initial mount.
+  const skipFirstSaveProfileRef = useRef(true);
+  useEffect(() => {
+    if (skipFirstSaveProfileRef.current) {
+      skipFirstSaveProfileRef.current = false;
+      return;
+    }
+    const handle = setTimeout(() => {
+      const updated = {
+        ...profile,
+        name,
+        currentRating: elo,
+        preferences: { ...profile.preferences, dailySessionMinutes: dailyMin },
+      };
+      void db.profiles.update(profile.id, {
+        name,
+        currentRating: elo,
+        preferences: updated.preferences,
+      }).then(() => {
+        setProfile(updated);
+        setProfileSaveStatus('Saved ✓');
+        setTimeout(() => setProfileSaveStatus(null), 1500);
+      });
+    }, 400);
+    return () => clearTimeout(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, elo, dailyMin]);
 
   const handleExport = async (): Promise<void> => {
     const data = await exportUserData();
@@ -546,14 +643,6 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
           ))}
         </select>
       </div>
-      <button
-        onClick={() => void handleSaveProfile()}
-        className="w-full py-2 rounded-lg text-sm font-medium"
-        style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-        data-testid="save-profile-btn"
-      >
-        Save Profile
-      </button>
       {profileSaveStatus && (
         <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }} data-testid="profile-save-status">
           {profileSaveStatus}
@@ -639,131 +728,181 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
     setTimeout(() => setStatus(null), 4000);
   };
 
-  const handleSaveCoachSettings = async (): Promise<void> => {
-    const updatedPrefs = {
-      ...profile.preferences,
-      monthlyBudgetCap: budgetCap,
-      preferredModel: {
-        commentary: commentaryModel,
-        analysis: analysisModel,
-        reports: reportsModel,
-      },
-    };
-    await db.profiles.update(profile.id, { preferences: updatedPrefs });
-    setProfile({ ...profile, preferences: updatedPrefs });
-    setStatus('Settings saved');
-    setTimeout(() => setStatus(null), 2000);
+  // Auto-save coach budget + model selections, debounced 300ms. The
+  // API key path stays explicit (encrypted, requires non-empty input)
+  // — only the dropdowns / number inputs auto-save.
+  const skipFirstSaveCoachRef = useRef(true);
+  useEffect(() => {
+    if (skipFirstSaveCoachRef.current) {
+      skipFirstSaveCoachRef.current = false;
+      return;
+    }
+    const handle = setTimeout(() => {
+      const updatedPrefs = {
+        ...profile.preferences,
+        monthlyBudgetCap: budgetCap,
+        preferredModel: {
+          commentary: commentaryModel,
+          analysis: analysisModel,
+          reports: reportsModel,
+        },
+      };
+      void db.profiles.update(profile.id, { preferences: updatedPrefs }).then(() => {
+        setProfile({ ...profile, preferences: updatedPrefs });
+        setStatus('Saved ✓');
+        setTimeout(() => setStatus(null), 1500);
+      });
+    }, 300);
+    return () => clearTimeout(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [budgetCap, commentaryModel, analysisModel, reportsModel]);
+
+  // WO-SETTINGS-CLEANUP — collapse the dense Coach tab into three top-
+  // level rows (each opens a modal containing the original block) plus
+  // the Voice & Personality panel. Nothing about the underlying
+  // controls / handlers / persistence changed; this is purely a UI
+  // re-arrangement.
+  // Live summaries on each modal row so the user sees the actual
+  // current selection without having to open the modal. WO-AUTOSAVE-01.
+  const aiSummary = `${isAnthropic ? 'Anthropic' : 'DeepSeek'}${hasExistingKey ? ' · key saved' : ''}`;
+  const verbosityLabels: Record<string, string> = {
+    none: 'None',
+    fast: 'Fast',
+    medium: 'Medium',
+    slow: 'Slow',
+    unlimited: 'Unlimited',
   };
+  const commentaryFreqLabels: Record<string, string> = {
+    'off': 'Off',
+    'key-moments': 'Key moments',
+    'every-move': 'Every move',
+  };
+  const verbosityValue = profile.preferences.coachVerbosity ?? 'unlimited';
+  const commentaryFreq = profile.preferences.coachCommentaryVerbosity ?? 'key-moments';
+  const tacticAlerts = profile.preferences.coachTacticAlerts !== false ? 'Tactic alerts on' : 'Tactic alerts off';
+  const gameplaySummary = `${verbosityLabels[verbosityValue] ?? verbosityValue} · ${commentaryFreqLabels[commentaryFreq] ?? commentaryFreq} · ${tacticAlerts}`;
 
   return (
-    <div className="space-y-4" data-testid="coach-tab">
-      <div>
-        <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-          AI Provider
-        </label>
-        <div className="flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--color-border)' }} data-testid="provider-toggle">
-          {(['deepseek', 'anthropic'] as const).map((p) => (
-            <button
-              key={p}
-              onClick={() => void handleProviderChange(p)}
-              className="flex-1 px-4 py-2 text-sm font-medium transition-colors"
-              style={{
-                background: provider === p ? 'var(--color-accent)' : 'var(--color-bg)',
-                color: provider === p ? 'var(--color-bg)' : 'var(--color-text)',
-              }}
-              data-testid={`provider-${p}`}
-            >
-              {p === 'deepseek' ? 'DeepSeek' : 'Anthropic'}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-          {isAnthropic ? 'Anthropic' : 'DeepSeek'} API Key {hasExistingKey && '(saved)'}
-        </label>
-        <div className="flex gap-2">
-          <input
-            type={showKey ? 'text' : 'password'}
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder={hasExistingKey ? '••••••••' : (isAnthropic ? 'sk-ant-...' : 'sk-...')}
-            className="flex-1 px-3 py-2 rounded-lg border text-sm"
-            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid="api-key-input"
-          />
-          <button onClick={() => setShowKey((s) => !s)} className="px-3 py-2 rounded-lg border text-xs" style={{ borderColor: 'var(--color-border)' }}>
-            {showKey ? 'Hide' : 'Show'}
-          </button>
-          <button
-            onClick={() => void handleSaveApiKey()}
-            className="px-4 py-2 rounded-lg text-sm font-medium"
-            style={{
-              background: keySaved ? '#16a34a' : 'var(--color-accent)',
-              color: 'var(--color-bg)',
-              transition: 'background 0.3s',
-            }}
-            data-testid="save-api-key-btn"
-          >
-            {keySaved ? 'Saved ✓' : 'Save'}
-          </button>
-        </div>
-        <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-          {isAnthropic ? 'Get a key at console.anthropic.com' : 'Get a key at platform.deepseek.com'}
-        </p>
-      </div>
-
-      <div>
-        <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>Monthly Budget Cap ($)</label>
-        <input
-          type="number"
-          value={budgetCap ?? ''}
-          onChange={(e) => setBudgetCap(e.target.value ? Number(e.target.value) : null)}
-          placeholder="No limit"
-          className="w-full px-3 py-2 rounded-lg border text-sm"
-          style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-          data-testid="budget-input"
-        />
-      </div>
-      <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-        Estimated spend this month: ${profile.preferences.estimatedSpend.toFixed(2)}
-      </div>
-
-      {[
-        { label: 'Commentary Model', value: commentaryModel, setter: setCommentaryModel, testId: 'model-commentary' },
-        { label: 'Analysis Model', value: analysisModel, setter: setAnalysisModel, testId: 'model-analysis' },
-        { label: 'Reports Model', value: reportsModel, setter: setReportsModel, testId: 'model-reports' },
-      ].map(({ label, value, setter, testId }) => (
-        <div key={testId}>
-          <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>{label}</label>
-          <select
-            value={value}
-            onChange={(e) => setter(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border text-sm"
-            style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-            data-testid={testId}
-          >
-            {modelOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-        </div>
-      ))}
-
-      <button
-        onClick={() => void handleSaveCoachSettings()}
-        className="w-full py-2 rounded-lg text-sm font-medium"
-        style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-        data-testid="save-coach-settings-btn"
+    <div className="space-y-3" data-testid="coach-tab">
+      {/* Row 1: AI Provider & Models — modal */}
+      <SettingsModalRow
+        label="AI Provider & Models"
+        summary={aiSummary}
+        title="AI Provider & Models"
+        testId="ai-provider-row"
       >
-        Save Coach Settings
-      </button>
+        <div className="space-y-4">
+          <div>
+            <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
+              AI Provider
+            </label>
+            <div className="flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--color-border)' }} data-testid="provider-toggle">
+              {(['deepseek', 'anthropic'] as const).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => void handleProviderChange(p)}
+                  className="flex-1 px-4 py-2 text-sm font-medium transition-colors"
+                  style={{
+                    background: provider === p ? 'var(--color-accent)' : 'var(--color-bg)',
+                    color: provider === p ? 'var(--color-bg)' : 'var(--color-text)',
+                  }}
+                  data-testid={`provider-${p}`}
+                >
+                  {p === 'deepseek' ? 'DeepSeek' : 'Anthropic'}
+                </button>
+              ))}
+            </div>
+          </div>
 
-      {status && <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>{status}</p>}
+          <div>
+            <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
+              {isAnthropic ? 'Anthropic' : 'DeepSeek'} API Key {hasExistingKey && '(saved)'}
+            </label>
+            <div className="flex gap-2">
+              <input
+                type={showKey ? 'text' : 'password'}
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder={hasExistingKey ? '••••••••' : (isAnthropic ? 'sk-ant-...' : 'sk-...')}
+                className="flex-1 px-3 py-2 rounded-lg border text-sm"
+                style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid="api-key-input"
+              />
+              <button onClick={() => setShowKey((s) => !s)} className="px-3 py-2 rounded-lg border text-xs" style={{ borderColor: 'var(--color-border)' }}>
+                {showKey ? 'Hide' : 'Show'}
+              </button>
+              <button
+                onClick={() => void handleSaveApiKey()}
+                className="px-4 py-2 rounded-lg text-sm font-medium"
+                style={{
+                  background: keySaved ? '#16a34a' : 'var(--color-accent)',
+                  color: 'var(--color-bg)',
+                  transition: 'background 0.3s',
+                }}
+                data-testid="save-api-key-btn"
+              >
+                {keySaved ? 'Saved ✓' : 'Save'}
+              </button>
+            </div>
+            <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+              {isAnthropic ? 'Get a key at console.anthropic.com' : 'Get a key at platform.deepseek.com'}
+            </p>
+          </div>
 
-      <CoachGameplaySection profile={profile} setProfile={setProfile} />
+          <div>
+            <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>Monthly Budget Cap ($)</label>
+            <input
+              type="number"
+              value={budgetCap ?? ''}
+              onChange={(e) => setBudgetCap(e.target.value ? Number(e.target.value) : null)}
+              placeholder="No limit"
+              className="w-full px-3 py-2 rounded-lg border text-sm"
+              style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+              data-testid="budget-input"
+            />
+          </div>
+          <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Estimated spend this month: ${profile.preferences.estimatedSpend.toFixed(2)}
+          </div>
 
+          {[
+            { label: 'Commentary Model', value: commentaryModel, setter: setCommentaryModel, testId: 'model-commentary' },
+            { label: 'Analysis Model', value: analysisModel, setter: setAnalysisModel, testId: 'model-analysis' },
+            { label: 'Reports Model', value: reportsModel, setter: setReportsModel, testId: 'model-reports' },
+          ].map(({ label, value, setter, testId }) => (
+            <div key={testId}>
+              <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>{label}</label>
+              <select
+                value={value}
+                onChange={(e) => setter(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border text-sm"
+                style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid={testId}
+              >
+                {modelOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+          ))}
+
+          {status && <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>{status}</p>}
+        </div>
+      </SettingsModalRow>
+
+      {/* Row 2: Gameplay Coaching — modal containing CoachGameplaySection */}
+      <SettingsModalRow
+        label="Gameplay Coaching"
+        summary={gameplaySummary}
+        title="Gameplay Coaching"
+        testId="gameplay-coaching-row"
+      >
+        <CoachGameplaySection profile={profile} setProfile={setProfile} />
+      </SettingsModalRow>
+
+      {/* Row 3 (inline): Voice & Personality. PersonalityPanel is now
+       *  rendered INSIDE VoiceSettingsPanel between the Coach Voice
+       *  toggle and the Cloud Voice section, per WO-SETTINGS-CLEANUP. */}
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <VoiceSettingsPanel />
       </div>
@@ -813,12 +952,12 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
       />
       <SelectRow
         label="Commentary Frequency"
-        tooltip="How often the coach generates AI commentary during a game. Key moments only saves tokens and keeps sessions snappy."
+        tooltip="How often the coach narrates during a game. Smart introduces the opening once, reacts to blunders / brilliants with short personality-laden zingers, and announces phase transitions — so you can play without waiting between every move. Every move keeps the old chatty cadence (long narration on every move, more tokens). Off is silent except for deterministic tactic alerts."
         value={profile.preferences.coachCommentaryVerbosity ?? 'key-moments'}
         options={[
-          { value: 'key-moments', label: 'Key moments — Only blunders, brilliants, turning points' },
-          { value: 'every-move', label: 'Every move — AI commentary after every move (uses more tokens)' },
-          { value: 'off', label: 'Off — Deterministic tactic hints only' },
+          { value: 'key-moments', label: 'Smart — Opening intro + key moments + phase transitions (recommended)' },
+          { value: 'every-move', label: 'Every move — Long narration after every move (chatty, more tokens)' },
+          { value: 'off', label: 'Off — Silent (deterministic tactic alerts only)' },
         ]}
         onChange={(v) => void handleCommentaryVerbosityChange(v as 'key-moments' | 'every-move' | 'off')}
         testId="coach-commentary-verbosity-select"

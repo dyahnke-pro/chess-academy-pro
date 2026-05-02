@@ -33,7 +33,7 @@ describe('assembleEnvelope', () => {
     expect(env.memory).toBeTruthy();
     expect(env.appMap.length).toBeGreaterThan(5);
     expect(env.liveState.surface).toBe('ping');
-    expect(env.toolbelt.length).toBe(17);
+    expect(env.toolbelt.length).toBe(20);
     expect(env.ask).toBe('hello');
   });
 
@@ -83,6 +83,45 @@ describe('formatEnvelopeAsSystemPrompt', () => {
     expect(prompt).toMatch(/\[Toolbelt\]/);
     expect(prompt).toMatch(/stockfish_eval/);
     expect(prompt).toMatch(/set_intended_opening/);
+  });
+
+  it('threads personality + dial settings into the assembled identity (WO-COACH-PERSONALITIES PR B)', () => {
+    const env = assembleEnvelope({
+      personality: 'drill-sergeant',
+      profanity: 'hard',
+      mockery: 'hard',
+      flirt: 'none',
+      toolbelt: getToolDefinitions(),
+      input: { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
+    });
+    const prompt = formatEnvelopeAsSystemPrompt(env);
+    // OPERATOR contract still present.
+    expect(prompt).toMatch(/OPERATOR MODE/);
+    // Personality body landed.
+    expect(prompt).toMatch(/Drill Sergeant/);
+    expect(prompt).toMatch(/Full Metal Jacket/);
+    // Dial clauses match the requested levels.
+    expect(prompt).toMatch(/PROFANITY DIAL: HARD/);
+    expect(prompt).toMatch(/MOCKERY DIAL: HARD/);
+    expect(prompt).toMatch(/FLIRT DIAL: NONE/);
+  });
+
+  it('omitted personality settings produce the same prompt as the legacy default path', () => {
+    const legacy = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      input: { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
+    });
+    const explicit = assembleEnvelope({
+      personality: 'default',
+      profanity: 'none',
+      mockery: 'none',
+      flirt: 'none',
+      toolbelt: getToolDefinitions(),
+      input: { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
+    });
+    expect(formatEnvelopeAsSystemPrompt(legacy)).toBe(
+      formatEnvelopeAsSystemPrompt(explicit),
+    );
   });
 });
 

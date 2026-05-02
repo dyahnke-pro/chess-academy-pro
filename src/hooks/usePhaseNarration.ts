@@ -29,18 +29,27 @@ export interface UsePhaseNarrationResult {
  *  transition is always either spoken or logged-and-forgotten. */
 const STOCKFISH_TIMEOUT_MS = 8_000;
 /** Tap-latency race budget. PHASE-LAG-01 set 500ms mirroring POLISH-03;
- *  PHASE-LAG-02 tightens to 300ms to match the post-PHASE-PROSE-01
- *  Read Position budget. PHASE_NARRATION_ADDITION tolerates a missing
- *  stockfishAnalysis block, so racing out fast is net-positive for
- *  detection-to-first-word latency. */
-const STOCKFISH_FAST_BUDGET_MS = 300;
+ *  PHASE-LAG-02 tightened to 300ms; PHASE-LAG-03 drops to 150ms.
+ *  PHASE_NARRATION_ADDITION tolerates a missing stockfishAnalysis block,
+ *  so racing out fast is net-positive for detection-to-first-word
+ *  latency — at typical depth-10 Stockfish times, most cold-cache runs
+ *  exceed 300ms and we'd ship a stale analysis anyway. The race still
+ *  lets fast cache hits through, so warm positions retain the engine
+ *  signal at zero latency cost. */
+const STOCKFISH_FAST_BUDGET_MS = 150;
 /** Stockfish analysis depth for phase narration. PHASE-LAG-01 set 12;
  *  PHASE-LAG-02 drops to 10 to match Read Position. Deterministic
  *  tactics detection runs on every FEN in buildChessContextMessage
  *  regardless, so the engine contributes only eval direction + top
  *  lines — not something that benefits from deeper search here. */
 const STOCKFISH_DEPTH = 10;
-const NARRATION_API_TIMEOUT_MS = 30_000;
+// WO-NARR-POLICY-04: bumped 30s → 12s. With max_tokens dropped to
+// 600 the real LLM response returns in ~3-5s; the old 30s timeout
+// existed because phase prose used to be 4000 tokens of streaming
+// narration. A tighter timeout means the deterministic fallback
+// fires faster on a true outage instead of letting the student wait
+// 30s with no audio at all.
+const NARRATION_API_TIMEOUT_MS = 12_000;
 const NARRATION_SPEAK_TIMEOUT_MS = 60_000;
 
 /** WO-REAL-FIXES — when the phase-narration LLM call times out
@@ -228,15 +237,12 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
 
       const userMessage = buildChessContextMessage(context);
 
-      // WO-PHASE-LAG-01: sentence-buffered streaming TTS (mirror of
-      // WO-POLISH-03 in usePositionNarration). First complete sentence
-      // goes to Polly (speakForced) so the premium voice lands on the
-      // first impression; subsequent sentences chain through Web Speech
-      // (speakQueuedForced) behind the Polly promise so they don't talk
-      // over it. Net effect: voice starts within one sentence of the
-      // first LLM token instead of waiting for the full response.
+      // Sentence-buffered streaming TTS. Every sentence chains through
+      // speakForced so each Polly call awaits the previous one's
+      // audio. Single-engine consistency: no Polly+Web-Speech overlap,
+      // no dropped sentences from the dead speakQueuedForced path.
       let sentenceBuffer = '';
-      let firstSpeakPromise: Promise<void> | null = null;
+      let speechChain: Promise<void> = Promise.resolve();
       let sentenceCount = 0;
       const dispatchSentence = (sentence: string): void => {
         const trimmed = sentence.trim();
@@ -257,16 +263,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             }),
             fen: event.fen,
           });
-          firstSpeakPromise = voiceService.speakForced(trimmed).catch(() => {
-            /* swallow — error handled via logAppAudit path */
-          });
-        } else {
-          if (firstSpeakPromise) {
-            void firstSpeakPromise.finally(() => voiceService.speakQueuedForced(trimmed));
-          } else {
-            voiceService.speakQueuedForced(trimmed);
-          }
         }
+        speechChain = speechChain
+          .then(() => voiceService.speakForced(trimmed))
+          .catch(() => undefined);
       };
       // `+` (not `*`) so a bare terminator like "..." can't match a
       // zero-char sentence. Requires ≥1 non-terminator char before the
@@ -301,10 +301,16 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               flushCompletedSentences();
             },
             'position_analysis_chat',
-            // WO-PHASE-PROSE-01: raised 2000 → 4000 to match
-            // usePositionNarration's cap. Phase prose is full coach
-            // reads (20+ seconds of speech), not a tagline.
-            4000,
+            // WO-NARR-POLICY-04: dropped 4000 → 600 tokens. Production
+            // audit e177da1 caught phase narration taking 32-35
+            // seconds end-to-end (LLM emitting 4000 tokens of prose),
+            // long enough that the deterministic fallback fires
+            // FIRST and the student hears generic filler before the
+            // real narration even arrives. 600 tokens (~2200 chars,
+            // ~30s of speech) returns in ~3-5s and the new prompt
+            // shape is action-first, idea-driven, every sentence a
+            // directive — no recap of moves the student already saw.
+            600,
             'medium',
           ),
           NARRATION_API_TIMEOUT_MS,
@@ -390,34 +396,30 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       console.log('[PHASE-HOOK-07] streaming speech dispatched', {
         sentenceCount,
       });
-      // Block isNarrating true until the first (Polly) sentence
-      // finishes — preserves the "board frozen while main voice speaks"
-      // invariant. Queued Web Speech sentences continue playing after
-      // the board unfreezes, which is fine.
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (firstSpeakPromise) {
-        try {
-          await withTimeout(
-            firstSpeakPromise,
-            NARRATION_SPEAK_TIMEOUT_MS,
-            'phase-narration-speak',
-          );
-          console.log('[PHASE-HOOK-08] first-sentence speech complete');
-        } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : String(err);
-          console.log('[PHASE-HOOK-08] speech errored / timed out', msg);
-          setError(msg);
-          if (msg.endsWith('-timeout')) {
-            voiceService.stop();
-            void logAppAudit({
-              kind: 'tts-failure',
-              category: 'subsystem',
-              source: 'usePhaseNarration',
-              summary: 'phase narration TTS playback timed out',
-              details: msg,
-              fen: event.fen,
-            });
-          }
+      // Block isNarrating true until the speech chain drains —
+      // preserves the "board frozen while main voice speaks"
+      // invariant. Single-engine Polly chain plays under this gate.
+      try {
+        await withTimeout(
+          speechChain,
+          NARRATION_SPEAK_TIMEOUT_MS,
+          'phase-narration-speak',
+        );
+        console.log('[PHASE-HOOK-08] speech chain drained');
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.log('[PHASE-HOOK-08] speech errored / timed out', msg);
+        setError(msg);
+        if (msg.endsWith('-timeout')) {
+          voiceService.stop();
+          void logAppAudit({
+            kind: 'tts-failure',
+            category: 'subsystem',
+            source: 'usePhaseNarration',
+            summary: 'phase narration TTS playback timed out',
+            details: msg,
+            fen: event.fen,
+          });
         }
       }
     } finally {

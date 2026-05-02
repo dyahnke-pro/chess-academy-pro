@@ -2,36 +2,7 @@
 
 This file is loaded automatically in every Claude Code session. Follow these instructions exactly.
 
-## ⏰ Open launch reminders (surface these proactively every session)
-
-**Lemon Squeezy signup pending.** User chose Lemon Squeezy as the payment
-processor (merchant of record — handles sales tax and VAT for them). They
-have NOT signed up yet. At the start of every session until this is
-resolved, proactively remind them:
-
-> "Reminder: still need to sign up for Lemon Squeezy
-> (https://lemonsqueezy.com) so I can wire the paywall. ~10 minutes.
-> Once you have the API key and two subscription product IDs ($7.99/mo
-> and $79.99/yr), share them and I'll implement the integration."
-
-**Domain not purchased.** `chessacademy.pro` recommended (Cloudflare
-Registrar, ~$15/year). Remind if not yet bought.
-
-**Pricing needs a rethink before launch.** The original plan was
-$7.99/mo and $79.99/yr. Since then the voice coach has grown
-significantly more expensive per session (Polly TTS + longer
-unlimited-verbosity LLM turns + Stockfish + Lichess calls). Before
-wiring the Lemon Squeezy paywall, revisit the price points against
-realistic per-user monthly cost:
-
-> "Reminder: pricing should be revisited before paywall wiring.
-> Voice coach is now Polly + long LLM responses + Stockfish +
-> Lichess per turn. Likely needs a higher tier or usage caps to
-> keep margins healthy. Want to sketch the new pricing together?"
-
-**Stop reminding** once the relevant item is complete — update or
-remove the corresponding reminder when the user confirms signup,
-shares keys, buys the domain, or locks in the new pricing.
+## ⏰ Standing notes
 
 **iOS AVAudioSession patch — DONE.** Lives in
 `ios-patches/App/AppDelegate.swift` and is copied over the Capacitor
@@ -109,7 +80,10 @@ src/
 - Each section button: `border-2 rounded-2xl`, tinted bg (`bg-{color}-500/10`), tinted border (`border-{color}-500/30`), centered icon + bold label
 - First item spans 2 columns (`col-span-2 py-10`), rest are `aspect-square`
 - Each section owns a color (Tailwind opacity classes, not CSS variables)
-- Container: `flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-20 md:pb-6`
+- Container: `flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6`
+  (the `pb-[calc(...)]` reserves room for the fixed mobile bottom nav
+  PLUS the iOS home-indicator safe-area inset; `pb-20` alone clips
+  the last row on iPhones with the gesture bar)
 - Content constrained to `max-w-lg mx-auto`
 
 **When "clean up" or "make it match" is requested, match BOTH structure AND visual.** Don't just reorganize information flow — replicate the actual layout, grid, card style, spacing, and interaction patterns of the reference page. Study the reference's exact JSX, Tailwind classes, and component hierarchy before writing new code.

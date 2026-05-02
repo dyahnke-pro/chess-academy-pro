@@ -9,6 +9,49 @@ import type { CoachMessage, HintRequestRecord, IntendedOpening } from '../stores
 
 export type CoachIdentity = 'danya' | 'kasparov' | 'fischer';
 
+// ─── Personality (WO-COACH-PERSONALITIES) ───────────────────────────────────
+//
+// Personality is the VOICE of the coach — tone, register, style. It's an
+// orthogonal axis to `CoachIdentity` (which was a never-implemented
+// name-based switch). The OPERATOR-mode hard rules (user sovereignty over
+// moves, play_move-when-mentioned, stockfish_eval grounding) hold across
+// every personality; only the way the coach SAYS things changes.
+//
+// Three intensity dials modulate independently of personality, so a user
+// can run e.g. "soft personality" with "medium flirt" if that's the vibe
+// they want. Each personality ships sensible per-dial defaults but every
+// dial is independently overridable from Settings.
+
+export type CoachPersonality =
+  | 'default'
+  | 'soft'
+  | 'edgy'
+  | 'flirtatious'
+  | 'drill-sergeant';
+
+export type IntensityLevel = 'none' | 'medium' | 'hard';
+
+export interface PersonalitySettings {
+  personality: CoachPersonality;
+  profanity: IntensityLevel;
+  mockery: IntensityLevel;
+  flirt: IntensityLevel;
+}
+
+/** The defaults that get applied when the user picks a personality but
+ *  hasn't explicitly overridden a specific dial. Lives here next to the
+ *  type so consumers (settings UI, envelope assembly, tests) never drift. */
+export const PERSONALITY_DIAL_DEFAULTS: Record<
+  CoachPersonality,
+  Pick<PersonalitySettings, 'profanity' | 'mockery' | 'flirt'>
+> = {
+  default: { profanity: 'none', mockery: 'none', flirt: 'none' },
+  soft: { profanity: 'none', mockery: 'none', flirt: 'none' },
+  edgy: { profanity: 'medium', mockery: 'hard', flirt: 'none' },
+  flirtatious: { profanity: 'medium', mockery: 'none', flirt: 'hard' },
+  'drill-sergeant': { profanity: 'hard', mockery: 'hard', flirt: 'none' },
+};
+
 // ─── Memory snapshot ─────────────────────────────────────────────────────────
 
 /** Read-only snapshot of the four-source coach memory at envelope-
@@ -50,6 +93,7 @@ export type CoachSurface =
   | 'hint'
   | 'phase-narration'
   | 'review'
+  | 'teach'
   | 'ping';
 
 export interface LiveState {
@@ -61,6 +105,13 @@ export interface LiveState {
   /** Free text describing what triggered this call. */
   userJustDid?: string;
   currentRoute?: string;
+  /** Whose turn it is right now in the live position. The /coach/teach
+   *  surface threads this through so the brain stops emitting moves
+   *  for the wrong side — production audit (build 30fe8c8) showed
+   *  the LLM trying to play `play_move {"san":"e5"}` from a
+   *  black-to-move position with the white-side mental model, and
+   *  chess.js correctly rejected it 5 trips in a row. */
+  whoseTurn?: 'white' | 'black';
 }
 
 // ─── Envelope (what every LLM call contains) ─────────────────────────────────
@@ -143,6 +194,37 @@ export interface ToolExecutionContext {
    *  react-router. Path has already been validated against the app
    *  manifest before this runs. */
   onNavigate?: (path: string) => void;
+  /** WO-COACH-LICHESS-OPENINGS — called by `quiz_user_for_move`. Puts
+   *  the live board into "find the move" mode for a specific
+   *  expected SAN. Surface displays the prompt, waits for the user's
+   *  move, and resolves with `{ ok: true, played }` when the user
+   *  played the expected (or alternative) move, or `{ ok: false,
+   *  played, expected }` when they played something else. The coach
+   *  reads the result on the next LLM round-trip and narrates
+   *  feedback. */
+  onQuizUserForMove?: (args: {
+    expectedSan: string;
+    prompt: string;
+    allowAlternatives?: readonly string[];
+  }) =>
+    | Promise<
+        | { ok: true; played: string }
+        | { ok: false; played: string; expected: string }
+        | { ok: false; reason: string }
+      >;
+  /** WO-COACH-LICHESS-OPENINGS — called by
+   *  `start_walkthrough_for_opening`. Hands off to the existing
+   *  WalkthroughMode UI seeded by an opening name (and optional
+   *  variation / orientation / PGN). Surface navigates and returns
+   *  `{ ok: true }` once the route push is dispatched. */
+  onStartWalkthroughForOpening?: (args: {
+    opening: string;
+    variation?: string;
+    orientation?: 'white' | 'black';
+    pgn?: string;
+  }) =>
+    | Promise<{ ok: boolean; reason?: string }>
+    | { ok: boolean; reason?: string };
   /** FEN at the time of the call — used by `play_move` to validate SAN
    *  legality before invoking `onPlayMove`. */
   liveFen?: string;

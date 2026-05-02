@@ -5,6 +5,7 @@ import { getOrCreateMainProfile } from './services/dbService';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
 import { seedPuzzles } from './services/puzzleService';
+import { runAutoImportIfDue } from './services/autoImportScheduler';
 import { getSharedAudioContext } from './services/audioContextManager';
 import { speechService } from './services/speechService';
 import { voiceService } from './services/voiceService';
@@ -33,6 +34,7 @@ import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
 import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { CoachTrainPage } from './components/Coach/CoachTrainPage';
+import { CoachTeachPage } from './components/Coach/CoachTeachPage';
 import { CoachPage } from './components/Coach/CoachPage';
 import { TacticsPage } from './components/Tactics/TacticsPage';
 import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
@@ -139,6 +141,18 @@ export function App(): JSX.Element {
         void seedDatabase();
         void seedPuzzles();
 
+        // Biweekly chess.com / lichess auto-import. Fire-and-forget,
+        // deferred 30s after boot so it never competes with the user's
+        // first action (especially the /coach/teach kickoff which
+        // wants the engine free for stockfish_eval tool calls).
+        // Skips post-import puzzle/analysis runs — those happen on
+        // explicit Game Insights navigation instead.
+        setTimeout(() => {
+          void runAutoImportIfDue(profile, {
+            onProfileUpdated: (next) => setActiveProfile(next),
+          });
+        }, 30_000);
+
       } catch (error) {
         console.error('App initialization failed:', error);
         void logAppAudit({
@@ -179,7 +193,7 @@ export function App(): JSX.Element {
               on a playable game instead of a card hub. The old hub
               (CoachHomePage / CoachPage) is still reachable at
               /coach/home for anyone who wants the action grid. */}
-          <Route path="/coach" element={<Navigate to="/coach/play" replace />} />
+          <Route path="/coach" element={<Navigate to="/coach/home" replace />} />
           <Route path="/coach/home" element={<ErrorBoundary><CoachPage /></ErrorBoundary>} />
           <Route path="/coach/play" element={<ErrorBoundary><CoachGamePage /></ErrorBoundary>} />
           <Route path="/coach/chat" element={<ErrorBoundary><CoachChatPage /></ErrorBoundary>} />
@@ -188,6 +202,7 @@ export function App(): JSX.Element {
           <Route path="/coach/plan" element={<ErrorBoundary><CoachSessionPlanPage /></ErrorBoundary>} />
           {/* /coach/report is a legacy alias — redirect lives below in the redirects block */}
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
+          <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage /></ErrorBoundary>} />
           {/* Tactics (absorbs former Puzzles tab) */}
           <Route path="/tactics" element={<ErrorBoundary><TacticsPage /></ErrorBoundary>} />
           <Route path="/tactics/profile" element={<ErrorBoundary><TacticalProfilePage /></ErrorBoundary>} />

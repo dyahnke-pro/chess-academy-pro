@@ -15,7 +15,7 @@ export const config = { runtime: 'edge' };
 
 const UPSTREAM = 'https://lichess.org/api/cloud-eval';
 const UPSTREAM_USER_AGENT =
-  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app)';
+  'ChessAcademyPro/1.0 (https://chess-academy-pro.vercel.app; contact: dyahnke@gmail.com)';
 const PROXY_TIMEOUT_MS = 8_000;
 
 function getCorsHeaders(req: Request): Record<string, string> {
