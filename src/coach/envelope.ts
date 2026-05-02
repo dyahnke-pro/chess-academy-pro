@@ -87,9 +87,26 @@ export interface AssembleEnvelopeArgs {
   profanity?: IntensityLevel;
   mockery?: IntensityLevel;
   flirt?: IntensityLevel;
+  /** Verbosity dial — clamps how much the coach says per turn. Renders
+   *  an inline modulator the brain reads as "ceiling on response
+   *  length." Default: 'normal'. */
+  verbosity?: 'minimal' | 'normal' | 'verbose';
   toolbelt: ToolDefinition[];
   input: CoachAskInput;
 }
+
+/** Verbosity prompt fragments. Appended to the identity prompt so the
+ *  brain has a concrete length ceiling regardless of which surface
+ *  fires the call. The default ('normal') matches the current
+ *  guided-opening-play shape on /coach/teach. */
+const VERBOSITY_BLOCKS: Record<'minimal' | 'normal' | 'verbose', string> = {
+  minimal: `═══ VERBOSITY: MINIMAL ═══
+The user wants you brief. Hard ceiling: ONE short sentence per turn, ≤8 words. Examples: "Nf6 — your move." "OK." "Done." Lecture mode is OFF — even on a teaching moment, you get one sentence and one move. NO multi-sentence responses. NO bullet points. NO past-games stats.`,
+  normal: `═══ VERBOSITY: NORMAL ═══
+Default tightness. Ceiling: ONE short sentence per turn (≤15 words) plus an optional one-line teaching beat when the position genuinely warrants it (a real blunder, a tactic, the student asked "why"). Otherwise: short reaction + play_move + "your move." prompt. NO multi-paragraph commentary, NO bullet-point agendas, NO past-games stats unless the student asked.`,
+  verbose: `═══ VERBOSITY: VERBOSE ═══
+The user wants depth. Lecture shape allowed: set up positions, demonstrate candidate moves with play_move + take_back_move, name the IDEA, ground in Stockfish, cite master games. No length cap. Use the full teaching shape on every meaningful turn.`,
+};
 
 /** Read all four sources and bundle them with the toolbelt and the
  *  caller's ask. Throws when any of the six envelope parts is missing
@@ -120,6 +137,12 @@ export function assembleEnvelope(args: AssembleEnvelopeArgs): AssembledEnvelope 
   if (args.input.liveState.surface === 'teach') {
     identity = `${identity}\n\n${TEACH_MODE_ADDITION}`;
   }
+  // Verbosity modulator. Wired everywhere — surfaces opt in by passing
+  // the user's preference (Settings → coachVerbosity) through to
+  // coachService.ask. Default 'normal' matches the post-38d4ace
+  // tightness; users who want full lecture shape pick 'verbose'.
+  const verbosity = args.verbosity ?? 'normal';
+  identity = `${identity}\n\n${VERBOSITY_BLOCKS[verbosity]}`;
   const memory = readMemorySnapshot();
   const appMap = loadRoutesManifest();
   const liveState = prepareLiveState(args.input.liveState);

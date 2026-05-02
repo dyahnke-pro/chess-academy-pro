@@ -1859,6 +1859,7 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
           profanity: prefs?.coachProfanity,
           mockery: prefs?.coachMockery,
           flirt: prefs?.coachFlirt,
+          verbosity: prefs?.coachResponseLength,
           // Teach mode: route the same coach-turn ask through Sonnet
           // instead of DeepSeek for richer commentary + deeper line
           // explanations. Stockfish stays as the opponent; only the

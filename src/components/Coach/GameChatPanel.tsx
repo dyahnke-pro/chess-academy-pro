@@ -695,6 +695,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               profanity: activeProfile.preferences.coachProfanity,
               mockery: activeProfile.preferences.coachMockery,
               flirt: activeProfile.preferences.coachFlirt,
+              verbosity: activeProfile.preferences.coachResponseLength,
               onChunk: (chunk: string) => {
                 fullResponse += chunk;
                 // WO-COACH-TTS-STRIP-01: sanitize the streaming buffer
@@ -978,6 +979,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             profanity: activeProfile.preferences.coachProfanity,
             mockery: activeProfile.preferences.coachMockery,
             flirt: activeProfile.preferences.coachFlirt,
+            verbosity: activeProfile.preferences.coachResponseLength,
             onChunk: (chunk: string) => {
               drawerFullResponse += chunk;
               // WO-COACH-TTS-STRIP-01: same streaming-sanitize as the

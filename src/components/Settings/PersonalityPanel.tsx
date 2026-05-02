@@ -120,6 +120,12 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
     profile.preferences.coachMockery ?? 'none';
   const currentFlirt: IntensityLevel =
     profile.preferences.coachFlirt ?? 'none';
+  // Response-length dial — clamps how much the coach says per turn.
+  // Default 'normal' matches post-38d4ace tightness; 'verbose' is the
+  // legacy lecture shape; 'minimal' is one-sentence-or-bust. Distinct
+  // from `coachVerbosity` (speech pace, also a setting).
+  const currentVerbosity: 'minimal' | 'normal' | 'verbose' =
+    profile.preferences.coachResponseLength ?? 'normal';
 
   // WO-AUTOSAVE-01: drop the draft / Save-button gate. Settings now
   // persist on every change (debounced 250ms). The local state still
@@ -129,6 +135,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
   const [draftProfanity, setDraftProfanity] = useState<IntensityLevel>(currentProfanity);
   const [draftMockery, setDraftMockery] = useState<IntensityLevel>(currentMockery);
   const [draftFlirt, setDraftFlirt] = useState<IntensityLevel>(currentFlirt);
+  const [draftVerbosity, setDraftVerbosity] = useState<'minimal' | 'normal' | 'verbose'>(currentVerbosity);
   const [draftVoiceMap, setDraftVoiceMap] = useState<Record<CoachPersonality, string>>(currentVoiceMap);
   const [draftSecondaryVoiceMap, setDraftSecondaryVoiceMap] = useState<Record<CoachPersonality, string>>(currentSecondaryVoiceMap);
 
@@ -140,10 +147,11 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       setDraftProfanity(currentProfanity);
       setDraftMockery(currentMockery);
       setDraftFlirt(currentFlirt);
+      setDraftVerbosity(currentVerbosity);
       setDraftVoiceMap(currentVoiceMap);
       setDraftSecondaryVoiceMap(currentSecondaryVoiceMap);
     }
-  }, [open, currentPersonality, currentProfanity, currentMockery, currentFlirt, currentVoiceMap, currentSecondaryVoiceMap]);
+  }, [open, currentPersonality, currentProfanity, currentMockery, currentFlirt, currentVerbosity, currentVoiceMap, currentSecondaryVoiceMap]);
 
   const summaryLabel = PERSONALITY_OPTIONS.find((p) => p.id === currentPersonality)?.label ?? 'Default';
   const summaryDials =
@@ -183,7 +191,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
     }, 250);
     return () => clearTimeout(handle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [draftPersonality, draftProfanity, draftMockery, draftFlirt, draftVoiceMap, draftSecondaryVoiceMap]);
+  }, [draftPersonality, draftProfanity, draftMockery, draftFlirt, draftVerbosity, draftVoiceMap, draftSecondaryVoiceMap]);
 
   const persistPersonality = async (): Promise<void> => {
     const before = {
@@ -215,6 +223,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       coachProfanity: draftProfanity,
       coachMockery: draftMockery,
       coachFlirt: draftFlirt,
+      coachResponseLength: draftVerbosity,
       coachPersonalityVoices: voiceOverrides,
       coachPersonalitySecondaryVoices: secondaryVoiceOverrides,
     };
@@ -412,6 +421,10 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
                   onChange={setDraftFlirt}
                   testIdPrefix="dial-flirt"
                 />
+                <VerbosityRow
+                  value={draftVerbosity}
+                  onChange={setDraftVerbosity}
+                />
                 <button
                   onClick={resetDialsToPersonalityDefaults}
                   className="text-xs underline"
@@ -479,6 +492,51 @@ function DialRow({ label, hint, value, onChange, testIdPrefix }: DialRowProps): 
               aria-checked={selected}
             >
               {INTENSITY_LABELS[level]}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const VERBOSITY_OPTIONS: readonly { id: 'minimal' | 'normal' | 'verbose'; label: string }[] = [
+  { id: 'minimal', label: 'Minimal' },
+  { id: 'normal', label: 'Normal' },
+  { id: 'verbose', label: 'Verbose' },
+];
+
+interface VerbosityRowProps {
+  value: 'minimal' | 'normal' | 'verbose';
+  onChange: (value: 'minimal' | 'normal' | 'verbose') => void;
+}
+
+function VerbosityRow({ value, onChange }: VerbosityRowProps): JSX.Element {
+  return (
+    <div>
+      <div className="flex items-baseline justify-between mb-1">
+        <span className="text-sm font-medium">Verbosity</span>
+        <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          How much the coach says per turn.
+        </span>
+      </div>
+      <div className="flex gap-1" role="radiogroup" aria-label="Verbosity">
+        {VERBOSITY_OPTIONS.map((opt) => {
+          const selected = value === opt.id;
+          return (
+            <button
+              key={opt.id}
+              onClick={() => onChange(opt.id)}
+              className="flex-1 py-1.5 rounded-lg border-2 text-xs font-medium transition-colors"
+              style={{
+                borderColor: selected ? 'var(--color-accent)' : 'var(--color-border)',
+                background: selected ? 'var(--color-surface)' : 'transparent',
+              }}
+              data-testid={`dial-verbosity-${opt.id}`}
+              role="radio"
+              aria-checked={selected}
+            >
+              {opt.label}
             </button>
           );
         })}

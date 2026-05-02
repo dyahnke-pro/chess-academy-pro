@@ -84,6 +84,9 @@ export interface CoachServiceOptions {
   mockery?: IntensityLevel;
   /** Flirt intensity dial. Default: 'none'. */
   flirt?: IntensityLevel;
+  /** Verbosity dial — clamps how much the coach says per turn. Wired
+   *  into the identity prompt's teaching block. Default: 'normal'. */
+  verbosity?: 'minimal' | 'normal' | 'verbose';
   /** Inject a custom provider instance (used by tests with a mock). */
   providerOverride?: Provider;
   /** When provided, the service routes through the provider's
@@ -135,6 +138,14 @@ export interface CoachServiceOptions {
    *  toolbelt, AND the spine refuses to dispatch them if the LLM
    *  hallucinates a call. WO-COACH-RESILIENCE. */
   excludeTools?: readonly string[];
+  /** Optional getter the spine calls between trips to refresh
+   *  `ctx.liveFen`. Without this, the FEN snapshotted at handleSubmit
+   *  time stays frozen across all round-trips — so when the brain
+   *  successfully plays a move in trip 2, trips 3+ still see the
+   *  pre-move FEN and wastes turns trying to play moves for the
+   *  side that already moved (production audit, build 38d4ace). The
+   *  surface should pass a getter that reads from a ref. */
+  getLiveFen?: () => string;
 }
 
 /** Format a list of tool results plus the LLM's previous text into a
@@ -203,6 +214,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     profanity: options.profanity,
     mockery: options.mockery,
     flirt: options.flirt,
+    verbosity: options.verbosity,
     toolbelt: getToolDefinitions({ exclude: options.excludeTools }),
     input,
   });
@@ -290,6 +302,17 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   let lastResponse: ProviderResponse = { text: '', toolCalls: [] };
 
   for (let trip = 1; trip <= maxRoundTrips; trip++) {
+    // Refresh liveFen between trips. After trip 1 successfully calls
+    // play_move, the board has moved on — trip 2's tool validation
+    // (chess.js .move() in playMoveTool) needs the post-move FEN or
+    // it'll reject the brain's next attempt as "wrong side to move."
+    // Production audit (build 38d4ace) showed the brain playing Nf6
+    // for black, then trying to play another black move 4 trips in a
+    // row because liveFen never advanced past the pre-Nf6 position.
+    if (options.getLiveFen) {
+      const fresh = options.getLiveFen();
+      if (fresh) ctx.liveFen = fresh;
+    }
     void logAppAudit({
       kind: 'coach-brain-provider-called',
       category: 'subsystem',

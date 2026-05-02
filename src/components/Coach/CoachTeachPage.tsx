@@ -74,6 +74,19 @@ export function CoachTeachPage(): JSX.Element {
 
   const transcriptRef = useRef<HTMLDivElement | null>(null);
   const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+  // gameRef is the closure-staleness escape hatch. React state updates
+  // are batched per render, so when ControlledChessBoard's `onMove`
+  // fires (synchronously inside the click/drag handler) and we call
+  // `handleSubmit(...)` in the same tick, `game.fen` in the closure
+  // still holds the PRE-move FEN. The ref updates synchronously after
+  // each render, so reading `gameRef.current.fen` from inside async
+  // brain trips always returns the latest state — including after the
+  // brain itself plays a move via `handlePlayMove` mid-handleSubmit.
+  // Production audit (build 38d4ace) showed the brain's `play_move e5`
+  // call rejected because liveFen was the starting position 2s after
+  // the student played e4; this ref is the fix.
+  const gameRef = useRef(game);
+  gameRef.current = game;
 
   // Chrome state — kept here so the layout matches /coach/play
   // button-for-button. Color selector picks who the student plays
@@ -99,46 +112,51 @@ export function CoachTeachPage(): JSX.Element {
 
   const handlePlayMove = useCallback((san: string): { ok: boolean; reason?: string } => {
     try {
-      const probe = new Chess(game.fen);
+      // Always read from gameRef so the move is validated and applied
+      // against the LATEST board state — not the closure-captured one
+      // from when handleSubmit was first invoked. Async coach trips
+      // happen across multiple renders; the ref is the only stable
+      // source of truth.
+      const live = gameRef.current;
+      const probe = new Chess(live.fen);
       const verboseMoves = probe.moves({ verbose: true });
       const match = verboseMoves.find((m) => m.san === san);
       if (!match) {
-        return { ok: false, reason: `chess.js rejected "${san}" from FEN ${game.fen}: Invalid move: ${san}` };
+        return { ok: false, reason: `chess.js rejected "${san}" from FEN ${live.fen}: Invalid move: ${san}` };
       }
-      const result = game.makeMove(match.from, match.to, match.promotion);
+      const result = live.makeMove(match.from, match.to, match.promotion);
       if (!result) return { ok: false, reason: `makeMove failed for ${san}` };
       return { ok: true };
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
     }
-  }, [game]);
+  }, []);
 
   const handleTakeBack = useCallback((count: number): { ok: boolean; reason?: string } => {
     try {
       for (let i = 0; i < count; i++) {
-        game.undoMove();
+        gameRef.current.undoMove();
       }
       return { ok: true };
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
     }
-  }, [game]);
+  }, []);
 
   const handleSetBoardPosition = useCallback((newFen: string): { ok: boolean; reason?: string } => {
     try {
-      // chess.js validates FEN on construction.
       new Chess(newFen);
-      const ok = game.loadFen(newFen);
+      const ok = gameRef.current.loadFen(newFen);
       return ok ? { ok: true } : { ok: false, reason: 'loadFen returned false' };
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
     }
-  }, [game]);
+  }, []);
 
   const handleResetBoard = useCallback((): { ok: boolean } => {
-    game.resetGame(STARTING_FEN);
+    gameRef.current.resetGame(STARTING_FEN);
     return { ok: true };
-  }, [game]);
+  }, []);
 
   const handleSubmit = useCallback(async (text: string, opts?: { kickoff?: boolean }): Promise<void> => {
     if (!text.trim() || busy) return;
@@ -193,17 +211,22 @@ export function CoachTeachPage(): JSX.Element {
         .catch(() => undefined);
     };
 
+    // Read from gameRef.current — the closure-captured `game` may be
+    // stale by one render at the moment a board-driven onMove triggers
+    // handleSubmit (React hasn't re-rendered yet when the user just
+    // dropped a piece). The ref always holds the latest state.
+    const liveGame = gameRef.current;
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
-      fen: game.fen,
-      moveHistory: game.history,
+      fen: liveGame.fen,
+      moveHistory: liveGame.history,
       userJustDid: text,
       // Tell the brain explicitly whose turn it is. Without this the
       // LLM was confusing sides — emitting `play_move {"san":"e5"}`
       // when it was Black's turn but the position needed White's
       // response, then chess.js rejected it 5 trips in a row.
-      whoseTurn: game.turn === 'w' ? 'white' : 'black',
+      whoseTurn: liveGame.turn === 'w' ? 'white' : 'black',
     };
 
     void logAppAudit({
@@ -211,14 +234,14 @@ export function CoachTeachPage(): JSX.Element {
       category: 'subsystem',
       source: 'CoachTeachPage',
       summary: `surface=teach viaSpine=true ask="${text.slice(0, 60)}"`,
-      details: JSON.stringify({ fen: game.fen, turn: game.turn }),
+      details: JSON.stringify({ fen: liveGame.fen, turn: liveGame.turn }),
     });
 
     useCoachMemoryStore.getState().appendConversationMessage({
       surface: 'chat-teach',
       role: 'user',
       text,
-      fen: game.fen,
+      fen: liveGame.fen,
       trigger: null,
     });
 
@@ -236,6 +259,12 @@ export function CoachTeachPage(): JSX.Element {
           profanity: activeProfile?.preferences.coachProfanity,
           mockery: activeProfile?.preferences.coachMockery,
           flirt: activeProfile?.preferences.coachFlirt,
+          verbosity: activeProfile?.preferences.coachResponseLength,
+          // Refresh ctx.liveFen at the start of every brain trip. The
+          // brain's play_move validation re-reads from this getter so
+          // trip N+1 sees the post-trip-N board state. Without it the
+          // brain hallucinates extra moves on the wrong side.
+          getLiveFen: () => gameRef.current.fen,
           onPlayMove: async (san: string) => handlePlayMove(san),
           onTakeBackMove: async (count: number) => handleTakeBack(count),
           onSetBoardPosition: async (newFen: string) => handleSetBoardPosition(newFen),
@@ -319,7 +348,7 @@ export function CoachTeachPage(): JSX.Element {
           surface: 'chat-teach',
           role: 'coach',
           text: finalText,
-          fen: game.fen,
+          fen: gameRef.current.fen,
           trigger: null,
         });
       }

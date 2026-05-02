@@ -578,6 +578,16 @@ export interface UserPreferences {
    * the setting automatically benefit from the cost reduction.
    */
   coachCommentaryVerbosity?: 'key-moments' | 'every-move' | 'off';
+  /** How much the coach says PER TURN when it does talk. Wired through
+   *  to the brain's TEACH_MODE_ADDITION + OPERATOR_BASE_BODY teaching
+   *  block to clamp response length. (Distinct from the older
+   *  `coachVerbosity` field above, which controls speech *pace*.)
+   *    - 'minimal'  → one short sentence, ≤8 words ("Nf6 — your move.")
+   *    - 'normal'   → one short sentence, ≤15 words (default)
+   *    - 'verbose'  → full lecture shape, no length cap (set up
+   *                   positions, demonstrate, name the IDEA, etc.)
+   *  When unset, treat as 'normal'. */
+  coachResponseLength?: 'minimal' | 'normal' | 'verbose';
   // Neon Glow Settings
   glowBrightness?: number;         // 0–200, default 100 — master dimmer for all glow
   boardGlowColor?: string;         // rgb string e.g. "0, 229, 255" — single color for all squares
