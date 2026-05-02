@@ -579,7 +579,24 @@ export async function getCoachChatResponse(
   if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
 
   const verbosity = verbosityOverride ?? await getCoachVerbosity();
-  const systemPrompt = buildSystemPromptWithVerbosity(SYSTEM_PROMPT, verbosity, systemPromptAddition);
+  // Pull the active profile's personality dials so EVERY surface that
+  // routes through getCoachChatResponse inherits the user's chosen
+  // voice (default / soft / edgy / flirtatious / drill-sergeant) +
+  // profanity / mockery / flirt intensities. Until this layer existed,
+  // legacy callers (walkthrough narrator, opening-section narrator,
+  // smart search, kid puzzles, middlegame planner, MiddlegamePractice,
+  // CoachGameReview) used a flat SYSTEM_PROMPT with no persona —
+  // their coach voice was identical regardless of Settings, breaking
+  // the "one coach across all tabs" feel. Failing this lookup
+  // gracefully (no profile, fresh install) keeps the legacy flat
+  // persona as the fallback so the surface still works.
+  const personalityAddition = await loadPersonalityAddition();
+  const responseLengthAddition = await loadResponseLengthAddition();
+  const systemPrompt = buildSystemPromptWithVerbosity(
+    SYSTEM_PROMPT,
+    verbosity,
+    [personalityAddition, responseLengthAddition, systemPromptAddition].filter(Boolean).join('\n\n') || undefined,
+  );
 
   try {
     return await callChatWithConfig(config, messages, systemPrompt, onStream, task, maxTokens);
@@ -597,6 +614,50 @@ export async function getCoachChatResponse(
     }
     const errMsg = error instanceof Error ? error.message : String(error);
     return `⚠️ Coach error: ${errMsg}`;
+  }
+}
+
+/** Read the active profile's personality dials and render the
+ *  surface-agnostic personality block (voice + intensity modulators).
+ *  Cached by-call — getProviderConfig already touches the same row, so
+ *  the additional read is hot in IndexedDB. Returns empty string when
+ *  the profile/dials aren't available so the legacy flat persona
+ *  remains the fallback. */
+async function loadPersonalityAddition(): Promise<string> {
+  try {
+    const profile = await db.profiles.get('main');
+    if (!profile) return '';
+    const personality = profile.preferences.coachPersonality ?? 'default';
+    const profanity = profile.preferences.coachProfanity ?? 'none';
+    const mockery = profile.preferences.coachMockery ?? 'none';
+    const flirt = profile.preferences.coachFlirt ?? 'none';
+    if (personality === 'default' && profanity === 'none' && mockery === 'none' && flirt === 'none') {
+      return '';
+    }
+    const { renderPersonalityBlock } = await import('../coach/sources/personalities');
+    return renderPersonalityBlock({ personality, profanity, mockery, flirt });
+  } catch {
+    return '';
+  }
+}
+
+/** Read the user's coachResponseLength preference (Settings →
+ *  Personality → Verbosity) and render the matching modulator. Same
+ *  shape as the verbosity blocks in `coach/envelope.ts` so legacy
+ *  callers feel identical to the chat surfaces. Default 'normal'
+ *  matches /coach/teach's tightness. */
+async function loadResponseLengthAddition(): Promise<string> {
+  try {
+    const profile = await db.profiles.get('main');
+    const level = profile?.preferences.coachResponseLength ?? 'normal';
+    const blocks: Record<'minimal' | 'normal' | 'verbose', string> = {
+      minimal: '═══ VERBOSITY: MINIMAL ═══\nHard ceiling: ONE short sentence per turn, ≤8 words. NO multi-sentence responses, NO bullet points, NO past-games stats.',
+      normal: '═══ VERBOSITY: NORMAL ═══\nDefault tightness. Ceiling: ONE short sentence per turn (≤15 words) plus an optional one-line teaching beat when the position genuinely warrants it. NO multi-paragraph commentary, NO bullet-point agendas.',
+      verbose: '═══ VERBOSITY: VERBOSE ═══\nLecture shape allowed: set up positions, demonstrate candidate moves, name the IDEA, ground in Stockfish, cite master games. No length cap.',
+    };
+    return blocks[level];
+  } catch {
+    return '';
   }
 }
 

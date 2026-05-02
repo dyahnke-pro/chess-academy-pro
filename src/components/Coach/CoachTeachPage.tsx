@@ -158,7 +158,21 @@ export function CoachTeachPage(): JSX.Element {
     return { ok: true };
   }, []);
 
-  const handleSubmit = useCallback(async (text: string, opts?: { kickoff?: boolean }): Promise<void> => {
+  const handleSubmit = useCallback(async (
+    text: string,
+    opts?: {
+      kickoff?: boolean;
+      /** Explicit post-move FEN override. Required when handleSubmit
+       *  is called from a board onMove callback because React hasn't
+       *  re-rendered yet — `gameRef.current` still holds the previous
+       *  render's value at that moment. The MoveResult emitted by
+       *  useChessGame already carries the post-move FEN, so the move
+       *  callback hands it in. Without this the brain saw the pre-move
+       *  FEN and replied "e4 hasn't landed yet" after the student
+       *  played e4 (production audit, build cf2fe0b). */
+      fenOverride?: string;
+    },
+  ): Promise<void> => {
     if (!text.trim() || busy) return;
     setBusy(true);
     const turnId = `t-${Date.now()}`;
@@ -211,22 +225,29 @@ export function CoachTeachPage(): JSX.Element {
         .catch(() => undefined);
     };
 
-    // Read from gameRef.current — the closure-captured `game` may be
-    // stale by one render at the moment a board-driven onMove triggers
-    // handleSubmit (React hasn't re-rendered yet when the user just
-    // dropped a piece). The ref always holds the latest state.
+    // Resolve the live FEN with the following priority:
+    //   1. opts.fenOverride — required when handleSubmit is called
+    //      from a board onMove (React hasn't re-rendered yet, so
+    //      gameRef.current is one tick stale).
+    //   2. gameRef.current — fresh after the next render commit, which
+    //      covers async coach trips and chat-input submissions.
+    // Derive turn from the FEN string ('w' or 'b' field) rather than
+    // game.turn so override + turn always agree on the same FEN.
+    const overrideFen = opts?.fenOverride;
     const liveGame = gameRef.current;
+    const fen = overrideFen ?? liveGame.fen;
+    const fenTurn = (fen.split(' ')[1] === 'b' ? 'black' : 'white') as 'white' | 'black';
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
-      fen: liveGame.fen,
+      fen,
       moveHistory: liveGame.history,
       userJustDid: text,
       // Tell the brain explicitly whose turn it is. Without this the
       // LLM was confusing sides — emitting `play_move {"san":"e5"}`
       // when it was Black's turn but the position needed White's
       // response, then chess.js rejected it 5 trips in a row.
-      whoseTurn: liveGame.turn === 'w' ? 'white' : 'black',
+      whoseTurn: fenTurn,
     };
 
     void logAppAudit({
@@ -234,14 +255,14 @@ export function CoachTeachPage(): JSX.Element {
       category: 'subsystem',
       source: 'CoachTeachPage',
       summary: `surface=teach viaSpine=true ask="${text.slice(0, 60)}"`,
-      details: JSON.stringify({ fen: liveGame.fen, turn: liveGame.turn }),
+      details: JSON.stringify({ fen, turn: fenTurn, overrideFen: !!overrideFen }),
     });
 
     useCoachMemoryStore.getState().appendConversationMessage({
       surface: 'chat-teach',
       role: 'user',
       text,
-      fen: liveGame.fen,
+      fen,
       trigger: null,
     });
 
@@ -373,9 +394,13 @@ export function CoachTeachPage(): JSX.Element {
   // observe completed moves and tell the coach about them.
   const handleStudentMove = useCallback((move: MoveResult): void => {
     if (busy) return;
-    // Prompt the coach to play (not lecture). The teaching-mode rules
-    // in OPERATOR_BASE_BODY enforce ≤15 words + a play_move response.
-    void handleSubmit(`I played ${move.san}. Your move.`);
+    // Pass the post-move FEN explicitly. handleSubmit's gameRef
+    // closure is stale by one render at this point because React
+    // batches the state update from useChessGame.executeMove and
+    // hasn't re-committed yet. Without the override the brain saw
+    // the pre-move FEN and replied "e4 hasn't landed yet" after the
+    // student played e4 (production audit, build cf2fe0b).
+    void handleSubmit(`I played ${move.san}. Your move.`, { fenOverride: move.fen });
   }, [busy, handleSubmit]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
