@@ -325,6 +325,13 @@ export function CoachTeachPage(): JSX.Element {
       const inner = match[1].trim();
       if (!inner) return;
       voiceSpokenForTurn = true;
+      void logAppAudit({
+        kind: 'coach-voice-marker-extracted',
+        category: 'subsystem',
+        source: 'CoachTeachPage.tryExtractVoiceMarker',
+        summary: `extracted [VOICE: ...] block (${inner.length} chars)`,
+        details: JSON.stringify({ length: inner.length, preview: inner.slice(0, 80) }),
+      });
       queueSpeak(inner);
     };
 
@@ -457,7 +464,21 @@ export function CoachTeachPage(): JSX.Element {
           : finalText.trim();
         if (firstSentence) {
           voiceSpokenForTurn = true;
+          void logAppAudit({
+            kind: 'coach-voice-marker-extracted',
+            category: 'subsystem',
+            source: 'CoachTeachPage.fallback',
+            summary: `[VOICE:] missing — fallback spoke first sentence (${firstSentence.length} chars)`,
+            details: JSON.stringify({ length: firstSentence.length, preview: firstSentence.slice(0, 80) }),
+          });
           queueSpeak(firstSentence);
+        } else {
+          void logAppAudit({
+            kind: 'coach-voice-marker-extracted',
+            category: 'subsystem',
+            source: 'CoachTeachPage.fallback',
+            summary: '[VOICE:] missing AND result.text empty — voice silent for this turn',
+          });
         }
       }
 

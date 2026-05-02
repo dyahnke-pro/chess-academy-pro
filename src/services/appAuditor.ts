@@ -97,6 +97,7 @@ export type AuditKind =
   | 'coach-memory-position-saved'
   | 'coach-memory-position-cleared'
   | 'coach-memory-position-restored'
+  | 'coach-voice-marker-extracted'
   // Progressive hint tiers (WO-HINT-REDESIGN-01)
   | 'coach-memory-hint-requested'
   | 'coach-memory-hint-recorded'
