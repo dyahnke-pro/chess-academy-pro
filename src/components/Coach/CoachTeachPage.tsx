@@ -112,6 +112,16 @@ export function CoachTeachPage(): JSX.Element {
   // so external mutations to `game` (loadFen, resetGame, undoMove
   // called from non-coach paths) flow through.
   liveFenRef.current = game.fen;
+  // Auto-save the live FEN to coach memory on every render. The
+  // store is debounced (250ms) and short-circuits when the FEN
+  // hasn't changed, so calling it every render is cheap. Survives
+  // app exit via Dexie persistence — the brain's
+  // `restore_saved_position` tool falls back to this slot when the
+  // student didn't explicitly say "remember this position." User
+  // requested this so a sudden close doesn't lose progress.
+  useEffect(() => {
+    useCoachMemoryStore.getState().setAutoSavedPosition(game.fen);
+  }, [game.fen]);
 
   // Chrome state — kept here so the layout matches /coach/play
   // button-for-button. Color selector picks who the student plays

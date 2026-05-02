@@ -94,6 +94,9 @@ export type AuditKind =
   | 'coach-memory-intent-set'
   | 'coach-memory-intent-consulted'
   | 'coach-memory-intent-cleared'
+  | 'coach-memory-position-saved'
+  | 'coach-memory-position-cleared'
+  | 'coach-memory-position-restored'
   // Progressive hint tiers (WO-HINT-REDESIGN-01)
   | 'coach-memory-hint-requested'
   | 'coach-memory-hint-recorded'

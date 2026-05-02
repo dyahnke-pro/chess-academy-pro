@@ -123,6 +123,19 @@ export interface BlunderPattern {
   lastSeen: number;
 }
 
+/** A FEN the student asked the coach to "remember for later." Set by
+ *  the `save_position` tool; restored by the `restore_saved_position`
+ *  tool. Only one slot — saving overwrites. Production audit (build
+ *  95a1785) showed the brain reconstructing positions from its own
+ *  prose description on resume and corrupting them (the c6 knight
+ *  vanished). The dedicated slot stores the EXACT FEN string verbatim
+ *  so resume is byte-perfect. */
+export interface SavedPosition {
+  fen: string;
+  label: string | null;
+  savedAt: number;
+}
+
 /** Schema-only — not populated in this WO. */
 export interface GrowthMapEntry {
   id: string;
@@ -147,6 +160,17 @@ interface CoachMemoryState {
   blunderPatterns: BlunderPattern[];
   growthMap: GrowthMapEntry[];
   gameHistory: GameSummary[];
+  /** Explicit save: the student asked the coach to "remember this
+   *  position." Sticky — only overwritten by another save or
+   *  explicit clear, NEVER by auto-save. */
+  savedPosition: SavedPosition | null;
+  /** Auto-save: the surface writes this on every board mutation so
+   *  a sudden app exit still leaves the most recent live FEN
+   *  recoverable. Different slot from `savedPosition` so per-move
+   *  auto-saves don't clobber an explicit save. On resume, the
+   *  brain prefers `savedPosition`; falls back to `autoSavedPosition`
+   *  when no explicit save exists. */
+  autoSavedPosition: SavedPosition | null;
   hydrated: boolean;
 }
 
@@ -160,6 +184,15 @@ interface CoachMemoryActions {
     next: Omit<IntendedOpening, 'setAt'> & { setAt?: number },
   ) => void;
   clearIntendedOpening: (reason: IntentClearReason) => void;
+  /** Snapshot a FEN to memory so the student can resume from this
+   *  exact position later. `label` is optional human context
+   *  ("Vienna Gambit, move 7"). Overwrites any prior save. */
+  setSavedPosition: (input: { fen: string; label?: string }) => void;
+  clearSavedPosition: () => void;
+  /** Auto-save the current live FEN. Cheap to call on every render.
+   *  Skipped (no-op) when the FEN matches the existing autoSaved
+   *  to avoid noisy persistence churn. */
+  setAutoSavedPosition: (fen: string) => void;
   /** Append a new hint request, OR escalate the tier on an existing
    *  same-FEN record. Returns the id of the (new or existing) record. */
   recordHintRequest: (input: {
@@ -199,6 +232,8 @@ const DEFAULT_STATE: CoachMemoryState = {
   blunderPatterns: [],
   growthMap: [],
   gameHistory: [],
+  savedPosition: null,
+  autoSavedPosition: null,
   hydrated: false,
 };
 
@@ -237,6 +272,43 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
         summary: `cleared ${prev.name} reason=${reason}`,
         details: JSON.stringify({ prev, reason }),
       });
+      schedulePersist(get);
+    },
+
+    setSavedPosition: (input) => {
+      const next: SavedPosition = {
+        fen: input.fen,
+        label: input.label ?? null,
+        savedAt: Date.now(),
+      };
+      set({ savedPosition: next });
+      void logAppAudit({
+        kind: 'coach-memory-position-saved',
+        category: 'subsystem',
+        source: 'useCoachMemoryStore.setSavedPosition',
+        summary: `saved position label="${next.label ?? ''}"`,
+        details: JSON.stringify(next),
+      });
+      schedulePersist(get);
+    },
+
+    clearSavedPosition: () => {
+      const prev = get().savedPosition;
+      if (!prev) return;
+      set({ savedPosition: null });
+      void logAppAudit({
+        kind: 'coach-memory-position-cleared',
+        category: 'subsystem',
+        source: 'useCoachMemoryStore.clearSavedPosition',
+        summary: `cleared saved position`,
+      });
+      schedulePersist(get);
+    },
+
+    setAutoSavedPosition: (fen) => {
+      const prev = get().autoSavedPosition;
+      if (prev?.fen === fen) return; // no-op when nothing changed
+      set({ autoSavedPosition: { fen, label: null, savedAt: Date.now() } });
       schedulePersist(get);
     },
 
@@ -369,6 +441,8 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
           blunderPatterns: restored.blunderPatterns ?? [],
           growthMap: restored.growthMap ?? [],
           gameHistory: restored.gameHistory ?? [],
+          savedPosition: restored.savedPosition ?? null,
+          autoSavedPosition: restored.autoSavedPosition ?? null,
           hydrated: true,
         });
       } else {
@@ -388,6 +462,8 @@ interface PersistedShape {
   blunderPatterns: BlunderPattern[];
   growthMap: GrowthMapEntry[];
   gameHistory: GameSummary[];
+  savedPosition: SavedPosition | null;
+  autoSavedPosition: SavedPosition | null;
 }
 
 let persistTimer: ReturnType<typeof setTimeout> | null = null;
@@ -408,6 +484,8 @@ async function writePersisted(state: CoachMemoryState): Promise<void> {
     blunderPatterns: state.blunderPatterns,
     growthMap: state.growthMap,
     gameHistory: state.gameHistory,
+    savedPosition: state.savedPosition,
+    autoSavedPosition: state.autoSavedPosition,
   };
   try {
     await db.meta.put({ key: META_KEY, value: JSON.stringify(payload) });

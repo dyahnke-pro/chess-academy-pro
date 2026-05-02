@@ -31,6 +31,8 @@ import { clearMemoryTool } from './cerebrum/clearMemory';
 import { playMoveTool } from './cerebrum/playMove';
 import { takeBackMoveTool } from './cerebrum/takeBackMove';
 import { setBoardPositionTool } from './cerebrum/setBoardPosition';
+import { savePositionTool } from './cerebrum/savePosition';
+import { restoreSavedPositionTool } from './cerebrum/restoreSavedPosition';
 import { resetBoardTool } from './cerebrum/resetBoard';
 import { speakTool } from './cerebrum/speak';
 import { requestHintTierTool } from './cerebrum/requestHintTier';
@@ -56,6 +58,8 @@ export const COACH_TOOLS: Tool[] = [
   playMoveTool,
   takeBackMoveTool,
   setBoardPositionTool,
+  savePositionTool,
+  restoreSavedPositionTool,
   resetBoardTool,
   speakTool,
   requestHintTierTool,
