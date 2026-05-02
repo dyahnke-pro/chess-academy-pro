@@ -102,36 +102,73 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
   });
 
-  it('chains every streamed sentence through speakForced (never speakQueuedForced)', async () => {
-    const fullText =
-      "Let me pull up your most common Vienna position and get the engine's read right now. " +
-      'Five Vienna games, five wins — from both colors. ' +
-      "That's a real pattern, and it tells me you genuinely understand this opening.";
+  it('speaks the [VOICE: ...] marker contents and nothing else', async () => {
+    // Brain emits a VOICE summary up-front + long teaching text below.
+    // Voice channel speaks the marker contents only — never the long
+    // chat-only prose. This is the contract the user asked for: a
+    // spoken summary covering positional info, structure, plans;
+    // depth lives in the chat bubble.
+    const voiceSummary = "e4 frees the bishop and queen. I'll mirror with e5 — symmetric center, both sides develop knights and castle short.";
+    const longChat = "Vienna Game proper kicks in once white plays Nc3 — knight to c3 supports a future d4 push and eyes the d5/f5 squares. Black's main responses are Nf6 mirroring development or Nc6 with a more positional setup. Master games show ~55% white scoring at club level, dropping to balance at master strength.";
+    const fullText = `[VOICE: ${voiceSummary}] ${longChat}`;
 
     vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
       options?.onChunk?.(fullText);
-      return { text: fullText, toolCallIds: [], provider: 'deepseek' };
+      return { text: fullText, toolCallIds: [], provider: 'anthropic' };
     });
 
     render(<CoachTeachPage />);
     await sendStudentMessage('Teach me the Vienna.');
 
     await waitFor(() => {
-      // 3 streamed sentences + 1 welcome line = 4 minimum.
-      expect(mockSpeakForced.mock.calls.length).toBeGreaterThanOrEqual(4);
+      const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
+      // The VOICE summary reaches Polly.
+      expect(spoken.some((s) => s.includes('symmetric center'))).toBe(true);
     }, { timeout: 4000 });
 
-    const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
-    expect(spoken.some((s) => s.includes('Vienna position'))).toBe(true);
-    expect(spoken.some((s) => s.includes('Five Vienna games'))).toBe(true);
-    expect(spoken.some((s) => s.includes('genuinely understand'))).toBe(true);
+    // The long chat-only prose did NOT reach Polly. Match on a
+    // distinctive phrase that only appears in the chat-side text.
+    const allSpoken = mockSpeakForced.mock.calls.map((c) => c[0] as string).join(' || ');
+    expect(allSpoken).not.toContain('Master games show');
+    expect(allSpoken).not.toContain('club level');
+    expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
+  });
+
+  it('falls back to first sentence when the brain omits the [VOICE:] marker', async () => {
+    // Defensive fallback: if the brain forgets to wrap its voice
+    // summary, the surface speaks the first sentence so the student
+    // isn't left in silence.
+    const fullText = 'Pulling the Vienna explorer data right now. The position has 5 master-level games on this exact line.';
+
+    vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
+      options?.onChunk?.(fullText);
+      return { text: fullText, toolCallIds: [], provider: 'anthropic' };
+    });
+
+    render(<CoachTeachPage />);
+    await sendStudentMessage('Show me Vienna stats.');
+
+    await waitFor(() => {
+      const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
+      expect(spoken.some((s) => s.includes('Pulling the Vienna explorer data'))).toBe(true);
+    }, { timeout: 4000 });
+
+    // The second sentence is NOT spoken under the fallback — only
+    // the first sentence is the rescue. The brain is supposed to
+    // emit [VOICE:] for the full summary.
+    const allSpoken = mockSpeakForced.mock.calls.map((c) => c[0] as string).join(' || ');
+    expect(allSpoken).not.toContain('5 master-level games');
     expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
   });
 
   it('forces the Anthropic provider for every coachService.ask call (Learn-only routing)', async () => {
     vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
-      options?.onChunk?.('Pulling the position.');
-      return { text: 'Pulling the position.', toolCallIds: [], provider: 'anthropic' };
+      options?.onChunk?.('[VOICE: Pulling the position.] Detailed analysis follows.');
+      return {
+        text: '[VOICE: Pulling the position.] Detailed analysis follows.',
+        toolCallIds: [],
+        provider: 'anthropic',
+      };
     });
 
     render(<CoachTeachPage />);
@@ -145,26 +182,5 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
       const opts = call[1] as { providerOverride?: { name: string } } | undefined;
       expect(opts?.providerOverride?.name).toBe('anthropic');
     }
-  });
-
-  it('flushes the trailing fragment through speakForced when the response ends mid-sentence-buffer', async () => {
-    const head = "Let me pull up the position. ";
-    const tail = 'And here is what I see';
-
-    vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
-      options?.onChunk?.(head + tail);
-      return { text: head + tail, toolCallIds: [], provider: 'deepseek' };
-    });
-
-    render(<CoachTeachPage />);
-    await sendStudentMessage('Walk me through the position.');
-
-    await waitFor(() => {
-      const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
-      expect(spoken.some((s) => s.includes('Let me pull up the position'))).toBe(true);
-      expect(spoken.some((s) => s.includes('here is what I see'))).toBe(true);
-    }, { timeout: 4000 });
-
-    expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
   });
 });
