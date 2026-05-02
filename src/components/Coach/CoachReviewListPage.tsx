@@ -5,6 +5,7 @@ import { db } from '../../db/schema';
 import type { GameRecord, GameSource } from '../../types';
 import { ReviewGameCard } from './ReviewGameCard';
 import { logAppAudit } from '../../services/appAuditor';
+import { seedReviewSamplesIfNeeded } from '../../services/reviewSampleGames';
 
 type SourceFilter = 'all' | GameSource;
 
@@ -25,6 +26,11 @@ export function CoachReviewListPage(): JSX.Element {
     let cancelled = false;
     async function load(): Promise<void> {
       try {
+        // First-visit seeding: drop 5 pre-analyzed sample games into
+        // the local library so the user has something to click into
+        // without having to play or import first. Idempotent — once
+        // a meta flag is set, subsequent loads skip the insert.
+        await seedReviewSamplesIfNeeded();
         const all = await db.games.orderBy('date').reverse().limit(100).toArray();
         if (cancelled) return;
         setGames(all);
