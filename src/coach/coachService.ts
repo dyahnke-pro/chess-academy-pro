@@ -172,6 +172,25 @@ function formatToolResultsAsFollowUpAsk(
     if (r.error) payload.push(`error=${r.error}`);
     lines.push(`- ${r.name}: ${payload.join(' ')}`);
   }
+  // Explicit anti-replay rule. Production audit (build a67a4eb) showed
+  // the brain emitting `play_move d5` twice in a row across trips —
+  // trip 2's d5 succeeded, then trip 3 emitted d5 again (rejected
+  // because d5 was already on the board). The brain was reading
+  // "play_move ok" as "the call worked" without realizing the move
+  // is now permanently committed. Spell it out.
+  const succeededMoves = results
+    .filter((r) => r.name === 'play_move' && r.ok)
+    .map((r) => {
+      const result = r.result as { san?: string } | undefined;
+      return result?.san ?? null;
+    })
+    .filter((san): san is string => san !== null);
+  if (succeededMoves.length > 0) {
+    lines.push(
+      '',
+      `IMPORTANT: ${succeededMoves.join(', ')} ${succeededMoves.length === 1 ? 'is' : 'are'} ALREADY ON THE BOARD. Do NOT call play_move again with ${succeededMoves.length === 1 ? 'that move' : 'those moves'} — it would either fail (the move is no longer legal from the new position) or play a different move with the same name (different piece). The board has advanced; your job now is to narrate WHAT YOU JUST DID and prompt the student's next move. Use NO more play_move calls this turn unless you genuinely want to play a NEW different move.`,
+    );
+  }
   lines.push(
     '',
     'Use these results to decide. Either call additional tools or give your final answer.',
