@@ -159,6 +159,7 @@ export function CoachReviewSessionPage(): JSX.Element {
   const { activeProfile } = useAppStore();
   const [game, setGame] = useState<GameRecord | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -174,7 +175,6 @@ export function CoachReviewSessionPage(): JSX.Element {
           setLoadError('That game is no longer in your library.');
           return;
         }
-        setGame(rec);
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
@@ -182,22 +182,36 @@ export function CoachReviewSessionPage(): JSX.Element {
           summary: `loaded game id=${rec.id} source=${rec.source} moves=${rec.annotations?.length ?? 0}`,
           details: JSON.stringify({ gameId, source: rec.source, fullyAnalyzed: rec.fullyAnalyzed }),
         });
+        // Block rendering until analysis is complete so the user
+        // never sees the partial "0% accuracy" intermediate state. For
+        // pre-analyzed games (samples + previously-reviewed games)
+        // gameNeedsAnalysis() returns false and we render
+        // immediately. For fresh imports we silently run Stockfish,
+        // then render — and the autoStartReview path fires the
+        // walkthrough straight away on first paint.
         if (gameNeedsAnalysis(rec)) {
-          void (async () => {
-            try {
-              await analyzeSingleGame(rec.id);
-              const refreshed = await db.games.get(rec.id);
-              if (refreshed && !cancelled) setGame(refreshed);
-            } catch (err) {
-              void logAppAudit({
-                kind: 'lichess-error',
-                category: 'subsystem',
-                source: 'CoachReviewSessionPage.analyze',
-                summary: `analyzeSingleGame failed: ${err instanceof Error ? err.message : String(err)}`,
-                details: JSON.stringify({ gameId }),
-              });
-            }
-          })();
+          setAnalyzing(true);
+          try {
+            await analyzeSingleGame(rec.id);
+            if (cancelled) return;
+            const refreshed = await db.games.get(rec.id);
+            if (cancelled) return;
+            setGame(refreshed ?? rec);
+          } catch (err) {
+            if (cancelled) return;
+            void logAppAudit({
+              kind: 'lichess-error',
+              category: 'subsystem',
+              source: 'CoachReviewSessionPage.analyze',
+              summary: `analyzeSingleGame failed: ${err instanceof Error ? err.message : String(err)}`,
+              details: JSON.stringify({ gameId }),
+            });
+            setGame(rec);
+          } finally {
+            if (!cancelled) setAnalyzing(false);
+          }
+        } else {
+          setGame(rec);
         }
       } catch (err) {
         if (cancelled) return;
@@ -237,7 +251,8 @@ export function CoachReviewSessionPage(): JSX.Element {
   if (!game || !adapted) {
     return (
       <div className="flex items-center justify-center p-6 flex-1 gap-2 text-theme-text-muted text-sm">
-        <Loader2 size={16} className="animate-spin" /> Loading game…
+        <Loader2 size={16} className="animate-spin" />
+        {analyzing ? 'Preparing your review…' : 'Loading game…'}
       </div>
     );
   }
@@ -257,6 +272,7 @@ export function CoachReviewSessionPage(): JSX.Element {
         onBackToCoach={() => navigate('/coach/review')}
         pgn={adapted.pgn}
         initialMoveIndex={-1}
+        autoStartReview
       />
     </div>
   );

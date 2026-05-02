@@ -60,6 +60,13 @@ interface CoachGameReviewProps {
   isGuidedLesson?: boolean;
   pgn?: string;
   initialMoveIndex?: number;
+  /** When true, auto-fire the post-game walkthrough as soon as the
+   *  component mounts — the user lands directly in the big-button +
+   *  chat-panel mode with the intro narration playing instead of
+   *  having to tap "Full Review" first. Used by the new
+   *  /coach/review/:gameId entry point so opening a game from the
+   *  picker drops the student straight into the walkthrough. */
+  autoStartReview?: boolean;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -108,11 +115,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     isGuidedLesson, pgn,
   } = props;
   const initialMoveIndex = props.initialMoveIndex;
+  const autoStartReview = props.autoStartReview;
   const navigate = useNavigate();
 
   // ─── Summary-First Flow ─────────────────────────────────────────────────────
+  // When autoStartReview is true, skip the summary card and land
+  // directly in the walkthrough. The /coach/review/:gameId entry point
+  // wants the user to drop straight into the chat-focused big-button
+  // mode the moment they tap a game card.
   const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
-    isGuidedLesson ? 'analysis' : 'summary',
+    isGuidedLesson || autoStartReview ? 'analysis' : 'summary',
   );
 
   const startIndex = initialMoveIndex !== undefined
@@ -1248,6 +1260,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWhatIfFen(null);
     setWhatIfCommentary(null);
   }, []);
+
+  // Auto-fire the walkthrough on mount when the parent surface
+  // (/coach/review/:gameId) requested it. We only fire ONCE — the
+  // ref guard protects against re-runs when other dependencies of
+  // handleStartAutoReview change. Skipped on guided lessons (which
+  // own their own playback orchestration).
+  const autoStartFiredRef = useRef(false);
+  useEffect(() => {
+    if (!autoStartReview) return;
+    if (autoStartFiredRef.current) return;
+    if (isGuidedLesson) return;
+    if (moves.length === 0) return;
+    autoStartFiredRef.current = true;
+    handleStartAutoReview();
+  }, [autoStartReview, isGuidedLesson, moves.length, handleStartAutoReview]);
 
   const handleStopAutoReview = useCallback(() => {
     setAutoReviewActive(false);
