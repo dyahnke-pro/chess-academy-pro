@@ -95,13 +95,18 @@ function adaptGameRecord(
     const san = history[i];
     const moveResult = replay.move(san);
     if (!moveResult) break;
-    const moveNumber = Math.floor(i / 2) + 1;
+    const fullMove = Math.floor(i / 2) + 1;
     const color: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';
-    const annot = annotationFor(game.annotations, moveNumber, color);
+    const annot = annotationFor(game.annotations, fullMove, color);
     const evaluation = annot?.evaluation ?? null;
     const isCoachMove = color !== playerColor;
+    // CoachGameMove.moveNumber is PLY-indexed (1=White's first ply,
+    // 2=Black's response, …) so accuracyService and
+    // getClassificationCounts can derive color via `moveNumber % 2 === 1`.
+    // Confirmed by CoachGamePage.tsx:1620 where it uses moveCountRef
+    // (incremented per ply) for the same field.
     moves.push({
-      moveNumber,
+      moveNumber: i + 1,
       san: moveResult.san,
       fen: replay.fen(),
       isCoachMove,
