@@ -87,6 +87,24 @@ export function CoachTeachPage(): JSX.Element {
   // the student played e4; this ref is the fix.
   const gameRef = useRef(game);
   gameRef.current = game;
+  // liveFenRef is the SYNCHRONOUS source of truth for the FEN — written
+  // by every successful handler (handlePlayMove, handleTakeBack,
+  // handleSetBoardPosition, handleResetBoard) immediately after the
+  // chess instance mutates, plus by the studentMove path with the
+  // post-move FEN. gameRef updates only on React render, so multiple
+  // brain trips inside one coachService.ask call (which run
+  // synchronously without yielding to React) all see the SAME stale
+  // gameRef value. Production audit (build eb38d11) showed the brain
+  // play Nxe4 successfully on trip 2 then re-play it on trip 3
+  // because trip 3's getLiveFen still returned the pre-Nxe4 FEN —
+  // user perceived this as "the coach made my move." liveFenRef fixes
+  // that: each play_move handler writes the chess instance's current
+  // FEN into it, and getLiveFen reads from this ref. */
+  const liveFenRef = useRef(game.fen);
+  // Keep liveFenRef in sync with the rendered fen on every render too,
+  // so external mutations to `game` (loadFen, resetGame, undoMove
+  // called from non-coach paths) flow through.
+  liveFenRef.current = game.fen;
 
   // Chrome state — kept here so the layout matches /coach/play
   // button-for-button. Color selector picks who the student plays
@@ -112,20 +130,24 @@ export function CoachTeachPage(): JSX.Element {
 
   const handlePlayMove = useCallback((san: string): { ok: boolean; reason?: string } => {
     try {
-      // Always read from gameRef so the move is validated and applied
-      // against the LATEST board state — not the closure-captured one
-      // from when handleSubmit was first invoked. Async coach trips
-      // happen across multiple renders; the ref is the only stable
-      // source of truth.
-      const live = gameRef.current;
-      const probe = new Chess(live.fen);
+      // Validate against liveFenRef (the SYNCHRONOUS post-move FEN)
+      // rather than gameRef.current.fen (which only updates on render).
+      // Multiple brain trips inside one coachService.ask call run
+      // without yielding to React, so the only correct source of truth
+      // for "where the board is right now" is the ref each handler
+      // updates synchronously after every successful mutation.
+      const liveFen = liveFenRef.current;
+      const probe = new Chess(liveFen);
       const verboseMoves = probe.moves({ verbose: true });
       const match = verboseMoves.find((m) => m.san === san);
       if (!match) {
-        return { ok: false, reason: `chess.js rejected "${san}" from FEN ${live.fen}: Invalid move: ${san}` };
+        return { ok: false, reason: `chess.js rejected "${san}" from FEN ${liveFen}: Invalid move: ${san}` };
       }
-      const result = live.makeMove(match.from, match.to, match.promotion);
+      const result = gameRef.current.makeMove(match.from, match.to, match.promotion);
       if (!result) return { ok: false, reason: `makeMove failed for ${san}` };
+      // Write the post-move FEN back so the next trip's getLiveFen
+      // reads the up-to-date board, even before React re-renders.
+      liveFenRef.current = result.fen;
       return { ok: true };
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
@@ -137,6 +159,9 @@ export function CoachTeachPage(): JSX.Element {
       for (let i = 0; i < count; i++) {
         gameRef.current.undoMove();
       }
+      // Re-derive the post-takeback FEN from the live game object so
+      // subsequent trips see the rolled-back state.
+      liveFenRef.current = gameRef.current.fen;
       return { ok: true };
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
@@ -147,6 +172,7 @@ export function CoachTeachPage(): JSX.Element {
     try {
       new Chess(newFen);
       const ok = gameRef.current.loadFen(newFen);
+      if (ok) liveFenRef.current = newFen;
       return ok ? { ok: true } : { ok: false, reason: 'loadFen returned false' };
     } catch (err) {
       return { ok: false, reason: err instanceof Error ? err.message : String(err) };
@@ -155,6 +181,7 @@ export function CoachTeachPage(): JSX.Element {
 
   const handleResetBoard = useCallback((): { ok: boolean } => {
     gameRef.current.resetGame(STARTING_FEN);
+    liveFenRef.current = STARTING_FEN;
     return { ok: true };
   }, []);
 
@@ -298,7 +325,12 @@ export function CoachTeachPage(): JSX.Element {
           // gives Sonnet/Haiku for the teaching content; DeepSeek stays
           // cost-effective for play, chat, hints, etc.
           providerOverride: anthropicProvider,
-          maxToolRoundTrips: 6,
+          // 4 trips is enough: trip 1 thinks + tools (lichess /
+          // stockfish), trip 2 emits play_move + teach text, trip 3-4
+          // closes the prose. 6 was costing 18–30s of Opus latency
+          // per turn; with liveFenRef preventing redundant retries
+          // the budget can come down without losing coverage.
+          maxToolRoundTrips: 4,
           personality: activeProfile?.preferences.coachPersonality,
           profanity: activeProfile?.preferences.coachProfanity,
           mockery: activeProfile?.preferences.coachMockery,
@@ -308,7 +340,7 @@ export function CoachTeachPage(): JSX.Element {
           // brain's play_move validation re-reads from this getter so
           // trip N+1 sees the post-trip-N board state. Without it the
           // brain hallucinates extra moves on the wrong side.
-          getLiveFen: () => gameRef.current.fen,
+          getLiveFen: () => liveFenRef.current,
           onPlayMove: async (san: string) => handlePlayMove(san),
           onTakeBackMove: async (count: number) => handleTakeBack(count),
           onSetBoardPosition: async (newFen: string) => handleSetBoardPosition(newFen),
@@ -417,12 +449,13 @@ export function CoachTeachPage(): JSX.Element {
   // observe completed moves and tell the coach about them.
   const handleStudentMove = useCallback((move: MoveResult): void => {
     if (busy) return;
-    // Pass the post-move FEN explicitly. handleSubmit's gameRef
-    // closure is stale by one render at this point because React
-    // batches the state update from useChessGame.executeMove and
-    // hasn't re-committed yet. Without the override the brain saw
-    // the pre-move FEN and replied "e4 hasn't landed yet" after the
-    // student played e4 (production audit, build cf2fe0b).
+    // Update liveFenRef SYNCHRONOUSLY with the post-move FEN that the
+    // MoveResult already carries. This is what every brain trip's
+    // getLiveFen will read, so trip 1 sees the post-student-move
+    // position immediately — no waiting for React re-render. Also
+    // pass fenOverride for the kickoff envelope's input.liveState.fen
+    // (used by trip 1 before getLiveFen kicks in on trip 2+).
+    liveFenRef.current = move.fen;
     void handleSubmit(`I played ${move.san}. Your move.`, { fenOverride: move.fen });
   }, [busy, handleSubmit]);
 
