@@ -190,11 +190,19 @@ export function CoachTeachPage(): JSX.Element {
     setStreaming('');
 
     // Stop in-flight speech so the new teaching response starts clean.
-    // Then reset the speech chain so the next queued sentence starts
-    // a fresh sequence (otherwise it'd be `.then(...)`-chained off a
-    // dead promise from the previous turn).
+    // Reset the chain ref AND capture the post-stop generation. Every
+    // queued speak below tags itself with this generation; if it
+    // doesn't match by the time the chain link actually fires, the
+    // call is dropped. This prevents the OLD chain (orphaned but
+    // still scheduled) from racing into speakInternal while the NEW
+    // chain is also playing — that race is what produced the
+    // tts-concurrent-speak warnings in the build 5df4252 audit (the
+    // brain's previous-turn streaming sentences kept dispatching after
+    // voiceService.stop() because Promise.then() chains can't be
+    // unsubscribed; only a per-link gen check can short-circuit them).
     voiceService.stop();
     speechChainRef.current = Promise.resolve();
+    const turnGeneration = voiceService.currentStopGeneration;
 
     // Two-stage buffer: `markupBuffer` holds raw streamed chunks until
     // any in-flight `[[DIRECTIVE...]]` tag closes (sanitizeCoachStream
@@ -207,21 +215,36 @@ export function CoachTeachPage(): JSX.Element {
     // "12.") from being treated as sentence terminators — without it
     // Polly voices "1." / "Nc3 Nc6 3." / "Bc4" as separate utterances.
     const SENTENCE_END = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
-    // Chain every sentence through speakForced. Each call's audio is
-    // awaited inside the chain so subsequent sentences only start
-    // after the previous one finishes — preventing speakInternal's
-    // unconditional this.stop() from cutting itself off mid-utterance.
+    // Track the last sentence queued so identical follow-ups across
+    // brain trips don't double-speak. Production audit (build 5df4252)
+    // showed "Your move." voiced TWICE when the brain emitted the
+    // same closing line in two consecutive trips of the same
+    // handleSubmit (trip 1 played a move + said "Done — your move.",
+    // trip 2 streamed "Your move." again as a tail). Polly fired both,
+    // 2ms apart. The dedupe just compares the formatted text and
+    // skips an exact repeat — distinct sentences with the same prefix
+    // ("Your move now." vs "Your move.") still play.
+    let lastQueuedSentence = '';
     const queueSpeak = (raw: string): void => {
       const sentence = formatForSpeech(raw);
       if (!sentence) return;
+      if (sentence === lastQueuedSentence) return;
+      lastQueuedSentence = sentence;
       speechChainRef.current = speechChainRef.current
-        // Polly-only — no Web Speech fallback. Production audit
-        // showed Polly cooldowns triggering Web Speech mid-chain,
-        // and Safari's speechSynth cancel-tail overlapped the next
-        // Polly sentence ("two voices"). Skipping the sentence
-        // audibly when Polly fails is preferable; chat bubble still
-        // shows the text. Polly recovers naturally after cooldown.
-        .then(() => voiceService.speakForcedPollyOnly(sentence))
+        .then(() => {
+          // Drop the call if a stop() has happened since this turn
+          // started (route change, mic barge-in, new submit). The
+          // orphaned chain from the previous turn dies here instead
+          // of racing into Polly playback alongside the new chain.
+          if (voiceService.currentStopGeneration !== turnGeneration) return;
+          // Polly-only — no Web Speech fallback. Production audit
+          // showed Polly cooldowns triggering Web Speech mid-chain,
+          // and Safari's speechSynth cancel-tail overlapped the next
+          // Polly sentence ("two voices"). Skipping the sentence
+          // audibly when Polly fails is preferable; chat bubble still
+          // shows the text. Polly recovers naturally after cooldown.
+          return voiceService.speakForcedPollyOnly(sentence);
+        })
         .catch(() => undefined);
     };
 

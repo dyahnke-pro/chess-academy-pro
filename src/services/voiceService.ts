@@ -212,6 +212,16 @@ export function normalizePieceShorthand(text: string): string {
   return out;
 }
 
+/** Matches a full FEN string anywhere in prose — any of the 8 ranks
+ *  followed by `w` or `b`, castling rights, and en-passant + halfmove
+ *  + fullmove. Production audit (build 5df4252) showed the brain
+ *  voicing the entire FEN string out loud as "rnbqkbnr slash pppppppp
+ *  slash 8 slash 8 slash 4P3 slash..." — never wanted, always wrong.
+ *  The brain shouldn't be including FENs in prose at all (the prompt
+ *  rule says so), but this is the belt-and-suspenders strip in case
+ *  it does. Optional surrounding backticks/quotes are also stripped. */
+const FEN_PATTERN_RE = /[`'"]?\s*([rnbqkpRNBQKP1-8]+\/){7}[rnbqkpRNBQKP1-8]+\s+[wb]\s+[KQkq-]+\s+[a-h1-8-]+\s+\d+\s+\d+\s*[`'"]?/g;
+
 /** Normalise LLM output so the spoken layer never has to read chess
  *  notation aloud. Pure function — safe to call on any string. Wraps
  *  normalizePieceShorthand with the TTS-only transforms (SAN expansion,
@@ -219,7 +229,11 @@ export function normalizePieceShorthand(text: string): string {
 export function sanitizeForTTS(text: string): string {
   if (!text) return text;
   let out = text;
-  // Castling FIRST (before piece-letter substitutions mangle the O's).
+  // FEN strings FIRST so they can't get tokenized into nonsense by the
+  // SAN regex below (a FEN's "K" / "Q" / "B" / "N" letters look like
+  // piece-letter SAN to the SAN_MOVE_RE pattern).
+  out = out.replace(FEN_PATTERN_RE, '[the position]');
+  // Castling (before piece-letter substitutions mangle the O's).
   out = out.replace(CASTLE_QUEEN_RE, 'castle queenside');
   out = out.replace(CASTLE_KING_RE, 'castle kingside');
   // Pawn captures: "exd5" → "e-pawn takes d5"
@@ -229,7 +243,6 @@ export function sanitizeForTTS(text: string): string {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;
     return capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
   });
-  // Descriptive piece-letter normalization (UI-safe, reusable).
   return normalizePieceShorthand(out);
 }
 
