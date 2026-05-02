@@ -485,6 +485,41 @@ function buildFenChain(moves: ReviewMoveInput[]): { fenBefore: string; fenAfter:
   return chain;
 }
 
+/** Deterministic fallback narration for a single ply. Used when the
+ *  LLM either omits a ply entirely or returns null for it. The user
+ *  has explicitly asked for narration on every move — silent plies
+ *  leave the student staring at the board. Production audit (build
+ *  06b6d5d) showed only 6/10 plies narrated; this guarantees a read
+ *  on every move even when the LLM regresses. Tone stays neutral —
+ *  the LLM produces the rich personality narration; this is just a
+ *  safety net. */
+function fallbackMoveNarration(params: {
+  san: string;
+  color: 'white' | 'black';
+  isStudentMove: boolean;
+  classification: import('../types').MoveClassification | null;
+}): string {
+  const { san, isStudentMove, classification } = params;
+  const subject = isStudentMove ? 'You played' : 'The coach played';
+  const sanReadable = san.replace(/\+|#/g, '');
+  if (classification === 'blunder') {
+    return `${subject} ${sanReadable} — flagged as a blunder. Step through to see the better line.`;
+  }
+  if (classification === 'mistake') {
+    return `${subject} ${sanReadable} — flagged as a mistake. There was a stronger continuation.`;
+  }
+  if (classification === 'inaccuracy') {
+    return `${subject} ${sanReadable} — slightly inaccurate, but still in the game.`;
+  }
+  if (classification === 'brilliant') {
+    return `${subject} ${sanReadable} — a brilliant move. The engine approves.`;
+  }
+  if (classification === 'great') {
+    return `${subject} ${sanReadable} — a strong, accurate move.`;
+  }
+  return `${subject} ${sanReadable}.`;
+}
+
 /** Fallback intro used if the LLM intro call fails. Still grounded in
  *  result + opening name. */
 function defaultIntroText(params: {
@@ -639,6 +674,24 @@ export async function generateReviewNarration(params: {
     const fullMove = Math.ceil(m.ply / 2);
     const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
     const bestUci = m.bestMove;
+    // Prefer the LLM's per-ply narration. When it's missing (LLM
+    // returned a null, omitted the ply, or the parse failed), fall
+    // back to a deterministic one-liner so EVERY ply speaks. The user
+    // has explicitly asked for narration on every move — silent plies
+    // leave the student staring at the board with no audio. Production
+    // audit (build 06b6d5d) showed only 6 of 10 plies narrated under
+    // the old "null = silence" prompt; this fallback closes the gap
+    // even when the LLM regresses.
+    const llmNarration = narrationByPly.get(m.ply);
+    const narration =
+      llmNarration && llmNarration.trim().length > 0
+        ? llmNarration
+        : fallbackMoveNarration({
+            san: m.san,
+            color: moverColor,
+            isStudentMove: !m.isCoachMove,
+            classification: m.classification,
+          });
     segments.push({
       ply: m.ply,
       moveNumber: fullMove,
@@ -651,7 +704,7 @@ export async function generateReviewNarration(params: {
       evalAfter: m.evaluation,
       bestMoveSan: bestUci, // UCI is passed through as SAN when SAN isn't available
       bestMoveUci: bestUci,
-      narration: narrationByPly.get(m.ply) ?? null,
+      narration,
     });
   }
 
