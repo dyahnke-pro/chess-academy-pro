@@ -95,45 +95,63 @@ function emitLichessFailure(
 }
 
 /** Circuit breaker — stop calling /api/lichess-explorer after N
- *  consecutive failures in a session. Production audit logs across
- *  every recent build show the explorer endpoint returning HTTP 401
- *  on every move (Lichess's nginx layer rejecting our requests). The
- *  failure is sustained, not transient, so retrying on every move
- *  just spams the audit log and burns latency in the
- *  `withFetchTimeout` wrapper. After CIRCUIT_BREAKER_THRESHOLD
- *  consecutive failures we open the circuit and short-circuit
- *  subsequent calls with a synthetic empty-result. The circuit
- *  resets on the next successful fetch, so a server-side fix on
- *  Lichess automatically restores grounded notes without any client
- *  redeploy. The per-call audit emit is gated behind the circuit
- *  state — failures while the circuit is open log once per session
- *  instead of on every move. */
+ *  consecutive failures, but auto-retry after CIRCUIT_RESET_AFTER_MS
+ *  so a transient burst of 401s doesn't permanently block Lichess
+ *  for the rest of the session. Production audit logs show the
+ *  explorer endpoint returning HTTP 401 in waves — sometimes a
+ *  cluster of 5 in a row, then it clears. Without a time-based
+ *  reset, the first 3 failures of a 30-minute coach session would
+ *  silently disable Lichess for the next 27 minutes even after the
+ *  upstream issue resolves. The circuit also resets on the next
+ *  successful fetch. The per-call audit emit is gated behind the
+ *  circuit state — failures while the circuit is open log once per
+ *  open-cycle instead of on every move. */
 const CIRCUIT_BREAKER_THRESHOLD = 3;
+const CIRCUIT_RESET_AFTER_MS = 2 * 60 * 1000;
 let consecutiveFailures = 0;
 let circuitOpen = false;
+let circuitOpenedAt: number | null = null;
 let openCircuitLogged = false;
 
 function recordExplorerFailure(): void {
   consecutiveFailures += 1;
   if (consecutiveFailures >= CIRCUIT_BREAKER_THRESHOLD && !circuitOpen) {
     circuitOpen = true;
+    circuitOpenedAt = Date.now();
   }
 }
 
 function recordExplorerSuccess(): void {
   consecutiveFailures = 0;
   circuitOpen = false;
+  circuitOpenedAt = null;
   openCircuitLogged = false;
 }
 
 function isCircuitOpen(): boolean {
-  return circuitOpen;
+  if (!circuitOpen) return false;
+  if (circuitOpenedAt !== null && Date.now() - circuitOpenedAt >= CIRCUIT_RESET_AFTER_MS) {
+    consecutiveFailures = 0;
+    circuitOpen = false;
+    circuitOpenedAt = null;
+    openCircuitLogged = false;
+    void logAppAudit({
+      kind: 'lichess-error',
+      category: 'subsystem',
+      source: 'lichessExplorerService.isCircuitOpen',
+      summary: `circuit auto-reset after ${CIRCUIT_RESET_AFTER_MS}ms — retrying Lichess`,
+      details: JSON.stringify({ circuitResetAfterMs: CIRCUIT_RESET_AFTER_MS }),
+    });
+    return false;
+  }
+  return true;
 }
 
 /** Test-only — reset the circuit between unit tests. */
 export function _resetLichessCircuitBreaker(): void {
   consecutiveFailures = 0;
   circuitOpen = false;
+  circuitOpenedAt = null;
   openCircuitLogged = false;
 }
 
@@ -146,18 +164,25 @@ export async function fetchLichessExplorer(
   source: ExplorerSource = 'lichess',
 ): Promise<LichessExplorerResult> {
   if (isCircuitOpen()) {
-    // Log the open-circuit state once per session so the audit log
-    // reflects "we stopped trying" rather than going completely silent.
+    // Log the open-circuit state once per open-cycle so the audit
+    // log reflects "we stopped trying" rather than going silent. A
+    // fresh open-cycle (after a time-based reset) gets a new emit.
     if (!openCircuitLogged) {
       openCircuitLogged = true;
+      const msUntilReset =
+        circuitOpenedAt !== null
+          ? Math.max(0, CIRCUIT_RESET_AFTER_MS - (Date.now() - circuitOpenedAt))
+          : null;
       void logAppAudit({
         kind: 'lichess-error',
         category: 'subsystem',
         source: 'lichessExplorerService.fetchLichessExplorer',
-        summary: `circuit open after ${CIRCUIT_BREAKER_THRESHOLD} consecutive failures — short-circuiting subsequent calls this session`,
+        summary: `circuit open after ${CIRCUIT_BREAKER_THRESHOLD} consecutive failures — short-circuiting; retry in ${msUntilReset ?? '?'}ms`,
         details: JSON.stringify({
           consecutiveFailures,
           circuitBreakerThreshold: CIRCUIT_BREAKER_THRESHOLD,
+          circuitResetAfterMs: CIRCUIT_RESET_AFTER_MS,
+          msUntilReset,
           fen,
           source,
         }),
