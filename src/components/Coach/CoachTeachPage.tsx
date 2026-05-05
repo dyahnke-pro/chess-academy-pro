@@ -148,6 +148,15 @@ export function CoachTeachPage(): JSX.Element {
           setLatestEval(a.evaluation);
           setLatestIsMate(a.isMate);
           setLatestMateIn(a.isMate ? a.evaluation : null);
+          // Mirror into the ref so handleSubmit can inject ground-
+          // truth engine eval into the envelope without a stale
+          // closure. Keyed by FEN so a one-ply-stale eval can't be
+          // misattributed to the new position.
+          latestEvalRef.current = {
+            fen,
+            evalCp: a.isMate ? 0 : a.evaluation,
+            mateIn: a.mateIn,
+          };
         } catch {
           // Stockfish hiccup — leave the bar at the last known value
           // rather than reset to null. Less jarring visually.
@@ -180,6 +189,15 @@ export function CoachTeachPage(): JSX.Element {
   const [latestEval, setLatestEval] = useState<number | null>(null);
   const [latestIsMate, setLatestIsMate] = useState(false);
   const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
+  // Mirror the eval into a ref keyed by FEN so handleSubmit can inject
+  // ground-truth engine eval into the brain's [Live state] envelope
+  // WITHOUT a stale-closure on latestEval (handleSubmit's deps don't
+  // include eval state). The brain otherwise self-counts material and
+  // hallucinates ("up a pawn" after a queen-for-knight trade) —
+  // production audit (build 4e628e5). We only surface the eval when
+  // its FEN matches the FEN we're asking about, so a one-ply-stale
+  // eval doesn't get misattributed to the new position.
+  const latestEvalRef = useRef<{ fen: string; evalCp: number; mateIn: number | null } | null>(null);
   const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
   const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
   const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
@@ -394,6 +412,18 @@ export function CoachTeachPage(): JSX.Element {
     const liveGame = gameRef.current;
     const fen = overrideFen ?? liveGame.fen;
     const fenTurn: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+    // Inject the latest Stockfish eval into the envelope when its FEN
+    // matches the FEN we're asking about. The brain otherwise
+    // self-counts material and gets it wrong — production audit
+    // (build 4e628e5) caught it claiming "up a pawn" after losing a
+    // queen for a knight. The eval bar effect populates this ref
+    // 250ms after every FEN change, cached, so it's usually fresh.
+    // When stale (FEN mismatch) we omit eval rather than misattribute.
+    const evalSnapshot = latestEvalRef.current;
+    const evalForAsk =
+      evalSnapshot && evalSnapshot.fen === fen
+        ? { evalCp: evalSnapshot.evalCp, evalMateIn: evalSnapshot.mateIn ?? undefined }
+        : undefined;
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
@@ -405,6 +435,7 @@ export function CoachTeachPage(): JSX.Element {
       // when it was Black's turn but the position needed White's
       // response, then chess.js rejected it 5 trips in a row.
       whoseTurn: fenTurn,
+      ...(evalForAsk ?? {}),
     };
 
     void logAppAudit({

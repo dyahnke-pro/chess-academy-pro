@@ -102,6 +102,22 @@ The ONLY exception: if you're NOT in play mode yet (initial lesson kickoff, you 
 
 If a previous \`play_move\` got rejected by USER SOVEREIGNTY (you tried to play the student's color), THAT does NOT block you from playing your own color on subsequent turns. The rejection means "you tried to move the wrong side"; it does NOT mean "stop calling play_move forever." When it's your turn (FEN turn matches your color), call play_move.
 
+═══ MATERIAL & EVAL CLAIMS — USE THE PRE-COMPUTED ENGINE EVAL (NON-NEGOTIABLE) ═══
+
+[Live state] carries a PRE-COMPUTED engine eval on the current FEN — line "Engine eval (PRE-COMPUTED, white-perspective): Xcp — <interpretation>." The surface ran Stockfish on this exact position BEFORE this call. That number is ground truth.
+
+When you make ANY claim about who's winning, who's up material, "trade complete and you're up a pawn," "you're down material," "this is equal," "white is winning here," "you're crushing me" — the answer comes FROM THAT NUMBER. Not from your own piece-counting. Not from your read of the FEN. Not from "the queen got captured so now we're even." Read the engine eval line and use the bracket it gives you (slight edge / clear advantage / winning / decisive / completely winning).
+
+Production audit (build 4e628e5) caught the brain claiming "queen trade's done. You're up a clean pawn" right after losing its queen for a knight — the actual eval was −800cp (black is winning decisively). The brain self-counted from the move list and got it backwards. Don't repeat that.
+
+Concrete rules:
+1. NEVER claim a material balance ("up a pawn," "even material," "exchange sac") without first looking at the engine eval line in [Live state]. If the eval says −800cp and you're black, you are NOT "up a pawn" — you are getting crushed.
+2. If the engine eval is ABSENT from [Live state] (e.g. you're on a surface that didn't pre-compute it), call \`stockfish_eval\` BEFORE making material claims. Don't eyeball it.
+3. If a play_move call was REJECTED (e.g. "Invalid move: Qxd5") that means the move did NOT happen. The board did not change. The piece you tried to move may not even exist on its old square anymore — read the FEN and re-orient before continuing. NEVER narrate as if a rejected move succeeded.
+4. The engine eval is white-perspective. If you're playing black and the eval is +500, that's BAD for you. If it's −500, that's GOOD for you. Don't flip the sign in your head and get it wrong.
+
+When in doubt: the number in [Live state] wins. Your own intuition loses.
+
 ═══ META QUESTIONS — ANSWER FROM MEMORY, NOT FROM stockfish_eval (NON-NEGOTIABLE) ═══
 
 When the student asks a META question about THEIR improvement, level, or focus — phrases like:
@@ -392,6 +408,27 @@ function formatAppMapBlock(routes: RouteManifestEntry[]): string {
   return parts.join('\n');
 }
 
+/** Convert centipawn eval into a plain-English material/winning-side
+ *  read so the brain can't miss it. Threshold buckets match what a
+ *  human coach would say: ±50cp = "roughly equal," ±150 = "slight
+ *  edge," ±300 = "clear advantage" (~minor piece), ±500 = "winning"
+ *  (~rook), ±900 = "decisive" (~queen), beyond = "completely
+ *  winning." Production audit (build 4e628e5) caught the brain
+ *  hallucinating "up a pawn" off a -800cp position because the eval
+ *  was buried as a bare integer — the prose interpretation makes the
+ *  ground truth unmissable. */
+function describeEval(cp: number): string {
+  const abs = Math.abs(cp);
+  const winner = cp > 0 ? 'white' : 'black';
+  const pawnsAhead = (abs / 100).toFixed(1);
+  if (abs < 50) return 'roughly equal';
+  if (abs < 150) return `${winner} has a slight edge (~${pawnsAhead} pawns)`;
+  if (abs < 300) return `${winner} has a clear advantage (~${pawnsAhead} pawns — about a minor piece)`;
+  if (abs < 500) return `${winner} is winning (~${pawnsAhead} pawns — about a rook)`;
+  if (abs < 900) return `${winner} is winning decisively (~${pawnsAhead} pawns — about a queen)`;
+  return `${winner} is completely winning (~${pawnsAhead} pawns — game-deciding material)`;
+}
+
 function formatLiveStateBlock(state: LiveState): string {
   const parts: string[] = ['[Live state]'];
   parts.push(`- Surface: ${state.surface}`);
@@ -405,7 +442,22 @@ function formatLiveStateBlock(state: LiveState): string {
     parts.push(`- Whose turn: ${state.whoseTurn} TO MOVE — ANY play_move you emit must be a legal move for ${state.whoseTurn}.`);
   }
   if (state.phase) parts.push(`- Phase: ${state.phase}`);
-  if (typeof state.evalCp === 'number') parts.push(`- Eval (centipawns, white-perspective): ${state.evalCp}`);
+  // Surface engine eval as PRE-COMPUTED GROUND TRUTH on the current
+  // FEN. The surface ran Stockfish on this exact position before
+  // dispatching the call; the brain MUST trust this over its own
+  // material counting (production audit, build 4e628e5: brain claimed
+  // "up a pawn" after losing queen-for-knight; eval was -800cp).
+  if (typeof state.evalMateIn === 'number') {
+    const winner = state.evalMateIn > 0 ? 'white' : 'black';
+    const plies = Math.abs(state.evalMateIn);
+    parts.push(
+      `- Engine eval (PRE-COMPUTED, white-perspective): MATE IN ${plies} for ${winner}. This is engine ground truth — do not contradict it with your own counting.`,
+    );
+  } else if (typeof state.evalCp === 'number') {
+    parts.push(
+      `- Engine eval (PRE-COMPUTED, white-perspective): ${state.evalCp}cp — ${describeEval(state.evalCp)}. This is engine ground truth — do not contradict it with your own material counting. When making "winning"/"losing"/"up material"/"down material" claims, USE THIS NUMBER, not your eyeball count.`,
+    );
+  }
   if (state.moveHistory && state.moveHistory.length > 0) {
     parts.push(`- Move history: ${state.moveHistory.join(' ')}`);
   }

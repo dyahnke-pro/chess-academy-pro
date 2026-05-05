@@ -100,7 +100,18 @@ export interface LiveState {
   surface: CoachSurface;
   fen?: string;
   phase?: 'opening' | 'middlegame' | 'endgame';
+  /** Stockfish centipawn eval (white-perspective) for the live FEN.
+   *  Surfaces that already run a debounced engine analysis for an
+   *  eval bar (CoachTeachPage) thread it through here so the envelope
+   *  can present ground-truth material/eval to the brain WITHOUT it
+   *  having to call stockfish_eval itself. Production audit (build
+   *  4e628e5) caught the brain hallucinating "you're up a pawn" after
+   *  losing its queen for a knight because it self-counted instead of
+   *  consulting the engine. */
   evalCp?: number;
+  /** Mate distance in plies (positive = white mates, negative = black
+   *  mates). When set, supersedes evalCp for "who's winning" reads. */
+  evalMateIn?: number;
   moveHistory?: string[];
   /** Free text describing what triggered this call. */
   userJustDid?: string;
