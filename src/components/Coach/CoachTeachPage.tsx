@@ -34,6 +34,8 @@ import { db } from '../../db/schema';
 import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
+import { stockfishEngine } from '../../services/stockfishEngine';
+import { withTimeout } from '../../coach/withTimeout';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -123,6 +125,41 @@ export function CoachTeachPage(): JSX.Element {
     useCoachMemoryStore.getState().setAutoSavedPosition(game.fen);
   }, [game.fen]);
 
+  // Live Stockfish eval of the current position → eval bar.
+  // Debounced 250ms to coalesce rapid FEN changes (e.g. brain plays a
+  // move while the user is mid-typing). Cancels in-flight analysis
+  // when the FEN changes again before the previous one completes —
+  // we only care about the latest position. Wrapped in withTimeout
+  // so a stuck Stockfish call doesn't hang the bar forever.
+  useEffect(() => {
+    let cancelled = false;
+    const fen = game.fen;
+    const handle = setTimeout(() => {
+      void (async () => {
+        try {
+          const wrapped = await withTimeout(
+            stockfishEngine.analyzePosition(fen, 12),
+            5_000,
+            'teach-eval-bar',
+          );
+          if (cancelled) return;
+          if (!wrapped.ok) return;
+          const a = wrapped.value;
+          setLatestEval(a.evaluation);
+          setLatestIsMate(a.isMate);
+          setLatestMateIn(a.isMate ? a.evaluation : null);
+        } catch {
+          // Stockfish hiccup — leave the bar at the last known value
+          // rather than reset to null. Less jarring visually.
+        }
+      })();
+    }, 250);
+    return () => {
+      cancelled = true;
+      clearTimeout(handle);
+    };
+  }, [game.fen]);
+
   // Chrome state — kept here so the layout matches /coach/play
   // button-for-button. Color selector picks who the student plays
   // (orientation hand-off), difficulty + coach-tips are visually
@@ -133,6 +170,16 @@ export function CoachTeachPage(): JSX.Element {
   const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  // Live Stockfish evaluation of the current position. Drives the
+  // eval bar on the board so it moves with each ply (matches what
+  // /coach/play and /coach/review already do). Debounced — every
+  // game.fen change kicks off an analyzePosition with a 250ms delay
+  // so rapid sequences (kickoff reset → first move) don't queue
+  // multiple analyses; only the last FEN's analysis runs. null while
+  // analysis is pending so the bar can fall back to 50/50 silently.
+  const [latestEval, setLatestEval] = useState<number | null>(null);
+  const [latestIsMate, setLatestIsMate] = useState(false);
+  const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
   const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
   const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
   const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
@@ -778,6 +825,9 @@ export function CoachTeachPage(): JSX.Element {
               showUndoButton={false}
               showResetButton={false}
               showEvalBar={showEvalBarEffective}
+              evaluation={latestEval}
+              isMate={latestIsMate}
+              mateIn={latestMateIn}
               showVoiceMic={false}
               showLastMoveHighlight
               onMove={handleStudentMove}
