@@ -515,22 +515,27 @@ class VoiceService {
     return this.speakInternal(sanitizeForTTS(text), false);
   }
 
-  /** Speak using the personality's SECONDARY voice — for short tactic
-   *  alerts / interjections that should cut through main narration
-   *  with a different timbre. WO-VOICE-LAYER-01 (b). Falls back to
-   *  the primary speak path if no prefs are loaded. */
+  /** Speak a short tactic alert. Production audit (build 81002c0)
+   *  showed alerts firing while the regular move commentary was still
+   *  streaming, causing speakInternal.stop() to cut off the main
+   *  narration mid-sentence (tts-concurrent-speak findings 176, 235).
+   *  Drop alerts when speech is already playing — the move commentary
+   *  is more substantive than a single-line warning, and the user can
+   *  still read the warning in chat. WO-VOICE-LAYER-01 (b). */
   async speakAlert(text: string): Promise<void> {
     this.logSpeakInvoked('speakAlert', text);
-    // WO-VOICE-LAYER-01 (b) was originally meant to give tactic alerts
-    // a different timbre via a SECONDARY voice. Production audit
-    // (build 06b6d5d) showed users hearing "two voices" — the regular
-    // coach voice AND the alert voice — which reads as a second
-    // character chiming in rather than a coach with a single voice.
-    // Drop the secondary-voice override; alerts now use the same
-    // primary personality voice as everything else. The
-    // PERSONALITY_SECONDARY_VOICE_DEFAULTS map + supporting state
-    // is left in place in case we revisit this with a clearer UX
-    // signal (e.g. a distinct chime *before* the alert plays).
+    if (this.playing) {
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'voice-speak-invoked',
+          category: 'subsystem',
+          source: 'voiceService.speakAlert',
+          summary: `dropped (busy): ${text.slice(0, 40)}`,
+          details: `length=${text.length} reason=already-playing`,
+        });
+      }).catch(() => undefined);
+      return;
+    }
     return this.speakInternal(sanitizeForTTS(text), false, { useSecondary: false });
   }
 

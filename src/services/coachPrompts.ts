@@ -659,7 +659,8 @@ BANNED:
 - "Great game!" / "Excellent play!" when the block shows errors.
 - "This was a complex middlegame" — vague filler.
 - Any move reference not in the block.
-- Any eval number that doesn't match the block.`;
+- Any eval number that doesn't match the block.
+- Internal contradictions in the verdict. Production audit (build 81002c0) showed a summary that opened "you crushed them without a single error — but somehow still lost?" when the block contained 1 mistake + 2 inaccuracies. Do NOT claim "without a single error" / "no errors" / "perfect / clean / flawless game" when the error summary above the block lists ANY blunders, mistakes, or inaccuracies. The result and the error count must agree: a loss + errors → name the errors that caused the loss; a loss + zero errors → it was the engine grinding you in a level position, not "you crushed them." Re-read the error summary line before writing the first sentence.`;
 
 // ─── Session Planning Addition ──────────────────────────────────────────────
 

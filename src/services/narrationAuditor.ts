@@ -70,6 +70,7 @@ const MATE_CLAIM_RE = /\b(?:checkmate|mate\s+in\s+\d+|forced\s+mate)\b/i;
 export function auditNarration(
   fen: string,
   narration: string,
+  moveHistorySan?: string[],
 ): AuditFlag[] {
   const flags: AuditFlag[] = [];
   if (!narration || narration.length < 10) return flags;
@@ -79,6 +80,19 @@ export function auditNarration(
     chess = new Chess(fen);
   } catch {
     return flags; // Bad FEN — nothing to check against.
+  }
+
+  // Past-tense recap allowance — narration legitimately references the
+  // move just played AND prior moves in the game. The auditor checks
+  // legality against the CURRENT FEN, so a SAN like "Qh5" (the move
+  // just played) is "illegal" in the post-move position even though
+  // the narration is correctly describing what happened. Build to a
+  // tolerant set: SAN that appears in move history is past-tense and
+  // shouldn't be flagged. Strip check (+) / mate (#) suffixes for the
+  // comparison so "Qh5+" in history matches "Qh5" in narration.
+  const recapAllowed = new Set<string>();
+  for (const san of moveHistorySan ?? []) {
+    recapAllowed.add(san.replace(/[+#]$/, ''));
   }
 
   // 1. Piece-on-square claims — dedup by (piece, square) pair so
@@ -173,6 +187,11 @@ export function auditNarration(
     // letter prefix (Nc3, Bxf7, etc.) since those ARE unambiguous
     // move claims.
     if (!/^[NBRQK]/.test(candidate)) continue;
+    // Past-tense recap: narration like "you played Qh5" is referring
+    // to a move already in the history, so the post-move position
+    // doesn't need to admit that SAN as legal NOW. Skip when the SAN
+    // matches any move the game has already played.
+    if (recapAllowed.has(candidate)) continue;
     if (!legal.has(candidate) && !legal.has(`${candidate}+`) && !legal.has(`${candidate}#`)) {
       flags.push({
         kind: 'illegal-san',
@@ -202,8 +221,9 @@ export async function recordAudit(
   fen: string,
   narration: string,
   context?: string,
+  moveHistorySan?: string[],
 ): Promise<void> {
-  const flags = auditNarration(fen, narration);
+  const flags = auditNarration(fen, narration, moveHistorySan);
   if (flags.length === 0) return;
   await Promise.all(
     flags.map((flag) =>
