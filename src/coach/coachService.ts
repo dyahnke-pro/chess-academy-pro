@@ -504,7 +504,22 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       await Promise.allSettled(readCalls.map(dispatchOne));
     }
     // Phase 2: write tools sequentially, in original emit order.
+    // Refresh liveFen BEFORE each write tool so a prior write in the
+    // same trip is visible to the next. Production audit (build
+    // 21c79dd) caught the brain emitting [set_board_position(endgame
+    // FEN), play_move(Kd5)] in one trip; play_move's pre-validation
+    // read the STALE starting FEN (snapshotted at trip 1 setup) and
+    // rejected Kd5 as illegal because there's no king at d5 in the
+    // starting position. The fix mirrors the trip>1 refresh above —
+    // any previous write (set_board_position, play_move,
+    // take_back_move, reset_board) updates the surface's
+    // liveFenRef, and this getter pulls the latest value before the
+    // next write validates against it.
     for (const call of writeCalls) {
+      if (options.getLiveFen) {
+        const fresh = options.getLiveFen();
+        if (fresh) ctx.liveFen = fresh;
+      }
       await dispatchOne(call);
     }
 
