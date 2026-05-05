@@ -63,22 +63,24 @@ export const quizUserForMoveTool: Tool = {
         : [];
 
     if (!ctx?.onQuizUserForMove) {
-      // Constitution: graceful no-op when the surface didn't wire
-      // the callback. See navigateToRouteTool for the canonical
-      // pattern.
+      // Production audit (build 26bbad4) caught the brain calling
+      // quiz_user_for_move on /coach/teach where no UI is wired —
+      // the old "ok=true stub" path made the brain believe it had
+      // quizzed the student and continue narrating as if a quiz
+      // had happened. The student saw nothing. Return ok=false so
+      // the brain knows the quiz didn't actually run and either
+      // explains the limitation, skips the quiz, or asks the
+      // question conversationally in chat instead.
       void logAppAudit({
         kind: 'coach-brain-tool-called',
         category: 'subsystem',
         source: 'quizUserForMoveTool.execute',
-        summary: `STUB quiz_user_for_move expectedSan=${expectedSan} (no onQuizUserForMove callback)`,
+        summary: `quiz_user_for_move unsupported on this surface (no onQuizUserForMove wired)`,
       });
       return {
-        ok: true,
-        result: {
-          stub: true,
-          requested: { expectedSan, prompt, allowAlternatives },
-          reason: 'no onQuizUserForMove callback on this surface',
-        },
+        ok: false,
+        error:
+          'quiz_user_for_move is not supported on this surface. The student will not see a quiz prompt. Instead, ask the question conversationally in your text response and wait for them to reply with the move — they can play it on the board and tell you what they did.',
       };
     }
 

@@ -174,7 +174,7 @@ If the student is in play mode (they explicitly chose to play, OR theory is cove
 4. **Forward-looking prompt.** Point at a decision. "What's your plan against my queenside?" "Three candidate moves here — see if you can spot mine."
 
 TOOLS — pull them aggressively, not as a fallback:
-   • \`stockfish_eval\` — required before any tactical eval claim AND before drawing any arrow (arrows are color-mapped to engine ranks: green=#1, blue=#2, yellow=#3, red=blunder). Do not eyeball arrows.
+   • \`stockfish_eval\` — required before any tactical eval claim AND before drawing any arrow (arrows are color-mapped to engine ranks: green=#1, blue=#2, yellow=#3, red=blunder). Do not eyeball arrows. ONE call per FEN per turn — production audit (build cc28e2e) caught the brain emitting \`stockfish_eval, stockfish_eval, play_move\` on the same FEN in one trip; the second eval was redundant (cached, no new info). Trust the first result; don't re-verify yourself.
    • \`local_opening_book\` — first stop for canonical opening lines. Always cheap, always available. Use it to verify FENs before set_board_position and to pull the canonical move sequence.
    • \`lichess_opening_lookup\`, \`lichess_master_games\` — explorer + master-games data. Try these every opening lesson; even if the proxy is rate-limited and returns 401 (an intermittent Vercel/Lichess issue), the brain should TRY before falling back to local_opening_book. The audit confirms a recent session (build 820c840) that skipped Lichess entirely and gave a less-grounded lesson — don't repeat that. If the call errors, acknowledge briefly and continue with stockfish_eval + local_opening_book; don't bail on the lesson.
    • \`lichess_game_export\` — fetch a specific master PGN when you cite a famous game. "Spielmann played this in 1925" lands harder when you can show the actual moves.
@@ -337,8 +337,20 @@ function formatMemoryBlock(memory: CoachMemorySnapshot): string {
     }
   }
   if (memory.conversationHistory.length > 0) {
+    const total = memory.conversationHistory.length;
     const recent = memory.conversationHistory.slice(-MAX_RECENT_MESSAGES);
-    parts.push('- Recent conversation:');
+    // Signal truncation explicitly so the brain knows there's earlier
+    // context it can't see (production audit caught long sessions
+    // silently losing the student's stated goal because it was set
+    // 20+ turns ago and got windowed out of the visible 12). When
+    // truncated, the brain can either ask the student to restate
+    // ("remind me what you wanted to focus on") or hedge claims that
+    // depend on early-session decisions.
+    const header =
+      total > MAX_RECENT_MESSAGES
+        ? `- Recent conversation (showing last ${MAX_RECENT_MESSAGES} of ${total} — earlier turns truncated):`
+        : '- Recent conversation:';
+    parts.push(header);
     for (const m of recent) {
       const trigger = m.trigger ? ` [${m.trigger}]` : '';
       parts.push(`  • [${m.surface}/${m.role}${trigger}] ${m.text.slice(0, 200)}`);
