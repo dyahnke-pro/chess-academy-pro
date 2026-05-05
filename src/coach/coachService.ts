@@ -515,12 +515,50 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     // take_back_move, reset_board) updates the surface's
     // liveFenRef, and this getter pulls the latest value before the
     // next write validates against it.
+    // Track play_move rejections in this trip. After the second one,
+    // short-circuit subsequent play_move calls with a stronger error
+    // that breaks the brain out of the "demo by sequencing play_move"
+    // pattern. Production audit (build 42fb9a0) caught the brain
+    // emitting 9 sequential play_move calls in one trip on a "Vienna
+    // trap" lesson — every one rejected (sovereignty + illegal-move
+    // chain) — instead of using start_walkthrough_for_opening. The
+    // prompt rule wasn't enough; this is the code-level backstop.
+    let playMoveRejectionsThisTrip = 0;
     for (const call of writeCalls) {
       if (options.getLiveFen) {
         const fresh = options.getLiveFen();
         if (fresh) ctx.liveFen = fresh;
       }
+      // Break the cascade: if play_move has already been rejected
+      // twice this trip, refuse subsequent play_move calls with
+      // explicit redirect guidance. Other tools (set_board_position,
+      // take_back_move, etc.) pass through normally.
+      if (call.name === 'play_move' && playMoveRejectionsThisTrip >= 2) {
+        const error =
+          `play_move SHORT-CIRCUITED — this trip has already had ${playMoveRejectionsThisTrip} play_move rejections. ` +
+          `STOP attempting to walk through a sequence via play_move. play_move is for ONE move on YOUR color's turn during practical play, not a way to enact hypothetical lines. ` +
+          `If the student asked for a guided opening lesson ("teach me [opening]" / "show me the trap"), call start_walkthrough_for_opening with the opening name — that routes them to a surface where each move animates sequentially. ` +
+          `If you just want to show one position to discuss, call set_board_position ONCE with the FEN and explain in prose + [BOARD: arrow] markers.`;
+        toolResults.push({ name: call.name, ok: false, error });
+        void logAppAudit({
+          kind: 'tool-call-error',
+          category: 'subsystem',
+          source: 'coachService.ask',
+          summary: `play_move short-circuited after ${playMoveRejectionsThisTrip} rejections this trip`,
+          details: JSON.stringify({ id: call.id, args: call.args, rejectionsThisTrip: playMoveRejectionsThisTrip }),
+        });
+        continue;
+      }
+      const beforeLen = toolResults.length;
       await dispatchOne(call);
+      // Count rejections of play_move only — other tool failures don't
+      // indicate the cascading-demo pattern.
+      if (call.name === 'play_move') {
+        const last = toolResults[toolResults.length - 1];
+        if (last && beforeLen < toolResults.length && !last.ok) {
+          playMoveRejectionsThisTrip += 1;
+        }
+      }
     }
 
     // If we have round-trips remaining AND we dispatched any tools,
