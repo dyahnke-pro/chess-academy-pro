@@ -275,31 +275,23 @@ export function CoachTeachPage(): JSX.Element {
     // Two-stage buffer: `markupBuffer` holds raw streamed chunks until
     // any in-flight `[[DIRECTIVE...]]` tag closes (sanitizeCoachStream
     // returns it as `pending`); `sentenceBuffer` collects sanitized
-    // prose for chat display. We do NOT speak every sentence — voice
-    // is reserved for an explicit `[VOICE: short summary]` marker the
-    // brain emits at the start of each response. The long teaching
-    // text streams to chat without flooding Polly with a 1000-char
-    // monologue. If the brain forgets the [VOICE:] marker, we fall
-    // back to speaking the first sentence after streaming completes.
+    // prose for sentence-by-sentence TTS dispatch. WO-COACH-TTS-STRIP-01.
     let markupBuffer = '';
     let sentenceBuffer = '';
     let displayBuffer = '';
-    // Raw stream buffer used solely for VOICE marker extraction. The
-    // brain emits ONE `[VOICE: ...]` marker per response containing a
-    // complete summary of the important info: what just happened on
-    // the board, positional/structural assessment, future plans. The
-    // voice speaks that summary in full while the chat shows the
-    // deeper teaching detail. We extract the first closed marker we
-    // see and ignore further VOICE markers in the same turn —
-    // rambling-by-multiple-markers is not the goal.
-    let voiceRawBuffer = '';
-    let voiceSpokenForTurn = false;
-    /** `[VOICE: summary]` — captures inner content lazily so the
-     *  marker closes on the first `]` rather than greedily consuming
-     *  past it. Multi-line content allowed because the summary itself
-     *  may span 3-4 sentences (positional, structural, plan). */
-    const VOICE_MARKER_RE = /\[VOICE:\s*([\s\S]*?)\]/g;
+    // Negative lookbehind on `\d` keeps SAN move numbers (e.g. "1.",
+    // "12.") from being treated as sentence terminators — without it
+    // Polly voices "1." / "Nc3 Nc6 3." / "Bc4" as separate utterances.
     const SENTENCE_END = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
+    // Track the last sentence queued so identical follow-ups across
+    // brain trips don't double-speak. Production audit (build 5df4252)
+    // showed "Your move." voiced TWICE when the brain emitted the
+    // same closing line in two consecutive trips of the same
+    // handleSubmit (trip 1 played a move + said "Done — your move.",
+    // trip 2 streamed "Your move." again as a tail). Polly fired both,
+    // 2ms apart. The dedupe just compares the formatted text and
+    // skips an exact repeat — distinct sentences with the same prefix
+    // ("Your move now." vs "Your move.") still play.
     let lastQueuedSentence = '';
     const queueSpeak = (raw: string): void => {
       const sentence = formatForSpeech(raw);
@@ -308,31 +300,20 @@ export function CoachTeachPage(): JSX.Element {
       lastQueuedSentence = sentence;
       speechChainRef.current = speechChainRef.current
         .then(() => {
+          // Skip if the page unmounted mid-response or a new turn
+          // superseded this one. NOT gen-checked — speakInternal
+          // bumps gen on every speak, which would falsely abort
+          // every link after the first.
           if (turnAbortRef.aborted) return;
+          // Polly-only — no Web Speech fallback. Production audit
+          // showed Polly cooldowns triggering Web Speech mid-chain,
+          // and Safari's speechSynth cancel-tail overlapped the next
+          // Polly sentence ("two voices"). Skipping the sentence
+          // audibly when Polly fails is preferable; chat bubble still
+          // shows the text. Polly recovers naturally after cooldown.
           return voiceService.speakForcedPollyOnly(sentence);
         })
         .catch(() => undefined);
-    };
-    /** Scan the raw stream for closed `[VOICE: ...]` markers. Speaks
-     *  the first one we find; subsequent markers in the same turn are
-     *  ignored (one spoken summary per turn). Called from onChunk on
-     *  every delta so voice fires the moment the marker closes. */
-    const tryExtractVoiceMarker = (): void => {
-      if (voiceSpokenForTurn) return;
-      VOICE_MARKER_RE.lastIndex = 0;
-      const match = VOICE_MARKER_RE.exec(voiceRawBuffer);
-      if (!match) return;
-      const inner = match[1].trim();
-      if (!inner) return;
-      voiceSpokenForTurn = true;
-      void logAppAudit({
-        kind: 'coach-voice-marker-extracted',
-        category: 'subsystem',
-        source: 'CoachTeachPage.tryExtractVoiceMarker',
-        summary: `extracted [VOICE: ...] block (${inner.length} chars)`,
-        details: JSON.stringify({ length: inner.length, preview: inner.slice(0, 80) }),
-      });
-      queueSpeak(inner);
     };
 
     // Resolve the live FEN with the following priority:
@@ -346,7 +327,7 @@ export function CoachTeachPage(): JSX.Element {
     const overrideFen = opts?.fenOverride;
     const liveGame = gameRef.current;
     const fen = overrideFen ?? liveGame.fen;
-    const fenTurn: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+    const fenTurn = (fen.split(' ')[1] === 'b' ? 'black' : 'white') as 'white' | 'black';
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
@@ -419,15 +400,6 @@ export function CoachTeachPage(): JSX.Element {
             return { ok: true };
           },
           onChunk: (chunk: string) => {
-            // Two streams off each delta:
-            //   1. voiceRawBuffer — looks for `[VOICE: ...]` markers
-            //      and queues the FIRST one's content for speech.
-            //   2. markupBuffer / displayBuffer — sanitized prose for
-            //      the chat bubble. The SAME `[VOICE: ...]` marker is
-            //      stripped here by SINGLE_MARKUP_RE so it doesn't
-            //      double-show in the transcript.
-            voiceRawBuffer += chunk;
-            tryExtractVoiceMarker();
             markupBuffer += chunk;
             const { safe, pending } = sanitizeCoachStream(markupBuffer);
             markupBuffer = pending;
@@ -438,49 +410,23 @@ export function CoachTeachPage(): JSX.Element {
             // Render in chat — sanitized only.
             displayBuffer += safe;
             setStreaming(displayBuffer);
+            // Append to sentence buffer for TTS dispatch.
             sentenceBuffer += safe;
-            // Drain sentence terminators only to keep the buffer
-            // bounded. We do NOT queueSpeak per sentence — voice is
-            // routed exclusively through the `[VOICE: ...]` marker.
             let match: RegExpExecArray | null;
             while ((match = SENTENCE_END.exec(sentenceBuffer)) !== null) {
+              queueSpeak(match[1].trim());
               sentenceBuffer = sentenceBuffer.slice(match.index + match[1].length);
             }
           },
         },
       );
 
-      // Final attempt to extract `[VOICE: ...]` from the full raw
-      // stream in case the marker straddled a chunk boundary that the
-      // per-delta scan missed. Then a fallback: if the brain forgot
-      // to emit `[VOICE: ...]` entirely, speak the first sentence of
-      // the final response so the student isn't left in silence.
-      tryExtractVoiceMarker();
-      if (!voiceSpokenForTurn) {
-        const finalText = sanitizeCoachText(result.text);
-        const firstSentenceMatch = SENTENCE_END.exec(finalText);
-        const firstSentence = firstSentenceMatch
-          ? firstSentenceMatch[1].trim()
-          : finalText.trim();
-        if (firstSentence) {
-          voiceSpokenForTurn = true;
-          void logAppAudit({
-            kind: 'coach-voice-marker-extracted',
-            category: 'subsystem',
-            source: 'CoachTeachPage.fallback',
-            summary: `[VOICE:] missing — fallback spoke first sentence (${firstSentence.length} chars)`,
-            details: JSON.stringify({ length: firstSentence.length, preview: firstSentence.slice(0, 80) }),
-          });
-          queueSpeak(firstSentence);
-        } else {
-          void logAppAudit({
-            kind: 'coach-voice-marker-extracted',
-            category: 'subsystem',
-            source: 'CoachTeachPage.fallback',
-            summary: '[VOICE:] missing AND result.text empty — voice silent for this turn',
-          });
-        }
-      }
+      // Flush: anything left in the markup buffer is either an
+      // unclosed marker (which we don't want to speak/render) or
+      // trailing prose. Sanitize once more to drop any unclosed
+      // markup, then flush as a final sentence.
+      const tail = sanitizeCoachText(markupBuffer + sentenceBuffer);
+      if (tail) queueSpeak(tail);
 
       // Parse [BOARD: arrow:e2-e4:green] / highlight: / clear markers
       // out of the LLM's response and render them on the board. Each

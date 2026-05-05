@@ -230,7 +230,12 @@ export async function generateMoveCommentary(input: MoveCommentaryInput): Promis
     // against the FEN; (2) detectSanitizerLeak catches piece-letter
     // shorthand that would become "hanging P on f3" at the speaker.
     // Independent failure modes, both fire-and-forget.
-    void recordAudit(input.gameAfter.fen(), cleaned, 'move-commentary');
+    // Pass the move history so past-tense recap SAN ("you played Qh5"
+    // referring to the move just made) doesn't trip the illegal-SAN
+    // false positive — the auditor only flags SAN that are illegal in
+    // the current position AND haven't been played already.
+    const historySan = input.gameAfter.history();
+    void recordAudit(input.gameAfter.fen(), cleaned, 'move-commentary', historySan);
     if (detectSanitizerLeak(cleaned)) {
       void logAppAudit({
         kind: 'sanitizer-leak',

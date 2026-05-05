@@ -540,6 +540,16 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
   // asked for silence except on actual events.
   const openingIntroSpokenRef = useRef<boolean>(false);
 
+  // Abort flag for the in-flight commentary streaming chain. When the
+  // game ends, the post-game review opens and tries to play its intro,
+  // but the previous move's commentary may still be chained through
+  // dozens of awaited speakForced calls (~5 minutes of speech for a
+  // 1600-char response). Setting `.aborted = true` makes each chain
+  // step skip its speak before yielding to the next, so the review
+  // intro doesn't compete with leftover commentary. Reset to a fresh
+  // object whenever the game restarts.
+  const commentaryAbortRef = useRef<{ aborted: boolean }>({ aborted: false });
+
   // Requested opening — read live from the memory store. Post-tightening
   // (WO-BRAIN-04) the move-selector no longer derives a parallel SAN
   // array here; the brain consults `local_opening_book` itself when it
@@ -1520,6 +1530,15 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
   // Check for game over — transition to 'gameover' first to show final position
   useEffect(() => {
     if (game.isGameOver && gameState.status === 'playing') {
+      // Cut off any in-flight commentary speech chain so the post-game
+      // review intro doesn't compete with leftover sentences from the
+      // previous move's narration. The abort flag short-circuits each
+      // chained .then(), and voiceService.stop() drops the active
+      // utterance immediately.
+      commentaryAbortRef.current.aborted = true;
+      commentaryAbortRef.current = { aborted: false };
+      voiceService.stop();
+
       const result: 'win' | 'loss' | 'draw' = game.isCheckmate
         ? (game.turn === 'w' && playerColor === 'white' ? 'loss' : 'win')
         : 'draw';
@@ -2846,7 +2865,11 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
             let buffer = '';
             let chain: Promise<void> | null = null;
             const SENTENCE_END = /([^.!?\n]+[.!?\n])(?=\s|$)/;
+            // Capture the abort token at chain-construction time so each
+            // step checks the SAME object the game-over effect flips.
+            const abortToken = commentaryAbortRef.current;
             return (chunk: string): void => {
+              if (abortToken.aborted) return;
               buffer += chunk;
               let match: RegExpExecArray | null;
               while ((match = SENTENCE_END.exec(buffer)) !== null) {
@@ -2857,7 +2880,10 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
                     chain = voiceService.speakIfFree(sentence).catch(() => undefined);
                   } else {
                     chain = chain
-                      .then(() => voiceService.speakForced(sentence))
+                      .then(() => {
+                        if (abortToken.aborted) return undefined;
+                        return voiceService.speakForced(sentence);
+                      })
                       .catch(() => undefined);
                   }
                 }
