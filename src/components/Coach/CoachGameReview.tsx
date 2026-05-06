@@ -597,7 +597,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // handle their own narration and voice. Running both simultaneously causes
   // duplicate fetches, interleaved streaming chunks, and a mismatch between
   // the spoken text (template) and displayed text (AI analysis).
+  //
+  // Audit-driven (Audit 1, build 6459def+ Finding 49): also gate on
+  // `reviewPhase === 'analysis'`. The walk phase is the default review
+  // surface today; the analysis-phase JSX that consumed `aiCommentary`
+  // was deleted in c063d0e, so firing this effect during walk mode
+  // burns a 600-token interactive_review call whose output is never
+  // displayed. The effect now only runs when the user has explicitly
+  // entered analysis phase via "Full analysis" or autoStartReview.
   useEffect(() => {
+    if (reviewPhase !== 'analysis') return;
     if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return;
     if (autoReviewActive || (guidedLessonActive && !guidedStopped)) {
       // Auto-advance modes manage their own commentary; clear stale AI text
@@ -696,7 +705,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally depends on moveIndex, not full currentMove
-  }, [reviewState.currentMoveIndex, reviewState.mode, autoReviewActive, guidedLessonActive, guidedStopped]);
+  }, [reviewPhase, reviewState.currentMoveIndex, reviewState.mode, autoReviewActive, guidedLessonActive, guidedStopped]);
 
   // ─── Ask About Position handler ────────────────────────────────────────────
   const handleAskSend = useCallback((question: string) => {
