@@ -2861,9 +2861,26 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
           // so it doesn't clip an in-flight phase narration; once the
           // chain is established, every subsequent sentence chains via
           // speakForced (no Web Speech overlap, no dropped sentences).
+          //
+          // Audit-driven fix: when the first-sentence speakIfFree
+          // DROPPED (because Polly was still finishing a prior
+          // narration), the original chain still proceeded to
+          // speakForced for sentence 2 — which CUT OFF the very thing
+          // speakIfFree was trying to protect. The whole point of
+          // speakIfFree is to defer to in-flight speech; if it
+          // dropped, every subsequent sentence in this batch must
+          // drop too. Production audit (build 6459def+) Finding 167
+          // caught this as a `tts-concurrent-speak prevTier=polly`
+          // event mid-game when the post-move commentary stream
+          // arrived while a prior phase narration was still playing.
           onStream: (() => {
             let buffer = '';
             let chain: Promise<void> | null = null;
+            // True after the first sentence's speakIfFree was
+            // dropped; subsequent sentences from the same batch are
+            // also skipped so we don't undo the politely-deferred
+            // semantic.
+            let abandoned = false;
             // SENTENCE_END_RE imported from sanitizeCoachText — shared
             // across all Coach streaming dispatchers post audit #29.
             // The `(?<!\d)` lookbehind keeps "+0.8" / "3.Bc4" atomic;
@@ -2880,9 +2897,17 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
                 // from match.index would drop it silently.
                 const endIdx = match.index + match[1].length;
                 const sentence = buffer.slice(0, endIdx).trim();
-                if (sentence) {
+                if (sentence && !abandoned) {
                   streamedAnything = true;
                   if (!chain) {
+                    // Snapshot whether anything's playing BEFORE
+                    // speakIfFree mutates state. If it was busy,
+                    // speakIfFree drops silently; we honor that drop
+                    // by setting `abandoned` so the rest of the
+                    // batch stays quiet too.
+                    if (voiceService.isPlaying()) {
+                      abandoned = true;
+                    }
                     chain = voiceService.speakIfFree(sentence).catch(() => undefined);
                   } else {
                     chain = chain
