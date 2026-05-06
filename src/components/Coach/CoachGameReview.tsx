@@ -351,6 +351,24 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // without them, the student stays on the card with stats only.
       if (narration && narration.segments.length > 0) {
         setWalkNarration(narration);
+      } else {
+        // Audit-driven (#26): the empty-segments fallback used to be
+        // silent — paste-back audit logs showed nothing for "I tapped
+        // Review and got the summary card, not the walk." Now we
+        // log the skip with the segment count + ply count so a
+        // regression in generateReviewNarration is debuggable from
+        // the audit panel without DevTools.
+        void logAppAudit({
+          kind: 'review-walk-skipped',
+          category: 'subsystem',
+          source: 'CoachGameReview.walkNarration',
+          summary: `walk UI skipped — ${narration?.segments.length ?? 0} segments for ${reviewMoveInputs.length} plies`,
+          details: JSON.stringify({
+            segmentCount: narration?.segments.length ?? 0,
+            plyCount: reviewMoveInputs.length,
+            hasIntro: Boolean(narration?.intro?.trim()),
+          }),
+        });
       }
     }).catch((err: unknown) => {
       const msg = err instanceof Error ? err.message : String(err);

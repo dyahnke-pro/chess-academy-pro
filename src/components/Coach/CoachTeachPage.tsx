@@ -291,6 +291,20 @@ export function CoachTeachPage(): JSX.Element {
   // consistent with the manual move path.
 
   const handlePlayMove = useCallback((san: string): { ok: boolean; reason?: string } => {
+    // Audit rejections so paste-back logs surface "the brain tried X
+    // and the surface refused" without needing DevTools. Same shape
+    // CoachGamePage uses (audit #12).
+    const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
+      if (!result.ok) {
+        void logAppAudit({
+          kind: 'coach-tool-callback-rejected',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handlePlayMove',
+          summary: `san=${san} reason=${result.reason ?? 'unknown'}`,
+        });
+      }
+      return result;
+    };
     try {
       // Validate against liveFenRef (the SYNCHRONOUS post-move FEN)
       // rather than gameRef.current.fen (which only updates on render).
@@ -312,29 +326,40 @@ export function CoachTeachPage(): JSX.Element {
       const fenSideToMove = liveFen.split(' ')[1] === 'w' ? 'white' : 'black';
       const studentColor = playerColor;
       if (fenSideToMove === studentColor) {
-        return {
+        return finish({
           ok: false,
           reason: `Refused: it's ${studentColor} to move and the student plays ${studentColor}. You may not move the student's pieces. For hypothetical demos, use [BOARD: arrow:from-to:color] arrows OR set_board_position to a separate position. play_move is reserved for YOUR moves on your own turns.`,
-        };
+        });
       }
       const probe = new Chess(liveFen);
       const verboseMoves = probe.moves({ verbose: true });
       const match = verboseMoves.find((m) => m.san === san);
       if (!match) {
-        return { ok: false, reason: `chess.js rejected "${san}" from FEN ${liveFen}: Invalid move: ${san}` };
+        return finish({ ok: false, reason: `chess.js rejected "${san}" from FEN ${liveFen}: Invalid move: ${san}` });
       }
       const result = gameRef.current.makeMove(match.from, match.to, match.promotion);
-      if (!result) return { ok: false, reason: `makeMove failed for ${san}` };
+      if (!result) return finish({ ok: false, reason: `makeMove failed for ${san}` });
       // Write the post-move FEN back so the next trip's getLiveFen
       // reads the up-to-date board, even before React re-renders.
       liveFenRef.current = result.fen;
-      return { ok: true };
+      return finish({ ok: true });
     } catch (err) {
-      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
     }
   }, [playerColor]);
 
   const handleTakeBack = useCallback((count: number): { ok: boolean; reason?: string } => {
+    const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
+      if (!result.ok) {
+        void logAppAudit({
+          kind: 'coach-tool-callback-rejected',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleTakeBack',
+          summary: `count=${count} reason=${result.reason ?? 'unknown'}`,
+        });
+      }
+      return result;
+    };
     try {
       for (let i = 0; i < count; i++) {
         gameRef.current.undoMove();
@@ -342,20 +367,32 @@ export function CoachTeachPage(): JSX.Element {
       // Re-derive the post-takeback FEN from the live game object so
       // subsequent trips see the rolled-back state.
       liveFenRef.current = gameRef.current.fen;
-      return { ok: true };
+      return finish({ ok: true });
     } catch (err) {
-      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
     }
   }, []);
 
   const handleSetBoardPosition = useCallback((newFen: string): { ok: boolean; reason?: string } => {
+    const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
+      if (!result.ok) {
+        void logAppAudit({
+          kind: 'coach-tool-callback-rejected',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSetBoardPosition',
+          summary: `reason=${result.reason ?? 'unknown'}`,
+          fen: newFen,
+        });
+      }
+      return result;
+    };
     try {
       new Chess(newFen);
       const ok = gameRef.current.loadFen(newFen);
       if (ok) liveFenRef.current = newFen;
-      return ok ? { ok: true } : { ok: false, reason: 'loadFen returned false' };
+      return ok ? finish({ ok: true }) : finish({ ok: false, reason: 'loadFen returned false' });
     } catch (err) {
-      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+      return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
     }
   }, []);
 
