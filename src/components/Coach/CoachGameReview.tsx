@@ -174,6 +174,27 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // navigated away) and gets discarded. Fixes the race where two
   // rapid "Show Best Line" clicks spawn parallel analyses.
   const bestLineRevisionRef = useRef(0);
+
+  // Audit-driven (review walk #4): tracks whether this component is
+  // still mounted. The walk-prep effect's generateReviewNarration call
+  // can take 5–60s; if the user navigates back to the list and opens
+  // a different game before it resolves, the orphan Promise's .then
+  // would call setWalkNarration on the unmounted component (React
+  // warning) AND any partial-state mutation could land on the next
+  // game's UI before the new prep call completes. Production audit
+  // (Audit 3, build 6459def+ Finding 41) showed `43 of 43 plies
+  // narrated` landing on a 9-ply game's URL — the prior 43-ply game's
+  // segments call leaked through on the new page. The mountedRef
+  // is set to false in an unmount-only cleanup; the .then/.catch
+  // guards check it and emit a cancellation audit instead of
+  // applying state.
+  const walkMountedRef = useRef(true);
+  useEffect(() => {
+    walkMountedRef.current = true;
+    return () => {
+      walkMountedRef.current = false;
+    };
+  }, []);
   const [bestLineActive, setBestLineActive] = useState(false);
   const [bestLineMoves, setBestLineMoves] = useState<string[]>([]); // UCI moves
   const [bestLineSans, setBestLineSans] = useState<string[]>([]); // SAN moves
@@ -346,6 +367,25 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       result,
       playerRating,
     }).then((narration) => {
+      // Audit-driven (review walk #4): bail if the component
+      // unmounted mid-call (user navigated away). React-level
+      // protection is also there — setWalkNarration on an unmounted
+      // component is a no-op + warning — but we want the explicit
+      // observability trail.
+      if (!walkMountedRef.current) {
+        void logAppAudit({
+          kind: 'review-walk-skipped',
+          category: 'subsystem',
+          source: 'CoachGameReview.walkNarration',
+          summary: `walk-prep result discarded — component unmounted (${narration?.segments.length ?? 0} segments)`,
+          details: JSON.stringify({
+            reason: 'component-unmounted-before-prep-resolved',
+            segmentCount: narration?.segments.length ?? 0,
+            plyCount: reviewMoveInputs.length,
+          }),
+        });
+        return;
+      }
       // Empty segments → keep the summary card visible as a
       // graceful fallback. The walk UI requires segments to render;
       // without them, the student stays on the card with stats only.
@@ -371,6 +411,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         });
       }
     }).catch((err: unknown) => {
+      if (!walkMountedRef.current) return;
       const msg = err instanceof Error ? err.message : String(err);
       void logAppAudit({
         kind: 'llm-error',
@@ -380,6 +421,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         details: msg,
       });
     }).finally(() => {
+      if (!walkMountedRef.current) return;
       setIsLoadingWalk(false);
     });
   }, [reviewPhase, isGuidedLesson, reviewMoveInputs, playerColor, openingName, result, playerRating, walkNarration, isLoadingWalk]);
