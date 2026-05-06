@@ -254,6 +254,15 @@ export interface AssembleEnvelopeArgs {
    *  an inline modulator the brain reads as "ceiling on response
    *  length." Default: 'normal'. */
   verbosity?: 'minimal' | 'normal' | 'verbose';
+  /** Per-call system-prompt addendum. Appended to the envelope's
+   *  identity AFTER the personality / verbosity / surface blocks.
+   *  Used by migrated /coach/play call sites that have a dynamic
+   *  prompt too specific for a generic surface block (move-commentary
+   *  varies by classification + verdict + opening + voice cue). The
+   *  spine's memory + live-state are still in the envelope's user
+   *  message — only the system-prompt tail is overridden. WO-COACH-
+   *  UNIFY-01. */
+  systemPromptAddition?: string;
   toolbelt: ToolDefinition[];
   input: CoachAskInput;
 }
@@ -324,6 +333,13 @@ export function assembleEnvelope(args: AssembleEnvelopeArgs): AssembledEnvelope 
   // tightness; users who want full lecture shape pick 'verbose'.
   const verbosity = args.verbosity ?? 'normal';
   identity = `${identity}\n\n${VERBOSITY_BLOCKS[verbosity]}`;
+  // Per-call addendum (WO-COACH-UNIFY-01). Lets a migrated surface
+  // append a dynamic block (e.g. move-commentary's classification +
+  // opening + voice-cue prose) without baking every variant into a
+  // surface-specific block here.
+  if (args.systemPromptAddition && args.systemPromptAddition.trim()) {
+    identity = `${identity}\n\n${args.systemPromptAddition.trim()}`;
+  }
   const memory = readMemorySnapshot();
   const appMap = loadRoutesManifest();
   const liveState = prepareLiveState(args.input.liveState);

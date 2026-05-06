@@ -147,6 +147,10 @@ export interface CoachServiceOptions {
    *  (tactic alerts ~200, move-commentary ~500) where the provider
    *  default of 2000 wastes budget. WO-COACH-UNIFY-01. */
   maxTokens?: number;
+  /** Per-call system-prompt addendum, appended to the envelope's
+   *  identity. Used by migrated surfaces with a prompt too dynamic
+   *  for a generic surface block. WO-COACH-UNIFY-01. */
+  systemPromptAddition?: string;
   /** Optional getter the spine calls between trips to refresh
    *  `ctx.liveFen`. Without this, the FEN snapshotted at handleSubmit
    *  time stays frozen across all round-trips — so when the brain
@@ -255,6 +259,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     mockery: options.mockery,
     flirt: options.flirt,
     verbosity: options.verbosity,
+    systemPromptAddition: options.systemPromptAddition,
     toolbelt: getToolDefinitions({ exclude: options.excludeTools }),
     input,
   });
