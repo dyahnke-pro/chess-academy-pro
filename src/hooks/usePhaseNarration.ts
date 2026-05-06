@@ -318,21 +318,27 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               },
             },
             {
-              task: 'position_analysis_chat',
-              // WO-COACH-UNIFY-01 audit-driven bump: legacy path used
-              // 600 tokens with a TIGHT system prompt (just
-              // PHASE_NARRATION_ADDITION). Spine envelope is heavier —
-              // identity + personality dials + memory snapshot + 200-msg
-              // conversation history + live state — and at 600 tokens
-              // deepseek-reasoner exhausts its budget on
-              // reasoning_content and emits zero content (production
-              // audit, build 4933e8e: TWO phase transitions returned
-              // text=0c, fallback fired, student heard the generic
-              // template instead of real analysis). 1500 gives the
-              // reasoner room to think AND emit prose without dragging
-              // total latency back into the 30s territory the original
-              // 600-cap was meant to prevent.
-              maxTokens: 1500,
+              task: 'chat_response',
+              // WO-COACH-UNIFY-01 audit-driven correction (build 82b6a28):
+              // bumping maxTokens 600 → 1500 didn't fix the empty-text
+              // regression — deepseek-reasoner was spending its whole
+              // token budget on reasoning_content and emitting zero
+              // content even at 1500 tokens, AND taking 21s (well past
+              // the 12s NARRATION_API_TIMEOUT_MS), so the fallback
+              // fired before the call returned. Root cause: the spine
+              // envelope is much heavier than legacy (full identity +
+              // 22 tools + memory snapshot + 200-msg history), and
+              // reasoning_content scales with input length.
+              //
+              // Fix: route phase-narration through `chat_response`
+              // task. Chat-tier models (deepseek-chat /
+              // claude-sonnet-4-6) don't have reasoning_content
+              // overhead — they use the full token budget for the
+              // actual narration. They're also faster, so the call
+              // lands inside the 12s wrapper. Phase narration is
+              // descriptive prose, not a tactical puzzle — chat
+              // models handle it fine.
+              maxTokens: 800,
               maxToolRoundTrips: 1,
               onChunk: (chunk: string) => {
                 if (token !== activeTokenRef.current) return;
