@@ -17,7 +17,10 @@ interface ReviewSummaryCardProps {
   moves: CoachGameMove[];
   narrativeSummary?: string;
   missedOpportunities?: number;
-  onStartReview: (depth: 'quick' | 'full') => void;
+  /** Optional now: when omitted, the Start Review buttons are hidden.
+   *  The prep-failed fallback in CoachGameReview opts out so users
+   *  don't get routed into the dormant analysis phase via this card. */
+  onStartReview?: (depth: 'quick' | 'full') => void;
   onPlayAgain: () => void;
   onBackToCoach: () => void;
   onNavigateToMistakes?: () => void;
@@ -181,7 +184,10 @@ export function ReviewSummaryCard({
         transition={{ duration: 0.3, delay: 0.4 }}
         className="w-full flex flex-col gap-2 pt-1"
       >
-        <div className="flex gap-2">
+        {/* Start Review buttons — hidden when onStartReview is omitted
+            (the CoachGameReview prep-failed fallback opts out so users
+            don't enter the dormant analysis phase via this card). */}
+        {onStartReview && <div className="flex gap-2">
           <button
             onClick={() => onStartReview('quick')}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
@@ -204,7 +210,7 @@ export function ReviewSummaryCard({
             Full Review
             <ChevronRight size={16} />
           </button>
-        </div>
+        </div>}
         <div className="flex gap-2">
           <button
             onClick={onPlayAgain}

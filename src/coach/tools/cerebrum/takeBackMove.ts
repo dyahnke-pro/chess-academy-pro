@@ -33,14 +33,6 @@ export const takeBackMoveTool: Tool = {
   },
   async execute(args, ctx) {
     // WO-FOUNDATION-02 trace harness.
-     
-    console.log('[TRACE-11b]', ctx?.traceId, 'takeBackMoveTool entered, count:', args.count, 'hasCallback:', typeof ctx?.onTakeBackMove);
-    void logAppAudit({
-      kind: 'trace-tool-entered',
-      category: 'subsystem',
-      source: 'takeBackMoveTool',
-      summary: `count=${typeof args.count === 'number' ? args.count : 'undef'} hasCallback=${typeof ctx?.onTakeBackMove === 'function'} traceId=${ctx?.traceId ?? 'none'}`,
-    });
 
     const rawCount = typeof args.count === 'number' ? args.count : 1;
     const count = Math.max(1, Math.floor(rawCount));

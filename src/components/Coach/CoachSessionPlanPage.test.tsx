@@ -7,7 +7,37 @@ import { buildUserProfile } from '../../test/factories';
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
     speak: vi.fn().mockResolvedValue(undefined),
+    speakForced: vi.fn().mockResolvedValue(undefined),
+    speakIfFree: vi.fn().mockResolvedValue(undefined),
+    speakAlert: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
+    getLastSpeakDiagnostic: vi.fn().mockReturnValue({
+      text: '',
+      tier: 'muted',
+      pollyAttempted: false,
+      pollyOk: null,
+      pollyStatus: null,
+      audioContextState: 'suspended',
+      error: null,
+      timestamp: 0,
+    }),
+  },
+}));
+
+// CoachSessionPlanPage now routes through coachService.ask (the
+// unified Coach Brain Spine). Mock simulates the streaming
+// onChunk callback so the UI fills with the expected text, then
+// resolves with the same text in `result.text`.
+vi.mock('../../coach/coachService', () => ({
+  coachService: {
+    ask: vi.fn().mockImplementation(async (
+      _input: unknown,
+      options: { onChunk?: (chunk: string) => void },
+    ) => {
+      const text = 'Here is your training plan for today.';
+      if (options.onChunk) options.onChunk(text);
+      return { text, toolCallIds: [], provider: 'deepseek' };
+    }),
   },
 }));
 

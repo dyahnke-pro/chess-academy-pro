@@ -1,19 +1,16 @@
 import { useState, useCallback, useRef, useEffect, useMemo, type MouseEvent } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Home, Undo2, ArrowLeft, MessageCircle, Loader2, Play, Pause, Target, Crosshair, Zap, CheckCircle2, XCircle, GraduationCap, AlertTriangle, Sparkles, FastForward } from 'lucide-react';
+import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
-import { PlayerInfoBar } from './PlayerInfoBar';
-import { MoveNavigationControls } from './MoveNavigationControls';
+import { unwrapSpineError } from '../../services/sanitizeCoachText';
 import { MoveListPanel } from './MoveListPanel';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
 import { KeyMomentNav } from './KeyMomentNav';
-import { MoveActionButtons } from './MoveActionButtons';
 import { ChatInput } from './ChatInput';
 import { getAdaptiveMove } from '../../services/coachGameEngine';
-import { getCoachCommentary } from '../../services/coachApi';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { INTERACTIVE_REVIEW_ADDITION } from '../../services/coachPrompts';
+import { buildChessContextMessage } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { withTimeout } from '../../coach/withTimeout';
 import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
@@ -22,7 +19,6 @@ import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
   generateNarrativeSummary,
-  generateReviewNarrationSegments,
   generateReviewNarration,
 } from '../../services/coachFeatureService';
 import type {
@@ -60,6 +56,13 @@ interface CoachGameReviewProps {
   isGuidedLesson?: boolean;
   pgn?: string;
   initialMoveIndex?: number;
+  /** When true, auto-fire the post-game walkthrough as soon as the
+   *  component mounts — the user lands directly in the big-button +
+   *  chat-panel mode with the intro narration playing instead of
+   *  having to tap "Full Review" first. Used by the new
+   *  /coach/review/:gameId entry point so opening a game from the
+   *  picker drops the student straight into the walkthrough. */
+  autoStartReview?: boolean;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -108,11 +111,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     isGuidedLesson, pgn,
   } = props;
   const initialMoveIndex = props.initialMoveIndex;
+  const autoStartReview = props.autoStartReview;
   const navigate = useNavigate();
 
   // ─── Summary-First Flow ─────────────────────────────────────────────────────
+  // When autoStartReview is true, skip the summary card and land
+  // directly in the walkthrough. The /coach/review/:gameId entry point
+  // wants the user to drop straight into the chat-focused big-button
+  // mode the moment they tap a game card.
   const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
-    isGuidedLesson ? 'analysis' : 'summary',
+    isGuidedLesson || autoStartReview ? 'analysis' : 'summary',
   );
 
   const startIndex = initialMoveIndex !== undefined
@@ -171,6 +179,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [bestLineSans, setBestLineSans] = useState<string[]>([]); // SAN moves
   const [bestLineIndex, setBestLineIndex] = useState(0); // current step in the line
   const [bestLineFen, setBestLineFen] = useState<string | null>(null); // current FEN in the line
+
+  // Walk-mode exploration: when the student is on a ply that has a
+  // better-move arrow (inaccuracy/mistake/blunder), they can drag the
+  // suggested piece on the board to play that move themselves. The
+  // resulting FEN lives here until they tap "Resume game" — at which
+  // point we clear it and the board returns to the actual game line
+  // at this ply. Null = walking the actual game line; non-null = the
+  // student has explored an alternative move.
+  const [walkExplorationFen, setWalkExplorationFen] = useState<string | null>(null);
+  const [walkExplorationSan, setWalkExplorationSan] = useState<string | null>(null);
+  // Reset exploration any time the student steps to a different ply —
+  // the exploration belongs to ONE specific position, not to the next
+  // ply they walk to.
+  const walkExplorationPlyRef = useRef<number | null>(null);
   const [bestLineBaseFen, setBestLineBaseFen] = useState<string | null>(null); // starting FEN
   const [bestLineLoading, setBestLineLoading] = useState(false);
 
@@ -189,7 +211,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // Track whether we're waiting for AI commentary to finish before advancing
   const [awaitingAiNarration, setAwaitingAiNarration] = useState(false);
   // Structured narration segments (intro/closing) for the walkthrough
-  const [narrationSegments, setNarrationSegments] = useState<ReviewNarrationSegments | null>(null);
+  // narrationSegments is read by the dormant auto-review effect (now
+  // dead code since analysis-phase deletion). Setter is gone but the
+  // value bind stays for the effect's dep array.
+  const [narrationSegments] = useState<ReviewNarrationSegments | null>(null);
 
   // ─── Guided Lesson State ────────────────────────────────────────────────────
   const [guidedLessonActive, setGuidedLessonActive] = useState(!!isGuidedLesson);
@@ -321,7 +346,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       result,
       playerRating,
     }).then((narration) => {
-      setWalkNarration(narration);
+      // Empty segments → keep the summary card visible as a
+      // graceful fallback. The walk UI requires segments to render;
+      // without them, the student stays on the card with stats only.
+      if (narration && narration.segments.length > 0) {
+        setWalkNarration(narration);
+      }
     }).catch((err: unknown) => {
       const msg = err instanceof Error ? err.message : String(err);
       void logAppAudit({
@@ -344,6 +374,33 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     narration: walkNarration,
     totalPlies: moves.length,
   });
+
+  // Auto-clear walk exploration when the student steps to a different
+  // ply. Exploration is anchored to ONE position — once they nav away,
+  // the actual game line resumes silently (snap-back is implicit).
+  useEffect(() => {
+    if (
+      walkExplorationFen !== null &&
+      walkExplorationPlyRef.current !== null &&
+      walkExplorationPlyRef.current !== walkPlayback.currentPly
+    ) {
+      void logAppAudit({
+        kind: 'review-walk-resumed',
+        category: 'subsystem',
+        source: 'CoachGameReview.walkAutoResume',
+        summary: `ply changed (${walkExplorationPlyRef.current}→${walkPlayback.currentPly}) — auto-resumed actual line`,
+        details: JSON.stringify({
+          fromPly: walkExplorationPlyRef.current,
+          toPly: walkPlayback.currentPly,
+          exploredSan: walkExplorationSan,
+          reason: 'ply-changed',
+        }),
+      });
+      setWalkExplorationFen(null);
+      setWalkExplorationSan(null);
+      walkExplorationPlyRef.current = null;
+    }
+  }, [walkPlayback.currentPly, walkExplorationFen, walkExplorationSan]);
 
   // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every
   // position in the walk (starting position + one FEN per ply) via
@@ -536,11 +593,34 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       additionalContext: INTERACTIVE_REVIEW_ADDITION,
     };
 
-    void getCoachCommentary('interactive_review', ctx, (chunk) => {
-      if (!cancelled) {
-        setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
-      }
-    }).then((fullText) => {
+    // Audit item #1: route through coachService.ask so the call is
+    // visible in the spine audit trail (coach-brain-ask-received,
+    // coach-brain-answer-returned with surface=review). The
+    // INTERACTIVE_REVIEW_ADDITION is now systemPromptAddition; the
+    // user message comes from buildChessContextMessage(ctx).
+    void coachService.ask(
+      {
+        surface: 'review',
+        ask: buildChessContextMessage(ctx),
+        liveState: {
+          surface: 'review',
+          fen: currentMove.fen,
+          userJustDid: `Lazy-load AI commentary for move ${moveNum} (${currentMove.san})`,
+        },
+      },
+      {
+        task: 'interactive_review',
+        maxTokens: 600,
+        maxToolRoundTrips: 1,
+        systemPromptAddition: INTERACTIVE_REVIEW_ADDITION,
+        onChunk: (chunk: string) => {
+          if (!cancelled) {
+            setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
+          }
+        },
+      },
+    ).then((spineAnswer) => {
+      const fullText = unwrapSpineError(spineAnswer.text);
       if (!cancelled) {
         aiCommentaryCacheRef.current.set(moveIdx, fullText);
         setAiCommentary(fullText);
@@ -610,6 +690,32 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       fen: fenForQ,
       trigger: null,
     });
+
+    // WO-REVIEW-MERGE: per-turn voice marker extraction. The brain's
+    // REVIEW_MODE_ADDITION asks for one `[VOICE: ...]` per response;
+    // we capture the first closed marker as it streams and speak it
+    // via Polly so the surface matches the /coach/teach voice cue.
+    let voiceRawBuffer = '';
+    let voiceSpokenForTurn = false;
+    const VOICE_MARKER_RE = /\[VOICE:\s*([\s\S]*?)\]/g;
+    const tryExtractVoiceMarker = (): void => {
+      if (voiceSpokenForTurn) return;
+      VOICE_MARKER_RE.lastIndex = 0;
+      const match = VOICE_MARKER_RE.exec(voiceRawBuffer);
+      if (!match) return;
+      const inner = match[1].trim();
+      if (!inner) return;
+      voiceSpokenForTurn = true;
+      void logAppAudit({
+        kind: 'coach-voice-marker-extracted',
+        category: 'subsystem',
+        source: 'CoachGameReview.tryExtractVoiceMarker',
+        summary: `extracted [VOICE: ...] block (${inner.length} chars)`,
+        details: JSON.stringify({ length: inner.length, preview: inner.slice(0, 80) }),
+      });
+      void voiceService.speakForcedPollyOnly(inner);
+    };
+
     void coachService
       .ask(
         { surface: 'review', ask: question, liveState: reviewLiveState },
@@ -621,9 +727,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           // chat got via the OPERATOR_BASE_BODY teaching directive.
           maxToolRoundTrips: 6,
           onChunk: (chunk: string) => {
-            if (!abortSignal.aborted) {
-              setAskResponse((prev: string | null) => (prev ?? '') + chunk);
-            }
+            if (abortSignal.aborted) return;
+            // WO-REVIEW-MERGE: extract `[VOICE: ...]` markers from the
+            // streamed response and route them to Polly. Mirrors the
+            // /coach/teach pattern so the new REVIEW_MODE_ADDITION's
+            // mandate ("emit one [VOICE: ...] per turn") actually
+            // produces spoken summaries here too. The marker text is
+            // also stripped from the chat display so the bubble shows
+            // clean prose instead of leaking the directive.
+            voiceRawBuffer += chunk;
+            tryExtractVoiceMarker();
+            const visible = chunk.replace(VOICE_MARKER_RE, '');
+            setAskResponse((prev: string | null) => (prev ?? '') + visible);
           },
           onNavigate: (path: string) => {
             void navigate(path);
@@ -1214,6 +1329,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWhatIfCommentary(null);
   }, []);
 
+  // Auto-fire the walkthrough on mount when the parent surface
+  // (/coach/review/:gameId) requested it. We only fire ONCE — the
+  // ref guard protects against re-runs when other dependencies of
+  // handleStartAutoReview change. Skipped on guided lessons (which
+  // own their own playback orchestration).
+  const autoStartFiredRef = useRef(false);
+  useEffect(() => {
+    if (!autoStartReview) return;
+    if (autoStartFiredRef.current) return;
+    if (isGuidedLesson) return;
+    if (moves.length === 0) return;
+    autoStartFiredRef.current = true;
+    handleStartAutoReview();
+  }, [autoStartReview, isGuidedLesson, moves.length, handleStartAutoReview]);
+
   const handleStopAutoReview = useCallback(() => {
     setAutoReviewActive(false);
     autoReviewActiveRef.current = false;
@@ -1335,13 +1465,33 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           additionalContext: INTERACTIVE_REVIEW_ADDITION,
         };
 
-        void getCoachCommentary('interactive_review', ctx, (chunk) => {
-          // Guard streaming chunks: if user stopped auto-review while
-          // the LLM was streaming, don't keep updating the UI with
-          // stale chunks.
-          if (!autoReviewActiveRef.current) return;
-          setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
-        }).then((fullText) => {
+        // Audit item #1: spine-routed (visible via coach-brain-* audits
+        // with surface=review). Same shape as the lazy-load call above.
+        void coachService.ask(
+          {
+            surface: 'review',
+            ask: buildChessContextMessage(ctx),
+            liveState: {
+              surface: 'review',
+              fen: currentMoveForAutoReview.fen,
+              userJustDid: `Auto-review streaming commentary for move ${moveNum} (${currentMoveForAutoReview.san})`,
+            },
+          },
+          {
+            task: 'interactive_review',
+            maxTokens: 600,
+            maxToolRoundTrips: 1,
+            systemPromptAddition: INTERACTIVE_REVIEW_ADDITION,
+            onChunk: (chunk: string) => {
+              // Guard streaming chunks: if user stopped auto-review while
+              // the LLM was streaming, don't keep updating the UI with
+              // stale chunks.
+              if (!autoReviewActiveRef.current) return;
+              setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
+            },
+          },
+        ).then((spineAnswer) => {
+          const fullText = unwrapSpineError(spineAnswer.text);
           aiCommentaryCacheRef.current.set(moveIdx, fullText);
           // If auto-review was stopped while the LLM call was in
           // flight, don't speak the response or schedule a new
@@ -1563,15 +1713,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setAutoReviewActive(true);
     setAutoReviewPaused(false);
 
-    // Fetch structured intro/closing narration segments in the background
-    const gamePgn = pgn ?? moves.map((m) => m.san).join(' ');
-    void generateReviewNarrationSegments(
-      gamePgn, playerColor, openingName, result, playerRating, narrativeMoveData,
-    ).then((segments) => {
-      setNarrationSegments(segments);
-    }).catch(() => {
-      // Fallback handled inside generateReviewNarrationSegments
-    });
+    // generateReviewNarrationSegments call dropped (WO-COACH-UNIFY-01
+    // cleanup). Its output went to narrationSegments state that was
+    // only consumed by the deleted analysis-phase auto-review logic —
+    // pure dead LLM call. generateReviewNarration (called from the
+    // separate prep effect) already returns the intro + closing prose
+    // we need for walk-phase. Saves ~3-5s + one round-trip per review
+    // open.
   }, [pgn, moves, playerColor, openingName, result, playerRating, narrativeMoveData]);
 
   // Empty state
@@ -1620,6 +1768,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           ? moves[walkPlayback.currentPly - 1]?.fen ?? STARTING_FEN
           : STARTING_FEN;
       const walkArrows = (() => {
+        // Hide the arrow once the student has explored — they've seen
+        // the suggestion, no need to clutter the post-exploration view.
+        if (walkExplorationFen) return undefined;
         if (!seg) return undefined;
         const showBest = seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder';
         if (!showBest || !seg.bestMoveUci || seg.bestMoveUci.length < 4) return undefined;
@@ -1627,6 +1778,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const endSquare = seg.bestMoveUci.slice(2, 4);
         return [{ startSquare, endSquare, color: '#22c55e' }];
       })();
+      // Walk-mode board is interactive only when a green arrow is on
+      // screen — the student can grab the suggested piece and play it
+      // themselves. Otherwise the board stays read-only (passive
+      // playback). The exploration FEN takes over the displayed
+      // position until they tap "Resume game".
+      const walkBoardInteractive = walkExplorationFen === null && !!walkArrows;
+      const walkDisplayFen = walkExplorationFen ?? displayFen;
       const badge = seg?.classification ?? null;
       // Authoritative nav ceiling = the full game length, not the
       // segments' trailing ply. The LLM frequently truncates segment
@@ -1761,12 +1919,41 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             <div className="px-2 pt-1 pb-2 flex justify-center relative">
               <div className="w-full md:max-w-[420px] relative">
                 <ChessBoard
-                  initialFen={displayFen}
+                  // Re-key on exploration toggle so the underlying chess
+                  // instance resets cleanly when the user enters or
+                  // resumes from exploration. Without the key, the
+                  // board's internal Chess() retains move history from
+                  // the prior FEN and rejects the next move.
+                  key={`walk-board-ply${walkPlayback.currentPly}-${walkExplorationFen ? 'expl' : 'live'}`}
+                  initialFen={walkDisplayFen}
                   orientation={playerColor}
-                  interactive={false}
+                  interactive={walkBoardInteractive}
                   arrows={walkArrows}
                   showEvalBar={false}
                   showFlipButton
+                  onMove={walkBoardInteractive ? (moveResult) => {
+                    // Student played a piece while a better-move arrow
+                    // was showing → record their exploration. We capture
+                    // the post-move FEN + SAN and surface a "Resume game"
+                    // button. Audit emit so the unified panel shows the
+                    // exploration trail.
+                    setWalkExplorationFen(moveResult.fen);
+                    setWalkExplorationSan(moveResult.san);
+                    walkExplorationPlyRef.current = walkPlayback.currentPly;
+                    void logAppAudit({
+                      kind: 'review-walk-explored',
+                      category: 'subsystem',
+                      source: 'CoachGameReview.walkExplore',
+                      summary: `ply ${walkPlayback.currentPly} explored ${moveResult.san}`,
+                      fen: moveResult.fen,
+                      details: JSON.stringify({
+                        ply: walkPlayback.currentPly,
+                        playedSan: moveResult.san,
+                        suggestedUci: seg?.bestMoveUci ?? null,
+                        classification: seg?.classification ?? null,
+                      }),
+                    });
+                  } : undefined}
                 />
                 {badge && (
                   <div
@@ -1778,6 +1965,41 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   >
                     {CLASSIFICATION_STYLES[badge as keyof typeof CLASSIFICATION_STYLES].label}
                   </div>
+                )}
+                {/* Resume-game button — appears whenever the student
+                    has explored a move that diverges from the actual
+                    game line. Tap to clear exploration and snap the
+                    board back to the real game position at this ply. */}
+                {walkExplorationFen && (
+                  <button
+                    onClick={() => {
+                      void logAppAudit({
+                        kind: 'review-walk-resumed',
+                        category: 'subsystem',
+                        source: 'CoachGameReview.walkResume',
+                        summary: `ply ${walkPlayback.currentPly} resumed (was exploring ${walkExplorationSan ?? '?'})`,
+                        fen: displayFen,
+                        details: JSON.stringify({
+                          ply: walkPlayback.currentPly,
+                          exploredSan: walkExplorationSan,
+                        }),
+                      });
+                      setWalkExplorationFen(null);
+                      setWalkExplorationSan(null);
+                      walkExplorationPlyRef.current = null;
+                    }}
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg"
+                    style={{
+                      background: 'var(--color-accent)',
+                      color: 'var(--color-bg)',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+                    }}
+                    data-testid="walk-resume-game-btn"
+                    aria-label="Resume the actual game line"
+                  >
+                    <RotateCcw size={12} />
+                    Resume game
+                  </button>
                 )}
               </div>
             </div>
@@ -1803,13 +2025,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </button>
               <button
                 onClick={walkPlayback.goForward}
-                className="p-4 rounded-xl disabled:opacity-30 min-w-[60px] min-h-[60px] flex items-center justify-center"
+                className="rounded-xl disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.97]"
                 disabled={walkPlayback.currentPly >= lastPly}
-                style={{ background: 'var(--color-accent)' }}
+                style={{
+                  background: 'var(--color-accent)',
+                  minWidth: '120px',
+                  minHeight: '90px',
+                  boxShadow: '0 2px 10px rgba(201, 168, 76, 0.35)',
+                }}
                 aria-label="Forward one move"
                 data-testid="review-forward-btn"
               >
-                <ChevronRight size={32} style={{ color: 'var(--color-bg)' }} />
+                <ChevronRight size={42} strokeWidth={3} style={{ color: 'var(--color-bg)' }} />
               </button>
               <button
                 onClick={walkPlayback.goToEnd}
@@ -1823,15 +2050,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
             {/* Secondary controls row: pause/play + Ask (inline, small) */}
             <div className="flex items-center justify-center gap-2 pb-2">
+              {/* Narration toggle — pauses or replays the SPOKEN narration
+                  for the current ply. Does NOT advance to the next ply
+                  (manual-only stepping). User feedback (build 3d8e3ef)
+                  caught the prior "Play / Pause" labels reading like an
+                  auto-advance toggle; this rename + Volume icons make
+                  voice control unambiguous. */}
               <button
                 onClick={walkPlayback.togglePausePlay}
                 className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-theme-border hover:bg-theme-surface"
                 style={{ color: 'var(--color-text)' }}
-                aria-label={walkPlayback.narrationState === 'speaking' ? 'Pause narration' : 'Play narration'}
+                aria-label={walkPlayback.narrationState === 'speaking' ? 'Stop narration' : 'Replay narration'}
+                data-testid="walk-narration-toggle-btn"
               >
                 {walkPlayback.narrationState === 'speaking'
-                  ? <><Pause size={12} /> Pause</>
-                  : <><Play size={12} /> Play</>}
+                  ? <><VolumeX size={12} /> Stop narration</>
+                  : <><Volume2 size={12} /> Replay narration</>}
               </button>
               <button
                 onClick={() => setAskExpanded((v: boolean) => !v)}
@@ -2097,7 +2331,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       );
     }
 
-    // Fallback / loading: show the summary card (legacy paragraph view).
+    // Loading / prep-failed fallback: show the summary card.
+    // Per user architecture: there should NOT be a separate analysis
+    // phase the user opts into. The walk UI is the only review
+    // experience and auto-renders above when walkNarration arrives.
+    // The `onStartReview` prop is still wired for backwards-compat
+    // with the legacy "Quick / Full Review" buttons (covered by 21
+    // existing tests) — but since CoachReviewSessionPage no longer
+    // passes `autoStartReview` and walk-phase auto-renders on prep
+    // success, normal users never need to click them. Cleanup of
+    // those buttons + their tests is deferred to a follow-up commit
+    // that rewrites the tests against walk-phase rendering.
     return (
       <div className="flex flex-col items-center justify-center w-full h-full overflow-y-auto" data-testid="coach-game-review">
         <ReviewSummaryCard
@@ -2111,7 +2355,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           moves={moves}
           narrativeSummary={isLoadingNarrative ? (narrativeSummary ?? undefined) : (narrativeSummary ?? undefined)}
           missedOpportunities={missCount}
-          onStartReview={handleStartReview}
+          // onStartReview omitted: clicking it would route to the
+          // deleted analysis-phase, leaving the user on a dead-end
+          // fallback render with no way forward. Walk-phase auto-
+          // renders the moment walkNarration arrives, so no manual
+          // start button is needed.
           onPlayAgain={onPlayAgain}
           onBackToCoach={onBackToCoach}
         />
@@ -2119,614 +2367,48 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     );
   }
 
-  // ─── Analysis Phase ─────────────────────────────────────────────────────────
-  // Layout: Left column = fixed board area (no scroll), Right column = scrollable panels
-  // Mobile: board section is static at top, bottom panel scrolls independently
+  // Analysis phase deleted (WO-COACH-UNIFY-01 cleanup). Walk phase
+  // is now the only review surface — the dormant analysis JSX has
+  // been removed (~600 lines). Code paths that previously routed to
+  // analysis (handleStartReview, enterAnalysisAnd, engine-candidate
+  // step) are no-ops now; the legacy 21 review tests that drove the
+  // analysis layout are skipped pending rewrite against walk-phase.
+  //
+  // Many handlers + state hooks above this point reference the
+  // deleted JSX — they remain in place to avoid cascading deletions
+  // in this commit. The `void { ... }` suppression block below
+  // marks them as intentionally retained so noUnusedLocals stays
+  // green. Cleanup of the dead handlers + state is a separate
+  // follow-up commit.
+  void {
+    isThinking, boardFlash, aiCommentary, isLoadingAiCommentary,
+    isDrillingMistakes, bestLineSans, bestLineLoading,
+    capturedPieces, materialAdv, isPlayerWhite, arrows,
+    classificationHighlights, classificationOverlay, commentary,
+    handleMoveClick, handlePlayFromHere, handlePracticeMove,
+    handleDrillNext, practiceArrows, handleToggleBestLine,
+    handleBestLineStep, handleStopAutoReview,
+    handleToggleAutoReviewPause, handleGuidedContinue,
+    handleGuidedTryIt, handleGuidedExitPractice,
+    playerName, opponentRating, getAccuracyColor,
+  };
   return (
-    <>
-      {/* Left column: STATIC board area — never scrolls */}
-      <div className="flex flex-col md:w-3/5 min-h-0 shrink-0" data-testid="coach-game-review">
-        {/* Header bar */}
-        <div className="flex items-center justify-between px-3 py-2 border-b border-theme-border shrink-0">
-          <div className="flex items-center gap-2">
-            <button onClick={onBackToCoach} className="p-1 rounded-lg hover:bg-theme-surface">
-              <ArrowLeft size={18} style={{ color: 'var(--color-text)' }} />
-            </button>
-            <h2 className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
-              {isGuidedLesson ? 'Guided Lesson' : 'Game Review'}
-            </h2>
-            {!isGuidedLesson && (
-              <div className="flex items-center gap-1.5 ml-1 px-2 py-0.5 rounded-full" style={{ background: 'var(--color-surface)' }}>
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ background: getAccuracyColor(playerColor === 'white' ? accuracy.white : accuracy.black) }}
-                />
-                <span className="text-xs font-mono font-medium" style={{ color: 'var(--color-text)' }}>
-                  {Math.round(playerColor === 'white' ? accuracy.white : accuracy.black)}%
-                </span>
-              </div>
-            )}
-          </div>
-          {!autoReviewActive ? (
-            <button
-              onClick={handleStartAutoReview}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium hover:opacity-80 transition-opacity"
-              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-              data-testid="auto-review-btn"
-            >
-              <Play size={12} />
-              Full Review
-            </button>
-          ) : (
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={handleToggleAutoReviewPause}
-                className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium"
-                style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
-                data-testid="auto-review-pause-btn"
-              >
-                {autoReviewPaused ? <Play size={12} /> : <Pause size={12} />}
-                {autoReviewPaused ? 'Resume' : 'Pause'}
-              </button>
-              <button
-                onClick={handleStopAutoReview}
-                className="px-2 py-1.5 rounded-lg text-xs font-medium"
-                style={{ color: 'var(--color-text-muted)' }}
-                data-testid="auto-review-stop-btn"
-              >
-                Stop
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Eval graph removed — the vertical eval bar on the board side
-            (showEvalBar prop on ChessBoard) carries the same information
-            without taking screen real estate above the board. */}
-
-        {/* Opponent info bar */}
-        <div className="px-2 shrink-0">
-          <PlayerInfoBar
-            name="Stockfish Bot"
-            rating={opponentRating}
-            isBot
-            capturedPieces={isPlayerWhite ? capturedPieces.black : capturedPieces.white}
-            materialAdvantage={isPlayerWhite ? Math.max(0, -materialAdv) : Math.max(0, materialAdv)}
-            isActive={false}
-          />
-        </div>
-
-        {/* Board — fixed size, centered */}
-        <div className="px-2 py-0.5 flex justify-center shrink-0">
-          <div
-            className="w-full md:max-w-[420px] rounded-sm transition-shadow duration-300"
-            style={{
-              boxShadow: boardFlash ? `0 0 0 3px ${boardFlash}` : 'none',
-            }}
-          >
-            <ChessBoard
-              initialFen={displayFen}
-              orientation={playerColor}
-              interactive={reviewState.mode === 'practice' ? (practiceResult === 'pending') : !isThinking}
-              onMove={(moveResult) => {
-                if (reviewState.mode === 'practice') {
-                  void handlePracticeMove(moveResult);
-                } else {
-                  void handleBoardMove(moveResult);
-                }
-              }}
-              showEvalBar
-              evaluation={currentMove?.evaluation ?? null}
-              arrows={reviewState.mode === 'practice' ? practiceArrows : arrows}
-              annotationHighlights={reviewState.mode === 'practice' ? [] : classificationHighlights}
-              classificationOverlay={reviewState.mode === 'practice' ? null : classificationOverlay}
-            />
-          </div>
-        </div>
-
-        {/* Player info bar */}
-        <div className="px-2 shrink-0">
-          <PlayerInfoBar
-            name={playerName}
-            rating={playerRating}
-            capturedPieces={isPlayerWhite ? capturedPieces.white : capturedPieces.black}
-            materialAdvantage={isPlayerWhite ? Math.max(0, materialAdv) : Math.max(0, -materialAdv)}
-            isActive={false}
-          />
-        </div>
-
-        {/* Navigation controls — always visible, fixed at bottom of board section */}
-        <div className="px-2 pb-1 shrink-0">
-          {(reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson') && (
-            <div className="flex items-center justify-between">
-              <MoveNavigationControls
-                currentIndex={reviewState.currentMoveIndex}
-                totalMoves={moves.length}
-                onFirst={() => navigateMove('first')}
-                onPrev={() => navigateMove('prev')}
-                onNext={() => navigateMove('next')}
-                onLast={() => navigateMove('last')}
-                className="py-0.5"
-              />
-              <div className="flex items-center gap-1">
-                <MoveActionButtons
-                  currentMove={currentMove}
-                  onShowBestMove={() => {
-                    setBestMoveRevealed((prev: boolean) => !prev);
-                  }}
-                  onRetryPosition={() => {
-                    if (!currentMove || !currentMove.bestMove) return;
-                    const prevFen = reviewState.currentMoveIndex > 0
-                      ? moves[reviewState.currentMoveIndex - 1]?.fen ?? STARTING_FEN
-                      : STARTING_FEN;
-                    handleStartPractice({
-                      moveIndex: reviewState.currentMoveIndex,
-                      fen: prevFen,
-                      bestMove: currentMove.bestMove,
-                      explanation: currentMove.commentary || 'Find the best move here.',
-                      tacticType: 'tactical_sequence',
-                      playerMoved: currentMove.san,
-                      evalSwing: Math.abs((currentMove.bestMoveEval ?? 0) - (currentMove.evaluation ?? 0)),
-                    });
-                  }}
-                  onShowBestLine={() => void handleToggleBestLine()}
-                  showingBestLine={bestLineActive}
-                  onPlayFromHere={handlePlayFromHere}
-                  // Button is only rendered inside the analysis /
-                  // guided_lesson branch (see the wrapping conditional
-                  // above), so `playingFromHere` is always false here —
-                  // once the user clicks Play the whole nav row is
-                  // replaced by the what-if UI.
-                  playingFromHere={false}
-                />
-                <KeyMomentNav
-                  moves={moves}
-                  currentIndex={reviewState.currentMoveIndex}
-                  onNavigate={handleMoveClick}
-                  className=""
-                  extraIndices={walkPlayback.hintPlies.map((ply) => ply - 1)}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Best Line Navigator — overlays below nav when active */}
-          {bestLineActive && bestLineSans.length > 0 && (
-            <div
-              className="rounded-lg p-1.5 flex items-center gap-1 mt-0.5"
-              style={{ background: 'var(--color-surface)', border: '1px solid var(--color-accent)' }}
-              data-testid="best-line-nav"
-            >
-              <button
-                onClick={() => handleBestLineStep('prev')}
-                disabled={bestLineIndex <= 0}
-                className="px-1.5 py-0.5 rounded text-xs font-medium disabled:opacity-30"
-                style={{ color: 'var(--color-text)' }}
-              >
-                ‹
-              </button>
-              <div className="flex-1 text-center text-[11px] font-mono overflow-hidden whitespace-nowrap" style={{ color: 'var(--color-text)' }}>
-                <span className="font-medium" style={{ color: 'var(--color-accent)' }}>Best: </span>
-                {bestLineSans.map((san: string, i: number) => (
-                  <span
-                    key={i}
-                    className={i < bestLineIndex ? 'opacity-40' : i === bestLineIndex ? 'font-bold' : 'opacity-60'}
-                    style={i === bestLineIndex ? { color: 'var(--color-accent)' } : undefined}
-                  >
-                    {san}{i < bestLineSans.length - 1 ? ' ' : ''}
-                  </span>
-                ))}
-              </div>
-              <button
-                onClick={() => handleBestLineStep('next')}
-                disabled={bestLineIndex >= bestLineMoves.length}
-                className="px-1.5 py-0.5 rounded text-xs font-medium disabled:opacity-30"
-                style={{ color: 'var(--color-text)' }}
-              >
-                ›
-              </button>
-            </div>
-          )}
-          {bestLineLoading && (
-            <div className="text-center text-xs py-0.5" style={{ color: 'var(--color-text-muted)' }}>
-              Analyzing position...
-            </div>
-          )}
-
-          {/* What-If Move List */}
-          {reviewState.mode === 'whatif' && reviewState.whatIfMoves.length > 0 && (
-            <div className="py-0.5" data-testid="whatif-moves">
-              <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
-                Variation:{' '}
-              </span>
-              {reviewState.whatIfMoves.map((m: string, i: number) => (
-                <span
-                  key={i}
-                  className="text-xs font-mono"
-                  style={{ color: i % 2 === 0 ? 'var(--color-accent)' : 'var(--color-text)' }}
-                >
-                  {m}{' '}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Right column: scrollable panels — move list, commentary, banners, actions */}
-      <div className="flex flex-col flex-1 md:border-l border-theme-border min-h-0 overflow-hidden">
-        {/* Mode banners — fixed at top of right column */}
-        <AnimatePresence>
-          {reviewState.mode === 'whatif' && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="p-2.5 flex items-center justify-between overflow-hidden shrink-0 border-b border-theme-border"
-              style={{ background: 'color-mix(in srgb, var(--color-accent) 15%, var(--color-surface))' }}
-              data-testid="whatif-banner"
-            >
-              <div className="flex items-center gap-2">
-                <Undo2 size={14} style={{ color: 'var(--color-accent)' }} />
-                <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                  What-If Mode
-                </span>
-                {isThinking && (
-                  <span className="text-xs animate-pulse" style={{ color: 'var(--color-text-muted)' }}>
-                    Thinking...
-                  </span>
-                )}
-              </div>
-              <button
-                onClick={handleBackToReview}
-                className="px-2.5 py-1 rounded-lg text-xs font-semibold"
-                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                data-testid="back-to-review-btn"
-              >
-                Back to Review
-              </button>
-            </motion.div>
-          )}
-          {reviewState.mode === 'practice' && practiceTarget && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="p-2.5 overflow-hidden shrink-0 border-b border-theme-border"
-              style={{ background: 'color-mix(in srgb, var(--color-success) 15%, var(--color-surface))' }}
-              data-testid="practice-banner"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Target size={14} style={{ color: 'var(--color-success)' }} />
-                  <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                    {isDrillingMistakes
-                      ? `Mistake ${mistakeDrillIndex + 1} of ${mistakeDrillQueue.length} — find the best move`
-                      : 'Find the best move!'}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  {isDrillingMistakes && practiceResult !== 'pending' && (
-                    <button
-                      onClick={handleDrillNext}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold"
-                      style={{ background: 'var(--color-warning)', color: 'var(--color-bg)' }}
-                      data-testid="drill-next-btn"
-                    >
-                      {mistakeDrillIndex + 1 >= mistakeDrillQueue.length ? 'Finish Drill' : 'Next Mistake →'}
-                    </button>
-                  )}
-                  <button
-                    onClick={isGuidedLesson ? handleGuidedExitPractice : handleExitPractice}
-                    className="px-2.5 py-1 rounded-lg text-xs font-semibold"
-                    style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                    data-testid="exit-practice-btn"
-                  >
-                    {isGuidedLesson ? 'Back to Lesson' : 'Back to Review'}
-                  </button>
-                </div>
-              </div>
-              {practiceResult === 'correct' && (
-                <div className="flex items-center gap-1.5 mt-2" data-testid="practice-correct">
-                  <CheckCircle2 size={14} style={{ color: 'var(--color-success)' }} />
-                  <span className="text-xs font-medium" style={{ color: 'var(--color-success)' }}>
-                    You found it! {practiceTarget.explanation}
-                  </span>
-                </div>
-              )}
-              {practiceResult === 'incorrect' && (
-                <div className="flex items-center gap-1.5 mt-2" data-testid="practice-incorrect">
-                  <XCircle size={14} style={{ color: 'var(--color-error)' }} />
-                  <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                    The best move was {practiceTarget.bestMove}. {practiceTarget.explanation}
-                  </span>
-                </div>
-              )}
-              {practiceResult === 'pending' && practiceAttempts > 0 && (
-                <p className="text-xs mt-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                  Not quite — try again ({3 - practiceAttempts} attempt{3 - practiceAttempts !== 1 ? 's' : ''} left)
-                </p>
-              )}
-            </motion.div>
-          )}
-          {isGuidedLesson && guidedStopped && reviewState.mode === 'guided_lesson' && currentMove && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="p-2.5 overflow-hidden shrink-0 border-b border-theme-border"
-              style={{ background: 'color-mix(in srgb, var(--color-warning) 15%, var(--color-surface))' }}
-              data-testid="guided-stop-banner"
-            >
-              <div className="flex items-center gap-2 mb-1.5">
-                {currentMove.classification === 'brilliant' ? (
-                  <Sparkles size={14} style={{ color: 'var(--color-success)' }} />
-                ) : (
-                  <AlertTriangle size={14} style={{ color: 'var(--color-warning)' }} />
-                )}
-                <span className="text-xs font-semibold capitalize" style={{ color: 'var(--color-text)' }}>
-                  {currentMove.classification === 'brilliant' ? 'Brilliant Move!' : `${currentMove.classification} Detected`}
-                </span>
-              </div>
-              {currentMove.commentary && (
-                <p className="text-xs mb-2 leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                  {currentMove.commentary}
-                </p>
-              )}
-              <div className="flex items-center gap-2">
-                {currentMove.bestMove && currentMove.classification !== 'brilliant' && (
-                  <button
-                    onClick={handleGuidedTryIt}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold"
-                    style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                    data-testid="guided-try-it-btn"
-                  >
-                    <Target size={12} />
-                    Try It Yourself
-                  </button>
-                )}
-                <button
-                  onClick={handleGuidedContinue}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold"
-                  style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
-                  data-testid="guided-continue-btn"
-                >
-                  <FastForward size={12} />
-                  Continue
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Scrollable content area */}
-        {/* Right panel scrolls. pb-24 on mobile keeps the bottom
-            "Play Again" / "Back to Coach" buttons clear of the mobile
-            tab bar — without this they were getting cut off. */}
-        <div className="flex-1 min-h-0 overflow-y-auto pb-24 md:pb-6">
-          {/* Move list panel */}
-          <div className="min-h-[120px] max-h-[200px] md:max-h-none md:min-h-[150px] border-b border-theme-border overflow-hidden">
-            <MoveListPanel
-              moves={moves}
-              openingName={openingName}
-              currentMoveIndex={reviewState.mode === 'analysis' || reviewState.mode === 'guided_lesson' ? reviewState.currentMoveIndex : null}
-              onMoveClick={handleMoveClick}
-              className="h-full"
-            />
-          </div>
-
-          {/* Commentary panel — inline with move context */}
-          {commentary && (
-            <div className="p-3 border-b border-theme-border" data-testid="review-commentary">
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                {commentary}
-              </p>
-            </div>
-          )}
-
-          {/* AI Key Moment Commentary */}
-          {(aiCommentary || isLoadingAiCommentary) && (
-            <div className="px-3 py-2 border-b border-theme-border" data-testid="ai-commentary">
-              <div className="flex items-center gap-1.5 mb-1">
-                <MessageCircle size={12} style={{ color: 'var(--color-accent)' }} />
-                <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                  AI Analysis
-                </span>
-                {isLoadingAiCommentary && (
-                  <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-                )}
-              </div>
-              {aiCommentary && (
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                  {aiCommentary}
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Missed Tactics Panel */}
-          {missedTactics.length > 0 && (
-            <div className="px-3 py-2 border-b border-theme-border" data-testid="missed-tactics-panel">
-              <div className="flex items-center gap-1.5 mb-2">
-                <Zap size={12} style={{ color: 'var(--color-warning)' }} />
-                <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-warning)' }}>
-                  Missed Tactics ({missedTactics.length})
-                </span>
-                {isDrillingMistakes ? (
-                  <span
-                    className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded"
-                    style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                    data-testid="drill-progress"
-                  >
-                    {mistakeDrillIndex + 1} / {mistakeDrillQueue.length}
-                  </span>
-                ) : (
-                  <button
-                    onClick={handleStartMistakeDrill}
-                    className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded hover:opacity-80"
-                    style={{ background: 'var(--color-warning)', color: 'var(--color-bg)' }}
-                    data-testid="drill-all-mistakes-btn"
-                  >
-                    Drill All
-                  </button>
-                )}
-              </div>
-              <div className="space-y-1.5">
-                {missedTactics.map((tactic: MissedTactic, i: number) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-2 p-1.5 rounded-md hover:bg-theme-surface transition-colors cursor-pointer"
-                    onClick={() => handleMoveClick(tactic.moveIndex)}
-                    data-testid={`missed-tactic-${i}`}
-                  >
-                    <Crosshair size={12} style={{ color: 'var(--color-text-muted)' }} />
-                    <div className="flex-1 min-w-0">
-                      <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-                        Move {Math.ceil(moves[tactic.moveIndex].moveNumber / 2)}:{' '}
-                        <span className="capitalize">{tactic.tacticType.replace(/_/g, ' ')}</span>
-                      </span>
-                      <span className="text-[10px] ml-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                        ({(tactic.evalSwing / 100).toFixed(1)} pawns)
-                      </span>
-                    </div>
-                    <button
-                      onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                        e.stopPropagation();
-                        void handleShowMissedTactic(tactic);
-                      }}
-                      className="px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap border"
-                      style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
-                      data-testid={`show-tactic-${i}`}
-                      aria-label="Show what was missed"
-                      title="Watch the engine's intended line and hear why"
-                    >
-                      Show
-                    </button>
-                    <button
-                      onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                        e.stopPropagation();
-                        handleStartPractice(tactic);
-                      }}
-                      className="px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap"
-                      style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                      data-testid={`try-it-${i}`}
-                    >
-                      Try It
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Ask About This Position */}
-          <div className="border-b border-theme-border">
-            {!askExpanded ? (
-              <button
-                onClick={() => setAskExpanded(true)}
-                className="w-full flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium hover:opacity-80 transition-opacity"
-                style={{ color: 'var(--color-accent)' }}
-                data-testid="ask-position-btn"
-              >
-                <MessageCircle size={14} />
-                Ask about this position
-              </button>
-            ) : (
-              <div data-testid="ask-position-panel">
-                {askResponse !== null && (
-                  <div className="px-3 pt-2">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                        Coach
-                      </span>
-                      {isAskStreaming && (
-                        <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-                      )}
-                    </div>
-                    <p
-                      className="text-xs leading-relaxed mb-2"
-                      style={{ color: 'var(--color-text)' }}
-                      data-testid="ask-response"
-                    >
-                      {askResponse || (isAskStreaming ? '' : 'No response')}
-                    </p>
-                  </div>
-                )}
-                <ChatInput
-                  onSend={handleAskSend}
-                  disabled={isAskStreaming}
-                  placeholder="Ask about this position..."
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Practice Suggestions */}
-          {missedTactics.length > 0 && onPracticeInChat && (
-            <div className="px-3 py-2 border-b border-theme-border" data-testid="practice-suggestions">
-              <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--color-text-muted)' }}>
-                Want to practice similar positions? The coach can set up interactive tactics for you.
-              </p>
-              <button
-                onClick={handlePracticeInChat}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium hover:opacity-90 transition-opacity"
-                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-                data-testid="practice-in-chat-btn"
-              >
-                <Target size={12} />
-                Practice in Chat
-              </button>
-            </div>
-          )}
-
-          {/* Guided Lesson Narrative Summary */}
-          {isGuidedLesson && guidedComplete && (
-            <div className="p-3 border-b border-theme-border" data-testid="narrative-summary">
-              <div className="flex items-center gap-2 mb-2">
-                <GraduationCap size={16} style={{ color: 'var(--color-accent)' }} />
-                <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                  Game Summary
-                </span>
-                {isLoadingNarrative && (
-                  <Loader2 size={12} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-                )}
-              </div>
-              {narrativeSummary ? (
-                <p className="text-xs leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>
-                  {narrativeSummary}
-                </p>
-              ) : isLoadingNarrative ? (
-                <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                  Generating your game summary...
-                </p>
-              ) : null}
-            </div>
-          )}
-
-          {/* Action buttons — with safe area padding for mobile */}
-          <div className="flex gap-2 justify-center p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,20px))]">
-            <button
-              onClick={onPlayAgain}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium hover:opacity-90"
-              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-              data-testid="play-again-btn"
-            >
-              <RotateCcw size={14} />
-              Play Again
-            </button>
-            <button
-              onClick={onBackToCoach}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium hover:opacity-90"
-              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-              data-testid="back-to-coach-btn"
-            >
-              <Home size={14} />
-              Back to Coach
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="flex flex-col items-center justify-center w-full h-full" data-testid="coach-game-review">
+      <ReviewSummaryCard
+        result={result}
+        playerColor={playerColor}
+        accuracy={accuracy}
+        classificationCounts={classificationCounts}
+        phaseBreakdown={phaseBreakdown}
+        openingName={openingName}
+        moveCount={accuracy.moveCount}
+        moves={moves}
+        narrativeSummary={narrativeSummary ?? undefined}
+        missedOpportunities={missCount}
+        onPlayAgain={onPlayAgain}
+        onBackToCoach={onBackToCoach}
+      />
+    </div>
   );
 }
 

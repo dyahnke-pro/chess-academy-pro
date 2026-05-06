@@ -100,7 +100,41 @@ export interface LiveState {
   surface: CoachSurface;
   fen?: string;
   phase?: 'opening' | 'middlegame' | 'endgame';
+  /** Stockfish centipawn eval (white-perspective) for the live FEN.
+   *  Surfaces that already run a debounced engine analysis for an
+   *  eval bar (CoachTeachPage) thread it through here so the envelope
+   *  can present ground-truth material/eval to the brain WITHOUT it
+   *  having to call stockfish_eval itself. Production audit (build
+   *  4e628e5) caught the brain hallucinating "you're up a pawn" after
+   *  losing its queen for a knight because it self-counted instead of
+   *  consulting the engine. */
   evalCp?: number;
+  /** Mate distance in plies (positive = white mates, negative = black
+   *  mates). When set, supersedes evalCp for "who's winning" reads. */
+  evalMateIn?: number;
+  /** Pre-fetched Lichess explorer snapshot for the current FEN. The
+   *  surface (CoachTeachPage) fires `fetchLichessExplorer` on every
+   *  FEN change and threads the compact result here so the brain can
+   *  cite ECO / opening name / amateur+master frequencies / sample
+   *  master games without spending a round-trip on
+   *  lichess_opening_lookup or lichess_master_games. The brain still
+   *  has the active tools available for branch FENs the lesson
+   *  hasn't navigated to yet. */
+  lichessSnapshot?: {
+    eco: string | null;
+    name: string | null;
+    /** Top moves from the amateur (lichess) explorer with frequency. */
+    topAmateurMoves: { san: string; total: number; whitePct: number | null }[];
+    /** Top moves from the masters explorer with rating. */
+    topMasterMoves: { san: string; total: number; averageRating: number }[];
+    /** Sample master games at this FEN. */
+    topMasterGames: {
+      white: string;
+      black: string;
+      winner: 'white' | 'black' | null;
+      year: number;
+    }[];
+  };
   moveHistory?: string[];
   /** Free text describing what triggered this call. */
   userJustDid?: string;
@@ -271,15 +305,36 @@ export interface ProviderResponse {
   raw?: unknown;
 }
 
+/** Per-call options the spine threads from `CoachServiceOptions` into
+ *  the provider. Today's only option is `task` — model-routing hint
+ *  the underlying coachApi uses to pick the right model
+ *  (interactive_review → haiku, position_analysis_chat → reasoner,
+ *  chat_response → sonnet/deepseek-chat). Without this the spine
+ *  always uses chat_response on Anthropic, which routes everything
+ *  through the expensive Sonnet model — fine for /coach/teach where
+ *  depth matters, wasteful for /coach/play move-commentary where
+ *  Haiku is the right call. WO-COACH-UNIFY-01. */
+export interface ProviderCallOptions {
+  /** CoachTask hint passed down to the underlying API for model
+   *  selection. When omitted, the provider uses 'chat_response'. */
+  task?: import('../types').CoachTask;
+  /** Optional max-tokens override. When omitted, the provider uses
+   *  its built-in default (typically 2000). Useful for short
+   *  one-shot calls (tactic alerts, explore reactions) that don't
+   *  need a long context budget. */
+  maxTokens?: number;
+}
+
 export interface Provider {
   name: ProviderName;
-  call(envelope: AssembledEnvelope): Promise<ProviderResponse>;
+  call(envelope: AssembledEnvelope, options?: ProviderCallOptions): Promise<ProviderResponse>;
   /** Optional streaming variant. WO-BRAIN-02 added this so migrated
    *  surfaces (in-game chat first) can preserve token-by-token UX.
    *  When omitted, callers fall back to `call(...)`. */
   callStreaming?(
     envelope: AssembledEnvelope,
     onChunk: (chunk: string) => void,
+    options?: ProviderCallOptions,
   ): Promise<ProviderResponse>;
 }
 

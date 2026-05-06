@@ -76,6 +76,12 @@ export type AuditKind =
   // Additional review trail (WO-REVIEW-02a)
   | 'review-segments-generated'
   | 'review-segments-parse-failed'
+  // Walk-mode exploration (better-move arrow → student plays it →
+  // "Resume game" snap-back). Fires when the student drags a piece
+  // on the arrow-active board, and again when they tap Resume (or
+  // navigate away → auto-resume).
+  | 'review-walk-explored'
+  | 'review-walk-resumed'
   // Engine lines on the review screen (WO-REVIEW-02b)
   | 'review-engine-lines-analysis-started'
   | 'review-engine-lines-analysis-complete'
@@ -110,32 +116,50 @@ export type AuditKind =
   | 'coach-brain-envelope-assembled'
   | 'coach-brain-provider-called'
   | 'coach-brain-tool-called'
+  // Coach-tab full audit #19 — split for filterability. The
+  // catch-all `coach-brain-tool-called` covers successful
+  // dispatches; these two distinguish (a) tool requests the spine
+  // didn't even attempt because the tool was excluded by the
+  // resilience-fallback caller or didn't exist in the registry,
+  // and (b) tool requests that THREW (vs returned ok=false; the
+  // latter has tool-call-error already).
+  | 'coach-brain-tool-skipped'
+  | 'coach-brain-tool-threw'
   | 'coach-llm-model-selected'
   | 'coach-brain-intent-routed'
   | 'coach-intent-router-input'
   | 'coach-brain-tool-parse-result'
   | 'chat-panel-message-received'
   | 'coach-brain-answer-returned'
-  // WO-FOUNDATION-02 trace harness — comprehensive per-message trace
-  // checkpoints. Every audit in this group carries a traceId so the
-  // pipeline can be reconstructed end-to-end. Temporary; removed once
-  // the cerebrum-dispatch chain question is answered.
-  | 'trace-handle-send'
-  | 'trace-intercept-check'
-  | 'trace-intercept-result'
-  | 'trace-ask-invoking'
-  | 'trace-ask-received'
-  | 'trace-ctx-built'
-  | 'trace-toolbelt'
-  | 'trace-provider-response'
-  | 'trace-tool-dispatch'
-  | 'trace-tool-entered'
-  | 'trace-surface-callback-invoked'
-  | 'trace-surface-callback-result'
+  // (WO-FOUNDATION-02 trace harness deleted — was emitting ~9 audits
+  // per spine call, doubling audit log size with no production
+  // value once the cerebrum-dispatch question was answered. Removed
+  // per Coach-tab full audit item #30. Source-tagged audits like
+  // coach-brain-* + coach-tool-callback-rejected cover the same
+  // observability needs without the noise.)
   // Surface migration trail (WO-BRAIN-02 onwards). Fired once per call
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
   | 'coach-surface-migrated'
+  // Coach-hub navigation (WO-COACH-UNIFY-01 audit item #15). Fires
+  // when the user taps a tile on the Coach hub so a "I went to
+  // Coach but ended up somewhere else" report has a trail.
+  | 'coach-hub-tile-clicked'
+  // GlobalCoachDrawer state transitions (WO-COACH-UNIFY-01 audit
+  // item #16). Open / close / minimize / handoff-to-play are all
+  // observable via this kind.
+  | 'coach-drawer-state'
+  | 'coach-drawer-handoff'
+  // Tool callback rejections at the surface layer (WO-COACH-UNIFY-01
+  // audit item #12). Distinguishes "spine rejected SAN" from
+  // "surface rejected SAN" — the latter is what fires when the
+  // SOVEREIGNTY check or chess.js refuses a move.
+  | 'coach-tool-callback-rejected'
+  // Walk-phase prep skipped (WO-COACH-UNIFY-01 audit item #26).
+  // Distinguishes empty-segments / parse-failed / adapt-failed
+  // from "still loading" so a "review never showed walk UI"
+  // report has a concrete reason.
+  | 'review-walk-skipped'
   // Biweekly chess.com / lichess auto-import scheduler.
   | 'auto-import-completed'
   | 'auto-import-failed'

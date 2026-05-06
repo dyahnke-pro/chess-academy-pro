@@ -18,7 +18,9 @@
  * review view.
  */
 import type { Chess } from 'chess.js';
-import { getCoachChatResponse, consumeLastLlmMetadata } from './coachApi';
+import { consumeLastLlmMetadata } from './coachApi';
+import { coachService } from '../coach/coachService';
+import { unwrapSpineError } from './sanitizeCoachText';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
 import { buildStudentStateBlock } from './studentStateBlock';
 import { recordAudit } from './narrationAuditor';
@@ -568,14 +570,47 @@ ACTION-FIRST RULE — narration is a guide for what to do NEXT, not a recap of w
   const maxTokens = reviewTone
     ? (briefMode ? 200 : 1500)
     : (briefMode ? 250 : 500);
-  const response = await getCoachChatResponse(
-    [{ role: 'user', content: user }],
-    system,
-    onStream,
-    'interactive_review',
-    maxTokens,
-    verbosity,
+  // WO-COACH-UNIFY-01 commit 3: route through Coach Brain Spine.
+  // The dynamic per-move system prompt (built in `system` above)
+  // becomes a per-call addendum on the envelope; spine identity +
+  // memory + live-state grounding ride along for free. task=
+  // 'interactive_review' preserves the legacy model routing
+  // (deepseek-chat / claude-haiku) so cost is unchanged. The
+  // existing onStream callback threads through coachService.ask's
+  // onChunk so the streaming sentence dispatcher in CoachGamePage
+  // still drives Polly first-sentence-fast playback.
+  const fenAfter = gameAfter.fen();
+  const fenSideToMove = fenAfter.split(' ')[1] === 'b' ? 'black' : 'white';
+  const spineAnswer = await coachService.ask(
+    {
+      surface: 'game-chat',
+      ask: user,
+      liveState: {
+        surface: 'game-chat',
+        fen: fenAfter,
+        moveHistory: history.map((h) => h.san),
+        userJustDid: last ? `Played ${last.san}` : undefined,
+        whoseTurn: fenSideToMove,
+        evalCp: evalAfter ?? undefined,
+      },
+    },
+    {
+      task: 'interactive_review',
+      maxTokens,
+      maxToolRoundTrips: 1,
+      systemPromptAddition: system,
+      onChunk: onStream,
+      personality,
+      profanity,
+      mockery,
+      flirt,
+    },
   );
+  // Spine wraps provider errors as text "(coach-brain provider error: …)".
+  // The legacy contract (caller in CoachGamePage) is "empty string on
+  // error → don't narrate"; preserve that here so a transient failure
+  // doesn't leak orchestration noise into the user-facing chat bubble.
+  const response = unwrapSpineError(spineAnswer.text);
   const llmDurationMs = Date.now() - llmStartedAt;
   // Consume the metadata snapshot from the LLM call we just awaited.
   // Single-threaded JS guarantees the snapshot is from THIS call, not

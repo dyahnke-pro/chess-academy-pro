@@ -34,6 +34,7 @@ import {
   type PhaseTransitionState,
 } from '../../services/phaseTransitionDetector';
 import { logAppAudit } from '../../services/appAuditor';
+import { unwrapSpineError, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import type { PhaseNarrationVerbosity } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -133,7 +134,6 @@ async function evaluateExplorerCandidates(
   return results.filter((r): r is MoveEvaluation => r !== null);
 }
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
-import { getCoachChatResponse } from '../../services/coachApi';
 import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
@@ -1020,11 +1020,6 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
       const userMsg = `Position FEN: ${newFen}\nMove played: ${moveResult.san}\nStockfish eval after move: ${evalText}\nEngine best move: ${bestMoveSan}\nReact to this move in 1-2 sentences.`;
 
-      const msgHistory: { role: 'user' | 'assistant'; content: string }[] = [
-        ...exploreMessages,
-        { role: 'user' as const, content: userMsg },
-      ];
-
       // When the student arrived here via "let's play / yes let's do it",
       // prefix the reaction prompt with the agreed training focus so the
       // coach's commentary stays on-theme with the chat conversation.
@@ -1032,13 +1027,37 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
         ? `${EXPLORE_REACTION_ADDITION}\n\nTraining focus for this game (carried over from the chat where the student agreed to play): ${focusParam}. Weave this focus into your reactions — praise moves that apply it, gently flag moves that miss it.`
         : EXPLORE_REACTION_ADDITION;
 
-      void getCoachChatResponse(
-        msgHistory,
-        systemPrompt,
-        undefined,
-        'explore_reaction',
-        256,
-      ).then((reaction) => {
+      // WO-COACH-UNIFY-01 commit 4: explore-reaction routes through
+      // coachService.ask. Explore session messages aren't in the
+      // long-term memory snapshot (they're transient UI state), so
+      // we concat the prior chat into the ask. systemPrompt
+      // (EXPLORE_REACTION_ADDITION + optional focus) becomes a
+      // systemPromptAddition on the envelope. task='explore_reaction'
+      // preserves the cheap-haiku / deepseek-chat routing.
+      const priorChatBlock = exploreMessages.length > 0
+        ? '\n\nPrior conversation in this explore session:\n' +
+          exploreMessages.map((m) => `${m.role === 'user' ? 'Student' : 'You'}: ${m.content}`).join('\n')
+        : '';
+      const exploreFenSideToMove = newFen.split(' ')[1] === 'b' ? 'black' : 'white';
+      void coachService.ask(
+        {
+          surface: 'game-chat',
+          ask: `${userMsg}${priorChatBlock}`,
+          liveState: {
+            surface: 'game-chat',
+            fen: newFen,
+            userJustDid: `Played ${moveResult.san} in explore mode`,
+            whoseTurn: exploreFenSideToMove,
+          },
+        },
+        {
+          task: 'explore_reaction',
+          maxTokens: 256,
+          maxToolRoundTrips: 1,
+          systemPromptAddition: systemPrompt,
+        },
+      ).then((spineAnswer) => {
+        const reaction = unwrapSpineError(spineAnswer.text);
         setExploreMessages((prev) => [
           ...prev,
           { role: 'user', content: userMsg },
@@ -2845,12 +2864,22 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
           onStream: (() => {
             let buffer = '';
             let chain: Promise<void> | null = null;
-            const SENTENCE_END = /([^.!?\n]+[.!?\n])(?=\s|$)/;
+            // SENTENCE_END_RE imported from sanitizeCoachText — shared
+            // across all Coach streaming dispatchers post audit #29.
+            // The `(?<!\d)` lookbehind keeps "+0.8" / "3.Bc4" atomic;
+            // see the helper's docstring for the build-e2a96ed slice
+            // bug that motivated the prefix-preserving slice below.
             return (chunk: string): void => {
               buffer += chunk;
               let match: RegExpExecArray | null;
-              while ((match = SENTENCE_END.exec(buffer)) !== null) {
-                const sentence = match[1].trim();
+              while ((match = SENTENCE_END_RE.exec(buffer)) !== null) {
+                // Take the whole prefix from buffer[0] up to the end of
+                // the match — any content before match.index is unmatched
+                // prose that belongs to THIS sentence (the regex skipped
+                // it because of an earlier digit-period). Slicing only
+                // from match.index would drop it silently.
+                const endIdx = match.index + match[1].length;
+                const sentence = buffer.slice(0, endIdx).trim();
                 if (sentence) {
                   streamedAnything = true;
                   if (!chain) {
@@ -2861,7 +2890,7 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
                       .catch(() => undefined);
                   }
                 }
-                buffer = buffer.slice(match.index + match[1].length);
+                buffer = buffer.slice(endIdx);
               }
             };
           })(),
@@ -3007,14 +3036,32 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
             : '',
         ].filter(Boolean).join('\n');
 
-        const alertText = await getCoachChatResponse(
-          [{ role: 'user', content: alertContext }],
-          BLUNDER_ALERT_ADDITION,
-          undefined,
-          'chat_response',
-          200,
-          'fast',
+        // WO-COACH-UNIFY-01 commit 4: route blunder-alert through
+        // coachService.ask. BLUNDER_ALERT_ADDITION threads as
+        // systemPromptAddition; live FEN + just-played move flow into
+        // liveState. task='chat_response' + maxTokens=200 preserves
+        // legacy model + cost. Empty string on provider error keeps
+        // the existing fallback path (clean template above).
+        const fenSideToMove = moveResult.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+        const spineAlert = await coachService.ask(
+          {
+            surface: 'game-chat',
+            ask: alertContext,
+            liveState: {
+              surface: 'game-chat',
+              fen: moveResult.fen,
+              userJustDid: `Student blundered with ${moveResult.san}`,
+              whoseTurn: fenSideToMove,
+            },
+          },
+          {
+            task: 'chat_response',
+            maxTokens: 200,
+            maxToolRoundTrips: 1,
+            systemPromptAddition: BLUNDER_ALERT_ADDITION,
+          },
         );
+        const alertText = unwrapSpineError(spineAlert.text);
         const trimmed = alertText.trim();
         if (trimmed && !trimmed.startsWith('⚠️')) {
           explanation = trimmed;
@@ -3163,22 +3210,18 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
   const handleChatPlayMove = useCallback(
     (san: string): { ok: boolean; reason?: string } => {
-      // WO-FOUNDATION-02 trace harness.
-      console.log('[TRACE-12a]', 'handleChatPlayMove invoked, san:', san);
-      void logAppAudit({
-        kind: 'trace-surface-callback-invoked',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleChatPlayMove',
-        summary: `args=${JSON.stringify({ san }).slice(0, 100)}`,
-      });
+      // Trace harness deleted (Coach-tab full audit #30). Failures
+      // are now visible via coach-tool-callback-rejected emitted by
+      // the spine when this callback returns ok=false.
       const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
-        console.log('[TRACE-13a]', 'handleChatPlayMove result:', result);
-        void logAppAudit({
-          kind: 'trace-surface-callback-result',
-          category: 'subsystem',
-          source: 'CoachGamePage.handleChatPlayMove',
-          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
-        });
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'coach-tool-callback-rejected',
+            category: 'subsystem',
+            source: 'CoachGamePage.handleChatPlayMove',
+            summary: `san=${san} reason=${result.reason ?? 'unknown'}`,
+          });
+        }
         return result;
       };
       try {
@@ -3207,22 +3250,15 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
   const handleChatTakeBackMove = useCallback(
     (count: number): { ok: boolean; reason?: string } => {
-      // WO-FOUNDATION-02 trace harness.
-      console.log('[TRACE-12b]', 'handleChatTakeBackMove invoked, count:', count);
-      void logAppAudit({
-        kind: 'trace-surface-callback-invoked',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleChatTakeBackMove',
-        summary: `args=${JSON.stringify({ count }).slice(0, 100)}`,
-      });
       const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
-        console.log('[TRACE-13b]', 'handleChatTakeBackMove result:', result);
-        void logAppAudit({
-          kind: 'trace-surface-callback-result',
-          category: 'subsystem',
-          source: 'CoachGamePage.handleChatTakeBackMove',
-          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
-        });
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'coach-tool-callback-rejected',
+            category: 'subsystem',
+            source: 'CoachGamePage.handleChatTakeBackMove',
+            summary: `count=${count} reason=${result.reason ?? 'unknown'}`,
+          });
+        }
         return result;
       };
       try {
@@ -3247,22 +3283,16 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
   const handleChatSetBoardPosition = useCallback(
     (fen: string): { ok: boolean; reason?: string } => {
-      // WO-FOUNDATION-02 trace harness.
-      console.log('[TRACE-12c]', 'handleChatSetBoardPosition invoked, fen:', fen);
-      void logAppAudit({
-        kind: 'trace-surface-callback-invoked',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleChatSetBoardPosition',
-        summary: `args=${JSON.stringify({ fen }).slice(0, 100)}`,
-      });
       const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
-        console.log('[TRACE-13c]', 'handleChatSetBoardPosition result:', result);
-        void logAppAudit({
-          kind: 'trace-surface-callback-result',
-          category: 'subsystem',
-          source: 'CoachGamePage.handleChatSetBoardPosition',
-          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
-        });
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'coach-tool-callback-rejected',
+            category: 'subsystem',
+            source: 'CoachGamePage.handleChatSetBoardPosition',
+            summary: `reason=${result.reason ?? 'unknown'}`,
+            fen,
+          });
+        }
         return result;
       };
       try {
@@ -3279,22 +3309,15 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
   const handleChatResetBoard = useCallback(
     (): { ok: boolean; reason?: string } => {
-      // WO-FOUNDATION-02 trace harness.
-      console.log('[TRACE-12d]', 'handleChatResetBoard invoked');
-      void logAppAudit({
-        kind: 'trace-surface-callback-invoked',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleChatResetBoard',
-        summary: 'args={}',
-      });
       const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
-        console.log('[TRACE-13d]', 'handleChatResetBoard result:', result);
-        void logAppAudit({
-          kind: 'trace-surface-callback-result',
-          category: 'subsystem',
-          source: 'CoachGamePage.handleChatResetBoard',
-          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
-        });
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'coach-tool-callback-rejected',
+            category: 'subsystem',
+            source: 'CoachGamePage.handleChatResetBoard',
+            summary: `reason=${result.reason ?? 'unknown'}`,
+          });
+        }
         return result;
       };
       try {

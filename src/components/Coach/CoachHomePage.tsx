@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, MessageCircle, GraduationCap } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, MessageCircle, GraduationCap, History } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
+import { logAppAudit } from '../../services/appAuditor';
 import type { CSSProperties, ReactNode } from 'react';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -38,6 +39,19 @@ export function CoachHomePage(): JSX.Element {
   const gB = settings.glowBrightness;
   const gS = gB / 100;
 
+  // Audit-driven (WO-COACH-UNIFY-01 #15): tile taps were silent. A
+  // "user went to Coach hub but ended up on Tactics" report now has
+  // a trail showing which tile they actually clicked.
+  const goTo = (tile: string, path: string) => () => {
+    void logAppAudit({
+      kind: 'coach-hub-tile-clicked',
+      category: 'subsystem',
+      source: 'CoachHomePage',
+      summary: `tile=${tile} → ${path}`,
+    });
+    void navigate(path);
+  };
+
   return (
     <div
       className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
@@ -67,7 +81,7 @@ export function CoachHomePage(): JSX.Element {
           rgb="52, 211, 153"
           bgClass="bg-emerald-500/10"
           textColorClass="text-emerald-400"
-          onClick={() => void navigate('/coach/play')}
+          onClick={goTo('play', '/coach/play')}
           gB={gB}
           gS={gS}
           testId="coach-action-play"
@@ -79,7 +93,7 @@ export function CoachHomePage(): JSX.Element {
           rgb="6, 182, 212"
           bgClass="bg-cyan-500/10"
           textColorClass="text-cyan-400"
-          onClick={() => void navigate('/coach/teach')}
+          onClick={goTo('teach', '/coach/teach')}
           gB={gB}
           gS={gS}
           testId="coach-action-teach"
@@ -91,7 +105,7 @@ export function CoachHomePage(): JSX.Element {
           rgb="139, 92, 246"
           bgClass="bg-violet-500/10"
           textColorClass="text-violet-400"
-          onClick={() => void navigate('/coach/report')}
+          onClick={goTo('report', '/coach/report')}
           gB={gB}
           gS={gS}
           testId="coach-action-report"
@@ -102,7 +116,7 @@ export function CoachHomePage(): JSX.Element {
           rgb="245, 158, 11"
           bgClass="bg-amber-500/10"
           textColorClass="text-amber-400"
-          onClick={() => void navigate('/coach/plan')}
+          onClick={goTo('plan', '/coach/plan')}
           gB={gB}
           gS={gS}
           testId="coach-action-plan"
@@ -113,7 +127,7 @@ export function CoachHomePage(): JSX.Element {
           rgb="56, 189, 248"
           bgClass="bg-sky-500/10"
           textColorClass="text-sky-400"
-          onClick={() => void navigate('/coach/analyse')}
+          onClick={goTo('analyse', '/coach/analyse')}
           gB={gB}
           gS={gS}
           testId="coach-action-analyse"
@@ -124,10 +138,21 @@ export function CoachHomePage(): JSX.Element {
           rgb="251, 113, 133"
           bgClass="bg-rose-500/10"
           textColorClass="text-rose-400"
-          onClick={() => void navigate('/coach/chat')}
+          onClick={goTo('chat', '/coach/chat')}
           gB={gB}
           gS={gS}
           testId="coach-action-chat"
+        />
+        <SecondaryTile
+          icon={<History size={28} className="text-teal-400" />}
+          label="Review with Coach"
+          rgb="45, 212, 191"
+          bgClass="bg-teal-500/10"
+          textColorClass="text-teal-400"
+          onClick={goTo('review', '/coach/review')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-review"
         />
       </div>
     </div>

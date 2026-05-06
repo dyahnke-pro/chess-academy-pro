@@ -24,7 +24,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
 import { anthropicProvider } from '../../coach/providers/anthropic';
 import { logAppAudit } from '../../services/appAuditor';
-import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
+import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
@@ -34,6 +34,9 @@ import { db } from '../../db/schema';
 import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
+import { stockfishEngine } from '../../services/stockfishEngine';
+import { fetchLichessExplorer } from '../../services/lichessExplorerService';
+import { withTimeout } from '../../coach/withTimeout';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -123,6 +126,118 @@ export function CoachTeachPage(): JSX.Element {
     useCoachMemoryStore.getState().setAutoSavedPosition(game.fen);
   }, [game.fen]);
 
+  // Live Stockfish eval of the current position → eval bar.
+  // Debounced 250ms to coalesce rapid FEN changes (e.g. brain plays a
+  // move while the user is mid-typing). Cancels in-flight analysis
+  // when the FEN changes again before the previous one completes —
+  // we only care about the latest position. Wrapped in withTimeout
+  // so a stuck Stockfish call doesn't hang the bar forever.
+  useEffect(() => {
+    let cancelled = false;
+    const fen = game.fen;
+    const handle = setTimeout(() => {
+      void (async () => {
+        try {
+          const wrapped = await withTimeout(
+            stockfishEngine.analyzePosition(fen, 12),
+            5_000,
+            'teach-eval-bar',
+          );
+          if (cancelled) return;
+          if (!wrapped.ok) return;
+          const a = wrapped.value;
+          setLatestEval(a.evaluation);
+          setLatestIsMate(a.isMate);
+          setLatestMateIn(a.isMate ? a.evaluation : null);
+          // Mirror into the ref so handleSubmit can inject ground-
+          // truth engine eval into the envelope without a stale
+          // closure. Keyed by FEN so a one-ply-stale eval can't be
+          // misattributed to the new position.
+          latestEvalRef.current = {
+            fen,
+            evalCp: a.isMate ? 0 : a.evaluation,
+            mateIn: a.mateIn,
+          };
+        } catch {
+          // Stockfish hiccup — leave the bar at the last known value
+          // rather than reset to null. Less jarring visually.
+        }
+      })();
+    }, 250);
+    return () => {
+      cancelled = true;
+      clearTimeout(handle);
+    };
+  }, [game.fen]);
+
+  // Prefetch Lichess explorer + masters data on every FEN change so
+  // the brain sees ECO / opening name / amateur top moves / master
+  // top moves / master games in [Live state] without spending a
+  // round-trip on the tool. Debounced 350ms to coalesce rapid FEN
+  // changes; cancelled when the FEN changes again before settle. Both
+  // calls run in parallel. Failures (proxy 401 / circuit open) are
+  // swallowed silently — the snapshot just stays stale and the brain
+  // can still fall back to the active tools.
+  useEffect(() => {
+    let cancelled = false;
+    const fen = game.fen;
+    // Skip the empty / starting position to save a request — the
+    // brain already knows what 1.e4 / 1.d4 / etc. are. The prefetch
+    // becomes valuable once the lesson has navigated INTO an opening.
+    if (fen === STARTING_FEN) {
+      lichessSnapshotRef.current = null;
+      return;
+    }
+    const handle = setTimeout(() => {
+      void (async () => {
+        try {
+          const [amateur, masters] = await Promise.all([
+            fetchLichessExplorer(fen, 'lichess').catch(() => null),
+            fetchLichessExplorer(fen, 'masters').catch(() => null),
+          ]);
+          if (cancelled) return;
+          if (!amateur && !masters) return;
+          const opening = amateur?.opening ?? masters?.opening ?? null;
+          const topAmateurMoves = (amateur?.moves ?? []).slice(0, 5).map((m) => {
+            const total = m.white + m.draws + m.black;
+            const whitePct = total > 0
+              ? Math.round(((m.white + m.draws * 0.5) / total) * 100)
+              : null;
+            return { san: m.san, total, whitePct };
+          });
+          const topMasterMoves = (masters?.moves ?? []).slice(0, 5).map((m) => ({
+            san: m.san,
+            total: m.white + m.draws + m.black,
+            averageRating: m.averageRating,
+          }));
+          const topMasterGames = (masters?.topGames ?? []).slice(0, 3).map((g) => ({
+            white: g.white.name,
+            black: g.black.name,
+            winner: g.winner,
+            year: g.year,
+          }));
+          lichessSnapshotRef.current = {
+            fen,
+            snapshot: {
+              eco: opening?.eco ?? null,
+              name: opening?.name ?? null,
+              topAmateurMoves,
+              topMasterMoves,
+              topMasterGames,
+            },
+          };
+        } catch {
+          // Proxy hiccup — leave the snapshot stale; the brain can
+          // still call the active tool.
+        }
+      })();
+    }, 350);
+    return () => {
+      cancelled = true;
+      clearTimeout(handle);
+    };
+  }, [game.fen]);
+
   // Chrome state — kept here so the layout matches /coach/play
   // button-for-button. Color selector picks who the student plays
   // (orientation hand-off), difficulty + coach-tips are visually
@@ -133,6 +248,36 @@ export function CoachTeachPage(): JSX.Element {
   const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  // Live Stockfish evaluation of the current position. Drives the
+  // eval bar on the board so it moves with each ply (matches what
+  // /coach/play and /coach/review already do). Debounced — every
+  // game.fen change kicks off an analyzePosition with a 250ms delay
+  // so rapid sequences (kickoff reset → first move) don't queue
+  // multiple analyses; only the last FEN's analysis runs. null while
+  // analysis is pending so the bar can fall back to 50/50 silently.
+  const [latestEval, setLatestEval] = useState<number | null>(null);
+  const [latestIsMate, setLatestIsMate] = useState(false);
+  const [latestMateIn, setLatestMateIn] = useState<number | null>(null);
+  // Mirror the eval into a ref keyed by FEN so handleSubmit can inject
+  // ground-truth engine eval into the brain's [Live state] envelope
+  // WITHOUT a stale-closure on latestEval (handleSubmit's deps don't
+  // include eval state). The brain otherwise self-counts material and
+  // hallucinates ("up a pawn" after a queen-for-knight trade) —
+  // production audit (build 4e628e5). We only surface the eval when
+  // its FEN matches the FEN we're asking about, so a one-ply-stale
+  // eval doesn't get misattributed to the new position.
+  const latestEvalRef = useRef<{ fen: string; evalCp: number; mateIn: number | null } | null>(null);
+  // Pre-fetched Lichess explorer snapshot for the current FEN. Same
+  // pattern as the eval bar — the surface fires the expensive request
+  // BEFORE the brain has to ask for it, then injects the compact
+  // result into the [Live state] envelope so opening names + master
+  // moves + master games are available for free on every turn. Brain
+  // still has the active lichess_opening_lookup / lichess_master_games
+  // tools for branch FENs the lesson hasn't navigated to yet.
+  const lichessSnapshotRef = useRef<{
+    fen: string;
+    snapshot: NonNullable<LiveState['lichessSnapshot']>;
+  } | null>(null);
   const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
   const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
   const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
@@ -299,7 +444,6 @@ export function CoachTeachPage(): JSX.Element {
      *  past it. Multi-line content allowed because the summary itself
      *  may span 3-4 sentences (positional, structural, plan). */
     const VOICE_MARKER_RE = /\[VOICE:\s*([\s\S]*?)\]/g;
-    const SENTENCE_END = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
     let lastQueuedSentence = '';
     const queueSpeak = (raw: string): void => {
       const sentence = formatForSpeech(raw);
@@ -347,6 +491,27 @@ export function CoachTeachPage(): JSX.Element {
     const liveGame = gameRef.current;
     const fen = overrideFen ?? liveGame.fen;
     const fenTurn: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+    // Inject the latest Stockfish eval into the envelope when its FEN
+    // matches the FEN we're asking about. The brain otherwise
+    // self-counts material and gets it wrong — production audit
+    // (build 4e628e5) caught it claiming "up a pawn" after losing a
+    // queen for a knight. The eval bar effect populates this ref
+    // 250ms after every FEN change, cached, so it's usually fresh.
+    // When stale (FEN mismatch) we omit eval rather than misattribute.
+    const evalSnapshot = latestEvalRef.current;
+    const evalForAsk =
+      evalSnapshot && evalSnapshot.fen === fen
+        ? { evalCp: evalSnapshot.evalCp, evalMateIn: evalSnapshot.mateIn ?? undefined }
+        : undefined;
+    // Same FEN-keyed gate as the eval — only inject when the
+    // snapshot's FEN matches the FEN we're asking about, so a
+    // one-ply-stale snapshot can't be misattributed to the new
+    // position.
+    const lichessRef = lichessSnapshotRef.current;
+    const lichessForAsk =
+      lichessRef && lichessRef.fen === fen
+        ? { lichessSnapshot: lichessRef.snapshot }
+        : undefined;
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
@@ -358,6 +523,8 @@ export function CoachTeachPage(): JSX.Element {
       // when it was Black's turn but the position needed White's
       // response, then chess.js rejected it 5 trips in a row.
       whoseTurn: fenTurn,
+      ...(evalForAsk ?? {}),
+      ...(lichessForAsk ?? {}),
     };
 
     void logAppAudit({
@@ -443,7 +610,7 @@ export function CoachTeachPage(): JSX.Element {
             // bounded. We do NOT queueSpeak per sentence — voice is
             // routed exclusively through the `[VOICE: ...]` marker.
             let match: RegExpExecArray | null;
-            while ((match = SENTENCE_END.exec(sentenceBuffer)) !== null) {
+            while ((match = SENTENCE_END_RE.exec(sentenceBuffer)) !== null) {
               sentenceBuffer = sentenceBuffer.slice(match.index + match[1].length);
             }
           },
@@ -458,7 +625,7 @@ export function CoachTeachPage(): JSX.Element {
       tryExtractVoiceMarker();
       if (!voiceSpokenForTurn) {
         const finalText = sanitizeCoachText(result.text);
-        const firstSentenceMatch = SENTENCE_END.exec(finalText);
+        const firstSentenceMatch = SENTENCE_END_RE.exec(finalText);
         const firstSentence = firstSentenceMatch
           ? firstSentenceMatch[1].trim()
           : finalText.trim();
@@ -778,6 +945,9 @@ export function CoachTeachPage(): JSX.Element {
               showUndoButton={false}
               showResetButton={false}
               showEvalBar={showEvalBarEffective}
+              evaluation={latestEval}
+              isMate={latestIsMate}
+              mateIn={latestMateIn}
               showVoiceMic={false}
               showLastMoveHighlight
               onMove={handleStudentMove}

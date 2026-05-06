@@ -107,7 +107,7 @@ describe('coachService.ask', () => {
     expect(answer.toolCallIds).toHaveLength(0);
     expect(
       auditCalls.some(
-        (c) => c.kind === 'coach-brain-tool-called' && /unknown/i.test(c.summary),
+        (c) => c.kind === 'coach-brain-tool-skipped' && /unknown/i.test(c.summary),
       ),
     ).toBe(true);
   });

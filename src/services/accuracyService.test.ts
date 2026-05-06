@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { calculateAccuracy, getClassificationCounts, cpLossToAccuracy, capEval } from './accuracyService';
+import {
+  calculateAccuracy,
+  getClassificationCounts,
+  cpLossToAccuracy,
+  capEval,
+  winPercent,
+  accuracyFromWinDelta,
+} from './accuracyService';
 import type { CoachGameMove } from '../types';
 
 function makeMoveData(overrides: Partial<CoachGameMove> & { moveNumber: number }): CoachGameMove {
@@ -35,37 +42,51 @@ describe('accuracyService', () => {
     });
   });
 
-  describe('cpLossToAccuracy', () => {
-    it('returns ~100 for perfect move (0 cp loss)', () => {
+  describe('winPercent', () => {
+    it('returns 50% at eval 0', () => {
+      expect(winPercent(0)).toBeCloseTo(50, 1);
+    });
+    it('saturates near 100 for big white advantage', () => {
+      expect(winPercent(2000)).toBeGreaterThan(99);
+    });
+    it('saturates near 0 for big white disadvantage', () => {
+      expect(winPercent(-2000)).toBeLessThan(1);
+    });
+    it('produces ~67% at +200cp', () => {
+      const w = winPercent(200);
+      expect(w).toBeGreaterThan(64);
+      expect(w).toBeLessThan(70);
+    });
+  });
+
+  describe('accuracyFromWinDelta', () => {
+    it('returns 100 when no win-percent dropped', () => {
+      expect(accuracyFromWinDelta(0)).toBeCloseTo(100, 0);
+    });
+    it('returns ~63 for a 10-point drop', () => {
+      const a = accuracyFromWinDelta(10);
+      expect(a).toBeGreaterThan(58);
+      expect(a).toBeLessThan(68);
+    });
+    it('returns ~30 for a 25-point drop', () => {
+      const a = accuracyFromWinDelta(25);
+      expect(a).toBeGreaterThan(25);
+      expect(a).toBeLessThan(40);
+    });
+    it('floors near 0 for >60-point drop', () => {
+      expect(accuracyFromWinDelta(60)).toBeLessThan(8);
+    });
+  });
+
+  describe('cpLossToAccuracy (legacy compat)', () => {
+    it('returns ~100 for 0 cp loss', () => {
       expect(cpLossToAccuracy(0)).toBeCloseTo(100, 0);
     });
-
-    it('returns ~91 for 10cp loss', () => {
-      const acc = cpLossToAccuracy(10);
-      expect(acc).toBeGreaterThan(88);
-      expect(acc).toBeLessThan(94);
+    it('returns very high for tiny losses', () => {
+      expect(cpLossToAccuracy(10)).toBeGreaterThan(90);
     });
-
-    it('returns ~62 for 50cp loss (significant inaccuracy)', () => {
-      const acc = cpLossToAccuracy(50);
-      expect(acc).toBeGreaterThan(55);
-      expect(acc).toBeLessThan(68);
-    });
-
-    it('returns ~38 for 100cp loss (mistake)', () => {
-      const acc = cpLossToAccuracy(100);
-      expect(acc).toBeGreaterThan(33);
-      expect(acc).toBeLessThan(44);
-    });
-
-    it('returns ~4 for 300cp loss (blunder)', () => {
-      const acc = cpLossToAccuracy(300);
-      expect(acc).toBeGreaterThan(0);
-      expect(acc).toBeLessThan(8);
-    });
-
-    it('floors at 0 for extreme losses', () => {
-      expect(cpLossToAccuracy(1000)).toBe(0);
+    it('returns lower for big losses', () => {
+      expect(cpLossToAccuracy(300)).toBeLessThan(40);
     });
   });
 
@@ -77,45 +98,58 @@ describe('accuracyService', () => {
       expect(result.moveCount).toBe(0);
     });
 
-    it('returns high accuracy for moves with small centipawn loss', () => {
+    it('returns high accuracy for moves that maintain or grow the eval', () => {
       const moves: CoachGameMove[] = [
-        // White plays: eval goes from 0 to +30 (no loss, white gained)
         makeMoveData({ moveNumber: 1, evaluation: 30, preMoveEval: 0 }),
-        // Coach move (black): eval goes from +30 to +25 (black perspective: 25 → 30 = -5 cp loss from black view → actually gained)
         makeMoveData({ moveNumber: 2, evaluation: 25, preMoveEval: 30, isCoachMove: true }),
-        // White plays: eval goes from +25 to +50 (white gained again)
         makeMoveData({ moveNumber: 3, evaluation: 50, preMoveEval: 25 }),
       ];
       const result = calculateAccuracy(moves);
-      // White gained eval on both moves, so accuracy should be very high
       expect(result.white).toBeGreaterThan(95);
     });
 
     it('returns lower accuracy for blundered moves', () => {
       const moves: CoachGameMove[] = [
-        // White blunders: eval drops from 0 to -200 (200cp loss for white)
         makeMoveData({ moveNumber: 1, evaluation: -200, preMoveEval: 0, classification: 'blunder' }),
-        // White blunders again: eval drops from -200 to -300 (100cp loss for white)
         makeMoveData({ moveNumber: 3, evaluation: -300, preMoveEval: -200, classification: 'blunder' }),
       ];
       const result = calculateAccuracy(moves);
-      // 200cp loss → ~14%, 100cp loss → ~38%, average ≈ 26%
-      expect(result.white).toBeLessThan(35);
+      // Two blunders from the moving side — chess.com algo gives
+      // roughly 30-50% depending on win-percent delta. Definitely
+      // less than a clean game.
+      expect(result.white).toBeLessThan(60);
     });
 
-    it('penalizes blunders even in winning positions', () => {
-      // Player is +800 and drops to +200 — a 600cp loss
+    it('penalizes blunders less when already winning by a huge margin', () => {
+      // Player is +800 (94% win) and drops to +200 (67% win) — a
+      // 27-point win-percent drop. chess.com's algo treats this as
+      // a real mistake but not catastrophic since they're still
+      // winning by ~67%.
       const moves: CoachGameMove[] = [
         makeMoveData({ moveNumber: 1, evaluation: 200, preMoveEval: 800, classification: 'blunder' }),
       ];
       const result = calculateAccuracy(moves);
-      // 600cp loss should give near-0 accuracy, definitely < 20%
-      expect(result.white).toBeLessThan(20);
+      // ~28% per chess.com's algorithm — reflects "you're still
+      // winning but you slipped." Same game's cp-loss of 600 in the
+      // old algo would have shown near-zero, which doesn't match
+      // chess.com.
+      expect(result.white).toBeGreaterThan(20);
+      expect(result.white).toBeLessThan(40);
+    });
+
+    it('catastrophizes blunders when going from winning to losing', () => {
+      // Player is +200 (67% win) and drops to -800 (~5% win) — a
+      // 62-point win-percent drop. This is the chess.com "you threw
+      // away the win" scenario.
+      const moves: CoachGameMove[] = [
+        makeMoveData({ moveNumber: 1, evaluation: -800, preMoveEval: 200, classification: 'blunder' }),
+      ];
+      const result = calculateAccuracy(moves);
+      expect(result.white).toBeLessThan(15);
     });
 
     it('gives near-perfect accuracy for optimal play', () => {
       const moves: CoachGameMove[] = [
-        // Each move either maintains or slightly improves the eval
         makeMoveData({ moveNumber: 1, evaluation: 30, preMoveEval: 0 }),
         makeMoveData({ moveNumber: 3, evaluation: 45, preMoveEval: 30 }),
         makeMoveData({ moveNumber: 5, evaluation: 60, preMoveEval: 45 }),
@@ -145,26 +179,25 @@ describe('accuracyService', () => {
         makeMoveData({ moveNumber: 1, evaluation: 30, preMoveEval: 0, bestMoveEval: null }),
       ];
       const result = calculateAccuracy(moves);
-      // Move should be counted even without bestMoveEval
       expect(result.moveCount).toBe(1);
       expect(result.white).toBeGreaterThan(90);
     });
 
     it('produces realistic intermediate-player accuracy', () => {
-      // Simulate a game with a mix of good moves and errors
+      // Mix of good moves and errors. Harmonic mean drags the
+      // average down because of the blunder.
       const moves: CoachGameMove[] = [
-        makeMoveData({ moveNumber: 1, evaluation: 20, preMoveEval: 0 }),    // +20, good
-        makeMoveData({ moveNumber: 3, evaluation: 30, preMoveEval: 20 }),   // +10, good
-        makeMoveData({ moveNumber: 5, evaluation: -20, preMoveEval: 30 }),  // 50cp loss (inaccuracy)
-        makeMoveData({ moveNumber: 7, evaluation: 10, preMoveEval: -20 }),  // gained eval
-        makeMoveData({ moveNumber: 9, evaluation: -90, preMoveEval: 10 }),  // 100cp loss (mistake)
-        makeMoveData({ moveNumber: 11, evaluation: -80, preMoveEval: -90 }),// gained eval
-        makeMoveData({ moveNumber: 13, evaluation: -280, preMoveEval: -80 }),// 200cp loss (blunder)
+        makeMoveData({ moveNumber: 1, evaluation: 20, preMoveEval: 0 }),
+        makeMoveData({ moveNumber: 3, evaluation: 30, preMoveEval: 20 }),
+        makeMoveData({ moveNumber: 5, evaluation: -20, preMoveEval: 30 }),
+        makeMoveData({ moveNumber: 7, evaluation: 10, preMoveEval: -20 }),
+        makeMoveData({ moveNumber: 9, evaluation: -90, preMoveEval: 10 }),
+        makeMoveData({ moveNumber: 11, evaluation: -80, preMoveEval: -90 }),
+        makeMoveData({ moveNumber: 13, evaluation: -280, preMoveEval: -80 }),
       ];
       const result = calculateAccuracy(moves);
-      // Should produce a realistic intermediate range (50-80%)
       expect(result.white).toBeGreaterThan(50);
-      expect(result.white).toBeLessThan(80);
+      expect(result.white).toBeLessThan(95);
     });
   });
 

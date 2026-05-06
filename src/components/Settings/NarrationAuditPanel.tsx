@@ -2,27 +2,80 @@ import { useEffect, useMemo, useState } from 'react';
 import { getAppAuditLog, clearAppAuditLog } from '../../services/appAuditor';
 import type { AuditCategory, AuditEntry } from '../../services/appAuditor';
 import { runLichessHealthProbe } from '../../services/lichessHealthProbe';
-import { AlertTriangle, Trash2, Copy, Check, Activity } from 'lucide-react';
+import { voiceService } from '../../services/voiceService';
+import { AlertTriangle, Trash2, Copy, Check, Activity, Mic, Radio } from 'lucide-react';
 
 /**
  * Unified debug viewer for the whole-app auditor.
  *
- * Surfaces four classes of finding:
- *   1. Narration factual errors (piece-on-square, check/mate, illegal SAN)
- *   2. Runtime errors (uncaught exceptions, unhandled promise rejections)
- *   3. Subsystem failures (TTS fallback, bad FEN, LLM error, network, Dexie)
- *   4. App state anomalies (React error boundary, FEN desync)
+ * One stop for every diagnostic tool in the app:
+ *   - Audit log: narration / runtime / subsystem / app + virtual 'spine'
+ *     filter for unified-coach activity
+ *   - Lichess health probe button (writes to log)
+ *   - Voice diagnostic snapshot (last Polly speak status, audio context)
+ *   - Audit-stream toggle (POST every audit to /api/audit-stream so
+ *     Claude can watch in near-real time)
+ *   - "Copy for Claude" — markdown export of the visible findings for
+ *     pasting into a Claude Code session
  *
- * All entries share one rolling-window Dexie log. "Copy for Claude"
- * serialises the visible entries to markdown for pasting into a Claude
- * Code session.
+ * Previously scattered diagnostic UIs (VoiceDebugPanel overlay,
+ * /debug/audit page, DevTools-only audit-stream setup) are all
+ * surfaced here so a single Settings → Narration audit visit covers
+ * everything (WO-COACH-UNIFY-01).
  */
 export function NarrationAuditPanel(): JSX.Element {
   const [log, setLog] = useState<AuditEntry[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [filter, setFilter] = useState<AuditCategory | 'all'>('all');
+  const [copiedAll, setCopiedAll] = useState(false);
+  // 'spine' is a virtual filter (not an AuditCategory) — selects only
+  // the audit kinds emitted by coachService.ask + the surface-migration
+  // marker. Lets you copy just the spine activity for a session and
+  // paste it back to verify which surfaces routed through the unified
+  // coach (WO-COACH-UNIFY-01).
+  const [filter, setFilter] = useState<AuditCategory | 'all' | 'spine'>('all');
   const [probing, setProbing] = useState(false);
+  // Voice diagnostic snapshot — polls voiceService every 500ms so the
+  // Polly tier / status / audio-context state shown next to the audit
+  // log stays current. Was previously only visible via the
+  // VoiceDebugPanel overlay on /coach/walkthrough?debug=1; folded into
+  // this panel so all diagnostics live in one place.
+  const [voiceSnap, setVoiceSnap] = useState(() => voiceService.getLastSpeakDiagnostic());
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setVoiceSnap(voiceService.getLastSpeakDiagnostic());
+    }, 500);
+    return () => window.clearInterval(id);
+  }, []);
+  // Audit-stream toggle — when enabled, every logAppAudit also POSTs
+  // to /api/audit-stream so Claude can poll for new entries in near
+  // real time. Reads/writes localStorage 'auditStreamUrl' +
+  // 'auditStreamSecret'. Default off; nothing leaves the device.
+  const [streamUrl, setStreamUrl] = useState<string>(() =>
+    typeof window !== 'undefined' ? window.localStorage.getItem('auditStreamUrl') ?? '' : '',
+  );
+  const [streamSecret, setStreamSecret] = useState<string>(() =>
+    typeof window !== 'undefined' ? window.localStorage.getItem('auditStreamSecret') ?? '' : '',
+  );
+  const streamEnabled = !!streamUrl && !!streamSecret;
+  const handleEnableStream = (): void => {
+    const defaultUrl = `${window.location.origin}/api/audit-stream`;
+    const url = streamUrl || defaultUrl;
+    const secret = streamSecret ||
+      window.prompt('Audit-stream secret (must match AUDIT_STREAM_SECRET on the server):') ||
+      '';
+    if (!secret) return;
+    window.localStorage.setItem('auditStreamUrl', url);
+    window.localStorage.setItem('auditStreamSecret', secret);
+    setStreamUrl(url);
+    setStreamSecret(secret);
+  };
+  const handleDisableStream = (): void => {
+    window.localStorage.removeItem('auditStreamUrl');
+    window.localStorage.removeItem('auditStreamSecret');
+    setStreamUrl('');
+    setStreamSecret('');
+  };
   // WO-DEEP-DIAGNOSTICS — read the build stamp from the most recent
   // entry that carries one (every entry will, post this WO).
   const buildIdHint = useMemo(() => {
@@ -68,16 +121,29 @@ export function NarrationAuditPanel(): JSX.Element {
   const filtered = useMemo(() => {
     if (!log) return [];
     if (filter === 'all') return log;
+    if (filter === 'spine') {
+      return log.filter((e) =>
+        e.kind === 'coach-brain-ask-received' ||
+        e.kind === 'coach-brain-envelope-assembled' ||
+        e.kind === 'coach-brain-provider-called' ||
+        e.kind === 'coach-brain-answer-returned' ||
+        e.kind === 'coach-brain-tool-called' ||
+        e.kind === 'coach-brain-tool-skipped' ||
+        e.kind === 'coach-brain-tool-threw' ||
+        e.kind === 'coach-llm-model-selected' ||
+        e.kind === 'coach-surface-migrated',
+      );
+    }
     return log.filter((e) => e.category === filter);
   }, [log, filter]);
 
-  const handleCopy = async (): Promise<void> => {
-    if (filtered.length === 0) return;
-    const markdown = formatLogAsMarkdown(filtered);
+  /** Shared copy implementation — primary `navigator.clipboard.writeText`
+   *  with a transient-textarea fallback for browsers / iOS Safari
+   *  contexts where the async clipboard API is unavailable. */
+  const writeToClipboard = async (markdown: string): Promise<boolean> => {
     try {
       await navigator.clipboard.writeText(markdown);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+      return true;
     } catch {
       const textarea = document.createElement('textarea');
       textarea.value = markdown;
@@ -87,11 +153,35 @@ export function NarrationAuditPanel(): JSX.Element {
       textarea.select();
       try {
         document.execCommand('copy');
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 2000);
+        return true;
       } finally {
         document.body.removeChild(textarea);
       }
+    }
+  };
+
+  /** Copy ONLY the currently visible (filtered) findings. Use this
+   *  alongside the filter pill ('spine', 'narration', etc.) to grab
+   *  a focused slice when you know what you're looking for. */
+  const handleCopy = async (): Promise<void> => {
+    if (filtered.length === 0) return;
+    const ok = await writeToClipboard(formatLogAsMarkdown(filtered));
+    if (ok) {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  /** Copy the WHOLE audit log regardless of the active filter — every
+   *  category, every kind, every entry currently in Dexie. Use when
+   *  you want to send a complete forensic dump (the cross-cutting
+   *  view that catches issues no single filter would surface). */
+  const handleCopyAll = async (): Promise<void> => {
+    if (!log || log.length === 0) return;
+    const ok = await writeToClipboard(formatLogAsMarkdown(log));
+    if (ok) {
+      setCopiedAll(true);
+      window.setTimeout(() => setCopiedAll(false), 2000);
     }
   };
 
@@ -129,6 +219,11 @@ export function NarrationAuditPanel(): JSX.Element {
   const entries = [...filtered].reverse();
   const byCategory = countByCategory(log);
 
+  // Diagnostic tools wired into this panel (WO-COACH-UNIFY-01):
+  //   - voiceSnap: last Polly speak diagnostic (was VoiceDebugPanel overlay)
+  //   - streamEnabled: localStorage-backed audit-stream opt-in (was
+  //     hidden in /debug/audit details)
+
   return (
     <div className="space-y-3" data-testid="narration-audit-panel">
       <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -154,10 +249,19 @@ export function NarrationAuditPanel(): JSX.Element {
             onClick={() => { void handleCopy(); }}
             className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
             data-testid="narration-audit-copy"
-            title="Copy the visible findings as markdown for pasting into a Claude Code session"
+            title="Copy ONLY the visible findings (respects the active filter) as markdown — use this with the 'spine' filter to grab just unified-coach activity"
           >
             {copied ? <Check size={12} /> : <Copy size={12} />}
-            {copied ? 'Copied' : 'Copy for Claude'}
+            {copied ? 'Copied' : `Copy ${filter === 'all' ? 'visible' : filter}`}
+          </button>
+          <button
+            onClick={() => { void handleCopyAll(); }}
+            className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
+            data-testid="narration-audit-copy-all"
+            title="Copy the WHOLE audit log regardless of filter — every category, every kind. Use when you want a complete forensic dump for Claude."
+          >
+            {copiedAll ? <Check size={12} /> : <Copy size={12} />}
+            {copiedAll ? 'Copied all' : 'Copy all'}
           </button>
           <button
             onClick={() => { void handleClear(); }}
@@ -171,10 +275,26 @@ export function NarrationAuditPanel(): JSX.Element {
         </div>
       </div>
 
-      {/* Category filters */}
+      {/* Category filters + virtual 'spine' filter for unified-coach
+          activity (WO-COACH-UNIFY-01). The spine count reflects how
+          many audit entries came from coachService.ask / surface
+          migration markers — non-zero means the spine is being used. */}
       <div className="flex gap-1 flex-wrap text-xs">
-        {(['all', 'narration', 'runtime', 'subsystem', 'app'] as const).map((cat) => {
-          const count = cat === 'all' ? log.length : (byCategory[cat] ?? 0);
+        {(['all', 'spine', 'narration', 'runtime', 'subsystem', 'app'] as const).map((cat) => {
+          const count =
+            cat === 'all'
+              ? log.length
+              : cat === 'spine'
+                ? log.filter((e) =>
+                    e.kind === 'coach-brain-ask-received' ||
+                    e.kind === 'coach-brain-envelope-assembled' ||
+                    e.kind === 'coach-brain-provider-called' ||
+                    e.kind === 'coach-brain-answer-returned' ||
+                    e.kind === 'coach-brain-tool-called' ||
+                    e.kind === 'coach-llm-model-selected' ||
+                    e.kind === 'coach-surface-migrated',
+                  ).length
+                : (byCategory[cat] ?? 0);
           const active = filter === cat;
           return (
             <button
@@ -192,6 +312,70 @@ export function NarrationAuditPanel(): JSX.Element {
             </button>
           );
         })}
+      </div>
+
+      {/* Diagnostic tools — voice snapshot + audit stream toggle.
+          All audit/diagnostic UI lives in this panel now (WO-COACH-UNIFY-01). */}
+      <div
+        className="rounded-md border p-2 text-xs space-y-1.5"
+        style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
+        data-testid="diagnostic-tools"
+      >
+        <div className="font-medium flex items-center gap-1.5" style={{ color: 'var(--color-text-muted)' }}>
+          <Mic size={12} /> Voice diagnostic
+        </div>
+        <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 font-mono text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
+          <div>tier: <span>{voiceSnap.tier}</span></div>
+          <div>audioCtx: {voiceSnap.audioContextState}</div>
+          <div>polly: {voiceSnap.pollyAttempted ? `${voiceSnap.pollyOk ? 'OK' : 'FAIL'} (${voiceSnap.pollyStatus ?? '—'})` : 'idle'}</div>
+          <div>last: {voiceSnap.timestamp ? `${Math.round((Date.now() - voiceSnap.timestamp) / 100) / 10}s ago` : '—'}</div>
+        </div>
+        {voiceSnap.text && (
+          <div className="text-[10px] truncate" style={{ color: 'var(--color-text-muted)' }}>
+            text: "{voiceSnap.text.slice(0, 80)}{voiceSnap.text.length > 80 ? '…' : ''}"
+          </div>
+        )}
+        {voiceSnap.error && (
+          <div className="text-[10px]" style={{ color: 'var(--color-error)' }}>
+            err: {voiceSnap.error.slice(0, 100)}
+          </div>
+        )}
+
+        <div className="pt-1.5 mt-1 border-t font-medium flex items-center gap-1.5" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}>
+          <Radio size={12} /> Audit stream
+          <span
+            className="ml-auto px-1.5 py-0.5 rounded text-[10px]"
+            style={{
+              background: streamEnabled ? '#10b981' : 'var(--color-border)',
+              color: streamEnabled ? '#000' : 'var(--color-text-muted)',
+            }}
+          >
+            {streamEnabled ? 'ON' : 'off'}
+          </span>
+        </div>
+        <div className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
+          {streamEnabled
+            ? 'Streaming every audit to /api/audit-stream — Claude can poll for new entries in near real time.'
+            : 'Off — audits stay on this device. Enable to let Claude watch the log live during a session.'}
+        </div>
+        {streamEnabled ? (
+          <button
+            onClick={handleDisableStream}
+            className="text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface"
+            data-testid="audit-stream-disable"
+          >
+            Disable stream
+          </button>
+        ) : (
+          <button
+            onClick={handleEnableStream}
+            className="text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface"
+            data-testid="audit-stream-enable"
+            title="Requires AUDIT_STREAM_SECRET env var on the Vercel deployment + Vercel KV enabled"
+          >
+            Enable stream
+          </button>
+        )}
       </div>
 
       <div className="space-y-2 max-h-80 overflow-y-auto">

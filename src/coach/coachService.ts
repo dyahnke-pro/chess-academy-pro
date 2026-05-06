@@ -138,6 +138,19 @@ export interface CoachServiceOptions {
    *  toolbelt, AND the spine refuses to dispatch them if the LLM
    *  hallucinates a call. WO-COACH-RESILIENCE. */
   excludeTools?: readonly string[];
+  /** Per-call task hint for model selection. Maps to CoachTask in the
+   *  underlying coachApi (move_commentary → cheap, position_analysis_chat
+   *  → reasoner, chat_response → sonnet/deepseek-chat, etc.). When
+   *  omitted the providers default to 'chat_response'. WO-COACH-UNIFY-01. */
+  task?: import('../types').CoachTask;
+  /** Per-call max-tokens override. Useful for short one-shot calls
+   *  (tactic alerts ~200, move-commentary ~500) where the provider
+   *  default of 2000 wastes budget. WO-COACH-UNIFY-01. */
+  maxTokens?: number;
+  /** Per-call system-prompt addendum, appended to the envelope's
+   *  identity. Used by migrated surfaces with a prompt too dynamic
+   *  for a generic surface block. WO-COACH-UNIFY-01. */
+  systemPromptAddition?: string;
   /** Optional getter the spine calls between trips to refresh
    *  `ctx.liveFen`. Without this, the FEN snapshotted at handleSubmit
    *  time stays frozen across all round-trips — so when the brain
@@ -199,25 +212,29 @@ function formatToolResultsAsFollowUpAsk(
 }
 
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
+  // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
+  // ask-received audit so paste-back audit logs show which surface
+  // picked which model. Surfaces migrated onto the spine are
+  // distinguishable from legacy /coach/play LLM calls (which fire
+  // 'coach-llm-model-selected' instead) by the presence of these
+  // fields.
   void logAppAudit({
     kind: 'coach-brain-ask-received',
     category: 'subsystem',
     source: 'coachService.ask',
-    summary: `surface=${input.surface} ask="${input.ask.slice(0, 60)}"`,
-    details: JSON.stringify({ surface: input.surface, askLen: input.ask.length }),
+    summary: `surface=${input.surface} task=${options.task ?? 'chat_response'} maxTokens=${options.maxTokens ?? 'default'} ask="${input.ask.slice(0, 60)}"`,
+    details: JSON.stringify({
+      surface: input.surface,
+      askLen: input.ask.length,
+      task: options.task ?? 'chat_response',
+      maxTokens: options.maxTokens ?? null,
+      providerOverride: options.providerOverride?.name ?? null,
+    }),
   });
 
   // WO-FOUNDATION-02 trace harness — fires at the start of every
   // ask, mirroring coach-brain-ask-received but carrying the
   // traceId so the audit pipeline can be reconstructed.
-   
-  console.log('[TRACE-5]', options.traceId, 'ask received, input.ask:', input.ask);
-  void logAppAudit({
-    kind: 'trace-ask-received',
-    category: 'subsystem',
-    source: 'coachService.ask',
-    summary: `ask="${input.ask.slice(0, 80)}" surface=${input.surface} traceId=${options.traceId ?? 'none'}`,
-  });
 
   // WO-FOUNDATION-02: Layer 1 routing moved upstream to
   // GameChatPanel.handleSend. Most user messages never reached this
@@ -234,6 +251,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     mockery: options.mockery,
     flirt: options.flirt,
     verbosity: options.verbosity,
+    systemPromptAddition: options.systemPromptAddition,
     toolbelt: getToolDefinitions({ exclude: options.excludeTools }),
     input,
   });
@@ -255,12 +273,6 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // WO-FOUNDATION-02 trace harness — list the tool names the LLM
   // sees in the toolbelt so we can verify play_move / take_back_move
   // / reset_board / set_board_position are present.
-  void logAppAudit({
-    kind: 'trace-toolbelt',
-    category: 'subsystem',
-    source: 'coachService.ask',
-    summary: `tools=${envelope.toolbelt.map((t) => t.name).join(',')} traceId=${options.traceId ?? 'none'}`,
-  });
 
   const providerName = options.provider ?? resolveProviderName();
   const provider = options.providerOverride ?? pickProvider(providerName);
@@ -296,25 +308,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     summary: `ctx-built: onPlayMove=${typeof ctx.onPlayMove} onTakeBackMove=${typeof ctx.onTakeBackMove} onResetBoard=${typeof ctx.onResetBoard} onSetBoardPosition=${typeof ctx.onSetBoardPosition} onNavigate=${typeof ctx.onNavigate}`,
   });
 
-  // WO-FOUNDATION-02 trace harness — same shape as the audit above
-  // but carries the traceId so it joins the per-message trace.
-   
-  console.log('[TRACE-6]', options.traceId, 'ctx-built:', {
-    onPlayMove: typeof ctx.onPlayMove,
-    onTakeBackMove: typeof ctx.onTakeBackMove,
-    onResetBoard: typeof ctx.onResetBoard,
-    onSetBoardPosition: typeof ctx.onSetBoardPosition,
-    onNavigate: typeof ctx.onNavigate,
-  });
-  void logAppAudit({
-    kind: 'trace-ctx-built',
-    category: 'subsystem',
-    source: 'coachService.ask',
-    summary: `onPlayMove=${typeof ctx.onPlayMove} onTakeBackMove=${typeof ctx.onTakeBackMove} onResetBoard=${typeof ctx.onResetBoard} traceId=${options.traceId ?? 'none'}`,
-  });
-
-  const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
   const dispatchedIds: string[] = [];
+  // Cap multi-turn tool loops so a misbehaving brain can't loop forever.
+  const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
 
   let currentEnvelope: AssembledEnvelope = envelope;
   let useStreaming = !!options.onChunk && typeof provider.callStreaming === 'function';
@@ -344,27 +340,24 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       kind: 'coach-brain-provider-called',
       category: 'subsystem',
       source: 'coachService.ask',
-      summary: `provider=${provider.name} streaming=${useStreaming} trip=${trip}/${maxRoundTrips}`,
+      summary: `surface=${input.surface} provider=${provider.name} task=${options.task ?? 'chat_response'} streaming=${useStreaming} trip=${trip}/${maxRoundTrips}`,
+      details: JSON.stringify({
+        surface: input.surface,
+        provider: provider.name,
+        task: options.task ?? 'chat_response',
+        maxTokens: options.maxTokens ?? null,
+        streaming: useStreaming,
+        trip,
+        maxRoundTrips,
+      }),
     });
 
+    const providerCallOptions = options.task !== undefined || options.maxTokens !== undefined
+      ? { task: options.task, maxTokens: options.maxTokens }
+      : undefined;
     lastResponse = useStreaming && options.onChunk && provider.callStreaming
-      ? await provider.callStreaming(currentEnvelope, options.onChunk)
-      : await provider.call(currentEnvelope);
-
-    // WO-FOUNDATION-02 trace harness — what tool calls did the
-    // provider return? Critical signal for diagnosing why play_move
-    // doesn't dispatch.
-     
-    console.log('[TRACE-9]', options.traceId, 'provider response:', {
-      toolCalls: lastResponse.toolCalls,
-      textPreview: lastResponse.text.slice(0, 200),
-    });
-    void logAppAudit({
-      kind: 'trace-provider-response',
-      category: 'subsystem',
-      source: 'coachService.ask',
-      summary: `toolCallNames=${lastResponse.toolCalls.map((c) => c.name).join(',')} textLen=${lastResponse.text.length} traceId=${options.traceId ?? 'none'}`,
-    });
+      ? await provider.callStreaming(currentEnvelope, options.onChunk, providerCallOptions)
+      : await provider.call(currentEnvelope, providerCallOptions);
 
     if (lastResponse.toolCalls.length === 0) {
       // No tools emitted — terminal turn. Exit the loop.
@@ -394,22 +387,22 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     for (const call of lastResponse.toolCalls) {
       if (excludeSet?.has(call.name)) {
         void logAppAudit({
-          kind: 'coach-brain-tool-called',
+          kind: 'coach-brain-tool-skipped',
           category: 'subsystem',
           source: 'coachService.ask',
-          summary: `excluded tool ${call.name} skipped (resilience fallback)`,
-          details: JSON.stringify({ id: call.id, args: call.args }),
+          summary: `excluded ${call.name} (resilience fallback)`,
+          details: JSON.stringify({ id: call.id, name: call.name, reason: 'excluded', args: call.args }),
         });
         continue;
       }
       const tool = getTool(call.name);
       if (!tool) {
         void logAppAudit({
-          kind: 'coach-brain-tool-called',
+          kind: 'coach-brain-tool-skipped',
           category: 'subsystem',
           source: 'coachService.ask',
-          summary: `unknown tool ${call.name}`,
-          details: JSON.stringify({ id: call.id, args: call.args }),
+          summary: `unknown ${call.name}`,
+          details: JSON.stringify({ id: call.id, name: call.name, reason: 'unknown', args: call.args }),
         });
         continue;
       }
@@ -422,13 +415,6 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
 
     const dispatchOne = async (call: typeof lastResponse.toolCalls[number]) => {
       // eslint-disable-next-line no-console
-      console.log('[TRACE-10]', options.traceId, 'tool dispatch:', call.name, call.args);
-      void logAppAudit({
-        kind: 'trace-tool-dispatch',
-        category: 'subsystem',
-        source: 'coachService.ask',
-        summary: `tool=${call.name} traceId=${options.traceId ?? 'none'}`,
-      });
       const tool = getTool(call.name);
       // Existence already verified above; non-null assertion is safe
       // here because unknown tools were filtered out.
@@ -472,7 +458,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         }
       } catch (err) {
         void logAppAudit({
-          kind: 'coach-brain-tool-called',
+          kind: 'coach-brain-tool-threw',
           category: 'subsystem',
           source: 'coachService.ask',
           summary: `${call.name} threw`,
@@ -504,8 +490,61 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       await Promise.allSettled(readCalls.map(dispatchOne));
     }
     // Phase 2: write tools sequentially, in original emit order.
+    // Refresh liveFen BEFORE each write tool so a prior write in the
+    // same trip is visible to the next. Production audit (build
+    // 21c79dd) caught the brain emitting [set_board_position(endgame
+    // FEN), play_move(Kd5)] in one trip; play_move's pre-validation
+    // read the STALE starting FEN (snapshotted at trip 1 setup) and
+    // rejected Kd5 as illegal because there's no king at d5 in the
+    // starting position. The fix mirrors the trip>1 refresh above —
+    // any previous write (set_board_position, play_move,
+    // take_back_move, reset_board) updates the surface's
+    // liveFenRef, and this getter pulls the latest value before the
+    // next write validates against it.
+    // Track play_move rejections in this trip. After the second one,
+    // short-circuit subsequent play_move calls with a stronger error
+    // that breaks the brain out of the "demo by sequencing play_move"
+    // pattern. Production audit (build 42fb9a0) caught the brain
+    // emitting 9 sequential play_move calls in one trip on a "Vienna
+    // trap" lesson — every one rejected (sovereignty + illegal-move
+    // chain) — instead of using start_walkthrough_for_opening. The
+    // prompt rule wasn't enough; this is the code-level backstop.
+    let playMoveRejectionsThisTrip = 0;
     for (const call of writeCalls) {
+      if (options.getLiveFen) {
+        const fresh = options.getLiveFen();
+        if (fresh) ctx.liveFen = fresh;
+      }
+      // Break the cascade: if play_move has already been rejected
+      // twice this trip, refuse subsequent play_move calls with
+      // explicit redirect guidance. Other tools (set_board_position,
+      // take_back_move, etc.) pass through normally.
+      if (call.name === 'play_move' && playMoveRejectionsThisTrip >= 2) {
+        const error =
+          `play_move SHORT-CIRCUITED — this trip has already had ${playMoveRejectionsThisTrip} play_move rejections. ` +
+          `STOP attempting to walk through a sequence via play_move. play_move is for ONE move on YOUR color's turn during practical play, not a way to enact hypothetical lines. ` +
+          `If the student asked for a guided opening lesson ("teach me [opening]" / "show me the trap"), call start_walkthrough_for_opening with the opening name — that routes them to a surface where each move animates sequentially. ` +
+          `If you just want to show one position to discuss, call set_board_position ONCE with the FEN and explain in prose + [BOARD: arrow] markers.`;
+        toolResults.push({ name: call.name, ok: false, error });
+        void logAppAudit({
+          kind: 'tool-call-error',
+          category: 'subsystem',
+          source: 'coachService.ask',
+          summary: `play_move short-circuited after ${playMoveRejectionsThisTrip} rejections this trip`,
+          details: JSON.stringify({ id: call.id, args: call.args, rejectionsThisTrip: playMoveRejectionsThisTrip }),
+        });
+        continue;
+      }
+      const beforeLen = toolResults.length;
       await dispatchOne(call);
+      // Count rejections of play_move only — other tool failures don't
+      // indicate the cascading-demo pattern.
+      if (call.name === 'play_move') {
+        const last = toolResults[toolResults.length - 1];
+        if (last && beforeLen < toolResults.length && !last.ok) {
+          playMoveRejectionsThisTrip += 1;
+        }
+      }
     }
 
     // If we have round-trips remaining AND we dispatched any tools,
@@ -538,7 +577,16 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     kind: 'coach-brain-answer-returned',
     category: 'subsystem',
     source: 'coachService.ask',
-    summary: `provider=${provider.name} text=${lastResponse.text.length}c tools=${dispatchedIds.length}`,
+    summary: `surface=${input.surface} provider=${provider.name} task=${options.task ?? 'chat_response'} text=${lastResponse.text.length}c tools=${dispatchedIds.length}`,
+    details: JSON.stringify({
+      surface: input.surface,
+      provider: provider.name,
+      task: options.task ?? 'chat_response',
+      maxTokens: options.maxTokens ?? null,
+      textLength: lastResponse.text.length,
+      toolCallsDispatched: dispatchedIds.length,
+      textPreview: lastResponse.text.slice(0, 120),
+    }),
   });
 
   return {

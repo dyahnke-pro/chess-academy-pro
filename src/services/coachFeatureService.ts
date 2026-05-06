@@ -1,6 +1,8 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { getCoachChatResponse, getCoachCommentary } from './coachApi';
+import { getCoachCommentary } from './coachApi';
+import { buildChessContextMessage } from './coachPrompts';
+import { coachService } from '../coach/coachService';
 import {
   GAME_POST_REVIEW_ADDITION,
   REVIEW_INTRO_ADDITION,
@@ -8,6 +10,7 @@ import {
 } from './coachPrompts';
 import { getThemeSkills } from './puzzleService';
 import { logAppAudit } from './appAuditor';
+import { unwrapSpineError } from './sanitizeCoachText';
 import type { BadHabit, CoachContext, UserProfile } from '../types';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
@@ -264,21 +267,44 @@ export async function generateNarrativeSummary(
     `PGN: ${pgn}`,
   ].join('\n');
 
-  return getCoachChatResponse(
-    [{ role: 'user', content: userMessage }],
-    GAME_POST_REVIEW_ADDITION,
-    onStream,
-    'game_narrative_summary',
-    // Raised from the default 1024 so the tail of the summary isn't
-    // clipped when the model explores the per-move block. Still tight
-    // enough to force brevity.
-    800,
-    // Review length is constrained by the addition, not by the
-    // student's global verbosity. Override to 'medium' so a user-
-    // level 'none' setting doesn't silently return a blank review
-    // (the root cause of today's empty output).
-    'medium',
+  // WO-COACH-UNIFY-01 Review-tab parity: route through coachService.ask
+  // with surface='review' so the unified envelope (REVIEW_MODE_ADDITION
+  // identity + memory + live-state) wraps every Review-tab LLM call —
+  // same shape as /coach/teach and /coach/play. GAME_POST_REVIEW_ADDITION
+  // threads as systemPromptAddition. Empty string on provider error
+  // preserves the legacy "graceful blank" contract.
+  const finalFen = (() => {
+    try {
+      const chess = new Chess();
+      chess.loadPgn(pgn);
+      return chess.fen();
+    } catch {
+      return undefined;
+    }
+  })();
+  const spineAnswer = await coachService.ask(
+    {
+      surface: 'review',
+      ask: userMessage,
+      liveState: {
+        surface: 'review',
+        fen: finalFen,
+        userJustDid: 'Reviewing the completed game',
+        whoseTurn: finalFen?.split(' ')[1] === 'b' ? 'black' : 'white',
+      },
+    },
+    {
+      // chat_response (not game_narrative_summary) so the spine
+      // envelope doesn't push deepseek-reasoner into empty-content.
+      // See the segments call below for the full rationale.
+      task: 'chat_response',
+      maxTokens: 800,
+      maxToolRoundTrips: 1,
+      systemPromptAddition: GAME_POST_REVIEW_ADDITION,
+      onChunk: onStream,
+    },
   );
+  return unwrapSpineError(spineAnswer.text);
 }
 
 // ─── Review Narration Segments ─────────────────────────────────────────────
@@ -335,9 +361,40 @@ Respond ONLY with valid JSON: {"intro": "...", "closing": "..."}
 Do not include any other text outside the JSON.${analysisContext}`,
   };
 
-  const raw = await getCoachCommentary('game_narrative_summary', context);
+  // WO-COACH-UNIFY-01 final review-tab parity: route through
+  // coachService.ask with surface='review' so this prep call ALSO
+  // rides the unified envelope (REVIEW_MODE_ADDITION + memory +
+  // live-state). Was the last legacy LLM caller in the Review path.
+  // The JSON-only instruction lives inside `context.additionalContext`,
+  // so it ends up in the user message via buildChessContextMessage —
+  // identical wire shape as the legacy getCoachCommentary call.
+  const userMessage = buildChessContextMessage(context);
+  let raw = '';
   try {
-    // Extract JSON from the response (may have markdown fences)
+    const spineAnswer = await coachService.ask(
+      {
+        surface: 'review',
+        ask: userMessage,
+        liveState: {
+          surface: 'review',
+          fen: context.fen,
+          userJustDid: 'Generating intro/closing narration for the review',
+        },
+      },
+      {
+        // chat_response avoids the deepseek-reasoner empty-content
+        // regression — see segments call for full rationale.
+        task: 'chat_response',
+        maxTokens: 800,
+        maxToolRoundTrips: 1,
+      },
+    );
+    raw = unwrapSpineError(spineAnswer.text);
+  } catch {
+    // Fall through to the deterministic fallback below.
+  }
+  try {
+    // Extract JSON from the response (may have markdown fences).
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const parsed = JSON.parse(jsonMatch[0]) as { intro: string; closing: string };
@@ -485,6 +542,41 @@ function buildFenChain(moves: ReviewMoveInput[]): { fenBefore: string; fenAfter:
   return chain;
 }
 
+/** Deterministic fallback narration for a single ply. Used when the
+ *  LLM either omits a ply entirely or returns null for it. The user
+ *  has explicitly asked for narration on every move — silent plies
+ *  leave the student staring at the board. Production audit (build
+ *  06b6d5d) showed only 6/10 plies narrated; this guarantees a read
+ *  on every move even when the LLM regresses. Tone stays neutral —
+ *  the LLM produces the rich personality narration; this is just a
+ *  safety net. */
+function fallbackMoveNarration(params: {
+  san: string;
+  color: 'white' | 'black';
+  isStudentMove: boolean;
+  classification: import('../types').MoveClassification | null;
+}): string {
+  const { san, isStudentMove, classification } = params;
+  const subject = isStudentMove ? 'You played' : 'The coach played';
+  const sanReadable = san.replace(/\+|#/g, '');
+  if (classification === 'blunder') {
+    return `${subject} ${sanReadable} — flagged as a blunder. Step through to see the better line.`;
+  }
+  if (classification === 'mistake') {
+    return `${subject} ${sanReadable} — flagged as a mistake. There was a stronger continuation.`;
+  }
+  if (classification === 'inaccuracy') {
+    return `${subject} ${sanReadable} — slightly inaccurate, but still in the game.`;
+  }
+  if (classification === 'brilliant') {
+    return `${subject} ${sanReadable} — a brilliant move. The engine approves.`;
+  }
+  if (classification === 'great') {
+    return `${subject} ${sanReadable} — a strong, accurate move.`;
+  }
+  return `${subject} ${sanReadable}.`;
+}
+
 /** Fallback intro used if the LLM intro call fails. Still grounded in
  *  result + opening name. */
 function defaultIntroText(params: {
@@ -558,28 +650,68 @@ export async function generateReviewNarration(params: {
     perMoveBlock,
   ].join('\n');
 
+  // WO-COACH-UNIFY-01 Review-tab parity: route both prep calls through
+  // coachService.ask with surface='review' so the unified envelope
+  // (REVIEW_MODE_ADDITION + memory + live-state) wraps the prep-scan
+  // step too. Same shape as /coach/teach + /coach/play. The two
+  // surface-specific prompts thread as systemPromptAddition.
   // Fire both in parallel so the review opens faster.
-  const introPromise = getCoachChatResponse(
-    [{ role: 'user', content: introUserMessage }],
-    REVIEW_INTRO_ADDITION,
-    undefined,
-    'chat_response',
-    200,
-    'fast',
-  ).catch(() => '');
+  const reviewLiveState = {
+    surface: 'review' as const,
+    fen: fenChain[fenChain.length - 1]?.fenAfter,
+    userJustDid: 'Opening review of the completed game (prep scan)',
+  };
+  const introPromise = coachService.ask(
+    {
+      surface: 'review',
+      ask: introUserMessage,
+      liveState: reviewLiveState,
+    },
+    {
+      task: 'chat_response',
+      maxTokens: 200,
+      maxToolRoundTrips: 1,
+      systemPromptAddition: REVIEW_INTRO_ADDITION,
+    },
+  ).then((a) => unwrapSpineError(a.text)).catch(() => '');
 
   // max_tokens: 8000 — the per-ply JSON array scales with game length
   // and the prior 2000 cap silently truncated output for games past ~20
   // plies, producing unparseable JSON and empty narration. Match the
   // "max_tokens is not a useful filter" posture from WO-POLISH-02.
-  const segmentsPromise = getCoachChatResponse(
-    [{ role: 'user', content: segmentsUserMessage }],
-    REVIEW_MOVE_SEGMENT_ADDITION,
-    undefined,
-    'game_narrative_summary',
-    8000,
-    'medium',
-  ).catch((err: unknown) => {
+  const segmentsPromise = coachService.ask(
+    {
+      surface: 'review',
+      ask: segmentsUserMessage,
+      liveState: reviewLiveState,
+    },
+    {
+      // WO-COACH-UNIFY-01 follow-up: switched task from
+      // 'game_narrative_summary' (which routes to deepseek-reasoner)
+      // to 'chat_response' (deepseek-chat). Same fix shipped for
+      // phase-narration: under the heavy spine envelope, the
+      // reasoner spends its full token budget on reasoning_content
+      // and emits zero content. Production audit on build 088fe97
+      // showed zero coach-brain-* entries from this prep call —
+      // partly because of autoStartReview gating it out, but also
+      // because when it DID fire elsewhere, deepseek-reasoner was
+      // returning empty. Chat-tier model is fast + uses full budget
+      // for the JSON output. 8000 max tokens still required since
+      // per-ply JSON scales with game length.
+      task: 'chat_response',
+      // WO-COACH-UNIFY-01 follow-up: dropped 8000 → 4000. Production
+      // audit on build ae46bcd caught the segments call hitting the
+      // spine's 30s PROVIDER_TIMEOUT_MS on a long game ("(coach-brain
+      // provider error: coach-brain-deepseek-timeout)" in finding 47).
+      // Most games are 30-50 plies; 4000 tokens (~150 chars per ply
+      // commentary) covers that comfortably while keeping latency
+      // inside the 30s envelope. Long-game truncation is graceful —
+      // segments end early and the walk plays out silent plies.
+      maxTokens: 4000,
+      maxToolRoundTrips: 1,
+      systemPromptAddition: REVIEW_MOVE_SEGMENT_ADDITION,
+    },
+  ).then((a) => unwrapSpineError(a.text)).catch((err: unknown) => {
     const msg = err instanceof Error ? err.message : String(err);
     void logAppAudit({
       kind: 'review-segments-parse-failed',
@@ -639,6 +771,24 @@ export async function generateReviewNarration(params: {
     const fullMove = Math.ceil(m.ply / 2);
     const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
     const bestUci = m.bestMove;
+    // Prefer the LLM's per-ply narration. When it's missing (LLM
+    // returned a null, omitted the ply, or the parse failed), fall
+    // back to a deterministic one-liner so EVERY ply speaks. The user
+    // has explicitly asked for narration on every move — silent plies
+    // leave the student staring at the board with no audio. Production
+    // audit (build 06b6d5d) showed only 6 of 10 plies narrated under
+    // the old "null = silence" prompt; this fallback closes the gap
+    // even when the LLM regresses.
+    const llmNarration = narrationByPly.get(m.ply);
+    const narration =
+      llmNarration && llmNarration.trim().length > 0
+        ? llmNarration
+        : fallbackMoveNarration({
+            san: m.san,
+            color: moverColor,
+            isStudentMove: !m.isCoachMove,
+            classification: m.classification,
+          });
     segments.push({
       ply: m.ply,
       moveNumber: fullMove,
@@ -651,7 +801,7 @@ export async function generateReviewNarration(params: {
       evalAfter: m.evaluation,
       bestMoveSan: bestUci, // UCI is passed through as SAN when SAN isn't available
       bestMoveUci: bestUci,
-      narration: narrationByPly.get(m.ply) ?? null,
+      narration,
     });
   }
 

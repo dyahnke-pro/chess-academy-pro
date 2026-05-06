@@ -67,6 +67,20 @@ const CHECK_CLAIM_RE = /\b(?:in\s+check|delivers?\s+check|delivering\s+check|giv
 /** "checkmate" / "mate in N" claims. */
 const MATE_CLAIM_RE = /\b(?:checkmate|mate\s+in\s+\d+|forced\s+mate)\b/i;
 
+/** Return a FEN identical to `fen` but with the side-to-move flipped
+ *  (and en-passant cleared since a flip invalidates it). Used by the
+ *  illegal-SAN check so the auditor can verify a move's legality from
+ *  EITHER side's perspective — narrations frequently mention the
+ *  opposite side's candidate moves ("you should've played Bd2"). */
+function flipSideToMove(fen: string): string | null {
+  const parts = fen.split(' ');
+  if (parts.length < 4) return null;
+  parts[1] = parts[1] === 'w' ? 'b' : 'w';
+  // Clear en-passant — flipping the turn invalidates any prior ep target.
+  parts[3] = '-';
+  return parts.join(' ');
+}
+
 export function auditNarration(
   fen: string,
   narration: string,
@@ -165,7 +179,34 @@ export function auditNarration(
   // 5. Illegal SAN references — skip castling (it's always O-O or O-O-O
   //    regardless of position) and the auditor produces noise on
   //    castling mentions.
-  const legal = new Set(chess.moves());
+  //    Build legality sets for BOTH colors. Coach narration often
+  //    discusses what the OTHER side could do ("you should've played
+  //    Bd2", "I'll play Qe4 next"); checking only the current side-to-
+  //    move's legal moves false-positives every cross-color reference.
+  //    Production audit (build 4933e8e) caught this on "axb4, c3, even
+  //    Bd2 — any of those picks up a piece" — Bd2 is white's move, but
+  //    the FEN was black-to-move at audit time, so the lone-side check
+  //    flagged it as illegal.
+  const legalCurrentSide = new Set(chess.moves());
+  const flippedFen = flipSideToMove(fen);
+  const legalOpposingSide = (() => {
+    if (!flippedFen) return new Set<string>();
+    try {
+      return new Set(new Chess(flippedFen).moves());
+    } catch {
+      return new Set<string>();
+    }
+  })();
+  const isLegalForEitherSide = (san: string): boolean => {
+    return (
+      legalCurrentSide.has(san) ||
+      legalCurrentSide.has(`${san}+`) ||
+      legalCurrentSide.has(`${san}#`) ||
+      legalOpposingSide.has(san) ||
+      legalOpposingSide.has(`${san}+`) ||
+      legalOpposingSide.has(`${san}#`)
+    );
+  };
   for (const m of narration.matchAll(SAN_MOVE_RE)) {
     const candidate = m[1];
     // Skip bare square names like "e4" in sentences like "control e4"
@@ -173,11 +214,22 @@ export function auditNarration(
     // letter prefix (Nc3, Bxf7, etc.) since those ARE unambiguous
     // move claims.
     if (!/^[NBRQK]/.test(candidate)) continue;
-    if (!legal.has(candidate) && !legal.has(`${candidate}+`) && !legal.has(`${candidate}#`)) {
+    if (!isLegalForEitherSide(candidate)) {
+      // Past-tense / current-position reference: if the destination
+      // square already holds a piece of the matching type, the
+      // narration is referencing the piece's CURRENT location
+      // ("You had Nd2 defending e4") rather than proposing a move.
+      // The SAN parses as illegal only because the piece is already
+      // there. Production audit (build e2a96ed) caught this exact
+      // false positive on Nd2 right after the knight moved to d2.
+      const pieceLetter = candidate.charAt(0).toLowerCase();
+      const destSquare = candidate.slice(-2);
+      const occupant = chess.get(destSquare as never) as { type: string } | null;
+      if (occupant && occupant.type === pieceLetter) continue;
       flags.push({
         kind: 'illegal-san',
         narrationExcerpt: candidate,
-        explanation: `narration references ${candidate} but it is not a legal move in this position`,
+        explanation: `narration references ${candidate} but it is not a legal move for either side in this position`,
       });
     }
   }

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { getCoachChatResponse } from '../services/coachApi';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine } from '../services/stockfishEngine';
-import { buildChessContextMessage, PHASE_NARRATION_ADDITION } from '../services/coachPrompts';
+import { buildChessContextMessage } from '../services/coachPrompts';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
+import { coachService } from '../coach/coachService';
 import type { CoachContext, PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 
@@ -284,38 +284,75 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       };
 
       console.log('[PHASE-HOOK-05] LLM call dispatched', {
-        addition: 'PHASE_NARRATION_ADDITION',
+        surface: 'phase-narration',
+        viaSpine: true,
         task: 'position_analysis_chat',
-        maxTokens: 4000,
+        maxTokens: 600,
+      });
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'usePhaseNarration',
+        summary: `surface=phase-narration viaSpine=true task=position_analysis_chat (WO-COACH-UNIFY-01 commit 2)`,
+        fen: event.fen,
       });
       try {
-        apiResponse = await withTimeout(
-          getCoachChatResponse(
-            [{ role: 'user', content: userMessage }],
-            PHASE_NARRATION_ADDITION,
-            (chunk: string) => {
-              if (token !== activeTokenRef.current) return;
-              fullText += chunk;
-              setCurrentText(fullText);
-              sentenceBuffer += chunk;
-              flushCompletedSentences();
+        // WO-COACH-UNIFY-01 commit 2: route phase-narration through
+        // the Coach Brain Spine. The PHASE_NARRATION_ADDITION prompt
+        // is now appended in envelope.ts when surface='phase-narration',
+        // so memory + live-state + tool-belt grounding propagate here
+        // for free. Bug fixes to the spine (asterisk strip, sentence
+        // prefix preservation) automatically apply to /coach/play
+        // and /coach/teach phase narrations alike.
+        const spineAnswer = await withTimeout(
+          coachService.ask(
+            {
+              surface: 'phase-narration',
+              ask: userMessage,
+              liveState: {
+                surface: 'phase-narration',
+                fen: event.fen,
+                moveHistory: undefined,
+                userJustDid: `Phase transition: ${event.kind} after ${event.triggeringMoveSan}`,
+                whoseTurn: event.fen.split(' ')[1] === 'b' ? 'black' : 'white',
+              },
             },
-            'position_analysis_chat',
-            // WO-NARR-POLICY-04: dropped 4000 → 600 tokens. Production
-            // audit e177da1 caught phase narration taking 32-35
-            // seconds end-to-end (LLM emitting 4000 tokens of prose),
-            // long enough that the deterministic fallback fires
-            // FIRST and the student hears generic filler before the
-            // real narration even arrives. 600 tokens (~2200 chars,
-            // ~30s of speech) returns in ~3-5s and the new prompt
-            // shape is action-first, idea-driven, every sentence a
-            // directive — no recap of moves the student already saw.
-            600,
-            'medium',
+            {
+              task: 'chat_response',
+              // WO-COACH-UNIFY-01 audit-driven correction (build 82b6a28):
+              // bumping maxTokens 600 → 1500 didn't fix the empty-text
+              // regression — deepseek-reasoner was spending its whole
+              // token budget on reasoning_content and emitting zero
+              // content even at 1500 tokens, AND taking 21s (well past
+              // the 12s NARRATION_API_TIMEOUT_MS), so the fallback
+              // fired before the call returned. Root cause: the spine
+              // envelope is much heavier than legacy (full identity +
+              // 22 tools + memory snapshot + 200-msg history), and
+              // reasoning_content scales with input length.
+              //
+              // Fix: route phase-narration through `chat_response`
+              // task. Chat-tier models (deepseek-chat /
+              // claude-sonnet-4-6) don't have reasoning_content
+              // overhead — they use the full token budget for the
+              // actual narration. They're also faster, so the call
+              // lands inside the 12s wrapper. Phase narration is
+              // descriptive prose, not a tactical puzzle — chat
+              // models handle it fine.
+              maxTokens: 800,
+              maxToolRoundTrips: 1,
+              onChunk: (chunk: string) => {
+                if (token !== activeTokenRef.current) return;
+                fullText += chunk;
+                setCurrentText(fullText);
+                sentenceBuffer += chunk;
+                flushCompletedSentences();
+              },
+            },
           ),
           NARRATION_API_TIMEOUT_MS,
           'phase-narration-api',
         );
+        apiResponse = spineAnswer.text;
         console.log('[PHASE-HOOK-06] LLM returned', {
           length: apiResponse.length,
           startsWithWarning: apiResponse.startsWith('⚠️'),
@@ -378,7 +415,14 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             fen: event.fen,
           });
           setCurrentText(fallback);
-          voiceService.speakForced(fallback).catch(() => {
+          // Strip the leading `* ` before TTS — the asterisk is a
+          // chat-banner affordance flagging the fallback path; Polly
+          // reads the literal "asterisk" out loud otherwise (production
+          // audit, build e2a96ed: voice spoke "* Endgame territory.
+          // King activity..."). Chat keeps the prefix; voice gets the
+          // bare prose.
+          const spokenFallback = fallback.replace(/^\s*\*\s*/, '');
+          voiceService.speakForced(spokenFallback).catch(() => {
             /* swallow — TTS hangs / device failures audit elsewhere */
           });
         } else {

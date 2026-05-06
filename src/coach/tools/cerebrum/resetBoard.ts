@@ -17,14 +17,6 @@ export const resetBoardTool: Tool = {
   parameters: { type: 'object', properties: {}, required: [] },
   async execute(_args, ctx) {
     // WO-FOUNDATION-02 trace harness.
-     
-    console.log('[TRACE-11c]', ctx?.traceId, 'resetBoardTool entered, hasCallback:', typeof ctx?.onResetBoard);
-    void logAppAudit({
-      kind: 'trace-tool-entered',
-      category: 'subsystem',
-      source: 'resetBoardTool',
-      summary: `hasCallback=${typeof ctx?.onResetBoard === 'function'} traceId=${ctx?.traceId ?? 'none'}`,
-    });
 
     if (!ctx?.onResetBoard) {
       // Constitution: graceful no-op when the surface didn't wire

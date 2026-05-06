@@ -1,14 +1,19 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Play, Clock, Loader } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
 import { generateCoachSession } from '../../services/sessionGenerator';
 import { createSession } from '../../services/sessionGenerator';
-import { getCoachCommentary } from '../../services/coachApi';
+import { coachService } from '../../coach/coachService';
+import { logAppAudit } from '../../services/appAuditor';
+import { SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { voiceService } from '../../services/voiceService';
+import { SESSION_PLAN_ADDITION } from '../../services/coachPrompts';
 import { ChatInput } from './ChatInput';
 import type { SessionPlan, SessionBlock } from '../../types';
+
+const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 const BLOCK_LABELS: Record<string, { label: string; color: string; emoji: string }> = {
   opening_review: { label: 'Opening Review', color: 'bg-blue-500/10 text-blue-500 border-blue-500/20', emoji: '📖' },
@@ -54,6 +59,37 @@ export function CoachSessionPlanPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [adjusting, setAdjusting] = useState(false);
 
+  // Streaming-voice dispatcher refs. Kept across renders so the
+  // sentence chain doesn't restart on each setCoachExplanation call.
+  // First-sentence-fast: each completed sentence speaks via
+  // speakForced as soon as the regex sees the terminator, instead of
+  // waiting for the whole response and then speaking 300 chars in one
+  // batch (the prior shape, which delayed audio by 3-5s).
+  const sentenceBufferRef = useRef('');
+  const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+  const sentenceCountRef = useRef(0);
+
+  const dispatchSentencesFromChunk = useCallback((accumulatedText: string) => {
+    sentenceBufferRef.current = accumulatedText.slice(sentenceCountRef.current === 0 ? 0 : accumulatedText.length);
+    let remaining = accumulatedText;
+    let consumed = 0;
+    let match: RegExpExecArray | null;
+    while ((match = SENTENCE_END_RE.exec(remaining)) !== null) {
+      const endIdx = match.index + match[1].length;
+      const sentence = remaining.slice(0, endIdx).trim();
+      if (sentence) {
+        sentenceCountRef.current += 1;
+        const isFirst = sentenceCountRef.current === 1;
+        speechChainRef.current = speechChainRef.current
+          .then(() => isFirst ? voiceService.speakIfFree(sentence) : voiceService.speakForced(sentence))
+          .catch(() => undefined);
+      }
+      remaining = remaining.slice(endIdx);
+      consumed += endIdx;
+    }
+    sentenceBufferRef.current = accumulatedText.slice(consumed);
+  }, []);
+
   // Generate initial plan
   useEffect(() => {
     if (!activeProfile) return;
@@ -63,30 +99,72 @@ export function CoachSessionPlanPage(): JSX.Element {
         const sessionPlan = await generateCoachSession(activeProfile);
         setPlan(sessionPlan);
 
-        // Get coach explanation
-        const context = {
-          fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-          lastMoveSan: null,
-          moveNumber: 0,
-          pgn: `Session plan: ${sessionPlan.blocks.map((b) => `${b.type}(${b.targetMinutes}min)`).join(', ')}. Total: ${sessionPlan.totalMinutes}min`,
-          openingName: null,
-          stockfishAnalysis: null,
-          playerMove: null,
-          moveClassification: null,
-          playerProfile: {
-            rating: activeProfile.currentRating,
+        // WO-COACH-UNIFY-01: route through coachService.ask so the
+        // unified envelope (memory + live-state + tool-belt) wraps
+        // this call. task='chat_response' keeps a non-reasoner model
+        // (chat-tier on both providers) so the heavy spine envelope
+        // doesn't push deepseek-reasoner into empty-content territory
+        // — same fix that resolved phase-narration.
+        const planAsk = [
+          `Session plan generated:`,
+          ...sessionPlan.blocks.map((b) => `- ${b.type} (${b.targetMinutes} min)`),
+          `Total: ${sessionPlan.totalMinutes} minutes.`,
+          `Student rating: ${activeProfile.currentRating}.`,
+          activeProfile.badHabits.filter((h) => !h.isResolved).length > 0
+            ? `Active weaknesses: ${activeProfile.badHabits.filter((h) => !h.isResolved).map((h) => h.description).join('; ')}.`
+            : 'No active weaknesses on file.',
+          '',
+          'Explain the plan to the student in 3-5 sentences. Why these blocks, in this order, given their rating and weaknesses.',
+        ].join('\n');
 
-            weaknesses: activeProfile.badHabits.filter((h) => !h.isResolved).map((h) => h.description),
-          },
-        };
-
+        sentenceCountRef.current = 0;
         let explanation = '';
-        await getCoachCommentary('session_plan_generation', context, (chunk) => {
-          explanation += chunk;
-          setCoachExplanation(explanation);
-        });
-
-        void voiceService.speak(explanation.slice(0, 300));
+        const result = await coachService.ask(
+          {
+            surface: 'standalone-chat',
+            ask: planAsk,
+            liveState: {
+              surface: 'standalone-chat',
+              fen: STARTING_FEN,
+              userJustDid: 'Opening the Training Plan tab',
+            },
+          },
+          {
+            task: 'chat_response',
+            maxTokens: 800,
+            maxToolRoundTrips: 1,
+            systemPromptAddition: SESSION_PLAN_ADDITION,
+            onChunk: (chunk: string) => {
+              explanation += chunk;
+              setCoachExplanation(explanation);
+              // Drive Polly first-sentence-fast playback as the LLM
+              // streams. Replaces the legacy after-the-fact
+              // voiceService.speak(explanation.slice(0, 300)) call,
+              // which couldn't start until the WHOLE response landed.
+              dispatchSentencesFromChunk(explanation);
+            },
+          },
+        );
+        // Final flush in case the response ended without a sentence
+        // terminator on the tail (rare but possible mid-clause).
+        const isProviderError = result.text.startsWith('(coach-brain provider error:');
+        if (isProviderError) {
+          // Audit-driven fix (item #13): silent strip used to swallow
+          // every spine error, so a "session plan voice didn't speak"
+          // report had no signal. Now an llm-error audit fires.
+          void logAppAudit({
+            kind: 'llm-error',
+            category: 'subsystem',
+            source: 'CoachSessionPlanPage.generatePlan',
+            summary: result.text.slice(0, 120),
+          });
+        }
+        const finalText = isProviderError ? '' : result.text;
+        if (finalText && sentenceCountRef.current === 0) {
+          // Fallback: if no sentence terminator fired during streaming
+          // (very short response, no period), speak whatever we got.
+          void voiceService.speakIfFree(finalText.slice(0, 600));
+        }
       } catch (error) {
         console.error('Plan generation error:', error);
         setCoachExplanation('Let me create a training plan for you based on your current progress.');
@@ -98,46 +176,74 @@ export function CoachSessionPlanPage(): JSX.Element {
     void generatePlan();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Handle pushback / adjustment
+  // Handle pushback / adjustment — same spine + streaming voice
+  // shape as the initial plan generation.
   const handlePushback = useCallback(async (text: string) => {
     if (!activeProfile || !plan) return;
 
     setAdjusting(true);
+    // Stop any in-flight narration from the prior plan; the
+    // adjustment will start its own sentence chain.
+    voiceService.stop();
+    speechChainRef.current = Promise.resolve();
+    sentenceCountRef.current = 0;
 
     try {
       const adjustedPlan = await generateCoachSession(activeProfile, text);
       setPlan(adjustedPlan);
 
-      // Get new explanation
-      const context = {
-        fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-        lastMoveSan: null,
-        moveNumber: 0,
-        pgn: `Adjusted session plan based on user feedback: "${text}". New plan: ${adjustedPlan.blocks.map((b) => `${b.type}(${b.targetMinutes}min)`).join(', ')}`,
-        openingName: null,
-        stockfishAnalysis: null,
-        playerMove: null,
-        moveClassification: null,
-        playerProfile: {
-          rating: activeProfile.currentRating,
-          style: 'default',
-          weaknesses: activeProfile.badHabits.filter((h) => !h.isResolved).map((h) => h.description),
-        },
-      };
+      const adjustAsk = [
+        `Student feedback: "${text}"`,
+        `Adjusted plan based on that feedback:`,
+        ...adjustedPlan.blocks.map((b) => `- ${b.type} (${b.targetMinutes} min)`),
+        `Total: ${adjustedPlan.totalMinutes} minutes.`,
+        `Student rating: ${activeProfile.currentRating}.`,
+        '',
+        'Acknowledge the adjustment in 2-3 sentences. What changed and why this fits their feedback.',
+      ].join('\n');
 
       let explanation = '';
-      await getCoachCommentary('session_plan_generation', context, (chunk) => {
-        explanation += chunk;
-        setCoachExplanation(explanation);
-      });
-
-      void voiceService.speak(explanation.slice(0, 200));
+      const result = await coachService.ask(
+        {
+          surface: 'standalone-chat',
+          ask: adjustAsk,
+          liveState: {
+            surface: 'standalone-chat',
+            fen: STARTING_FEN,
+            userJustDid: `Asked to adjust the plan: "${text.slice(0, 60)}"`,
+          },
+        },
+        {
+          task: 'chat_response',
+          maxTokens: 600,
+          maxToolRoundTrips: 1,
+          systemPromptAddition: SESSION_PLAN_ADDITION,
+          onChunk: (chunk: string) => {
+            explanation += chunk;
+            setCoachExplanation(explanation);
+            dispatchSentencesFromChunk(explanation);
+          },
+        },
+      );
+      const isProviderError = result.text.startsWith('(coach-brain provider error:');
+      if (isProviderError) {
+        void logAppAudit({
+          kind: 'llm-error',
+          category: 'subsystem',
+          source: 'CoachSessionPlanPage.handlePushback',
+          summary: result.text.slice(0, 120),
+        });
+      }
+      const finalText = isProviderError ? '' : result.text;
+      if (finalText && sentenceCountRef.current === 0) {
+        void voiceService.speakIfFree(finalText.slice(0, 400));
+      }
     } catch {
       setCoachExplanation('Sure, I\'ve adjusted the plan. Let me know if this works better for you.');
     } finally {
       setAdjusting(false);
     }
-  }, [activeProfile, plan]);
+  }, [activeProfile, plan, dispatchSentencesFromChunk]);
 
   // Start session
   const handleStartSession = useCallback(async () => {
