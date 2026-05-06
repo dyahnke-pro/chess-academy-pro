@@ -7,7 +7,23 @@ import type { CoachGameMove, KeyMoment } from '../../types';
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
     speak: vi.fn().mockResolvedValue(undefined),
+    // useReviewPlayback was rewired to call speakForced (single-engine
+    // Polly chain) — without it, every test that triggers narration
+    // playback throws "speakForced is not a function".
+    speakForced: vi.fn().mockResolvedValue(undefined),
+    speakIfFree: vi.fn().mockResolvedValue(undefined),
+    speakAlert: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
+    getLastSpeakDiagnostic: vi.fn().mockReturnValue({
+      text: '',
+      tier: 'muted',
+      pollyAttempted: false,
+      pollyOk: null,
+      pollyStatus: null,
+      audioContextState: 'suspended',
+      error: null,
+      timestamp: 0,
+    }),
   },
 }));
 
@@ -69,6 +85,16 @@ vi.mock('../../hooks/useSettings', () => ({
 vi.mock('../../services/coachFeatureService', () => ({
   generateNarrativeSummary: vi.fn().mockResolvedValue('This was a well-played game with some key moments.'),
   generateReviewNarrationSegments: vi.fn().mockResolvedValue({ intro: 'Let us review this game.', closing: 'That concludes the review.' }),
+  // generateReviewNarration was added to CoachGameReview.tsx after
+  // this mock was last updated; without it, every test that mounts
+  // the component fails at module-eval ("No 'generateReviewNarration'
+  // export is defined on the mock"). Returns the same ReviewNarration
+  // shape the production code resolves to: intro + segments[] + closing.
+  generateReviewNarration: vi.fn().mockResolvedValue({
+    intro: 'Let us review this game.',
+    segments: [],
+    closing: 'That concludes the review.',
+  }),
 }));
 
 vi.mock('../../services/coachPrompts', () => ({
