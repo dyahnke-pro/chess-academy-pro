@@ -93,6 +93,12 @@ describe('coachService.ask', () => {
     expect(stored?.color).toBe('black');
     const toolAudits = auditCalls.filter((c) => c.kind === 'coach-brain-tool-called');
     expect(toolAudits.length).toBeGreaterThan(0);
+    // Audit-driven (#20, #21): coach-brain-tool-called audit should
+    // include a result preview so paste-back logs surface what the
+    // tool actually did. set_intended_opening's preview is `<color>
+    // <name>` on success.
+    const setOpeningAudit = toolAudits.find((c) => c.summary.startsWith('set_intended_opening'));
+    expect(setOpeningAudit?.summary).toContain('black Caro-Kann Defense');
   });
 
   it('logs but does not throw on unknown tool names', async () => {

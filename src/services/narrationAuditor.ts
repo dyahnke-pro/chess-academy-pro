@@ -67,6 +67,16 @@ const CHECK_CLAIM_RE = /\b(?:in\s+check|delivers?\s+check|delivering\s+check|giv
 /** "checkmate" / "mate in N" claims. */
 const MATE_CLAIM_RE = /\b(?:checkmate|mate\s+in\s+\d+|forced\s+mate)\b/i;
 
+/** Past-tense / historical hints that the SAN reference is recapping a
+ *  past ply, not proposing a move from the current position. Common in
+ *  review walk narration ("you played Nd2", "your Nd2 was strong",
+ *  "after Nd2 the eval swung"). The window scanned is the 32 chars
+ *  preceding the SAN so the regex can stay anchored on the verb
+ *  without matching cross-sentence. Audit Finding 139 (build 6459def+).
+ */
+const PAST_TENSE_HINT_RE =
+  /\b(?:had|played|missed|allowed|let|gave|chose|tried|considered|opted|after|when|earlier|before|previously|already|once|just|here|then|that\s+(?:was|move)|you\s+(?:were|did))\b[^.!?]*$/i;
+
 /** Return a FEN identical to `fen` but with the side-to-move flipped
  *  (and en-passant cleared since a flip invalidates it). Used by the
  *  illegal-SAN check so the auditor can verify a move's legality from
@@ -209,6 +219,7 @@ export function auditNarration(
   };
   for (const m of narration.matchAll(SAN_MOVE_RE)) {
     const candidate = m[1];
+    const matchIndex = m.index ?? 0;
     // Skip bare square names like "e4" in sentences like "control e4"
     // — those aren't move claims. Only check patterns with a piece
     // letter prefix (Nc3, Bxf7, etc.) since those ARE unambiguous
@@ -226,6 +237,18 @@ export function auditNarration(
       const destSquare = candidate.slice(-2);
       const occupant = chess.get(destSquare as never) as { type: string } | null;
       if (occupant && occupant.type === pieceLetter) continue;
+      // Historical / past-tense reference: review walk narration often
+      // recaps past plies ("you played Nd2 here, which let me grab the
+      // pawn"). The SAN refers to a past board state, not a candidate
+      // for the current position. Audit Finding 139 (build 6459def+)
+      // caught this on a knight that moved off d2 several plies before
+      // the narrated ply. Skip when a past-tense verb sits in the
+      // 32-char window before the SAN — the window covers normal
+      // sentence shapes ("After Nd2", "you had Nd2") without leaking
+      // across sentences.
+      const windowStart = Math.max(0, matchIndex - 32);
+      const preceding = narration.slice(windowStart, matchIndex).toLowerCase();
+      if (PAST_TENSE_HINT_RE.test(preceding)) continue;
       flags.push({
         kind: 'illegal-san',
         narrationExcerpt: candidate,

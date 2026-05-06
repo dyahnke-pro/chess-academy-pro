@@ -89,6 +89,26 @@ describe('auditNarration', () => {
       const flags = auditNarration(ITALIAN_FEN, 'White aims to control e4 and d4.');
       expect(flags).toHaveLength(0);
     });
+
+    it('does not flag a past-tense reference to a piece that has since moved (Finding 139)', () => {
+      // Italian — knight is on f3, not on d2. A review walk recap
+      // ("you played Nd2 here") references the past ply, not a move
+      // from the current position. The auditor should treat past-tense
+      // mentions as historical and skip the legality check.
+      const flags = auditNarration(
+        ITALIAN_FEN,
+        'You played Nd2 earlier — that knight then swung to f3.',
+      );
+      expect(flags.filter((f) => f.kind === 'illegal-san')).toHaveLength(0);
+    });
+
+    it('still flags a clearly-illegal current-position move proposal (no past-tense hint)', () => {
+      // Sanity check the past-tense skip doesn't over-match. "Try Qh8"
+      // has no past-tense verb — it's a candidate move proposal. The
+      // queen has no path to h8 from d1 in the Italian.
+      const flags = auditNarration(ITALIAN_FEN, 'Try Qh8 to threaten mate.');
+      expect(flags.filter((f) => f.kind === 'illegal-san')).toHaveLength(1);
+    });
   });
 
   describe('edge cases', () => {

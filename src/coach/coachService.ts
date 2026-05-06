@@ -221,6 +221,54 @@ function formatToolResultsAsFollowUpAsk(
   return lines.join('\n');
 }
 
+/** Produce a one-line preview of a tool's result payload so the audit
+ *  log surfaces what the tool actually did, not just whether it ok'd.
+ *  Audit-driven (#20, #21): paste-back logs used to show
+ *  `stockfish_eval ok` with no eval / best-move data, leaving "the
+ *  brain made a wrong claim" reports without engine ground truth.
+ *  Returns null when the result has no informative shape — in that
+ *  case the audit summary stays at the bare ok/error verb. */
+function previewToolResult(
+  name: string,
+  result: { ok: boolean; result?: unknown; error?: string },
+): string | null {
+  if (!result.ok) return null;
+  const r = result.result as Record<string, unknown> | undefined;
+  if (!r) return null;
+  if (name === 'stockfish_eval' || name === 'stockfish_classify_move') {
+    const best = typeof r.bestMove === 'string' ? r.bestMove : null;
+    const ev = typeof r.evaluation === 'number' ? r.evaluation : null;
+    const isMate = r.isMate === true;
+    const mateIn = typeof r.mateIn === 'number' ? r.mateIn : null;
+    const depth = typeof r.depth === 'number' ? r.depth : null;
+    const parts: string[] = [];
+    if (best) parts.push(`best=${best}`);
+    if (isMate && mateIn !== null) parts.push(`mate=${mateIn}`);
+    else if (ev !== null) parts.push(`eval=${ev > 0 ? '+' : ''}${(ev / 100).toFixed(2)}`);
+    if (depth !== null) parts.push(`d${depth}`);
+    return parts.length > 0 ? parts.join(' ') : null;
+  }
+  if (name === 'set_intended_opening') {
+    const oname = typeof r.name === 'string' ? r.name : null;
+    const color = typeof r.color === 'string' ? r.color : null;
+    return oname && color ? `${color} ${oname}` : null;
+  }
+  if (name === 'set_board_position') {
+    const fen = typeof r.fen === 'string' ? r.fen : null;
+    return fen ? `fen=${fen.split(' ')[0]}…` : null;
+  }
+  if (name === 'play_move' || name === 'take_back_move') {
+    const san = typeof r.san === 'string' ? r.san : null;
+    return san ? `san=${san}` : null;
+  }
+  if (name === 'lichess_opening_lookup') {
+    const eco = typeof r.eco === 'string' ? r.eco : null;
+    const oname = typeof r.name === 'string' ? r.name : null;
+    return oname || eco ? `${oname ?? '?'} (${eco ?? '?'})` : null;
+  }
+  return null;
+}
+
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
@@ -439,12 +487,26 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           result: result.result,
           error: result.error,
         });
+        // Audit-driven (#20, #21): include a high-signal preview of the
+        // tool result so paste-back logs surface "stockfish said
+        // bestMove=Nf3 eval=+0.4" instead of just "stockfish_eval ok".
+        // The full result is still threaded back to the LLM via
+        // toolResults; this is observability for the human reading
+        // the audit panel.
+        const resultPreview = previewToolResult(call.name, result);
+        const summarySuffix = resultPreview ? ` ${resultPreview}` : '';
         void logAppAudit({
           kind: 'coach-brain-tool-called',
           category: 'subsystem',
           source: 'coachService.ask',
-          summary: `${call.name} ${result.ok ? 'ok' : 'error'}`,
-          details: JSON.stringify({ id: call.id, name: call.name, ok: result.ok, error: result.error }),
+          summary: `${call.name} ${result.ok ? 'ok' : 'error'}${summarySuffix}`,
+          details: JSON.stringify({
+            id: call.id,
+            name: call.name,
+            ok: result.ok,
+            error: result.error,
+            preview: resultPreview ?? null,
+          }),
         });
         // Dedicated tool-call-error trail — captures full error text +
         // the exact args that triggered it. The existing
