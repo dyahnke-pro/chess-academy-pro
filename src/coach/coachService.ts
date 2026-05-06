@@ -235,14 +235,6 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // WO-FOUNDATION-02 trace harness — fires at the start of every
   // ask, mirroring coach-brain-ask-received but carrying the
   // traceId so the audit pipeline can be reconstructed.
-   
-  console.log('[TRACE-5]', options.traceId, 'ask received, input.ask:', input.ask);
-  void logAppAudit({
-    kind: 'trace-ask-received',
-    category: 'subsystem',
-    source: 'coachService.ask',
-    summary: `ask="${input.ask.slice(0, 80)}" surface=${input.surface} traceId=${options.traceId ?? 'none'}`,
-  });
 
   // WO-FOUNDATION-02: Layer 1 routing moved upstream to
   // GameChatPanel.handleSend. Most user messages never reached this
@@ -281,12 +273,6 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // WO-FOUNDATION-02 trace harness — list the tool names the LLM
   // sees in the toolbelt so we can verify play_move / take_back_move
   // / reset_board / set_board_position are present.
-  void logAppAudit({
-    kind: 'trace-toolbelt',
-    category: 'subsystem',
-    source: 'coachService.ask',
-    summary: `tools=${envelope.toolbelt.map((t) => t.name).join(',')} traceId=${options.traceId ?? 'none'}`,
-  });
 
   const providerName = options.provider ?? resolveProviderName();
   const provider = options.providerOverride ?? pickProvider(providerName);
@@ -322,25 +308,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     summary: `ctx-built: onPlayMove=${typeof ctx.onPlayMove} onTakeBackMove=${typeof ctx.onTakeBackMove} onResetBoard=${typeof ctx.onResetBoard} onSetBoardPosition=${typeof ctx.onSetBoardPosition} onNavigate=${typeof ctx.onNavigate}`,
   });
 
-  // WO-FOUNDATION-02 trace harness — same shape as the audit above
-  // but carries the traceId so it joins the per-message trace.
-   
-  console.log('[TRACE-6]', options.traceId, 'ctx-built:', {
-    onPlayMove: typeof ctx.onPlayMove,
-    onTakeBackMove: typeof ctx.onTakeBackMove,
-    onResetBoard: typeof ctx.onResetBoard,
-    onSetBoardPosition: typeof ctx.onSetBoardPosition,
-    onNavigate: typeof ctx.onNavigate,
-  });
-  void logAppAudit({
-    kind: 'trace-ctx-built',
-    category: 'subsystem',
-    source: 'coachService.ask',
-    summary: `onPlayMove=${typeof ctx.onPlayMove} onTakeBackMove=${typeof ctx.onTakeBackMove} onResetBoard=${typeof ctx.onResetBoard} traceId=${options.traceId ?? 'none'}`,
-  });
-
-  const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
   const dispatchedIds: string[] = [];
+  // Cap multi-turn tool loops so a misbehaving brain can't loop forever.
+  const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
 
   let currentEnvelope: AssembledEnvelope = envelope;
   let useStreaming = !!options.onChunk && typeof provider.callStreaming === 'function';
@@ -388,21 +358,6 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     lastResponse = useStreaming && options.onChunk && provider.callStreaming
       ? await provider.callStreaming(currentEnvelope, options.onChunk, providerCallOptions)
       : await provider.call(currentEnvelope, providerCallOptions);
-
-    // WO-FOUNDATION-02 trace harness — what tool calls did the
-    // provider return? Critical signal for diagnosing why play_move
-    // doesn't dispatch.
-     
-    console.log('[TRACE-9]', options.traceId, 'provider response:', {
-      toolCalls: lastResponse.toolCalls,
-      textPreview: lastResponse.text.slice(0, 200),
-    });
-    void logAppAudit({
-      kind: 'trace-provider-response',
-      category: 'subsystem',
-      source: 'coachService.ask',
-      summary: `toolCallNames=${lastResponse.toolCalls.map((c) => c.name).join(',')} textLen=${lastResponse.text.length} traceId=${options.traceId ?? 'none'}`,
-    });
 
     if (lastResponse.toolCalls.length === 0) {
       // No tools emitted — terminal turn. Exit the loop.
@@ -460,13 +415,6 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
 
     const dispatchOne = async (call: typeof lastResponse.toolCalls[number]) => {
       // eslint-disable-next-line no-console
-      console.log('[TRACE-10]', options.traceId, 'tool dispatch:', call.name, call.args);
-      void logAppAudit({
-        kind: 'trace-tool-dispatch',
-        category: 'subsystem',
-        source: 'coachService.ask',
-        summary: `tool=${call.name} traceId=${options.traceId ?? 'none'}`,
-      });
       const tool = getTool(call.name);
       // Existence already verified above; non-null assertion is safe
       // here because unknown tools were filtered out.

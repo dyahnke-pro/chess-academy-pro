@@ -3221,22 +3221,18 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
   const handleChatPlayMove = useCallback(
     (san: string): { ok: boolean; reason?: string } => {
-      // WO-FOUNDATION-02 trace harness.
-      console.log('[TRACE-12a]', 'handleChatPlayMove invoked, san:', san);
-      void logAppAudit({
-        kind: 'trace-surface-callback-invoked',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleChatPlayMove',
-        summary: `args=${JSON.stringify({ san }).slice(0, 100)}`,
-      });
+      // Trace harness deleted (Coach-tab full audit #30). Failures
+      // are now visible via coach-tool-callback-rejected emitted by
+      // the spine when this callback returns ok=false.
       const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
-        console.log('[TRACE-13a]', 'handleChatPlayMove result:', result);
-        void logAppAudit({
-          kind: 'trace-surface-callback-result',
-          category: 'subsystem',
-          source: 'CoachGamePage.handleChatPlayMove',
-          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
-        });
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'coach-tool-callback-rejected',
+            category: 'subsystem',
+            source: 'CoachGamePage.handleChatPlayMove',
+            summary: `san=${san} reason=${result.reason ?? 'unknown'}`,
+          });
+        }
         return result;
       };
       try {
@@ -3265,22 +3261,15 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
   const handleChatTakeBackMove = useCallback(
     (count: number): { ok: boolean; reason?: string } => {
-      // WO-FOUNDATION-02 trace harness.
-      console.log('[TRACE-12b]', 'handleChatTakeBackMove invoked, count:', count);
-      void logAppAudit({
-        kind: 'trace-surface-callback-invoked',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleChatTakeBackMove',
-        summary: `args=${JSON.stringify({ count }).slice(0, 100)}`,
-      });
       const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
-        console.log('[TRACE-13b]', 'handleChatTakeBackMove result:', result);
-        void logAppAudit({
-          kind: 'trace-surface-callback-result',
-          category: 'subsystem',
-          source: 'CoachGamePage.handleChatTakeBackMove',
-          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
-        });
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'coach-tool-callback-rejected',
+            category: 'subsystem',
+            source: 'CoachGamePage.handleChatTakeBackMove',
+            summary: `count=${count} reason=${result.reason ?? 'unknown'}`,
+          });
+        }
         return result;
       };
       try {
@@ -3305,22 +3294,16 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
   const handleChatSetBoardPosition = useCallback(
     (fen: string): { ok: boolean; reason?: string } => {
-      // WO-FOUNDATION-02 trace harness.
-      console.log('[TRACE-12c]', 'handleChatSetBoardPosition invoked, fen:', fen);
-      void logAppAudit({
-        kind: 'trace-surface-callback-invoked',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleChatSetBoardPosition',
-        summary: `args=${JSON.stringify({ fen }).slice(0, 100)}`,
-      });
       const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
-        console.log('[TRACE-13c]', 'handleChatSetBoardPosition result:', result);
-        void logAppAudit({
-          kind: 'trace-surface-callback-result',
-          category: 'subsystem',
-          source: 'CoachGamePage.handleChatSetBoardPosition',
-          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
-        });
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'coach-tool-callback-rejected',
+            category: 'subsystem',
+            source: 'CoachGamePage.handleChatSetBoardPosition',
+            summary: `reason=${result.reason ?? 'unknown'}`,
+            fen,
+          });
+        }
         return result;
       };
       try {
@@ -3337,22 +3320,15 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
   const handleChatResetBoard = useCallback(
     (): { ok: boolean; reason?: string } => {
-      // WO-FOUNDATION-02 trace harness.
-      console.log('[TRACE-12d]', 'handleChatResetBoard invoked');
-      void logAppAudit({
-        kind: 'trace-surface-callback-invoked',
-        category: 'subsystem',
-        source: 'CoachGamePage.handleChatResetBoard',
-        summary: 'args={}',
-      });
       const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
-        console.log('[TRACE-13d]', 'handleChatResetBoard result:', result);
-        void logAppAudit({
-          kind: 'trace-surface-callback-result',
-          category: 'subsystem',
-          source: 'CoachGamePage.handleChatResetBoard',
-          summary: `success=${result.ok} reason=${result.reason ?? 'none'}`,
-        });
+        if (!result.ok) {
+          void logAppAudit({
+            kind: 'coach-tool-callback-rejected',
+            category: 'subsystem',
+            source: 'CoachGamePage.handleChatResetBoard',
+            summary: `reason=${result.reason ?? 'unknown'}`,
+          });
+        }
         return result;
       };
       try {

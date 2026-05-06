@@ -97,14 +97,6 @@ export const playMoveTool: Tool = {
   },
   async execute(args, ctx) {
     // WO-FOUNDATION-02 trace harness.
-     
-    console.log('[TRACE-11a]', ctx?.traceId, 'playMoveTool entered, san:', args.san, 'hasCallback:', typeof ctx?.onPlayMove);
-    void logAppAudit({
-      kind: 'trace-tool-entered',
-      category: 'subsystem',
-      source: 'playMoveTool',
-      summary: `san=${typeof args.san === 'string' ? args.san : 'undef'} hasCallback=${typeof ctx?.onPlayMove === 'function'} traceId=${ctx?.traceId ?? 'none'}`,
-    });
     void logAppAudit({
       kind: 'coach-brain-tool-called',
       category: 'subsystem',

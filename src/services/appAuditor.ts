@@ -122,22 +122,12 @@ export type AuditKind =
   | 'coach-brain-tool-parse-result'
   | 'chat-panel-message-received'
   | 'coach-brain-answer-returned'
-  // WO-FOUNDATION-02 trace harness — comprehensive per-message trace
-  // checkpoints. Every audit in this group carries a traceId so the
-  // pipeline can be reconstructed end-to-end. Temporary; removed once
-  // the cerebrum-dispatch chain question is answered.
-  | 'trace-handle-send'
-  | 'trace-intercept-check'
-  | 'trace-intercept-result'
-  | 'trace-ask-invoking'
-  | 'trace-ask-received'
-  | 'trace-ctx-built'
-  | 'trace-toolbelt'
-  | 'trace-provider-response'
-  | 'trace-tool-dispatch'
-  | 'trace-tool-entered'
-  | 'trace-surface-callback-invoked'
-  | 'trace-surface-callback-result'
+  // (WO-FOUNDATION-02 trace harness deleted — was emitting ~9 audits
+  // per spine call, doubling audit log size with no production
+  // value once the cerebrum-dispatch question was answered. Removed
+  // per Coach-tab full audit item #30. Source-tagged audits like
+  // coach-brain-* + coach-tool-callback-rejected cover the same
+  // observability needs without the noise.)
   // Surface migration trail (WO-BRAIN-02 onwards). Fired once per call
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
