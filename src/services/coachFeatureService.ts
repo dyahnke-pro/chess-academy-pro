@@ -293,7 +293,10 @@ export async function generateNarrativeSummary(
       },
     },
     {
-      task: 'game_narrative_summary',
+      // chat_response (not game_narrative_summary) so the spine
+      // envelope doesn't push deepseek-reasoner into empty-content.
+      // See the segments call below for the full rationale.
+      task: 'chat_response',
       maxTokens: 800,
       maxToolRoundTrips: 1,
       systemPromptAddition: GAME_POST_REVIEW_ADDITION,
@@ -380,7 +383,9 @@ Do not include any other text outside the JSON.${analysisContext}`,
         },
       },
       {
-        task: 'game_narrative_summary',
+        // chat_response avoids the deepseek-reasoner empty-content
+        // regression — see segments call for full rationale.
+        task: 'chat_response',
         maxTokens: 800,
         maxToolRoundTrips: 1,
       },
@@ -686,7 +691,19 @@ export async function generateReviewNarration(params: {
       liveState: reviewLiveState,
     },
     {
-      task: 'game_narrative_summary',
+      // WO-COACH-UNIFY-01 follow-up: switched task from
+      // 'game_narrative_summary' (which routes to deepseek-reasoner)
+      // to 'chat_response' (deepseek-chat). Same fix shipped for
+      // phase-narration: under the heavy spine envelope, the
+      // reasoner spends its full token budget on reasoning_content
+      // and emits zero content. Production audit on build 088fe97
+      // showed zero coach-brain-* entries from this prep call —
+      // partly because of autoStartReview gating it out, but also
+      // because when it DID fire elsewhere, deepseek-reasoner was
+      // returning empty. Chat-tier model is fast + uses full budget
+      // for the JSON output. 8000 max tokens still required since
+      // per-ply JSON scales with game length.
+      task: 'chat_response',
       maxTokens: 8000,
       maxToolRoundTrips: 1,
       systemPromptAddition: REVIEW_MOVE_SEGMENT_ADDITION,

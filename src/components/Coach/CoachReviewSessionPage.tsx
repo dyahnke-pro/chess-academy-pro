@@ -264,6 +264,19 @@ export function CoachReviewSessionPage(): JSX.Element {
 
   return (
     <div className="flex flex-col md:flex-row flex-1 min-h-0">
+      {/* `autoStartReview` was previously passed here, forcing
+          `reviewPhase` to initialize to `'analysis'`. That made
+          sense in the old design where analysis was the dominant
+          review surface. Today the walk phase IS the review
+          experience (big yellow Next, interactive arrow, narrated
+          per ply, key-moment nav). Auto-starting analysis (a) shows
+          the wrong layout and (b) gates out the walk-phase prep
+          effect entirely — the per-ply commentary segments never
+          generate because the effect early-returns on
+          `reviewPhase !== 'summary'`. Production audit on build
+          088fe97 confirmed: zero coach-brain-ask-received entries on
+          /coach/review/game-* loads. Removing the prop lets walk
+          phase render and the prep scan fire on mount. */}
       <CoachGameReview
         moves={adapted.moves}
         keyMoments={adapted.keyMoments}
@@ -277,7 +290,6 @@ export function CoachReviewSessionPage(): JSX.Element {
         onBackToCoach={() => navigate('/coach/review')}
         pgn={adapted.pgn}
         initialMoveIndex={-1}
-        autoStartReview
       />
     </div>
   );
