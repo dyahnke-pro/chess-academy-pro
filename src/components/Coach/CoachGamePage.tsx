@@ -34,6 +34,7 @@ import {
   type PhaseTransitionState,
 } from '../../services/phaseTransitionDetector';
 import { logAppAudit } from '../../services/appAuditor';
+import { unwrapSpineError, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import type { PhaseNarrationVerbosity } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -1056,9 +1057,7 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
           systemPromptAddition: systemPrompt,
         },
       ).then((spineAnswer) => {
-        const reaction = spineAnswer.text.startsWith('(coach-brain provider error:')
-          ? ''
-          : spineAnswer.text;
+        const reaction = unwrapSpineError(spineAnswer.text);
         setExploreMessages((prev) => [
           ...prev,
           { role: 'user', content: userMsg },
@@ -2865,23 +2864,15 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
           onStream: (() => {
             let buffer = '';
             let chain: Promise<void> | null = null;
-            // `(?<!\d)` lookbehind: don't treat a period as a sentence
-            // terminator when it's preceded by a digit ("+0.8" stays in
-            // one sentence, "3.Bc4" SAN stays atomic). Without this the
-            // regex would skip over the decimal looking for the real
-            // sentence end, but production audit (build e2a96ed) caught
-            // a sister bug — even with the lookahead `(?=\s|$)`, the
-            // regex still locks onto the next valid end and the slice
-            // below discards everything up to match.index. The
-            // lookbehind narrows what counts as an end; the slice fix
-            // below preserves any prefix as part of the sentence so
-            // "Stockfish says +0.8 and climbing..." doesn't get spoken
-            // as "8 and climbing..." (chopping off "Stockfish says +0.").
-            const SENTENCE_END = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
+            // SENTENCE_END_RE imported from sanitizeCoachText — shared
+            // across all Coach streaming dispatchers post audit #29.
+            // The `(?<!\d)` lookbehind keeps "+0.8" / "3.Bc4" atomic;
+            // see the helper's docstring for the build-e2a96ed slice
+            // bug that motivated the prefix-preserving slice below.
             return (chunk: string): void => {
               buffer += chunk;
               let match: RegExpExecArray | null;
-              while ((match = SENTENCE_END.exec(buffer)) !== null) {
+              while ((match = SENTENCE_END_RE.exec(buffer)) !== null) {
                 // Take the whole prefix from buffer[0] up to the end of
                 // the match — any content before match.index is unmatched
                 // prose that belongs to THIS sentence (the regex skipped
@@ -3070,9 +3061,7 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
             systemPromptAddition: BLUNDER_ALERT_ADDITION,
           },
         );
-        const alertText = spineAlert.text.startsWith('(coach-brain provider error:')
-          ? ''
-          : spineAlert.text;
+        const alertText = unwrapSpineError(spineAlert.text);
         const trimmed = alertText.trim();
         if (trimmed && !trimmed.startsWith('⚠️')) {
           explanation = trimmed;

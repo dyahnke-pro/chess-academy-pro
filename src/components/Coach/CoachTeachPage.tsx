@@ -24,7 +24,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
 import { anthropicProvider } from '../../coach/providers/anthropic';
 import { logAppAudit } from '../../services/appAuditor';
-import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
+import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
@@ -444,7 +444,6 @@ export function CoachTeachPage(): JSX.Element {
      *  past it. Multi-line content allowed because the summary itself
      *  may span 3-4 sentences (positional, structural, plan). */
     const VOICE_MARKER_RE = /\[VOICE:\s*([\s\S]*?)\]/g;
-    const SENTENCE_END = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
     let lastQueuedSentence = '';
     const queueSpeak = (raw: string): void => {
       const sentence = formatForSpeech(raw);
@@ -611,7 +610,7 @@ export function CoachTeachPage(): JSX.Element {
             // bounded. We do NOT queueSpeak per sentence — voice is
             // routed exclusively through the `[VOICE: ...]` marker.
             let match: RegExpExecArray | null;
-            while ((match = SENTENCE_END.exec(sentenceBuffer)) !== null) {
+            while ((match = SENTENCE_END_RE.exec(sentenceBuffer)) !== null) {
               sentenceBuffer = sentenceBuffer.slice(match.index + match[1].length);
             }
           },
@@ -626,7 +625,7 @@ export function CoachTeachPage(): JSX.Element {
       tryExtractVoiceMarker();
       if (!voiceSpokenForTurn) {
         const finalText = sanitizeCoachText(result.text);
-        const firstSentenceMatch = SENTENCE_END.exec(finalText);
+        const firstSentenceMatch = SENTENCE_END_RE.exec(finalText);
         const firstSentence = firstSentenceMatch
           ? firstSentenceMatch[1].trim()
           : finalText.trim();

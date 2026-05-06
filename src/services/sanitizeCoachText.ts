@@ -138,3 +138,36 @@ export function sanitizeCoachStream(
 
   return { safe: stripMarkup(buffer), pending: '' };
 }
+
+/**
+ * Sentence-end matcher used by every streaming-voice dispatcher in
+ * the Coach tab. Matches one sentence + its terminator, but only
+ * when the terminator is followed by whitespace or end-of-buffer
+ * AND not preceded by a digit (so "+0.8" / "3.Bc4" don't false-
+ * positive split into pieces).
+ *
+ * Audit-driven (#29): three different regexes were in use across
+ * GameChatPanel, CoachChatPage, CoachTeachPage, CoachSessionPlanPage.
+ * CoachChatPage's lacked the `(?<!\d)` lookbehind, so SAN move
+ * numbers ("1.", "12.") split sentences and Polly voiced "1." /
+ * "Nc3 Nc6 3." as separate utterances.
+ *
+ * Use this regex with `RegExp.exec` in a loop; `match[1]` is the
+ * full sentence including the terminator. Slice the buffer to
+ * `match.index + match[1].length` after each match.
+ */
+export const SENTENCE_END_RE = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
+
+/**
+ * Strip the spine's wrapped provider error from text. The Coach
+ * Brain Spine returns `text: '(coach-brain provider error: <msg>)'`
+ * when the underlying provider call rejects. Six call sites used
+ * to inline this strip; some surfaces forgot it entirely (chat
+ * pages voiced the error message verbatim).
+ *
+ * Returns empty string when the wrap is detected, original text
+ * otherwise. Pure function.
+ */
+export function unwrapSpineError(text: string): string {
+  return text.startsWith('(coach-brain provider error:') ? '' : text;
+}

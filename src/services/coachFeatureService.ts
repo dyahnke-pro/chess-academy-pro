@@ -10,6 +10,7 @@ import {
 } from './coachPrompts';
 import { getThemeSkills } from './puzzleService';
 import { logAppAudit } from './appAuditor';
+import { unwrapSpineError } from './sanitizeCoachText';
 import type { BadHabit, CoachContext, UserProfile } from '../types';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
@@ -303,9 +304,7 @@ export async function generateNarrativeSummary(
       onChunk: onStream,
     },
   );
-  return spineAnswer.text.startsWith('(coach-brain provider error:')
-    ? ''
-    : spineAnswer.text;
+  return unwrapSpineError(spineAnswer.text);
 }
 
 // ─── Review Narration Segments ─────────────────────────────────────────────
@@ -390,9 +389,7 @@ Do not include any other text outside the JSON.${analysisContext}`,
         maxToolRoundTrips: 1,
       },
     );
-    raw = spineAnswer.text.startsWith('(coach-brain provider error:')
-      ? ''
-      : spineAnswer.text;
+    raw = unwrapSpineError(spineAnswer.text);
   } catch {
     // Fall through to the deterministic fallback below.
   }
@@ -664,8 +661,6 @@ export async function generateReviewNarration(params: {
     fen: fenChain[fenChain.length - 1]?.fenAfter,
     userJustDid: 'Opening review of the completed game (prep scan)',
   };
-  const stripErrorWrap = (text: string): string =>
-    text.startsWith('(coach-brain provider error:') ? '' : text;
   const introPromise = coachService.ask(
     {
       surface: 'review',
@@ -678,7 +673,7 @@ export async function generateReviewNarration(params: {
       maxToolRoundTrips: 1,
       systemPromptAddition: REVIEW_INTRO_ADDITION,
     },
-  ).then((a) => stripErrorWrap(a.text)).catch(() => '');
+  ).then((a) => unwrapSpineError(a.text)).catch(() => '');
 
   // max_tokens: 8000 — the per-ply JSON array scales with game length
   // and the prior 2000 cap silently truncated output for games past ~20
@@ -716,7 +711,7 @@ export async function generateReviewNarration(params: {
       maxToolRoundTrips: 1,
       systemPromptAddition: REVIEW_MOVE_SEGMENT_ADDITION,
     },
-  ).then((a) => stripErrorWrap(a.text)).catch((err: unknown) => {
+  ).then((a) => unwrapSpineError(a.text)).catch((err: unknown) => {
     const msg = err instanceof Error ? err.message : String(err);
     void logAppAudit({
       kind: 'review-segments-parse-failed',

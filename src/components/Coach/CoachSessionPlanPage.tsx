@@ -7,17 +7,13 @@ import { generateCoachSession } from '../../services/sessionGenerator';
 import { createSession } from '../../services/sessionGenerator';
 import { coachService } from '../../coach/coachService';
 import { logAppAudit } from '../../services/appAuditor';
+import { SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { voiceService } from '../../services/voiceService';
 import { SESSION_PLAN_ADDITION } from '../../services/coachPrompts';
 import { ChatInput } from './ChatInput';
 import type { SessionPlan, SessionBlock } from '../../types';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-/** Sentence terminator with `(?<!\d)` lookbehind so decimals like
- *  "0.8" don't trigger a false sentence-end split. Matches the
- *  pattern used in CoachTeachPage / CoachGamePage streaming
- *  dispatchers post-WO-COACH-UNIFY-01. */
-const SENTENCE_END = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
 
 const BLOCK_LABELS: Record<string, { label: string; color: string; emoji: string }> = {
   opening_review: { label: 'Opening Review', color: 'bg-blue-500/10 text-blue-500 border-blue-500/20', emoji: '📖' },
@@ -78,7 +74,7 @@ export function CoachSessionPlanPage(): JSX.Element {
     let remaining = accumulatedText;
     let consumed = 0;
     let match: RegExpExecArray | null;
-    while ((match = SENTENCE_END.exec(remaining)) !== null) {
+    while ((match = SENTENCE_END_RE.exec(remaining)) !== null) {
       const endIdx = match.index + match[1].length;
       const sentence = remaining.slice(0, endIdx).trim();
       if (sentence) {

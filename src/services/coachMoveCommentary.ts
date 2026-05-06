@@ -20,6 +20,7 @@
 import type { Chess } from 'chess.js';
 import { consumeLastLlmMetadata } from './coachApi';
 import { coachService } from '../coach/coachService';
+import { unwrapSpineError } from './sanitizeCoachText';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
 import { buildStudentStateBlock } from './studentStateBlock';
 import { recordAudit } from './narrationAuditor';
@@ -609,9 +610,7 @@ ACTION-FIRST RULE — narration is a guide for what to do NEXT, not a recap of w
   // The legacy contract (caller in CoachGamePage) is "empty string on
   // error → don't narrate"; preserve that here so a transient failure
   // doesn't leak orchestration noise into the user-facing chat bubble.
-  const response = spineAnswer.text.startsWith('(coach-brain provider error:')
-    ? ''
-    : spineAnswer.text;
+  const response = unwrapSpineError(spineAnswer.text);
   const llmDurationMs = Date.now() - llmStartedAt;
   // Consume the metadata snapshot from the LLM call we just awaited.
   // Single-threaded JS guarantees the snapshot is from THIS call, not

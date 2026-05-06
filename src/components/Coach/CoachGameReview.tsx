@@ -2,14 +2,15 @@ import { useState, useCallback, useRef, useEffect, useMemo, type MouseEvent } fr
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
+import { unwrapSpineError } from '../../services/sanitizeCoachText';
 import { MoveListPanel } from './MoveListPanel';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
 import { KeyMomentNav } from './KeyMomentNav';
 import { ChatInput } from './ChatInput';
 import { getAdaptiveMove } from '../../services/coachGameEngine';
-import { getCoachCommentary } from '../../services/coachApi';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { INTERACTIVE_REVIEW_ADDITION } from '../../services/coachPrompts';
+import { buildChessContextMessage } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { withTimeout } from '../../coach/withTimeout';
 import { uciToArrow, getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
@@ -592,11 +593,34 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       additionalContext: INTERACTIVE_REVIEW_ADDITION,
     };
 
-    void getCoachCommentary('interactive_review', ctx, (chunk) => {
-      if (!cancelled) {
-        setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
-      }
-    }).then((fullText) => {
+    // Audit item #1: route through coachService.ask so the call is
+    // visible in the spine audit trail (coach-brain-ask-received,
+    // coach-brain-answer-returned with surface=review). The
+    // INTERACTIVE_REVIEW_ADDITION is now systemPromptAddition; the
+    // user message comes from buildChessContextMessage(ctx).
+    void coachService.ask(
+      {
+        surface: 'review',
+        ask: buildChessContextMessage(ctx),
+        liveState: {
+          surface: 'review',
+          fen: currentMove.fen,
+          userJustDid: `Lazy-load AI commentary for move ${moveNum} (${currentMove.san})`,
+        },
+      },
+      {
+        task: 'interactive_review',
+        maxTokens: 600,
+        maxToolRoundTrips: 1,
+        systemPromptAddition: INTERACTIVE_REVIEW_ADDITION,
+        onChunk: (chunk: string) => {
+          if (!cancelled) {
+            setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
+          }
+        },
+      },
+    ).then((spineAnswer) => {
+      const fullText = unwrapSpineError(spineAnswer.text);
       if (!cancelled) {
         aiCommentaryCacheRef.current.set(moveIdx, fullText);
         setAiCommentary(fullText);
@@ -1441,13 +1465,33 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           additionalContext: INTERACTIVE_REVIEW_ADDITION,
         };
 
-        void getCoachCommentary('interactive_review', ctx, (chunk) => {
-          // Guard streaming chunks: if user stopped auto-review while
-          // the LLM was streaming, don't keep updating the UI with
-          // stale chunks.
-          if (!autoReviewActiveRef.current) return;
-          setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
-        }).then((fullText) => {
+        // Audit item #1: spine-routed (visible via coach-brain-* audits
+        // with surface=review). Same shape as the lazy-load call above.
+        void coachService.ask(
+          {
+            surface: 'review',
+            ask: buildChessContextMessage(ctx),
+            liveState: {
+              surface: 'review',
+              fen: currentMoveForAutoReview.fen,
+              userJustDid: `Auto-review streaming commentary for move ${moveNum} (${currentMoveForAutoReview.san})`,
+            },
+          },
+          {
+            task: 'interactive_review',
+            maxTokens: 600,
+            maxToolRoundTrips: 1,
+            systemPromptAddition: INTERACTIVE_REVIEW_ADDITION,
+            onChunk: (chunk: string) => {
+              // Guard streaming chunks: if user stopped auto-review while
+              // the LLM was streaming, don't keep updating the UI with
+              // stale chunks.
+              if (!autoReviewActiveRef.current) return;
+              setAiCommentary((prev: string | null) => (prev ?? '') + chunk);
+            },
+          },
+        ).then((spineAnswer) => {
+          const fullText = unwrapSpineError(spineAnswer.text);
           aiCommentaryCacheRef.current.set(moveIdx, fullText);
           // If auto-review was stopped while the LLM call was in
           // flight, don't speak the response or schedule a new
