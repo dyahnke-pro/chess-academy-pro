@@ -1803,13 +1803,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </button>
               <button
                 onClick={walkPlayback.goForward}
-                className="p-4 rounded-xl disabled:opacity-30 min-w-[60px] min-h-[60px] flex items-center justify-center"
+                className="rounded-xl disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.97]"
                 disabled={walkPlayback.currentPly >= lastPly}
-                style={{ background: 'var(--color-accent)' }}
+                style={{
+                  background: 'var(--color-accent)',
+                  minWidth: '120px',
+                  minHeight: '90px',
+                  boxShadow: '0 2px 10px rgba(201, 168, 76, 0.35)',
+                }}
                 aria-label="Forward one move"
                 data-testid="review-forward-btn"
               >
-                <ChevronRight size={32} style={{ color: 'var(--color-bg)' }} />
+                <ChevronRight size={42} strokeWidth={3} style={{ color: 'var(--color-bg)' }} />
               </button>
               <button
                 onClick={walkPlayback.goToEnd}
