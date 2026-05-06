@@ -1961,7 +1961,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   // resumes from exploration. Without the key, the
                   // board's internal Chess() retains move history from
                   // the prior FEN and rejects the next move.
-                  key={`walk-board-ply${walkPlayback.currentPly}-${walkExplorationFen ? 'expl' : 'live'}`}
+                  //
+                  // Audit-driven (review walk #1): the key originally
+                  // included `-ply${currentPly}` which forced a fresh
+                  // ChessBoard mount on every forward/back press. The
+                  // brief unmount+remount collapsed the board wrapper's
+                  // height to 0 for one frame, causing the HERO nav row
+                  // below to jump up and back down — user reported as
+                  // "board shifts down after each press." Per-ply key
+                  // is also redundant: useChessGame already syncs FEN
+                  // changes via its [initialFen] effect (rebuilds the
+                  // Chess instance, clears lastMove + selection). The
+                  // exploration half of the key stays — it forces a
+                  // clean remount when entering/exiting exploration so
+                  // any chess.js move history accumulated during
+                  // exploration is wiped.
+                  key={`walk-board-${walkExplorationFen ? 'expl' : 'live'}`}
                   initialFen={walkDisplayFen}
                   orientation={playerColor}
                   interactive={walkBoardInteractive}
