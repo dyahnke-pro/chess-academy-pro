@@ -863,11 +863,30 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // Keyboard navigation. Dep array is REQUIRED — without it the effect
   // re-runs on every render and stacks keydown listeners, so one key
-  // press advances N plies at once. navigateMove is stable
-  // (only depends on moves.length) so this installs exactly once per
-  // review session.
+  // press advances N plies at once.
+  //
+  // Audit-driven (#17): the walk UI took over the summary phase but
+  // this handler still drove the legacy `navigateMove` (analysis-phase
+  // currentMoveIndex), so arrow keys updated a hidden index that the
+  // walk UI never consulted. Now we branch on the same condition the
+  // render uses: when the walk is up, route to walkPlayback; only the
+  // analysis-phase path keeps the legacy navigateMove drive.
+  const walkUiActive =
+    reviewPhase === 'summary' &&
+    walkNarration !== null &&
+    walkNarration.segments.length > 0;
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
+      if (walkUiActive) {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          walkPlayback.goBack();
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          walkPlayback.goForward();
+        }
+        return;
+      }
       if (reviewState.mode !== 'analysis' && reviewState.mode !== 'guided_lesson') return;
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
@@ -879,7 +898,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [reviewState.mode, navigateMove]);
+  }, [reviewState.mode, navigateMove, walkUiActive, walkPlayback]);
 
   const handleMoveClick = useCallback((moveIndex: number) => {
     setReviewState((prev: ReviewState) => ({

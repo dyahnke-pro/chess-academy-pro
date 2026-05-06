@@ -331,11 +331,24 @@ export function CoachChatPage(): JSX.Element {
       // spinner + orphaned user message. Refresh-loses-chat was the
       // prior behaviour; now they see what went wrong.
       const detail = err instanceof Error ? err.message : 'Please try again.';
+      const failureText = `⚠️ Coach is unavailable right now (${detail}). Your message is saved — tap send to retry when you\u2019re back online.`;
       appendMessage({
         id: `err-${Date.now()}`,
         role: 'assistant',
-        content: `⚠️ Coach is unavailable right now (${detail}). Your message is saved — tap send to retry when you\u2019re back online.`,
+        content: failureText,
         timestamp: Date.now(),
+      });
+      // Audit-driven (#18): also persist the failure to coach memory
+      // so the conversation trail isn't "user asked X, then nothing."
+      // The next turn's envelope sees the prior reply was a failure
+      // stub — the brain can apologize and retry, or change tactic.
+      // Without this write, memory shows the user asked a question
+      // and the coach silently never replied.
+      useCoachMemoryStore.getState().appendConversationMessage({
+        surface: 'chat-coach-tab',
+        role: 'coach',
+        text: failureText,
+        trigger: null,
       });
     } finally {
       setIsStreaming(false);
