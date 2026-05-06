@@ -319,8 +319,21 @@ describe('CoachGameReview', () => {
   });
 
   // ─── Analysis Phase (after clicking Review Game) ───────────────────────────
+  //
+  // The 21 tests below are it.skip'd. They drove the analysis-phase
+  // layout via the "Review Game" button on the summary card. That
+  // entire JSX branch was deleted in WO-COACH-UNIFY-01 cleanup
+  // because walk-phase is now the only review surface (per user
+  // architecture: "There should not be an analysis phase").
+  //
+  // The features these tests covered (Ask, AI commentary,
+  // prev/next nav, what-if mode, move list) are reimplemented in
+  // walk-phase. The tests need to be rewritten to drive walk-phase
+  // instead — that's a focused follow-up commit. Keeping them
+  // skipped (rather than deleted) so the named expectations are
+  // visible while the rewrite is pending.
 
-  it('renders the review layout with all sections after clicking Review Game', () => {
+  it.skip('renders the review layout with all sections after clicking Review Game', () => {
     renderAnalysis();
 
     expect(screen.getByTestId('coach-game-review')).toBeInTheDocument();
@@ -329,7 +342,7 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('move-nav-controls')).toBeInTheDocument();
   });
 
-  it('starts at beginning after clicking Review Game', () => {
+  it.skip('starts at beginning after clicking Review Game', () => {
     renderAnalysis();
 
     // After clicking Review Game, should be at starting position (index -1)
@@ -339,7 +352,7 @@ describe('CoachGameReview', () => {
     );
   });
 
-  it('shows player info bars', () => {
+  it.skip('shows player info bars', () => {
     renderAnalysis();
 
     const infoBars = screen.getAllByTestId('player-info-bar');
@@ -348,13 +361,13 @@ describe('CoachGameReview', () => {
     expect(infoBars[1]).toHaveTextContent('Player');
   });
 
-  it('passes opening name to MoveListPanel', () => {
+  it.skip('passes opening name to MoveListPanel', () => {
     renderAnalysis({ openingName: 'Sicilian Defense' });
 
     expect(screen.getByTestId('move-list-panel')).toHaveAttribute('data-opening', 'Sicilian Defense');
   });
 
-  it('navigating with prev/next updates board position', () => {
+  it.skip('navigating with prev/next updates board position', () => {
     renderAnalysis();
 
     // Start at beginning (index -1), navigate forward
@@ -369,7 +382,7 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-e4');
   });
 
-  it('navigating to first shows starting position', () => {
+  it.skip('navigating to first shows starting position', () => {
     renderAnalysis();
 
     // Go to last then back to first
@@ -382,7 +395,7 @@ describe('CoachGameReview', () => {
     );
   });
 
-  it('navigating to last shows final position', () => {
+  it.skip('navigating to last shows final position', () => {
     renderAnalysis();
 
     fireEvent.click(screen.getByTestId('nav-last'));
@@ -390,7 +403,7 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('chess-board')).toHaveAttribute('data-fen', 'fen-after-nc6');
   });
 
-  it('shows commentary for key moment moves', () => {
+  it.skip('shows commentary for key moment moves', () => {
     renderAnalysis();
 
     // Navigate to move index 0 (moveNumber 1) which is a key moment
@@ -400,7 +413,7 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('review-commentary')).toHaveTextContent('You missed a fork');
   });
 
-  it('shows play again and back to coach buttons in analysis', () => {
+  it.skip('shows play again and back to coach buttons in analysis', () => {
     renderAnalysis();
 
     expect(screen.getByTestId('play-again-btn')).toBeInTheDocument();
@@ -409,7 +422,7 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('back-to-coach-btn')).toHaveTextContent('Back to Coach');
   });
 
-  it('onPlayAgain callback fires when clicked in analysis', () => {
+  it.skip('onPlayAgain callback fires when clicked in analysis', () => {
     const onPlayAgain = vi.fn();
     renderAnalysis({ onPlayAgain });
 
@@ -417,7 +430,7 @@ describe('CoachGameReview', () => {
     expect(onPlayAgain).toHaveBeenCalledTimes(1);
   });
 
-  it('onBackToCoach callback fires when clicked in analysis', () => {
+  it.skip('onBackToCoach callback fires when clicked in analysis', () => {
     const onBackToCoach = vi.fn();
     renderAnalysis({ onBackToCoach });
 
@@ -442,7 +455,7 @@ describe('CoachGameReview', () => {
     expect(onBackToCoach).toHaveBeenCalledTimes(1);
   });
 
-  it('entering what-if mode shows banner and back-to-review button', async () => {
+  it.skip('entering what-if mode shows banner and back-to-review button', async () => {
     renderAnalysis();
 
     // Initially no whatif banner
@@ -459,7 +472,7 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('back-to-review-btn')).toHaveTextContent('Back to Review');
   });
 
-  it('what-if mode shows variation move list', async () => {
+  it.skip('what-if mode shows variation move list', async () => {
     renderAnalysis();
 
     fireEvent.click(screen.getByTestId('nav-last'));
@@ -471,7 +484,7 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('whatif-moves')).toHaveTextContent('e4');
   });
 
-  it('back-to-review button returns to analysis mode', async () => {
+  it.skip('back-to-review button returns to analysis mode', async () => {
     renderAnalysis();
 
     fireEvent.click(screen.getByTestId('nav-last'));
@@ -490,7 +503,7 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('move-nav-controls')).toBeInTheDocument();
   });
 
-  it('updates the board FEN when navigating forward (one ply per click)', () => {
+  it.skip('updates the board FEN when navigating forward (one ply per click)', () => {
     renderAnalysis();
 
     // Step back to start, then advance one ply at a time. Each click
@@ -505,14 +518,14 @@ describe('CoachGameReview', () => {
 
   // ─── AI Features ───────────────────────────────────────────────────────────
 
-  it('shows "Ask about this position" button', () => {
+  it.skip('shows "Ask about this position" button', () => {
     renderAnalysis();
 
     expect(screen.getByTestId('ask-position-btn')).toBeInTheDocument();
     expect(screen.getByTestId('ask-position-btn')).toHaveTextContent('Ask about this position');
   });
 
-  it('expands ask panel when button is clicked', () => {
+  it.skip('expands ask panel when button is clicked', () => {
     renderAnalysis();
 
     expect(screen.queryByTestId('ask-position-panel')).not.toBeInTheDocument();
@@ -523,7 +536,7 @@ describe('CoachGameReview', () => {
     expect(screen.getByTestId('chat-input')).toBeInTheDocument();
   });
 
-  it('sends question to coach API and shows response', async () => {
+  it.skip('sends question to coach API and shows response', async () => {
     const { getCoachChatResponse } = await import('../../services/coachApi');
     renderAnalysis();
 
@@ -539,7 +552,7 @@ describe('CoachGameReview', () => {
     });
   });
 
-  it('loads AI commentary for key moment moves (blunder)', async () => {
+  it.skip('loads AI commentary for key moment moves (blunder)', async () => {
     const { getCoachCommentary } = await import('../../services/coachApi');
     const blunderMoves: CoachGameMove[] = [
       { moveNumber: 1, san: 'e4', fen: 'fen-after-e4', isCoachMove: false, commentary: '', evaluation: 30, classification: 'blunder', expanded: false, bestMove: 'e2e4', bestMoveEval: 30, preMoveEval: 0 },
@@ -564,7 +577,7 @@ describe('CoachGameReview', () => {
     });
   });
 
-  it('loads AI commentary for ordinary good moves too', async () => {
+  it.skip('loads AI commentary for ordinary good moves too', async () => {
     // Users wanted narration on every move, not only blunders/mistakes
     // (see CoachGameReview: the gating that used to skip "good" moves
     // was removed so every navigated move gets its own commentary).
@@ -585,7 +598,7 @@ describe('CoachGameReview', () => {
     });
   });
 
-  it('resets ask panel when navigating to different move', () => {
+  it.skip('resets ask panel when navigating to different move', () => {
     renderAnalysis();
 
     // Navigate to a move first
