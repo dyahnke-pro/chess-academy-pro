@@ -134,9 +134,18 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     return baseText;
   }, [narration, currentPly, lastPly, currentSegment, hintRecordForPly]);
 
-  // Dispatch speech for the current ply's text. Supersedes any prior
+  // Dispatch speech for the given ply's text. Supersedes any prior
   // utterance via token-counter cancellation + voiceService.stop().
-  const speakCurrent = useCallback((text: string | null): void => {
+  // Audit-driven (review walk #3): the ply is passed in explicitly
+  // rather than read from `currentPly` closure. commitPly fires this
+  // immediately after `setCurrentPly(bounded)` schedules the state
+  // update; the closure's `currentPly` would still hold the OLD value
+  // and the audit would log `ply N-1` for narration that's actually
+  // for ply N. Production audit (build 6459def+) showed
+  // `review-playback-step 6→7` paired with
+  // `review-narration-spoken ply 6: d3 — solid…` — the text was
+  // ply 7's d3 narration but the audit summary said ply 6.
+  const speakCurrent = useCallback((ply: number, text: string | null): void => {
     activeTokenRef.current += 1;
     const token = activeTokenRef.current;
     voiceService.stop();
@@ -149,8 +158,8 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       kind: 'review-narration-spoken',
       category: 'subsystem',
       source: 'useReviewPlayback',
-      summary: `ply ${currentPly}: ${text.slice(0, 40)}`,
-      details: JSON.stringify({ ply: currentPly, length: text.length }),
+      summary: `ply ${ply}: ${text.slice(0, 40)}`,
+      details: JSON.stringify({ ply, length: text.length }),
     });
     voiceService.speakForced(text).then(
       () => {
@@ -160,7 +169,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
         if (token === activeTokenRef.current) setNarrationState('idle');
       },
     );
-  }, [currentPly]);
+  }, []);
 
   // Speak the intro once the narration arrives. Subsequent ply changes
   // fire from the nav actions below — we don't re-speak on every ply
@@ -174,7 +183,8 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       source: 'useReviewPlayback',
       summary: `segments=${narration.segments.length}`,
     });
-    speakCurrent(narration.intro);
+    // Intro fires at ply 0 — the framing before any move plays.
+    speakCurrent(0, narration.intro);
   }, [narration, speakCurrent]);
 
   const commitPly = useCallback((ply: number, opts: { speak: boolean; navSource?: string }): void => {
@@ -227,7 +237,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       const seg = segments.find((s) => s.ply === bounded);
       text = seg?.narration ?? null;
     }
-    speakCurrent(text);
+    speakCurrent(bounded, text);
   }, [lastPly, narration, onPlyChange, segments, speakCurrent]);
 
   const goForward = useCallback(() => {
@@ -261,13 +271,15 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       setNarrationState('paused');
     } else {
       // Resume from current ply: re-speak whatever text matches.
-      speakCurrent(currentText);
+      // currentPly is the rendered ply (no setState pending), so the
+      // closure value is correct here.
+      speakCurrent(currentPly, currentText);
     }
-  }, [narrationState, speakCurrent, currentText]);
+  }, [narrationState, speakCurrent, currentText, currentPly]);
 
   const replay = useCallback(() => {
-    speakCurrent(currentText);
-  }, [speakCurrent, currentText]);
+    speakCurrent(currentPly, currentText);
+  }, [speakCurrent, currentText, currentPly]);
 
   const hintPlies = useMemo(
     () => hintRequests.map((r) => r.ply).filter((ply) => ply > 0),
