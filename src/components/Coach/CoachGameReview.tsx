@@ -347,7 +347,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       result,
       playerRating,
     }).then((narration) => {
-      setWalkNarration(narration);
+      // Empty segments → keep the summary card visible as a
+      // graceful fallback. The walk UI requires segments to render;
+      // without them, the student stays on the card with stats only.
+      if (narration && narration.segments.length > 0) {
+        setWalkNarration(narration);
+      }
     }).catch((err: unknown) => {
       const msg = err instanceof Error ? err.message : String(err);
       void logAppAudit({
@@ -2286,7 +2291,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       );
     }
 
-    // Fallback / loading: show the summary card (legacy paragraph view).
+    // Loading / prep-failed fallback: show the summary card.
+    // Per user architecture: there should NOT be a separate analysis
+    // phase the user opts into. The walk UI is the only review
+    // experience and auto-renders above when walkNarration arrives.
+    // The `onStartReview` prop is still wired for backwards-compat
+    // with the legacy "Quick / Full Review" buttons (covered by 21
+    // existing tests) — but since CoachReviewSessionPage no longer
+    // passes `autoStartReview` and walk-phase auto-renders on prep
+    // success, normal users never need to click them. Cleanup of
+    // those buttons + their tests is deferred to a follow-up commit
+    // that rewrites the tests against walk-phase rendering.
     return (
       <div className="flex flex-col items-center justify-center w-full h-full overflow-y-auto" data-testid="coach-game-review">
         <ReviewSummaryCard
