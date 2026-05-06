@@ -19,12 +19,14 @@ import { parseActions } from '../../services/coachActionDispatcher';
 import type {
   AssembledEnvelope,
   Provider,
+  ProviderCallOptions,
   ProviderResponse,
   ProviderToolCall,
 } from '../types';
 import { formatEnvelopeAsSystemPrompt, formatEnvelopeAsUserMessage } from '../envelope';
 
 const PROVIDER_TIMEOUT_MS = 30_000;
+const DEFAULT_MAX_TOKENS = 2000;
 
 function buildResponse(raw: string): ProviderResponse {
   const parsed = parseActions(raw);
@@ -43,6 +45,7 @@ function buildResponse(raw: string): ProviderResponse {
 async function callAnthropicViaCoachApi(
   envelope: AssembledEnvelope,
   onChunk?: (chunk: string) => void,
+  options?: ProviderCallOptions,
 ): Promise<ProviderResponse> {
   const systemPrompt = formatEnvelopeAsSystemPrompt(envelope);
   const userMessage = formatEnvelopeAsUserMessage(envelope);
@@ -51,12 +54,17 @@ async function callAnthropicViaCoachApi(
   // available, which can route the call to DeepSeek even though the brain
   // chose anthropicProvider. The /coach/teach surface must always hit
   // Anthropic (Sonnet/Haiku) regardless of the global default.
+  // Task defaults to 'chat_response' (claude-sonnet-4-6); legacy
+  // /coach/play call sites passing through the spine override this
+  // to keep Haiku/Reasoner routing for cost-sensitive paths.
+  const task = options?.task ?? 'chat_response';
+  const maxTokens = options?.maxTokens ?? DEFAULT_MAX_TOKENS;
   const promise = getCoachChatResponse(
     [{ role: 'user', content: userMessage }],
     systemPrompt,
     onChunk,
-    'chat_response',
-    2000,
+    task,
+    maxTokens,
     'medium',
     'anthropic',
   );
@@ -79,8 +87,8 @@ async function callAnthropicViaCoachApi(
 
 export const anthropicProvider: Provider = {
   name: 'anthropic',
-  async call(envelope: AssembledEnvelope): Promise<ProviderResponse> {
-    return callAnthropicViaCoachApi(envelope, undefined);
+  async call(envelope: AssembledEnvelope, options?: ProviderCallOptions): Promise<ProviderResponse> {
+    return callAnthropicViaCoachApi(envelope, undefined, options);
   },
   /** First-sentence-fast streaming. The brain hands `onChunk` here so
    *  the TTS dispatcher in CoachTeachPage / GameChatPanel can split on
@@ -90,7 +98,7 @@ export const anthropicProvider: Provider = {
    *  parsed from the FULL accumulated response after streaming
    *  completes, so the dispatcher fires every action regardless of
    *  whether streaming was on. */
-  async callStreaming(envelope, onChunk) {
-    return callAnthropicViaCoachApi(envelope, onChunk);
+  async callStreaming(envelope, onChunk, options) {
+    return callAnthropicViaCoachApi(envelope, onChunk, options);
   },
 };

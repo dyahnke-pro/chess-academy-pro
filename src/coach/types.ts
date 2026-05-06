@@ -305,15 +305,36 @@ export interface ProviderResponse {
   raw?: unknown;
 }
 
+/** Per-call options the spine threads from `CoachServiceOptions` into
+ *  the provider. Today's only option is `task` — model-routing hint
+ *  the underlying coachApi uses to pick the right model
+ *  (interactive_review → haiku, position_analysis_chat → reasoner,
+ *  chat_response → sonnet/deepseek-chat). Without this the spine
+ *  always uses chat_response on Anthropic, which routes everything
+ *  through the expensive Sonnet model — fine for /coach/teach where
+ *  depth matters, wasteful for /coach/play move-commentary where
+ *  Haiku is the right call. WO-COACH-UNIFY-01. */
+export interface ProviderCallOptions {
+  /** CoachTask hint passed down to the underlying API for model
+   *  selection. When omitted, the provider uses 'chat_response'. */
+  task?: import('../types').CoachTask;
+  /** Optional max-tokens override. When omitted, the provider uses
+   *  its built-in default (typically 2000). Useful for short
+   *  one-shot calls (tactic alerts, explore reactions) that don't
+   *  need a long context budget. */
+  maxTokens?: number;
+}
+
 export interface Provider {
   name: ProviderName;
-  call(envelope: AssembledEnvelope): Promise<ProviderResponse>;
+  call(envelope: AssembledEnvelope, options?: ProviderCallOptions): Promise<ProviderResponse>;
   /** Optional streaming variant. WO-BRAIN-02 added this so migrated
    *  surfaces (in-game chat first) can preserve token-by-token UX.
    *  When omitted, callers fall back to `call(...)`. */
   callStreaming?(
     envelope: AssembledEnvelope,
     onChunk: (chunk: string) => void,
+    options?: ProviderCallOptions,
   ): Promise<ProviderResponse>;
 }
 

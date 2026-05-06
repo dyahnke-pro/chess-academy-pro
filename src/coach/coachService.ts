@@ -138,6 +138,15 @@ export interface CoachServiceOptions {
    *  toolbelt, AND the spine refuses to dispatch them if the LLM
    *  hallucinates a call. WO-COACH-RESILIENCE. */
   excludeTools?: readonly string[];
+  /** Per-call task hint for model selection. Maps to CoachTask in the
+   *  underlying coachApi (move_commentary → cheap, position_analysis_chat
+   *  → reasoner, chat_response → sonnet/deepseek-chat, etc.). When
+   *  omitted the providers default to 'chat_response'. WO-COACH-UNIFY-01. */
+  task?: import('../types').CoachTask;
+  /** Per-call max-tokens override. Useful for short one-shot calls
+   *  (tactic alerts ~200, move-commentary ~500) where the provider
+   *  default of 2000 wastes budget. WO-COACH-UNIFY-01. */
+  maxTokens?: number;
   /** Optional getter the spine calls between trips to refresh
    *  `ctx.liveFen`. Without this, the FEN snapshotted at handleSubmit
    *  time stays frozen across all round-trips — so when the brain
@@ -347,9 +356,12 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       summary: `provider=${provider.name} streaming=${useStreaming} trip=${trip}/${maxRoundTrips}`,
     });
 
+    const providerCallOptions = options.task !== undefined || options.maxTokens !== undefined
+      ? { task: options.task, maxTokens: options.maxTokens }
+      : undefined;
     lastResponse = useStreaming && options.onChunk && provider.callStreaming
-      ? await provider.callStreaming(currentEnvelope, options.onChunk)
-      : await provider.call(currentEnvelope);
+      ? await provider.callStreaming(currentEnvelope, options.onChunk, providerCallOptions)
+      : await provider.call(currentEnvelope, providerCallOptions);
 
     // WO-FOUNDATION-02 trace harness — what tool calls did the
     // provider return? Critical signal for diagnosing why play_move

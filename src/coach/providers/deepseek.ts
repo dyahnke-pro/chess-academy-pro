@@ -19,12 +19,14 @@ import { parseActions } from '../../services/coachActionDispatcher';
 import type {
   AssembledEnvelope,
   Provider,
+  ProviderCallOptions,
   ProviderResponse,
   ProviderToolCall,
 } from '../types';
 import { formatEnvelopeAsSystemPrompt, formatEnvelopeAsUserMessage } from '../envelope';
 
 const PROVIDER_TIMEOUT_MS = 30_000;
+const DEFAULT_MAX_TOKENS = 2000;
 
 function buildResponse(raw: string): ProviderResponse {
   const parsed = parseActions(raw);
@@ -43,6 +45,7 @@ function buildResponse(raw: string): ProviderResponse {
 async function callDeepSeek(
   envelope: AssembledEnvelope,
   onChunk?: (chunk: string) => void,
+  options?: ProviderCallOptions,
 ): Promise<ProviderResponse> {
   const systemPrompt = formatEnvelopeAsSystemPrompt(envelope);
   const userMessage = formatEnvelopeAsUserMessage(envelope);
@@ -51,12 +54,14 @@ async function callDeepSeek(
   // only surface that uses Anthropic (see anthropicProvider for the
   // mirror call with 'anthropic'). The fallback chain still kicks in
   // if DeepSeek's call errors.
+  const task = options?.task ?? 'chat_response';
+  const maxTokens = options?.maxTokens ?? DEFAULT_MAX_TOKENS;
   const promise = getCoachChatResponse(
     [{ role: 'user', content: userMessage }],
     systemPrompt,
     onChunk,
-    'chat_response',
-    2000,
+    task,
+    maxTokens,
     'medium',
     'deepseek',
   );
@@ -79,10 +84,10 @@ async function callDeepSeek(
 
 export const deepseekProvider: Provider = {
   name: 'deepseek',
-  async call(envelope: AssembledEnvelope): Promise<ProviderResponse> {
-    return callDeepSeek(envelope, undefined);
+  async call(envelope: AssembledEnvelope, options?: ProviderCallOptions): Promise<ProviderResponse> {
+    return callDeepSeek(envelope, undefined, options);
   },
-  async callStreaming(envelope, onChunk) {
-    return callDeepSeek(envelope, onChunk);
+  async callStreaming(envelope, onChunk, options) {
+    return callDeepSeek(envelope, onChunk, options);
   },
 };
