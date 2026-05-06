@@ -10,6 +10,7 @@ import { useAppStore } from '../../stores/appStore';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { coachService } from '../../coach/coachService';
 import { voiceService } from '../../services/voiceService';
+import { createStreamingSpeaker, type StreamingSpeaker } from '../../services/streamingSpeaker';
 import { SENTENCE_END_RE, unwrapSpineError } from '../../services/sanitizeCoachText';
 import { logAppAudit } from '../../services/appAuditor';
 import type { StockfishAnalysis } from '../../types';
@@ -38,8 +39,9 @@ export function CoachAnalysePage(): JSX.Element {
   // Each completed sentence speaks via speakForced as soon as the
   // SENTENCE_END_RE terminator arrives in the stream (first sentence
   // within ~500ms instead of waiting for full LLM completion).
-  const speechChainRef = useRef<Promise<void>>(Promise.resolve());
-  const sentenceCountRef = useRef(0);
+  // `createStreamingSpeaker` encapsulates the abandoned-on-busy chain
+  // semantics — see streamingSpeaker.ts.
+  const speakerRef = useRef<StreamingSpeaker>(createStreamingSpeaker());
   const dispatchSentencesFromChunk = useCallback((accumulated: string) => {
     let remaining = accumulated;
     let consumed = 0;
@@ -47,13 +49,7 @@ export function CoachAnalysePage(): JSX.Element {
     while ((match = SENTENCE_END_RE.exec(remaining)) !== null) {
       const endIdx = match.index + match[1].length;
       const sentence = remaining.slice(0, endIdx).trim();
-      if (sentence) {
-        sentenceCountRef.current += 1;
-        const isFirst = sentenceCountRef.current === 1;
-        speechChainRef.current = speechChainRef.current
-          .then(() => isFirst ? voiceService.speakIfFree(sentence) : voiceService.speakForced(sentence))
-          .catch(() => undefined);
-      }
+      if (sentence) speakerRef.current.add(sentence);
       remaining = remaining.slice(endIdx);
       consumed += endIdx;
     }
@@ -63,10 +59,10 @@ export function CoachAnalysePage(): JSX.Element {
   const analysePosition = useCallback(async (fen: string) => {
     setLoading(true);
     setCoachExplanation('');
-    // Cut any in-flight TTS before starting a new narration.
+    // Cut any in-flight TTS before starting a new narration. Fresh
+    // speaker so a prior stream's abandoned flag doesn't carry over.
     voiceService.stop();
-    speechChainRef.current = Promise.resolve();
-    sentenceCountRef.current = 0;
+    speakerRef.current = createStreamingSpeaker();
 
     try {
       // Run Stockfish analysis
@@ -139,7 +135,7 @@ export function CoachAnalysePage(): JSX.Element {
           summary: result.text.slice(0, 120),
           fen,
         });
-      } else if (sentenceCountRef.current === 0) {
+      } else if (speakerRef.current.count() === 0) {
         // Fallback: if no sentence terminator fired (very short
         // response), speak whatever we got.
         void voiceService.speakIfFree(finalText.slice(0, 600));
@@ -167,8 +163,7 @@ export function CoachAnalysePage(): JSX.Element {
   const handleFollowUp = useCallback(async (question: string) => {
     setLoading(true);
     voiceService.stop();
-    speechChainRef.current = Promise.resolve();
-    sentenceCountRef.current = 0;
+    speakerRef.current = createStreamingSpeaker();
 
     const evalText = analysis
       ? (analysis.isMate
@@ -216,7 +211,7 @@ export function CoachAnalysePage(): JSX.Element {
         source: 'CoachAnalysePage.handleFollowUp',
         summary: result.text.slice(0, 120),
       });
-    } else if (sentenceCountRef.current === 0) {
+    } else if (speakerRef.current.count() === 0) {
       void voiceService.speakIfFree(finalText.slice(0, 400));
     }
     setLoading(false);

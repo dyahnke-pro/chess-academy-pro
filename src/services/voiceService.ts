@@ -5,7 +5,7 @@
 import { speechService } from './speechService';
 import { voicePackService } from './voicePackService';
 import { getSharedAudioContext } from './audioContextManager';
-import { stripCoachMarkup } from './sanitizeCoachText';
+import { stripCoachMarkup, formatForSpeech } from './sanitizeCoachText';
 import { db } from '../db/schema';
 import type { CoachPersonality } from '../coach/types';
 
@@ -236,6 +236,13 @@ export function sanitizeForTTS(text: string): string {
   // narration — bypassing them, and Polly was reading the markers
   // verbatim. This is the chokepoint that catches every caller.
   let out = stripCoachMarkup(text);
+  // Strip markdown formatting tokens that Polly would otherwise voice
+  // literally. Production audit (build 6459def+) Findings 9-10 caught
+  // Polly speaking `**Here's why it hurts so bad for you:**` with the
+  // raw asterisks because the streaming dispatchers feed chat-bubble
+  // markdown straight to TTS. formatForSpeech strips bold/italic
+  // markers and stray `*`/`_` runs without touching SAN notation.
+  out = formatForSpeech(out);
   // FEN strings FIRST so they can't get tokenized into nonsense by the
   // SAN regex below (a FEN's "K" / "Q" / "B" / "N" letters look like
   // piece-letter SAN to the SAN_MOVE_RE pattern).

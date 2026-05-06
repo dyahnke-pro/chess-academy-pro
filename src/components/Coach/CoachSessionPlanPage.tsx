@@ -9,6 +9,7 @@ import { coachService } from '../../coach/coachService';
 import { logAppAudit } from '../../services/appAuditor';
 import { SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { voiceService } from '../../services/voiceService';
+import { createStreamingSpeaker, type StreamingSpeaker } from '../../services/streamingSpeaker';
 import { SESSION_PLAN_ADDITION } from '../../services/coachPrompts';
 import { ChatInput } from './ChatInput';
 import type { SessionPlan, SessionBlock } from '../../types';
@@ -59,35 +60,24 @@ export function CoachSessionPlanPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [adjusting, setAdjusting] = useState(false);
 
-  // Streaming-voice dispatcher refs. Kept across renders so the
-  // sentence chain doesn't restart on each setCoachExplanation call.
-  // First-sentence-fast: each completed sentence speaks via
-  // speakForced as soon as the regex sees the terminator, instead of
-  // waiting for the whole response and then speaking 300 chars in one
-  // batch (the prior shape, which delayed audio by 3-5s).
-  const sentenceBufferRef = useRef('');
-  const speechChainRef = useRef<Promise<void>>(Promise.resolve());
-  const sentenceCountRef = useRef(0);
+  // Streaming-voice dispatcher. Kept across renders so the sentence
+  // chain doesn't restart on each setCoachExplanation call. First-
+  // sentence-fast: each completed sentence speaks ~500ms after the
+  // first chunk arrives instead of waiting for the full LLM response
+  // (the prior shape delayed audio by 3-5s).
+  // `createStreamingSpeaker` encapsulates the abandoned-on-busy chain
+  // semantics — see streamingSpeaker.ts.
+  const speakerRef = useRef<StreamingSpeaker>(createStreamingSpeaker());
 
   const dispatchSentencesFromChunk = useCallback((accumulatedText: string) => {
-    sentenceBufferRef.current = accumulatedText.slice(sentenceCountRef.current === 0 ? 0 : accumulatedText.length);
     let remaining = accumulatedText;
-    let consumed = 0;
     let match: RegExpExecArray | null;
     while ((match = SENTENCE_END_RE.exec(remaining)) !== null) {
       const endIdx = match.index + match[1].length;
       const sentence = remaining.slice(0, endIdx).trim();
-      if (sentence) {
-        sentenceCountRef.current += 1;
-        const isFirst = sentenceCountRef.current === 1;
-        speechChainRef.current = speechChainRef.current
-          .then(() => isFirst ? voiceService.speakIfFree(sentence) : voiceService.speakForced(sentence))
-          .catch(() => undefined);
-      }
+      if (sentence) speakerRef.current.add(sentence);
       remaining = remaining.slice(endIdx);
-      consumed += endIdx;
     }
-    sentenceBufferRef.current = accumulatedText.slice(consumed);
   }, []);
 
   // Generate initial plan
@@ -117,7 +107,7 @@ export function CoachSessionPlanPage(): JSX.Element {
           'Explain the plan to the student in 3-5 sentences. Why these blocks, in this order, given their rating and weaknesses.',
         ].join('\n');
 
-        sentenceCountRef.current = 0;
+        speakerRef.current = createStreamingSpeaker();
         let explanation = '';
         const result = await coachService.ask(
           {
@@ -160,7 +150,7 @@ export function CoachSessionPlanPage(): JSX.Element {
           });
         }
         const finalText = isProviderError ? '' : result.text;
-        if (finalText && sentenceCountRef.current === 0) {
+        if (finalText && speakerRef.current.count() === 0) {
           // Fallback: if no sentence terminator fired during streaming
           // (very short response, no period), speak whatever we got.
           void voiceService.speakIfFree(finalText.slice(0, 600));
@@ -185,8 +175,7 @@ export function CoachSessionPlanPage(): JSX.Element {
     // Stop any in-flight narration from the prior plan; the
     // adjustment will start its own sentence chain.
     voiceService.stop();
-    speechChainRef.current = Promise.resolve();
-    sentenceCountRef.current = 0;
+    speakerRef.current = createStreamingSpeaker();
 
     try {
       const adjustedPlan = await generateCoachSession(activeProfile, text);
@@ -235,7 +224,7 @@ export function CoachSessionPlanPage(): JSX.Element {
         });
       }
       const finalText = isProviderError ? '' : result.text;
-      if (finalText && sentenceCountRef.current === 0) {
+      if (finalText && speakerRef.current.count() === 0) {
         void voiceService.speakIfFree(finalText.slice(0, 400));
       }
     } catch {

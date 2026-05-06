@@ -35,6 +35,7 @@ import {
 } from '../../services/phaseTransitionDetector';
 import { logAppAudit } from '../../services/appAuditor';
 import { unwrapSpineError, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
+import { createStreamingSpeaker } from '../../services/streamingSpeaker';
 import type { PhaseNarrationVerbosity } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -2855,37 +2856,15 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
             return POLLY_VOICES.find((v) => v.id === activeVoice)?.engine as 'generative' | 'neural' | undefined;
           })(),
           // Stream the LLM and ship each completed sentence to Polly
-          // the moment it lands. Single chained pipeline through
-          // speakForced so each Polly call awaits the previous
-          // sentence's audio. First sentence drops behind speakIfFree
-          // so it doesn't clip an in-flight phase narration; once the
-          // chain is established, every subsequent sentence chains via
-          // speakForced (no Web Speech overlap, no dropped sentences).
-          //
-          // Audit-driven fix: when the first-sentence speakIfFree
-          // DROPPED (because Polly was still finishing a prior
-          // narration), the original chain still proceeded to
-          // speakForced for sentence 2 — which CUT OFF the very thing
-          // speakIfFree was trying to protect. The whole point of
-          // speakIfFree is to defer to in-flight speech; if it
-          // dropped, every subsequent sentence in this batch must
-          // drop too. Production audit (build 6459def+) Finding 167
-          // caught this as a `tts-concurrent-speak prevTier=polly`
-          // event mid-game when the post-move commentary stream
-          // arrived while a prior phase narration was still playing.
+          // the moment it lands. `createStreamingSpeaker()` encapsulates
+          // the chain semantics: first sentence drops politely via
+          // speakIfFree if Polly is busy, and when that drop happens
+          // every subsequent sentence in the batch also drops so the
+          // in-flight narration plays through cleanly. See
+          // streamingSpeaker.ts for the production-audit history.
           onStream: (() => {
             let buffer = '';
-            let chain: Promise<void> | null = null;
-            // True after the first sentence's speakIfFree was
-            // dropped; subsequent sentences from the same batch are
-            // also skipped so we don't undo the politely-deferred
-            // semantic.
-            let abandoned = false;
-            // SENTENCE_END_RE imported from sanitizeCoachText — shared
-            // across all Coach streaming dispatchers post audit #29.
-            // The `(?<!\d)` lookbehind keeps "+0.8" / "3.Bc4" atomic;
-            // see the helper's docstring for the build-e2a96ed slice
-            // bug that motivated the prefix-preserving slice below.
+            const speaker = createStreamingSpeaker();
             return (chunk: string): void => {
               buffer += chunk;
               let match: RegExpExecArray | null;
@@ -2897,23 +2876,9 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
                 // from match.index would drop it silently.
                 const endIdx = match.index + match[1].length;
                 const sentence = buffer.slice(0, endIdx).trim();
-                if (sentence && !abandoned) {
+                if (sentence) {
                   streamedAnything = true;
-                  if (!chain) {
-                    // Snapshot whether anything's playing BEFORE
-                    // speakIfFree mutates state. If it was busy,
-                    // speakIfFree drops silently; we honor that drop
-                    // by setting `abandoned` so the rest of the
-                    // batch stays quiet too.
-                    if (voiceService.isPlaying()) {
-                      abandoned = true;
-                    }
-                    chain = voiceService.speakIfFree(sentence).catch(() => undefined);
-                  } else {
-                    chain = chain
-                      .then(() => voiceService.speakForced(sentence))
-                      .catch(() => undefined);
-                  }
+                  speaker.add(sentence);
                 }
                 buffer = buffer.slice(endIdx);
               }

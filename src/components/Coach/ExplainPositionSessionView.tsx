@@ -19,6 +19,7 @@ import { ChatInput } from './ChatInput';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { coachService } from '../../coach/coachService';
 import { voiceService } from '../../services/voiceService';
+import { createStreamingSpeaker, type StreamingSpeaker } from '../../services/streamingSpeaker';
 import { SENTENCE_END_RE, unwrapSpineError } from '../../services/sanitizeCoachText';
 import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
@@ -50,8 +51,9 @@ export function ExplainPositionSessionView({
   // Streaming-voice dispatcher: same pattern as CoachAnalysePage /
   // CoachSessionPlanPage. First sentence speaks ~500ms after first
   // chunk arrives instead of waiting for the full LLM completion.
-  const speechChainRef = useRef<Promise<void>>(Promise.resolve());
-  const sentenceCountRef = useRef(0);
+  // `createStreamingSpeaker` encapsulates the abandoned-on-busy chain
+  // semantics — see streamingSpeaker.ts.
+  const speakerRef = useRef<StreamingSpeaker>(createStreamingSpeaker());
   const dispatchSentencesFromChunk = useCallback((accumulated: string) => {
     if (voiceMuted) return;
     let remaining = accumulated;
@@ -60,13 +62,7 @@ export function ExplainPositionSessionView({
     while ((match = SENTENCE_END_RE.exec(remaining)) !== null) {
       const endIdx = match.index + match[1].length;
       const sentence = remaining.slice(0, endIdx).trim();
-      if (sentence) {
-        sentenceCountRef.current += 1;
-        const isFirst = sentenceCountRef.current === 1;
-        speechChainRef.current = speechChainRef.current
-          .then(() => isFirst ? voiceService.speakIfFree(sentence) : voiceService.speakForced(sentence))
-          .catch(() => undefined);
-      }
+      if (sentence) speakerRef.current.add(sentence);
       remaining = remaining.slice(endIdx);
       consumed += endIdx;
     }
@@ -97,9 +93,9 @@ export function ExplainPositionSessionView({
         if (cancelled.value || !mountedRef.current) return;
         setAnalysis(sf);
 
-        // Reset speech chain for this position's narration.
-        speechChainRef.current = Promise.resolve();
-        sentenceCountRef.current = 0;
+        // Reset speech chain for this position's narration. Fresh
+        // speaker so a prior stream's abandoned flag doesn't carry over.
+        speakerRef.current = createStreamingSpeaker();
 
         const evalText = sf.isMate
           ? `Mate in ${sf.mateIn ?? '?'}`
@@ -157,7 +153,7 @@ export function ExplainPositionSessionView({
             summary: result.text.slice(0, 120),
             fen: targetFen,
           });
-        } else if (!voiceMuted && sentenceCountRef.current === 0) {
+        } else if (!voiceMuted && speakerRef.current.count() === 0) {
           // Fallback: short response without a sentence terminator.
           void voiceService.speakIfFree(finalText.slice(0, 600));
         }
@@ -186,8 +182,7 @@ export function ExplainPositionSessionView({
       if (!analysis) return;
       setLoading(true);
       voiceService.stop();
-      speechChainRef.current = Promise.resolve();
-      sentenceCountRef.current = 0;
+      speakerRef.current = createStreamingSpeaker();
 
       const evalText = analysis.isMate
         ? `Mate in ${analysis.mateIn ?? '?'}`
