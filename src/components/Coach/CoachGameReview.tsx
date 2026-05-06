@@ -60,6 +60,13 @@ interface CoachGameReviewProps {
   isGuidedLesson?: boolean;
   pgn?: string;
   initialMoveIndex?: number;
+  /** When true, auto-fire the post-game walkthrough as soon as the
+   *  component mounts — the user lands directly in the big-button +
+   *  chat-panel mode with the intro narration playing instead of
+   *  having to tap "Full Review" first. Used by the new
+   *  /coach/review/:gameId entry point so opening a game from the
+   *  picker drops the student straight into the walkthrough. */
+  autoStartReview?: boolean;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -108,11 +115,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     isGuidedLesson, pgn,
   } = props;
   const initialMoveIndex = props.initialMoveIndex;
+  const autoStartReview = props.autoStartReview;
   const navigate = useNavigate();
 
   // ─── Summary-First Flow ─────────────────────────────────────────────────────
+  // When autoStartReview is true, skip the summary card and land
+  // directly in the walkthrough. The /coach/review/:gameId entry point
+  // wants the user to drop straight into the chat-focused big-button
+  // mode the moment they tap a game card.
   const [reviewPhase, setReviewPhase] = useState<'summary' | 'analysis'>(
-    isGuidedLesson ? 'analysis' : 'summary',
+    isGuidedLesson || autoStartReview ? 'analysis' : 'summary',
   );
 
   const startIndex = initialMoveIndex !== undefined
@@ -651,6 +663,32 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       fen: fenForQ,
       trigger: null,
     });
+
+    // WO-REVIEW-MERGE: per-turn voice marker extraction. The brain's
+    // REVIEW_MODE_ADDITION asks for one `[VOICE: ...]` per response;
+    // we capture the first closed marker as it streams and speak it
+    // via Polly so the surface matches the /coach/teach voice cue.
+    let voiceRawBuffer = '';
+    let voiceSpokenForTurn = false;
+    const VOICE_MARKER_RE = /\[VOICE:\s*([\s\S]*?)\]/g;
+    const tryExtractVoiceMarker = (): void => {
+      if (voiceSpokenForTurn) return;
+      VOICE_MARKER_RE.lastIndex = 0;
+      const match = VOICE_MARKER_RE.exec(voiceRawBuffer);
+      if (!match) return;
+      const inner = match[1].trim();
+      if (!inner) return;
+      voiceSpokenForTurn = true;
+      void logAppAudit({
+        kind: 'coach-voice-marker-extracted',
+        category: 'subsystem',
+        source: 'CoachGameReview.tryExtractVoiceMarker',
+        summary: `extracted [VOICE: ...] block (${inner.length} chars)`,
+        details: JSON.stringify({ length: inner.length, preview: inner.slice(0, 80) }),
+      });
+      void voiceService.speakForcedPollyOnly(inner);
+    };
+
     void coachService
       .ask(
         { surface: 'review', ask: question, liveState: reviewLiveState },
@@ -662,9 +700,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           // chat got via the OPERATOR_BASE_BODY teaching directive.
           maxToolRoundTrips: 6,
           onChunk: (chunk: string) => {
-            if (!abortSignal.aborted) {
-              setAskResponse((prev: string | null) => (prev ?? '') + chunk);
-            }
+            if (abortSignal.aborted) return;
+            // WO-REVIEW-MERGE: extract `[VOICE: ...]` markers from the
+            // streamed response and route them to Polly. Mirrors the
+            // /coach/teach pattern so the new REVIEW_MODE_ADDITION's
+            // mandate ("emit one [VOICE: ...] per turn") actually
+            // produces spoken summaries here too. The marker text is
+            // also stripped from the chat display so the bubble shows
+            // clean prose instead of leaking the directive.
+            voiceRawBuffer += chunk;
+            tryExtractVoiceMarker();
+            const visible = chunk.replace(VOICE_MARKER_RE, '');
+            setAskResponse((prev: string | null) => (prev ?? '') + visible);
           },
           onNavigate: (path: string) => {
             void navigate(path);
@@ -1254,6 +1301,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWhatIfFen(null);
     setWhatIfCommentary(null);
   }, []);
+
+  // Auto-fire the walkthrough on mount when the parent surface
+  // (/coach/review/:gameId) requested it. We only fire ONCE — the
+  // ref guard protects against re-runs when other dependencies of
+  // handleStartAutoReview change. Skipped on guided lessons (which
+  // own their own playback orchestration).
+  const autoStartFiredRef = useRef(false);
+  useEffect(() => {
+    if (!autoStartReview) return;
+    if (autoStartFiredRef.current) return;
+    if (isGuidedLesson) return;
+    if (moves.length === 0) return;
+    autoStartFiredRef.current = true;
+    handleStartAutoReview();
+  }, [autoStartReview, isGuidedLesson, moves.length, handleStartAutoReview]);
 
   const handleStopAutoReview = useCallback(() => {
     setAutoReviewActive(false);
