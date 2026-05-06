@@ -89,7 +89,21 @@ export function CoachReviewListPage(): JSX.Element {
           return (
             <button
               key={b.id}
-              onClick={() => setFilter(b.id)}
+              onClick={() => {
+                // Audit-driven (#14): a "filter looks empty" report
+                // now has a trail showing which filter was active and
+                // how many games matched.
+                const all = games ?? [];
+                const matched = b.id === 'all' ? all.length : all.filter((g) => g.source === b.id).length;
+                void logAppAudit({
+                  kind: 'coach-surface-migrated',
+                  category: 'subsystem',
+                  source: 'CoachReviewListPage.filter',
+                  summary: `filter=${b.id} matched=${matched} of ${all.length}`,
+                  details: JSON.stringify({ filter: b.id, matched, total: all.length }),
+                });
+                setFilter(b.id);
+              }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors border ${
                 active
                   ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300'

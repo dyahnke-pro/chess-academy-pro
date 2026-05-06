@@ -5,6 +5,7 @@ import { X, Minus, Swords } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
+import { logAppAudit } from '../../services/appAuditor';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { MobileChatDrawer } from './MobileChatDrawer';
 import { GameChatPanel } from './GameChatPanel';
@@ -61,6 +62,12 @@ export function GlobalCoachDrawer(): JSX.Element | null {
   const chatRef = useRef<{ injectAssistantMessage: (text: string) => void } | null>(null);
 
   const handleClose = useCallback(() => {
+    void logAppAudit({
+      kind: 'coach-drawer-state',
+      category: 'subsystem',
+      source: 'GlobalCoachDrawer.handleClose',
+      summary: 'closed',
+    });
     setOpen(false);
     setMinimized(false);
   }, [setOpen]);
@@ -117,13 +124,27 @@ export function GlobalCoachDrawer(): JSX.Element | null {
       return;
     }
     if (showPositionFen) {
+      void logAppAudit({
+        kind: 'coach-drawer-handoff',
+        category: 'subsystem',
+        source: 'GlobalCoachDrawer',
+        summary: `handoff=show-position → /coach/play`,
+        fen: showPositionFen,
+      });
       setOpen(false);
       void navigate(`/coach/play?fen=${encodeURIComponent(showPositionFen)}`);
       return;
     }
     if (hasPractice) {
-      setPracticeFromAnnotation(commands);
       const practiceCmd = commands.find((c) => c.type === 'practice' && c.fen);
+      void logAppAudit({
+        kind: 'coach-drawer-handoff',
+        category: 'subsystem',
+        source: 'GlobalCoachDrawer',
+        summary: `handoff=practice ${practiceCmd?.label ?? '(no label)'}`,
+        fen: practiceCmd?.fen,
+      });
+      setPracticeFromAnnotation(commands);
       if (practiceCmd?.fen) {
         setGlobalPractice({ fen: practiceCmd.fen, label: practiceCmd.label ?? 'Practice position' });
       }

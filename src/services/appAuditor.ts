@@ -142,6 +142,25 @@ export type AuditKind =
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
   | 'coach-surface-migrated'
+  // Coach-hub navigation (WO-COACH-UNIFY-01 audit item #15). Fires
+  // when the user taps a tile on the Coach hub so a "I went to
+  // Coach but ended up somewhere else" report has a trail.
+  | 'coach-hub-tile-clicked'
+  // GlobalCoachDrawer state transitions (WO-COACH-UNIFY-01 audit
+  // item #16). Open / close / minimize / handoff-to-play are all
+  // observable via this kind.
+  | 'coach-drawer-state'
+  | 'coach-drawer-handoff'
+  // Tool callback rejections at the surface layer (WO-COACH-UNIFY-01
+  // audit item #12). Distinguishes "spine rejected SAN" from
+  // "surface rejected SAN" — the latter is what fires when the
+  // SOVEREIGNTY check or chess.js refuses a move.
+  | 'coach-tool-callback-rejected'
+  // Walk-phase prep skipped (WO-COACH-UNIFY-01 audit item #26).
+  // Distinguishes empty-segments / parse-failed / adapt-failed
+  // from "still loading" so a "review never showed walk UI"
+  // report has a concrete reason.
+  | 'review-walk-skipped'
   // Biweekly chess.com / lichess auto-import scheduler.
   | 'auto-import-completed'
   | 'auto-import-failed'

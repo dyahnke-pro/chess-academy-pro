@@ -205,7 +205,10 @@ export function CoachReviewSessionPage(): JSX.Element {
           } catch (err) {
             if (cancelled) return;
             void logAppAudit({
-              kind: 'lichess-error',
+              // analyzeSingleGame is Stockfish-driven, not Lichess —
+              // mis-categorised as lichess-error on this branch. Fixed
+              // per audit item #28.
+              kind: 'stockfish-error',
               category: 'subsystem',
               source: 'CoachReviewSessionPage.analyze',
               summary: `analyzeSingleGame failed: ${err instanceof Error ? err.message : String(err)}`,
@@ -278,6 +281,13 @@ export function CoachReviewSessionPage(): JSX.Element {
           /coach/review/game-* loads. Removing the prop lets walk
           phase render and the prep scan fire on mount. */}
       <CoachGameReview
+        // key={gameId} forces a fresh mount when the user navigates
+        // from /coach/review/A → /coach/review/B. Without it, walk
+        // narration state, aiCommentaryCache, and other refs from
+        // game A leak into game B until the prep effect overwrites
+        // (and the cache stays game-A-keyed against game-B's move
+        // indices). Audit-driven (Coach-tab full audit, item #9).
+        key={gameId}
         moves={adapted.moves}
         keyMoments={adapted.keyMoments}
         playerColor={adapted.playerColor}

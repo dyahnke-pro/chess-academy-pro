@@ -6,6 +6,7 @@ import { useAppStore } from '../../stores/appStore';
 import { generateCoachSession } from '../../services/sessionGenerator';
 import { createSession } from '../../services/sessionGenerator';
 import { coachService } from '../../coach/coachService';
+import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
 import { SESSION_PLAN_ADDITION } from '../../services/coachPrompts';
 import { ChatInput } from './ChatInput';
@@ -150,9 +151,19 @@ export function CoachSessionPlanPage(): JSX.Element {
         );
         // Final flush in case the response ended without a sentence
         // terminator on the tail (rare but possible mid-clause).
-        const finalText = result.text.startsWith('(coach-brain provider error:')
-          ? ''
-          : result.text;
+        const isProviderError = result.text.startsWith('(coach-brain provider error:');
+        if (isProviderError) {
+          // Audit-driven fix (item #13): silent strip used to swallow
+          // every spine error, so a "session plan voice didn't speak"
+          // report had no signal. Now an llm-error audit fires.
+          void logAppAudit({
+            kind: 'llm-error',
+            category: 'subsystem',
+            source: 'CoachSessionPlanPage.generatePlan',
+            summary: result.text.slice(0, 120),
+          });
+        }
+        const finalText = isProviderError ? '' : result.text;
         if (finalText && sentenceCountRef.current === 0) {
           // Fallback: if no sentence terminator fired during streaming
           // (very short response, no period), speak whatever we got.
@@ -218,9 +229,16 @@ export function CoachSessionPlanPage(): JSX.Element {
           },
         },
       );
-      const finalText = result.text.startsWith('(coach-brain provider error:')
-        ? ''
-        : result.text;
+      const isProviderError = result.text.startsWith('(coach-brain provider error:');
+      if (isProviderError) {
+        void logAppAudit({
+          kind: 'llm-error',
+          category: 'subsystem',
+          source: 'CoachSessionPlanPage.handlePushback',
+          summary: result.text.slice(0, 120),
+        });
+      }
+      const finalText = isProviderError ? '' : result.text;
       if (finalText && sentenceCountRef.current === 0) {
         void voiceService.speakIfFree(finalText.slice(0, 400));
       }
