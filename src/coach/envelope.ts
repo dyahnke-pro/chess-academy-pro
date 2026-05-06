@@ -31,6 +31,7 @@ import { readMemorySnapshot } from './sources/memory';
 import { loadRoutesManifest } from './sources/routesManifest';
 import { prepareLiveState } from './sources/liveState';
 import type { CoachPersonality, IntensityLevel } from './types';
+import { PHASE_NARRATION_ADDITION } from '../services/coachPrompts';
 
 /** Appended to the identity prompt when the surface is 'teach'. The
  *  /coach/teach surface defaults to GUIDED OPENING PLAY: the student
@@ -307,6 +308,15 @@ export function assembleEnvelope(args: AssembleEnvelopeArgs): AssembledEnvelope 
   // master-game database, and a pile of past games. Use them.
   if (args.input.liveState.surface === 'teach') {
     identity = `${identity}\n\n${TEACH_MODE_ADDITION}`;
+  }
+  // WO-COACH-UNIFY-01: phase-narration surface owns the
+  // opening→middlegame / middlegame→endgame transition prose. The
+  // legacy usePhaseNarration hook used PHASE_NARRATION_ADDITION as a
+  // standalone system prompt; bringing it under the spine means the
+  // same memory/live-state blocks are available and bug fixes
+  // (asterisk in fallback, sentence-prefix drop) propagate to /coach/play.
+  if (args.input.liveState.surface === 'phase-narration') {
+    identity = `${identity}\n\n${PHASE_NARRATION_ADDITION}`;
   }
   // Verbosity modulator. Wired everywhere — surfaces opt in by passing
   // the user's preference (Settings → coachVerbosity) through to

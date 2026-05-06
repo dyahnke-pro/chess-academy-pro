@@ -208,12 +208,24 @@ function formatToolResultsAsFollowUpAsk(
 }
 
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
+  // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
+  // ask-received audit so paste-back audit logs show which surface
+  // picked which model. Surfaces migrated onto the spine are
+  // distinguishable from legacy /coach/play LLM calls (which fire
+  // 'coach-llm-model-selected' instead) by the presence of these
+  // fields.
   void logAppAudit({
     kind: 'coach-brain-ask-received',
     category: 'subsystem',
     source: 'coachService.ask',
-    summary: `surface=${input.surface} ask="${input.ask.slice(0, 60)}"`,
-    details: JSON.stringify({ surface: input.surface, askLen: input.ask.length }),
+    summary: `surface=${input.surface} task=${options.task ?? 'chat_response'} maxTokens=${options.maxTokens ?? 'default'} ask="${input.ask.slice(0, 60)}"`,
+    details: JSON.stringify({
+      surface: input.surface,
+      askLen: input.ask.length,
+      task: options.task ?? 'chat_response',
+      maxTokens: options.maxTokens ?? null,
+      providerOverride: options.providerOverride?.name ?? null,
+    }),
   });
 
   // WO-FOUNDATION-02 trace harness — fires at the start of every
@@ -353,7 +365,16 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       kind: 'coach-brain-provider-called',
       category: 'subsystem',
       source: 'coachService.ask',
-      summary: `provider=${provider.name} streaming=${useStreaming} trip=${trip}/${maxRoundTrips}`,
+      summary: `surface=${input.surface} provider=${provider.name} task=${options.task ?? 'chat_response'} streaming=${useStreaming} trip=${trip}/${maxRoundTrips}`,
+      details: JSON.stringify({
+        surface: input.surface,
+        provider: provider.name,
+        task: options.task ?? 'chat_response',
+        maxTokens: options.maxTokens ?? null,
+        streaming: useStreaming,
+        trip,
+        maxRoundTrips,
+      }),
     });
 
     const providerCallOptions = options.task !== undefined || options.maxTokens !== undefined
@@ -603,7 +624,16 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     kind: 'coach-brain-answer-returned',
     category: 'subsystem',
     source: 'coachService.ask',
-    summary: `provider=${provider.name} text=${lastResponse.text.length}c tools=${dispatchedIds.length}`,
+    summary: `surface=${input.surface} provider=${provider.name} task=${options.task ?? 'chat_response'} text=${lastResponse.text.length}c tools=${dispatchedIds.length}`,
+    details: JSON.stringify({
+      surface: input.surface,
+      provider: provider.name,
+      task: options.task ?? 'chat_response',
+      maxTokens: options.maxTokens ?? null,
+      textLength: lastResponse.text.length,
+      toolCallsDispatched: dispatchedIds.length,
+      textPreview: lastResponse.text.slice(0, 120),
+    }),
   });
 
   return {

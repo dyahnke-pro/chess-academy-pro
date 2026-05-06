@@ -21,7 +21,12 @@ export function NarrationAuditPanel(): JSX.Element {
   const [log, setLog] = useState<AuditEntry[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [filter, setFilter] = useState<AuditCategory | 'all'>('all');
+  // 'spine' is a virtual filter (not an AuditCategory) — selects only
+  // the audit kinds emitted by coachService.ask + the surface-migration
+  // marker. Lets you copy just the spine activity for a session and
+  // paste it back to verify which surfaces routed through the unified
+  // coach (WO-COACH-UNIFY-01).
+  const [filter, setFilter] = useState<AuditCategory | 'all' | 'spine'>('all');
   const [probing, setProbing] = useState(false);
   // WO-DEEP-DIAGNOSTICS — read the build stamp from the most recent
   // entry that carries one (every entry will, post this WO).
@@ -68,6 +73,17 @@ export function NarrationAuditPanel(): JSX.Element {
   const filtered = useMemo(() => {
     if (!log) return [];
     if (filter === 'all') return log;
+    if (filter === 'spine') {
+      return log.filter((e) =>
+        e.kind === 'coach-brain-ask-received' ||
+        e.kind === 'coach-brain-envelope-assembled' ||
+        e.kind === 'coach-brain-provider-called' ||
+        e.kind === 'coach-brain-answer-returned' ||
+        e.kind === 'coach-brain-tool-called' ||
+        e.kind === 'coach-llm-model-selected' ||
+        e.kind === 'coach-surface-migrated',
+      );
+    }
     return log.filter((e) => e.category === filter);
   }, [log, filter]);
 
@@ -171,10 +187,26 @@ export function NarrationAuditPanel(): JSX.Element {
         </div>
       </div>
 
-      {/* Category filters */}
+      {/* Category filters + virtual 'spine' filter for unified-coach
+          activity (WO-COACH-UNIFY-01). The spine count reflects how
+          many audit entries came from coachService.ask / surface
+          migration markers — non-zero means the spine is being used. */}
       <div className="flex gap-1 flex-wrap text-xs">
-        {(['all', 'narration', 'runtime', 'subsystem', 'app'] as const).map((cat) => {
-          const count = cat === 'all' ? log.length : (byCategory[cat] ?? 0);
+        {(['all', 'spine', 'narration', 'runtime', 'subsystem', 'app'] as const).map((cat) => {
+          const count =
+            cat === 'all'
+              ? log.length
+              : cat === 'spine'
+                ? log.filter((e) =>
+                    e.kind === 'coach-brain-ask-received' ||
+                    e.kind === 'coach-brain-envelope-assembled' ||
+                    e.kind === 'coach-brain-provider-called' ||
+                    e.kind === 'coach-brain-answer-returned' ||
+                    e.kind === 'coach-brain-tool-called' ||
+                    e.kind === 'coach-llm-model-selected' ||
+                    e.kind === 'coach-surface-migrated',
+                  ).length
+                : (byCategory[cat] ?? 0);
           const active = filter === cat;
           return (
             <button
