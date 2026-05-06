@@ -112,6 +112,29 @@ export interface LiveState {
   /** Mate distance in plies (positive = white mates, negative = black
    *  mates). When set, supersedes evalCp for "who's winning" reads. */
   evalMateIn?: number;
+  /** Pre-fetched Lichess explorer snapshot for the current FEN. The
+   *  surface (CoachTeachPage) fires `fetchLichessExplorer` on every
+   *  FEN change and threads the compact result here so the brain can
+   *  cite ECO / opening name / amateur+master frequencies / sample
+   *  master games without spending a round-trip on
+   *  lichess_opening_lookup or lichess_master_games. The brain still
+   *  has the active tools available for branch FENs the lesson
+   *  hasn't navigated to yet. */
+  lichessSnapshot?: {
+    eco: string | null;
+    name: string | null;
+    /** Top moves from the amateur (lichess) explorer with frequency. */
+    topAmateurMoves: { san: string; total: number; whitePct: number | null }[];
+    /** Top moves from the masters explorer with rating. */
+    topMasterMoves: { san: string; total: number; averageRating: number }[];
+    /** Sample master games at this FEN. */
+    topMasterGames: {
+      white: string;
+      black: string;
+      winner: 'white' | 'black' | null;
+      year: number;
+    }[];
+  };
   moveHistory?: string[];
   /** Free text describing what triggered this call. */
   userJustDid?: string;

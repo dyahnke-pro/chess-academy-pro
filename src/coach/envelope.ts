@@ -102,6 +102,21 @@ The ONLY exception: if you're NOT in play mode yet (initial lesson kickoff, you 
 
 If a previous \`play_move\` got rejected by USER SOVEREIGNTY (you tried to play the student's color), THAT does NOT block you from playing your own color on subsequent turns. The rejection means "you tried to move the wrong side"; it does NOT mean "stop calling play_move forever." When it's your turn (FEN turn matches your color), call play_move.
 
+═══ LICHESS GROUNDING — OPENING NAMES, TRAPS, SUBLINES (NON-NEGOTIABLE) ═══
+
+Every opening lesson is GROUNDED in Lichess data — opening names, master move frequencies, sample master games, trap continuations. There are two channels you have for this:
+
+1. **PRE-FETCHED snapshot in [Live state]**. The surface fires \`fetchLichessExplorer\` on every FEN change and threads the compact result into [Live state] as "Lichess explorer (PRE-FETCHED for current FEN):". When you see that block, USE IT — cite the opening name verbatim, name a master who played it (from the sample games), point at the most popular master continuation. Do NOT re-call \`lichess_opening_lookup\` or \`lichess_master_games\` for the SAME FEN — the data is already in front of you. Re-calling wastes a tool round-trip and is one of the redundant-eval class of errors caught in build cc28e2e.
+
+2. **ACTIVE tool calls for BRANCH FENs**. When you're teaching SUBLINES — comparing 3...exf4 vs 3...d5 in the Vienna Gambit, walking trap lines, or showing variations the lesson hasn't navigated to yet — the pre-fetched snapshot only knows the CURRENT FEN. For branch FENs, you MUST call \`lichess_opening_lookup\` and/or \`lichess_master_games\` actively, passing the FEN AFTER the hypothetical move. That's how you ground claims like "in the trap line, master games show Black usually plays X, scoring Y%." Without the active call, your subline claims are ungrounded — the student notices.
+
+Concrete rules:
+1. NEVER say "this is the [Opening Name]" without either the pre-fetched snapshot's opening name OR an active \`lichess_opening_lookup\` call confirming it.
+2. NEVER claim "masters play X here" without grounding in either the pre-fetched topMasterMoves OR an active \`lichess_master_games\` call.
+3. When teaching sublines, walk through each branch with \`set_board_position\` to the branch FEN AND/OR call \`lichess_opening_lookup\` for that branch FEN. The student trusts you because you're citing real data, not guessing.
+4. Trap lines specifically: the master-games explorer at the trap-position FEN shows whether the trap actually gets played. Cite the frequency ("about 12% of master games here fall into the trap") and name the trap if Lichess names it.
+5. If the Lichess proxy is currently 401/429 (snapshot empty AND active tool returns an error), acknowledge briefly ("Lichess is rate-limiting — going from local opening data") and continue with \`local_opening_book\`. Don't bail.
+
 ═══ MATERIAL & EVAL CLAIMS — USE THE PRE-COMPUTED ENGINE EVAL (NON-NEGOTIABLE) ═══
 
 [Live state] carries a PRE-COMPUTED engine eval on the current FEN — line "Engine eval (PRE-COMPUTED, white-perspective): Xcp — <interpretation>." The surface ran Stockfish on this exact position BEFORE this call. That number is ground truth.
@@ -457,6 +472,38 @@ function formatLiveStateBlock(state: LiveState): string {
     parts.push(
       `- Engine eval (PRE-COMPUTED, white-perspective): ${state.evalCp}cp — ${describeEval(state.evalCp)}. This is engine ground truth — do not contradict it with your own material counting. When making "winning"/"losing"/"up material"/"down material" claims, USE THIS NUMBER, not your eyeball count.`,
     );
+  }
+  if (state.lichessSnapshot) {
+    const s = state.lichessSnapshot;
+    const lines: string[] = ['- Lichess explorer (PRE-FETCHED for current FEN):'];
+    if (s.eco || s.name) {
+      lines.push(`    Opening: ${s.name ?? '?'}${s.eco ? ` (ECO ${s.eco})` : ''}`);
+    }
+    if (s.topMasterMoves.length > 0) {
+      const masterStr = s.topMasterMoves
+        .map((m) => `${m.san} (${m.total} games, avg ${m.averageRating || '?'})`)
+        .join(', ');
+      lines.push(`    Top master moves here: ${masterStr}`);
+    }
+    if (s.topMasterGames.length > 0) {
+      const gamesStr = s.topMasterGames
+        .map((g) => {
+          const result = g.winner === 'white' ? '1-0' : g.winner === 'black' ? '0-1' : '½-½';
+          return `${g.white} vs ${g.black} ${g.year} ${result}`;
+        })
+        .join('; ');
+      lines.push(`    Sample master games: ${gamesStr}`);
+    }
+    if (s.topAmateurMoves.length > 0) {
+      const amateurStr = s.topAmateurMoves
+        .map((m) => `${m.san} (${m.total} games${m.whitePct !== null ? `, white ${m.whitePct}%` : ''})`)
+        .join(', ');
+      lines.push(`    Top amateur moves here: ${amateurStr}`);
+    }
+    lines.push(
+      `    USE this data when teaching the position — cite the opening name, name a master who played it, point at the most popular continuation. For BRANCH FENs the lesson hasn't reached yet, call lichess_opening_lookup / lichess_master_games actively.`,
+    );
+    parts.push(lines.join('\n'));
   }
   if (state.moveHistory && state.moveHistory.length > 0) {
     parts.push(`- Move history: ${state.moveHistory.join(' ')}`);
