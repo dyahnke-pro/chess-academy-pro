@@ -2845,12 +2845,30 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
           onStream: (() => {
             let buffer = '';
             let chain: Promise<void> | null = null;
-            const SENTENCE_END = /([^.!?\n]+[.!?\n])(?=\s|$)/;
+            // `(?<!\d)` lookbehind: don't treat a period as a sentence
+            // terminator when it's preceded by a digit ("+0.8" stays in
+            // one sentence, "3.Bc4" SAN stays atomic). Without this the
+            // regex would skip over the decimal looking for the real
+            // sentence end, but production audit (build e2a96ed) caught
+            // a sister bug — even with the lookahead `(?=\s|$)`, the
+            // regex still locks onto the next valid end and the slice
+            // below discards everything up to match.index. The
+            // lookbehind narrows what counts as an end; the slice fix
+            // below preserves any prefix as part of the sentence so
+            // "Stockfish says +0.8 and climbing..." doesn't get spoken
+            // as "8 and climbing..." (chopping off "Stockfish says +0.").
+            const SENTENCE_END = /([^.!?\n]+(?<!\d)[.!?\n])(?=\s|$)/;
             return (chunk: string): void => {
               buffer += chunk;
               let match: RegExpExecArray | null;
               while ((match = SENTENCE_END.exec(buffer)) !== null) {
-                const sentence = match[1].trim();
+                // Take the whole prefix from buffer[0] up to the end of
+                // the match — any content before match.index is unmatched
+                // prose that belongs to THIS sentence (the regex skipped
+                // it because of an earlier digit-period). Slicing only
+                // from match.index would drop it silently.
+                const endIdx = match.index + match[1].length;
+                const sentence = buffer.slice(0, endIdx).trim();
                 if (sentence) {
                   streamedAnything = true;
                   if (!chain) {
@@ -2861,7 +2879,7 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
                       .catch(() => undefined);
                   }
                 }
-                buffer = buffer.slice(match.index + match[1].length);
+                buffer = buffer.slice(endIdx);
               }
             };
           })(),

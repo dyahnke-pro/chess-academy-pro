@@ -174,6 +174,17 @@ export function auditNarration(
     // move claims.
     if (!/^[NBRQK]/.test(candidate)) continue;
     if (!legal.has(candidate) && !legal.has(`${candidate}+`) && !legal.has(`${candidate}#`)) {
+      // Past-tense / current-position reference: if the destination
+      // square already holds a piece of the matching type, the
+      // narration is referencing the piece's CURRENT location
+      // ("You had Nd2 defending e4") rather than proposing a move.
+      // The SAN parses as illegal only because the piece is already
+      // there. Production audit (build e2a96ed) caught this exact
+      // false positive on Nd2 right after the knight moved to d2.
+      const pieceLetter = candidate.charAt(0).toLowerCase();
+      const destSquare = candidate.slice(-2);
+      const occupant = chess.get(destSquare as never) as { type: string } | null;
+      if (occupant && occupant.type === pieceLetter) continue;
       flags.push({
         kind: 'illegal-san',
         narrationExcerpt: candidate,

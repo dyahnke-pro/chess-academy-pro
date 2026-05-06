@@ -378,7 +378,14 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             fen: event.fen,
           });
           setCurrentText(fallback);
-          voiceService.speakForced(fallback).catch(() => {
+          // Strip the leading `* ` before TTS — the asterisk is a
+          // chat-banner affordance flagging the fallback path; Polly
+          // reads the literal "asterisk" out loud otherwise (production
+          // audit, build e2a96ed: voice spoke "* Endgame territory.
+          // King activity..."). Chat keeps the prefix; voice gets the
+          // bare prose.
+          const spokenFallback = fallback.replace(/^\s*\*\s*/, '');
+          voiceService.speakForced(spokenFallback).catch(() => {
             /* swallow — TTS hangs / device failures audit elsewhere */
           });
         } else {
