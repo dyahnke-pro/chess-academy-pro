@@ -18,7 +18,6 @@ import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
   generateNarrativeSummary,
-  generateReviewNarrationSegments,
   generateReviewNarration,
 } from '../../services/coachFeatureService';
 import type {
@@ -211,7 +210,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // Track whether we're waiting for AI commentary to finish before advancing
   const [awaitingAiNarration, setAwaitingAiNarration] = useState(false);
   // Structured narration segments (intro/closing) for the walkthrough
-  const [narrationSegments, setNarrationSegments] = useState<ReviewNarrationSegments | null>(null);
+  // narrationSegments is read by the dormant auto-review effect (now
+  // dead code since analysis-phase deletion). Setter is gone but the
+  // value bind stays for the effect's dep array.
+  const [narrationSegments] = useState<ReviewNarrationSegments | null>(null);
 
   // ─── Guided Lesson State ────────────────────────────────────────────────────
   const [guidedLessonActive, setGuidedLessonActive] = useState(!!isGuidedLesson);
@@ -1667,15 +1669,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setAutoReviewActive(true);
     setAutoReviewPaused(false);
 
-    // Fetch structured intro/closing narration segments in the background
-    const gamePgn = pgn ?? moves.map((m) => m.san).join(' ');
-    void generateReviewNarrationSegments(
-      gamePgn, playerColor, openingName, result, playerRating, narrativeMoveData,
-    ).then((segments) => {
-      setNarrationSegments(segments);
-    }).catch(() => {
-      // Fallback handled inside generateReviewNarrationSegments
-    });
+    // generateReviewNarrationSegments call dropped (WO-COACH-UNIFY-01
+    // cleanup). Its output went to narrationSegments state that was
+    // only consumed by the deleted analysis-phase auto-review logic —
+    // pure dead LLM call. generateReviewNarration (called from the
+    // separate prep effect) already returns the intro + closing prose
+    // we need for walk-phase. Saves ~3-5s + one round-trip per review
+    // open.
   }, [pgn, moves, playerColor, openingName, result, playerRating, narrativeMoveData]);
 
   // Empty state
@@ -2311,7 +2311,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           moves={moves}
           narrativeSummary={isLoadingNarrative ? (narrativeSummary ?? undefined) : (narrativeSummary ?? undefined)}
           missedOpportunities={missCount}
-          onStartReview={handleStartReview}
+          // onStartReview omitted: clicking it would route to the
+          // deleted analysis-phase, leaving the user on a dead-end
+          // fallback render with no way forward. Walk-phase auto-
+          // renders the moment walkNarration arrives, so no manual
+          // start button is needed.
           onPlayAgain={onPlayAgain}
           onBackToCoach={onBackToCoach}
         />

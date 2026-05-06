@@ -704,7 +704,15 @@ export async function generateReviewNarration(params: {
       // for the JSON output. 8000 max tokens still required since
       // per-ply JSON scales with game length.
       task: 'chat_response',
-      maxTokens: 8000,
+      // WO-COACH-UNIFY-01 follow-up: dropped 8000 → 4000. Production
+      // audit on build ae46bcd caught the segments call hitting the
+      // spine's 30s PROVIDER_TIMEOUT_MS on a long game ("(coach-brain
+      // provider error: coach-brain-deepseek-timeout)" in finding 47).
+      // Most games are 30-50 plies; 4000 tokens (~150 chars per ply
+      // commentary) covers that comfortably while keeping latency
+      // inside the 30s envelope. Long-game truncation is graceful —
+      // segments end early and the walk plays out silent plies.
+      maxTokens: 4000,
       maxToolRoundTrips: 1,
       systemPromptAddition: REVIEW_MOVE_SEGMENT_ADDITION,
     },
