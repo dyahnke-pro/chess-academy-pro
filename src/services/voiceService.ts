@@ -601,6 +601,26 @@ class VoiceService {
     force: boolean,
     opts?: { useSecondary?: boolean; noFallback?: boolean },
   ): Promise<void> {
+    // Audit-driven (build 6459def+ Findings 5, 7): the streaming
+    // sentence dispatchers can split text like "X . . . " into
+    // single-period "sentences" (the SENTENCE_END_RE matches ` .` as
+    // one space + terminator). Polly delivers each as an awkward
+    // "period" beat. Skip any sanitized text with no letter/digit
+    // content — `\p{L}\p{N}` covers Latin, Cyrillic, CJK, etc., so
+    // Unicode-content prose still speaks. Pure punctuation, ellipses,
+    // dashes, em-dashes, asterisks alone all silently drop.
+    if (!/[\p{L}\p{N}]/u.test(text)) {
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'voice-speak-invoked',
+          category: 'subsystem',
+          source: 'voiceService.speakInternal',
+          summary: `dropped (no speakable content): "${text.slice(0, 40)}"`,
+          details: `length=${text.length} reason=no-alphanumeric`,
+        });
+      }).catch(() => undefined);
+      return;
+    }
     this.lastSpeakDiagnostic = {
       text: text.slice(0, 80),
       tier: 'muted',
@@ -1003,6 +1023,18 @@ class VoiceService {
    *  respect WEB_SPEECH_FALLBACK_ENABLED so the original streaming-
    *  overlap bug doesn't reappear in the coach chat. */
   private async speakFallback(text: string): Promise<void> {
+    // Audit-driven (build 6459def+ Finding 142): the master kill-switch
+    // at line 113 is meant to disable the Web Speech tier entirely.
+    // Currently only `speakQueuedForced` honors it — `speakFallback`
+    // unconditionally calls `speechService.speak`, which on iOS Safari
+    // can hang forever if synthesis is interrupted before producing
+    // 'end' or 'error'. That hang propagates up to usePhaseNarration's
+    // 60-second `withTimeout`, holding `isNarrating=true` (which gates
+    // CoachGamePage board interactivity at line 4062) for the full
+    // window — user reported as "board froze for a while after phase
+    // shift." With the flag honored here, Polly failures result in
+    // silent skips rather than UI-blocking hangs.
+    if (!WEB_SPEECH_FALLBACK_ENABLED) return;
     await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
   }
 
