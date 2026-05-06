@@ -1,6 +1,11 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { getCoachChatResponse, getCoachCommentary } from './coachApi';
+// getCoachCommentary is still used by generateReviewNarrationSegments
+// (the older intro/closing-only path). All three direct
+// getCoachChatResponse calls were migrated to coachService.ask in
+// WO-COACH-UNIFY-01 — getCoachCommentary will follow in a later PR.
+import { getCoachCommentary } from './coachApi';
+import { coachService } from '../coach/coachService';
 import {
   GAME_POST_REVIEW_ADDITION,
   REVIEW_INTRO_ADDITION,
@@ -264,21 +269,43 @@ export async function generateNarrativeSummary(
     `PGN: ${pgn}`,
   ].join('\n');
 
-  return getCoachChatResponse(
-    [{ role: 'user', content: userMessage }],
-    GAME_POST_REVIEW_ADDITION,
-    onStream,
-    'game_narrative_summary',
-    // Raised from the default 1024 so the tail of the summary isn't
-    // clipped when the model explores the per-move block. Still tight
-    // enough to force brevity.
-    800,
-    // Review length is constrained by the addition, not by the
-    // student's global verbosity. Override to 'medium' so a user-
-    // level 'none' setting doesn't silently return a blank review
-    // (the root cause of today's empty output).
-    'medium',
+  // WO-COACH-UNIFY-01 Review-tab parity: route through coachService.ask
+  // with surface='review' so the unified envelope (REVIEW_MODE_ADDITION
+  // identity + memory + live-state) wraps every Review-tab LLM call —
+  // same shape as /coach/teach and /coach/play. GAME_POST_REVIEW_ADDITION
+  // threads as systemPromptAddition. Empty string on provider error
+  // preserves the legacy "graceful blank" contract.
+  const finalFen = (() => {
+    try {
+      const chess = new Chess();
+      chess.loadPgn(pgn);
+      return chess.fen();
+    } catch {
+      return undefined;
+    }
+  })();
+  const spineAnswer = await coachService.ask(
+    {
+      surface: 'review',
+      ask: userMessage,
+      liveState: {
+        surface: 'review',
+        fen: finalFen,
+        userJustDid: 'Reviewing the completed game',
+        whoseTurn: finalFen?.split(' ')[1] === 'b' ? 'black' : 'white',
+      },
+    },
+    {
+      task: 'game_narrative_summary',
+      maxTokens: 800,
+      maxToolRoundTrips: 1,
+      systemPromptAddition: GAME_POST_REVIEW_ADDITION,
+      onChunk: onStream,
+    },
   );
+  return spineAnswer.text.startsWith('(coach-brain provider error:')
+    ? ''
+    : spineAnswer.text;
 }
 
 // ─── Review Narration Segments ─────────────────────────────────────────────
@@ -593,28 +620,50 @@ export async function generateReviewNarration(params: {
     perMoveBlock,
   ].join('\n');
 
+  // WO-COACH-UNIFY-01 Review-tab parity: route both prep calls through
+  // coachService.ask with surface='review' so the unified envelope
+  // (REVIEW_MODE_ADDITION + memory + live-state) wraps the prep-scan
+  // step too. Same shape as /coach/teach + /coach/play. The two
+  // surface-specific prompts thread as systemPromptAddition.
   // Fire both in parallel so the review opens faster.
-  const introPromise = getCoachChatResponse(
-    [{ role: 'user', content: introUserMessage }],
-    REVIEW_INTRO_ADDITION,
-    undefined,
-    'chat_response',
-    200,
-    'fast',
-  ).catch(() => '');
+  const reviewLiveState = {
+    surface: 'review' as const,
+    fen: fenChain[fenChain.length - 1]?.fenAfter,
+    userJustDid: 'Opening review of the completed game (prep scan)',
+  };
+  const stripErrorWrap = (text: string): string =>
+    text.startsWith('(coach-brain provider error:') ? '' : text;
+  const introPromise = coachService.ask(
+    {
+      surface: 'review',
+      ask: introUserMessage,
+      liveState: reviewLiveState,
+    },
+    {
+      task: 'chat_response',
+      maxTokens: 200,
+      maxToolRoundTrips: 1,
+      systemPromptAddition: REVIEW_INTRO_ADDITION,
+    },
+  ).then((a) => stripErrorWrap(a.text)).catch(() => '');
 
   // max_tokens: 8000 — the per-ply JSON array scales with game length
   // and the prior 2000 cap silently truncated output for games past ~20
   // plies, producing unparseable JSON and empty narration. Match the
   // "max_tokens is not a useful filter" posture from WO-POLISH-02.
-  const segmentsPromise = getCoachChatResponse(
-    [{ role: 'user', content: segmentsUserMessage }],
-    REVIEW_MOVE_SEGMENT_ADDITION,
-    undefined,
-    'game_narrative_summary',
-    8000,
-    'medium',
-  ).catch((err: unknown) => {
+  const segmentsPromise = coachService.ask(
+    {
+      surface: 'review',
+      ask: segmentsUserMessage,
+      liveState: reviewLiveState,
+    },
+    {
+      task: 'game_narrative_summary',
+      maxTokens: 8000,
+      maxToolRoundTrips: 1,
+      systemPromptAddition: REVIEW_MOVE_SEGMENT_ADDITION,
+    },
+  ).then((a) => stripErrorWrap(a.text)).catch((err: unknown) => {
     const msg = err instanceof Error ? err.message : String(err);
     void logAppAudit({
       kind: 'review-segments-parse-failed',
