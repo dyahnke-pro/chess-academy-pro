@@ -27,6 +27,7 @@ export function NarrationAuditPanel(): JSX.Element {
   const [log, setLog] = useState<AuditEntry[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedAll, setCopiedAll] = useState(false);
   // 'spine' is a virtual filter (not an AuditCategory) — selects only
   // the audit kinds emitted by coachService.ask + the surface-migration
   // marker. Lets you copy just the spine activity for a session and
@@ -134,13 +135,13 @@ export function NarrationAuditPanel(): JSX.Element {
     return log.filter((e) => e.category === filter);
   }, [log, filter]);
 
-  const handleCopy = async (): Promise<void> => {
-    if (filtered.length === 0) return;
-    const markdown = formatLogAsMarkdown(filtered);
+  /** Shared copy implementation — primary `navigator.clipboard.writeText`
+   *  with a transient-textarea fallback for browsers / iOS Safari
+   *  contexts where the async clipboard API is unavailable. */
+  const writeToClipboard = async (markdown: string): Promise<boolean> => {
     try {
       await navigator.clipboard.writeText(markdown);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+      return true;
     } catch {
       const textarea = document.createElement('textarea');
       textarea.value = markdown;
@@ -150,11 +151,35 @@ export function NarrationAuditPanel(): JSX.Element {
       textarea.select();
       try {
         document.execCommand('copy');
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 2000);
+        return true;
       } finally {
         document.body.removeChild(textarea);
       }
+    }
+  };
+
+  /** Copy ONLY the currently visible (filtered) findings. Use this
+   *  alongside the filter pill ('spine', 'narration', etc.) to grab
+   *  a focused slice when you know what you're looking for. */
+  const handleCopy = async (): Promise<void> => {
+    if (filtered.length === 0) return;
+    const ok = await writeToClipboard(formatLogAsMarkdown(filtered));
+    if (ok) {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  /** Copy the WHOLE audit log regardless of the active filter — every
+   *  category, every kind, every entry currently in Dexie. Use when
+   *  you want to send a complete forensic dump (the cross-cutting
+   *  view that catches issues no single filter would surface). */
+  const handleCopyAll = async (): Promise<void> => {
+    if (!log || log.length === 0) return;
+    const ok = await writeToClipboard(formatLogAsMarkdown(log));
+    if (ok) {
+      setCopiedAll(true);
+      window.setTimeout(() => setCopiedAll(false), 2000);
     }
   };
 
@@ -222,10 +247,19 @@ export function NarrationAuditPanel(): JSX.Element {
             onClick={() => { void handleCopy(); }}
             className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
             data-testid="narration-audit-copy"
-            title="Copy the visible findings as markdown for pasting into a Claude Code session"
+            title="Copy ONLY the visible findings (respects the active filter) as markdown — use this with the 'spine' filter to grab just unified-coach activity"
           >
             {copied ? <Check size={12} /> : <Copy size={12} />}
-            {copied ? 'Copied' : 'Copy for Claude'}
+            {copied ? 'Copied' : `Copy ${filter === 'all' ? 'visible' : filter}`}
+          </button>
+          <button
+            onClick={() => { void handleCopyAll(); }}
+            className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface disabled:opacity-50"
+            data-testid="narration-audit-copy-all"
+            title="Copy the WHOLE audit log regardless of filter — every category, every kind. Use when you want a complete forensic dump for Claude."
+          >
+            {copiedAll ? <Check size={12} /> : <Copy size={12} />}
+            {copiedAll ? 'Copied all' : 'Copy all'}
           </button>
           <button
             onClick={() => { void handleClear(); }}
