@@ -91,14 +91,10 @@ export function CoachChatPage(): JSX.Element {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, streamingContent]);
 
-  // Buffer speech to sentence boundaries
-  const flushSpeechBuffer = useCallback(() => {
-    const buffer = speechBufferRef.current;
-    if (buffer.trim() && !voiceMutedRef.current) {
-      void voiceService.speak(buffer.trim());
-    }
-    speechBufferRef.current = '';
-  }, []);
+  // (Audit-driven cleanup #23: deleted unused `flushSpeechBuffer`
+  // helper that called the deprecated `voiceService.speak` API and
+  // had no callers — it lived in handleSend's deps array as dead
+  // weight. The chained `speakOrQueue` pattern below replaced it.)
 
   const handleSend = useCallback(async (text: string, modality: 'voice' | 'text' = 'text') => {
     // Guard: if the persisted session hasn't hydrated yet, refuse to
@@ -153,8 +149,12 @@ export function CoachChatPage(): JSX.Element {
         });
         setVoiceMuted(false);
         voiceMutedRef.current = false;
-        voiceService.stop();
-        void voiceService.speak(stripMarkdownForTts(lastAssistant.content));
+        // Audit #5: switched from voiceService.speak() to speakForced()
+        // so this "read this to me" replay shares the single-engine
+        // Polly chain with the streaming dispatcher below — was racing
+        // against in-flight stream chunks and producing concurrent
+        // overlapping audio (the `tts-concurrent-speak` audit pattern).
+        void voiceService.speakForced(stripMarkdownForTts(lastAssistant.content));
         return;
       }
     }
@@ -279,10 +279,14 @@ export function CoachChatPage(): JSX.Element {
 
             if (shouldSpeak) {
               speechBufferRef.current += chunk;
-              // Flush on any terminator including newline — no trailing
-              // whitespace requirement. Matches VoiceChatMic and
-              // SmartSearchBar; saves 200-400ms of first-word latency.
-              const sentenceEnd = /[.!?\n]/.exec(speechBufferRef.current);
+              // Flush on any terminator including newline. The
+              // `(?<!\d)` lookbehind keeps SAN move numbers ("1.",
+              // "12.", "3.Nc3") atomic so Polly doesn't voice them
+              // as standalone utterances (audit #29). Doesn't require
+              // trailing whitespace — saves 200-400ms of first-word
+              // latency vs the canonical SENTENCE_END_RE (which awaits
+              // `\s|$`).
+              const sentenceEnd = /(?<!\d)[.!?\n]/.exec(speechBufferRef.current);
               if (sentenceEnd) {
                 const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1).trim();
                 speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 1).trimStart();
@@ -337,7 +341,7 @@ export function CoachChatPage(): JSX.Element {
       setIsStreaming(false);
       setStreamingContent('');
     }
-  }, [activeProfile, hydrated, chatMessages, isStreaming, appendMessage, flushSpeechBuffer, navigate]);
+  }, [activeProfile, hydrated, chatMessages, isStreaming, appendMessage, navigate]);
 
   // Auto-send a query carried in the URL (e.g., from the Game Insights
   // search bar navigating here with ?q=...). Runs once per distinct
