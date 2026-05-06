@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Search, Loader } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -8,8 +8,10 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useAppStore } from '../../stores/appStore';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { getCoachCommentary } from '../../services/coachApi';
+import { coachService } from '../../coach/coachService';
 import { voiceService } from '../../services/voiceService';
+import { SENTENCE_END_RE, unwrapSpineError } from '../../services/sanitizeCoachText';
+import { logAppAudit } from '../../services/appAuditor';
 import type { StockfishAnalysis } from '../../types';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -32,9 +34,39 @@ export function CoachAnalysePage(): JSX.Element {
   const [loading, setLoading] = useState(false);
   const [candidateMoves, setCandidateMoves] = useState<string[]>([]);
 
+  // Streaming-voice dispatcher refs — same pattern as CoachSessionPlanPage.
+  // Each completed sentence speaks via speakForced as soon as the
+  // SENTENCE_END_RE terminator arrives in the stream (first sentence
+  // within ~500ms instead of waiting for full LLM completion).
+  const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+  const sentenceCountRef = useRef(0);
+  const dispatchSentencesFromChunk = useCallback((accumulated: string) => {
+    let remaining = accumulated;
+    let consumed = 0;
+    let match: RegExpExecArray | null;
+    while ((match = SENTENCE_END_RE.exec(remaining)) !== null) {
+      const endIdx = match.index + match[1].length;
+      const sentence = remaining.slice(0, endIdx).trim();
+      if (sentence) {
+        sentenceCountRef.current += 1;
+        const isFirst = sentenceCountRef.current === 1;
+        speechChainRef.current = speechChainRef.current
+          .then(() => isFirst ? voiceService.speakIfFree(sentence) : voiceService.speakForced(sentence))
+          .catch(() => undefined);
+      }
+      remaining = remaining.slice(endIdx);
+      consumed += endIdx;
+    }
+    void consumed;
+  }, []);
+
   const analysePosition = useCallback(async (fen: string) => {
     setLoading(true);
     setCoachExplanation('');
+    // Cut any in-flight TTS before starting a new narration.
+    voiceService.stop();
+    speechChainRef.current = Promise.resolve();
+    sentenceCountRef.current = 0;
 
     try {
       // Run Stockfish analysis
@@ -45,41 +77,80 @@ export function CoachAnalysePage(): JSX.Element {
       const moves = sfAnalysis.topLines.map((line) => line.moves[0]).filter((m): m is string => Boolean(m));
       setCandidateMoves(moves);
 
-      // Get coach explanation
-      const context = {
-        fen,
-        lastMoveSan: null,
-        moveNumber: 0,
-        pgn: '',
-        openingName: null,
-        stockfishAnalysis: sfAnalysis,
-        playerMove: null,
-        moveClassification: null,
-        playerProfile: {
-          rating: activeProfile?.currentRating ?? 1420,
-
-          weaknesses: activeProfile?.badHabits.filter((h) => !h.isResolved).map((h) => h.description) ?? [],
-        },
-      };
+      // Audit-driven (#4): route through coachService.ask so the
+      // unified envelope (memory + live-state + tool-belt) wraps
+      // this call. task='chat_response' keeps a non-reasoner model
+      // — same fix as phase-narration. The Stockfish analysis is
+      // threaded into the user message via plain prose since the
+      // spine's envelope already provides eval context separately.
+      const evalText = sfAnalysis.isMate
+        ? `Mate in ${sfAnalysis.mateIn ?? '?'}`
+        : `${(sfAnalysis.evaluation / 100).toFixed(2)} pawns (white perspective)`;
+      const candidateLines = sfAnalysis.topLines.slice(0, 3).map((line, i) => {
+        const moveSeq = line.moves.slice(0, 5).join(' ');
+        const lineEval = line.mate !== null ? `M${line.mate}` : `${(line.evaluation / 100).toFixed(2)}`;
+        return `  ${i + 1}. ${moveSeq} (${lineEval})`;
+      }).join('\n');
+      const ask = [
+        `Analyze this position deeply.`,
+        `FEN: ${fen}`,
+        `Engine eval: ${evalText} at depth ${sfAnalysis.depth}.`,
+        `Top engine candidates:`,
+        candidateLines,
+        '',
+        `Student rating: ${activeProfile?.currentRating ?? 1420}.`,
+        activeProfile?.badHabits.filter((h) => !h.isResolved).length
+          ? `Active weaknesses: ${activeProfile.badHabits.filter((h) => !h.isResolved).map((h) => h.description).join('; ')}.`
+          : 'No active weaknesses on file.',
+        '',
+        `Explain the position in 4-6 sentences: who's better, why, key plans for both sides, what to watch for.`,
+      ].join('\n');
 
       let explanation = '';
-      await getCoachCommentary('deep_analysis', context, (chunk) => {
-        explanation += chunk;
-        setCoachExplanation(explanation);
-      });
-
-      // Cut any in-flight TTS (a previous analysis, a voice-chat
-      // reply that's still speaking) before this narration starts —
-      // otherwise two voices play at once.
-      voiceService.stop();
-      void voiceService.speak(explanation.slice(0, 200)); // First 200 chars only for voice
+      const result = await coachService.ask(
+        {
+          surface: 'standalone-chat',
+          ask,
+          liveState: {
+            surface: 'standalone-chat',
+            fen,
+            evalCp: sfAnalysis.isMate ? undefined : sfAnalysis.evaluation,
+            evalMateIn: sfAnalysis.mateIn ?? undefined,
+            userJustDid: 'Loaded a position into Analyse',
+          },
+        },
+        {
+          task: 'chat_response',
+          maxTokens: 600,
+          maxToolRoundTrips: 1,
+          onChunk: (chunk: string) => {
+            explanation += chunk;
+            setCoachExplanation(explanation);
+            dispatchSentencesFromChunk(explanation);
+          },
+        },
+      );
+      const finalText = unwrapSpineError(result.text);
+      if (!finalText) {
+        void logAppAudit({
+          kind: 'llm-error',
+          category: 'subsystem',
+          source: 'CoachAnalysePage.analysePosition',
+          summary: result.text.slice(0, 120),
+          fen,
+        });
+      } else if (sentenceCountRef.current === 0) {
+        // Fallback: if no sentence terminator fired (very short
+        // response), speak whatever we got.
+        void voiceService.speakIfFree(finalText.slice(0, 600));
+      }
     } catch (error) {
       console.error('Analysis error:', error);
       setCoachExplanation('I had trouble analysing that position. Please check the FEN and try again.');
     } finally {
       setLoading(false);
     }
-  }, [activeProfile]);
+  }, [activeProfile, dispatchSentencesFromChunk]);
 
   const handleLoadFen = useCallback(() => {
     const fen = fenInput.trim() || START_FEN;
@@ -95,38 +166,61 @@ export function CoachAnalysePage(): JSX.Element {
 
   const handleFollowUp = useCallback(async (question: string) => {
     setLoading(true);
+    voiceService.stop();
+    speechChainRef.current = Promise.resolve();
+    sentenceCountRef.current = 0;
 
-    const context = {
-      fen: game.fen,
-      lastMoveSan: null,
-      moveNumber: 0,
-      pgn: '',
-      openingName: null,
-      stockfishAnalysis: analysis,
-      playerMove: null,
-      moveClassification: null,
-      playerProfile: {
-        rating: activeProfile?.currentRating ?? 1420,
-        style: 'default',
-        weaknesses: [] as string[],
-      },
-    };
-
-    // Append question to context
-    const questionContext = { ...context, pgn: `User question: ${question}` };
+    const evalText = analysis
+      ? (analysis.isMate
+          ? `Mate in ${analysis.mateIn ?? '?'}`
+          : `${(analysis.evaluation / 100).toFixed(2)} pawns`)
+      : 'no engine eval cached';
+    const ask = [
+      `Student question: ${question}`,
+      `Position FEN: ${game.fen}`,
+      `Engine eval: ${evalText}.`,
+      `Student rating: ${activeProfile?.currentRating ?? 1420}.`,
+      '',
+      `Answer in 2-4 sentences. Stay grounded in the position.`,
+    ].join('\n');
 
     let response = '';
-    await getCoachCommentary('position_analysis_chat', questionContext, (chunk) => {
-      response += chunk;
-      setCoachExplanation((prev) => prev + '\n\n' + response);
-    });
-
+    const result = await coachService.ask(
+      {
+        surface: 'standalone-chat',
+        ask,
+        liveState: {
+          surface: 'standalone-chat',
+          fen: game.fen,
+          evalCp: analysis && !analysis.isMate ? analysis.evaluation : undefined,
+          evalMateIn: analysis?.mateIn ?? undefined,
+          userJustDid: `Asked: "${question.slice(0, 60)}"`,
+        },
+      },
+      {
+        task: 'chat_response',
+        maxTokens: 400,
+        maxToolRoundTrips: 1,
+        onChunk: (chunk: string) => {
+          response += chunk;
+          setCoachExplanation((prev) => prev + '\n\n' + response);
+          dispatchSentencesFromChunk(response);
+        },
+      },
+    );
+    const finalText = unwrapSpineError(result.text);
+    if (!finalText) {
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'CoachAnalysePage.handleFollowUp',
+        summary: result.text.slice(0, 120),
+      });
+    } else if (sentenceCountRef.current === 0) {
+      void voiceService.speakIfFree(finalText.slice(0, 400));
+    }
     setLoading(false);
-    // Stop prior TTS before speaking the follow-up answer — same
-    // reason as the analysePosition path above.
-    voiceService.stop();
-    void voiceService.speak(response.slice(0, 200));
-  }, [game.fen, analysis, activeProfile]);
+  }, [game.fen, analysis, activeProfile, dispatchSentencesFromChunk]);
 
   return (
     <div className="flex flex-col pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-2xl mx-auto w-full" data-testid="coach-analyse-page">

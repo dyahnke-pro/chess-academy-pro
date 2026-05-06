@@ -17,8 +17,10 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { ChatInput } from './ChatInput';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { getCoachCommentary } from '../../services/coachApi';
+import { coachService } from '../../coach/coachService';
 import { voiceService } from '../../services/voiceService';
+import { SENTENCE_END_RE, unwrapSpineError } from '../../services/sanitizeCoachText';
+import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
 import type { StockfishAnalysis } from '../../types';
 
@@ -45,6 +47,31 @@ export function ExplainPositionSessionView({
   const [loading, setLoading] = useState<boolean>(true);
   const [voiceMuted, setVoiceMuted] = useState<boolean>(true);
   const mountedRef = useRef<boolean>(true);
+  // Streaming-voice dispatcher: same pattern as CoachAnalysePage /
+  // CoachSessionPlanPage. First sentence speaks ~500ms after first
+  // chunk arrives instead of waiting for the full LLM completion.
+  const speechChainRef = useRef<Promise<void>>(Promise.resolve());
+  const sentenceCountRef = useRef(0);
+  const dispatchSentencesFromChunk = useCallback((accumulated: string) => {
+    if (voiceMuted) return;
+    let remaining = accumulated;
+    let consumed = 0;
+    let match: RegExpExecArray | null;
+    while ((match = SENTENCE_END_RE.exec(remaining)) !== null) {
+      const endIdx = match.index + match[1].length;
+      const sentence = remaining.slice(0, endIdx).trim();
+      if (sentence) {
+        sentenceCountRef.current += 1;
+        const isFirst = sentenceCountRef.current === 1;
+        speechChainRef.current = speechChainRef.current
+          .then(() => isFirst ? voiceService.speakIfFree(sentence) : voiceService.speakForced(sentence))
+          .catch(() => undefined);
+      }
+      remaining = remaining.slice(endIdx);
+      consumed += endIdx;
+    }
+    void consumed;
+  }, [voiceMuted]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -70,35 +97,69 @@ export function ExplainPositionSessionView({
         if (cancelled.value || !mountedRef.current) return;
         setAnalysis(sf);
 
-        const context = {
-          fen: targetFen,
-          lastMoveSan: null,
-          moveNumber: 0,
-          pgn: '',
-          openingName: null,
-          stockfishAnalysis: sf,
-          playerMove: null,
-          moveClassification: null,
-          playerProfile: {
-            rating: activeProfile?.currentRating ?? 1420,
-            weaknesses:
-              activeProfile?.badHabits
-                .filter((h) => !h.isResolved)
-                .map((h) => h.description) ?? [],
-          },
-        };
+        // Reset speech chain for this position's narration.
+        speechChainRef.current = Promise.resolve();
+        sentenceCountRef.current = 0;
+
+        const evalText = sf.isMate
+          ? `Mate in ${sf.mateIn ?? '?'}`
+          : `${(sf.evaluation / 100).toFixed(2)} pawns`;
+        const candidateLines = sf.topLines.slice(0, 3).map((line, i) => {
+          const moveSeq = line.moves.slice(0, 5).join(' ');
+          const lineEval = line.mate !== null ? `M${line.mate}` : `${(line.evaluation / 100).toFixed(2)}`;
+          return `  ${i + 1}. ${moveSeq} (${lineEval})`;
+        }).join('\n');
+        const ask = [
+          `Explain this position deeply.`,
+          `FEN: ${targetFen}`,
+          `Engine eval: ${evalText} at depth ${sf.depth}.`,
+          `Top engine candidates:`,
+          candidateLines,
+          '',
+          `Student rating: ${activeProfile?.currentRating ?? 1420}.`,
+          '',
+          `Explain in 4-6 sentences: assessment, plans, tactics to watch for.`,
+        ].join('\n');
 
         let streamed = '';
-        await getCoachCommentary('deep_analysis', context, (chunk) => {
-          if (cancelled.value || !mountedRef.current) return;
-          streamed += chunk;
-          setExplanation(streamed);
-        });
-
+        const result = await coachService.ask(
+          {
+            surface: 'standalone-chat',
+            ask,
+            liveState: {
+              surface: 'standalone-chat',
+              fen: targetFen,
+              evalCp: sf.isMate ? undefined : sf.evaluation,
+              evalMateIn: sf.mateIn ?? undefined,
+              userJustDid: 'Loaded a position into Explain',
+            },
+          },
+          {
+            task: 'chat_response',
+            maxTokens: 600,
+            maxToolRoundTrips: 1,
+            onChunk: (chunk: string) => {
+              if (cancelled.value || !mountedRef.current) return;
+              streamed += chunk;
+              setExplanation(streamed);
+              dispatchSentencesFromChunk(streamed);
+            },
+          },
+        );
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (cancelled.value || !mountedRef.current) return;
-        if (!voiceMuted && streamed) {
-          void voiceService.speak(streamed.slice(0, 400));
+        const finalText = unwrapSpineError(result.text);
+        if (!finalText) {
+          void logAppAudit({
+            kind: 'llm-error',
+            category: 'subsystem',
+            source: 'ExplainPositionSessionView.analyse',
+            summary: result.text.slice(0, 120),
+            fen: targetFen,
+          });
+        } else if (!voiceMuted && sentenceCountRef.current === 0) {
+          // Fallback: short response without a sentence terminator.
+          void voiceService.speakIfFree(finalText.slice(0, 600));
         }
       } catch (err: unknown) {
         if (cancelled.value || !mountedRef.current) return;
@@ -124,37 +185,63 @@ export function ExplainPositionSessionView({
     async (question: string) => {
       if (!analysis) return;
       setLoading(true);
+      voiceService.stop();
+      speechChainRef.current = Promise.resolve();
+      sentenceCountRef.current = 0;
 
-      const context = {
-        fen: targetFen,
-        lastMoveSan: null,
-        moveNumber: 0,
-        pgn: `User question: ${question}`,
-        openingName: null,
-        stockfishAnalysis: analysis,
-        playerMove: null,
-        moveClassification: null,
-        playerProfile: {
-          rating: activeProfile?.currentRating ?? 1420,
-          style: 'default',
-          weaknesses: [] as string[],
-        },
-      };
+      const evalText = analysis.isMate
+        ? `Mate in ${analysis.mateIn ?? '?'}`
+        : `${(analysis.evaluation / 100).toFixed(2)} pawns`;
+      const ask = [
+        `Student question: ${question}`,
+        `Position FEN: ${targetFen}`,
+        `Engine eval: ${evalText}.`,
+        `Student rating: ${activeProfile?.currentRating ?? 1420}.`,
+        '',
+        `Answer in 2-4 sentences. Stay grounded in the position.`,
+      ].join('\n');
 
       let response = '';
-      await getCoachCommentary('position_analysis_chat', context, (chunk) => {
-        if (!mountedRef.current) return;
-        response += chunk;
-        setExplanation((prev) => `${prev}\n\n${response}`);
-      });
-
+      const result = await coachService.ask(
+        {
+          surface: 'standalone-chat',
+          ask,
+          liveState: {
+            surface: 'standalone-chat',
+            fen: targetFen,
+            evalCp: analysis.isMate ? undefined : analysis.evaluation,
+            evalMateIn: analysis.mateIn ?? undefined,
+            userJustDid: `Asked: "${question.slice(0, 60)}"`,
+          },
+        },
+        {
+          task: 'chat_response',
+          maxTokens: 400,
+          maxToolRoundTrips: 1,
+          onChunk: (chunk: string) => {
+            if (!mountedRef.current) return;
+            response += chunk;
+            setExplanation((prev) => `${prev}\n\n${response}`);
+            dispatchSentencesFromChunk(response);
+          },
+        },
+      );
       if (!mountedRef.current) return;
-      setLoading(false);
-      if (!voiceMuted && response) {
-        void voiceService.speak(response.slice(0, 400));
+      const finalText = unwrapSpineError(result.text);
+      if (!finalText) {
+        void logAppAudit({
+          kind: 'llm-error',
+          category: 'subsystem',
+          source: 'ExplainPositionSessionView.handleFollowUp',
+          summary: result.text.slice(0, 120),
+          fen: targetFen,
+        });
+      } else if (!voiceMuted && sentenceCountRef.current === 0) {
+        void voiceService.speakIfFree(finalText.slice(0, 400));
       }
+      setLoading(false);
     },
-    [targetFen, analysis, activeProfile, voiceMuted],
+    [targetFen, analysis, activeProfile, voiceMuted, dispatchSentencesFromChunk],
   );
 
   const evalDisplay = analysis
