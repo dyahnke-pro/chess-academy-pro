@@ -133,7 +133,6 @@ async function evaluateExplorerCandidates(
   return results.filter((r): r is MoveEvaluation => r !== null);
 }
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
-import { getCoachChatResponse } from '../../services/coachApi';
 import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
@@ -1020,11 +1019,6 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
       const userMsg = `Position FEN: ${newFen}\nMove played: ${moveResult.san}\nStockfish eval after move: ${evalText}\nEngine best move: ${bestMoveSan}\nReact to this move in 1-2 sentences.`;
 
-      const msgHistory: { role: 'user' | 'assistant'; content: string }[] = [
-        ...exploreMessages,
-        { role: 'user' as const, content: userMsg },
-      ];
-
       // When the student arrived here via "let's play / yes let's do it",
       // prefix the reaction prompt with the agreed training focus so the
       // coach's commentary stays on-theme with the chat conversation.
@@ -1032,13 +1026,39 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
         ? `${EXPLORE_REACTION_ADDITION}\n\nTraining focus for this game (carried over from the chat where the student agreed to play): ${focusParam}. Weave this focus into your reactions — praise moves that apply it, gently flag moves that miss it.`
         : EXPLORE_REACTION_ADDITION;
 
-      void getCoachChatResponse(
-        msgHistory,
-        systemPrompt,
-        undefined,
-        'explore_reaction',
-        256,
-      ).then((reaction) => {
+      // WO-COACH-UNIFY-01 commit 4: explore-reaction routes through
+      // coachService.ask. Explore session messages aren't in the
+      // long-term memory snapshot (they're transient UI state), so
+      // we concat the prior chat into the ask. systemPrompt
+      // (EXPLORE_REACTION_ADDITION + optional focus) becomes a
+      // systemPromptAddition on the envelope. task='explore_reaction'
+      // preserves the cheap-haiku / deepseek-chat routing.
+      const priorChatBlock = exploreMessages.length > 0
+        ? '\n\nPrior conversation in this explore session:\n' +
+          exploreMessages.map((m) => `${m.role === 'user' ? 'Student' : 'You'}: ${m.content}`).join('\n')
+        : '';
+      const exploreFenSideToMove = newFen.split(' ')[1] === 'b' ? 'black' : 'white';
+      void coachService.ask(
+        {
+          surface: 'game-chat',
+          ask: `${userMsg}${priorChatBlock}`,
+          liveState: {
+            surface: 'game-chat',
+            fen: newFen,
+            userJustDid: `Played ${moveResult.san} in explore mode`,
+            whoseTurn: exploreFenSideToMove,
+          },
+        },
+        {
+          task: 'explore_reaction',
+          maxTokens: 256,
+          maxToolRoundTrips: 1,
+          systemPromptAddition: systemPrompt,
+        },
+      ).then((spineAnswer) => {
+        const reaction = spineAnswer.text.startsWith('(coach-brain provider error:')
+          ? ''
+          : spineAnswer.text;
         setExploreMessages((prev) => [
           ...prev,
           { role: 'user', content: userMsg },
@@ -3025,14 +3045,34 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
             : '',
         ].filter(Boolean).join('\n');
 
-        const alertText = await getCoachChatResponse(
-          [{ role: 'user', content: alertContext }],
-          BLUNDER_ALERT_ADDITION,
-          undefined,
-          'chat_response',
-          200,
-          'fast',
+        // WO-COACH-UNIFY-01 commit 4: route blunder-alert through
+        // coachService.ask. BLUNDER_ALERT_ADDITION threads as
+        // systemPromptAddition; live FEN + just-played move flow into
+        // liveState. task='chat_response' + maxTokens=200 preserves
+        // legacy model + cost. Empty string on provider error keeps
+        // the existing fallback path (clean template above).
+        const fenSideToMove = moveResult.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+        const spineAlert = await coachService.ask(
+          {
+            surface: 'game-chat',
+            ask: alertContext,
+            liveState: {
+              surface: 'game-chat',
+              fen: moveResult.fen,
+              userJustDid: `Student blundered with ${moveResult.san}`,
+              whoseTurn: fenSideToMove,
+            },
+          },
+          {
+            task: 'chat_response',
+            maxTokens: 200,
+            maxToolRoundTrips: 1,
+            systemPromptAddition: BLUNDER_ALERT_ADDITION,
+          },
         );
+        const alertText = spineAlert.text.startsWith('(coach-brain provider error:')
+          ? ''
+          : spineAlert.text;
         const trimmed = alertText.trim();
         if (trimmed && !trimmed.startsWith('⚠️')) {
           explanation = trimmed;
