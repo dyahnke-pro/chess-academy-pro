@@ -319,10 +319,20 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             },
             {
               task: 'position_analysis_chat',
-              // WO-NARR-POLICY-04: 600 tokens (~2200 chars, ~30s of
-              // speech) returns in ~3-5s — keeps phase prose tight
-              // and avoids the 32-35s LLM stalls audit e177da1 caught.
-              maxTokens: 600,
+              // WO-COACH-UNIFY-01 audit-driven bump: legacy path used
+              // 600 tokens with a TIGHT system prompt (just
+              // PHASE_NARRATION_ADDITION). Spine envelope is heavier —
+              // identity + personality dials + memory snapshot + 200-msg
+              // conversation history + live state — and at 600 tokens
+              // deepseek-reasoner exhausts its budget on
+              // reasoning_content and emits zero content (production
+              // audit, build 4933e8e: TWO phase transitions returned
+              // text=0c, fallback fired, student heard the generic
+              // template instead of real analysis). 1500 gives the
+              // reasoner room to think AND emit prose without dragging
+              // total latency back into the 30s territory the original
+              // 600-cap was meant to prevent.
+              maxTokens: 1500,
               maxToolRoundTrips: 1,
               onChunk: (chunk: string) => {
                 if (token !== activeTokenRef.current) return;
