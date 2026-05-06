@@ -2,20 +2,26 @@ import { useEffect, useMemo, useState } from 'react';
 import { getAppAuditLog, clearAppAuditLog } from '../../services/appAuditor';
 import type { AuditCategory, AuditEntry } from '../../services/appAuditor';
 import { runLichessHealthProbe } from '../../services/lichessHealthProbe';
-import { AlertTriangle, Trash2, Copy, Check, Activity } from 'lucide-react';
+import { voiceService } from '../../services/voiceService';
+import { AlertTriangle, Trash2, Copy, Check, Activity, Mic, Radio } from 'lucide-react';
 
 /**
  * Unified debug viewer for the whole-app auditor.
  *
- * Surfaces four classes of finding:
- *   1. Narration factual errors (piece-on-square, check/mate, illegal SAN)
- *   2. Runtime errors (uncaught exceptions, unhandled promise rejections)
- *   3. Subsystem failures (TTS fallback, bad FEN, LLM error, network, Dexie)
- *   4. App state anomalies (React error boundary, FEN desync)
+ * One stop for every diagnostic tool in the app:
+ *   - Audit log: narration / runtime / subsystem / app + virtual 'spine'
+ *     filter for unified-coach activity
+ *   - Lichess health probe button (writes to log)
+ *   - Voice diagnostic snapshot (last Polly speak status, audio context)
+ *   - Audit-stream toggle (POST every audit to /api/audit-stream so
+ *     Claude can watch in near-real time)
+ *   - "Copy for Claude" — markdown export of the visible findings for
+ *     pasting into a Claude Code session
  *
- * All entries share one rolling-window Dexie log. "Copy for Claude"
- * serialises the visible entries to markdown for pasting into a Claude
- * Code session.
+ * Previously scattered diagnostic UIs (VoiceDebugPanel overlay,
+ * /debug/audit page, DevTools-only audit-stream setup) are all
+ * surfaced here so a single Settings → Narration audit visit covers
+ * everything (WO-COACH-UNIFY-01).
  */
 export function NarrationAuditPanel(): JSX.Element {
   const [log, setLog] = useState<AuditEntry[] | null>(null);
@@ -28,6 +34,47 @@ export function NarrationAuditPanel(): JSX.Element {
   // coach (WO-COACH-UNIFY-01).
   const [filter, setFilter] = useState<AuditCategory | 'all' | 'spine'>('all');
   const [probing, setProbing] = useState(false);
+  // Voice diagnostic snapshot — polls voiceService every 500ms so the
+  // Polly tier / status / audio-context state shown next to the audit
+  // log stays current. Was previously only visible via the
+  // VoiceDebugPanel overlay on /coach/walkthrough?debug=1; folded into
+  // this panel so all diagnostics live in one place.
+  const [voiceSnap, setVoiceSnap] = useState(() => voiceService.getLastSpeakDiagnostic());
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setVoiceSnap(voiceService.getLastSpeakDiagnostic());
+    }, 500);
+    return () => window.clearInterval(id);
+  }, []);
+  // Audit-stream toggle — when enabled, every logAppAudit also POSTs
+  // to /api/audit-stream so Claude can poll for new entries in near
+  // real time. Reads/writes localStorage 'auditStreamUrl' +
+  // 'auditStreamSecret'. Default off; nothing leaves the device.
+  const [streamUrl, setStreamUrl] = useState<string>(() =>
+    typeof window !== 'undefined' ? window.localStorage.getItem('auditStreamUrl') ?? '' : '',
+  );
+  const [streamSecret, setStreamSecret] = useState<string>(() =>
+    typeof window !== 'undefined' ? window.localStorage.getItem('auditStreamSecret') ?? '' : '',
+  );
+  const streamEnabled = !!streamUrl && !!streamSecret;
+  const handleEnableStream = (): void => {
+    const defaultUrl = `${window.location.origin}/api/audit-stream`;
+    const url = streamUrl || defaultUrl;
+    const secret = streamSecret ||
+      window.prompt('Audit-stream secret (must match AUDIT_STREAM_SECRET on the server):') ||
+      '';
+    if (!secret) return;
+    window.localStorage.setItem('auditStreamUrl', url);
+    window.localStorage.setItem('auditStreamSecret', secret);
+    setStreamUrl(url);
+    setStreamSecret(secret);
+  };
+  const handleDisableStream = (): void => {
+    window.localStorage.removeItem('auditStreamUrl');
+    window.localStorage.removeItem('auditStreamSecret');
+    setStreamUrl('');
+    setStreamSecret('');
+  };
   // WO-DEEP-DIAGNOSTICS — read the build stamp from the most recent
   // entry that carries one (every entry will, post this WO).
   const buildIdHint = useMemo(() => {
@@ -145,6 +192,11 @@ export function NarrationAuditPanel(): JSX.Element {
   const entries = [...filtered].reverse();
   const byCategory = countByCategory(log);
 
+  // Diagnostic tools wired into this panel (WO-COACH-UNIFY-01):
+  //   - voiceSnap: last Polly speak diagnostic (was VoiceDebugPanel overlay)
+  //   - streamEnabled: localStorage-backed audit-stream opt-in (was
+  //     hidden in /debug/audit details)
+
   return (
     <div className="space-y-3" data-testid="narration-audit-panel">
       <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -224,6 +276,70 @@ export function NarrationAuditPanel(): JSX.Element {
             </button>
           );
         })}
+      </div>
+
+      {/* Diagnostic tools — voice snapshot + audit stream toggle.
+          All audit/diagnostic UI lives in this panel now (WO-COACH-UNIFY-01). */}
+      <div
+        className="rounded-md border p-2 text-xs space-y-1.5"
+        style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
+        data-testid="diagnostic-tools"
+      >
+        <div className="font-medium flex items-center gap-1.5" style={{ color: 'var(--color-text-muted)' }}>
+          <Mic size={12} /> Voice diagnostic
+        </div>
+        <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 font-mono text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
+          <div>tier: <span>{voiceSnap.tier}</span></div>
+          <div>audioCtx: {voiceSnap.audioContextState}</div>
+          <div>polly: {voiceSnap.pollyAttempted ? `${voiceSnap.pollyOk ? 'OK' : 'FAIL'} (${voiceSnap.pollyStatus ?? '—'})` : 'idle'}</div>
+          <div>last: {voiceSnap.timestamp ? `${Math.round((Date.now() - voiceSnap.timestamp) / 100) / 10}s ago` : '—'}</div>
+        </div>
+        {voiceSnap.text && (
+          <div className="text-[10px] truncate" style={{ color: 'var(--color-text-muted)' }}>
+            text: "{voiceSnap.text.slice(0, 80)}{voiceSnap.text.length > 80 ? '…' : ''}"
+          </div>
+        )}
+        {voiceSnap.error && (
+          <div className="text-[10px]" style={{ color: 'var(--color-error)' }}>
+            err: {voiceSnap.error.slice(0, 100)}
+          </div>
+        )}
+
+        <div className="pt-1.5 mt-1 border-t font-medium flex items-center gap-1.5" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}>
+          <Radio size={12} /> Audit stream
+          <span
+            className="ml-auto px-1.5 py-0.5 rounded text-[10px]"
+            style={{
+              background: streamEnabled ? '#10b981' : 'var(--color-border)',
+              color: streamEnabled ? '#000' : 'var(--color-text-muted)',
+            }}
+          >
+            {streamEnabled ? 'ON' : 'off'}
+          </span>
+        </div>
+        <div className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
+          {streamEnabled
+            ? 'Streaming every audit to /api/audit-stream — Claude can poll for new entries in near real time.'
+            : 'Off — audits stay on this device. Enable to let Claude watch the log live during a session.'}
+        </div>
+        {streamEnabled ? (
+          <button
+            onClick={handleDisableStream}
+            className="text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface"
+            data-testid="audit-stream-disable"
+          >
+            Disable stream
+          </button>
+        ) : (
+          <button
+            onClick={handleEnableStream}
+            className="text-xs px-2 py-1 rounded-md border border-theme-border hover:bg-theme-surface"
+            data-testid="audit-stream-enable"
+            title="Requires AUDIT_STREAM_SECRET env var on the Vercel deployment + Vercel KV enabled"
+          >
+            Enable stream
+          </button>
+        )}
       </div>
 
       <div className="space-y-2 max-h-80 overflow-y-auto">

@@ -1225,13 +1225,19 @@ function AboutTab(): JSX.Element {
         )}
       </div>
 
-      {/* Runtime narration audit — passive background check of every
-          coach narration against the live board. Flags persist to
-          Dexie and show up here for triage. "Copy for Claude" exports
-          the current log as a markdown report that can be pasted
-          straight into a Claude Code session. */}
+      {/* Diagnostics & audit log — the one-stop diagnostic panel for
+          the whole app (WO-COACH-UNIFY-01). Surfaces:
+            - The unified audit log (narration / runtime / subsystem /
+              app + virtual 'spine' filter for unified-coach activity)
+            - Lichess health probe button
+            - Live voice diagnostic snapshot (Polly tier, audio
+              context state, last error)
+            - Audit-stream toggle (POST every audit to
+              /api/audit-stream so Claude can watch in near-real time)
+            - "Copy for Claude" — markdown export of the visible
+              findings for pasting into a Claude Code session. */}
       <div className="pt-4 border-t space-y-2" style={{ borderColor: 'var(--color-border)' }}>
-        <div className="text-sm font-medium">Narration audit</div>
+        <div className="text-sm font-medium">Diagnostics &amp; audit log</div>
         <NarrationAuditPanel />
       </div>
     </div>

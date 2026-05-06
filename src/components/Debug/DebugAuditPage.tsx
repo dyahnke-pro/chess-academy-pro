@@ -49,42 +49,24 @@ export function DebugAuditPage(): JSX.Element {
     >
       <div className="max-w-3xl mx-auto space-y-4">
         <div>
-          <h1 className="text-xl font-bold">Audit back-door</h1>
+          <h1 className="text-xl font-bold">Diagnostics &amp; audit log</h1>
           <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-            Full audit log — narration, runtime, subsystem, app. Visit
+            Full audit log + every diagnostic tool — narration, runtime,
+            subsystem, app, spine activity, voice snapshot, audit-stream
+            toggle, Lichess health probe. Same panel as Settings →
+            Diagnostics &amp; audit log.
+          </p>
+          <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+            Visit
             <code className="mx-1 px-1 rounded" style={{ background: 'var(--color-surface)' }}>
               /debug/audit?copy=1
             </code>
-            to auto-copy on load. Also available from DevTools as
+            to auto-copy the log on load. Also available from DevTools as
             <code className="mx-1 px-1 rounded" style={{ background: 'var(--color-surface)' }}>
               await __AUDIT__.copy()
             </code>
             .
           </p>
-          <details className="text-xs mt-3" style={{ color: 'var(--color-text-muted)' }}>
-            <summary className="cursor-pointer">Live-watch setup (optional)</summary>
-            <div className="mt-2 space-y-1 pl-2">
-              <p>
-                To stream each audit event to <code>/api/audit-stream</code> so
-                Claude can watch in real time during a session:
-              </p>
-              <ol className="list-decimal list-inside space-y-0.5">
-                <li>Enable Vercel KV in the project dashboard (one click).</li>
-                <li>Set <code>AUDIT_STREAM_SECRET</code> env var to any long random string.</li>
-                <li>Run these two commands in this tab&rsquo;s DevTools console:</li>
-              </ol>
-              <pre className="mt-1 p-2 rounded overflow-x-auto" style={{ background: 'var(--color-surface)' }}>
-{`localStorage.setItem('auditStreamUrl', location.origin + '/api/audit-stream');
-localStorage.setItem('auditStreamSecret', 'PASTE_SAME_SECRET');`}
-              </pre>
-              <p className="mt-1">
-                After setup, every new audit event POSTs to the endpoint. Claude
-                polls <code>GET /api/audit-stream?since=&lt;ms&gt;</code> and sees
-                new entries within seconds. Default behaviour is still
-                local-only — no data leaves the device unless both keys are set.
-              </p>
-            </div>
-          </details>
         </div>
         <NarrationAuditPanel />
       </div>
