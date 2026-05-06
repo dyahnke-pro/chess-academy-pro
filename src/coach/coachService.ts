@@ -387,22 +387,22 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     for (const call of lastResponse.toolCalls) {
       if (excludeSet?.has(call.name)) {
         void logAppAudit({
-          kind: 'coach-brain-tool-called',
+          kind: 'coach-brain-tool-skipped',
           category: 'subsystem',
           source: 'coachService.ask',
-          summary: `excluded tool ${call.name} skipped (resilience fallback)`,
-          details: JSON.stringify({ id: call.id, args: call.args }),
+          summary: `excluded ${call.name} (resilience fallback)`,
+          details: JSON.stringify({ id: call.id, name: call.name, reason: 'excluded', args: call.args }),
         });
         continue;
       }
       const tool = getTool(call.name);
       if (!tool) {
         void logAppAudit({
-          kind: 'coach-brain-tool-called',
+          kind: 'coach-brain-tool-skipped',
           category: 'subsystem',
           source: 'coachService.ask',
-          summary: `unknown tool ${call.name}`,
-          details: JSON.stringify({ id: call.id, args: call.args }),
+          summary: `unknown ${call.name}`,
+          details: JSON.stringify({ id: call.id, name: call.name, reason: 'unknown', args: call.args }),
         });
         continue;
       }
@@ -458,7 +458,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         }
       } catch (err) {
         void logAppAudit({
-          kind: 'coach-brain-tool-called',
+          kind: 'coach-brain-tool-threw',
           category: 'subsystem',
           source: 'coachService.ask',
           summary: `${call.name} threw`,

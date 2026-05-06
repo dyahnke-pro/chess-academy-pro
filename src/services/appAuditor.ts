@@ -116,6 +116,15 @@ export type AuditKind =
   | 'coach-brain-envelope-assembled'
   | 'coach-brain-provider-called'
   | 'coach-brain-tool-called'
+  // Coach-tab full audit #19 — split for filterability. The
+  // catch-all `coach-brain-tool-called` covers successful
+  // dispatches; these two distinguish (a) tool requests the spine
+  // didn't even attempt because the tool was excluded by the
+  // resilience-fallback caller or didn't exist in the registry,
+  // and (b) tool requests that THREW (vs returned ok=false; the
+  // latter has tool-call-error already).
+  | 'coach-brain-tool-skipped'
+  | 'coach-brain-tool-threw'
   | 'coach-llm-model-selected'
   | 'coach-brain-intent-routed'
   | 'coach-intent-router-input'
