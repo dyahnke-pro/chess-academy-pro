@@ -2056,47 +2056,49 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             </div>
 
-            {/* HERO nav: four big arrows centered, 64px tap targets */}
-            <div className="flex items-center justify-center gap-3 py-2" data-testid="review-nav-controls">
+            {/* Walk nav: four uniform 52px buttons, forward gets a
+                subtle accent border so it reads as primary without
+                dwarfing the others. Audit-driven redesign — the prior
+                gold 120×90 forward chevron next to 60×60 transparent
+                siblings was visually unbalanced. All four now share
+                the same shape, size, and active-press affordance. */}
+            <div className="flex items-center justify-center gap-2 py-2" data-testid="review-nav-controls">
               <button
                 onClick={walkPlayback.goToStart}
-                className="p-4 rounded-xl hover:bg-theme-surface disabled:opacity-30 min-w-[60px] min-h-[60px] flex items-center justify-center"
+                className="w-[52px] h-[52px] rounded-xl border border-theme-border hover:bg-theme-surface disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
                 disabled={walkPlayback.currentPly === 0}
                 aria-label="Jump to start"
               >
-                <SkipBack size={28} style={{ color: 'var(--color-text)' }} />
+                <SkipBack size={22} style={{ color: 'var(--color-text)' }} />
               </button>
               <button
                 onClick={walkPlayback.goBack}
-                className="p-4 rounded-xl hover:bg-theme-surface disabled:opacity-30 min-w-[60px] min-h-[60px] flex items-center justify-center"
+                className="w-[52px] h-[52px] rounded-xl border border-theme-border hover:bg-theme-surface disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
                 disabled={walkPlayback.currentPly === 0}
                 aria-label="Back one move"
                 data-testid="review-back-btn"
               >
-                <ChevronLeft size={32} style={{ color: 'var(--color-text)' }} />
+                <ChevronLeft size={24} style={{ color: 'var(--color-text)' }} />
               </button>
               <button
                 onClick={walkPlayback.goForward}
-                className="rounded-xl disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.97]"
+                className="w-[52px] h-[52px] rounded-xl border-2 disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
                 disabled={walkPlayback.currentPly >= lastPly}
                 style={{
-                  background: 'var(--color-accent)',
-                  minWidth: '120px',
-                  minHeight: '90px',
-                  boxShadow: '0 2px 10px rgba(201, 168, 76, 0.35)',
+                  borderColor: 'var(--color-accent)',
                 }}
                 aria-label="Forward one move"
                 data-testid="review-forward-btn"
               >
-                <ChevronRight size={42} strokeWidth={3} style={{ color: 'var(--color-bg)' }} />
+                <ChevronRight size={24} style={{ color: 'var(--color-accent)' }} />
               </button>
               <button
                 onClick={walkPlayback.goToEnd}
-                className="p-4 rounded-xl hover:bg-theme-surface disabled:opacity-30 min-w-[60px] min-h-[60px] flex items-center justify-center"
+                className="w-[52px] h-[52px] rounded-xl border border-theme-border hover:bg-theme-surface disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
                 disabled={walkPlayback.currentPly >= lastPly}
                 aria-label="Jump to end"
               >
-                <SkipForward size={28} style={{ color: 'var(--color-text)' }} />
+                <SkipForward size={22} style={{ color: 'var(--color-text)' }} />
               </button>
             </div>
 
