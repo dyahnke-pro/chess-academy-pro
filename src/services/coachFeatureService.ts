@@ -1,10 +1,7 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-// getCoachCommentary is still used by generateReviewNarrationSegments
-// (the older intro/closing-only path). All three direct
-// getCoachChatResponse calls were migrated to coachService.ask in
-// WO-COACH-UNIFY-01 — getCoachCommentary will follow in a later PR.
 import { getCoachCommentary } from './coachApi';
+import { buildChessContextMessage } from './coachPrompts';
 import { coachService } from '../coach/coachService';
 import {
   GAME_POST_REVIEW_ADDITION,
@@ -362,9 +359,40 @@ Respond ONLY with valid JSON: {"intro": "...", "closing": "..."}
 Do not include any other text outside the JSON.${analysisContext}`,
   };
 
-  const raw = await getCoachCommentary('game_narrative_summary', context);
+  // WO-COACH-UNIFY-01 final review-tab parity: route through
+  // coachService.ask with surface='review' so this prep call ALSO
+  // rides the unified envelope (REVIEW_MODE_ADDITION + memory +
+  // live-state). Was the last legacy LLM caller in the Review path.
+  // The JSON-only instruction lives inside `context.additionalContext`,
+  // so it ends up in the user message via buildChessContextMessage —
+  // identical wire shape as the legacy getCoachCommentary call.
+  const userMessage = buildChessContextMessage(context);
+  let raw = '';
   try {
-    // Extract JSON from the response (may have markdown fences)
+    const spineAnswer = await coachService.ask(
+      {
+        surface: 'review',
+        ask: userMessage,
+        liveState: {
+          surface: 'review',
+          fen: context.fen,
+          userJustDid: 'Generating intro/closing narration for the review',
+        },
+      },
+      {
+        task: 'game_narrative_summary',
+        maxTokens: 800,
+        maxToolRoundTrips: 1,
+      },
+    );
+    raw = spineAnswer.text.startsWith('(coach-brain provider error:')
+      ? ''
+      : spineAnswer.text;
+  } catch {
+    // Fall through to the deterministic fallback below.
+  }
+  try {
+    // Extract JSON from the response (may have markdown fences).
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const parsed = JSON.parse(jsonMatch[0]) as { intro: string; closing: string };
