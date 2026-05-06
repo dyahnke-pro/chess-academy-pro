@@ -76,6 +76,12 @@ export type AuditKind =
   // Additional review trail (WO-REVIEW-02a)
   | 'review-segments-generated'
   | 'review-segments-parse-failed'
+  // Walk-mode exploration (better-move arrow → student plays it →
+  // "Resume game" snap-back). Fires when the student drags a piece
+  // on the arrow-active board, and again when they tap Resume (or
+  // navigate away → auto-resume).
+  | 'review-walk-explored'
+  | 'review-walk-resumed'
   // Engine lines on the review screen (WO-REVIEW-02b)
   | 'review-engine-lines-analysis-started'
   | 'review-engine-lines-analysis-complete'

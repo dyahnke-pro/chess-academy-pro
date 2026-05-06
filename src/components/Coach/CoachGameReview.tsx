@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect, useMemo, type MouseEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Home, Undo2, ArrowLeft, MessageCircle, Loader2, Play, Pause, Target, Crosshair, Zap, CheckCircle2, XCircle, GraduationCap, AlertTriangle, Sparkles, FastForward } from 'lucide-react';
+import { RotateCcw, Home, Undo2, ArrowLeft, MessageCircle, Loader2, Play, Pause, Volume2, VolumeX, Target, Crosshair, Zap, CheckCircle2, XCircle, GraduationCap, AlertTriangle, Sparkles, FastForward } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
 import { PlayerInfoBar } from './PlayerInfoBar';
@@ -171,6 +171,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [bestLineSans, setBestLineSans] = useState<string[]>([]); // SAN moves
   const [bestLineIndex, setBestLineIndex] = useState(0); // current step in the line
   const [bestLineFen, setBestLineFen] = useState<string | null>(null); // current FEN in the line
+
+  // Walk-mode exploration: when the student is on a ply that has a
+  // better-move arrow (inaccuracy/mistake/blunder), they can drag the
+  // suggested piece on the board to play that move themselves. The
+  // resulting FEN lives here until they tap "Resume game" — at which
+  // point we clear it and the board returns to the actual game line
+  // at this ply. Null = walking the actual game line; non-null = the
+  // student has explored an alternative move.
+  const [walkExplorationFen, setWalkExplorationFen] = useState<string | null>(null);
+  const [walkExplorationSan, setWalkExplorationSan] = useState<string | null>(null);
+  // Reset exploration any time the student steps to a different ply —
+  // the exploration belongs to ONE specific position, not to the next
+  // ply they walk to.
+  const walkExplorationPlyRef = useRef<number | null>(null);
   const [bestLineBaseFen, setBestLineBaseFen] = useState<string | null>(null); // starting FEN
   const [bestLineLoading, setBestLineLoading] = useState(false);
 
@@ -344,6 +358,33 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     narration: walkNarration,
     totalPlies: moves.length,
   });
+
+  // Auto-clear walk exploration when the student steps to a different
+  // ply. Exploration is anchored to ONE position — once they nav away,
+  // the actual game line resumes silently (snap-back is implicit).
+  useEffect(() => {
+    if (
+      walkExplorationFen !== null &&
+      walkExplorationPlyRef.current !== null &&
+      walkExplorationPlyRef.current !== walkPlayback.currentPly
+    ) {
+      void logAppAudit({
+        kind: 'review-walk-resumed',
+        category: 'subsystem',
+        source: 'CoachGameReview.walkAutoResume',
+        summary: `ply changed (${walkExplorationPlyRef.current}→${walkPlayback.currentPly}) — auto-resumed actual line`,
+        details: JSON.stringify({
+          fromPly: walkExplorationPlyRef.current,
+          toPly: walkPlayback.currentPly,
+          exploredSan: walkExplorationSan,
+          reason: 'ply-changed',
+        }),
+      });
+      setWalkExplorationFen(null);
+      setWalkExplorationSan(null);
+      walkExplorationPlyRef.current = null;
+    }
+  }, [walkPlayback.currentPly, walkExplorationFen, walkExplorationSan]);
 
   // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every
   // position in the walk (starting position + one FEN per ply) via
@@ -1620,6 +1661,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           ? moves[walkPlayback.currentPly - 1]?.fen ?? STARTING_FEN
           : STARTING_FEN;
       const walkArrows = (() => {
+        // Hide the arrow once the student has explored — they've seen
+        // the suggestion, no need to clutter the post-exploration view.
+        if (walkExplorationFen) return undefined;
         if (!seg) return undefined;
         const showBest = seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder';
         if (!showBest || !seg.bestMoveUci || seg.bestMoveUci.length < 4) return undefined;
@@ -1627,6 +1671,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const endSquare = seg.bestMoveUci.slice(2, 4);
         return [{ startSquare, endSquare, color: '#22c55e' }];
       })();
+      // Walk-mode board is interactive only when a green arrow is on
+      // screen — the student can grab the suggested piece and play it
+      // themselves. Otherwise the board stays read-only (passive
+      // playback). The exploration FEN takes over the displayed
+      // position until they tap "Resume game".
+      const walkBoardInteractive = walkExplorationFen === null && !!walkArrows;
+      const walkDisplayFen = walkExplorationFen ?? displayFen;
       const badge = seg?.classification ?? null;
       // Authoritative nav ceiling = the full game length, not the
       // segments' trailing ply. The LLM frequently truncates segment
@@ -1761,12 +1812,41 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             <div className="px-2 pt-1 pb-2 flex justify-center relative">
               <div className="w-full md:max-w-[420px] relative">
                 <ChessBoard
-                  initialFen={displayFen}
+                  // Re-key on exploration toggle so the underlying chess
+                  // instance resets cleanly when the user enters or
+                  // resumes from exploration. Without the key, the
+                  // board's internal Chess() retains move history from
+                  // the prior FEN and rejects the next move.
+                  key={`walk-board-ply${walkPlayback.currentPly}-${walkExplorationFen ? 'expl' : 'live'}`}
+                  initialFen={walkDisplayFen}
                   orientation={playerColor}
-                  interactive={false}
+                  interactive={walkBoardInteractive}
                   arrows={walkArrows}
                   showEvalBar={false}
                   showFlipButton
+                  onMove={walkBoardInteractive ? (moveResult) => {
+                    // Student played a piece while a better-move arrow
+                    // was showing → record their exploration. We capture
+                    // the post-move FEN + SAN and surface a "Resume game"
+                    // button. Audit emit so the unified panel shows the
+                    // exploration trail.
+                    setWalkExplorationFen(moveResult.fen);
+                    setWalkExplorationSan(moveResult.san);
+                    walkExplorationPlyRef.current = walkPlayback.currentPly;
+                    void logAppAudit({
+                      kind: 'review-walk-explored',
+                      category: 'subsystem',
+                      source: 'CoachGameReview.walkExplore',
+                      summary: `ply ${walkPlayback.currentPly} explored ${moveResult.san}`,
+                      fen: moveResult.fen,
+                      details: JSON.stringify({
+                        ply: walkPlayback.currentPly,
+                        playedSan: moveResult.san,
+                        suggestedUci: seg?.bestMoveUci ?? null,
+                        classification: seg?.classification ?? null,
+                      }),
+                    });
+                  } : undefined}
                 />
                 {badge && (
                   <div
@@ -1778,6 +1858,41 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   >
                     {CLASSIFICATION_STYLES[badge as keyof typeof CLASSIFICATION_STYLES].label}
                   </div>
+                )}
+                {/* Resume-game button — appears whenever the student
+                    has explored a move that diverges from the actual
+                    game line. Tap to clear exploration and snap the
+                    board back to the real game position at this ply. */}
+                {walkExplorationFen && (
+                  <button
+                    onClick={() => {
+                      void logAppAudit({
+                        kind: 'review-walk-resumed',
+                        category: 'subsystem',
+                        source: 'CoachGameReview.walkResume',
+                        summary: `ply ${walkPlayback.currentPly} resumed (was exploring ${walkExplorationSan ?? '?'})`,
+                        fen: displayFen,
+                        details: JSON.stringify({
+                          ply: walkPlayback.currentPly,
+                          exploredSan: walkExplorationSan,
+                        }),
+                      });
+                      setWalkExplorationFen(null);
+                      setWalkExplorationSan(null);
+                      walkExplorationPlyRef.current = null;
+                    }}
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg"
+                    style={{
+                      background: 'var(--color-accent)',
+                      color: 'var(--color-bg)',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+                    }}
+                    data-testid="walk-resume-game-btn"
+                    aria-label="Resume the actual game line"
+                  >
+                    <RotateCcw size={12} />
+                    Resume game
+                  </button>
                 )}
               </div>
             </div>
@@ -1828,15 +1943,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
             {/* Secondary controls row: pause/play + Ask (inline, small) */}
             <div className="flex items-center justify-center gap-2 pb-2">
+              {/* Narration toggle — pauses or replays the SPOKEN narration
+                  for the current ply. Does NOT advance to the next ply
+                  (manual-only stepping). User feedback (build 3d8e3ef)
+                  caught the prior "Play / Pause" labels reading like an
+                  auto-advance toggle; this rename + Volume icons make
+                  voice control unambiguous. */}
               <button
                 onClick={walkPlayback.togglePausePlay}
                 className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-theme-border hover:bg-theme-surface"
                 style={{ color: 'var(--color-text)' }}
-                aria-label={walkPlayback.narrationState === 'speaking' ? 'Pause narration' : 'Play narration'}
+                aria-label={walkPlayback.narrationState === 'speaking' ? 'Stop narration' : 'Replay narration'}
+                data-testid="walk-narration-toggle-btn"
               >
                 {walkPlayback.narrationState === 'speaking'
-                  ? <><Pause size={12} /> Pause</>
-                  : <><Play size={12} /> Play</>}
+                  ? <><VolumeX size={12} /> Stop narration</>
+                  : <><Volume2 size={12} /> Replay narration</>}
               </button>
               <button
                 onClick={() => setAskExpanded((v: boolean) => !v)}
