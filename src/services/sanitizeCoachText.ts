@@ -60,6 +60,20 @@ export function sanitizeCoachText(text: string | null | undefined): string {
   return stripMarkup(text).trim();
 }
 
+/** Defense-in-depth markup strip exposed for the TTS pipeline. Same
+ *  shape as `sanitizeCoachText` but skips the trim so the caller can
+ *  splice with surrounding whitespace. Used by `voiceService`'s
+ *  `sanitizeForTTS` so any `[VOICE: ...]` / `[[ACTION:...]]` /
+ *  `[BOARD: ...]` directive that slipped past the per-surface strip
+ *  never reaches Polly verbatim. Production audit (build 6459def+)
+ *  showed Polly speaking `[VOICE: Let's walk through where it all...`
+ *  and `[[ACTION:play_move {...}]]` aloud — sanitizeForTTS was the
+ *  single chokepoint that didn't run a markup strip. */
+export function stripCoachMarkup(text: string): string {
+  if (!text) return text;
+  return stripMarkup(text);
+}
+
 /**
  * Prepare a sanitized prose chunk for Polly TTS. Strips formatting
  * tokens that have no spoken value (markdown bold `**word**`, italic

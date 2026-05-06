@@ -144,4 +144,32 @@ describe('sanitizeForTTS', () => {
       expect(sanitizeForTTS('Trade a B for Q to d8')).toBe('Trade a bishop for queen to d8');
     });
   });
+
+  describe('directive markup strip — defense-in-depth (audit 6459def+)', () => {
+    it('strips a leading [VOICE: ...] marker so Polly never speaks it verbatim', () => {
+      const input = "[VOICE: Let's walk through where it all came apart.] Now to your move.";
+      // Markup removed, surrounding prose preserved (whitespace tolerant).
+      expect(sanitizeForTTS(input)).not.toContain('[VOICE');
+      expect(sanitizeForTTS(input)).toContain('Now to your move.');
+    });
+    it('strips an [[ACTION:play_move {...}]] marker that leaked into a narration string', () => {
+      const input = 'Looking up the line. [[ACTION:play_move {"san":"exd5"}]] Then we develop.';
+      const out = sanitizeForTTS(input);
+      expect(out).not.toContain('[[ACTION');
+      expect(out).not.toContain(']]');
+      expect(out).toContain('Looking up the line.');
+      expect(out).toContain('Then we develop.');
+    });
+    it('strips multiple sibling markers (BOARD + VOICE on the same line)', () => {
+      const input = '[BOARD: arrow:c4:green]\n\n[VOICE: Knight goes to c3.]';
+      const out = sanitizeForTTS(input);
+      expect(out).not.toContain('[BOARD');
+      expect(out).not.toContain('[VOICE');
+    });
+    it('does not break unrelated bracketed prose like "[the position]"', () => {
+      // sanitizeForTTS itself substitutes FENs into "[the position]" —
+      // that placeholder must survive since it has no DIRECTIVE: prefix.
+      expect(sanitizeForTTS('Look at [the position]')).toContain('[the position]');
+    });
+  });
 });

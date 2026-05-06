@@ -327,6 +327,14 @@ export interface AssembleEnvelopeArgs {
    *  message — only the system-prompt tail is overridden. WO-COACH-
    *  UNIFY-01. */
   systemPromptAddition?: string;
+  /** When true, skip the surface-specific block (TEACH_MODE_ADDITION /
+   *  REVIEW_MODE_ADDITION / PHASE_NARRATION_ADDITION). The caller wants
+   *  the rest of the envelope (memory + live-state + toolbelt) but a
+   *  systemPromptAddition that conflicts with the surface block's
+   *  output-format mandates. Used by review prep calls (intro prose,
+   *  per-ply JSON) so the [VOICE: ...] / [BOARD: ...] marker mandate
+   *  doesn't fight the JSON-only / prose-only prompt. */
+  suppressSurfaceMode?: boolean;
   toolbelt: ToolDefinition[];
   input: CoachAskInput;
 }
@@ -379,22 +387,26 @@ export function assembleEnvelope(args: AssembleEnvelopeArgs): AssembledEnvelope 
   // free play (the student isn't playing against you). This is a
   // classroom and you are the teacher with a board, an engine, a
   // master-game database, and a pile of past games. Use them.
-  if (args.input.liveState.surface === 'teach') {
-    identity = `${identity}\n\n${TEACH_MODE_ADDITION}`;
-  } else if (args.input.liveState.surface === 'review') {
-    // Both /coach/review (new game-picker flow) and the legacy
-    // post-game review (after a finished /coach/play game) hit this
-    // branch — see REVIEW_MODE_ADDITION above for the merger rationale.
-    identity = `${identity}\n\n${REVIEW_MODE_ADDITION}`;
-  }
-  // WO-COACH-UNIFY-01: phase-narration surface owns the
-  // opening→middlegame / middlegame→endgame transition prose. The
-  // legacy usePhaseNarration hook used PHASE_NARRATION_ADDITION as a
-  // standalone system prompt; bringing it under the spine means the
-  // same memory/live-state blocks are available and bug fixes
-  // (asterisk in fallback, sentence-prefix drop) propagate to /coach/play.
-  if (args.input.liveState.surface === 'phase-narration') {
-    identity = `${identity}\n\n${PHASE_NARRATION_ADDITION}`;
+  // `suppressSurfaceMode` opts a single call out of the surface block
+  // for shape-conflict cases — see the option's JSDoc above.
+  if (!args.suppressSurfaceMode) {
+    if (args.input.liveState.surface === 'teach') {
+      identity = `${identity}\n\n${TEACH_MODE_ADDITION}`;
+    } else if (args.input.liveState.surface === 'review') {
+      // Both /coach/review (new game-picker flow) and the legacy
+      // post-game review (after a finished /coach/play game) hit this
+      // branch — see REVIEW_MODE_ADDITION above for the merger rationale.
+      identity = `${identity}\n\n${REVIEW_MODE_ADDITION}`;
+    }
+    // WO-COACH-UNIFY-01: phase-narration surface owns the
+    // opening→middlegame / middlegame→endgame transition prose. The
+    // legacy usePhaseNarration hook used PHASE_NARRATION_ADDITION as a
+    // standalone system prompt; bringing it under the spine means the
+    // same memory/live-state blocks are available and bug fixes
+    // (asterisk in fallback, sentence-prefix drop) propagate to /coach/play.
+    if (args.input.liveState.surface === 'phase-narration') {
+      identity = `${identity}\n\n${PHASE_NARRATION_ADDITION}`;
+    }
   }
   // Verbosity modulator. Wired everywhere — surfaces opt in by passing
   // the user's preference (Settings → coachVerbosity) through to

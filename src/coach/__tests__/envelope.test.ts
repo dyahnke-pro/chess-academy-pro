@@ -67,6 +67,50 @@ describe('assembleEnvelope', () => {
     });
     expect(env.memory.intendedOpening?.name).toBe('Caro-Kann Defense');
   });
+
+  it('appends REVIEW_MODE_ADDITION on surface=review by default', () => {
+    const env = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      input: { surface: 'review', ask: 'q', liveState: { surface: 'review' } },
+    });
+    expect(env.identity).toMatch(/REVIEW MODE/);
+    expect(env.identity).toMatch(/\[VOICE: \.\.\.\]/);
+  });
+
+  it('skips REVIEW_MODE_ADDITION when suppressSurfaceMode=true so JSON-only prep calls don\'t fight the marker mandate', () => {
+    const env = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      suppressSurfaceMode: true,
+      input: { surface: 'review', ask: 'q', liveState: { surface: 'review' } },
+    });
+    expect(env.identity).not.toMatch(/REVIEW MODE/);
+    // Memory + live-state still load.
+    expect(env.liveState.surface).toBe('review');
+    expect(env.memory).toBeTruthy();
+  });
+
+  it('skips TEACH_MODE_ADDITION when suppressSurfaceMode=true on surface=teach', () => {
+    const env = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      suppressSurfaceMode: true,
+      input: { surface: 'teach', ask: 'q', liveState: { surface: 'teach' } },
+    });
+    expect(env.identity).not.toMatch(/TEACH MODE/);
+  });
+
+  it('skips PHASE_NARRATION_ADDITION when suppressSurfaceMode=true on surface=phase-narration', () => {
+    const env = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      suppressSurfaceMode: true,
+      input: {
+        surface: 'phase-narration',
+        ask: 'q',
+        liveState: { surface: 'phase-narration' },
+      },
+    });
+    // PHASE_NARRATION_ADDITION's distinctive header.
+    expect(env.identity).not.toMatch(/ACTION-FIRST RULE/);
+  });
 });
 
 describe('formatEnvelopeAsSystemPrompt', () => {

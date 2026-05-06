@@ -5,6 +5,7 @@
 import { speechService } from './speechService';
 import { voicePackService } from './voicePackService';
 import { getSharedAudioContext } from './audioContextManager';
+import { stripCoachMarkup } from './sanitizeCoachText';
 import { db } from '../db/schema';
 import type { CoachPersonality } from '../coach/types';
 
@@ -228,7 +229,13 @@ const FEN_PATTERN_RE = /[`'"]?\s*([rnbqkpRNBQKP1-8]+\/){7}[rnbqkpRNBQKP1-8]+\s+[
  *  castling → plain English, pawn-capture expansion). */
 export function sanitizeForTTS(text: string): string {
   if (!text) return text;
-  let out = text;
+  // Strip directive markup first ([VOICE: ...], [[ACTION:...]],
+  // [BOARD: ...]) so it can never reach Polly. Per-surface strippers
+  // exist (CoachTeachPage, CoachGameReview, sanitizeCoachStream) but
+  // production audit showed at least one path — review walk segment
+  // narration — bypassing them, and Polly was reading the markers
+  // verbatim. This is the chokepoint that catches every caller.
+  let out = stripCoachMarkup(text);
   // FEN strings FIRST so they can't get tokenized into nonsense by the
   // SAN regex below (a FEN's "K" / "Q" / "B" / "N" letters look like
   // piece-letter SAN to the SAN_MOVE_RE pattern).

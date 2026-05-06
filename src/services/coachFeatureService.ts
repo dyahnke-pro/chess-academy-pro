@@ -301,6 +301,10 @@ export async function generateNarrativeSummary(
       maxTokens: 800,
       maxToolRoundTrips: 1,
       systemPromptAddition: GAME_POST_REVIEW_ADDITION,
+      // GAME_POST_REVIEW_ADDITION wants grounded prose; surface block's
+      // [VOICE:] / [BOARD:] marker mandate would leak markers into the
+      // streamed summary card. Memory + live-state still inject.
+      suppressSurfaceMode: true,
       onChunk: onStream,
     },
   );
@@ -387,6 +391,11 @@ Do not include any other text outside the JSON.${analysisContext}`,
         task: 'chat_response',
         maxTokens: 800,
         maxToolRoundTrips: 1,
+        // The user message asks for `{"intro":..., "closing":...}` JSON
+        // only. REVIEW_MODE_ADDITION's [VOICE:] / [BOARD:] marker
+        // mandate fights that. Skip the surface block so the JSON
+        // contract wins; memory + live-state still load.
+        suppressSurfaceMode: true,
       },
     );
     raw = unwrapSpineError(spineAnswer.text);
@@ -672,6 +681,13 @@ export async function generateReviewNarration(params: {
       maxTokens: 200,
       maxToolRoundTrips: 1,
       systemPromptAddition: REVIEW_INTRO_ADDITION,
+      // REVIEW_INTRO_ADDITION asks for prose only; REVIEW_MODE_ADDITION
+      // (surface block) mandates [VOICE:] / [BOARD:] markers per turn.
+      // The two collide — production audit (build 6459def+) caught the
+      // intro coming back wrapped in markers. Keep memory + live-state
+      // injection by leaving surface='review', but skip the surface
+      // mode addition so the JSON-only / prose-only addendum wins.
+      suppressSurfaceMode: true,
     },
   ).then((a) => unwrapSpineError(a.text)).catch(() => '');
 
@@ -710,6 +726,16 @@ export async function generateReviewNarration(params: {
       maxTokens: 4000,
       maxToolRoundTrips: 1,
       systemPromptAddition: REVIEW_MOVE_SEGMENT_ADDITION,
+      // REVIEW_MOVE_SEGMENT_ADDITION mandates JSON output;
+      // REVIEW_MODE_ADDITION (surface block) mandates [VOICE:] /
+      // [BOARD:] markers. Production audit (build 6459def+) Finding 69
+      // showed the segments call returning markdown-with-markers and
+      // failing parse, leaving every ply on the deterministic fallback
+      // ("You played X" / "The coach played X"). Skip the surface
+      // block here — the per-call addition is the single source of
+      // truth for output format. Memory + live-state injection still
+      // happens since `surface='review'`.
+      suppressSurfaceMode: true,
     },
   ).then((a) => unwrapSpineError(a.text)).catch((err: unknown) => {
     const msg = err instanceof Error ? err.message : String(err);

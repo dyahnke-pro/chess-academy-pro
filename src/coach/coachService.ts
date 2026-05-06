@@ -151,6 +151,16 @@ export interface CoachServiceOptions {
    *  identity. Used by migrated surfaces with a prompt too dynamic
    *  for a generic surface block. WO-COACH-UNIFY-01. */
   systemPromptAddition?: string;
+  /** When true, the envelope skips appending the surface-mode block
+   *  (TEACH_MODE_ADDITION / REVIEW_MODE_ADDITION / PHASE_NARRATION_ADDITION)
+   *  for this call. Used by JSON-only / prose-only prep calls that
+   *  want surface='review' for memory + live-state injection but
+   *  conflict with the surface block's `[VOICE: ...]` / `[BOARD: ...]`
+   *  marker mandate. Production audit (build 6459def+) showed the
+   *  review-segments JSON parse failing because the LLM honored both
+   *  prompts at once and emitted markdown markers wrapped around the
+   *  JSON. Memory + live-state injection still happens regardless. */
+  suppressSurfaceMode?: boolean;
   /** Optional getter the spine calls between trips to refresh
    *  `ctx.liveFen`. Without this, the FEN snapshotted at handleSubmit
    *  time stays frozen across all round-trips — so when the brain
@@ -252,6 +262,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     flirt: options.flirt,
     verbosity: options.verbosity,
     systemPromptAddition: options.systemPromptAddition,
+    suppressSurfaceMode: options.suppressSurfaceMode,
     toolbelt: getToolDefinitions({ exclude: options.excludeTools }),
     input,
   });
