@@ -128,6 +128,8 @@ export function NarrationAuditPanel(): JSX.Element {
         e.kind === 'coach-brain-provider-called' ||
         e.kind === 'coach-brain-answer-returned' ||
         e.kind === 'coach-brain-tool-called' ||
+        e.kind === 'coach-brain-tool-skipped' ||
+        e.kind === 'coach-brain-tool-threw' ||
         e.kind === 'coach-llm-model-selected' ||
         e.kind === 'coach-surface-migrated',
       );
