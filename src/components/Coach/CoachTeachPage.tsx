@@ -12,10 +12,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2 } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X } from 'lucide-react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { ChessBoard } from '../Board/ChessBoard';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
+import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
+import { resolveWalkthroughTree } from '../../data/openingWalkthroughs';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { DifficultyToggle } from './DifficultyToggle';
@@ -56,6 +59,13 @@ export function CoachTeachPage(): JSX.Element {
   // us click-to-move + legal dots + drag, plus loadFen/resetGame/undoMove
   // for LLM-driven mutations.
   const game = useChessGame(STARTING_FEN, 'white');
+
+  // In-place walkthrough runtime. When active, takes over the board
+  // (renders walkthrough.fen instead of game.fen, board is read-only)
+  // and shows fork tap targets / leaf options below. Replaces the
+  // navigate-to-/coach/session/walkthrough flow that lost the chat
+  // panel. See `useTeachWalkthrough` + `data/openingWalkthroughs/`.
+  const walkthrough = useTeachWalkthrough();
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
@@ -418,6 +428,14 @@ export function CoachTeachPage(): JSX.Element {
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
+    // If a walkthrough is mid-narration when the student types a
+    // question, pause it so voice doesn't talk over the coach's
+    // reply. The student can hit Resume on the walkthrough panel
+    // when they're ready to continue. Idempotent — safe even when
+    // already paused (cleanupNarration is a no-op then).
+    if (walkthrough.isActive && walkthrough.phase !== 'paused') {
+      walkthrough.pause();
+    }
     setBusy(true);
     const turnId = `t-${Date.now()}`;
     // Kickoff sends a system-style ask to seed the lesson — don't
@@ -616,6 +634,17 @@ export function CoachTeachPage(): JSX.Element {
           // Without this wired the brain tool would no-op and the
           // teach session couldn't escalate to a focused drill.
           onStartWalkthroughForOpening: ({ opening, orientation }) => {
+            // In-place walkthrough on /coach/teach when a tree is
+            // registered for the requested opening. Replaces the
+            // legacy navigate-away behavior that lost the chat panel
+            // (production audit, build c6cce89: user said "It routed
+            // me to this stupid board"). For openings without a
+            // curated tree, fall back to the legacy navigate.
+            const tree = resolveWalkthroughTree(opening);
+            if (tree) {
+              walkthrough.start(tree);
+              return { ok: true };
+            }
             const params = new URLSearchParams();
             params.set('subject', opening);
             if (orientation) params.set('orientation', orientation);
@@ -740,7 +769,7 @@ export function CoachTeachPage(): JSX.Element {
       setBusy(false);
       setKickoffStatus(null);
     }
-  }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus]);
+  }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough]);
 
   // Student-driven moves go through ControlledChessBoard's onMove
   // callback (below). useChessGame already handles the click-to-move
@@ -972,25 +1001,45 @@ export function CoachTeachPage(): JSX.Element {
             all work identically. No eval bar, no flip/undo/reset chrome
             (chrome on this surface is just the small Reset button in
             the header above). showVoiceMic={false} so the mic doesn't
-            draw under the board (we already have the chat input). */}
+            draw under the board (we already have the chat input).
+            When the in-place walkthrough is active, swap the live
+            board for a read-only `<ChessBoard>` driven by the
+            walkthrough's computed FEN — the board animates through
+            opening lines while the chat panel stays available for
+            tangent questions. */}
         <div className="px-2 py-1 flex justify-center w-full">
           <div className="w-full md:max-w-[420px]">
-            <ControlledChessBoard
-              game={game}
-              interactive={!busy}
-              showFlipButton={false}
-              showUndoButton={false}
-              showResetButton={false}
-              showEvalBar={showEvalBarEffective}
-              evaluation={latestEval}
-              isMate={latestIsMate}
-              mateIn={latestMateIn}
-              showVoiceMic={false}
-              showLastMoveHighlight
-              onMove={handleStudentMove}
-              arrows={arrows.length > 0 ? arrows : undefined}
-              annotationHighlights={highlights.length > 0 ? highlights : undefined}
-            />
+            {walkthrough.isActive ? (
+              <ChessBoard
+                key="walkthrough-board"
+                initialFen={walkthrough.fen}
+                orientation={playerColor}
+                interactive={false}
+                showFlipButton={false}
+                showUndoButton={false}
+                showResetButton={false}
+                showEvalBar={false}
+                showVoiceMic={false}
+                showLastMoveHighlight
+              />
+            ) : (
+              <ControlledChessBoard
+                game={game}
+                interactive={!busy}
+                showFlipButton={false}
+                showUndoButton={false}
+                showResetButton={false}
+                showEvalBar={showEvalBarEffective}
+                evaluation={latestEval}
+                isMate={latestIsMate}
+                mateIn={latestMateIn}
+                showVoiceMic={false}
+                showLastMoveHighlight
+                onMove={handleStudentMove}
+                arrows={arrows.length > 0 ? arrows : undefined}
+                annotationHighlights={highlights.length > 0 ? highlights : undefined}
+              />
+            )}
           </div>
         </div>
 
@@ -1007,39 +1056,44 @@ export function CoachTeachPage(): JSX.Element {
 
         {/* Control buttons row — Takeback / Restart / Resign, same as
             Play. Resign on the teach surface ends the lesson and pops
-            back to the coach hub. */}
-        <div className="flex items-center justify-center gap-2 px-3 pb-3">
-          <button
-            onClick={() => game.undoMove()}
-            disabled={busy || game.history.length === 0}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
-            aria-label="Take back last move"
-            data-testid="teach-takeback"
-          >
-            <SkipBack size={14} />
-            <span>Takeback</span>
-          </button>
-          <button
-            onClick={() => { void handleResetBoard(); }}
-            disabled={busy}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
-            aria-label="Restart"
-            data-testid="teach-restart"
-          >
-            <RefreshCw size={14} />
-            <span>Restart</span>
-          </button>
-          <button
-            onClick={() => void navigate('/coach/home')}
-            disabled={busy}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
-            aria-label="End lesson"
-            data-testid="teach-resign"
-          >
-            <Flag size={14} />
-            <span>End Lesson</span>
-          </button>
-        </div>
+            back to the coach hub. When a walkthrough is active, this
+            row is replaced by the walkthrough control panel below. */}
+        {walkthrough.isActive ? (
+          <WalkthroughControls walkthrough={walkthrough} />
+        ) : (
+          <div className="flex items-center justify-center gap-2 px-3 pb-3">
+            <button
+              onClick={() => game.undoMove()}
+              disabled={busy || game.history.length === 0}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+              aria-label="Take back last move"
+              data-testid="teach-takeback"
+            >
+              <SkipBack size={14} />
+              <span>Takeback</span>
+            </button>
+            <button
+              onClick={() => { void handleResetBoard(); }}
+              disabled={busy}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+              aria-label="Restart"
+              data-testid="teach-restart"
+            >
+              <RefreshCw size={14} />
+              <span>Restart</span>
+            </button>
+            <button
+              onClick={() => void navigate('/coach/home')}
+              disabled={busy}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+              aria-label="End lesson"
+              data-testid="teach-resign"
+            >
+              <Flag size={14} />
+              <span>End Lesson</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Right column: stationary chat input directly under the board,
@@ -1158,6 +1212,178 @@ export function CoachTeachPage(): JSX.Element {
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Walkthrough control panel — swaps in for the
+ * Takeback / Restart / End Lesson row when an in-place walkthrough
+ * is running. Renders one of four phase-specific UIs:
+ *
+ *   - 'narrating' : "Skip narration" + "End walkthrough" — student
+ *                   wants to keep going faster, or bail entirely.
+ *   - 'fork'      : Vertical-stacked tap targets, one per branch
+ *                   (label + forkSubtitle). The user confirmed they
+ *                   want forks as tap targets — "Tap targets. Keep
+ *                   things consistent." Wraps with "Pause / End"
+ *                   secondary controls so the lesson is interruptible.
+ *   - 'leaf'      : "Back to last fork" (when canBacktrack), plus
+ *                   "End walkthrough." Renders the leaf outro above
+ *                   the buttons so the student sees the wrap-up text
+ *                   even if voice was muted.
+ *   - 'paused'    : "Resume" + "End walkthrough." Triggered when the
+ *                   student types a chat question mid-narration —
+ *                   handleSubmit calls walkthrough.pause() so voice
+ *                   doesn't talk over the coach reply.
+ */
+function WalkthroughControls({
+  walkthrough,
+}: {
+  walkthrough: ReturnType<typeof useTeachWalkthrough>;
+}): JSX.Element {
+  const { phase, forkOptions, canBacktrack, leafOutro, tree } = walkthrough;
+
+  if (phase === 'fork') {
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-fork-panel">
+        <div className="text-xs font-medium text-theme-text-muted px-1">
+          Which line would you like to explore?
+        </div>
+        <div className="flex flex-col gap-2">
+          {forkOptions.map((opt, idx) => (
+            <button
+              key={`${opt.label ?? idx}-${idx}`}
+              onClick={() => walkthrough.pickFork(idx)}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[56px] transition-colors"
+              data-testid={`walkthrough-fork-option-${idx}`}
+            >
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-theme-text">
+                  {opt.label ?? `Option ${idx + 1}`}
+                </span>
+                {opt.forkSubtitle && (
+                  <span className="text-xs text-theme-text-muted">
+                    {opt.forkSubtitle}
+                  </span>
+                )}
+              </div>
+              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center justify-center gap-2 pt-1">
+          <button
+            onClick={() => walkthrough.pause()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+            data-testid="walkthrough-pause-from-fork"
+          >
+            Pause
+          </button>
+          <button
+            onClick={() => walkthrough.stop()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+            data-testid="walkthrough-end-from-fork"
+          >
+            <X size={12} />
+            End walkthrough
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase === 'leaf') {
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-leaf-panel">
+        {leafOutro && (
+          <div className="text-xs text-theme-text-muted px-1 italic">
+            {leafOutro}
+          </div>
+        )}
+        <div className="flex flex-col gap-2">
+          {canBacktrack && (
+            <button
+              onClick={() => walkthrough.backtrackToLastFork()}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors"
+              data-testid="walkthrough-backtrack"
+            >
+              <SkipBack size={14} />
+              Try a different line
+            </button>
+          )}
+          <button
+            onClick={() => walkthrough.stop()}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors"
+            data-testid="walkthrough-end-from-leaf"
+          >
+            <Flag size={14} />
+            End walkthrough
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase === 'paused') {
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-paused-panel">
+        <div className="text-xs text-theme-text-muted px-1">
+          {tree ? `Walkthrough paused — ${tree.openingName}` : 'Walkthrough paused'}
+        </div>
+        <div className="flex items-center justify-center gap-2">
+          <button
+            onClick={() => walkthrough.resume()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-accent text-theme-bg text-sm font-semibold transition-colors"
+            data-testid="walkthrough-resume"
+          >
+            Resume
+          </button>
+          <button
+            onClick={() => walkthrough.stop()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors"
+            data-testid="walkthrough-end-from-paused"
+          >
+            <X size={14} />
+            End walkthrough
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // phase === 'narrating' (default)
+  return (
+    <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-narrating-panel">
+      <div className="flex items-center justify-center gap-2 text-xs text-theme-text-muted">
+        <Loader2 size={12} className="animate-spin" />
+        <span>{tree ? `Teaching — ${tree.openingName}` : 'Teaching…'}</span>
+      </div>
+      <div className="flex items-center justify-center gap-2">
+        <button
+          onClick={() => walkthrough.skipNarration()}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors"
+          data-testid="walkthrough-skip"
+        >
+          <ChevronRight size={14} />
+          Skip
+        </button>
+        <button
+          onClick={() => walkthrough.pause()}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors"
+          data-testid="walkthrough-pause"
+        >
+          Pause
+        </button>
+        <button
+          onClick={() => walkthrough.stop()}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors"
+          data-testid="walkthrough-end"
+        >
+          <X size={14} />
+          End
+        </button>
       </div>
     </div>
   );

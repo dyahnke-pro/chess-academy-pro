@@ -340,10 +340,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
 
   const pickFork = useCallback(
     (childIndex: number): void => {
+      if (pathNodes.length === 0) return;
       const node = pathNodes[pathNodes.length - 1];
-      if (!node || node.children.length <= 1) return;
+      if (node.children.length <= 1) return;
+      if (childIndex < 0 || childIndex >= node.children.length) return;
       const choice = node.children[childIndex];
-      if (!choice) return;
       void logAppAudit({
         kind: 'coach-tool-callback-rejected',
         category: 'subsystem',
@@ -385,8 +386,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       advanceTimerRef.current = null;
     }
     // Manually transition based on current node's children.
+    if (pathNodes.length === 0) return;
     const node = pathNodes[pathNodes.length - 1];
-    if (!node) return;
     if (node.children.length === 0) {
       setPhase('leaf');
     } else if (node.children.length === 1) {
