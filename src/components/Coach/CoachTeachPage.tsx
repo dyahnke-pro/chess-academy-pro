@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check } from 'lucide-react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { ChessBoard } from '../Board/ChessBoard';
 import { NarrationArrowOverlay } from './NarrationArrowOverlay';
@@ -25,6 +25,10 @@ import {
   getCachedOpening,
   cacheOpening,
 } from '../../services/openingGenerator';
+import {
+  getCompletedStages,
+  type ProgressStage,
+} from '../../services/openingProgress';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { DifficultyToggle } from './DifficultyToggle';
@@ -1495,6 +1499,53 @@ export function CoachTeachPage(): JSX.Element {
   );
 }
 
+/** Reusable gold-glow style for selectable buttons (fork tap targets,
+ *  stage menu, quiz choices, drill picker, nav arrows). Matches the
+ *  Coach Tips button style — same gold (rgba 201,168,76) palette,
+ *  layered box-shadow for the glow, gold borders. The user asked for
+ *  "selectable options highlighted in our gold glow" in the morning
+ *  iteration. Applied via the inline `style` prop because Tailwind
+ *  doesn't have an out-of-the-box utility for this multi-layer glow. */
+const goldGlowStyle: React.CSSProperties = {
+  borderTop: '1px solid rgba(201, 168, 76, 0.3)',
+  borderRight: '1px solid rgba(201, 168, 76, 0.3)',
+  borderLeft: '2px solid rgba(201, 168, 76, 0.8)',
+  borderBottom: '2px solid rgba(201, 168, 76, 0.8)',
+  boxShadow:
+    '0 0 8px rgba(201, 168, 76, 0.4), 0 0 18px rgba(201, 168, 76, 0.2), 0 0 30px rgba(201, 168, 76, 0.1)',
+};
+
+/** Slightly stronger gold glow for primary CTAs (Resume, Continue,
+ *  Drill again — the action you want the user to most naturally tap). */
+const goldGlowStrongStyle: React.CSSProperties = {
+  borderTop: '1px solid rgba(201, 168, 76, 0.5)',
+  borderRight: '1px solid rgba(201, 168, 76, 0.5)',
+  borderLeft: '2px solid rgba(201, 168, 76, 1)',
+  borderBottom: '2px solid rgba(201, 168, 76, 1)',
+  boxShadow:
+    '0 0 12px rgba(201, 168, 76, 0.7), 0 0 24px rgba(201, 168, 76, 0.4), 0 0 40px rgba(201, 168, 76, 0.25)',
+};
+
+/** Render a stage's completion indicator. Done stages get a gold
+ *  checkmark; pending stages get the chevron-right CTA. */
+function StageStatus({ done }: { done: boolean }): JSX.Element {
+  if (done) {
+    return (
+      <div
+        className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center"
+        style={{
+          background: 'rgba(201, 168, 76, 0.2)',
+          border: '1px solid rgba(201, 168, 76, 0.6)',
+        }}
+        aria-label="Completed"
+      >
+        <Check size={14} style={{ color: 'rgb(201, 168, 76)' }} strokeWidth={3} />
+      </div>
+    );
+  }
+  return <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />;
+}
+
 /**
  * Walkthrough control panel — swaps in for the
  * Takeback / Restart / End Lesson row when an in-place walkthrough
@@ -1525,6 +1576,25 @@ function WalkthroughControls({
 }): JSX.Element {
   const { phase, forkOptions, canBacktrack, leafOutro, tree } = walkthrough;
 
+  // Fetch completed stages for the current opening so we can show
+  // checkmarks on the stage menu. Re-fetch whenever we re-enter the
+  // stage-menu phase (after completing a stage we want to see the
+  // new checkmark immediately).
+  const [completedStages, setCompletedStages] = useState<Set<ProgressStage>>(
+    new Set(),
+  );
+  useEffect(() => {
+    if (!tree?.openingName) return;
+    if (phase !== 'stage-menu' && phase !== 'leaf') return;
+    let cancelled = false;
+    void getCompletedStages(tree.openingName).then((stages) => {
+      if (!cancelled) setCompletedStages(stages);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [tree, phase]);
+
   if (phase === 'fork') {
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-fork-panel">
@@ -1536,7 +1606,8 @@ function WalkthroughControls({
             <button
               key={`${opt.label ?? idx}-${idx}`}
               onClick={() => walkthrough.pickFork(idx)}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[56px] transition-colors"
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[56px] transition-colors"
+              style={goldGlowStyle}
               data-testid={`walkthrough-fork-option-${idx}`}
             >
               <div className="flex flex-col">
@@ -1594,6 +1665,7 @@ function WalkthroughControls({
             <button
               onClick={() => walkthrough.enterStageMenu()}
               className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
+              style={goldGlowStrongStyle}
               data-testid="walkthrough-continue-learning"
             >
               <ChevronRight size={16} />
@@ -1638,53 +1710,57 @@ function WalkthroughControls({
           {conceptsCount > 0 && (
             <button
               onClick={() => walkthrough.startStage('concepts')}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              style={goldGlowStyle}
               data-testid="walkthrough-stage-concepts"
             >
               <div className="flex flex-col">
                 <span className="text-sm font-semibold text-theme-text">Concept check</span>
                 <span className="text-[11px] text-theme-text-muted">{conceptsCount} questions on the big ideas</span>
               </div>
-              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+              <StageStatus done={completedStages.has('concepts')} />
             </button>
           )}
           {findMoveCount > 0 && (
             <button
               onClick={() => walkthrough.startStage('findMove')}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              style={goldGlowStyle}
               data-testid="walkthrough-stage-findmove"
             >
               <div className="flex flex-col">
                 <span className="text-sm font-semibold text-theme-text">Find the move</span>
                 <span className="text-[11px] text-theme-text-muted">{findMoveCount} recognition puzzles</span>
               </div>
-              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+              <StageStatus done={completedStages.has('findMove')} />
             </button>
           )}
           {drillCount > 0 && (
             <button
               onClick={() => walkthrough.startStage('drill')}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              style={goldGlowStyle}
               data-testid="walkthrough-stage-drill"
             >
               <div className="flex flex-col">
                 <span className="text-sm font-semibold text-theme-text">Drill the line</span>
                 <span className="text-[11px] text-theme-text-muted">{drillCount} woodpecker lines — play them on the board</span>
               </div>
-              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+              <StageStatus done={completedStages.has('drill')} />
             </button>
           )}
           {punishCount > 0 && (
             <button
               onClick={() => walkthrough.startStage('punish')}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              style={goldGlowStyle}
               data-testid="walkthrough-stage-punish"
             >
               <div className="flex flex-col">
                 <span className="text-sm font-semibold text-theme-text">Punish mistakes</span>
                 <span className="text-[11px] text-theme-text-muted">{punishCount} common opponent errors and how to crush them</span>
               </div>
-              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+              <StageStatus done={completedStages.has('punish')} />
             </button>
           )}
           <button
@@ -1693,7 +1769,8 @@ function WalkthroughControls({
               walkthrough.stop();
               navigate(`/coach/play?opening=${encodeURIComponent(opening)}`);
             }}
-            className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+            className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+            style={goldGlowStyle}
             data-testid="walkthrough-stage-play"
           >
             <div className="flex flex-col">
@@ -1734,7 +1811,8 @@ function WalkthroughControls({
         <div className="flex items-center justify-center gap-2">
           <button
             onClick={() => walkthrough.resume()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-accent text-theme-bg text-sm font-semibold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-md bg-theme-accent text-theme-bg text-sm font-semibold transition-colors"
+            style={goldGlowStrongStyle}
             data-testid="walkthrough-resume"
           >
             Resume
@@ -1806,6 +1884,36 @@ function QuizPanel({
     quizSelected,
     quizShowingFeedback,
   } = walkthrough;
+
+  // Speak the question prompt aloud whenever a new question appears.
+  // User asked for "the coach reads the question out loud — not the
+  // answer, just the question." Fires on activeStage change (new
+  // stage) or stageIndex change (next question). Stripped of the
+  // multi-paragraph structure for punish (just the closing
+  // question line so voice doesn't drone through the setup prose).
+  useEffect(() => {
+    if (!tree || !activeStage) return;
+    let promptToSpeak = '';
+    if (activeStage === 'concepts') {
+      promptToSpeak = tree.concepts?.[stageIndex]?.prompt ?? '';
+    } else if (activeStage === 'findMove') {
+      promptToSpeak = tree.findMove?.[stageIndex]?.prompt ?? '';
+    } else if (activeStage === 'punish') {
+      const lesson = tree.punish?.[stageIndex];
+      if (lesson) {
+        // Speak the FULL lesson context — name + whyBad + the
+        // question. The student needs the WHY for the punish stage.
+        promptToSpeak = `${lesson.name}. ${lesson.whyBad} Black played ${lesson.inaccuracy}. What's your punishment?`;
+      }
+    }
+    if (promptToSpeak.trim()) {
+      // Use speakForced so it cuts any in-flight speech (e.g. the
+      // walkthrough's narration just finished or a prior quiz answer's
+      // explanation is being read).
+      void voiceService.speakForced(promptToSpeak);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeStage, stageIndex, tree]);
 
   if (!tree || !activeStage) return <div data-testid="walkthrough-quiz-empty" />;
 
@@ -1924,21 +2032,21 @@ function QuizPanel({
             bg = 'bg-green-500/10';
             border = 'border-green-500/40';
           }
+          // Gold glow before answering; once feedback shows, the
+          // green/red tint replaces it (using border classes from the
+          // logic above).
+          const choiceStyle: React.CSSProperties = showResult ? {} : goldGlowStyle;
           return (
             <button
               key={`${stageIndex}-${idx}`}
               type="button"
               disabled={showResult}
               onClick={(e) => {
-                // Defensively stop propagation; some iOS touch sequences
-                // can deliver the event to a parent before the button.
-                // pointer-events-none on inner divs (below) was missing
-                // in build e6c3c7b — user reported "couldn't select the
-                // right answer" in that build.
                 e.stopPropagation();
                 walkthrough.pickQuizChoice(idx);
               }}
-              className={`w-full text-left px-3 py-3 rounded-lg border ${border} ${bg} hover:bg-theme-bg disabled:cursor-default disabled:opacity-100 text-sm text-theme-text min-h-[56px] transition-colors`}
+              className={`w-full text-left px-3 py-3 rounded-lg ${showResult ? `border ${border}` : ''} ${bg} hover:bg-theme-bg disabled:cursor-default disabled:opacity-100 text-sm text-theme-text min-h-[56px] transition-colors`}
+              style={choiceStyle}
               data-testid={`walkthrough-quiz-choice-${idx}`}
             >
               <div className="font-medium pointer-events-none">{c.text}</div>
@@ -1966,7 +2074,8 @@ function QuizPanel({
           </button>
           <button
             onClick={() => walkthrough.nextQuizQuestion()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-accent text-theme-bg text-sm font-semibold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-md bg-theme-accent text-theme-bg text-sm font-semibold transition-colors"
+            style={goldGlowStrongStyle}
             data-testid="walkthrough-quiz-next"
           >
             {stageIndex === questions.length - 1 ? 'Finish' : 'Next'}
@@ -2039,9 +2148,8 @@ function DrillPanel({
             <button
               key={idx}
               onClick={() => walkthrough.selectDrillLine(idx)}
-              className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border ${
-                stageIndex === idx ? 'border-theme-accent' : 'border-theme-border'
-              } bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors`}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              style={goldGlowStyle}
               data-testid={`walkthrough-drill-line-${idx}`}
             >
               <div className="flex flex-col">
@@ -2080,6 +2188,7 @@ function DrillPanel({
           <button
             onClick={() => walkthrough.restartDrill()}
             className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[44px] transition-colors"
+            style={goldGlowStrongStyle}
             data-testid="walkthrough-drill-restart"
           >
             <RefreshCw size={14} />
@@ -2109,6 +2218,7 @@ function DrillPanel({
           <button
             onClick={() => walkthrough.acknowledgeDrillMistake()}
             className="flex items-center gap-1.5 px-3 py-2 rounded-md bg-theme-accent text-theme-bg text-sm font-semibold transition-colors"
+            style={goldGlowStrongStyle}
             data-testid="walkthrough-drill-acknowledge"
           >
             Got it

@@ -33,6 +33,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
+import { markStageComplete } from '../services/openingProgress';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -249,6 +250,15 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       cleanupNarration();
     };
   }, [cleanupNarration]);
+
+  // Mark walkthrough stage complete when student reaches a leaf.
+  // Fires once per leaf-arrival; the markStageComplete service is
+  // idempotent so re-marks are harmless.
+  useEffect(() => {
+    if (phase === 'leaf' && tree?.openingName) {
+      void markStageComplete(tree.openingName, 'walkthrough');
+    }
+  }, [phase, tree]);
 
   const currentNode = pathNodes.length > 0 ? pathNodes[pathNodes.length - 1] : null;
   const pathSans = useMemo(
@@ -633,7 +643,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     if (!arr) return;
     const next = stageIndex + 1;
     if (next >= arr.length) {
-      // Stage complete — back to menu.
+      // Stage complete — record progress, then back to menu.
+      if (tree.openingName) {
+        void markStageComplete(tree.openingName, activeStage);
+      }
       backToStageMenu();
     } else {
       setStageIndex(next);
@@ -698,6 +711,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
 
       if (nextIndex >= line.moves.length) {
         setDrillComplete(true);
+        if (tree.openingName) {
+          void markStageComplete(tree.openingName, 'drill');
+        }
       }
 
       return { ok: true };

@@ -33,11 +33,11 @@ export const VIENNA_GAME: WalkthroughTree = {
     // gambit is honestly bad for Black; we ship White's huge advantage.
     'e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3':
       "And there it is — the Vienna Gambit accepted, the truth of the line. Black's knight is buried back on g8, having spent two tempi for nothing. We have a huge lead in development, the open e-file, and the f4-pawn (Black's prize) is just a target waiting to be picked off. From here White's plan: Bc4 eyeing f7, castle, take f4 with the c1-bishop, then attack. Black is just worse — at master level the gambit accepted is considered theoretically bad for Black, which is why most strong Black players play the Falkbeer (3...d5) instead. Now you know why.",
-    // Falkbeer Variation middlegame — after the standard knight
-    // trade, doubled c-pawns vs the bishop pair, both kings castled.
-    // Classic structural tradeoff.
-    'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 d3 Nxc3 bxc3 O-O Be2 c5 O-O':
-      "And there's the Falkbeer middlegame in its classic form. Both kings castled, doubled c-pawns for white (the cost of the trade), bishop pair for black (the gift). This is the structural tradeoff that defines the line. White's plan from here: open b-file pressure, push d4 supported by c3, swing the c1-bishop to a3 and the long diagonal. Black's plan: pawn duo on c5-d5 with the bishop pair, undermine the doubled pawns. Both sides have a clear strategy. This is where opening theory ends.",
+    // Falkbeer Variation modern challenge — 5.Qf3 attacks the e4-knight
+    // directly, forcing Black to commit on move five. Sharper than 5.Nf3
+    // (the older calm move) and the line preferred by modern theory.
+    'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3':
+      "And there's the modern Falkbeer challenge. Queen on f3, Black's knight on e4 with no defenders, Black forced to commit. The line goes deep from here — Black's main responses are 5...Nxc3 (the trade, leading to a balanced middlegame with doubled c-pawns for white), 5...f5 (sharp defense, weakens the king but holds the knight), or 5...Nc5 (passive retreat, white develops with tempo). All three are real and worth knowing, but the position TO know is THIS one — because the queen on f3 is what makes the gambit declined sharp instead of comfortable for Black. Now you know why most strong Black players don't decline the Vienna Gambit; they take with exf4 and grind out the resulting positions.",
     // Center fork trick line through to the typical middlegame.
     // Open position with bishop pair vs piece coordination — clean
     // educational moment.
@@ -378,11 +378,10 @@ export const VIENNA_GAME: WalkthroughTree = {
       ],
     },
     {
-      name: 'Vienna Gambit Declined (Falkbeer)',
-      subtitle: '1.e4 e5 2.Nc3 Nf6 3.f4 d5 — the principled reply',
+      name: 'Vienna Gambit Declined (Falkbeer, modern)',
+      subtitle: '1.e4 e5 2.Nc3 Nf6 3.f4 d5 — through 5.Qf3',
       moves: [
-        'e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5', 'fxe5', 'Nxe4',
-        'Nf3', 'Be7', 'd3', 'Nxc3', 'bxc3', 'O-O', 'Be2', 'c5', 'O-O',
+        'e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5', 'fxe5', 'Nxe4', 'Qf3',
       ],
     },
     {
@@ -750,224 +749,28 @@ export const VIENNA_GAME: WalkthroughTree = {
                                                     children: [
                                                       {
                                                         node: {
-                                                          san: 'Nf3',
+                                                          san: 'Qf3',
                                                           movedBy: 'white',
                                                           idea:
-                                                            "5.Nf3 — calm development. I bring the second knight out and prepare to castle. The Black knight on e4 is in my territory but currently unsupported — I'll kick it next move with d3.",
+                                                            "5.Qf3 — the modern challenge. Queen straight to f3 — and now Black's e4-knight is staring down the barrel of a queen attack with NO defender. Black's options narrow fast: trade with Nxc3 (cleanest), defend with f5 (creates king-safety problems), retreat with Nc5 (loses tempo). Qf3 is the more challenging line than the older 5.Nf3 because it forces the question on move five — Black has to commit to something concrete instead of developing freely. This is the position to know cold.",
                                                           narration: [
                                                             {
-                                                              text: '5.Nf3 — calm development.',
-                                                              arrows: [{ from: 'g1', to: 'f3', color: 'green' }],
+                                                              text: '5.Qf3 — the modern challenge.',
+                                                              arrows: [{ from: 'd1', to: 'f3', color: 'green' }],
                                                             },
                                                             {
-                                                              text: 'Knight from g1 to f3, preparing to castle.',
-                                                              arrows: [{ from: 'e1', to: 'g1', color: 'blue' }],
-                                                            },
-                                                            {
-                                                              text: 'And the Black knight on e4 is in my territory but unsupported. I will kick it next move with d3.',
-                                                              arrows: [{ from: 'd2', to: 'd3', color: 'yellow' }],
+                                                              text: "Queen straight to f3, attacking the e4-knight directly.",
+                                                              arrows: [{ from: 'f3', to: 'e4', color: 'red' }],
                                                               highlights: [{ square: 'e4', color: 'red' }],
                                                             },
-                                                          ],
-                                                          children: [
                                                             {
-                                                              node: {
-                                                                san: 'Be7',
-                                                                movedBy: 'black',
-                                                                idea:
-                                                                  "5...Be7 — Black develops solidly. Bishop from f8 to e7, preparing to castle short. This is the main move at the level we're talking about — solid, safe, no commitments. The e4-knight stays in our half for one more move.",
-                                                                narration: [
-                                                                  {
-                                                                    text: '5...Be7 — Black develops solidly.',
-                                                                    arrows: [{ from: 'f8', to: 'e7', color: 'green' }],
-                                                                  },
-                                                                  {
-                                                                    text: 'Bishop from f8 to e7, preparing to castle short. Solid, safe, no commitments.',
-                                                                    arrows: [{ from: 'e8', to: 'g8', color: 'blue' }],
-                                                                  },
-                                                                ],
-                                                                children: [
-                                                                  {
-                                                                    node: {
-                                                                      san: 'd3',
-                                                                      movedBy: 'white',
-                                                                      idea:
-                                                                        "6.d3 — kick the knight. Pawn from d2 to d3 attacks the Ne4 directly. The knight has to move, and the cleanest reply is Nxc3 — Black trades a knight for a knight. We accept the doubled c-pawns that come from the recapture because they buy us the open b-file and the long dark diagonal.",
-                                                                      narration: [
-                                                                        {
-                                                                          text: '6.d3 — kick the knight.',
-                                                                          arrows: [{ from: 'd2', to: 'd3', color: 'green' }],
-                                                                        },
-                                                                        {
-                                                                          text: 'Pawn from d2 to d3 attacks the e4-knight directly.',
-                                                                          arrows: [{ from: 'd3', to: 'e4', color: 'red' }],
-                                                                          highlights: [{ square: 'e4', color: 'red' }],
-                                                                        },
-                                                                        {
-                                                                          text: 'The cleanest reply is Nxc3 — knight for knight, then we recapture with the b-pawn.',
-                                                                          arrows: [{ from: 'e4', to: 'c3', color: 'yellow' }],
-                                                                        },
-                                                                      ],
-                                                                      children: [
-                                                                        {
-                                                                          node: {
-                                                                            san: 'Nxc3',
-                                                                            movedBy: 'black',
-                                                                            idea:
-                                                                              "6...Nxc3 — Black trades. The knight on e4 captures our knight on c3. There's no other clean square: Nc5 walks into kicks, Nd6 blocks Black's own development, and Ng5 gets traded too. Capturing on c3 is cleanest.",
-                                                                            narration: [
-                                                                              {
-                                                                                text: '6...Nxc3 — Black trades.',
-                                                                                arrows: [{ from: 'e4', to: 'c3', color: 'green' }],
-                                                                              },
-                                                                              {
-                                                                                text: 'The knight on e4 captures our knight on c3. No other clean square — Nc5 gets kicked, Nd6 blocks development, Ng5 gets traded anyway.',
-                                                                              },
-                                                                            ],
-                                                                            children: [
-                                                                              {
-                                                                                node: {
-                                                                                  san: 'bxc3',
-                                                                                  movedBy: 'white',
-                                                                                  idea:
-                                                                                    "7.bxc3 — recapture with the b-pawn. Now we have doubled c-pawns (c2 and c3), the structural cost. In return: the b-file is half-open for our rook, our dark-squared bishop has a clear path to a3 and the long diagonal, and the c3-pawn supports a future d4 break. Doubled pawns aren't pretty, but they come with attacking compensation here.",
-                                                                                  narration: [
-                                                                                    {
-                                                                                      text: '7.bxc3 — recapture with the b-pawn.',
-                                                                                      arrows: [{ from: 'b2', to: 'c3', color: 'green' }],
-                                                                                    },
-                                                                                    {
-                                                                                      text: 'Now we have doubled c-pawns. The structural cost of the line.',
-                                                                                      highlights: [
-                                                                                        { square: 'c2', color: 'yellow' },
-                                                                                        { square: 'c3', color: 'yellow' },
-                                                                                      ],
-                                                                                    },
-                                                                                    {
-                                                                                      text: 'In return — the b-file is half-open for our rook,',
-                                                                                      arrows: [{ from: 'a1', to: 'b1', color: 'blue' }],
-                                                                                    },
-                                                                                    {
-                                                                                      text: 'and our dark-squared bishop has a clear path to a3 and the long diagonal.',
-                                                                                      arrows: [{ from: 'c1', to: 'a3', color: 'blue' }],
-                                                                                    },
-                                                                                  ],
-                                                                                  children: [
-                                                                                    {
-                                                                                      node: {
-                                                                                        san: 'O-O',
-                                                                                        movedBy: 'black',
-                                                                                        idea:
-                                                                                          "7...O-O — Black castles short. Standard, no surprises. King to g8, rook to f8.",
-                                                                                        narration: [
-                                                                                          {
-                                                                                            text: '7...O-O — Black castles short.',
-                                                                                            arrows: [{ from: 'e8', to: 'g8', color: 'green' }],
-                                                                                          },
-                                                                                          {
-                                                                                            text: 'King to g8, rook to f8.',
-                                                                                          },
-                                                                                        ],
-                                                                                        children: [
-                                                                                          {
-                                                                                            node: {
-                                                                                              san: 'Be2',
-                                                                                              movedBy: 'white',
-                                                                                              idea:
-                                                                                                "8.Be2 — modest bishop development. The natural square Bd3 is blocked by our own d-pawn, so we settle for e2. The bishop's job here is supporting castling and keeping options open. After we castle, we can think about Bf3 to reroute to the long diagonal.",
-                                                                                              narration: [
-                                                                                                {
-                                                                                                  text: '8.Be2 — modest bishop development.',
-                                                                                                  arrows: [{ from: 'f1', to: 'e2', color: 'green' }],
-                                                                                                },
-                                                                                                {
-                                                                                                  text: 'The natural Bd3 is blocked by our own pawn, so we settle for e2.',
-                                                                                                  highlights: [{ square: 'd3', color: 'yellow' }],
-                                                                                                },
-                                                                                                {
-                                                                                                  text: 'After we castle, we can reroute to f3 on the long diagonal.',
-                                                                                                  arrows: [{ from: 'e2', to: 'f3', color: 'blue' }],
-                                                                                                },
-                                                                                              ],
-                                                                                              children: [
-                                                                                                {
-                                                                                                  node: {
-                                                                                                    san: 'c5',
-                                                                                                    movedBy: 'black',
-                                                                                                    idea:
-                                                                                                      "8...c5 — Black challenges our doubled c-pawns and grabs central space. Pawn from c7 to c5 — typical Falkbeer middlegame plan: undermine the c3-pawn, fight for the d4-square. Black wants Nc6 next, then maybe c4 or d4 breaks.",
-                                                                                                    narration: [
-                                                                                                      {
-                                                                                                        text: '8...c5 — Black challenges our doubled c-pawns.',
-                                                                                                        arrows: [{ from: 'c7', to: 'c5', color: 'green' }],
-                                                                                                      },
-                                                                                                      {
-                                                                                                        text: 'Typical Falkbeer middlegame plan — undermine c3, fight for the d4-square.',
-                                                                                                        highlights: [
-                                                                                                          { square: 'c3', color: 'red' },
-                                                                                                          { square: 'd4', color: 'yellow' },
-                                                                                                        ],
-                                                                                                      },
-                                                                                                    ],
-                                                                                                    children: [
-                                                                                                      {
-                                                                                                        node: {
-                                                                                                          san: 'O-O',
-                                                                                                          movedBy: 'white',
-                                                                                                          idea:
-                                                                                                            "9.O-O — and we castle too. King to safety, rook to f1 on the half-open f-file (the f-pawn went away on move 4). We've reached the Falkbeer middlegame: doubled c-pawns vs the bishop pair tradeoff, both kings castled, central tension between our e5-pawn and Black's d5-c5 pawn duo. White's plan: open b-file, dark-square diagonal, push d4 supported by c3. Black's plan: pawn duo plus bishop pair against our broken structure. This is where opening theory ends.",
-                                                                                                          narration: [
-                                                                                                            {
-                                                                                                              text: '9.O-O — and we castle too.',
-                                                                                                              arrows: [{ from: 'e1', to: 'g1', color: 'green' }],
-                                                                                                            },
-                                                                                                            {
-                                                                                                              text: 'King to safety, rook to f1 on the half-open f-file.',
-                                                                                                              arrows: [{ from: 'h1', to: 'f1', color: 'blue' }],
-                                                                                                            },
-                                                                                                            {
-                                                                                                              text: "We've reached the Falkbeer middlegame.",
-                                                                                                              highlights: [
-                                                                                                                { square: 'g1', color: 'green' },
-                                                                                                                { square: 'g8', color: 'green' },
-                                                                                                              ],
-                                                                                                            },
-                                                                                                            {
-                                                                                                              text: 'White plays for the open b-file and a future d4 push supported by c3.',
-                                                                                                              arrows: [
-                                                                                                                { from: 'd3', to: 'd4', color: 'green' },
-                                                                                                                { from: 'c1', to: 'a3', color: 'blue' },
-                                                                                                              ],
-                                                                                                            },
-                                                                                                            {
-                                                                                                              text: 'Black plays for the pawn duo and the bishop pair. This is where opening theory ends.',
-                                                                                                            },
-                                                                                                          ],
-                                                                                                          children: [],
-                                                                                                        },
-                                                                                                      },
-                                                                                                    ],
-                                                                                                  },
-                                                                                                },
-                                                                                              ],
-                                                                                            },
-                                                                                          },
-                                                                                        ],
-                                                                                      },
-                                                                                    },
-                                                                                  ],
-                                                                                },
-                                                                              },
-                                                                            ],
-                                                                          },
-                                                                        },
-                                                                      ],
-                                                                    },
-                                                                  },
-                                                                ],
-                                                              },
+                                                              text: "Black has no defender for the knight. Their options are narrow — trade with Nxc3, defend with f5 weakening the king, or retreat with Nc5 losing tempo.",
+                                                            },
+                                                            {
+                                                              text: 'This is the more challenging modern line — forces Black to commit on move five instead of developing freely.',
                                                             },
                                                           ],
+                                                          children: [],
                                                         },
                                                       },
                                                     ],
