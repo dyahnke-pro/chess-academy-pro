@@ -96,41 +96,142 @@ export function isStillInOpening(moveHistory: string[]): boolean {
  * canonical shortest match (e.g. "e4 e6" for French Defense) to start the
  * opening and then the longest continuation to guide play deeper.
  */
+/** Normalize an opening-name string for tolerant matching:
+ *    - lowercase
+ *    - strip diacritics (Réti → reti, Grünfeld → grunfeld)
+ *    - strip apostrophes (King's → kings)
+ *    - replace hyphens with spaces (Caro-Kann → caro kann)
+ *    - collapse whitespace
+ *  Production audit (build c081450) caught 27 of 116 legitimate
+ *  user inputs being rejected by pre-flight because the DB names
+ *  use canonical apostrophes / diacritics / hyphens but users
+ *  typically don't. This normalization makes the match tolerant. */
+function normalizeNameForMatch(s: string): string {
+  return s
+    .normalize('NFKD')                  // decomposes Réti → R + e + combining
+    .replace(/[̀-ͯ]/g, '')    // strips combining diacritical marks
+    .toLowerCase()
+    // BEFORE stripping all apostrophes: kill the possessive 's so
+    // "King's Gambit" / "Bird's Opening" / "Alekhine's Defense" all
+    // collapse to forms that match the DB's apostrophe-less or
+    // apostrophe-ful entries either way.
+    .replace(/[‘’'`]s\b/g, '')
+    .replace(/[‘’'`]/g, '')   // remaining apostrophes (straight + curly)
+    .replace(/-/g, ' ')                 // hyphens to space
+    .replace(/\s+/g, ' ')               // collapse whitespace
+    .trim();
+}
+
+/** Token-set match: does `target` contain every meaningful token
+ *  from `query`? Used as the word-order-insensitive fallback.
+ *  "Najdorf Sicilian" → tokens [najdorf, sicilian] both appear in
+ *  "sicilian defense: najdorf variation" (tokens [sicilian, defense,
+ *  najdorf, variation]). 2-letter tokens dropped to avoid false
+ *  positives on "of", "to", etc. */
+function tokensMatchTarget(query: string, target: string): boolean {
+  const qNorm = normalizeNameForMatch(query);
+  const tNorm = normalizeNameForMatch(target);
+  const qTokens = qNorm.split(' ').filter((t) => t.length >= 3);
+  if (qTokens.length === 0) return false;
+  const tTokens = new Set(tNorm.split(' '));
+  return qTokens.every((t) => tTokens.has(t));
+}
+
+/** Aliases for acronyms + common alt-names the DB doesn't index.
+ *  Keys are lowercase normalized inputs; values are canonical names
+ *  that DO exist in the DB. Pre-flight aliases the input before
+ *  attempting match against the DB. */
+const NAME_ALIASES: Record<string, string> = {
+  kid: "King's Indian Defense",
+  nid: 'Nimzo-Indian Defense',
+  qid: "Queen's Indian Defense",
+  qga: "Queen's Gambit Accepted",
+  qgd: "Queen's Gambit Declined",
+  'center counter': 'Scandinavian Defense',
+  'centre counter': 'Scandinavian Defense',
+  // Spelling variants the DB doesn't index under both forms.
+  petroff: "Petrov's Defense",
+  saemisch: 'Sämisch',
+  // "Spanish" is the European name for Ruy Lopez — DB uses Ruy Lopez.
+  spanish: 'Ruy Lopez',
+  'spanish opening': 'Ruy Lopez',
+  // The Vienna sub-line is spelled "Hamppe-Allgaier" in the DB
+  // (double-p) but commonly written single-p in coaching books.
+  'hampe-allgaier': 'Hamppe-Allgaier Gambit',
+  'hampe allgaier': 'Hamppe-Allgaier Gambit',
+  // Possessive forms typed without apostrophe. The DB inconsistently
+  // uses apostrophes for some openings ("King's Gambit") and not for
+  // others ("Bird Opening"), so a single normalization rule can't fix
+  // both. Explicit aliases for the common no-apostrophe inputs:
+  'kings gambit': "King's Gambit",
+  'bishops opening': "Bishop's Opening",
+  'queens gambit': "Queen's Gambit",
+  'queens gambit accepted': "Queen's Gambit Accepted",
+  'queens gambit declined': "Queen's Gambit Declined",
+  'kings indian': "King's Indian Defense",
+  'kings indian defense': "King's Indian Defense",
+  'queens indian': "Queen's Indian Defense",
+  'queens indian defense': "Queen's Indian Defense",
+  'birds opening': 'Bird Opening',
+  'bird opening': 'Bird Opening',
+  "bird's opening": 'Bird Opening',
+  'alekhines defense': 'Alekhine Defense',
+  "alekhine's defense": 'Alekhine Defense',
+};
+
 export function getOpeningMoves(openingName: string): string[] | null {
   const entries = openingsData as OpeningEntry[];
-  const lower = openingName.toLowerCase();
+  const trimmed = openingName.trim();
+  if (!trimmed) return null;
 
-  // Exact match wins — when the user says "King's Indian Defense" we
-  // want the bare main line, not the longest "King's Indian Defense:
-  // Fianchetto, Panno Variation" sub-line. Without this preference
-  // the longest-PGN reducer below picked an obscure variation that
-  // diverged from the user's actual intent on move 3-4 and
-  // tryOpeningBookMove silently fell off the line.
-  const exact = entries.filter((e) => e.name.toLowerCase() === lower);
+  // Apply alias map first (KID → King's Indian Defense, etc.).
+  const aliased = NAME_ALIASES[trimmed.toLowerCase()] ?? trimmed;
+  const queryNorm = normalizeNameForMatch(aliased);
+
+  // 1. Exact match (case + diacritic + apostrophe + hyphen insensitive).
+  //    "Kings Gambit" → matches "King's Gambit" entry.
+  const exact = entries.filter(
+    (e) => normalizeNameForMatch(e.name) === queryNorm,
+  );
   if (exact.length > 0) {
     const best = exact.reduce((a, b) => (a.pgn.length > b.pgn.length ? a : b));
     return best.pgn.split(/\s+/).filter(Boolean);
   }
 
-  // Common-prefix match — "King's Indian" matches "King's Indian
-  // Defense" / "King's Indian Attack". Prefer the bare entry when
-  // present (shortest name in the prefix bucket → least specific →
-  // closest to the canonical main line). Fall back to longest PGN.
-  const prefix = entries.filter((e) => e.name.toLowerCase().startsWith(lower));
+  // 2. Prefix match (normalized) — "Kings Indian" → "King's Indian
+  //    Defense" / "King's Indian Attack".
+  const prefix = entries.filter((e) =>
+    normalizeNameForMatch(e.name).startsWith(queryNorm),
+  );
   if (prefix.length > 0) {
-    const bare = prefix.find((e) => e.name.toLowerCase() === lower);
+    const bare = prefix.find((e) => normalizeNameForMatch(e.name) === queryNorm);
     const best = bare ?? prefix.reduce((a, b) => {
-      // Prefer shorter NAME (the bare opening) over longer PGN here.
       if (a.name.length !== b.name.length) return a.name.length < b.name.length ? a : b;
       return a.pgn.length > b.pgn.length ? a : b;
     });
     return best.pgn.split(/\s+/).filter(Boolean);
   }
 
-  // Fallback: substring match — same shorter-name preference.
-  const fuzzy = entries.filter((e) => e.name.toLowerCase().includes(lower));
-  if (fuzzy.length === 0) return null;
-  const best = fuzzy.reduce((a, b) => {
+  // 3. Substring match (normalized).
+  const sub = entries.filter((e) =>
+    normalizeNameForMatch(e.name).includes(queryNorm),
+  );
+  if (sub.length > 0) {
+    const best = sub.reduce((a, b) => {
+      if (a.name.length !== b.name.length) return a.name.length < b.name.length ? a : b;
+      return a.pgn.length > b.pgn.length ? a : b;
+    });
+    return best.pgn.split(/\s+/).filter(Boolean);
+  }
+
+  // 4. Token-set match — word-order-insensitive. "Najdorf Sicilian"
+  //    matches "Sicilian Defense: Najdorf Variation" (tokens najdorf
+  //    + sicilian both present, order doesn't matter).
+  const tokenMatches = entries.filter((e) =>
+    tokensMatchTarget(aliased, e.name),
+  );
+  if (tokenMatches.length === 0) return null;
+  const best = tokenMatches.reduce((a, b) => {
     if (a.name.length !== b.name.length) return a.name.length < b.name.length ? a : b;
     return a.pgn.length > b.pgn.length ? a : b;
   });
