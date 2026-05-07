@@ -28,15 +28,20 @@ export const VIENNA_GAME: WalkthroughTree = {
   outro:
     "That's a typical position you'd see in this branch. Want to back up to the last decision and see the other line? Or take this position into a real game against me?",
   leafOutros: {
-    // Vienna Gambit accepted, main line — the position is wild and
-    // uncomfortable for both sides. The takeaway here is "you've got
-    // an attack, find it" rather than "memorize one more move."
-    'e4 e5 Nc3 Nf6 f4 exf4 Nf3 g5':
-      "Pawn on f4 is hanging, and Black just locked it down with g5. This is where the Vienna Gambit gets uncomfortable for both sides — White has the open f-file and a lead in development; Black has the pawn but a brittle kingside. Strong players go h4 here to crack the g5 pawn, but you don't need to memorize that today. The point is: in this opening, you're playing for piece activity, not perfect structure. Want me to set this up as a real game so you can feel it?",
-    // Center fork trick line — equal material but Black has the
-    // bishop pair. Worth naming explicitly.
-    'e4 e5 Nc3 Nf6 Bc4 Nxe4 Nxe4 d5 Bxd5 Qxd5':
-      "Material is even — you traded the bishop for the pawn, then Black recovered the knight with the d-pawn fork. But Black walked out of it with the bishop pair, which is a small long-term advantage. This is exactly why most Vienna players prefer 4.d3 instead of 4.Nf3 in the 2...Nc6 line — to avoid this trick. Now you know the trap. Back up and try 3.Bc4 against 2...Nc6 instead, or play this position out against me?",
+    // Vienna Gambit accepted main line — after 5.Nf3 the move-order
+    // lesson is the takeaway. "Push first, develop second."
+    'e4 e5 Nc3 Nf6 f4 exf4 e5 Ng4 Nf3':
+      "And there it is — the Vienna Gambit accepted main line. The Qh4+ threat is dead, my knight is developed, and the f-pawn on f4 is the touchstone of the whole game. Black still has to figure out where to put the king and how to give back the pawn safely. White's plan from here: get the bishop out (Bc4 eyeing f7), castle short, build pressure on the open e-file and the kingside. Black's plan: hold the f4 pawn with g5 if possible, develop, navigate the storm. This position is where opening theory ends and the attack begins.",
+    // Falkbeer Variation middlegame — after the standard knight
+    // trade, doubled c-pawns vs the bishop pair, both kings castled.
+    // Classic structural tradeoff.
+    'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 d3 Nxc3 bxc3 O-O Be2 c5 O-O':
+      "And there's the Falkbeer middlegame in its classic form. Both kings castled, doubled c-pawns for white (the cost of the trade), bishop pair for black (the gift). This is the structural tradeoff that defines the line. White's plan from here: open b-file pressure, push d4 supported by c3, swing the c1-bishop to a3 and the long diagonal. Black's plan: pawn duo on c5-d5 with the bishop pair, undermine the doubled pawns. Both sides have a clear strategy. This is where opening theory ends.",
+    // Center fork trick line through to the typical middlegame.
+    // Open position with bishop pair vs piece coordination — clean
+    // educational moment.
+    'e4 e5 Nc3 Nf6 Bc4 Nxe4 Nxe4 d5 Bxd5 Qxd5 Nf3 Nc6 O-O Bf5 Nc3 Qd6 d4':
+      "Material is even — you traded the bishop for the pawn, then Black recovered the knight with the d5 fork. But Black walked out of it with the bishop pair, which is a small long-term advantage. We've now reached the typical center fork trick middlegame: open position, our knight back on c3, Black's queen on d6 covering e5, and our 9.d4 break challenging the center. This is exactly why most Vienna players prefer 4.d3 instead of 4.Nf3 against the 2...Nc6 line — to avoid this whole sequence. Now you know the trap. Back up and try 3.Bc4 against 2...Nc6 instead, or play this position out against me?",
     // Italian-Vienna middlegame — both kings castled, doubled
     // e-pawns the cost of opening the f-file, dark-square bishop
     // gone on both sides. This is a position you should know cold:
@@ -171,15 +176,218 @@ export const VIENNA_GAME: WalkthroughTree = {
                                                           san: 'Nf3',
                                                           movedBy: 'white',
                                                           idea:
-                                                            "5.Nf3 — calm development. I bring the second knight out and prepare to castle. The pawn on e5 is poisoned; if Black plays 5...Nxc3 6.bxc3, my dark-squared bishop has a clear diagonal to a3 and my pawn structure points right at Black's king. The position is roughly equal but it's MY kind of position — every piece of mine has a job, and Black has to find precise moves to hold.",
+                                                            "5.Nf3 — calm development. I bring the second knight out and prepare to castle. The Black knight on e4 is in my territory but currently unsupported — I'll kick it next move with d3.",
+                                                          narration: [
+                                                            {
+                                                              text: '5.Nf3 — calm development.',
+                                                              arrows: [{ from: 'g1', to: 'f3', color: 'green' }],
+                                                            },
+                                                            {
+                                                              text: 'Knight from g1 to f3, preparing to castle.',
+                                                              arrows: [{ from: 'e1', to: 'g1', color: 'blue' }],
+                                                            },
+                                                            {
+                                                              text: 'And the Black knight on e4 is in my territory but unsupported. I will kick it next move with d3.',
+                                                              arrows: [{ from: 'd2', to: 'd3', color: 'yellow' }],
+                                                              highlights: [{ square: 'e4', color: 'red' }],
+                                                            },
+                                                          ],
                                                           children: [
                                                             {
                                                               node: {
-                                                                san: 'g5',
+                                                                san: 'Be7',
                                                                 movedBy: 'black',
                                                                 idea:
-                                                                  "5...g5 — Black tries to lock down the f4 square and protect the pawn. This is one of Black's main attempts and it's the position where I want to stop the lesson. Now you've seen the Vienna Gambit's main artery: I sac, Black takes, I get fast development, the pawn on f4 is the touchstone of the whole game.",
-                                                                children: [],
+                                                                  "5...Be7 — Black develops solidly. Bishop from f8 to e7, preparing to castle short. This is the main move at the level we're talking about — solid, safe, no commitments. The e4-knight stays in our half for one more move.",
+                                                                narration: [
+                                                                  {
+                                                                    text: '5...Be7 — Black develops solidly.',
+                                                                    arrows: [{ from: 'f8', to: 'e7', color: 'green' }],
+                                                                  },
+                                                                  {
+                                                                    text: 'Bishop from f8 to e7, preparing to castle short. Solid, safe, no commitments.',
+                                                                    arrows: [{ from: 'e8', to: 'g8', color: 'blue' }],
+                                                                  },
+                                                                ],
+                                                                children: [
+                                                                  {
+                                                                    node: {
+                                                                      san: 'd3',
+                                                                      movedBy: 'white',
+                                                                      idea:
+                                                                        "6.d3 — kick the knight. Pawn from d2 to d3 attacks the Ne4 directly. The knight has to move, and the cleanest reply is Nxc3 — Black trades a knight for a knight. We accept the doubled c-pawns that come from the recapture because they buy us the open b-file and the long dark diagonal.",
+                                                                      narration: [
+                                                                        {
+                                                                          text: '6.d3 — kick the knight.',
+                                                                          arrows: [{ from: 'd2', to: 'd3', color: 'green' }],
+                                                                        },
+                                                                        {
+                                                                          text: 'Pawn from d2 to d3 attacks the e4-knight directly.',
+                                                                          arrows: [{ from: 'd3', to: 'e4', color: 'red' }],
+                                                                          highlights: [{ square: 'e4', color: 'red' }],
+                                                                        },
+                                                                        {
+                                                                          text: 'The cleanest reply is Nxc3 — knight for knight, then we recapture with the b-pawn.',
+                                                                          arrows: [{ from: 'e4', to: 'c3', color: 'yellow' }],
+                                                                        },
+                                                                      ],
+                                                                      children: [
+                                                                        {
+                                                                          node: {
+                                                                            san: 'Nxc3',
+                                                                            movedBy: 'black',
+                                                                            idea:
+                                                                              "6...Nxc3 — Black trades. The knight on e4 captures our knight on c3. There's no other clean square: Nc5 walks into kicks, Nd6 blocks Black's own development, and Ng5 gets traded too. Capturing on c3 is cleanest.",
+                                                                            narration: [
+                                                                              {
+                                                                                text: '6...Nxc3 — Black trades.',
+                                                                                arrows: [{ from: 'e4', to: 'c3', color: 'green' }],
+                                                                              },
+                                                                              {
+                                                                                text: 'The knight on e4 captures our knight on c3. No other clean square — Nc5 gets kicked, Nd6 blocks development, Ng5 gets traded anyway.',
+                                                                              },
+                                                                            ],
+                                                                            children: [
+                                                                              {
+                                                                                node: {
+                                                                                  san: 'bxc3',
+                                                                                  movedBy: 'white',
+                                                                                  idea:
+                                                                                    "7.bxc3 — recapture with the b-pawn. Now we have doubled c-pawns (c2 and c3), the structural cost. In return: the b-file is half-open for our rook, our dark-squared bishop has a clear path to a3 and the long diagonal, and the c3-pawn supports a future d4 break. Doubled pawns aren't pretty, but they come with attacking compensation here.",
+                                                                                  narration: [
+                                                                                    {
+                                                                                      text: '7.bxc3 — recapture with the b-pawn.',
+                                                                                      arrows: [{ from: 'b2', to: 'c3', color: 'green' }],
+                                                                                    },
+                                                                                    {
+                                                                                      text: 'Now we have doubled c-pawns. The structural cost of the line.',
+                                                                                      highlights: [
+                                                                                        { square: 'c2', color: 'yellow' },
+                                                                                        { square: 'c3', color: 'yellow' },
+                                                                                      ],
+                                                                                    },
+                                                                                    {
+                                                                                      text: 'In return — the b-file is half-open for our rook,',
+                                                                                      arrows: [{ from: 'a1', to: 'b1', color: 'blue' }],
+                                                                                    },
+                                                                                    {
+                                                                                      text: 'and our dark-squared bishop has a clear path to a3 and the long diagonal.',
+                                                                                      arrows: [{ from: 'c1', to: 'a3', color: 'blue' }],
+                                                                                    },
+                                                                                  ],
+                                                                                  children: [
+                                                                                    {
+                                                                                      node: {
+                                                                                        san: 'O-O',
+                                                                                        movedBy: 'black',
+                                                                                        idea:
+                                                                                          "7...O-O — Black castles short. Standard, no surprises. King to g8, rook to f8.",
+                                                                                        narration: [
+                                                                                          {
+                                                                                            text: '7...O-O — Black castles short.',
+                                                                                            arrows: [{ from: 'e8', to: 'g8', color: 'green' }],
+                                                                                          },
+                                                                                          {
+                                                                                            text: 'King to g8, rook to f8.',
+                                                                                          },
+                                                                                        ],
+                                                                                        children: [
+                                                                                          {
+                                                                                            node: {
+                                                                                              san: 'Be2',
+                                                                                              movedBy: 'white',
+                                                                                              idea:
+                                                                                                "8.Be2 — modest bishop development. The natural square Bd3 is blocked by our own d-pawn, so we settle for e2. The bishop's job here is supporting castling and keeping options open. After we castle, we can think about Bf3 to reroute to the long diagonal.",
+                                                                                              narration: [
+                                                                                                {
+                                                                                                  text: '8.Be2 — modest bishop development.',
+                                                                                                  arrows: [{ from: 'f1', to: 'e2', color: 'green' }],
+                                                                                                },
+                                                                                                {
+                                                                                                  text: 'The natural Bd3 is blocked by our own pawn, so we settle for e2.',
+                                                                                                  highlights: [{ square: 'd3', color: 'yellow' }],
+                                                                                                },
+                                                                                                {
+                                                                                                  text: 'After we castle, we can reroute to f3 on the long diagonal.',
+                                                                                                  arrows: [{ from: 'e2', to: 'f3', color: 'blue' }],
+                                                                                                },
+                                                                                              ],
+                                                                                              children: [
+                                                                                                {
+                                                                                                  node: {
+                                                                                                    san: 'c5',
+                                                                                                    movedBy: 'black',
+                                                                                                    idea:
+                                                                                                      "8...c5 — Black challenges our doubled c-pawns and grabs central space. Pawn from c7 to c5 — typical Falkbeer middlegame plan: undermine the c3-pawn, fight for the d4-square. Black wants Nc6 next, then maybe c4 or d4 breaks.",
+                                                                                                    narration: [
+                                                                                                      {
+                                                                                                        text: '8...c5 — Black challenges our doubled c-pawns.',
+                                                                                                        arrows: [{ from: 'c7', to: 'c5', color: 'green' }],
+                                                                                                      },
+                                                                                                      {
+                                                                                                        text: 'Typical Falkbeer middlegame plan — undermine c3, fight for the d4-square.',
+                                                                                                        highlights: [
+                                                                                                          { square: 'c3', color: 'red' },
+                                                                                                          { square: 'd4', color: 'yellow' },
+                                                                                                        ],
+                                                                                                      },
+                                                                                                    ],
+                                                                                                    children: [
+                                                                                                      {
+                                                                                                        node: {
+                                                                                                          san: 'O-O',
+                                                                                                          movedBy: 'white',
+                                                                                                          idea:
+                                                                                                            "9.O-O — and we castle too. King to safety, rook to f1 on the half-open f-file (the f-pawn went away on move 4). We've reached the Falkbeer middlegame: doubled c-pawns vs the bishop pair tradeoff, both kings castled, central tension between our e5-pawn and Black's d5-c5 pawn duo. White's plan: open b-file, dark-square diagonal, push d4 supported by c3. Black's plan: pawn duo plus bishop pair against our broken structure. This is where opening theory ends.",
+                                                                                                          narration: [
+                                                                                                            {
+                                                                                                              text: '9.O-O — and we castle too.',
+                                                                                                              arrows: [{ from: 'e1', to: 'g1', color: 'green' }],
+                                                                                                            },
+                                                                                                            {
+                                                                                                              text: 'King to safety, rook to f1 on the half-open f-file.',
+                                                                                                              arrows: [{ from: 'h1', to: 'f1', color: 'blue' }],
+                                                                                                            },
+                                                                                                            {
+                                                                                                              text: "We've reached the Falkbeer middlegame.",
+                                                                                                              highlights: [
+                                                                                                                { square: 'g1', color: 'green' },
+                                                                                                                { square: 'g8', color: 'green' },
+                                                                                                              ],
+                                                                                                            },
+                                                                                                            {
+                                                                                                              text: 'White plays for the open b-file and a future d4 push supported by c3.',
+                                                                                                              arrows: [
+                                                                                                                { from: 'd3', to: 'd4', color: 'green' },
+                                                                                                                { from: 'c1', to: 'a3', color: 'blue' },
+                                                                                                              ],
+                                                                                                            },
+                                                                                                            {
+                                                                                                              text: 'Black plays for the pawn duo and the bishop pair. This is where opening theory ends.',
+                                                                                                            },
+                                                                                                          ],
+                                                                                                          children: [],
+                                                                                                        },
+                                                                                                      },
+                                                                                                    ],
+                                                                                                  },
+                                                                                                },
+                                                                                              ],
+                                                                                            },
+                                                                                          },
+                                                                                        ],
+                                                                                      },
+                                                                                    },
+                                                                                  ],
+                                                                                },
+                                                                              },
+                                                                            ],
+                                                                          },
+                                                                        },
+                                                                      ],
+                                                                    },
+                                                                  },
+                                                                ],
                                                               },
                                                             },
                                                           ],
@@ -371,8 +579,177 @@ export const VIENNA_GAME: WalkthroughTree = {
                                                                 san: 'Qxd5',
                                                                 movedBy: 'black',
                                                                 idea:
-                                                                  "5...Qxd5 — Black recaptures. The queen comes out early, which is normally a mistake, but here it can't be hit easily. The position is balanced. Now you've seen the trick — and you also see why most Vienna players steer to 4.d3 instead of 4.Nf3 against the 2...Nc6 line. We'll get there.",
-                                                                children: [],
+                                                                  "5...Qxd5 — Black recaptures with the queen. The queen comes out early, which is normally a mistake, but here it can't be hit easily — White doesn't have a knight or bishop ready to attack it for free. From this position both sides develop normally, and the center fork trick has effectively equalized for Black with the bishop pair as a small long-term plus. Let me show you how the typical middlegame unfolds.",
+                                                                narration: [
+                                                                  {
+                                                                    text: '5...Qxd5 — Black recaptures with the queen.',
+                                                                    arrows: [{ from: 'd8', to: 'd5', color: 'green' }],
+                                                                  },
+                                                                  {
+                                                                    text: "The queen comes out early — normally a mistake, but here it can't be hit easily.",
+                                                                    highlights: [{ square: 'd5', color: 'yellow' }],
+                                                                  },
+                                                                  {
+                                                                    text: "Both sides develop from here. Let me show you the typical middlegame.",
+                                                                  },
+                                                                ],
+                                                                children: [
+                                                                  {
+                                                                    node: {
+                                                                      san: 'Nf3',
+                                                                      movedBy: 'white',
+                                                                      idea:
+                                                                        "6.Nf3 — bring the kingside knight out. Knight from g1 to f3, normal development. The queen on d5 isn't directly attacked, but the knight does eye e5 (a third attacker on Black's pawn) and supports a future castle.",
+                                                                      narration: [
+                                                                        {
+                                                                          text: '6.Nf3 — bring the kingside knight out.',
+                                                                          arrows: [{ from: 'g1', to: 'f3', color: 'green' }],
+                                                                        },
+                                                                        {
+                                                                          text: 'Normal development. The knight eyes e5 and supports castling.',
+                                                                          arrows: [{ from: 'f3', to: 'e5', color: 'blue' }],
+                                                                          highlights: [{ square: 'e5', color: 'red' }],
+                                                                        },
+                                                                      ],
+                                                                      children: [
+                                                                        {
+                                                                          node: {
+                                                                            san: 'Nc6',
+                                                                            movedBy: 'black',
+                                                                            idea:
+                                                                              "6...Nc6 — Black develops and defends. Knight from b8 to c6, supporting the e5-pawn (which now has Nf3 attacking it). Standard.",
+                                                                            narration: [
+                                                                              {
+                                                                                text: '6...Nc6 — Black develops and defends.',
+                                                                                arrows: [{ from: 'b8', to: 'c6', color: 'green' }],
+                                                                              },
+                                                                              {
+                                                                                text: 'Knight from b8 to c6, supporting the e5-pawn against our knight on f3.',
+                                                                                arrows: [{ from: 'c6', to: 'e5', color: 'blue' }],
+                                                                              },
+                                                                            ],
+                                                                            children: [
+                                                                              {
+                                                                                node: {
+                                                                                  san: 'O-O',
+                                                                                  movedBy: 'white',
+                                                                                  idea:
+                                                                                    "7.O-O — castle now. King to safety, rook to f1. We're keeping development moving. Notice our knight on e4 is still hanging out in the center — Black can challenge it with Bf5 next move, and we'll have to retreat it.",
+                                                                                  narration: [
+                                                                                    {
+                                                                                      text: '7.O-O — castle now.',
+                                                                                      arrows: [{ from: 'e1', to: 'g1', color: 'green' }],
+                                                                                    },
+                                                                                    {
+                                                                                      text: 'King to safety, rook to f1.',
+                                                                                      arrows: [{ from: 'h1', to: 'f1', color: 'blue' }],
+                                                                                    },
+                                                                                    {
+                                                                                      text: 'Our knight on e4 is still in the center — Black can challenge it with Bf5 next, and we will have to retreat.',
+                                                                                      highlights: [{ square: 'e4', color: 'yellow' }],
+                                                                                    },
+                                                                                  ],
+                                                                                  children: [
+                                                                                    {
+                                                                                      node: {
+                                                                                        san: 'Bf5',
+                                                                                        movedBy: 'black',
+                                                                                        idea:
+                                                                                          "7...Bf5 — Black challenges our centralized knight. Bishop from c8 to f5, attacking the e4-knight along the b1-h7 diagonal. We must retreat it. The natural square is c3 — the knight goes back where it started, and the position has effectively equalized.",
+                                                                                        narration: [
+                                                                                          {
+                                                                                            text: '7...Bf5 — Black challenges our centralized knight.',
+                                                                                            arrows: [{ from: 'c8', to: 'f5', color: 'green' }],
+                                                                                          },
+                                                                                          {
+                                                                                            text: 'Bishop to f5, attacking our e4-knight directly.',
+                                                                                            arrows: [{ from: 'f5', to: 'e4', color: 'red' }],
+                                                                                            highlights: [{ square: 'e4', color: 'red' }],
+                                                                                          },
+                                                                                          {
+                                                                                            text: 'We must retreat. Natural square is c3 — back where it started.',
+                                                                                            arrows: [{ from: 'e4', to: 'c3', color: 'yellow' }],
+                                                                                          },
+                                                                                        ],
+                                                                                        children: [
+                                                                                          {
+                                                                                            node: {
+                                                                                              san: 'Nc3',
+                                                                                              movedBy: 'white',
+                                                                                              idea:
+                                                                                                "8.Nc3 — knight retreats to c3. Saves the piece and re-establishes a normal Italian-style setup. Now Black has to decide where the queen is happy.",
+                                                                                              narration: [
+                                                                                                {
+                                                                                                  text: '8.Nc3 — knight retreats to c3.',
+                                                                                                  arrows: [{ from: 'e4', to: 'c3', color: 'green' }],
+                                                                                                },
+                                                                                                {
+                                                                                                  text: 'Saves the piece and re-establishes a normal Italian-style setup.',
+                                                                                                },
+                                                                                              ],
+                                                                                              children: [
+                                                                                                {
+                                                                                                  node: {
+                                                                                                    san: 'Qd6',
+                                                                                                    movedBy: 'black',
+                                                                                                    idea:
+                                                                                                      "8...Qd6 — Black moves the queen to a safer square. d6 supports e5, prepares queenside castling if Black wants it, and steps off the d-file in case our rook lands on d1.",
+                                                                                                    narration: [
+                                                                                                      {
+                                                                                                        text: '8...Qd6 — queen to a safer square.',
+                                                                                                        arrows: [{ from: 'd5', to: 'd6', color: 'green' }],
+                                                                                                      },
+                                                                                                      {
+                                                                                                        text: 'Supports e5, prepares queenside castling, steps off the d-file before our rook can hit it.',
+                                                                                                        highlights: [{ square: 'd6', color: 'yellow' }],
+                                                                                                      },
+                                                                                                    ],
+                                                                                                    children: [
+                                                                                                      {
+                                                                                                        node: {
+                                                                                                          san: 'd4',
+                                                                                                          movedBy: 'white',
+                                                                                                          idea:
+                                                                                                            "9.d4 — challenge the center. Pawn from d2 to d4 hits the e5-pawn directly. Black has to decide: trade with exd4 (opening the position for the bishop pair, slightly favoring Black), defend with Bd6 supporting (loses the bishop pair option), or just let us take with dxe5. This is the typical middlegame moment in the center fork trick line — open position, bishop pair vs piece coordination, both sides have plans. From here it's real chess.",
+                                                                                                          narration: [
+                                                                                                            {
+                                                                                                              text: '9.d4 — challenge the center.',
+                                                                                                              arrows: [{ from: 'd2', to: 'd4', color: 'green' }],
+                                                                                                            },
+                                                                                                            {
+                                                                                                              text: 'Pawn from d2 to d4, hitting the e5-pawn directly.',
+                                                                                                              arrows: [{ from: 'd4', to: 'e5', color: 'red' }],
+                                                                                                              highlights: [{ square: 'e5', color: 'red' }],
+                                                                                                            },
+                                                                                                            {
+                                                                                                              text: 'Black has to decide — trade with exd4 to open lines for the bishop pair, defend, or let us take with dxe5.',
+                                                                                                            },
+                                                                                                            {
+                                                                                                              text: 'This is the typical middlegame moment — open position, bishop pair versus our piece coordination, both sides have plans. From here it is real chess.',
+                                                                                                            },
+                                                                                                          ],
+                                                                                                          children: [],
+                                                                                                        },
+                                                                                                      },
+                                                                                                    ],
+                                                                                                  },
+                                                                                                },
+                                                                                              ],
+                                                                                            },
+                                                                                          },
+                                                                                        ],
+                                                                                      },
+                                                                                    },
+                                                                                  ],
+                                                                                },
+                                                                              },
+                                                                            ],
+                                                                          },
+                                                                        },
+                                                                      ],
+                                                                    },
+                                                                  },
+                                                                ],
                                                               },
                                                             },
                                                           ],
