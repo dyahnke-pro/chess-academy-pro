@@ -63,6 +63,28 @@ export const VIENNA_GAME: WalkthroughTree = {
                       movedBy: 'white',
                       idea:
                         "2.Nc3 — and here's where the Vienna actually starts. The natural move at this point is Nf3 (the Italian and the Spanish both go there), but we play Nc3 instead. Why? Three reasons. One: it develops a piece. Two: it defends e4 in case Black later threatens it. Three — and this is the big one — it leaves the f-pawn FREE. In the Italian, after Nf3, the f-pawn is locked behind the knight forever; you can never push f4 without first moving the knight. In the Vienna, f4 is on the table from move three onward. That's the whole opening: a kingside pawn storm waiting to happen.",
+                      narration: [
+                        {
+                          text: "2.Nc3 — and here's where the Vienna actually starts. The natural move at this point is Nf3 — the Italian and the Spanish both go there.",
+                          arrows: [{ from: 'g1', to: 'f3', color: 'red' }],
+                        },
+                        {
+                          text: "But we play Nc3 instead. Why? Three reasons. One — it develops a piece.",
+                          arrows: [{ from: 'b1', to: 'c3', color: 'green' }],
+                        },
+                        {
+                          text: "Two — it defends e4 in case Black later threatens it.",
+                          arrows: [{ from: 'c3', to: 'e4', color: 'blue' }],
+                        },
+                        {
+                          text: "Three, and this is the big one — it leaves the f-pawn free. In the Italian, after Nf3, the f-pawn is locked behind the knight forever. You can never push f4 without first moving the knight back.",
+                          highlights: [{ square: 'f2', color: 'yellow' }],
+                        },
+                        {
+                          text: "In the Vienna, f4 is on the table from move three onward. That's the whole opening — a kingside pawn storm waiting to happen.",
+                          arrows: [{ from: 'f2', to: 'f4', color: 'green' }],
+                        },
+                      ],
                       children: [
                         // ─── FORK 1: Black's response to 2.Nc3 ───
                         {
@@ -85,6 +107,33 @@ export const VIENNA_GAME: WalkthroughTree = {
                                   movedBy: 'white',
                                   idea:
                                     "3.f4 — the Vienna Gambit. Right out of the gate, we're offering the f-pawn. The point: if Black takes with exf4, the e-file opens up, my queen can swing to e2 or h5, my dark-squared bishop comes alive, and I get a serious lead in development for the price of one pawn. If Black declines with d5 (the principled refutation attempt), the position gets sharp in a different way. Either way, you're playing for an attack from move three — there's no quiet middlegame in this line.",
+                                  narration: [
+                                    {
+                                      text: "3.f4 — the Vienna Gambit. Right out of the gate, we're offering the f-pawn.",
+                                      arrows: [{ from: 'f2', to: 'f4', color: 'green' }],
+                                    },
+                                    {
+                                      text: "The point — if Black takes with exf4, the e-file opens up.",
+                                      arrows: [
+                                        { from: 'e5', to: 'f4', color: 'red' },
+                                        { from: 'e1', to: 'e8', color: 'blue' },
+                                      ],
+                                    },
+                                    {
+                                      text: "My queen can swing to e2 or h5.",
+                                      arrows: [
+                                        { from: 'd1', to: 'e2', color: 'green' },
+                                        { from: 'd1', to: 'h5', color: 'green' },
+                                      ],
+                                    },
+                                    {
+                                      text: "My dark-squared bishop comes alive on the long diagonal.",
+                                      arrows: [{ from: 'c1', to: 'h6', color: 'green' }],
+                                    },
+                                    {
+                                      text: "I get a serious lead in development for the price of one pawn. If Black declines with d5, the principled refutation, the position gets sharp in a different way. Either way, you're playing for an attack from move three — there's no quiet middlegame in this line.",
+                                    },
+                                  ],
                                   children: [
                                     // ─── FORK 3: Black accepts or declines ───
                                     {
@@ -173,6 +222,20 @@ export const VIENNA_GAME: WalkthroughTree = {
                                   movedBy: 'white',
                                   idea:
                                     "3.Bc4 — Italian-style development. The bishop eyes f7, the weakest square in Black's camp. This is the safer, calmer Vienna — but there's a famous trap here, and you need to know it. Watch what Black plays next.",
+                                  narration: [
+                                    {
+                                      text: "3.Bc4 — Italian-style development.",
+                                      arrows: [{ from: 'f1', to: 'c4', color: 'green' }],
+                                    },
+                                    {
+                                      text: "The bishop eyes f7, the weakest square in Black's camp.",
+                                      arrows: [{ from: 'c4', to: 'f7', color: 'blue' }],
+                                      highlights: [{ square: 'f7', color: 'red' }],
+                                    },
+                                    {
+                                      text: "This is the safer, calmer Vienna — but there's a famous trap here, and you need to know it. Watch what Black plays next.",
+                                    },
+                                  ],
                                   children: [
                                     {
                                       node: {

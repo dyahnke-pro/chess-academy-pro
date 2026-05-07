@@ -30,13 +30,69 @@ export interface WalkthroughTreeNode {
   /** Coach's spoken explanation of THIS move, narrated as it
    *  animates onto the board. Written in the coach's own voice —
    *  no length cap, no template. The voice service speaks it via
-   *  Polly; the chat panel renders it as the coach's message. */
+   *  Polly; the chat panel renders it as the coach's message.
+   *  Used as the FALLBACK narration when `narration` is omitted. */
   idea: string;
+  /** Optional segmented narration with per-segment arrows and
+   *  highlights. When present, the runtime speaks each segment's
+   *  text in order via voice service, setting arrows/highlights
+   *  to that segment's values BEFORE speaking — so the arrows
+   *  appear AS the moves are mentioned. When omitted, `idea` is
+   *  spoken as a single block with no arrows. Authors only need
+   *  this when they want real-time arrow timing on a node. */
+  narration?: NarrationSegment[];
   /** Children of this node. `length === 0` means leaf (line ends
    *  here). `length === 1` means linear continuation (auto-advance
    *  after `idea` is narrated). `length > 1` means BRANCH — pause,
    *  show tap targets, wait for student to pick. */
   children: WalkthroughTreeChild[];
+}
+
+/** A single narration segment — one beat of speech with its own
+ *  arrows + highlights. The runtime speaks segments in order; arrows
+ *  set on a segment appear BEFORE its text starts speaking and stay
+ *  visible until the next segment runs (or the node transitions).
+ *
+ *  Authoring guideline: split `idea` into segments at natural sentence
+ *  boundaries where the prose mentions a square or a move. Put the
+ *  arrow on the segment that NAMES the destination — e.g. for "push
+ *  the pawn forward to f4 to start the gambit", the arrow `f2→f4`
+ *  goes on that segment. The student sees the arrow draw exactly as
+ *  the coach says "f4". */
+export interface NarrationSegment {
+  /** Text spoken in this segment. Combine across segments to form
+   *  the full prose. */
+  text: string;
+  /** Arrows visible during this segment. Replaces any arrows from
+   *  the previous segment. Empty array (or omitted) clears arrows
+   *  on this segment. */
+  arrows?: NarrationArrow[];
+  /** Square highlights visible during this segment. Same semantics
+   *  as `arrows`. Useful for "weak square" callouts. */
+  highlights?: NarrationHighlight[];
+}
+
+/** A drawn arrow on the board — animates from `from` to `to` over
+ *  ~550ms via Framer Motion's pathLength. Color names map to the
+ *  app's accent palette; default is green ("here's the plan"). */
+export interface NarrationArrow {
+  /** Source square in algebraic notation, e.g. "f2". */
+  from: string;
+  /** Destination square in algebraic notation, e.g. "f4". */
+  to: string;
+  /** Arrow color. Default 'green'. Use 'red' for warnings ("don't
+   *  play this"), 'blue' for plans ("future move"), 'yellow' for
+   *  attention ("look here"). */
+  color?: 'green' | 'red' | 'blue' | 'yellow';
+}
+
+/** A square highlight — fills the square with a translucent color
+ *  while the segment is active. */
+export interface NarrationHighlight {
+  /** Square in algebraic notation, e.g. "f7". */
+  square: string;
+  /** Highlight color. Default 'yellow'. */
+  color?: 'green' | 'red' | 'blue' | 'yellow';
 }
 
 /** A child of a node. The `label` and `forkSubtitle` are only

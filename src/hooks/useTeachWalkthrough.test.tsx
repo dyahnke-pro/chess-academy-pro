@@ -134,6 +134,106 @@ describe('useTeachWalkthrough', () => {
     expect(result.current.currentNode).toBeNull();
   });
 
+  it('segmented narration sets arrows per segment as voice speaks each piece', async () => {
+    // Validates the "real-time arrows in time with narration"
+    // contract: each segment's arrows appear BEFORE that segment's
+    // text starts speaking, replacing whatever was visible from the
+    // previous segment, and clear when the node finishes.
+    const { voiceService } = await import('../services/voiceService');
+    const tree = {
+      openingName: 'Arrow Smoke',
+      eco: 'Z00',
+      intro: '',
+      outro: 'done',
+      root: {
+        san: null,
+        movedBy: null,
+        idea: '',
+        children: [
+          {
+            node: {
+              san: 'e4',
+              movedBy: 'white' as const,
+              idea: 'fallback prose',
+              narration: [
+                {
+                  text: 'first beat',
+                  arrows: [{ from: 'e2', to: 'e4', color: 'green' as const }],
+                },
+                {
+                  text: 'second beat',
+                  arrows: [{ from: 'd1', to: 'h5', color: 'blue' as const }],
+                  highlights: [{ square: 'f7', color: 'red' as const }],
+                },
+              ],
+              children: [],
+            },
+          },
+        ],
+      },
+    } as const;
+
+    // Resolve speakForced manually so we control segment-boundary timing.
+    let resolveFirst: (() => void) | null = null;
+    let resolveSecond: (() => void) | null = null;
+    let callIndex = 0;
+    vi.mocked(voiceService.speakForced).mockImplementation(() => {
+      if (callIndex === 0) {
+        callIndex += 1;
+        return new Promise((res) => {
+          resolveFirst = res;
+        });
+      }
+      callIndex += 1;
+      return new Promise((res) => {
+        resolveSecond = res;
+      });
+    });
+
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(tree));
+
+    // Segment 1's arrows land BEFORE its voice promise resolves.
+    await waitFor(
+      () => {
+        expect(result.current.narrationArrows).toEqual([
+          { from: 'e2', to: 'e4', color: 'green' },
+        ]);
+      },
+      { timeout: 3000 },
+    );
+    expect(result.current.narrationHighlights).toEqual([]);
+
+    // Resolve segment 1's voice; segment 2 starts and swaps arrows.
+    act(() => {
+      resolveFirst?.();
+    });
+    await waitFor(
+      () => {
+        expect(result.current.narrationArrows).toEqual([
+          { from: 'd1', to: 'h5', color: 'blue' },
+        ]);
+        expect(result.current.narrationHighlights).toEqual([
+          { square: 'f7', color: 'red' },
+        ]);
+      },
+      { timeout: 3000 },
+    );
+
+    // Resolve segment 2; node completes; arrows clear; leaf reached.
+    act(() => {
+      resolveSecond?.();
+    });
+    await waitFor(
+      () => {
+        expect(result.current.narrationArrows).toEqual([]);
+        expect(result.current.narrationHighlights).toEqual([]);
+        expect(result.current.phase).toBe('leaf');
+      },
+      { timeout: 3000 },
+    );
+  });
+
   it('pause stops voice and freezes phase at "paused"; resume re-narrates', async () => {
     const { result } = renderHook(() => useTeachWalkthrough());
     act(() => result.current.start(SMOKE_TREE));

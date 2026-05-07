@@ -15,6 +15,7 @@ import { Chess } from 'chess.js';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X } from 'lucide-react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { ChessBoard } from '../Board/ChessBoard';
+import { NarrationArrowOverlay } from './NarrationArrowOverlay';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
@@ -1079,18 +1080,31 @@ export function CoachTeachPage(): JSX.Element {
         <div className="px-2 py-1 flex justify-center w-full">
           <div className="w-full md:max-w-[420px]">
             {walkthrough.isActive ? (
-              <ChessBoard
-                key="walkthrough-board"
-                initialFen={walkthrough.fen}
-                orientation={playerColor}
-                interactive={false}
-                showFlipButton={false}
-                showUndoButton={false}
-                showResetButton={false}
-                showEvalBar={false}
-                showVoiceMic={false}
-                showLastMoveHighlight
-              />
+              // Wrap the board in a relative container so the
+              // NarrationArrowOverlay sits absolutely on top.
+              // Overlay's SVG viewBox is 8×8 squares, matching the
+              // board's grid — Framer Motion `pathLength` draws each
+              // arrow from source to destination over ~550ms when
+              // the segment that owns it starts speaking.
+              <div className="relative">
+                <ChessBoard
+                  key="walkthrough-board"
+                  initialFen={walkthrough.fen}
+                  orientation={playerColor}
+                  interactive={false}
+                  showFlipButton={false}
+                  showUndoButton={false}
+                  showResetButton={false}
+                  showEvalBar={false}
+                  showVoiceMic={false}
+                  showLastMoveHighlight
+                />
+                <NarrationArrowOverlay
+                  arrows={walkthrough.narrationArrows}
+                  highlights={walkthrough.narrationHighlights}
+                  orientation={playerColor}
+                />
+              </div>
             ) : (
               <ControlledChessBoard
                 game={game}

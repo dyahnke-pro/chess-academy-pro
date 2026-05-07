@@ -37,6 +37,8 @@ import type {
   WalkthroughTree,
   WalkthroughTreeNode,
   WalkthroughTreeChild,
+  NarrationArrow,
+  NarrationHighlight,
 } from '../types/walkthroughTree';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -86,6 +88,14 @@ export interface UseTeachWalkthroughReturn {
   /** Default leaf outro for the current leaf, with tree-level
    *  override applied if `leafOutros[pathKey]` exists. */
   leafOutro: string | null;
+  /** Currently visible arrows on the board, set by the active
+   *  narration segment. Empty when no segment is active or when
+   *  the current segment has no arrows. Caller passes these to
+   *  the NarrationArrowOverlay component. */
+  narrationArrows: NarrationArrow[];
+  /** Currently visible square highlights, same semantics as
+   *  `narrationArrows`. */
+  narrationHighlights: NarrationHighlight[];
 
   /** Begin walking the given tree. Idempotent — calling start() twice
    *  with the same tree restarts from root. */
@@ -141,6 +151,12 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   // pathNodes[0] is always the root when active. The current node
   // is pathNodes[pathNodes.length - 1].
   const [pathNodes, setPathNodes] = useState<WalkthroughTreeNode[]>([]);
+  // Arrow + highlight state, set by the currently-speaking
+  // narration segment (or empty when not narrating).
+  const [narrationArrows, setNarrationArrows] = useState<NarrationArrow[]>([]);
+  const [narrationHighlights, setNarrationHighlights] = useState<
+    NarrationHighlight[]
+  >([]);
 
   // Active narration cancel + backup timer refs.
   const cancelNarrationRef = useRef<(() => void) | null>(null);
@@ -183,14 +199,99 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
 
   /** Speak the given node's idea, then transition based on its
    *  children. Linear → push child onto path + recurse. Fork → set
-   *  phase to 'fork'. Leaf → set phase to 'leaf'. */
+   *  phase to 'fork'. Leaf → set phase to 'leaf'.
+   *
+   *  Two narration paths:
+   *    1. `node.narration` (segmented) — speaks each segment in
+   *       sequence, setting arrows/highlights to that segment's
+   *       values BEFORE speaking. Awaitable promise from the voice
+   *       service drives sequential speech; arrows fire AS the
+   *       coach mentions the move (the user's "real-time arrows
+   *       in time with narration" requirement).
+   *    2. `node.idea` (single block) — fallback when `narration` is
+   *       omitted. No arrows. Same backup-timer pattern as before. */
   const narrateAndAdvance = useCallback(
     (path: WalkthroughTreeNode[]): void => {
       cleanupNarration();
       const node = path[path.length - 1];
       setPhase('narrating');
       setPathNodes(path);
+      // Clear arrows from any prior node — fresh canvas for this one.
+      setNarrationArrows([]);
+      setNarrationHighlights([]);
 
+      // Common transition logic — runs after the narration finishes
+      // (segmented OR single-block). Linear → recurse to next node;
+      // fork → set phase 'fork'; leaf → set phase 'leaf'.
+      const transitionAfter = (): void => {
+        cancelNarrationRef.current = null;
+        if (advanceTimerRef.current) {
+          clearTimeout(advanceTimerRef.current);
+          advanceTimerRef.current = null;
+        }
+        if (node.children.length === 0) {
+          setPhase('leaf');
+        } else if (node.children.length === 1) {
+          advanceTimerRef.current = setTimeout(() => {
+            advanceTimerRef.current = null;
+            narrateAndAdvance([...path, node.children[0].node]);
+          }, POST_NARRATION_BUFFER_MS);
+        } else {
+          setPhase('fork');
+        }
+      };
+
+      // ── Path 1: segmented narration with arrows ──────────────
+      if (node.narration && node.narration.length > 0) {
+        const segments = node.narration;
+        // Use a ref-shaped object so cancellation crosses the
+        // for-loop, the timeout, and the cancelNarrationRef closure
+        // without ESLint thinking the boolean is invariant.
+        const ctrl = { cancelled: false };
+        cancelNarrationRef.current = (): void => {
+          ctrl.cancelled = true;
+          if (advanceTimerRef.current) {
+            clearTimeout(advanceTimerRef.current);
+            advanceTimerRef.current = null;
+          }
+        };
+        // Backup timer covers the WHOLE node — sum of all segment
+        // budgets — so a hung TTS layer can't strand us mid-node.
+        const totalText = segments.map((s) => s.text).join(' ');
+        const backupMs = clampBackupMs(totalText);
+        advanceTimerRef.current = setTimeout(() => {
+          if (ctrl.cancelled) return;
+          ctrl.cancelled = true;
+          transitionAfter();
+        }, backupMs);
+
+        void (async () => {
+          for (const segment of segments) {
+            if (ctrl.cancelled) return;
+            // Set arrows + highlights BEFORE speaking the segment so
+            // the visual lands at the same moment Polly starts saying
+            // the words. (Segment without `arrows` clears them; segment
+            // with empty array clears them too.)
+            setNarrationArrows(segment.arrows ?? []);
+            setNarrationHighlights(segment.highlights ?? []);
+            try {
+              await voiceService.speakForced(segment.text);
+            } catch {
+              // Voice errored — keep going so the narration arc
+              // completes; backup timer is a safety net.
+            }
+          }
+          if (ctrl.cancelled) return;
+          // Clear arrows once the node finishes — next node sets
+          // fresh arrows on its first segment.
+          setNarrationArrows([]);
+          setNarrationHighlights([]);
+          transitionAfter();
+        })();
+        return;
+      }
+
+      // ── Path 2: single-block narration on `idea` ─────────────
       const idea = node.idea.trim();
       if (!idea) {
         // Root node — no narration, just transition based on children.
@@ -209,23 +310,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       const settle = (): void => {
         if (settled) return;
         settled = true;
-        cancelNarrationRef.current = null;
-        if (advanceTimerRef.current) {
-          clearTimeout(advanceTimerRef.current);
-          advanceTimerRef.current = null;
-        }
-        // Transition.
-        if (node.children.length === 0) {
-          setPhase('leaf');
-        } else if (node.children.length === 1) {
-          // Linear: small post-narration buffer, then advance.
-          advanceTimerRef.current = setTimeout(() => {
-            advanceTimerRef.current = null;
-            narrateAndAdvance([...path, node.children[0].node]);
-          }, POST_NARRATION_BUFFER_MS);
-        } else {
-          setPhase('fork');
-        }
+        transitionAfter();
       };
 
       cancelNarrationRef.current = (): void => {
@@ -372,6 +457,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setTree(null);
     setPathNodes([]);
     setPhase('idle');
+    setNarrationArrows([]);
+    setNarrationHighlights([]);
   }, [cleanupNarration]);
 
   const skipNarration = useCallback((): void => {
@@ -408,6 +495,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     canBacktrack,
     pathSans,
     leafOutro,
+    narrationArrows,
+    narrationHighlights,
     start,
     pause,
     resume,
