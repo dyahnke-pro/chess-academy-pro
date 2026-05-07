@@ -482,13 +482,17 @@ export function CoachTeachPage(): JSX.Element {
       if (m && m[2]) {
         requestedName = m[2].trim();
       } else if (trimmed.length <= 40 && !trimmed.includes('?')) {
-        // Bare-name resolution: "The Vienna", "Italian", etc. Ask
-        // the resolver if this short phrase points to a tree. If it
-        // does, route. If not, fall through to the brain.
-        const probe = resolveWalkthroughTree(trimmed);
-        if (probe) {
-          requestedName = trimmed;
-        }
+        // Bare-name routing: "The Vienna", "Pirc defense", "Italian".
+        // Production audit (build 7e4f52b) caught "Pirc defense"
+        // falling through to the brain instead of the LLM generator
+        // because Pirc isn't in the static registry — we previously
+        // only routed when registry hit. Now we route through the
+        // full three-tier pipeline (registry → cache → LLM gen) for
+        // any short bare-name input. Result: "Pirc defense" produces
+        // a generated walkthrough; non-opening garbage like "hello"
+        // fails validation in the LLM gen tier and surfaces a clear
+        // failure message — same behavior as verb-prefix inputs.
+        requestedName = trimmed;
       }
       if (requestedName) {
         // Three-tier resolution: static registry (Vienna lives here),
