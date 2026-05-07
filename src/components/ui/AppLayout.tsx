@@ -53,7 +53,7 @@ function DraggableCoachFab({ onOpen }: { onOpen: () => void }): JSX.Element {
     moved: boolean;
   } | null>(null);
 
-  const defaultBottom = 'calc(4.5rem + env(safe-area-inset-bottom, 0px))';
+  const defaultTop = 'calc(env(safe-area-inset-top, 0px) + 4rem)';
 
   const handleTouchStart = useCallback((e: React.TouchEvent): void => {
     const touch = e.touches[0];
@@ -111,16 +111,15 @@ function DraggableCoachFab({ onOpen }: { onOpen: () => void }): JSX.Element {
               transform: 'translate(-50%, -50%)',
             }
           : {
-              left: '50%',
-              transform: 'translateX(-50%)',
-              bottom: defaultBottom,
+              right: '1rem',
+              top: defaultTop,
             }),
       }}
-      aria-label="Open coach chat"
+      aria-label="Open chat"
       data-testid="coach-edge-tab"
     >
       <MessageCircle size={16} />
-      <span className="text-xs font-semibold">Coach</span>
+      <span className="text-xs font-semibold">Chat</span>
     </button>
   );
 }
@@ -138,6 +137,19 @@ export function AppLayout(): JSX.Element {
   const closeSidebar = useCallback((): void => {
     setSidebarOpen(false);
   }, [setSidebarOpen]);
+
+  // Tap target: if the current page already exposes the inline coach
+  // chat textarea, scroll to it and focus the cursor instead of
+  // opening the drawer (the drawer would just duplicate that input).
+  const handleOpenCoach = useCallback((): void => {
+    const el = document.getElementById('coach-chat-textarea');
+    if (el instanceof HTMLTextAreaElement && !el.disabled) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.focus();
+      return;
+    }
+    setCoachDrawerOpen(true);
+  }, [setCoachDrawerOpen]);
 
   // Hide FAB on pages with their own chat panel and when no profile
   const showCoachFab = activeProfile
@@ -374,19 +386,19 @@ export function AppLayout(): JSX.Element {
       {/* Coach trigger — draggable on mobile, FAB on desktop */}
       {showCoachFab && (
         <>
-          <DraggableCoachFab onOpen={() => setCoachDrawerOpen(true)} />
+          <DraggableCoachFab onOpen={handleOpenCoach} />
 
           {/* Desktop: floating action button */}
           <button
-            onClick={() => setCoachDrawerOpen(true)}
+            onClick={handleOpenCoach}
             className="hidden md:flex fixed z-40 items-center justify-center w-12 h-12 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
             style={{
               background: 'var(--color-accent)',
               color: 'var(--color-bg)',
               right: '1rem',
-              bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
+              top: 'calc(env(safe-area-inset-top, 0px) + 1rem)',
             }}
-            aria-label="Open coach chat"
+            aria-label="Open chat"
             data-testid="coach-fab"
           >
             <MessageCircle size={22} />

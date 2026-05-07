@@ -206,7 +206,7 @@ describe('CoachGamePage', () => {
 
   it('chat panel shows placeholder text', () => {
     render(<CoachGamePage />);
-    expect(screen.getByPlaceholderText('Ask about the position...')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Ask your coach/)).toBeInTheDocument();
   });
 
   it('chat panel shows Game Chat header', () => {
