@@ -143,6 +143,12 @@ export function CoachTeachPage(): JSX.Element {
     canonicalName: string;
     options: LinePickerOption[];
   } | null>(null);
+  // 'play' = student studies the chosen variation as its natural side
+  // (Black for Sicilian, White for Italian, etc.); 'face' = student
+  // studies the OPPOSITE side's main-line counter (Sicilian Najdorf
+  // → White learns to face it via English Attack or similar). The
+  // mode flips on toggle and re-renders the dot+routing on each tile.
+  const [linePickerMode, setLinePickerMode] = useState<'play' | 'face'>('play');
   // Coach-drawn arrows + square highlights. The LLM uses
   // `[BOARD: arrow:e2-e4:green]` markers to suggest hypothetical
   // moves WITHOUT committing them on the board — the arrow channel
@@ -598,14 +604,26 @@ export function CoachTeachPage(): JSX.Element {
           break;
         }
       }
-      const m = (stageHint ? stageStrippedInput : trimmed).match(TEACH_PATTERN);
+      // FACE-mode routing: when the line picker submits "Face: X" we
+      // strip the prefix, set the face flag, and proceed through the
+      // normal name-resolution path. Generation later passes the flag
+      // to buildSystemPrompt, which switches to a "teach the counter
+      // against X" prompt.
+      let faceMode = false;
+      let workingInput = trimmed;
+      if (/^face:\s*/i.test(workingInput)) {
+        faceMode = true;
+        workingInput = workingInput.replace(/^face:\s*/i, '').trim();
+      }
+
+      const m = (stageHint ? stageStrippedInput : workingInput).match(TEACH_PATTERN);
       let requestedName: string | null = null;
       if (m && m[2]) {
         requestedName = m[2].trim();
       } else if (stageHint && stageStrippedInput.length > 0 && stageStrippedInput.length <= 60) {
         // Stage keyword stripped → remaining text is the opening name.
         requestedName = stageStrippedInput;
-      } else if (trimmed.length <= 60 && !trimmed.includes('?')) {
+      } else if (workingInput.length <= 60 && !workingInput.includes('?')) {
         // Bare-name routing: "The Vienna", "Pirc defense", "Italian".
         // Production audit (build 7e4f52b) caught "Pirc defense"
         // falling through to the brain instead of the LLM generator
@@ -620,8 +638,13 @@ export function CoachTeachPage(): JSX.Element {
         // sub-variations broke. 60 catches the long ones without
         // letting full sentences through (sentences usually have a
         // verb, > 60 chars, or end with ?/.).
-        requestedName = trimmed;
+        requestedName = workingInput;
       }
+      // Cache key includes face-mode prefix so the same opening
+      // doesn't collide between "learn Najdorf as Black" and "face
+      // Najdorf as White" — they're entirely different lessons.
+      const cacheKey =
+        requestedName && faceMode ? `Face: ${requestedName}` : requestedName;
       if (requestedName) {
         // Three-tier resolution: static registry (Vienna lives here),
         // Dexie cache (previously LLM-generated), runtime LLM
@@ -695,7 +718,7 @@ export function CoachTeachPage(): JSX.Element {
         }
 
         // ── Tier 2: Dexie cache (instant). ─────────────────────
-        const cachedTree = await getCachedOpening(requestedName);
+        const cachedTree = await getCachedOpening(cacheKey ?? requestedName);
         if (cachedTree) {
           if (stageHint === 'play-real') {
             walkthrough.stop();
@@ -787,7 +810,7 @@ export function CoachTeachPage(): JSX.Element {
         // ALREADY a specific variation ("Najdorf Sicilian", "Dragon
         // Sicilian", "Italian Two Knights") — those skip the picker
         // and proceed directly to LLM gen.
-        if (!stageHint) {
+        if (!stageHint && !faceMode) {
           const pickerData = findLinePickerOptions(requestedName);
           if (pickerData) {
             const ack = `The ${pickerData.canonicalName} branches into many lines. Which one do you want to learn? Pick one to dive in deep, or just type the variation name.`;
@@ -841,10 +864,12 @@ export function CoachTeachPage(): JSX.Element {
           timestamp: Date.now(),
         }]);
         try {
-          const result = await generateOpening(requestedName);
+          const result = await generateOpening(requestedName, {
+            mode: faceMode ? 'face' : 'learn',
+          });
           if (result.ok && result.tree) {
             // Persist for next time.
-            await cacheOpening(requestedName, result.tree);
+            await cacheOpening(cacheKey ?? requestedName, result.tree);
             const successAck = `Ready — let's walk through the ${result.tree.openingName}.`;
             setMessages((prev) => [...prev, {
               id: `${surfaceTurnId}-c2`,
@@ -1685,18 +1710,65 @@ export function CoachTeachPage(): JSX.Element {
             variation names. */}
         {linePicker && (
           <div className="px-3 py-2 border-b border-theme-border bg-theme-bg" data-testid="line-picker">
-            <div className="text-xs font-medium text-theme-text-muted px-1 pb-2">
-              Pick a {linePicker.canonicalName} line to learn
+            <div className="flex items-center justify-between px-1 pb-2">
+              <div className="text-xs font-medium text-theme-text-muted">
+                Pick a {linePicker.canonicalName} line to {linePickerMode === 'face' ? 'face' : 'learn'}
+              </div>
+              {/* Play / Face toggle. Switches what each tile does:
+                  PLAY → study the variation as its natural side.
+                  FACE → study the main-line counter from the
+                  opposite side (LLM picks the counter). Tile dots
+                  flip color to reflect which side you'll be on. */}
+              <div className="inline-flex rounded-md border border-theme-border bg-theme-surface text-[10px] font-medium overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setLinePickerMode('play')}
+                  className={
+                    linePickerMode === 'play'
+                      ? 'px-2 py-1 bg-theme-accent text-theme-bg'
+                      : 'px-2 py-1 text-theme-text-muted hover:text-theme-text'
+                  }
+                  data-testid="line-picker-mode-play"
+                >
+                  Play
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLinePickerMode('face')}
+                  className={
+                    linePickerMode === 'face'
+                      ? 'px-2 py-1 bg-theme-accent text-theme-bg'
+                      : 'px-2 py-1 text-theme-text-muted hover:text-theme-text'
+                  }
+                  data-testid="line-picker-mode-face"
+                >
+                  Face
+                </button>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-1.5">
               {linePicker.options.map((opt) => {
                 const neon = getNeonColor(opt.style);
+                // In FACE mode the student plays the OPPOSITE side
+                // (counter the variation, not play it).
+                const effectiveSide: 'white' | 'black' =
+                  linePickerMode === 'face'
+                    ? opt.studentSide === 'white' ? 'black' : 'white'
+                    : opt.studentSide;
                 return (
                   <button
                     key={opt.fullName}
                     onClick={() => {
                       setLinePicker(null);
-                      void handleSubmit(opt.fullName);
+                      // FACE mode submits a "Face: X" prefix that
+                      // handleSubmit recognizes and routes to a
+                      // counter-gen flow. PLAY mode submits the
+                      // variation name directly.
+                      const submission =
+                        linePickerMode === 'face'
+                          ? `Face: ${opt.fullName}`
+                          : opt.fullName;
+                      void handleSubmit(submission);
                     }}
                     className="flex flex-col items-start gap-0.5 px-2.5 py-2 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
                     style={{
@@ -1712,11 +1784,11 @@ export function CoachTeachPage(): JSX.Element {
                       <span
                         className="inline-block w-2.5 h-2.5 rounded-full border"
                         style={{
-                          background: opt.studentSide === 'white' ? '#f5f0e1' : '#1a1a1a',
+                          background: effectiveSide === 'white' ? '#f5f0e1' : '#1a1a1a',
                           borderColor: 'rgba(255,255,255,0.4)',
                         }}
-                        aria-label={`You play ${opt.studentSide}`}
-                        title={`You play ${opt.studentSide}`}
+                        aria-label={`You play ${effectiveSide}`}
+                        title={`You play ${effectiveSide}`}
                       />
                       <span>{opt.eco}</span>
                       <span>·</span>

@@ -178,7 +178,26 @@ GROUNDING RULES (this is the most important section):
 - For punish lessons: the inaccuracy + punishment can be moves NOT in the database (since traps by definition deviate from main theory), but the setupMoves leading up to the inaccuracy MUST be a prefix of a listed line. The punishment + followup should land back on or near a known line.`;
 }
 
-function buildSystemPrompt(openingName?: string): string {
+function buildSystemPrompt(openingName?: string, mode: 'learn' | 'face' = 'learn'): string {
+  const faceBlock = mode === 'face' && openingName ? `
+
+FACE MODE — IMPORTANT:
+This lesson teaches the user how to FACE the "${openingName}" as the OPPOSITE side, not how to play it.
+- Identify the opposite side (if "${openingName}" is normally played by Black, the user is playing White, and vice versa).
+- Pick a SOLID, MAINSTREAM main-line counter / response system that masters use against this opening. Examples:
+    • Sicilian Najdorf as White → 6.Be3 English Attack OR 6.Bg5 Classical
+    • Caro-Kann as White → 3.e5 Advance Variation OR 3.Nc3 / 3.Nd2 Two Knights
+    • French as White → 3.Nc3 Classical OR 3.e5 Advance OR 3.Nd2 Tarrasch
+    • King's Indian Defense as White → Sämisch 5.f3 OR Classical 5.Nf3 6.Be2 OR Fianchetto 5.g3
+    • Pirc as White → Austrian Attack 4.f4 OR Classical 4.Nf3 5.Be2
+- The tree's openingName field should describe the COUNTER you chose, e.g. "English Attack vs Najdorf" or "Advance Variation vs Caro-Kann" — NOT the original opening name. The student is learning the counter, not the opening they're facing.
+- The tree's studentSide is the OPPOSITE side from "${openingName}"'s natural side.
+- The walkthrough's spine should follow the counter's main line. Forks are at the points where the FACING side has meaningful choices (e.g. 6.Be3 vs 6.Bg5 against the Najdorf).
+- The narration should frame the lesson from the counter's perspective: "we're playing against the Najdorf — here's how White restrains Black's setup," etc.
+- Idea text should explain what the counter ACCOMPLISHES: where the threats come from, what Black is trying to do that we're stopping, when the position transitions to the middlegame.
+- Punish lessons should be Black mistakes the student (White) can exploit, not the other way around.
+` : '';
+
   return `You are an expert chess coach generating a walkthrough lesson for a 1200-1600 rated player. Your output is a JSON object matching the WalkthroughTree schema below. You are reading from your knowledge of standard opening theory — moves should be MAIN-LINE master theory, not engine sidelines.
 
 OUTPUT FORMAT: Raw JSON only. No markdown code fences. No prose before or after. The first character must be \`{\` and the last must be \`}\`. The validation pipeline will fail otherwise.
@@ -249,8 +268,8 @@ LEGAL-MOVE TRAPS (production audit caught all of these — DO NOT repeat):
 
 ${VIENNA_SAMPLE}
 ${buildBookSourceBlock(openingName)}
-
-Now generate the WalkthroughTree for the requested opening. Output JSON only.`;
+${faceBlock}
+Now generate the WalkthroughTree ${mode === 'face' ? 'for the COUNTER you chose' : 'for the requested opening'}. Output JSON only.`;
 }
 
 /** Parse the LLM's response into a WalkthroughTree. Defensively
@@ -945,8 +964,9 @@ function describeTreeShape(tree: WalkthroughTree): string {
 async function generateOnce(
   name: string,
   retryContext?: string,
+  mode: 'learn' | 'face' = 'learn',
 ): Promise<GenerationResult> {
-  const systemPrompt = buildSystemPrompt(name);
+  const systemPrompt = buildSystemPrompt(name, mode);
   const userMessage = retryContext
     ? `Generate the WalkthroughTree for: ${name}
 
@@ -1132,17 +1152,27 @@ Fix the issues above and produce a SHORTER, valid tree.`
 /** Generate a walkthrough tree for the given opening name. Tries
  *  once; on validation failure, tries once more with the error
  *  messages fed back. Returns null on total failure. */
+export interface GenerateOpeningOptions {
+  /** When 'face', the LLM is instructed to teach the OPPOSITE side
+   *  the main-line counter against the named opening. The resulting
+   *  tree's openingName will be the counter (e.g. "English Attack vs
+   *  Najdorf"), not the original variation. Default 'learn'. */
+  mode?: 'learn' | 'face';
+}
+
 export async function generateOpening(
   name: string,
+  options?: GenerateOpeningOptions,
 ): Promise<GenerationResult> {
+  const mode = options?.mode ?? 'learn';
   void logAppAudit({
     kind: 'coach-surface-migrated',
     category: 'subsystem',
     source: 'openingGenerator.generateOpening',
-    summary: `generation requested for "${name}"`,
+    summary: `generation requested for "${name}" (mode=${mode})`,
   });
 
-  const first = await generateOnce(name);
+  const first = await generateOnce(name, undefined, mode);
   if (first.ok) {
     void logAppAudit({
       kind: 'coach-surface-migrated',
@@ -1155,7 +1185,7 @@ export async function generateOpening(
 
   // One retry with the failure context. Cheap insurance; LLM often
   // recovers when shown its own validation errors.
-  const second = await generateOnce(name, first.issues ?? first.reason);
+  const second = await generateOnce(name, first.issues ?? first.reason, mode);
   if (second.ok) {
     void logAppAudit({
       kind: 'coach-surface-migrated',
