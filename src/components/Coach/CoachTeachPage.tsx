@@ -678,14 +678,27 @@ export function CoachTeachPage(): JSX.Element {
       const inner = match[1].trim();
       if (!inner) return;
       voiceSpokenForTurn = true;
+      // SUPPRESS brain [VOICE:] when the walkthrough is the priority
+      // audio. Production audit (build e6c3c7b, finding 45) showed
+      // the brain's "I kicked off the Vienna walkthrough anyway"
+      // chat acknowledgement firing concurrently with the walkthrough
+      // intro narration; both used force=true so the brain's voice
+      // killed the walkthrough's mid-word. Walkthrough audio always
+      // wins — render the brain's prose in chat but skip the speech.
+      const walkthroughOwnsAudio =
+        walkthrough.isActive && walkthrough.phase !== 'paused';
       void logAppAudit({
         kind: 'coach-voice-marker-extracted',
         category: 'subsystem',
         source: 'CoachTeachPage.tryExtractVoiceMarker',
-        summary: `extracted [VOICE: ...] block (${inner.length} chars)`,
+        summary: walkthroughOwnsAudio
+          ? `SUPPRESSED [VOICE: ...] (walkthrough owns audio, ${inner.length} chars)`
+          : `extracted [VOICE: ...] block (${inner.length} chars)`,
         details: JSON.stringify({ length: inner.length, preview: inner.slice(0, 80) }),
       });
-      queueSpeak(inner);
+      if (!walkthroughOwnsAudio) {
+        queueSpeak(inner);
+      }
     };
 
     // Resolve the live FEN with the following priority:
@@ -788,12 +801,30 @@ export function CoachTeachPage(): JSX.Element {
           // Without this wired the brain tool would no-op and the
           // teach session couldn't escalate to a focused drill.
           onStartWalkthroughForOpening: ({ opening, orientation }) => {
-            // In-place walkthrough on /coach/teach when a tree is
-            // registered for the requested opening. Replaces the
-            // legacy navigate-away behavior that lost the chat panel
-            // (production audit, build c6cce89: user said "It routed
-            // me to this stupid board"). For openings without a
-            // curated tree, fall back to the legacy navigate.
+            // PRESERVE EXISTING WALKTHROUGH STATE.
+            // Production audit (build e6c3c7b) caught a regression
+            // where the brain re-called start_walkthrough_for_opening
+            // mid-paused-walkthrough, restarting from the root and
+            // destroying the student's progress. User had typed
+            // "Wait, go back to where I was!" and the brain helpfully
+            // tried to "restart the Vienna" — which was the OPPOSITE
+            // of what the user wanted. Here we short-circuit: if a
+            // walkthrough is already running on this surface, RESUME
+            // (if paused) or no-op (if active). Only start fresh if
+            // nothing is in progress.
+            if (walkthrough.isActive) {
+              if (walkthrough.phase === 'paused') {
+                walkthrough.resume();
+                void logAppAudit({
+                  kind: 'coach-surface-migrated',
+                  category: 'subsystem',
+                  source: 'CoachTeachPage.onStartWalkthroughForOpening',
+                  summary: `RESUMED paused walkthrough instead of restarting (brain asked for "${opening}")`,
+                });
+              }
+              return { ok: true };
+            }
+            // No walkthrough in progress — start fresh.
             const tree = resolveWalkthroughTree(opening);
             if (tree) {
               walkthrough.start(tree);
@@ -851,14 +882,23 @@ export function CoachTeachPage(): JSX.Element {
           : finalText.trim();
         if (firstSentence) {
           voiceSpokenForTurn = true;
+          // Same suppression as the [VOICE:] path: walkthrough audio
+          // always wins. The fallback first-sentence speech also gets
+          // suppressed when the walkthrough is running.
+          const walkthroughOwnsAudio =
+            walkthrough.isActive && walkthrough.phase !== 'paused';
           void logAppAudit({
             kind: 'coach-voice-marker-extracted',
             category: 'subsystem',
             source: 'CoachTeachPage.fallback',
-            summary: `[VOICE:] missing — fallback spoke first sentence (${firstSentence.length} chars)`,
+            summary: walkthroughOwnsAudio
+              ? `SUPPRESSED fallback first sentence (walkthrough owns audio, ${firstSentence.length} chars)`
+              : `[VOICE:] missing — fallback spoke first sentence (${firstSentence.length} chars)`,
             details: JSON.stringify({ length: firstSentence.length, preview: firstSentence.slice(0, 80) }),
           });
-          queueSpeak(firstSentence);
+          if (!walkthroughOwnsAudio) {
+            queueSpeak(firstSentence);
+          }
         } else {
           void logAppAudit({
             kind: 'coach-voice-marker-extracted',
@@ -1769,23 +1809,39 @@ function QuizPanel({
     }));
     stageLabel = 'Find the move';
   } else if (activeStage === 'punish') {
-    // For punish, the "question" is whyBad + "what's the punishment?"
-    // and the choices are the punishment + distractors.
+    // For punish: the prompt is whyBad + "find the punishment". Choices
+    // are SAN-only so the label doesn't give away the answer (build
+    // e6c3c7b had "Qxg4 — find the punishment" as the choice text,
+    // which was an obvious tell). The full explanation surfaces after
+    // the student picks.
     questions = (tree.punish ?? []).map((p) => {
-      // Combine punishment + distractors into a shuffled-but-deterministic
-      // choice list. We mark the punishment as correct.
-      const choices: { text: string; correct: boolean; explanation: string }[] = [
+      // Deterministic but slightly randomized order so the punishment
+      // isn't always at index 0. Sort by SAN string — same order every
+      // time, but not "always first."
+      const all: { san: string; correct: boolean; explanation: string; label: string }[] = [
         {
-          text: `${p.punishment} — find the punishment`,
+          san: p.punishment,
           correct: true,
           explanation: p.whyPunish,
+          label: '',
         },
         ...p.distractors.map((d) => ({
-          text: d.label,
+          san: d.san,
           correct: false,
           explanation: d.explanation,
+          label: d.label,
         })),
       ];
+      const sorted = [...all].sort((a, b) => a.san.localeCompare(b.san));
+      const choices = sorted.map((entry) => ({
+        text: entry.san,
+        correct: entry.correct,
+        // After click, show the label (if any) + the explanation so
+        // the student gets full pedagogy, not just "wrong."
+        explanation: entry.label
+          ? `${entry.label} — ${entry.explanation}`
+          : entry.explanation,
+      }));
       return {
         prompt: `${p.name}\n\n${p.whyBad}\n\nBlack played ${p.inaccuracy}. What's your punishment?`,
         choices,
@@ -1841,19 +1897,28 @@ function QuizPanel({
           return (
             <button
               key={`${stageIndex}-${idx}`}
+              type="button"
               disabled={showResult}
-              onClick={() => walkthrough.pickQuizChoice(idx)}
-              className={`w-full text-left px-3 py-2.5 rounded-lg border ${border} ${bg} hover:bg-theme-bg disabled:cursor-default text-sm text-theme-text min-h-[48px] transition-colors`}
+              onClick={(e) => {
+                // Defensively stop propagation; some iOS touch sequences
+                // can deliver the event to a parent before the button.
+                // pointer-events-none on inner divs (below) was missing
+                // in build e6c3c7b — user reported "couldn't select the
+                // right answer" in that build.
+                e.stopPropagation();
+                walkthrough.pickQuizChoice(idx);
+              }}
+              className={`w-full text-left px-3 py-3 rounded-lg border ${border} ${bg} hover:bg-theme-bg disabled:cursor-default disabled:opacity-100 text-sm text-theme-text min-h-[56px] transition-colors`}
               data-testid={`walkthrough-quiz-choice-${idx}`}
             >
-              <div className="font-medium">{c.text}</div>
+              <div className="font-medium pointer-events-none">{c.text}</div>
               {showResult && isSelected && (
-                <div className="text-xs text-theme-text-muted mt-1">
+                <div className="text-xs text-theme-text-muted mt-1 pointer-events-none">
                   {c.explanation}
                 </div>
               )}
               {showResult && !isSelected && c.correct && (
-                <div className="text-xs text-theme-text-muted mt-1 italic">
+                <div className="text-xs text-theme-text-muted mt-1 italic pointer-events-none">
                   {c.explanation}
                 </div>
               )}

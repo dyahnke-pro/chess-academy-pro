@@ -46,8 +46,8 @@ export const VIENNA_GAME: WalkthroughTree = {
     // 2...Bc5 calm Italian-Vienna — symmetrical Italian structure
     // with the Vienna's Nc3 as the asymmetry. Reached when Black
     // mirrors with the bishop early and we develop normally.
-    'e4 e5 Nc3 Bc5 Nf3 Nf6 Bc4 Nc6 O-O d6 d3 O-O':
-      "And there's the calm Italian-Vienna. Both kings castled, classical pawn structure, both bishops on the c-files. The asymmetry — what we have over a normal Italian — is the knight already on c3 ready for Nd5 or supporting d4. From here you have three real plans: Be3 to trade the dark-bishops and double the e-pawns (same f-file lesson as the 2...Nc6 line), Nd5 to plant a knight in the heart of Black's position, or h3 + g4 to start a slow kingside attack. All real, all winnable. Want to play it out?",
+    'e4 e5 Nc3 Bc5 Nf3 Nf6 Be2 Nc6 d3 d6 O-O O-O':
+      "And there's the calm Italian-Vienna. Both kings castled, e4-pawn doubly defended (Nc3 + d3) so the center fork trick is dead. The asymmetry — what we have over a normal Italian — is the knight already on c3 ready for Nd5 or supporting d4. From here you have three real plans: Be3 to challenge the dark-bishop, Nd5 to plant a knight in the heart of Black's position, or h3 + g4 to start a slow kingside attack. All real, all winnable. Want to play it out?",
     // Italian-Vienna middlegame — both kings castled, doubled
     // e-pawns the cost of opening the f-file, dark-square bishop
     // gone on both sides. This is a position you should know cold:
@@ -404,8 +404,8 @@ export const VIENNA_GAME: WalkthroughTree = {
       name: 'Calm Italian-Vienna (vs 2...Bc5)',
       subtitle: 'Symmetric Italian-style with Vienna asymmetry',
       moves: [
-        'e4', 'e5', 'Nc3', 'Bc5', 'Nf3', 'Nf6', 'Bc4', 'Nc6',
-        'O-O', 'd6', 'd3', 'O-O',
+        'e4', 'e5', 'Nc3', 'Bc5', 'Nf3', 'Nf6', 'Be2', 'Nc6',
+        'd3', 'd6', 'O-O', 'O-O',
       ],
     },
   ],
@@ -1765,27 +1765,26 @@ export const VIENNA_GAME: WalkthroughTree = {
                                         children: [
                                           {
                                             node: {
-                                              san: 'Bc4',
+                                              san: 'Be2',
                                               movedBy: 'white',
                                               idea:
-                                                "4.Bc4 — bring out the bishop, eye f7. Italian setup. Our e4 pawn is defended by the c3-knight, so we don't need to react to the threat directly. Bishop to c4 stares down f7 — the same target Black's bishop on c5 has on f2, mirror-image.",
+                                                "4.Be2 — modest bishop development, and crucially this AVOIDS the center fork trick. If we played Bc4 here instead, Black would play Nxe4! — and after we recapture with our c3-knight, Black plays d5 forking our bishop on c4 and the knight on e4. Same trick we teach against the 2...Nc6 line. By playing Be2 first, no target on c4. We'll defend e4 with d3 next move so any Nxe4 grab loses material outright.",
                                               narration: [
                                                 {
-                                                  text: '4.Bc4 — bring out the bishop, eye f7.',
-                                                  arrows: [{ from: 'f1', to: 'c4', color: 'green' }],
+                                                  text: '4.Be2 — modest bishop development.',
+                                                  arrows: [{ from: 'f1', to: 'e2', color: 'green' }],
                                                 },
                                                 {
-                                                  text: 'Italian setup. Our e4 pawn is defended by the c3-knight, so we ignore the threat.',
+                                                  text: 'Critically — this AVOIDS the center fork trick. If we played Bc4 here, Black would play Nxe4 then d5 forking the bishop and our recaptured knight.',
                                                   arrows: [
-                                                    { from: 'c3', to: 'e4', color: 'blue' },
-                                                    { from: 'c4', to: 'f7', color: 'red' },
+                                                    { from: 'f1', to: 'c4', color: 'red' },
+                                                    { from: 'f6', to: 'e4', color: 'red' },
                                                   ],
-                                                  highlights: [{ square: 'f7', color: 'red' }],
                                                 },
                                                 {
-                                                  text: 'Mirror-image of their bishop on c5 eyeing our f2.',
-                                                  arrows: [{ from: 'c5', to: 'f2', color: 'red' }],
-                                                  highlights: [{ square: 'f2', color: 'red' }],
+                                                  text: 'By playing Be2 first, no target on c4. We defend e4 with d3 next move so any Nxe4 grab just loses material.',
+                                                  arrows: [{ from: 'd2', to: 'd3', color: 'yellow' }],
+                                                  highlights: [{ square: 'e4', color: 'blue' }],
                                                 },
                                               ],
                                               children: [
@@ -1808,22 +1807,25 @@ export const VIENNA_GAME: WalkthroughTree = {
                                                     children: [
                                                       {
                                                         node: {
-                                                          san: 'O-O',
+                                                          san: 'd3',
                                                           movedBy: 'white',
                                                           idea:
-                                                            "5.O-O — castle short. King to safety, rook to f1. Notice: the bishop on c5 still attacks our king's destination via the long diagonal, but our pawn on f2 blocks it. Castling is legal and safe — we just need to be aware that any future f4 push has to address that bishop FIRST (same lesson as the 2...Nc6 line).",
+                                                            "5.d3 — defend e4 with the pawn. Now the e4-pawn has TWO defenders (the c3-knight AND this d3-pawn) so any Nxe4 ideas are off the table for good. We can also push d4 later if conditions allow. The position is set up for a calm Italian-Vienna middlegame.",
                                                           narration: [
                                                             {
-                                                              text: '5.O-O — castle short.',
-                                                              arrows: [{ from: 'e1', to: 'g1', color: 'green' }],
+                                                              text: '5.d3 — defend e4 with the pawn.',
+                                                              arrows: [{ from: 'd2', to: 'd3', color: 'green' }],
                                                             },
                                                             {
-                                                              text: "The bishop on c5 still aims at our king's destination via the long diagonal, but our f2-pawn blocks it.",
-                                                              arrows: [{ from: 'c5', to: 'g1', color: 'red' }],
-                                                              highlights: [{ square: 'f2', color: 'green' }],
+                                                              text: 'Two defenders on e4 now — the c3-knight AND this pawn.',
+                                                              arrows: [
+                                                                { from: 'c3', to: 'e4', color: 'blue' },
+                                                                { from: 'd3', to: 'e4', color: 'blue' },
+                                                              ],
+                                                              highlights: [{ square: 'e4', color: 'green' }],
                                                             },
                                                             {
-                                                              text: 'Castling is legal and safe — but any future f4 push has to address that bishop FIRST. Same lesson as the 2...Nc6 line.',
+                                                              text: "Black can't even think about Nxe4 — it just hangs the knight to a recapture.",
                                                             },
                                                           ],
                                                           children: [
@@ -1846,24 +1848,22 @@ export const VIENNA_GAME: WalkthroughTree = {
                                                                 children: [
                                                                   {
                                                                     node: {
-                                                                      san: 'd3',
+                                                                      san: 'O-O',
                                                                       movedBy: 'white',
                                                                       idea:
-                                                                        "6.d3 — match Black's structure. Pawn to d3 supports e4, opens our c1-bishop's diagonal, and prepares Be3 (challenging Black's bishop) or Nd5 (a knight outpost). The position is symmetrical-ish — what we have over a normal Italian is the knight already on c3, ready to jump to d5 or support the eventual d4 break.",
+                                                                        "6.O-O — castle short. King to safety, rook to f1. The bishop on c5 still aims at the long diagonal but our f2-pawn blocks any pressure on g1. We're set up for a calm middlegame from here — what we have over a normal Italian is the knight already on c3, ready for Nd5 or supporting an eventual d4 break.",
                                                                       narration: [
                                                                         {
-                                                                          text: "6.d3 — match Black's structure.",
-                                                                          arrows: [{ from: 'd2', to: 'd3', color: 'green' }],
+                                                                          text: '6.O-O — castle short.',
+                                                                          arrows: [{ from: 'e1', to: 'g1', color: 'green' }],
                                                                         },
                                                                         {
-                                                                          text: "Supports e4, opens our c1-bishop's diagonal, prepares Be3 or Nd5.",
-                                                                          arrows: [
-                                                                            { from: 'c1', to: 'h6', color: 'blue' },
-                                                                            { from: 'c3', to: 'd5', color: 'yellow' },
-                                                                          ],
+                                                                          text: "The bishop on c5 aims at our king's destination but our f2-pawn blocks any pressure on g1.",
+                                                                          highlights: [{ square: 'f2', color: 'green' }],
                                                                         },
                                                                         {
-                                                                          text: 'What we have over a normal Italian is the knight already on c3, ready to jump to d5 or support the d4 break.',
+                                                                          text: 'What we have over a normal Italian is the knight already on c3, ready for Nd5 or supporting d4.',
+                                                                          arrows: [{ from: 'c3', to: 'd5', color: 'yellow' }],
                                                                         },
                                                                       ],
                                                                       children: [
