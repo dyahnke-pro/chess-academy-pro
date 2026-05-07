@@ -1646,6 +1646,39 @@ function WalkthroughControls({
   }
 
   if (phase === 'leaf') {
+    // Inside a punish-walkthrough sub-flow → leaf panel offers
+    // "Back to lessons" instead of the standard menu (since the
+    // tree we're in is a punish mini-tree, not the parent opening).
+    if (walkthrough.isInPunishLesson) {
+      return (
+        <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-punish-leaf">
+          {leafOutro && (
+            <div className="text-xs text-theme-text-muted px-1 italic">
+              {leafOutro}
+            </div>
+          )}
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => walkthrough.exitPunishToMenu()}
+              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
+              style={goldGlowStrongStyle}
+              data-testid="walkthrough-punish-back-to-lessons"
+            >
+              <ChevronRight size={16} />
+              Back to lessons
+            </button>
+            <button
+              onClick={() => walkthrough.stop()}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors"
+              data-testid="walkthrough-end-from-punish"
+            >
+              <Flag size={14} />
+              End for now
+            </button>
+          </div>
+        </div>
+      );
+    }
     // Show "Continue to learning stages" only if any stage data
     // exists on the tree; otherwise the menu would be empty.
     const hasStages =
@@ -1885,6 +1918,16 @@ function QuizPanel({
     quizShowingFeedback,
   } = walkthrough;
 
+  // Punish stage gets a LESSON PICKER (not the MC quiz UI) per user
+  // morning iteration: "Punishment lines need to be in walk through
+  // style following the same pattern we teach the opening in." Each
+  // picked lesson runs as its own mini-walkthrough via
+  // startPunishLesson; the picker re-renders here when the lesson
+  // ends and exitPunishToMenu returns the user to the stage menu.
+  if (activeStage === 'punish' && tree?.punish && tree.punish.length > 0) {
+    return <PunishLessonPicker walkthrough={walkthrough} />;
+  }
+
   // Speak the question prompt aloud whenever a new question appears.
   // User asked for "the coach reads the question out loud — not the
   // answer, just the question." Fires on activeStage change (new
@@ -2083,6 +2126,62 @@ function QuizPanel({
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * PunishLessonPicker — list of punish lessons available for the
+ * current opening. Each lesson has a name + the inaccuracy SAN as
+ * subtitle. Clicking a lesson kicks off a self-contained punish
+ * walkthrough (setup → inaccuracy → fork → followup → leaf) using
+ * the same animation engine as the opening walkthrough. Replaces the
+ * MC-quiz UI for the punish stage per user morning iteration:
+ * "Punishment lines need to be in walk through style following the
+ * same pattern we teach the opening in."
+ */
+function PunishLessonPicker({
+  walkthrough,
+}: {
+  walkthrough: ReturnType<typeof useTeachWalkthrough>;
+}): JSX.Element {
+  const { tree } = walkthrough;
+  if (!tree?.punish || tree.punish.length === 0) {
+    return <div data-testid="walkthrough-punish-empty" />;
+  }
+  return (
+    <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-punish-picker">
+      <div className="text-xs font-medium text-theme-text-muted px-1">
+        Pick a lesson — Black plays a common mistake, you find the punishment.
+        Plays out as a walkthrough on the board.
+      </div>
+      <div className="flex flex-col gap-2">
+        {tree.punish.map((lesson, idx) => (
+          <button
+            key={idx}
+            onClick={() => walkthrough.startPunishLesson(idx)}
+            className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[56px] transition-colors"
+            style={goldGlowStyle}
+            data-testid={`walkthrough-punish-lesson-${idx}`}
+          >
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-theme-text">
+                {lesson.name}
+              </span>
+              <span className="text-[11px] text-theme-text-muted">
+                Black plays {lesson.inaccuracy}
+              </span>
+            </div>
+            <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+          </button>
+        ))}
+        <button
+          onClick={() => walkthrough.backToStageMenu()}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+        >
+          Back to menu
+        </button>
+      </div>
     </div>
   );
 }

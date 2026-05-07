@@ -38,11 +38,195 @@ import type {
   WalkthroughTree,
   WalkthroughTreeNode,
   WalkthroughTreeChild,
+  PunishLesson,
   NarrationArrow,
   NarrationHighlight,
 } from '../types/walkthroughTree';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+/** Convert a SAN to a friendly spoken form. Used for the punish-
+ *  walkthrough fork subtitles so all options look uniform — none
+ *  reads as a tell. "Qxg4" → "Queen takes g4", "Nf3" → "Knight to
+ *  f3", "h3" → "h3", "O-O" → "Castle". */
+function sanToFriendly(san: string): string {
+  if (san === 'O-O') return 'Castle short';
+  if (san === 'O-O-O') return 'Castle long';
+  const pieceMap: Record<string, string> = {
+    N: 'Knight',
+    B: 'Bishop',
+    R: 'Rook',
+    Q: 'Queen',
+    K: 'King',
+  };
+  const first = san[0];
+  if (first in pieceMap) {
+    const captures = san.includes('x');
+    const dest = san.match(/[a-h][1-8]/g)?.slice(-1)[0];
+    if (dest) {
+      return `${pieceMap[first]} ${captures ? 'takes' : 'to'} ${dest}`;
+    }
+  }
+  // Pawn move — just return the SAN.
+  return san;
+}
+
+/** Determine which side a move belongs to based on its index in a
+ *  zero-indexed sequence starting from white's first move. */
+function sideAtIndex(plyIndex: number): 'white' | 'black' {
+  return plyIndex % 2 === 0 ? 'white' : 'black';
+}
+
+/** Build a one-shot WalkthroughTree from a PunishLesson. Reuses the
+ *  walkthrough engine to play the punish lesson with the same UI as
+ *  the opening walkthrough — animated moves with narration, fork
+ *  picker at the punishment moment, leaf at the end with the
+ *  whyPunish takeaway. Per the user's morning iteration: "Punishment
+ *  lines need to be in walk through style following the same pattern
+ *  we teach the opening in."
+ *
+ *  Tree shape:
+ *    root → setup1 (silent, fast advance) → setup2 → ... → setupN
+ *      → inaccuracy (highlighted red, whyBad narrated)
+ *      → FORK[ punishment, distractor1, distractor2, ... ]
+ *           punishment → followup1 → ... → leaf (whyPunish outro)
+ *           distractor → leaf (distractor explanation)
+ */
+export function buildPunishWalkthroughTree(
+  lesson: PunishLesson,
+  parentOpening: WalkthroughTree,
+): WalkthroughTree {
+  // Build leaf nodes for each distractor (single node, dead-end).
+  const distractorChildren: WalkthroughTreeChild[] = lesson.distractors.map(
+    (d) => ({
+      label: d.san,
+      forkSubtitle: sanToFriendly(d.san),
+      node: {
+        san: d.san,
+        movedBy: 'white',
+        idea: `${d.san} — ${d.label}. ${d.explanation}\n\nThe actual punishment was ${lesson.punishment}: ${lesson.whyPunish}`,
+        narration: [
+          {
+            text: `${sanToFriendly(d.san)}. Not the move.`,
+            arrows: [],
+          },
+          {
+            text: d.explanation,
+          },
+          {
+            text: `The actual punishment was ${sanToFriendly(lesson.punishment)}. ${lesson.whyPunish}`,
+          },
+        ],
+        children: [],
+      },
+    }),
+  );
+
+  // Build the punishment subtree: punishment node → followup chain → leaf.
+  // followupSide alternates from the move AFTER punishment.
+  // Punishment is white's move, so followup[0] is black's, followup[1] white's, etc.
+  let punishmentLeafContinuation: WalkthroughTreeNode | null = null;
+  if (lesson.followup && lesson.followup.length > 0) {
+    // Build followup from the END backwards so we can chain children.
+    let current: WalkthroughTreeNode | null = null;
+    for (let i = lesson.followup.length - 1; i >= 0; i -= 1) {
+      const fm = lesson.followup[i];
+      const node: WalkthroughTreeNode = {
+        san: fm.san,
+        movedBy: i % 2 === 0 ? 'black' : 'white',
+        idea: fm.idea,
+        narration: [{ text: fm.idea }],
+        children: current ? [{ node: current }] : [],
+      };
+      current = node;
+    }
+    punishmentLeafContinuation = current;
+  }
+
+  const punishmentChild: WalkthroughTreeChild = {
+    label: lesson.punishment,
+    forkSubtitle: sanToFriendly(lesson.punishment),
+    node: {
+      san: lesson.punishment,
+      movedBy: 'white',
+      idea: lesson.whyPunish,
+      narration: [
+        {
+          text: `${sanToFriendly(lesson.punishment)}.`,
+        },
+        {
+          text: lesson.whyPunish,
+        },
+      ],
+      children: punishmentLeafContinuation
+        ? [{ node: punishmentLeafContinuation }]
+        : [],
+    },
+  };
+
+  // Combine: punishment first (correct answer), then distractors.
+  // Sort alphabetically by SAN so the punishment isn't always at
+  // index 0 — same anti-tell measure as the quiz panel.
+  const forkChildren = [punishmentChild, ...distractorChildren].sort((a, b) =>
+    (a.label ?? '').localeCompare(b.label ?? ''),
+  );
+
+  // Inaccuracy node: animates Black's bad move, narrates whyBad with
+  // red highlight, then forks to the candidate moves.
+  const inaccuracySide = sideAtIndex(lesson.setupMoves.length);
+  const inaccuracyNode: WalkthroughTreeNode = {
+    san: lesson.inaccuracy,
+    movedBy: inaccuracySide,
+    idea: lesson.whyBad,
+    narration: [
+      {
+        text: `Now Black plays ${sanToFriendly(lesson.inaccuracy)}.`,
+        highlights: [{ square: 'a1', color: 'red' }], // placeholder; will be overridden
+      },
+      {
+        text: lesson.whyBad,
+      },
+      {
+        text: 'What is your punishment?',
+      },
+    ],
+    children: forkChildren,
+  };
+
+  // Setup chain: animate setupMoves quickly with empty idea (no
+  // narration) so the position lands without narrating each move.
+  // Build from the END backwards.
+  let setupChain: WalkthroughTreeNode = inaccuracyNode;
+  for (let i = lesson.setupMoves.length - 1; i >= 0; i -= 1) {
+    const san = lesson.setupMoves[i];
+    const movedBy = sideAtIndex(i);
+    setupChain = {
+      san,
+      movedBy,
+      // Empty idea triggers root-treatment-style fast advance; the
+      // narration array with one short text segment plays the move
+      // name briefly so the student tracks the position.
+      idea: '',
+      children: [{ node: setupChain }],
+    };
+  }
+
+  // Root wrapper.
+  const root: WalkthroughTreeNode = {
+    san: null,
+    movedBy: null,
+    idea: '',
+    children: [{ node: setupChain }],
+  };
+
+  return {
+    openingName: `${parentOpening.openingName}: ${lesson.name}`,
+    eco: parentOpening.eco,
+    intro: `${lesson.name}. Watch the position set up, then find the punishment.`,
+    outro: lesson.whyPunish,
+    root,
+  };
+}
 
 /** Words per minute used for the backup-timer heuristic. Matches
  *  `walkthroughRunner` so the lesson rhythm is consistent. */
@@ -174,6 +358,17 @@ export interface UseTeachWalkthroughReturn {
   restartDrill: () => void;
   /** From any stage, return to the stage-menu hub. */
   backToStageMenu: () => void;
+  /** Start a specific punish lesson as a self-contained walkthrough.
+   *  Saves the current opening tree as the parent, then runs the
+   *  punish lesson through the same animation engine. */
+  startPunishLesson: (lessonIndex: number) => void;
+  /** Exit a punish walkthrough back to the parent opening's stage
+   *  menu. Restores the parent tree without re-narrating the intro. */
+  exitPunishToMenu: () => void;
+  /** True when we're inside a punish-walkthrough sub-flow. UI uses
+   *  this to render the "Back to lessons" button instead of the
+   *  default "End walkthrough" on the leaf panel. */
+  isInPunishLesson: boolean;
 }
 
 /** Compute the FEN at a node by walking chess.js through the SAN
@@ -227,6 +422,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     { tried: string; expected: string } | null
   >(null);
   const [drillComplete, setDrillComplete] = useState(false);
+  // When inside a punish-walkthrough sub-flow, this holds the
+  // ORIGINAL opening tree so we can return to it when the lesson
+  // ends. Non-null = we're inside a punish walkthrough.
+  const [parentOpeningTree, setParentOpeningTree] =
+    useState<WalkthroughTree | null>(null);
 
   // Active narration cancel + backup timer refs.
   const cancelNarrationRef = useRef<(() => void) | null>(null);
@@ -732,6 +932,62 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setDrillComplete(false);
   }, []);
 
+  /** Start a specific punish lesson as a self-contained walkthrough.
+   *  Saves the current (parent) tree, then `start()`s a freshly-built
+   *  punish walkthrough tree. The walkthrough plays the setup, the
+   *  inaccuracy, and pauses at a fork for the student to pick the
+   *  punishment from candidates. After the leaf (whichever path),
+   *  the leaf panel offers "Back to lessons" to call exitPunishToMenu. */
+  const startPunishLesson = useCallback(
+    (lessonIndex: number): void => {
+      if (!tree?.punish) return;
+      if (lessonIndex < 0 || lessonIndex >= tree.punish.length) return;
+      const lesson = tree.punish[lessonIndex];
+      const punishTree = buildPunishWalkthroughTree(lesson, tree);
+      // Stash the parent so we can return to it on exit.
+      setParentOpeningTree(tree);
+      // Track which lesson we're on so the "next/prev" UI can advance.
+      setStageIndex(lessonIndex);
+      // Run the punish tree through the same engine as the opening
+      // walkthrough — animations, narration, fork picker, leaf panel.
+      start(punishTree);
+    },
+    [tree, start],
+  );
+
+  /** Exit a punish walkthrough back to the stage menu of the parent
+   *  opening. Restores the parent tree and resets walkthrough state
+   *  so the student lands at the stage menu (with checkmarks
+   *  reflecting the latest progress). */
+  const exitPunishToMenu = useCallback((): void => {
+    const parent = parentOpeningTree;
+    if (!parent) {
+      // Not inside a punish lesson — fall back to stage-menu transition.
+      backToStageMenu();
+      return;
+    }
+    cleanupNarration();
+    setParentOpeningTree(null);
+    // Restore the parent tree's state. We can't call start() on
+    // parent because that would re-narrate the intro; instead, set
+    // the tree directly and jump to stage-menu phase.
+    setTree(parent);
+    setPathNodes([]);
+    setNarrationArrows([]);
+    setNarrationHighlights([]);
+    setActiveStage(null);
+    setStageIndex(0);
+    setQuizSelected(null);
+    setQuizShowingFeedback(false);
+    setPhase('stage-menu');
+    // Mark punish stage complete on this lesson exit. (This means
+    // completing ANY punish lesson marks the stage done; if you want
+    // "complete all" instead, change this to count lessons answered.)
+    if (parent.openingName) {
+      void markStageComplete(parent.openingName, 'punish');
+    }
+  }, [parentOpeningTree, backToStageMenu, cleanupNarration]);
+
   return {
     phase,
     isActive: phase !== 'idle',
@@ -769,5 +1025,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     acknowledgeDrillMistake,
     restartDrill,
     backToStageMenu,
+    startPunishLesson,
+    exitPunishToMenu,
+    isInPunishLesson: parentOpeningTree !== null,
   };
 }
