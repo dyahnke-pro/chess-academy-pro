@@ -137,6 +137,94 @@ export function getOpeningMoves(openingName: string): string[] | null {
   return best.pgn.split(/\s+/).filter(Boolean);
 }
 
+/** Find ALL Lichess-DB entries related to an opening name. Returns
+ *  the bare main line PLUS every named variation / sub-line that
+ *  shares an ECO code or whose PGN extends the bare line.
+ *
+ *  Used by the LLM-grounding flow: instead of asking the LLM to
+ *  invent move sequences from training memory (which has been the
+ *  cause of every "illegal SAN" error in production audits), we
+ *  pass the DB-verified PGN sequences in as the source of truth.
+ *  The LLM picks lines from this list and writes pedagogy on top.
+ *
+ *  Caps result length at maxEntries (default 30) — enough coverage
+ *  without blowing the prompt token budget. Sorted by:
+ *    1. Bare opening first (shortest PGN with an exact name match)
+ *    2. Then sub-variations sorted by name length (broader names first) */
+export function findRelatedDbEntries(
+  openingName: string,
+  maxEntries: number = 30,
+): OpeningEntry[] {
+  const entries = openingsData as OpeningEntry[];
+  const lower = openingName.toLowerCase();
+
+  // 1. Find the bare opening — exact name match prefers shortest PGN
+  //    (the canonical entry; longest sub-variation otherwise).
+  const exactMatches = entries.filter(
+    (e) => e.name.toLowerCase() === lower,
+  );
+  const bare = exactMatches.length > 0
+    ? exactMatches.reduce((a, b) => (a.pgn.length < b.pgn.length ? a : b))
+    : null;
+
+  // 2. Identify the ECO range from the bare entry.
+  const ecoRoot = bare?.eco;
+
+  // 3. Collect candidates by SUBSTRING match on name. The Lichess
+  //    DB names sub-variations with the bare name as prefix (e.g.
+  //    "Bishop's Opening: Boden-Kieseritzky Gambit"), so an exact
+  //    substring match captures all sub-lines of the requested
+  //    opening WITHOUT pulling in unrelated openings that just
+  //    happen to share a token (e.g. token "bishop" would catch
+  //    "Modern Defense: Bishop Attack" — wrong).
+  const candidates = entries.filter((e) => {
+    if (e === bare) return false; // listed separately first
+    const nameLower = e.name.toLowerCase();
+    if (nameLower.includes(lower)) return true;
+    // Same-ECO PGN extension catches unnamed transpositions.
+    if (
+      ecoRoot &&
+      e.eco === ecoRoot &&
+      bare &&
+      e.pgn.startsWith(bare.pgn + ' ')
+    ) {
+      return true;
+    }
+    return false;
+  });
+
+  // Dedupe by name — the Lichess DB often has the SAME variation
+  // name listed at multiple depths (e.g. "Sicilian Defense: Open"
+  // appears 4 times with progressively longer PGNs as the line
+  // continues). Keep the shortest-PGN entry per name so we cover
+  // more distinct variations within maxEntries.
+  const byName = new Map<string, OpeningEntry>();
+  for (const c of candidates) {
+    const existing = byName.get(c.name);
+    if (!existing || c.pgn.length < existing.pgn.length) {
+      byName.set(c.name, c);
+    }
+  }
+  const deduped = Array.from(byName.values());
+
+  // Sort: shorter PGN first (trunk-near variations like 2.Nc3
+  // come before deep sub-lines like Najdorf English Attack at
+  // ply 12). Within same PGN length, shorter name first.
+  deduped.sort((a, b) => {
+    if (a.pgn.length !== b.pgn.length) return a.pgn.length - b.pgn.length;
+    return a.name.length - b.name.length;
+  });
+
+  const result: OpeningEntry[] = [];
+  if (bare) result.push(bare);
+  for (const c of deduped) {
+    if (result.length >= maxEntries) break;
+    result.push(c);
+  }
+  return result;
+}
+
+
 /**
  * Given a requested opening's move list and the current game history,
  * return the next book move the AI should play, or null if we've left the book.

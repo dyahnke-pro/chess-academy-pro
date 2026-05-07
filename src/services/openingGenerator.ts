@@ -31,6 +31,7 @@ import {
   formatIssues,
   stripSanAnnotations,
 } from '../data/openingWalkthroughs/validate';
+import { findRelatedDbEntries } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import type {
@@ -144,7 +145,40 @@ Branch points (children.length > 1) need label + forkSubtitle on every child:
 /** System prompt — instructs the LLM to produce a JSON
  *  WalkthroughTree following the Vienna pattern. Critically: output
  *  must be RAW JSON, no markdown fences, no commentary. */
-function buildSystemPrompt(): string {
+/** Render a Lichess-DB entry list as a numbered, prompt-friendly
+ *  block. Each line: "  {N}. [ECO] Name :: PGN". */
+function formatDbEntriesForPrompt(
+  entries: Array<{ eco: string; name: string; pgn: string }>,
+): string {
+  return entries
+    .map((e, i) => `  ${i + 1}. [${e.eco}] ${e.name} :: ${e.pgn}`)
+    .join('\n');
+}
+
+/** Build the BOOK SOURCE block to inject into LLM prompts. Pulls
+ *  Lichess-DB entries related to the opening name and formats them
+ *  so the LLM has a "book on the table" of verified PGN sequences
+ *  to anchor on. Empty string when the DB has nothing for the name
+ *  (in which case the LLM falls back to training-memory). */
+function buildBookSourceBlock(openingName?: string): string {
+  if (!openingName) return '';
+  const entries = findRelatedDbEntries(openingName, 30);
+  if (entries.length === 0) return '';
+  return `
+
+BOOK SOURCE — Lichess opening database. The following PGN sequences are verified from master practice. They are your SOURCE OF TRUTH for move sequences:
+
+${formatDbEntriesForPrompt(entries)}
+
+GROUNDING RULES (this is the most important section):
+- Every move sequence you emit (tree spine, fork children, drill moves, punish setupMoves, findMove paths) MUST be a prefix or extension of one of the lines above.
+- DO NOT invent novel move sequences from training memory. The lines above are the authoritative theory; if a move you'd otherwise play isn't represented here, don't play it.
+- Forks should land at positions where the database itself splits (i.e., the parent PGN above has multiple sub-variations diverging at that ply). Each fork child's first move = the divergence move of one listed line.
+- Within a branch, continue down the chosen line's PGN. Do NOT mix moves from different lines in the same branch.
+- For punish lessons: the inaccuracy + punishment can be moves NOT in the database (since traps by definition deviate from main theory), but the setupMoves leading up to the inaccuracy MUST be a prefix of a listed line. The punishment + followup should land back on or near a known line.`;
+}
+
+function buildSystemPrompt(openingName?: string): string {
   return `You are an expert chess coach generating a walkthrough lesson for a 1200-1600 rated player. Your output is a JSON object matching the WalkthroughTree schema below. You are reading from your knowledge of standard opening theory — moves should be MAIN-LINE master theory, not engine sidelines.
 
 OUTPUT FORMAT: Raw JSON only. No markdown code fences. No prose before or after. The first character must be \`{\` and the last must be \`}\`. The validation pipeline will fail otherwise.
@@ -211,6 +245,7 @@ LEGAL-MOVE TRAPS (production audit caught all of these — DO NOT repeat):
 - ARROWS: every narration arrow must have from !== to. Don't emit no-op arrows like {from: f7, to: f7} — the validator rejects them and the visual is pointless. To highlight a single square, use the highlights array, not arrows.
 
 ${VIENNA_SAMPLE}
+${buildBookSourceBlock(openingName)}
 
 Now generate the WalkthroughTree for the requested opening. Output JSON only.`;
 }
@@ -866,7 +901,7 @@ async function generateOnce(
   name: string,
   retryContext?: string,
 ): Promise<GenerationResult> {
-  const systemPrompt = buildSystemPrompt();
+  const systemPrompt = buildSystemPrompt(name);
   const userMessage = retryContext
     ? `Generate the WalkthroughTree for: ${name}
 
@@ -1132,7 +1167,7 @@ type OptionalStage = 'concepts' | 'findMove' | 'drill' | 'punish';
 
 /** Per-stage system prompt — focused on ONE stage at a time so the
  *  LLM has plenty of token budget to generate quality content. */
-function buildStageSystemPrompt(stage: OptionalStage): string {
+function buildStageSystemPrompt(stage: OptionalStage, openingName?: string): string {
   const schemas: Record<OptionalStage, string> = {
     concepts: `Output a JSON array of ConceptCheckQuestion objects:
 interface ConceptCheckQuestion {
@@ -1188,7 +1223,7 @@ CRITICAL:
   • KINGSIDE CASTLING (O-O): both the f1 bishop AND the g1 knight (or f8 / g8 for Black) must be developed.
   • Pawns move FORWARD only. e4-to-e3 is illegal.
 - Coach voice: first-person, conversational, pedagogically clear.
-${stage === 'concepts' ? `- Single-select questions (multiSelect omitted or false) need EXACTLY ONE correct choice. If 2+ choices are correct, set multiSelect: true on that question.\n` : ''}${stage === 'findMove' ? `- Each question needs 2+ candidates. EXACTLY ONE is correct. The path SANs must be a legal sequence from the standard starting position.\n` : ''}${stage === 'drill' ? `- Trace the FULL move sequence with chess.js mentally before emitting. Each move must be legal from the position the prior moves create. studentSide MUST match the opening — black for Sicilian, French, Caro-Kann, Pirc, KID, Nimzo-Indian, Modern, Alekhine, Scandinavian, etc.; white for Italian, Vienna, Spanish, Queen's Gambit, etc.\n` : ''}${stage === 'punish' ? `- setupMoves + inaccuracy + punishment + each distractor + each followup move must ALL be legal in sequence. Distractors are LEGAL alternatives that don't punish as well — they are NOT illegal moves. Each lesson needs at least 2 distractors.\n` : ''}- Output JSON only. Validation pipeline rejects anything else.`;
+${stage === 'concepts' ? `- Single-select questions (multiSelect omitted or false) need EXACTLY ONE correct choice. If 2+ choices are correct, set multiSelect: true on that question.\n` : ''}${stage === 'findMove' ? `- Each question needs 2+ candidates. EXACTLY ONE is correct. The path SANs must be a legal sequence from the standard starting position.\n` : ''}${stage === 'drill' ? `- Trace the FULL move sequence with chess.js mentally before emitting. Each move must be legal from the position the prior moves create. studentSide MUST match the opening — black for Sicilian, French, Caro-Kann, Pirc, KID, Nimzo-Indian, Modern, Alekhine, Scandinavian, etc.; white for Italian, Vienna, Spanish, Queen's Gambit, etc.\n` : ''}${stage === 'punish' ? `- setupMoves + inaccuracy + punishment + each distractor + each followup move must ALL be legal in sequence. Distractors are LEGAL alternatives that don't punish as well — they are NOT illegal moves. Each lesson needs at least 2 distractors.\n` : ''}- Output JSON only. Validation pipeline rejects anything else.${buildBookSourceBlock(openingName)}`;
 }
 
 /** Parse a stage array from raw LLM output. Same defensive handling
@@ -1219,7 +1254,7 @@ async function generateOneStage(
   stage: OptionalStage,
   retryContext?: string,
 ): Promise<{ ok: boolean; data?: unknown[]; reason?: string }> {
-  const systemPrompt = buildStageSystemPrompt(stage);
+  const systemPrompt = buildStageSystemPrompt(stage, openingName);
   const userMessage = retryContext
     ? `Generate the ${stage} array for the opening: ${openingName}.\n\nYour previous attempt failed:\n${retryContext}\n\nProduce a new attempt that addresses the failures above. Keep moves SIMPLE and conservative — verify each SAN is legal from its parent position. Output JSON only.`
     : `Generate the ${stage} array for the opening: ${openingName}.`;

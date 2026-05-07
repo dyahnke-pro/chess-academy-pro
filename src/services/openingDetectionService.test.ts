@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { detectOpening, isStillInOpening, getOpeningMoves, getNextOpeningBookMove, _resetTrie } from './openingDetectionService';
+import { detectOpening, isStillInOpening, getOpeningMoves, getNextOpeningBookMove, findRelatedDbEntries, _resetTrie } from './openingDetectionService';
 
 describe('openingDetectionService', () => {
   beforeEach(() => {
@@ -205,6 +205,48 @@ describe('openingDetectionService', () => {
       // After Dave plays 1.e4 c6 2.d4, coach (black) should play d5.
       const reply = getNextOpeningBookMove(moves, ['e4', 'c6', 'd4'], 'black');
       expect(reply).toBe('d5');
+    });
+  });
+
+  describe('findRelatedDbEntries', () => {
+    it('returns the bare opening first when name matches exactly', () => {
+      const entries = findRelatedDbEntries("Bishop's Opening");
+      expect(entries.length).toBeGreaterThan(0);
+      // Bare line should be present and listed first.
+      const first = entries[0];
+      expect(first.name.toLowerCase()).toBe("bishop's opening");
+      expect(first.pgn).toBe('e4 e5 Bc4');
+    });
+
+    it('includes named sub-variations of the requested opening', () => {
+      const entries = findRelatedDbEntries("Bishop's Opening");
+      const names = entries.map((e) => e.name);
+      // Spot-check a handful of well-known sharp lines.
+      expect(names.some((n) => n.includes('Boden-Kieseritzky'))).toBe(true);
+      expect(names.some((n) => n.includes('Urusov Gambit'))).toBe(true);
+      expect(names.some((n) => n.includes('Calabrese'))).toBe(true);
+    });
+
+    it('caps results at maxEntries', () => {
+      const entries = findRelatedDbEntries("Bishop's Opening", 5);
+      expect(entries.length).toBeLessThanOrEqual(5);
+    });
+
+    it('returns [] for unknown opening', () => {
+      const entries = findRelatedDbEntries('Totally Made Up Opening Xyz');
+      expect(entries).toEqual([]);
+    });
+
+    it('handles broader opening names (Sicilian)', () => {
+      const entries = findRelatedDbEntries('Sicilian Defense');
+      expect(entries.length).toBeGreaterThan(5);
+      // The bare Sicilian must be present.
+      expect(entries[0].name.toLowerCase()).toBe('sicilian defense');
+      // All entries must have "sicilian" in the name (or be the
+      // bare line itself).
+      for (const e of entries) {
+        expect(e.name.toLowerCase()).toContain('sicilian');
+      }
     });
   });
 });
