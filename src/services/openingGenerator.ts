@@ -31,7 +31,10 @@ import {
 } from '../data/openingWalkthroughs/validate';
 import { db, type CachedOpening } from '../db/schema';
 import { logAppAudit } from './appAuditor';
-import type { WalkthroughTree } from '../types/walkthroughTree';
+import type {
+  WalkthroughTree,
+  WalkthroughTreeNode,
+} from '../types/walkthroughTree';
 
 /** Concrete top-of-tree skeleton showing the root → first-move →
  *  second-move structure. Production audit (build 3965c09 and prior)
@@ -183,6 +186,12 @@ CONVENTIONS:
 - Move-order matters: trace each line carefully. For example, you can't push f4 with Black's bishop on c5 (the long diagonal opens and the g1-knight hangs). The trade or the move-order matters.
 - TARGET SIZE: 3 forks, each branch ~6-10 plies after the fork. Idea text 40-90 words. Narration 2-4 segments per node, each 1-2 sentences. This keeps the response within the token budget; longer trees truncate and fail to load.
 
+LEGAL-MOVE TRAPS (production audit caught all of these — DO NOT repeat):
+- FIANCHETTO PREP: To play Bg7 you must FIRST move the g-pawn (...g6). Bishop on f8 → bishop to g7 requires g7 to be EMPTY. Same for Bg2 (needs g3) and Bb7 (needs b6) and Bb2 (needs b3). The Pirc move order is ...d6, ...Nf6, ...g6, THEN ...Bg7 — never ...Bg7 before ...g6.
+- QUEENSIDE CASTLING: O-O-O requires the b1 (or b8) knight to be DEVELOPED — castling cannot pass through a piece. If Nb1 is still home, you cannot castle queenside. Develop the knight first (Nc3, Nb1-d2-c4, etc.) before O-O-O.
+- KINGSIDE CASTLING: O-O requires the f1 (or f8) bishop to be developed AND the g1 (or g8) knight to be developed. King and rook must not have moved.
+- Pawn moves can never go BACKWARD or sideways. e4 to e5 is legal, e4 to e3 is not.
+
 ${VIENNA_SAMPLE}
 
 Now generate the WalkthroughTree for the requested opening. Output JSON only.`;
@@ -196,14 +205,27 @@ Now generate the WalkthroughTree for the requested opening. Output JSON only.`;
  *  truncated mid-JSON when max_tokens was 8192 (now bumped to 16384
  *  in the call), but defensive parsing also helps recover from
  *  smaller LLM mistakes. Returns null if JSON parsing still fails. */
-function parseGeneratedTree(raw: string): WalkthroughTree | null {
+/** Parse result that surfaces the JSON.parse error message when it
+ *  fails — production audit (build 23c484d) showed retries producing
+ *  non-truncated responses (ended with `}`) that still didn't parse.
+ *  Without the error message we couldn't tell why. */
+interface ParseResult {
+  tree: WalkthroughTree | null;
+  /** JSON.parse error message when tree is null, e.g.
+   *  "Unexpected token } in JSON at position 1234". */
+  parseError?: string;
+}
+
+function parseGeneratedTree(raw: string): ParseResult {
   let text = raw.trim();
   // Strip markdown code fences defensively.
   text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```\s*$/, '');
   // Find the first { and last } in case there's surrounding prose.
   const firstBrace = text.indexOf('{');
   const lastBrace = text.lastIndexOf('}');
-  if (firstBrace < 0 || lastBrace < firstBrace) return null;
+  if (firstBrace < 0 || lastBrace < firstBrace) {
+    return { tree: null, parseError: 'no balanced { ... } found in response' };
+  }
   let jsonText = text.slice(firstBrace, lastBrace + 1);
   // Strip C-style line comments (LLMs sometimes add them despite
   // the prompt). Matches // ... to end of line.
@@ -212,9 +234,12 @@ function parseGeneratedTree(raw: string): WalkthroughTree | null {
   // even though strict JSON disallows them).
   jsonText = jsonText.replace(/,(\s*[}\]])/g, '$1');
   try {
-    return JSON.parse(jsonText) as WalkthroughTree;
-  } catch {
-    return null;
+    return { tree: JSON.parse(jsonText) as WalkthroughTree };
+  } catch (err) {
+    return {
+      tree: null,
+      parseError: err instanceof Error ? err.message : String(err),
+    };
   }
 }
 
@@ -291,6 +316,46 @@ export interface GenerationResult {
   reason?: string;
   /** Validation issues if any (even on success — warnings only). */
   issues?: string;
+}
+
+/** Auto-fix cosmetic schema mistakes the LLM repeatedly makes:
+ *  missing label / forkSubtitle on fork children. The validator
+ *  flags both as errors which forces a retry — but they're trivially
+ *  derivable from the child's SAN. Production audit (build 23c484d)
+ *  caught Pirc validation failing on 4 missing-label/subtitle errors
+ *  even though the chess content was largely correct. Mutating in
+ *  place keeps the caller path simple. Returns the count of fields
+ *  filled so the audit can record what was repaired. */
+export function repairForkLabels(tree: WalkthroughTree): number {
+  let filled = 0;
+  function walk(node: WalkthroughTreeNode): void {
+    if (node.children.length > 1) {
+      for (const child of node.children) {
+        if (!child.label || !child.label.trim()) {
+          child.label = child.node.san ?? '';
+          filled += 1;
+        }
+        if (!child.forkSubtitle || !child.forkSubtitle.trim()) {
+          // Derive from the child's first idea sentence — it's a coach
+          // explanation so the first sentence usually states the plan.
+          // Falls back to the SAN if the idea is empty.
+          const idea = child.node.idea ?? '';
+          const firstSentence = idea.split(/(?<=[.!?])\s/)[0]?.trim() ?? '';
+          // Cap to keep the chip from getting unwieldy on the fork picker.
+          const subtitle = firstSentence.length > 80
+            ? firstSentence.slice(0, 79) + '…'
+            : firstSentence;
+          child.forkSubtitle = subtitle || (child.node.san ?? '—');
+          filled += 1;
+        }
+      }
+    }
+    for (const child of node.children) {
+      walk(child.node);
+    }
+  }
+  walk(tree.root);
+  return filled;
 }
 
 /** Pull the first N SAN values from a generated tree by walking
@@ -381,7 +446,8 @@ Fix the issues above and produce a SHORTER, valid tree.`
     return { ok: false, reason: rawResponse };
   }
 
-  const tree = parseGeneratedTree(rawResponse);
+  const parseResult = parseGeneratedTree(rawResponse);
+  const tree = parseResult.tree;
   if (!tree) {
     // Detect truncation explicitly — if the last non-whitespace char
     // isn't `}`, the response was cut off mid-stream (most likely
@@ -391,7 +457,19 @@ Fix the issues above and produce a SHORTER, valid tree.`
     const looksTruncated = trimmed.length > 0 && trimmed[trimmed.length - 1] !== '}';
     const reason = looksTruncated
       ? 'JSON parse failed — response truncated (does not end with `}`); LLM exceeded token budget'
-      : 'failed to parse JSON from LLM response';
+      : `JSON parse failed — ${parseResult.parseError ?? 'unknown error'}`;
+    // Around the parse error position, dump the surrounding 200 chars
+    // — that's the diagnostic the audit needs. Production audit (build
+    // 23c484d) showed a retry response ending in `}` but not parsing,
+    // and we couldn't see what broke without the error message + locale.
+    let errorContext = '';
+    const posMatch = parseResult.parseError?.match(/position (\d+)/);
+    if (posMatch) {
+      const pos = parseInt(posMatch[1], 10);
+      const start = Math.max(0, pos - 100);
+      const end = Math.min(rawResponse.length, pos + 100);
+      errorContext = `\n--- 200 chars around position ${pos} ---\n${rawResponse.slice(start, end)}`;
+    }
     void logAppAudit({
       kind: 'llm-error',
       category: 'subsystem',
@@ -399,9 +477,26 @@ Fix the issues above and produce a SHORTER, valid tree.`
       summary: `${looksTruncated ? 'truncated response' : 'JSON parse failed'} for "${name}"${retryContext ? ' (retry)' : ''}`,
       details:
         `responseLength=${rawResponse.length} endsWith=${JSON.stringify(trimmed.slice(-50))}\n` +
-        `raw response (first 1500 chars): ${rawResponse.slice(0, 1500)}`,
+        `parseError: ${parseResult.parseError ?? '<none>'}` +
+        errorContext +
+        `\n--- raw response (first 1500 chars) ---\n${rawResponse.slice(0, 1500)}`,
     });
     return { ok: false, reason };
+  }
+
+  // Auto-repair cosmetic schema mistakes the LLM keeps making
+  // (missing label / forkSubtitle on fork children). Production
+  // audit (build 23c484d) caught Pirc validation failing on 4
+  // missing-label/subtitle errors that were trivially derivable
+  // from the SAN. Fixing in code beats begging the LLM to remember.
+  const repaired = repairForkLabels(tree);
+  if (repaired > 0) {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOnce',
+      summary: `auto-repaired ${repaired} missing label/forkSubtitle entries for "${name}"`,
+    });
   }
 
   const structural = validateWalkthroughTree(tree);
