@@ -8,7 +8,12 @@
  */
 import { describe, it, expect } from 'vitest';
 import { VIENNA_GAME } from './vienna';
-import { validateWalkthroughTree, formatIssues, spokenForm } from './validate';
+import {
+  validateWalkthroughTree,
+  validateMoveLegality,
+  formatIssues,
+  spokenForm,
+} from './validate';
 
 describe('walkthrough tree validation', () => {
   describe('Vienna Game', () => {
@@ -19,6 +24,16 @@ describe('walkthrough tree validation', () => {
       if (errors.length > 0) {
         // Surfacing the actual messages in the test output makes
         // CI failures debuggable without re-running locally.
+        // eslint-disable-next-line no-console
+        console.log(formatIssues(errors));
+      }
+      expect(errors).toEqual([]);
+    });
+
+    it('every SAN sequence in concepts/findMove/drill/punish is legal', () => {
+      const legalityIssues = validateMoveLegality(VIENNA_GAME);
+      const errors = legalityIssues.filter((i) => i.severity === 'error');
+      if (errors.length > 0) {
         // eslint-disable-next-line no-console
         console.log(formatIssues(errors));
       }

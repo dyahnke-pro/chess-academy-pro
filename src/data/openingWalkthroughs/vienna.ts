@@ -55,6 +55,577 @@ export const VIENNA_GAME: WalkthroughTree = {
     'e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 Be3 Bxe3 fxe3 d6 Nf3 O-O O-O Bg4 h3':
       "And there it is — the Vienna middlegame in its purest form. Both kings castled, dark-square bishops traded off (which suits us — we have the open f-file as compensation for the doubled e-pawns), the c4-bishop still pointing at f7. From here Black has to decide whether to trade on f3 (giving us the queen on f3 hitting f7 and ready to swing) or retreat to h5 (and we play g4 to chase it further). Either way, our middlegame plan is set: double the rooks on the f-file, push d4 to break the center when ready, swing the queen to h5 or g3. This is the position to know cold. Want to play it out from here as a real game?",
   },
+
+  // ─── Stage 2: Concept check questions ─────────────────────────
+  // Big-idea quizzes after the walkthrough. Tests whether the
+  // student internalized the WHY, not just the moves.
+  concepts: [
+    {
+      prompt:
+        "Why does the Vienna play 2.Nc3 instead of the more natural 2.Nf3? (Pick all that apply.)",
+      multiSelect: true,
+      choices: [
+        {
+          text: "It develops a piece toward the center.",
+          correct: true,
+          explanation:
+            "Yes — Nc3 develops a knight to a useful central square. Same as any opening principle.",
+        },
+        {
+          text: "It defends the e4-pawn.",
+          correct: true,
+          explanation:
+            "Right — Nc3 supports e4 in case Black tries ...Nf6 attacking it. We have a defender ready.",
+        },
+        {
+          text: "It leaves the f-pawn free for a later f4 push.",
+          correct: true,
+          explanation:
+            "This is the BIG ONE. In the Italian (Nf3), the f-pawn is locked behind the knight forever. In the Vienna, f4 is on the table from move 3 onward.",
+        },
+        {
+          text: "It directly threatens to win Black's knight.",
+          correct: false,
+          explanation:
+            "No — Nc3 doesn't attack any Black piece on move 2. The threat comes later through the f4 break or central tactics, never on move 2 itself.",
+        },
+      ],
+    },
+    {
+      prompt: "What's the central idea behind the Vienna Gambit (3.f4)?",
+      choices: [
+        {
+          text: "Open lines for an attack on Black's king side.",
+          correct: true,
+          explanation:
+            "Exactly. We sacrifice the f-pawn to open the e-file (after exf4), free the dark-squared bishop, and create attacking chances along the f-file and the d1-h5 diagonal. Material for activity.",
+        },
+        {
+          text: "Lock the center pawn structure.",
+          correct: false,
+          explanation:
+            "Opposite of what happens — the gambit OPENS the center, not closes it. Lockdowns are for slower openings like the French or the Old Indian.",
+        },
+        {
+          text: "Force Black to trade queens immediately.",
+          correct: false,
+          explanation:
+            "No queen trade is forced. The gambit is about activity for material, not exchanges.",
+        },
+        {
+          text: "Win the e5-pawn after exf4.",
+          correct: false,
+          explanation:
+            "We're not playing for material — we're SACRIFICING the f-pawn. Winning e5 isn't the point; activity is.",
+        },
+      ],
+    },
+    {
+      prompt:
+        "Why do most Vienna players prefer 4.d3 instead of 4.Nf3 against the 2...Nc6 line?",
+      choices: [
+        {
+          text: "To kill the center fork trick (3.Bc4 Nxe4 4.Nxe4 d5) before it starts.",
+          correct: true,
+          explanation:
+            "Right. After 4.d3, the e4-pawn has TWO defenders (the c3-knight AND the d3-pawn), so 4...Nxe4 just loses a piece. With 4.Nf3, e4 has only one defender, and Black's Nxe4 → d5 fork costs us the bishop pair.",
+        },
+        {
+          text: "To prepare a quick queenside castle.",
+          correct: false,
+          explanation:
+            "We castle short in the Vienna, not long. d3 isn't related to castling preparation.",
+        },
+        {
+          text: "Because Nf3 blocks the f-pawn.",
+          correct: false,
+          explanation:
+            "True statement, but not why we play d3 here. We CAN play Nf3 in many Vienna lines (the 2...Bc5 branch, for example). The d3 specifically defends e4.",
+        },
+        {
+          text: "To threaten d4 next move.",
+          correct: false,
+          explanation:
+            "We're not really threatening d4 — d3 is a one-move-at-a-time defensive move. The threat is the absence of the fork trick.",
+        },
+      ],
+    },
+    {
+      prompt:
+        "When can White safely push f4 in the Vienna with Black's bishop on c5?",
+      choices: [
+        {
+          text: "After we trade off Black's c5-bishop (e.g. with Be3 Bxe3 fxe3).",
+          correct: true,
+          explanation:
+            "Exactly. Pushing f4 with a Black bishop on c5 alive is a blunder — it opens the long a7-g1 diagonal and our knight on g1 hangs to ...Bxg1. So we trade the bishop FIRST. Be3 challenges it head-on; if Black trades, we recapture with the f-pawn opening the f-file as a bonus.",
+        },
+        {
+          text: "Anytime after move 3 — Nc3 supports f4 indirectly.",
+          correct: false,
+          explanation:
+            "Not safe — Nc3 doesn't address the Bc5 diagonal threat. With Bc5 alive, f4 hangs the knight on g1.",
+        },
+        {
+          text: "Only after Black castles short.",
+          correct: false,
+          explanation:
+            "Black's castling doesn't change the c5-bishop's diagonal attack. The bishop has to move or trade BEFORE we push f4.",
+        },
+        {
+          text: "Never — the Vienna can't push f4 against ...Bc5.",
+          correct: false,
+          explanation:
+            "Too pessimistic — we CAN push f4 once the c5-bishop is gone. We just have to trade it first.",
+        },
+      ],
+    },
+  ],
+
+  // ─── Stage 3: Find the move (recognition) ──────────────────────
+  // Tests pattern recognition before motor recall. Each candidate
+  // gets an idea-label so the student is choosing between concepts,
+  // not just memorizing a SAN.
+  findMove: [
+    {
+      path: ['e4', 'e5'],
+      prompt: "White to play. Which move starts the Vienna?",
+      candidates: [
+        {
+          san: 'Nc3',
+          label: 'Nc3 — Vienna setup',
+          correct: true,
+          explanation:
+            "Yes — the defining Vienna move. Develops, defends e4, and crucially leaves the f-pawn free for a future f4 break.",
+        },
+        {
+          san: 'Nf3',
+          label: 'Nf3 — Italian/Spanish setup',
+          correct: false,
+          explanation:
+            "Solid move, but it locks the f-pawn behind the knight. You're now in Italian/Spanish territory, not the Vienna. The whole point of the Vienna is keeping f4 available.",
+        },
+        {
+          san: 'Bc4',
+          label: 'Bc4 — Italian-style bishop first',
+          correct: false,
+          explanation:
+            "Skips the knight development. Bishop's a fine square but you've lost a tempo for the Vienna structure.",
+        },
+        {
+          san: 'd4',
+          label: 'd4 — Center Game',
+          correct: false,
+          explanation:
+            "That's the Center Game (or Scotch with the wrong move order). Different opening, different ideas.",
+        },
+      ],
+    },
+    {
+      path: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'exf4'],
+      prompt:
+        "Black just took the gambit pawn with exf4. What does White play next?",
+      candidates: [
+        {
+          san: 'e5',
+          label: 'e5 — kick the f6-knight first',
+          correct: true,
+          explanation:
+            "Correct! Push e5 BEFORE developing. The knight on f6 has to move, and every square except Ng8 hangs material to our queen along the open d1-h5 diagonal. This is the foundational Vienna Gambit move-order lesson.",
+        },
+        {
+          san: 'Nf3',
+          label: 'Nf3 — defend against Qh4+ first',
+          correct: false,
+          explanation:
+            "The right idea (we do need to neutralize Qh4+) but the wrong move ORDER. Push e5 first to kick the knight; THEN play Nf3 once Black's knight has moved. Playing Nf3 first lets Black develop normally while you've gained nothing on tempo.",
+        },
+        {
+          san: 'd4',
+          label: 'd4 — open the center',
+          correct: false,
+          explanation:
+            "Doesn't address Qh4+ and doesn't gain tempo. The center push is right idea, wrong moment.",
+        },
+        {
+          san: 'Bc4',
+          label: 'Bc4 — develop the bishop',
+          correct: false,
+          explanation:
+            "Solid developing move but it lets Black's f6-knight stay aggressively placed. The kicking move e5 has to come first; develop after.",
+        },
+      ],
+    },
+    {
+      path: ['e4', 'e5', 'Nc3', 'Nf6', 'Bc4', 'Nxe4', 'Nxe4', 'd5', 'Bxd5', 'Qxd5'],
+      prompt:
+        "Black just played Qxd5. Their queen attacks our e4-knight! What's White's only good move?",
+      candidates: [
+        {
+          san: 'd3',
+          label: 'd3 — defend the knight in place',
+          correct: true,
+          explanation:
+            "Right — the d3-pawn supports the knight. Black can't take Nxe4 because we'd recapture with the pawn. We keep the piece and continue developing.",
+        },
+        {
+          san: 'Nc3',
+          label: 'Nc3 — retreat the knight',
+          correct: false,
+          explanation:
+            "Looks safe but actually loses material! Once the knight retreats, the d5-queen has a clean diagonal all the way to g2. Qxg2 wins our pawn AND attacks the rook on h1. The defend-in-place move (d3) is the only safe one.",
+        },
+        {
+          san: 'Nf3',
+          label: 'Nf3 — develop and ignore',
+          correct: false,
+          explanation:
+            "Just hangs the e4-knight. Black plays Qxe4+ winning a clean piece. Always check what your opponent's last move attacks before developing.",
+        },
+        {
+          san: 'Qf3',
+          label: 'Qf3 — challenge the queen',
+          correct: false,
+          explanation:
+            "Active but doesn't defend e4. Black trades queens and is up a piece. The defend-in-place pawn move is much simpler.",
+        },
+      ],
+    },
+    {
+      path: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'exf4', 'e5', 'Nh5'],
+      prompt:
+        "Black just played 4...Nh5 trying to defend f4. What's the punishment?",
+      candidates: [
+        {
+          san: 'Qxh5',
+          label: 'Qxh5 — queen takes the knight',
+          correct: true,
+          explanation:
+            "Yes! The d1-queen marches all the way down the open diagonal: d1 → e2 → f3 → g4 → h5, every square empty after the f-pawn left. Free knight. Black has no recapture. This is the Vienna Gambit's recurring lesson — when a pawn move opens a diagonal, recount what's on it.",
+        },
+        {
+          san: 'Bc4',
+          label: 'Bc4 — develop the bishop',
+          correct: false,
+          explanation:
+            "Develops but ignores the free knight on h5. When you have a free piece, take it. Development continues after the capture.",
+        },
+        {
+          san: 'g4',
+          label: 'g4 — kick the knight',
+          correct: false,
+          explanation:
+            "Misses the win. The knight just retreats (Nf6 back home or Ng7) and you've spent a tempo on a kick when you could have just captured.",
+        },
+        {
+          san: 'Nf3',
+          label: 'Nf3 — develop normally',
+          correct: false,
+          explanation:
+            "Misses the free piece. Always look for captures FIRST when it's your move. Development is automatic; tactics aren't.",
+        },
+      ],
+    },
+    {
+      path: ['e4', 'e5', 'Nc3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5'],
+      prompt:
+        "Black just played Bc5. Now we want to push f4 eventually — what should White play first?",
+      candidates: [
+        {
+          san: 'Be3',
+          label: 'Be3 — challenge the c5-bishop',
+          correct: true,
+          explanation:
+            "Right. Pushing f4 directly with Bc5 alive opens the long a7-g1 diagonal and our knight on g1 hangs to Bxg1. So we trade the bishop first. After Bxe3 fxe3, the f-pawn already moved (recapture), the bishop is gone, AND we have the open f-file for free.",
+        },
+        {
+          san: 'f4',
+          label: 'f4 — push directly',
+          correct: false,
+          explanation:
+            "Loses material! After f4, the f2-square clears and Black plays Bxg1 winning our knight. ALWAYS check the long diagonals before pushing pawns that open them.",
+        },
+        {
+          san: 'Nf3',
+          label: 'Nf3 — develop the knight',
+          correct: false,
+          explanation:
+            "Solid but it locks the f-pawn behind the knight forever. You've just turned your Vienna into an Italian. The whole reason we played Nc3 was to keep f4 available.",
+        },
+        {
+          san: 'h3',
+          label: 'h3 — kingside expansion',
+          correct: false,
+          explanation:
+            "Premature — h3 is useful later (preventing ...Bg4 once Black develops the bishop) but right now we have a more pressing concern: the c5-bishop's diagonal threatens our king position.",
+        },
+      ],
+    },
+  ],
+
+  // ─── Stage 4: Drill the line (woodpecker) ──────────────────────
+  // Full SAN sequences from the starting position. The student plays
+  // White; the runtime auto-plays Black. Wrong move resets to that
+  // position. Five lines = the five branches we taught, drillable
+  // until automatic.
+  drill: [
+    {
+      name: 'Italian-Vienna (vs 2...Nc6)',
+      subtitle: 'Most common amateur reply — through to middlegame',
+      moves: [
+        'e4', 'e5', 'Nc3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5',
+        'Be3', 'Bxe3', 'fxe3', 'd6', 'Nf3', 'O-O', 'O-O', 'Bg4', 'h3',
+      ],
+    },
+    {
+      name: 'Vienna Gambit Declined (Falkbeer)',
+      subtitle: '1.e4 e5 2.Nc3 Nf6 3.f4 d5 — the principled reply',
+      moves: [
+        'e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5', 'fxe5', 'Nxe4',
+        'Nf3', 'Be7', 'd3', 'Nxc3', 'bxc3', 'O-O', 'Be2', 'c5', 'O-O',
+      ],
+    },
+    {
+      name: 'Vienna Gambit Accepted',
+      subtitle: 'When Black takes the bait — Ng8 forced',
+      moves: [
+        'e4', 'e5', 'Nc3', 'Nf6', 'f4', 'exf4', 'e5', 'Ng8', 'Nf3',
+      ],
+    },
+    {
+      name: 'Center Fork Trick — White defends correctly',
+      subtitle: 'Through opposite-side castled middlegame',
+      moves: [
+        'e4', 'e5', 'Nc3', 'Nf6', 'Bc4', 'Nxe4', 'Nxe4', 'd5',
+        'Bxd5', 'Qxd5', 'd3', 'Nc6', 'Nf3', 'Bf5', 'O-O', 'O-O-O', 'd4',
+      ],
+    },
+    {
+      name: 'Calm Italian-Vienna (vs 2...Bc5)',
+      subtitle: 'Symmetric Italian-style with Vienna asymmetry',
+      moves: [
+        'e4', 'e5', 'Nc3', 'Bc5', 'Nf3', 'Nf6', 'Bc4', 'Nc6',
+        'O-O', 'd6', 'd3', 'O-O',
+      ],
+    },
+  ],
+
+  // ─── Stage 5: Punish inaccuracies ──────────────────────────────
+  // The "book in front of the LLM" stage. For each common amateur
+  // mistake: the SETUP that leads to the mistake, WHY the mistake is
+  // bad (the principle, not just the tactic), the PUNISHMENT, why
+  // it works (the principle again), distractor moves that look
+  // plausible but miss, and the FOLLOWUP showing how the win
+  // materializes. This is where intermediate players become advanced.
+  punish: [
+    {
+      name: "4...Ng4? — the active retreat that hangs",
+      setupMoves: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'exf4', 'e5'],
+      inaccuracy: 'Ng4',
+      whyBad:
+        "Black thinks the knight on g4 is 'active' — eyeing f2, supporting a future Qh4+ check. But Black missed a critical fact: when the f-pawn left f2 (way back on move 3), the d1-queen got an open diagonal pointing right at the kingside. d1 → e2 → f3 → g4 — every square empty. The knight on g4 is just a piece sitting at the end of that diagonal with NO defender. The 'active retreat' is actually an active hang. This is a recurring trap throughout chess: when a pawn move opens a line, immediately recount the attackers and defenders along that newly-opened line. Black neglected to.",
+      punishment: 'Qxg4',
+      whyPunish:
+        "Queen takes knight, end of discussion. Black has no recapture — no Black piece attacks g4 right now. We go from down a pawn (the gambit) to up a clean knight. The recurring chess principle: ALWAYS look for captures first when it's your move. Tactics live ahead of strategy. The lesson Black needs to learn from this game is the diagonal-counting habit.",
+      distractors: [
+        {
+          san: 'Nf3',
+          label: 'Nf3 — develop and shut Qh4+',
+          explanation:
+            "Misses the free piece. Right idea on the SECOND-best move (Nf3 IS what we'd play if Black retreated to Ng8), but here we have a tactic. Always look for captures first.",
+        },
+        {
+          san: 'd4',
+          label: 'd4 — push for the center',
+          explanation:
+            "Walks past the free knight. The center push is right idea for the Vienna, wrong moment when there's a free piece on the board.",
+        },
+        {
+          san: 'h3',
+          label: 'h3 — kick the knight',
+          explanation:
+            "Why kick a piece you can capture? After h3, the knight retreats and you've spent a tempo for nothing instead of winning material.",
+        },
+      ],
+      followup: [
+        {
+          san: 'd5',
+          idea:
+            "Black's only counter-shot is something desperate like ...d5 trying to open lines. Doesn't matter — you're a piece up.",
+        },
+        {
+          san: 'd3',
+          idea:
+            'Solid response — defend e4, finish development, convert the piece advantage.',
+        },
+      ],
+    },
+    {
+      name: "4...Nh5? — same diagonal, same fate",
+      setupMoves: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'exf4', 'e5'],
+      inaccuracy: 'Nh5',
+      whyBad:
+        "Black tries Nh5 with the same idea as Ng4 — defend f4, prepare g6/Bg7 setup. And the same lesson applies, sharper this time: the d1-queen's diagonal extends ALL the way to h5. d1 → e2 → f3 → g4 → h5, four empty squares. The knight on h5 is at the very end of that diagonal, undefended, asking to be taken. The structural lesson is the same as Ng4 but it's worth seeing twice — when an opening pawn move clears a long diagonal, that's the FIRST thing to check before committing pieces nearby.",
+      punishment: 'Qxh5',
+      whyPunish:
+        "Queen marches all the way to h5 and takes the knight. No recapture. Free piece, same as Ng4. Two examples of the same principle: in any Vienna Gambit accepted, if Black puts a knight on g4 OR h5, the d1-queen wins it. The principle generalizes: open diagonals in YOUR favor are the strongest piece-winning weapons in chess.",
+      distractors: [
+        {
+          san: 'g4',
+          label: 'g4 — kick before taking',
+          explanation:
+            "g4 attacks the knight, but we can just take it directly with the queen. Don't waste a tempo on a kick when capture is available.",
+        },
+        {
+          san: 'Nf3',
+          label: 'Nf3 — develop',
+          explanation:
+            "Misses the free piece AGAIN. The lesson keeps repeating: captures first, development second.",
+        },
+        {
+          san: 'd3',
+          label: 'd3 — defend e4',
+          explanation:
+            "Solid-looking move that ignores the free knight. Always look for captures FIRST.",
+        },
+      ],
+      followup: [
+        {
+          san: 'd6',
+          idea:
+            "Black tries to develop and hope. Doesn't matter — you're up a piece.",
+        },
+        {
+          san: 'Nf3',
+          idea:
+            'Now develop — bring the second knight out, prepare Bc4 and castling. Consolidate.',
+        },
+      ],
+    },
+    {
+      name: "4...Nd5? — another knight square that just loses",
+      setupMoves: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'exf4', 'e5'],
+      inaccuracy: 'Nd5',
+      whyBad:
+        "Different square, different attacker, same loss. Black centralizes the knight on d5 hoping for activity, but Nd5 is attacked by our c3-knight AND has zero defenders (Black's d-pawn is still on d7, blocking the queen from defending vertically). The lesson: when you move a piece to a square, count BOTH the attackers (who can take it) and the defenders (who can recapture). One attacker + zero defenders = lost piece.",
+      punishment: 'Nxd5',
+      whyPunish:
+        "Knight takes knight cleanly. Black has no recapture: ...Qxd5 is illegal (d7-pawn blocks), no other pieces reach d5. Up a knight, the rest is conversion. The lesson sticks: in the Vienna Gambit accepted line, the f-pawn's departure opened diagonals AND your own c3-knight controls the central squares. Black's knight has nowhere to go.",
+      distractors: [
+        {
+          san: 'Nf3',
+          label: 'Nf3 — develop',
+          explanation:
+            "Misses the free knight. Develops, but Black's knight on d5 was just sitting there asking to be taken. Captures first, every time.",
+        },
+        {
+          san: 'd4',
+          label: 'd4 — push for center',
+          explanation:
+            "Push misses the free piece. The center push is right idea for the Vienna long-term, wrong moment when there's a free knight on d5.",
+        },
+        {
+          san: 'Bc4',
+          label: 'Bc4 — develop the bishop',
+          explanation:
+            "Misses the free knight. Always look for captures first when it's your move.",
+        },
+      ],
+      followup: [
+        {
+          san: 'Qe7',
+          idea:
+            "Black tries Qe7 hoping to trade some pieces. Whatever — you're a knight up.",
+        },
+        {
+          san: 'Nf3',
+          idea:
+            'Develop the second knight, prepare castling. Convert the piece.',
+        },
+      ],
+    },
+    {
+      name: "4...Ne4? — last of the failed knight tries",
+      setupMoves: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'exf4', 'e5'],
+      inaccuracy: 'Ne4',
+      whyBad:
+        "Black moves the knight to e4 hoping to attack our c3-knight. But Black missed: their knight on e4 is itself attacked by our c3-knight, and Black has zero defenders for it. So Black is offering a knight trade where THEY lose the piece, not us. This is the fourth variation of the same lesson: every Black knight square except Ng8 in this position hangs to White's superior piece coordination.",
+      punishment: 'Nxe4',
+      whyPunish:
+        "Knight takes knight, end of story. Black has no recapture (no piece attacks e4). We've now seen four flavors of the same principle in this exact position: Ng4 hangs to the queen, Nh5 hangs to the queen, Nd5 hangs to the c3-knight, Ne4 hangs to the c3-knight. Black's ONLY non-losing move was Ng8 — pure passive retreat. That's why the Vienna Gambit accepted is theoretically refuted at master level.",
+      distractors: [
+        {
+          san: 'd3',
+          label: 'd3 — kick the knight',
+          explanation:
+            "Yes, d3 attacks the knight, BUT capture is available. Why kick when you can take? Always check captures first.",
+        },
+        {
+          san: 'Nf3',
+          label: 'Nf3 — develop the second knight',
+          explanation:
+            "Develops nicely but ignores the free knight on e4. Always check for captures FIRST. The four-times-in-a-row lesson.",
+        },
+        {
+          san: 'Bc4',
+          label: 'Bc4 — develop the bishop',
+          explanation:
+            "Develops the bishop but ignores the free knight. The lesson, four times in a row: captures first.",
+        },
+      ],
+    },
+    {
+      name: "6...Nxe4? — the 'free pawn' that wasn't",
+      setupMoves: [
+        'e4', 'e5', 'Nc3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5',
+        'Be3', 'Bxe3', 'fxe3',
+      ],
+      inaccuracy: 'Nxe4',
+      whyBad:
+        "Black sees the e4-pawn 'unprotected' and grabs it with the f6-knight. Classic amateur blunder, and it teaches the most important counting principle in chess. Black counted ONE attacker on e4 (their own f6-knight) — but missed that e4 has TWO defenders: the c3-knight AND the d3-pawn. With more defenders than attackers, the pawn is poison. This is the universal opening lesson: BEFORE you grab a 'free' pawn, count attackers, count defenders. If defenders ≥ attackers, the pawn isn't free — it's a hook to win YOUR piece.",
+      punishment: 'Nxe4',
+      whyPunish:
+        "Knight takes knight. Black is now down a piece for a single pawn — a catastrophic trade. The structural lesson: 'Looks free' is not a chess concept. 'Has more attackers than defenders' is. This SAME principle applies in the middlegame, the endgame, and tactical puzzles for the rest of your chess life. Internalize it now.",
+      distractors: [
+        {
+          san: 'dxe4',
+          label: 'Pawn takes (dxe4)',
+          explanation:
+            "Also wins the knight, but it removes our d3-pawn from the position. Knight recapture is cleaner: it keeps our pawn structure intact and our knight stays in the center. Always prefer the cleaner recapture.",
+        },
+        {
+          san: 'Bxf7+',
+          label: 'Bxf7+ — counter-sacrifice',
+          explanation:
+            "Loses a bishop for one pawn — a panic move that makes the position WORSE. When you have a free piece coming, just take it. Don't get fancy.",
+        },
+        {
+          san: 'Nf3',
+          label: 'Nf3 — develop and ignore',
+          explanation:
+            "Develops the kingside knight but ignores the free piece on e4. Captures first, every time.",
+        },
+      ],
+      followup: [
+        {
+          san: 'd6',
+          idea:
+            "Black tries to develop and pretend nothing happened. Doesn't matter — you're up a piece.",
+        },
+        {
+          san: 'Nf3',
+          idea:
+            'Develop the kingside knight, prepare castling. Convert the material advantage with simple, accurate play.',
+        },
+        {
+          san: 'O-O',
+          idea:
+            "Black plays it later — castle, exchange pieces if you can, simplify to a winning endgame. A piece up at this stage is a comfortably winning advantage.",
+        },
+      ],
+    },
+  ],
+
   root: {
     san: null,
     movedBy: null,

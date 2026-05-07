@@ -29,11 +29,15 @@
  *   - leafOutros keys correspond to real leaf paths
  *   - Word count sanity (idea ~20-300 words; warns outside)
  */
+import { Chess } from 'chess.js';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
   NarrationSegment,
 } from '../../types/walkthroughTree';
+
+const STARTING_FEN =
+  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 export interface ValidationIssue {
   severity: 'error' | 'warning';
@@ -295,6 +299,234 @@ export function validateWalkthroughTree(
       }
     }
   }
+
+  return issues;
+}
+
+/** Try a SAN sequence from the starting position. Returns the
+ *  resulting Chess instance on success, or an error message on the
+ *  first illegal move. */
+function tryReplay(sans: string[]): { fen: string } | { error: string; failedAt: number; failedSan: string } {
+  const c = new Chess();
+  for (let i = 0; i < sans.length; i += 1) {
+    try {
+      c.move(sans[i]);
+    } catch {
+      return { error: `illegal move`, failedAt: i, failedSan: sans[i] };
+    }
+  }
+  return { fen: c.fen() };
+}
+
+/** Validate that every SAN sequence in the optional fields
+ *  (concepts/findMove/drill/punish) is legal from the starting
+ *  position. The tree's `root` is validated separately by
+ *  vienna.test.ts (kept there for historical reasons + because the
+ *  tree-walking logic is more complex). */
+export function validateMoveLegality(
+  tree: WalkthroughTree,
+): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  // findMove: path is a legal SAN sequence; each candidate's SAN is
+  // legal from the path's resulting FEN.
+  if (tree.findMove) {
+    for (let i = 0; i < tree.findMove.length; i += 1) {
+      const q = tree.findMove[i];
+      const replay = tryReplay(q.path);
+      if ('error' in replay) {
+        issues.push({
+          severity: 'error',
+          path: ['findMove', String(i), 'path'],
+          message: `path illegal at index ${replay.failedAt} ("${replay.failedSan}")`,
+        });
+        continue;
+      }
+      // Test each candidate from the resulting FEN.
+      for (let j = 0; j < q.candidates.length; j += 1) {
+        const cand = q.candidates[j];
+        const probe = new Chess(replay.fen);
+        try {
+          probe.move(cand.san);
+        } catch {
+          issues.push({
+            severity: 'error',
+            path: ['findMove', String(i), 'candidates', String(j)],
+            message: `candidate "${cand.san}" is illegal from path FEN`,
+          });
+        }
+      }
+      // Exactly one candidate should be marked correct.
+      const correctCount = q.candidates.filter((c) => c.correct).length;
+      if (correctCount !== 1) {
+        issues.push({
+          severity: 'error',
+          path: ['findMove', String(i)],
+          message: `expected exactly 1 correct candidate, got ${correctCount}`,
+        });
+      }
+    }
+  }
+
+  // drill: each line's moves are a legal SAN sequence from start.
+  if (tree.drill) {
+    for (let i = 0; i < tree.drill.length; i += 1) {
+      const line = tree.drill[i];
+      if (!line.name.trim()) {
+        issues.push({
+          severity: 'error',
+          path: ['drill', String(i)],
+          message: 'drill line has empty name',
+        });
+      }
+      if (line.moves.length === 0) {
+        issues.push({
+          severity: 'error',
+          path: ['drill', String(i), 'moves'],
+          message: 'drill line has empty moves array',
+        });
+        continue;
+      }
+      const replay = tryReplay(line.moves);
+      if ('error' in replay) {
+        issues.push({
+          severity: 'error',
+          path: ['drill', String(i), 'moves'],
+          message: `drill moves illegal at index ${replay.failedAt} ("${replay.failedSan}")`,
+        });
+      }
+    }
+  }
+
+  // punish: setupMoves legal, inaccuracy legal from setup,
+  // punishment legal from setup+inaccuracy, distractors legal from
+  // setup+inaccuracy, followup moves legal from setup+inaccuracy+punishment.
+  if (tree.punish) {
+    for (let i = 0; i < tree.punish.length; i += 1) {
+      const lesson = tree.punish[i];
+      if (!lesson.name.trim()) {
+        issues.push({
+          severity: 'error',
+          path: ['punish', String(i)],
+          message: 'punish lesson has empty name',
+        });
+      }
+
+      // setup
+      const setupReplay = tryReplay(lesson.setupMoves);
+      if ('error' in setupReplay) {
+        issues.push({
+          severity: 'error',
+          path: ['punish', String(i), 'setupMoves'],
+          message: `setupMoves illegal at index ${setupReplay.failedAt} ("${setupReplay.failedSan}")`,
+        });
+        continue;
+      }
+
+      // inaccuracy
+      let postInaccuracyFen: string | null = null;
+      try {
+        const probe = new Chess(setupReplay.fen);
+        probe.move(lesson.inaccuracy);
+        postInaccuracyFen = probe.fen();
+      } catch {
+        issues.push({
+          severity: 'error',
+          path: ['punish', String(i), 'inaccuracy'],
+          message: `inaccuracy "${lesson.inaccuracy}" illegal from setup FEN`,
+        });
+      }
+
+      if (postInaccuracyFen) {
+        // punishment
+        let postPunishFen: string | null = null;
+        try {
+          const probe = new Chess(postInaccuracyFen);
+          probe.move(lesson.punishment);
+          postPunishFen = probe.fen();
+        } catch {
+          issues.push({
+            severity: 'error',
+            path: ['punish', String(i), 'punishment'],
+            message: `punishment "${lesson.punishment}" illegal from post-inaccuracy FEN`,
+          });
+        }
+
+        // distractors — legal alternatives to the punishment
+        for (let j = 0; j < lesson.distractors.length; j += 1) {
+          const d = lesson.distractors[j];
+          try {
+            const probe = new Chess(postInaccuracyFen);
+            probe.move(d.san);
+          } catch {
+            issues.push({
+              severity: 'error',
+              path: ['punish', String(i), 'distractors', String(j)],
+              message: `distractor "${d.san}" illegal from post-inaccuracy FEN`,
+            });
+          }
+        }
+
+        // followup
+        if (postPunishFen && lesson.followup) {
+          const probe = new Chess(postPunishFen);
+          for (let j = 0; j < lesson.followup.length; j += 1) {
+            const fm = lesson.followup[j];
+            try {
+              probe.move(fm.san);
+            } catch {
+              issues.push({
+                severity: 'error',
+                path: ['punish', String(i), 'followup', String(j)],
+                message: `followup move "${fm.san}" illegal from prior position`,
+              });
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // concepts: optional path is legal.
+  if (tree.concepts) {
+    for (let i = 0; i < tree.concepts.length; i += 1) {
+      const q = tree.concepts[i];
+      if (q.path && q.path.length > 0) {
+        const replay = tryReplay(q.path);
+        if ('error' in replay) {
+          issues.push({
+            severity: 'error',
+            path: ['concepts', String(i), 'path'],
+            message: `path illegal at index ${replay.failedAt} ("${replay.failedSan}")`,
+          });
+        }
+      }
+      // multiSelect → at least one correct; single-select → exactly one.
+      const correctCount = q.choices.filter((c) => c.correct).length;
+      if (q.multiSelect) {
+        if (correctCount === 0) {
+          issues.push({
+            severity: 'error',
+            path: ['concepts', String(i)],
+            message: 'multiSelect question has zero correct choices',
+          });
+        }
+      } else {
+        if (correctCount !== 1) {
+          issues.push({
+            severity: 'error',
+            path: ['concepts', String(i)],
+            message: `single-select question has ${correctCount} correct choices, expected exactly 1`,
+          });
+        }
+      }
+    }
+  }
+
+  // Suppress the unused variable lint by referencing STARTING_FEN
+  // (we use it indirectly via `new Chess()` which initializes to it).
+  void STARTING_FEN;
 
   return issues;
 }
