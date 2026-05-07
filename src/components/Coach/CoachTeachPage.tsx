@@ -20,6 +20,10 @@ import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
+import type {
+  WalkthroughTree,
+  WalkthroughTreeNode,
+} from '../../types/walkthroughTree';
 import {
   generateOpening,
   getCachedOpening,
@@ -61,6 +65,54 @@ const SUGGESTIONS = [
   'How do I attack a castled king?',
   'What is the Sicilian Defense and why play it?',
 ];
+
+/** A deep-dive entry point pulled from the walkthrough tree. Every
+ *  fork branch in the tree is a natural deep-dive candidate — when
+ *  the user picked the Classical Pirc in the walkthrough, they can
+ *  later come back and dive deeper into the Austrian Attack or 150
+ *  Attack as separate, focused lessons.
+ *
+ *  pathSans is the SAN sequence to reach the fork's parent (the
+ *  position where the choice was offered); label is the child's
+ *  SAN (the branch's first move); subtitle is the prose chip text
+ *  ("Main line — natural development", etc.). */
+interface DeepDiveOption {
+  pathSans: string[];
+  label: string;
+  subtitle: string;
+}
+
+/** Walk every fork in the tree and emit one DeepDiveOption per
+ *  child. Limited to the FIRST fork's children for surface clarity —
+ *  a tree with three forks would emit 9 options otherwise, which
+ *  overwhelms the menu. The first fork is always the most pedagogically
+ *  significant ("3.Nc3 vs 3.f3 vs 3.Bd3" in the Pirc). Returns
+ *  empty array when the tree has no fork (linear walkthrough). */
+function extractDeepDiveOptions(tree: WalkthroughTree): DeepDiveOption[] {
+  const options: DeepDiveOption[] = [];
+  function walk(node: WalkthroughTreeNode, pathSans: string[]): boolean {
+    if (node.children.length > 1) {
+      for (const child of node.children) {
+        if (child.label && child.forkSubtitle && child.node.san) {
+          options.push({
+            pathSans: [...pathSans],
+            label: child.label,
+            subtitle: child.forkSubtitle,
+          });
+        }
+      }
+      // Stop after finding the first fork — see comment above.
+      return true;
+    }
+    for (const child of node.children) {
+      const childPath = node.san === null ? pathSans : [...pathSans, node.san];
+      if (walk(child.node, childPath)) return true;
+    }
+    return false;
+  }
+  walk(tree.root, []);
+  return options;
+}
 
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
@@ -1461,7 +1513,11 @@ export function CoachTeachPage(): JSX.Element {
             back to the coach hub. When a walkthrough is active, this
             row is replaced by the walkthrough control panel below. */}
         {walkthrough.isActive ? (
-          <WalkthroughControls walkthrough={walkthrough} navigate={navigate} />
+          <WalkthroughControls
+            walkthrough={walkthrough}
+            navigate={navigate}
+            onDeepDive={(query) => void handleSubmit(query)}
+          />
         ) : (
           <div className="flex items-center justify-center gap-2 px-3 pb-3">
             <button
@@ -1777,9 +1833,15 @@ function StageStatus({ done }: { done: boolean }): JSX.Element {
 function WalkthroughControls({
   walkthrough,
   navigate,
+  onDeepDive,
 }: {
   walkthrough: ReturnType<typeof useTeachWalkthrough>;
   navigate: ReturnType<typeof useNavigate>;
+  /** Fired when the student picks a deep-dive option from the stage
+   *  menu. The parent submits the resulting query through the same
+   *  surface routing that handles chat input, so existing typo
+   *  tolerance + broad-vs-specific depth logic kicks in. */
+  onDeepDive: (query: string) => void;
 }): JSX.Element {
   const { phase, forkOptions, canBacktrack, leafOutro, tree } = walkthrough;
 
@@ -2093,6 +2155,39 @@ function WalkthroughControls({
               </div>
               <StageStatus done={completedStages.has('punish')} />
             </button>
+          )}
+          {tree && extractDeepDiveOptions(tree).length > 0 && (
+            <>
+              <div className="text-xs font-medium text-theme-text-muted px-1 pt-2">
+                Dive deeper into a variation
+              </div>
+              {extractDeepDiveOptions(tree).map((opt, idx) => (
+                <button
+                  key={`deepdive-${idx}`}
+                  onClick={() => {
+                    const ctx = opt.pathSans.length > 0
+                      ? `after ${opt.pathSans.join(' ')} ${opt.label}`
+                      : `${opt.label}`;
+                    const query = `${tree.openingName} ${ctx}`;
+                    walkthrough.stop();
+                    onDeepDive(query);
+                  }}
+                  className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+                  style={goldGlowStyle}
+                  data-testid={`walkthrough-deepdive-${idx}`}
+                >
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <span className="text-sm font-semibold text-theme-text truncate">{opt.subtitle}</span>
+                    <span className="text-[11px] text-theme-text-muted">
+                      {opt.pathSans.length > 0
+                        ? `after ${opt.pathSans.join(' ')} ${opt.label}`
+                        : opt.label}
+                    </span>
+                  </div>
+                  <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+                </button>
+              ))}
+            </>
           )}
           <button
             onClick={() => {
