@@ -1,27 +1,32 @@
 /**
  * start_walkthrough_for_opening — REAL (WO-COACH-LICHESS-OPENINGS).
  *
- * Hands off to the existing WalkthroughMode UI seeded by an opening
- * name. The surface navigates the user to /coach/session/walkthrough
- * (or the equivalent route in this app) with the opening name and
- * optional variation / orientation / PGN as query params.
+ * On /coach/teach, when the requested opening has a curated tree
+ * registered in `data/openingWalkthroughs/`, the surface starts an
+ * IN-PLACE walkthrough: the board takes over with the line's first
+ * move, voice narrates each idea, and at branches the student picks
+ * which sub-line to explore via tap targets — all without leaving
+ * the chat panel. For openings with no curated tree, the surface
+ * falls back to navigating to the legacy /coach/session/walkthrough
+ * route. Either way the brain just calls this tool with an opening
+ * name and the surface decides which mode to use.
  *
- * Use at the END of an interactive opening tour to drop the student
- * into the dedicated walkthrough player for repetition / drilling.
- *
- * Integrates with the existing routing surface — the coach doesn't
- * navigate directly; it asks the surface to do it via the
+ * Integrates with the routing surface — the coach doesn't navigate
+ * directly; it asks the surface to do it via the
  * `onStartWalkthroughForOpening` callback.
  */
 import type { Tool } from '../../types';
 import { logAppAudit } from '../../../services/appAuditor';
+import { listAvailableWalkthroughs } from '../../../data/openingWalkthroughs';
 
 export const startWalkthroughForOpeningTool: Tool = {
   name: 'start_walkthrough_for_opening',
   category: 'cerebrum',
   kind: 'write',
   description:
-    "FIRST CHOICE for any 'teach me [opening]' / 'walk me through [line]' / 'show me the [opening] traps' ask. Routes the student to a dedicated walkthrough surface where each move animates sequentially with timed narration — the right experience for a guided opening lesson. The student SEES every move land in order; that's something /coach/teach can't deliver because set_board_position jumps and play_move violates user sovereignty when the demo move is on the student's color. Reach for THIS tool the moment the student names an opening they want to learn — don't try to walk through the line via play_move sequences (production audit, build 42fb9a0, caught 9-rejection cascades) or chained set_board_position calls (only the last position renders). Optional `pgn` arg seeds the walkthrough from a specific master game (typically fetched via lichess_game_export). Optional `orientation` controls which color the student plays.",
+    "FIRST CHOICE for any 'teach me [opening]' / 'walk me through [line]' / 'show me the [opening] traps' ask. On /coach/teach the surface drives an IN-PLACE walkthrough when the opening has a curated tree (currently: " +
+    listAvailableWalkthroughs().map((w) => `${w.name} (${w.eco})`).join(', ') +
+    ") — the board animates each move with voice narration and pauses at branches with tap targets so the student picks which sub-line to explore. The chat panel stays available the whole time, so a question like 'why is that bad for white?' just pauses the walkthrough and resumes after the answer. For openings with no curated tree the surface falls back to navigating to the legacy walkthrough route. Reach for THIS tool the moment the student names an opening they want to learn — don't try to walk through the line via play_move sequences (production audit, build 42fb9a0, caught 9-rejection cascades) or chained set_board_position calls (only the last position renders). After calling this, you can stop generating moves on the board — the walkthrough runtime owns the board until the student exits or finishes a leaf. Optional `pgn` arg seeds the LEGACY walkthrough from a specific master game (ignored when an in-place tree exists). Optional `orientation` controls which color the student plays.",
   parameters: {
     type: 'object',
     properties: {
