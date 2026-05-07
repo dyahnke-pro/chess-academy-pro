@@ -326,6 +326,182 @@ export function findRelatedDbEntries(
 }
 
 
+/** A line-picker option: a named sub-variation the user can choose
+ *  to focus the LLM gen on, with a style tag for color-coding. */
+export interface LinePickerOption {
+  /** Display label (e.g. "Najdorf Variation"). */
+  label: string;
+  /** Full opening name to send to the gen path (e.g. "Sicilian
+   *  Defense: Najdorf Variation") — produces a specific deep-dive. */
+  fullName: string;
+  /** ECO code, shown as a small badge. */
+  eco: string;
+  /** Style tag matching one of the keys in neonColors.STYLE_COLORS
+   *  ('sharp', 'solid', 'positional', 'tactical', 'gambit',
+   *  'classical', 'hypermodern', 'aggressive', etc.). Drives tile
+   *  glow color. */
+  style: string;
+  /** Move count (PGN plies) — surface as a "depth: N moves" hint. */
+  pgnLength: number;
+}
+
+/** Classify a variation's style from name keywords. Falls through to
+ *  'classical' as the neutral default. Production heuristic — not
+ *  authoritative, but good enough to color-code tiles distinctly so
+ *  the user can recognize sharp vs solid lines at a glance.
+ *
+ *  Keys returned MUST exist in neonColors.STYLE_COLORS so the UI
+ *  can look them up via getNeonColor(). */
+export function classifyVariationStyle(name: string): string {
+  const lower = name.toLowerCase();
+  // Hardcoded mappings for major variations whose keyword would
+  // misfire on the heuristic below.
+  if (/\b(najdorf|dragon|sveshnikov|taimanov|sicilian|hampe.allgaier|frankenstein.dracula)\b/.test(lower)) {
+    return 'sharp';
+  }
+  if (/\b(berlin|petrov|petroff|slav|london|exchange|caro.kann)\b/.test(lower)) {
+    return 'solid';
+  }
+  if (/\b(catalan|qgd|queen'?s gambit declined|nimzo.indian|tarrasch)\b/.test(lower)) {
+    return 'positional';
+  }
+  if (/\b(smith.morra|alapin|grand prix|fried liver)\b/.test(lower)) {
+    return 'aggressive';
+  }
+  if (/\b(king'?s indian|grunfeld|grünfeld|benoni|benko|dutch|alekhine|pirc|modern)\b/.test(lower)) {
+    return 'hypermodern';
+  }
+  if (/\b(scandinavian|center counter)\b/.test(lower)) {
+    return 'classical';
+  }
+  // Heuristic by keyword in the variation suffix.
+  if (/\bgambit\b/.test(lower)) return 'gambit';
+  if (/\battack\b/.test(lower)) return 'aggressive';
+  if (/\bclosed\b/.test(lower)) return 'positional';
+  if (/\bopen\b/.test(lower)) return 'open';
+  if (/\bclassical\b/.test(lower)) return 'classical';
+  if (/\bmodern\b/.test(lower)) return 'hypermodern';
+  if (/\bcounter|countergambit\b/.test(lower)) return 'tactical';
+  return 'classical';
+}
+
+/** When the user types a BROAD opening name (e.g. "Sicilian", "French
+ *  Defense", "King's Indian"), the LLM-gen path otherwise spreads the
+ *  output budget across many variations and produces a shallow
+ *  overview. The line picker intercepts this case: detect that the
+ *  query matches a top-level opening with named sub-variations, and
+ *  return those variations so the UI can ask the user which one to
+ *  deep-dive on. The chosen variation gets the full token budget for
+ *  real theoretical depth.
+ *
+ *  Returns null when:
+ *    - The input isn't a broad opening (it's already a specific
+ *      variation like "Najdorf Sicilian", or it doesn't resolve in
+ *      the DB at all).
+ *    - The DB has fewer than `minVariations` sub-variations for the
+ *      input (not enough to make a picker worthwhile). */
+export function findLinePickerOptions(
+  query: string,
+  minVariations: number = 5,
+): { canonicalName: string; options: LinePickerOption[] } | null {
+  const trimmed = query.trim();
+  if (!trimmed) return null;
+
+  // Resolve through the alias map first so "KID" / "Caro Kann" work.
+  const aliased = NAME_ALIASES[trimmed.toLowerCase()] ?? trimmed;
+  const queryNorm = normalizeNameForMatch(aliased);
+
+  // Find the BARE entry — broad opening typed exactly. We use
+  // normalized matching so apostrophes / diacritics / hyphens don't
+  // block it. Also accept the queryNorm as a strict prefix of the
+  // bare name when it ends in "Defense" / "Game" / "Opening" — so
+  // user typing "Sicilian" matches the bare "Sicilian Defense".
+  // When multiple candidates match (e.g. "King's Indian Defense"
+  // AND "King's Indian Attack" both strip to "kings indian"),
+  // prefer Defense > Game > Opening > Attack (defense is the most
+  // commonly-meant when a user types just the family name).
+  const entries = openingsData as OpeningEntry[];
+  const bareCandidates = entries.filter((e) => {
+    const eNorm = normalizeNameForMatch(e.name);
+    if (eNorm === queryNorm) return true;
+    const eStripped = eNorm
+      .replace(/\s+(defense|defence|game|opening|attack)$/i, '')
+      .trim();
+    return eStripped === queryNorm && !e.name.includes(':');
+  });
+  if (bareCandidates.length === 0) return null;
+  const SUFFIX_PRIORITY = ['defense', 'defence', 'game', 'opening', 'attack', ''];
+  const bareCandidate = bareCandidates.reduce((a, b) => {
+    const ar = SUFFIX_PRIORITY.findIndex((s) =>
+      a.name.toLowerCase().endsWith(s),
+    );
+    const br = SUFFIX_PRIORITY.findIndex((s) =>
+      b.name.toLowerCase().endsWith(s),
+    );
+    return ar <= br ? a : b;
+  });
+
+  // The bare entry should be at low PGN depth (top-level opening).
+  // If we matched something that's already a sub-variation deep in
+  // the tree, the user already specified — no picker needed.
+  const barePlies = bareCandidate.pgn.split(/\s+/).filter(Boolean).length;
+  if (barePlies > 6 || bareCandidate.name.includes(':')) return null;
+
+  // Enumerate sub-variations: entries whose name starts with
+  // bareCandidate.name + ":" — those are the named children.
+  const prefix = bareCandidate.name + ':';
+  const children = entries.filter((e) => e.name.startsWith(prefix));
+
+  // Dedupe by everything-after-the-colon (DB lists same variation at
+  // multiple PGN depths). Keep shortest PGN per unique sub-name.
+  const byName = new Map<string, OpeningEntry>();
+  for (const c of children) {
+    const subName = c.name.slice(prefix.length).trim();
+    // Only the FIRST sub-variation segment (split on ',' — DB nests
+    // sub-sub-variations after a comma). "Najdorf Variation, English
+    // Attack" becomes just "Najdorf Variation" for the picker.
+    const topSub = subName.split(',')[0].trim();
+    const fullName = `${bareCandidate.name}: ${topSub}`;
+    const existing = byName.get(topSub);
+    if (!existing || c.pgn.length < existing.pgn.length) {
+      byName.set(topSub, { ...c, name: fullName });
+    }
+  }
+
+  const options: LinePickerOption[] = Array.from(byName.values())
+    .map((e) => {
+      const label = e.name.slice(prefix.length).trim();
+      return {
+        label,
+        fullName: e.name,
+        eco: e.eco,
+        // Classify by the sub-variation label ALONE, not the full
+        // "Parent: Sub" string. Otherwise "Sicilian Defense:
+        // Alapin Variation" would inherit the parent's "sharp" tag
+        // and every variation would be sharp. We want each tile
+        // colored by ITS character, not the parent's.
+        style: classifyVariationStyle(label),
+        pgnLength: e.pgn.split(/\s+/).filter(Boolean).length,
+      };
+    })
+    // Sort by PGN length asc (trunk-near first), then alphabetically.
+    .sort((a, b) => {
+      if (a.pgnLength !== b.pgnLength) return a.pgnLength - b.pgnLength;
+      return a.label.localeCompare(b.label);
+    });
+
+  if (options.length < minVariations) return null;
+
+  // Cap at 15 options — beyond that the picker becomes overwhelming.
+  // The 15 trunk-near variations cover what a 1200-1600 rated player
+  // would reasonably encounter.
+  const MAX_OPTIONS = 15;
+  return {
+    canonicalName: bareCandidate.name,
+    options: options.slice(0, MAX_OPTIONS),
+  };
+}
+
 /**
  * Given a requested opening's move list and the current game history,
  * return the next book move the AI should play, or null if we've left the book.

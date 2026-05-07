@@ -30,7 +30,12 @@ import {
   cacheOpening,
   generateMissingStagesInBackground,
 } from '../../services/openingGenerator';
-import { getOpeningMoves } from '../../services/openingDetectionService';
+import {
+  getOpeningMoves,
+  findLinePickerOptions,
+  type LinePickerOption,
+} from '../../services/openingDetectionService';
+import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import {
   getCompletedStages,
   type ProgressStage,
@@ -134,6 +139,10 @@ export function CoachTeachPage(): JSX.Element {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [linePicker, setLinePicker] = useState<{
+    canonicalName: string;
+    options: LinePickerOption[];
+  } | null>(null);
   // Coach-drawn arrows + square highlights. The LLM uses
   // `[BOARD: arrow:e2-e4:green]` markers to suggest hypothetical
   // moves WITHOUT committing them on the board — the arrow channel
@@ -762,6 +771,51 @@ export function CoachTeachPage(): JSX.Element {
           // requestedName to null short-circuits the gen path.
           // Continue to brain handling below.
         } else {
+
+        // ── Tier 2.6: Line picker for BROAD openings ───────────
+        // When the user types a top-level opening with many named
+        // sub-variations (Sicilian → Najdorf/Dragon/Sveshnikov/...,
+        // French → Winawer/Tarrasch/Advance/..., etc.), don't go
+        // straight to LLM gen — that splits the output budget across
+        // every variation and produces a shallow "3 pawn moves and
+        // stop" overview. Instead, ask the user which line to focus
+        // on. The chosen variation gets the FULL token budget, so
+        // we get real theoretical depth (15-20 plies) instead of
+        // a fragmented overview.
+        //
+        // findLinePickerOptions returns null for inputs that are
+        // ALREADY a specific variation ("Najdorf Sicilian", "Dragon
+        // Sicilian", "Italian Two Knights") — those skip the picker
+        // and proceed directly to LLM gen.
+        if (!stageHint) {
+          const pickerData = findLinePickerOptions(requestedName);
+          if (pickerData) {
+            const ack = `The ${pickerData.canonicalName} branches into many lines. Which one do you want to learn? Pick one to dive in deep, or just type the variation name.`;
+            setMessages((prev) => [...prev, {
+              id: `${surfaceTurnId}-c`,
+              role: 'assistant',
+              content: ack,
+              timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach',
+              role: 'coach',
+              text: ack,
+              fen: gameRef.current.fen,
+              trigger: null,
+            });
+            voiceService.stop();
+            void voiceService.speakForced(ack).catch(() => undefined);
+            setLinePicker(pickerData);
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.surfaceRouting',
+              summary: `line picker shown for "${pickerData.canonicalName}" — ${pickerData.options.length} variations`,
+            });
+            return;
+          }
+        }
 
         // ── Tier 3: LLM generation (slow — ~30-60s). ───────────
         // Show the working banner so the student knows we're not
@@ -1619,6 +1673,56 @@ export function CoachTeachPage(): JSX.Element {
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
           />
         </div>
+
+        {/* Line picker — when the user typed a broad opening, render
+            tappable variation tiles instead of immediately kicking
+            off LLM gen. Each tile is glow-tinted by its style (sharp
+            / solid / positional / etc.) using the same neon-color
+            palette as the Openings tab cards. Tapping a tile clears
+            the picker and re-submits the focused variation name
+            through handleSubmit, which routes straight to LLM gen
+            because findLinePickerOptions returns null for specific
+            variation names. */}
+        {linePicker && (
+          <div className="px-3 py-2 border-b border-theme-border bg-theme-bg" data-testid="line-picker">
+            <div className="text-xs font-medium text-theme-text-muted px-1 pb-2">
+              Pick a {linePicker.canonicalName} line to learn
+            </div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {linePicker.options.map((opt) => {
+                const neon = getNeonColor(opt.style);
+                return (
+                  <button
+                    key={opt.fullName}
+                    onClick={() => {
+                      setLinePicker(null);
+                      void handleSubmit(opt.fullName);
+                    }}
+                    className="flex flex-col items-start gap-0.5 px-2.5 py-2 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+                    style={{
+                      borderTop: `1px solid rgba(${neon.rgb}, 0.25)`,
+                      borderRight: `1px solid rgba(${neon.rgb}, 0.25)`,
+                      borderLeft: `2px solid rgba(${neon.rgb}, 0.7)`,
+                      borderBottom: `2px solid rgba(${neon.rgb}, 0.7)`,
+                      boxShadow: scaledShadow(neon.rgb, 70),
+                    }}
+                    data-testid={`line-picker-${opt.eco}`}
+                  >
+                    <span className="text-[10px] font-mono text-theme-text-muted">{opt.eco} · {opt.style}</span>
+                    <span className="text-sm font-semibold text-theme-text leading-tight">{opt.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              onClick={() => setLinePicker(null)}
+              className="mt-2 w-full px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+              data-testid="line-picker-dismiss"
+            >
+              Never mind — let me type something else
+            </button>
+          </div>
+        )}
 
         {/* LLM opening-generation banner — real progress bar (not a
             spinner) so the student knows roughly how long is left.
