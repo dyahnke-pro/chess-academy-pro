@@ -39,6 +39,23 @@ import type {
 const STARTING_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
+/** Strip PGN annotation marks (!, ?, !!, ??, !?, ?!) from a SAN string
+ *  before passing to chess.js. chess.js's `move()` rejects SAN with
+ *  trailing annotation marks, but the LLM frequently includes them
+ *  (e.g. "g4?" to mean "the bad move g4"). Production audit (build
+ *  23c484d) caught Pirc punish lessons failing on inaccuracy="g4?",
+ *  inaccuracy="Bg5?", inaccuracy="f4?" — chess.js rejected all three
+ *  purely because of the `?`. Stripping at the chess.js boundary
+ *  preserves the LLM's intent (the move IS bad) while letting it
+ *  parse. Also strips a leading 1./1.../etc. move-number prefix in
+ *  case the LLM includes those (rare but seen in punish setupMoves). */
+export function stripSanAnnotations(san: string): string {
+  return san
+    .replace(/^\d+\.+\s*/, '') // "1." or "1..." prefix
+    .replace(/[!?]+\s*$/, '')  // trailing annotation marks
+    .trim();
+}
+
 export interface ValidationIssue {
   severity: 'error' | 'warning';
   /** Tree path to the offending node, joined with the SAN moves. */
@@ -313,7 +330,7 @@ function tryReplay(
   const c = startFen ? new Chess(startFen) : new Chess();
   for (let i = 0; i < sans.length; i += 1) {
     try {
-      c.move(sans[i]);
+      c.move(stripSanAnnotations(sans[i]));
     } catch {
       return { error: `illegal move`, failedAt: i, failedSan: sans[i] };
     }
@@ -335,7 +352,7 @@ export function validateTreeMoveLegality(
     if (node.san !== null) {
       const probe = startFen ? new Chess(parentFen) : new Chess(parentFen);
       try {
-        probe.move(node.san);
+        probe.move(stripSanAnnotations(node.san));
       } catch {
         issues.push({
           severity: 'error',
@@ -391,7 +408,7 @@ export function validateMoveLegality(
         const cand = q.candidates[j];
         const probe = new Chess(replay.fen);
         try {
-          probe.move(cand.san);
+          probe.move(stripSanAnnotations(cand.san));
         } catch {
           issues.push({
             severity: 'error',
@@ -471,7 +488,7 @@ export function validateMoveLegality(
       let postInaccuracyFen: string | null = null;
       try {
         const probe = new Chess(setupReplay.fen);
-        probe.move(lesson.inaccuracy);
+        probe.move(stripSanAnnotations(lesson.inaccuracy));
         postInaccuracyFen = probe.fen();
       } catch {
         issues.push({
@@ -486,7 +503,7 @@ export function validateMoveLegality(
         let postPunishFen: string | null = null;
         try {
           const probe = new Chess(postInaccuracyFen);
-          probe.move(lesson.punishment);
+          probe.move(stripSanAnnotations(lesson.punishment));
           postPunishFen = probe.fen();
         } catch {
           issues.push({
@@ -501,7 +518,7 @@ export function validateMoveLegality(
           const d = lesson.distractors[j];
           try {
             const probe = new Chess(postInaccuracyFen);
-            probe.move(d.san);
+            probe.move(stripSanAnnotations(d.san));
           } catch {
             issues.push({
               severity: 'error',
@@ -517,7 +534,7 @@ export function validateMoveLegality(
           for (let j = 0; j < lesson.followup.length; j += 1) {
             const fm = lesson.followup[j];
             try {
-              probe.move(fm.san);
+              probe.move(stripSanAnnotations(fm.san));
             } catch {
               issues.push({
                 severity: 'error',

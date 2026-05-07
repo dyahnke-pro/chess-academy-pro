@@ -233,16 +233,32 @@ export function buildPunishWalkthroughTree(
 }
 
 /** Words per minute used for the backup-timer heuristic. Matches
- *  `walkthroughRunner` so the lesson rhythm is consistent. */
+ *  `walkthroughRunner` so the lesson rhythm is consistent.
+ *
+ *  Production audit (build 23c484d) showed 132-194 char Pirc
+ *  narrations spaced 13-15s apart — the backup timer was firing
+ *  while Polly was still mid-sentence and `transitionAfter()` was
+ *  starting the NEXT move's speak() which stopped the in-flight
+ *  audio. The 1.6x multiplier under-estimates Polly's real time
+ *  because:
+ *    1. chess SAN expands when spoken ("Bc5" → "bishop to c5") —
+ *       roughly 50% more syllables than the raw text suggests.
+ *    2. Polly Ruth runs ~140-150 wpm for chess prose, not 180.
+ *    3. Multi-segment narration adds inter-segment fetch latency
+ *       (~200-400ms each).
+ *  Bumping multiplier 1.6 → 3.0 and MIN 1500 → 3000 gives the
+ *  voice promise time to resolve first (which is the intended
+ *  primary gate per CLAUDE.md). Backup remains a safety net for
+ *  hung-TTS cases. */
 const BACKUP_WPM = 180;
-const MIN_BACKUP_MS = 1500;
-const MAX_BACKUP_MS = 30_000;
+const MIN_BACKUP_MS = 3000;
+const MAX_BACKUP_MS = 45_000;
 const POST_NARRATION_BUFFER_MS = 400;
 
 function clampBackupMs(text: string): number {
   const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
   const base = (wordCount / BACKUP_WPM) * 60_000;
-  return Math.max(MIN_BACKUP_MS, Math.min(MAX_BACKUP_MS, base * 1.6));
+  return Math.max(MIN_BACKUP_MS, Math.min(MAX_BACKUP_MS, base * 3.0));
 }
 
 export type WalkthroughPhase =

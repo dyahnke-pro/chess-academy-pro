@@ -13,6 +13,7 @@ import {
   validateMoveLegality,
   formatIssues,
   spokenForm,
+  stripSanAnnotations,
 } from './validate';
 
 describe('walkthrough tree validation', () => {
@@ -74,6 +75,43 @@ describe('walkthrough tree validation', () => {
       // The destination square is what gets spoken.
       expect(spokenForm('Nbxd5')).toBe('knight to d5');
       expect(spokenForm('R1xe4')).toBe('rook to e4');
+    });
+  });
+
+  describe('stripSanAnnotations', () => {
+    it('strips trailing ? annotation marks', () => {
+      expect(stripSanAnnotations('g4?')).toBe('g4');
+      expect(stripSanAnnotations('Bg5?')).toBe('Bg5');
+      expect(stripSanAnnotations('f4?')).toBe('f4');
+    });
+
+    it('strips trailing ! annotation marks', () => {
+      expect(stripSanAnnotations('Qxh5!')).toBe('Qxh5');
+      expect(stripSanAnnotations('Bxf7+!')).toBe('Bxf7+');
+    });
+
+    it('strips compound annotation marks (??, !!, !?, ?!)', () => {
+      expect(stripSanAnnotations('Nf6??')).toBe('Nf6');
+      expect(stripSanAnnotations('Bb5!!')).toBe('Bb5');
+      expect(stripSanAnnotations('h3!?')).toBe('h3');
+      expect(stripSanAnnotations('a4?!')).toBe('a4');
+    });
+
+    it('strips leading move-number prefix', () => {
+      expect(stripSanAnnotations('1.e4')).toBe('e4');
+      expect(stripSanAnnotations('1...d5')).toBe('d5');
+      expect(stripSanAnnotations('15.Nf3')).toBe('Nf3');
+    });
+
+    it('preserves check/mate suffixes (legal SAN)', () => {
+      expect(stripSanAnnotations('Qxd8+')).toBe('Qxd8+');
+      expect(stripSanAnnotations('Qh7#')).toBe('Qh7#');
+    });
+
+    it('returns clean SAN unchanged', () => {
+      expect(stripSanAnnotations('e4')).toBe('e4');
+      expect(stripSanAnnotations('Nc3')).toBe('Nc3');
+      expect(stripSanAnnotations('O-O-O')).toBe('O-O-O');
     });
   });
 });

@@ -28,6 +28,7 @@ import {
   validateMoveLegality,
   validateTreeMoveLegality,
   formatIssues,
+  stripSanAnnotations,
 } from '../data/openingWalkthroughs/validate';
 import { db, type CachedOpening } from '../db/schema';
 import { logAppAudit } from './appAuditor';
@@ -326,6 +327,81 @@ export interface GenerationResult {
  *  even though the chess content was largely correct. Mutating in
  *  place keeps the caller path simple. Returns the count of fields
  *  filled so the audit can record what was repaired. */
+/** Normalize every SAN string in a tree (root walk) by stripping
+ *  annotation marks (!, ?, !!, ??, !?, ?!). chess.js rejects SAN with
+ *  trailing annotations; the LLM frequently emits them on punish
+ *  inaccuracies (e.g. "g4?") and occasionally on tree nodes. The
+ *  validator already strips before its chess.js calls, but the
+ *  RUNTIME (drill playback, punish move execution, walkthrough animation)
+ *  also feeds these SANs into chess.js — so the cached data must be
+ *  clean too. Mutates in place. Returns the count of fields normalized. */
+export function normalizeTreeSans(tree: WalkthroughTree): number {
+  let touched = 0;
+  function walk(node: WalkthroughTreeNode): void {
+    if (node.san !== null) {
+      const stripped = stripSanAnnotations(node.san);
+      if (stripped !== node.san) {
+        node.san = stripped;
+        touched += 1;
+      }
+    }
+    for (const child of node.children) {
+      walk(child.node);
+    }
+  }
+  walk(tree.root);
+  return touched;
+}
+
+/** Normalize SANs on a stage payload (one of concepts / findMove /
+ *  drill / punish). Mutates in place. Returns count. */
+export function normalizeStageSans(
+  stage: 'concepts' | 'findMove' | 'drill' | 'punish',
+  data: unknown[],
+): number {
+  let touched = 0;
+  const strip = (s: string): string => {
+    const stripped = stripSanAnnotations(s);
+    if (stripped !== s) touched += 1;
+    return stripped;
+  };
+  if (stage === 'findMove') {
+    for (const q of data as { path?: string[]; candidates?: { san: string }[] }[]) {
+      if (q.path) q.path = q.path.map(strip);
+      if (q.candidates) {
+        for (const c of q.candidates) c.san = strip(c.san);
+      }
+    }
+  } else if (stage === 'drill') {
+    for (const line of data as { moves?: string[] }[]) {
+      if (line.moves) line.moves = line.moves.map(strip);
+    }
+  } else if (stage === 'punish') {
+    for (const lesson of data as {
+      setupMoves?: string[];
+      inaccuracy?: string;
+      punishment?: string;
+      distractors?: { san: string }[];
+      followup?: { san: string }[];
+    }[]) {
+      if (lesson.setupMoves) lesson.setupMoves = lesson.setupMoves.map(strip);
+      if (typeof lesson.inaccuracy === 'string') lesson.inaccuracy = strip(lesson.inaccuracy);
+      if (typeof lesson.punishment === 'string') lesson.punishment = strip(lesson.punishment);
+      if (lesson.distractors) {
+        for (const d of lesson.distractors) d.san = strip(d.san);
+      }
+      if (lesson.followup) {
+        for (const f of lesson.followup) f.san = strip(f.san);
+      }
+    }
+  } else if (stage === 'concepts') {
+    for (const q of data as { path?: string[] }[]) {
+      if (q.path) q.path = q.path.map(strip);
+    }
+  }
+  return touched;
+}
+
 export function repairForkLabels(tree: WalkthroughTree): number {
   let filled = 0;
   function walk(node: WalkthroughTreeNode): void {
@@ -496,6 +572,19 @@ Fix the issues above and produce a SHORTER, valid tree.`
       category: 'subsystem',
       source: 'openingGenerator.generateOnce',
       summary: `auto-repaired ${repaired} missing label/forkSubtitle entries for "${name}"`,
+    });
+  }
+  // Strip PGN annotation marks from every SAN. The validator already
+  // strips before its chess.js calls so validation passes, but the
+  // RUNTIME drill / punish / walkthrough animation will fail to advance
+  // if the cached data has "g4?" instead of "g4".
+  const sansNormalized = normalizeTreeSans(tree);
+  if (sansNormalized > 0) {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOnce',
+      summary: `stripped ${sansNormalized} SAN annotation marks for "${name}"`,
     });
   }
 
@@ -759,6 +848,12 @@ async function mergeStageIntoCache(
     const normalized = normalizeOpeningName(openingName);
     const cached = await db.cachedOpenings.get(normalized);
     if (!cached) return;
+    // Strip PGN annotation marks from any SAN strings in the stage
+    // payload BEFORE validation. Production audit (build 23c484d)
+    // caught Pirc punish failing on inaccuracy="g4?" / "Bg5?" /
+    // "f4?" — chess.js rejected the bare `?`. Mutating cleans both
+    // the validation pass and the cached runtime data.
+    normalizeStageSans(stage, data);
     const updatedTree: WalkthroughTree = {
       ...cached.tree,
       [stage]: data,

@@ -1798,6 +1798,15 @@ function WalkthroughControls({
   // four optional stages are populated. Conservative 3s interval —
   // background gens typically take 10-30s each, so this picks them
   // up promptly without hammering Dexie.
+  //
+  // Production audit (build 23c484d): user reported "no quiz or drill"
+  // even though drill+findMove had merged into Dexie before they
+  // entered the stage menu. enterStageMenu calls mergeStagesFromCache
+  // once on entry, but if THAT call raced with a freshly-completing
+  // background gen, the user could see the menu render with stale
+  // data and wait 3s for the next poll. Fire IMMEDIATELY on effect
+  // mount as well so the first poll happens within React's render
+  // cycle, not 3 seconds later.
   useEffect(() => {
     if (phase !== 'stage-menu' || !tree) return;
     const allStagesFilled =
@@ -1806,10 +1815,18 @@ function WalkthroughControls({
       (tree.drill?.length ?? 0) > 0 &&
       (tree.punish?.length ?? 0) > 0;
     if (allStagesFilled) return;
+    // Immediate first read — picks up any stage that just merged
+    // milliseconds before this effect ran.
+    void walkthrough.mergeStagesFromCache();
     const id = setInterval(() => {
       void walkthrough.mergeStagesFromCache();
     }, 3000);
     return () => clearInterval(id);
+    // walkthrough.mergeStagesFromCache is intentionally OMITTED from
+    // deps — it changes identity on every tree update and would
+    // reset the interval each tick, never letting it fire. The
+    // function reads from current state via closure on each call.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tree, phase]);
 
   // Chooser shown to a returning student who's already completed
