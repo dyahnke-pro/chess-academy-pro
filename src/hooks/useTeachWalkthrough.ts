@@ -375,17 +375,19 @@ export interface UseTeachWalkthroughReturn {
 }
 
 /** Compute the FEN at a node by walking chess.js through the SAN
- *  path from the root. Returns STARTING_FEN if the path is empty. */
-function fenForPath(pathSans: string[]): string {
-  if (pathSans.length === 0) return STARTING_FEN;
-  const chess = new Chess();
+ *  path from the root. Returns the start FEN (or standard starting
+ *  position) if the path is empty. Middlegame pattern trees pass a
+ *  non-default startFen so the position lands mid-game. */
+function fenForPath(pathSans: string[], startFen?: string): string {
+  const baseFen = startFen ?? STARTING_FEN;
+  if (pathSans.length === 0) return baseFen;
+  const chess = startFen ? new Chess(startFen) : new Chess();
   for (const san of pathSans) {
     try {
       chess.move(san);
     } catch {
-      // Bad data — already caught by vienna.test.ts validation, but
-      // bail gracefully if it ever slips through.
-      return STARTING_FEN;
+      // Bad data — already caught by validate.ts; bail gracefully.
+      return baseFen;
     }
   }
   return chess.fen();
@@ -468,7 +470,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     () => pathNodes.filter((n) => n.san !== null).map((n) => n.san as string),
     [pathNodes],
   );
-  const fen = useMemo(() => fenForPath(pathSans), [pathSans]);
+  const fen = useMemo(
+    () => fenForPath(pathSans, tree?.startFen),
+    [pathSans, tree?.startFen],
+  );
   const isLeaf = currentNode !== null && currentNode.children.length === 0;
   const forkOptions =
     currentNode !== null && currentNode.children.length > 1 ? currentNode.children : [];

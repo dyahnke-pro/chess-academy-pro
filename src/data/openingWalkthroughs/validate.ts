@@ -306,8 +306,11 @@ export function validateWalkthroughTree(
 /** Try a SAN sequence from the starting position. Returns the
  *  resulting Chess instance on success, or an error message on the
  *  first illegal move. */
-function tryReplay(sans: string[]): { fen: string } | { error: string; failedAt: number; failedSan: string } {
-  const c = new Chess();
+function tryReplay(
+  sans: string[],
+  startFen?: string,
+): { fen: string } | { error: string; failedAt: number; failedSan: string } {
+  const c = startFen ? new Chess(startFen) : new Chess();
   for (let i = 0; i < sans.length; i += 1) {
     try {
       c.move(sans[i]);
@@ -316,6 +319,47 @@ function tryReplay(sans: string[]): { fen: string } | { error: string; failedAt:
     }
   }
   return { fen: c.fen() };
+}
+
+/** Walk the tree depth-first and return any SANs that don't legally
+ *  resolve from their parent FEN. Honors the tree's optional
+ *  startFen so middlegame pattern trees that begin mid-game validate
+ *  correctly. Used by per-data tests (vienna.test.ts and middlegame
+ *  pattern tests) to catch typos before runtime. */
+export function validateTreeMoveLegality(
+  tree: WalkthroughTree,
+): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const startFen = tree.startFen;
+  function walk(node: WalkthroughTreeNode, parentFen: string, path: string[]): void {
+    if (node.san !== null) {
+      const probe = startFen ? new Chess(parentFen) : new Chess(parentFen);
+      try {
+        probe.move(node.san);
+      } catch {
+        issues.push({
+          severity: 'error',
+          path: [...path, node.san],
+          message: `SAN "${node.san}" illegal from FEN ${parentFen}`,
+        });
+        return;
+      }
+      const childFen = probe.fen();
+      for (const child of node.children) {
+        walk(child.node, childFen, [...path, node.san]);
+      }
+    } else {
+      for (const child of node.children) {
+        walk(child.node, parentFen, path);
+      }
+    }
+  }
+  walk(
+    tree.root,
+    startFen ?? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    [],
+  );
+  return issues;
 }
 
 /** Validate that every SAN sequence in the optional fields

@@ -141,6 +141,13 @@ export interface WalkthroughTree {
    *  render with Black on bottom so the moves animate from the
    *  student's perspective. Defaults to white if omitted. */
   studentSide?: 'white' | 'black';
+  /** Optional starting FEN for trees that begin mid-game rather than
+   *  from the standard starting position. Required for middlegame
+   *  pattern lessons (Greek gift sacrifice, IQP play, etc.) where
+   *  the student is studying a position several moves into a game.
+   *  When omitted, the tree starts from the standard chess start
+   *  position. The engine's fen-from-path computation honors this. */
+  startFen?: string;
   /** The root node — the pre-move starting position. Its `idea` is
    *  ignored (the intro covers the framing); only its children
    *  matter (the first moves of the opening). */
