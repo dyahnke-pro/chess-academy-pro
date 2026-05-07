@@ -670,11 +670,15 @@ export async function callDeepseekWithTool(
   return JSON.parse(toolCall.function.arguments);
 }
 
-/** Top-level helper for tool-use generation. Tries Anthropic first
- *  (most reliable structured output); falls back to DeepSeek on any
- *  failure (no Anthropic key, network error, schema rejection).
- *  Returns the tool's input as `unknown` — caller validates field
- *  shapes downstream. */
+/** Top-level helper for tool-use generation. Tries DeepSeek first —
+ *  the heavy lifting (moves, FENs, schema validation) is DB-anchored
+ *  and tool-enforced, so the LLM only needs to generate narration
+ *  text and DeepSeek handles that fine at a fraction of the cost.
+ *  Falls back to Anthropic on any failure (no DeepSeek key, network
+ *  error, schema rejection). User: "Anthropic too expensive.
+ *  DeepSeek gives same thing at a fraction of the cost. Minus Opus,
+ *  but everything is tied to the DB so the only thinking needed
+ *  should be the small narrations after each move." */
 export async function getCoachStructuredResponse(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPrompt: string,
@@ -684,13 +688,13 @@ export async function getCoachStructuredResponse(
   toolDescription: string,
   inputSchema: Record<string, unknown>,
 ): Promise<unknown> {
-  const anthropicConfig = await getForcedProviderConfig('anthropic');
+  const deepseekConfig = await getForcedProviderConfig('deepseek');
   let lastErr: unknown = null;
-  if (anthropicConfig) {
+  if (deepseekConfig) {
     try {
-      const model = getModel(task, anthropicConfig.provider, anthropicConfig.preferredModel);
-      return await callAnthropicWithTool(
-        anthropicConfig.apiKey,
+      const model = getModel(task, deepseekConfig.provider, deepseekConfig.preferredModel);
+      return await callDeepseekWithTool(
+        deepseekConfig.apiKey,
         model,
         systemPrompt,
         messages,
@@ -702,14 +706,14 @@ export async function getCoachStructuredResponse(
       );
     } catch (err) {
       lastErr = err;
-      // Fall through to DeepSeek.
+      // Fall through to Anthropic.
     }
   }
-  const deepseekConfig = await getForcedProviderConfig('deepseek');
-  if (deepseekConfig) {
-    const model = getModel(task, deepseekConfig.provider, deepseekConfig.preferredModel);
-    return callDeepseekWithTool(
-      deepseekConfig.apiKey,
+  const anthropicConfig = await getForcedProviderConfig('anthropic');
+  if (anthropicConfig) {
+    const model = getModel(task, anthropicConfig.provider, anthropicConfig.preferredModel);
+    return callAnthropicWithTool(
+      anthropicConfig.apiKey,
       model,
       systemPrompt,
       messages,
@@ -721,7 +725,7 @@ export async function getCoachStructuredResponse(
     );
   }
   if (lastErr) throw lastErr;
-  throw new Error('No API key configured for tool-use call (neither Anthropic nor DeepSeek)');
+  throw new Error('No API key configured for tool-use call (neither DeepSeek nor Anthropic)');
 }
 
 export async function getCoachChatResponse(
