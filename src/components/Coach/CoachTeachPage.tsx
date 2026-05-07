@@ -31,6 +31,10 @@ import {
   generateMissingStagesInBackground,
 } from '../../services/openingGenerator';
 import {
+  readSharedCache,
+  writeSharedCache,
+} from '../../services/sharedOpeningCache';
+import {
   getOpeningMoves,
   findLinePickerOptions,
   type LinePickerOption,
@@ -880,6 +884,39 @@ export function CoachTeachPage(): JSX.Element {
         // names that fall through to here always go straight to
         // LLM gen because findLinePickerOptions returns null for them.)
 
+        // ── Tier 2.5: Shared Supabase cache (cross-user). ──────
+        // Anyone who's previously generated this opening has mirrored
+        // their tree into a public Supabase table. Pull it before
+        // spending an LLM call. Validates structurally + legally before
+        // returning so a broken row from another user doesn't poison
+        // this one. Skips silently when Supabase isn't configured.
+        const sharedTree = await readSharedCache(cacheKey ?? requestedName);
+        if (sharedTree) {
+          // Persist into local Dexie too so future visits are instant
+          // without the Supabase round-trip.
+          await cacheOpening(cacheKey ?? requestedName, sharedTree);
+          const ack = `Found a cached lesson for the ${sharedTree.openingName} (someone else generated this earlier — instant load).`;
+          setMessages((prev) => [...prev, {
+            id: `${surfaceTurnId}-c`,
+            role: 'assistant',
+            content: ack,
+            timestamp: Date.now(),
+          }]);
+          voiceService.stop();
+          if (stageHint === 'play-real') {
+            walkthrough.stop();
+            navigate(`/coach/play?opening=${encodeURIComponent(sharedTree.openingName)}`);
+          } else if (stageHint) {
+            walkthrough.startAtStageMenu(sharedTree, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
+          } else {
+            walkthrough.start(sharedTree);
+          }
+          // Kick off background stage gens for any missing stages
+          // (the shared row may not have all of them populated).
+          void generateMissingStagesInBackground(sharedTree.openingName, sharedTree);
+          return;
+        }
+
         // ── Tier 3: LLM generation (slow — ~30-60s). ───────────
         // Show the working banner so the student knows we're not
         // hung. Disable typing until generation completes (busy
@@ -908,8 +945,12 @@ export function CoachTeachPage(): JSX.Element {
             mode: faceMode ? 'face' : 'learn',
           });
           if (result.ok && result.tree) {
-            // Persist for next time.
+            // Persist locally for instant re-load.
             await cacheOpening(cacheKey ?? requestedName, result.tree);
+            // Mirror to shared Supabase cache so next user (or this
+            // user on another device) gets it instantly. Fire-and-forget;
+            // failures don't block the lesson from starting.
+            void writeSharedCache(cacheKey ?? requestedName, result.tree);
             const successAck = `Ready — let's walk through the ${result.tree.openingName}.`;
             setMessages((prev) => [...prev, {
               id: `${surfaceTurnId}-c2`,
