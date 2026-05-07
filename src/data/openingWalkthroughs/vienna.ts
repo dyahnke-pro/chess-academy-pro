@@ -33,7 +33,7 @@ export const VIENNA_GAME: WalkthroughTree = {
     // square except Ng8 hangs material to the open d1-h5 diagonal. The
     // gambit is honestly bad for Black; we ship White's huge advantage.
     'e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3':
-      "And there it is — the Vienna Gambit accepted, the truth of the line. Black's knight is buried back on g8, having spent two tempi for nothing. We have a huge lead in development, the open e-file, and the f4-pawn (Black's prize) is just a target waiting to be picked off. From here White's plan: Bc4 eyeing f7, castle, take f4 with the c1-bishop, then attack. Black is just worse — at master level the gambit accepted is considered theoretically bad for Black, which is why most strong Black players play the Falkbeer (3...d5) instead. Now you know why.",
+      "And there it is — the Vienna Gambit accepted, the truth of the line. Black's knight is buried back on g8, having spent two tempi for nothing. We have a huge lead in development, the open f-file (the f-pawn we gave up clears the file for our rook on f1), and the f4-pawn (Black's prize) is just a target waiting to be picked off. From here White's plan: Bc4 eyeing f7, castle, take f4 with the c1-bishop, then attack down the f-file. Black is just worse — at master level the gambit accepted is considered theoretically bad for Black, which is why most strong Black players play the Falkbeer (3...d5) instead. Now you know why.",
     // Falkbeer Variation modern challenge — 5.Qf3 attacks the e4-knight
     // directly, forcing Black to commit on move five. Sharper than 5.Nf3
     // (the older calm move) and the line preferred by modern theory.
@@ -99,7 +99,7 @@ export const VIENNA_GAME: WalkthroughTree = {
           text: "Open lines for an attack on Black's king side.",
           correct: true,
           explanation:
-            "Exactly. We sacrifice the f-pawn to open the e-file (after exf4), free the dark-squared bishop, and create attacking chances along the f-file and the d1-h5 diagonal. Material for activity.",
+            "Exactly. We sacrifice the f-pawn to open the f-file (after exf4 captures away our f-pawn), free the dark-squared bishop, and create attacking chances along the f-file and the d1-h5 diagonal. Material for activity.",
         },
         {
           text: "Lock the center pawn structure.",
@@ -694,17 +694,17 @@ export const VIENNA_GAME: WalkthroughTree = {
                                   san: 'f4',
                                   movedBy: 'white',
                                   idea:
-                                    "3.f4 — the Vienna Gambit. Right out of the gate, we're offering the f-pawn. The point: if Black takes with exf4, the e-file opens up, my queen can swing to e2 or h5, my dark-squared bishop comes alive, and I get a serious lead in development for the price of one pawn. If Black declines with d5 (the principled refutation attempt), the position gets sharp in a different way. Either way, you're playing for an attack from move three — there's no quiet middlegame in this line.",
+                                    "3.f4 — the Vienna Gambit. Right out of the gate, we're offering the f-pawn. The point: if Black takes with exf4, the f-file opens for my rook on f1, my queen can swing to e2 or h5, my dark-squared bishop comes alive, and I get a serious lead in development for the price of one pawn. If Black declines with d5 (the principled refutation attempt), the position gets sharp in a different way. Either way, you're playing for an attack from move three — there's no quiet middlegame in this line.",
                                   narration: [
                                     {
                                       text: "3.f4 — the Vienna Gambit. Right out of the gate, we're offering the f-pawn.",
                                       arrows: [{ from: 'f2', to: 'f4', color: 'green' }],
                                     },
                                     {
-                                      text: "The point — if Black takes with exf4, the e-file opens up.",
+                                      text: "The point — if Black takes with exf4, the f-file opens up for our rook.",
                                       arrows: [
                                         { from: 'e5', to: 'f4', color: 'red' },
-                                        { from: 'e1', to: 'e8', color: 'blue' },
+                                        { from: 'f1', to: 'f8', color: 'blue' },
                                       ],
                                     },
                                     {
@@ -880,7 +880,7 @@ export const VIENNA_GAME: WalkthroughTree = {
                                                           san: 'Nf3',
                                                           movedBy: 'white',
                                                           idea:
-                                                            "5.Nf3 — develop and shut the door on Qh4+. Knight from g1 to f3 controls h4, which would otherwise be the only Black counter (Qh4+ would split my king from castling rights). With both knights out, the f-pawn captured but the e-file open, and Black's pieces still on their starting squares, my plan writes itself: Bc4 next, castle, then attack. The pawn on f4 is a black weakness I'll target with the c1-bishop or recapture later.",
+                                                            "5.Nf3 — develop and shut the door on Qh4+. Knight from g1 to f3 controls h4, which would otherwise be the only Black counter (Qh4+ would split my king from castling rights). With both knights out, the f-pawn captured but the f-file open for my rook on f1, and Black's pieces still on their starting squares, my plan writes itself: Bc4 next, castle, then attack. The pawn on f4 is a black weakness I'll target with the c1-bishop or recapture later.",
                                                           narration: [
                                                             {
                                                               text: '5.Nf3 — develop and shut the door on Qh4+.',
