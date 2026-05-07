@@ -22,6 +22,7 @@
  * voice and supplies a sample node so the LLM mimics the pattern.
  * Style drift is the main risk; that's why we anchor on a sample.
  */
+import { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
 import {
   validateWalkthroughTree,
@@ -35,6 +36,10 @@ import { logAppAudit } from './appAuditor';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
+  ConceptCheckQuestion,
+  FindMoveQuestion,
+  DrillLine,
+  PunishLesson,
 } from '../types/walkthroughTree';
 
 /** Concrete top-of-tree skeleton showing the root → first-move →
@@ -400,6 +405,294 @@ export function normalizeStageSans(
     }
   }
   return touched;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// STAGE REPAIR — drop bad individual entries instead of failing whole
+// stages. The LLM produces 5 punish lessons; if 1 has an illegal SAN,
+// we want to keep the other 4, not throw the entire stage away.
+//
+// Production audit (build 23c484d) showed the Pirc punish stage being
+// discarded wholesale due to 6 errors — but really only 2-3 lessons
+// were broken; the others were fine. The user wants ANY opening they
+// pick to "just work," so per-stage all-or-nothing rejection has to go.
+// ───────────────────────────────────────────────────────────────────
+
+interface StageRepairReport {
+  /** Entries dropped because they were unsalvageable. */
+  dropped: number;
+  /** Entries mutated to fix recoverable issues. */
+  fixed: number;
+  /** Per-action notes for audit logging. */
+  notes: string[];
+}
+
+/** Try a SAN sequence from a starting position; return the resulting
+ *  Chess instance if every move is legal, else null. */
+function replayAll(sans: string[], startFen?: string): Chess | null {
+  const c = startFen ? new Chess(startFen) : new Chess();
+  for (const san of sans) {
+    try {
+      c.move(stripSanAnnotations(san));
+    } catch {
+      return null;
+    }
+  }
+  return c;
+}
+
+/** Concepts repair:
+ *  - single-select with 2+ correct → promote to multiSelect (LLM
+ *    intended multi-correct; preserves the question)
+ *  - 0 correct → drop (no salvage)
+ *  - 0 choices → drop
+ *  - illegal path → strip the path (question still works as
+ *    starting-position MC) */
+export function repairConceptsStage(
+  data: ConceptCheckQuestion[],
+): { kept: ConceptCheckQuestion[]; report: StageRepairReport } {
+  const kept: ConceptCheckQuestion[] = [];
+  const report: StageRepairReport = { dropped: 0, fixed: 0, notes: [] };
+  for (let i = 0; i < data.length; i += 1) {
+    const q = data[i];
+    if (!q.choices || q.choices.length === 0) {
+      report.dropped += 1;
+      report.notes.push(`concepts[${i}]: dropped — no choices`);
+      continue;
+    }
+    const correctCount = q.choices.filter((c) => c.correct).length;
+    if (correctCount === 0) {
+      report.dropped += 1;
+      report.notes.push(`concepts[${i}]: dropped — no correct choice`);
+      continue;
+    }
+    if (!q.multiSelect && correctCount > 1) {
+      q.multiSelect = true;
+      report.fixed += 1;
+      report.notes.push(
+        `concepts[${i}]: promoted to multiSelect (had ${correctCount} correct)`,
+      );
+    }
+    if (q.path && q.path.length > 0 && !replayAll(q.path)) {
+      const droppedPath = q.path.join(' ');
+      q.path = [];
+      report.fixed += 1;
+      report.notes.push(`concepts[${i}]: stripped illegal path "${droppedPath}"`);
+    }
+    kept.push(q);
+  }
+  return { kept, report };
+}
+
+/** FindMove repair:
+ *  - illegal path → drop (the position can't be reached, no salvage)
+ *  - illegal candidate SAN → drop just that candidate
+ *  - 0 correct candidates after pruning → drop
+ *  - 2+ correct candidates → keep only first as correct, mark rest false
+ *  - <2 candidates remaining → drop (MC needs at least 2 options) */
+export function repairFindMoveStage(
+  data: FindMoveQuestion[],
+): { kept: FindMoveQuestion[]; report: StageRepairReport } {
+  const kept: FindMoveQuestion[] = [];
+  const report: StageRepairReport = { dropped: 0, fixed: 0, notes: [] };
+  for (let i = 0; i < data.length; i += 1) {
+    const q = data[i];
+    const replay = replayAll(q.path ?? []);
+    if (!replay) {
+      report.dropped += 1;
+      report.notes.push(`findMove[${i}]: dropped — illegal path`);
+      continue;
+    }
+    const fen = replay.fen();
+    // Filter candidates by SAN legality from the path FEN.
+    const validCandidates = q.candidates.filter((c) => {
+      const probe = new Chess(fen);
+      try {
+        probe.move(stripSanAnnotations(c.san));
+        return true;
+      } catch {
+        return false;
+      }
+    });
+    const droppedCands = q.candidates.length - validCandidates.length;
+    if (droppedCands > 0) {
+      report.fixed += 1;
+      report.notes.push(
+        `findMove[${i}]: dropped ${droppedCands} illegal candidate(s)`,
+      );
+    }
+    if (validCandidates.length < 2) {
+      report.dropped += 1;
+      report.notes.push(
+        `findMove[${i}]: dropped — only ${validCandidates.length} valid candidate(s) after pruning`,
+      );
+      continue;
+    }
+    // Enforce exactly-one-correct.
+    const correctIndices = validCandidates
+      .map((c, idx) => (c.correct ? idx : -1))
+      .filter((idx) => idx >= 0);
+    if (correctIndices.length === 0) {
+      report.dropped += 1;
+      report.notes.push(`findMove[${i}]: dropped — no correct candidate`);
+      continue;
+    }
+    if (correctIndices.length > 1) {
+      // Keep first as correct; mark rest false.
+      for (let j = 1; j < correctIndices.length; j += 1) {
+        validCandidates[correctIndices[j]].correct = false;
+      }
+      report.fixed += 1;
+      report.notes.push(
+        `findMove[${i}]: kept first of ${correctIndices.length} correct candidates`,
+      );
+    }
+    q.candidates = validCandidates;
+    kept.push(q);
+  }
+  return { kept, report };
+}
+
+/** Drill repair:
+ *  - empty moves → drop
+ *  - line illegal at move N → if N >= 4 plies, truncate (still useful
+ *    as a partial drill); else drop entirely */
+export function repairDrillStage(
+  data: DrillLine[],
+): { kept: DrillLine[]; report: StageRepairReport } {
+  const kept: DrillLine[] = [];
+  const report: StageRepairReport = { dropped: 0, fixed: 0, notes: [] };
+  for (let i = 0; i < data.length; i += 1) {
+    const line = data[i];
+    if (!line.moves || line.moves.length === 0) {
+      report.dropped += 1;
+      report.notes.push(`drill[${i}]: dropped — empty moves`);
+      continue;
+    }
+    // Walk move-by-move; find the longest legal prefix.
+    const c = new Chess();
+    let legalUpTo = 0;
+    for (let j = 0; j < line.moves.length; j += 1) {
+      try {
+        c.move(stripSanAnnotations(line.moves[j]));
+        legalUpTo = j + 1;
+      } catch {
+        break;
+      }
+    }
+    if (legalUpTo === line.moves.length) {
+      kept.push(line);
+      continue;
+    }
+    if (legalUpTo >= 4) {
+      const dropped = line.moves.length - legalUpTo;
+      line.moves = line.moves.slice(0, legalUpTo);
+      report.fixed += 1;
+      report.notes.push(
+        `drill[${i}]: truncated last ${dropped} illegal move(s)`,
+      );
+      kept.push(line);
+    } else {
+      report.dropped += 1;
+      report.notes.push(
+        `drill[${i}]: dropped — only ${legalUpTo} legal move(s) before illegal SAN`,
+      );
+    }
+  }
+  return { kept, report };
+}
+
+/** Punish repair (most complex — multi-part lesson with several
+ *  SAN fields). Drop policy:
+ *  - illegal setupMoves / inaccuracy / punishment → drop the lesson
+ *    (these are load-bearing; can't continue without them)
+ *  - illegal individual distractor → drop just that distractor
+ *  - 0 distractors remaining → drop the lesson (MC needs alternatives)
+ *  - illegal followup move → truncate followup at the failing index */
+export function repairPunishStage(
+  data: PunishLesson[],
+): { kept: PunishLesson[]; report: StageRepairReport } {
+  const kept: PunishLesson[] = [];
+  const report: StageRepairReport = { dropped: 0, fixed: 0, notes: [] };
+  for (let i = 0; i < data.length; i += 1) {
+    const lesson = data[i];
+    const setupChess = replayAll(lesson.setupMoves ?? []);
+    if (!setupChess) {
+      report.dropped += 1;
+      report.notes.push(`punish[${i}]: dropped — illegal setupMoves`);
+      continue;
+    }
+    // Apply inaccuracy to get the post-inaccuracy FEN.
+    let postInaccuracyFen: string;
+    try {
+      const probe = new Chess(setupChess.fen());
+      probe.move(stripSanAnnotations(lesson.inaccuracy));
+      postInaccuracyFen = probe.fen();
+    } catch {
+      report.dropped += 1;
+      report.notes.push(
+        `punish[${i}]: dropped — illegal inaccuracy "${lesson.inaccuracy}"`,
+      );
+      continue;
+    }
+    // Apply punishment to get the post-punish FEN.
+    let postPunishFen: string;
+    try {
+      const probe = new Chess(postInaccuracyFen);
+      probe.move(stripSanAnnotations(lesson.punishment));
+      postPunishFen = probe.fen();
+    } catch {
+      report.dropped += 1;
+      report.notes.push(
+        `punish[${i}]: dropped — illegal punishment "${lesson.punishment}"`,
+      );
+      continue;
+    }
+    // Filter distractors.
+    const validDistractors = (lesson.distractors ?? []).filter((d) => {
+      const probe = new Chess(postInaccuracyFen);
+      try {
+        probe.move(stripSanAnnotations(d.san));
+        return true;
+      } catch {
+        return false;
+      }
+    });
+    const droppedDist = (lesson.distractors?.length ?? 0) - validDistractors.length;
+    if (droppedDist > 0) {
+      report.fixed += 1;
+      report.notes.push(`punish[${i}]: dropped ${droppedDist} illegal distractor(s)`);
+    }
+    if (validDistractors.length === 0) {
+      report.dropped += 1;
+      report.notes.push(
+        `punish[${i}]: dropped — 0 valid distractors after pruning (MC needs alternatives)`,
+      );
+      continue;
+    }
+    lesson.distractors = validDistractors;
+    // Truncate followup at first illegal move.
+    if (lesson.followup && lesson.followup.length > 0) {
+      const probe = new Chess(postPunishFen);
+      let legalUpTo = 0;
+      for (let j = 0; j < lesson.followup.length; j += 1) {
+        try {
+          probe.move(stripSanAnnotations(lesson.followup[j].san));
+          legalUpTo = j + 1;
+        } catch {
+          break;
+        }
+      }
+      if (legalUpTo < lesson.followup.length) {
+        const dropped = lesson.followup.length - legalUpTo;
+        lesson.followup = lesson.followup.slice(0, legalUpTo);
+        report.fixed += 1;
+        report.notes.push(`punish[${i}]: truncated ${dropped} illegal followup move(s)`);
+      }
+    }
+    kept.push(lesson);
+  }
+  return { kept, report };
 }
 
 export function repairForkLabels(tree: WalkthroughTree): number {
@@ -854,9 +1147,50 @@ async function mergeStageIntoCache(
     // "f4?" — chess.js rejected the bare `?`. Mutating cleans both
     // the validation pass and the cached runtime data.
     normalizeStageSans(stage, data);
+    // Per-entry repair: drop bad individual entries instead of
+    // failing the whole stage. Production audit (build 23c484d)
+    // showed Pirc punish discarded wholesale on 6 errors when really
+    // only 2-3 lessons were broken — losing the salvageable ones too.
+    let repairedData: unknown[] = data;
+    let repairReport: StageRepairReport | null = null;
+    if (stage === 'concepts') {
+      const r = repairConceptsStage(data as ConceptCheckQuestion[]);
+      repairedData = r.kept;
+      repairReport = r.report;
+    } else if (stage === 'findMove') {
+      const r = repairFindMoveStage(data as FindMoveQuestion[]);
+      repairedData = r.kept;
+      repairReport = r.report;
+    } else if (stage === 'drill') {
+      const r = repairDrillStage(data as DrillLine[]);
+      repairedData = r.kept;
+      repairReport = r.report;
+    } else if (stage === 'punish') {
+      const r = repairPunishStage(data as PunishLesson[]);
+      repairedData = r.kept;
+      repairReport = r.report;
+    }
+    if (repairReport && (repairReport.dropped > 0 || repairReport.fixed > 0)) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'openingGenerator.mergeStageIntoCache',
+        summary: `repaired ${stage} for "${openingName}" — ${repairReport.fixed} fixed, ${repairReport.dropped} dropped (${repairedData.length} kept)`,
+        details: repairReport.notes.slice(0, 8).join('\n'),
+      });
+    }
+    if (repairedData.length === 0) {
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'openingGenerator.mergeStageIntoCache',
+        summary: `no salvageable ${stage} entries for "${openingName}" after repair`,
+      });
+      return;
+    }
     const updatedTree: WalkthroughTree = {
       ...cached.tree,
-      [stage]: data,
+      [stage]: repairedData,
     };
     // Re-validate the merged tree to catch corruption.
     const issues = validateMoveLegality(updatedTree);

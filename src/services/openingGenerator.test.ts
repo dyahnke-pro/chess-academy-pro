@@ -5,8 +5,20 @@
  * that are pure functions of the parsed tree.
  */
 import { describe, it, expect } from 'vitest';
-import { repairForkLabels } from './openingGenerator';
-import type { WalkthroughTree } from '../types/walkthroughTree';
+import {
+  repairForkLabels,
+  repairConceptsStage,
+  repairFindMoveStage,
+  repairDrillStage,
+  repairPunishStage,
+} from './openingGenerator';
+import type {
+  WalkthroughTree,
+  ConceptCheckQuestion,
+  FindMoveQuestion,
+  DrillLine,
+  PunishLesson,
+} from '../types/walkthroughTree';
 
 function makeTree(rootChildren: WalkthroughTree['root']['children']): WalkthroughTree {
   return {
@@ -153,5 +165,256 @@ describe('repairForkLabels', () => {
     const subtitle = tree.root.children[0].node.children[0].forkSubtitle ?? '';
     expect(subtitle.length).toBe(80);
     expect(subtitle.endsWith('…')).toBe(true);
+  });
+});
+
+describe('repairConceptsStage', () => {
+  it('promotes single-select with 2+ correct to multiSelect', () => {
+    const data: ConceptCheckQuestion[] = [
+      {
+        prompt: 'Q?',
+        choices: [
+          { text: 'a', correct: true, explanation: '' },
+          { text: 'b', correct: true, explanation: '' },
+          { text: 'c', correct: false, explanation: '' },
+        ],
+      },
+    ];
+    const { kept, report } = repairConceptsStage(data);
+    expect(kept.length).toBe(1);
+    expect(kept[0].multiSelect).toBe(true);
+    expect(report.fixed).toBe(1);
+    expect(report.dropped).toBe(0);
+  });
+
+  it('drops questions with no correct choice', () => {
+    const data: ConceptCheckQuestion[] = [
+      {
+        prompt: 'Q?',
+        choices: [
+          { text: 'a', correct: false, explanation: '' },
+          { text: 'b', correct: false, explanation: '' },
+        ],
+      },
+    ];
+    const { kept, report } = repairConceptsStage(data);
+    expect(kept.length).toBe(0);
+    expect(report.dropped).toBe(1);
+  });
+
+  it('strips illegal path but keeps the question', () => {
+    const data: ConceptCheckQuestion[] = [
+      {
+        prompt: 'Q?',
+        path: ['e4', 'Bg7'], // illegal: bishop locked behind g-pawn
+        choices: [
+          { text: 'a', correct: true, explanation: '' },
+          { text: 'b', correct: false, explanation: '' },
+        ],
+      },
+    ];
+    const { kept, report } = repairConceptsStage(data);
+    expect(kept.length).toBe(1);
+    expect(kept[0].path).toEqual([]);
+    expect(report.fixed).toBe(1);
+  });
+});
+
+describe('repairFindMoveStage', () => {
+  it('drops illegal candidates and keeps the question if 2+ remain', () => {
+    const data: FindMoveQuestion[] = [
+      {
+        path: ['e4', 'e5'],
+        prompt: 'White to move.',
+        candidates: [
+          { san: 'Nf3', label: '', correct: true, explanation: '' },
+          { san: 'Nc3', label: '', correct: false, explanation: '' },
+          { san: 'Bg2', label: '', correct: false, explanation: '' }, // illegal
+        ],
+      },
+    ];
+    const { kept, report } = repairFindMoveStage(data);
+    expect(kept.length).toBe(1);
+    expect(kept[0].candidates.length).toBe(2);
+    expect(kept[0].candidates.every((c) => c.san !== 'Bg2')).toBe(true);
+    expect(report.fixed).toBe(1);
+  });
+
+  it('drops question if illegal path', () => {
+    const data: FindMoveQuestion[] = [
+      {
+        path: ['e4', 'Bg7'],
+        prompt: 'Q',
+        candidates: [
+          { san: 'Nf3', label: '', correct: true, explanation: '' },
+          { san: 'Nc3', label: '', correct: false, explanation: '' },
+        ],
+      },
+    ];
+    const { kept, report } = repairFindMoveStage(data);
+    expect(kept.length).toBe(0);
+    expect(report.dropped).toBe(1);
+  });
+
+  it('keeps only first correct when multiple are marked correct', () => {
+    const data: FindMoveQuestion[] = [
+      {
+        path: [],
+        prompt: 'Q',
+        candidates: [
+          { san: 'e4', label: '', correct: true, explanation: '' },
+          { san: 'd4', label: '', correct: true, explanation: '' },
+          { san: 'Nf3', label: '', correct: false, explanation: '' },
+        ],
+      },
+    ];
+    const { kept } = repairFindMoveStage(data);
+    expect(kept.length).toBe(1);
+    expect(kept[0].candidates.filter((c) => c.correct).length).toBe(1);
+    expect(kept[0].candidates[0].correct).toBe(true);
+    expect(kept[0].candidates[1].correct).toBe(false);
+  });
+});
+
+describe('repairDrillStage', () => {
+  it('keeps fully legal lines unchanged', () => {
+    const data: DrillLine[] = [
+      { name: 'A', moves: ['e4', 'e5', 'Nf3', 'Nc6'] },
+    ];
+    const { kept, report } = repairDrillStage(data);
+    expect(kept.length).toBe(1);
+    expect(kept[0].moves).toEqual(['e4', 'e5', 'Nf3', 'Nc6']);
+    expect(report.fixed).toBe(0);
+  });
+
+  it('truncates illegal-tail when legal prefix has 4+ moves', () => {
+    const data: DrillLine[] = [
+      { name: 'A', moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bg7' /* illegal */] },
+    ];
+    const { kept, report } = repairDrillStage(data);
+    expect(kept.length).toBe(1);
+    expect(kept[0].moves).toEqual(['e4', 'e5', 'Nf3', 'Nc6']);
+    expect(report.fixed).toBe(1);
+  });
+
+  it('drops lines that are too short before becoming illegal', () => {
+    const data: DrillLine[] = [
+      { name: 'A', moves: ['e4', 'Bg7' /* illegal at ply 2 */] },
+    ];
+    const { kept, report } = repairDrillStage(data);
+    expect(kept.length).toBe(0);
+    expect(report.dropped).toBe(1);
+  });
+});
+
+describe('repairPunishStage', () => {
+  it('keeps a fully legal lesson', () => {
+    const data: PunishLesson[] = [
+      {
+        name: 'A',
+        setupMoves: ['e4', 'e5', 'Nf3'],
+        inaccuracy: 'f6',
+        whyBad: '',
+        punishment: 'Nxe5',
+        whyPunish: '',
+        distractors: [
+          { san: 'Nc3', label: '', explanation: '' },
+          { san: 'd4', label: '', explanation: '' },
+        ],
+      },
+    ];
+    const { kept, report } = repairPunishStage(data);
+    expect(kept.length).toBe(1);
+    expect(report.fixed).toBe(0);
+    expect(report.dropped).toBe(0);
+  });
+
+  it('drops only the bad distractor, keeps the lesson', () => {
+    const data: PunishLesson[] = [
+      {
+        name: 'A',
+        setupMoves: ['e4', 'e5', 'Nf3'],
+        inaccuracy: 'f6',
+        whyBad: '',
+        punishment: 'Nxe5',
+        whyPunish: '',
+        distractors: [
+          { san: 'Nc3', label: '', explanation: '' },
+          { san: 'd4', label: '', explanation: '' },
+          { san: 'Bg7', label: '', explanation: '' }, // illegal
+        ],
+      },
+    ];
+    const { kept, report } = repairPunishStage(data);
+    expect(kept.length).toBe(1);
+    expect(kept[0].distractors.length).toBe(2);
+    expect(report.fixed).toBe(1);
+  });
+
+  it('drops the lesson when inaccuracy is illegal', () => {
+    const data: PunishLesson[] = [
+      {
+        name: 'A',
+        setupMoves: ['e4', 'e5'],
+        inaccuracy: 'Bg7', // illegal
+        whyBad: '',
+        punishment: 'Nf3',
+        whyPunish: '',
+        distractors: [
+          { san: 'd4', label: '', explanation: '' },
+          { san: 'Nc3', label: '', explanation: '' },
+        ],
+      },
+    ];
+    const { kept, report } = repairPunishStage(data);
+    expect(kept.length).toBe(0);
+    expect(report.dropped).toBe(1);
+  });
+
+  it('drops the lesson when 0 valid distractors remain', () => {
+    const data: PunishLesson[] = [
+      {
+        name: 'A',
+        setupMoves: ['e4', 'e5', 'Nf3'],
+        inaccuracy: 'f6',
+        whyBad: '',
+        punishment: 'Nxe5',
+        whyPunish: '',
+        distractors: [
+          { san: 'Bg7', label: '', explanation: '' }, // all illegal
+          { san: 'Bb7', label: '', explanation: '' },
+        ],
+      },
+    ];
+    const { kept, report } = repairPunishStage(data);
+    expect(kept.length).toBe(0);
+    expect(report.dropped).toBe(1);
+  });
+
+  it('truncates followup at the first illegal move', () => {
+    const data: PunishLesson[] = [
+      {
+        name: 'A',
+        setupMoves: ['e4', 'e5', 'Nf3'],
+        inaccuracy: 'f6',
+        whyBad: '',
+        punishment: 'Nxe5',
+        whyPunish: '',
+        distractors: [
+          { san: 'Nc3', label: '', explanation: '' },
+          { san: 'd4', label: '', explanation: '' },
+        ],
+        followup: [
+          { san: 'fxe5', idea: '' },
+          { san: 'Qh5+', idea: '' },
+          { san: 'Bg7', idea: '' }, // illegal here
+          { san: 'Qxh7', idea: '' },
+        ],
+      },
+    ];
+    const { kept, report } = repairPunishStage(data);
+    expect(kept.length).toBe(1);
+    expect(kept[0].followup?.length).toBe(2);
+    expect(report.fixed).toBe(1);
   });
 });
