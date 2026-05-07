@@ -436,6 +436,75 @@ export function CoachTeachPage(): JSX.Element {
     if (walkthrough.isActive && walkthrough.phase !== 'paused') {
       walkthrough.pause();
     }
+
+    // ─── Deterministic walkthrough routing (BYPASS THE BRAIN) ───
+    // Production audit (build 2ab2726) caught the LLM hallucinating
+    // that it had called start_walkthrough_for_opening (its [VOICE:]
+    // marker literally said "the walkthrough is queued but keeps
+    // hitting a dead loop") while the actual tool dispatch chained
+    // 3× set_board_position calls instead — the in-place walkthrough
+    // never fired. Six prior audits showed the same brain ignoring
+    // the tool's prompt-side description. We can't trust the model
+    // for this routing; pattern-match at the surface and call
+    // walkthrough.start() directly when the student types an obvious
+    // "teach me / walk me through / show me [opening]" ask. The
+    // brain only sees asks that DON'T match.
+    if (!opts?.kickoff) {
+      const TEACH_PATTERN =
+        /\b(teach\s+me|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|drill|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
+      const m = text.trim().match(TEACH_PATTERN);
+      if (m && m[2]) {
+        const tree = resolveWalkthroughTree(m[2].trim());
+        if (tree) {
+          const surfaceTurnId = `t-${Date.now()}-walkthrough-surface`;
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.surfaceRouting',
+            summary: `surface-routed walkthrough: "${text.slice(0, 60)}" → ${tree.openingName}`,
+          });
+          // Show the user's ask in the transcript.
+          setMessages((prev) => [...prev, {
+            id: `${surfaceTurnId}-u`,
+            role: 'user',
+            content: text,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'user',
+            text,
+            fen: gameRef.current.fen,
+            trigger: null,
+          });
+          // Acknowledge in chat so the student knows what's happening
+          // (no LLM round-trip — the canned line ships instantly).
+          // Walkthrough's own intro narration handles the spoken side;
+          // we don't queue this canned line through Polly so voice
+          // doesn't double-speak.
+          const ack = `Sure — let's walk through the ${tree.openingName}.`;
+          setMessages((prev) => [...prev, {
+            id: `${surfaceTurnId}-c`,
+            role: 'assistant',
+            content: ack,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'coach',
+            text: ack,
+            fen: gameRef.current.fen,
+            trigger: null,
+          });
+          // Stop any in-flight TTS from a prior turn before the
+          // walkthrough's intro narration starts speaking.
+          voiceService.stop();
+          walkthrough.start(tree);
+          return;
+        }
+      }
+    }
+
     setBusy(true);
     const turnId = `t-${Date.now()}`;
     // Kickoff sends a system-style ask to seed the lesson — don't

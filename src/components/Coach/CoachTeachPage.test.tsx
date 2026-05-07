@@ -118,7 +118,10 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     });
 
     render(<CoachTeachPage />);
-    await sendStudentMessage('Teach me the Vienna.');
+    // NB: ask phrased as a Q so the surface-level walkthrough router
+    // (which intercepts "teach me / walk me through / show me [opening]")
+    // doesn't bypass the brain — this test exercises the brain path.
+    await sendStudentMessage('Why does white play 2.Nc3 in this line?');
 
     await waitFor(() => {
       const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
@@ -146,7 +149,9 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     });
 
     render(<CoachTeachPage />);
-    await sendStudentMessage('Show me Vienna stats.');
+    // Non-routable ask (doesn't match the surface-level walkthrough
+    // router) so this test exercises the brain path.
+    await sendStudentMessage('What does Stockfish say about this position?');
 
     await waitFor(() => {
       const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
@@ -161,6 +166,27 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
   });
 
+  it('routes "Teach me the Vienna" to the in-place walkthrough WITHOUT calling the brain (build 2ab2726 audit fix)', async () => {
+    // Brain audit (build 2ab2726) showed the LLM hallucinating that
+    // it had called start_walkthrough_for_opening — its [VOICE:]
+    // marker said "the walkthrough is queued but keeps hitting a
+    // dead loop" — while actually chaining 3× set_board_position
+    // calls. The walkthrough never fired. Fix: surface-level
+    // pattern-match this kind of ask and call walkthrough.start()
+    // directly, never invoking the brain.
+    render(<CoachTeachPage />);
+    await sendStudentMessage('Teach me the Vienna.');
+
+    // The brain was NOT invoked at all — surface short-circuited.
+    expect(coachService.ask).not.toHaveBeenCalled();
+    // The user's ask AND the canned acknowledgement both rendered
+    // in the transcript so the conversation is honest.
+    await waitFor(() => {
+      expect(screen.getByText("Teach me the Vienna.")).toBeInTheDocument();
+      expect(screen.getByText(/let's walk through the Vienna Game/i)).toBeInTheDocument();
+    });
+  });
+
   it('forces the Anthropic provider for every coachService.ask call (Learn-only routing)', async () => {
     vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
       options?.onChunk?.('[VOICE: Pulling the position.] Detailed analysis follows.');
@@ -172,7 +198,9 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     });
 
     render(<CoachTeachPage />);
-    await sendStudentMessage('Show me a Vienna position.');
+    // Non-routable ask (doesn't match the surface-level walkthrough
+    // router) so this test exercises the brain path.
+    await sendStudentMessage('Why is white better in this position?');
 
     await waitFor(() => {
       expect(coachService.ask).toHaveBeenCalled();
