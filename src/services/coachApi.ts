@@ -613,10 +613,68 @@ function buildSystemPromptWithVerbosity(base: string, verbosity: CoachVerbosity,
   return parts.join('\n\n');
 }
 
-/** Top-level helper for tool-use generation. Forces Anthropic
- *  (DeepSeek's tool-use API has different semantics; sticking to
- *  Anthropic for now keeps the path single-provider). Returns the
- *  tool's input as `unknown` — caller validates field shapes. */
+/** DeepSeek tool-use via OpenAI-compatible function calling. The
+ *  LLM is forced to invoke the named function and the API validates
+ *  the arguments against the schema. Mirrors callAnthropicWithTool
+ *  for the DeepSeek path so we have a free fallback when Anthropic
+ *  is unavailable / rate-limited. DeepSeek returns the tool's
+ *  arguments as a JSON STRING in tool_calls[].function.arguments;
+ *  we JSON.parse that string and return the object. */
+export async function callDeepseekWithTool(
+  apiKey: string,
+  model: string,
+  systemPrompt: string,
+  messages: { role: 'user' | 'assistant'; content: string }[],
+  maxTokens: number,
+  task: string,
+  toolName: string,
+  toolDescription: string,
+  inputSchema: Record<string, unknown>,
+): Promise<unknown> {
+  const client = new OpenAI({
+    apiKey,
+    baseURL: 'https://api.deepseek.com',
+    dangerouslyAllowBrowser: true,
+  });
+  const response = await client.chat.completions.create({
+    model,
+    max_tokens: maxTokens,
+    messages: [{ role: 'system', content: systemPrompt }, ...messages],
+    tools: [
+      {
+        type: 'function',
+        function: {
+          name: toolName,
+          description: toolDescription,
+          parameters: inputSchema as unknown as Record<string, unknown>,
+        },
+      },
+    ],
+    tool_choice: { type: 'function', function: { name: toolName } },
+  });
+  if (response.usage) {
+    void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
+  }
+  const choice = response.choices[0];
+  const toolCall = choice?.message?.tool_calls?.[0];
+  // The OpenAI SDK union types tool_call as function | custom. We
+  // only emit `function` tools so narrow on `type === 'function'`.
+  if (!toolCall || toolCall.type !== 'function' || toolCall.function.name !== toolName) {
+    const got = toolCall && toolCall.type === 'function' ? toolCall.function.name : 'none';
+    throw new Error(
+      `DeepSeek API returned no matching tool_call for "${toolName}" — got ${got}`,
+    );
+  }
+  // DeepSeek emits `arguments` as a JSON string. Parse here; let
+  // exceptions propagate so the caller can decide to fall back.
+  return JSON.parse(toolCall.function.arguments);
+}
+
+/** Top-level helper for tool-use generation. Tries Anthropic first
+ *  (most reliable structured output); falls back to DeepSeek on any
+ *  failure (no Anthropic key, network error, schema rejection).
+ *  Returns the tool's input as `unknown` — caller validates field
+ *  shapes downstream. */
 export async function getCoachStructuredResponse(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPrompt: string,
@@ -626,22 +684,44 @@ export async function getCoachStructuredResponse(
   toolDescription: string,
   inputSchema: Record<string, unknown>,
 ): Promise<unknown> {
-  const config = await getForcedProviderConfig('anthropic');
-  if (!config) {
-    throw new Error('No Anthropic API key configured for tool-use call');
+  const anthropicConfig = await getForcedProviderConfig('anthropic');
+  let lastErr: unknown = null;
+  if (anthropicConfig) {
+    try {
+      const model = getModel(task, anthropicConfig.provider, anthropicConfig.preferredModel);
+      return await callAnthropicWithTool(
+        anthropicConfig.apiKey,
+        model,
+        systemPrompt,
+        messages,
+        maxTokens,
+        task,
+        toolName,
+        toolDescription,
+        inputSchema,
+      );
+    } catch (err) {
+      lastErr = err;
+      // Fall through to DeepSeek.
+    }
   }
-  const model = getModel(task, config.provider, config.preferredModel);
-  return callAnthropicWithTool(
-    config.apiKey,
-    model,
-    systemPrompt,
-    messages,
-    maxTokens,
-    task,
-    toolName,
-    toolDescription,
-    inputSchema,
-  );
+  const deepseekConfig = await getForcedProviderConfig('deepseek');
+  if (deepseekConfig) {
+    const model = getModel(task, deepseekConfig.provider, deepseekConfig.preferredModel);
+    return callDeepseekWithTool(
+      deepseekConfig.apiKey,
+      model,
+      systemPrompt,
+      messages,
+      maxTokens,
+      task,
+      toolName,
+      toolDescription,
+      inputSchema,
+    );
+  }
+  if (lastErr) throw lastErr;
+  throw new Error('No API key configured for tool-use call (neither Anthropic nor DeepSeek)');
 }
 
 export async function getCoachChatResponse(
