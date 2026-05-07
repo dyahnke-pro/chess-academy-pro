@@ -26,6 +26,7 @@ import { getCoachChatResponse } from './coachApi';
 import {
   validateWalkthroughTree,
   validateMoveLegality,
+  validateTreeMoveLegality,
   formatIssues,
 } from '../data/openingWalkthroughs/validate';
 import { db, type CachedOpening } from '../db/schema';
@@ -194,14 +195,36 @@ export function normalizeOpeningName(name: string): string {
   return name.trim().toLowerCase();
 }
 
-/** Read-through cache: check Dexie before generating. */
+/** Read-through cache: check Dexie before generating. RE-VALIDATES
+ *  the cached tree before returning — production audit (build
+ *  c2bc340) caught a bad Pirc tree shipping into the cache during
+ *  the window before tree-legality validation existed. Re-checking
+ *  on retrieval means broken trees from old caches get evicted +
+ *  re-generated automatically; users don't have to clear storage. */
 export async function getCachedOpening(
   name: string,
 ): Promise<WalkthroughTree | null> {
   try {
     const normalized = normalizeOpeningName(name);
     const cached = await db.cachedOpenings.get(normalized);
-    return cached ? cached.tree : null;
+    if (!cached) return null;
+    // Sanity-check the cached tree before returning. If illegal SANs
+    // were saved before the tree-legality gate existed, evict the
+    // record so the next request goes through fresh generation.
+    const issues = validateTreeMoveLegality(cached.tree);
+    const errors = issues.filter((i) => i.severity === 'error');
+    if (errors.length > 0) {
+      void logAppAudit({
+        kind: 'dexie-error',
+        category: 'subsystem',
+        source: 'openingGenerator.getCachedOpening',
+        summary: `evicting broken cached tree for "${name}" — ${errors.length} legality errors`,
+        details: errors.slice(0, 3).map((e) => e.message).join('; '),
+      });
+      await db.cachedOpenings.delete(normalized);
+      return null;
+    }
+    return cached.tree;
   } catch {
     return null;
   }
@@ -302,7 +325,16 @@ Fix the issues above and produce a valid tree.`
 
   const structural = validateWalkthroughTree(tree);
   const legality = validateMoveLegality(tree);
-  const allIssues = [...structural, ...legality];
+  // CRITICAL: validate the walkthrough tree's own SANs are legal
+  // from their parent positions. Production audit (build c2bc340)
+  // caught the LLM generating a Pirc tree where the first child's
+  // san='d6' (Black's move) — illegal from the standard starting
+  // position because White moves first. The tree shipped, got
+  // cached, narration played but the board never advanced because
+  // chess.js silently rejected each move. Without this gate, broken
+  // trees ship and cache.
+  const treeLegality = validateTreeMoveLegality(tree);
+  const allIssues = [...structural, ...legality, ...treeLegality];
   const errors = allIssues.filter((i) => i.severity === 'error');
   if (errors.length > 0) {
     return {
