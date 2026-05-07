@@ -592,20 +592,24 @@ export function CoachTeachPage(): JSX.Element {
       let requestedName: string | null = null;
       if (m && m[2]) {
         requestedName = m[2].trim();
-      } else if (stageHint && stageStrippedInput.length > 0 && stageStrippedInput.length <= 40) {
+      } else if (stageHint && stageStrippedInput.length > 0 && stageStrippedInput.length <= 60) {
         // Stage keyword stripped → remaining text is the opening name.
         requestedName = stageStrippedInput;
-      } else if (trimmed.length <= 40 && !trimmed.includes('?')) {
+      } else if (trimmed.length <= 60 && !trimmed.includes('?')) {
         // Bare-name routing: "The Vienna", "Pirc defense", "Italian".
         // Production audit (build 7e4f52b) caught "Pirc defense"
         // falling through to the brain instead of the LLM generator
         // because Pirc isn't in the static registry — we previously
         // only routed when registry hit. Now we route through the
         // full three-tier pipeline (registry → cache → LLM gen) for
-        // any short bare-name input. Result: "Pirc defense" produces
-        // a generated walkthrough; non-opening garbage like "hello"
-        // fails validation in the LLM gen tier and surfaces a clear
-        // failure message — same behavior as verb-prefix inputs.
+        // any short bare-name input.
+        // Length cap was 40 — production audit (build 0c6c02c) caught
+        // deep-dive queries like "Pirc Defense: Baz Counter-gambit"
+        // (33 chars OK) but variations like "King's Indian Defense:
+        // Mar del Plata" (39) sat right at the limit and longer named
+        // sub-variations broke. 60 catches the long ones without
+        // letting full sentences through (sentences usually have a
+        // verb, > 60 chars, or end with ?/.).
         requestedName = trimmed;
       }
       if (requestedName) {
@@ -2165,10 +2169,20 @@ function WalkthroughControls({
                 <button
                   key={`deepdive-${idx}`}
                   onClick={() => {
-                    const ctx = opt.pathSans.length > 0
-                      ? `after ${opt.pathSans.join(' ')} ${opt.label}`
-                      : `${opt.label}`;
-                    const query = `${tree.openingName} ${ctx}`;
+                    // Production audit (build 0c6c02c): the original
+                    // "${name} after ${path} ${label}" query (~50 chars
+                    // for Pirc) failed bare-name routing's 60-char cap
+                    // AND didn't match TEACH_PATTERN, so the surface
+                    // sent the deep-dive query straight to chat. New
+                    // shape: "${openingName}: ${variationName}" where
+                    // variationName is the prose part of forkSubtitle
+                    // before the "—". For Pirc that produces:
+                    // "Pirc Defense: Main line", "Pirc Defense: Baz
+                    // Counter-gambit", etc. — short, route-friendly,
+                    // and gets deep-dive treatment from the LLM via
+                    // the broad-vs-specific prompt rule.
+                    const variationName = opt.subtitle.split('—')[0].trim() || opt.label;
+                    const query = `${tree.openingName}: ${variationName}`;
                     walkthrough.stop();
                     onDeepDive(query);
                   }}
