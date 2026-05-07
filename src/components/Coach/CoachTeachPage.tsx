@@ -464,11 +464,29 @@ export function CoachTeachPage(): JSX.Element {
     // "teach me / walk me through / show me [opening]" ask. The
     // brain only sees asks that DON'T match.
     if (!opts?.kickoff) {
+      // Two-pass routing.
+      // Pass 1 (verb-prefix): "teach me X", "walk me through X", etc.
+      // Pass 2 (bare-name): if input is short and resolveWalkthroughTree
+      //   resolves it directly. Catches "The Vienna" / "Vienna please"
+      //   / "Italian" — phrases the user typed in build 3e2263c that
+      //   the verb-prefix pattern missed.
       const TEACH_PATTERN =
         /\b(teach\s+me|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|drill|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
-      const m = text.trim().match(TEACH_PATTERN);
+      const trimmed = text.trim();
+      const m = trimmed.match(TEACH_PATTERN);
+      let requestedName: string | null = null;
       if (m && m[2]) {
-        const requestedName = m[2].trim();
+        requestedName = m[2].trim();
+      } else if (trimmed.length <= 40 && !trimmed.includes('?')) {
+        // Bare-name resolution: "The Vienna", "Italian", etc. Ask
+        // the resolver if this short phrase points to a tree. If it
+        // does, route. If not, fall through to the brain.
+        const probe = resolveWalkthroughTree(trimmed);
+        if (probe) {
+          requestedName = trimmed;
+        }
+      }
+      if (requestedName) {
         // Three-tier resolution: static registry (Vienna lives here),
         // Dexie cache (previously LLM-generated), runtime LLM
         // generation (last resort). Each later tier is slower but
@@ -805,13 +823,10 @@ export function CoachTeachPage(): JSX.Element {
             // Production audit (build e6c3c7b) caught a regression
             // where the brain re-called start_walkthrough_for_opening
             // mid-paused-walkthrough, restarting from the root and
-            // destroying the student's progress. User had typed
-            // "Wait, go back to where I was!" and the brain helpfully
-            // tried to "restart the Vienna" — which was the OPPOSITE
-            // of what the user wanted. Here we short-circuit: if a
-            // walkthrough is already running on this surface, RESUME
-            // (if paused) or no-op (if active). Only start fresh if
-            // nothing is in progress.
+            // destroying the student's progress. Here we short-circuit:
+            // if a walkthrough is already running on this surface,
+            // RESUME (if paused) or no-op (if active). Only start
+            // fresh if nothing is in progress.
             if (walkthrough.isActive) {
               if (walkthrough.phase === 'paused') {
                 walkthrough.resume();
@@ -827,6 +842,21 @@ export function CoachTeachPage(): JSX.Element {
             // No walkthrough in progress — start fresh.
             const tree = resolveWalkthroughTree(opening);
             if (tree) {
+              // SILENCE THE BRAIN before the walkthrough starts speaking.
+              // Production audit (build 3e2263c) caught a "two voices"
+              // overlap: the brain emitted [VOICE: "the Vienna walkthrough
+              // is launching..."] which Polly began speaking; 1.5s later
+              // the walkthrough's intro started ("The Vienna Game. It's
+              // the King's Pawn opening's quieter, sharper cousin..."),
+              // both running concurrently. The brain's preamble was
+              // redundant — the walkthrough has its own intro. Stopping
+              // here cuts the brain mid-sentence in favor of the
+              // walkthrough's authoritative narration.
+              voiceService.stop();
+              // Mark the turn's voice slot as already spent so the
+              // brain's [VOICE:] fallback doesn't re-queue after the
+              // walkthrough is running.
+              turnAbortRef.aborted = true;
               walkthrough.start(tree);
               return { ok: true };
             }
