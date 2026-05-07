@@ -205,9 +205,10 @@ ARROW + HIGHLIGHT RULES (production audit caught useless arrows; follow these st
 
 LEGAL-MOVE TRAPS (production audit caught all of these — DO NOT repeat):
 - FIANCHETTO PREP: To play Bg7 you must FIRST move the g-pawn (...g6). Bishop on f8 → bishop to g7 requires g7 to be EMPTY. Same for Bg2 (needs g3) and Bb7 (needs b6) and Bb2 (needs b3). The Pirc move order is ...d6, ...Nf6, ...g6, THEN ...Bg7 — never ...Bg7 before ...g6.
-- QUEENSIDE CASTLING: O-O-O requires the b1 (or b8) knight to be DEVELOPED — castling cannot pass through a piece. If Nb1 is still home, you cannot castle queenside. Develop the knight first (Nc3, Nb1-d2-c4, etc.) before O-O-O.
-- KINGSIDE CASTLING: O-O requires the f1 (or f8) bishop to be developed AND the g1 (or g8) knight to be developed. King and rook must not have moved.
+- QUEENSIDE CASTLING (O-O-O): castling cannot pass through ANY piece on the queenside. All THREE squares between king and rook must be empty: b1, c1, d1 for White; b8, c8, d8 for Black. That means the b-knight (Nb1/Nb8), the c-bishop (Bc1/Bc8), AND the queen (Qd1/Qd8) all need to have moved off their starting squares before O-O-O is legal. Production audit (build 41154ec) caught a Najdorf tree with O-O-O attempted while the c1-bishop was still home — the bishop blocks the king's path. Check ALL three squares are empty before emitting O-O-O.
+- KINGSIDE CASTLING (O-O): the f-bishop (Bf1/Bf8) AND g-knight (Ng1/Ng8) must both have moved. King and rook must not have moved.
 - Pawn moves can never go BACKWARD or sideways. e4 to e5 is legal, e4 to e3 is not.
+- ARROWS: every narration arrow must have from !== to. Don't emit no-op arrows like {from: f7, to: f7} — the validator rejects them and the visual is pointless. To highlight a single square, use the highlights array, not arrows.
 
 ${VIENNA_SAMPLE}
 
@@ -233,6 +234,31 @@ interface ParseResult {
   parseError?: string;
 }
 
+/** Defensively normalize an LLM-emitted JSON string before parse:
+ *    - smart double quotes → straight double quotes (LLM occasionally
+ *      uses curly " " as STRING DELIMITERS, which JSON.parse rejects)
+ *    - smart single quotes → straight apostrophes (cosmetic, not a
+ *      parse-breaker but keeps text uniform)
+ *    - literal NEL / line-separator / paragraph-separator chars in
+ *      strings → spaces (these are valid Unicode but iOS Safari
+ *      sometimes treats them as illegal in JSON strings)
+ *    - tab characters in strings → spaces (also iOS Safari sensitive)
+ *  Production audit (builds c95ccc9 + 41154ec) caught Philidor +
+ *  Hampe-Allgaier + Najdorf failing JSON.parse with iOS Safari's
+ *  "Expected '}'" message and no position info. The position is
+ *  always somewhere INSIDE the response — and the recurring suspect
+ *  is character-class issues invisible in the audit dump. */
+function preprocessForParse(text: string): string {
+  // Use Unicode escapes inside the character classes — U+2028 and
+  // U+2029 are line terminators in JS source, so writing them as
+  // literal chars in a regex literal breaks the parser across lines.
+  return text
+    .replace(/[\u201c\u201d]/g, '"')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u0085\u2028\u2029]/g, ' ')
+    .replace(/\t/g, ' ');
+}
+
 function parseGeneratedTree(raw: string): ParseResult {
   let text = raw.trim();
   // Strip markdown code fences defensively.
@@ -250,12 +276,25 @@ function parseGeneratedTree(raw: string): ParseResult {
   // Strip trailing commas before } or ] (LLM frequently adds these
   // even though strict JSON disallows them).
   jsonText = jsonText.replace(/,(\s*[}\]])/g, '$1');
+  // First parse attempt: as-is.
   try {
     return { tree: JSON.parse(jsonText) as WalkthroughTree };
-  } catch (err) {
+  } catch (firstErr) {
+    // Second attempt: smart-quote / control-char preprocessing.
+    // Production audit recurring "Expected '}'" with no position info
+    // is most plausibly explained by character-class issues invisible
+    // in the audit dump — try to fix them and re-parse before giving up.
+    try {
+      const preprocessed = preprocessForParse(jsonText);
+      if (preprocessed !== jsonText) {
+        return { tree: JSON.parse(preprocessed) as WalkthroughTree };
+      }
+    } catch {
+      // Fall through to original error reporting.
+    }
     return {
       tree: null,
-      parseError: err instanceof Error ? err.message : String(err),
+      parseError: firstErr instanceof Error ? firstErr.message : String(firstErr),
     };
   }
 }
@@ -706,6 +745,32 @@ export function repairPunishStage(
   return { kept, report };
 }
 
+/** Drop narration arrows where from === to. The LLM emits these
+ *  as no-op "highlight this square" gestures (e.g. {from: f7, to: f7})
+ *  but the validator catches them as errors and the visual is
+ *  pointless either way. Production audit (build 41154ec) caught
+ *  Hampe-Allgaier validation failing on three same-square arrows.
+ *  Mutates in place. Returns the count dropped. */
+export function repairNarrationArrows(tree: WalkthroughTree): number {
+  let dropped = 0;
+  function walk(node: WalkthroughTreeNode): void {
+    if (node.narration) {
+      for (const seg of node.narration) {
+        if (seg.arrows) {
+          const before = seg.arrows.length;
+          seg.arrows = seg.arrows.filter((a) => a.from !== a.to);
+          dropped += before - seg.arrows.length;
+        }
+      }
+    }
+    for (const child of node.children) {
+      walk(child.node);
+    }
+  }
+  walk(tree.root);
+  return dropped;
+}
+
 export function repairForkLabels(tree: WalkthroughTree): number {
   let filled = 0;
   function walk(node: WalkthroughTreeNode): void {
@@ -896,6 +961,19 @@ Fix the issues above and produce a SHORTER, valid tree.`
       category: 'subsystem',
       source: 'openingGenerator.generateOnce',
       summary: `stripped ${sansNormalized} SAN annotation marks for "${name}"`,
+    });
+  }
+  // Drop no-op arrows (from === to). Production audit (build 41154ec)
+  // caught Hampe-Allgaier validation failing on 3 same-square arrows.
+  // Visual is pointless and validation rejects them; auto-drop is
+  // strictly better than re-rolling the whole gen.
+  const noopArrowsDropped = repairNarrationArrows(tree);
+  if (noopArrowsDropped > 0) {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOnce',
+      summary: `dropped ${noopArrowsDropped} no-op (from===to) arrows for "${name}"`,
     });
   }
 

@@ -1987,6 +1987,37 @@ function WalkthroughControls({
               <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
             </button>
           ))}
+          {tree && forkOptions.length > 0 && (
+            <>
+              <div className="text-xs font-medium text-theme-text-muted px-1 pt-2">
+                Or dive deeper into one of these
+              </div>
+              {forkOptions.map((opt, idx) => {
+                const variationName =
+                  (opt.forkSubtitle ?? '').split('—')[0].trim() ||
+                  opt.label ||
+                  `variation ${idx + 1}`;
+                const query = `${tree.openingName}: ${variationName}`;
+                return (
+                  <button
+                    key={`fork-deepdive-${idx}`}
+                    onClick={() => {
+                      walkthrough.stop();
+                      onDeepDive(query);
+                    }}
+                    className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg border border-theme-border bg-theme-bg hover:bg-theme-surface text-left min-h-[44px] transition-colors"
+                    data-testid={`walkthrough-fork-deepdive-${idx}`}
+                  >
+                    <div className="flex flex-col min-w-0 flex-1">
+                      <span className="text-xs font-medium text-theme-text-muted">Deep dive</span>
+                      <span className="text-sm text-theme-text truncate">{variationName}</span>
+                    </div>
+                    <ChevronRight size={14} className="text-theme-text-muted flex-shrink-0" />
+                  </button>
+                );
+              })}
+            </>
+          )}
         </div>
         <div className="flex items-center justify-center gap-2 pt-1">
           <button
