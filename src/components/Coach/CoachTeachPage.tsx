@@ -1166,23 +1166,41 @@ export function CoachTeachPage(): JSX.Element {
             {walkthrough.isActive ? (
               // Wrap the board in a relative container so the
               // NarrationArrowOverlay sits absolutely on top.
-              // Overlay's SVG viewBox is 8×8 squares, matching the
-              // board's grid — Framer Motion `pathLength` draws each
-              // arrow from source to destination over ~550ms when
-              // the segment that owns it starts speaking.
+              // In drill mode, the board becomes interactive — the
+              // student plays moves on it and the hook routes them
+              // through attemptDrillMove. Otherwise the board is
+              // read-only and just shows the walkthrough's FEN.
               <div className="relative">
-                <ChessBoard
-                  key="walkthrough-board"
-                  initialFen={walkthrough.fen}
-                  orientation={playerColor}
-                  interactive={false}
-                  showFlipButton={false}
-                  showUndoButton={false}
-                  showResetButton={false}
-                  showEvalBar={false}
-                  showVoiceMic={false}
-                  showLastMoveHighlight
-                />
+                {walkthrough.phase === 'drill' && walkthrough.drillMoveIndex >= 0 && !walkthrough.drillComplete && !walkthrough.drillWrongMove ? (
+                  <ChessBoard
+                    key={`drill-board-${walkthrough.drillFen}`}
+                    initialFen={walkthrough.drillFen}
+                    orientation={playerColor}
+                    interactive={true}
+                    showFlipButton={false}
+                    showUndoButton={false}
+                    showResetButton={false}
+                    showEvalBar={false}
+                    showVoiceMic={false}
+                    showLastMoveHighlight
+                    onMove={(move) => {
+                      walkthrough.attemptDrillMove(move.san);
+                    }}
+                  />
+                ) : (
+                  <ChessBoard
+                    key={`walkthrough-board-${walkthrough.phase === 'drill' ? walkthrough.drillFen : walkthrough.fen}`}
+                    initialFen={walkthrough.phase === 'drill' ? walkthrough.drillFen : walkthrough.fen}
+                    orientation={playerColor}
+                    interactive={false}
+                    showFlipButton={false}
+                    showUndoButton={false}
+                    showResetButton={false}
+                    showEvalBar={false}
+                    showVoiceMic={false}
+                    showLastMoveHighlight
+                  />
+                )}
                 <NarrationArrowOverlay
                   arrows={walkthrough.narrationArrows}
                   highlights={walkthrough.narrationHighlights}
@@ -1226,7 +1244,7 @@ export function CoachTeachPage(): JSX.Element {
             back to the coach hub. When a walkthrough is active, this
             row is replaced by the walkthrough control panel below. */}
         {walkthrough.isActive ? (
-          <WalkthroughControls walkthrough={walkthrough} />
+          <WalkthroughControls walkthrough={walkthrough} navigate={navigate} />
         ) : (
           <div className="flex items-center justify-center gap-2 px-3 pb-3">
             <button
@@ -1430,8 +1448,10 @@ export function CoachTeachPage(): JSX.Element {
  */
 function WalkthroughControls({
   walkthrough,
+  navigate,
 }: {
   walkthrough: ReturnType<typeof useTeachWalkthrough>;
+  navigate: ReturnType<typeof useNavigate>;
 }): JSX.Element {
   const { phase, forkOptions, canBacktrack, leafOutro, tree } = walkthrough;
 
@@ -1485,6 +1505,13 @@ function WalkthroughControls({
   }
 
   if (phase === 'leaf') {
+    // Show "Continue to learning stages" only if any stage data
+    // exists on the tree; otherwise the menu would be empty.
+    const hasStages =
+      (tree?.concepts && tree.concepts.length > 0) ||
+      (tree?.findMove && tree.findMove.length > 0) ||
+      (tree?.drill && tree.drill.length > 0) ||
+      (tree?.punish && tree.punish.length > 0);
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-leaf-panel">
         {leafOutro && (
@@ -1493,6 +1520,16 @@ function WalkthroughControls({
           </div>
         )}
         <div className="flex flex-col gap-2">
+          {hasStages && (
+            <button
+              onClick={() => walkthrough.enterStageMenu()}
+              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
+              data-testid="walkthrough-continue-learning"
+            >
+              <ChevronRight size={16} />
+              Continue learning
+            </button>
+          )}
           {canBacktrack && (
             <button
               onClick={() => walkthrough.backtrackToLastFork()}
@@ -1514,6 +1551,108 @@ function WalkthroughControls({
         </div>
       </div>
     );
+  }
+
+  // Stage-menu hub: pick one of the 4 stages or play it for real.
+  if (phase === 'stage-menu') {
+    const conceptsCount = tree?.concepts?.length ?? 0;
+    const findMoveCount = tree?.findMove?.length ?? 0;
+    const drillCount = tree?.drill?.length ?? 0;
+    const punishCount = tree?.punish?.length ?? 0;
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-stage-menu">
+        <div className="text-xs font-medium text-theme-text-muted px-1">
+          What's next?
+        </div>
+        <div className="flex flex-col gap-2">
+          {conceptsCount > 0 && (
+            <button
+              onClick={() => walkthrough.startStage('concepts')}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              data-testid="walkthrough-stage-concepts"
+            >
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-theme-text">Concept check</span>
+                <span className="text-[11px] text-theme-text-muted">{conceptsCount} questions on the big ideas</span>
+              </div>
+              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+            </button>
+          )}
+          {findMoveCount > 0 && (
+            <button
+              onClick={() => walkthrough.startStage('findMove')}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              data-testid="walkthrough-stage-findmove"
+            >
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-theme-text">Find the move</span>
+                <span className="text-[11px] text-theme-text-muted">{findMoveCount} recognition puzzles</span>
+              </div>
+              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+            </button>
+          )}
+          {drillCount > 0 && (
+            <button
+              onClick={() => walkthrough.startStage('drill')}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              data-testid="walkthrough-stage-drill"
+            >
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-theme-text">Drill the line</span>
+                <span className="text-[11px] text-theme-text-muted">{drillCount} woodpecker lines — play them on the board</span>
+              </div>
+              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+            </button>
+          )}
+          {punishCount > 0 && (
+            <button
+              onClick={() => walkthrough.startStage('punish')}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              data-testid="walkthrough-stage-punish"
+            >
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-theme-text">Punish mistakes</span>
+                <span className="text-[11px] text-theme-text-muted">{punishCount} common opponent errors and how to crush them</span>
+              </div>
+              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+            </button>
+          )}
+          <button
+            onClick={() => {
+              const opening = tree?.openingName ?? '';
+              walkthrough.stop();
+              navigate(`/coach/play?opening=${encodeURIComponent(opening)}`);
+            }}
+            className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+            data-testid="walkthrough-stage-play"
+          >
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-theme-text">Play it for real</span>
+              <span className="text-[11px] text-theme-text-muted">Full game vs. coach starting from this opening</span>
+            </div>
+            <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+          </button>
+          <button
+            onClick={() => walkthrough.stop()}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+            data-testid="walkthrough-end-from-menu"
+          >
+            <X size={12} />
+            End for now
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Quiz panel — handles concepts, findMove, and punish (all are MC).
+  if (phase === 'quiz') {
+    return <QuizPanel walkthrough={walkthrough} />;
+  }
+
+  // Drill panel — woodpecker, interactive board.
+  if (phase === 'drill') {
+    return <DrillPanel walkthrough={walkthrough} />;
   }
 
   if (phase === 'paused') {
@@ -1573,6 +1712,369 @@ function WalkthroughControls({
         >
           <X size={14} />
           End
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * QuizPanel — handles the three MC-based stages (concepts /
+ * findMove / punish). Same UI pattern: show prompt, render choices
+ * as tap targets, on pick reveal the explanation, "Next" advances
+ * (or returns to stage menu when done).
+ */
+function QuizPanel({
+  walkthrough,
+}: {
+  walkthrough: ReturnType<typeof useTeachWalkthrough>;
+}): JSX.Element {
+  const {
+    tree,
+    activeStage,
+    stageIndex,
+    quizSelected,
+    quizShowingFeedback,
+  } = walkthrough;
+
+  if (!tree || !activeStage) return <div data-testid="walkthrough-quiz-empty" />;
+
+  // Resolve the question source.
+  type AnyQuizQ = {
+    prompt: string;
+    multiSelect?: boolean;
+    choices: { text: string; correct: boolean; explanation: string }[];
+  };
+  let questions: AnyQuizQ[] = [];
+  let stageLabel = '';
+  if (activeStage === 'concepts') {
+    questions = (tree.concepts ?? []).map((q) => ({
+      prompt: q.prompt,
+      multiSelect: q.multiSelect,
+      choices: q.choices.map((c) => ({
+        text: c.text,
+        correct: c.correct,
+        explanation: c.explanation,
+      })),
+    }));
+    stageLabel = 'Concept check';
+  } else if (activeStage === 'findMove') {
+    questions = (tree.findMove ?? []).map((q) => ({
+      prompt: q.prompt,
+      choices: q.candidates.map((c) => ({
+        text: `${c.label}`,
+        correct: c.correct,
+        explanation: c.explanation,
+      })),
+    }));
+    stageLabel = 'Find the move';
+  } else if (activeStage === 'punish') {
+    // For punish, the "question" is whyBad + "what's the punishment?"
+    // and the choices are the punishment + distractors.
+    questions = (tree.punish ?? []).map((p) => {
+      // Combine punishment + distractors into a shuffled-but-deterministic
+      // choice list. We mark the punishment as correct.
+      const choices: { text: string; correct: boolean; explanation: string }[] = [
+        {
+          text: `${p.punishment} — find the punishment`,
+          correct: true,
+          explanation: p.whyPunish,
+        },
+        ...p.distractors.map((d) => ({
+          text: d.label,
+          correct: false,
+          explanation: d.explanation,
+        })),
+      ];
+      return {
+        prompt: `${p.name}\n\n${p.whyBad}\n\nBlack played ${p.inaccuracy}. What's your punishment?`,
+        choices,
+      };
+    });
+    stageLabel = 'Punish mistakes';
+  }
+
+  if (stageIndex >= questions.length) {
+    // All done — back to menu (defensive; shouldn't usually render).
+    return (
+      <div className="px-3 pb-3" data-testid="walkthrough-quiz-complete">
+        <button
+          onClick={() => walkthrough.backToStageMenu()}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[44px] transition-colors"
+        >
+          Back to menu
+        </button>
+      </div>
+    );
+  }
+
+  const q = questions[stageIndex];
+
+  return (
+    <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-quiz-panel">
+      <div className="flex items-center justify-between text-xs text-theme-text-muted px-1">
+        <span className="font-semibold">{stageLabel}</span>
+        <span>
+          {stageIndex + 1} / {questions.length}
+        </span>
+      </div>
+      <div className="text-sm text-theme-text px-1 whitespace-pre-line">
+        {q.prompt}
+      </div>
+      <div className="flex flex-col gap-2">
+        {q.choices.map((c, idx) => {
+          const isSelected = quizSelected === idx;
+          const showResult = quizShowingFeedback;
+          // Color tint based on feedback state.
+          let bg = 'bg-theme-surface';
+          let border = 'border-theme-border';
+          if (showResult && isSelected && c.correct) {
+            bg = 'bg-green-500/15';
+            border = 'border-green-500/50';
+          } else if (showResult && isSelected && !c.correct) {
+            bg = 'bg-red-500/15';
+            border = 'border-red-500/50';
+          } else if (showResult && c.correct && !isSelected) {
+            bg = 'bg-green-500/10';
+            border = 'border-green-500/40';
+          }
+          return (
+            <button
+              key={`${stageIndex}-${idx}`}
+              disabled={showResult}
+              onClick={() => walkthrough.pickQuizChoice(idx)}
+              className={`w-full text-left px-3 py-2.5 rounded-lg border ${border} ${bg} hover:bg-theme-bg disabled:cursor-default text-sm text-theme-text min-h-[48px] transition-colors`}
+              data-testid={`walkthrough-quiz-choice-${idx}`}
+            >
+              <div className="font-medium">{c.text}</div>
+              {showResult && isSelected && (
+                <div className="text-xs text-theme-text-muted mt-1">
+                  {c.explanation}
+                </div>
+              )}
+              {showResult && !isSelected && c.correct && (
+                <div className="text-xs text-theme-text-muted mt-1 italic">
+                  {c.explanation}
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
+      {quizShowingFeedback && (
+        <div className="flex items-center justify-between gap-2 pt-1">
+          <button
+            onClick={() => walkthrough.backToStageMenu()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+          >
+            Back to menu
+          </button>
+          <button
+            onClick={() => walkthrough.nextQuizQuestion()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-accent text-theme-bg text-sm font-semibold transition-colors"
+            data-testid="walkthrough-quiz-next"
+          >
+            {stageIndex === questions.length - 1 ? 'Finish' : 'Next'}
+            <ChevronRight size={14} />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * DrillPanel — woodpecker drill UI. Three sub-states:
+ *   - No line selected yet → show line picker
+ *   - drillWrongMove non-null → show "no, the move was X" feedback
+ *   - drillComplete → show "Done! Restart or back to menu"
+ *   - Otherwise → show "play your move" instruction
+ *
+ * The board itself is rendered by CoachTeachPage; this panel is
+ * just the controls beneath.
+ */
+function DrillPanel({
+  walkthrough,
+}: {
+  walkthrough: ReturnType<typeof useTeachWalkthrough>;
+}): JSX.Element {
+  const {
+    tree,
+    stageIndex,
+    drillMoveIndex,
+    drillWrongMove,
+    drillComplete,
+  } = walkthrough;
+
+  const drillLines = tree?.drill ?? [];
+  const currentLine = drillLines[stageIndex];
+
+  // No drill array at all — defensive fallback.
+  if (drillLines.length === 0) {
+    return (
+      <div className="px-3 pb-3" data-testid="walkthrough-drill-empty">
+        <button
+          onClick={() => walkthrough.backToStageMenu()}
+          className="w-full px-3 py-2 rounded-md bg-theme-surface hover:bg-theme-border text-sm text-theme-text"
+        >
+          Back to menu
+        </button>
+      </div>
+    );
+  }
+
+  // Line picker — shown until selectDrillLine is called explicitly
+  // OR right after startStage('drill') puts us here. We treat
+  // drillMoveIndex===0 with no line picked as the picker state.
+  // Once the user clicks a line, drillMoveIndex stays 0 but the line
+  // is "active." We use a separate state to detect this — for now,
+  // show the picker if drillMoveIndex===0 AND drillFen is the
+  // starting position AND the first move hasn't been played yet.
+  // Simpler: always show picker as a "switch line" option.
+  const lineActive = drillMoveIndex > 0 || drillWrongMove !== null || drillComplete;
+
+  if (!lineActive) {
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-drill-picker">
+        <div className="text-xs font-medium text-theme-text-muted px-1">
+          Pick a line to drill — play it on the board, opponent auto-replies, wrong moves reset.
+        </div>
+        <div className="flex flex-col gap-2">
+          {drillLines.map((line, idx) => (
+            <button
+              key={idx}
+              onClick={() => walkthrough.selectDrillLine(idx)}
+              className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border ${
+                stageIndex === idx ? 'border-theme-accent' : 'border-theme-border'
+              } bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors`}
+              data-testid={`walkthrough-drill-line-${idx}`}
+            >
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-theme-text">{line.name}</span>
+                {line.subtitle && (
+                  <span className="text-[11px] text-theme-text-muted">{line.subtitle}</span>
+                )}
+                <span className="text-[11px] text-theme-text-muted">
+                  {Math.ceil(line.moves.length / 2)} full moves
+                </span>
+              </div>
+              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+            </button>
+          ))}
+          <button
+            onClick={() => walkthrough.backToStageMenu()}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+          >
+            Back to menu
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (drillComplete) {
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-drill-complete">
+        <div className="text-sm font-semibold text-green-500 px-1">
+          Clean playthrough! Line drilled.
+        </div>
+        <div className="text-[11px] text-theme-text-muted px-1">
+          Repeat until automatic, then drill another line or move on.
+        </div>
+        <div className="flex flex-col gap-2">
+          <button
+            onClick={() => walkthrough.restartDrill()}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[44px] transition-colors"
+            data-testid="walkthrough-drill-restart"
+          >
+            <RefreshCw size={14} />
+            Drill it again
+          </button>
+          <button
+            onClick={() => walkthrough.backToStageMenu()}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors"
+          >
+            Back to menu
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (drillWrongMove) {
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-drill-wrong">
+        <div className="text-sm font-semibold text-red-500 px-1">
+          Not quite — you played {drillWrongMove.tried}, the move is {drillWrongMove.expected}.
+        </div>
+        <div className="text-[11px] text-theme-text-muted px-1">
+          Resetting to this position. Try again.
+        </div>
+        <div className="flex items-center justify-center gap-2">
+          <button
+            onClick={() => walkthrough.acknowledgeDrillMistake()}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-md bg-theme-accent text-theme-bg text-sm font-semibold transition-colors"
+            data-testid="walkthrough-drill-acknowledge"
+          >
+            Got it
+          </button>
+          <button
+            onClick={() => walkthrough.restartDrill()}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors"
+          >
+            <RefreshCw size={14} />
+            Restart line
+          </button>
+          <button
+            onClick={() => walkthrough.backToStageMenu()}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors"
+          >
+            Menu
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Active drill — student to play.
+  const totalPlies = currentLine?.moves.length ?? 0;
+  const progress = totalPlies > 0 ? Math.min(drillMoveIndex / totalPlies, 1) : 0;
+  return (
+    <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-drill-active">
+      <div className="flex items-center justify-between text-xs text-theme-text-muted px-1">
+        <span className="font-semibold">{currentLine?.name ?? 'Drill'}</span>
+        <span>
+          ply {drillMoveIndex} / {totalPlies}
+        </span>
+      </div>
+      <div
+        className="h-1 rounded-full overflow-hidden"
+        style={{ background: 'rgba(168, 85, 247, 0.15)' }}
+      >
+        <div
+          className="h-full transition-all duration-200"
+          style={{
+            width: `${progress * 100}%`,
+            background: 'rgb(168, 85, 247)',
+          }}
+        />
+      </div>
+      <div className="text-xs text-theme-text-muted px-1">
+        Play the next move on the board. Opponent will auto-reply.
+      </div>
+      <div className="flex items-center justify-center gap-2">
+        <button
+          onClick={() => walkthrough.restartDrill()}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+        >
+          <RefreshCw size={12} />
+          Restart
+        </button>
+        <button
+          onClick={() => walkthrough.backToStageMenu()}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+        >
+          Menu
         </button>
       </div>
     </div>

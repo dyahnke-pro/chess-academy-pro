@@ -61,7 +61,13 @@ export type WalkthroughPhase =
   | 'narrating'
   | 'fork'
   | 'leaf'
-  | 'paused';
+  | 'paused'
+  | 'stage-menu'  // post-leaf hub; pick which stage to do next
+  | 'quiz'        // concept-check OR find-the-move OR punish (all MC)
+  | 'drill';      // woodpecker — interactive board, play the line
+
+/** Which post-walkthrough stage the user is currently in. */
+export type StageKind = 'concepts' | 'findMove' | 'drill' | 'punish';
 
 export interface UseTeachWalkthroughReturn {
   /** Current state-machine phase. */
@@ -97,6 +103,29 @@ export interface UseTeachWalkthroughReturn {
    *  `narrationArrows`. */
   narrationHighlights: NarrationHighlight[];
 
+  // ─── Stage 2-5 state (post-walkthrough pedagogy) ────────────
+  /** Which stage is active. null when in walkthrough/leaf/menu. */
+  activeStage: StageKind | null;
+  /** Index into the active stage's question/line array. */
+  stageIndex: number;
+  /** For 'quiz' phase: which choice the student picked, or null
+   *  if they haven't answered yet. */
+  quizSelected: number | null;
+  /** For 'quiz' phase: true after the student picks, before they
+   *  hit "next". */
+  quizShowingFeedback: boolean;
+  /** For 'drill' phase: ply index into the drill line. */
+  drillMoveIndex: number;
+  /** For 'drill' phase: FEN at the current drill position. */
+  drillFen: string;
+  /** For 'drill' phase: when the student plays a wrong move, this
+   *  holds the attempted SAN + the expected SAN so the UI can show
+   *  feedback. null when no mistake pending. */
+  drillWrongMove: { tried: string; expected: string } | null;
+  /** For 'drill' phase: true once the entire drill line has been
+   *  played correctly. */
+  drillComplete: boolean;
+
   /** Begin walking the given tree. Idempotent — calling start() twice
    *  with the same tree restarts from root. */
   start: (tree: WalkthroughTree) => void;
@@ -116,6 +145,34 @@ export interface UseTeachWalkthroughReturn {
    *  → next, fork → exposed, leaf → exposed). Useful for "I get it,
    *  next" tap. */
   skipNarration: () => void;
+
+  // ─── Stage 2-5 actions ──────────────────────────────────────
+  /** From a leaf, transition to the stage-menu hub. */
+  enterStageMenu: () => void;
+  /** Start a stage from the menu. For drill, also pass the line index
+   *  via selectDrillLine after; quiz stages start at index 0. */
+  startStage: (stage: StageKind) => void;
+  /** For drill: select which line (from tree.drill[]) to grind. */
+  selectDrillLine: (lineIndex: number) => void;
+  /** For quiz stages (concepts/findMove/punish): student picks a
+   *  choice index. Reveals the explanation; does NOT auto-advance. */
+  pickQuizChoice: (choiceIndex: number) => void;
+  /** For quiz stages: advance to next question (or back to menu when
+   *  all questions are done). */
+  nextQuizQuestion: () => void;
+  /** For drill: student attempted a SAN move on the board. Returns
+   *  whether it matched the expected next move. On match, the hook
+   *  auto-advances drillFen + drillMoveIndex (and plays opponent's
+   *  reply if next ply is opponent's). On mismatch, sets
+   *  drillWrongMove and the UI shows the correction. */
+  attemptDrillMove: (san: string) => { ok: boolean };
+  /** Dismiss the wrong-move feedback and let the student try again
+   *  from the same drill position. */
+  acknowledgeDrillMistake: () => void;
+  /** Restart the current drill line from move 0. */
+  restartDrill: () => void;
+  /** From any stage, return to the stage-menu hub. */
+  backToStageMenu: () => void;
 }
 
 /** Compute the FEN at a node by walking chess.js through the SAN
@@ -157,6 +214,18 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const [narrationHighlights, setNarrationHighlights] = useState<
     NarrationHighlight[]
   >([]);
+
+  // ─── Stage 2-5 state (post-walkthrough pedagogy) ───────────
+  const [activeStage, setActiveStage] = useState<StageKind | null>(null);
+  const [stageIndex, setStageIndex] = useState(0);
+  const [quizSelected, setQuizSelected] = useState<number | null>(null);
+  const [quizShowingFeedback, setQuizShowingFeedback] = useState(false);
+  const [drillMoveIndex, setDrillMoveIndex] = useState(0);
+  const [drillFen, setDrillFen] = useState(STARTING_FEN);
+  const [drillWrongMove, setDrillWrongMove] = useState<
+    { tried: string; expected: string } | null
+  >(null);
+  const [drillComplete, setDrillComplete] = useState(false);
 
   // Active narration cancel + backup timer refs.
   const cancelNarrationRef = useRef<(() => void) | null>(null);
@@ -484,6 +553,165 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     }
   }, [phase, pathNodes, narrateAndAdvance]);
 
+  // ─── Stage 2-5 methods ─────────────────────────────────────
+  const resetStageState = useCallback((): void => {
+    setActiveStage(null);
+    setStageIndex(0);
+    setQuizSelected(null);
+    setQuizShowingFeedback(false);
+    setDrillMoveIndex(0);
+    setDrillFen(STARTING_FEN);
+    setDrillWrongMove(null);
+    setDrillComplete(false);
+  }, []);
+
+  const enterStageMenu = useCallback((): void => {
+    cleanupNarration();
+    resetStageState();
+    setPhase('stage-menu');
+  }, [cleanupNarration, resetStageState]);
+
+  const backToStageMenu = useCallback((): void => {
+    cleanupNarration();
+    setActiveStage(null);
+    setStageIndex(0);
+    setQuizSelected(null);
+    setQuizShowingFeedback(false);
+    setDrillWrongMove(null);
+    setDrillComplete(false);
+    setPhase('stage-menu');
+  }, [cleanupNarration]);
+
+  const startStage = useCallback(
+    (stage: StageKind): void => {
+      cleanupNarration();
+      setActiveStage(stage);
+      setStageIndex(0);
+      setQuizSelected(null);
+      setQuizShowingFeedback(false);
+      if (stage === 'drill') {
+        // Drill needs a line selection; UI shows the line picker
+        // while phase is 'drill' but stageIndex/drillFen are stale
+        // until selectDrillLine is called.
+        setDrillMoveIndex(0);
+        setDrillFen(STARTING_FEN);
+        setDrillComplete(false);
+        setPhase('drill');
+      } else {
+        setPhase('quiz');
+      }
+    },
+    [cleanupNarration],
+  );
+
+  const selectDrillLine = useCallback(
+    (lineIndex: number): void => {
+      if (!tree?.drill || lineIndex < 0 || lineIndex >= tree.drill.length) {
+        return;
+      }
+      setStageIndex(lineIndex);
+      setDrillMoveIndex(0);
+      setDrillFen(STARTING_FEN);
+      setDrillWrongMove(null);
+      setDrillComplete(false);
+    },
+    [tree],
+  );
+
+  const pickQuizChoice = useCallback((choiceIndex: number): void => {
+    setQuizSelected(choiceIndex);
+    setQuizShowingFeedback(true);
+  }, []);
+
+  const nextQuizQuestion = useCallback((): void => {
+    if (!tree || !activeStage) return;
+    const arr =
+      activeStage === 'concepts' ? tree.concepts
+      : activeStage === 'findMove' ? tree.findMove
+      : activeStage === 'punish' ? tree.punish
+      : null;
+    if (!arr) return;
+    const next = stageIndex + 1;
+    if (next >= arr.length) {
+      // Stage complete — back to menu.
+      backToStageMenu();
+    } else {
+      setStageIndex(next);
+      setQuizSelected(null);
+      setQuizShowingFeedback(false);
+    }
+  }, [tree, activeStage, stageIndex, backToStageMenu]);
+
+  /** Attempt a drill move. Returns ok=true on match (advances state),
+   *  ok=false on mismatch (sets drillWrongMove for UI feedback). */
+  const attemptDrillMove = useCallback(
+    (san: string): { ok: boolean } => {
+      if (!tree?.drill || phase !== 'drill') return { ok: false };
+      const line = tree.drill[stageIndex];
+      if (!line) return { ok: false };
+      const studentSide = line.studentSide ?? 'white';
+      // Determine which moves in the line are the student's.
+      // Even-indexed moves (0, 2, 4...) are white's; odd are black's.
+      // If studentSide is 'white', student plays even indices.
+      const expected = line.moves[drillMoveIndex];
+      if (!expected) return { ok: false };
+
+      if (san !== expected) {
+        setDrillWrongMove({ tried: san, expected });
+        return { ok: false };
+      }
+
+      // Correct! Advance the drillFen by playing this move.
+      const probe = new Chess(drillFen);
+      try {
+        probe.move(san);
+      } catch {
+        return { ok: false };
+      }
+      let nextFen = probe.fen();
+      let nextIndex = drillMoveIndex + 1;
+
+      // If the next move is the OPPONENT's, auto-play it.
+      const isStudentMove = (idx: number): boolean => {
+        const isWhitesMove = idx % 2 === 0;
+        return studentSide === 'white' ? isWhitesMove : !isWhitesMove;
+      };
+
+      while (nextIndex < line.moves.length && !isStudentMove(nextIndex)) {
+        const opponentSan = line.moves[nextIndex];
+        try {
+          probe.move(opponentSan);
+          nextFen = probe.fen();
+          nextIndex += 1;
+        } catch {
+          break;
+        }
+      }
+
+      setDrillFen(nextFen);
+      setDrillMoveIndex(nextIndex);
+      setDrillWrongMove(null);
+
+      if (nextIndex >= line.moves.length) {
+        setDrillComplete(true);
+      }
+
+      return { ok: true };
+    },
+    [tree, phase, stageIndex, drillMoveIndex, drillFen],
+  );
+
+  const acknowledgeDrillMistake = useCallback((): void => {
+    setDrillWrongMove(null);
+  }, []);
+
+  const restartDrill = useCallback((): void => {
+    setDrillMoveIndex(0);
+    setDrillFen(STARTING_FEN);
+    setDrillWrongMove(null);
+    setDrillComplete(false);
+  }, []);
+
   return {
     phase,
     isActive: phase !== 'idle',
@@ -497,6 +725,14 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     leafOutro,
     narrationArrows,
     narrationHighlights,
+    activeStage,
+    stageIndex,
+    quizSelected,
+    quizShowingFeedback,
+    drillMoveIndex,
+    drillFen,
+    drillWrongMove,
+    drillComplete,
     start,
     pause,
     resume,
@@ -504,5 +740,14 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     backtrackToLastFork,
     stop,
     skipNarration,
+    enterStageMenu,
+    startStage,
+    selectDrillLine,
+    pickQuizChoice,
+    nextQuizQuestion,
+    attemptDrillMove,
+    acknowledgeDrillMistake,
+    restartDrill,
+    backToStageMenu,
   };
 }
