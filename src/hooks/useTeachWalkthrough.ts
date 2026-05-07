@@ -656,10 +656,29 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           const sansSoFar = path
             .filter((n) => n.san !== null)
             .map((n) => n.san as string);
-          const matches = findMatchingTraps(
-            sansSoFar,
-            treeRef.current?.punish,
-          );
+          const allPunish = treeRef.current?.punish ?? [];
+          const matches = findMatchingTraps(sansSoFar, allPunish);
+          // Audit log: production audit (build a802d1c) caught no
+          // traps firing for Bishop's Opening even though the cache
+          // had 1 punish lesson. Without seeing what the lesson's
+          // setupMoves were vs. the fork's pathSans, we couldn't
+          // tell why no match. This audit makes both visible.
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'useTeachWalkthrough.transitionAfter',
+            summary: `fork@[${sansSoFar.join(' ')}] — ${matches.length}/${allPunish.length} punish lesson(s) match`,
+            details:
+              allPunish.length === 0
+                ? 'tree has no punish lessons'
+                : allPunish
+                    .slice(0, 5)
+                    .map(
+                      (p) =>
+                        `[${p.setupMoves.join(' ')}] inaccuracy=${p.inaccuracy}`,
+                    )
+                    .join('\n'),
+          });
           if (matches.length > 0) {
             setTrapQueue(matches);
             setTrapIndex(0);

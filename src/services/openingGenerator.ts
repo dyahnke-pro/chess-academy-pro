@@ -745,20 +745,47 @@ export function repairPunishStage(
   return { kept, report };
 }
 
-/** Drop narration arrows where from === to. The LLM emits these
- *  as no-op "highlight this square" gestures (e.g. {from: f7, to: f7})
- *  but the validator catches them as errors and the visual is
- *  pointless either way. Production audit (build 41154ec) caught
- *  Hampe-Allgaier validation failing on three same-square arrows.
+/** Extract the destination square from a SAN string. Returns null
+ *  for castle moves (special — no single dest). Strips check/mate
+ *  marks and promotion suffixes before matching the trailing square.
+ *  Used by repairNarrationArrows to detect "this arrow just shows
+ *  the move that's already animating." */
+function sanDestSquare(san: string): string | null {
+  if (san === 'O-O' || san === 'O-O-O' || san === '0-0' || san === '0-0-0') {
+    return null;
+  }
+  const stripped = san.replace(/[+#!?]+$/, '');
+  const m = stripped.match(/([a-h][1-8])(?:=[QRBN])?$/);
+  return m ? m[1] : null;
+}
+
+/** Drop narration arrows that are redundant or invalid:
+ *  - from === to (LLM no-op "highlight this square" gestures —
+ *    Hampe-Allgaier audit caught three of these failing validation)
+ *  - to === the move's destination square (the move is already
+ *    animating from start→dest; an arrow drawn at that same dest
+ *    just clutters the board — production audit (build bdc447a)
+ *    caught Bishop's Opening drawing a green arrow on Bc4 showing
+ *    the bishop's destination square it was just animated TO).
  *  Mutates in place. Returns the count dropped. */
 export function repairNarrationArrows(tree: WalkthroughTree): number {
   let dropped = 0;
   function walk(node: WalkthroughTreeNode): void {
-    if (node.narration) {
+    if (node.narration && node.san !== null) {
+      const dest = sanDestSquare(node.san);
       for (const seg of node.narration) {
         if (seg.arrows) {
           const before = seg.arrows.length;
-          seg.arrows = seg.arrows.filter((a) => a.from !== a.to);
+          seg.arrows = seg.arrows.filter((a) => {
+            if (a.from === a.to) return false;
+            // Drop arrows where the END is the move's destination
+            // (showing where the piece just moved TO). Note: arrows
+            // FROM the destination toward another square (e.g.
+            // c4→f7 to show "now this bishop eyes f7") are kept —
+            // those convey new information beyond the move itself.
+            if (dest && a.to === dest) return false;
+            return true;
+          });
           dropped += before - seg.arrows.length;
         }
       }

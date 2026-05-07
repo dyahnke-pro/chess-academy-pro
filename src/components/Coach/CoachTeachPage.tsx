@@ -1758,6 +1758,28 @@ const goldGlowStrongStyle: React.CSSProperties = {
     '0 0 12px rgba(201, 168, 76, 0.7), 0 0 24px rgba(201, 168, 76, 0.4), 0 0 40px rgba(201, 168, 76, 0.25)',
 };
 
+/** Green glow for deep-dive tiles. Visually differentiates "this
+ *  branches into a new sub-lesson" from the gold "continue" tiles. */
+const greenGlowStyle: React.CSSProperties = {
+  borderTop: '1px solid rgba(74, 222, 128, 0.3)',
+  borderRight: '1px solid rgba(74, 222, 128, 0.3)',
+  borderLeft: '2px solid rgba(74, 222, 128, 0.8)',
+  borderBottom: '2px solid rgba(74, 222, 128, 0.8)',
+  boxShadow:
+    '0 0 8px rgba(74, 222, 128, 0.4), 0 0 18px rgba(74, 222, 128, 0.2), 0 0 30px rgba(74, 222, 128, 0.1)',
+};
+
+/** Red glow for trap / punish tiles. Signals "watch out — this
+ *  shows what NOT to do." */
+const redGlowStyle: React.CSSProperties = {
+  borderTop: '1px solid rgba(239, 68, 68, 0.3)',
+  borderRight: '1px solid rgba(239, 68, 68, 0.3)',
+  borderLeft: '2px solid rgba(239, 68, 68, 0.8)',
+  borderBottom: '2px solid rgba(239, 68, 68, 0.8)',
+  boxShadow:
+    '0 0 8px rgba(239, 68, 68, 0.4), 0 0 18px rgba(239, 68, 68, 0.2), 0 0 30px rgba(239, 68, 68, 0.1)',
+};
+
 /** Estimated mean wall-clock time for an LLM opening generation.
  *  Drives the progress bar's fill rate. Real wall times observed:
  *  30-60s typical, up to 90s on retry. We aim for 95% fill at this
@@ -2017,7 +2039,7 @@ function WalkthroughControls({
             type="button"
             onClick={() => walkthrough.acceptTrap()}
             className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
-            style={goldGlowStyle}
+            style={redGlowStyle}
             data-testid="walkthrough-trap-accept"
           >
             <div className="flex flex-col">
@@ -2064,27 +2086,43 @@ function WalkthroughControls({
           Which line would you like to explore?
         </div>
         <div className="flex flex-col gap-2">
-          {forkOptions.map((opt, idx) => (
-            <button
-              key={`${opt.label ?? idx}-${idx}`}
-              onClick={() => walkthrough.pickFork(idx)}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[56px] transition-colors"
-              style={goldGlowStyle}
-              data-testid={`walkthrough-fork-option-${idx}`}
-            >
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold text-theme-text">
-                  {opt.label ?? `Option ${idx + 1}`}
-                </span>
-                {opt.forkSubtitle && (
-                  <span className="text-xs text-theme-text-muted">
-                    {opt.forkSubtitle}
+          {forkOptions.map((opt, idx) => {
+            // Trap foreshadowing: red glow on fork tiles whose branch
+            // contains a known punish lesson. Lets the student see
+            // "watch out — this path has a trap" before committing.
+            const childPath = [...walkthrough.pathSans, opt.node.san ?? ''];
+            const hasTrapDownBranch = !!tree?.punish?.some(
+              (p) =>
+                p.setupMoves.length >= childPath.length &&
+                childPath.every((m, i) => p.setupMoves[i] === m),
+            );
+            return (
+              <button
+                key={`${opt.label ?? idx}-${idx}`}
+                onClick={() => walkthrough.pickFork(idx)}
+                className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[56px] transition-colors"
+                style={hasTrapDownBranch ? redGlowStyle : goldGlowStyle}
+                data-testid={`walkthrough-fork-option-${idx}`}
+              >
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold text-theme-text">
+                    {opt.label ?? `Option ${idx + 1}`}
+                    {hasTrapDownBranch && (
+                      <span className="ml-1.5 text-[10px] font-medium text-red-400">
+                        ⚠ trap ahead
+                      </span>
+                    )}
                   </span>
-                )}
-              </div>
-              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
-            </button>
-          ))}
+                  {opt.forkSubtitle && (
+                    <span className="text-xs text-theme-text-muted">
+                      {opt.forkSubtitle}
+                    </span>
+                  )}
+                </div>
+                <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+              </button>
+            );
+          })}
           {tree && forkOptions.length > 0 && (
             <>
               <div className="text-xs font-medium text-theme-text-muted px-1 pt-2">
@@ -2103,7 +2141,8 @@ function WalkthroughControls({
                       walkthrough.stop();
                       onDeepDive(query);
                     }}
-                    className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg border border-theme-border bg-theme-bg hover:bg-theme-surface text-left min-h-[44px] transition-colors"
+                    className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-theme-bg hover:bg-theme-surface text-left min-h-[44px] transition-colors"
+                    style={greenGlowStyle}
                     data-testid={`walkthrough-fork-deepdive-${idx}`}
                   >
                     <div className="flex flex-col min-w-0 flex-1">
@@ -2197,6 +2236,38 @@ function WalkthroughControls({
               <ChevronRight size={16} />
               Continue learning
             </button>
+          )}
+          {tree && extractDeepDiveOptions(tree).length > 0 && (
+            <>
+              <div className="text-xs font-medium text-theme-text-muted px-1 pt-1">
+                Dive deeper into a variation
+              </div>
+              {extractDeepDiveOptions(tree).map((opt, idx) => {
+                const variationName =
+                  opt.subtitle.split('—')[0].trim() ||
+                  opt.label ||
+                  `variation ${idx + 1}`;
+                const query = `${tree.openingName}: ${variationName}`;
+                return (
+                  <button
+                    key={`leaf-deepdive-${idx}`}
+                    onClick={() => {
+                      walkthrough.stop();
+                      onDeepDive(query);
+                    }}
+                    className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-theme-bg hover:bg-theme-surface text-left min-h-[44px] transition-colors"
+                    style={greenGlowStyle}
+                    data-testid={`walkthrough-leaf-deepdive-${idx}`}
+                  >
+                    <div className="flex flex-col min-w-0 flex-1">
+                      <span className="text-xs font-medium text-theme-text-muted">Deep dive</span>
+                      <span className="text-sm text-theme-text truncate">{variationName}</span>
+                    </div>
+                    <ChevronRight size={14} className="text-theme-text-muted flex-shrink-0" />
+                  </button>
+                );
+              })}
+            </>
           )}
           {canBacktrack && (
             <button
@@ -2316,7 +2387,7 @@ function WalkthroughControls({
                     onDeepDive(query);
                   }}
                   className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
-                  style={goldGlowStyle}
+                  style={greenGlowStyle}
                   data-testid={`walkthrough-deepdive-${idx}`}
                 >
                   <div className="flex flex-col min-w-0 flex-1">
