@@ -30,6 +30,7 @@ import {
   cacheOpening,
   generateMissingStagesInBackground,
 } from '../../services/openingGenerator';
+import { getOpeningMoves } from '../../services/openingDetectionService';
 import {
   getCompletedStages,
   type ProgressStage,
@@ -738,6 +739,30 @@ export function CoachTeachPage(): JSX.Element {
           return;
         }
 
+        // ── Tier 2.5: Pre-validate against the Lichess opening DB
+        // before the slow LLM call. Production audit (build a802d1c)
+        // caught chat fragments like "Ok" and "Let's best opening
+        // for a complete beginner" being routed as opening names —
+        // the bare-name length cap (60 chars) lets short fragments
+        // through and we'd burn ~60 seconds generating a bogus
+        // lesson. getOpeningMoves returns null when the name doesn't
+        // resolve to ANY opening in the Lichess DB (~3000 named
+        // entries with aliases / sub-variations). When it returns
+        // null, refuse politely and route the input back to chat.
+        const dbHit = getOpeningMoves(requestedName);
+        if (!dbHit) {
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.surfaceRouting',
+            summary: `pre-flight rejected non-opening: "${text.slice(0, 60)}"`,
+          });
+          // Don't take over the chat flow — fall through to the
+          // brain so the user gets a normal coach reply. Setting
+          // requestedName to null short-circuits the gen path.
+          // Continue to brain handling below.
+        } else {
+
         // ── Tier 3: LLM generation (slow — ~30-60s). ───────────
         // Show the working banner so the student knows we're not
         // hung. Disable typing until generation completes (busy
@@ -808,6 +833,7 @@ export function CoachTeachPage(): JSX.Element {
           setBusy(false);
         }
         return;
+        } // end of dbHit-was-found branch
       }
     }
 
