@@ -24,6 +24,7 @@ import {
   generateOpening,
   getCachedOpening,
   cacheOpening,
+  generateMissingStagesInBackground,
 } from '../../services/openingGenerator';
 import {
   getCompletedStages,
@@ -630,6 +631,20 @@ export function CoachTeachPage(): JSX.Element {
             }]);
             voiceService.stop();
             walkthrough.start(result.tree);
+            // Fire-and-forget: generate missing stages (concepts /
+            // findMove / drill / punish) in the BACKGROUND while the
+            // user is engaged with the walkthrough. Each is a focused
+            // smaller LLM call that's more reliable than packing
+            // everything into the main gen. By the time the user
+            // reaches the leaf and opens the stage menu, the
+            // background merges have updated the cache. The hook's
+            // tree state in memory still has the original (pre-fill)
+            // arrays, but the stage menu fetches from cache when
+            // entered, so newly-merged stages appear.
+            void generateMissingStagesInBackground(
+              requestedName,
+              result.tree,
+            );
           } else {
             // Generation failed both attempts. Render an honest fallback.
             const failAck = `I couldn't put together a clean lesson for "${requestedName}" — ${result.reason ?? 'unknown error'}. Try a more standard opening name (e.g. "Italian Game", "Sicilian Defense", "Caro-Kann Defense") or ask me a question instead.`;
@@ -1693,6 +1708,25 @@ function WalkthroughControls({
     return () => {
       cancelled = true;
     };
+  }, [tree, phase]);
+
+  // Poll the cache while in stage-menu so background-generated
+  // stages appear as cards when they finish. Stops polling once all
+  // four optional stages are populated. Conservative 3s interval —
+  // background gens typically take 10-30s each, so this picks them
+  // up promptly without hammering Dexie.
+  useEffect(() => {
+    if (phase !== 'stage-menu' || !tree) return;
+    const allStagesFilled =
+      (tree.concepts?.length ?? 0) > 0 &&
+      (tree.findMove?.length ?? 0) > 0 &&
+      (tree.drill?.length ?? 0) > 0 &&
+      (tree.punish?.length ?? 0) > 0;
+    if (allStagesFilled) return;
+    const id = setInterval(() => {
+      void walkthrough.mergeStagesFromCache();
+    }, 3000);
+    return () => clearInterval(id);
   }, [tree, phase]);
 
   if (phase === 'fork') {

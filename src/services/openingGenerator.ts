@@ -400,3 +400,233 @@ export async function generateOpening(
   });
   return second;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// BACKGROUND STAGE GENERATION
+// ───────────────────────────────────────────────────────────────────
+// User asked: "Can it generate the next level of teaching in
+// background while user is doing the walkthrough?" Yes — and it
+// solves three problems at once:
+//   1. Reliability: 4 focused LLM calls (one per stage) instead of
+//      one giant call. Each is small enough to validate strictly.
+//   2. Hidden latency: the walkthrough takes 2-5 minutes; the
+//      stages generate in parallel during that window.
+//   3. Validation time: each stage gets focused validation, not a
+//      compromise across 5 sections at once.
+//
+// Flow:
+//   1. Main gen produces the walkthrough tree (blocking, ~30-60s).
+//   2. Walkthrough starts; user engages.
+//   3. generateMissingStagesInBackground fires the 4 focused calls
+//      in parallel, fire-and-forget.
+//   4. As each stage validates, it merges into the cached tree
+//      (Dexie put with the new stage).
+//   5. Stage menu re-reads the cache when entered → shows whatever
+//      stages have completed.
+
+/** The four optional stages the LLM can generate in focused calls. */
+type OptionalStage = 'concepts' | 'findMove' | 'drill' | 'punish';
+
+/** Per-stage system prompt — focused on ONE stage at a time so the
+ *  LLM has plenty of token budget to generate quality content. */
+function buildStageSystemPrompt(stage: OptionalStage): string {
+  const schemas: Record<OptionalStage, string> = {
+    concepts: `Output a JSON array of ConceptCheckQuestion objects:
+interface ConceptCheckQuestion {
+  prompt: string;            // Big-idea question, e.g. "Why does the Vienna play 2.Nc3 instead of 2.Nf3?"
+  multiSelect?: boolean;     // true if multiple choices are correct
+  choices: { text: string; correct: boolean; explanation: string }[];
+}
+Aim for 3-5 questions. Test the IDEA behind the opening, not memorization. Mix single-select and multi-select. Multi-select questions need 2+ correct choices.`,
+
+    findMove: `Output a JSON array of FindMoveQuestion objects:
+interface FindMoveQuestion {
+  path: string[];            // SAN sequence from the standard start position to the position being quizzed
+  prompt: string;            // Question, e.g. "White to play. What's the move?"
+  candidates: { san: string; label: string; correct: boolean; explanation: string }[];
+}
+Aim for 3-5 puzzles. Each candidate's SAN must be LEGAL from the path's resulting FEN. Exactly one candidate is correct. Each label is a brief intent ("Bc4 — eyes f7"). Test recognition at branch points and key moments of the opening.`,
+
+    drill: `Output a JSON array of DrillLine objects:
+interface DrillLine {
+  name: string;              // Display name
+  subtitle?: string;
+  moves: string[];           // Full SAN sequence from the standard start
+  studentSide?: 'white' | 'black';  // Defaults to 'white'
+}
+Aim for 3-5 lines. Each is a full opening line through to a clear middlegame transition (~10-15 plies). All SANs must be legal sequences from the starting position. studentSide should match the opening (white for openings; black for defenses like Sicilian/French/Caro-Kann/Pirc).`,
+
+    punish: `Output a JSON array of PunishLesson objects:
+interface PunishLesson {
+  name: string;              // Display name
+  setupMoves: string[];      // SAN sequence to the position BEFORE the inaccuracy
+  inaccuracy: string;        // Opponent's bad move (SAN, legal from setup position)
+  whyBad: string;            // 2-3 sentences explaining the principle violated
+  punishment: string;        // The student's punishing move (SAN, legal from post-inaccuracy)
+  whyPunish: string;         // 2-3 sentences explaining why it works
+  distractors: { san: string; label: string; explanation: string }[];  // 2-3 LEGAL alternatives that don't punish
+  followup?: { san: string; idea: string }[];  // Optional winning continuation
+}
+Aim for 3-5 lessons. Each setupMoves+inaccuracy+punishment+distractors must be LEGAL chess from the start position. Teach common amateur mistakes the student will face in real games.`,
+  };
+
+  return `You are an expert chess coach generating ONE specific stage of an opening lesson. Output is RAW JSON — no markdown fences, no prose, no comments, no trailing commas. The first character must be \`[\` and the last must be \`]\`.
+
+Schema:
+${schemas[stage]}
+
+CRITICAL:
+- All chess moves must be LEGAL from their parent positions. The validation harness will reject illegal SANs.
+- Coach voice: first-person, conversational, pedagogically clear.
+- Output JSON only. Validation pipeline rejects anything else.`;
+}
+
+/** Parse a stage array from raw LLM output. Same defensive handling
+ *  as the main tree parser — strips markdown fences, trailing
+ *  commas, and line comments. Returns null if parse fails. */
+function parseStageArray<T>(raw: string): T[] | null {
+  let text = raw.trim();
+  text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```\s*$/, '');
+  const firstBracket = text.indexOf('[');
+  const lastBracket = text.lastIndexOf(']');
+  if (firstBracket < 0 || lastBracket < firstBracket) return null;
+  let jsonText = text.slice(firstBracket, lastBracket + 1);
+  jsonText = jsonText.replace(/^\s*\/\/[^\n]*$/gm, '');
+  jsonText = jsonText.replace(/,(\s*[}\]])/g, '$1');
+  try {
+    const parsed = JSON.parse(jsonText);
+    return Array.isArray(parsed) ? (parsed as T[]) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Generate one stage's data via a focused LLM call. */
+async function generateOneStage(
+  openingName: string,
+  stage: OptionalStage,
+): Promise<{ ok: boolean; data?: unknown[]; reason?: string }> {
+  const systemPrompt = buildStageSystemPrompt(stage);
+  const userMessage = `Generate the ${stage} array for the opening: ${openingName}.`;
+  let raw: string;
+  try {
+    raw = await getCoachChatResponse(
+      [{ role: 'user', content: userMessage }],
+      systemPrompt,
+      undefined,
+      'chat_response',
+      // 4096 tokens per stage is plenty — focused content fits
+      // easily and keeps cost down compared to the full 16K main call.
+      4096,
+      undefined,
+      'anthropic',
+    );
+  } catch (err) {
+    return { ok: false, reason: `LLM call failed: ${err instanceof Error ? err.message : String(err)}` };
+  }
+  if (raw.startsWith('⚠️')) return { ok: false, reason: raw };
+  const data = parseStageArray<unknown>(raw);
+  if (!data) return { ok: false, reason: 'failed to parse stage JSON' };
+  return { ok: true, data };
+}
+
+/** Merge a freshly-generated stage into the cached tree. Atomic via
+ *  Dexie's transaction. If another stage's merge happens concurrently,
+ *  Dexie serializes them — last write wins on a per-field basis but
+ *  since each call writes a DIFFERENT field, no conflict. */
+async function mergeStageIntoCache(
+  openingName: string,
+  stage: OptionalStage,
+  data: unknown[],
+): Promise<void> {
+  try {
+    const normalized = normalizeOpeningName(openingName);
+    const cached = await db.cachedOpenings.get(normalized);
+    if (!cached) return;
+    const updatedTree: WalkthroughTree = {
+      ...cached.tree,
+      [stage]: data,
+    };
+    // Re-validate the merged tree to catch corruption.
+    const issues = validateMoveLegality(updatedTree);
+    const errors = issues.filter((i) => i.severity === 'error' && i.path[0] === stage);
+    if (errors.length > 0) {
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'openingGenerator.mergeStageIntoCache',
+        summary: `discarded background-generated ${stage} for "${openingName}" — ${errors.length} legality errors`,
+      });
+      return;
+    }
+    await db.cachedOpenings.put({
+      ...cached,
+      tree: updatedTree,
+      generatedAt: cached.generatedAt, // preserve original timestamp
+    });
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.mergeStageIntoCache',
+      summary: `merged ${stage} (${data.length} entries) into cached "${openingName}"`,
+    });
+  } catch (err) {
+    void logAppAudit({
+      kind: 'dexie-error',
+      category: 'subsystem',
+      source: 'openingGenerator.mergeStageIntoCache',
+      summary: `failed to merge ${stage} for "${openingName}"`,
+      details: err instanceof Error ? err.message : String(err),
+    });
+  }
+}
+
+/** Determine which optional stages are missing from a tree (for
+ *  background-fill targeting). Empty arrays count as missing — we
+ *  want SOMETHING for each stage, not a hollow shell. */
+export function getMissingStages(tree: WalkthroughTree): OptionalStage[] {
+  const missing: OptionalStage[] = [];
+  if (!tree.concepts || tree.concepts.length === 0) missing.push('concepts');
+  if (!tree.findMove || tree.findMove.length === 0) missing.push('findMove');
+  if (!tree.drill || tree.drill.length === 0) missing.push('drill');
+  if (!tree.punish || tree.punish.length === 0) missing.push('punish');
+  return missing;
+}
+
+/** Fire-and-forget background generation for missing stages. Called
+ *  AFTER the main tree is generated and cached. The 4 stages run in
+ *  parallel; each successful one merges into the cached tree as it
+ *  completes. Failures are silent — the user gets whatever finishes
+ *  by the time they reach the stage menu. Idempotent: calling again
+ *  for stages already present is a no-op (the `missing` filter
+ *  excludes them). */
+export async function generateMissingStagesInBackground(
+  openingName: string,
+  tree: WalkthroughTree,
+): Promise<void> {
+  const missing = getMissingStages(tree);
+  if (missing.length === 0) return;
+  void logAppAudit({
+    kind: 'coach-surface-migrated',
+    category: 'subsystem',
+    source: 'openingGenerator.generateMissingStagesInBackground',
+    summary: `kicking off ${missing.length} background stage gens for "${openingName}": ${missing.join(', ')}`,
+  });
+  // Promise.all runs them in parallel. We swallow the result —
+  // individual failures don't block other stages.
+  await Promise.all(
+    missing.map(async (stage) => {
+      const result = await generateOneStage(openingName, stage);
+      if (result.ok && result.data) {
+        await mergeStageIntoCache(openingName, stage, result.data);
+      } else {
+        void logAppAudit({
+          kind: 'llm-error',
+          category: 'subsystem',
+          source: 'openingGenerator.generateMissingStagesInBackground',
+          summary: `background stage gen failed for "${openingName}" / ${stage}: ${result.reason ?? 'unknown'}`,
+        });
+      }
+    }),
+  );
+}

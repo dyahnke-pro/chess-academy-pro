@@ -34,6 +34,7 @@ import { Chess } from 'chess.js';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
 import { markStageComplete } from '../services/openingProgress';
+import { getCachedOpening } from '../services/openingGenerator';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -372,6 +373,11 @@ export interface UseTeachWalkthroughReturn {
    *  this to render the "Back to lessons" button instead of the
    *  default "End walkthrough" on the leaf panel. */
   isInPunishLesson: boolean;
+  /** Refresh the optional stages (concepts / findMove / drill /
+   *  punish) from Dexie cache. Used after background generation so
+   *  newly-completed stages appear in the stage menu without a full
+   *  page reload. Walkthrough state (pathNodes, phase) is unaffected. */
+  mergeStagesFromCache: () => Promise<void>;
 }
 
 /** Compute the FEN at a node by walking chess.js through the SAN
@@ -783,11 +789,59 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setDrillComplete(false);
   }, []);
 
+  /** Pull the latest version of the current opening from Dexie cache
+   *  and merge in any optional stages (concepts / findMove / drill /
+   *  punish) that have been background-generated since the tree was
+   *  first loaded. The walkthrough state (pathNodes, phase, etc.)
+   *  stays unchanged — only the optional arrays update. Called when
+   *  the student opens the stage menu so background-completed stages
+   *  appear as cards if they finished while the walkthrough played. */
+  const mergeStagesFromCache = useCallback(async (): Promise<void> => {
+    if (!tree?.openingName) return;
+    try {
+      const fresh = await getCachedOpening(tree.openingName);
+      if (!fresh) return;
+      // Only merge if the cache has data we don't.
+      const haveConcepts = (tree.concepts?.length ?? 0) > 0;
+      const haveFindMove = (tree.findMove?.length ?? 0) > 0;
+      const haveDrill = (tree.drill?.length ?? 0) > 0;
+      const havePunish = (tree.punish?.length ?? 0) > 0;
+      const cacheConcepts = (fresh.concepts?.length ?? 0) > 0;
+      const cacheFindMove = (fresh.findMove?.length ?? 0) > 0;
+      const cacheDrill = (fresh.drill?.length ?? 0) > 0;
+      const cachePunish = (fresh.punish?.length ?? 0) > 0;
+      if (
+        (cacheConcepts && !haveConcepts) ||
+        (cacheFindMove && !haveFindMove) ||
+        (cacheDrill && !haveDrill) ||
+        (cachePunish && !havePunish)
+      ) {
+        setTree((prev) =>
+          prev
+            ? {
+                ...prev,
+                concepts: cacheConcepts ? fresh.concepts : prev.concepts,
+                findMove: cacheFindMove ? fresh.findMove : prev.findMove,
+                drill: cacheDrill ? fresh.drill : prev.drill,
+                punish: cachePunish ? fresh.punish : prev.punish,
+              }
+            : prev,
+        );
+      }
+    } catch {
+      // Cache fetch failures are non-fatal; user just sees what they had.
+    }
+  }, [tree]);
+
   const enterStageMenu = useCallback((): void => {
     cleanupNarration();
     resetStageState();
     setPhase('stage-menu');
-  }, [cleanupNarration, resetStageState]);
+    // Pick up any background-generated stages that completed while
+    // the walkthrough played. Non-blocking; the menu renders with
+    // current data immediately and re-renders when the merge resolves.
+    void mergeStagesFromCache();
+  }, [cleanupNarration, resetStageState, mergeStagesFromCache]);
 
   const backToStageMenu = useCallback((): void => {
     cleanupNarration();
@@ -1036,5 +1090,6 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     startPunishLesson,
     exitPunishToMenu,
     isInPunishLesson: parentOpeningTree !== null,
+    mergeStagesFromCache,
   };
 }
