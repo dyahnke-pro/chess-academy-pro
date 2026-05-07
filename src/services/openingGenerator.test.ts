@@ -11,6 +11,7 @@ import {
   repairFindMoveStage,
   repairDrillStage,
   repairPunishStage,
+  assertTreeShape,
 } from './openingGenerator';
 import type {
   WalkthroughTree,
@@ -416,5 +417,62 @@ describe('repairPunishStage', () => {
     expect(kept.length).toBe(1);
     expect(kept[0].followup?.length).toBe(2);
     expect(report.fixed).toBe(1);
+  });
+});
+
+describe('assertTreeShape', () => {
+  function makeShell(rootChildren: unknown): unknown {
+    return {
+      openingName: 'X',
+      eco: 'A00',
+      studentSide: 'white',
+      intro: '',
+      outro: '',
+      leafOutros: {},
+      root: {
+        san: null,
+        movedBy: null,
+        idea: '',
+        children: rootChildren,
+      },
+    };
+  }
+
+  it('passes a well-formed minimal tree', () => {
+    const tree = makeShell([
+      { node: { san: 'e4', movedBy: 'white', idea: 'center', children: [] } },
+    ]);
+    expect(() => assertTreeShape(tree as never)).not.toThrow();
+  });
+
+  it('throws when a non-root node is missing children', () => {
+    const tree = makeShell([
+      { node: { san: 'e4', movedBy: 'white', idea: 'center' } }, // no children
+    ]);
+    expect(() => assertTreeShape(tree as never)).toThrow(/children missing/);
+  });
+
+  it('throws when a child wrapper is missing .node', () => {
+    const tree = makeShell([{}]);
+    expect(() => assertTreeShape(tree as never)).toThrow(/missing \.node/);
+  });
+
+  it('throws when root is missing', () => {
+    const tree = { openingName: 'X' };
+    expect(() => assertTreeShape(tree as never)).toThrow(/root missing/);
+  });
+
+  it('reports the path to the broken node', () => {
+    const tree = makeShell([
+      {
+        node: {
+          san: 'e4',
+          movedBy: 'white',
+          idea: '',
+          children: [{ node: { san: 'e5', movedBy: 'black', idea: '' } }], // no children at depth 2
+        },
+      },
+    ]);
+    expect(() => assertTreeShape(tree as never)).toThrow(/e4.*e5/);
   });
 });
