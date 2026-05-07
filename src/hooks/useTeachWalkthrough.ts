@@ -222,6 +222,9 @@ export function buildPunishWalkthroughTree(
   return {
     openingName: `${parentOpening.openingName}: ${lesson.name}`,
     eco: parentOpening.eco,
+    // Inherit board orientation from the parent opening so a black-
+    // side opening's punish lessons keep Black on bottom.
+    studentSide: parentOpening.studentSide,
     intro: `${lesson.name}. Watch the position set up, then find the punishment.`,
     outro: lesson.whyPunish,
     root,

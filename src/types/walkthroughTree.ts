@@ -134,6 +134,13 @@ export interface WalkthroughTree {
    *  (the SAN moves from root joined by spaces). Used when a
    *  particular branch deserves a custom takeaway message. */
   leafOutros?: Record<string, string>;
+  /** Which side the student is learning to play. White for openings
+   *  like Vienna / Italian / Ruy Lopez / Queen's Gambit; Black for
+   *  defenses (Sicilian / French / Caro-Kann / Pirc / King's Indian
+   *  / etc.). Drives board orientation — Black-student openings
+   *  render with Black on bottom so the moves animate from the
+   *  student's perspective. Defaults to white if omitted. */
+  studentSide?: 'white' | 'black';
   /** The root node — the pre-move starting position. Its `idea` is
    *  ignored (the intro covers the framing); only its children
    *  matter (the first moves of the opening). */

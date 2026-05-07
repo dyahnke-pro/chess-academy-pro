@@ -89,6 +89,7 @@ SCHEMA (TypeScript types):
 interface WalkthroughTree {
   openingName: string;       // Display name, e.g. "Italian Game"
   eco: string;               // ECO code, e.g. "C50"
+  studentSide: 'white' | 'black';  // REQUIRED. Which side the student is learning. White for openings the student plays AS WHITE (Italian, Vienna, Ruy Lopez, Queen's Gambit, etc.). Black for defenses the student plays AS BLACK (Sicilian, French, Caro-Kann, Pirc, King's Indian, Nimzo-Indian, etc.). Drives board orientation.
   intro: string;             // 2-4 sentence opening framing, coach voice
   outro: string;             // 1-2 sentences inviting next steps
   leafOutros?: Record<string, string>;  // Optional per-leaf custom outros, key = SAN path joined by spaces

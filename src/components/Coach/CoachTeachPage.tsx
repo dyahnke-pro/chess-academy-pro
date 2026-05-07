@@ -19,7 +19,7 @@ import { NarrationArrowOverlay } from './NarrationArrowOverlay';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
-import { resolveWalkthroughTree } from '../../data/openingWalkthroughs';
+import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import {
   generateOpening,
   getCachedOpening,
@@ -95,12 +95,14 @@ export function CoachTeachPage(): JSX.Element {
     total: number;
   } | null>(null);
   // Tracks an in-flight LLM opening generation. When non-null, the
-  // chat panel shows a "Putting together the lesson..." banner and
-  // typing is disabled (busy is also set). Cleared when generation
-  // completes (success: walkthrough.start fires; failure: ack
-  // message rendered).
+  // chat panel shows a "Putting together the lesson..." banner with
+  // an estimated-progress bar and typing is disabled (busy is also
+  // set). Cleared when generation completes (success: walkthrough.start
+  // fires; failure: ack message rendered). startedAt drives the
+  // progress bar's elapsed-time math.
   const [generationStatus, setGenerationStatus] = useState<{
     openingName: string;
+    startedAt: number;
   } | null>(null);
 
   const transcriptRef = useRef<HTMLDivElement | null>(null);
@@ -276,6 +278,26 @@ export function CoachTeachPage(): JSX.Element {
   const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+
+  // Auto-flip the board when a walkthrough loads a tree whose
+  // studentSide differs from the current orientation. Black-side
+  // openings (Sicilian, French, Caro-Kann, Pirc, etc.) render with
+  // Black on bottom so the moves animate from the student's
+  // perspective. User asked for this directly. The flip fires on
+  // tree change — start, cache hit, LLM gen success, punish lesson
+  // entry, parent restore on punish exit. Manual color toggle still
+  // works after the auto-flip; the user can override.
+  useEffect(() => {
+    if (!walkthrough.tree) return;
+    const target =
+      walkthrough.tree.studentSide ??
+      inferStudentSide(walkthrough.tree.openingName);
+    if (target !== playerColor) {
+      setPlayerColor(target);
+      game.setOrientation(target);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [walkthrough.tree]);
   // Live Stockfish evaluation of the current position. Drives the
   // eval bar on the board so it moves with each ply (matches what
   // /coach/play and /coach/review already do). Debounced — every
@@ -576,7 +598,17 @@ export function CoachTeachPage(): JSX.Element {
         // hung. Disable typing until generation completes (busy
         // gets set true; we set false in a finally below).
         setBusy(true);
-        setGenerationStatus({ openingName: requestedName });
+        setGenerationStatus({ openingName: requestedName, startedAt: Date.now() });
+        // Pre-flip the board based on the requested name's heuristic
+        // BEFORE the LLM finishes — otherwise the student watches a
+        // black-side opening load with white on bottom for 30-60s,
+        // then a jarring flip at the end. Heuristic gets corrected
+        // when the tree loads if the LLM-set studentSide disagrees.
+        const guessedSide = inferStudentSide(requestedName);
+        if (guessedSide !== playerColor) {
+          setPlayerColor(guessedSide);
+          game.setOrientation(guessedSide);
+        }
         const ackBuilding = `Putting together the ${requestedName} lesson — this takes about a minute. The first time only; after this it'll be instant.`;
         setMessages((prev) => [...prev, {
           id: `${surfaceTurnId}-c`,
@@ -1374,27 +1406,18 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
 
-        {/* LLM opening-generation banner — shown when the surface is
-            calling the LLM to produce a tree for an opening that
-            isn't in the static registry or the Dexie cache. Takes
-            ~30-60s; we show indeterminate progress to set
-            expectations. */}
+        {/* LLM opening-generation banner — real progress bar (not a
+            spinner) so the student knows roughly how long is left.
+            Bar fills 0→95% over the estimated 45s window using the
+            startedAt timestamp; remains at 95% until the tree
+            actually loads (then unmounts entirely). User asked
+            specifically: "I want a progress bar instead of running
+            circle." */}
         {generationStatus && (
-          <div
-            className="px-4 py-2 border-b border-theme-border space-y-1.5"
-            style={{ background: 'rgba(168, 85, 247, 0.06)' }}
-            data-testid="teach-generation-progress"
-            role="status"
-            aria-live="polite"
-          >
-            <div className="flex items-center gap-2 text-xs font-medium" style={{ color: 'var(--color-text)' }}>
-              <Loader2 size={12} className="animate-spin" style={{ color: 'rgb(168, 85, 247)' }} />
-              <span>Putting together the {generationStatus.openingName} lesson…</span>
-            </div>
-            <div className="text-[10px] text-theme-text-muted">
-              First time only — we'll cache it locally so future visits are instant.
-            </div>
-          </div>
+          <GenerationProgressBanner
+            openingName={generationStatus.openingName}
+            startedAt={generationStatus.startedAt}
+          />
         )}
 
         {/* Kickoff progress banner — sticky right under the input so
@@ -1529,6 +1552,79 @@ const goldGlowStrongStyle: React.CSSProperties = {
   boxShadow:
     '0 0 12px rgba(201, 168, 76, 0.7), 0 0 24px rgba(201, 168, 76, 0.4), 0 0 40px rgba(201, 168, 76, 0.25)',
 };
+
+/** Estimated mean wall-clock time for an LLM opening generation.
+ *  Drives the progress bar's fill rate. Real wall times observed:
+ *  30-60s typical, up to 90s on retry. We aim for 95% fill at this
+ *  estimate so the bar still shows progress past the mean without
+ *  ever falsely-claiming completion. */
+const GENERATION_ESTIMATE_MS = 45_000;
+
+/** Generation-progress banner with a real-time fill bar. Re-renders
+ *  every 250ms via a setInterval so the bar stays smooth. Caps fill
+ *  at 95% — the final 5% only completes when the actual generation
+ *  resolves (and the parent unmounts this component). After the
+ *  estimate window, switches messaging to set expectations.
+ *
+ *  Replaces the indeterminate Loader2 spinner per user feedback:
+ *  "I want a progress bar instead of running circle. That way user
+ *  doesn't have to guess if it's still working and they know how
+ *  long they need to wait." */
+function GenerationProgressBanner({
+  openingName,
+  startedAt,
+}: {
+  openingName: string;
+  startedAt: number;
+}): JSX.Element {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 250);
+    return () => clearInterval(id);
+  }, []);
+  const elapsedMs = Math.max(0, now - startedAt);
+  // Linear fill 0 → 95% over GENERATION_ESTIMATE_MS, then asymptote
+  // at 95% (so the bar still has somewhere to go and never
+  // false-completes).
+  const fillPct = Math.min(95, (elapsedMs / GENERATION_ESTIMATE_MS) * 95);
+  const overdue = elapsedMs > GENERATION_ESTIMATE_MS + 15_000;
+  const elapsedSec = Math.floor(elapsedMs / 1000);
+  return (
+    <div
+      className="px-4 py-2 border-b border-theme-border space-y-1.5"
+      style={{ background: 'rgba(168, 85, 247, 0.06)' }}
+      data-testid="teach-generation-progress"
+      role="status"
+      aria-live="polite"
+    >
+      <div className="flex items-center justify-between text-xs font-medium" style={{ color: 'var(--color-text)' }}>
+        <span>
+          {overdue
+            ? `Still working on the ${openingName} lesson…`
+            : `Putting together the ${openingName} lesson…`}
+        </span>
+        <span className="text-[10px] text-theme-text-muted tabular-nums">
+          {elapsedSec}s
+        </span>
+      </div>
+      <div
+        className="h-1.5 rounded-full overflow-hidden"
+        style={{ background: 'rgba(168, 85, 247, 0.15)' }}
+      >
+        <div
+          className="h-full transition-all duration-200"
+          style={{
+            width: `${fillPct}%`,
+            background: 'rgb(168, 85, 247)',
+          }}
+        />
+      </div>
+      <div className="text-[10px] text-theme-text-muted">
+        First time only — we'll cache it locally so future visits are instant.
+      </div>
+    </div>
+  );
+}
 
 /** Render a stage's completion indicator. Done stages get a gold
  *  checkmark; pending stages get the chevron-right CTA. */

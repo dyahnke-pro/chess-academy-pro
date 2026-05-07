@@ -84,3 +84,33 @@ export function resolveWalkthroughTree(query: string): WalkthroughTree | null {
 export function listAvailableWalkthroughs(): { name: string; eco: string }[] {
   return ALL_TREES.map((t) => ({ name: t.openingName, eco: t.eco }));
 }
+
+/** Infer which side the student plays from an opening name. Used:
+ *    1. As a fallback when a tree's `studentSide` isn't set.
+ *    2. To pre-flip the board during LLM generation (~30-60s window),
+ *       so the student doesn't watch the lesson load with the wrong
+ *       orientation.
+ *
+ *  Conservative heuristic: known black-side openings + the universal
+ *  "Defense"/"Defence" suffix → black. Everything else defaults to
+ *  white. Wrong inferences get corrected when the tree's actual
+ *  studentSide loads. */
+export function inferStudentSide(name: string): 'white' | 'black' {
+  const lower = name.trim().toLowerCase();
+  // Universal black-side suffix.
+  if (/\bdefen[cs]e\b/.test(lower)) return 'black';
+  // Known black-side openings without "defense" in the name.
+  const blackSideKeywords = [
+    'sicilian', 'french', 'caro-kann', 'caro kann', 'pirc',
+    'modern', 'alekhine', 'scandinavian', 'scandi',
+    'king\'s indian', 'kings indian', 'queen\'s indian', 'queens indian',
+    'nimzo', 'grunfeld', 'grünfeld', 'benoni', 'benko',
+    'dutch', 'philidor', 'petroff', 'petrov',
+    'slav', 'semi-slav', 'tarrasch defense', 'two knights',
+    'budapest', 'old indian', 'wade defense',
+  ];
+  for (const kw of blackSideKeywords) {
+    if (lower.includes(kw)) return 'black';
+  }
+  return 'white';
+}

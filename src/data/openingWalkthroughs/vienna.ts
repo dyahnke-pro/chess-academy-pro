@@ -23,6 +23,7 @@ import type { WalkthroughTree } from '../../types/walkthroughTree';
 export const VIENNA_GAME: WalkthroughTree = {
   openingName: 'Vienna Game',
   eco: 'C25',
+  studentSide: 'white',
   intro:
     "The Vienna Game. It's the King's Pawn opening's quieter, sharper cousin — quieter because we develop a knight before the bishop, sharper because we keep the f-pawn free for an attack. Most beginners learn the Italian or the Spanish; the Vienna is what you play when you want the same classical pressure but with a tactical engine humming under the hood. Let me walk you through it.",
   outro:
