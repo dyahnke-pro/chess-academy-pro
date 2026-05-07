@@ -247,6 +247,7 @@ function clampBackupMs(text: string): number {
 
 export type WalkthroughPhase =
   | 'idle'
+  | 'choose-mode'  // returning student: chooser between walkthrough + stages
   | 'narrating'
   | 'fork'
   | 'leaf'
@@ -317,7 +318,10 @@ export interface UseTeachWalkthroughReturn {
 
   /** Begin walking the given tree. Idempotent — calling start() twice
    *  with the same tree restarts from root. */
-  start: (tree: WalkthroughTree) => void;
+  start: (
+    tree: WalkthroughTree,
+    options?: { showChooser?: boolean },
+  ) => void;
   /** Pause mid-narration (user typed in chat / asked a question).
    *  Voice stops; board freezes; phase = 'paused'. */
   pause: () => void;
@@ -360,6 +364,18 @@ export interface UseTeachWalkthroughReturn {
   acknowledgeDrillMistake: () => void;
   /** Restart the current drill line from move 0. */
   restartDrill: () => void;
+  /** Skip the walkthrough entirely and land at the stage-menu hub
+   *  for the given tree. Optional autoSelectStage transitions
+   *  immediately into that specific stage (concepts / findMove /
+   *  drill / punish) instead of showing the menu. Used when the
+   *  student types "drill Vienna" / "punish Vienna" / etc. — the
+   *  surface routing detects the stage keyword and jumps directly.
+   *  Eliminates the "I have to play the whole opening every time
+   *  just to drill" complaint. */
+  startAtStageMenu: (tree: WalkthroughTree, autoSelectStage?: StageKind) => void;
+  /** Re-start the walkthrough from move 1 from any phase. Used by
+   *  the "Watch walkthrough again" CTA on the stage menu. */
+  restartWalkthrough: () => void;
   /** From any stage, return to the stage-menu hub. */
   backToStageMenu: () => void;
   /** Start a specific punish lesson as a self-contained walkthrough.
@@ -638,7 +654,31 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   );
 
   const start = useCallback(
-    (newTree: WalkthroughTree): void => {
+    (
+      newTree: WalkthroughTree,
+      options?: { showChooser?: boolean },
+    ): void => {
+      // Returning visitor flow: if the page passed showChooser=true
+      // (because completion data shows the walkthrough was already
+      // done on this opening), land in the chooser phase instead of
+      // auto-playing the walkthrough. The student picks "Walk through
+      // again" or "Pick what to learn" with explicit tap targets.
+      // First-time visits skip this entirely.
+      if (options?.showChooser) {
+        cleanupNarration();
+        setTree(newTree);
+        setPathNodes([]);
+        setNarrationArrows([]);
+        setNarrationHighlights([]);
+        setPhase('choose-mode');
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'useTeachWalkthrough.start',
+          summary: `chooser shown for "${newTree.openingName}" (previously completed)`,
+        });
+        return;
+      }
       void logAppAudit({
         kind: 'coach-surface-migrated',
         category: 'subsystem',
@@ -842,6 +882,48 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     // current data immediately and re-renders when the merge resolves.
     void mergeStagesFromCache();
   }, [cleanupNarration, resetStageState, mergeStagesFromCache]);
+
+  /** Skip the walkthrough entirely and load straight into the stage
+   *  menu (or a specific stage if autoSelectStage is provided). Used
+   *  by the surface routing's stage-keyword detection ("drill Vienna"
+   *  / "Vienna punish" / etc.) so a returning student doesn't have
+   *  to sit through the walkthrough to access drills/punishes/etc. */
+  const startAtStageMenu = useCallback(
+    (newTree: WalkthroughTree, autoSelectStage?: StageKind): void => {
+      cleanupNarration();
+      setTree(newTree);
+      setPathNodes([]);
+      setNarrationArrows([]);
+      setNarrationHighlights([]);
+      resetStageState();
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'useTeachWalkthrough.startAtStageMenu',
+        summary: `skipped walkthrough; landed at ${autoSelectStage ?? 'stage-menu'} for "${newTree.openingName}"`,
+      });
+      if (autoSelectStage) {
+        setActiveStage(autoSelectStage);
+        setStageIndex(0);
+        setQuizSelected(null);
+        setQuizShowingFeedback(false);
+        setPhase(autoSelectStage === 'drill' ? 'drill' : 'quiz');
+      } else {
+        setPhase('stage-menu');
+        void mergeStagesFromCache();
+      }
+    },
+    [cleanupNarration, resetStageState, mergeStagesFromCache],
+  );
+
+  /** Re-run the walkthrough from move 1. Used by the chooser's
+   *  "Walk through it again" button. Doesn't re-show the chooser —
+   *  forces straight into narrating phase. */
+  const restartWalkthrough = useCallback((): void => {
+    if (!tree) return;
+    // Re-call start without showChooser to force the walkthrough.
+    start(tree);
+  }, [tree, start]);
 
   const backToStageMenu = useCallback((): void => {
     cleanupNarration();
@@ -1079,6 +1161,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     stop,
     skipNarration,
     enterStageMenu,
+    startAtStageMenu,
+    restartWalkthrough,
     startStage,
     selectDrillLine,
     pickQuizChoice,

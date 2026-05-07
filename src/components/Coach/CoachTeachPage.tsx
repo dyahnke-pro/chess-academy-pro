@@ -498,12 +498,51 @@ export function CoachTeachPage(): JSX.Element {
       //   / "Italian" — phrases the user typed in build 3e2263c that
       //   the verb-prefix pattern missed.
       const TEACH_PATTERN =
-        /\b(teach\s+me|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|drill|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
+        /\b(teach\s+me|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
+      // Stage-keyword detection: user inputs like "drill Vienna" /
+      // "Vienna punish" / "quiz me on the Sicilian" should skip the
+      // walkthrough animation and land directly at that stage. User
+      // request: "Is there a way for users to skip the opening
+      // walkthrough and go straight to punish lines after their
+      // first session?" Each pattern strips the keyword from the
+      // input; the cleaned text is then resolved as the opening name.
+      const STAGE_PATTERNS: Array<{
+        regex: RegExp;
+        stage: 'concepts' | 'findMove' | 'drill' | 'punish' | 'play-real';
+      }> = [
+        { regex: /\b(?:drill|practice)\s+(?:the\s+)?/i, stage: 'drill' },
+        { regex: /\b(?:the\s+)?(?:.+?)\s+drill(?:s)?\b/i, stage: 'drill' },
+        { regex: /\bpunish(?:ment)?(?:\s+lines?)?\s+(?:in\s+|for\s+|from\s+)?(?:the\s+)?/i, stage: 'punish' },
+        { regex: /\b(?:the\s+)?(?:.+?)\s+punish(?:ment)?(?:\s+lines?)?\b/i, stage: 'punish' },
+        { regex: /\b(?:quiz\s+me\s+on|quiz)\s+(?:the\s+)?/i, stage: 'concepts' },
+        { regex: /\b(?:concept(?:\s+check)?|concepts)\s+(?:for\s+|of\s+)?(?:the\s+)?/i, stage: 'concepts' },
+        { regex: /\b(?:find(?:\s+the)?\s+moves?|recognition)\s+(?:in\s+|for\s+)?(?:the\s+)?/i, stage: 'findMove' },
+        { regex: /\bplay\s+(?:it\s+)?(?:for\s+)?real\s+(?:the\s+)?/i, stage: 'play-real' },
+      ];
       const trimmed = text.trim();
-      const m = trimmed.match(TEACH_PATTERN);
+      let stageHint:
+        | 'concepts'
+        | 'findMove'
+        | 'drill'
+        | 'punish'
+        | 'play-real'
+        | null = null;
+      let stageStrippedInput = trimmed;
+      for (const sp of STAGE_PATTERNS) {
+        const sm = stageStrippedInput.match(sp.regex);
+        if (sm) {
+          stageHint = sp.stage;
+          stageStrippedInput = stageStrippedInput.replace(sp.regex, ' ').replace(/\s+/g, ' ').trim();
+          break;
+        }
+      }
+      const m = (stageHint ? stageStrippedInput : trimmed).match(TEACH_PATTERN);
       let requestedName: string | null = null;
       if (m && m[2]) {
         requestedName = m[2].trim();
+      } else if (stageHint && stageStrippedInput.length > 0 && stageStrippedInput.length <= 40) {
+        // Stage keyword stripped → remaining text is the opening name.
+        requestedName = stageStrippedInput;
       } else if (trimmed.length <= 40 && !trimmed.includes('?')) {
         // Bare-name routing: "The Vienna", "Pirc defense", "Italian".
         // Production audit (build 7e4f52b) caught "Pirc defense"
@@ -541,13 +580,30 @@ export function CoachTeachPage(): JSX.Element {
 
         // ── Tier 1: Static registry (instant). ─────────────────
         if (staticTree) {
+          // Decide entry mode:
+          //   1. stageHint present (e.g. "drill Vienna") → jump
+          //      directly to that stage (or play-real navigates).
+          //   2. Walkthrough already completed → show chooser
+          //      (returning visitor: walk again vs pick a stage).
+          //   3. Otherwise → play the walkthrough (first-time).
+          if (stageHint === 'play-real') {
+            walkthrough.stop();
+            navigate(`/coach/play?opening=${encodeURIComponent(staticTree.openingName)}`);
+            return;
+          }
+          const completed = await getCompletedStages(staticTree.openingName);
+          const walkthroughDone = completed.has('walkthrough');
+          const ack = stageHint
+            ? `Sure — jumping straight to ${stageHint === 'concepts' ? 'concept check' : stageHint === 'findMove' ? 'find the move' : stageHint} for the ${staticTree.openingName}.`
+            : walkthroughDone
+              ? `Welcome back to the ${staticTree.openingName}. Pick how you want to learn.`
+              : `Sure — let's walk through the ${staticTree.openingName}.`;
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-            summary: `surface-routed walkthrough (static): "${text.slice(0, 60)}" → ${staticTree.openingName}`,
+            summary: `surface-routed (static): "${text.slice(0, 60)}" → ${staticTree.openingName} ${stageHint ? `[stage=${stageHint}]` : walkthroughDone ? '[chooser]' : '[walkthrough]'}`,
           });
-          const ack = `Sure — let's walk through the ${staticTree.openingName}.`;
           setMessages((prev) => [...prev, {
             id: `${surfaceTurnId}-c`,
             role: 'assistant',
@@ -562,20 +618,37 @@ export function CoachTeachPage(): JSX.Element {
             trigger: null,
           });
           voiceService.stop();
-          walkthrough.start(staticTree);
+          if (stageHint) {
+            walkthrough.startAtStageMenu(staticTree, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
+          } else if (walkthroughDone) {
+            walkthrough.start(staticTree, { showChooser: true });
+          } else {
+            walkthrough.start(staticTree);
+          }
           return;
         }
 
         // ── Tier 2: Dexie cache (instant). ─────────────────────
         const cachedTree = await getCachedOpening(requestedName);
         if (cachedTree) {
+          if (stageHint === 'play-real') {
+            walkthrough.stop();
+            navigate(`/coach/play?opening=${encodeURIComponent(cachedTree.openingName)}`);
+            return;
+          }
+          const completed = await getCompletedStages(cachedTree.openingName);
+          const walkthroughDone = completed.has('walkthrough');
+          const ack = stageHint
+            ? `Jumping straight to ${stageHint === 'concepts' ? 'concept check' : stageHint === 'findMove' ? 'find the move' : stageHint} for the ${cachedTree.openingName}.`
+            : walkthroughDone
+              ? `Welcome back to the ${cachedTree.openingName}. Pick how you want to learn.`
+              : `Welcome back to the ${cachedTree.openingName} — let's go.`;
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-            summary: `surface-routed walkthrough (cached): "${text.slice(0, 60)}" → ${cachedTree.openingName}`,
+            summary: `surface-routed (cached): "${text.slice(0, 60)}" → ${cachedTree.openingName} ${stageHint ? `[stage=${stageHint}]` : walkthroughDone ? '[chooser]' : '[walkthrough]'}`,
           });
-          const ack = `Welcome back to the ${cachedTree.openingName} — let's go.`;
           setMessages((prev) => [...prev, {
             id: `${surfaceTurnId}-c`,
             role: 'assistant',
@@ -590,7 +663,13 @@ export function CoachTeachPage(): JSX.Element {
             trigger: null,
           });
           voiceService.stop();
-          walkthrough.start(cachedTree);
+          if (stageHint) {
+            walkthrough.startAtStageMenu(cachedTree, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
+          } else if (walkthroughDone) {
+            walkthrough.start(cachedTree, { showChooser: true });
+          } else {
+            walkthrough.start(cachedTree);
+          }
           return;
         }
 
@@ -630,17 +709,21 @@ export function CoachTeachPage(): JSX.Element {
               timestamp: Date.now(),
             }]);
             voiceService.stop();
-            walkthrough.start(result.tree);
-            // Fire-and-forget: generate missing stages (concepts /
-            // findMove / drill / punish) in the BACKGROUND while the
-            // user is engaged with the walkthrough. Each is a focused
-            // smaller LLM call that's more reliable than packing
-            // everything into the main gen. By the time the user
-            // reaches the leaf and opens the stage menu, the
-            // background merges have updated the cache. The hook's
-            // tree state in memory still has the original (pre-fill)
-            // arrays, but the stage menu fetches from cache when
-            // entered, so newly-merged stages appear.
+            // Stage hint takes precedence even on first-time gen.
+            // play-real navigates away. Otherwise: walkthrough on
+            // first visit (no chooser since this IS the first visit).
+            if (stageHint === 'play-real') {
+              walkthrough.stop();
+              navigate(`/coach/play?opening=${encodeURIComponent(result.tree.openingName)}`);
+            } else if (stageHint) {
+              walkthrough.startAtStageMenu(result.tree, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
+            } else {
+              walkthrough.start(result.tree);
+            }
+            // Fire-and-forget: generate missing stages in background.
+            // Each is a focused smaller LLM call that's more reliable
+            // than packing everything into the main gen. Cache fills
+            // progressively while user is engaged.
             void generateMissingStagesInBackground(
               requestedName,
               result.tree,
@@ -1729,6 +1812,61 @@ function WalkthroughControls({
     return () => clearInterval(id);
   }, [tree, phase]);
 
+  // Chooser shown to a returning student who's already completed
+  // the walkthrough for this opening. User asked: "Maybe have the
+  // coach ask with leaf selection buttons? Do you want to run from
+  // beginning or pick what you want to learn?" Two big tap-target
+  // buttons; gold glow primary on each. Resolves to either the
+  // walkthrough animation (restart) or the stage menu hub.
+  if (phase === 'choose-mode') {
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-choose-mode">
+        <div className="text-sm text-theme-text px-1">
+          {tree
+            ? `You've already learned the ${tree.openingName}. How do you want to dive back in?`
+            : 'How do you want to dive back in?'}
+        </div>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => walkthrough.restartWalkthrough()}
+            className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[60px] transition-colors"
+            style={goldGlowStrongStyle}
+            data-testid="walkthrough-choose-walkthrough"
+          >
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-theme-text">Walk through it again</span>
+              <span className="text-[11px] text-theme-text-muted">Replay the full lesson with narration + arrows</span>
+            </div>
+            <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+          </button>
+          <button
+            type="button"
+            onClick={() => walkthrough.enterStageMenu()}
+            className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[60px] transition-colors"
+            style={goldGlowStrongStyle}
+            data-testid="walkthrough-choose-stages"
+          >
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-theme-text">Pick what to learn</span>
+              <span className="text-[11px] text-theme-text-muted">Skip the walkthrough — go straight to drill, punish, quizzes</span>
+            </div>
+            <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+          </button>
+          <button
+            type="button"
+            onClick={() => walkthrough.stop()}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+            data-testid="walkthrough-choose-cancel"
+          >
+            <X size={12} />
+            Never mind
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (phase === 'fork') {
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-fork-panel">
@@ -1945,6 +2083,14 @@ function WalkthroughControls({
               <span className="text-[11px] text-theme-text-muted">Full game vs. coach starting from this opening</span>
             </div>
             <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+          </button>
+          <button
+            onClick={() => walkthrough.restartWalkthrough()}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
+            data-testid="walkthrough-watch-again-from-menu"
+          >
+            <RefreshCw size={12} />
+            Watch the walkthrough again
           </button>
           <button
             onClick={() => walkthrough.stop()}

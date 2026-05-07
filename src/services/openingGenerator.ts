@@ -145,6 +145,15 @@ interface PunishLesson {
   followup?: { san: string; idea: string }[];  // Optional winning continuation
 }
 
+CRITICAL MOVE-ORDER RULES:
+- Chess ALWAYS starts with White's move. The first non-root node of your tree MUST have movedBy: 'white' and a White move SAN (e.g. 'e4', 'd4', 'Nf3', 'c4').
+- This applies EVEN for openings where the student plays Black. studentSide: 'black' affects board orientation ONLY — the SAN sequence still alternates white-black-white-black starting from White's 1st move.
+- Pirc Defense example: root → white 'e4' → black 'd6' → white 'd4' → black 'Nf6' → white 'Nc3' → black 'g6' → ...
+- Sicilian Defense example: root → white 'e4' → black 'c5' → white 'Nf3' → black 'd6' → ...
+- Caro-Kann example: root → white 'e4' → black 'c6' → white 'd4' → black 'd5' → ...
+- French Defense example: root → white 'e4' → black 'e6' → white 'd4' → black 'd5' → ...
+- Production audit (build ea93844) caught the LLM repeatedly producing Pirc trees with san='d6' as the FIRST child — illegal because White moves first. Don't make this mistake.
+
 CONVENTIONS:
 - Coach voice: first-person, conversational, pedagogically clear. Read like a strong coach explaining to a student face-to-face.
 - Narration arrows: green = our plan, red = warning/threat or move-not-to-make, blue = development/defensive, yellow = key squares/highlights.
@@ -153,7 +162,7 @@ CONVENTIONS:
 - All distractor moves in findMove and punish MUST be LEGAL from the position. The validation harness will reject illegal SANs.
 - Move-order matters: trace each line carefully. For example, you can't push f4 with Black's bishop on c5 (the long diagonal opens and the g1-knight hangs). The trade or the move-order matters.
 - Aim for 3-5 forks total, ending each branch at a recognizable middlegame transition (~7-12 plies after the fork).
-- Concepts/findMove/drill/punish are OPTIONAL; include all four if you can produce quality data, omit if you'd be guessing.
+- Concepts/findMove/drill/punish are OPTIONAL; include all four if you can produce quality data, omit if you'd be guessing. (Note: per Commit ea93844 the surface generates these in background calls if you omit them, so omitting is safe.)
 
 ${VIENNA_SAMPLE}
 
