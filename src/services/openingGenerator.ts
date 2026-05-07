@@ -33,6 +33,61 @@ import { db, type CachedOpening } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import type { WalkthroughTree } from '../types/walkthroughTree';
 
+/** Concrete top-of-tree skeleton showing the root → first-move →
+ *  second-move structure. Production audit (build 3965c09 and prior)
+ *  caught the LLM placing Black moves directly under root for openings
+ *  like Pirc/Sicilian/Caro-Kann — the prose rules in the system prompt
+ *  weren't enough; the LLM needed to SEE the JSON shape with the root
+ *  placeholder + White's first move + Black's response nested below.
+ *  This anchor shows it. Generic king-pawn opening template; the LLM
+ *  fills in actual moves and idea text appropriate to the requested
+ *  opening. */
+const ROOT_STRUCTURE_EXAMPLE = `
+ROOT STRUCTURE EXAMPLE — top-of-tree shape for a Pirc Defense walkthrough.
+The root node ALWAYS has san: null and movedBy: null. The FIRST entry in
+root.children is ALWAYS White's 1st move, regardless of which side the
+student is learning. Black's response is nested INSIDE that node's children.
+
+{
+  "openingName": "Pirc Defense",
+  "eco": "B07",
+  "studentSide": "black",
+  "intro": "...",
+  "outro": "...",
+  "root": {
+    "san": null,
+    "movedBy": null,
+    "idea": "",
+    "children": [
+      {
+        "node": {
+          "san": "e4",
+          "movedBy": "white",
+          "idea": "1.e4 — White claims the center...",
+          "children": [
+            {
+              "node": {
+                "san": "d6",
+                "movedBy": "black",
+                "idea": "1...d6 — the Pirc setup move...",
+                "children": [
+                  { "node": { "san": "d4", "movedBy": "white", ... } }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+
+Same shape applies to EVERY opening:
+- Italian: root → e4 (white) → e5 (black) → Nf3 (white) → Nc6 (black) → Bc4 (white) → ...
+- Sicilian: root → e4 (white) → c5 (black) → Nf3 (white) → d6 (black) → ...
+- Queen's Gambit: root → d4 (white) → d5 (black) → c4 (white) → ...
+`;
+
 /** Condensed Vienna sample shown to the LLM as a few-shot example.
  *  Just one full node (2.Nc3) showing all the conventions: idea
  *  text, narration segments with arrows, color usage. The LLM
@@ -146,13 +201,11 @@ interface PunishLesson {
 }
 
 CRITICAL MOVE-ORDER RULES:
-- Chess ALWAYS starts with White's move. The first non-root node of your tree MUST have movedBy: 'white' and a White move SAN (e.g. 'e4', 'd4', 'Nf3', 'c4').
-- This applies EVEN for openings where the student plays Black. studentSide: 'black' affects board orientation ONLY — the SAN sequence still alternates white-black-white-black starting from White's 1st move.
-- Pirc Defense example: root → white 'e4' → black 'd6' → white 'd4' → black 'Nf6' → white 'Nc3' → black 'g6' → ...
-- Sicilian Defense example: root → white 'e4' → black 'c5' → white 'Nf3' → black 'd6' → ...
-- Caro-Kann example: root → white 'e4' → black 'c6' → white 'd4' → black 'd5' → ...
-- French Defense example: root → white 'e4' → black 'e6' → white 'd4' → black 'd5' → ...
-- Production audit (build ea93844) caught the LLM repeatedly producing Pirc trees with san='d6' as the FIRST child — illegal because White moves first. Don't make this mistake.
+- Chess ALWAYS starts with White's move. root.children[0].node.san MUST be a White move (e.g. 'e4', 'd4', 'Nf3', 'c4'); root.children[0].node.movedBy MUST be 'white'.
+- This applies EVEN when studentSide is 'black'. studentSide: 'black' affects board orientation ONLY — the SAN sequence still alternates white→black→white→black starting from White's 1st move.
+- See ROOT STRUCTURE EXAMPLE below for the exact JSON shape. Match it precisely. Production audit caught the LLM repeatedly producing Pirc/Sicilian/Caro-Kann trees with the Black move (d6/c5/c6) as root.children[0] — that's illegal because White moves first. The example below shows the correct shape.
+
+${ROOT_STRUCTURE_EXAMPLE}
 
 CONVENTIONS:
 - Coach voice: first-person, conversational, pedagogically clear. Read like a strong coach explaining to a student face-to-face.
@@ -274,6 +327,36 @@ export interface GenerationResult {
   issues?: string;
 }
 
+/** Pull the first N SAN values from a generated tree by walking
+ *  root.children depth-first along the leftmost path. Used in audit
+ *  logs so we can SEE what the LLM produced — the most diagnostic
+ *  signal when validation fails is "did the LLM put Black on top?"
+ *  Returns up to maxDepth SANs from the leftmost spine. */
+function firstSansAlongLeftSpine(
+  tree: WalkthroughTree,
+  maxDepth: number,
+): string[] {
+  const sans: string[] = [];
+  let node = tree.root;
+  while (node.children.length > 0 && sans.length < maxDepth) {
+    const next = node.children[0].node;
+    sans.push(next.san ?? '<null>');
+    node = next;
+  }
+  return sans;
+}
+
+/** Snapshot the LLM's structural shape into one short string for
+ *  audit triage: childCount + first SANs along the leftmost spine.
+ *  At a glance you can see "Pirc tree shape: rootKids=1, spine=d6,d4,Nf6"
+ *  and immediately know the LLM put Black on top. */
+function describeTreeShape(tree: WalkthroughTree): string {
+  const rootKidCount = tree.root.children.length;
+  const spine = firstSansAlongLeftSpine(tree, 6).join(',');
+  const firstMover = tree.root.children[0]?.node.movedBy ?? '<missing>';
+  return `rootKids=${rootKidCount}, firstMover=${firstMover}, spine=${spine}`;
+}
+
 /** Single generation attempt — calls the LLM, parses, validates.
  *  No retry; the wrapper `generateOpening` does the retry. */
 async function generateOnce(
@@ -321,11 +404,25 @@ Fix the issues above and produce a valid tree.`
   }
 
   if (rawResponse.startsWith('⚠️')) {
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOnce',
+      summary: `LLM provider error for "${name}"${retryContext ? ' (retry)' : ''}`,
+      details: rawResponse.slice(0, 500),
+    });
     return { ok: false, reason: rawResponse };
   }
 
   const tree = parseGeneratedTree(rawResponse);
   if (!tree) {
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOnce',
+      summary: `JSON parse failed for "${name}"${retryContext ? ' (retry)' : ''}`,
+      details: `raw response (first 1500 chars): ${rawResponse.slice(0, 1500)}`,
+    });
     return {
       ok: false,
       reason: 'failed to parse JSON from LLM response',
@@ -346,10 +443,24 @@ Fix the issues above and produce a valid tree.`
   const allIssues = [...structural, ...legality, ...treeLegality];
   const errors = allIssues.filter((i) => i.severity === 'error');
   if (errors.length > 0) {
+    const formatted = formatIssues(errors);
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOnce',
+      summary: `validation failed for "${name}"${retryContext ? ' (retry)' : ''} — ${errors.length} errors`,
+      // Include the parsed tree shape (so we know if the LLM put Black
+      // on top, missed root, etc.) and the first 1500 chars of issues.
+      // Without this, "validation failed" is opaque and we can't
+      // diagnose without re-running.
+      details:
+        `shape: ${describeTreeShape(tree)}\n` +
+        `issues:\n${formatted.slice(0, 2500)}`,
+    });
     return {
       ok: false,
       reason: 'validation failed',
-      issues: formatIssues(errors),
+      issues: formatted,
     };
   }
 
@@ -405,7 +516,15 @@ export async function generateOpening(
     category: 'subsystem',
     source: 'openingGenerator.generateOpening',
     summary: `generation failed both attempts for "${name}"`,
-    details: `first: ${first.reason}; second: ${second.reason}`,
+    // The per-attempt logAppAudit calls inside generateOnce already
+    // captured the raw response / tree shape / full issue list. This
+    // top-level summary just chains the attempt summaries so the trail
+    // is readable end-to-end without joining audit entries by hand.
+    details:
+      `first attempt reason: ${first.reason}\n` +
+      `first attempt issues: ${(first.issues ?? '<none>').slice(0, 1000)}\n` +
+      `second attempt reason: ${second.reason}\n` +
+      `second attempt issues: ${(second.issues ?? '<none>').slice(0, 1000)}`,
   });
   return second;
 }
@@ -533,9 +652,27 @@ async function generateOneStage(
   } catch (err) {
     return { ok: false, reason: `LLM call failed: ${err instanceof Error ? err.message : String(err)}` };
   }
-  if (raw.startsWith('⚠️')) return { ok: false, reason: raw };
+  if (raw.startsWith('⚠️')) {
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOneStage',
+      summary: `LLM provider error for "${openingName}" / ${stage}`,
+      details: raw.slice(0, 500),
+    });
+    return { ok: false, reason: raw };
+  }
   const data = parseStageArray<unknown>(raw);
-  if (!data) return { ok: false, reason: 'failed to parse stage JSON' };
+  if (!data) {
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOneStage',
+      summary: `stage JSON parse failed for "${openingName}" / ${stage}`,
+      details: `raw response (first 1500 chars): ${raw.slice(0, 1500)}`,
+    });
+    return { ok: false, reason: 'failed to parse stage JSON' };
+  }
   return { ok: true, data };
 }
 
@@ -565,6 +702,11 @@ async function mergeStageIntoCache(
         category: 'subsystem',
         source: 'openingGenerator.mergeStageIntoCache',
         summary: `discarded background-generated ${stage} for "${openingName}" — ${errors.length} legality errors`,
+        // Production audit (build 3965c09) showed N-error counts but
+        // no SAN detail, so we couldn't tell which moves were illegal
+        // or where the LLM was confused. Capture the full issue list
+        // (capped) so the next audit triage has the SAN + FEN context.
+        details: formatIssues(errors).slice(0, 2500),
       });
       return;
     }
