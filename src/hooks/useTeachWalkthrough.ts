@@ -647,14 +647,18 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const attemptDrillMove = useCallback(
     (san: string): { ok: boolean } => {
       if (!tree?.drill || phase !== 'drill') return { ok: false };
+      if (stageIndex < 0 || stageIndex >= tree.drill.length) {
+        return { ok: false };
+      }
       const line = tree.drill[stageIndex];
-      if (!line) return { ok: false };
       const studentSide = line.studentSide ?? 'white';
       // Determine which moves in the line are the student's.
       // Even-indexed moves (0, 2, 4...) are white's; odd are black's.
       // If studentSide is 'white', student plays even indices.
+      if (drillMoveIndex < 0 || drillMoveIndex >= line.moves.length) {
+        return { ok: false };
+      }
       const expected = line.moves[drillMoveIndex];
-      if (!expected) return { ok: false };
 
       if (san !== expected) {
         setDrillWrongMove({ tried: san, expected });
