@@ -266,6 +266,8 @@ export type WalkthroughPhase =
   | 'choose-mode'  // returning student: chooser between walkthrough + stages
   | 'narrating'
   | 'fork'
+  | 'trap-prompt'    // inline-trap intro narrated; user picks See/Continue
+  | 'trap-playing'   // trap line animating on the board
   | 'leaf'
   | 'paused'
   | 'stage-menu'  // post-leaf hub; pick which stage to do next
@@ -410,6 +412,46 @@ export interface UseTeachWalkthroughReturn {
    *  newly-completed stages appear in the stage menu without a full
    *  page reload. Walkthrough state (pathNodes, phase) is unaffected. */
   mergeStagesFromCache: () => Promise<void>;
+
+  // ─── Inline trap-prompt state ────────────────────────────────
+  /** The PunishLesson currently being introduced (phase ===
+   *  'trap-prompt') or animated (phase === 'trap-playing'). null
+   *  when no trap is active. */
+  pendingTrap: PunishLesson | null;
+  /** Board FEN during 'trap-playing' phase. The board renderer
+   *  prefers this over `fen` when set, so the trap detour shows
+   *  on-board without mutating walkthrough path state. null when
+   *  no trap is animating. */
+  trapFen: string | null;
+  /** Number of traps remaining in the current fork's queue (after
+   *  the current one). UI uses this to label the Continue button
+   *  ("Continue, skip these N mistakes"). */
+  trapsQueuedAfter: number;
+  /** User accepted the trap intro — start animating the bad move /
+   *  punishment / followup. */
+  acceptTrap: () => void;
+  /** User declined the trap intro — move to the next queued trap
+   *  (if any) or transition to the fork picker. */
+  skipTrap: () => void;
+}
+
+/** Find punish lessons whose setupMoves match the walkthrough's
+ *  current path EXACTLY. These are "common mistakes here" — the
+ *  next move from this position is the inaccuracy. Returns [] when
+ *  the tree has no punish data or no exact-match lessons. Used by
+ *  the inline trap-prompt feature: when the walkthrough hits a
+ *  fork node whose pathSans matches a punish lesson's setupMoves,
+ *  the coach intros the trap before showing the fork picker. */
+function findMatchingTraps(
+  pathSans: string[],
+  punishLessons: PunishLesson[] | undefined,
+): PunishLesson[] {
+  if (!punishLessons || punishLessons.length === 0) return [];
+  return punishLessons.filter(
+    (lesson) =>
+      lesson.setupMoves.length === pathSans.length &&
+      lesson.setupMoves.every((m, i) => m === pathSans[i]),
+  );
 }
 
 /** Compute the FEN at a node by walking chess.js through the SAN
@@ -454,6 +496,13 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     NarrationHighlight[]
   >([]);
 
+  // Mirror tree into a ref so closures inside narrateAndAdvance can
+  // read fresh tree.punish without forcing the useCallback to
+  // re-create on every tree update (which would invalidate other
+  // hooks that depend on narrateAndAdvance identity).
+  const treeRef = useRef<WalkthroughTree | null>(null);
+  treeRef.current = tree;
+
   // ─── Stage 2-5 state (post-walkthrough pedagogy) ───────────
   const [activeStage, setActiveStage] = useState<StageKind | null>(null);
   const [stageIndex, setStageIndex] = useState(0);
@@ -465,6 +514,19 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     { tried: string; expected: string } | null
   >(null);
   const [drillComplete, setDrillComplete] = useState(false);
+
+  // ─── Inline trap-prompt state (offered at fork nodes) ────────
+  // When the walkthrough reaches a fork whose pathSans matches one
+  // or more punish-lesson setupMoves exactly, we queue those
+  // lessons and narrate the first one's intro before showing the
+  // fork picker. The user accepts (animates the trap detour, then
+  // either chains to the next queued trap or proceeds to the fork
+  // picker) or skips (advances to the next queued trap, then to
+  // the fork picker).
+  const [trapQueue, setTrapQueue] = useState<PunishLesson[]>([]);
+  const [trapIndex, setTrapIndex] = useState(0);
+  const [trapFen, setTrapFen] = useState<string | null>(null);
+
   // When inside a punish-walkthrough sub-flow, this holds the
   // ORIGINAL opening tree so we can return to it when the lesson
   // ends. Non-null = we're inside a punish walkthrough.
@@ -571,7 +633,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
 
       // Common transition logic — runs after the narration finishes
       // (segmented OR single-block). Linear → recurse to next node;
-      // fork → set phase 'fork'; leaf → set phase 'leaf'.
+      // fork → check for matching trap lessons first (offer trap
+      // prompt before the fork picker if any), else show fork picker;
+      // leaf → set phase 'leaf'.
       const transitionAfter = (): void => {
         cancelNarrationRef.current = null;
         if (advanceTimerRef.current) {
@@ -586,7 +650,30 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
             narrateAndAdvance([...path, node.children[0].node]);
           }, POST_NARRATION_BUFFER_MS);
         } else {
-          setPhase('fork');
+          // Fork: check for trap lessons matching this exact position.
+          // Match condition: lesson.setupMoves === current path SANs
+          // exactly (the next move IS the inaccuracy from this fork).
+          const sansSoFar = path
+            .filter((n) => n.san !== null)
+            .map((n) => n.san as string);
+          const matches = findMatchingTraps(
+            sansSoFar,
+            treeRef.current?.punish,
+          );
+          if (matches.length > 0) {
+            setTrapQueue(matches);
+            setTrapIndex(0);
+            // Speak the intro for the first trap; fall through to
+            // 'trap-prompt' phase. Fire-and-forget — voice promise
+            // resolution doesn't gate the UI, the buttons appear
+            // immediately so impatient users can skip ahead.
+            const first = matches[0];
+            const intro = `Hold on — a common mistake here is ${first.inaccuracy}. ${first.whyBad} Want to see it now, or keep going with the walkthrough?`;
+            void voiceService.speakForced(intro).catch(() => undefined);
+            setPhase('trap-prompt');
+          } else {
+            setPhase('fork');
+          }
         }
       };
 
@@ -825,6 +912,106 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setPhase('fork');
   }, [pathNodes, cleanupNarration]);
 
+  // Move to the next queued trap (if any) or fall through to the
+  // fork picker. Used by both skipTrap and the post-acceptTrap
+  // continuation. Pulled out so both share the same logic.
+  const advancePastTrap = useCallback((): void => {
+    setTrapIndex((prev) => {
+      const next = prev + 1;
+      const queue = trapQueue;
+      if (next < queue.length) {
+        const lesson = queue[next];
+        const intro = `Another common mistake here is ${lesson.inaccuracy}. ${lesson.whyBad} Want to see this one too?`;
+        void voiceService.speakForced(intro).catch(() => undefined);
+        setPhase('trap-prompt');
+        return next;
+      }
+      // No more traps queued — show the fork picker.
+      setTrapQueue([]);
+      setTrapFen(null);
+      setPhase('fork');
+      return 0;
+    });
+  }, [trapQueue]);
+
+  const skipTrap = useCallback((): void => {
+    voiceService.stop();
+    advancePastTrap();
+  }, [advancePastTrap]);
+
+  const acceptTrap = useCallback((): void => {
+    if (trapQueue.length === 0) return;
+    const lesson = trapQueue[trapIndex];
+    if (!lesson) {
+      setPhase('fork');
+      return;
+    }
+    voiceService.stop();
+    setPhase('trap-playing');
+    // Animate the bad-move → punishment → followup sequence on the
+    // board via trapFen overrides. Each step waits for the voice
+    // promise to resolve before the next animates, so narration
+    // and animation stay in sync. After the sequence, snap back
+    // (trapFen → null reverts the board to fenForPath(pathSans))
+    // and either prompt the next queued trap or show fork picker.
+    void (async (): Promise<void> => {
+      try {
+        const startFen = fenForPath(
+          lesson.setupMoves,
+          treeRef.current?.startFen,
+        );
+        const c = new Chess(startFen);
+        const speakAndWait = async (text: string): Promise<void> => {
+          if (!text.trim()) return;
+          try {
+            await voiceService.speakForced(text);
+          } catch {
+            // Voice errors don't block the animation arc.
+          }
+        };
+        // 1. Inaccuracy.
+        try {
+          c.move(lesson.inaccuracy);
+        } catch {
+          // Repair should have caught this, but bail safely if not.
+          setTrapFen(null);
+          setPhase('fork');
+          return;
+        }
+        setTrapFen(c.fen());
+        await speakAndWait(`${lesson.inaccuracy} — ${lesson.whyBad}`);
+        // 2. Punishment.
+        try {
+          c.move(lesson.punishment);
+        } catch {
+          setTrapFen(null);
+          advancePastTrap();
+          return;
+        }
+        setTrapFen(c.fen());
+        await speakAndWait(`${lesson.punishment} — ${lesson.whyPunish}`);
+        // 3. Followup (optional).
+        if (lesson.followup && lesson.followup.length > 0) {
+          for (const fm of lesson.followup) {
+            try {
+              c.move(fm.san);
+            } catch {
+              break;
+            }
+            setTrapFen(c.fen());
+            await speakAndWait(`${fm.san} — ${fm.idea}`);
+          }
+        }
+        // 4. Snap back; advance to next queued trap or fork picker.
+        setTrapFen(null);
+        advancePastTrap();
+      } catch {
+        setTrapFen(null);
+        setPhase('fork');
+      }
+    })();
+  }, [trapQueue, trapIndex, advancePastTrap]);
+
   const stop = useCallback((): void => {
     cleanupNarration();
     setTree(null);
@@ -832,6 +1019,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setPhase('idle');
     setNarrationArrows([]);
     setNarrationHighlights([]);
+    setTrapQueue([]);
+    setTrapIndex(0);
+    setTrapFen(null);
   }, [cleanupNarration]);
 
   const skipNarration = useCallback((): void => {
@@ -1215,5 +1405,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     exitPunishToMenu,
     isInPunishLesson: parentOpeningTree !== null,
     mergeStagesFromCache,
+    pendingTrap: trapQueue[trapIndex] ?? null,
+    trapFen,
+    trapsQueuedAfter: Math.max(0, trapQueue.length - trapIndex - 1),
+    acceptTrap,
+    skipTrap,
   };
 }

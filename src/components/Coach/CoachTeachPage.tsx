@@ -1461,9 +1461,21 @@ export function CoachTeachPage(): JSX.Element {
                     }}
                   />
                 ) : (
+                  // Board FEN selection priority: drill mode owns its
+                  // own FEN; trap-playing mode owns trapFen (so the
+                  // detour animates without mutating walkthrough path
+                  // state); otherwise use the walkthrough's path FEN.
                   <ChessBoard
-                    key={`walkthrough-board-${walkthrough.phase === 'drill' ? walkthrough.drillFen : walkthrough.fen}`}
-                    initialFen={walkthrough.phase === 'drill' ? walkthrough.drillFen : walkthrough.fen}
+                    key={`walkthrough-board-${
+                      walkthrough.phase === 'drill'
+                        ? walkthrough.drillFen
+                        : walkthrough.trapFen ?? walkthrough.fen
+                    }`}
+                    initialFen={
+                      walkthrough.phase === 'drill'
+                        ? walkthrough.drillFen
+                        : walkthrough.trapFen ?? walkthrough.fen
+                    }
                     orientation={playerColor}
                     interactive={false}
                     showFlipButton={false}
@@ -1954,6 +1966,66 @@ function WalkthroughControls({
             <X size={12} />
             Never mind
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Inline trap-prompt: coach has just intro'd a "common mistake"
+  // for the current fork position. User picks See / Skip. After the
+  // trap (or if user skips), either prompts the next queued trap or
+  // falls through to the regular fork picker.
+  if (phase === 'trap-prompt' && walkthrough.pendingTrap) {
+    const trap = walkthrough.pendingTrap;
+    const hasMore = walkthrough.trapsQueuedAfter > 0;
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-trap-prompt">
+        <div className="text-xs font-medium text-theme-text-muted px-1">
+          ⚠️ Common mistake here: {trap.inaccuracy}
+        </div>
+        <div className="text-sm text-theme-text px-1 pb-1 leading-snug">
+          {trap.whyBad}
+        </div>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => walkthrough.acceptTrap()}
+            className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+            style={goldGlowStyle}
+            data-testid="walkthrough-trap-accept"
+          >
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-theme-text">See the trap</span>
+              <span className="text-[11px] text-theme-text-muted">Watch the bad move + how to punish it</span>
+            </div>
+            <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+          </button>
+          <button
+            type="button"
+            onClick={() => walkthrough.skipTrap()}
+            className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg border border-theme-border bg-theme-bg hover:bg-theme-surface text-left min-h-[44px] transition-colors"
+            data-testid="walkthrough-trap-skip"
+          >
+            <div className="flex flex-col">
+              <span className="text-sm text-theme-text">
+                {hasMore ? 'Skip — show next trap' : 'Skip — keep going with the walkthrough'}
+              </span>
+            </div>
+            <ChevronRight size={14} className="text-theme-text-muted flex-shrink-0" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Trap is animating — render a small "playing" status. The board
+  // is animating via trapFen above; no controls needed during the
+  // animation itself.
+  if (phase === 'trap-playing') {
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-trap-playing">
+        <div className="text-xs font-medium text-theme-text-muted px-1">
+          ⚠️ Playing the trap line…
         </div>
       </div>
     );
