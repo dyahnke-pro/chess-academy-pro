@@ -202,15 +202,110 @@ export const VIENNA_GAME: WalkthroughTree = {
                                         san: 'exf4',
                                         movedBy: 'black',
                                         idea:
-                                          "3...exf4 — Black takes the bait. Now I'm down a pawn but my plan writes itself: develop fast, get the king to safety, build pressure on the kingside, push e5 if I can to chase Black's f6-knight. My pieces are all about to come out with tempo; Black has to spend moves figuring out where to put the king and how to give back the pawn safely.",
+                                          "3...exf4 — Black takes the bait. Now I'm down a pawn but my plan writes itself: push e5 right now to kick the f6-knight, develop fast with tempo, deal with the Qh4+ threat that's lurking on the open e1-h4 diagonal, and build pressure on the kingside. Black has to spend moves figuring out where to put the knight and how to give back the pawn safely.",
+                                        narration: [
+                                          {
+                                            text: '3...exf4 — Black takes the bait.',
+                                            arrows: [{ from: 'e5', to: 'f4', color: 'red' }],
+                                          },
+                                          {
+                                            text: "I'm down a pawn but my plan writes itself.",
+                                          },
+                                          {
+                                            text: "And there's something serious to see: with my f-pawn gone, the diagonal from e1 to h4 is wide open. Black is one move from Qh4+ check, and that would split my king from castling rights for the rest of the game.",
+                                            arrows: [{ from: 'd8', to: 'h4', color: 'red' }],
+                                            highlights: [
+                                              { square: 'h4', color: 'red' },
+                                              { square: 'e1', color: 'red' },
+                                            ],
+                                          },
+                                          {
+                                            text: 'So I need to do TWO things in the next couple of moves: push e5 to kick the f6-knight, and get a knight to f3 to neutralize the Qh4+ check. Order matters. Push first.',
+                                            arrows: [
+                                              { from: 'e4', to: 'e5', color: 'green' },
+                                              { from: 'g1', to: 'f3', color: 'blue' },
+                                            ],
+                                          },
+                                        ],
                                         children: [
                                           {
                                             node: {
-                                              san: 'Nf3',
+                                              san: 'e5',
                                               movedBy: 'white',
                                               idea:
-                                                "4.Nf3 — stops Black from playing ...Qh4+ (which would be devastating, splitting my king from castling rights). This is non-negotiable; any other 4th move runs into ...Qh4+ and the wheels come off. Once the knight is on f3, that diagonal is shut and I can resume normal development.",
-                                              children: [],
+                                                "4.e5 — push first to kick the knight. Pawn from e4 to e5 attacks the f6-knight, forcing it to move. The knight has only awkward squares: Ng8 (back home, lost a tempo for nothing), Nh5 (sidelined), Nd5 (gets traded by Nxd5), or Ng4 (the active try, eyeing f2 and supporting a future Qh4+). At club level you'll see Ng4 most often. Note that Qh4+ is still threatened on the next move because the e1-h4 diagonal is still open — that's our problem to solve next.",
+                                              narration: [
+                                                {
+                                                  text: '4.e5 — push first to kick the knight.',
+                                                  arrows: [{ from: 'e4', to: 'e5', color: 'green' }],
+                                                },
+                                                {
+                                                  text: 'Pawn from e4 to e5 attacks the f6-knight, forcing it to move.',
+                                                  arrows: [{ from: 'e5', to: 'f6', color: 'red' }],
+                                                  highlights: [{ square: 'f6', color: 'red' }],
+                                                },
+                                                {
+                                                  text: "The knight has only awkward squares. Ng8 — back home, lost a tempo for nothing. Nh5 — sidelined. Nd5 — gets traded. Ng4 — the active try, eyeing f2 and supporting a future Qh4+. At club level you will see Ng4 most often.",
+                                                  arrows: [{ from: 'f6', to: 'g4', color: 'yellow' }],
+                                                },
+                                                {
+                                                  text: 'Important: Qh4+ is still threatened on the next move because the e1-h4 diagonal is still open. That is our problem to solve next.',
+                                                  arrows: [{ from: 'd8', to: 'h4', color: 'red' }],
+                                                },
+                                              ],
+                                              children: [
+                                                {
+                                                  node: {
+                                                    san: 'Ng4',
+                                                    movedBy: 'black',
+                                                    idea:
+                                                      "4...Ng4 — Black plays the active retreat. Knight from f6 to g4. This is the critical line: the knight eyes f2 (the weak square) and supports the looming Qh4+. Now I have to neutralize Qh4+ this very move, or else.",
+                                                    narration: [
+                                                      {
+                                                        text: '4...Ng4 — Black plays the active retreat.',
+                                                        arrows: [{ from: 'f6', to: 'g4', color: 'green' }],
+                                                      },
+                                                      {
+                                                        text: 'Knight from f6 to g4. This is the critical line — the knight eyes f2,',
+                                                        arrows: [{ from: 'g4', to: 'f2', color: 'red' }],
+                                                        highlights: [{ square: 'f2', color: 'red' }],
+                                                      },
+                                                      {
+                                                        text: 'and supports the looming Qh4+. I have to neutralize that check this move, or else.',
+                                                        arrows: [{ from: 'd8', to: 'h4', color: 'red' }],
+                                                      },
+                                                    ],
+                                                    children: [
+                                                      {
+                                                        node: {
+                                                          san: 'Nf3',
+                                                          movedBy: 'white',
+                                                          idea:
+                                                            "5.Nf3 — and now the knight comes out. Knight from g1 to f3 — develops a piece AND controls h4, which kills the Qh4+ threat dead. Notice the move order: I HAD to push e5 first to kick the f6-knight (otherwise Black plays Qh4+ instantly and the wheels come off). Now that the knight on f6 has been forced to g4, I can develop normally and the diagonal is shut. This is the foundational lesson of the Vienna Gambit move order: push first, develop second.",
+                                                          narration: [
+                                                            {
+                                                              text: '5.Nf3 — and now the knight comes out.',
+                                                              arrows: [{ from: 'g1', to: 'f3', color: 'green' }],
+                                                            },
+                                                            {
+                                                              text: 'Knight from g1 to f3 — develops a piece and controls h4, which kills the Qh4+ threat dead.',
+                                                              arrows: [{ from: 'f3', to: 'h4', color: 'blue' }],
+                                                              highlights: [{ square: 'h4', color: 'blue' }],
+                                                            },
+                                                            {
+                                                              text: 'Notice the move order. I HAD to push e5 first to kick the f6-knight, otherwise Black plays Qh4+ instantly and the wheels come off. Now that the knight has been forced to g4, I develop and the diagonal is shut.',
+                                                            },
+                                                            {
+                                                              text: 'This is the foundational lesson of the Vienna Gambit move order. Push first, develop second.',
+                                                            },
+                                                          ],
+                                                          children: [],
+                                                        },
+                                                      },
+                                                    ],
+                                                  },
+                                                },
+                                              ],
                                             },
                                           },
                                         ],
