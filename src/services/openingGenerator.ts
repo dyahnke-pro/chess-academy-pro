@@ -1020,6 +1020,97 @@ export function repairTreeIllegalSubtrees(tree: WalkthroughTree): number {
   return pruned;
 }
 
+/** Catch-all content cleanup for the long tail of small validator
+ *  errors that shouldn't fail an entire 30-60s LLM gen. Handles:
+ *
+ *  - Empty `idea` on a non-root node — fill with the SAN itself so
+ *    the empty-idea + idea-mentions-SAN checks both pass. The lesson
+ *    is shallower for that one move but doesn't fail the gen.
+ *  - Empty `narration` array — delete the field (the validator says
+ *    "omit the field instead" so we comply).
+ *  - Empty narration segment text — drop the segment; if all
+ *    segments were empty, delete the narration field entirely.
+ *  - Invalid algebraic arrow.from / arrow.to / highlight.square —
+ *    drop just that arrow / highlight. Validator only accepts a-h+1-8.
+ *  - Empty `openingName` — fall back to the requested name.
+ *  - Empty `eco` — fall back to "?" (the field is required to be
+ *    non-empty but the LLM occasionally omits ECO for niche openings).
+ *
+ *  Returns aggregate counts so audit can spot patterns. */
+export function repairTreeContent(
+  tree: WalkthroughTree,
+  requestedName: string,
+): {
+  ideasFilled: number;
+  narrationsDropped: number;
+  segmentsDropped: number;
+  arrowsDropped: number;
+  highlightsDropped: number;
+  treeFieldsFilled: number;
+} {
+  const out = {
+    ideasFilled: 0,
+    narrationsDropped: 0,
+    segmentsDropped: 0,
+    arrowsDropped: 0,
+    highlightsDropped: 0,
+    treeFieldsFilled: 0,
+  };
+  const SQUARE_RE = /^[a-h][1-8]$/;
+  // Tree-level fields.
+  if (!tree.openingName.trim()) {
+    tree.openingName = requestedName;
+    out.treeFieldsFilled += 1;
+  }
+  if (!tree.eco.trim()) {
+    tree.eco = '?';
+    out.treeFieldsFilled += 1;
+  }
+  function walk(node: WalkthroughTreeNode): void {
+    if (node.san !== null && !node.idea.trim()) {
+      // The validator's empty-idea check is hard-error; the
+      // mention-SAN check is a warning. Putting the SAN in the idea
+      // satisfies both with the smallest possible filler.
+      node.idea = node.san;
+      out.ideasFilled += 1;
+    }
+    if (node.narration !== undefined) {
+      // Drop empty-text segments; drop arrows/highlights with bad squares.
+      const cleanSegs = [];
+      for (const seg of node.narration) {
+        if (!seg.text.trim()) {
+          out.segmentsDropped += 1;
+          continue;
+        }
+        if (seg.arrows) {
+          const before = seg.arrows.length;
+          seg.arrows = seg.arrows.filter(
+            (a) => SQUARE_RE.test(a.from) && SQUARE_RE.test(a.to),
+          );
+          out.arrowsDropped += before - seg.arrows.length;
+        }
+        if (seg.highlights) {
+          const before = seg.highlights.length;
+          seg.highlights = seg.highlights.filter((h) =>
+            SQUARE_RE.test(h.square),
+          );
+          out.highlightsDropped += before - seg.highlights.length;
+        }
+        cleanSegs.push(seg);
+      }
+      if (cleanSegs.length === 0) {
+        delete node.narration;
+        out.narrationsDropped += 1;
+      } else {
+        node.narration = cleanSegs;
+      }
+    }
+    for (const child of node.children) walk(child.node);
+  }
+  walk(tree.root);
+  return out;
+}
+
 /** Pull the first N SAN values from a generated tree by walking
  *  root.children depth-first along the leftmost path. Used in audit
  *  logs so we can SEE what the LLM produced — the most diagnostic
@@ -1221,6 +1312,33 @@ Fix the issues above and produce a SHORTER, valid tree.`
       category: 'subsystem',
       source: 'openingGenerator.generateOnce',
       summary: `dropped ${orphanLeafOutros} orphan leafOutros key(s) for "${name}"`,
+    });
+  }
+
+  // Catch-all content cleanup: empty ideas, empty narration, invalid
+  // squares, missing tree-level fields. Closes the long tail of
+  // single-validator-rule failures that shouldn't fail the whole gen.
+  const contentRepairs = repairTreeContent(tree, name);
+  const contentTotal =
+    contentRepairs.ideasFilled +
+    contentRepairs.narrationsDropped +
+    contentRepairs.segmentsDropped +
+    contentRepairs.arrowsDropped +
+    contentRepairs.highlightsDropped +
+    contentRepairs.treeFieldsFilled;
+  if (contentTotal > 0) {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOnce',
+      summary:
+        `repaired tree content for "${name}" — ` +
+        `ideasFilled=${contentRepairs.ideasFilled} ` +
+        `narrationsDropped=${contentRepairs.narrationsDropped} ` +
+        `segmentsDropped=${contentRepairs.segmentsDropped} ` +
+        `arrowsDropped=${contentRepairs.arrowsDropped} ` +
+        `highlightsDropped=${contentRepairs.highlightsDropped} ` +
+        `treeFieldsFilled=${contentRepairs.treeFieldsFilled}`,
     });
   }
 

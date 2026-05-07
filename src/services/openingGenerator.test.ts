@@ -13,6 +13,7 @@ import {
   repairPunishStage,
   repairLeafOutros,
   repairTreeIllegalSubtrees,
+  repairTreeContent,
   assertTreeShape,
 } from './openingGenerator';
 import type {
@@ -603,5 +604,112 @@ describe('repairTreeIllegalSubtrees', () => {
       },
     ]);
     expect(repairTreeIllegalSubtrees(tree)).toBe(0);
+  });
+});
+
+describe('repairTreeContent', () => {
+  it('fills empty ideas with the SAN', () => {
+    const tree = makeTree([
+      { node: { san: 'e4', movedBy: 'white', idea: '', children: [] } },
+    ]);
+    const r = repairTreeContent(tree, 'Test Opening');
+    expect(r.ideasFilled).toBe(1);
+    expect(tree.root.children[0].node.idea).toBe('e4');
+  });
+
+  it('fills empty tree-level fields with fallbacks', () => {
+    const tree = makeTree([]);
+    tree.openingName = '';
+    tree.eco = '';
+    const r = repairTreeContent(tree, 'Requested Name');
+    expect(r.treeFieldsFilled).toBe(2);
+    expect(tree.openingName).toBe('Requested Name');
+    expect(tree.eco).toBe('?');
+  });
+
+  it('drops empty narration segments and removes narration when all empty', () => {
+    const tree = makeTree([
+      {
+        node: {
+          san: 'e4',
+          movedBy: 'white',
+          idea: '1.e4',
+          narration: [{ text: '' }, { text: '   ' }],
+          children: [],
+        },
+      },
+    ]);
+    const r = repairTreeContent(tree, 'X');
+    expect(r.segmentsDropped).toBe(2);
+    expect(r.narrationsDropped).toBe(1);
+    expect(tree.root.children[0].node.narration).toBeUndefined();
+  });
+
+  it('keeps non-empty segments and drops only the empty ones', () => {
+    const tree = makeTree([
+      {
+        node: {
+          san: 'e4',
+          movedBy: 'white',
+          idea: '1.e4',
+          narration: [{ text: '' }, { text: 'good text' }],
+          children: [],
+        },
+      },
+    ]);
+    const r = repairTreeContent(tree, 'X');
+    expect(r.segmentsDropped).toBe(1);
+    expect(r.narrationsDropped).toBe(0);
+    expect(tree.root.children[0].node.narration).toEqual([
+      { text: 'good text' },
+    ]);
+  });
+
+  it('drops arrows + highlights with invalid algebraic squares', () => {
+    const tree = makeTree([
+      {
+        node: {
+          san: 'e4',
+          movedBy: 'white',
+          idea: '1.e4',
+          narration: [
+            {
+              text: 'play e4',
+              arrows: [
+                { from: 'e2', to: 'e4' },
+                { from: 'i9', to: 'e4' }, // invalid from
+                { from: 'e2', to: 'z3' }, // invalid to
+              ],
+              highlights: [
+                { square: 'd5' },
+                { square: 'q9' }, // invalid
+              ],
+            },
+          ],
+          children: [],
+        },
+      },
+    ]);
+    const r = repairTreeContent(tree, 'X');
+    expect(r.arrowsDropped).toBe(2);
+    expect(r.highlightsDropped).toBe(1);
+    const seg = tree.root.children[0].node.narration?.[0];
+    expect(seg?.arrows).toEqual([{ from: 'e2', to: 'e4' }]);
+    expect(seg?.highlights).toEqual([{ square: 'd5' }]);
+  });
+
+  it('returns all-zero counts on a clean tree', () => {
+    const tree = makeTree([
+      { node: { san: 'e4', movedBy: 'white', idea: '1.e4 center', children: [] } },
+    ]);
+    const r = repairTreeContent(tree, 'X');
+    expect(r).toEqual({
+      ideasFilled: 0,
+      narrationsDropped: 0,
+      segmentsDropped: 0,
+      arrowsDropped: 0,
+      highlightsDropped: 0,
+      treeFieldsFilled: 0,
+    });
   });
 });
