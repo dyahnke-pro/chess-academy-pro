@@ -186,11 +186,18 @@ ${ROOT_STRUCTURE_EXAMPLE}
 
 CONVENTIONS:
 - Coach voice: first-person, conversational, pedagogically clear. Read like a strong coach explaining to a student face-to-face.
-- Narration arrows: green = our plan, red = warning/threat or move-not-to-make, blue = development/defensive, yellow = key squares/highlights.
 - Each idea must MENTION the SAN played (e.g. "Bc4 develops..." or "bishop to c4 develops...").
 - Branch points (forks) need every child to have label + forkSubtitle.
 - Move-order matters: trace each line carefully. For example, you can't push f4 with Black's bishop on c5 (the long diagonal opens and the g1-knight hangs). The trade or the move-order matters.
 - TARGET SIZE: 3 forks, each branch ~6-10 plies after the fork. Idea text 40-90 words. Narration 2-4 segments per node, each 1-2 sentences. This keeps the response within the token budget; longer trees truncate and fail to load.
+
+ARROW + HIGHLIGHT RULES (production audit caught useless arrows; follow these strictly):
+- DO NOT draw an arrow on the move being played in this node. The board animates the SAN itself — adding an arrow from the same from→to is redundant noise.
+- DO draw arrows on FUTURE moves the narration text mentions. If the prose says "preparing ...c5" → green arrow c7→c5. If it says "...e5 will challenge the center" → green arrow e7→e5. If the prose says "we'll castle" → green arrow e8→g8. If "...Nc6 hits d4" → green arrow b8→c6.
+- DO highlight key SQUARES the prose talks about ("eyes f7", "controls e5") with yellow.
+- DO use red arrows for OPPONENT THREATS the prose warns about ("careful — White wants Bxh7+") with red from→to.
+- Color legend: green = our future plan / our piece's destination. Red = opponent's threat or move-not-to-make. Blue = development / defensive squares. Yellow = key squares the prose highlights.
+- If a narration segment doesn't reference a specific square or future move, OMIT arrows/highlights entirely on that segment. A clean board with no arrows is better than nonsense arrows.
 
 LEGAL-MOVE TRAPS (production audit caught all of these — DO NOT repeat):
 - FIANCHETTO PREP: To play Bg7 you must FIRST move the g-pawn (...g6). Bishop on f8 → bishop to g7 requires g7 to be EMPTY. Same for Bg2 (needs g3) and Bb7 (needs b6) and Bb2 (needs b3). The Pirc move order is ...d6, ...Nf6, ...g6, THEN ...Bg7 — never ...Bg7 before ...g6.
@@ -831,6 +838,11 @@ Fix the issues above and produce a SHORTER, valid tree.`
     // — that's the diagnostic the audit needs. Production audit (build
     // 23c484d) showed a retry response ending in `}` but not parsing,
     // and we couldn't see what broke without the error message + locale.
+    // Production audit (build c95ccc9) caught Philidor failing with
+    // iOS Safari's "Expected '}'" message — no position number, so the
+    // position-based window didn't fire and we were blind to which
+    // region broke. Fall back to dumping the LAST 500 chars (where
+    // structural-tail errors usually live).
     let errorContext = '';
     const posMatch = parseResult.parseError?.match(/position (\d+)/);
     if (posMatch) {
@@ -838,6 +850,8 @@ Fix the issues above and produce a SHORTER, valid tree.`
       const start = Math.max(0, pos - 100);
       const end = Math.min(rawResponse.length, pos + 100);
       errorContext = `\n--- 200 chars around position ${pos} ---\n${rawResponse.slice(start, end)}`;
+    } else if (rawResponse.length > 500) {
+      errorContext = `\n--- last 500 chars (no position in error message) ---\n${rawResponse.slice(-500)}`;
     }
     void logAppAudit({
       kind: 'llm-error',

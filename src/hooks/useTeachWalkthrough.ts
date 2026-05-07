@@ -509,8 +509,32 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     [pathNodes],
   );
   const fen = useMemo(
-    () => fenForPath(pathSans, tree?.startFen),
-    [pathSans, tree?.startFen],
+    () => {
+      // When in a quiz stage with a question that specifies a path,
+      // the board should show THAT position — not where the
+      // walkthrough left off. Production audit (build c95ccc9) caught
+      // the find-the-move stage rendering with the walkthrough's
+      // last-move FEN (move 8 in Pirc), making the question
+      // "White to play" against a position 8 moves deep — wrong board.
+      if (activeStage === 'findMove') {
+        const q = tree?.findMove?.[stageIndex];
+        if (q && q.path && q.path.length > 0) {
+          return fenForPath(q.path, tree?.startFen);
+        }
+        if (q) return tree?.startFen ?? STARTING_FEN;
+      }
+      if (activeStage === 'concepts') {
+        const q = tree?.concepts?.[stageIndex];
+        if (q && q.path && q.path.length > 0) {
+          return fenForPath(q.path, tree?.startFen);
+        }
+        // Concepts often lack a path; fall back to start position
+        // rather than leaving the walkthrough's leaf FEN visible.
+        if (q) return tree?.startFen ?? STARTING_FEN;
+      }
+      return fenForPath(pathSans, tree?.startFen);
+    },
+    [pathSans, tree?.startFen, tree?.findMove, tree?.concepts, activeStage, stageIndex],
   );
   const isLeaf = currentNode !== null && currentNode.children.length === 0;
   const forkOptions =

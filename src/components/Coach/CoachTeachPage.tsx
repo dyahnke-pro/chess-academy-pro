@@ -670,6 +670,15 @@ export function CoachTeachPage(): JSX.Element {
           } else {
             walkthrough.start(cachedTree);
           }
+          // Re-fire background gen for any stages still missing
+          // from the cache. Production audit (build c95ccc9) caught
+          // the user returning to Pirc and finding no Punish tile —
+          // that stage failed the first time (before per-entry
+          // repairs shipped) and was never re-attempted. Now we try
+          // again every visit; the merge step is idempotent (only
+          // writes if there's data to write) and getMissingStages
+          // makes this a no-op when everything's already cached.
+          void generateMissingStagesInBackground(cachedTree.openingName, cachedTree);
           return;
         }
 
