@@ -343,6 +343,13 @@ export interface LinePickerOption {
   style: string;
   /** Move count (PGN plies) — surface as a "depth: N moves" hint. */
   pgnLength: number;
+  /** Which side the student plays in this line. Driven by the
+   *  PARENT opening's nature — defenses (Sicilian, French, Pirc,
+   *  KID, etc.) and Black-named openings put the student as Black;
+   *  everything else as White. The picker uses this to surface a
+   *  small color/icon hint on each tile so the student knows which
+   *  side they'll be playing before tapping in. */
+  studentSide: 'white' | 'black';
 }
 
 /** Classify a variation's style from name keywords. Falls through to
@@ -468,9 +475,25 @@ export function findLinePickerOptions(
     }
   }
 
+  // Determine which side the student plays for this opening family.
+  // Driven by the PARENT name — defenses + Black-named openings put
+  // the student as Black; everything else as White. We use the same
+  // heuristic as the existing inferStudentSide so picker labels align
+  // with the board orientation when the lesson actually loads.
+  const parentLower = bareCandidate.name.toLowerCase();
+  const isBlackOpening =
+    /\bdefen[cs]e\b/.test(parentLower) ||
+    /\b(sicilian|french|caro|pirc|modern|alekhine|scandinavian|king.s indian|queen.s indian|nimzo|grunfeld|grünfeld|benoni|benko|dutch|philidor|petroff|petrov|slav|two knights)\b/.test(parentLower);
+  const studentSide: 'white' | 'black' = isBlackOpening ? 'black' : 'white';
+
   const options: LinePickerOption[] = Array.from(byName.values())
     .map((e) => {
       const label = e.name.slice(prefix.length).trim();
+      // Sub-variations like "King's Indian Attack" inside an otherwise
+      // Black opening don't actually exist — the DB nests names under
+      // the parent. But "King's Indian Defense: Fianchetto Variation"
+      // keeps the student on Black. So studentSide is parent-driven,
+      // not variation-driven, for every tile in the picker.
       return {
         label,
         fullName: e.name,
@@ -482,6 +505,7 @@ export function findLinePickerOptions(
         // colored by ITS character, not the parent's.
         style: classifyVariationStyle(label),
         pgnLength: e.pgn.split(/\s+/).filter(Boolean).length,
+        studentSide,
       };
     })
     // Sort by PGN length asc (trunk-near first), then alphabetically.

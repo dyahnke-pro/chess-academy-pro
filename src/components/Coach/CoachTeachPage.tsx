@@ -1708,7 +1708,20 @@ export function CoachTeachPage(): JSX.Element {
                     }}
                     data-testid={`line-picker-${opt.eco}`}
                   >
-                    <span className="text-[10px] font-mono text-theme-text-muted">{opt.eco} · {opt.style}</span>
+                    <div className="flex items-center gap-1.5 text-[10px] font-mono text-theme-text-muted">
+                      <span
+                        className="inline-block w-2.5 h-2.5 rounded-full border"
+                        style={{
+                          background: opt.studentSide === 'white' ? '#f5f0e1' : '#1a1a1a',
+                          borderColor: 'rgba(255,255,255,0.4)',
+                        }}
+                        aria-label={`You play ${opt.studentSide}`}
+                        title={`You play ${opt.studentSide}`}
+                      />
+                      <span>{opt.eco}</span>
+                      <span>·</span>
+                      <span>{opt.style}</span>
+                    </div>
                     <span className="text-sm font-semibold text-theme-text leading-tight">{opt.label}</span>
                   </button>
                 );
