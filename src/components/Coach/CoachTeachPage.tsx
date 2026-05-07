@@ -1047,7 +1047,7 @@ export function CoachTeachPage(): JSX.Element {
           // to the walkthrough surface seeded with the opening name.
           // Without this wired the brain tool would no-op and the
           // teach session couldn't escalate to a focused drill.
-          onStartWalkthroughForOpening: ({ opening, orientation }) => {
+          onStartWalkthroughForOpening: async ({ opening, orientation }) => {
             // PRESERVE EXISTING WALKTHROUGH STATE.
             // Production audit (build e6c3c7b) caught a regression
             // where the brain re-called start_walkthrough_for_opening
@@ -1068,8 +1068,17 @@ export function CoachTeachPage(): JSX.Element {
               }
               return { ok: true };
             }
-            // No walkthrough in progress — start fresh.
-            const tree = resolveWalkthroughTree(opening);
+            // No walkthrough in progress — start fresh. Check the
+            // static registry first, then the Dexie cache for any
+            // LLM-generated tree from a prior visit. Production audit
+            // (build 62a884d) caught Sicilian getting handed off to
+            // /coach/session/walkthrough (the legacy surface) because
+            // the static registry doesn't carry it — even when a
+            // valid LLM-generated tree was already cached. The cache
+            // fallback keeps the in-place walkthrough flow on
+            // /coach/teach for everything we've ever generated.
+            const tree =
+              resolveWalkthroughTree(opening) ?? (await getCachedOpening(opening));
             if (tree) {
               // SILENCE THE BRAIN before the walkthrough starts speaking.
               // Production audit (build 3e2263c) caught a "two voices"

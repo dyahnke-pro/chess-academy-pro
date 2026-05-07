@@ -187,7 +187,10 @@ SCOPE: You are generating ONLY the walkthrough tree (the move-by-move lesson). D
 
 OPENING-NAME INTERPRETATION (read the user's request carefully):
 - TYPO TOLERANCE: if the request has a misspelling, normalize to the closest canonical opening name and use that in the openingName field. Examples: "Phillador" → "Philidor Defense"; "Sicillian" → "Sicilian Defense"; "Caro Khan" → "Caro-Kann Defense"; "Kings Indian" → "King's Indian Defense"; "Naijdorf" → "Najdorf Sicilian"; "Reuy Lopez" → "Ruy Lopez". Never refuse a request just because of a typo.
-- BROAD vs SPECIFIC depth: if the user names a BROAD opening (e.g. "Sicilian Defense", "Italian Game", "King's Indian"), give an OVERVIEW: 3 forks at moves 2-4 surveying the main variations. If the user names a SPECIFIC VARIATION (e.g. "Najdorf Sicilian", "Italian Two Knights", "King's Indian Mar del Plata", "Hampe-Allgaier", "Vienna Gambit"), DIVE DEEPER into THAT variation specifically — fewer top-level forks, more depth (8-12 plies of theory inside the variation), with the forks placed at the critical decision points within the variation. Treat ECO codes (e.g. "B90", "C25") and named variations as specific.
+- BROAD vs SPECIFIC depth: a walkthrough is "substantial" when the student leaves it ready to play the early middlegame, not at move 4 holding a pawn. Take the student through the named opening AND a few plies into the resulting middlegame; the deep-dive flow handles drilling further inside any single variation, so this top-level walkthrough must cover the whole opening, not a fragment.
+  - BROAD opening (e.g. "Sicilian Defense", "Italian Game", "King's Indian", "Slav", "Caro-Kann Defense"): give an OVERVIEW that reaches the middlegame. 2-3 forks at moves 2-4 surveying the main variations, EACH branch continuing 12-15 plies past the fork into a typical middlegame structure. Pawn-only fragments are not acceptable: develop minor pieces, castle when applicable, reach a position where the student knows what plan they're on.
+  - SPECIFIC VARIATION (e.g. "Najdorf Sicilian", "Italian Two Knights", "King's Indian Mar del Plata", "Hampe-Allgaier", "Vienna Gambit", or any ECO code like "B90"/"C25"): fewer top-level forks (1-2), MORE depth — 15-20 plies of theory inside the variation, with the forks placed at the critical decision points within the variation, ending in a recognizable middlegame plan.
+  - The deep-dive UI lets the student pick any leaf or fork and ask for more — DO NOT compress your tree on the assumption that they'll dig deeper later. The walkthrough they get from this call IS the foundation; deep-dive is for the next zoom, not for filling in moves you skipped.
 
 SCHEMA (TypeScript types) — these are the ONLY fields you output:
 
@@ -227,7 +230,7 @@ CONVENTIONS:
 - Each idea must MENTION the SAN played (e.g. "Bc4 develops..." or "bishop to c4 develops...").
 - Branch points (forks) need every child to have label + forkSubtitle.
 - Move-order matters: trace each line carefully. For example, you can't push f4 with Black's bishop on c5 (the long diagonal opens and the g1-knight hangs). The trade or the move-order matters.
-- TARGET SIZE: 3 forks, each branch ~6-10 plies after the fork. Idea text 40-90 words. Narration 2-4 segments per node, each 1-2 sentences. This keeps the response within the token budget; longer trees truncate and fail to load.
+- TARGET SIZE: see the BROAD vs SPECIFIC depth rules above for fork count + branch length per opening type. Idea text 40-90 words. Narration 2-4 segments per node, each 1-2 sentences. The hard ceiling is ~14K characters of JSON output (longer truncates and fails to load) — stay under that by using fewer top-level forks when branches are deep, never by clipping a branch in the opening phase.
 
 ARROW + HIGHLIGHT RULES (production audit caught useless arrows; follow these strictly):
 - DO NOT draw an arrow on the move being played in this node. The board animates the SAN itself — adding an arrow from the same from→to is redundant noise.
@@ -294,6 +297,44 @@ function preprocessForParse(text: string): string {
     .replace(/\t/g, ' ');
 }
 
+/** Walk a parsed tree and ensure every node carries a `children`
+ *  array. Production audit (build 62a884d) caught an unhandled
+ *  rejection — `t.children.length` undefined — recursing through a
+ *  Sicilian tree shortly after a JSON parse failure. The crash bubbled
+ *  up because downstream walkers (validate, normalizeTreeSans,
+ *  auditMoveQuality, useTeachWalkthrough) all trust `node.children` to
+ *  be an array. If the LLM's JSON parses but a node omits `children`,
+ *  every walker explodes. Failing the parse loudly here keeps a
+ *  half-formed tree from leaking into Dexie cache or the runtime. */
+export function assertTreeShape(tree: unknown): asserts tree is WalkthroughTree {
+  if (!tree || typeof tree !== 'object') {
+    throw new Error('tree is not an object');
+  }
+  const root = (tree as { root?: unknown }).root;
+  if (!root || typeof root !== 'object') {
+    throw new Error('tree.root missing');
+  }
+  function visit(node: unknown, path: string): void {
+    if (!node || typeof node !== 'object') {
+      throw new Error(`${path}: node is not an object`);
+    }
+    const n = node as { children?: unknown; san?: unknown };
+    if (!Array.isArray(n.children)) {
+      throw new Error(`${path}: children missing or not an array`);
+    }
+    for (let i = 0; i < n.children.length; i += 1) {
+      const child = n.children[i] as { node?: unknown } | null | undefined;
+      if (!child || typeof child !== 'object' || !child.node) {
+        throw new Error(`${path}.children[${i}]: missing .node`);
+      }
+      const san = (child.node as { san?: unknown }).san;
+      const childPath = `${path}.children[${i}]${typeof san === 'string' ? `(${san})` : ''}`;
+      visit(child.node, childPath);
+    }
+  }
+  visit(root, 'root');
+}
+
 function parseGeneratedTree(raw: string): ParseResult {
   let text = raw.trim();
   // Strip markdown code fences defensively.
@@ -311,27 +352,31 @@ function parseGeneratedTree(raw: string): ParseResult {
   // Strip trailing commas before } or ] (LLM frequently adds these
   // even though strict JSON disallows them).
   jsonText = jsonText.replace(/,(\s*[}\]])/g, '$1');
-  // First parse attempt: as-is.
-  try {
-    return { tree: JSON.parse(jsonText) as WalkthroughTree };
-  } catch (firstErr) {
-    // Second attempt: smart-quote / control-char preprocessing.
-    // Production audit recurring "Expected '}'" with no position info
-    // is most plausibly explained by character-class issues invisible
-    // in the audit dump — try to fix them and re-parse before giving up.
+  function tryParse(text: string): ParseResult {
     try {
-      const preprocessed = preprocessForParse(jsonText);
-      if (preprocessed !== jsonText) {
-        return { tree: JSON.parse(preprocessed) as WalkthroughTree };
-      }
-    } catch {
-      // Fall through to original error reporting.
+      const parsed: unknown = JSON.parse(text);
+      assertTreeShape(parsed);
+      return { tree: parsed };
+    } catch (err) {
+      return {
+        tree: null,
+        parseError: err instanceof Error ? err.message : String(err),
+      };
     }
-    return {
-      tree: null,
-      parseError: firstErr instanceof Error ? firstErr.message : String(firstErr),
-    };
   }
+  // First parse attempt: as-is.
+  const first = tryParse(jsonText);
+  if (first.tree) return first;
+  // Second attempt: smart-quote / control-char preprocessing.
+  // Production audit recurring "Expected '}'" with no position info
+  // is most plausibly explained by character-class issues invisible
+  // in the audit dump — try to fix them and re-parse before giving up.
+  const preprocessed = preprocessForParse(jsonText);
+  if (preprocessed !== jsonText) {
+    const second = tryParse(preprocessed);
+    if (second.tree) return second;
+  }
+  return first;
 }
 
 /** Normalize an opening name for cache lookup. Lowercase + trim. */
