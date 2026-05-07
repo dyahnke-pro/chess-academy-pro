@@ -753,6 +753,50 @@ export function CoachTeachPage(): JSX.Element {
           return;
         }
 
+        // ── Tier 1.5: Line picker for BROAD openings ───────────
+        // User feedback (build 6d73f88): "We need to get the coach
+        // back to tier one after each training session." Translation:
+        // typing a broad opening name like "Sicilian" should ALWAYS
+        // surface the line picker — not silently load the cached
+        // overview tree. The picker is the entry point; cache is
+        // per-VARIATION, not per-family.
+        //
+        // Specific variations (Najdorf, Dragon, Two Knights, etc.)
+        // return null from findLinePickerOptions and continue through
+        // Tier 2 cache → Tier 3 gen as before. So a user who types
+        // "Najdorf Sicilian" still hits cache instantly; only a
+        // user typing the broad family name "Sicilian" gets the
+        // picker every time.
+        if (!stageHint && !faceMode) {
+          const pickerData = findLinePickerOptions(requestedName);
+          if (pickerData) {
+            const ack = `The ${pickerData.canonicalName} branches into many lines. Which one do you want to learn? Pick one to dive in deep, or just type the variation name.`;
+            setMessages((prev) => [...prev, {
+              id: `${surfaceTurnId}-c`,
+              role: 'assistant',
+              content: ack,
+              timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach',
+              role: 'coach',
+              text: ack,
+              fen: gameRef.current.fen,
+              trigger: null,
+            });
+            voiceService.stop();
+            void voiceService.speakForced(ack).catch(() => undefined);
+            setLinePicker(pickerData);
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.surfaceRouting',
+              summary: `line picker shown for "${pickerData.canonicalName}" — ${pickerData.options.length} variations (pre-cache)`,
+            });
+            return;
+          }
+        }
+
         // ── Tier 2: Dexie cache (instant). ─────────────────────
         const cachedTree = await getCachedOpening(cacheKey ?? requestedName);
         if (cachedTree) {
@@ -831,50 +875,10 @@ export function CoachTeachPage(): JSX.Element {
           // Continue to brain handling below.
         } else {
 
-        // ── Tier 2.6: Line picker for BROAD openings ───────────
-        // When the user types a top-level opening with many named
-        // sub-variations (Sicilian → Najdorf/Dragon/Sveshnikov/...,
-        // French → Winawer/Tarrasch/Advance/..., etc.), don't go
-        // straight to LLM gen — that splits the output budget across
-        // every variation and produces a shallow "3 pawn moves and
-        // stop" overview. Instead, ask the user which line to focus
-        // on. The chosen variation gets the FULL token budget, so
-        // we get real theoretical depth (15-20 plies) instead of
-        // a fragmented overview.
-        //
-        // findLinePickerOptions returns null for inputs that are
-        // ALREADY a specific variation ("Najdorf Sicilian", "Dragon
-        // Sicilian", "Italian Two Knights") — those skip the picker
-        // and proceed directly to LLM gen.
-        if (!stageHint && !faceMode) {
-          const pickerData = findLinePickerOptions(requestedName);
-          if (pickerData) {
-            const ack = `The ${pickerData.canonicalName} branches into many lines. Which one do you want to learn? Pick one to dive in deep, or just type the variation name.`;
-            setMessages((prev) => [...prev, {
-              id: `${surfaceTurnId}-c`,
-              role: 'assistant',
-              content: ack,
-              timestamp: Date.now(),
-            }]);
-            useCoachMemoryStore.getState().appendConversationMessage({
-              surface: 'chat-teach',
-              role: 'coach',
-              text: ack,
-              fen: gameRef.current.fen,
-              trigger: null,
-            });
-            voiceService.stop();
-            void voiceService.speakForced(ack).catch(() => undefined);
-            setLinePicker(pickerData);
-            void logAppAudit({
-              kind: 'coach-surface-migrated',
-              category: 'subsystem',
-              source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-              summary: `line picker shown for "${pickerData.canonicalName}" — ${pickerData.options.length} variations`,
-            });
-            return;
-          }
-        }
+        // (Line picker for broad openings now runs at Tier 1.5,
+        // before the cache check — see above. Specific variation
+        // names that fall through to here always go straight to
+        // LLM gen because findLinePickerOptions returns null for them.)
 
         // ── Tier 3: LLM generation (slow — ~30-60s). ───────────
         // Show the working banner so the student knows we're not
