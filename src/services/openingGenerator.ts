@@ -159,18 +159,29 @@ ${VIENNA_SAMPLE}
 Now generate the WalkthroughTree for the requested opening. Output JSON only.`;
 }
 
-/** Parse the LLM's response into a WalkthroughTree. Strips any
- *  markdown fences if the LLM ignored the instruction; returns null
- *  if JSON parsing fails entirely. */
+/** Parse the LLM's response into a WalkthroughTree. Defensively
+ *  handles common LLM output mistakes: markdown code fences,
+ *  surrounding prose, trailing commas in objects/arrays, single-line
+ *  comments. Production audit (build ea296eb) caught "The Pirc"
+ *  generation failing on first parse — likely the LLM output got
+ *  truncated mid-JSON when max_tokens was 8192 (now bumped to 16384
+ *  in the call), but defensive parsing also helps recover from
+ *  smaller LLM mistakes. Returns null if JSON parsing still fails. */
 function parseGeneratedTree(raw: string): WalkthroughTree | null {
   let text = raw.trim();
   // Strip markdown code fences defensively.
-  text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+  text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```\s*$/, '');
   // Find the first { and last } in case there's surrounding prose.
   const firstBrace = text.indexOf('{');
   const lastBrace = text.lastIndexOf('}');
   if (firstBrace < 0 || lastBrace < firstBrace) return null;
-  const jsonText = text.slice(firstBrace, lastBrace + 1);
+  let jsonText = text.slice(firstBrace, lastBrace + 1);
+  // Strip C-style line comments (LLMs sometimes add them despite
+  // the prompt). Matches // ... to end of line.
+  jsonText = jsonText.replace(/^\s*\/\/[^\n]*$/gm, '');
+  // Strip trailing commas before } or ] (LLM frequently adds these
+  // even though strict JSON disallows them).
+  jsonText = jsonText.replace(/,(\s*[}\]])/g, '$1');
   try {
     return JSON.parse(jsonText) as WalkthroughTree;
   } catch {
@@ -239,7 +250,18 @@ async function generateOnce(
 ): Promise<GenerationResult> {
   const systemPrompt = buildSystemPrompt();
   const userMessage = retryContext
-    ? `Generate the WalkthroughTree for: ${name}\n\nYour previous attempt failed validation:\n${retryContext}\n\nFix those issues and produce a valid tree.`
+    ? `Generate the WalkthroughTree for: ${name}
+
+Your previous attempt failed:
+${retryContext}
+
+CRITICAL on this retry:
+- Output ONLY raw JSON. First character must be \`{\`, last must be \`}\`.
+- No markdown fences. No prose. No comments. No trailing commas.
+- If you're uncertain about any optional section (concepts / findMove / drill / punish), OMIT IT entirely. A valid tree with just the walkthrough is better than an invalid tree with all sections.
+- Keep the walkthrough tree to 3-4 forks max with shorter narration so the response fits in the token budget.
+
+Fix the issues above and produce a valid tree.`
     : `Generate the WalkthroughTree for: ${name}`;
 
   let rawResponse: string;
@@ -249,7 +271,13 @@ async function generateOnce(
       systemPrompt,
       undefined, // no streaming
       'chat_response',
-      8192, // max tokens — opening trees can be large
+      // 16384 max tokens — full opening trees with all 5 stages
+      // (concepts, findMove, drill, punish, plus a deep walkthrough
+      // tree with 4-5 forks) routinely exceed 8192. Production audit
+      // (build ea296eb) caught "The Pirc" generation failing because
+      // the response was truncated mid-JSON. 16K gives plenty of room
+      // without bumping into the per-call API ceiling.
+      16384,
       undefined,
       'anthropic',
     );
