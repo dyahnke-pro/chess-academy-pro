@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, MessageCircle, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2 } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess } from 'chess.js';
 import { safeChessFromFen } from '../../services/chessSafe';
@@ -22,7 +22,6 @@ import { GameChatPanel } from './GameChatPanel';
 import type { GameChatPanelHandle } from './GameChatPanel';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveListPanel } from './MoveListPanel';
-import { MobileChatDrawer } from './MobileChatDrawer';
 import { ResignButton } from './ResignButton';
 import { PositionNarrationBanner } from './PositionNarrationBanner';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
@@ -518,7 +517,6 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
   });
 
   const isMobile = useIsMobile();
-  const [mobileChatOpen, setMobileChatOpen] = useState(false);
 
   const [coachLastMove, setCoachLastMove] = useState<{ from: string; to: string } | null>(null);
   const previousFenRef = useRef<string | null>(null);
@@ -3681,7 +3679,7 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
   return (
     <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
       {/* Left column: board + controls */}
-      <div className="flex flex-col flex-1 md:flex-none md:w-3/5 min-h-0 overflow-y-auto">
+      <div className="flex flex-col flex-none md:w-3/5 min-h-0 overflow-y-auto">
         {/* Header — two rows for compact mobile layout */}
         <div className="px-3 py-2 md:p-4 border-b border-theme-border space-y-1.5">
           {/* Row 1: Back + title + color selector + analysis toggles */}
@@ -4271,24 +4269,44 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
 
       </div>
 
-      {/* Mobile: swipeable chat drawer + toggle button */}
-      {isMobile && (
-        <>
-          <button
-            onClick={() => setMobileChatOpen(true)}
-            className="fixed z-30 flex items-center justify-center w-12 h-12 rounded-full bg-theme-accent text-white transition-transform hover:scale-105 active:scale-95"
-            style={{
-              right: '1rem',
-              bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
-              boxShadow: '0 0 12px rgba(6, 182, 212, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3)',
-            }}
-            aria-label="Open chat"
-            data-testid="mobile-chat-toggle"
-          >
-            <MessageCircle size={22} />
-          </button>
+      {/* Right column: chat (mobile = inline below board, desktop =
+          move list + divider + chat). Mirrors the Learn-with-coach
+          layout so both surfaces feel like one room — chat input
+          pinned, reverse-flow messages below. */}
+      <div
+        ref={rightColumnRef}
+        className="flex flex-col flex-1 min-h-0 border-t md:border-t-0 md:border-l border-theme-border bg-theme-bg md:overflow-hidden"
+      >
+        {!isMobile && (
+          <>
+            <div
+              className="min-h-0 overflow-hidden"
+              style={{ height: `${100 - chatPercent}%` }}
+            >
+              <MoveListPanel
+                moves={gameState.moves}
+                openingName={detectedOpening?.name ?? null}
+                currentMoveIndex={viewedMoveIndex !== null ? viewedMoveIndex : (gameState.moves.length > 0 ? gameState.moves.length - 1 : null)}
+                className="h-full"
+              />
+            </div>
 
-          <MobileChatDrawer isOpen={mobileChatOpen} onClose={() => setMobileChatOpen(false)}>
+            <div
+              className="flex-shrink-0 h-1.5 bg-theme-border hover:bg-theme-accent/50 cursor-row-resize flex items-center justify-center transition-colors"
+              onPointerDown={handleDividerPointerDown}
+              onPointerMove={handleDividerPointerMove}
+              onPointerUp={handleDividerPointerUp}
+              data-testid="panel-divider"
+            >
+              <div className="w-8 h-0.5 rounded-full bg-theme-text-muted/40" />
+            </div>
+          </>
+        )}
+
+        <div
+          className={isMobile ? 'flex-1 min-h-0 overflow-hidden' : 'min-h-[120px] overflow-hidden'}
+          style={isMobile ? undefined : { height: `${chatPercent}%` }}
+        >
             <GameChatPanel
               ref={gameChatRef}
               fen={game.fen}
@@ -4318,71 +4336,8 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
               onMessagesUpdate={handleChatMessagesUpdate}
               className="h-full"
             />
-          </MobileChatDrawer>
-        </>
-      )}
-
-      {/* Desktop: right column with move list + divider + chat */}
-      {!isMobile && (
-        <div
-          ref={rightColumnRef}
-          className="flex flex-col flex-1 border-l border-theme-border overflow-hidden"
-        >
-          <div
-            className="min-h-0 overflow-hidden"
-            style={{ height: `${100 - chatPercent}%` }}
-          >
-            <MoveListPanel
-              moves={gameState.moves}
-              openingName={detectedOpening?.name ?? null}
-              currentMoveIndex={viewedMoveIndex !== null ? viewedMoveIndex : (gameState.moves.length > 0 ? gameState.moves.length - 1 : null)}
-              className="h-full"
-            />
           </div>
-
-          <div
-            className="flex-shrink-0 h-1.5 bg-theme-border hover:bg-theme-accent/50 cursor-row-resize flex items-center justify-center transition-colors"
-            onPointerDown={handleDividerPointerDown}
-            onPointerMove={handleDividerPointerMove}
-            onPointerUp={handleDividerPointerUp}
-            data-testid="panel-divider"
-          >
-            <div className="w-8 h-0.5 rounded-full bg-theme-text-muted/40" />
-          </div>
-
-          <div
-            className="min-h-[120px] overflow-hidden"
-            style={{ height: `${chatPercent}%` }}
-          >
-            <GameChatPanel
-              ref={gameChatRef}
-              fen={game.fen}
-              pgn={game.history.join(' ')}
-              moveNumber={moveCountRef.current}
-              playerColor={playerColor}
-              turn={game.turn}
-              isGameOver={game.isGameOver}
-              gameResult={gameState.result}
-              lastMove={game.lastMove && game.history.length > 0 ? { ...game.lastMove, san: game.history[game.history.length - 1] } : undefined}
-              lastMoveBy={lastMoveBy}
-              history={game.history}
-              previousFen={previousFenRef.current}
-              onBoardAnnotation={handleBoardAnnotation}
-              onRestartGame={handleRestart}
-              onPlayOpening={handleOpeningRequest}
-              onPlayMove={handleChatPlayMove}
-              onTakeBackMove={handleChatTakeBackMove}
-              onSetBoardPosition={handleChatSetBoardPosition}
-              onResetBoard={handleChatResetBoard}
-              onQuizUserForMove={handleQuizUserForMove}
-              onStartWalkthroughForOpening={handleStartWalkthroughForOpening}
-              onPlayVariation={handlePlayVariation}
-              onReturnToGame={handleReturnToGame}
-              initialPrompt={pendingChatPrompt}
-            />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

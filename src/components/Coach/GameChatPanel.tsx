@@ -1139,7 +1139,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         <ChatInput
           onSend={(text) => void handleSend(text)}
           disabled={isStreaming}
-          placeholder={isStreaming ? 'Coach is typing…' : 'Ask about the position…'}
+          placeholder={isStreaming ? 'Coach is typing…' : 'Ask your coach…'}
         />
 
         {/* Messages — reverse chronological. Newest at top with a

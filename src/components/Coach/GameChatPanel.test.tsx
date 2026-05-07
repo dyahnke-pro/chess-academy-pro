@@ -76,7 +76,7 @@ describe('GameChatPanel', () => {
 
   it('renders chat input with placeholder', () => {
     render(<GameChatPanel {...defaultProps} />);
-    expect(screen.getByPlaceholderText(/Ask about the position/)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Ask your coach/)).toBeInTheDocument();
   });
 
   it('renders send button', () => {

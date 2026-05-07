@@ -779,7 +779,7 @@ export function CoachTeachPage(): JSX.Element {
           setPlayerColor(guessedSide);
           game.setOrientation(guessedSide);
         }
-        const ackBuilding = `Putting together the ${requestedName} lesson — this takes about a minute. The first time only; after this it'll be instant.`;
+        const ackBuilding = `Putting together ${lessonLabel(requestedName)} — this takes about a minute. The first time only; after this it'll be instant.`;
         setMessages((prev) => [...prev, {
           id: `${surfaceTurnId}-c`,
           role: 'assistant',
@@ -1787,6 +1787,27 @@ const redGlowStyle: React.CSSProperties = {
  *  ever falsely-claiming completion. */
 const GENERATION_ESTIMATE_MS = 45_000;
 
+/** Format a lesson identifier for inclusion in user-facing status
+ *  text. Proper opening names ("Italian Game", "Caro-Kann Defense")
+ *  embed cleanly into "the X lesson". A long descriptive phrase
+ *  ("Let's start with the best opening for a complete beginner")
+ *  doesn't — produces "Putting together the Let's start … lesson"
+ *  gibberish. In that case fall back to a generic label. */
+function lessonLabel(name: string): string {
+  const trimmed = name.trim();
+  const lower = trimmed.toLowerCase();
+  const looksLikePhrase =
+    lower.startsWith("let's") ||
+    lower.startsWith('lets ') ||
+    lower.startsWith('how ') ||
+    lower.startsWith('what ') ||
+    lower.startsWith('best ') ||
+    lower.includes(' lesson') ||
+    trimmed.length > 40 ||
+    trimmed.split(/\s+/).length > 5;
+  return looksLikePhrase ? 'your lesson' : `the ${trimmed} lesson`;
+}
+
 /** Generation-progress banner with a real-time fill bar. Re-renders
  *  every 250ms via a setInterval so the bar stays smooth. Caps fill
  *  at 95% — the final 5% only completes when the actual generation
@@ -1827,8 +1848,8 @@ function GenerationProgressBanner({
       <div className="flex items-center justify-between text-xs font-medium" style={{ color: 'var(--color-text)' }}>
         <span>
           {overdue
-            ? `Still working on the ${openingName} lesson…`
-            : `Putting together the ${openingName} lesson…`}
+            ? `Still working on ${lessonLabel(openingName)}…`
+            : `Putting together ${lessonLabel(openingName)}…`}
         </span>
         <span className="text-[10px] text-theme-text-muted tabular-nums">
           {elapsedSec}s
