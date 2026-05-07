@@ -82,6 +82,162 @@ export interface WalkthroughTree {
    *  ignored (the intro covers the framing); only its children
    *  matter (the first moves of the opening). */
   root: WalkthroughTreeNode;
+
+  // ─── Stage 2: Concept check (after walkthrough) ───────────────
+  /** Optional concept-check questions — short MC quizzes on the BIG
+   *  IDEAS, not the moves. Forces the student to verbalize the
+   *  reasoning before drilling motor memory. Pedagogy: recall of
+   *  conceptual frame BEFORE recognition or motor recall. */
+  concepts?: ConceptCheckQuestion[];
+
+  // ─── Stage 3: Find the move (recognition) ─────────────────────
+  /** Optional "find the move" puzzles — show a position, give 3-4
+   *  candidate moves with brief intent labels, student picks. Builds
+   *  pattern recognition. Pedagogy: recognition before recall. */
+  findMove?: FindMoveQuestion[];
+
+  // ─── Stage 4: Drill the line (woodpecker) ─────────────────────
+  /** Optional drill lines — full sequences the student plays from
+   *  the start position against an automatic opponent. Wrong move
+   *  → reset to that position, retry. Pedagogy: motor recall under
+   *  low cognitive load. */
+  drill?: DrillLine[];
+
+  // ─── Stage 5: Punish inaccuracies ─────────────────────────────
+  /** Optional punish-mistake lessons — opponent plays a sub-optimal
+   *  move; student finds the punishment. Mix of MC + play-on-board.
+   *  Pedagogy: pattern recognition under novel input. */
+  punish?: PunishLesson[];
+}
+
+// ─── Stage 2 types ────────────────────────────────────────────────
+
+/** A single concept-check question. The "concept" is the BIG IDEA
+ *  behind a move or line, not the move itself — e.g. "Why Nc3 instead
+ *  of Nf3 in the Vienna?" with reasoning-based answers. Multiple
+ *  choices may be correct (multiSelect mode) when the IDEA has
+ *  multiple facets. */
+export interface ConceptCheckQuestion {
+  /** Optional SAN path from root, so the board can show the position
+   *  the question is about. Empty / omitted → board stays at the
+   *  starting position. */
+  path?: string[];
+  /** The conceptual question text. */
+  prompt: string;
+  /** MC choices. */
+  choices: ConceptCheckChoice[];
+  /** True when more than one choice is correct (e.g. "Why Nc3? —
+   *  pick all that apply"). Default false. */
+  multiSelect?: boolean;
+}
+
+/** A single MC choice on a concept-check question. */
+export interface ConceptCheckChoice {
+  /** Choice text shown on the tap target. */
+  text: string;
+  /** True when this choice is correct. */
+  correct: boolean;
+  /** Coach's explanation, shown after the student picks this choice
+   *  (whether correct or not). Spoken via voice + rendered in chat. */
+  explanation: string;
+}
+
+// ─── Stage 3 types ────────────────────────────────────────────────
+
+/** A "find the move" puzzle — recognition-stage MC. Show position,
+ *  ask "what's the move?", offer 3-4 candidates each labeled with
+ *  the IDEA behind the move. Student picks; coach explains why the
+ *  correct one is correct AND why each distractor is inferior. */
+export interface FindMoveQuestion {
+  /** SAN path from root to the position being quizzed. */
+  path: string[];
+  /** Question prompt, e.g. "White to play. What's the move?" */
+  prompt: string;
+  /** Candidate moves. Exactly one is correct. */
+  candidates: FindMoveCandidate[];
+}
+
+/** A single candidate move on a find-the-move puzzle. */
+export interface FindMoveCandidate {
+  /** SAN of the candidate move. */
+  san: string;
+  /** Short intent label shown on the tap target — e.g. "Bc4 —
+   *  develops + eyes f7". */
+  label: string;
+  /** True when this is the best move. Only one candidate per
+   *  question should be correct. */
+  correct: boolean;
+  /** Coach's explanation shown after pick (correct: why it's right;
+   *  incorrect: why this is inferior). */
+  explanation: string;
+}
+
+// ─── Stage 4 types ────────────────────────────────────────────────
+
+/** A drill line — a sequence of SAN moves the student plays from
+ *  the starting position. The student plays their side; the runtime
+ *  auto-plays the opponent's moves. Wrong move → "the move is X,
+ *  here's why" → reset to that position. After a clean playthrough,
+ *  the line restarts so the student grinds it until automatic. */
+export interface DrillLine {
+  /** Display name shown on the line-picker tap target. */
+  name: string;
+  /** Subtitle, e.g. "Vienna Gambit accepted — main line". */
+  subtitle?: string;
+  /** Full SAN sequence from the starting position. The student
+   *  plays the moves on their side; the runtime auto-plays the
+   *  others. Length must match the depth they should drill to. */
+  moves: string[];
+  /** Which side the student plays. Default: 'white'. */
+  studentSide?: 'white' | 'black';
+}
+
+// ─── Stage 5 types ────────────────────────────────────────────────
+
+/** A punish-inaccuracy lesson — opponent plays a sub-optimal move,
+ *  student finds the punishment. Two-part flow: first MC ("which
+ *  move punishes this?") then a follow-up walkthrough of the
+ *  resulting line so the student sees the win materialize. */
+export interface PunishLesson {
+  /** Display name on the lesson-picker tap target — e.g. "Vienna:
+   *  Black plays 2…d6? — punish the loose center". */
+  name: string;
+  /** SAN path UP TO the position right BEFORE the inaccuracy. The
+   *  opponent's bad move (`inaccuracy` field) is the next move
+   *  played in the runtime. */
+  setupMoves: string[];
+  /** The opponent's sub-optimal move (SAN). Played by the runtime
+   *  as part of the lesson setup. */
+  inaccuracy: string;
+  /** Coach's explanation of why the inaccuracy is bad — sets up the
+   *  "find the punishment" question. */
+  whyBad: string;
+  /** The punishing move (SAN). The student should pick this on the
+   *  MC. */
+  punishment: string;
+  /** Coach's explanation of why the punishment works. Shown after
+   *  the student picks (or after they reveal the answer). */
+  whyPunish: string;
+  /** Distractor candidates that don't punish as well. Combined with
+   *  the punishment, these become the MC choices (in random order
+   *  at runtime). */
+  distractors: PunishDistractor[];
+  /** Optional follow-up moves to play out so the student sees the
+   *  winning continuation. Each move comes with the coach's idea
+   *  text, narrated as the move animates. */
+  followup?: { san: string; idea: string }[];
+}
+
+/** A distractor candidate on a punish-inaccuracy MC question. Looks
+ *  plausible but is inferior to the actual punishment. */
+export interface PunishDistractor {
+  /** SAN of the inferior move. */
+  san: string;
+  /** Short label shown on the tap target. */
+  label: string;
+  /** Coach's explanation of why this is inferior. Shown after the
+   *  student picks this incorrectly. */
+  explanation: string;
 }
 
 /** Result of resolving a branch path through the tree. Used by the
