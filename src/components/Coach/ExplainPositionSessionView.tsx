@@ -231,7 +231,7 @@ export function ExplainPositionSessionView({
           summary: result.text.slice(0, 120),
           fen: targetFen,
         });
-      } else if (!voiceMuted && sentenceCountRef.current === 0) {
+      } else if (!voiceMuted && speakerRef.current.count() === 0) {
         void voiceService.speakIfFree(finalText.slice(0, 400));
       }
       setLoading(false);
