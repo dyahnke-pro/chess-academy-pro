@@ -19,6 +19,24 @@ import type {
   SetupPuzzle,
   OpeningNarration,
 } from '../types';
+import type { WalkthroughTree } from '../types/walkthroughTree';
+
+/** A cached LLM-generated opening walkthrough tree. Once an opening
+ *  is requested via "Teach me [opening]" and successfully generated,
+ *  it lands here so the second visit is instant. Persistent across
+ *  sessions via IndexedDB. */
+export interface CachedOpening {
+  /** Normalized opening name (lowercase, trimmed) — primary key. */
+  normalizedName: string;
+  /** Display name as the LLM produced it (e.g. "Sicilian Defense"). */
+  displayName: string;
+  /** ECO code for cross-reference. */
+  eco: string;
+  /** The validated walkthrough tree. */
+  tree: WalkthroughTree;
+  /** Unix ms when this was generated. */
+  generatedAt: number;
+}
 
 class ChessAcademyDB extends Dexie {
   puzzles!: EntityTable<PuzzleRecord, 'id'>;
@@ -36,6 +54,7 @@ class ChessAcademyDB extends Dexie {
   classifiedTactics!: EntityTable<ClassifiedTactic, 'id'>;
   setupPuzzles!: EntityTable<SetupPuzzle, 'id'>;
   openingNarrations!: EntityTable<OpeningNarration, 'id'>;
+  cachedOpenings!: EntityTable<CachedOpening, 'normalizedName'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -436,6 +455,31 @@ class ChessAcademyDB extends Dexie {
           prefs.coachVerbosity = 'unlimited';
         }
       });
+    });
+
+    // v22: cached LLM-generated opening walkthrough trees.
+    // The "Teach me [any opening]" surface routing checks this store
+    // before generating. A successful generation saves here so the
+    // second visit is instant. Keyed by normalized opening name
+    // (lowercase, trimmed) for cache lookup. ECO is indexed for
+    // future "show me all C-codes I have cached" queries.
+    this.version(22).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
+      classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
+      openingNarrations: 'id, openingName, variation, moveSan, fen, approved',
+      cachedOpenings: 'normalizedName, eco, generatedAt',
     });
   }
 }

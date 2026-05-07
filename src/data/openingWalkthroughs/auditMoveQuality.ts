@@ -47,9 +47,12 @@ interface AuditIssue {
 }
 
 /** Depth used for engine analysis. Higher = more accurate but slower.
- *  16 is enough to catch most opening-quality issues without making
- *  the audit unbearably slow on a typical machine. */
-const DEFAULT_DEPTH = 16;
+ *  18 is the sweet spot for opening positions — catches subtle theory
+ *  issues that depth 16 misses, without the diminishing returns of
+ *  depth 20+. Beyond 24 is overkill for opening audits (mostly refines
+ *  CP scores by ±10 points without changing best-move identity).
+ *  Override with --depth N for ad-hoc deeper checks. */
+const DEFAULT_DEPTH = 18;
 
 /** A move is flagged ERROR if it loses more than this many cp vs best. */
 const ERROR_CP_THRESHOLD = 100;

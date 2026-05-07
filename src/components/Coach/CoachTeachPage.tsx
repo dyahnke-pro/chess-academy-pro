@@ -20,6 +20,11 @@ import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
 import { resolveWalkthroughTree } from '../../data/openingWalkthroughs';
+import {
+  generateOpening,
+  getCachedOpening,
+  cacheOpening,
+} from '../../services/openingGenerator';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { DifficultyToggle } from './DifficultyToggle';
@@ -84,6 +89,14 @@ export function CoachTeachPage(): JSX.Element {
     label: string;
     step: number;
     total: number;
+  } | null>(null);
+  // Tracks an in-flight LLM opening generation. When non-null, the
+  // chat panel shows a "Putting together the lesson..." banner and
+  // typing is disabled (busy is also set). Cleared when generation
+  // completes (success: walkthrough.start fires; failure: ack
+  // message rendered).
+  const [generationStatus, setGenerationStatus] = useState<{
+    openingName: string;
   } | null>(null);
 
   const transcriptRef = useRef<HTMLDivElement | null>(null);
@@ -455,35 +468,37 @@ export function CoachTeachPage(): JSX.Element {
         /\b(teach\s+me|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|drill|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
       const m = text.trim().match(TEACH_PATTERN);
       if (m && m[2]) {
-        const tree = resolveWalkthroughTree(m[2].trim());
-        if (tree) {
-          const surfaceTurnId = `t-${Date.now()}-walkthrough-surface`;
+        const requestedName = m[2].trim();
+        // Three-tier resolution: static registry (Vienna lives here),
+        // Dexie cache (previously LLM-generated), runtime LLM
+        // generation (last resort). Each later tier is slower but
+        // covers more openings.
+        const staticTree = resolveWalkthroughTree(requestedName);
+        const surfaceTurnId = `t-${Date.now()}-walkthrough-surface`;
+        // Always show the user's ask in the transcript.
+        setMessages((prev) => [...prev, {
+          id: `${surfaceTurnId}-u`,
+          role: 'user',
+          content: text,
+          timestamp: Date.now(),
+        }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'user',
+          text,
+          fen: gameRef.current.fen,
+          trigger: null,
+        });
+
+        // ── Tier 1: Static registry (instant). ─────────────────
+        if (staticTree) {
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-            summary: `surface-routed walkthrough: "${text.slice(0, 60)}" → ${tree.openingName}`,
+            summary: `surface-routed walkthrough (static): "${text.slice(0, 60)}" → ${staticTree.openingName}`,
           });
-          // Show the user's ask in the transcript.
-          setMessages((prev) => [...prev, {
-            id: `${surfaceTurnId}-u`,
-            role: 'user',
-            content: text,
-            timestamp: Date.now(),
-          }]);
-          useCoachMemoryStore.getState().appendConversationMessage({
-            surface: 'chat-teach',
-            role: 'user',
-            text,
-            fen: gameRef.current.fen,
-            trigger: null,
-          });
-          // Acknowledge in chat so the student knows what's happening
-          // (no LLM round-trip — the canned line ships instantly).
-          // Walkthrough's own intro narration handles the spoken side;
-          // we don't queue this canned line through Polly so voice
-          // doesn't double-speak.
-          const ack = `Sure — let's walk through the ${tree.openingName}.`;
+          const ack = `Sure — let's walk through the ${staticTree.openingName}.`;
           setMessages((prev) => [...prev, {
             id: `${surfaceTurnId}-c`,
             role: 'assistant',
@@ -497,12 +512,81 @@ export function CoachTeachPage(): JSX.Element {
             fen: gameRef.current.fen,
             trigger: null,
           });
-          // Stop any in-flight TTS from a prior turn before the
-          // walkthrough's intro narration starts speaking.
           voiceService.stop();
-          walkthrough.start(tree);
+          walkthrough.start(staticTree);
           return;
         }
+
+        // ── Tier 2: Dexie cache (instant). ─────────────────────
+        const cachedTree = await getCachedOpening(requestedName);
+        if (cachedTree) {
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.surfaceRouting',
+            summary: `surface-routed walkthrough (cached): "${text.slice(0, 60)}" → ${cachedTree.openingName}`,
+          });
+          const ack = `Welcome back to the ${cachedTree.openingName} — let's go.`;
+          setMessages((prev) => [...prev, {
+            id: `${surfaceTurnId}-c`,
+            role: 'assistant',
+            content: ack,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'coach',
+            text: ack,
+            fen: gameRef.current.fen,
+            trigger: null,
+          });
+          voiceService.stop();
+          walkthrough.start(cachedTree);
+          return;
+        }
+
+        // ── Tier 3: LLM generation (slow — ~30-60s). ───────────
+        // Show the working banner so the student knows we're not
+        // hung. Disable typing until generation completes (busy
+        // gets set true; we set false in a finally below).
+        setBusy(true);
+        setGenerationStatus({ openingName: requestedName });
+        const ackBuilding = `Putting together the ${requestedName} lesson — this takes about a minute. The first time only; after this it'll be instant.`;
+        setMessages((prev) => [...prev, {
+          id: `${surfaceTurnId}-c`,
+          role: 'assistant',
+          content: ackBuilding,
+          timestamp: Date.now(),
+        }]);
+        try {
+          const result = await generateOpening(requestedName);
+          if (result.ok && result.tree) {
+            // Persist for next time.
+            await cacheOpening(requestedName, result.tree);
+            const successAck = `Ready — let's walk through the ${result.tree.openingName}.`;
+            setMessages((prev) => [...prev, {
+              id: `${surfaceTurnId}-c2`,
+              role: 'assistant',
+              content: successAck,
+              timestamp: Date.now(),
+            }]);
+            voiceService.stop();
+            walkthrough.start(result.tree);
+          } else {
+            // Generation failed both attempts. Render an honest fallback.
+            const failAck = `I couldn't put together a clean lesson for "${requestedName}" — ${result.reason ?? 'unknown error'}. Try a more standard opening name (e.g. "Italian Game", "Sicilian Defense", "Caro-Kann Defense") or ask me a question instead.`;
+            setMessages((prev) => [...prev, {
+              id: `${surfaceTurnId}-c2`,
+              role: 'assistant',
+              content: failAck,
+              timestamp: Date.now(),
+            }]);
+          }
+        } finally {
+          setGenerationStatus(null);
+          setBusy(false);
+        }
+        return;
       }
     }
 
@@ -1193,6 +1277,29 @@ export function CoachTeachPage(): JSX.Element {
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
           />
         </div>
+
+        {/* LLM opening-generation banner — shown when the surface is
+            calling the LLM to produce a tree for an opening that
+            isn't in the static registry or the Dexie cache. Takes
+            ~30-60s; we show indeterminate progress to set
+            expectations. */}
+        {generationStatus && (
+          <div
+            className="px-4 py-2 border-b border-theme-border space-y-1.5"
+            style={{ background: 'rgba(168, 85, 247, 0.06)' }}
+            data-testid="teach-generation-progress"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="flex items-center gap-2 text-xs font-medium" style={{ color: 'var(--color-text)' }}>
+              <Loader2 size={12} className="animate-spin" style={{ color: 'rgb(168, 85, 247)' }} />
+              <span>Putting together the {generationStatus.openingName} lesson…</span>
+            </div>
+            <div className="text-[10px] text-theme-text-muted">
+              First time only — we'll cache it locally so future visits are instant.
+            </div>
+          </div>
+        )}
 
         {/* Kickoff progress banner — sticky right under the input so
             the student sees what's happening without losing input
