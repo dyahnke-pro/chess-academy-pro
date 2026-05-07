@@ -275,10 +275,10 @@ class VoiceService {
     return this.stopGeneration;
   }
   // Default Polly playback rate. Bumped from 1.0 → 1.15 because the
-  // production audit feedback was "voice sounds plodding." 1.15 stays
-  // intelligible while feeling like a human coach pacing a lesson.
-  // User can override per-profile via `prefs.voiceSpeed` in Settings.
-  private speed = 1.15;
+  // User-configurable per-profile via `prefs.voiceSpeed` in Settings.
+  // Default 1.0 (natural Polly rate); user request 2026-05-07: bumped
+  // accelerated default down to natural pace.
+  private speed = 1.0;
   /** Whether the Polly endpoint is currently considered usable. Set by
    *  warmup() on probe success, cleared (temporarily) by speakPolly on
    *  failure. Comes back automatically after POLLY_COOLDOWN_MS so a
@@ -465,7 +465,7 @@ class VoiceService {
       coachPersonalityVoices: prefs.coachPersonalityVoices,
       coachPersonalitySecondaryVoices: prefs.coachPersonalitySecondaryVoices,
       systemVoiceURI: prefs.systemVoiceURI ?? null,
-      voiceSpeed: prefs.voiceSpeed ?? 1.15,
+      voiceSpeed: prefs.voiceSpeed ?? 1.0,
     };
     this.prefsCacheTime = now;
     return this.cachedPrefs;
