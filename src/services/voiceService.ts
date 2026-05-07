@@ -968,6 +968,21 @@ class VoiceService {
       const played = await this.playAudioBuffer(arrayBuffer.slice(0));
       if (!played) {
         this.lastSpeakDiagnostic.error = 'AudioContext suspended (need user gesture)';
+        // Audit so "no voice heard" reports have a trail. Production
+        // audit (build 77d7b8f) showed coach-narration-spoken firing
+        // 5x for a Catalan lesson with the user reporting silence —
+        // could not distinguish "Polly fired and audio played fine"
+        // from "Polly fetched audio but iOS AudioContext refused to
+        // resume." This audit makes the second case visible.
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'tts-failure',
+            category: 'subsystem',
+            source: 'voiceService.speakPolly',
+            summary: 'Polly fetched audio but AudioContext could not resume — audio not played',
+            details: `text (first 80): ${text.slice(0, 80)}; voice=${voice}`,
+          });
+        }).catch(() => undefined);
         return false;
       }
       return true;
