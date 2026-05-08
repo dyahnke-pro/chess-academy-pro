@@ -1689,6 +1689,14 @@ interface NarrationOutput {
 async function generateOpeningFromDbNarration(
   name: string,
   pace: 'full' | 'tour' = 'full',
+  /** Optional FACE-mode metadata. When provided, the resulting
+   *  tree's studentSide is FLIPPED (the student plays the OPPOSITE
+   *  side from the canonical opening — they're learning the counter,
+   *  not the opening itself), and the openingName is prefixed with
+   *  "Facing: " so the UI doesn't confuse it for a normal lesson.
+   *  Caller passes the original opening's display name so the prose
+   *  can frame the lesson as a counter to that opening. */
+  faceContext?: { originalDisplayName: string },
 ): Promise<WalkthroughTree | null> {
   const entry = resolveOpeningEntry(name);
   if (!entry || entry.moves.length === 0) return null;
@@ -1744,7 +1752,14 @@ async function generateOpeningFromDbNarration(
     : rawBranches;
 
   // 2. Single LLM call: ask for narration text only.
-  const studentSide = inferStudentSideFromName(entry.canonicalName);
+  // Student side: in normal mode, derive from the canonical name.
+  // In FACE mode the student plays the OPPOSITE side (they're
+  // learning the counter to the named opening, not the opening
+  // itself), so flip.
+  const baseStudentSide = inferStudentSideFromName(entry.canonicalName);
+  const studentSide = faceContext
+    ? (baseStudentSide === 'white' ? 'black' : 'white')
+    : baseStudentSide;
   const moveLabels = positions
     .map((p, idx) => {
       const moveNum = Math.floor(p.ply / 2) + 1;
@@ -1764,7 +1779,10 @@ async function generateOpeningFromDbNarration(
       return `${idx + 1}. "${b.label}" (entry move: ${b.san}) — ${b.count} sub-line${b.count === 1 ? '' : 's'} in DB${extInfo}`;
     })
     .join('\n');
-  const systemPrompt = `You are an expert chess coach narrating a walkthrough of "${entry.canonicalName}". Output ONLY a JSON object matching the schema. The move sequence and positions are PROVIDED — do NOT invent or alter them. Your only job is to write short coach commentary plus optional visualization arrows.
+  const lessonFraming = faceContext
+    ? `a walkthrough of "${entry.canonicalName}" — the canonical White (or attacking side) counter to "${faceContext.originalDisplayName}". The student is the side PLAYING this counter (learning to face the named opening from the opposite perspective), not the side being countered.`
+    : `a walkthrough of "${entry.canonicalName}".`;
+  const systemPrompt = `You are an expert chess coach narrating ${lessonFraming} Output ONLY a JSON object matching the schema. The move sequence and positions are PROVIDED — do NOT invent or alter them. Your only job is to write short coach commentary plus optional visualization arrows.
 
 For each move in the line, return:
 - text: ONE sentence (max ${pace === 'tour' ? 12 : 25} words) explaining the IDEA behind the move. First-person, second-person, conversational. Mention the SAN or its spoken form somewhere. ${pace === 'tour' ? 'TOUR MODE: keep narrations TIGHT — the student wants a quick playthrough, not a lecture.' : ''}Examples:
@@ -1924,11 +1942,18 @@ Emit a JSON object with intro (string), outro (string), ideas (array of ${positi
     }
     nextChildren = [{ node }];
   }
+  // In Face mode, surface the canonical counter's name with a
+  // "Facing: <original>" prefix so the UI shows what the student is
+  // learning to play AGAINST. Cache key prefixing handled by the
+  // caller in CoachTeachPage (existing Face: prefix logic).
+  const displayName = faceContext
+    ? `${entry.canonicalName} (facing ${faceContext.originalDisplayName})`
+    : entry.canonicalName;
   return {
-    openingName: entry.canonicalName,
+    openingName: displayName,
     eco: entry.eco,
     studentSide,
-    intro: narration.intro?.trim() || `${entry.canonicalName} — let's walk through the main line.`,
+    intro: narration.intro?.trim() || `${displayName} — let's walk through the main line.`,
     outro: narration.outro?.trim() || `Drill the moves to lock them in.`,
     root: { san: null, movedBy: null, idea: '', children: nextChildren },
   };
@@ -2057,10 +2082,63 @@ export async function generateOpening(
   // before running narration. It shouldn't have to do that if the
   // brain is pulling straight from the DB."
   //
-  // Skipped for FACE mode (the user is learning to PLAY THE COUNTER
-  // to a named opening, not the named opening itself — the canonical
-  // PGN we'd pull would be wrong). FACE goes through the legacy
-  // free-form gen which handles counter-system selection.
+  // FACE mode — the student is learning the counter to the named
+  // opening, not the opening itself. We resolve the canonical
+  // counter from the Lichess DB (the most-popular sibling
+  // extension is by definition the main-line counter — for Sicilian
+  // Dragon it's the Yugoslav Attack at Be3, for Najdorf it's the
+  // Bg5 Main Line, etc) and run THAT through the same DB-narration
+  // pipeline as learn mode. studentSide gets flipped automatically
+  // (see faceContext handling inside generateOpeningFromDbNarration).
+  // User: "I want that narration fix built!" — applies the same
+  // architectural inversion that fixed learn mode.
+  if (mode === 'face') {
+    try {
+      const original = resolveOpeningEntry(name);
+      if (original) {
+        const shortPgn =
+          findShortestCanonicalPgn(original.canonicalName) ??
+          original.moves.join(' ');
+        const counters = findSiblingExtensionBranches(
+          original.canonicalName,
+          shortPgn,
+        );
+        if (counters.length > 0) {
+          // counters[] is sorted by popularity descending; the first
+          // is the main-line counter.
+          const counter = counters[0];
+          const fromDb = await generateOpeningFromDbNarration(
+            counter.fullName,
+            pace,
+            { originalDisplayName: original.canonicalName },
+          );
+          if (fromDb) {
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'openingGenerator.generateOpening',
+              summary: `face mode resolved "${name}" → counter "${counter.fullName}" via DB-narration`,
+            });
+            return { ok: true, tree: fromDb };
+          }
+        } else {
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'openingGenerator.generateOpening',
+            summary: `face mode found no DB counter for "${name}" — falling back to legacy free-form gen`,
+          });
+        }
+      }
+    } catch (err) {
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'openingGenerator.generateOpening',
+        summary: `face DB-narration path threw for "${name}" — falling back: ${err instanceof Error ? err.message : String(err)}`,
+      });
+    }
+  }
   if (mode === 'learn') {
     try {
       const fromDb = await generateOpeningFromDbNarration(name, pace);

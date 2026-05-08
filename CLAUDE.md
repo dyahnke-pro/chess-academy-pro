@@ -22,11 +22,16 @@ chess structure when the DB already has it. Concretely:
   asking the LLM for data we already had. When fix N+1 in a
   sequence treats the same symptom differently, the disease is
   structural, not symptomatic. Stop and look at the architecture.
+- Face mode (commit 5ba9d0f → next commit) now uses the same
+  inversion: code resolves the canonical counter from the DB
+  (most-popular sibling extension under the named opening — for
+  Sicilian Dragon that's the Yugoslav Attack, for Najdorf the Bg5
+  Main Line, for French Winawer the 4.e5 Advance) and runs THAT
+  through generateOpeningFromDbNarration with studentSide flipped.
 - Apply the same principle elsewhere: stage gen (concepts /
   findMove / drill / punish) should likewise pull positions and
   legal moves from the DB / chess.js, asking the LLM only for
-  pedagogy. Face mode currently still goes through free-form gen
-  and may need the same inversion later.
+  pedagogy. That's the next inversion target.
 
 **iOS AVAudioSession patch — DONE.** Lives in
 `ios-patches/App/AppDelegate.swift` and is copied over the Capacitor
