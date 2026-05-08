@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle } from 'lucide-react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { ChessBoard } from '../Board/ChessBoard';
 import { NarrationArrowOverlay } from './NarrationArrowOverlay';
@@ -1666,17 +1666,39 @@ export function CoachTeachPage(): JSX.Element {
               />
             </div>
           </div>
-          {/* Row 2: Difficulty toggle + Coach Tips button — same widgets
+          {/* Row 2: Difficulty toggle + Chat + Tips buttons — same widgets
               Play has. Difficulty is cosmetic in teach (LLM teaches
-              regardless), but kept for visual parity. */}
+              regardless), but kept for visual parity. The Chat
+              button is a permanent fixture per user request — it
+              opens the global coach drawer for ad-hoc questions
+              without taking the student out of the walkthrough. */}
           <div className="flex items-center justify-between pl-12 md:pl-14">
             <DifficultyToggle
               value={difficulty}
               onChange={setDifficulty}
               disabled={game.history.length > 0}
             />
-            <button
-              onClick={() => setCoachTipsOn((v) => !v)}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => useAppStore.getState().setCoachDrawerOpen(true)}
+                className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+                style={{
+                  background: 'var(--color-accent)',
+                  color: 'var(--color-bg)',
+                  borderTop: '1px solid rgba(201, 168, 76, 0.3)',
+                  borderRight: '1px solid rgba(201, 168, 76, 0.3)',
+                  borderLeft: '2px solid rgba(201, 168, 76, 0.8)',
+                  borderBottom: '2px solid rgba(201, 168, 76, 0.8)',
+                  boxShadow: '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)',
+                }}
+                aria-label="Open chat"
+                data-testid="teach-chat-button"
+              >
+                <MessageCircle size={16} />
+                <span className="hidden sm:inline">Chat</span>
+              </button>
+              <button
+                onClick={() => setCoachTipsOn((v) => !v)}
               className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
               style={{
                 background: coachTipsOn ? 'var(--color-accent)' : 'var(--color-surface)',
@@ -1696,6 +1718,7 @@ export function CoachTeachPage(): JSX.Element {
               <Lightbulb size={16} />
               <span className="hidden sm:inline">Tips</span>
             </button>
+            </div>
           </div>
         </div>
 

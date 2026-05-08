@@ -1,5 +1,5 @@
 import { useCallback, useState, useRef } from 'react';
-import { Outlet, NavLink, useLocation } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   BookOpen,
@@ -132,7 +132,10 @@ export function AppLayout(): JSX.Element {
   const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const bgAnalysisRunning = useAppStore((s) => s.backgroundAnalysisRunning);
   const bgAnalysisProgress = useAppStore((s) => s.backgroundAnalysisProgress);
-  const location = useLocation();
+  // useLocation was used to gate the global chat FAB by route; the
+  // FAB is retired in favor of inline Chat buttons on chessboard
+  // surfaces (and SmartSearchBar handles chat intent on tab pages).
+  // Importing kept commented to avoid a churny line if we re-enable.
 
   const closeSidebar = useCallback((): void => {
     setSidebarOpen(false);
@@ -152,11 +155,17 @@ export function AppLayout(): JSX.Element {
   }, [setCoachDrawerOpen]);
 
   // Hide FAB on pages with their own chat panel and when no profile
-  const showCoachFab = activeProfile
-    && location.pathname !== '/coach/play'
-    && location.pathname !== '/coach'
-    && !location.pathname.startsWith('/play')
-    && !coachDrawerOpen;
+  // Global chat FAB is retired. Per user feedback (build a48b721):
+  //   - Tabs with SmartSearchBar (Home, Openings, Tactics, Weaknesses,
+  //     Coach landing) already provide a chat entry point via search.
+  //   - Chessboard surfaces (Coach Teach, Coach Play, etc.) carry a
+  //     dedicated inline Chat button next to the Tips toggle.
+  // The duplicate floating FAB cluttered the top-right corner and
+  // could cover board UI. Disabled here; both inline buttons + the
+  // SmartSearchBar handle the chat-open intent.
+  const showCoachFab = false;
+  void activeProfile;
+  void coachDrawerOpen;
 
   return (
     <div className="flex flex-col min-h-dvh" style={{ background: 'var(--color-bg)' }}>

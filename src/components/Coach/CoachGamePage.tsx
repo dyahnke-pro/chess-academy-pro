@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2 } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2, MessageCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess } from 'chess.js';
 import { safeChessFromFen } from '../../services/chessSafe';
@@ -3731,34 +3731,57 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
               />
             </div>
           </div>
-          {/* Row 2: Difficulty toggle + Coach Tips button */}
+          {/* Row 2: Difficulty toggle + Chat + Coach Tips buttons. Chat
+              is a permanent fixture matching CoachTeachPage's layout
+              per user request — both coach tabs surface the chat
+              opener in the same place. */}
           <div className="flex items-center justify-between pl-12 md:pl-14">
             <DifficultyToggle
               value={difficulty}
               onChange={setDifficulty}
               disabled={gameState.moves.length > 0}
             />
-            <button
-              onClick={toggleCoachTips}
-              className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
-              style={{
-                background: coachTipsOn ? 'var(--color-accent)' : 'var(--color-surface)',
-                color: coachTipsOn ? 'var(--color-bg)' : 'var(--color-text-muted)',
-                borderTop: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
-                borderRight: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
-                borderLeft: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
-                borderBottom: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
-                boxShadow: coachTipsOn
-                  ? '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)'
-                  : '0 0 6px rgba(234, 179, 8, 0.35), 0 0 14px rgba(234, 179, 8, 0.2), 0 0 24px rgba(234, 179, 8, 0.1)',
-              }}
-              aria-label={coachTipsOn ? 'Disable coach tips' : 'Enable coach tips'}
-              aria-pressed={coachTipsOn}
-              data-testid="coach-tips-toggle"
-            >
-              <Lightbulb size={16} />
-              <span className="hidden sm:inline">Tips</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => useAppStore.getState().setCoachDrawerOpen(true)}
+                className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+                style={{
+                  background: 'var(--color-accent)',
+                  color: 'var(--color-bg)',
+                  borderTop: '1px solid rgba(201, 168, 76, 0.3)',
+                  borderRight: '1px solid rgba(201, 168, 76, 0.3)',
+                  borderLeft: '2px solid rgba(201, 168, 76, 0.8)',
+                  borderBottom: '2px solid rgba(201, 168, 76, 0.8)',
+                  boxShadow: '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)',
+                }}
+                aria-label="Open chat"
+                data-testid="play-chat-button"
+              >
+                <MessageCircle size={16} />
+                <span className="hidden sm:inline">Chat</span>
+              </button>
+              <button
+                onClick={toggleCoachTips}
+                className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+                style={{
+                  background: coachTipsOn ? 'var(--color-accent)' : 'var(--color-surface)',
+                  color: coachTipsOn ? 'var(--color-bg)' : 'var(--color-text-muted)',
+                  borderTop: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+                  borderRight: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+                  borderLeft: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
+                  borderBottom: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
+                  boxShadow: coachTipsOn
+                    ? '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)'
+                    : '0 0 6px rgba(234, 179, 8, 0.35), 0 0 14px rgba(234, 179, 8, 0.2), 0 0 24px rgba(234, 179, 8, 0.1)',
+                }}
+                aria-label={coachTipsOn ? 'Disable coach tips' : 'Enable coach tips'}
+                aria-pressed={coachTipsOn}
+                data-testid="coach-tips-toggle"
+              >
+                <Lightbulb size={16} />
+                <span className="hidden sm:inline">Tips</span>
+              </button>
+            </div>
           </div>
         </div>
 
