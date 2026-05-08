@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap } from 'lucide-react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { ChessBoard } from '../Board/ChessBoard';
 import { NarrationArrowOverlay } from './NarrationArrowOverlay';
@@ -169,8 +169,17 @@ export function CoachTeachPage(): JSX.Element {
   // choice still works), but shorter narrations, shorter branch
   // extensions, and no background quiz / drill / punish gens.
   // User: "Add a quick walk through mode from coach." Default 'full'.
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const pace: 'full' | 'tour' = searchParams.get('mode') === 'tour' ? 'tour' : 'full';
+  const togglePace = useCallback((): void => {
+    const next = new URLSearchParams(searchParams);
+    if (pace === 'tour') {
+      next.delete('mode');
+    } else {
+      next.set('mode', 'tour');
+    }
+    setSearchParams(next, { replace: true });
+  }, [pace, searchParams, setSearchParams]);
   const activeProfile = useAppStore((s) => s.activeProfile);
 
   // Game state via the canonical hook — same primitive Play uses. Gives
@@ -1791,6 +1800,24 @@ export function CoachTeachPage(): JSX.Element {
               disabled={game.history.length > 0}
             />
             <div className="flex items-center gap-2">
+              <button
+                onClick={togglePace}
+                className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+                style={{
+                  background: pace === 'tour' ? 'var(--color-accent)' : 'var(--color-surface)',
+                  color: pace === 'tour' ? 'var(--color-bg)' : 'var(--color-text-muted)',
+                  borderTop: pace === 'tour' ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+                  borderRight: pace === 'tour' ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+                  borderLeft: pace === 'tour' ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid var(--color-border)',
+                  borderBottom: pace === 'tour' ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid var(--color-border)',
+                }}
+                aria-label={pace === 'tour' ? 'Switch to full lesson' : 'Switch to quick tour'}
+                aria-pressed={pace === 'tour'}
+                data-testid="teach-pace-toggle"
+              >
+                <Zap size={16} />
+                <span className="hidden sm:inline">{pace === 'tour' ? 'Tour' : 'Full'}</span>
+              </button>
               <button
                 onClick={() => useAppStore.getState().setCoachDrawerOpen(true)}
                 className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
