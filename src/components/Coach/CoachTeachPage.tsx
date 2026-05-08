@@ -2969,18 +2969,18 @@ function WalkthroughControls({
           What's next?
         </div>
         <div className="flex flex-col gap-2">
-          {conceptsCount > 0 && (
+          {punishCount > 0 && (
             <button
-              onClick={() => walkthrough.startStage('concepts')}
+              onClick={() => walkthrough.startStage('punish')}
               className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
-              style={goldGlowStyle}
-              data-testid="walkthrough-stage-concepts"
+              style={redGlowStyle}
+              data-testid="walkthrough-stage-punish"
             >
               <div className="flex flex-col">
-                <span className="text-sm font-semibold text-theme-text">Concept check</span>
-                <span className="text-[11px] text-theme-text-muted">{conceptsCount} questions on the big ideas</span>
+                <span className="text-sm font-semibold text-theme-text">⚠ Trap lines</span>
+                <span className="text-[11px] text-theme-text-muted">{punishCount} common opponent errors and how to crush them</span>
               </div>
-              <StageStatus done={completedStages.has('concepts')} />
+              <StageStatus done={completedStages.has('punish')} />
             </button>
           )}
           {findMoveCount > 0 && (
@@ -2997,6 +2997,20 @@ function WalkthroughControls({
               <StageStatus done={completedStages.has('findMove')} />
             </button>
           )}
+          {conceptsCount > 0 && (
+            <button
+              onClick={() => walkthrough.startStage('concepts')}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
+              style={goldGlowStyle}
+              data-testid="walkthrough-stage-concepts"
+            >
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-theme-text">Quiz</span>
+                <span className="text-[11px] text-theme-text-muted">{conceptsCount} questions on the big ideas</span>
+              </div>
+              <StageStatus done={completedStages.has('concepts')} />
+            </button>
+          )}
           {drillCount > 0 && (
             <button
               onClick={() => walkthrough.startStage('drill')}
@@ -3005,24 +3019,10 @@ function WalkthroughControls({
               data-testid="walkthrough-stage-drill"
             >
               <div className="flex flex-col">
-                <span className="text-sm font-semibold text-theme-text">Drill the line</span>
+                <span className="text-sm font-semibold text-theme-text">Drill</span>
                 <span className="text-[11px] text-theme-text-muted">{drillCount} woodpecker lines — play them on the board</span>
               </div>
               <StageStatus done={completedStages.has('drill')} />
-            </button>
-          )}
-          {punishCount > 0 && (
-            <button
-              onClick={() => walkthrough.startStage('punish')}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
-              style={goldGlowStyle}
-              data-testid="walkthrough-stage-punish"
-            >
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold text-theme-text">Punish mistakes</span>
-                <span className="text-[11px] text-theme-text-muted">{punishCount} common opponent errors and how to crush them</span>
-              </div>
-              <StageStatus done={completedStages.has('punish')} />
             </button>
           )}
           {tree && extractDeepDiveOptions(tree).length > 0 && (
