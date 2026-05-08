@@ -4,6 +4,30 @@ This file is loaded automatically in every Claude Code session. Follow these ins
 
 ## ⏰ Standing notes
 
+**The DB is the source of truth — the LLM only writes prose.**
+The Lichess opening database (`src/data/openings-lichess.json`,
+3,000+ entries) is the canonical source for move sequences, FENs,
+and structure. The LLM should NEVER be asked to invent or validate
+chess structure when the DB already has it. Concretely:
+
+- Walkthroughs: spine + branch moves come from the DB. chess.js
+  computes FENs deterministically. The LLM is called ONCE per
+  opening to write narration text per move (intro, outro, ideas,
+  branch-extension ideas) — that's it. See
+  `generateOpeningFromDbNarration` in `src/services/openingGenerator.ts`.
+- This pattern was hard-won (build a48b721, 2026-05-08): the prior
+  approach asked the LLM to emit the entire WalkthroughTree as
+  free-form JSON and we spent hours patching parse errors / illegal
+  moves / truncation symptoms. The disease was structural — we were
+  asking the LLM for data we already had. When fix N+1 in a
+  sequence treats the same symptom differently, the disease is
+  structural, not symptomatic. Stop and look at the architecture.
+- Apply the same principle elsewhere: stage gen (concepts /
+  findMove / drill / punish) should likewise pull positions and
+  legal moves from the DB / chess.js, asking the LLM only for
+  pedagogy. Face mode currently still goes through free-form gen
+  and may need the same inversion later.
+
 **iOS AVAudioSession patch — DONE.** Lives in
 `ios-patches/App/AppDelegate.swift` and is copied over the Capacitor
 default by `npm run setup:ios`. Sets category `.playAndRecord` with

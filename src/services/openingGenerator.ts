@@ -1570,6 +1570,14 @@ export interface GenerateOpeningOptions {
    *  tree's openingName will be the counter (e.g. "English Attack vs
    *  Najdorf"), not the original variation. Default 'learn'. */
   mode?: 'learn' | 'face';
+  /** 'full' = the standard lesson with branch extensions to
+   *  middlegame, post-walkthrough quiz / drill / punish stages, and
+   *  longer per-move narrations. 'tour' = a quick playthrough — same
+   *  spine + fork branches (so variation choice still works) but
+   *  shorter narrations, shorter branch extensions, and no
+   *  post-walkthrough stage gens. User: "Add a quick walk through
+   *  mode from coach." Default 'full'. */
+  pace?: 'full' | 'tour';
 }
 
 /** Schema for the narration-only LLM call. Inverts the gen
@@ -1678,6 +1686,7 @@ interface NarrationOutput {
 
 async function generateOpeningFromDbNarration(
   name: string,
+  pace: 'full' | 'tour' = 'full',
 ): Promise<WalkthroughTree | null> {
   const entry = resolveOpeningEntry(name);
   if (!entry || entry.moves.length === 0) return null;
@@ -1716,10 +1725,21 @@ async function generateOpeningFromDbNarration(
   //     Attack, Adams Attack, Bg5 Main Line, Opocensky / Scheveningen
   //     under Be2, etc. — the actual deep-dive choices a student
   //     would expect.
-  const branches: ForkBranch[] = findSiblingExtensionBranches(
+  const rawBranches: ForkBranch[] = findSiblingExtensionBranches(
     entry.canonicalName,
     spineMoves.join(' '),
   );
+  // Tour mode caps branch extensions tighter so the lesson stays
+  // snappy. Full mode gets up to 6 plies per branch (already capped
+  // inside findSiblingExtensionBranches); tour shortens to 3 plies
+  // so each branch is a quick taste, not a deep walkthrough.
+  const TOUR_EXT_CAP = 3;
+  const branches: ForkBranch[] = pace === 'tour'
+    ? rawBranches.map((b) => ({
+        ...b,
+        extensionMoves: b.extensionMoves.slice(0, TOUR_EXT_CAP),
+      }))
+    : rawBranches;
 
   // 2. Single LLM call: ask for narration text only.
   const studentSide = inferStudentSideFromName(entry.canonicalName);
@@ -1745,7 +1765,7 @@ async function generateOpeningFromDbNarration(
   const systemPrompt = `You are an expert chess coach narrating a walkthrough of "${entry.canonicalName}". Output ONLY a JSON object matching the schema. The move sequence and positions are PROVIDED — do NOT invent or alter them. Your only job is to write short coach commentary plus optional visualization arrows.
 
 For each move in the line, return:
-- text: ONE sentence (max 25 words) explaining the IDEA behind the move. First-person, second-person, conversational. Mention the SAN or its spoken form somewhere. Examples:
+- text: ONE sentence (max ${pace === 'tour' ? 12 : 25} words) explaining the IDEA behind the move. First-person, second-person, conversational. Mention the SAN or its spoken form somewhere. ${pace === 'tour' ? 'TOUR MODE: keep narrations TIGHT — the student wants a quick playthrough, not a lecture.' : ''}Examples:
   - "1.e4 grabs the center and frees the king's bishop and queen."
   - "1...c5 — Black declines the symmetry and aims for asymmetric play on the queenside."
   - "5.Nc3 develops the knight, defends e4, and prepares Bc4 or Qe2."
@@ -1762,7 +1782,7 @@ Also produce:
 - intro: 2-3 sentences framing the lesson
 - outro: 1-2 sentences inviting the next step (drill / face the variation / try a deeper line)
 ${branches.length > 0 ? `- branchIdeas: ONE sentence (max 20 words) for EACH branch the student might dive into next. Mention the named line and its strategic flavor (sharp / positional / pawn-storm / quiet etc).
-- branchExtensionIdeas: a 2D array. For EACH branch (in the same order as branches), an array of one idea object per extension move provided. Same rules as the spine ideas: text (max 25 words mentioning the SAN), optional arrows. These narrate the branch's main-line continuation into middlegame so the student lands at a position with a real plan, not at the moment the variation gets named. Example: for "English Attack" with extension "Ng4 Bg5 Qa5+", emit 3 idea objects narrating those three plies.` : ''}`;
+- branchExtensionIdeas: a 2D array. For EACH branch (in the same order as branches), an array of one idea object per extension move provided. Same rules as the spine ideas: text (max ${pace === 'tour' ? 12 : 25} words mentioning the SAN), optional arrows. These narrate the branch's main-line continuation into middlegame so the student lands at a position with a real plan, not at the moment the variation gets named. Example: for "English Attack" with extension "Ng4 Bg5 Qa5+", emit 3 idea objects narrating those three plies.` : ''}`;
   const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
 Student plays: ${studentSide}
 Total moves in spine: ${positions.length}
@@ -2019,11 +2039,12 @@ export async function generateOpening(
   options?: GenerateOpeningOptions,
 ): Promise<GenerationResult> {
   const mode = options?.mode ?? 'learn';
+  const pace = options?.pace ?? 'full';
   void logAppAudit({
     kind: 'coach-surface-migrated',
     category: 'subsystem',
     source: 'openingGenerator.generateOpening',
-    summary: `generation requested for "${name}" (mode=${mode})`,
+    summary: `generation requested for "${name}" (mode=${mode}, pace=${pace})`,
   });
 
   // PRIMARY PATH: trust the Lichess DB as the source of truth. Code
@@ -2040,7 +2061,7 @@ export async function generateOpening(
   // free-form gen which handles counter-system selection.
   if (mode === 'learn') {
     try {
-      const fromDb = await generateOpeningFromDbNarration(name);
+      const fromDb = await generateOpeningFromDbNarration(name, pace);
       if (fromDb) {
         void logAppAudit({
           kind: 'coach-surface-migrated',

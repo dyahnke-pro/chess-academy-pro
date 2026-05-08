@@ -10,7 +10,7 @@
  * actions.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle } from 'lucide-react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
@@ -164,6 +164,13 @@ function buildDeepDiveQuery(
 
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
+  // Quick Tour mode: ?mode=tour in the URL flips lessons into a
+  // snappier playthrough — same spine + branches (so variation
+  // choice still works), but shorter narrations, shorter branch
+  // extensions, and no background quiz / drill / punish gens.
+  // User: "Add a quick walk through mode from coach." Default 'full'.
+  const [searchParams] = useSearchParams();
+  const pace: 'full' | 'tour' = searchParams.get('mode') === 'tour' ? 'tour' : 'full';
   const activeProfile = useAppStore((s) => s.activeProfile);
 
   // Game state via the canonical hook — same primitive Play uses. Gives
@@ -772,11 +779,15 @@ export function CoachTeachPage(): JSX.Element {
           requestedName = dbEntry.canonicalName;
         }
       }
-      // Cache key includes face-mode prefix so the same opening
-      // doesn't collide between "learn Najdorf as Black" and "face
-      // Najdorf as White" — they're entirely different lessons.
-      const cacheKey =
+      // Cache key includes face-mode + tour-mode prefixes so the
+      // same opening doesn't collide between "learn Najdorf as
+      // Black" / "face Najdorf as White" / "quick tour of Najdorf"
+      // — they're entirely different lessons (different shapes,
+      // different narration depths).
+      const baseName =
         requestedName && faceMode ? `Face: ${requestedName}` : requestedName;
+      const cacheKey =
+        baseName && pace === 'tour' ? `Tour: ${baseName}` : baseName;
       if (requestedName) {
         // Three-tier resolution: static registry (Vienna lives here),
         // Dexie cache (previously LLM-generated), runtime LLM
@@ -965,11 +976,17 @@ export function CoachTeachPage(): JSX.Element {
           // again every visit; the merge step is idempotent (only
           // writes if there's data to write) and getMissingStages
           // makes this a no-op when everything's already cached.
-          void generateMissingStagesInBackground(
-            cachedTree.openingName,
-            cachedTree,
-            handleStageMerged,
-          );
+          // Tour mode skips quiz / drill / punish stages entirely —
+          // it's a quick playthrough, not a full lesson. The stages
+          // become available again the moment the user re-loads in
+          // full mode (different cache key).
+          if (pace !== 'tour') {
+            void generateMissingStagesInBackground(
+              cachedTree.openingName,
+              cachedTree,
+              handleStageMerged,
+            );
+          }
           return;
         }
 
@@ -1031,11 +1048,13 @@ export function CoachTeachPage(): JSX.Element {
           }
           // Kick off background stage gens for any missing stages
           // (the shared row may not have all of them populated).
-          void generateMissingStagesInBackground(
-            sharedTree.openingName,
-            sharedTree,
-            handleStageMerged,
-          );
+          if (pace !== 'tour') {
+            void generateMissingStagesInBackground(
+              sharedTree.openingName,
+              sharedTree,
+              handleStageMerged,
+            );
+          }
           return;
         }
 
@@ -1065,6 +1084,7 @@ export function CoachTeachPage(): JSX.Element {
         try {
           const result = await generateOpening(requestedName, {
             mode: faceMode ? 'face' : 'learn',
+            pace,
           });
           if (result.ok && result.tree) {
             // Persist locally for instant re-load.
@@ -1096,11 +1116,13 @@ export function CoachTeachPage(): JSX.Element {
             // Each is a focused smaller LLM call that's more reliable
             // than packing everything into the main gen. Cache fills
             // progressively while user is engaged.
-            void generateMissingStagesInBackground(
-              requestedName,
-              result.tree,
-              handleStageMerged,
-            );
+            if (pace !== 'tour') {
+              void generateMissingStagesInBackground(
+                requestedName,
+                result.tree,
+                handleStageMerged,
+              );
+            }
           } else {
             // Generation failed both attempts. Render an honest fallback.
             const failAck = `I couldn't put together a clean lesson for "${requestedName}" — ${result.reason ?? 'unknown error'}. Try a more standard opening name (e.g. "Italian Game", "Sicilian Defense", "Caro-Kann Defense") or ask me a question instead.`;
