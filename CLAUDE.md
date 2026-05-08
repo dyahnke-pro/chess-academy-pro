@@ -50,6 +50,89 @@ and Web Speech mic input survive Bluetooth route changes and the
 ringer switch. Keep the patch in sync when `cap sync` regenerates
 `ios/` — see `ios-patches/README.md`.
 
+## 🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08
+
+The /coach/teach (Learn with Coach) surface works end-to-end at commit
+`6bad90c` (tag: `learn-stable-2026-05-08`). It took many hard-won
+inversions to get here. Each item below is a contract that another
+session might inadvertently break — when you touch this code, verify
+each is still satisfied.
+
+**Architecture spine:**
+- **DB-narration is the only generation path** for walkthroughs.
+  `generateOpeningFromDbNarration` is the entry point. The LLM never
+  emits move sequences, FENs, or schema structure — only prose.
+  `chess.js` computes FENs from DB-sourced SANs deterministically.
+- **Provider fallback chain**: DeepSeek tool-use → Anthropic tool-use
+  → text-mode → DB-only synthesis. Every layer is required.
+  DeepSeek is the cost-default; Anthropic catches schema misses;
+  text-mode handles transient tool-use bugs; DB-only-synth ships a
+  walkthrough even when both LLMs fail. Don't remove a layer.
+- **Lichess DB is canonical.** No fabricated sidelines. If a name
+  isn't in `openings-lichess.json`, it doesn't exist for our app.
+
+**Resolver / picker contracts (`openingDetectionService.ts`):**
+- `NAME_ALIASES` is the only place to map shorthand and ambiguous
+  inputs. Every audited typo / shorthand / ambiguity has an entry
+  here. Don't introduce string-cleaning logic that bypasses it.
+- **Terminal-short filter** (≤8 plies + no DB extension): hides ~1000
+  useless namesake-only entries from name resolution, line pickers,
+  related entries, and sibling-extension forks. `detectOpening` and
+  `findOpeningByPgnPrefix` stay UNFILTERED — those identify positions,
+  they don't pick lessons. If you add a new user-facing entry-point
+  function, gate the candidate pool through `isTeachableEntry`.
+- **Branch extensions extend to middlegame.** `findSiblingExtensionBranches`
+  pulls up to 6 plies of continuation per branch from the longest DB
+  entry under that branch. Every walkthrough fork tile must land in
+  middlegame territory, not at the moment of divergence.
+- **Face mode inversion**: code resolves the canonical counter via
+  the most-popular DB sibling extension; that PGN runs through
+  `generateOpeningFromDbNarration` with `studentSide` flipped.
+
+**Walkthrough runtime contracts:**
+- **Stage cache polling at the `leaf` phase** (not just the leaf
+  CHOOSER). Without this the "Continue Learning" button never
+  surfaces when stage gen completes after the user reaches a leaf.
+- **Walkthrough-aware FEN priority for chat**: when the brain is
+  asked a question mid-walkthrough, it sees the displayed FEN, not
+  the starting FEN. Don't reset the chat FEN to `gameRef.current.fen`
+  on every turn.
+- **Auto-pause walkthrough on chat**: voice + auto-advance pause when
+  the user types a question; the brain confirms before resuming.
+- **Find-the-Move accepts board moves** via `attemptFindMoveAnswer`,
+  not just typed SAN.
+- **Voice-promise resolution is the single source of truth for
+  auto-advance.** No fallback timers that race `voiceService.speak()`.
+
+**UI contracts:**
+- **Inline Chat button on every chessboard surface** (top-right, next
+  to Tips). NO global FAB — `showCoachFab = false` in `AppLayout`.
+- **`ConsistentChessboard` is the only board** in lesson views.
+  Never render `react-chessboard` or `ControlledChessBoard` directly.
+- **`ChessLessonLayout` wraps every lesson page.** Caps board height
+  on short viewports, reserves bottom-nav + safe-area inset.
+- **Hub tile labels**: "Learn with Coach" / "Play with Coach". Don't
+  rename to legacy "Teach" / "Play".
+
+**Plan tracker (Play with Coach, but lives in the same brain):**
+- `intendedOpening` adheres to the canonical name from
+  `resolveOpeningEntry`. The coach calls out the move student
+  diverges from their declared opening — once per session, on the
+  first divergence, no spam.
+
+**Infrastructure:**
+- **Lichess Explorer goes through `/api/lichess-explorer`** — never
+  call `explorer.lichess.ovh` directly from the client. The Edge
+  function carries a UA fallback chain because Lichess's CDN 401s
+  iOS Safari's default UA.
+
+**The next inversion target** (NOT done at this lock-in): stage gen
+(`concepts` / `findMove` / `drill` / `punish`) still asks the LLM
+for move sequences and is the source of every "illegal SAN" repair
+in the audit logs. The pattern to follow is the walkthrough one:
+code picks positions from the DB, chess.js enumerates legal moves,
+LLM only writes pedagogy text.
+
 ## Project Overview
 
 Chess Academy Pro is an AI-powered chess training PWA built with React + TypeScript + Vite. It wraps as a native iOS app via Capacitor and is distributed through TestFlight. The app features an LLM-powered chess coach (Claude API), Stockfish WASM analysis, spaced repetition puzzles, opening training, and adaptive difficulty.
