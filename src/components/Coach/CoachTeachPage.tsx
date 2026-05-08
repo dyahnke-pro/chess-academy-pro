@@ -2505,7 +2505,17 @@ function WalkthroughControls({
   // mount as well so the first poll happens within React's render
   // cycle, not 3 seconds later.
   useEffect(() => {
-    if (phase !== 'stage-menu' || !tree) return;
+    // Poll while in stage-menu OR at the leaf. Production audit
+    // (build d9a5f28) caught a user reaching the leaf inside the
+    // Anderssen Attack and seeing "nothing special after this
+    // walkthrough" — no Continue Learning button, no Quiz / Drill /
+    // Punish menu. Stages WERE in cache (audit shows merges 2 minutes
+    // before leaf), but the walkthrough's in-memory tree hadn't
+    // refreshed because polling was gated on stage-menu only. Now the
+    // leaf phase also polls, so hasStages flips true the moment a
+    // stage merges and the Continue Learning button surfaces.
+    if (!tree) return;
+    if (phase !== 'stage-menu' && phase !== 'leaf') return;
     const allStagesFilled =
       (tree.concepts?.length ?? 0) > 0 &&
       (tree.findMove?.length ?? 0) > 0 &&
