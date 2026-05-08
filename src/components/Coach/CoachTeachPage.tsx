@@ -1882,7 +1882,16 @@ export function CoachTeachPage(): JSX.Element {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-1.5">
-              {linePicker.options.map((opt) => {
+              {(() => {
+                // Only show the per-tile leading-side chip when the
+                // picker has a mix of W-led and B-led variations.
+                // Production audit (build cb36485): Pirc picker shows
+                // every tile as "W-led" because every named Pirc
+                // variation is White's attack system — the chip is
+                // pure visual noise. Drop it when uniform.
+                const sides = new Set(linePicker.options.map((o) => o.leadingSide));
+                const showLeadingChip = sides.size > 1;
+                return linePicker.options.map((opt) => {
                 const neon = getNeonColor(opt.style);
                 // In FACE mode the student plays the OPPOSITE side
                 // (counter the variation, not play it).
@@ -1928,15 +1937,20 @@ export function CoachTeachPage(): JSX.Element {
                       <span>{opt.eco}</span>
                       <span>·</span>
                       <span>{opt.style}</span>
-                      <span>·</span>
-                      <span title={`This line is named after ${opt.leadingSide}'s play in the Lichess DB`}>
-                        {opt.leadingSide === 'white' ? 'W-led' : 'B-led'}
-                      </span>
+                      {showLeadingChip && (
+                        <>
+                          <span>·</span>
+                          <span title={`This line is named after ${opt.leadingSide}'s play in the Lichess DB`}>
+                            {opt.leadingSide === 'white' ? 'W-led' : 'B-led'}
+                          </span>
+                        </>
+                      )}
                     </div>
                     <span className="text-sm font-semibold text-theme-text leading-tight">{opt.label}</span>
                   </button>
                 );
-              })}
+              });
+              })()}
             </div>
             <button
               onClick={() => setLinePicker(null)}
