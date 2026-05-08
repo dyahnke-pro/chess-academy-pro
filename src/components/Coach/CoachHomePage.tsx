@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, MessageCircle, GraduationCap, History, Info, X } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, MessageCircle, GraduationCap, History, Info, X, Crown } from 'lucide-react';
 import { useState } from 'react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useSettings } from '../../hooks/useSettings';
@@ -153,6 +153,20 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-chat"
+        />
+        <SecondaryTile
+          icon={<Crown size={28} className="text-fuchsia-400" />}
+          label="Endgame"
+          info={
+            "Master the named checkmating patterns and the fundamental piece-mate techniques. Each pattern opens with a hand-crafted geometry intro, then runs you through real master-game positions where you set up the mate from several moves out — not just one-move recognition.\n\nCovers Anastasia, Boden, Smothered, Arabian, Hook, Opera, Pillsbury, and 30+ more, plus K+Q, K+R, B+N piece-mate fundamentals."
+          }
+          rgb="217, 70, 239"
+          bgClass="bg-fuchsia-500/10"
+          textColorClass="text-fuchsia-400"
+          onClick={goTo('endgame', '/coach/endgame')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-endgame"
         />
         <SecondaryTile
           icon={<History size={28} className="text-teal-400" />}

@@ -35,6 +35,7 @@ import { CoachSessionPlanPage } from './components/Coach/CoachSessionPlanPage';
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { CoachTrainPage } from './components/Coach/CoachTrainPage';
 import { CoachTeachPage } from './components/Coach/CoachTeachPage';
+import { CoachEndgamePage } from './components/Coach/CoachEndgamePage';
 import { CoachReviewListPage } from './components/Coach/CoachReviewListPage';
 import { CoachReviewSessionPage } from './components/Coach/CoachReviewSessionPage';
 import { CoachPage } from './components/Coach/CoachPage';
@@ -205,6 +206,7 @@ export function App(): JSX.Element {
           {/* /coach/report is a legacy alias — redirect lives below in the redirects block */}
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
           <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage /></ErrorBoundary>} />
+          <Route path="/coach/endgame" element={<ErrorBoundary><CoachEndgamePage /></ErrorBoundary>} />
           <Route path="/coach/review" element={<ErrorBoundary><CoachReviewListPage /></ErrorBoundary>} />
           <Route path="/coach/review/:gameId" element={<ErrorBoundary><CoachReviewSessionPage /></ErrorBoundary>} />
           {/* Tactics (absorbs former Puzzles tab) */}
