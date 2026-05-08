@@ -36,6 +36,7 @@ import {
   resolveOpeningEntry,
   findSiblingExtensionBranches,
   findShortestCanonicalPgn,
+  findContinuationsAtPly,
   type ForkBranch,
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
@@ -2353,6 +2354,319 @@ ${stage === 'concepts' ? `- Single-select questions (multiSelect omitted or fals
 \n` : ''}- Output JSON only. Validation pipeline rejects anything else.${buildBookSourceBlock(openingName)}${buildStagePositionBlock(openingName)}`;
 }
 
+// ─── DB-narration stage generators ──────────────────────────────────
+// Mirror of the walkthrough's DB-narration inversion: code provides
+// the move sequences (legal by DB construction) and chess.js confirms
+// FENs; the LLM only writes labels and short prose. Eliminates the
+// "illegal SAN" repair class for `drill` and `findMove` stages
+// entirely. `concepts` is already prose-only (no moves to invert) and
+// `punish` is tactical (its moves are by definition NOT in the DB),
+// so neither gets a DB path here.
+//
+// The fallback is the existing free-form LLM stage gen if a DB path
+// can't produce enough entries (e.g. a niche opening with no sibling
+// extensions). All audit logs tag which path produced the stage.
+
+const DRILL_LABEL_SCHEMA: Record<string, unknown> = {
+  type: 'object',
+  required: ['lines'],
+  properties: {
+    lines: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['name', 'subtitle'],
+        properties: {
+          name: { type: 'string' },
+          subtitle: { type: 'string' },
+        },
+      },
+    },
+  },
+};
+
+interface DrillLabelOutput {
+  lines: { name: string; subtitle: string }[];
+}
+
+const FIND_MOVE_LABEL_SCHEMA: Record<string, unknown> = {
+  type: 'object',
+  required: ['questions'],
+  properties: {
+    questions: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['prompt', 'candidates'],
+        properties: {
+          prompt: { type: 'string' },
+          candidates: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['label', 'explanation'],
+              properties: {
+                label: { type: 'string' },
+                explanation: { type: 'string' },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+interface FindMoveLabelOutput {
+  questions: {
+    prompt: string;
+    candidates: { label: string; explanation: string }[];
+  }[];
+}
+
+/** Generate `drill` stage entries by pulling top sibling sub-variations
+ *  from the Lichess DB (with their middlegame extensions) and asking
+ *  the LLM ONLY for a display name + subtitle per line. Eliminates
+ *  every "illegal SAN" failure mode for this stage. Returns null when
+ *  the DB doesn't have enough sub-variations to populate a useful set
+ *  — the caller falls back to the free-form LLM gen path. */
+async function generateDrillFromDb(
+  openingName: string,
+): Promise<DrillLine[] | null> {
+  const entry = resolveOpeningEntry(openingName);
+  if (!entry || entry.moves.length === 0) return null;
+  const shortPgn = findShortestCanonicalPgn(entry.canonicalName);
+  const spineMoves = shortPgn ? shortPgn.split(/\s+/).filter(Boolean) : entry.moves;
+  const branches = findSiblingExtensionBranches(
+    entry.canonicalName,
+    spineMoves.join(' '),
+  );
+  if (branches.length === 0) return null;
+  const studentSide = inferStudentSideFromName(entry.canonicalName);
+  const picked = branches.slice(0, 5);
+  // Build the line skeletons from the DB (legal by construction).
+  const lines = picked.map((b) => ({
+    branchSan: b.san,
+    branchLabel: b.label,
+    moves: [...spineMoves, b.san, ...b.extensionMoves],
+  }));
+
+  const systemPrompt = `You are an expert chess coach labelling drill lines. For EACH line below, output:
+- name: 4-8 words. Lead with the canonical sub-variation name (e.g. "English Attack — Najdorf Sicilian").
+- subtitle: 3-7 words capturing the strategic flavor (e.g. "Sharp kingside pawn-storm" or "Quiet positional setup").
+
+The move sequences come from the Lichess opening database — DO NOT alter them, do NOT repeat them in the labels. Output ONLY via the tool.`;
+
+  const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
+Student plays: ${studentSide}
+
+Lines (in order — emit one { name, subtitle } per line):
+${lines
+  .map(
+    (l, i) =>
+      `${i + 1}. "${l.branchLabel}" — entry move ${l.branchSan}; full sequence: ${l.moves.join(' ')}`,
+  )
+  .join('\n')}
+
+Emit a JSON object: { lines: [ ${lines.length} entries, in the same order ] }.`;
+
+  let labels: DrillLabelOutput;
+  try {
+    const result = await getCoachStructuredResponse(
+      [{ role: 'user', content: userPrompt }],
+      systemPrompt,
+      'chat_response',
+      1024,
+      'emit_drill_labels',
+      'Emit display labels for opening drill lines.',
+      DRILL_LABEL_SCHEMA,
+    );
+    labels = result as DrillLabelOutput;
+  } catch (err) {
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'openingGenerator.generateDrillFromDb',
+      summary: `drill-label LLM call failed for "${openingName}" — using template names: ${err instanceof Error ? err.message : String(err)}`,
+    });
+    labels = {
+      lines: lines.map((l) => ({
+        name: `${entry.canonicalName} — ${l.branchLabel}`,
+        subtitle: l.branchLabel,
+      })),
+    };
+  }
+
+  return lines.map((l, i) => {
+    const lab = labels.lines?.[i];
+    return {
+      name: (lab?.name?.trim()) || `${entry.canonicalName} — ${l.branchLabel}`,
+      subtitle: (lab?.subtitle?.trim()) || l.branchLabel,
+      moves: l.moves,
+      studentSide,
+    };
+  });
+}
+
+/** Generate `findMove` stage entries by walking the canonical spine
+ *  and picking branchpoints — positions where multiple DB-named
+ *  openings diverge. The "correct" candidate is the canonical SAN
+ *  (the move that keeps the student in their named opening); the
+ *  distractors are sibling SANs that lead to DIFFERENT named
+ *  openings. The LLM only writes the prompt + per-candidate label
+ *  and explanation. No SANs are LLM-emitted, eliminating the legal-
+ *  move bug class for this stage. */
+async function generateFindMoveFromDb(
+  openingName: string,
+): Promise<FindMoveQuestion[] | null> {
+  const entry = resolveOpeningEntry(openingName);
+  if (!entry || entry.moves.length === 0) return null;
+  const shortPgn = findShortestCanonicalPgn(entry.canonicalName);
+  const spineMoves = shortPgn
+    ? shortPgn.split(/\s+/).filter(Boolean)
+    : entry.moves;
+  const studentSide = inferStudentSideFromName(entry.canonicalName);
+
+  // Walk the spine. At each ply where the studentSide moves, query
+  // the DB for sibling SANs at that ply. If 2+, it's a branchpoint.
+  type Branchpoint = {
+    pathBeforeMove: string[];
+    correctSan: string;
+    distractors: { san: string; openingName: string; eco: string }[];
+    movedBy: 'white' | 'black';
+    plyIndex: number;
+  };
+  const branchpoints: Branchpoint[] = [];
+  for (let i = 0; i < spineMoves.length; i += 1) {
+    const movedBy: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';
+    if (movedBy !== studentSide) continue;
+    const prefix = spineMoves.slice(0, i);
+    const continuations = findContinuationsAtPly(prefix);
+    if (continuations.size < 2) continue;
+    const correctSan = spineMoves[i];
+    if (!continuations.has(correctSan)) continue; // safety
+    const distractors: Branchpoint['distractors'] = [];
+    for (const [san, info] of continuations) {
+      if (san === correctSan) continue;
+      distractors.push({ san, openingName: info.name, eco: info.eco });
+    }
+    if (distractors.length === 0) continue;
+    // Cap at 3 distractors. Prefer ones whose representative opening
+    // has the SHORTEST name (the bare-line entries — Sicilian, French,
+    // etc. — make cleaner distractors than deep sub-variations).
+    distractors.sort((a, b) => a.openingName.length - b.openingName.length);
+    branchpoints.push({
+      pathBeforeMove: prefix,
+      correctSan,
+      distractors: distractors.slice(0, 3),
+      movedBy,
+      plyIndex: i,
+    });
+  }
+  if (branchpoints.length === 0) return null;
+  // Cap at 5 branchpoints. Prefer the ones DEEPEST in the spine
+  // (later plies — those are the more specific decisions of the
+  // named opening, the ones the student actually needs to memorize).
+  branchpoints.sort((a, b) => b.plyIndex - a.plyIndex);
+  const picked = branchpoints.slice(0, 5).reverse(); // re-order earliest-first for narrative flow
+
+  const systemPrompt = `You are an expert chess coach writing find-the-move puzzles. For each branchpoint below, output:
+- prompt: ONE sentence framing the question. Mention whose turn and the strategic context. Examples:
+  • "Black has just played 4...Nc6. What's White's signature move to enter the Italian?"
+  • "After 1.e4 c5 2.Nf3, what does Black play to set up a Najdorf-style structure?"
+- candidates: for EACH candidate (in the SAME ORDER as given), write:
+    label: 2-6 words tagging the move's idea ("eyes f7", "claims the center", "entering the Spanish")
+    explanation: ONE sentence explaining why it's right or what other opening it heads into.
+
+The SANs and the correct answer are GIVEN — DO NOT alter them, do NOT add candidates, do NOT change the order. Just label + explain. Output ONLY via the tool.`;
+
+  const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
+Student plays: ${studentSide}
+
+Branchpoints (emit one question per branchpoint, in order):
+${picked
+  .map((bp, i) => {
+    const moveNum = Math.floor(bp.plyIndex / 2) + 1;
+    const dotted = bp.movedBy === 'white' ? `${moveNum}.` : `${moveNum}…`;
+    const path = bp.pathBeforeMove.length > 0
+      ? bp.pathBeforeMove.join(' ')
+      : '(starting position)';
+    const candidatesList = [
+      { san: bp.correctSan, isCorrect: true, opening: entry.canonicalName },
+      ...bp.distractors.map((d) => ({
+        san: d.san,
+        isCorrect: false,
+        opening: d.openingName,
+      })),
+    ];
+    return `${i + 1}. After ${path} — ${bp.movedBy} to move ${dotted}? Candidates (in order):
+${candidatesList.map((c, j) => `   ${String.fromCharCode(97 + j)}) ${c.san} → ${c.opening}${c.isCorrect ? ' [CORRECT]' : ''}`).join('\n')}`;
+  })
+  .join('\n\n')}
+
+Emit a JSON object: { questions: [ ${picked.length} entries, in the same order, each with prompt + candidates labels in the same order as listed above ] }.`;
+
+  let labels: FindMoveLabelOutput;
+  try {
+    const result = await getCoachStructuredResponse(
+      [{ role: 'user', content: userPrompt }],
+      systemPrompt,
+      'chat_response',
+      2048,
+      'emit_findmove_labels',
+      'Emit prompt + candidate labels for find-the-move puzzles.',
+      FIND_MOVE_LABEL_SCHEMA,
+    );
+    labels = result as FindMoveLabelOutput;
+  } catch (err) {
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'openingGenerator.generateFindMoveFromDb',
+      summary: `findMove-label LLM call failed for "${openingName}" — using template labels: ${err instanceof Error ? err.message : String(err)}`,
+    });
+    labels = {
+      questions: picked.map(() => ({
+        prompt: '',
+        candidates: [],
+      })),
+    };
+  }
+
+  // Map back to FindMoveQuestion[].
+  return picked.map((bp, i) => {
+    const moveNum = Math.floor(bp.plyIndex / 2) + 1;
+    const dotted = bp.movedBy === 'white' ? `${moveNum}.` : `${moveNum}…`;
+    const labelEntry = labels.questions?.[i];
+    const fallbackPrompt = `${bp.movedBy === 'white' ? 'White' : 'Black'} to play ${dotted} What's the move?`;
+    const candidates = [
+      {
+        san: bp.correctSan,
+        label: labelEntry?.candidates?.[0]?.label?.trim() || `${bp.correctSan} — ${entry.canonicalName}`,
+        correct: true,
+        explanation:
+          labelEntry?.candidates?.[0]?.explanation?.trim() ||
+          `${bp.correctSan} is the canonical move into the ${entry.canonicalName}.`,
+      },
+      ...bp.distractors.map((d, j) => ({
+        san: d.san,
+        label:
+          labelEntry?.candidates?.[j + 1]?.label?.trim() ||
+          `${d.san} — ${d.openingName}`,
+        correct: false,
+        explanation:
+          labelEntry?.candidates?.[j + 1]?.explanation?.trim() ||
+          `${d.san} heads into the ${d.openingName} instead — a different opening.`,
+      })),
+    ];
+    return {
+      path: bp.pathBeforeMove,
+      prompt: labelEntry?.prompt?.trim() || fallbackPrompt,
+      candidates,
+    };
+  });
+}
+
 /** Parse a stage array from raw LLM output. Mirrors the recovery
  *  pipeline used for tree parses (parseGeneratedTree): markdown
  *  fences, line comments, trailing commas, then on failure a second
@@ -2395,6 +2709,59 @@ async function generateOneStage(
   stage: OptionalStage,
   retryContext?: string,
 ): Promise<{ ok: boolean; data?: unknown[]; reason?: string }> {
+  // DB-narration path for drill + findMove. Code provides legal
+  // moves from the Lichess DB; LLM only labels them. Eliminates
+  // the "illegal SAN" repair class for these stages entirely.
+  // Skip on retry — if the DB path produced an empty/invalid set
+  // the first time, the legacy LLM gen path is the fallback. Other
+  // stages (concepts, punish) still go through the prose-only LLM
+  // gen below, since concepts has no SANs and punish's tactical
+  // moves aren't in the opening DB.
+  if (!retryContext && stage === 'drill') {
+    try {
+      const drillData = await generateDrillFromDb(openingName);
+      if (drillData && drillData.length >= 2) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'openingGenerator.generateOneStage',
+          summary: `drill via DB-narration path for "${openingName}" — ${drillData.length} lines`,
+        });
+        return { ok: true, data: drillData };
+      }
+    } catch (err) {
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'openingGenerator.generateOneStage',
+        summary: `drill DB path failed for "${openingName}" — falling back to free-form LLM gen`,
+        details: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }
+  if (!retryContext && stage === 'findMove') {
+    try {
+      const findMoveData = await generateFindMoveFromDb(openingName);
+      if (findMoveData && findMoveData.length >= 2) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'openingGenerator.generateOneStage',
+          summary: `findMove via DB-narration path for "${openingName}" — ${findMoveData.length} questions`,
+        });
+        return { ok: true, data: findMoveData };
+      }
+    } catch (err) {
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'openingGenerator.generateOneStage',
+        summary: `findMove DB path failed for "${openingName}" — falling back to free-form LLM gen`,
+        details: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }
+
   const systemPrompt = buildStageSystemPrompt(stage, openingName);
   const userMessage = retryContext
     ? `Generate the ${stage} array for the opening: ${openingName}.\n\nYour previous attempt failed:\n${retryContext}\n\nProduce a new attempt that addresses the failures above. Keep moves SIMPLE and conservative — verify each SAN is legal from its parent position. Output JSON only.`

@@ -379,6 +379,42 @@ export function getOpeningMoves(openingName: string): string[] | null {
   return r ? r.moves : null;
 }
 
+/** All distinct SANs that appear at `prefix.length`-th ply across DB
+ *  entries whose first `prefix.length` plies match `prefix` exactly.
+ *  Used by find-move stage gen to pick branchpoints — positions where
+ *  multiple opening lines diverge — and surface the canonical move
+ *  as the "right answer" with sibling SANs as named-opening
+ *  distractors. Map value is one representative DB entry per SAN
+ *  (the shortest-name match) so the caller can label each
+ *  distractor with its named opening. */
+export function findContinuationsAtPly(
+  prefix: string[],
+): Map<string, { name: string; eco: string }> {
+  const entries = openingsData as OpeningEntry[];
+  const prefixStr = prefix.join(' ');
+  const result = new Map<string, { name: string; eco: string }>();
+  const candidates = prefix.length === 0
+    ? entries
+    : entries.filter((e) => e.pgn.startsWith(prefixStr + ' '));
+  for (const e of candidates) {
+    const moves = e.pgn.split(/\s+/).filter(Boolean);
+    if (moves.length <= prefix.length) continue;
+    const sanAtPly = moves[prefix.length];
+    const existing = result.get(sanAtPly);
+    if (!existing) {
+      result.set(sanAtPly, { name: e.name, eco: e.eco });
+      continue;
+    }
+    // Prefer shorter-named entry as the representative (the bare
+    // opening rather than a deep sub-variation). Same tie-break as
+    // the picker uses elsewhere.
+    if (e.name.length < existing.name.length) {
+      result.set(sanAtPly, { name: e.name, eco: e.eco });
+    }
+  }
+  return result;
+}
+
 /** Sibling DB extensions of a canonical opening, surfaced as
  *  fork branches at the end of a DB-narration walkthrough. Used by
  *  `generateOpeningFromDbNarration` to give the student deep-dive
