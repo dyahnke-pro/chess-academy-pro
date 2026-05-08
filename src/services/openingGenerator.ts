@@ -1588,15 +1588,44 @@ const NARRATION_SCHEMA: Record<string, unknown> = {
   properties: {
     intro: { type: 'string' },
     outro: { type: 'string' },
-    ideas: { type: 'array', items: { type: 'string' } },
+    ideas: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['text'],
+        properties: {
+          text: { type: 'string' },
+          // Optional arrows: 0-3 per move, showing strategic intent
+          // (what the piece NOW eyes / attacks / pressures), NOT the
+          // move itself. The board animates the move's own from→to;
+          // the LLM-supplied arrows add information beyond that.
+          arrows: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['from', 'to'],
+              properties: {
+                from: { type: 'string' },
+                to: { type: 'string' },
+              },
+            },
+          },
+        },
+      },
+    },
     branchIdeas: { type: 'array', items: { type: 'string' } },
   },
 };
 
+interface NarrationIdea {
+  text: string;
+  arrows?: { from: string; to: string }[];
+}
+
 interface NarrationOutput {
   intro: string;
   outro: string;
-  ideas: string[];
+  ideas: NarrationIdea[];
   branchIdeas?: string[];
 }
 
@@ -1680,12 +1709,19 @@ async function generateOpeningFromDbNarration(
   const branchLabels = branches
     .map((b, idx) => `${idx + 1}. "${b.label}" (move: ${b.san}) — ${b.count} sub-line${b.count === 1 ? '' : 's'} in DB`)
     .join('\n');
-  const systemPrompt = `You are an expert chess coach narrating a walkthrough of "${entry.canonicalName}". Output ONLY a JSON object matching the schema. The move sequence and positions are PROVIDED — do NOT invent or alter them. Your only job is to write short coach commentary.
+  const systemPrompt = `You are an expert chess coach narrating a walkthrough of "${entry.canonicalName}". Output ONLY a JSON object matching the schema. The move sequence and positions are PROVIDED — do NOT invent or alter them. Your only job is to write short coach commentary plus optional visualization arrows.
 
-For each move in the line, write ONE sentence (max 25 words) explaining the IDEA behind that move. First-person, second-person, conversational. Mention the SAN or its spoken form somewhere in the sentence. Examples:
-- "1.e4 grabs the center and frees the king's bishop and queen."
-- "1...c5 — Black declines the symmetry and aims for asymmetric play on the queenside."
-- "5.Nc3 develops the knight, defends e4, and prepares Bc4 or Qe2."
+For each move in the line, return:
+- text: ONE sentence (max 25 words) explaining the IDEA behind the move. First-person, second-person, conversational. Mention the SAN or its spoken form somewhere. Examples:
+  - "1.e4 grabs the center and frees the king's bishop and queen."
+  - "1...c5 — Black declines the symmetry and aims for asymmetric play on the queenside."
+  - "5.Nc3 develops the knight, defends e4, and prepares Bc4 or Qe2."
+- arrows (OPTIONAL, 0-3 per move): squares to highlight on the board AFTER the move. Use these to show STRATEGIC INTENT — what the piece NOW eyes, what's attacked, where pressure shifts. Do NOT draw the move itself (the board animates that automatically). Examples:
+  - For Bc4: arrow c4→f7 ("the bishop now eyes f7")
+  - For Nf3: arrow f3→e5 ("the knight controls e5")
+  - For ...c5: arrow c5→d4 ("c5 fights for d4")
+  - For O-O: no arrows needed
+- Use squares in algebraic notation only (e.g. "e4", "f7"). Skip the arrows field when there's nothing useful to show.
 
 The student is playing as ${studentSide}. Frame ideas from that perspective when relevant.
 
@@ -1701,7 +1737,7 @@ Moves with post-move FENs:
 ${moveLabels}
 ${branches.length > 0 ? `\nBranches available at the end of the spine (the student picks one to dive deeper):\n${branchLabels}\n\nFor each branch, write ONE short sentence describing what kind of line it is.` : ''}
 
-Emit a JSON object with intro (string), outro (string), ideas (array of ${positions.length} strings, one per spine move in order)${branches.length > 0 ? `, and branchIdeas (array of ${branches.length} strings, one per branch in order)` : ''}.`;
+Emit a JSON object with intro (string), outro (string), ideas (array of ${positions.length} objects { text, arrows? }, one per spine move in order)${branches.length > 0 ? `, and branchIdeas (array of ${branches.length} strings, one per branch in order)` : ''}.`;
 
   let narration: NarrationOutput;
   try {
@@ -1730,7 +1766,7 @@ Emit a JSON object with intro (string), outro (string), ideas (array of ${positi
     narration = {
       intro: `${entry.canonicalName} — book moves from the Lichess opening database. Quick walkthrough of the canonical line.`,
       outro: `That's the canonical book line for the ${entry.canonicalName}. Drill the moves to lock them in, or ask for a deeper variation.`,
-      ideas: positions.map((p) => synthesizeIdeaFromSan(p.san, p.movedBy, p.ply)),
+      ideas: positions.map((p) => ({ text: synthesizeIdeaFromSan(p.san, p.movedBy, p.ply) })),
     };
   }
 
@@ -1763,11 +1799,37 @@ Emit a JSON object with intro (string), outro (string), ideas (array of ${positi
       },
     };
   });
+  const SQUARE_RE = /^[a-h][1-8]$/;
   let nextChildren: ChildWrap[] = branchChildren;
   for (let i = positions.length - 1; i >= 0; i -= 1) {
     const p = positions[i];
-    const idea = narration.ideas[i]?.trim() || synthesizeIdeaFromSan(p.san, p.movedBy, p.ply);
-    nextChildren = [{ node: { san: p.san, movedBy: p.movedBy, idea, children: nextChildren } }];
+    const ideaEntry = narration.ideas[i];
+    const text =
+      (typeof ideaEntry === 'object' && ideaEntry?.text?.trim()) ||
+      // Tolerate legacy string-shaped entries (older cached gens
+      // pre-arrows extension might still produce them).
+      (typeof ideaEntry === 'string' ? (ideaEntry as string).trim() : '') ||
+      synthesizeIdeaFromSan(p.san, p.movedBy, p.ply);
+    const rawArrows =
+      typeof ideaEntry === 'object' && Array.isArray(ideaEntry?.arrows)
+        ? ideaEntry.arrows
+        : [];
+    // Drop arrows with non-algebraic squares or from===to no-ops.
+    // The downstream repairNarrationArrows pass would clean these
+    // up too, but doing it here keeps the tree tight at build time.
+    const arrows = rawArrows.filter(
+      (a) => SQUARE_RE.test(a.from) && SQUARE_RE.test(a.to) && a.from !== a.to,
+    );
+    const node: WalkthroughTreeNode = {
+      san: p.san,
+      movedBy: p.movedBy,
+      idea: text,
+      children: nextChildren,
+    };
+    if (arrows.length > 0) {
+      node.narration = [{ text, arrows }];
+    }
+    nextChildren = [{ node }];
   }
   return {
     openingName: entry.canonicalName,
