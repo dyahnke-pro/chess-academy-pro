@@ -466,16 +466,38 @@ export interface UseTeachWalkthroughReturn {
  *  the inline trap-prompt feature: when the walkthrough hits a
  *  fork node whose pathSans matches a punish lesson's setupMoves,
  *  the coach intros the trap before showing the fork picker. */
+/** Exported for tests under `_findMatchingTraps` — internal use only. */
+export function _findMatchingTraps(
+  pathSans: string[],
+  punishLessons: PunishLesson[] | undefined,
+): PunishLesson[] {
+  return findMatchingTraps(pathSans, punishLessons);
+}
 function findMatchingTraps(
   pathSans: string[],
   punishLessons: PunishLesson[] | undefined,
 ): PunishLesson[] {
   if (!punishLessons || punishLessons.length === 0) return [];
-  return punishLessons.filter(
-    (lesson) =>
+  return punishLessons.filter((lesson) => {
+    // Puzzle-DB-derived punishes carry setupFen (the actual lesson
+    // FEN — a mid-game position from a real puzzle) and store the
+    // canonical opening's PGN in setupMoves only for context-display
+    // and canonical-pinning purposes. Their inaccuracy / punishment
+    // SANs are LEGAL only from setupFen, not from the walkthrough's
+    // current position. Auto-narrating them during the walkthrough
+    // ("a common mistake here is Rxe4") is wrong because Rxe4 isn't
+    // playable at the walkthrough FEN. They surface via the punish
+    // stage menu instead, where startPunishLesson loads setupFen.
+    // Production audit (build 3a27027): every Italian Classical
+    // walkthrough fired 5 trap-prompts at the spine's leaf with
+    // illegal-from-this-position SANs; user couldn't make sense of
+    // it. Filter them out here.
+    if (lesson.setupFen) return false;
+    return (
       lesson.setupMoves.length === pathSans.length &&
-      lesson.setupMoves.every((m, i) => m === pathSans[i]),
-  );
+      lesson.setupMoves.every((m, i) => m === pathSans[i])
+    );
+  });
 }
 
 /** Compute the FEN at a node by walking chess.js through the SAN

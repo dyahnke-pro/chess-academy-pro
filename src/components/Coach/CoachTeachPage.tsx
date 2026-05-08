@@ -2689,9 +2689,16 @@ function WalkthroughControls({
             // Trap foreshadowing: red glow on fork tiles whose branch
             // contains a known punish lesson. Lets the student see
             // "watch out — this path has a trap" before committing.
+            // Puzzle-DB-derived punishes (setupFen present) are NOT
+            // anchored to the walkthrough path — their setupMoves is
+            // the canonical opening's PGN purely for display, while
+            // the actual position lives at setupFen (a mid-game
+            // puzzle position). Glowing every fork tile under the
+            // canonical spine for those is meaningless. Filter them.
             const childPath = [...walkthrough.pathSans, opt.node.san ?? ''];
             const hasTrapDownBranch = !!tree?.punish?.some(
               (p) =>
+                !p.setupFen &&
                 p.setupMoves.length >= childPath.length &&
                 childPath.every((m, i) => p.setupMoves[i] === m),
             );
