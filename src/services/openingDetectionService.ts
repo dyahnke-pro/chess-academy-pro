@@ -495,12 +495,40 @@ export function findSiblingExtensionBranches(
   const MAX_EXTENSION_PLIES = 6;
   const branches: ForkBranch[] = Array.from(byFirstMove.entries()).map(
     ([san, group]) => {
-      // Pick the rep with the SHORTEST sub-name (most general —
-      // e.g. "English Attack" beats "English Attack, Anti-English");
-      // ties broken by shortest PGN (closest to divergence point).
+      // Pick the rep whose sub-name is most useful as a fork-tile
+      // label. Priority order:
+      //   1. Sub-names that start with a CAPITAL letter (proper
+      //      variation names like "Giuoco Pianissimo", "Greco
+      //      Gambit", "Center Attack") beat lowercase generics like
+      //      "with d5", "and a5", "on the queenside" — those
+      //      lowercase suffixes are descriptive prefixes the
+      //      curator added to disambiguate move-orders, not real
+      //      variation names.
+      //   2. Within proper-named, the sub-name that appears MOST
+      //      OFTEN in this group wins (popularity proxy — Giuoco
+      //      Pianissimo has 14+ entries under Italian Classical's
+      //      Nf6 fork, Greco Gambit has 8, "with d5" has 1).
+      //   3. Tie-break: shortest sub-name (most general — "English
+      //      Attack" beats "English Attack, Anti-English").
+      //   4. Tie-break: shortest PGN (closest to divergence point).
+      // Production audit (build 27d0453): Italian Classical's Nf6
+      // fork showed "with d5" as the rep label, hiding "Giuoco
+      // Pianissimo" / "Greco Gambit" / "Center Attack" — all
+      // recognizable variation names — beneath an awkward generic.
+      const subNameCounts = new Map<string, number>();
+      for (const e of group.reps) {
+        const s = e.name.slice(namePrefix.length).split(',')[0].trim();
+        subNameCounts.set(s, (subNameCounts.get(s) ?? 0) + 1);
+      }
       const rep = group.reps.reduce((a, b) => {
-        const aSub = a.name.slice(namePrefix.length);
-        const bSub = b.name.slice(namePrefix.length);
+        const aSub = a.name.slice(namePrefix.length).split(',')[0].trim();
+        const bSub = b.name.slice(namePrefix.length).split(',')[0].trim();
+        const aProper = /^[A-Z]/.test(aSub);
+        const bProper = /^[A-Z]/.test(bSub);
+        if (aProper !== bProper) return aProper ? a : b;
+        const aPop = subNameCounts.get(aSub) ?? 0;
+        const bPop = subNameCounts.get(bSub) ?? 0;
+        if (aPop !== bPop) return aPop > bPop ? a : b;
         if (aSub.length !== bSub.length) return aSub.length < bSub.length ? a : b;
         return a.pgn.length < b.pgn.length ? a : b;
       });

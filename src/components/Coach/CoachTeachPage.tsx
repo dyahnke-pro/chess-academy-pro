@@ -101,6 +101,12 @@ interface DeepDiveOption {
    *  Variation: Solid and flexible" — production audit (build
    *  3ad9a2b). */
   childSan: string;
+  /** Straight-line extension SANs along this branch (the auto-played
+   *  middlegame chain after the fork's first move). Included in the
+   *  deep-dive canonical-prefix lookup so a branch labeled "Greco
+   *  Gambit" actually resolves to "Italian Game: Classical Variation,
+   *  Greco Gambit, Modern Line" instead of the bare parent. */
+  extensionSans: string[];
 }
 
 /** Walk every fork in the tree and emit one DeepDiveOption per
@@ -120,6 +126,7 @@ function extractDeepDiveOptions(tree: WalkthroughTree): DeepDiveOption[] {
             label: child.label,
             subtitle: child.forkSubtitle,
             childSan: child.node.san,
+            extensionSans: collectStraightLineSansFromNode(child.node),
           });
         }
       }
@@ -148,18 +155,50 @@ function extractDeepDiveOptions(tree: WalkthroughTree): DeepDiveOption[] {
  *  producing nonsense queries that pre-flight rejected and the brain
  *  re-routed to a different, bare-named walkthrough — trampling the
  *  in-progress lesson. */
+/** Walk a fork option's node down its single-child chain, collecting
+ *  the SANs that the walkthrough engine would auto-play between this
+ *  fork and the next branchpoint. Used to pull the branch's
+ *  middlegame extension moves for the deep-dive query so the
+ *  canonical-prefix lookup lands on the actual sub-variation, not
+ *  just the parent. */
+function collectStraightLineSansFromNode(node: WalkthroughTreeNode): string[] {
+  const sans: string[] = [];
+  let current = node;
+  // Walk while there's exactly one child (linear extension);
+  // stop at branchpoints and leaves.
+  while (current.children.length === 1) {
+    const next = current.children[0].node;
+    if (!next.san) break;
+    sans.push(next.san);
+    current = next;
+  }
+  return sans;
+}
+
 function buildDeepDiveQuery(
   parentName: string,
   pathSans: string[],
   childSan: string,
   fallbackLabel: string,
+  /** Optional extension SANs from the fork branch's chain. When
+   *  provided, included in the canonical-prefix lookup so the deep-
+   *  dive resolves to the actual sub-variation (e.g. "Italian Game:
+   *  Classical Variation, Greco Gambit, Modern Line") instead of the
+   *  parent ("Italian Game: Classical Variation"). */
+  extensionSans: string[] = [],
 ): string {
-  const fullPath = [...pathSans, childSan];
+  const fullPath = [...pathSans, childSan, ...extensionSans];
   const canon = findOpeningByPgnPrefix(fullPath);
   if (canon) return canon.canonicalName;
-  // Last resort: parent + label. May still mis-route but at least the
-  // string is short enough for canonicalization to take a shot.
-  return `${parentName}: ${fallbackLabel}`;
+  // Try again with just one move ahead — covers cases where the
+  // extension doesn't exactly match a DB PGN but the immediate fork
+  // does.
+  const shorterCanon = findOpeningByPgnPrefix([...pathSans, childSan]);
+  if (shorterCanon) return shorterCanon.canonicalName;
+  // Last resort: parent + label. The DB uses ", " (comma-space)
+  // between sub-variation segments, not ":", so use that form for a
+  // better chance of name-resolution success downstream.
+  return `${parentName}, ${fallbackLabel}`;
 }
 
 export function CoachTeachPage(): JSX.Element {
@@ -2740,14 +2779,20 @@ function WalkthroughControls({
                   opt.label ||
                   `variation ${idx + 1}`;
                 const childSan = opt.node.san ?? '';
+                // Walk the branch's straight-line extension chain so
+                // the deep-dive canonical lookup lands on the actual
+                // sub-variation (e.g. "Italian Game: Classical
+                // Variation, Greco Gambit") rather than the parent.
+                const extensionSans = collectStraightLineSansFromNode(opt.node);
                 const query = childSan
                   ? buildDeepDiveQuery(
                       tree.openingName,
                       walkthrough.pathSans,
                       childSan,
                       variationName,
+                      extensionSans,
                     )
-                  : `${tree.openingName}: ${variationName}`;
+                  : `${tree.openingName}, ${variationName}`;
                 return (
                   <button
                     key={`fork-deepdive-${idx}`}
@@ -2866,6 +2911,7 @@ function WalkthroughControls({
                   opt.pathSans,
                   opt.childSan,
                   variationName,
+                  opt.extensionSans,
                 );
                 return (
                   <button
@@ -3003,6 +3049,7 @@ function WalkthroughControls({
                       opt.pathSans,
                       opt.childSan,
                       variationName,
+                      opt.extensionSans,
                     );
                     walkthrough.stop();
                     onDeepDive(query);
