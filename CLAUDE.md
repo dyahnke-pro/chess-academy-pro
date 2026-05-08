@@ -126,12 +126,24 @@ each is still satisfied.
   function carries a UA fallback chain because Lichess's CDN 401s
   iOS Safari's default UA.
 
-**The next inversion target** (NOT done at this lock-in): stage gen
-(`concepts` / `findMove` / `drill` / `punish`) still asks the LLM
-for move sequences and is the source of every "illegal SAN" repair
-in the audit logs. The pattern to follow is the walkthrough one:
-code picks positions from the DB, chess.js enumerates legal moves,
-LLM only writes pedagogy text.
+**Stage gen — inversion partial (commit `1927ab9`).** `drill` and
+`findMove` now run through DB-narration: code provides legal moves
+from the Lichess DB, chess.js confirms positions, LLM only writes
+labels + explanations. `findContinuationsAtPly` in
+`openingDetectionService.ts` is the branchpoint query.
+- `drill`: top 5 sibling-extension branches → spine + branch + middle-
+  game extension. LLM emits `{ name, subtitle }` per line.
+- `findMove`: walks the spine; at studentSide-move plies where 2+ DB
+  openings diverge, the canonical SAN is "correct" and sibling SANs
+  (sorted by representative-opening name length) are distractors.
+  LLM emits `{ prompt, candidates: [{ label, explanation }] }`.
+- Both DB paths fire BEFORE the legacy LLM gen; if DB has too little
+  material the legacy path still runs. Don't reorder.
+
+Still on the legacy free-form LLM gen path: `concepts` (no SANs to
+invert — already prose-only) and `punish` (tactical traps aren't in
+the opening DB; setupMoves is canonical-pinned in `mergeStageIntoCache`
+and the existing repair pipeline drops illegals).
 
 ## Project Overview
 
