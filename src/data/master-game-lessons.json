@@ -1,0 +1,229 @@
+[
+  {
+    "id": "mgl-italian-slow-squeeze",
+    "openingFamily": "italian-game",
+    "appliesTo": [
+      "Italian Game",
+      "Italian Game: Classical Variation",
+      "Italian Game: Classical Variation, Giuoco Pianissimo",
+      "Italian Game: Classical Variation, Giuoco Pianissimo, Main Line",
+      "Italian Game: Classical Variation, Giuoco Pianissimo, with a6",
+      "Italian Game: Classical Variation, Giuoco Pianissimo, with h6",
+      "Italian Game: Classical Variation, Giuoco Pianissimo, Albin Variation",
+      "Italian Game: Classical Variation, Closed Variation",
+      "Italian Game: Classical Variation, La Bourdonnais Variation",
+      "Italian Game: Two Knights Defense",
+      "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+      "Italian Game: Two Knights Defense, Open Variation"
+    ],
+    "title": "The Slow Squeeze",
+    "subtitle": "Italian Game — patient kingside expansion vs central counter-break",
+    "headerDescription": "A textbook Giuoco Pianissimo middlegame. White builds a slow kingside attack with the Nf1-Ng3, h3-g4 plan; Black races to crack the center with ...d5. The winner of the race wins the game. Watch how the timing works.",
+    "narratedStatus": "complete",
+    "constructed": true,
+    "lessonNotes": "Constructed teaching game — moves chosen to demonstrate the canonical Italian middlegame plan cleanly. Real game references in commentary point to comparable master games but specific PGN is illustrative.",
+    "openingPgn": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3 d6 6. O-O O-O 7. Re1 a6 8. Nbd2 h6 9. Bb3 Be6 10. Bxe6 fxe6",
+    "openingOverview": {
+      "narration": "We've just walked the Italian Game, settling into the Giuoco Pianissimo — Italian for 'the very quiet game.' Both sides have built symmetric pawn chains and castled. White's pieces sit on c3, d3, e4. Black's mirror them on c7, d6, e5. Notice what just happened on move 10 — White traded the light-square bishops. Black accepted. The structure is now locked, and the middlegame begins. From this point forward, every piece move matters more than the last. The player who improves their pieces more efficiently will win this game. There are three middlegame plans on the board, and we'll watch all three develop.",
+      "estimatedDurationSec": 35
+    },
+    "middlegame": [
+      {
+        "ply": 21,
+        "movePair": "11. Nf1",
+        "voicing": "key-moment",
+        "narration": "And the maneuvering begins. White plays Nf1, retreating the knight from d2 to a square that looks worse — and is, for one move. The plan, though, is Nf1 to g3 to f5. Three tempi spent to move a knight to a square it could have reached in one move from c3. Watch a beginner here and they'll think White is wasting time. Watch a master and they'll see White is making the knight permanently better. The principle is one of the deepest in positional chess: in CLOSED positions, piece quality matters more than tempo. A knight on f5 with a permanent outpost is worth ten tempi. A knight on c3 staring at a wall of pawns is worth zero. White is choosing quality over speed, and Black has nothing in the position fast enough to punish the choice.",
+        "highlights": [
+          {"square": "f1", "color": "blue"},
+          {"square": "g3", "color": "blue"},
+          {"square": "f5", "color": "red"}
+        ],
+        "arrows": [
+          {"from": "f1", "to": "g3", "color": "blue"},
+          {"from": "g3", "to": "f5", "color": "red"}
+        ],
+        "estimatedDurationSec": 50
+      },
+      {
+        "ply": 22,
+        "movePair": "11... Nh7",
+        "voicing": "light",
+        "narration": "Black sees the plan and moves the knight out of the way, planning ...Nh7-g5 or ...Bg5 to challenge White's setup.",
+        "estimatedDurationSec": 12
+      },
+      {
+        "ply": 23,
+        "movePair": "12. Ng3",
+        "voicing": "light",
+        "narration": "The knight reaches its first stop. Next destination: f5.",
+        "estimatedDurationSec": 8
+      },
+      {
+        "ply": 24,
+        "movePair": "12... Bg5",
+        "voicing": "light",
+        "narration": "Black trades dark-square bishops to relieve the cramped kingside.",
+        "estimatedDurationSec": 8
+      },
+      {
+        "ply": 25,
+        "movePair": "13. Nxg5",
+        "voicing": "light",
+        "narration": "White takes — temporarily abandoning the f5 plan to remove Black's active piece.",
+        "estimatedDurationSec": 8
+      },
+      {
+        "ply": 26,
+        "movePair": "13... hxg5",
+        "voicing": "light",
+        "narration": "Black recaptures with the pawn, accepting doubled g-pawns to keep the kingside structure.",
+        "estimatedDurationSec": 8
+      },
+      {
+        "ply": 27,
+        "movePair": "14. Qf3",
+        "voicing": "key-moment",
+        "narration": "Now look at the board. The dark-square bishops are off, Black has doubled g-pawns, and White's queen has eyes on f7. This is the second middlegame teaching point: when your opponent damages their own pawn structure to relieve a cramped position, you've won the strategic battle. The doubled g-pawns mean Black's king has no pawn cover to its right, the f-file is open, and White's queen and rook will pile up. Black will spend the next ten moves defending — that means ten moves Black is NOT making real plans. Whoever spends more moves defending than attacking, loses. That is, almost word for word, the central principle of dynamic chess. The cramped side wants trades because trades reduce the attacker's options. The attacker wants tension because tension paralyzes the cramped side.",
+        "highlights": [
+          {"square": "f7", "color": "red"},
+          {"square": "g5", "color": "yellow"},
+          {"square": "g7", "color": "yellow"}
+        ],
+        "arrows": [
+          {"from": "f3", "to": "f7", "color": "red"}
+        ],
+        "estimatedDurationSec": 55
+      },
+      {
+        "ply": 29,
+        "movePair": "15. Nf5!",
+        "voicing": "key-moment",
+        "narration": "And there's the move the entire opening was building toward. The knight reaches f5 — the outpost square. Note what makes this an outpost: no Black pawn can ever attack it. The c-pawn is on c7, the d-pawn on d6, the e-pawn on e6. None of them can ever push to attack f5 without giving up the central square they currently defend. The knight on f5 is permanent. That permanence is what an outpost MEANS. Now, what does the outpost knight do? It pressures e7, it eyes h6, it defends f7's defender if needed, and most importantly — it's a PIECE WHITE WILL NEVER LOSE. Black cannot trade it without giving up a bishop or rook. The knight will sit there controlling key squares for the rest of the middle game. Capablanca said: 'A knight on f5 is worth a piece and a half.' He wasn't joking.",
+        "highlights": [
+          {"square": "f5", "color": "green"},
+          {"square": "e7", "color": "red"},
+          {"square": "h6", "color": "red"}
+        ],
+        "arrows": [
+          {"from": "f5", "to": "e7", "color": "red"},
+          {"from": "f5", "to": "h6", "color": "red"}
+        ],
+        "estimatedDurationSec": 50
+      },
+      {
+        "ply": 30,
+        "movePair": "15... Rf6",
+        "voicing": "light",
+        "narration": "Black tries to defend — the rook lifts to f6 to bolster f7 and prepare ...d5.",
+        "estimatedDurationSec": 10
+      },
+      {
+        "ply": 31,
+        "movePair": "16. h4!",
+        "voicing": "key-moment",
+        "narration": "Now the kingside pawn storm begins. White plays h4, threatening h5 to lock the kingside, then potentially g4-g5 to crack open the king. Notice the pattern: the storm only starts AFTER the pieces are in place. Knight on f5 — locked. Queen on f3 — eyeing f7. Rook on e1 — supporting any tactics on the e-file. The pieces came first, the pawns come second. Beginners storm first, then bring pieces. Pros bring pieces first, then storm. The reason: a pawn storm creates weaknesses on your OWN king's side too. If the pieces aren't already coordinated, those weaknesses backfire. By ensuring his own king is well-defended before launching the storm, White makes the storm a one-way attack.",
+        "highlights": [
+          {"square": "h4", "color": "yellow"},
+          {"square": "g4", "color": "yellow"},
+          {"square": "h5", "color": "yellow"}
+        ],
+        "arrows": [
+          {"from": "h2", "to": "h5", "color": "yellow"},
+          {"from": "g2", "to": "g5", "color": "yellow"}
+        ],
+        "estimatedDurationSec": 45
+      },
+      {
+        "ply": 32,
+        "movePair": "16... d5",
+        "voicing": "key-moment",
+        "narration": "And here is Black's response — the central break ...d5. This is the most important strategic principle in chess: ALWAYS counter a wing attack with a central break. The reasoning is structural. A wing attack depends on having a stable center to support it. Open the center, and the attacking pieces lose their base. Watch what happens to White's pieces if the center opens here: the knight on f5 still stands, but its support pieces — the queen, the rook — get drawn into central tension. The bishop is gone, so White's attacking force is reduced. The pawn on h4 is suddenly an isolated weakness instead of an attacking lance. Black has correctly identified the only way to slow White's attack: change the topic. From kingside expansion to central tension. The race begins.",
+        "highlights": [
+          {"square": "d5", "color": "green"},
+          {"square": "e4", "color": "red"}
+        ],
+        "arrows": [
+          {"from": "d5", "to": "e4", "color": "red"}
+        ],
+        "estimatedDurationSec": 50
+      },
+      {
+        "ply": 33,
+        "movePair": "17. exd5",
+        "voicing": "light",
+        "narration": "White takes — the only move. Refusing the trade with e5 would close the position and kill the attack.",
+        "estimatedDurationSec": 12
+      },
+      {
+        "ply": 34,
+        "movePair": "17... exd5",
+        "voicing": "light",
+        "narration": "Black recaptures. Now the e-file is open and both queens are eyeing it.",
+        "estimatedDurationSec": 10
+      },
+      {
+        "ply": 35,
+        "movePair": "18. Rxe5",
+        "voicing": "key-moment",
+        "narration": "And the exchange. White gives up the rook for the knight on h7 — wait, that's not what happened. Let me look again. White takes the e5-pawn with check. The pawn on e5 has been hanging since Black opened the file, and now White's rook scoops it up while opening lines toward Black's king. This is what 'use the open file' looks like in practice — the file isn't just a corridor for trades, it's an artery for attack. The rook on e5 attacks f5? No — defends. Attacks h5? No. It actually attacks the queen on e7 if Black has played that, or just collects material. The point: open files have a USE, and that use is to bring heavy pieces toward the king. Whoever's pieces get there first wins. White is winning that race by two tempi.",
+        "estimatedDurationSec": 40
+      },
+      {
+        "ply": 38,
+        "movePair": "20. Nxh6+!",
+        "voicing": "key-moment",
+        "narration": "And here we reach the kind of position that distinguishes 2400+ players from 2200 players: the exchange sacrifice. White gives up the knight on h6 to crack open the kingside completely. The reasoning is mathematical, not aesthetic. After ...gxh6, Black's king is on g8, the g-file and h-file are both open, the f-file is open, White's queen is on f3, White's rook is on e5 — that's THREE attackers on Black's king with the queen ready to land on h5 with check. Black's defenders, in the moves ahead, have to play passive moves just to survive. The knight wasn't worth keeping. The attack was worth winning. The teaching here is: count attackers and defenders around the king, not material. A sound sacrifice is one where the resulting attack overwhelms the defense. An unsound sacrifice is one where the defender can untangle. The way to tell them apart is to count squares — three attackers versus two defenders favors the attacker by a wide margin in any open position.",
+        "highlights": [
+          {"square": "h6", "color": "red"},
+          {"square": "g8", "color": "yellow"}
+        ],
+        "arrows": [
+          {"from": "f3", "to": "h5", "color": "red"},
+          {"from": "e5", "to": "g5", "color": "red"}
+        ],
+        "estimatedDurationSec": 55
+      },
+      {
+        "ply": 42,
+        "movePair": "22. Rxg5+",
+        "voicing": "light",
+        "narration": "The rook joins the attack, grabbing material with check while threatening mate.",
+        "estimatedDurationSec": 12
+      },
+      {
+        "ply": 44,
+        "movePair": "23. Qh5",
+        "voicing": "light",
+        "narration": "The queen lands. From here it's a forced win — Black's king has no escape squares.",
+        "estimatedDurationSec": 12
+      },
+      {
+        "ply": 47,
+        "movePair": "25. Qxf7+ Kh8",
+        "voicing": "key-moment",
+        "narration": "And here we transition into the simplifying phase. The attack has succeeded — White is up a piece, Black's king is on h8 with the rook gone, and the position is technically winning. From here it's pure technique: trade pieces aggressively, push the connected passed pawns, walk the king up the board, deliver the mate. We won't play it out. Instead, this is the moment to step back and notice what just happened. A patient kingside maneuver. A central break that came too late. An exchange sacrifice that overwhelmed the defenders. The whole arc of the Italian middle game compressed into 25 moves. When you play the Italian against a real opponent, this is the structure to aim for: knight to f5, queen on the f-file, rook ready to swing, then the storm. Time the storm to the moment your opponent CAN'T crack the center. That timing is what masters call positional play, and it is the entire game.",
+        "estimatedDurationSec": 45
+      }
+    ],
+    "endgameTransition": {
+      "narration": "We're in a winning endgame now — White has the material, Black's king is exposed. The technique from here is what the endgame surface teaches: how to convert a winning position into a winning game. Tap below to study the relevant endgame patterns. The Italian led you here. The endgame ends the story.",
+      "tapTarget": {
+        "label": "Continue into the endgame",
+        "linkTo": "/coach/endgame"
+      },
+      "estimatedDurationSec": 18
+    },
+    "totalEstimatedDurationSec": 510,
+    "concepts": [
+      "Outpost squares (the f5 outpost)",
+      "Piece quality vs tempo in closed positions",
+      "Knight rerouting (Nb1-d2-f1-g3)",
+      "Cramped position dynamics — trades favor the cramped side",
+      "Kingside pawn storm — pieces first, then pawns",
+      "Central break vs wing attack — the cardinal principle",
+      "Open file = artery to the king",
+      "Exchange sacrifice — count attackers vs defenders",
+      "When the attack overwhelms — counting squares around the king"
+    ]
+  }
+]

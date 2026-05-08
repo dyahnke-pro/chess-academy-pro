@@ -155,6 +155,51 @@ function extractDeepDiveOptions(tree: WalkthroughTree): DeepDiveOption[] {
  *  producing nonsense queries that pre-flight rejected and the brain
  *  re-routed to a different, bare-named walkthrough — trampling the
  *  in-progress lesson. */
+/** Trim a freshly-generated walkthrough tree so it resumes from a
+ *  fork the user has already walked, instead of replaying the spine
+ *  from move 1. Walks down the tree's left-most child chain and skips
+ *  every node whose SAN matches the next entry in `resumeFromPath`.
+ *  When the path is exhausted (or the tree's spine diverges from
+ *  the path) the cursor's children become the new tree's root
+ *  children, and the tree's startFen is set to the supplied FEN.
+ *
+ *  Production audit (build 5fec0dc): tapping "Deep dive — Greco
+ *  Gambit" reset the board to the starting position and replayed
+ *  every opening move before getting to the new content. With this
+ *  trim, the board freezes at the fork's FEN and only the new moves
+ *  animate. */
+function trimTreeToResume(
+  tree: WalkthroughTree,
+  resumeFromPath: string[],
+  resumeFromFen: string,
+): WalkthroughTree {
+  if (resumeFromPath.length === 0) return tree;
+  // Walk left-spine: at each step find the child whose SAN matches
+  // the next path entry. If no match, we've diverged and stop —
+  // the remaining spine becomes the resumed walkthrough.
+  let cursor: WalkthroughTreeNode = tree.root;
+  for (const wantSan of resumeFromPath) {
+    if (cursor.children.length === 0) break;
+    // Prefer left-most match — the canonical spine. If a fork has
+    // multiple matching children that's pathological; leftmost is
+    // safe.
+    const matchIdx = cursor.children.findIndex((c) => c.node.san === wantSan);
+    if (matchIdx < 0) break;
+    cursor = cursor.children[matchIdx].node;
+  }
+  // Build a fresh root whose children are the cursor's children.
+  // Drop the openingName + intro/outro untouched — the lesson-name
+  // header still reads correctly; the intro narration is brief and
+  // worth playing on resume since it frames the deeper variation.
+  const newRoot: WalkthroughTreeNode = {
+    san: null,
+    movedBy: null,
+    idea: '',
+    children: cursor.children,
+  };
+  return { ...tree, root: newRoot, startFen: resumeFromFen };
+}
+
 /** Walk a fork option's node down its single-child chain, collecting
  *  the SANs that the walkthrough engine would auto-play between this
  *  fork and the next branchpoint. Used to pull the branch's
@@ -663,6 +708,14 @@ export function CoachTeachPage(): JSX.Element {
        *  FEN and replied "e4 hasn't landed yet" after the student
        *  played e4 (production audit, build cf2fe0b). */
       fenOverride?: string;
+      /** Deep-dive resume: when set, the new walkthrough starts from
+       *  this FEN with the prefix moves trimmed off the spine. The
+       *  board freezes at the fork instead of resetting to the
+       *  starting position and replaying every prefix move. David's
+       *  ask — production audit (build 5fec0dc) showed deep-dive
+       *  taps replaying from move 1, which the user found confusing. */
+      resumeFromPath?: string[];
+      resumeFromFen?: string;
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
@@ -1152,13 +1205,22 @@ export function CoachTeachPage(): JSX.Element {
             // Stage hint takes precedence even on first-time gen.
             // play-real navigates away. Otherwise: walkthrough on
             // first visit (no chooser since this IS the first visit).
+            // Deep-dive resume: when the user tapped a "Deep dive
+            // — X" tile from a walkthrough fork, trim the new tree's
+            // spine of the prefix moves they've already walked and
+            // freeze the board at their current FEN. Without this
+            // the new walkthrough resets to the starting position
+            // and replays every prefix move.
+            const treeToStart = (opts?.resumeFromPath && opts.resumeFromFen)
+              ? trimTreeToResume(result.tree, opts.resumeFromPath, opts.resumeFromFen)
+              : result.tree;
             if (stageHint === 'play-real') {
               walkthrough.stop();
               navigate(`/coach/play?opening=${encodeURIComponent(result.tree.openingName)}`);
             } else if (stageHint) {
-              walkthrough.startAtStageMenu(result.tree, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
+              walkthrough.startAtStageMenu(treeToStart, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
             } else {
-              walkthrough.start(result.tree);
+              walkthrough.start(treeToStart);
             }
             // Fire-and-forget: generate missing stages in background.
             // Each is a focused smaller LLM call that's more reliable
@@ -2037,7 +2099,7 @@ export function CoachTeachPage(): JSX.Element {
           <WalkthroughControls
             walkthrough={walkthrough}
             navigate={navigate}
-            onDeepDive={(query) => void handleSubmit(query)}
+            onDeepDive={(query, resumeContext) => void handleSubmit(query, resumeContext)}
           />
         ) : (
           <div className="flex items-center justify-center gap-2 px-3 pb-3">
@@ -2543,8 +2605,14 @@ function WalkthroughControls({
   /** Fired when the student picks a deep-dive option from the stage
    *  menu. The parent submits the resulting query through the same
    *  surface routing that handles chat input, so existing typo
-   *  tolerance + broad-vs-specific depth logic kicks in. */
-  onDeepDive: (query: string) => void;
+   *  tolerance + broad-vs-specific depth logic kicks in.
+   *  resumeContext (when supplied) lets the new walkthrough freeze
+   *  the board at the fork's FEN and trim the prefix moves off the
+   *  new tree's spine — see trimTreeToResume. */
+  onDeepDive: (
+    query: string,
+    resumeContext?: { resumeFromPath: string[]; resumeFromFen: string },
+  ) => void;
 }): JSX.Element {
   const { phase, forkOptions, canBacktrack, leafOutro, tree } = walkthrough;
 
@@ -2808,8 +2876,20 @@ function WalkthroughControls({
                   <button
                     key={`fork-deepdive-${idx}`}
                     onClick={() => {
+                      // Capture the current fork path + FEN BEFORE
+                      // stopping the walkthrough — once stop() runs
+                      // pathSans is reset. The new walkthrough resumes
+                      // from this position rather than replaying from
+                      // move 1. Path is just pathSans (the user
+                      // hasn't played the fork move yet — the new
+                      // walkthrough's spine will animate it as the
+                      // first move past the resume point).
+                      const resumeContext = {
+                        resumeFromPath: [...walkthrough.pathSans],
+                        resumeFromFen: walkthrough.fen,
+                      };
                       walkthrough.stop();
-                      onDeepDive(query);
+                      onDeepDive(query, resumeContext);
                     }}
                     className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-theme-bg hover:bg-theme-surface text-left min-h-[44px] transition-colors"
                     style={greenGlowStyle}
