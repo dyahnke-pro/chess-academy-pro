@@ -14,6 +14,46 @@ interface TrieNode {
 
 let cachedTrie: TrieNode | null = null;
 
+/** Entries shorter than this AND with no DB extension are useless for
+ *  teaching: there's nothing to walk through past the namesake move.
+ *  Production audit (build 2fcec7e+): the Gunderam Gambit walkthrough
+ *  ended at 4 plies because the DB literally only carries
+ *  `e4 e5 Nf3 c6` for that name. The user's call: hide every terminal
+ *  entry at this depth or shallower from name resolution, line
+ *  pickers, search, and sibling-extension forks. The data file is
+ *  untouched — `findOpeningByPgnPrefix` and `detectOpening` stay
+ *  unfiltered so we still recognize the canonical name when a played
+ *  position lands inside one of these short terminals. */
+const TEACHABLE_PLY_THRESHOLD = 8;
+
+let _terminalShortPgns: Set<string> | null = null;
+
+function getTerminalShortPgns(): Set<string> {
+  if (_terminalShortPgns) return _terminalShortPgns;
+  const entries = openingsData as OpeningEntry[];
+  // Walk every entry's strict PGN prefixes once — any prefix we see
+  // is "extended" by at least one DB entry, so it has children.
+  const extendedPrefixes = new Set<string>();
+  for (const e of entries) {
+    const moves = e.pgn.split(/\s+/).filter(Boolean);
+    for (let i = 1; i < moves.length; i++) {
+      extendedPrefixes.add(moves.slice(0, i).join(' '));
+    }
+  }
+  const result = new Set<string>();
+  for (const e of entries) {
+    const plies = e.pgn.split(/\s+/).filter(Boolean).length;
+    if (plies > TEACHABLE_PLY_THRESHOLD) continue;
+    if (!extendedPrefixes.has(e.pgn)) result.add(e.pgn);
+  }
+  _terminalShortPgns = result;
+  return result;
+}
+
+function isTeachableEntry(e: OpeningEntry): boolean {
+  return !getTerminalShortPgns().has(e.pgn);
+}
+
 function buildTrie(entries: OpeningEntry[]): TrieNode {
   const root: TrieNode = { children: new Map(), opening: null };
 
@@ -195,6 +235,15 @@ const NAME_ALIASES: Record<string, string> = {
   scheveningen: 'Sicilian Defense: Scheveningen Variation',
   taimanov: 'Sicilian Defense: Taimanov Variation',
   kan: 'Sicilian Defense: Kan Variation',
+  // "Vienna Gambit" is ambiguous in the DB — there's no entry by
+  // that exact name. The DB has "Vienna Gambit, with Max Lange
+  // Defense" (Nc6 line, niche) and "Vienna Game: Vienna Gambit"
+  // (Nf6 line, the famous one — `1.e4 e5 2.Nc3 Nf6 3.f4`). The
+  // resolver was picking the shorter name and routing to the niche
+  // Nc6 line, which has no static walkthrough entry, so the user
+  // got bounced back to a parent picker. Pin to the canonical Nf6
+  // f4 line that 95% of users mean.
+  'vienna gambit': 'Vienna Game: Vienna Gambit',
 };
 
 /** Find the shortest canonical-PGN entry for a given exact name.
@@ -224,7 +273,11 @@ export function findShortestCanonicalPgn(canonicalName: string): string | null {
 export function resolveOpeningEntry(
   openingName: string,
 ): { canonicalName: string; eco: string; moves: string[] } | null {
-  const entries = openingsData as OpeningEntry[];
+  // Filter out terminal-short entries — these are namesake-only DB
+  // rows with no continuation (e.g. Gunderam Gambit at 4 plies).
+  // Preserves all teachable openings; deep-dive (PGN-prefix) and
+  // in-game detection still see the full DB via separate code paths.
+  const entries = (openingsData as OpeningEntry[]).filter(isTeachableEntry);
   const trimmed = openingName.trim();
   if (!trimmed) return null;
 
@@ -381,7 +434,10 @@ export function findSiblingExtensionBranches(
   const candidates = entries.filter((e) => {
     if (e.name === canonicalName) return false;
     if (!e.name.startsWith(namePrefix)) return false;
-    return e.pgn.startsWith(pgnPrefix);
+    if (!e.pgn.startsWith(pgnPrefix)) return false;
+    // Drop terminal-short fork tiles — picking them lands the student
+    // in a 1-2 move dead-end with no walkthrough material.
+    return isTeachableEntry(e);
   });
   if (candidates.length === 0) return [];
 
@@ -490,6 +546,7 @@ export function findRelatedDbEntries(
   //    "Modern Defense: Bishop Attack" — wrong).
   const candidates = entries.filter((e) => {
     if (e === bare) return false; // listed separately first
+    if (!isTeachableEntry(e)) return false;
     const nameLower = e.name.toLowerCase();
     if (nameLower.includes(lower)) return true;
     // Same-ECO PGN extension catches unnamed transpositions.
@@ -678,9 +735,13 @@ export function findLinePickerOptions(
   if (barePlies > 6 || bareCandidate.name.includes(':')) return null;
 
   // Enumerate sub-variations: entries whose name starts with
-  // bareCandidate.name + ":" — those are the named children.
+  // bareCandidate.name + ":" — those are the named children. Filter
+  // out terminal-short rows so the picker doesn't surface tiles that
+  // dead-end after the namesake move.
   const prefix = bareCandidate.name + ':';
-  const children = entries.filter((e) => e.name.startsWith(prefix));
+  const children = entries.filter(
+    (e) => e.name.startsWith(prefix) && isTeachableEntry(e),
+  );
 
   // Dedupe by everything-after-the-colon (DB lists same variation at
   // multiple PGN depths). Keep shortest PGN per unique sub-name.
