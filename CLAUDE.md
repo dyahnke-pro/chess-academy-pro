@@ -32,6 +32,15 @@ chess structure when the DB already has it. Concretely:
   findMove / drill / punish) should likewise pull positions and
   legal moves from the DB / chess.js, asking the LLM only for
   pedagogy. That's the next inversion target.
+- **The Lichess DB IS the canon.** If a named opening or sub-line
+  doesn't exist in `openings-lichess.json`, IT DOESN'T EXIST. We
+  don't invent sub-variations. We don't pull from external master
+  game DBs to fabricate sidelines. We don't ask the LLM to fill
+  gaps. ~72% of the 3,641 entries are terminal (zero sub-variations)
+  — that's fine; those are linear walkthroughs by design. The
+  user's word: "If the lichess db does not have side lines then
+  they don't exist. We don't make stuff up and we certainly don't
+  break what we have just built!"
 
 **iOS AVAudioSession patch — DONE.** Lives in
 `ios-patches/App/AppDelegate.swift` and is copied over the Capacitor
