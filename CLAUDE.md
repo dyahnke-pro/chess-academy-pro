@@ -131,24 +131,35 @@ each is still satisfied.
   function carries a UA fallback chain because Lichess's CDN 401s
   iOS Safari's default UA.
 
-**Stage gen — inversion partial (commit `1927ab9`).** `drill` and
-`findMove` now run through DB-narration: code provides legal moves
-from the Lichess DB, chess.js confirms positions, LLM only writes
-labels + explanations. `findContinuationsAtPly` in
-`openingDetectionService.ts` is the branchpoint query.
-- `drill`: top 5 sibling-extension branches → spine + branch + middle-
-  game extension. LLM emits `{ name, subtitle }` per line.
-- `findMove`: walks the spine; at studentSide-move plies where 2+ DB
-  openings diverge, the canonical SAN is "correct" and sibling SANs
-  (sorted by representative-opening name length) are distractors.
-  LLM emits `{ prompt, candidates: [{ label, explanation }] }`.
-- Both DB paths fire BEFORE the legacy LLM gen; if DB has too little
-  material the legacy path still runs. Don't reorder.
+**Stage gen — fully inverted for every stage with moves (commit `2094ce5`).**
+The DB is the brain for all four stages; LLM only writes prose.
+- `drill` (commit `1927ab9`): top 5 sibling-extension branches →
+  spine + branch + middlegame extension. LLM emits `{ name, subtitle }`
+  per line.
+- `findMove` (commit `1927ab9`): walks the spine; at studentSide-move
+  plies where 2+ DB openings diverge, the canonical SAN is "correct"
+  and sibling SANs (sorted by representative-opening name length)
+  are distractors. LLM emits `{ prompt, candidates: [{ label,
+  explanation }] }`. `findContinuationsAtPly` in
+  `openingDetectionService.ts` is the branchpoint query.
+- `punish` (commit `2094ce5`): mines `src/data/puzzles.json`
+  (Lichess puzzle DB, 15K curated, CC0) for puzzles tagged with the
+  canonical opening's name family AND carrying punish-style themes
+  (mate, fork, pin, skewer, sacrifice, hangingPiece, attraction,
+  deflection, kingsideAttack, attackingF2F7, xRayAttack). Each
+  puzzle becomes a `PunishLesson` skeleton with positions and moves
+  straight from the puzzle's UCI sequence. Distractors are scored
+  chess.js legal moves (captures + checks + central minor-piece
+  development rank high; edge pawn pushes + king shuffles rank low).
+  LLM emits `{ name, whyBad, whyPunish, distractors[], followupIdeas[] }`.
+  - Schema addition: `PunishLesson.setupFen?: string` — optional
+    starting FEN for puzzle-derived lessons. Runtime sets it as
+    the built tree's `startFen` and skips the `setupMoves` animation.
+  - All three DB paths fire BEFORE the legacy LLM gen; if DB has too
+    little material the legacy path still runs. Don't reorder.
 
-Still on the legacy free-form LLM gen path: `concepts` (no SANs to
-invert — already prose-only) and `punish` (tactical traps aren't in
-the opening DB; setupMoves is canonical-pinned in `mergeStageIntoCache`
-and the existing repair pipeline drops illegals).
+Only `concepts` remains LLM-only — by design, since it's
+prose-question-with-prose-answers and has no SANs to invert.
 
 ## Project Overview
 
