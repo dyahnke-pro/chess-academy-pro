@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { findTrapTilesForCanonicalLine } from './proRepertoireService';
+import { findTrapTilesForCanonicalLine, getTrapLineKind } from './proRepertoireService';
 import { buildTrapWalkthroughTreeFromPgn } from './openingGenerator';
 
 describe('findTrapTilesForCanonicalLine', () => {
@@ -55,6 +55,84 @@ describe('findTrapTilesForCanonicalLine', () => {
     const traps = findTrapTilesForCanonicalLine('e4 e5 Nf3 Nc6 Bc4');
     expect(traps.length).toBeGreaterThan(0);
     expect(traps.length).toBeLessThanOrEqual(4);
+  });
+
+  it('only surfaces trap-classified entries — filters out mistake / theme lessons', () => {
+    // Production audit (build 1f1aa7a): the picker was surfacing
+    // every trapLine including "exf4 Central Domination" (a
+    // gambit-accepted positional plus, classified 'mistake') and
+    // "Bishop Pair in Berlin Wall" (a long middlegame plan,
+    // classified 'theme'). Only true tactical traps should reach
+    // the red TRAP tile.
+    const traps = findTrapTilesForCanonicalLine('e4 e5 Nf3 Nc6 Bc4');
+    const names = traps.map((t) => t.trapName);
+    // No "Central Domination" / "Storm" / "Compensation" /
+    // "Steamroll" / "Long Diagonal" — all classified non-trap.
+    for (const n of names) {
+      expect(n).not.toMatch(/Central Domination|Storm After|Compensation|Steamroll|Long Diagonal/i);
+    }
+  });
+});
+
+describe('getTrapLineKind classification lookup', () => {
+  it('returns "trap" for classic forced-tactical lines', () => {
+    // Sample known true traps. If the classification file ever drops
+    // these to non-trap, this test fires.
+    expect(getTrapLineKind('pro-ericrosen-stafford', 'Oh No My Queen Trap')).toBe('trap');
+    expect(getTrapLineKind('pro-samayraina-italian', "Legal's Mate Setup")).toBe('trap');
+    expect(getTrapLineKind('pro-carlsen-ruy-lopez', "Noah's Ark Trap")).toBe('trap');
+    expect(getTrapLineKind('pro-naroditsky-jobava-london', 'Nb5-Nc7 Fork Trap')).toBe('trap');
+  });
+
+  it('returns "mistake" for the Vienna exf4 entry the user flagged as not-a-trap', () => {
+    // User: "I saw a trap line in the Vienna ... that is not a trap"
+    // — the exf4 gambit-accepted line gets a structural plus, not a
+    // forced material win.
+    expect(getTrapLineKind('pro-naroditsky-vienna', 'exf4 Central Domination')).toBe('mistake');
+    expect(getTrapLineKind('pro-firouzja-vienna', 'exf4 Opens the f-file')).toBe('mistake');
+    expect(getTrapLineKind('pro-firouzja-vienna', 'Bg4 Pin Broken by f5')).toBe('mistake');
+  });
+
+  it('returns "theme" for long middlegame-plan entries', () => {
+    expect(getTrapLineKind('pro-caruana-berlin', 'Bishop Pair in Berlin Wall')).toBe('theme');
+    expect(getTrapLineKind('pro-dubov-dutch', 'Stonewall d5 Fortress')).toBe('theme');
+    expect(getTrapLineKind('pro-hikaru-kid', 'Kingside ...f5 Pawn Storm')).toBe('theme');
+  });
+
+  it('defaults unmapped entries to "mistake" (safe — no red TRAP surface)', () => {
+    // If a curator adds a new trapLine to pro-repertoires.json but
+    // forgets to classify it here, the default keeps it OUT of the
+    // picker (kind 'mistake' is filtered) rather than letting an
+    // unvetted entry become a bright-red tile.
+    expect(getTrapLineKind('pro-future', 'Some New Trap')).toBe('mistake');
+  });
+
+  it('classifies every trapLine in pro-repertoires.json — no orphans', () => {
+    // Whole-catalog regression. Every trap-line entry must have a
+    // classification, otherwise we'd silently default to 'mistake'
+    // for legitimate traps and never surface them. If the curator
+    // adds entries without updating the classification file, this
+    // fires.
+    /* eslint-disable @typescript-eslint/no-require-imports */
+    const repertoire = require('../data/pro-repertoires.json') as {
+      openings: Array<{
+        id: string;
+        trapLines?: Array<{ name: string }>;
+      }>;
+    };
+    const classMap = require('../data/trap-line-classifications.json') as {
+      classifications: Record<string, string>;
+    };
+    /* eslint-enable @typescript-eslint/no-require-imports */
+    const orphans: string[] = [];
+    for (const op of repertoire.openings) {
+      if (!op.trapLines) continue;
+      for (const t of op.trapLines) {
+        const key = `${op.id}::${t.name}`;
+        if (!(key in classMap.classifications)) orphans.push(key);
+      }
+    }
+    expect(orphans).toEqual([]);
   });
 });
 
