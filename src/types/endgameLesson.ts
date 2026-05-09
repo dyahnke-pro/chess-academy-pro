@@ -83,4 +83,14 @@ export interface EndgameLessonPosition {
   solution?: string[];
   /** Optional source citation — book, study, named position. */
   source?: string;
+  /** Set to a non-empty string to exempt this position from the
+   *  Stockfish-deep audit (`scripts/audit-endgame-results.mjs`).
+   *  Use ONLY for theoretical positions where engine evaluation
+   *  doesn't align with the pedagogical claim — e.g. opposite-
+   *  color bishop endings the engine scores as winning but human
+   *  practice converts to draw, or 30+ move technical wins that
+   *  exceed the engine's reachable horizon at the audit's depth.
+   *  The string is the documented reason; surfaced in the audit
+   *  log so reviewers see why a position was skipped. */
+  auditSkip?: string;
 }

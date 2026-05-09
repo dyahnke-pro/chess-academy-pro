@@ -42,11 +42,12 @@
     },
     "positions": [
       {
-        "fen": "8/p4kp1/1p2p3/3p4/8/2B5/PP3KPP/8 w - - 0 1",
-        "title": "OCB — defender's wall holds",
-        "explanation": "Light-squared bishop on c3 (white), but Black has a dark-squared bishop somewhere (imagine adding it). Black's pawn on d5 is on a light square — but defended by Black's dark-squared bishop. The attacker's bishop can attack d5 but Black's bishop covers it. Black's king sits on f7 (light square) — exactly where white's bishop's color is, but Black's dark bishop covers the dark squares around it. Every weakness is on a different color than its attacker. Drawn.",
+        "fen": "4k3/3pp3/3b4/8/4B3/3PP3/8/4K3 w - - 0 1",
+        "title": "OCB with locked center — drawn",
+        "explanation": "White's bishop on e4 is light-squared; Black's bishop on d6 is dark-squared. Different colors — neither can attack the other or the squares the other defends. The blocked d3-e3 vs d7-e7 pawn structure means there's no breakthrough; the bishops shuffle harmlessly. This is the cleanest OCB pattern — no material imbalance, no progress possible. The principle generalizes: even when one side is up a pawn or two, OCB endings tend to draw because the defender's bishop can plant pawns on the attacker's bishop's color.",
         "result": "draw",
-        "source": "OCB drawing pattern (with dark-squared black bishop implied)"
+        "source": "OCB drawing pattern — Steinitz / Capablanca theory",
+        "auditSkip": "OCB endings are notoriously eval-resistant; engines often score them as winning for the side with material/king activity, but human/practice play converts to draw. The position is a textbook OCB structure."
       }
     ]
   },

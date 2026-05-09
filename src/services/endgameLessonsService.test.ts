@@ -139,6 +139,26 @@ describe('endgameLessonsService', () => {
     });
   });
 
+  describe('audit-skip discipline', () => {
+    it('every position with auditSkip has a documented (non-empty) reason', () => {
+      // The auditSkip field is an escape hatch for theoretical
+      // positions where engine eval doesn't align with pedagogy.
+      // It MUST carry a documented reason so reviewers can audit
+      // why a position was exempted from Stockfish verification.
+      const offenders: string[] = [];
+      for (const lesson of getAllEndgameLessons()) {
+        for (const pos of lesson.positions) {
+          if (pos.auditSkip !== undefined) {
+            if (typeof pos.auditSkip !== 'string' || pos.auditSkip.length < 30) {
+              offenders.push(`${lesson.id} / ${pos.title}: auditSkip too brief (${typeof pos.auditSkip})`);
+            }
+          }
+        }
+      }
+      expect(offenders).toEqual([]);
+    });
+  });
+
   describe('lookup', () => {
     it('finds a known lesson by ID', () => {
       const found = getEndgameLessonById('opposition');
