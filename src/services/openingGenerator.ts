@@ -1973,7 +1973,7 @@ Emit a JSON object with intro (string), outro (string), ideas (array of ${positi
   const displayName = faceContext
     ? `${entry.canonicalName} (facing ${faceContext.originalDisplayName})`
     : entry.canonicalName;
-  return {
+  const tree: WalkthroughTree = {
     openingName: displayName,
     eco: entry.eco,
     studentSide,
@@ -1981,6 +1981,23 @@ Emit a JSON object with intro (string), outro (string), ideas (array of ${positi
     outro: narration.outro?.trim() || `Drill the moves to lock them in.`,
     root: { san: null, movedBy: null, idea: '', children: nextChildren },
   };
+  // Drop redundant arrows (no-ops + arrows pointing AT the move's
+  // own destination). Production audit (build 088b57a): user reported
+  // "the first pawn push has a forward and diagonal arrow." 1.e4
+  // shouldn't draw e2→e4 (the board animates that) — only threats
+  // / look-aheads. The legacy free-form gen path runs this repair;
+  // the DB-narration path (this function) was missing it, so the
+  // LLM's redundant arrows survived to the board.
+  const droppedArrows = repairNarrationArrows(tree);
+  if (droppedArrows > 0) {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOpeningFromDbNarration',
+      summary: `dropped ${droppedArrows} redundant narration arrows for "${name}"`,
+    });
+  }
+  return tree;
 }
 
 /** DB-only fallback walkthrough builder. When both LLM gen attempts
@@ -2060,8 +2077,17 @@ function inferStudentSideFromName(name: string): 'white' | 'black' {
   return 'white';
 }
 
-/** Build a short idea sentence for a SAN at the given ply index.
- *  Keeps the spoken narration meaningful even without LLM gen. */
+/** Terse SAN-only fallback when the LLM didn't supply a per-move
+ *  idea. User audit (build 088b57a): the previous templates spoke
+ *  generic prose like "knight develops toward the center; standard
+ *  opening principle" or "pawn move shaping the center and clearing
+ *  lines for the pieces behind" for every move the LLM skipped —
+ *  the student called it out specifically: "rambling generic
+ *  narration. It hurts the ears. Not helpful or constructive."
+ *
+ *  Better-silence-than-slop: announce the move number + SAN and
+ *  stop. The board animates the move; we don't pretend to teach
+ *  pedagogy we don't have. */
 function synthesizeIdeaFromSan(
   san: string,
   movedBy: 'white' | 'black',
@@ -2069,20 +2095,63 @@ function synthesizeIdeaFromSan(
 ): string {
   const moveNumber = Math.floor(plyIndex / 2) + 1;
   const prefix = movedBy === 'white' ? `${moveNumber}.${san}` : `${moveNumber}…${san}`;
-  const piece = san[0];
-  if (san === 'O-O' || san === '0-0') {
-    return `${prefix} — ${movedBy === 'white' ? 'White' : 'Black'} castles kingside, tucking the king behind the wall and connecting the rooks.`;
+  return `${prefix}.`;
+}
+
+/** Build a linear walkthrough tree from a curated trap PGN (no LLM
+ *  call — the curator's explanation IS the intro, per-move text is
+ *  the terse SAN announcement). Used when a student taps a trap
+ *  tile in the line picker. The tree is single-spine (no forks),
+ *  ending at the punishment position. */
+export function buildTrapWalkthroughTreeFromPgn(opts: {
+  trapName: string;
+  parentOpeningName: string;
+  eco: string;
+  pgn: string;
+  explanation: string;
+}): WalkthroughTree | null {
+  const moves = opts.pgn.trim().split(/\s+/).filter(Boolean);
+  if (moves.length === 0) return null;
+  const c = new Chess();
+  type Pos = { san: string; movedBy: 'white' | 'black'; ply: number };
+  const positions: Pos[] = [];
+  for (let i = 0; i < moves.length; i += 1) {
+    try {
+      c.move(stripSanAnnotations(moves[i]));
+    } catch {
+      return null;
+    }
+    positions.push({
+      san: moves[i],
+      movedBy: i % 2 === 0 ? 'white' : 'black',
+      ply: i,
+    });
   }
-  if (san === 'O-O-O' || san === '0-0-0') {
-    return `${prefix} — ${movedBy === 'white' ? 'White' : 'Black'} castles queenside, an aggressive choice that activates the rook on the d-file.`;
+  // Build bottom-up: leaf has no children, each move wraps the next.
+  type ChildWrap = { node: WalkthroughTreeNode };
+  let nextChildren: ChildWrap[] = [];
+  for (let i = positions.length - 1; i >= 0; i -= 1) {
+    const p = positions[i];
+    const node: WalkthroughTreeNode = {
+      san: p.san,
+      movedBy: p.movedBy,
+      idea: synthesizeIdeaFromSan(p.san, p.movedBy, p.ply),
+      children: nextChildren,
+    };
+    nextChildren = [{ node }];
   }
-  if (piece === 'N') return `${prefix} — knight develops toward the center; standard opening principle.`;
-  if (piece === 'B') return `${prefix} — bishop activates and eyes the long diagonal; supports the central squares.`;
-  if (piece === 'R') return `${prefix} — rook lifts to a more active square, often preparing a file battle.`;
-  if (piece === 'Q') return `${prefix} — queen joins the action; mind the early development principles.`;
-  if (piece === 'K') return `${prefix} — king step; usually a sign castling has happened or the position is in a late-opening transition.`;
-  // Pawn move (lowercase first char).
-  return `${prefix} — pawn move shaping the center and clearing lines for the pieces behind.`;
+  // The trap's "studentSide" is the side that PUNISHES the trap —
+  // the side whose final move wins material. PGN ends with the
+  // punisher's strike, so studentSide = whoever moved last.
+  const lastMover = positions[positions.length - 1].movedBy;
+  return {
+    openingName: `Trap: ${opts.trapName}`,
+    eco: opts.eco,
+    studentSide: lastMover,
+    intro: `${opts.trapName} — from ${opts.parentOpeningName}. ${opts.explanation}`,
+    outro: `That's the trap. Watch for this pattern in your games.`,
+    root: { san: null, movedBy: null, idea: '', children: nextChildren },
+  };
 }
 
 export async function generateOpening(

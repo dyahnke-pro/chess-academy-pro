@@ -757,7 +757,14 @@ export function classifyVariationStyle(name: string): string {
 export function findLinePickerOptions(
   query: string,
   minVariations: number = 5,
-): { canonicalName: string; options: LinePickerOption[] } | null {
+): {
+  canonicalName: string;
+  /** Canonical PGN of the bare opening (e.g. "e4 e5 Nf3 Nc6 Bc4"
+   *  for Italian Game). Callers use this to look up curated trap
+   *  lines whose move sequence falls under this opening family. */
+  canonicalPgn: string;
+  options: LinePickerOption[];
+} | null {
   const trimmed = query.trim();
   if (!trimmed) return null;
 
@@ -897,6 +904,7 @@ export function findLinePickerOptions(
   const MAX_OPTIONS = 15;
   return {
     canonicalName: bareCandidate.name,
+    canonicalPgn: bareCandidate.pgn,
     options: options.slice(0, MAX_OPTIONS),
   };
 }

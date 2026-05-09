@@ -333,6 +333,15 @@ describe('openingDetectionService', () => {
       const labels = result?.options.map((o) => o.label) ?? [];
       expect(labels.some((l) => l.includes('Gunderam Gambit'))).toBe(false);
     });
+
+    it('exposes the canonical PGN of the bare opening for trap-tile lookup', () => {
+      // Italian Game's bare line is `e4 e5 Nf3 Nc6 Bc4`. The picker
+      // surfaces this so callers can match curated trap-line PGNs
+      // that fall under the same family (proRepertoireService).
+      const result = findLinePickerOptions('Italian Game');
+      expect(result).not.toBeNull();
+      expect(result?.canonicalPgn).toBe('e4 e5 Nf3 Nc6 Bc4');
+    });
   });
 
   describe('findSiblingExtensionBranches extends to end of Lichess DB', () => {
