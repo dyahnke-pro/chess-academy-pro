@@ -15,6 +15,7 @@ import {
   repairTreeIllegalSubtrees,
   repairTreeContent,
   assertTreeShape,
+  repairNarrationArrows,
 } from './openingGenerator';
 import type {
   WalkthroughTree,
@@ -805,5 +806,52 @@ describe('Lichess puzzle DB coverage for punish-stage inversion', () => {
     // they tag at the family level. The matcher's "drop colon-suffix"
     // candidate captures this case.
     expect(countMatching('Sicilian Defense: Najdorf Variation')).toBeGreaterThanOrEqual(50);
+  });
+});
+
+describe('repairNarrationArrows on DB-narration shaped trees', () => {
+  it('drops the arrow that points AT the move\'s own destination square', () => {
+    // Production audit (build 088b57a): user reported "the first
+    // pawn push has a forward and diagonal arrow." The forward
+    // arrow is the LLM redundantly drawing e2→e4 — the same vector
+    // the board is already animating. repairNarrationArrows must
+    // strip it whether the tree came from the legacy free-form gen
+    // (where this was already wired) or the new DB-narration path
+    // (where this fix is freshly applied).
+    const tree: WalkthroughTree = {
+      openingName: 'Test',
+      eco: 'X00',
+      intro: 'i',
+      outro: 'o',
+      root: {
+        san: null,
+        movedBy: null,
+        idea: '',
+        children: [
+          {
+            node: {
+              san: 'e4',
+              movedBy: 'white',
+              idea: '1.e4',
+              narration: [
+                {
+                  text: '1.e4',
+                  arrows: [
+                    { from: 'e2', to: 'e4' },  // redundant — drop
+                    { from: 'e4', to: 'd5' },  // threat — keep
+                    { from: 'a1', to: 'a1' },  // no-op — drop
+                  ],
+                },
+              ],
+              children: [],
+            },
+          },
+        ],
+      },
+    };
+    const dropped = repairNarrationArrows(tree);
+    expect(dropped).toBe(2);
+    const kept = tree.root.children[0].node.narration?.[0].arrows ?? [];
+    expect(kept).toEqual([{ from: 'e4', to: 'd5' }]);
   });
 });
