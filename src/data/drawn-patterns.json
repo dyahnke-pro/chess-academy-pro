@@ -13,11 +13,18 @@
     },
     "positions": [
       {
-        "fen": "k7/8/1K6/8/8/8/8/B7 b - - 0 1",
-        "title": "Wrong bishop, rook pawn — drawn",
-        "explanation": "Imagine adding a white pawn on a-file. The dark-squared bishop on a1 can never attack a8 — wrong color. Black king already in the corner. White to play any aggressive move runs into stalemate or perpetual king dance. Drawn no matter how the play continues. The bishop's color decides everything; the wrong color makes the win unwinnable.",
+        "fen": "k7/8/PK6/8/8/8/8/B7 b - - 0 1",
+        "title": "Wrong-color bishop + a-pawn — drawn",
+        "explanation": "White: Kb6, Pa6, Ba1 (dark-squared bishop). Black: Ka8. The queening square a8 is a LIGHT square; the dark-squared bishop on a1 can never attack it. Black sits in the corner; white can't evict because every aggressive try (1.a7+ followed by attempts to advance the king) ends in stalemate — black's king has no legal squares without being attacked, and stalemate is a draw. The bishop's wrong color makes the position unwinnable.",
         "result": "draw",
-        "source": "Wrong-rook-pawn principle illustrated"
+        "source": "Wrong-rook-pawn principle — Greco c. 1620"
+      },
+      {
+        "fen": "k7/8/PK6/8/8/8/8/1B6 b - - 0 1",
+        "title": "Same position, RIGHT-color bishop — winning",
+        "explanation": "Identical pawn structure but with Bb1 (light-squared bishop). a8 is a light square, so the bishop CAN attack it — and that's the difference between win and draw. White's plan: bring the bishop to the a8-h1 diagonal, deliver Ba8 forcing Kxa8 (no, defended) or evict via Bb7+ pattern. Compare against the wrong-color version above: same king and pawn placement, same defensive try by Black, but the bishop's color flips win to draw or back. This is the cleanest demonstration of how a single piece's color decides an entire endgame.",
+        "result": "white-wins",
+        "source": "Compare-and-contrast with the wrong-color version above"
       }
     ]
   },
@@ -171,9 +178,23 @@
       {
         "fen": "k7/8/8/8/8/8/8/4KB2 w - - 0 1",
         "title": "K + B vs K — drawn by insufficient material",
-        "explanation": "King + bishop vs king cannot force checkmate. The bishop covers half the board (one color), the king covers a small area; the lone king always has an escape on the bishop's wrong color. Drawn automatically by FIDE rule. Same for K+N vs K. Avoid trading INTO this material configuration when you're trying to win.",
+        "explanation": "King + bishop vs king cannot force checkmate. The bishop covers half the board (one color), the king covers a small area; the lone king always has an escape on the bishop's wrong color. Drawn automatically by FIDE rule. Avoid trading INTO this material configuration when you're trying to win.",
         "result": "draw",
         "source": "FIDE Laws Article 5.2.b — insufficient material"
+      },
+      {
+        "fen": "k7/8/8/8/8/8/8/4KN2 w - - 0 1",
+        "title": "K + N vs K — also drawn",
+        "explanation": "King + knight vs king is the other automatic-draw piece configuration. The knight controls only 2-8 squares depending on its position; it CANNOT cover all the squares the lone king might use to escape. Same insufficient-material rule applies. Worth memorizing alongside K+B vs K — both are 'I have a piece, why isn't this winning?' positions that are simply drawn by FIDE rule.",
+        "result": "draw",
+        "source": "FIDE Laws Article 5.2.b — insufficient material"
+      },
+      {
+        "fen": "k7/8/8/8/8/8/8/3NKN2 w - - 0 1",
+        "title": "K + 2 knights vs K — drawn by FIDE rule",
+        "explanation": "Two knights vs lone king CAN deliver checkmate in some positions — but cannot FORCE it. The lone king can always reach a square none of the two knights can simultaneously attack. FIDE classifies this as insufficient material because no FORCED mate exists, even though mate IS possible. Don't try to win this; you'll only embarrass yourself with a 50-move-rule draw.",
+        "result": "draw",
+        "source": "Two-knight checkmate impossibility — FIDE Laws"
       }
     ]
   }
