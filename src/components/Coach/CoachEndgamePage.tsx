@@ -41,6 +41,7 @@ import {
   getRookEndings,
 } from '../../services/endgameLessonsService';
 import { EndgameLessonTab } from './EndgameLessonTab';
+import { EvalLabQuiz } from './EvalLabQuiz';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 import type { MatingPattern } from '../../types/matingPattern';
@@ -63,13 +64,15 @@ type EndgameTab =
   | 'principles'
   | 'pawn-endings'
   | 'rook-endings'
-  | 'drawing-patterns';
+  | 'drawing-patterns'
+  | 'eval-lab';
 const TAB_OPTIONS: { value: EndgameTab; label: string; ready: boolean }[] = [
   { value: 'mating-patterns', label: 'Mating', ready: true },
   { value: 'principles', label: 'Principles', ready: true },
   { value: 'pawn-endings', label: 'Pawn', ready: true },
   { value: 'rook-endings', label: 'Rook', ready: true },
   { value: 'drawing-patterns', label: 'Drawn', ready: true },
+  { value: 'eval-lab', label: 'Eval Lab', ready: true },
 ];
 
 export function CoachEndgamePage(): JSX.Element {
@@ -312,6 +315,10 @@ function PatternPicker({ onPick, onBack, tier, onTierChange, activeTab, onTabCha
           tabLabel="Drawing Patterns"
           tabSubtitle="The eight positions every player should recognize. Knowing these turns lost games into half-points."
         />
+      )}
+
+      {activeTab === 'eval-lab' && (
+        <EvalLabQuiz onExit={() => onTabChange('mating-patterns')} />
       )}
     </div>
   );
