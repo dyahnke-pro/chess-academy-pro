@@ -68,10 +68,32 @@
     ]
   },
   {
+    "id": "vancura-position",
+    "name": "Vancura Position",
+    "category": "rook-position",
+    "order": 4,
+    "narration": {
+      "intro": "Rook + rook-pawn vs rook is the most common winning rook ending — and the one with the most surprising drawing technique. The defending rook does NOT block the pawn directly. Instead it goes to the SIDE of the board on the 3rd rank (6th rank from the defender's POV) and gives perpetual side checks. The attacking king can never both escort the pawn and escape the checks. Drawn.",
+      "rule": "Defending against R + rook-pawn vs R: park the defending rook on the SIDE of the 3rd rank (from the pawn's POV), pawn distance away, and check perpetually whenever the attacking king tries to advance.",
+      "why": "The naive defense — putting the rook in front of the pawn on the a-file — loses because the attacking king can shoulder it aside, then promote. The Vancura works because it doesn't try to block the pawn at all; it threatens the white king from the side. Put the black rook on f6 (with white pawn on a6), and any white king move toward the queenside walks into rook checks: Rf1+, Rf2+, Rf3+ — always a check from the f-file. The white king has to retreat or hide on the a-file (where the rook can't reach), but on the a-file the king can't shoulder anyone. Drawn.",
+      "history": "Josef Vancura, Czech composer, published this defense in 1924. Without it, R+RP vs R is a clear win; with Vancura's resource, it's a clear draw. One of the most important theoretical discoveries in 20th-century rook endings.",
+      "tip": "Defending K+R vs K+R+rook-pawn? Get the rook to the f-file (or c-file for an h-pawn), 3rd rank from the pawn's POV. Side checks forever. Drawn."
+    },
+    "positions": [
+      {
+        "fen": "8/6k1/P4r2/8/8/8/R7/K7 w - - 0 1",
+        "title": "Vancura defense — black rook on f6, side checks forever",
+        "explanation": "White Ka1, Pa6, Ra2. Black Kg7, Rf6. White's pawn is supported by the white rook; white wants to advance the king to escort the pawn to a8. But the black rook on f6 attacks a6 (the pawn). White's king tries 1.Kb1 — Rf1+ 2.Ka2 Rf2+ 3.Kb3 Rf3+ 4.Kc4 Rf4+ — perpetual side checks. White can never escape and escort the pawn simultaneously. Drawn. Black's king on g7 stays safe; black's rook does all the work.",
+        "result": "draw",
+        "source": "Vancura 1924 — canonical R+RP vs R drawing technique"
+      }
+    ]
+  },
+  {
     "id": "cutting-off-the-king",
     "name": "Cutting Off the King",
     "category": "rook-position",
-    "order": 4,
+    "order": 5,
     "narration": {
       "intro": "When you have a passed pawn and your opponent's king is the only defender, use the rook to cut off the king on a file or rank. While the king is cut off, you escort the pawn home. This is the simplest practical winning rook ending and the prototype of the Lucena win.",
       "rule": "With a passed pawn, place the rook on a file (or rank) BETWEEN the defender's king and the pawn. The king can't cross; the pawn marches.",

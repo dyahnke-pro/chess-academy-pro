@@ -14,7 +14,17 @@
  * voiceService.
  */
 import { useCallback, useMemo, useState } from 'react';
-import { ArrowLeft, ChevronLeft, ChevronRight, Lightbulb, BookOpen } from 'lucide-react';
+import { Chess } from 'chess.js';
+import {
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Lightbulb,
+  BookOpen,
+  CheckCircle,
+} from 'lucide-react';
+import type { PieceDropHandlerArgs } from 'react-chessboard';
+import type { CSSProperties } from 'react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import type { EndgameLesson, EndgameLessonPosition } from '../../types/endgameLesson';
@@ -110,12 +120,71 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
     [position.fen],
   );
 
+  // Interactive practice state — when a position has bestMove, the
+  // student can drag a piece to attempt it. Right move → green
+  // success flash. Wrong move → red destination square flash. The
+  // board snaps back via FEN unchanged either way; the student can
+  // retry as many times as they want.
+  const [solved, setSolved] = useState(false);
+  const [wrongSquare, setWrongSquare] = useState<string | null>(null);
+
   const goPrev = useCallback(() => {
-    setPosIndex((i) => Math.max(0, i - 1));
+    setPosIndex((i) => {
+      const next = Math.max(0, i - 1);
+      setSolved(false);
+      setWrongSquare(null);
+      return next;
+    });
   }, []);
   const goNext = useCallback(() => {
-    setPosIndex((i) => Math.min(lesson.positions.length - 1, i + 1));
+    setPosIndex((i) => {
+      const next = Math.min(lesson.positions.length - 1, i + 1);
+      setSolved(false);
+      setWrongSquare(null);
+      return next;
+    });
   }, [lesson.positions.length]);
+
+  const handlePieceDrop = useCallback(
+    (args: PieceDropHandlerArgs): boolean => {
+      if (!position.bestMove) return false;
+      if (solved) return false;
+      if (!args.sourceSquare || !args.targetSquare) return false;
+      const probe = new Chess(position.fen);
+      let played;
+      try {
+        played = probe.move({
+          from: args.sourceSquare,
+          to: args.targetSquare,
+          promotion: 'q',
+        });
+      } catch {
+        return false;
+      }
+      // Strip annotations and compare. chess.js's SAN includes
+      // disambiguation; the authored bestMove may not. Compare on
+      // the cleaned forms.
+      const stripAnnotations = (san: string): string =>
+        san.replace(/[+#!?]+$/, '').replace(/=Q$|=R$|=B$|=N$/, '');
+      if (stripAnnotations(played.san) === stripAnnotations(position.bestMove)) {
+        setSolved(true);
+        setWrongSquare(null);
+        return true;
+      }
+      setWrongSquare(args.targetSquare);
+      window.setTimeout(() => setWrongSquare(null), 600);
+      return false;
+    },
+    [position.bestMove, position.fen, solved],
+  );
+
+  const flashStyles = useMemo<Record<string, CSSProperties>>(() => {
+    const out: Record<string, CSSProperties> = {};
+    if (wrongSquare) {
+      out[wrongSquare] = { background: 'rgba(239, 68, 68, 0.45)' };
+    }
+    return out;
+  }, [wrongSquare]);
 
   const header = (
     <div className="px-3 py-2 md:p-4 border-b border-theme-border">
@@ -139,7 +208,13 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
   );
 
   const board = (
-    <ConsistentChessboard fen={position.fen} boardOrientation={studentSide} />
+    <ConsistentChessboard
+      fen={position.fen}
+      boardOrientation={studentSide}
+      interactive={!!position.bestMove && !solved}
+      onPieceDrop={handlePieceDrop}
+      squareStyles={flashStyles}
+    />
   );
 
   const resultColor =
@@ -157,7 +232,12 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
 
   const controls = (
     <div className="flex flex-col gap-3 px-2 pb-4">
-      <PositionCard position={position} resultColor={resultColor} resultLabel={resultLabel} />
+      <PositionCard
+        position={position}
+        resultColor={resultColor}
+        resultLabel={resultLabel}
+        solved={solved}
+      />
       {posIndex === 0 && <NarrationPanel lesson={lesson} />}
       <div className="flex items-center justify-between gap-2">
         <button
@@ -190,9 +270,10 @@ interface PositionCardProps {
   position: EndgameLessonPosition;
   resultColor: string;
   resultLabel: string;
+  solved: boolean;
 }
 
-function PositionCard({ position, resultColor, resultLabel }: PositionCardProps): JSX.Element {
+function PositionCard({ position, resultColor, resultLabel, solved }: PositionCardProps): JSX.Element {
   return (
     <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
       <div className="flex items-start justify-between gap-2">
@@ -203,7 +284,18 @@ function PositionCard({ position, resultColor, resultLabel }: PositionCardProps)
       </div>
       <p className="text-[12px] text-theme-text-muted leading-relaxed">{position.explanation}</p>
       {position.bestMove && (
-        <div className="text-[11px] text-cyan-400 font-mono">Best move: {position.bestMove}</div>
+        <div className="flex items-center gap-2">
+          {solved ? (
+            <div className="flex items-center gap-1.5 text-[11px] text-green-400 font-semibold">
+              <CheckCircle size={14} />
+              Solved — best move was {position.bestMove}
+            </div>
+          ) : (
+            <div className="text-[11px] text-cyan-400">
+              Drag a piece to play your move.
+            </div>
+          )}
+        </div>
       )}
       {position.source && (
         <div className="text-[10px] text-theme-text-muted/70 italic">{position.source}</div>

@@ -117,10 +117,39 @@
     ]
   },
   {
+    "id": "distant-opposition",
+    "name": "Distant Opposition",
+    "category": "pawn-concept",
+    "order": 4,
+    "narration": {
+      "intro": "Direct opposition is kings facing each other across one square. Distant opposition is the same idea stretched — kings on the same file (or rank, or diagonal) with three or five squares between them. The same rule applies: the side NOT to move has it. Distant opposition is how you fight for direct opposition from far away, before you get close enough to use it.",
+      "rule": "Kings facing on the same file/rank/diagonal with an ODD number of squares between (1, 3, 5) — the side NOT to move has the opposition.",
+      "why": "Opposition is fundamentally about who runs out of legal moves first. With one square between (direct opposition), it's immediate. With three squares between (distant opposition), it takes a couple of king moves to play out, but the result is the same: the player without the opposition has to give way first. Distant opposition matters when the kings are still far from the pawn — the side that takes distant opposition early walks INTO direct opposition naturally as the kings approach. Lose distant opposition and you'll lose direct opposition; lose direct opposition and you lose the K+P endgame.",
+      "history": "Distant opposition is part of Maizelis 'King and Pawn Endgames' (1956) and Dvoretsky's 'Endgame Manual' (2003). The concept generalizes to 'corresponding squares' for any-distance king coordination, but distant opposition is the practical 90% case.",
+      "tip": "Kings far apart? Count the squares between. 1, 3, or 5? If you're the side NOT to move, you have it — walk forward."
+    },
+    "positions": [
+      {
+        "fen": "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+        "title": "Distant opposition — five squares apart",
+        "explanation": "White Ke1, Black Ke8. Five squares between the kings on the e-file. White to move — Black has the distant opposition. After 1.Ke2 Ke7 2.Ke3 Ke6 3.Ke4 (now direct opposition: kings 1 square apart) Black must move 3...Ke7? No wait — kings facing on e3 and e6, 2 squares between. White moves 4.Ke5? Kings adjacent, illegal. White options narrow. Each cycle the player WITHOUT the opposition gives way; in this pure K vs K position the result is just shuffling, drawn — but the technique is the same when a pawn is added.",
+        "result": "draw",
+        "source": "Pure-king teaching position for distant opposition"
+      },
+      {
+        "fen": "4k3/8/8/8/8/8/8/4K3 b - - 0 1",
+        "title": "Same position, Black to move — White has the opposition",
+        "explanation": "Same kings, but Black moves first. Now WHITE has distant opposition. After 1...Ke7 2.Ke2 Ke6 3.Ke3 Ke5 4.Ke3? — illegal (adjacent). White plays the technique: maintains distant opposition, forces Black to commit. With a pawn on the board this technique is what wins.",
+        "result": "draw",
+        "source": "Pure-king teaching position — same FEN, Black to move"
+      }
+    ]
+  },
+  {
     "id": "outflanking",
     "name": "Outflanking",
     "category": "pawn-technique",
-    "order": 4,
+    "order": 5,
     "narration": {
       "intro": "When you have the opposition but the defending king blocks direct progress, you outflank — sidestep one file, force the defender to follow, then take the opposition again on the new file. The defender chases; you advance one rank with every cycle.",
       "rule": "If the opposition won't let you push forward, sidestep one file. The defender must follow; you regain the opposition on the new file with a rank gained.",
@@ -143,7 +172,7 @@
     "id": "breakthrough",
     "name": "Breakthrough",
     "category": "pawn-technique",
-    "order": 5,
+    "order": 6,
     "narration": {
       "intro": "When you have a pawn majority on one flank — three pawns vs three pawns is the canonical setup — you can sometimes sacrifice one or two pawns to create an unstoppable passed pawn that outruns the defender's king. The breakthrough is a tempo trade: pawns for promotion.",
       "rule": "With a majority of pawns racing on one flank, sacrifice the central pawn first — the defender's recapture clears a path for the next pawn to break through.",
@@ -167,7 +196,7 @@
     "id": "triangulation",
     "name": "Triangulation",
     "category": "pawn-technique",
-    "order": 6,
+    "order": 7,
     "narration": {
       "intro": "When you need to pass the move to your opponent — to put them in zugzwang — but a direct king move loses tempo, you triangulate: walk the king through three squares back to where it started. Same square, opposite turn. Now the opponent has to move into the bad position.",
       "rule": "Walk your king through three squares (a triangle) back to its original square. You've used three of your moves and one of your opponent's — net effect: same position, opposite turn.",
