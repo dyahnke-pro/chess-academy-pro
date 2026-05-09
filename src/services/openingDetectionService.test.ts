@@ -324,6 +324,37 @@ describe('openingDetectionService', () => {
     });
   });
 
+  describe('findShortestCanonicalPgn picks spine based on whether sub-variations exist', () => {
+    it('uses the LONGEST same-name PGN when no sub-variations exist (Pirc Bayonet)', () => {
+      // Pirc Defense: Bayonet Attack has only one named entry in
+      // the canonical Lichess DB (9 plies). The extended file
+      // adds a longer same-name entry (21 plies). Without sub-
+      // variations to surface as fork branches, the spine should
+      // pick the longer extended PGN — student gets the deeper
+      // walkthrough they asked for.
+      const pgn = findShortestCanonicalPgn('Pirc Defense: Bayonet Attack');
+      expect(pgn).not.toBeNull();
+      const plies = pgn!.split(/\s+/).filter(Boolean).length;
+      expect(plies).toBeGreaterThanOrEqual(15);
+    });
+
+    it('uses the SHORTEST same-name PGN when sub-variations exist (Najdorf)', () => {
+      // Sicilian Defense: Najdorf Variation has many named sub-
+      // variations (English Attack, Adams Attack, Bg5 Main Line,
+      // etc.). The spine MUST stay short so the fork picker can
+      // surface those sub-variations as branches at the end of
+      // the walkthrough. If this regresses, named-fork pickers
+      // disappear from popular openings.
+      const pgn = findShortestCanonicalPgn('Sicilian Defense: Najdorf Variation');
+      expect(pgn).not.toBeNull();
+      const plies = pgn!.split(/\s+/).filter(Boolean).length;
+      // Najdorf canonical bare entry is 10 plies. Allow some
+      // tolerance but cap well below the deepest same-name entry
+      // (23+ plies for Ivkov / Polugaevsky sub-lines).
+      expect(plies).toBeLessThanOrEqual(11);
+    });
+  });
+
   describe('Lichess-extended entries conform to canonical shape', () => {
     /* eslint-disable @typescript-eslint/no-require-imports */
     const extended = require('../data/openings-lichess-extended.json') as Array<{

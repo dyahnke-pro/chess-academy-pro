@@ -271,11 +271,42 @@ const NAME_ALIASES: Record<string, string> = {
  *  every other listed depth is the bare line plus a few extra plies
  *  the curator wanted to register. For walkthroughs we want the
  *  bare spine so the fork picker at the end has the most choices. */
+/** Find the spine PGN for a canonical opening name.
+ *
+ *  When sub-variations exist under this name (entries with names
+ *  starting with `<canonicalName>, `), prefer the SHORTEST same-name
+ *  PGN — that's the parent / bare entry, and leaving the spine
+ *  short gives the fork picker at the end the most choices.
+ *
+ *  When NO sub-variations exist (single-entry opening like Pirc
+ *  Defense: Bayonet Attack), prefer the LONGEST same-name PGN —
+ *  there's no fork picker to budget for, and the user wants the
+ *  walkthrough to extend as deep as the DB carries. Production
+ *  audit (build e0b3f85): user reported Pirc Bayonet Attack
+ *  walkthrough only goes 5 moves deep. The Lichess DB carries it
+ *  at 9 plies with no sub-variations, but the
+ *  `openings-lichess-extended.json` mining-script output (or
+ *  hand-mined entries) provides longer same-name PGNs. The old
+ *  shortest-wins logic ignored the extended entry; the new logic
+ *  uses it as the spine when there's no fork picker to populate. */
 export function findShortestCanonicalPgn(canonicalName: string): string | null {
   const entries = openingsData as OpeningEntry[];
   const matches = entries.filter((e) => e.name === canonicalName);
   if (matches.length === 0) return null;
-  return matches.reduce((a, b) => (a.pgn.length < b.pgn.length ? a : b)).pgn;
+  // Check whether any sub-variation entries exist under this name
+  // (e.g. "Sicilian Defense: Najdorf Variation, English Attack" is
+  // a sub-variation of "Sicilian Defense: Najdorf Variation").
+  const namePrefix = canonicalName + ', ';
+  const hasSubVariations = entries.some((e) => e.name.startsWith(namePrefix));
+  if (hasSubVariations) {
+    // Spine = shortest so the fork picker can surface the named
+    // sub-variations as branch tiles at the end of the walkthrough.
+    return matches.reduce((a, b) => (a.pgn.length < b.pgn.length ? a : b)).pgn;
+  }
+  // No sub-variations to surface as forks — use the longest same-
+  // name PGN so the walkthrough extends to whatever depth the DB
+  // (canonical or extended) carries.
+  return matches.reduce((a, b) => (a.pgn.length > b.pgn.length ? a : b)).pgn;
 }
 
 /** Resolve a user-typed opening name against the Lichess DB and
