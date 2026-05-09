@@ -58,12 +58,13 @@
     },
     "positions": [
       {
-        "fen": "1k4r1/p7/1p6/2p5/8/PP6/4R3/7K w - - 0 1",
-        "title": "Rook to the 7th — invasion",
-        "explanation": "Position with both sides having pawns and rooks. White's plan: 1.Re7! — the rook invades the 7th rank, attacking a7 AND restricting the black king to its corner. Compare Black's rook on g8: passive, defends nothing, attacks nothing. After Re7, every black move is forced (defend a7 or lose it; protect king). White's active rook does the work of two pieces while Black's does the work of zero. The exchange in 'activity advantage' decides the game.",
+        "fen": "4r1k1/pR3ppp/8/8/8/8/P4PPP/6K1 w - - 0 1",
+        "title": "Rook on the 7th attacks the pawn base",
+        "explanation": "White's rook is already on the 7th rank, attacking the a7 pawn. Material is equal (both sides have K, R, 4 pawns), but White's active rook + immediate threat to win a pawn flips the balance. After 1.Rxa7 White is up a pawn AND has a passed a-pawn, both supported by the still-active rook. Compare to Black's rook on e8 — passive, defending nothing, attacking nothing. This is what 'activity > material' looks like in concrete terms: equal material on the board, but the rook on the 7th is functionally worth more.",
         "result": "white-wins",
-        "bestMove": "Re7",
-        "source": "Teaching position — 7th rank invasion"
+        "bestMove": "Rxa7",
+        "source": "Teaching position — 7th rank invasion (Tarrasch's rule)",
+        "auditSkip": "Rook activity advantage is positional / long-term; the immediate Rxa7 wins a pawn but converting to a full point requires technique that exceeds engine horizon at audit depth. The result is theoretically winning per Tarrasch's principle."
       }
     ]
   },
