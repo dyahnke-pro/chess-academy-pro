@@ -496,8 +496,9 @@ export interface ForkBranch {
  *  by one or more plies. Groups by the FIRST divergent move so the
  *  picker shows one tile per genuine fork choice (multiple sub-sub-
  *  lines under the same first move collapse into a single branch
- *  represented by the most-general member of the group). Caps at 6
- *  branches to keep the fork picker readable. */
+ *  represented by the most-general member of the group). Caps at 3
+ *  branches to keep the fork picker readable — matches the trim of
+ *  the entry-level picker (top 3 popular variations only). */
 export function findSiblingExtensionBranches(
   canonicalName: string,
   canonicalPgn: string,
@@ -617,7 +618,7 @@ export function findSiblingExtensionBranches(
     },
   );
   branches.sort((a, b) => b.count - a.count);
-  return branches.slice(0, 6);
+  return branches.slice(0, 3);
 }
 
 /** Find ALL Lichess-DB entries related to an opening name. Returns
