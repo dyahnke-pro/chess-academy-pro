@@ -31,6 +31,7 @@ import type { CSSProperties } from 'react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
+import { useClickToMove } from '../../hooks/useClickToMove';
 import {
   getDrillPositionsForLesson,
   getDrillPuzzleCount,
@@ -503,13 +504,20 @@ function PositionRunner({
     </div>
   );
 
+  const clickToMove = useClickToMove(playout);
+  const mergedStyles = useMemo<Record<string, CSSProperties>>(() => {
+    // wrongFlash wins over click-to-move highlighting so red flash is visible.
+    return { ...clickToMove.squareStyles, ...wrongFlash };
+  }, [clickToMove.squareStyles, wrongFlash]);
+
   const board = (
     <ConsistentChessboard
       fen={playout.fen}
       boardOrientation={studentSide}
       interactive={playout.phase === 'student-to-move'}
       onPieceDrop={playout.onPieceDrop}
-      squareStyles={wrongFlash}
+      onSquareClick={clickToMove.onSquareClick}
+      squareStyles={mergedStyles}
     />
   );
 

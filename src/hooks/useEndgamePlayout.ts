@@ -118,6 +118,11 @@ export interface EndgamePlayoutControls {
    *  the drop is the correct move (board updates), false otherwise
    *  (board snaps back, red flash fires). */
   onPieceDrop: (args: PieceDropHandlerArgs) => boolean;
+  /** Direct move API for click-to-move flows. The host component
+   *  tracks "selected from square" via onSquareClick and calls
+   *  this once the user clicks a destination. Returns true when
+   *  accepted, false on rejection. Same semantics as onPieceDrop. */
+  playMove: (from: string, to: string) => boolean;
   /** Reset the playout to its starting FEN, wipe state. Used by
    *  the "Try again" button. */
   reset: () => void;
@@ -288,20 +293,20 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     fallbackPliesToPlay,
   ]);
 
-  const onPieceDrop = useCallback(
-    (args: PieceDropHandlerArgs): boolean => {
+  /** Attempt a move at the current position. Returns true when the
+   *  move was accepted (curated-correct or in-fallback legal),
+   *  false when rejected (wrong move flashes red, attempt counter
+   *  bumps). Shared by onPieceDrop (drag) and onSquareClick
+   *  (click-to-move) — both call into this. */
+  const playMove = useCallback(
+    (from: string, to: string): boolean => {
       if (phase !== 'student-to-move') return false;
-      if (!args.sourceSquare || !args.targetSquare) return false;
       // Probe the move on a copy so a wrong attempt doesn't mutate
       // the running game.
       const probe = new Chess(chessRef.current.fen());
       let played;
       try {
-        played = probe.move({
-          from: args.sourceSquare,
-          to: args.targetSquare,
-          promotion: 'q',
-        });
+        played = probe.move({ from, to, promotion: 'q' });
       } catch {
         return false;
       }
@@ -310,12 +315,11 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
         const expectedClean = stripSan(expectedSan);
         const playedClean = stripSan(played.san);
         if (playedClean !== expectedClean) {
-          setWrongSquare(args.targetSquare);
+          setWrongSquare(to);
           setWrongAttempts((n) => n + 1);
           setFirstTryPerfect(false);
           return false;
         }
-        // Correct curated move.
         chessRef.current.move(played.san);
         setFen(chessRef.current.fen());
         setStudentMovesPlayed((n) => n + 1);
@@ -324,8 +328,6 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
         return true;
       }
       // Fallback (Stockfish) territory — any legal move is accepted.
-      // The engine's response decides whether the student held the
-      // eval. (For Eval Lab stage 2.)
       chessRef.current.move(played.san);
       setFen(chessRef.current.fen());
       setStudentMovesPlayed((n) => n + 1);
@@ -334,6 +336,14 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
       return true;
     },
     [phase, expectedSan, playOpponentReply],
+  );
+
+  const onPieceDrop = useCallback(
+    (args: PieceDropHandlerArgs): boolean => {
+      if (!args.sourceSquare || !args.targetSquare) return false;
+      return playMove(args.sourceSquare, args.targetSquare);
+    },
+    [playMove],
   );
 
   const reset = useCallback((): void => {
@@ -387,6 +397,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     expectedSan,
     curatedRepliesRemaining,
     onPieceDrop,
+    playMove,
     reset,
     reveal,
   };

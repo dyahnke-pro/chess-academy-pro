@@ -51,6 +51,7 @@ import type { CSSProperties } from 'react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
+import { useClickToMove } from '../../hooks/useClickToMove';
 import { getAllEndgameLessons } from '../../services/endgameLessonsService';
 import { lookupTablebase, type TablebaseLookupResult } from '../../services/lichessTablebaseService';
 import type { EndgameLessonPosition } from '../../types/endgameLesson';
@@ -277,13 +278,20 @@ function QuizItemRunner({
     </div>
   );
 
+  const clickToMove = useClickToMove(playout);
+  const mergedStyles = useMemo<Record<string, CSSProperties>>(() => ({
+    ...clickToMove.squareStyles,
+    ...wrongFlash,
+  }), [clickToMove.squareStyles, wrongFlash]);
+
   const board = (
     <ConsistentChessboard
       fen={playout.fen}
       boardOrientation={studentSide}
       interactive={playout.phase === 'student-to-move'}
       onPieceDrop={playout.onPieceDrop}
-      squareStyles={wrongFlash}
+      onSquareClick={clickToMove.onSquareClick}
+      squareStyles={mergedStyles}
     />
   );
 

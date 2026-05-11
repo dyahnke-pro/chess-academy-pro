@@ -72,12 +72,19 @@
     },
     "positions": [
       {
-        "fen": "4k3/3pp3/3b4/8/4B3/3PP3/8/4K3 w - - 0 1",
-        "title": "OCB with locked center — drawn",
-        "explanation": "White's bishop on e4 is light-squared; Black's bishop on d6 is dark-squared. Different colors — neither can attack the other or the squares the other defends. The blocked d3-e3 vs d7-e7 pawn structure means there's no breakthrough; the bishops shuffle harmlessly. This is the cleanest OCB pattern — no material imbalance, no progress possible. The principle generalizes: even when one side is up a pawn or two, OCB endings tend to draw because the defender's bishop can plant pawns on the attacker's bishop's color.",
-        "result": "draw",
-        "source": "OCB drawing pattern — Steinitz / Capablanca theory",
-        "auditSkip": "OCB endings are notoriously eval-resistant; engines often score them as winning for the side with material/king activity, but human/practice play converts to draw. The position is a textbook OCB structure."
+        "fen": "4b3/6k1/8/7p/pP5P/3BK1P1/2P5/8 b - - 0 41",
+        "title": "OCB endgame — student plays Black to push the passed pawn",
+        "explanation": "Black has just been hit with axb4. The student plays Black. With pawns on both flanks and opposite-colored bishops, the key is the far-advanced a-pawn: 1...a3 forces the issue. White scrambles with Bc4 + Bf7 trades, but after Bxf7 Kxf7 the a-pawn promotes. The OCB lesson: when one side has a far-advanced passed pawn, OCB no longer equalizes.",
+        "result": "black-wins",
+        "bestMove": "a3",
+        "solution": [
+          "a3",
+          "Bc4",
+          "Bf7",
+          "Bxf7",
+          "Kxf7"
+        ],
+        "source": "Lichess puzzle 0Cuxd — bishopEndgame OCB technique"
       }
     ],
     "practiceThemes": [
