@@ -94,13 +94,19 @@
     },
     "positions": [
       {
-        "fen": "4r1k1/pR3ppp/8/8/8/8/P4PPP/6K1 w - - 0 1",
-        "title": "Rook on the 7th attacks the pawn base",
-        "explanation": "White's rook is already on the 7th rank, attacking the a7 pawn. Material is equal (both sides have K, R, 4 pawns), but White's active rook + immediate threat to win a pawn flips the balance. After 1.Rxa7 White is up a pawn AND has a passed a-pawn, both supported by the still-active rook. Compare to Black's rook on e8 — passive, defending nothing, attacking nothing. This is what 'activity > material' looks like in concrete terms: equal material on the board, but the rook on the 7th is functionally worth more.",
+        "fen": "8/R7/8/pP4p1/7k/7r/5K2/8 w - - 0 53",
+        "title": "Active rook on the 7th swings to win the exchange",
+        "explanation": "Black has just captured on a5 with the b-pawn — but in doing so, the black rook on h3 has been left exposed. White swings the active rook along the 7th to attack it: Rxh3 trades rooks and leaves a winning K+P endgame. The principle: a rook on the 7th rank is a tactical machine, even simple swings turn into material wins.",
         "result": "white-wins",
-        "bestMove": "Rxa7",
-        "source": "Teaching position — 7th rank invasion (Tarrasch's rule)",
-        "auditSkip": "Rook activity advantage is positional / long-term; the immediate Rxa7 wins a pawn but converting to a full point requires technique that exceeds engine horizon at audit depth. The result is theoretically winning per Tarrasch's principle."
+        "bestMove": "Rh7+",
+        "solution": [
+          "Rh7+",
+          "Kg4",
+          "Rxh3",
+          "Kxh3",
+          "b6"
+        ],
+        "source": "Lichess puzzle 0FKht — rookEndgame technique"
       }
     ],
     "practiceThemes": [

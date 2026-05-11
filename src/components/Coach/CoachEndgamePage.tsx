@@ -21,13 +21,14 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { ArrowLeft, Crown, ChevronRight, RotateCw, Lightbulb, MessageCircle } from 'lucide-react';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
+import { useClickToMove } from '../../hooks/useClickToMove';
 import { voiceService } from '../../services/voiceService';
 import { getMasteredCount } from '../../services/endgameProgressService';
 import {
@@ -474,18 +475,16 @@ function LessonView({
   // button list is gone — the student answers by playing on the
   // board. A bail-out toggle (after 2 wrong drops) lets them
   // reveal options if they're stuck.
-  const handlePieceDrop = useCallback(
-    (args: PieceDropHandlerArgs): boolean => {
+  // Core move attempt — shared by piece-drop (drag) and the
+  // click-to-move flow below. Returns true when the move matched a
+  // fork option; false on legal-but-wrong (red flash + counter).
+  const tryForkMove = useCallback(
+    (from: string, to: string): boolean => {
       if (phase !== 'fork') return false;
-      if (!args.sourceSquare || !args.targetSquare) return false;
       const probe = new Chess(fen);
       let move;
       try {
-        move = probe.move({
-          from: args.sourceSquare,
-          to: args.targetSquare,
-          promotion: 'q',
-        });
+        move = probe.move({ from, to, promotion: 'q' });
       } catch {
         return false;
       }
@@ -494,16 +493,100 @@ function LessonView({
         walkthrough.pickFork(idx);
         return true;
       }
-      // Legal move but not the right answer — flash the destination
-      // square red and bump the wrong-attempts counter. After 2
-      // wrong drops, the bail-out toggle becomes available.
-      setWrongFlash(args.targetSquare);
+      setWrongFlash(to);
       setWrongAttempts((n) => n + 1);
       window.setTimeout(() => setWrongFlash(null), 600);
       return false;
     },
     [phase, fen, forkOptions, walkthrough],
   );
+
+  const handlePieceDrop = useCallback(
+    (args: PieceDropHandlerArgs): boolean => {
+      if (!args.sourceSquare || !args.targetSquare) return false;
+      return tryForkMove(args.sourceSquare, args.targetSquare);
+    },
+    [tryForkMove],
+  );
+
+  // Click-to-move state for the fork phase. Mirrors useClickToMove
+  // but uses tryForkMove instead of playMove because this board is
+  // driven by useTeachWalkthrough's fork mechanic, not the playout
+  // hook.
+  const [forkSelected, setForkSelected] = useState<string | null>(null);
+  useEffect(() => {
+    // Clear selection whenever the FEN changes (auto-played move).
+    setForkSelected(null);
+  }, [fen]);
+  const forkLegalTargets = useMemo<string[]>(() => {
+    if (!forkSelected) return [];
+    try {
+      const c = new Chess(fen);
+      return c.moves({ square: forkSelected as Square, verbose: true }).map((m) => m.to);
+    } catch {
+      return [];
+    }
+  }, [forkSelected, fen]);
+  const handleForkSquareClick = useCallback(
+    (args: { square?: string }) => {
+      const sq = args.square;
+      if (!sq) return;
+      if (phase !== 'fork') return;
+      if (!forkSelected) {
+        try {
+          const c = new Chess(fen);
+          const piece = c.get(sq as Square);
+          if (!piece) return;
+          const stm = fen.split(' ')[1];
+          if (piece.color !== stm) return;
+          setForkSelected(sq);
+        } catch {
+          /* swallow */
+        }
+        return;
+      }
+      if (sq === forkSelected) {
+        setForkSelected(null);
+        return;
+      }
+      if (forkLegalTargets.includes(sq)) {
+        tryForkMove(forkSelected, sq);
+        setForkSelected(null);
+        return;
+      }
+      try {
+        const c = new Chess(fen);
+        const piece = c.get(sq as Square);
+        const stm = fen.split(' ')[1];
+        if (piece && piece.color === stm) {
+          setForkSelected(sq);
+          return;
+        }
+      } catch {
+        /* swallow */
+      }
+      setForkSelected(null);
+    },
+    [phase, fen, forkSelected, forkLegalTargets, tryForkMove],
+  );
+  const forkClickStyles = useMemo<Record<string, React.CSSProperties>>(() => {
+    const out: Record<string, React.CSSProperties> = {};
+    if (forkSelected) {
+      out[forkSelected] = {
+        background: 'rgba(0, 229, 255, 0.35)',
+        boxShadow: 'inset 0 0 0 2px rgba(0, 229, 255, 0.7)',
+      };
+    }
+    for (const t of forkLegalTargets) {
+      out[t] = {
+        ...(out[t] ?? {}),
+        background:
+          out[t]?.background ??
+          'radial-gradient(circle, rgba(0, 229, 255, 0.5) 18%, transparent 22%)',
+      };
+    }
+    return out;
+  }, [forkSelected, forkLegalTargets]);
 
   const wrongFlashStyles = useMemo<Record<string, React.CSSProperties>>(() => {
     if (!wrongFlash) return {};
@@ -646,13 +729,19 @@ function LessonView({
   // attempt the correct mate move directly. During narration /
   // animation the board is non-interactive — pieces wouldn't make
   // sense to move while the coach is still talking.
+  const mergedForkStyles = useMemo<Record<string, React.CSSProperties>>(() => ({
+    ...forkClickStyles,
+    ...wrongFlashStyles,
+  }), [forkClickStyles, wrongFlashStyles]);
+
   const board = (
     <ConsistentChessboard
       fen={fen}
       boardOrientation={studentSide}
       interactive={phase === 'fork'}
       onPieceDrop={handlePieceDrop}
-      squareStyles={wrongFlashStyles}
+      onSquareClick={handleForkSquareClick}
+      squareStyles={mergedForkStyles}
     />
   );
 
@@ -817,13 +906,20 @@ function CuratedMatingLessonView({
     };
   }, [playout.wrongSquare]);
 
+  const clickToMove = useClickToMove(playout);
+  const mergedStyles = useMemo<Record<string, React.CSSProperties>>(() => ({
+    ...clickToMove.squareStyles,
+    ...wrongFlashStyles,
+  }), [clickToMove.squareStyles, wrongFlashStyles]);
+
   const board = (
     <ConsistentChessboard
       fen={playout.fen}
       boardOrientation={playout.studentSide}
       interactive={playout.phase === 'student-to-move'}
       onPieceDrop={playout.onPieceDrop}
-      squareStyles={wrongFlashStyles}
+      onSquareClick={clickToMove.onSquareClick}
+      squareStyles={mergedStyles}
     />
   );
 
