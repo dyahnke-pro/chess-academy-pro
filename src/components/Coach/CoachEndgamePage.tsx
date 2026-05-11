@@ -29,6 +29,7 @@ import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
 import { voiceService } from '../../services/voiceService';
+import { getMasteredCount } from '../../services/endgameProgressService';
 import {
   getAllPatterns,
   getPatternById,
@@ -221,6 +222,20 @@ function PatternPicker({ onPick, onBack, tier, onTierChange, activeTab, onTabCha
   const named = patterns.filter((p) => p.category === 'named-pattern');
   const piece = patterns.filter((p) => p.category === 'piece-mate');
 
+  // Cumulative mastery across every endgame lesson tab. Cheap
+  // Dexie aggregate; re-runs whenever the picker mounts so the
+  // count reflects the student's most-recent session.
+  const [masteredCount, setMasteredCount] = useState<number>(0);
+  useEffect(() => {
+    let cancelled = false;
+    void getMasteredCount().then((n) => {
+      if (!cancelled) setMasteredCount(n);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [activeTab]);
+
   return (
     <div
       className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
@@ -235,7 +250,20 @@ function PatternPicker({ onPick, onBack, tier, onTierChange, activeTab, onTabCha
         >
           <ArrowLeft size={20} className="text-theme-text" />
         </button>
-        <h1 className="text-xl font-bold text-center flex-1">Endgame with Coach</h1>
+        <div className="flex-1 flex flex-col items-center gap-0.5">
+          <h1 className="text-xl font-bold text-center">Endgame with Coach</h1>
+          {masteredCount > 0 && (
+            <div
+              className="inline-flex items-center gap-1 text-[10px] text-green-400 font-medium"
+              data-testid="endgame-hub-mastered-count"
+            >
+              <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-green-500/20 text-[8px] font-bold">
+                ✓
+              </span>
+              {masteredCount} mastered
+            </div>
+          )}
+        </div>
         <div className="w-[44px]" />
       </div>
 
