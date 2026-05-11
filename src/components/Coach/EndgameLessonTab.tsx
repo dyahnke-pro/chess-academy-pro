@@ -210,6 +210,24 @@ interface LessonViewProps {
 function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
   const [drillSeed, setDrillSeed] = useState<number>(() => Date.now());
   const [tier, setTier] = useState<DrillTier>('beginner');
+  // Persisted mastery for the keystones — { fen → mastered }.
+  // Loaded once on lesson open. Drill positions don't surface
+  // mastery (they're DB-rotated, not the canonical set).
+  const [masteryByFen, setMasteryByFen] = useState<Record<string, boolean>>({});
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const records = await getLessonProgress(lesson.id);
+      if (cancelled) return;
+      const out: Record<string, boolean> = {};
+      for (const r of records) out[r.fen] = r.mastered;
+      setMasteryByFen(out);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [lesson.id]);
+
   // The full position list = keystone positions (hand-authored)
   // followed by drill positions (Lichess puzzle DB). The student
   // sees keystones first (named theory, explained), then drills
@@ -226,6 +244,7 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
   const [posIndex, setPosIndex] = useState(0);
   const position = allPositions[posIndex];
   const isDrill = posIndex >= lesson.positions.length;
+  const isMastered = !isDrill && (masteryByFen[position.fen] ?? false);
 
   const goPrev = useCallback(() => {
     setPosIndex((i) => Math.max(0, i - 1));
@@ -248,6 +267,14 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
     [lesson.positions.length],
   );
 
+  // Optimistic mastery flip on local play completion — the
+  // PositionRunner persists the play asynchronously; we update
+  // the in-memory map immediately so the chip appears without a
+  // round-trip to Dexie.
+  const onPlayPerfect = useCallback((fen: string) => {
+    setMasteryByFen((prev) => ({ ...prev, [fen]: true }));
+  }, []);
+
   return (
     <PositionRunner
       key={`${lesson.id}-${posIndex}-${drillSeed}-${tier}`}
@@ -259,6 +286,7 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
       isDrill={isDrill}
       drillCount={drillPositions.length}
       tier={tier}
+      isMastered={isMastered}
       onTierChange={onTierChange}
       onExit={onExit}
       onPrev={goPrev}
@@ -266,6 +294,7 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
       canPrev={posIndex > 0}
       canNext={posIndex < allPositions.length - 1}
       onReshuffleDrills={drillPositions.length > 0 ? reshuffleDrills : undefined}
+      onPlayPerfect={onPlayPerfect}
     />
   );
 }
@@ -279,6 +308,10 @@ interface PositionRunnerProps {
   isDrill: boolean;
   drillCount: number;
   tier: DrillTier;
+  /** Whether this keystone position is already mastered (from
+   *  Dexie). Drives the ✓ chip on the position card. Drills don't
+   *  surface mastery, so this is always false for drills. */
+  isMastered: boolean;
   onTierChange: (next: DrillTier) => void;
   onExit: () => void;
   onPrev: () => void;
@@ -286,6 +319,10 @@ interface PositionRunnerProps {
   canPrev: boolean;
   canNext: boolean;
   onReshuffleDrills?: () => void;
+  /** Called when the student completes the playout on first try.
+   *  Lets the parent flip the in-memory mastery map without
+   *  re-querying Dexie. */
+  onPlayPerfect?: (fen: string) => void;
 }
 
 function PositionRunner({
@@ -297,6 +334,7 @@ function PositionRunner({
   isDrill,
   drillCount,
   tier,
+  isMastered,
   onTierChange,
   onExit,
   onPrev,
@@ -304,6 +342,7 @@ function PositionRunner({
   canPrev,
   canNext,
   onReshuffleDrills,
+  onPlayPerfect,
 }: PositionRunnerProps): JSX.Element {
   const playout = useEndgamePlayout({
     startFen: position.fen,
@@ -355,7 +394,12 @@ function PositionRunner({
       firstTryPerfect: playout.firstTryPerfect,
       wrongAttempts: playout.wrongAttempts,
     });
-  }, [playout.isComplete, playout.firstTryPerfect, playout.wrongAttempts, isPlayable, lesson.id, position.fen]);
+    // Optimistically flip the parent's mastery map so the chip
+    // appears immediately, without waiting for the next lesson re-mount.
+    if (playout.firstTryPerfect && !isDrill && onPlayPerfect) {
+      onPlayPerfect(position.fen);
+    }
+  }, [playout.isComplete, playout.firstTryPerfect, playout.wrongAttempts, isPlayable, isDrill, lesson.id, position.fen, onPlayPerfect]);
 
   const wrongFlash = useMemo<Record<string, CSSProperties>>(() => {
     if (!playout.wrongSquare) return {};
@@ -442,6 +486,7 @@ function PositionRunner({
         studentSide={studentSide}
         playout={playout}
         isPlayable={isPlayable}
+        isMastered={isMastered}
       />
       {posIndex === 0 && <NarrationPanel lesson={lesson} />}
       <div className="flex items-center justify-between gap-2">
@@ -488,6 +533,9 @@ interface PositionCardProps {
   studentSide: 'white' | 'black';
   playout: ReturnType<typeof useEndgamePlayout>;
   isPlayable: boolean;
+  /** Sticky mastery flag — true when the student has previously
+   *  completed this position on first try. Drives the ✓ chip. */
+  isMastered: boolean;
 }
 
 function PositionCard({
@@ -497,11 +545,23 @@ function PositionCard({
   studentSide,
   playout,
   isPlayable,
+  isMastered,
 }: PositionCardProps): JSX.Element {
   return (
     <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-sm font-semibold text-theme-text leading-tight">{position.title}</h3>
+        <h3 className="text-sm font-semibold text-theme-text leading-tight flex items-center gap-1.5">
+          {isMastered && (
+            <span
+              className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-green-500/20 text-green-400 text-[9px] font-bold"
+              aria-label="Mastered"
+              data-testid="endgame-position-mastered"
+            >
+              ✓
+            </span>
+          )}
+          {position.title}
+        </h3>
         <span className={`text-[11px] font-mono font-semibold ${resultColor} flex-shrink-0`}>
           {resultLabel}
         </span>
