@@ -362,15 +362,46 @@ function PositionRunner({
   onReshuffleDrills,
   onPlayPerfect,
 }: PositionRunnerProps): JSX.Element {
+  // Toggle for the optional "Play it out vs Stockfish" extension
+  // surfaced after a single-bestMove curated portion completes.
+  // When engaged, the playout restarts with engine fallback so the
+  // student replays the bestMove and then continues against
+  // Stockfish for fallbackPliesToPlay more half-moves. Resets when
+  // the student navigates to a different position.
+  const [playItOut, setPlayItOut] = useState(false);
+  useEffect(() => {
+    setPlayItOut(false);
+  }, [position.fen]);
+
   const playout = useEndgamePlayout({
     startFen: position.fen,
     solution: position.solution ?? [],
     bestMove: position.bestMove,
-    stockfishFallback: false,
+    stockfishFallback: playItOut,
+    fallbackPliesToPlay: 4,
     replyDelayMs: 450,
   });
   const studentSide = playout.studentSide;
   const isPlayable = playout.curatedStudentMoves > 0;
+  // Only single-curated-move keystones benefit from the
+  // "Play it out vs Stockfish" extension — multi-move keystones
+  // already drill the technique through their full solution.
+  const offerPlayItOut =
+    isPlayable && playout.curatedStudentMoves === 1 && !isDrill;
+
+  // When the student opts in to play-it-out, the hook starts with
+  // stockfishFallback=true but the chess.js position is already at
+  // startFen. Calling reset() re-arms the playout so the student
+  // can replay the curated bestMove, after which the engine takes
+  // over for fallbackPliesToPlay half-moves.
+  useEffect(() => {
+    if (!playItOut) return;
+    playout.reset();
+    // playout.reset is stable across renders; we don't want it in
+    // the deps because that would loop. Only re-run when playItOut
+    // toggles.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playItOut]);
 
   // Voice-first: speak the position's hand-authored explanation the
   // moment the student lands on it. On the FIRST position of the
@@ -505,6 +536,9 @@ function PositionRunner({
         playout={playout}
         isPlayable={isPlayable}
         isMastered={isMastered}
+        offerPlayItOut={offerPlayItOut}
+        playItOutEngaged={playItOut}
+        onEngagePlayItOut={() => setPlayItOut(true)}
       />
       {posIndex === 0 && <NarrationPanel lesson={lesson} />}
       <div className="flex items-center justify-between gap-2">
@@ -567,6 +601,16 @@ interface PositionCardProps {
   /** Sticky mastery flag — true when the student has previously
    *  completed this position on first try. Drives the ✓ chip. */
   isMastered: boolean;
+  /** When true, surface the "Play it out vs Stockfish" extension
+   *  button on completion. Only applies to single-bestMove
+   *  keystones — multi-move solutions already drill the technique. */
+  offerPlayItOut: boolean;
+  /** When true, the student has already engaged play-it-out and
+   *  the engine is in the loop. */
+  playItOutEngaged: boolean;
+  /** Engage the play-it-out extension — resets the playout with
+   *  Stockfish fallback enabled. */
+  onEngagePlayItOut: () => void;
 }
 
 function PositionCard({
@@ -577,6 +621,9 @@ function PositionCard({
   playout,
   isPlayable,
   isMastered,
+  offerPlayItOut,
+  playItOutEngaged,
+  onEngagePlayItOut,
 }: PositionCardProps): JSX.Element {
   return (
     <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
@@ -599,7 +646,13 @@ function PositionCard({
       </div>
       <p className="text-[12px] text-theme-text-muted leading-relaxed">{position.explanation}</p>
       {isPlayable ? (
-        <PlayoutStatus playout={playout} studentSide={studentSide} />
+        <PlayoutStatus
+          playout={playout}
+          studentSide={studentSide}
+          offerPlayItOut={offerPlayItOut}
+          playItOutEngaged={playItOutEngaged}
+          onEngagePlayItOut={onEngagePlayItOut}
+        />
       ) : (
         <div className="text-[11px] text-theme-text-muted italic">
           Reference position — no playable line authored. Study the position and tap Next.
@@ -615,23 +668,49 @@ function PositionCard({
 interface PlayoutStatusProps {
   playout: ReturnType<typeof useEndgamePlayout>;
   studentSide: 'white' | 'black';
+  offerPlayItOut: boolean;
+  playItOutEngaged: boolean;
+  onEngagePlayItOut: () => void;
 }
 
-function PlayoutStatus({ playout, studentSide }: PlayoutStatusProps): JSX.Element {
+function PlayoutStatus({
+  playout,
+  studentSide,
+  offerPlayItOut,
+  playItOutEngaged,
+  onEngagePlayItOut,
+}: PlayoutStatusProps): JSX.Element {
   if (playout.isComplete) {
     return (
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center gap-1.5 text-[11px] text-green-400 font-semibold">
           <CheckCircle size={14} />
-          {playout.firstTryPerfect ? 'Played perfectly' : 'Line played out'}
+          {playItOutEngaged
+            ? playout.fallbackOutcome === 'survived'
+              ? 'Held the position vs Stockfish'
+              : 'Played through'
+            : playout.firstTryPerfect
+              ? 'Played perfectly'
+              : 'Line played out'}
         </div>
-        <button
-          onClick={playout.reset}
-          className="flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 self-start"
-        >
-          <RotateCw size={11} />
-          Try again
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={playout.reset}
+            className="flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300"
+          >
+            <RotateCw size={11} />
+            Try again
+          </button>
+          {offerPlayItOut && !playItOutEngaged && (
+            <button
+              onClick={onEngagePlayItOut}
+              className="flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300"
+              data-testid="endgame-play-it-out"
+            >
+              Play it out vs Stockfish →
+            </button>
+          )}
+        </div>
       </div>
     );
   }
