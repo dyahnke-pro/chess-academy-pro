@@ -83,6 +83,12 @@ export interface EndgameLessonPosition {
   solution?: string[];
   /** Optional source citation — book, study, named position. */
   source?: string;
+  /** Optional concept hint surfaced under the puzzle description
+   *  AFTER a wrong first move (not before — the student should try
+   *  cold). Short, concrete, names the tactic or technique. Maps
+   *  from puzzle themes for DB-sourced drills; curators may set
+   *  it directly on hand-authored positions. */
+  conceptHint?: string;
   /** Set to a non-empty string to exempt this position from the
    *  Stockfish-deep audit (`scripts/audit-endgame-results.mjs`).
    *  Use ONLY for theoretical positions where engine evaluation

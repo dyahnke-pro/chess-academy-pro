@@ -462,7 +462,11 @@ function PositionRunner({
     solution: position.solution ?? [],
     bestMove: position.bestMove,
     stockfishFallback: playItOut,
-    fallbackPliesToPlay: 4,
+    fallbackPliesToPlay: isDrill ? 8 : 4,
+    // Drills: extend automatically until mate / promotion / decisive
+    // material. Keystones: keep the existing fixed-fallback path
+    // (their lines are curated to end at an instructive point).
+    extendToObviousWin: isDrill,
     replyDelayMs: 450,
   });
   const studentSide = playout.studentSide;
@@ -686,6 +690,7 @@ function PositionRunner({
   const controls = (
     <div className="flex flex-col gap-3 px-2 pb-4">
       <PositionCard
+        lesson={lesson}
         position={position}
         resultColor={resultColor}
         resultLabel={resultLabel}
@@ -749,28 +754,21 @@ function PositionRunner({
 }
 
 interface PositionCardProps {
+  lesson: EndgameLesson;
   position: EndgameLessonPosition;
   resultColor: string;
   resultLabel: string;
   studentSide: 'white' | 'black';
   playout: ReturnType<typeof useEndgamePlayout>;
   isPlayable: boolean;
-  /** Sticky mastery flag — true when the student has previously
-   *  completed this position on first try. Drives the ✓ chip. */
   isMastered: boolean;
-  /** When true, surface the "Play it out vs Stockfish" extension
-   *  button on completion. Only applies to single-bestMove
-   *  keystones — multi-move solutions already drill the technique. */
   offerPlayItOut: boolean;
-  /** When true, the student has already engaged play-it-out and
-   *  the engine is in the loop. */
   playItOutEngaged: boolean;
-  /** Engage the play-it-out extension — resets the playout with
-   *  Stockfish fallback enabled. */
   onEngagePlayItOut: () => void;
 }
 
 function PositionCard({
+  lesson,
   position,
   resultColor,
   resultLabel,
@@ -802,6 +800,15 @@ function PositionCard({
         </span>
       </div>
       <p className="text-[12px] text-theme-text-muted leading-relaxed">{position.explanation}</p>
+      {playout.wrongAttempts > 0 && (position.conceptHint || lesson.narration.rule) && (
+        <div
+          className="text-[12px] text-amber-300 leading-relaxed border-l-2 border-amber-500/40 pl-2"
+          data-testid="endgame-concept-hint"
+        >
+          <span className="font-semibold">Concept:</span>{' '}
+          {position.conceptHint ?? lesson.narration.rule}
+        </div>
+      )}
       {isPlayable ? (
         <PlayoutStatus
           playout={playout}

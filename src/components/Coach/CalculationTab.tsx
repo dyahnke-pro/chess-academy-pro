@@ -36,6 +36,7 @@ import {
   getDrillPuzzleCount,
   type CalculationSkill,
 } from '../../services/calculationDrillService';
+import { pickConceptHint } from '../../services/puzzleConceptHint';
 
 const PUZZLES_PER_DRILL = 5;
 
@@ -62,6 +63,10 @@ interface DrillPuzzle {
   expectedSan: string;
   /** Lichess puzzle rating — surfaced as difficulty info. */
   rating: number;
+  /** Short concept hint mapped from the puzzle's theme tags. Shown
+   *  under the prompt only AFTER the student plays a wrong first
+   *  move — gives them a tactical nudge without revealing the move. */
+  conceptHint: string | null;
 }
 
 export function CalculationTab({ onExit }: CalculationTabProps): JSX.Element {
@@ -107,7 +112,13 @@ export function CalculationTab({ onExit }: CalculationTabProps): JSX.Element {
           to: studentUci.slice(2, 4),
           promotion: studentUci.length > 4 ? (studentUci[4] as 'q' | 'r' | 'b' | 'n') : undefined,
         });
-        puzzles.push({ id: p.id, fen: startFen, expectedSan: studentMove.san, rating: p.rating });
+        puzzles.push({
+          id: p.id,
+          fen: startFen,
+          expectedSan: studentMove.san,
+          rating: p.rating,
+          conceptHint: pickConceptHint(p.themes),
+        });
       } catch {
         // Skip malformed puzzles — defensive.
       }
@@ -273,6 +284,11 @@ interface DrillScreenProps {
 
 function DrillScreen({ skill, drill, setDrill, onExit, onReshuffle }: DrillScreenProps): JSX.Element {
   const [wrongSquare, setWrongSquare] = useState<string | null>(null);
+  // Per-puzzle wrong-attempt counter — drives the post-mistake
+  // concept hint. Resets on puzzle change. Used INSTEAD of
+  // pushing a parallel array into DrillState because it's a UI
+  // concern, not part of the persisted drill result.
+  const [wrongCount, setWrongCount] = useState<number>(0);
   const current = drill.puzzles[drill.currentIndex];
   const studentSide: 'white' | 'black' = useMemo(
     () => (current?.fen.split(' ')[1] === 'w' ? 'white' : 'black'),
@@ -282,9 +298,10 @@ function DrillScreen({ skill, drill, setDrill, onExit, onReshuffle }: DrillScree
   const score = drill.outcomes.filter((o) => o === 'correct').length;
   const answered = drill.outcomes.filter((o) => o !== null).length;
 
-  // Reset the wrong-square flash when the puzzle changes.
+  // Reset the wrong-square flash + wrong-count when the puzzle changes.
   useEffect(() => {
     setWrongSquare(null);
+    setWrongCount(0);
   }, [drill.currentIndex]);
 
   // Core move attempt — shared by drag (handleDrop) and click-to-
@@ -312,6 +329,7 @@ function DrillScreen({ skill, drill, setDrill, onExit, onReshuffle }: DrillScree
         return true;
       }
       setWrongSquare(to);
+      setWrongCount((n) => n + 1);
       window.setTimeout(() => setWrongSquare(null), 600);
       return false;
     },
@@ -485,6 +503,14 @@ function DrillScreen({ skill, drill, setDrill, onExit, onReshuffle }: DrillScree
         <p className="text-sm text-theme-text">
           {studentSide === 'white' ? 'White' : 'Black'} to play. Find the best move.
         </p>
+        {outcome === null && wrongCount > 0 && current.conceptHint && (
+          <div
+            className="text-[12px] text-amber-300 leading-relaxed border-l-2 border-amber-500/40 pl-2"
+            data-testid="calc-concept-hint"
+          >
+            <span className="font-semibold">Concept:</span> {current.conceptHint}
+          </div>
+        )}
         {outcome === 'correct' && (
           <div className="flex items-center gap-1.5 text-[12px] text-green-400 font-semibold">
             <Check size={14} />
@@ -498,7 +524,9 @@ function DrillScreen({ skill, drill, setDrill, onExit, onReshuffle }: DrillScree
           </div>
         )}
         {outcome === null && (
-          <p className="text-[11px] text-cyan-400">Drag a piece to play your move.</p>
+          <p className="text-[11px] text-cyan-400">
+            {wrongCount > 0 ? 'Try again — drag or tap a piece.' : 'Drag or tap a piece to play your move.'}
+          </p>
         )}
       </div>
       <div className="flex items-center justify-between gap-2">
