@@ -16,7 +16,7 @@
  * input via chess.js. No runtime LLM authorship.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import {
   ArrowLeft,
   Check,
@@ -80,21 +80,36 @@ export function CalculationTab({ onExit }: CalculationTabProps): JSX.Element {
     const raw = getDrillPuzzles(skillId, { limit: PUZZLES_PER_DRILL, seed });
     const puzzles: DrillPuzzle[] = [];
     for (const p of raw) {
+      // Lichess puzzle convention:
+      //   puzzle.fen   = position BEFORE the opponent's setup move
+      //   moves[0]     = opponent's setup move (auto-played)
+      //   moves[1]     = the FIRST move the student must find
+      // We apply the setup so the student is presented with the
+      // position to solve from — side-to-move is THEIR side.
+      // Previous code stored p.fen directly, which left the
+      // student looking at the opponent-to-move position and
+      // asked them to play the opponent's setup move (find-the-
+      // mate from the wrong side).
       const c = new Chess(p.fen);
-      const firstUci = p.moves.split(' ')[0];
-      const from = firstUci.slice(0, 2);
-      const to = firstUci.slice(2, 4);
-      const promotion = firstUci.length > 4 ? firstUci.slice(4) : undefined;
+      const ucis = p.moves.split(/\s+/).filter(Boolean);
+      if (ucis.length < 2) continue;
+      const setupUci = ucis[0];
+      const studentUci = ucis[1];
       try {
-        const mv = c.move({
-          from,
-          to,
-          promotion: promotion as 'q' | 'r' | 'b' | 'n' | undefined,
+        c.move({
+          from: setupUci.slice(0, 2),
+          to: setupUci.slice(2, 4),
+          promotion: setupUci.length > 4 ? (setupUci[4] as 'q' | 'r' | 'b' | 'n') : undefined,
         });
-        puzzles.push({ id: p.id, fen: p.fen, expectedSan: mv.san, rating: p.rating });
+        const startFen = c.fen();
+        const studentMove = c.move({
+          from: studentUci.slice(0, 2),
+          to: studentUci.slice(2, 4),
+          promotion: studentUci.length > 4 ? (studentUci[4] as 'q' | 'r' | 'b' | 'n') : undefined,
+        });
+        puzzles.push({ id: p.id, fen: startFen, expectedSan: studentMove.san, rating: p.rating });
       } catch {
-        // Skip malformed puzzles — should be filtered by the
-        // service's invariant tests but defensive anyway.
+        // Skip malformed puzzles — defensive.
       }
     }
     setDrill({
@@ -272,27 +287,22 @@ function DrillScreen({ skill, drill, setDrill, onExit, onReshuffle }: DrillScree
     setWrongSquare(null);
   }, [drill.currentIndex]);
 
-  const handleDrop = useCallback(
-    (args: PieceDropHandlerArgs): boolean => {
+  // Core move attempt — shared by drag (handleDrop) and click-to-
+  // move (handleSquareClick). Returns true on a correct attempt.
+  const tryMove = useCallback(
+    (from: string, to: string): boolean => {
       if (!current) return false;
       if (outcome !== null) return false;
-      if (!args.sourceSquare || !args.targetSquare) return false;
       const probe = new Chess(current.fen);
       let played;
       try {
-        played = probe.move({
-          from: args.sourceSquare,
-          to: args.targetSquare,
-          promotion: 'q',
-        });
+        played = probe.move({ from, to, promotion: 'q' });
       } catch {
         return false;
       }
       const stripAnnotations = (san: string): string =>
         san.replace(/[+#!?]+$/, '').replace(/=Q$|=R$|=B$|=N$/, '');
-      const playedClean = stripAnnotations(played.san);
-      const expectedClean = stripAnnotations(current.expectedSan);
-      if (playedClean === expectedClean) {
+      if (stripAnnotations(played.san) === stripAnnotations(current.expectedSan)) {
         setDrill((prev) => {
           if (!prev) return prev;
           const newOutcomes = [...prev.outcomes];
@@ -301,13 +311,77 @@ function DrillScreen({ skill, drill, setDrill, onExit, onReshuffle }: DrillScree
         });
         return true;
       }
-      // Mark wrong if answered for the first time, but allow retry
-      // until they get it right OR explicitly skip.
-      setWrongSquare(args.targetSquare);
+      setWrongSquare(to);
       window.setTimeout(() => setWrongSquare(null), 600);
       return false;
     },
     [current, outcome, setDrill],
+  );
+
+  const handleDrop = useCallback(
+    (args: PieceDropHandlerArgs): boolean => {
+      if (!args.sourceSquare || !args.targetSquare) return false;
+      return tryMove(args.sourceSquare, args.targetSquare);
+    },
+    [tryMove],
+  );
+
+  // Click-to-move selection state. Tap a friendly piece → select it
+  // + highlight legal targets. Tap a target → tryMove. Tap an empty
+  // or opponent square (or the same piece) → cancel selection.
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+  useEffect(() => {
+    setSelectedSquare(null);
+  }, [current?.fen]);
+  const legalTargets = useMemo<string[]>(() => {
+    if (!selectedSquare || !current) return [];
+    try {
+      const c = new Chess(current.fen);
+      return c.moves({ square: selectedSquare as Square, verbose: true }).map((m) => m.to);
+    } catch {
+      return [];
+    }
+  }, [selectedSquare, current]);
+  const handleSquareClick = useCallback(
+    (args: { square?: string }) => {
+      const sq = args.square;
+      if (!sq || !current || outcome !== null) return;
+      if (!selectedSquare) {
+        try {
+          const c = new Chess(current.fen);
+          const piece = c.get(sq as Square);
+          if (!piece) return;
+          const stm = current.fen.split(' ')[1];
+          if (piece.color !== stm) return;
+          setSelectedSquare(sq);
+        } catch {
+          /* swallow */
+        }
+        return;
+      }
+      if (sq === selectedSquare) {
+        setSelectedSquare(null);
+        return;
+      }
+      if (legalTargets.includes(sq)) {
+        tryMove(selectedSquare, sq);
+        setSelectedSquare(null);
+        return;
+      }
+      try {
+        const c = new Chess(current.fen);
+        const piece = c.get(sq as Square);
+        const stm = current.fen.split(' ')[1];
+        if (piece && piece.color === stm) {
+          setSelectedSquare(sq);
+          return;
+        }
+      } catch {
+        /* swallow */
+      }
+      setSelectedSquare(null);
+    },
+    [current, outcome, selectedSquare, legalTargets, tryMove],
   );
 
   const advance = useCallback(() => {
@@ -333,6 +407,30 @@ function DrillScreen({ skill, drill, setDrill, onExit, onReshuffle }: DrillScree
     if (!wrongSquare) return {};
     return { [wrongSquare]: { background: 'rgba(239, 68, 68, 0.45)' } };
   }, [wrongSquare]);
+
+  const clickStyles = useMemo<Record<string, CSSProperties>>(() => {
+    const out: Record<string, CSSProperties> = {};
+    if (selectedSquare) {
+      out[selectedSquare] = {
+        background: 'rgba(0, 229, 255, 0.35)',
+        boxShadow: 'inset 0 0 0 2px rgba(0, 229, 255, 0.7)',
+      };
+    }
+    for (const t of legalTargets) {
+      out[t] = {
+        ...(out[t] ?? {}),
+        background:
+          out[t]?.background ??
+          'radial-gradient(circle, rgba(0, 229, 255, 0.5) 18%, transparent 22%)',
+      };
+    }
+    return out;
+  }, [selectedSquare, legalTargets]);
+
+  const mergedSquareStyles = useMemo<Record<string, CSSProperties>>(
+    () => ({ ...clickStyles, ...flashStyles }),
+    [clickStyles, flashStyles],
+  );
 
   if (!current) {
     return <DrillSummary drill={drill} skill={skill} onReshuffle={onReshuffle} onExit={onExit} />;
@@ -376,7 +474,8 @@ function DrillScreen({ skill, drill, setDrill, onExit, onReshuffle }: DrillScree
       boardOrientation={studentSide}
       interactive={outcome === null}
       onPieceDrop={handleDrop}
-      squareStyles={flashStyles}
+      onSquareClick={handleSquareClick}
+      squareStyles={mergedSquareStyles}
     />
   );
 
