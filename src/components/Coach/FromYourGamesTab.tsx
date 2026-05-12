@@ -15,7 +15,7 @@
  *   - All games are mistake-free in the endgame phase (lucky you)
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import {
   ArrowLeft,
   ChevronLeft,
@@ -204,19 +204,16 @@ function Lesson({ positions, index, onExit, onIndexChange }: LessonProps): JSX.E
     setWrongSquare(null);
   }, [index]);
 
-  const handleDrop = useCallback(
-    (args: PieceDropHandlerArgs): boolean => {
+  // Core move attempt — shared by drag (handleDrop) and click-to-
+  // move (handleSquareClick).
+  const tryMove = useCallback(
+    (from: string, to: string): boolean => {
       if (!position.bestMove) return false;
       if (solved) return false;
-      if (!args.sourceSquare || !args.targetSquare) return false;
       const probe = new Chess(position.fen);
       let played;
       try {
-        played = probe.move({
-          from: args.sourceSquare,
-          to: args.targetSquare,
-          promotion: 'q',
-        });
+        played = probe.move({ from, to, promotion: 'q' });
       } catch {
         return false;
       }
@@ -227,17 +224,98 @@ function Lesson({ positions, index, onExit, onIndexChange }: LessonProps): JSX.E
         setWrongSquare(null);
         return true;
       }
-      setWrongSquare(args.targetSquare);
+      setWrongSquare(to);
       window.setTimeout(() => setWrongSquare(null), 600);
       return false;
     },
     [position.fen, position.bestMove, solved],
   );
 
+  const handleDrop = useCallback(
+    (args: PieceDropHandlerArgs): boolean => {
+      if (!args.sourceSquare || !args.targetSquare) return false;
+      return tryMove(args.sourceSquare, args.targetSquare);
+    },
+    [tryMove],
+  );
+
+  // Click-to-move selection.
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+  useEffect(() => {
+    setSelectedSquare(null);
+  }, [position.fen]);
+  const legalTargets = useMemo<string[]>(() => {
+    if (!selectedSquare) return [];
+    try {
+      const c = new Chess(position.fen);
+      return c.moves({ square: selectedSquare as Square, verbose: true }).map((m) => m.to);
+    } catch {
+      return [];
+    }
+  }, [selectedSquare, position.fen]);
+  const handleSquareClick = useCallback(
+    (args: { square?: string }) => {
+      const sq = args.square;
+      if (!sq || solved) return;
+      if (!selectedSquare) {
+        try {
+          const c = new Chess(position.fen);
+          const piece = c.get(sq as Square);
+          if (!piece) return;
+          const stm = position.fen.split(' ')[1];
+          if (piece.color !== stm) return;
+          setSelectedSquare(sq);
+        } catch {
+          /* swallow */
+        }
+        return;
+      }
+      if (sq === selectedSquare) {
+        setSelectedSquare(null);
+        return;
+      }
+      if (legalTargets.includes(sq)) {
+        tryMove(selectedSquare, sq);
+        setSelectedSquare(null);
+        return;
+      }
+      try {
+        const c = new Chess(position.fen);
+        const piece = c.get(sq as Square);
+        const stm = position.fen.split(' ')[1];
+        if (piece && piece.color === stm) {
+          setSelectedSquare(sq);
+          return;
+        }
+      } catch {
+        /* swallow */
+      }
+      setSelectedSquare(null);
+    },
+    [position.fen, solved, selectedSquare, legalTargets, tryMove],
+  );
+
   const flashStyles = useMemo<Record<string, CSSProperties>>(() => {
-    if (!wrongSquare) return {};
-    return { [wrongSquare]: { background: 'rgba(239, 68, 68, 0.45)' } };
-  }, [wrongSquare]);
+    const out: Record<string, CSSProperties> = {};
+    if (selectedSquare) {
+      out[selectedSquare] = {
+        background: 'rgba(0, 229, 255, 0.35)',
+        boxShadow: 'inset 0 0 0 2px rgba(0, 229, 255, 0.7)',
+      };
+    }
+    for (const t of legalTargets) {
+      out[t] = {
+        ...(out[t] ?? {}),
+        background:
+          out[t]?.background ??
+          'radial-gradient(circle, rgba(0, 229, 255, 0.5) 18%, transparent 22%)',
+      };
+    }
+    if (wrongSquare) {
+      out[wrongSquare] = { background: 'rgba(239, 68, 68, 0.45)' };
+    }
+    return out;
+  }, [selectedSquare, legalTargets, wrongSquare]);
 
   const goPrev = useCallback(
     () => onIndexChange(Math.max(0, index - 1)),
@@ -280,6 +358,7 @@ function Lesson({ positions, index, onExit, onIndexChange }: LessonProps): JSX.E
       boardOrientation={studentSide}
       interactive={!!position.bestMove && !solved}
       onPieceDrop={handleDrop}
+      onSquareClick={handleSquareClick}
       squareStyles={flashStyles}
     />
   );
