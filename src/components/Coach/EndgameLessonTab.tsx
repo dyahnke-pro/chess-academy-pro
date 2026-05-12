@@ -44,6 +44,7 @@ import {
   recordPlay,
   resetLessonProgress,
 } from '../../services/endgameProgressService';
+import { EndgameRecapCard } from './EndgameRecapCard';
 import type { EndgameLesson, EndgameLessonPosition } from '../../types/endgameLesson';
 import type { EndgameProgressRecord } from '../../types';
 
@@ -896,6 +897,10 @@ function PlayoutStatus({
             </button>
           )}
         </div>
+        <EndgameRecapCard
+          studentMoves={playout.studentMoveLog}
+          studentSide={studentSide}
+        />
       </div>
     );
   }
