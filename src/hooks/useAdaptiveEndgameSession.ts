@@ -104,6 +104,7 @@ export function useAdaptiveEndgameSession(
         firstTryPerfect,
         puzzleRating: currentRaw.rating,
         puzzleId: currentRaw.id,
+        puzzleThemes: currentRaw.themes,
       });
       setState(next);
       setCurrentRaw(pickAdaptivePuzzle(next, { themes }));

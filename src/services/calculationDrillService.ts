@@ -103,6 +103,14 @@ const SKILLS: CalculationSkill[] = [
       "Tactics aren't pure calculation — they're pattern recognition followed by calculation. A sacrifice is a calculated investment; an attraction lures the king; a deflection breaks a defender. Drill the named patterns and your calculation gets a head start: you know what shape you're calculating before you start counting.",
     themes: ['sacrifice', 'attraction', 'deflection'],
   },
+  {
+    id: 'adaptive-mixed',
+    name: 'Adaptive (auto)',
+    description: 'Mixed endgame puzzles at your level — no theme filter, weakness-boost every 5th.',
+    rationale:
+      "The lazy-perfect choice. No theme filter — every puzzle is pulled from the full endgame pool at your current rating. Get a streak going and the puzzles get harder; miss one and they ease back. Every fifth puzzle is biased toward your weakest theme so the gaps in your toolkit don't get ignored. Use this when you don't want to pick a specific skill — just let the algorithm drive.",
+    themes: ['endgame'],
+  },
 ];
 
 /** All available calculation skills — picker tile data. */

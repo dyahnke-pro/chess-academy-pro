@@ -79,7 +79,13 @@ export interface AdaptiveEndgameState {
   /** Lichess puzzle ids the student has already played this
    *  session — feed into puzzle selection to avoid repeats. */
   playedIds: Set<string>;
+  /** Per-theme accuracy tracking. Each theme tag the student has
+   *  encountered records {correct, total}. Drives the weakness-
+   *  boost on every Nth puzzle. */
+  themesEncountered: Record<string, { correct: number; total: number }>;
 }
+
+const WEAKNESS_BOOST_INTERVAL = 5;
 
 export function createAdaptiveEndgameState(initialUserRating?: number): AdaptiveEndgameState {
   const rating = clamp(initialUserRating ?? DEFAULT_ENDGAME_RATING);
@@ -93,6 +99,7 @@ export function createAdaptiveEndgameState(initialUserRating?: number): Adaptive
     consecutiveWrong: 0,
     lastAdjustment: null,
     playedIds: new Set(),
+    themesEncountered: {},
   };
 }
 
@@ -105,6 +112,9 @@ export interface AdaptiveEndgameOutcome {
   puzzleRating: number;
   /** Lichess puzzle id — added to playedIds so it isn't re-served. */
   puzzleId: string;
+  /** Theme tags from the puzzle. Used to update themesEncountered
+   *  per-theme accuracy for the weakness-boost picker. */
+  puzzleThemes?: ReadonlyArray<string>;
 }
 
 /** Apply an outcome: step the session target, update the user's
@@ -141,7 +151,42 @@ export function applyAdaptiveOutcome(
   const delta = calculateRatingDelta(state.userRating, outcome.puzzleRating, outcome.firstTryPerfect);
   next.userRating = clamp(state.userRating + delta);
 
+  // Per-theme accuracy tracking — used by the weakness-boost
+  // picker to bias every Nth puzzle toward the student's worst
+  // theme. Updated AFTER the rating step so streak math is
+  // unaffected.
+  if (outcome.puzzleThemes && outcome.puzzleThemes.length > 0) {
+    const updated = { ...state.themesEncountered };
+    for (const theme of outcome.puzzleThemes) {
+      const prev = updated[theme] ?? { correct: 0, total: 0 };
+      updated[theme] = {
+        correct: prev.correct + (outcome.firstTryPerfect ? 1 : 0),
+        total: prev.total + 1,
+      };
+    }
+    next.themesEncountered = updated;
+  }
+
   return next;
+}
+
+/** Return the student's weakest theme — lowest accuracy among
+ *  themes encountered ≥ 2 times. Returns null until the student
+ *  has built up enough history to surface a meaningful gap. */
+export function getWeakestTheme(state: AdaptiveEndgameState): string | null {
+  const entries = Object.entries(state.themesEncountered).filter(
+    ([, stats]) => stats.total >= 2,
+  );
+  if (entries.length === 0) return null;
+  entries.sort(
+    ([, a], [, b]) => a.correct / a.total - b.correct / b.total,
+  );
+  // Only return when the weakest theme is genuinely weak — i.e.
+  // accuracy below 60%. Otherwise the picker can use its normal
+  // closest-to-target logic instead.
+  const [theme, stats] = entries[0];
+  if (stats.correct / stats.total >= 0.6) return null;
+  return theme;
 }
 
 /** Pick the next puzzle for an adaptive endgame session. Filters
@@ -164,6 +209,16 @@ export function pickAdaptivePuzzle(
   const minPlays = options.minPlays ?? 80;
   const themeSet = themes.length > 0 ? new Set(themes) : null;
 
+  // Weakness-boost: every WEAKNESS_BOOST_INTERVAL puzzles, prefer
+  // a puzzle from the student's weakest theme (if one has emerged
+  // from at least 2 attempts at <60% accuracy). Falls through to
+  // the normal closest-to-target pick when no weakest theme is
+  // available or no eligible candidate is found.
+  const totalSoFar = state.solved + state.failed;
+  const shouldBoost =
+    totalSoFar > 0 && totalSoFar % WEAKNESS_BOOST_INTERVAL === 0;
+  const weakest = shouldBoost ? getWeakestTheme(state) : null;
+
   const eligible = PUZZLES.filter((p) => {
     if (state.playedIds.has(p.id)) return false;
     if (p.popularity < minPopularity) return false;
@@ -172,6 +227,19 @@ export function pickAdaptivePuzzle(
     return true;
   });
   if (eligible.length === 0) return null;
+
+  if (weakest) {
+    const weakHits = eligible.filter((p) => p.themes.includes(weakest));
+    if (weakHits.length > 0) {
+      // Closest-to-target within the weakness pool.
+      weakHits.sort(
+        (a, b) =>
+          Math.abs(a.rating - state.sessionRating) -
+          Math.abs(b.rating - state.sessionRating),
+      );
+      return weakHits[0];
+    }
+  }
 
   // Progressive band widening: try 1×, 2×, 3×.
   for (let mult = 1; mult <= 3; mult += 1) {
