@@ -22,6 +22,7 @@
  */
 import { Chess } from 'chess.js';
 import puzzlesData from '../data/puzzles.json';
+import { pickConceptHint } from './puzzleConceptHint';
 import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesson';
 
 interface RawPuzzle {
@@ -117,20 +118,18 @@ function puzzleToLessonPosition(p: RawPuzzle, _lessonName: string): EndgameLesso
     studentSide === 'white' ? 'white-wins' : 'black-wins';
   return {
     fen: startFen,
-    // Short, non-templated title. Used to be "Drill — rating XXXX"
-    // which voiced as "Drill, rating fourteen hundred" on every
-    // single drill; got monotonous fast. The rating already
-    // surfaces in the source citation below.
     title: 'Drill',
-    // No prose explanation — the position itself is the lesson at
-    // this point; the previous "{Side} to play. Play the N-move
-    // sequence from {lesson} — every move is forced." was voiced
-    // verbatim across every DB-sourced drill and tuned out.
     explanation: '',
     result,
     bestMove: sanSequence[0],
     solution: sanSequence,
     source: `Lichess puzzle #${p.id} (rating ${p.rating})`,
+    // Concept hint sourced from the puzzle's theme tags. Surfaces
+    // only after a wrong first move, so the student gets a shove
+    // toward the tactic name without losing the cold-find aspect.
+    // null when no theme matches — UI then falls back to the
+    // lesson's narration.rule.
+    conceptHint: pickConceptHint(p.themes) ?? undefined,
   };
 }
 

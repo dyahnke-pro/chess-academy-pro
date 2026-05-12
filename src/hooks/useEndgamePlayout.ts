@@ -62,6 +62,14 @@ export interface EndgamePlayoutOptions {
    *  fallback. After this many student moves, the playout is
    *  marked complete (won the holding test). Default 4. */
   fallbackPliesToPlay?: number;
+  /** When true, after the curated line ends the playout enters
+   *  engine fallback automatically AND completes the moment the
+   *  position becomes an obvious win (mate, fresh promotion to
+   *  queen, or material lead ≥ ~5 pawns). Caps at
+   *  `fallbackPliesToPlay` extra student moves regardless. Used
+   *  by drill puzzles where the Lichess solution often stops a
+   *  few plies before the actual win materializes. */
+  extendToObviousWin?: boolean;
   /** Animation delay (ms) before the opponent's auto-reply plays.
    *  Keeps the board readable rather than instantly snapping to
    *  the next position. Default 450. */
@@ -166,12 +174,16 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     startFen,
     solution,
     bestMove,
-    stockfishFallback = false,
+    stockfishFallback: stockfishFallbackOption = false,
     fallbackDifficulty = 'easy',
     fallbackPlayerElo = 1500,
     fallbackPliesToPlay = 4,
+    extendToObviousWin = false,
     replyDelayMs = 450,
   } = options;
+  // Extend-to-obvious-win implies fallback is on; treat them as
+  // a single effective flag in the playOpponentReply path.
+  const stockfishFallback = stockfishFallbackOption || extendToObviousWin;
 
   // Build the effective curated line: if solution is empty but
   // bestMove is present, treat bestMove as a 1-move curated line.
@@ -291,9 +303,15 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
       setPhase('complete');
       return;
     }
-    // Count this fallback ply (engine's reply). If we've played
-    // enough student moves in fallback, mark survived.
-    if (fallbackPliesPlayed + 1 >= fallbackPliesToPlay) {
+    // Two paths to "playout done" in fallback:
+    //   1. extendToObviousWin: complete as soon as the position
+    //      is mate / fresh promotion / decisively winning. The
+    //      fallback-plies cap still applies as a safety net.
+    //   2. fixed-plies (Eval Lab style): play exactly
+    //      fallbackPliesToPlay extra student moves, then complete.
+    const reachedObvious = extendToObviousWin && isObviousWin(chessRef.current, studentSide);
+    const reachedCap = fallbackPliesPlayed + 1 >= fallbackPliesToPlay;
+    if (reachedObvious || reachedCap) {
       setFallbackOutcome('survived');
       setPhase('complete');
     } else {
@@ -308,6 +326,8 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     fallbackPlayerElo,
     fallbackPliesPlayed,
     fallbackPliesToPlay,
+    extendToObviousWin,
+    studentSide,
   ]);
 
   /** Attempt a move at the current position. Returns true when the
@@ -446,4 +466,41 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     reveal,
     revealHint,
   };
+}
+
+/** Return true when the position is clearly won/decided for the
+ *  student side — mate on the board OR material lead ≥ ~5 pawn
+ *  units OR a fresh promotion to queen (the rook the student just
+ *  promoted is counted in material; if the side-to-move's queen
+ *  count exceeded the start-of-game count, that's "fresh"
+ *  promotion). Used by the drill-extension fallback to stop the
+ *  playout once the win has materialized.
+ *
+ *  We don't call into Stockfish here — chess.js material + game
+ *  state is enough for the "obvious" threshold. Edge cases (e.g.
+ *  zugzwang win with equal material) won't trip, which is the
+ *  right call: the fallback-plies cap still completes the drill. */
+function isObviousWin(chess: Chess, studentSide: 'white' | 'black'): boolean {
+  if (chess.isCheckmate()) {
+    // chess.js: turn() returns the side to move; if it's mate
+    // then the SIDE TO MOVE is mated. So the winner is the OTHER
+    // side. Match against the student.
+    const mated = chess.turn();
+    const studentMated = (mated === 'w' && studentSide === 'white') ||
+      (mated === 'b' && studentSide === 'black');
+    return !studentMated;
+  }
+  const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  let whiteMat = 0;
+  let blackMat = 0;
+  for (const row of chess.board()) {
+    for (const sq of row) {
+      if (!sq) continue;
+      const v = PIECE_VALUE[sq.type] ?? 0;
+      if (sq.color === 'w') whiteMat += v;
+      else blackMat += v;
+    }
+  }
+  const studentEdge = studentSide === 'white' ? whiteMat - blackMat : blackMat - whiteMat;
+  return studentEdge >= 5;
 }
