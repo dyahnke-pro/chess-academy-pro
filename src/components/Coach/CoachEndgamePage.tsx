@@ -54,13 +54,6 @@ import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 import type { MatingPattern } from '../../types/matingPattern';
 
-const TIER_OPTIONS: { value: EndgameTier; label: string }[] = [
-  { value: 'beginner', label: 'Beginner' },
-  { value: 'intermediate', label: 'Intermediate' },
-  { value: 'advanced', label: 'Advanced' },
-  { value: 'mixed', label: 'Mixed' },
-];
-
 /** Top-level endgame surface tabs. Mating Patterns is the only
  *  populated one today — the others are placeholders for future
  *  endgame surfaces (K+P fundamentals, rook endings, etc.) so the
@@ -91,9 +84,11 @@ export function CoachEndgamePage(): JSX.Element {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<EndgameTab>('mating-patterns');
   const [selectedPatternId, setSelectedPatternId] = useState<string | null>(null);
-  // Tier kept for backward compatibility on the recognition-only
-  // fallback; adaptive mode is the primary driver for puzzle picks.
-  const [tier, setTier] = useState<EndgameTier>('beginner');
+  // Legacy tier kept ONLY for the untagged-pattern fallback path
+  // (a handful of patterns Lichess doesn't tag). For everything
+  // else, adaptive mode drives puzzle picks. Locked at 'beginner'
+  // since there's no user-facing toggle any more.
+  const [tier] = useState<EndgameTier>('beginner');
   const [sessionSeed, setSessionSeed] = useState<number>(() => Date.now());
 
   const [lessonMeta, setLessonMeta] = useState<{
@@ -195,15 +190,6 @@ export function CoachEndgamePage(): JSX.Element {
     adaptive.reset();
   }, [selectedPatternId, adaptive]);
 
-  const onTierChange = useCallback(
-    (next: EndgameTier): void => {
-      // Tier is now a passive preference (used only when the
-      // pattern has no Lichess theme tag so adaptive can't run).
-      // For tagged patterns the adaptive session is the driver.
-      setTier(next);
-    },
-    [],
-  );
 
   // Picker view — tap a pattern to start the lesson. For tagged
   // patterns, the adaptive session will pick the first puzzle and
@@ -223,8 +209,6 @@ export function CoachEndgamePage(): JSX.Element {
         }
       }}
       onBack={() => void navigate('/coach/home')}
-      tier={tier}
-      onTierChange={onTierChange}
       activeTab={activeTab}
       onTabChange={setActiveTab}
     />;
@@ -241,9 +225,7 @@ export function CoachEndgamePage(): JSX.Element {
     <LessonView
       pattern={pattern}
       walkthrough={walkthrough}
-      tier={tier}
       lessonMeta={lessonMeta}
-      onTierChange={onTierChange}
       onExit={exitLesson}
       onPracticeMore={practiceMore}
       onReshuffle={reshufflePractice}
@@ -256,13 +238,11 @@ export function CoachEndgamePage(): JSX.Element {
 interface PickerProps {
   onPick: (patternId: string) => void;
   onBack: () => void;
-  tier: EndgameTier;
-  onTierChange: (next: EndgameTier) => void;
   activeTab: EndgameTab;
   onTabChange: (next: EndgameTab) => void;
 }
 
-function PatternPicker({ onPick, onBack, tier, onTierChange, activeTab, onTabChange }: PickerProps): JSX.Element {
+function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps): JSX.Element {
   const patterns = useMemo(() => getAllPatterns(), []);
   const named = patterns.filter((p) => p.category === 'named-pattern');
   const piece = patterns.filter((p) => p.category === 'piece-mate');
@@ -354,23 +334,11 @@ function PatternPicker({ onPick, onBack, tier, onTierChange, activeTab, onTabCha
             Pick a checkmate pattern. Listen to the geometry, then practice setting it up across multiple positions.
           </p>
 
-          {/* Tier selector */}
-          <div className="flex justify-center gap-1 max-w-lg mx-auto w-full">
-            {TIER_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => onTierChange(opt.value)}
-                className={`flex-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                  tier === opt.value
-                    ? 'bg-theme-accent text-theme-bg'
-                    : 'bg-theme-surface text-theme-text-muted hover:bg-theme-bg'
-                }`}
-                data-testid={`endgame-tier-${opt.value}`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
+          {/* Tier picker dropped — each pattern's drill is now
+              adaptive (PR #437/#438): the session pulls puzzles
+              from the pattern's puzzleThemeTag at your current
+              endgame Elo, stepping up/down per result. The tier
+              control was effectively dead UI for tagged patterns. */}
 
           <PatternSection title="Named Patterns" patterns={named} onPick={onPick} />
           <PatternSection title="Piece Mates" patterns={piece} onPick={onPick} subtitle="Recognition only — practice corpus coming soon" />
@@ -481,14 +449,12 @@ function PatternSection({ title, subtitle, patterns, onPick }: SectionProps): JS
 interface LessonViewProps {
   pattern: MatingPattern;
   walkthrough: ReturnType<typeof useTeachWalkthrough>;
-  tier: EndgameTier;
   lessonMeta: {
     rating: number;
     movesToMate: number;
     totalAvailable: number;
     currentIndex: number;
   } | null;
-  onTierChange: (next: EndgameTier) => void;
   onExit: () => void;
   onPracticeMore: (firstTryPerfect: boolean) => void;
   onReshuffle: () => void;
@@ -497,9 +463,7 @@ interface LessonViewProps {
 function LessonView({
   pattern,
   walkthrough,
-  tier,
   lessonMeta,
-  onTierChange,
   onExit,
   onPracticeMore,
   onReshuffle,
@@ -694,6 +658,13 @@ function LessonView({
   }, [matingHintRevealed, matingHintMove]);
   const revealMatingHint = useCallback(() => {
     setMatingHintRevealed(true);
+    // Taking the hint counts as a wrong attempt against the
+    // adaptive Elo signal — same convention as useEndgamePlayout
+    // (revealHint flips firstTryPerfect=false there). We bump
+    // lessonWrongAttempts so when the student reaches the mate
+    // and clicks Practice More, the adaptive session sees a
+    // non-perfect run and steps the rating down.
+    setLessonWrongAttempts((n) => n + 1);
   }, []);
 
   const wrongFlashStyles = useMemo<Record<string, React.CSSProperties>>(() => {
@@ -719,9 +690,9 @@ function LessonView({
           </h2>
           <p className="text-xs text-theme-text-muted truncate">
             {hasPractice && lessonMeta
-              ? `Mate in ${lessonMeta.movesToMate} · rating ${lessonMeta.rating} · #${lessonMeta.currentIndex + 1} of ${lessonMeta.totalAvailable}`
+              ? `Mate in ${lessonMeta.movesToMate} · rating ${lessonMeta.rating}`
               : hasPractice
-                ? `${tier.charAt(0).toUpperCase() + tier.slice(1)} tier`
+                ? 'Adaptive drill'
                 : 'Recognition only'}
           </p>
         </div>
@@ -744,23 +715,9 @@ function LessonView({
           </button>
         </div>
       </div>
-      {hasPractice && (
-        <div className="flex justify-center gap-1 mt-2">
-          {TIER_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => onTierChange(opt.value)}
-              className={`flex-1 px-2 py-1 rounded text-[11px] font-medium transition-colors ${
-                tier === opt.value
-                  ? 'bg-theme-accent text-theme-bg'
-                  : 'bg-theme-surface text-theme-text-muted hover:bg-theme-bg'
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Tier picker dropped — the mating drill is now adaptive
+          (PR #438). Difficulty steps from your endgame Elo
+          based on per-attempt success, not a manual tier. */}
     </div>
   );
 
