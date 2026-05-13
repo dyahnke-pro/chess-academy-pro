@@ -34,6 +34,36 @@ describe('endgameService — mating-pattern data invariants', () => {
       }
     }
   });
+
+  // Phase 7: every hand-authored `solution` array must be legal SAN
+  // sequence ending in checkmate. Pins down the JSON so a future
+  // typo (e.g. promoting the queen to the wrong square) won't ship.
+  it('every lessonPosition.solution is a legal sequence ending in mate', () => {
+    for (const p of getAllPatterns()) {
+      for (const lp of p.lessonPositions) {
+        if (!lp.solution || lp.solution.length === 0) continue;
+        const game = new Chess(lp.fen);
+        for (const san of lp.solution) {
+          expect(() => game.move(san)).not.toThrow();
+        }
+        expect(game.isCheckmate(), `${p.id} solution ${lp.solution.join(' ')} did not mate`).toBe(true);
+      }
+    }
+  });
+
+  // Phase 7: only piece-mate fundamentals remain Recognition-only.
+  // Every named-pattern entry must be playable (either via Lichess
+  // theme tag corpus OR via a hand-authored solution[]).
+  it('no named-pattern remains Recognition-only', () => {
+    const recognitionOnlyNamed = getAllPatterns().filter((p) => {
+      if (p.category !== 'named-pattern') return false;
+      if (p.puzzleThemeTag) return false;
+      return !p.lessonPositions.some(
+        (lp) => lp.solution && lp.solution.length > 0,
+      );
+    });
+    expect(recognitionOnlyNamed, `still recognition-only: ${recognitionOnlyNamed.map((p) => p.id).join(', ')}`).toEqual([]);
+  });
 });
 
 describe('endgameService — practice puzzle filtering', () => {

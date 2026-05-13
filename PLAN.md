@@ -341,26 +341,52 @@ tolerance inclusion/exclusion, black-to-move sign flip, engine
 failure). Existing `useEndgamePlayout` (13) and `FromYourGamesTab`
 (3) tests still pass. Typecheck clean.
 
-### Phase 7 — Mating pattern DB augmentation [STATUS: NEEDS DECISION]
-Open question on data source:
+### Phase 7 — Mating pattern DB augmentation [STATUS: shipped this PR]
 
-- **(a)** Hand-author 5–10 positions per missing pattern from
-  public mate-manual references (Renaud-Kahn, Polgár). Fully under
-  our control, no third-party dep. Slowest per pattern, fastest to
-  ship overall.
-- **(b)** Parse Lichess Studies (CC0) tagged with the pattern name.
-  More positions, more code to write, depends on third-party data
-  quality.
-- **(c)** ChessTempo — paid/restrictive license. Likely off the
-  table.
+Picked option (a) — hand-author. Swept the picker: 13 patterns were
+"Recognition only" (no `puzzleThemeTag` + no `lessonPositions[].solution`).
+10 are named patterns; 3 are piece-mate fundamentals (Two-Bishop,
+Queen+Bishop, Queen+Knight) which need open-board endgame play, not
+mate-in-N puzzles — out of Phase 7 scope.
 
-Recommended: (a) for the first wave (top 5 missing patterns),
-revisit (b) if more is wanted later. **Awaiting David's pick.**
+For each of the 10 named patterns, took the existing recognition-
+reference FEN from the pychess study data and:
+- mate-in-1 positions: brute-force enumerated legal moves, kept the
+  one(s) producing `#`.
+- mate-in-2 positions: recursive search via chess.js (find a White
+  move such that EVERY Black reply allows a mate-in-1).
 
-Patterns currently "Recognition only":
-- Damiano's Mate
-- Lolli's Mate
-- (others — needs full sweep of the picker)
+Wrote `solution[]` arrays into `mating-patterns.json` for:
+
+| Pattern | Position | Solution |
+|---|---|---|
+| Damiano's Mate | m1 | `Qh7#` |
+| Damiano's Mate | m2 | `Rh8+ Nxh8 Qg7#` |
+| Lolli's Mate | m1 | `Qg7#` |
+| Anderssen's Mate | m1 | `Rh8#` |
+| Cozio's Mate | m2 | `Qh6+ Kg3 Qh2#` |
+| Pawn Mate | m1 | `b5#` |
+| Pawn Mate | m2 | `Qe8+ Nge7 d5#` |
+| Greco's Mate | m1 | `Qh5#` |
+| Max Lange's Mate | m1 | `Qg8#` |
+| Réti's Mate | m1 | `Bd8#` |
+| Légal's Mate | m1 | `Nd5#` |
+| Triangle Mate | m1 | `Qe5#` |
+
+Also caught a pre-existing bug: `double-bishop-mate` had a 2-SAN
+solution that didn't mate (`Qxf3+ Bxf3`). Restored the third ply
+(`Bxf3#`) — verified via the same recursive search.
+
+**Tests:** 2 new in `endgameService.test.ts`:
+- every `lessonPosition.solution` is a legal SAN sequence ending in
+  checkmate (20 solutions verified, includes the existing 9 + my 11)
+- no `named-pattern` remains Recognition-only (`piece-mate` excluded)
+
+**Net effect:** the picker now opens a `CuratedMatingLessonView`
+(playable, voice-narrated) for 10 patterns that previously showed
+"Recognition only" with a static board. The 3 remaining piece-mate
+fundamentals are tracked separately — they want a different surface
+(open-board play vs Stockfish), not a 1-2 move puzzle.
 
 ### Phase 8 — Stockfish crash hygiene [STATUS: shipped in PR #453]
 

@@ -308,7 +308,8 @@
         "sourceComment": "From Victor Kahn - Carl Hartlaub, 1916.",
         "solution": [
           "Qxf3+",
-          "Bxf3"
+          "Bxf3",
+          "Bxf3#"
         ]
       }
     ],
@@ -394,11 +395,13 @@
       {
         "fen": "5rk1/6p1/6P1/7Q/8/8/8/6K1 w - - 0 1",
         "movesToMate": 1,
+        "solution": ["Qh7#"],
         "sourceComment": "Damiano's Mate is a classic method of checkmating and one of the oldest. It works by confining the king with a pawn or bishop and using a queen to initiate the final blow. Damiano's mate is often arrived at by first sacrificing a rook on the h-file, then checking the king with the queen on the h-file, and then moving in for the mate. The checkmate was first published by Pedro Damiano in 1512."
       },
       {
         "fen": "4rk2/1p1q1p2/3p1Bn1/p1pP1p2/P1P5/1PK3Q1/8/7R w - - 0 1",
         "movesToMate": 2,
+        "solution": ["Rh8+", "Nxh8", "Qg7#"],
         "sourceComment": "From Ulvi Bajarani - Dragan Solak, 2010."
       },
       {
@@ -425,6 +428,7 @@
       {
         "fen": "6k1/5p2/5PpQ/8/8/8/8/6K1 w - - 0 1",
         "movesToMate": 1,
+        "solution": ["Qg7#"],
         "sourceComment": "Lolli's Mate involves infiltrating Black's fianchetto position using both a pawn and queen. The queen often gets to the h6 square by means of sacrifices on the h-file. It is named after Giambattista Lolli."
       },
       {
@@ -488,6 +492,7 @@
       {
         "fen": "6k1/6P1/5K1R/8/8/8/8/8 w - - 0 1",
         "movesToMate": 1,
+        "solution": ["Rh8#"],
         "sourceComment": "In Anderssen's mate, named for Adolf Anderssen, the rook or queen is supported by a diagonally-attacking piece such as a pawn or bishop as it checkmates the opposing king along the eighth rank."
       },
       {
@@ -557,6 +562,7 @@
       {
         "fen": "8/8/1Q6/8/6pk/5q2/8/6K1 w - - 0 1",
         "movesToMate": 2,
+        "solution": ["Qh6+", "Kg3", "Qh2#"],
         "sourceComment": "Cozio's Mate is an upside down version of the Dovetail Mate. It was named after a study by Carlo Cozio that was published in 1766."
       }
     ],
@@ -640,11 +646,13 @@
       {
         "fen": "8/7R/1pkp4/2p5/1PP5/8/8/6K1 w - - 0 1",
         "movesToMate": 1,
+        "solution": ["b5#"],
         "sourceComment": "Although the Pawn Mate can take many forms, it is generally characterized as a mate in which a pawn is the final attacking piece and where enemy pawns are nearby. The Pawn Mate is sometimes also called the David and Goliath Mate, named after the biblical account of David and Goliath."
       },
       {
         "fen": "r1b3nr/ppp3qp/1bnpk3/4p1BQ/3PP3/2P5/PP3PPP/RN3RK1 w - - 0 1",
         "movesToMate": 2,
+        "solution": ["Qe8+", "Nge7", "d5#"],
         "sourceComment": "From Gioachino Greco vs NN, 1620."
       }
     ],
@@ -700,6 +708,7 @@
       {
         "fen": "7k/6p1/6Q1/8/8/1B6/8/6K1 w - - 0 1",
         "movesToMate": 1,
+        "solution": ["Qh5#"],
         "sourceComment": "Greco's Mate is named after the famous Italian checkmate cataloguer Gioachino Greco. It works by using the bishop to contain the black king by use of the black g-pawn and subsequently using the queen or a rook to checkmate the king by moving it to the edge of the board."
       },
       {
@@ -730,6 +739,7 @@
       {
         "fen": "2Q5/5Bpk/7p/8/8/8/8/6K1 w - - 0 1",
         "movesToMate": 1,
+        "solution": ["Qg8#"],
         "sourceComment": "Max Lange's Mate is named after German chess player and problem composer Max Lange. It works by using the bishop and queen in combination to checkmate the king."
       },
       {
@@ -787,6 +797,7 @@
       {
         "fen": "1nb5/1pk5/2p5/8/7B/8/8/3R3K w - - 0 1",
         "movesToMate": 1,
+        "solution": ["Bd8#"],
         "sourceComment": "Réti's Mate is named after Richard Réti, who delivered it in an 11-move game against Savielly Tartakower in 1910 in Vienna. It works by trapping the enemy king with four of its own pieces that are situated on flight squares and then attacking it with a bishop that is protected by a rook or queen."
       }
     ],
@@ -809,6 +820,7 @@
       {
         "fen": "3q1b2/4kB2/3p4/4N3/8/2N5/8/6K1 w - - 0 1",
         "movesToMate": 1,
+        "solution": ["Nd5#"],
         "sourceComment": "In Légal's Mate, the knight moves into a position to check the king. The bishop is guarded by the other knight, and the enemy pieces block the king's escape."
       }
     ],
@@ -851,6 +863,7 @@
       {
         "fen": "8/3p4/3k4/2R4Q/8/4K3/8/8 w - - 0 1",
         "movesToMate": 1,
+        "solution": ["Qe5#"],
         "sourceComment": "A Triangle Mate is delivered by a queen attacking an enemy king, while it is supported by a rook. The queen and rook are one square away from the enemy king. They are on the same rank or file, separated by one square, with the enemy king being between them one square away, forming a triangle. The king must be restricted from escaping to the middle square behind it away from the queen and rook, by the edge of the board, a piece blocking it, or by controlling that square with a third piece."
       }
     ],
