@@ -65,10 +65,23 @@ export function MoveListPanel({
   const scrollRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLButtonElement>(null);
 
-  // Auto-scroll to active move
+  // Auto-scroll to active move — scope to the LOCAL scroll container
+  // only. Using `scrollIntoView` lets the browser walk up the DOM
+  // for the nearest scrollable ancestor, and when the page itself
+  // scrolls (e.g. on /coach/review where the move list lives inside
+  // a flex-1 middle region) every Next press also bumps the page
+  // viewport down — making the board appear to slide off-screen.
+  // Manual scrollTop on `scrollRef` keeps the scroll local.
   useEffect(() => {
-    if (activeRef.current && scrollRef.current) {
-      activeRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    if (!activeRef.current || !scrollRef.current) return;
+    const container = scrollRef.current;
+    const active = activeRef.current;
+    const containerRect = container.getBoundingClientRect();
+    const activeRect = active.getBoundingClientRect();
+    if (activeRect.top < containerRect.top) {
+      container.scrollTop -= containerRect.top - activeRect.top;
+    } else if (activeRect.bottom > containerRect.bottom) {
+      container.scrollTop += activeRect.bottom - containerRect.bottom;
     }
   }, [currentMoveIndex]);
 

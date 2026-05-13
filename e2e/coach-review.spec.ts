@@ -599,15 +599,22 @@ test.describe('Review with Coach — full-play audit', () => {
     }
     await expect(page.getByTestId('review-classification-badge')).toBeVisible({ timeout: 6000 });
 
+    // Click "Explore this position" — the canonical walk shows
+    // seg.fenAfter (Black to move), so the board is read-only until
+    // the student opts in. The toggle swaps to seg.fenBefore so the
+    // missed move is legal and the board becomes interactive.
+    await expect(page.getByTestId('walk-explore-toggle-btn')).toBeVisible({ timeout: 4000 });
+    await page.getByTestId('walk-explore-toggle-btn').click();
+    await page.waitForTimeout(400);
+
     // Play the suggested missed move directly via click-to-move:
-    // d2 (white pawn) → d3. The walk-UI displays seg.fenBefore
-    // here (white to move), so the move is legal.
+    // d2 (white pawn) → d3. With explore-toggle on, the walk-UI
+    // displays seg.fenBefore (white to move), so the move is legal.
     await page.locator('[data-square="d2"]').first().click({ force: true });
     await page.waitForTimeout(200);
     await page.locator('[data-square="d3"]').first().click({ force: true });
 
-    // Resume-game button appears once exploration FEN is captured
-    // (CoachGameReview.tsx:851).
+    // Resume-game button appears once exploration FEN is captured.
     await expect(page.getByTestId('walk-resume-game-btn')).toBeVisible({ timeout: 8000 });
 
     // Click resume — exploration state clears, button hides.
