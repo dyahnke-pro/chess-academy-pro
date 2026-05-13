@@ -83,6 +83,60 @@ export function familyLabel(family: string): string {
   return family.replace(/_/g, ' ');
 }
 
+/** Conventional player-color classification of an opening family by
+ *  who CHOOSES the line. White's openings: Italian, Vienna, Ruy/Spanish,
+ *  Queen's Gambit, English, London, Bird, Reti, Scotch, Center Game,
+ *  King's Gambit, gambits white initiates, etc. Black's defenses:
+ *  Sicilian, French, Caro-Kann, Pirc, Modern, Alekhine, Scandinavian,
+ *  KID, Nimzo, QID, Grünfeld, Benoni, Slav, Dutch, Englund (black
+ *  initiates), Latvian, Elephant, etc. Substring match so sub-variations
+ *  inherit the parent classification. Default to white when nothing
+ *  matches (most named openings ship as white's choice). */
+export function familyPlayerColor(family: string): 'white' | 'black' {
+  const slug = family.toLowerCase();
+  const BLACK_KEYWORDS = [
+    'sicilian',
+    'french',
+    'caro',
+    'pirc',
+    'modern_defense',
+    'alekhine',
+    'scandinavian',
+    'kings_indian_defense',
+    'nimzo',
+    'queens_indian',
+    'grunfeld',
+    'benoni',
+    'benko',
+    'slav',
+    'dutch',
+    'petrov',
+    'philidor',
+    'two_knights',
+    'czech_defense',
+    'old_indian',
+    'east_indian',
+    'horwitz',
+    'owen',
+    'english_defense',
+    'nimzowitsch_defense',
+    'mikenas_defense',
+    'barnes_defense',
+    'indian_defense',
+    'englund',
+    'budapest',
+    'latvian',
+    'elephant',
+    'blumenfeld',
+    'duras_gambit',
+    'tarrasch_defense',
+  ];
+  for (const k of BLACK_KEYWORDS) {
+    if (slug.includes(k)) return 'black';
+  }
+  return 'white';
+}
+
 /** Side the puzzle's STUDENT plays — i.e., the side to move after the
  *  opponent's setup move (UCI moves[0]) is applied. Returns null when
  *  the move sequence can't be replayed. */
