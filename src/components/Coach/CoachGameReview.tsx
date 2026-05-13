@@ -697,8 +697,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // otherwise the game's move history (moves[ply-1].fen). This
       // keeps the board in sync even when the narration bundle is
       // truncated or missing for the current ply (WO-REVIEW-02a-FIX).
+      // At inaccuracy / mistake / blunder plies WITH a known better
+      // move, show the position BEFORE the wrong move was played so
+      // the green arrow's suggested move is actually legal on the
+      // displayed board (side-to-move matches the player who erred).
+      // For every other ply, show the position AFTER the move was
+      // played — the canonical playback FEN.
+      const showBest = !!seg && (
+        seg.classification === 'inaccuracy' ||
+        seg.classification === 'mistake' ||
+        seg.classification === 'blunder'
+      );
+      const hasArrow = showBest && !!seg && !!seg.bestMoveUci && seg.bestMoveUci.length >= 4;
       const displayFen = seg
-        ? seg.fenAfter
+        ? (hasArrow ? seg.fenBefore : seg.fenAfter)
         : walkPlayback.currentPly > 0
           ? moves[walkPlayback.currentPly - 1]?.fen ?? STARTING_FEN
           : STARTING_FEN;
@@ -706,11 +718,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // Hide the arrow once the student has explored — they've seen
         // the suggestion, no need to clutter the post-exploration view.
         if (walkExplorationFen) return undefined;
-        if (!seg) return undefined;
-        const showBest = seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder';
-        if (!showBest || !seg.bestMoveUci || seg.bestMoveUci.length < 4) return undefined;
-        const startSquare = seg.bestMoveUci.slice(0, 2);
-        const endSquare = seg.bestMoveUci.slice(2, 4);
+        if (!seg || !hasArrow) return undefined;
+        const startSquare = seg.bestMoveUci!.slice(0, 2);
+        const endSquare = seg.bestMoveUci!.slice(2, 4);
         return [{ startSquare, endSquare, color: '#22c55e' }];
       })();
       // Walk-mode board is interactive only when a green arrow is on

@@ -16,6 +16,7 @@
  * same record). Manually deleting a sample from the games library
  * won't bring it back unless the meta flag is also reset.
  */
+import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import type { GameRecord, MoveAnnotation, MoveClassification } from '../types';
 import { logAppAudit } from './appAuditor';
@@ -25,7 +26,11 @@ import { logAppAudit } from './appAuditor';
 // the Missed Tactics / Missed Opportunities surfaces empty on samples.
 // Bumping the key forces a re-seed on next mount; `bulkPut` at the
 // same ids overwrites cleanly.
-const SAMPLES_SEEDED_META_KEY = 'review-samples-seeded.v2';
+// .v3 — bumped when bestMove was converted from SAN to UCI so the
+// walk-UI green arrow renders. Old .v2-seeded records carry SAN
+// (e.g. "d3") which fails the UCI length>=4 gate in
+// CoachGameReview.tsx:711 — re-seed to fix the regression.
+const SAMPLES_SEEDED_META_KEY = 'review-samples-seeded.v3';
 
 interface SampleAnnotation {
   /** 1-indexed full move number, matching MoveAnnotation.moveNumber. */
@@ -354,21 +359,78 @@ const SAMPLE_GAMES: SampleGame[] = [
   },
 ];
 
-function expandAnnotations(annots: SampleAnnotation[]): MoveAnnotation[] {
+function expandAnnotations(
+  annots: SampleAnnotation[],
+  pgn: string,
+): MoveAnnotation[] {
   // `bestMoveEval` for each entry = the prior annotation's `eval`
   // (i.e., the eval of the position BEFORE this move was played). For
   // the very first entry, the pre-move position is the starting
   // position which the engine treats as ~0.0. Same cp/White-POV unit
   // as `evaluation` so detectMisses / detectMissedTactics can compute
   // the swing the moving side conceded.
+  //
+  // bestMove is stored in UCI format (e.g. "d2d3") downstream
+  // consumers — most importantly the walk-UI green arrow in
+  // CoachGameReview.tsx — require length>=4 UCI to render. Sample
+  // annotations author bestMove in SAN ("d3") for human-readability,
+  // so we replay the PGN ply-by-ply and convert each `best` SAN to
+  // UCI in the pre-move FEN.
+  const replay = new Chess();
+  try {
+    replay.loadPgn(pgn);
+  } catch {
+    // PGN unparseable — fall back to identity (callers see SAN, which
+    // matches old behavior).
+    let prevEval = 0;
+    return annots.map((a) => {
+      const annotation: MoveAnnotation = {
+        moveNumber: a.m, color: a.c, san: a.san, evaluation: a.eval,
+        bestMove: a.best ?? null, bestMoveEval: prevEval,
+        classification: a.classification ?? 'good', comment: a.comment ?? null,
+      };
+      prevEval = a.eval;
+      return annotation;
+    });
+  }
+  // Replay to capture FEN BEFORE each ply. Map (moveNumber, color) →
+  // pre-move FEN so we can look up an annotation's pre-move position.
+  const probe = new Chess();
+  const fenBeforeByKey = new Map<string, string>();
+  const history = replay.history();
+  for (let i = 0; i < history.length; i += 1) {
+    const moveNum = Math.floor(i / 2) + 1;
+    const color = i % 2 === 0 ? 'white' : 'black';
+    fenBeforeByKey.set(`${moveNum}::${color}`, probe.fen());
+    probe.move(history[i]);
+  }
+
   let prevEval = 0;
   return annots.map((a) => {
+    let bestMoveUci: string | null = a.best ?? null;
+    if (a.best) {
+      const fenBefore = fenBeforeByKey.get(`${a.m}::${a.c}`);
+      if (fenBefore) {
+        try {
+          const c = new Chess(fenBefore);
+          const result = c.move(a.best);
+          // chess.js returns the move with .from / .to set; combine to
+          // UCI. Promotion suffix appended when present.
+          bestMoveUci = `${result.from}${result.to}${result.promotion ?? ''}`;
+        } catch {
+          // Unparseable SAN against the FEN — keep the SAN so the
+          // narration text still says the right thing; the arrow just
+          // won't render for this one entry.
+          bestMoveUci = a.best;
+        }
+      }
+    }
     const annotation: MoveAnnotation = {
       moveNumber: a.m,
       color: a.c,
       san: a.san,
       evaluation: a.eval,
-      bestMove: a.best ?? null,
+      bestMove: bestMoveUci,
       bestMoveEval: prevEval,
       classification: a.classification ?? 'good',
       comment: a.comment ?? null,
@@ -391,7 +453,7 @@ function buildGameRecord(s: SampleGame): GameRecord {
     whiteElo: s.whiteElo,
     blackElo: s.blackElo,
     source: s.source,
-    annotations: expandAnnotations(s.annotations),
+    annotations: expandAnnotations(s.annotations, s.pgn),
     coachAnalysis: null,
     isMasterGame: s.source === 'master',
     openingId: null,

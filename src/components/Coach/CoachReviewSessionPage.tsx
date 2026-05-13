@@ -307,6 +307,13 @@ export function CoachReviewSessionPage(): JSX.Element {
         opponentRating={adapted.opponentRating}
         onPlayAgain={() => navigate('/coach/play')}
         onBackToCoach={() => navigate('/coach/review')}
+        onPracticeInChat={(prompt) => {
+          // Route to /coach/chat with the tactic prompt seeded as a
+          // URL query param. CoachChatPage reads `?q=` and pre-fills
+          // the chat input so the user lands on a populated draft
+          // they can immediately send.
+          void navigate(`/coach/chat?q=${encodeURIComponent(prompt)}`);
+        }}
         pgn={adapted.pgn}
         initialMoveIndex={-1}
       />
