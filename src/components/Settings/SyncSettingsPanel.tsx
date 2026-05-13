@@ -1,13 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import { pushToCloud, pullFromCloud } from '../../services/syncService';
+import { pushToCloud, pullFromCloud, getSyncConfig } from '../../services/syncService';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Cloud, Download, Upload } from 'lucide-react';
 
 export function SyncSettingsPanel(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
+
+  // All three fields (URL, anon key, user ID) now persist encrypted
+  // via cryptoService. Initial state shows the decrypted form so the
+  // user can read/edit them in-place; legacy plaintext profiles get
+  // upgraded on the next Save Config. (Anon key still hidden by
+  // password input, but URL + user ID are clear text in the field —
+  // the encryption is for at-rest XSS exfiltration defense, not
+  // user-facing redaction.)
+  const [supabaseUrl, setSupabaseUrl] = useState('');
+  const [supabaseAnonKey, setSupabaseAnonKey] = useState('');
+  const [syncUserId, setSyncUserId] = useState('');
+  useEffect(() => {
+    if (!activeProfile) return;
+    void (async () => {
+      const cfg = await getSyncConfig(activeProfile);
+      setSupabaseUrl(cfg.supabaseUrl ?? '');
+      setSupabaseAnonKey(cfg.supabaseAnonKey ?? '');
+      setSyncUserId(cfg.syncUserId ?? '');
+    })();
+  }, [activeProfile]);
+
+  const [status, setStatus] = useState<string | null>(null);
+  const [statusKind, setStatusKind] = useState<'info' | 'success' | 'error'>('info');
+  const [busy, setBusy] = useState(false);
+  const [confirmRestore, setConfirmRestore] = useState(false);
 
   const getSyncPref = (key: string): string => {
     if (!activeProfile) return '';
@@ -16,38 +41,37 @@ export function SyncSettingsPanel(): JSX.Element {
     return typeof val === 'string' ? val : '';
   };
 
-  const [supabaseUrl, setSupabaseUrl] = useState(() => getSyncPref('supabaseUrl'));
-  const [supabaseAnonKey, setSupabaseAnonKey] = useState(() => getSyncPref('supabaseAnonKey'));
-  const [syncUserId, setSyncUserId] = useState(() => getSyncPref('syncUserId'));
-
-  const [status, setStatus] = useState<string | null>(null);
-  const [statusKind, setStatusKind] = useState<'info' | 'success' | 'error'>('info');
-  const [busy, setBusy] = useState(false);
-  const [confirmRestore, setConfirmRestore] = useState(false);
-
   const lastSyncDate = getSyncPref('lastSyncDate') || null;
 
   const handleSaveConfig = async (): Promise<void> => {
     if (!activeProfile) return;
-    // Encrypt the Supabase anon key before persisting — security
-    // audit flagged plaintext storage as an XSS exfiltration vector.
-    // Null out the plaintext field so the old value never coexists
-    // with the encrypted one on the same record.
-    let anonKeyEncrypted: string | null = null;
-    let anonKeyIv: string | null = null;
-    if (supabaseAnonKey) {
-      const enc = await encryptApiKey(supabaseAnonKey);
-      anonKeyEncrypted = enc.encrypted;
-      anonKeyIv = enc.iv;
+    // Encrypt ALL three sync fields before persisting. Security audit
+    // (R6) flagged plaintext storage as an XSS exfiltration vector;
+    // anon key was already encrypted, URL + user ID lagged. Each
+    // legacy plaintext field is nulled out so stale reads can't pick
+    // them up.
+    async function encryptOrNull(value: string): Promise<{ encrypted: string | null; iv: string | null }> {
+      if (!value) return { encrypted: null, iv: null };
+      const enc = await encryptApiKey(value);
+      return { encrypted: enc.encrypted, iv: enc.iv };
     }
+    const [anonKey, url, userId] = await Promise.all([
+      encryptOrNull(supabaseAnonKey),
+      encryptOrNull(supabaseUrl),
+      encryptOrNull(syncUserId),
+    ]);
     const updatedPrefs = {
       ...activeProfile.preferences,
-      supabaseUrl: supabaseUrl || null,
-      // Drop plaintext so a stale read can't pick it up.
+      // Drop legacy plaintext so a stale read can't pick them up.
+      supabaseUrl: null,
+      supabaseUrlEncrypted: url.encrypted,
+      supabaseUrlIv: url.iv,
       supabaseAnonKey: null,
-      supabaseAnonKeyEncrypted: anonKeyEncrypted,
-      supabaseAnonKeyIv: anonKeyIv,
-      syncUserId: syncUserId || null,
+      supabaseAnonKeyEncrypted: anonKey.encrypted,
+      supabaseAnonKeyIv: anonKey.iv,
+      syncUserId: null,
+      syncUserIdEncrypted: userId.encrypted,
+      syncUserIdIv: userId.iv,
     } as unknown as Record<string, unknown>;
 
     await db.profiles.update(activeProfile.id, { preferences: updatedPrefs as unknown as typeof activeProfile.preferences });

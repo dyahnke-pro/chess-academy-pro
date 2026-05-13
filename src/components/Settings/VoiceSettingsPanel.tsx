@@ -225,11 +225,11 @@ export function VoiceSettingsPanel(): JSX.Element {
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-sm flex items-center gap-2">
             <Sparkles size={16} />
-            Cloud Voice (AI)
+            Cloud voice (Polly) priority
           </h3>
           <label className="flex items-center gap-2 cursor-pointer" data-testid="polly-toggle">
             <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-              {pollyEnabled ? 'On' : 'Off'}
+              {pollyEnabled ? 'Polly first' : 'System voice first'}
             </span>
             <div
               role="switch"
@@ -248,7 +248,10 @@ export function VoiceSettingsPanel(): JSX.Element {
           </label>
         </div>
         <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-          High-quality AI voice powered by Amazon Polly. Reads any text naturally — no setup required.
+          When Polly is the priority, the coach uses Amazon's high-quality AI voice; if Polly
+          fails, the browser's system voice is the fallback. Switch this off to skip Polly and
+          go straight to the system voice. To silence the coach entirely, set Speech Pace to
+          None on the Coach Detail panel.
         </p>
 
         {/* Live voice-tier indicator — shows which engine actually

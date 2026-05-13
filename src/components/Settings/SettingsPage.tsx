@@ -350,7 +350,8 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
       {masterAllOff && (
         <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
           Voice, hints, move flash, highlights, legal moves, and animations are disabled.
-          Sound and theme are unaffected.
+          Sound and theme are unaffected. Turning Master Off back to normal restores
+          your previous values for each affected setting (not the defaults).
         </p>
       )}
 
@@ -510,8 +511,8 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         disabled={affectedByMaster}
       />
       <ToggleRow
-        label="Voice Narration"
-        tooltip="Enable spoken coach commentary and narration"
+        label="All audio voice"
+        tooltip="Master gate for ALL spoken voice in the app. Coach voice can be silenced separately on the Coach tab — this controls every voice surface (opening walkthroughs, phase narration, etc.)."
         checked={voiceEnabled}
         onChange={setVoiceEnabled}
         testId="voice-narration-toggle"
@@ -702,7 +703,15 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
     const updatedPrefs = { ...profile.preferences, aiProvider: newProvider };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
-    setApiKey('');
+    // R7 (audit): do NOT clear the input on provider switch. The
+    // encrypted key for each provider is stored independently
+    // (`apiKey{Encrypted,Iv}` for DeepSeek, `anthropicApiKey{...}` for
+    // Anthropic), so nothing is lost — and silently clearing the input
+    // hid that fact. The label below already shows "(saved)" when a
+    // key is present for the active provider; the placeholder shows
+    // "••••••••" so the user can tell at a glance. If they want to
+    // replace the key, typing into the input still does the right
+    // thing.
     setShowKey(false);
   };
 
@@ -937,14 +946,14 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
     <div className="pt-4 border-t space-y-1" style={{ borderColor: 'var(--color-border)' }}>
       <SectionHeader title="Gameplay Coaching" />
       <SelectRow
-        label="Coach Detail"
-        tooltip="How detailed the coach's explanations are"
+        label="Speech Pace"
+        tooltip="How quickly the coach speaks per turn. Pick None to fully silence the coach — that's the single switch for stopping all coach voice. (Distinct from Response Length below, which controls how MUCH the coach says per turn, and from Commentary Frequency, which controls HOW OFTEN it speaks.)"
         value={profile.preferences.coachVerbosity ?? 'unlimited'}
         options={[
           { value: 'none', label: 'None — Silent, no commentary' },
           { value: 'fast', label: 'Fast — Brief, just the key point' },
-          { value: 'medium', label: 'Medium — Balanced detail' },
-          { value: 'slow', label: 'Slow — Thorough explanations' },
+          { value: 'medium', label: 'Medium — Balanced pace' },
+          { value: 'slow', label: 'Slow — Unhurried delivery' },
           { value: 'unlimited', label: 'Unlimited — Full personal-trainer mode, no cap' },
         ]}
         onChange={(v) => void handleVerbosityChange(v as CoachVerbosity)}

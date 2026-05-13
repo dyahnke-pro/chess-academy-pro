@@ -38,31 +38,42 @@ interface ImportData {
   openingWeakSpots?: OpeningWeakSpot[];
 }
 
-export async function getSyncConfig(profile: UserProfile): Promise<SyncConfig> {
-  const prefs = profile.preferences as unknown as Record<string, unknown>;
-  // Prefer encrypted form. Fall back to legacy plaintext for users
-  // whose config was saved before the encryption migration — next
-  // save will upgrade it via SyncSettingsPanel.
-  let anonKey: string | null = null;
-  const encrypted = prefs.supabaseAnonKeyEncrypted as string | null | undefined;
-  const iv = prefs.supabaseAnonKeyIv as string | null | undefined;
+/** Try-decrypt a (`{key}Encrypted`, `{key}Iv`) pair, falling back to
+ *  the legacy plaintext `{key}` field if no encrypted record exists.
+ *  Returns null when neither form is available. Symmetric with
+ *  `SyncSettingsPanel.handleSaveConfig` which encrypts on save. */
+async function readEncryptedOrLegacy(
+  prefs: Record<string, unknown>,
+  encryptedKey: string,
+  ivKey: string,
+  plaintextKey: string,
+): Promise<string | null> {
+  const encrypted = prefs[encryptedKey] as string | null | undefined;
+  const iv = prefs[ivKey] as string | null | undefined;
   if (encrypted && iv) {
     try {
-      anonKey = await decryptApiKey(encrypted, iv);
+      return await decryptApiKey(encrypted, iv);
     } catch {
       // Decrypt failed (key derivation mismatch, corrupt record).
-      // Leave anonKey null; caller's "sync not configured" path
-      // will surface a clean error to the user.
-      anonKey = null;
+      // Leave null; caller's "sync not configured" path will surface
+      // a clean error to the user.
+      return null;
     }
-  } else {
-    anonKey = (prefs.supabaseAnonKey as string | null) ?? null;
   }
-  return {
-    supabaseUrl: (prefs.supabaseUrl as string | null) ?? null,
-    supabaseAnonKey: anonKey,
-    syncUserId: (prefs.syncUserId as string | null) ?? null,
-  };
+  return (prefs[plaintextKey] as string | null) ?? null;
+}
+
+export async function getSyncConfig(profile: UserProfile): Promise<SyncConfig> {
+  const prefs = profile.preferences as unknown as Record<string, unknown>;
+  // All three sync fields are now encrypted on save. Each falls back
+  // to the legacy plaintext field for profiles saved before the
+  // encryption migration — the next Save Config call upgrades them.
+  const [supabaseUrl, supabaseAnonKey, syncUserId] = await Promise.all([
+    readEncryptedOrLegacy(prefs, 'supabaseUrlEncrypted', 'supabaseUrlIv', 'supabaseUrl'),
+    readEncryptedOrLegacy(prefs, 'supabaseAnonKeyEncrypted', 'supabaseAnonKeyIv', 'supabaseAnonKey'),
+    readEncryptedOrLegacy(prefs, 'syncUserIdEncrypted', 'syncUserIdIv', 'syncUserId'),
+  ]);
+  return { supabaseUrl, supabaseAnonKey, syncUserId };
 }
 
 export async function pushToCloud(profile: UserProfile): Promise<void> {
