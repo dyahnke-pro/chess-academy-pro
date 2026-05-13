@@ -20,13 +20,17 @@ describe('quiz_user_for_move tool', () => {
     expect(r.error).toMatch(/prompt is required/);
   });
 
-  it('graceful no-op when no callback wired (stub=true)', async () => {
+  it('returns ok=false with an explanatory error when no callback is wired', async () => {
+    // Previous behavior was ok=true + stub=true, but the old stub path
+    // was misleading the brain into thinking it had quizzed the student
+    // on surfaces with no quiz UI (build 26bbad4 audit). The tool now
+    // surfaces a hard failure with a message the brain can act on.
     const r = (await quizUserForMoveTool.execute({
       expectedSan: 'Nf3',
       prompt: 'Find the developing move',
     })) as ToolResult;
-    expect(r.ok).toBe(true);
-    expect(r.result?.stub).toBe(true);
+    expect(r.ok).toBe(false);
+    expect(r.error).toMatch(/not supported on this surface/);
   });
 
   it('returns ok=true with played SAN when surface accepts', async () => {
