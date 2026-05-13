@@ -10,7 +10,7 @@
 // color-coded by opening type (CLAUDE.md "UI Design Language" + the
 // /tactics page pattern).
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Chess } from 'chess.js';
 import { ArrowLeft, ChevronRight, Target, Flame } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -18,14 +18,17 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
 import { useClickToMove } from '../../hooks/useClickToMove';
-import { useNarration } from '../../hooks/useNarration';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useSettings } from '../../hooks/useSettings';
 import { useAppStore } from '../../stores/appStore';
 import { scaledShadow } from '../../utils/neonColors';
+import { createStreamingSpeaker } from '../../services/streamingSpeaker';
+import { voiceService } from '../../services/voiceService';
 import {
   getOpeningBlunderPuzzles,
   groupByOpeningFamily,
+  familyLabel,
+  openingFamily,
   type OpeningBlunderPuzzle,
   type OpeningBlunderFamily,
 } from '../../services/openingBlunderService';
@@ -627,12 +630,34 @@ function PuzzleView({ puzzle, onExit, onResult }: PuzzleViewProps): JSX.Element 
     onResult?.(playout.firstTryPerfect);
   }
 
-  const introText = useMemo<string>(
-    () =>
-      `${puzzleGoalSentence(puzzle.themes)}. ${studentSide === 'white' ? 'White' : 'Black'} to play.`,
-    [puzzle.themes, studentSide],
-  );
-  useNarration({ text: introText });
+  // Streaming intro narration — multi-sentence brief that queues
+  // sentence-by-sentence so the FIRST Polly fetch fires immediately
+  // and subsequent sentences pre-warm during playback. No per-move
+  // narration after the intro per user direction: "wire in the
+  // streaming narration. no need for move narrations, just a brief
+  // intro." Uses the shared streamingSpeaker helper that all coach
+  // streaming surfaces use.
+  const introSentences = useMemo<string[]>(() => {
+    const family = openingFamily(puzzle);
+    const label = familyLabel(family);
+    const sentences = [
+      label && family !== 'other' ? `${label}.` : null,
+      `${studentSide === 'white' ? 'White' : 'Black'} to play.`,
+      `${puzzleGoalSentence(puzzle.themes)}.`,
+    ].filter((s): s is string => Boolean(s));
+    return sentences;
+  }, [puzzle, studentSide]);
+
+  useEffect(() => {
+    const speaker = createStreamingSpeaker();
+    for (const s of introSentences) speaker.add(s);
+    return () => {
+      // Stop both the queued chain (no future Polly fetches fire) AND
+      // any in-flight audio so the next puzzle's intro starts cleanly.
+      speaker.abandon();
+      voiceService.stop();
+    };
+  }, [introSentences]);
 
   const chip = chipFor(puzzle.themes);
   const header = (
