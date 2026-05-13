@@ -300,10 +300,12 @@ The "make-the-app-feel-cohesive" pass.
   flow is reconstructable from the audit log alone.
 - New audit kind `scroll-hint-state` — fires when the gold-bar comet
   state flips. Diagnoses "the bar isn't moving" reports.
-- New audit kind `asset-load-error` — reserved (will be wired into
-  `ConsistentChessboard`'s overlay path for the Phase 1.3 bishop-
-  sprite trail once we have a place to hook it in without a re-
-  render storm).
+- New audit kind `asset-load-error` — wired into `pieceSetService`'s
+  per-piece `<img onError>` handler (shipped as a follow-up). Now
+  produces an audit entry per failed sprite — the Phase 1.3 bishop-
+  sprite report will have a concrete trail (URL, set, piece key) the
+  next time it reproduces, instead of needing a DevTools Network
+  dump.
 
 ### Phase 6 — Game review hint button [STATUS: shipped this PR]
 

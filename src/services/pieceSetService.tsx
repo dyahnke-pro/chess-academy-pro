@@ -1,4 +1,5 @@
 import type { PieceRenderObject } from 'react-chessboard';
+import { logAppAudit } from './appAuditor';
 
 export interface PieceSetConfig {
   id: string;
@@ -61,6 +62,19 @@ export function buildPieceRenderer(
       <img
         src={url}
         alt={key}
+        onError={() => {
+          // Phase 5 audit (#4 deferred): when a piece sprite 404s the
+          // board shows the alt-text fallback (e.g. "bB"). Without
+          // browser DevTools this used to be undiagnosable from logs.
+          // One audit entry per failed sprite (de-duped by the
+          // appAuditor session-summary collapsing) gives the trail.
+          void logAppAudit({
+            kind: 'asset-load-error',
+            category: 'subsystem',
+            source: 'pieceSetService',
+            summary: `piece=${key} set=${setName} url=${url}`,
+          });
+        }}
         style={{
           width: '100%',
           height: '100%',
