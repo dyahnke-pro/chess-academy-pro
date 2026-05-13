@@ -288,9 +288,11 @@ export function App(): JSX.Element {
           <Route path="/neon-mock" element={<NeonBoardMock />} />
           {/* Audit back-door — not linked from UI; deep-link only. */}
           <Route path="/debug/audit" element={<ErrorBoundary><DebugAuditPage /></ErrorBoundary>} />
-          {/* Opening blunders preview — Lichess opening + tactical
-              puzzles grouped by family. Deep-link / preview only for now. */}
-          <Route path="/debug/opening-blunders" element={<ErrorBoundary><OpeningBlundersPage /></ErrorBoundary>} />
+          {/* Opening Traps — wired up from the Tactics page tile and
+              also kept as a /debug deep-link alias for older preview
+              URLs we've shared. */}
+          <Route path="/tactics/opening-traps" element={<ErrorBoundary><OpeningBlundersPage /></ErrorBoundary>} />
+          <Route path="/debug/opening-blunders" element={<Navigate to="/tactics/opening-traps" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route element={<KidLayout />}>

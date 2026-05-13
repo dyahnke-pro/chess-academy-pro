@@ -10,9 +10,9 @@
 // intersection gives us the same effective surface: positions where
 // someone walked into a tactical refutation during the opening.
 //
-// Used by the debug/preview "Opening Blunders" surface and (TODO)
-// potentially by a per-opening drill view on OpeningDetailPage.
+// Used by the /tactics/opening-traps surface.
 
+import { Chess } from 'chess.js';
 import puzzlesRaw from '../data/puzzles.json';
 
 const TACTICAL_OUTCOME_THEMES = new Set<string>([
@@ -49,6 +49,10 @@ export interface OpeningBlunderPuzzle {
   openingTags: string | string[];
   popularity: number;
   nbPlays: number;
+  /** Color the STUDENT plays — i.e., the side to move AFTER the
+   *  opponent's setup move (moves[0]) is applied. This is the side
+   *  that delivers the punishing tactic. Pre-computed for fast filter. */
+  studentColor: 'white' | 'black';
 }
 
 interface RawPuzzle {
@@ -79,6 +83,31 @@ export function familyLabel(family: string): string {
   return family.replace(/_/g, ' ');
 }
 
+/** Side the puzzle's STUDENT plays — i.e., the side to move after the
+ *  opponent's setup move (UCI moves[0]) is applied. Returns null when
+ *  the move sequence can't be replayed. */
+function deriveStudentColor(
+  fen: string,
+  moves: string,
+): 'white' | 'black' | null {
+  const uciList = moves.split(/\s+/).filter(Boolean);
+  if (uciList.length === 0) {
+    return fen.split(' ')[1] === 'w' ? 'white' : 'black';
+  }
+  try {
+    const c = new Chess(fen);
+    const uci = uciList[0];
+    c.move({
+      from: uci.slice(0, 2),
+      to: uci.slice(2, 4),
+      promotion: uci.length > 4 ? uci[4] : undefined,
+    });
+    return c.turn() === 'w' ? 'white' : 'black';
+  } catch {
+    return null;
+  }
+}
+
 /** All opening blunders in the local corpus, sorted by popularity desc. */
 export function getOpeningBlunderPuzzles(): OpeningBlunderPuzzle[] {
   const out: OpeningBlunderPuzzle[] = [];
@@ -87,6 +116,8 @@ export function getOpeningBlunderPuzzles(): OpeningBlunderPuzzle[] {
     if (!themes.includes('opening')) continue;
     const hasTactic = themes.some((t) => TACTICAL_OUTCOME_THEMES.has(t));
     if (!hasTactic) continue;
+    const studentColor = deriveStudentColor(p.fen, p.moves);
+    if (!studentColor) continue;
     out.push({
       id: p.id,
       fen: p.fen,
@@ -96,6 +127,7 @@ export function getOpeningBlunderPuzzles(): OpeningBlunderPuzzle[] {
       openingTags: p.openingTags ?? '',
       popularity: p.popularity ?? 0,
       nbPlays: p.nbPlays ?? 0,
+      studentColor,
     });
   }
   out.sort((a, b) => b.popularity - a.popularity);
@@ -105,23 +137,28 @@ export function getOpeningBlunderPuzzles(): OpeningBlunderPuzzle[] {
 export interface OpeningBlunderFamily {
   family: string;
   label: string;
-  puzzles: OpeningBlunderPuzzle[];
+  white: OpeningBlunderPuzzle[];
+  black: OpeningBlunderPuzzle[];
 }
 
-/** Same data grouped by opening family slug, families sorted by puzzle count desc. */
+/** Same data grouped by opening family, with white/black panels split
+ *  by the punishing side (student color). Families sorted by total
+ *  count desc. Each color list is sorted by popularity desc. */
 export function groupByOpeningFamily(): OpeningBlunderFamily[] {
-  const map = new Map<string, OpeningBlunderPuzzle[]>();
+  const map = new Map<string, { white: OpeningBlunderPuzzle[]; black: OpeningBlunderPuzzle[] }>();
   for (const p of getOpeningBlunderPuzzles()) {
     const fam = openingFamily(p);
-    const bucket = map.get(fam) ?? [];
-    bucket.push(p);
+    const bucket = map.get(fam) ?? { white: [], black: [] };
+    if (p.studentColor === 'white') bucket.white.push(p);
+    else bucket.black.push(p);
     map.set(fam, bucket);
   }
   return Array.from(map.entries())
-    .map(([family, list]) => ({
+    .map(([family, lists]) => ({
       family,
       label: familyLabel(family),
-      puzzles: list,
+      white: lists.white,
+      black: lists.black,
     }))
-    .sort((a, b) => b.puzzles.length - a.puzzles.length);
+    .sort((a, b) => b.white.length + b.black.length - (a.white.length + a.black.length));
 }

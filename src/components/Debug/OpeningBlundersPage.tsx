@@ -1,12 +1,10 @@
-// Opening Blunders — preview surface
-// ----------------------------------
-// `/debug/opening-blunders` mines the local Lichess puzzle DB for
-// positions tagged `opening` + a tactical-outcome theme and surfaces
-// them as a playable picker. Tap a family → tap a puzzle → playout
-// runs through the punishing line, voice-narrated.
-//
-// This is a preview / spike page. If we like it, we can promote to
-// a real Coach hub tile and lift the picker into the openings flow.
+// Opening Blunders — Tactics → Opening Traps tab
+// -----------------------------------------------
+// `/tactics/opening-traps` mines the local Lichess puzzle DB for
+// positions tagged `opening` + a tactical-outcome theme. Family-grouped
+// picker, then split into White / Black panels (the COLOR YOU PLAY —
+// i.e., the side that delivers the punishing tactic). Tap a puzzle →
+// playable lesson with voice intro.
 
 import { useMemo, useState } from 'react';
 import { Chess } from 'chess.js';
@@ -68,20 +66,18 @@ function puzzleGoal(themes: string[]): string {
   return 'Find the tactic';
 }
 
+type ColorTab = 'white' | 'black';
+
 export function OpeningBlundersPage(): JSX.Element {
   const navigate = useNavigate();
   const families = useMemo<OpeningBlunderFamily[]>(() => groupByOpeningFamily(), []);
   const total = useMemo<number>(() => getOpeningBlunderPuzzles().length, []);
   const [activeFamily, setActiveFamily] = useState<string | null>(null);
+  const [activeColor, setActiveColor] = useState<ColorTab>('white');
   const [activePuzzle, setActivePuzzle] = useState<OpeningBlunderPuzzle | null>(null);
 
   if (activePuzzle) {
-    return (
-      <PuzzleView
-        puzzle={activePuzzle}
-        onExit={() => setActivePuzzle(null)}
-      />
-    );
+    return <PuzzleView puzzle={activePuzzle} onExit={() => setActivePuzzle(null)} />;
   }
 
   if (activeFamily) {
@@ -90,6 +86,7 @@ export function OpeningBlundersPage(): JSX.Element {
       setActiveFamily(null);
       return <></>;
     }
+    const list = activeColor === 'white' ? family.white : family.black;
     return (
       <div
         className="flex flex-col flex-1 overflow-y-auto"
@@ -106,37 +103,69 @@ export function OpeningBlundersPage(): JSX.Element {
           <div className="flex-1 min-w-0">
             <h2 className="text-sm font-semibold truncate">{family.label}</h2>
             <p className="text-[11px] text-theme-text-muted">
-              {family.puzzles.length} opening blunders, sorted by popularity
+              {family.white.length + family.black.length} blunders to punish
             </p>
           </div>
         </div>
+
+        {/* White / Black toggle */}
+        <div className="px-3 pt-3 max-w-2xl mx-auto w-full">
+          <div
+            className="flex gap-1 rounded-lg p-1"
+            style={{ background: 'var(--color-bg-secondary)' }}
+          >
+            {(['white', 'black'] as const).map((c) => (
+              <button
+                key={c}
+                onClick={() => setActiveColor(c)}
+                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                style={{
+                  background: activeColor === c ? 'var(--color-surface)' : 'transparent',
+                  color: activeColor === c ? 'var(--color-text)' : 'var(--color-text-muted)',
+                }}
+                data-testid={`opening-blunder-color-${c}`}
+              >
+                <span aria-hidden>{c === 'white' ? '♙' : '♟'}</span>
+                <span className="capitalize">You play {c}</span>
+                <span className="text-[11px] opacity-60">({c === 'white' ? family.white.length : family.black.length})</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="flex flex-col gap-2 p-3 max-w-2xl mx-auto w-full">
-          {family.puzzles.slice(0, 100).map((p) => (
-            <button
-              key={p.id}
-              onClick={() => setActivePuzzle(p)}
-              className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[60px] transition-colors"
-              data-testid={`opening-blunder-${p.id}`}
-            >
-              <div className="flex flex-col gap-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="inline-block px-1.5 py-0.5 rounded border border-amber-500/40 bg-amber-500/15 text-[9px] font-mono font-semibold tracking-wider text-amber-400">
-                    {puzzleGoal(p.themes).toUpperCase()}
-                  </span>
-                  <span className="text-[11px] text-theme-text-muted font-mono">
-                    {p.rating}
-                  </span>
+          {list.length === 0 ? (
+            <p className="text-sm text-theme-text-muted text-center py-8">
+              No {activeColor}-side blunders for this opening in the local corpus.
+            </p>
+          ) : (
+            list.slice(0, 100).map((p) => (
+              <button
+                key={p.id}
+                onClick={() => setActivePuzzle(p)}
+                className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[60px] transition-colors"
+                data-testid={`opening-blunder-${p.id}`}
+              >
+                <div className="flex flex-col gap-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block px-1.5 py-0.5 rounded border border-amber-500/40 bg-amber-500/15 text-[9px] font-mono font-semibold tracking-wider text-amber-400">
+                      {puzzleGoal(p.themes).toUpperCase()}
+                    </span>
+                    <span className="text-[11px] text-theme-text-muted font-mono">
+                      {p.rating}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-theme-text-muted truncate">
+                    {p.themes
+                      .filter((t) => !['opening', 'short', 'long', 'oneMove', 'master'].includes(t))
+                      .slice(0, 4)
+                      .join(' · ')}
+                  </p>
                 </div>
-                <p className="text-[11px] text-theme-text-muted truncate">
-                  {p.themes
-                    .filter((t) => !['opening', 'short', 'long', 'oneMove', 'master'].includes(t))
-                    .slice(0, 4)
-                    .join(' · ')}
-                </p>
-              </div>
-              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
-            </button>
-          ))}
+                <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+              </button>
+            ))
+          )}
         </div>
       </div>
     );
@@ -146,6 +175,7 @@ export function OpeningBlundersPage(): JSX.Element {
     <div
       className="flex flex-col flex-1 overflow-y-auto"
       style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}
+      data-testid="opening-blunders-page"
     >
       <div className="flex items-center gap-2 px-3 py-3 border-b border-theme-border sticky top-0 bg-theme-bg z-10">
         <button
@@ -156,30 +186,45 @@ export function OpeningBlundersPage(): JSX.Element {
           <ArrowLeft size={18} />
         </button>
         <div className="flex-1 min-w-0">
-          <h1 className="text-lg font-bold">Opening blunders</h1>
+          <h1 className="text-lg font-bold">Opening traps</h1>
           <p className="text-[11px] text-theme-text-muted">
-            {total} curated tactical refutations from the Lichess puzzle DB,
-            grouped by opening family
+            {total} tactical refutations from the Lichess puzzle DB, grouped
+            by opening
           </p>
         </div>
       </div>
       <div className="flex flex-col gap-2 p-3 max-w-2xl mx-auto w-full">
-        {families.map((f) => (
-          <button
-            key={f.family}
-            onClick={() => setActiveFamily(f.family)}
-            className="flex items-center justify-between gap-3 px-3 py-3 rounded-xl border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[60px] transition-colors"
-            data-testid={`opening-blunder-family-${f.family}`}
-          >
-            <div className="flex flex-col gap-0.5 min-w-0">
-              <span className="text-sm font-semibold truncate">{f.label}</span>
-              <span className="text-[11px] text-theme-text-muted">
-                {f.puzzles.length} blunder{f.puzzles.length === 1 ? '' : 's'}
-              </span>
-            </div>
-            <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
-          </button>
-        ))}
+        {families.map((f) => {
+          const total = f.white.length + f.black.length;
+          return (
+            <button
+              key={f.family}
+              onClick={() => {
+                // Default to the side with more puzzles when entering a family.
+                setActiveColor(f.white.length >= f.black.length ? 'white' : 'black');
+                setActiveFamily(f.family);
+              }}
+              className="flex items-center justify-between gap-3 px-3 py-3 rounded-xl border border-theme-border bg-theme-surface hover:bg-theme-bg text-left min-h-[60px] transition-colors"
+              data-testid={`opening-blunder-family-${f.family}`}
+            >
+              <div className="flex flex-col gap-1 min-w-0 flex-1">
+                <span className="text-sm font-semibold truncate">{f.label}</span>
+                <div className="flex items-center gap-2 text-[11px] text-theme-text-muted">
+                  <span>{total} total</span>
+                  <span aria-hidden>·</span>
+                  <span>
+                    <span aria-hidden>♙</span> {f.white.length}
+                  </span>
+                  <span aria-hidden>·</span>
+                  <span>
+                    <span aria-hidden>♟</span> {f.black.length}
+                  </span>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -206,10 +251,7 @@ function PuzzleView({ puzzle, onExit }: PuzzleViewProps): JSX.Element {
     return uciToSanLine(startFen, uciList.slice(1).join(' '));
   }, [startFen, puzzle.moves]);
 
-  const studentSide: 'white' | 'black' = useMemo(
-    () => (startFen.split(' ')[1] === 'w' ? 'white' : 'black'),
-    [startFen],
-  );
+  const studentSide = puzzle.studentColor;
 
   const playout = useEndgamePlayout({
     startFen,
@@ -267,13 +309,12 @@ function PuzzleView({ puzzle, onExit }: PuzzleViewProps): JSX.Element {
       <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
         {!playout.isComplete && playout.expectedSan && (
           <p className="text-sm text-theme-text">
-            {studentSide === 'white' ? 'White' : 'Black'} to play.{' '}
-            {puzzleGoal(puzzle.themes)}.
+            {studentSide === 'white' ? 'White' : 'Black'} to play. {puzzleGoal(puzzle.themes)}.
           </p>
         )}
         {playout.isComplete && (
           <p className="text-sm text-green-400 font-semibold">
-            Solved — that&apos;s the punishing line.
+            Solved — that's the punishing line.
           </p>
         )}
         {playout.wrongAttempts > 0 && !playout.isComplete && (
