@@ -54,7 +54,15 @@ describe('annotationService', () => {
     if (annotations === null) throw new Error('Expected annotations to be non-null');
     expect(annotations.length).toBeGreaterThan(0);
     expect(annotations[0].san).toBeTruthy();
-    expect(annotations[0].annotation).toBeTruthy();
+    // `annotation` is allowed to be empty per CLAUDE.md Narration Voice
+    // rules ("silence is acceptable" — routine opening moves play without
+    // speech). What matters is that the loader returns substantive
+    // annotation entries — at least one move on the line must carry a
+    // non-empty annotation or plan.
+    const hasContent = annotations.some(
+      (m) => m.annotation || (m.plans && m.plans.length > 0),
+    );
+    expect(hasContent).toBe(true);
   });
 
   it('loads subline annotation for variation-2 (Jobava London)', async () => {
