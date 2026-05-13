@@ -2,7 +2,7 @@
 
 How `/coach/review` and `/coach/review/:gameId` SHOULD work, and what the e2e audit (`e2e/coach-review.spec.ts`) exercises end-to-end.
 
-**Current state: 20/20 specs passing serially (Wave 2 closes all 4 deferred gaps).**
+**Current state: 20/20 specs passing serially. Wave 3 ships product fixes for all 3 gaps surfaced during Wave 2.**
 
 ```
 PLAYWRIGHT_LOCAL_CHROME=/opt/pw-browsers/chromium-1194/chrome-linux/chrome \
@@ -121,10 +121,11 @@ The session page renders `CoachGameReview`'s walk UI: chessboard, ply navigation
 3. ✅ **Ask-coach LLM round trip** (`ask-coach round trip: question → response surfaces via stubbed coach API`) — `page.route` intercepts `api.deepseek.com` + `api.anthropic.com` with proper SSE chunk streams (OpenAI delta protocol + Anthropic event-stream protocol — coachApi.ts:350 uses `stream: true`). Asserts `walk-ask-response` accumulates the canned text.
 4. ✅ **Missed-tactics jump-to-ply** (`missed-tactics list surfaces + jumping to a tactic advances the ply`) — uses the Vienna sample (source=coach, playerColor='white', 2 white-side mistakes at moves 4/5 = 2 missed tactics). Asserts `walk-missed-tactic-0` clickable, board placement changes after click. Notes that `walk-practice-in-chat-btn` only renders when `onPracticeInChat` is wired — `CoachReviewSessionPage` doesn't currently wire it, flagged as a separate product gap.
 
-**Product-code gaps surfaced during the audit:**
-- `CoachReviewSessionPage` doesn't pass `onPracticeInChat` to `CoachGameReview`, so the Practice-in-Chat button never renders in the live app.
-- The walk-UI shows `seg.fenAfter` at mistake plies (`CoachGameReview.tsx:700`), so the green arrow visualizes a missed move from the PRE-mistake position but the displayed FEN is from the POST-mistake position — the player can't actually play the arrow's suggested move (wrong side to move). Exploration mode still fires for any legal opponent move, but the UX intent appears to be "play the missed move," which isn't currently reachable.
-- The in-product sample-game seeder stores `bestMove` in SAN format, but the walk-UI arrow code (`CoachGameReview.tsx:711`) requires `bestMoveUci.length >= 4` (UCI format). The 5 shipped samples therefore never render the arrow — silent regression of the exploration affordance.
+**Wave 3 — product-code fixes shipped:**
+
+1. ✅ **`onPracticeInChat` wired** in `CoachReviewSessionPage` — routes to `/coach/chat?q=<prompt>` so the Practice-in-Chat button now renders + the chat input arrives pre-filled with the tactic prompt.
+2. ✅ **Walk-UI `fenBefore` at arrow plies** — `CoachGameReview.tsx` now displays `seg.fenBefore` at inaccuracy / mistake / blunder plies when a UCI bestMoveUci is set. The player's side-to-move now matches the displayed board, so the green arrow's suggested move is legal + playable. Other plies still display `fenAfter` (canonical playback FEN).
+3. ✅ **Sample seeder converts SAN → UCI** — `reviewSampleGames.ts` v3 replays each sample's PGN to derive UCI from the SAN `best` field. The seeder meta key bumped from `.v2` → `.v3` so existing seeded data refreshes automatically on next mount.
 
 ---
 

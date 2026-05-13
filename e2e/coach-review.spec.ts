@@ -539,35 +539,22 @@ test.describe('Review with Coach — full-play audit', () => {
     });
     expect(placementAfter, 'missed-tactic click should change the board (jump-to-ply)').not.toBe(placementBefore);
 
-    // "Practice in Coach Chat" button — only renders when
-    // `onPracticeInChat` is wired. CoachReviewSessionPage does NOT
-    // currently wire it (product gap flagged in the contract doc).
-    // We still verify the wrapper testid is reachable when the
-    // wiring exists; today it doesn't, so we just confirm the
-    // missed-tactics section keeps rendering after the click.
-    await expect(section).toBeVisible();
+    // "Practice in Coach Chat" button — wired in
+    // CoachReviewSessionPage as of Wave 3 fix (routes to
+    // /coach/chat?q=<prompt>). Expected to render.
+    await expect(page.getByTestId('walk-practice-in-chat-btn')).toBeVisible();
 
     expect(recorder.pageErrors).toEqual([]);
   });
 
-  test('exploration: drag the suggested move at a mistake ply → resume button surfaces', async ({ page }) => {
+  test('exploration: play the missed move at a mistake ply → resume button surfaces', async ({ page }) => {
     test.setTimeout(180_000);
     const recorder = recordPage(page);
 
-    // The 5 in-product sample games store `bestMove` in SAN format
-    // (e.g. "d3", "Qc7") via reviewSampleGames.ts. The walk-UI arrow
-    // code (CoachGameReview.tsx:711) requires `bestMoveUci.length >= 4`
-    // i.e. UCI like "d2d3" — so SAN-shaped bestMove silently fails to
-    // produce an arrow + the board never becomes interactive. PRODUCT
-    // GAP flagged in the contract doc.
-    //
-    // To verify the exploration contract itself, seed a fixture
-    // game with UCI-format bestMove on one mistake annotation.
-    //
-    // Also stub the LLM endpoints — generateReviewNarration calls
-    // DeepSeek/Anthropic for the intro paragraph, and without
-    // network access in headless that fetch hangs forever, which
-    // blocks the walk-UI mount.
+    // generateReviewNarration calls DeepSeek/Anthropic for the intro
+    // paragraph. Without network access the fetch hangs and blocks
+    // the walk-UI mount. Stub both providers with a short canned
+    // response so the page proceeds.
     const stubResponse = 'Walk-through intro narration.';
     await page.route(/api\.deepseek\.com|api\.anthropic\.com/, async (route) => {
       const url = route.request().url();
@@ -594,67 +581,30 @@ test.describe('Review with Coach — full-play audit', () => {
       }
     });
 
-    // Trigger the in-product seeder by visiting the list page, then
-    // PATCH the Vienna sample's bestMove on move 4 to UCI format
-    // ("d2d3") so the walk-UI arrow code (which gates on
-    // bestMoveUci.length >= 4) accepts it. This reuses the sample's
-    // already-valid PGN + annotation set.
-    await gotoList(page);
-    await expect(page.getByTestId('review-game-card-sample-vienna-amateur-1')).toBeVisible({ timeout: 15_000 });
-    await page.evaluate(async () => {
-      await new Promise<void>((resolve) => {
-        const req = indexedDB.open('ChessAcademyDB');
-        req.onsuccess = () => {
-          const db = req.result;
-          const tx = db.transaction('games', 'readwrite');
-          const store = tx.objectStore('games');
-          const get = store.get('sample-vienna-amateur-1');
-          get.onsuccess = () => {
-            const rec = get.result as {
-              annotations?: Array<{ moveNumber: number; color: string; bestMove?: string | null }>;
-            } | undefined;
-            if (!rec) { resolve(); return; }
-            for (const a of rec.annotations ?? []) {
-              if (a.moveNumber === 4 && a.color === 'white') a.bestMove = 'd2d3';
-              if (a.moveNumber === 5 && a.color === 'white') a.bestMove = 'd2d3';
-            }
-            store.put(rec);
-            tx.oncomplete = () => resolve();
-            tx.onerror = () => resolve();
-          };
-        };
-      });
-    });
+    // After the Wave-3 product fixes:
+    //   - reviewSampleGames.ts (v3) emits bestMove in UCI ('d2d3')
+    //     so the walk-UI's arrow code accepts it.
+    //   - CoachGameReview.tsx now uses seg.fenBefore at arrow-bearing
+    //     plies, so the displayed side-to-move matches the player
+    //     who erred — the missed move is legal on the displayed
+    //     board.
+    // No manual patching needed; visit Vienna directly.
+    await gotoSession(page, 'sample-vienna-amateur-1');
 
-    // Now visit the Vienna session page.
-    await page.goto('/coach/review/sample-vienna-amateur-1');
-    await page.waitForSelector('[data-testid="coach-game-review-walk"]', { timeout: 60_000 });
-
-    // Walk forward to the mistake ply. The game has 7 plies total;
-    // ply 7 = white's 4th move (Qg4 mistake). The arrow renders
-    // from d2 → d3.
+    // Walk forward to ply 7 (white's 4th move, Qg4 mistake). The
+    // green arrow renders from d2 → d3.
     for (let i = 0; i < 7; i++) {
       await page.keyboard.press('ArrowRight');
       await page.waitForTimeout(300);
     }
-    // Classification badge confirms mistake ply.
     await expect(page.getByTestId('review-classification-badge')).toBeVisible({ timeout: 6000 });
 
-    // Subtle product nuance: the walk-UI shows the post-mistake
-    // FEN (CoachGameReview.tsx:700 — `displayFen = seg.fenAfter`)
-    // which is the OPPONENT's turn-to-move state. The green arrow
-    // shows the player's missed move from the PRE-mistake FEN, but
-    // the board itself doesn't allow playing that move from the
-    // current position (useChessGame's side-to-move gate). The
-    // exploration mechanism still fires for ANY legal move from
-    // the displayed FEN — so we play a legal opponent move to
-    // trigger setWalkExplorationFen and surface walk-resume-game-btn.
-    //
-    // At post-Qg4 Vienna (black to move), black pawn a7-a6 is
-    // trivially legal. Click-to-move: click a7 → click a6.
-    await page.locator('[data-square="a7"]').first().click({ force: true });
+    // Play the suggested missed move directly via click-to-move:
+    // d2 (white pawn) → d3. The walk-UI displays seg.fenBefore
+    // here (white to move), so the move is legal.
+    await page.locator('[data-square="d2"]').first().click({ force: true });
     await page.waitForTimeout(200);
-    await page.locator('[data-square="a6"]').first().click({ force: true });
+    await page.locator('[data-square="d3"]').first().click({ force: true });
 
     // Resume-game button appears once exploration FEN is captured
     // (CoachGameReview.tsx:851).
