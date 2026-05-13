@@ -15,7 +15,17 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        // Sandbox ships chromium-1194 pre-installed but Playwright
+        // 1.58 wants 1208's chrome-headless-shell which isn't here
+        // and downloads are blocked. Point at the full chrome binary
+        // already on disk; falls back to standard download path when
+        // PLAYWRIGHT_LOCAL_CHROME isn't set.
+        launchOptions: process.env.PLAYWRIGHT_LOCAL_CHROME
+          ? { executablePath: process.env.PLAYWRIGHT_LOCAL_CHROME }
+          : undefined,
+      },
     },
   ],
   webServer: {
