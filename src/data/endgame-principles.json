@@ -33,28 +33,6 @@
           "Ka6",
           "Kc5"
         ]
-      },
-      {
-        "fen": "8/p4kpp/1pK5/8/8/PP6/6PP/8 w - - 0 4",
-        "title": "Three moves later — White has invaded",
-        "explanation": "After 1.Kd5 Kf7 2.Kc6 Ke7 3.Kxb6, the white king has eaten a pawn and dominates the queenside. Black's king has covered three squares; the white king has covered four AND captured material. This is what 'king activity' looks like in concrete numbers.",
-        "result": "white-wins",
-        "source": "Continuation of the previous position",
-        "solution": [
-          "b5",
-          "Kxb5",
-          "Ke6",
-          "Ka6",
-          "Kd5",
-          "Kxa7",
-          "Kd4",
-          "a4",
-          "Ke3",
-          "a5",
-          "Kf2",
-          "a6"
-        ],
-        "bestMove": "b5"
       }
     ],
     "practiceThemes": [
@@ -298,20 +276,9 @@
         "result": "white-wins",
         "source": "Teaching position — simplification's payoff",
         "solution": [
-          "Ke7",
-          "Kd5",
-          "a5",
-          "Kc4",
-          "Kxe6",
-          "Kb3",
-          "Kd5",
-          "Ka3",
-          "Kd4",
-          "Ka4",
-          "Kc4",
-          "Kxa5"
+          "Kf6"
         ],
-        "bestMove": "Ke7"
+        "bestMove": "Kf6"
       }
     ],
     "practiceThemes": [
