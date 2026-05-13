@@ -91,15 +91,27 @@ the phase plan below.
 Each phase = one PR. PRs ship independently to main. After each
 phase, this file gets ticked.
 
-### Phase 1 — Quick wins (~2 hrs, 1 PR) [STATUS: pending]
-Tiny fixes that don't need new architecture.
+### Phase 1 — Quick wins [STATUS: partial — 1.1 + 1.2 done, 1.3 deferred]
 
-- [ ] (#1) Activate-the-King keystone extension — flip
-  `extendToObviousWin: isDrill` → `isDrill || isPlayable`.
-- [ ] (#5) Back button on Endgame routes to `/coach` instead of `/`.
-- [ ] (#4) Bishop sprite — investigate piece-set asset path. If
-  it's a 1-file path fix, ship here; if it requires the board-
-  substrate work, defer to Phase 3.
+- [x] (#1) **Activate-the-King keystone extension** —
+  `extendToObviousWin: isDrill` widened to
+  `isDrill || positionHasPlayableLine`. Keystones with a curated
+  `solution` / `bestMove` now extend past the curated end-of-line
+  until the engine reaches mate / promotion / decisive material.
+- [x] (#5) **Back button on Endgame** — verified already routes to
+  `/coach/home` (the Coach hub). Locked in with a new regression
+  test (`CoachEndgamePage.test.tsx`). If the user still reports
+  landing on Dashboard, the cause is likely browser back-button
+  (not the in-app arrow) skipping intermediate history, or stale
+  deploy on device. Needs concrete repro steps to investigate
+  further.
+- [ ] (#4) **Bishop sprite missing** — DEFERRED. URL construction
+  in `pieceSetService.tsx` looks correct, all 12 pieces map
+  identically, underlying SVGs exist on the CDN. Root cause not
+  visible without browser DevTools (Network tab on the failing
+  bishop request). Probable suspects: CORS / 403 specific to
+  bishop file, bad cache, or react-chessboard renderer override.
+  Will pick up when we can get a Network-tab dump from David.
 
 ### Phase 2 — Narration substrate (~½ day, 1 PR) [STATUS: pending]
 Pipe endgame surfaces through `useStrictNarration` (the substrate
