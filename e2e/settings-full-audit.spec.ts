@@ -143,7 +143,8 @@ test.beforeAll(async () => {
   }
 
   // R2: masterAllOff hint about prior-value restore
-  if (/restores your previous values/.test(settingsPage)) {
+  // (regex tolerant of JSX whitespace + line breaks inside the string)
+  if (/restores\s+your\s+previous\s+values/.test(settingsPage)) {
     audit('R2', 'B1 masterAllOff restore hint', 'PASS', 'Hint about prior-value restore present.');
   } else {
     audit('R2', 'B1 masterAllOff restore hint', 'FAIL', 'No hint about prior-value restore.');
@@ -585,9 +586,14 @@ test.describe('Settings full audit', () => {
           : `Got ${stored?.[slot]}, wanted ${target}.`);
     }
 
-    // Close provider modal if open.
-    await page.keyboard.press('Escape').catch(() => undefined);
-    await page.waitForTimeout(300);
+    // Close provider modal via the dedicated close button. The
+    // backdrop intercepts pointer events, and Escape isn't wired in
+    // SettingsModalRow — so the only reliable exit is `${testId}-close`.
+    const providerClose = page.getByTestId('ai-provider-row-close');
+    if (await safeBool(() => providerClose.isVisible({ timeout: 500 }), false)) {
+      await providerClose.click();
+      await page.waitForTimeout(400);
+    }
 
     // C8: Speech Pace
     const gameplayRow = page.getByTestId('gameplay-coaching-row');
@@ -638,9 +644,12 @@ test.describe('Settings full audit', () => {
       audit('C8', 'Gameplay coaching row', 'SKIP', 'gameplay-coaching-row not visible.');
     }
 
-    // Close gameplay modal.
-    await page.keyboard.press('Escape').catch(() => undefined);
-    await page.waitForTimeout(300);
+    // Close gameplay modal via its close button.
+    const gameplayClose = page.getByTestId('gameplay-coaching-row-close');
+    if (await safeBool(() => gameplayClose.isVisible({ timeout: 500 }), false)) {
+      await gameplayClose.click();
+      await page.waitForTimeout(400);
+    }
 
     // C15: Coach voice master toggle
     const coachVoice = page.getByTestId('coach-voice-toggle');
