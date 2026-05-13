@@ -237,6 +237,19 @@ beforeAll(() => {
   URL.createObjectURL = vi.fn(() => 'blob:mock-url');
   URL.revokeObjectURL = vi.fn();
 
+  // Stub ResizeObserver — happy-dom doesn't ship one, and several
+  // components (ScrollHintBar, board layouts) use it to watch
+  // container width. Tests don't care about resize events; they just
+  // need the constructor to exist so component mount doesn't throw.
+  if (typeof globalThis.ResizeObserver === 'undefined') {
+    class MockResizeObserver {
+      observe(): void { /* noop */ }
+      unobserve(): void { /* noop */ }
+      disconnect(): void { /* noop */ }
+    }
+    (globalThis as unknown as { ResizeObserver: typeof MockResizeObserver }).ResizeObserver = MockResizeObserver;
+  }
+
   // Make navigator.onLine mockable
   let _onLine = true;
   Object.defineProperty(navigator, 'onLine', {

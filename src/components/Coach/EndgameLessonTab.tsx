@@ -479,16 +479,26 @@ function PositionRunner({
     setPlayItOut(false);
   }, [position.fen]);
 
+  // Whether THIS specific position has a playable line (solution or
+  // bestMove). Distinct from `playout.curatedStudentMoves > 0` —
+  // we need this BEFORE calling the hook so we can size its config.
+  const positionHasPlayableLine =
+    (position.solution !== undefined && position.solution.length > 0) || !!position.bestMove;
+
   const playout = useEndgamePlayout({
     startFen: position.fen,
     solution: position.solution ?? [],
     bestMove: position.bestMove,
     stockfishFallback: playItOut,
     fallbackPliesToPlay: isDrill ? 8 : 4,
-    // Drills: extend automatically until mate / promotion / decisive
-    // material. Keystones: keep the existing fixed-fallback path
-    // (their lines are curated to end at an instructive point).
-    extendToObviousWin: isDrill,
+    // Both drills AND playable keystones extend automatically until
+    // mate / promotion / decisive material. David's audit: keystones
+    // like "Activate the King" used to end at the last curated move
+    // (Kc5) — a winning position but not an OBVIOUS win yet. Now the
+    // engine plays on past the curated line so the student converts
+    // to mate / promotion. Reference-only positions (no solution + no
+    // bestMove) are excluded — there's nothing to extend.
+    extendToObviousWin: isDrill || positionHasPlayableLine,
     // Max-strength Stockfish on the puzzle-extension path so the
     // engine plays the best defense — the student earns the win
     // against optimal play, not a weakened sparring partner.
