@@ -206,17 +206,16 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       mockery: draftMockery,
       flirt: draftFlirt,
     };
-    // Only persist voice-map entries that DIFFER from defaults so the
-    // stored object stays compact and a future default change picks up
-    // automatically for users who never overrode that personality.
-    const voiceOverrides: Partial<Record<CoachPersonality, string>> = {};
-    for (const [key, value] of Object.entries(draftVoiceMap) as [CoachPersonality, string][]) {
-      if (value !== PERSONALITY_VOICE_DEFAULTS[key]) voiceOverrides[key] = value;
-    }
-    const secondaryVoiceOverrides: Partial<Record<CoachPersonality, string>> = {};
-    for (const [key, value] of Object.entries(draftSecondaryVoiceMap) as [CoachPersonality, string][]) {
-      if (value !== PERSONALITY_SECONDARY_VOICE_DEFAULTS[key]) secondaryVoiceOverrides[key] = value;
-    }
+    // R8 (audit): persist ALL voice-map entries explicitly, not just
+    // the ones that differ from defaults. The old "diff-only"
+    // optimization caused silent value-resets: pick a personality →
+    // dials seeded to its defaults → adjust → save persists the diff
+    // → user picks another personality → comes back, only to find
+    // their custom dial value silently reverted because the stored
+    // record didn't actually contain it. Storing the full 5×voice +
+    // 5×secondary map locks each personality's pairing in place.
+    const voiceOverrides: Partial<Record<CoachPersonality, string>> = { ...draftVoiceMap };
+    const secondaryVoiceOverrides: Partial<Record<CoachPersonality, string>> = { ...draftSecondaryVoiceMap };
     const updatedPrefs = {
       ...profile.preferences,
       coachPersonality: draftPersonality,
@@ -515,12 +514,12 @@ function VerbosityRow({ value, onChange }: VerbosityRowProps): JSX.Element {
   return (
     <div>
       <div className="flex items-baseline justify-between mb-1">
-        <span className="text-sm font-medium">Verbosity</span>
+        <span className="text-sm font-medium">Response Length</span>
         <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-          How much the coach says per turn.
+          How long each coach response is (length cap, not pace).
         </span>
       </div>
-      <div className="flex gap-1" role="radiogroup" aria-label="Verbosity">
+      <div className="flex gap-1" role="radiogroup" aria-label="Response Length">
         {VERBOSITY_OPTIONS.map((opt) => {
           const selected = value === opt.id;
           return (
