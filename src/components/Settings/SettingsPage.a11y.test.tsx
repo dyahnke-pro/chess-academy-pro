@@ -79,12 +79,17 @@ describe('SettingsPage a11y', () => {
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-coach'));
     expect(screen.getByTestId('coach-tab')).toBeInTheDocument();
+    // The API key input lives inside the AI Provider & Models modal row.
+    // Stale before this fix: the modal was a refactor target — tests
+    // missed the row-click that mounts the input.
+    fireEvent.click(screen.getByTestId('ai-provider-row'));
     expect(screen.getByTestId('api-key-input')).toBeInTheDocument();
   });
 
   it('api key input has password type by default', () => {
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-coach'));
+    fireEvent.click(screen.getByTestId('ai-provider-row'));
     const input = screen.getByTestId('api-key-input');
     expect(input).toHaveAttribute('type', 'password');
   });
@@ -92,6 +97,7 @@ describe('SettingsPage a11y', () => {
   it('show/hide toggle changes input type', () => {
     render(<SettingsPage />);
     fireEvent.click(screen.getByTestId('tab-coach'));
+    fireEvent.click(screen.getByTestId('ai-provider-row'));
     const showBtn = screen.getByText('Show');
     fireEvent.click(showBtn);
     const input = screen.getByTestId('api-key-input');
