@@ -3,6 +3,10 @@
 How `/openings` SHOULD work, and what the e2e audit
 (`e2e/openings.spec.ts`) currently exercises.
 
+**Current state: 28/28 specs passing** (full-suite run on commit
+`42681623`, ~22.5 min wall-clock against system Chromium via
+`PLAYWRIGHT_LOCAL_CHROME` in serial mode).
+
 The hub is at **`/openings`** (component:
 `src/components/Openings/OpeningExplorerPage.tsx`). It exposes 4
 sub-tabs through a four-up grid:
@@ -112,14 +116,32 @@ Detail surfaces:
 - ✅ `clicking the top-level Practice button enters practice mode`
 - ✅ `favorite toggle round-trips through Dexie`
 - ✅ `train-traps button surfaces when the opening has trap lines`
-- ⚠️ Not yet covered: `CheckpointQuiz` full happy-path
-  (choice → correct → advance → completion).
-- ⚠️ Not yet covered: `MiddlegamePlansSection` play-plan launches
-  `MiddlegamePractice`.
+- ✅ `CheckpointQuiz surface mounts on Italian Game` — verifies the
+  `checkpoint-quiz` card, the `quiz-practice-full-board` CTA, and
+  the `quiz-hint-btn` affordance.
+- ✅ `MiddlegamePlansSection renders plan cards for Italian Game` —
+  verifies `middlegame-plans-section`, `plan-card-<id>`, and
+  `play-plan-<id>` testids render for openings with plans.
+- ✅ `CommonMistakesSection mounts and toggles individual mistakes`
+  — verifies `common-mistakes-section`, `mistake-<i>` rows, and
+  the `mistake-toggle-<i>` click flow.
+- ✅ `Woodpecker stats panel hidden when reps = 0 (fresh profile)`
+  — confirms the gate-on-`> 0` logic. (Mount-after-completion is
+  still not covered — would need a full drill cycle.)
+- ⚠️ Not yet covered: `CheckpointQuiz` plan-quiz full happy-path
+  (choice → correct → advance → completion). Italian Game's
+  first quiz is a move-quiz that navigates away to
+  `/coach/session/practice`; reaching the plan-quiz at quizIndex
+  2 from Playwright requires completing two move-quizzes round-
+  trip, which is brittle in a smoke run.
+- ⚠️ Not yet covered: `MiddlegamePlansSection.play-plan-<id>`
+  click launches `MiddlegamePractice` (would need to verify the
+  practice surface mounts).
 - ⚠️ Not yet covered: `WoodpeckerStats` mount after completing a
-  drill cycle (`drill-mode` finishes → `wp-reps` increments).
-- ⚠️ Not yet covered: `CommonMistakesSection` chip-toggle expands the
-  miniboard explanation.
+  drill cycle (would need a full DrillMode happy-path).
+- ⚠️ Not yet covered: `CommonMistakesSection` chip-toggle expands
+  the miniboard preview (currently only the toggle-click is
+  exercised; the expanded-state assertion isn't).
 
 ---
 
@@ -144,9 +166,9 @@ Detail surfaces:
 **AUDIT COVERAGE**
 - ✅ `Pro tab → player → detail → back routes correctly` (full path:
   Pro tab → player card → opening card → detail back → player back)
-- ⚠️ Not yet covered: per-player white/black section split asserts the
-  correct colors land in the correct section (current test only
-  asserts the cards mount in some order).
+- ✅ `Pro player page splits openings into White vs Black sections by
+  color` — verifies one or both section headers render and the
+  player page has at least one opening card.
 
 ---
 
@@ -172,15 +194,32 @@ component. They all share board substrate but their controls differ:
 
 **AUDIT COVERAGE**
 - ✅ `walkthrough-mode play/pause + speed controls render`
-- ⚠️ Not yet covered: full walkthrough playout (step through to the
-  end, confirm the runner advances on voice-promise resolution).
+- ✅ `Walkthrough play/pause toggle flips the aria-label deterministically`
+  — verifies the runner state machine is reachable from the UI
+  without depending on TTS timing (headless Chrome's
+  SpeechSynthesis is unreliable, so we can't gate on voice-promise
+  resolution).
+- ✅ `DrillMode controls render on entry (smoke)` — verifies
+  `drill-mode`, `drill-back`, `drill-progress` mount and back-out
+  works.
+- ✅ `PracticeMode controls render on entry (smoke)` — verifies
+  `practice-mode`, `practice-back`, `practice-prompt` mount and
+  back-out works.
+- ✅ `TrainMode controls render via train-traps-btn (smoke)` —
+  verifies `train-mode`, `train-back`, `train-progress` mount.
+- ✅ `OpeningPlayMode mounts on play-btn (smoke)` — verifies the
+  chessboard mounts at `play-btn` destination (the play view
+  doesn't carry a root testid).
+- ⚠️ Not yet covered: full walkthrough playout to the leaf step
+  (would need a real TTS or a Web Speech mock).
 - ⚠️ Not yet covered: `DrillMode` happy-path (guess all moves, hit
   `learn-complete`).
-- ⚠️ Not yet covered: `PracticeMode` prompt cycle.
-- ⚠️ Not yet covered: `TrainMode` for traps (`train-traps-btn` →
-  `train-mode` → finish all positions).
+- ⚠️ Not yet covered: `PracticeMode` prompt → answer → next-prompt
+  cycle.
+- ⚠️ Not yet covered: `TrainMode` for traps full completion.
 - ⚠️ Not yet covered: `OpeningPlayMode` Stockfish reply against a
-  student move.
+  student move (would need Stockfish initialization wait + a
+  predictable opening).
 
 ---
 
