@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Brain, BookOpen, AlertTriangle } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { seedPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
@@ -37,6 +37,7 @@ export function AdaptivePuzzlePage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const location = useLocation();
+  const navigate = useNavigate();
   const forcedWeakThemes = (location.state as { forcedWeakThemes?: string[] } | null)?.forcedWeakThemes;
   const autoStartedRef = useRef(false);
 
@@ -187,16 +188,14 @@ export function AdaptivePuzzlePage(): JSX.Element {
     <div className="flex flex-col flex-1 p-4 md:p-6 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-y-auto" data-testid="adaptive-puzzle-page">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
-        {phase !== 'select' && (
-          <button
-            onClick={handleBackToSelect}
-            className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-            aria-label="Back to difficulty select"
-            data-testid="back-button"
-          >
-            <ArrowLeft size={18} className="text-theme-text" />
-          </button>
-        )}
+        <button
+          onClick={phase === 'select' ? () => navigate('/tactics') : handleBackToSelect}
+          className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
+          aria-label={phase === 'select' ? 'Back to Tactics' : 'Back to difficulty select'}
+          data-testid="back-button"
+        >
+          <ArrowLeft size={18} className="text-theme-text" />
+        </button>
         <div className="flex items-center gap-2">
           <Brain size={24} className="text-theme-accent" />
           <h1 className="text-xl font-bold text-theme-text">Puzzles</h1>

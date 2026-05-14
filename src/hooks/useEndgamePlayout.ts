@@ -317,8 +317,13 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     // wanted the playout to keep going past the critical move
     // "until it was an obvious win." Once the student queens a
     // pawn the lesson is over regardless of whose turn comes next.
+    //
+    // History can be empty when this function is invoked from the
+    // auto-kick useEffect (Play-it-out mounts with opponent-to-move
+    // FEN, no student move has happened yet). Skip the promotion
+    // check in that case — there's no "last move" to inspect.
     const lastMove = chessRef.current.history({ verbose: true }).slice(-1)[0];
-    if (lastMove.flags.includes('p')) {
+    if (lastMove && lastMove.flags.includes('p')) {
       setFallbackOutcome('survived');
       setPhase('complete');
       return;
