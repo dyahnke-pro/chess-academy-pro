@@ -695,6 +695,31 @@ current.
 **Don't ask for permission to push or merge.** Just do it. Asking
 adds round-trips David doesn't want.
 
+**Auth for `git push` from Claude sessions.** Dave keeps a GitHub
+Personal Access Token labeled **"Claude Code repo token"** in his
+GitHub settings (`Settings → Developer settings → Personal access
+tokens`). It needs either:
+
+- Classic PAT with `repo` scope, OR
+- Fine-grained PAT with `dyahnke-pro/chess-academy-pro` selected and
+  `Contents: Read and write` permission
+
+The token value is **not** stored in the repo — it lives in Claude's
+per-project memory (see `audit_stream.md` / sibling memory files).
+Workflow when `git push` returns 401 / 403:
+
+1. Check Claude memory for the current token.
+2. If absent / stale, ask Dave to paste it (he can copy from the
+   labeled PAT in GitHub settings or rotate and generate a fresh
+   one).
+3. Use it via `git push https://dyahnke-pro:<TOKEN>@github.com/dyahnke-pro/chess-academy-pro.git main`
+   or `gh auth login --with-token` if that path works in the sandbox.
+4. Save the new value back to memory (never commit it).
+
+If `git push` keeps failing, fall back to `vercel --prod` to push the
+deployment without going through GitHub — the git history will then
+be local-only until the push resolves.
+
 ## Before Finishing a Session
 
 1. All tests pass (`npm run test:run`)
