@@ -15,9 +15,11 @@
  * honest.
  */
 import { useEffect, useState } from 'react';
-import { Flame, TrendingUp, Layers, ArrowDownUp, RotateCw, Star, Repeat, Sparkles, Trophy } from 'lucide-react';
+import { Flame, TrendingUp, Layers, ArrowDownUp, RotateCw, Star, Repeat, Sparkles, Trophy, Crown, Zap, Clock } from 'lucide-react';
 import { engagementSummary, type EngagementSummary } from '../../services/analyticsService';
 import { StrengthsCard } from './StrengthsCard';
+import { HeatmapGrid, type HeatmapRow } from './HeatmapGrid';
+import { accuracyColor, gapColor } from './heatmapScales';
 
 interface PatternsTabProps {
   /** When provided, parent skipped its own load — render the
@@ -69,18 +71,190 @@ export function PatternsTab({ data: provided }: PatternsTabProps = {}): JSX.Elem
 
   return (
     <div data-testid="patterns-tab" className="flex flex-col gap-4 pt-2">
+      <PersonalRecordsCard records={data.records} />
       <StreaksRow streak={data.streak} />
+      <PhaseStrengthHeatmap matrix={data.phaseStrength} />
+      <TacticRecognitionHeatmap rows={data.tacticRecognition} />
       <FirstTryCard firstTry={data.firstTry} />
       <ColorMismatchCard mismatch={data.colorMismatch} />
       <ComebackCard comeback={data.comeback} winShape={data.winShape} />
       <WinShapeCard winShape={data.winShape} />
       <TacticBreadthCard breadth={data.breadth} brilliantShape={data.brilliantShape} />
-      <TransferGapCard rows={data.transferGap} />
       <RepeatMistakeCard repeats={data.repeatMistake} />
 
       {/* Reuse the existing StrengthsCard primitive for one-liner
        *  consolidated strengths derived from this tab's signals. */}
       <StrengthsCard strengths={buildStrengthsList(data)} />
+    </div>
+  );
+}
+
+// ─── New cards / heatmaps ──────────────────────────────────────────────
+
+function PersonalRecordsCard({ records }: { records: EngagementSummary['records'] }): JSX.Element {
+  const hasAny =
+    records.highestBeaten ||
+    records.fastestWin ||
+    records.longestGame ||
+    records.bestAccuracyGame ||
+    records.longestWinStreak > 0;
+  if (!hasAny) return <></>;
+  return (
+    <div
+      className="rounded-2xl border p-4"
+      style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+      data-testid="patterns-records"
+    >
+      <div className="flex items-center gap-2 mb-3">
+        <Crown size={16} style={{ color: '#f59e0b' }} />
+        <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
+          Personal records
+        </h3>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        {records.highestBeaten && (
+          <RecordTile
+            label="Highest beaten"
+            value={`${records.highestBeaten.elo}`}
+            sub={records.highestBeaten.name}
+            color="var(--color-success)"
+            icon={<Crown size={11} />}
+          />
+        )}
+        {records.fastestWin && (
+          <RecordTile
+            label="Fastest win"
+            value={`${records.fastestWin.moves} moves`}
+            sub={`vs ${records.fastestWin.opponent}`}
+            color="#22d3ee"
+            icon={<Zap size={11} />}
+          />
+        )}
+        {records.longestGame && (
+          <RecordTile
+            label="Longest game"
+            value={`${records.longestGame.moves} moves`}
+            sub={records.longestGame.result.toUpperCase()}
+            color="#a855f7"
+            icon={<Clock size={11} />}
+          />
+        )}
+        {records.bestAccuracyGame && (
+          <RecordTile
+            label="Best accuracy"
+            value={`${records.bestAccuracyGame.accuracyPct}%`}
+            sub={`vs ${records.bestAccuracyGame.opponent}`}
+            color="var(--color-warning)"
+            icon={<Sparkles size={11} />}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function RecordTile({ label, value, sub, color, icon }: {
+  label: string; value: string; sub: string; color: string; icon?: React.ReactNode;
+}): JSX.Element {
+  return (
+    <div
+      className="rounded-xl border p-3"
+      style={{ borderColor: 'var(--color-border)' }}
+    >
+      <div className="flex items-center gap-1 text-[10px] uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
+        {icon}
+        {label}
+      </div>
+      <div className="text-base font-bold tabular-nums mt-0.5" style={{ color }}>
+        {value}
+      </div>
+      <div className="text-[10px] truncate" style={{ color: 'var(--color-text-muted)' }} title={sub}>
+        {sub}
+      </div>
+    </div>
+  );
+}
+
+function PhaseStrengthHeatmap({ matrix }: { matrix: EngagementSummary['phaseStrength'] }): JSX.Element {
+  // Hide when no row has more than one populated cell — the trend
+  // isn't there yet.
+  const hasTrendData = matrix.rows.some((r) => r.cells.filter((c) => c.accuracyPct !== null).length >= 2);
+  if (!hasTrendData) return <></>;
+  const heatRows: HeatmapRow[] = matrix.rows.map((r) => ({
+    label: r.phase.charAt(0).toUpperCase() + r.phase.slice(1),
+    cells: r.cells.map((c) => ({
+      value: c.accuracyPct,
+      display: c.accuracyPct !== null ? `${c.accuracyPct}` : '—',
+      hint: `${c.monthLabel}: ${c.samples} game${c.samples === 1 ? '' : 's'}`,
+    })),
+  }));
+  return (
+    <div
+      className="rounded-2xl border p-4"
+      style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+      data-testid="patterns-phase-strength"
+    >
+      <div className="flex items-center gap-2 mb-1">
+        <TrendingUp size={16} style={{ color: 'var(--color-success)' }} />
+        <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
+          Phase strength over time
+        </h3>
+      </div>
+      <HeatmapGrid
+        columns={matrix.monthLabels}
+        rows={heatRows}
+        cellColor={accuracyColor}
+        caption="Accuracy % per phase, by month. Darker green = sharper."
+        legend={<span>Red &lt; 55% · Amber 55-85% · Green &gt; 85%</span>}
+        testId="patterns-phase-strength-heatmap"
+      />
+    </div>
+  );
+}
+
+function TacticRecognitionHeatmap({ rows }: { rows: EngagementSummary['tacticRecognition'] }): JSX.Element {
+  const significant = rows.filter(
+    (r) => r.puzzleAccuracyPct !== null || r.inGameRecognitionPct !== null,
+  );
+  if (significant.length === 0) return <></>;
+
+  const heatRows: HeatmapRow[] = significant.slice(0, 8).map((r) => ({
+    label: r.tacticType.replace(/_/g, ' '),
+    cells: [
+      { value: r.puzzleAccuracyPct, display: r.puzzleAccuracyPct !== null ? `${r.puzzleAccuracyPct}%` : '—' },
+      { value: r.inGameRecognitionPct, display: r.inGameRecognitionPct !== null ? `${r.inGameRecognitionPct}%` : '—' },
+      {
+        value: r.gapPoints,
+        display: r.gapPoints !== null ? `${r.gapPoints > 0 ? '+' : ''}${r.gapPoints}` : '—',
+        hint: r.gapPoints !== null
+          ? (r.gapPoints > 0
+            ? 'Higher in puzzles — pattern known, board awareness weaker'
+            : 'Higher in-game — board sense stronger than pattern recognition')
+          : undefined,
+      },
+    ],
+  }));
+
+  return (
+    <div
+      className="rounded-2xl border p-4"
+      style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+      data-testid="patterns-tactic-recognition"
+    >
+      <div className="flex items-center gap-2 mb-1">
+        <Sparkles size={16} style={{ color: '#22d3ee' }} />
+        <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
+          Tactic recognition
+        </h3>
+      </div>
+      <HeatmapGrid
+        columns={['Puzzle', 'In game', 'Gap']}
+        rows={heatRows}
+        cellColor={(v) => (v === null ? gapColor(null) : accuracyColor(v))}
+        caption="How you handle each tactic type. Gap column uses a separate scale: positive = puzzle-strong/game-weak."
+        testId="patterns-tactic-recognition-heatmap"
+        labelColumnWidth="140px"
+      />
     </div>
   );
 }
@@ -270,52 +444,6 @@ function TacticBreadthCard({ breadth, brilliantShape }: {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function TransferGapCard({ rows }: { rows: EngagementSummary['transferGap'] }): JSX.Element {
-  const significant = rows.filter((r) => r.transferGapPoints !== null && Math.abs(r.transferGapPoints) >= 20);
-  if (significant.length === 0) return <></>;
-  return (
-    <div
-      className="rounded-2xl border p-4"
-      style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
-      data-testid="patterns-transfer"
-    >
-      <div className="flex items-center gap-2 mb-2">
-        <TrendingUp size={16} style={{ color: 'var(--color-warning)' }} />
-        <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
-          Puzzle vs game gap
-        </h3>
-      </div>
-      <p className="text-[11px] mb-3" style={{ color: 'var(--color-text-muted)' }}>
-        Where your puzzle accuracy doesn't match what you do in real games. Positive means
-        you nail the puzzle but miss the same idea on the board.
-      </p>
-      {significant.slice(0, 4).map((r) => (
-        <div
-          key={r.tacticType}
-          className="flex items-center justify-between py-2 border-b text-sm"
-          style={{ borderColor: 'color-mix(in srgb, var(--color-border) 50%, transparent)' }}
-        >
-          <span className="capitalize" style={{ color: 'var(--color-text)' }}>
-            {r.tacticType.replace(/_/g, ' ')}
-          </span>
-          <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            <span style={{ color: '#22d3ee' }}>{r.puzzleAccuracyPct ?? '—'}%</span>
-            {' puzzle · '}
-            <span style={{ color: 'var(--color-warning)' }}>{r.gameRecognitionPct ?? '—'}%</span>
-            {' game · '}
-            <span style={{
-              color: (r.transferGapPoints ?? 0) > 0 ? 'var(--color-error)' : 'var(--color-success)',
-              fontWeight: 600,
-            }}>
-              {(r.transferGapPoints ?? 0) > 0 ? '+' : ''}{r.transferGapPoints}
-            </span>
-          </span>
-        </div>
-      ))}
     </div>
   );
 }

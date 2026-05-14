@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { InsightsDonutChart } from './InsightsDonutChart';
 import { InsightsBarChart } from './InsightsBarChart';
 import { StrengthsCard } from './StrengthsCard';
 import { OpeningDrilldown } from './OpeningDrilldown';
+import { HeatmapGrid, type HeatmapRow } from './HeatmapGrid';
+import { winRateColor } from './heatmapScales';
+import { openingProficiencyMatrix, type OpeningProficiencyRow } from '../../services/analyticsService';
 import type { OpeningInsights, OpeningAggregateStats } from '../../types';
 
 interface OpeningsTabProps {
@@ -11,6 +14,15 @@ interface OpeningsTabProps {
 
 export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
   const [drilldownOpening, setDrilldownOpening] = useState<OpeningAggregateStats | null>(null);
+  const [matrix, setMatrix] = useState<OpeningProficiencyRow[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void openingProficiencyMatrix()
+      .then((rows) => { if (!cancelled) setMatrix(rows); })
+      .catch(() => { /* analytics is read-only; safe to swallow */ });
+    return () => { cancelled = true; };
+  }, []);
 
   if (drilldownOpening) {
     return (
@@ -90,6 +102,45 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
               suffix: '%',
             }))}
             maxValue={100}
+          />
+        </Section>
+      )}
+
+      {/* Opening proficiency matrix — answers "what works for you"
+          in a single heatmap: rows are your top openings, columns
+          split White / Black / Combined performance. Hidden until
+          we have at least one row with ≥3 games. */}
+      {matrix && matrix.length > 0 && (
+        <Section title="Proficiency matrix">
+          <p className="text-[10px] -mt-1 mb-2" style={{ color: 'var(--color-text-muted)' }}>
+            Win-rate per opening, split by color. Greener = stronger.
+          </p>
+          <HeatmapGrid
+            columns={['As White', 'As Black', 'Combined']}
+            rows={matrix.map((row): HeatmapRow => ({
+              label: row.name,
+              sublabel: row.eco ?? undefined,
+              cells: [
+                {
+                  value: row.asWhite ? row.asWhite.winRatePct : null,
+                  display: row.asWhite ? `${row.asWhite.winRatePct}%` : '—',
+                  hint: row.asWhite ? `${row.asWhite.games} game${row.asWhite.games === 1 ? '' : 's'} as White` : 'No games as White',
+                },
+                {
+                  value: row.asBlack ? row.asBlack.winRatePct : null,
+                  display: row.asBlack ? `${row.asBlack.winRatePct}%` : '—',
+                  hint: row.asBlack ? `${row.asBlack.games} game${row.asBlack.games === 1 ? '' : 's'} as Black` : 'No games as Black',
+                },
+                {
+                  value: row.combined.winRatePct,
+                  display: `${row.combined.winRatePct}%`,
+                  hint: `${row.combined.games} game${row.combined.games === 1 ? '' : 's'} total`,
+                },
+              ],
+            }))}
+            cellColor={winRateColor}
+            labelColumnWidth="160px"
+            testId="opening-proficiency-matrix"
           />
         </Section>
       )}

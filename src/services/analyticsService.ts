@@ -965,6 +965,471 @@ export async function streaks(): Promise<StreakStats> {
   };
 }
 
+// ─── Activity heatmap (calendar) ───────────────────────────────────────
+//
+// Daily game-count series for the last N weeks, suitable for a
+// calendar-grid heatmap (GitHub contribution graph style).
+
+export interface ActivityCell {
+  date: string;  // ISO YYYY-MM-DD
+  count: number;
+}
+
+export interface ActivityHeatmapData {
+  /** Newest-last; one entry per day in the window even when count===0. */
+  cells: ActivityCell[];
+  /** Max count across the window — drives color-scale normalization. */
+  maxCount: number;
+  /** Total games in the window. */
+  totalGames: number;
+  /** Distinct active days (count > 0). */
+  activeDays: number;
+}
+
+export async function activityHeatmap(windowDays = 365): Promise<ActivityHeatmapData> {
+  const playerGames = await loadPlayerGames();
+  const counts = new Map<string, number>();
+  for (const { game } of playerGames) {
+    const day = (game.date || '').slice(0, 10);
+    if (!day) continue;
+    counts.set(day, (counts.get(day) ?? 0) + 1);
+  }
+
+  // Build a dense series anchored on "today" and walking back windowDays.
+  const cells: ActivityCell[] = [];
+  let total = 0;
+  let active = 0;
+  let max = 0;
+  const today = new Date();
+  for (let i = windowDays - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    const c = counts.get(key) ?? 0;
+    cells.push({ date: key, count: c });
+    if (c > 0) { active++; total += c; }
+    if (c > max) max = c;
+  }
+  return { cells, maxCount: max, totalGames: total, activeDays: active };
+}
+
+// ─── Personal records ──────────────────────────────────────────────────
+//
+// Single-card "highlights of your career so far." All derived from
+// db.games — no new emit sites required.
+
+export interface PersonalRecords {
+  highestBeaten: { name: string; elo: number; gameId: string } | null;
+  fastestWin: { moves: number; gameId: string; opponent: string } | null;
+  longestGame: { moves: number; gameId: string; result: 'win' | 'loss' | 'draw' } | null;
+  bestAccuracyGame: { accuracyPct: number; gameId: string; opponent: string } | null;
+  longestWinStreak: number;
+  totalGames: number;
+}
+
+export async function personalRecords(): Promise<PersonalRecords> {
+  const profile = await db.profiles.toCollection().first();
+  const username = profile?.preferences.chessComUsername ?? profile?.preferences.lichessUsername ?? profile?.name ?? null;
+  const playerGames = await loadPlayerGames();
+
+  let highestBeaten: PersonalRecords['highestBeaten'] = null;
+  let fastestWin: PersonalRecords['fastestWin'] = null;
+  let longestGame: PersonalRecords['longestGame'] = null;
+  let bestAccuracyGame: PersonalRecords['bestAccuracyGame'] = null;
+
+  for (const { game, color } of playerGames) {
+    const opponentName = color === 'white' ? game.black : game.white;
+    const opponentElo = color === 'white' ? game.blackElo : game.whiteElo;
+    const won = isWin(game, color);
+    const moves = countMovesInPgn(game.pgn);
+
+    if (won && opponentElo !== null) {
+      if (!highestBeaten || opponentElo > highestBeaten.elo) {
+        highestBeaten = { name: opponentName, elo: opponentElo, gameId: game.id };
+      }
+    }
+    if (won) {
+      if (!fastestWin || moves < fastestWin.moves) {
+        fastestWin = { moves, gameId: game.id, opponent: opponentName };
+      }
+    }
+    const result: 'win' | 'loss' | 'draw' = won ? 'win' : (game.result === '1/2-1/2' ? 'draw' : 'loss');
+    if (!longestGame || moves > longestGame.moves) {
+      longestGame = { moves, gameId: game.id, result };
+    }
+
+    // Per-game accuracy from full annotations (only fully analyzed games count).
+    if (game.fullyAnalyzed && game.annotations && game.annotations.length > 0) {
+      const accPct = perGameAccuracyPct(game.annotations, color);
+      if (accPct !== null && (!bestAccuracyGame || accPct > bestAccuracyGame.accuracyPct)) {
+        bestAccuracyGame = { accuracyPct: accPct, gameId: game.id, opponent: opponentName };
+      }
+    }
+  }
+
+  // Longest win streak (reuse the streak logic).
+  const sorted = [...playerGames].sort((a, b) => b.game.date.localeCompare(a.game.date));
+  let longestWinStreak = 0;
+  let cur = 0;
+  for (const { game, color } of sorted) {
+    if (isWin(game, color)) {
+      cur++;
+      if (cur > longestWinStreak) longestWinStreak = cur;
+    } else {
+      cur = 0;
+    }
+  }
+
+  void username;  // future: tag-record provenance
+  return {
+    highestBeaten,
+    fastestWin,
+    longestGame,
+    bestAccuracyGame,
+    longestWinStreak,
+    totalGames: playerGames.length,
+  };
+}
+
+/** Rough per-game accuracy derived from annotations. Counts moves
+ *  classified as good/great/brilliant/book as "accurate" against
+ *  the player's color total. Lightweight; matches the spirit of
+ *  Lichess's "accuracy %" without re-implementing the full CDF.
+ *  Returns null if no player-color moves were classified. */
+function perGameAccuracyPct(annotations: { color: 'white' | 'black'; classification: string }[], playerColor: 'white' | 'black'): number | null {
+  let total = 0, accurate = 0;
+  for (const ann of annotations) {
+    if (ann.color !== playerColor) continue;
+    total++;
+    if (ann.classification === 'brilliant' || ann.classification === 'great' || ann.classification === 'good' || ann.classification === 'book') {
+      accurate++;
+    }
+  }
+  if (total === 0) return null;
+  return Math.round((accurate / total) * 100);
+}
+
+// ─── Time-control performance ──────────────────────────────────────────
+//
+// Bucket games by their PGN [TimeControl "..."] header. Lichess
+// convention: bullet ≤179s, blitz 180-479s, rapid 480-1499s, classical
+// ≥1500s (using initial + 40×increment as the "expected duration"
+// proxy). Daily games fall into a separate "correspondence" bucket.
+
+export type TimeControlBucket = 'bullet' | 'blitz' | 'rapid' | 'classical' | 'correspondence' | 'unknown';
+
+export interface TimeControlRow {
+  bucket: TimeControlBucket;
+  games: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  winRatePct: number;
+  /** Avg accuracy across fully-analyzed games in this bucket. */
+  avgAccuracyPct: number | null;
+}
+
+const TIME_CONTROL_ORDER: TimeControlBucket[] = ['bullet', 'blitz', 'rapid', 'classical', 'correspondence', 'unknown'];
+
+function parseTimeControlHeader(pgn: string): TimeControlBucket {
+  // Look for [TimeControl "<value>"] header
+  const match = /\[TimeControl\s+"([^"]+)"\]/.exec(pgn);
+  if (!match) return 'unknown';
+  const v = match[1].trim();
+  if (v === '-' || v === '*') return 'unknown';
+  // Correspondence: chess.com uses "1/86400" (1 move per day) etc.
+  if (/^\d+\/\d+$/.test(v)) return 'correspondence';
+  // Standard "initial+increment" or just "initial"
+  const tc = /^(\d+)(?:\+(\d+))?$/.exec(v);
+  if (!tc) return 'unknown';
+  const initial = Number(tc[1]);
+  const increment = tc[2] ? Number(tc[2]) : 0;
+  const expected = initial + 40 * increment;
+  if (expected <= 179) return 'bullet';
+  if (expected <= 479) return 'blitz';
+  if (expected <= 1499) return 'rapid';
+  return 'classical';
+}
+
+export async function timeControlPerformance(): Promise<TimeControlRow[]> {
+  const playerGames = await loadPlayerGames();
+  const bins = new Map<TimeControlBucket, {
+    games: number; wins: number; losses: number; draws: number;
+    accuracySum: number; accuracyCount: number;
+  }>();
+  for (const { game, color } of playerGames) {
+    const bucket = parseTimeControlHeader(game.pgn);
+    let bin = bins.get(bucket);
+    if (!bin) {
+      bin = { games: 0, wins: 0, losses: 0, draws: 0, accuracySum: 0, accuracyCount: 0 };
+      bins.set(bucket, bin);
+    }
+    bin.games++;
+    if (isWin(game, color)) bin.wins++;
+    else if (game.result === '1/2-1/2') bin.draws++;
+    else bin.losses++;
+    if (game.fullyAnalyzed && game.annotations && game.annotations.length > 0) {
+      const acc = perGameAccuracyPct(game.annotations, color);
+      if (acc !== null) {
+        bin.accuracySum += acc;
+        bin.accuracyCount++;
+      }
+    }
+  }
+  return TIME_CONTROL_ORDER
+    .filter((b) => bins.has(b))
+    .map((b) => {
+      const bin = bins.get(b);
+      if (!bin) return null;
+      return {
+        bucket: b,
+        games: bin.games,
+        wins: bin.wins,
+        losses: bin.losses,
+        draws: bin.draws,
+        winRatePct: bin.games > 0 ? Math.round((bin.wins / bin.games) * 100) : 0,
+        avgAccuracyPct: bin.accuracyCount > 0 ? Math.round(bin.accuracySum / bin.accuracyCount) : null,
+      };
+    })
+    .filter((r): r is TimeControlRow => r !== null);
+}
+
+// ─── Critical-moments accuracy ─────────────────────────────────────────
+//
+// Of all positions where a single move could have swung the eval by
+// ≥100 cp (the "critical moments"), what % did the student find the
+// best move? Cleanest single-number "decision quality" signal.
+
+export interface CriticalMomentsStats {
+  found: number;
+  total: number;
+  accuracyPct: number;
+  /** Cohort breakdown: critical moments by phase, so the dashboard
+   *  can call out "you find tactical moments but miss endgame
+   *  critical positions." */
+  byPhase: { phase: GamePhase; total: number; found: number; accuracyPct: number }[];
+}
+
+const CRITICAL_SWING_THRESHOLD_CP = 100;
+
+function phaseForMoveNumber(moveNumber: number): GamePhase {
+  if (moveNumber <= 10) return 'opening';
+  if (moveNumber >= 30) return 'endgame';
+  return 'middlegame';
+}
+
+export async function criticalMomentsAccuracy(): Promise<CriticalMomentsStats> {
+  const playerGames = await loadPlayerGames();
+  let total = 0, found = 0;
+  const byPhase: Record<GamePhase, { total: number; found: number }> = {
+    opening: { total: 0, found: 0 },
+    middlegame: { total: 0, found: 0 },
+    endgame: { total: 0, found: 0 },
+  };
+
+  for (const { game, color } of playerGames) {
+    if (!game.fullyAnalyzed || !game.annotations) continue;
+    for (const ann of game.annotations) {
+      if (ann.color !== color) continue;
+      if (ann.bestMove === null || ann.bestMoveEval === null || ann.evaluation === null) continue;
+      // Eval is from White's POV; convert to player's POV.
+      const playerBestEval = color === 'white' ? ann.bestMoveEval : -ann.bestMoveEval;
+      const playerActualEval = color === 'white' ? ann.evaluation : -ann.evaluation;
+      const swing = playerBestEval - playerActualEval;
+      // Only counts positions where the best move would have been ≥100cp
+      // better than what was played AND the available improvement was
+      // real (a critical opportunity, not a forced "any move is fine").
+      if (swing < CRITICAL_SWING_THRESHOLD_CP) continue;
+      total++;
+      const phase = phaseForMoveNumber(ann.moveNumber);
+      byPhase[phase].total++;
+      // "Found" the critical moment = played the SAN matching bestMove.
+      if (ann.san === ann.bestMove) {
+        found++;
+        byPhase[phase].found++;
+      }
+    }
+  }
+
+  return {
+    found,
+    total,
+    accuracyPct: total > 0 ? Math.round((found / total) * 100) : 0,
+    byPhase: (['opening', 'middlegame', 'endgame'] as GamePhase[]).map((p) => ({
+      phase: p,
+      total: byPhase[p].total,
+      found: byPhase[p].found,
+      accuracyPct: byPhase[p].total > 0 ? Math.round((byPhase[p].found / byPhase[p].total) * 100) : 0,
+    })),
+  };
+}
+
+// ─── Opening proficiency matrix (heatmap data) ─────────────────────────
+//
+// rows: top N openings by total games · columns: as White / as Black /
+// Combined · cells: win-rate %. A direct visualization of "what works
+// for you" — the existing winRateByOpening surfaces it as a bar; the
+// matrix exposes the color split.
+
+export interface OpeningProficiencyRow {
+  name: string;
+  eco: string | null;
+  asWhite: { games: number; winRatePct: number } | null;
+  asBlack: { games: number; winRatePct: number } | null;
+  combined: { games: number; winRatePct: number };
+}
+
+export async function openingProficiencyMatrix(topN = 10): Promise<OpeningProficiencyRow[]> {
+  const playerGames = await loadPlayerGames();
+  type Bin = { name: string; eco: string | null; w: number; wWins: number; b: number; bWins: number };
+  const bins = new Map<string, Bin>();
+
+  // Pull opening names from the openings table to enrich raw ECOs.
+  const openings = await db.openings.toArray();
+  const ecoToName = new Map<string, string>();
+  for (const o of openings) {
+    if (o.eco && !ecoToName.has(o.eco)) ecoToName.set(o.eco, o.name);
+  }
+
+  for (const { game, color } of playerGames) {
+    const key = game.eco ?? 'unknown';
+    const name = (game.eco && ecoToName.get(game.eco)) ?? game.eco ?? 'Unknown';
+    let bin = bins.get(key);
+    if (!bin) {
+      bin = { name, eco: game.eco, w: 0, wWins: 0, b: 0, bWins: 0 };
+      bins.set(key, bin);
+    }
+    if (color === 'white') {
+      bin.w++;
+      if (isWin(game, 'white')) bin.wWins++;
+    } else {
+      bin.b++;
+      if (isWin(game, 'black')) bin.bWins++;
+    }
+  }
+
+  return Array.from(bins.values())
+    .filter((b) => (b.w + b.b) >= 3)  // at least 3 games to be honest
+    .sort((a, b) => (b.w + b.b) - (a.w + a.b))
+    .slice(0, topN)
+    .map((b) => ({
+      name: b.name,
+      eco: b.eco,
+      asWhite: b.w > 0 ? { games: b.w, winRatePct: Math.round((b.wWins / b.w) * 100) } : null,
+      asBlack: b.b > 0 ? { games: b.b, winRatePct: Math.round((b.bWins / b.b) * 100) } : null,
+      combined: {
+        games: b.w + b.b,
+        winRatePct: Math.round(((b.wWins + b.bWins) / (b.w + b.b)) * 100),
+      },
+    }));
+}
+
+// ─── Phase strength over time (heatmap data) ───────────────────────────
+//
+// rows: opening / middlegame / endgame · columns: last 6 months
+// (oldest-leftmost) · cells: avg accuracy in that phase that month.
+// Answers "strongest part of the game" PLUS trend.
+
+export interface PhaseStrengthCell {
+  phase: GamePhase;
+  monthLabel: string;       // "Mar 2026"
+  monthKey: string;         // "2026-03" — sort key
+  accuracyPct: number | null;
+  samples: number;
+}
+
+export interface PhaseStrengthMatrix {
+  monthsAsc: string[];      // monthKey order, oldest first
+  monthLabels: string[];    // human labels matching monthsAsc
+  rows: { phase: GamePhase; cells: PhaseStrengthCell[] }[];
+}
+
+export async function phaseStrengthOverTime(months = 6): Promise<PhaseStrengthMatrix> {
+  const playerGames = await loadPlayerGames();
+
+  // Build the month key window — newest is "this month".
+  const now = new Date();
+  const monthsAsc: string[] = [];
+  const monthLabels: string[] = [];
+  for (let i = months - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    monthsAsc.push(key);
+    monthLabels.push(d.toLocaleString('en-US', { month: 'short', year: '2-digit' }));
+  }
+
+  const accBins: Record<GamePhase, Map<string, { sum: number; count: number }>> = {
+    opening: new Map(),
+    middlegame: new Map(),
+    endgame: new Map(),
+  };
+
+  for (const { game, color } of playerGames) {
+    if (!game.fullyAnalyzed || !game.annotations) continue;
+    const monthKey = (game.date || '').slice(0, 7);
+    if (!monthsAsc.includes(monthKey)) continue;
+    const phaseTotals: Record<GamePhase, { sum: number; count: number }> = {
+      opening: { sum: 0, count: 0 },
+      middlegame: { sum: 0, count: 0 },
+      endgame: { sum: 0, count: 0 },
+    };
+    for (const ann of game.annotations) {
+      if (ann.color !== color) continue;
+      const phase = phaseForMoveNumber(ann.moveNumber);
+      const accurate = (
+        ann.classification === 'brilliant' ||
+        ann.classification === 'great' ||
+        ann.classification === 'good' ||
+        ann.classification === 'book'
+      );
+      phaseTotals[phase].count++;
+      phaseTotals[phase].sum += accurate ? 100 : 0;
+    }
+    for (const phase of ['opening', 'middlegame', 'endgame'] as GamePhase[]) {
+      if (phaseTotals[phase].count === 0) continue;
+      const acc = phaseTotals[phase].sum / phaseTotals[phase].count;
+      const bin = accBins[phase].get(monthKey) ?? { sum: 0, count: 0 };
+      bin.sum += acc;
+      bin.count++;
+      accBins[phase].set(monthKey, bin);
+    }
+  }
+
+  const rows = (['opening', 'middlegame', 'endgame'] as GamePhase[]).map((phase) => ({
+    phase,
+    cells: monthsAsc.map((monthKey, i) => {
+      const bin = accBins[phase].get(monthKey);
+      const samples = bin?.count ?? 0;
+      const accuracyPct = bin && samples > 0 ? Math.round(bin.sum / samples) : null;
+      return { phase, monthKey, monthLabel: monthLabels[i], accuracyPct, samples };
+    }),
+  }));
+
+  return { monthsAsc, monthLabels, rows };
+}
+
+// ─── Tactic recognition matrix (heatmap reshape) ───────────────────────
+//
+// Same data as `tacticTransferGap` above but pivoted for a heatmap:
+// rows: tactic type, columns: puzzle / in-game / gap.
+
+export interface TacticRecognitionRow {
+  tacticType: TacticType;
+  puzzleAccuracyPct: number | null;
+  inGameRecognitionPct: number | null;
+  gapPoints: number | null;
+}
+
+export async function tacticRecognitionMatrix(): Promise<TacticRecognitionRow[]> {
+  const rows = await tacticTransferGap();
+  return rows.map((r) => ({
+    tacticType: r.tacticType,
+    puzzleAccuracyPct: r.puzzleAccuracyPct,
+    inGameRecognitionPct: r.gameRecognitionPct,
+    gapPoints: r.transferGapPoints,
+  }));
+}
+
 // ─── Engagement summary (the user-facing "habits" view) ────────────────
 //
 // One-stop aggregate the /weaknesses Patterns tab reads. Composes
@@ -980,6 +1445,13 @@ export interface EngagementSummary {
   transferGap: TacticTransferRow[];
   repeatMistake: RepeatMistakeStats;
   streak: StreakStats;
+  records: PersonalRecords;
+  activity: ActivityHeatmapData;
+  timeControls: TimeControlRow[];
+  criticalMoments: CriticalMomentsStats;
+  openingMatrix: OpeningProficiencyRow[];
+  phaseStrength: PhaseStrengthMatrix;
+  tacticRecognition: TacticRecognitionRow[];
   /** Total game sample size — gates "not enough data" empty states. */
   totalGames: number;
 }
@@ -996,6 +1468,13 @@ export async function engagementSummary(): Promise<EngagementSummary> {
     transferGap,
     repeatMistake,
     streak,
+    records,
+    activity,
+    timeControls,
+    criticalMoments,
+    openingMatrix,
+    phaseStrength,
+    tacticRecognition,
   ] = await Promise.all([
     getOverviewInsights(),
     colorProficiencyMismatch(),
@@ -1007,6 +1486,13 @@ export async function engagementSummary(): Promise<EngagementSummary> {
     tacticTransferGap(),
     repeatMistakes(),
     streaks(),
+    personalRecords(),
+    activityHeatmap(),
+    timeControlPerformance(),
+    criticalMomentsAccuracy(),
+    openingProficiencyMatrix(),
+    phaseStrengthOverTime(),
+    tacticRecognitionMatrix(),
   ]);
   // Silence unused-var warning — getOpeningInsights is imported for
   // future shape extension and to keep the dependency edge documented.
@@ -1021,6 +1507,13 @@ export async function engagementSummary(): Promise<EngagementSummary> {
     transferGap,
     repeatMistake,
     streak,
+    records,
+    activity,
+    timeControls,
+    criticalMoments,
+    openingMatrix,
+    phaseStrength,
+    tacticRecognition,
     totalGames: overview.totalGames,
   };
 }
