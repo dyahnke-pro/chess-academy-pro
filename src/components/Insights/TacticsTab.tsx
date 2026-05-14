@@ -170,7 +170,10 @@ function TacticRow({
   return (
     <div>
       <button
-        onClick={() => void navigate(`/coach/review/${encodeURIComponent(moment.gameId)}?move=${moment.moveNumber}`)}
+        onClick={() => void navigate(
+          `/coach/review/${encodeURIComponent(moment.gameId)}?move=${moment.moveNumber}`,
+          { state: { from: '/weaknesses', tab: 'tactics' } },
+        )}
         className="flex items-center justify-between w-full py-2 border-b text-sm hover:opacity-80 transition-opacity"
         style={{ borderColor: 'color-mix(in srgb, var(--color-border) 50%, transparent)' }}
         data-testid="tactic-row"

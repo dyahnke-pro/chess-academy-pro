@@ -108,7 +108,10 @@ export function MistakesTab({ data }: MistakesTabProps): JSX.Element {
           {data.costliestMistakes.map((m) => (
             <div key={`${m.gameId}:${m.moveNumber}`}>
               <button
-                onClick={() => void navigate(`/coach/review/${encodeURIComponent(m.gameId)}?move=${m.moveNumber}`)}
+                onClick={() => void navigate(
+                  `/coach/review/${encodeURIComponent(m.gameId)}?move=${m.moveNumber}`,
+                  { state: { from: '/weaknesses', tab: 'mistakes' } },
+                )}
                 className="flex items-center justify-between w-full py-2 border-b text-sm hover:opacity-80 transition-opacity"
                 style={{ borderColor: 'color-mix(in srgb, var(--color-border) 50%, transparent)' }}
                 data-testid="mistake-row"

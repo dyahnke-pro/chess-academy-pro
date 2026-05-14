@@ -167,7 +167,10 @@ export function CoachReviewListPage(): JSX.Element {
             <ReviewGameCard
               key={g.id}
               game={g}
-              onClick={() => navigate(`/coach/review/${encodeURIComponent(g.id)}`)}
+              onClick={() => navigate(
+                `/coach/review/${encodeURIComponent(g.id)}`,
+                { state: { from: '/coach/review' } },
+              )}
             />
           ))}
       </div>

@@ -16,7 +16,7 @@
  * Stockfish-grounded, [VOICE: ...]-marker pedagogy automatically.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { Chess } from 'chess.js';
 import { CoachGameReview } from './CoachGameReview';
@@ -188,6 +188,19 @@ function adaptGameRecord(
 
 export function CoachReviewSessionPage(): JSX.Element {
   const navigate = useNavigate();
+  const location = useLocation();
+  // Where to send the user when they tap Back. Callers (Weaknesses
+  // tabs, Games drilldown, Coach Review list) pass `state.from` so
+  // back routes to the page the user actually came from rather than
+  // a hard-coded `/coach/review`. The optional `tab` rides along
+  // for surfaces like GameInsightsPage that need to restore which
+  // sub-tab was active. Falls back to the review list when no
+  // state is present (e.g. deep-link / direct URL load).
+  const navState = (location.state ?? null) as
+    | { from?: string; tab?: string }
+    | null;
+  const backTarget = navState?.from ?? '/coach/review';
+  const backState = navState?.tab ? { tab: navState.tab } : undefined;
   const { gameId } = useParams<{ gameId: string }>();
   // Deep-link support: `/coach/review/:gameId?move=N` jumps the
   // review to ply N on first paint. Used by Insights tab rows
@@ -375,7 +388,7 @@ export function CoachReviewSessionPage(): JSX.Element {
         playerRating={adapted.playerRating}
         opponentRating={adapted.opponentRating}
         onPlayAgain={() => navigate('/coach/play')}
-        onBackToCoach={() => navigate('/coach/review')}
+        onBackToCoach={() => navigate(backTarget, { state: backState })}
         onPracticeInChat={(prompt) => {
           // Route to /coach/chat with the tactic prompt seeded as a
           // URL query param. CoachChatPage reads `?q=` and pre-fills

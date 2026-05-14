@@ -169,7 +169,10 @@ export function EnhancedGameCard({ game, username, reviewHref }: EnhancedGameCar
   }
 
   const onClick = (): void => {
-    void navigate(reviewHref ?? `/coach/review/${encodeURIComponent(game.id)}`);
+    void navigate(
+      reviewHref ?? `/coach/review/${encodeURIComponent(game.id)}`,
+      { state: { from: '/weaknesses/games' } },
+    );
   };
 
   return (

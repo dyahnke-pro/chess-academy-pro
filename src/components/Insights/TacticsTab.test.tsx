@@ -110,7 +110,14 @@ describe('TacticsTab', () => {
     const tacticRows = screen.getAllByTestId('tactic-row');
     fireEvent.click(tacticRows[0]);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/coach/play?review=g1&move=15');
+    // Routes to the review session for that game, deep-linking the
+    // exact ply via ?move=. Carries `state.from` + `state.tab` so the
+    // review's back button returns the user to the Tactics tab on
+    // /weaknesses instead of the review list.
+    expect(mockNavigate).toHaveBeenCalledWith(
+      '/coach/review/g1?move=15',
+      { state: { from: '/weaknesses', tab: 'tactics' } },
+    );
   });
 
   it('shows awareness rate', () => {

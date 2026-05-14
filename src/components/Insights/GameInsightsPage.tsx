@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Search, Sparkles } from 'lucide-react';
 import {
@@ -36,9 +36,32 @@ const TABS: { id: InsightsTab; label: string }[] = [
   { id: 'patterns', label: 'Patterns' },
 ];
 
+// Tab IDs we accept from a back-nav state restore. The literal-set
+// keeps casts honest and rejects garbage values from history state.
+const VALID_TABS: ReadonlySet<InsightsTab> = new Set([
+  'overview',
+  'openings',
+  'mistakes',
+  'tactics',
+  'patterns',
+]);
+
 export function GameInsightsPage(): JSX.Element {
   const navigate = useNavigate();
-  const [tab, setTab] = useState<InsightsTab>('overview');
+  const location = useLocation();
+  // When the user navigates back from /coach/review/:gameId, the
+  // session page passes `state: { tab: <id> }` so we restore the
+  // sub-tab they were on (Mistakes / Tactics / Openings) instead
+  // of dumping them on Overview. Fresh entries from the nav bar
+  // come with no state and default to 'overview'.
+  const initialTabFromState = (() => {
+    const raw = (location.state ?? null) as { tab?: string } | null;
+    if (raw?.tab && VALID_TABS.has(raw.tab as InsightsTab)) {
+      return raw.tab as InsightsTab;
+    }
+    return 'overview' as InsightsTab;
+  })();
+  const [tab, setTab] = useState<InsightsTab>(initialTabFromState);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

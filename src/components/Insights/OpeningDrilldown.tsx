@@ -206,7 +206,10 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
                 summary: `open review for ${g.game.id} (eco=${opening.eco ?? 'unknown'})`,
                 details: JSON.stringify({ gameId: g.game.id, eco: opening.eco, openingName: opening.name }),
               });
-              void navigate(`/coach/review/${encodeURIComponent(g.game.id)}`);
+              void navigate(
+                `/coach/review/${encodeURIComponent(g.game.id)}`,
+                { state: { from: '/weaknesses', tab: 'openings' } },
+              );
             }}
           />
         );

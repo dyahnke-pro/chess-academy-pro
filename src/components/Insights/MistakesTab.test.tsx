@@ -105,7 +105,14 @@ describe('MistakesTab', () => {
     const mistakeRows = screen.getAllByTestId('mistake-row');
     fireEvent.click(mistakeRows[0]);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/coach/play?review=g1&move=15');
+    // Routes to the review session for that game, deep-linking the
+    // exact ply via ?move=. Carries `state.from` + `state.tab` so the
+    // review's back button returns the user to the Mistakes tab on
+    // /weaknesses instead of the review list.
+    expect(mockNavigate).toHaveBeenCalledWith(
+      '/coach/review/g1?move=15',
+      { state: { from: '/weaknesses', tab: 'mistakes' } },
+    );
   });
 
   it('shows errors by situation section', () => {
