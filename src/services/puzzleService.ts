@@ -84,37 +84,45 @@ export async function isPuzzleSeeded(): Promise<boolean> {
 export async function seedPuzzles(): Promise<void> {
   if (await isPuzzleSeeded()) return;
 
-  const defaults = createDefaultSrsFields();
-  const today = new Date().toISOString().split('T')[0];
+  // StrictMode double-invokes the init effect in dev, and audit-stream
+  // caught both invocations racing on a 15000-row bulkAdd of identical
+  // ids (ConstraintError on every row). Serialize the check + write
+  // inside a 'rw' transaction so the second caller sees the seeded
+  // flag and exits before re-running the bulkAdd.
+  await db.transaction('rw', db.puzzles, db.meta, async () => {
+    if (await isPuzzleSeeded()) return;
 
-  // Get existing puzzle IDs to preserve SRS progress
-  const existingIds = new Set(await db.puzzles.toCollection().primaryKeys());
+    const defaults = createDefaultSrsFields();
+    const today = new Date().toISOString().split('T')[0];
 
-  const records: PuzzleRecord[] = (puzzleData as RawPuzzle[])
-    .filter((p) => !existingIds.has(p.id))
-    .map((p) => ({
-      id: p.id,
-      fen: p.fen,
-      moves: p.moves,
-      rating: p.rating,
-      themes: p.themes,
-      openingTags: p.openingTags,
-      popularity: p.popularity,
-      nbPlays: p.nbPlays,
-      srsInterval: defaults.interval,
-      srsEaseFactor: defaults.easeFactor,
-      srsRepetitions: defaults.repetitions,
-      srsDueDate: today,
-      srsLastReview: null,
-      userRating: 1200,
-      attempts: 0,
-      successes: 0,
-    }));
+    const existingIds = new Set(await db.puzzles.toCollection().primaryKeys());
 
-  if (records.length > 0) {
-    await db.puzzles.bulkAdd(records);
-  }
-  await db.meta.put({ key: PUZZLE_SEED_KEY, value: 'true' });
+    const records: PuzzleRecord[] = (puzzleData as RawPuzzle[])
+      .filter((p) => !existingIds.has(p.id))
+      .map((p) => ({
+        id: p.id,
+        fen: p.fen,
+        moves: p.moves,
+        rating: p.rating,
+        themes: p.themes,
+        openingTags: p.openingTags,
+        popularity: p.popularity,
+        nbPlays: p.nbPlays,
+        srsInterval: defaults.interval,
+        srsEaseFactor: defaults.easeFactor,
+        srsRepetitions: defaults.repetitions,
+        srsDueDate: today,
+        srsLastReview: null,
+        userRating: 1200,
+        attempts: 0,
+        successes: 0,
+      }));
+
+    if (records.length > 0) {
+      await db.puzzles.bulkAdd(records);
+    }
+    await db.meta.put({ key: PUZZLE_SEED_KEY, value: 'true' });
+  });
 }
 
 // ─── Adaptive Difficulty ────────────────────────────────────────────────────

@@ -6,9 +6,6 @@ import type { UserProfile, PuzzleRecord, OpeningRecord, SessionRecord, Flashcard
 // ─── Profile ──────────────────────────────────────────────────────────────────
 
 export async function getOrCreateMainProfile(): Promise<UserProfile> {
-  const existing = await db.profiles.get('main');
-  if (existing) return existing;
-
   const defaultProfile: UserProfile = {
     id: 'main',
     name: 'Player',
@@ -73,8 +70,17 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
     },
   };
 
-  await db.profiles.add(defaultProfile);
-  return defaultProfile;
+  // Atomic upsert: StrictMode double-invokes the init effect in dev,
+  // and audit-stream caught both invocations racing on db.profiles.add('main')
+  // → ConstraintError. Wrapping in a 'rw' transaction serializes the
+  // get/add against the same store, so the second caller sees the
+  // first caller's row and returns it.
+  return db.transaction('rw', db.profiles, async () => {
+    const existing = await db.profiles.get('main');
+    if (existing) return existing;
+    await db.profiles.add(defaultProfile);
+    return defaultProfile;
+  });
 }
 
 export async function updateProfile(
