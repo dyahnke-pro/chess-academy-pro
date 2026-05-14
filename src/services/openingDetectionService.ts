@@ -210,14 +210,24 @@ const NAME_ALIASES: Record<string, string> = {
   'centre counter': 'Scandinavian Defense',
   // Spelling variants the DB doesn't index under both forms.
   petroff: "Petrov's Defense",
-  saemisch: 'Sämisch',
+  // "Sämisch" alone has no DB entry (it's always a sub-variation
+  // marker like "Alekhine Defense: Sämisch Attack" or "Slav Defense:
+  // … Sämisch Variation"). The user typically means the KID/Nimzo
+  // structure; "Alekhine Defense: Sämisch Attack" is the closest
+  // complete bare-name DB row.
+  saemisch: 'Alekhine Defense: Sämisch Attack',
   // "Spanish" is the European name for Ruy Lopez — DB uses Ruy Lopez.
   spanish: 'Ruy Lopez',
   'spanish opening': 'Ruy Lopez',
   // The Vienna sub-line is spelled "Hamppe-Allgaier" in the DB
   // (double-p) but commonly written single-p in coaching books.
-  'hampe-allgaier': 'Hamppe-Allgaier Gambit',
-  'hampe allgaier': 'Hamppe-Allgaier Gambit',
+  // No bare "Hamppe-Allgaier Gambit" exists in the DB — it only
+  // appears as a sub-variation of the Vienna Gambit with Max Lange
+  // Defense. Pin to the canonical full name.
+  'hampe-allgaier': 'Vienna Gambit, with Max Lange Defense: Hamppe-Allgaier Gambit',
+  'hampe allgaier': 'Vienna Gambit, with Max Lange Defense: Hamppe-Allgaier Gambit',
+  'hamppe-allgaier': 'Vienna Gambit, with Max Lange Defense: Hamppe-Allgaier Gambit',
+  'hamppe allgaier': 'Vienna Gambit, with Max Lange Defense: Hamppe-Allgaier Gambit',
   // Possessive forms typed without apostrophe. The DB inconsistently
   // uses apostrophes for some openings ("King's Gambit") and not for
   // others ("Bird Opening"), so a single normalization rule can't fix

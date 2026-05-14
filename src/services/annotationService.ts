@@ -135,8 +135,8 @@ const PRO_SUFFIX_TO_BASE: Record<string, string> = {
 // renamed to the NEW slugify ("king-s-gambit"), so the bare-id
 // lookup misses. This map repairs the resolution.
 //
-// Locked by scripts/verify-legacy-id-to-base.test.ts — every value
-// must resolve to a real annotation file.
+// Locked by scripts/verify-annotation-resolution.test.ts — every
+// value must resolve to a real annotation file.
 const LEGACY_ID_TO_BASE: Record<string, string> = {
   // Repertoire-list IDs (src/data/repertoire.json) ──────────────────
   'sicilian-najdorf': 'sicilian-defense-najdorf-variation-opocensky-variation-traditional-line',

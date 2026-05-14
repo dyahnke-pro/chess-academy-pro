@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * scripts/verify-pro-suffix-bases.mjs
+ * scripts/verify-annotation-resolution.mjs
  *
- * Three-part orphan-rename drift detector:
+ * Four-part openings-tab data integrity check:
  *
  *   1. PRO_SUFFIX_TO_BASE: every value resolves to a real `*.json`.
  *   2. LEGACY_ID_TO_BASE:  every value resolves to a real `*.json`.
@@ -10,6 +10,10 @@
  *      gambits.json has a resolvable annotation (via direct match,
  *      legacy-id map, or pro-suffix map). Pro-repertoires.json
  *      already audited under part 1's suffix set.
+ *   4. NAME_ALIASES:       every value in
+ *      openingDetectionService.NAME_ALIASES is a real entry name
+ *      in openings-lichess.json — typed shortcuts that no longer
+ *      resolve to a DB row return null silently.
  *
  * Exit 1 + report mismatches when any check fails.
  */
@@ -21,20 +25,22 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = join(HERE, '..');
 const ANNOTATIONS_DIR = join(REPO, 'src/data/annotations');
 const SERVICE_PATH = join(REPO, 'src/services/annotationService.ts');
+const DETECT_PATH = join(REPO, 'src/services/openingDetectionService.ts');
 
 const src = readFileSync(SERVICE_PATH, 'utf8');
+const detectSrc = readFileSync(DETECT_PATH, 'utf8');
 const annotationKeys = new Set(
   readdirSync(ANNOTATIONS_DIR)
     .filter((f) => f.endsWith('.json'))
     .map((f) => f.replace(/\.json$/, '')),
 );
 
-function parseMap(varName) {
-  const start = src.indexOf(varName);
+function parseSingleQuotedMap(source, varName) {
+  const start = source.indexOf(varName);
   if (start < 0) return {};
-  const open = src.indexOf('{', start);
-  const close = src.indexOf('};', open);
-  const body = src.slice(open + 1, close);
+  const open = source.indexOf('{', start);
+  const close = source.indexOf('};', open);
+  const body = source.slice(open + 1, close);
   const out = {};
   for (const m of body.matchAll(/'([^']+)':\s*'([^']+)'/g)) {
     out[m[1]] = m[2];
@@ -42,8 +48,27 @@ function parseMap(varName) {
   return out;
 }
 
-const PRO_SUFFIX_TO_BASE = parseMap('PRO_SUFFIX_TO_BASE');
-const LEGACY_ID_TO_BASE = parseMap('LEGACY_ID_TO_BASE');
+function parseNameAliasesMap(source, varName) {
+  // NAME_ALIASES values often contain apostrophes ("Queen's
+  // Gambit"), so the file alternates between single + double
+  // quotes per entry. Accept both quote flavours per side.
+  const start = source.indexOf(varName);
+  if (start < 0) return {};
+  const open = source.indexOf('{', start);
+  const close = source.indexOf('};', open);
+  const body = source.slice(open + 1, close);
+  const out = {};
+  const re = /(['"])([^'"]+)\1\s*:\s*(['"])((?:\\.|(?!\3).)*)\3/g;
+  let m;
+  while ((m = re.exec(body)) !== null) {
+    out[m[2]] = m[4];
+  }
+  return out;
+}
+
+const PRO_SUFFIX_TO_BASE = parseSingleQuotedMap(src, 'PRO_SUFFIX_TO_BASE');
+const LEGACY_ID_TO_BASE = parseSingleQuotedMap(src, 'LEGACY_ID_TO_BASE');
+const NAME_ALIASES = parseNameAliasesMap(detectSrc, 'NAME_ALIASES');
 
 const errors = [];
 
@@ -91,15 +116,30 @@ auditList('src/data/repertoire.json', 'Repertoire');
 auditList('src/data/gambits.json', 'Gambits');
 auditList('src/data/pro-repertoires.json', 'Pro', (j) => j.openings);
 
+// Part 4 — NAME_ALIASES → openings-lichess.json name presence
+const lichessNames = new Set(
+  JSON.parse(
+    readFileSync(join(REPO, 'src/data/openings-lichess.json'), 'utf8'),
+  ).map((r) => r.name),
+);
+for (const [alias, canonical] of Object.entries(NAME_ALIASES)) {
+  if (!lichessNames.has(canonical)) {
+    errors.push(
+      `NAME_ALIASES['${alias}'] → '${canonical}' (not in openings-lichess.json)`,
+    );
+  }
+}
+
 if (errors.length === 0) {
   const proCount = Object.keys(PRO_SUFFIX_TO_BASE).length;
   const legacyCount = Object.keys(LEGACY_ID_TO_BASE).length;
+  const aliasCount = Object.keys(NAME_ALIASES).length;
   console.log(
-    `Annotation resolution OK: ${proCount} pro suffixes + ${legacyCount} legacy IDs + all repertoire/gambits/pro entries reach an annotation file.`,
+    `Openings-tab integrity OK: ${proCount} pro suffixes + ${legacyCount} legacy IDs + ${aliasCount} name-aliases all resolve; every repertoire/gambit/pro entry reaches an annotation file.`,
   );
   process.exit(0);
 }
 
-console.error(`Annotation resolution: ${errors.length} problems`);
+console.error(`Openings-tab integrity: ${errors.length} problems`);
 for (const e of errors) console.error('  ' + e);
 process.exit(1);
