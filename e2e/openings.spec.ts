@@ -810,10 +810,8 @@ test.describe('Openings Hub — full-tab audit', () => {
     // The eval is announced via an aria-label on the eval indicator
     // ("Evaluation: +0.3"). Wait for it to land — Stockfish takes
     // ~3-6s to produce its first depth-12 evaluation from cold.
-    const evalIndicator = page.getByRole('generic', {
-      name: /Evaluation:/i,
-    });
-    await expect(evalIndicator.first()).toBeVisible({ timeout: 30_000 });
+    const evalIndicator = page.locator('[aria-label^="Evaluation:"]').first();
+    await expect(evalIndicator).toBeVisible({ timeout: 30_000 });
     expect(rec.pageErrors).toEqual([]);
   });
 });
