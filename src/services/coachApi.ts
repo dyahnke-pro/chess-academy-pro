@@ -194,21 +194,29 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     const deepseekEnvKey = getDeepseekKey();
 
     const profile = await db.profiles.get('main');
-    // Anthropic is the cost-default everywhere as of 2026-05-14 (David's
-    // call) — Sonnet/Haiku produce noticeably better chess pedagogy
-    // than DeepSeek, and the budget situation has changed enough that
-    // we want to use what's available. On 401/429/quota errors the
-    // call below auto-retries against DeepSeek via getFallbackConfig
-    // at line ~782 of this file. Per-call latency cost when Anthropic
-    // is dead is one round-trip + the fallback; user-visible behaviour
-    // is "first reply takes longer until Anthropic comes back."
-    // A user with ONLY a DeepSeek key still gets DeepSeek (no key =
-    // no calls).
-    const provider: AiProvider = anthropicEnvKey
+    // Anthropic is the primary on every surface as of 2026-05-14
+    // (David's call) — Sonnet/Haiku produce noticeably better chess
+    // pedagogy than DeepSeek. The fallback chain below auto-retries
+    // on DeepSeek if Anthropic 401s/429s on this single call. The
+    // dead-state cooldown above means subsequent calls within the
+    // next 60s skip Anthropic entirely if we just saw it fail —
+    // avoids paying the failed-primary latency on every coach
+    // interaction during an extended outage.
+    // A user with ONLY a DeepSeek key still gets DeepSeek.
+    const anthropicReachable = !!anthropicEnvKey && !isProviderInCooldown('anthropic');
+    const deepseekReachable = !!deepseekEnvKey && !isProviderInCooldown('deepseek');
+    const provider: AiProvider = anthropicReachable
       ? 'anthropic'
-      : (deepseekEnvKey
+      : (deepseekReachable
           ? 'deepseek'
-          : (profile?.preferences.aiProvider ?? 'anthropic'));
+          // Both keys absent OR both in cooldown — fall through to
+          // whichever key exists (try-anyway over no-coach), then to
+          // profile preference. Cooldown lifts on its own after 60s.
+          : (anthropicEnvKey
+              ? 'anthropic'
+              : (deepseekEnvKey
+                  ? 'deepseek'
+                  : (profile?.preferences.aiProvider ?? 'anthropic'))));
 
     const preferredModel = profile?.preferences.preferredModel;
 
@@ -279,6 +287,35 @@ async function getForcedProviderConfig(provider: AiProvider): Promise<ProviderCo
   } catch {
     return null;
   }
+}
+
+// ─── Provider dead-state cooldown ────────────────────────────────────
+// When a provider call throws (auth/quota/network), record a short-TTL
+// timestamp so subsequent coach interactions skip the known-dead
+// provider and go straight to the fallback. Without this every call
+// during an extended Anthropic outage would pay the full Anthropic
+// latency (timeout/error) before the DeepSeek retry — bad UX. 60s
+// balances "recover quickly from transient blips" with "don't burn
+// time on a primary we just saw fail."
+const PROVIDER_COOLDOWN_MS = 60_000;
+const providerDeadUntil: Record<AiProvider, number> = {
+  anthropic: 0,
+  deepseek: 0,
+};
+
+function markProviderDead(provider: AiProvider): void {
+  providerDeadUntil[provider] = Date.now() + PROVIDER_COOLDOWN_MS;
+}
+
+function isProviderInCooldown(provider: AiProvider): boolean {
+  return Date.now() < providerDeadUntil[provider];
+}
+
+/** Reset the dead-state cache. Test-only — production code never
+ *  calls this; the timestamps decay on their own after 60s. */
+export function __resetProviderCooldownsForTests(): void {
+  providerDeadUntil.anthropic = 0;
+  providerDeadUntil.deepseek = 0;
 }
 
 /** Get a fallback config using the OTHER provider. Returns null if no alternate key available. */
@@ -675,15 +712,13 @@ export async function callDeepseekWithTool(
   return JSON.parse(toolCall.function.arguments);
 }
 
-/** Top-level helper for tool-use generation. Tries DeepSeek first —
- *  the heavy lifting (moves, FENs, schema validation) is DB-anchored
- *  and tool-enforced, so the LLM only needs to generate narration
- *  text and DeepSeek handles that fine at a fraction of the cost.
- *  Falls back to Anthropic on any failure (no DeepSeek key, network
- *  error, schema rejection). User: "Anthropic too expensive.
- *  DeepSeek gives same thing at a fraction of the cost. Minus Opus,
- *  but everything is tied to the DB so the only thinking needed
- *  should be the small narrations after each move." */
+/** Top-level helper for tool-use generation. Tries Anthropic first —
+ *  Sonnet/Haiku schema-validate tool calls more reliably than DeepSeek
+ *  and chess pedagogy quality is better. Falls back to DeepSeek on
+ *  any failure (no Anthropic key, network error, schema rejection,
+ *  quota). The dead-state cooldown skips Anthropic for 60s after a
+ *  failure so subsequent calls go straight to DeepSeek. CLAUDE.md
+ *  2026-05-14: Anthropic-primary across the app. */
 export async function getCoachStructuredResponse(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPrompt: string,
@@ -693,11 +728,34 @@ export async function getCoachStructuredResponse(
   toolDescription: string,
   inputSchema: Record<string, unknown>,
 ): Promise<unknown> {
-  const deepseekConfig = await getForcedProviderConfig('deepseek');
   let lastErr: unknown = null;
+  if (!isProviderInCooldown('anthropic')) {
+    const anthropicConfig = await getForcedProviderConfig('anthropic');
+    if (anthropicConfig) {
+      try {
+        const model = getModel(task, anthropicConfig.provider, anthropicConfig.preferredModel);
+        return await callAnthropicWithTool(
+          anthropicConfig.apiKey,
+          model,
+          systemPrompt,
+          messages,
+          maxTokens,
+          task,
+          toolName,
+          toolDescription,
+          inputSchema,
+        );
+      } catch (err) {
+        lastErr = err;
+        markProviderDead('anthropic');
+        // Fall through to DeepSeek.
+      }
+    }
+  }
+  const deepseekConfig = await getForcedProviderConfig('deepseek');
   if (deepseekConfig) {
+    const model = getModel(task, deepseekConfig.provider, deepseekConfig.preferredModel);
     try {
-      const model = getModel(task, deepseekConfig.provider, deepseekConfig.preferredModel);
       return await callDeepseekWithTool(
         deepseekConfig.apiKey,
         model,
@@ -710,24 +768,9 @@ export async function getCoachStructuredResponse(
         inputSchema,
       );
     } catch (err) {
-      lastErr = err;
-      // Fall through to Anthropic.
+      markProviderDead('deepseek');
+      throw err;
     }
-  }
-  const anthropicConfig = await getForcedProviderConfig('anthropic');
-  if (anthropicConfig) {
-    const model = getModel(task, anthropicConfig.provider, anthropicConfig.preferredModel);
-    return callAnthropicWithTool(
-      anthropicConfig.apiKey,
-      model,
-      systemPrompt,
-      messages,
-      maxTokens,
-      task,
-      toolName,
-      toolDescription,
-      inputSchema,
-    );
   }
   if (lastErr) throw lastErr;
   throw new Error('No API key configured for tool-use call (neither DeepSeek nor Anthropic)');
@@ -782,12 +825,14 @@ export async function getCoachChatResponse(
     return await callChatWithConfig(config, messages, systemPrompt, onStream, task, maxTokens);
   } catch (error) {
     console.warn(`[CoachAPI] ${config.provider} failed, trying fallback...`, error);
+    markProviderDead(config.provider);
     const fallback = getFallbackConfig(config.provider);
     if (fallback) {
       try {
         return await callChatWithConfig(fallback, messages, systemPrompt, onStream, task, maxTokens);
       } catch (fallbackError) {
         console.error('[CoachAPI] Fallback also failed:', fallbackError);
+        markProviderDead(fallback.provider);
         const errMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
         return `⚠️ Coach error: ${errMsg}`;
       }
@@ -887,12 +932,14 @@ export async function getCoachCommentary(
     return await callCommentaryWithConfig(config, task, userMessage, systemPrompt, onStream);
   } catch (error) {
     console.warn(`[CoachAPI] ${config.provider} failed for ${task}, trying fallback...`, error);
+    markProviderDead(config.provider);
     const fallback = getFallbackConfig(config.provider);
     if (fallback) {
       try {
         return await callCommentaryWithConfig(fallback, task, userMessage, systemPrompt, onStream);
       } catch (fallbackError) {
         console.error('[CoachAPI] Fallback also failed:', fallbackError);
+        markProviderDead(fallback.provider);
         return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
       }
     }
