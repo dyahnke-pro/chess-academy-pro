@@ -1018,17 +1018,27 @@ async function main() {
   // SHOULD-WORK contract enforcement: audit-hook coverage on every
   // /tactics/* surface. Iterate scenarios; for any whose final URL
   // matches a tactics surface, verify at least one
-  // `tactics-surface-event` was emitted during the scenario. This is
-  // the F1-lineage check (PR #504) — pre-fix, every row here would
-  // FAIL because the tactics tab had zero `logAppAudit` emit sites.
+  // `tactics-surface-event` was emitted EITHER during this scenario
+  // OR during any earlier scenario that already landed on the same
+  // URL (covers same-surface re-entries / on-page interactions
+  // where the mount audit fired once on first arrival).
   const TACTICS_URL_RX = /\/tactics(\/|$|\?)/;
+  const urlCoverage = new Map();  // url → boolean (has seen a tactics-surface-event)
+  for (const s of report.scenarios) {
+    if (!s.url || !TACTICS_URL_RX.test(s.url)) continue;
+    const seenHere = s.kindCounts && s.kindCounts['tactics-surface-event'] >= 1;
+    const seenBefore = urlCoverage.get(s.url) === true;
+    if (seenHere) urlCoverage.set(s.url, true);
+    // Mark s with its coverage source for the gap diagnostic.
+    s.tacticsEventCoverage = seenHere ? 'this-scenario' : (seenBefore ? 'prior-scenario' : 'none');
+  }
   const auditCoverageGaps = report.scenarios
     .filter((s) => s.url && TACTICS_URL_RX.test(s.url))
-    .filter((s) => !(s.kindCounts && s.kindCounts['tactics-surface-event'] >= 1))
+    .filter((s) => s.tacticsEventCoverage === 'none')
     .map((s) => ({
       scenario: s.name,
       url: s.url,
-      reason: 'no tactics-surface-event seen during scenario',
+      reason: 'no tactics-surface-event seen here or in any prior scenario at this URL',
     }));
   report.auditCoverageGaps = auditCoverageGaps;
   for (const g of auditCoverageGaps) {
