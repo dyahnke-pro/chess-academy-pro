@@ -394,7 +394,82 @@ export type AuditKind =
   | 'weakness-report-refresh'
   | 'weakness-report-analyze-kickoff'
   | 'weakness-report-search-routed'
-  | 'weakness-report-search-fallback';
+  | 'weakness-report-search-fallback'
+  // ─── Analytics backbone (ANALYTICS_AUDIT.md, Tier 1-3) ───────────────
+  // The audit log already captures forensic events; these kinds carry
+  // the *analytic* signal a coach brain or weakness/strength report
+  // needs. Each is fire-and-forget on the user's interaction path.
+  //
+  // Tier 1 — confessed weakness signals.
+  // `move-attempt`: emitted on EVERY move input across puzzle,
+  //   walkthrough, endgame playout, and coach-play surfaces. Carries
+  //   { surface, fen, attemptedSan, correctSan?, isCorrect,
+  //     moveMethod: 'drag'|'click', timeFromPositionEnterMs,
+  //     sourceId? (puzzleId/lessonId/gameId), tacticType?, phase? }.
+  //   Drives moveAttemptsPerPuzzle, decision-reversal joins, hint
+  //   effectiveness joins.
+  | 'move-attempt'
+  // `hint-revealed`: extended hint-system audit superseding the older
+  //   `coach-memory-hint-{requested,recorded}` (kept for compat).
+  //   Carries { source, surface, reason: 'student-tap'|'auto-reveal'|
+  //   'coach-initiative', tier: 0|1|2|3, timeToRevealMs, fen,
+  //   tacticType?, phase?, openingEco? }. Effectiveness joined at
+  //   query time with the next move-attempt on the same FEN.
+  | 'hint-revealed'
+  // `position-dwell`: time spent on a position before leaving it
+  //   (moved away, navigated, session-end). Cheap timer pattern —
+  //   emit on exit, not entry. Carries { surface, fen, dwellMs,
+  //   exitReason: 'moved'|'navigated'|'session-end' }.
+  | 'position-dwell'
+  // Tier 2 — high-volume engagement.
+  // `engine-lines-dwell`: emitted when the engine-lines panel closes,
+  //   with the duration it was open. Joins with the existing
+  //   `review-engine-lines-toggled` for open-event metadata.
+  | 'engine-lines-dwell'
+  // `insights-tab-switched`: emitted on /weaknesses tab swap. The
+  //   global `route-changed` audit doesn't see in-page tab state.
+  | 'insights-tab-switched'
+  // `endgame-playout-attempt`: emitted per attempt inside an endgame
+  //   playout. Replaces the rollup-only `endgameProgress.totalWrongAttempts`
+  //   with a per-attempt trail. Carries { lessonId, attemptedSan,
+  //   isCorrect, attemptIndex, fen }.
+  | 'endgame-playout-attempt'
+  // Tier 3 — narration interaction.
+  // `narration-replay`: student tapped replay on the last narration block.
+  | 'narration-replay'
+  // `narration-muted` / `narration-unmuted`: voice toggle audit.
+  | 'narration-muted'
+  | 'narration-unmuted'
+  // Tier 4 — session shape.
+  // `session-shape`: emitted on session end with surfaces visited +
+  //   time per surface + dominant phase. Companion to db.sessions which
+  //   is currently orphaned (write-only).
+  | 'session-shape'
+  // Tier 5 — second-pass additions (post-review).
+  // `move-reversed`: drag-and-drop reversal — piece picked up, legal-move
+  //   dots shown, piece returned without playing. The hesitation IS the
+  //   signal. Carries { surface, fen, pickedUpSquare }.
+  | 'move-reversed'
+  // `puzzle-skipped`: skip button engaged. Different from wrong — an
+  //   engagement weakness, not a skill weakness.
+  | 'puzzle-skipped'
+  // `repeat-mistake`: emitted when a previously-recorded mistake puzzle
+  //   is attempted AGAIN and the student plays the SAME wrong move.
+  //   Highest-signal weakness row — "you make the same mistake twice."
+  | 'repeat-mistake'
+  // `lesson-started` / `lesson-completed` / `lesson-abandoned`: per-
+  //   walkthrough lifecycle. Abandon = exit before the final step.
+  | 'lesson-started'
+  | 'lesson-completed'
+  | 'lesson-abandoned'
+  // `coach-question-topic`: best-effort topic classification on
+  //   `coach-brain-ask-received`. Captures what the student asks about
+  //   — their questions reveal their gaps better than their moves.
+  | 'coach-question-topic'
+  // `analytics-self-audit`: emitted by the in-app AnalyticsAuditPanel
+  //   when the user opens the coverage view. Lets the audit stream see
+  //   that David is actively inspecting the analytic surface.
+  | 'analytics-self-audit';
 
 export interface AuditEntry {
   timestamp: number;

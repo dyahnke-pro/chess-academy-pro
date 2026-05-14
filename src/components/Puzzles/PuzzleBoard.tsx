@@ -15,6 +15,7 @@ import { getWrongMoveHint } from '../../utils/puzzleHints';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
 import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
 import { useAppStore } from '../../stores/appStore';
+import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { PuzzleRecord } from '../../types';
 
@@ -222,6 +223,41 @@ export function PuzzleBoard({
 
     const isCorrect = move.from === expected.from && move.to === expected.to && (!expected.promotion || move.promotion === expected.promotion);
 
+    // Tier 1 analytic emit — every move input (correct or wrong) lands
+    // a `move-attempt` event with the FEN of the position the student
+    // was solving (derived via chess.js undo since `game.fen` is the
+    // post-attempt state). Pairs with `hint-revealed` via FEN equality
+    // in analyticsService.recentHintActivity for hint effectiveness.
+    // Drives analyticsService.moveAttemptsPerPuzzle aggregation.
+    let fenBeforeAttempt = game.fen;
+    try {
+      const replay = new Chess(game.fen);
+      replay.undo();
+      fenBeforeAttempt = replay.fen();
+    } catch {
+      // Fall back to post-attempt fen — still a useful key for the
+      // join logic, just slightly less precise.
+    }
+    const timeFromStart = Date.now() - solveStartRef.current;
+    void logAppAudit({
+      kind: 'move-attempt',
+      category: 'subsystem',
+      source: 'PuzzleBoard.handleMove',
+      summary: `${isCorrect ? '✓' : '✗'} ${move.san} (expected ${expected.from}${expected.to})`,
+      details: JSON.stringify({
+        surface: 'puzzle',
+        fen: fenBeforeAttempt,
+        attemptedSan: move.san,
+        correctSan: `${expected.from}${expected.to}${expected.promotion ?? ''}`,
+        isCorrect,
+        moveMethod: 'unknown',
+        timeFromPositionEnterMs: timeFromStart,
+        sourceId: puzzle.id,
+        tacticType: tacticType ?? undefined,
+      }),
+      fen: fenBeforeAttempt,
+    });
+
     if (isCorrect) {
       playMoveSound(move.san);
       resetHints();
@@ -285,7 +321,7 @@ export function PuzzleBoard({
         setState('playing');
       }, 1000);
     }
-  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, game]);
+  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game]);
 
   // With ControlledChessBoard, the move is already applied to the game object
   const handleChessBoardMove = handleMove;

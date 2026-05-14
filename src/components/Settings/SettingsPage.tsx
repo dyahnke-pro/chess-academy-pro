@@ -19,18 +19,20 @@ import { Link } from 'react-router-dom';
 
 import { BoardGlowButton, BoardGlowSettings } from './BoardGlowSettings';
 import { NarrationAuditPanel } from './NarrationAuditPanel';
+import { AnalyticsAuditPanel } from './AnalyticsAuditPanel';
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import { hardRefresh } from '../../utils/hardRefresh';
 import type { UserProfile, PieceAnimationSpeed, CoachNarration, MoveMethod } from '../../types';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 
-type SettingsTab = 'profile' | 'board' | 'coach' | 'appearance' | 'about';
+type SettingsTab = 'profile' | 'board' | 'coach' | 'appearance' | 'analytics' | 'about';
 
 const TABS: { id: SettingsTab; label: string }[] = [
   { id: 'profile', label: 'Profile' },
   { id: 'board', label: 'Board' },
   { id: 'coach', label: 'Coach' },
   { id: 'appearance', label: 'Appearance' },
+  { id: 'analytics', label: 'Analytics' },
   { id: 'about', label: 'About' },
 ];
 
@@ -82,6 +84,7 @@ export function SettingsPage(): JSX.Element {
           <CoachTab profile={activeProfile} setProfile={setActiveProfile} />
         )}
         {tab === 'appearance' && <AppearanceTab />}
+        {tab === 'analytics' && <AnalyticsTab />}
         {tab === 'about' && <AboutTab />}
       </div>
     </div>
@@ -1327,6 +1330,33 @@ function AboutTab(): JSX.Element {
         <div className="text-sm font-medium">Diagnostics &amp; audit log</div>
         <NarrationAuditPanel />
       </div>
+    </div>
+  );
+}
+
+// ─── Analytics Tab ─────────────────────────────────────────────────────
+//
+// Top-level Settings tab dedicated to the "what data is tracked, how
+// is it used" view. Renders the AnalyticsAuditPanel (coverage map,
+// AuditKind frequency, dead-capture warnings, live counters for the
+// Tier 1-3 analytic signals). Companion to ANALYTICS_AUDIT.md.
+
+function AnalyticsTab(): JSX.Element {
+  return (
+    <div className="space-y-4" data-testid="analytics-tab">
+      <div>
+        <h2 className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>
+          Analytics &amp; data flow
+        </h2>
+        <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+          The analytic backbone that innervates the coach brain and
+          powers the Patterns view on /weaknesses. This tab shows
+          which surfaces are emitting events, which AuditKinds are
+          firing, hint activity and dwell metrics, and any
+          "dead capture" — data we track but nothing consumes.
+        </p>
+      </div>
+      <AnalyticsAuditPanel />
     </div>
   );
 }
