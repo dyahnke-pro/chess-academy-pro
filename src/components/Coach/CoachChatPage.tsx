@@ -74,6 +74,15 @@ export function CoachChatPage(): JSX.Element {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechBufferRef = useRef('');
   const voiceMutedRef = useRef(false);
+  // Synchronous "send already in progress" guard. `isStreaming` doesn't
+  // flip until React commits, so two rapid Enter-presses can both pass
+  // the `if (isStreaming) return;` guard at the top of handleSend AND
+  // both fire fast-paths (narration toggle / read-this / intent router)
+  // before either has a chance to set the streaming state. This ref
+  // flips inside the same JS tick, so a second send within the same
+  // event loop short-circuits immediately. Cleared in the
+  // ChatInput-disabled `finally` AND at every early-return path.
+  const inFlightRef = useRef(false);
 
   // Hydrate persisted session on mount and publish current route.
   useEffect(() => {
@@ -105,6 +114,10 @@ export function CoachChatPage(): JSX.Element {
     // the send is safer than corrupting the transcript ordering —
     // user can retry after the input re-enables in the next tick.
     if (!activeProfile || isStreaming || !hydrated) return;
+    // Sync-flip "in flight" so a second Enter-press in the same JS tick
+    // (before React commits setIsStreaming(true)) short-circuits.
+    if (inFlightRef.current) return;
+    inFlightRef.current = true;
 
     // Deterministic narration toggle — flips voice on/off reliably
     // without depending on LLM prompt-following. When enabling from
@@ -146,6 +159,7 @@ export function CoachChatPage(): JSX.Element {
       if (narrationToggle.enable) {
         void navigate('/coach/session/play-against?narrate=1');
       }
+      inFlightRef.current = false;
       return;
     }
 
@@ -164,14 +178,15 @@ export function CoachChatPage(): JSX.Element {
           timestamp: Date.now(),
         });
         recordTurn('user', text);
-        setVoiceMuted(false);
-        voiceMutedRef.current = false;
-        // Audit #5: switched from voiceService.speak() to speakForced()
-        // so this "read this to me" replay shares the single-engine
-        // Polly chain with the streaming dispatcher below — was racing
-        // against in-flight stream chunks and producing concurrent
-        // overlapping audio (the `tts-concurrent-speak` audit pattern).
+        // Audit #5: speakForced() bypasses the mute gate by design — it
+        // shares the single Polly engine chain with the streaming
+        // dispatcher to avoid concurrent overlapping audio. Previously
+        // this branch ALSO silently flipped `voiceMuted` to false,
+        // which permanently changed the toggle's visible state without
+        // telling the user. Removed: the speak fires regardless of the
+        // mute toggle, and the toggle stays where the user left it.
         void voiceService.speakForced(stripMarkdownForTts(lastAssistant.content));
+        inFlightRef.current = false;
         return;
       }
     }
@@ -206,6 +221,7 @@ export function CoachChatPage(): JSX.Element {
         if (routed.path) {
           void navigate(routed.path);
         }
+        inFlightRef.current = false;
         return;
       }
     } catch (err: unknown) {
@@ -357,6 +373,7 @@ export function CoachChatPage(): JSX.Element {
     } finally {
       setIsStreaming(false);
       setStreamingContent('');
+      inFlightRef.current = false;
     }
   }, [activeProfile, hydrated, chatMessages, isStreaming, appendMessage, navigate]);
 

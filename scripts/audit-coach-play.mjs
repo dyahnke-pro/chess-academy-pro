@@ -235,6 +235,31 @@ async function main() {
     { kind: 'coach-opening-auto-detected', match: 'presence', op: 'present', why: 'auto-detect runs every move; Italian shape recognizable by move 4' },
   ]);
 
+  // ── Memory-mirror contract guard (regression test for the
+  //    audit-found bug class: GameChatPanel fast-paths used to write
+  //    only to local chat state, never to useCoachMemoryStore, leaving
+  //    the brain dissociative-amnesic for any chat-routed turn).
+  //    Drive a deterministic fast-path that requires no LLM and no
+  //    board mutation — `detectNarrationToggle` matches "narrate while
+  //    we play" and emits one user + one coach memory write. Assert
+  //    both audits fire. ────────────────────────────────────────────
+  await record('chat-narration-toggle-memory-write', async () => {
+    // Open the inline chat panel.
+    const chatBtn = page.locator('[data-testid="play-chat-button"]');
+    if (await chatBtn.count() === 0) throw new Error('play-chat-button missing on /coach/play');
+    await chatBtn.click();
+    await page.locator('[data-testid="game-chat-panel"]').first().waitFor({ timeout: 5000 });
+    // Send the deterministic fast-path phrase.
+    const input = page.locator('[data-testid="game-chat-panel"] [data-testid="chat-text-input"]').first();
+    await input.fill('narrate while we play');
+    await page.locator('[data-testid="game-chat-panel"] [data-testid="chat-send-btn"]').first().click();
+  }, MOVE_SETTLE_MS, [
+    // Pre-fix this count was 0 (only LLM-success paths wrote to memory;
+    // fast-paths skipped it). Post-fix both user + coach turns mirror,
+    // so we expect ≥ 2 appends per fast-path turn.
+    { kind: 'coach-memory-conversation-appended', match: 'count', op: 'gte', value: 2, why: 'GameChatPanel fast-path must mirror user + coach to conversation memory' },
+  ]);
+
   // ── Roll up overall and write report ────────────────────────────
   report.totalEvents = captured.length;
   report.totalConsoleErrors = consoleErrors.length;
