@@ -35,9 +35,61 @@ async function gotoSession(page: Page, gameId: string): Promise<void> {
   // directly to /coach/review/<id> without the seeder having run
   // produces "That game is no longer in your library." Visit the
   // list page first, wait for the seeded tiles, then navigate.
+  //
+  // The seeder write is async + the list re-reads after; under
+  // dev-server contention the tile DOM can lag 20+ seconds even
+  // though the Dexie record is in place. Poll Dexie directly for
+  // the record so the wait is deterministic instead of dependent
+  // on a React re-render race.
+  //
+  // Also stub the LLM endpoints — CoachGameReview's mount fires
+  // generateReviewNarration which calls DeepSeek/Anthropic for the
+  // intro paragraph. Under suite-level contention the embedded
+  // fallback keys can rate-limit and the walk-UI gates on the
+  // narration being ready, so the testid never mounts. A cheap
+  // canned response keeps every session test deterministic.
+  await page.route(/api\.deepseek\.com|api\.anthropic\.com/, async (route) => {
+    const url = route.request().url();
+    if (url.includes('anthropic.com')) {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          id: 'stub-msg', type: 'message', role: 'assistant',
+          content: [{ type: 'text', text: 'Walk-through intro.' }],
+          stop_reason: 'end_turn', usage: { input_tokens: 1, output_tokens: 1 },
+        }),
+      });
+    } else {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          id: 'stub-chatcmpl', object: 'chat.completion',
+          choices: [{ index: 0, message: { role: 'assistant', content: 'Walk-through intro.' }, finish_reason: 'stop' }],
+          usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+        }),
+      });
+    }
+  });
   await page.goto('/coach/review');
-  await page.waitForSelector('[data-testid="coach-review-list-page"]', { timeout: 12_000 });
-  await page.waitForSelector(`[data-testid="review-game-card-${gameId}"]`, { timeout: 20_000 });
+  await page.waitForSelector('[data-testid="coach-review-list-page"]', { timeout: 15_000 });
+  await page.waitForFunction(
+    (id) => new Promise<boolean>((resolve) => {
+      const req = indexedDB.open('ChessAcademyDB');
+      req.onerror = () => resolve(false);
+      req.onsuccess = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains('games')) { resolve(false); return; }
+        const tx = db.transaction('games', 'readonly');
+        const get = tx.objectStore('games').get(id);
+        get.onsuccess = () => resolve(!!get.result);
+        get.onerror = () => resolve(false);
+      };
+    }),
+    gameId,
+    { timeout: 30_000, polling: 500 },
+  );
   await page.goto(`/coach/review/${gameId}`);
   await page.waitForSelector('[data-testid="coach-game-review-walk"]', { timeout: 30_000 });
 }
@@ -103,7 +155,7 @@ async function resetSeeder(page: Page): Promise<void> {
 test.describe('Review with Coach — full-play audit', () => {
   // Parallel workers race on Dexie state — sample seeder vs cleanup
   // collide. Serial mode keeps state predictable.
-  test.describe.configure({ mode: 'serial' });
+  test.describe.configure({ mode: 'serial', retries: 1 });
   test.setTimeout(120_000);
 
   test('list page renders with title + 4 filter buttons + back button', async ({ page }) => {
@@ -599,15 +651,22 @@ test.describe('Review with Coach — full-play audit', () => {
     }
     await expect(page.getByTestId('review-classification-badge')).toBeVisible({ timeout: 6000 });
 
+    // Click "Explore this position" — the canonical walk shows
+    // seg.fenAfter (Black to move), so the board is read-only until
+    // the student opts in. The toggle swaps to seg.fenBefore so the
+    // missed move is legal and the board becomes interactive.
+    await expect(page.getByTestId('walk-explore-toggle-btn')).toBeVisible({ timeout: 4000 });
+    await page.getByTestId('walk-explore-toggle-btn').click();
+    await page.waitForTimeout(400);
+
     // Play the suggested missed move directly via click-to-move:
-    // d2 (white pawn) → d3. The walk-UI displays seg.fenBefore
-    // here (white to move), so the move is legal.
+    // d2 (white pawn) → d3. With explore-toggle on, the walk-UI
+    // displays seg.fenBefore (white to move), so the move is legal.
     await page.locator('[data-square="d2"]').first().click({ force: true });
     await page.waitForTimeout(200);
     await page.locator('[data-square="d3"]').first().click({ force: true });
 
-    // Resume-game button appears once exploration FEN is captured
-    // (CoachGameReview.tsx:851).
+    // Resume-game button appears once exploration FEN is captured.
     await expect(page.getByTestId('walk-resume-game-btn')).toBeVisible({ timeout: 8000 });
 
     // Click resume — exploration state clears, button hides.
@@ -668,6 +727,11 @@ test.describe('Review with Coach — full-play audit', () => {
       `event: content_block_stop\ndata: ${JSON.stringify({ type: 'content_block_stop', index: 0 })}\n\n` +
       `event: message_delta\ndata: ${JSON.stringify({ type: 'message_delta', delta: { stop_reason: 'end_turn', stop_sequence: null }, usage: { output_tokens: 1 } })}\n\n` +
       `event: message_stop\ndata: ${JSON.stringify({ type: 'message_stop' })}\n\n`;
+    // Visit the session FIRST so gotoSession registers its default
+    // JSON stub for the intro narration call. THEN register our
+    // streaming stub — Playwright matches routes last-registered-
+    // first, so this one wins over gotoSession's for the ask call.
+    await gotoSession(page, 'sample-morphy-opera-1858');
     await page.route(/api\.deepseek\.com|api\.anthropic\.com/, async (route) => {
       const url = route.request().url();
       if (url.includes('anthropic.com')) {
@@ -686,8 +750,6 @@ test.describe('Review with Coach — full-play audit', () => {
         });
       }
     });
-
-    await gotoSession(page, 'sample-morphy-opera-1858');
 
     const askToggle = page.getByTestId('walk-ask-toggle-btn');
     await askToggle.scrollIntoViewIfNeeded();

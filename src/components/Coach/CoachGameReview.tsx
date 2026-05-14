@@ -2,6 +2,8 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
+import { usePieceSound } from '../../hooks/usePieceSound';
+import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
 import { MoveListPanel } from './MoveListPanel';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
 import { KeyMomentNav } from './KeyMomentNav';
@@ -138,6 +140,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [walkExplorationFen, setWalkExplorationFen] = useState<string | null>(null);
   const [walkExplorationSan, setWalkExplorationSan] = useState<string | null>(null);
   const walkExplorationPlyRef = useRef<number | null>(null);
+  // Opt-in toggle: when on at an arrow-bearing ply, the board
+  // displays `seg.fenBefore` (so the missed move is playable)
+  // instead of the canonical `seg.fenAfter`. Resets when the
+  // student steps to a different ply.
+  const [walkExploreToggleOn, setWalkExploreToggleOn] = useState<boolean>(false);
 
   // ship-4: auto-review state machine + guided-lesson state machine
   // both removed. The walk-phase UI driven by `useReviewPlayback` is
@@ -339,6 +346,31 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     gameId: props.gameId,
   });
 
+  // Move sound on every walk advance — Polly + voice narration is
+  // great pedagogy but the silent piece transition makes it hard to
+  // pick out which piece moved. usePieceSound matches the chime the
+  // Learn-with-Coach board plays on student moves (per David's
+  // 2026-05 review audit feedback).
+  const { playMoveSound } = usePieceSound();
+  const lastSoundPlyRef = useRef<number>(walkPlayback.currentPly);
+  useEffect(() => {
+    if (walkPlayback.currentPly === lastSoundPlyRef.current) return;
+    const advancedForward = walkPlayback.currentPly > lastSoundPlyRef.current;
+    const targetPly = walkPlayback.currentPly;
+    lastSoundPlyRef.current = targetPly;
+    // Skip the silent boot-up render (no transition to sound).
+    if (targetPly === 0) return;
+    // Use the SAN of the ply we just arrived at — for forward
+    // motion that's the move played; for back motion it's the move
+    // we're un-playing (sound still helps signal that something
+    // moved). When the segment SAN is missing fall back to
+    // moves[ply-1].san.
+    const seg = walkPlayback.currentSegment;
+    const san = seg?.san ?? moves[targetPly - 1]?.san;
+    if (san) playMoveSound(san);
+    void advancedForward;
+  }, [walkPlayback.currentPly, walkPlayback.currentSegment, moves, playMoveSound]);
+
   // Auto-clear walk exploration when the student steps to a different
   // ply. Exploration is anchored to ONE position — once they nav away,
   // the actual game line resumes silently (snap-back is implicit).
@@ -365,6 +397,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       walkExplorationPlyRef.current = null;
     }
   }, [walkPlayback.currentPly, walkExplorationFen, walkExplorationSan]);
+
+  // Reset the explore-toggle on every ply change. Each arrow-bearing
+  // ply has its OWN suggested-move-vs-played-move discussion, so the
+  // student should opt in fresh on each one. Keeps the canonical
+  // playback path animating cleanly when they just press Next.
+  useEffect(() => {
+    setWalkExploreToggleOn(false);
+  }, [walkPlayback.currentPly]);
 
   // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every
   // position in the walk (starting position + one FEN per ply) via
@@ -697,12 +737,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // otherwise the game's move history (moves[ply-1].fen). This
       // keeps the board in sync even when the narration bundle is
       // truncated or missing for the current ply (WO-REVIEW-02a-FIX).
+      //
+      // Canonical playback shows `seg.fenAfter` — the position
+      // AFTER the displayed ply was played. This gives react-
+      // chessboard a clean one-move animation per Next press.
+      //
       // At inaccuracy / mistake / blunder plies WITH a known better
-      // move, show the position BEFORE the wrong move was played so
-      // the green arrow's suggested move is actually legal on the
-      // displayed board (side-to-move matches the player who erred).
-      // For every other ply, show the position AFTER the move was
-      // played — the canonical playback FEN.
+      // move, we ALSO expose a separate "Explore this position"
+      // affordance (via `walkExploreToggleOn` below) that swaps the
+      // board to `seg.fenBefore` so the suggested missed move is
+      // actually playable. This swap is OPT-IN — by default the
+      // walk uses fenAfter so stepping Next ↔ Prev animates as a
+      // single move on the board, not a double-jump that hides
+      // which piece moved (David's review-audit feedback, 2026-05).
       const showBest = !!seg && (
         seg.classification === 'inaccuracy' ||
         seg.classification === 'mistake' ||
@@ -710,7 +757,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       );
       const hasArrow = showBest && !!seg && !!seg.bestMoveUci && seg.bestMoveUci.length >= 4;
       const displayFen = seg
-        ? (hasArrow ? seg.fenBefore : seg.fenAfter)
+        ? (walkExploreToggleOn && hasArrow ? seg.fenBefore : seg.fenAfter)
         : walkPlayback.currentPly > 0
           ? moves[walkPlayback.currentPly - 1]?.fen ?? STARTING_FEN
           : STARTING_FEN;
@@ -728,7 +775,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // themselves. Otherwise the board stays read-only (passive
       // playback). The exploration FEN takes over the displayed
       // position until they tap "Resume game".
-      const walkBoardInteractive = walkExplorationFen === null && !!walkArrows;
+      //
+      // Board is interactive in two cases:
+      //   (a) the student tapped "Explore this position" at an
+      //       arrow-bearing ply — display flips to fenBefore so the
+      //       missed move is legal + the drop captures their pick.
+      //   (b) they're already in exploration mode and want to play
+      //       further continuation moves (engine replies handled
+      //       separately via the onMove handler).
+      const walkBoardInteractive =
+        (walkExploreToggleOn && hasArrow && walkExplorationFen === null) ||
+        walkExplorationFen !== null;
       const walkDisplayFen = walkExplorationFen ?? displayFen;
       const badge = seg?.classification ?? null;
       // Authoritative nav ceiling = the full game length, not the
@@ -850,8 +907,32 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   orientation={playerColor}
                   interactive={walkBoardInteractive}
                   arrows={walkArrows}
-                  showEvalBar={false}
+                  // Eval bar parity with Learn-with-Coach: pass the
+                  // segment's per-ply evaluation through so the user
+                  // can see the position eval as they walk forward.
+                  // During exploration there's no fresh Stockfish run
+                  // yet, so the bar holds the last known eval until
+                  // the next ply.
+                  showEvalBar
+                  evaluation={seg?.evalAfter ?? null}
                   showFlipButton
+                  // Parity with Learn-with-Coach board: last-move
+                  // highlight on every transition so the piece that
+                  // just moved is visually obvious. useChessGame
+                  // resets `lastMove` on every initialFen change, so
+                  // we pass an explicit `highlightSquares` derived
+                  // from the segment's played-move SAN.
+                  showLastMoveHighlight
+                  highlightSquares={(() => {
+                    if (walkExplorationFen || !seg) return null;
+                    try {
+                      const probe = new Chess(seg.fenBefore);
+                      const m = probe.move(seg.san);
+                      return m ? { from: m.from, to: m.to } : null;
+                    } catch {
+                      return null;
+                    }
+                  })()}
                   onMove={walkBoardInteractive ? (moveResult) => {
                     // Student played a piece while a better-move arrow
                     // was showing → record their exploration. We capture
@@ -861,6 +942,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                     setWalkExplorationFen(moveResult.fen);
                     setWalkExplorationSan(moveResult.san);
                     walkExplorationPlyRef.current = walkPlayback.currentPly;
+                    playMoveSound(moveResult.san);
                     void logAppAudit({
                       kind: 'review-walk-explored',
                       category: 'subsystem',
@@ -874,6 +956,34 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                         classification: seg?.classification ?? null,
                       }),
                     });
+                    // Engine reply — David's review-audit feedback:
+                    // "I could only move my piece on the board and the
+                    // opponent did not make a move after I did." Fire
+                    // Stockfish at medium strength (~1500 ELO) so the
+                    // exploration feels like a continuation rather than
+                    // a frozen one-move analysis.
+                    void (async () => {
+                      try {
+                        const config = resolveConfig('medium', 1500);
+                        const reply = await getCoachMove(moveResult.fen, config);
+                        // Apply on a local chess.js, get the post-reply
+                        // FEN, then swap walkExplorationFen so the board
+                        // animates the opponent's slide.
+                        const probe = new Chess(moveResult.fen);
+                        const applied = probe.move({
+                          from: reply.from,
+                          to: reply.to,
+                          promotion: reply.promotion,
+                        });
+                        if (!applied || !walkMountedRef.current) return;
+                        setWalkExplorationFen(probe.fen());
+                        playMoveSound(applied.san);
+                      } catch {
+                        // Stockfish unreachable / engine error — stay
+                        // on the student's exploration FEN. The Resume
+                        // button still lets them snap back.
+                      }
+                    })();
                   } : undefined}
                 />
                 {badge && (
@@ -920,6 +1030,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   >
                     <RotateCcw size={12} />
                     Resume game
+                  </button>
+                )}
+                {/* "Explore this position" — only shows on arrow-bearing
+                    plies when the student hasn't already explored. Tapping
+                    flips the board to seg.fenBefore so the missed move is
+                    playable (canonical playback stays on seg.fenAfter so
+                    Next ↔ Prev animates as a single move). */}
+                {hasArrow && walkExplorationFen === null && !walkExploreToggleOn && (
+                  <button
+                    onClick={() => setWalkExploreToggleOn(true)}
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg"
+                    style={{
+                      background: '#22c55e',
+                      color: 'white',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+                    }}
+                    data-testid="walk-explore-toggle-btn"
+                    aria-label="Try the missed move yourself"
+                  >
+                    Explore this position
                   </button>
                 )}
               </div>
