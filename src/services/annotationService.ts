@@ -60,49 +60,70 @@ const PRO_SUFFIX_TO_SUBLINE: Record<string, string> = {
   'tarrasch-french': 'variation-3',
 };
 
-// Map pro-repertoire suffixes to base annotation IDs
+// Map pro-repertoire suffixes to base annotation IDs.
+//
+// CRITICAL: these values MUST match real files in
+// src/data/annotations/. The May-2026 orphan-rename pass converted
+// every annotation filename from British "Defence" to American
+// "Defense" + Lichess-canonical apostrophe-bearing names
+// ("kings-indian-defense" → "king-s-indian-defense"). Aliases that
+// still pointed at the old filenames silently returned null at
+// runtime, so every pro repertoire whose ID ended in one of these
+// suffixes lost its annotations. Run `node
+// scripts/verify-pro-suffix-bases.mjs` to validate after any edit.
 const PRO_SUFFIX_TO_BASE: Record<string, string> = {
-  'alapin': 'sicilian-alapin',
+  // ─── Sicilian family (sicilian-defense.json is the bare base;
+  // deeper variants for the specific lines that exist post-rename) ─
+  'alapin': 'sicilian-defense-alapin-variation',
+  'anti-sicilian': 'sicilian-defense-alapin-variation',
+  'najdorf': 'sicilian-defense-najdorf-variation-opocensky-variation-traditional-line',
+  'rossolimo': 'sicilian-defense',
+  'sicilian': 'sicilian-defense',
+  'sicilian-najdorf': 'sicilian-defense-najdorf-variation-opocensky-variation-traditional-line',
+  'sveshnikov': 'sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation',
+  // ─── Ruy Lopez family (unchanged; ruy-lopez.json still exists) ─
   'anti-berlin': 'ruy-lopez',
   'anti-marshall': 'ruy-lopez',
-  'anti-sicilian': 'sicilian-alapin',
-  'benko': 'benko-gambit',
-  'benoni': 'benoni-defence',
   'berlin': 'ruy-lopez',
-  'caro-kann': 'caro-kann',
-  'catalan': 'catalan-opening',
-  'dutch': 'dutch-defence',
-  'english': 'english-opening',
-  'englund': 'englund-gambit',
-  'fantasy-caro': 'caro-kann',
-  'french': 'french-defence',
-  'jobava-london': 'london-system',
-  'grunfeld': 'grunfeld-defence',
+  'ponziani': 'italian-game',
+  'ruy-lopez': 'ruy-lopez',
+  // ─── Italian / Two Knights / Evans ─
   'italian': 'italian-game',
-  'kia': 'kings-indian-attack',
-  'kid': 'kings-indian-defence',
-  'kings-gambit': 'kings-gambit',
+  // ─── Open games ─
+  'kings-gambit': 'king-s-gambit',
+  'petroff': 'petrov-s-defense',
+  'scotch': 'scotch-game',
+  'stafford': 'petrov-s-defense-stafford-gambit',
+  'stafford-refute': 'petrov-s-defense-stafford-gambit',
+  'vienna': 'vienna-game',
+  // ─── French ─
+  'french': 'french-defense',
+  'milner-barry': 'french-defense',
+  'tarrasch-french': 'french-defense',
+  // ─── Caro-Kann ─
+  'caro-kann': 'caro-kann-defense',
+  'fantasy-caro': 'caro-kann-defense',
+  // ─── Other 1.e4 ─
+  'scandinavian': 'scandinavian-defense',
+  // ─── 1.d4 Indian systems ─
+  'benoni': 'benoni-defense',
+  'benko': 'benko-gambit-accepted-central-storming-variation',
+  'dutch': 'dutch-defense',
+  'grunfeld': 'gr-nfeld-defense',
+  'kid': 'king-s-indian-defense',
+  'nimzo': 'nimzo-indian-defense',
+  // ─── Closed games (Queen's pawn) ─
+  'catalan': 'catalan-opening',
+  'jobava-london': 'london-system',
   'london': 'london-system',
   'london-d4': 'london-system',
-  'milner-barry': 'french-defence',
-  'najdorf': 'sicilian-najdorf',
-  'nimzo': 'nimzo-indian',
-  'petroff': 'petrov-defence',
-  'ponziani': 'italian-game',
-  'qgd': 'qgd',
-  'rossolimo': 'sicilian-sveshnikov',
-  'ruy-lopez': 'ruy-lopez',
-  'scandinavian': 'scandinavian-defence',
-  'scotch': 'scotch-game',
-  'semi-slav': 'semi-slav',
-  'sicilian': 'sicilian-najdorf',
-  'sicilian-najdorf': 'sicilian-najdorf',
-  'stafford': 'stafford-gambit',
-  'stafford-refute': 'stafford-gambit',
-  'sveshnikov': 'sicilian-sveshnikov',
-  'tarrasch-defense': 'qgd',
-  'tarrasch-french': 'french-defence',
-  'vienna': 'vienna-game',
+  'qgd': 'queen-s-gambit-declined',
+  'semi-slav': 'semi-slav-defense',
+  'tarrasch-defense': 'queen-s-gambit-declined-tarrasch-defense',
+  // ─── 1.Nf3 / 1.c4 ─
+  'english': 'english-opening',
+  'englund': 'englund-gambit',
+  'kia': 'king-s-indian-attack',
 };
 
 function resolveAnnotationId(openingId: string): string {
