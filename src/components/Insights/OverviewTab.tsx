@@ -1,9 +1,38 @@
-import { Loader2, Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Loader2, Sparkles, Calendar, Timer, Target } from 'lucide-react';
 import { InsightsDonutChart } from './InsightsDonutChart';
 import { InsightsBarChart } from './InsightsBarChart';
 import { InsightsStackedBar } from './InsightsStackedBar';
 import { StrengthsCard } from './StrengthsCard';
+import { ActivityHeatmap } from './ActivityHeatmap';
+import {
+  activityHeatmap,
+  timeControlPerformance,
+  criticalMomentsAccuracy,
+  type ActivityHeatmapData,
+  type TimeControlRow,
+  type CriticalMomentsStats,
+  type TimeControlBucket,
+} from '../../services/analyticsService';
 import type { OverviewInsights } from '../../types';
+
+const TIME_CONTROL_LABEL: Record<TimeControlBucket, string> = {
+  bullet: 'Bullet',
+  blitz: 'Blitz',
+  rapid: 'Rapid',
+  classical: 'Classical',
+  correspondence: 'Daily',
+  unknown: 'Other',
+};
+
+const TIME_CONTROL_COLOR: Record<TimeControlBucket, string> = {
+  bullet: '#ef4444',
+  blitz: '#f97316',
+  rapid: '#22c55e',
+  classical: '#6366f1',
+  correspondence: '#a855f7',
+  unknown: 'var(--color-text-muted)',
+};
 
 interface OverviewTabProps {
   data: OverviewInsights;
@@ -22,6 +51,27 @@ interface OverviewTabProps {
 }
 
 export function OverviewTab({ data, onAnalyze, isAnalyzing, analysisLabel }: OverviewTabProps): JSX.Element {
+  // Lazy-load the analytics views — they're additive and shouldn't
+  // block the existing tab's first paint. Each renders once its
+  // shape resolves; null until then so the section is hidden.
+  const [activity, setActivity] = useState<ActivityHeatmapData | null>(null);
+  const [timeControls, setTimeControls] = useState<TimeControlRow[] | null>(null);
+  const [criticals, setCriticals] = useState<CriticalMomentsStats | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    void Promise.all([
+      activityHeatmap(),
+      timeControlPerformance(),
+      criticalMomentsAccuracy(),
+    ]).then(([a, tc, cm]) => {
+      if (cancelled) return;
+      setActivity(a);
+      setTimeControls(tc);
+      setCriticals(cm);
+    }).catch(() => { /* analytics is read-only; failures shouldn't break the tab */ });
+    return () => { cancelled = true; };
+  }, [data.totalGames]);
+
   const wldData = [
     { name: 'Wins', value: data.wins, color: 'var(--color-success)' },
     { name: 'Losses', value: data.losses, color: 'var(--color-error)' },
@@ -121,6 +171,91 @@ export function OverviewTab({ data, onAnalyze, isAnalyzing, analysisLabel }: Ove
       </Section>
 
       <StrengthsCard strengths={data.strengths} />
+
+      {/* Activity heatmap — calendar-grid "your year of chess" view.
+          Renders below the existing summary so it doesn't push the
+          top-of-page numbers off-screen on mobile. */}
+      {activity && activity.totalGames > 0 && (
+        <Section title="Activity">
+          <div className="flex items-center gap-1.5 -mt-1 mb-2 text-[10px] uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
+            <Calendar size={11} />
+            Last year of chess
+          </div>
+          <ActivityHeatmap data={activity} />
+        </Section>
+      )}
+
+      {/* Time-control performance — bucket games by PGN [TimeControl]
+          header and show win-rate per format. Hidden when only one
+          bucket has data (too thin to be a comparison). */}
+      {timeControls && timeControls.length > 1 && (
+        <Section title="By time control">
+          <div className="flex items-center gap-1.5 -mt-1 mb-2 text-[10px] uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
+            <Timer size={11} />
+            Where you play and where you win
+          </div>
+          {timeControls.map((row) => (
+            <div
+              key={row.bucket}
+              className="flex items-center justify-between py-2 border-b text-sm"
+              style={{ borderColor: 'color-mix(in srgb, var(--color-border) 50%, transparent)' }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ background: TIME_CONTROL_COLOR[row.bucket] }} />
+                <span style={{ color: 'var(--color-text)' }}>{TIME_CONTROL_LABEL[row.bucket]}</span>
+                <span className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>{row.games} gm</span>
+              </div>
+              <div className="text-xs flex items-center gap-2 tabular-nums" style={{ color: 'var(--color-text-muted)' }}>
+                <span style={{ color: 'var(--color-success)' }}>{row.winRatePct}%</span>
+                {row.avgAccuracyPct !== null && (
+                  <>
+                    <span>·</span>
+                    <span style={{ color: 'var(--color-warning)' }}>{row.avgAccuracyPct}% acc</span>
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
+
+      {/* Critical-moments accuracy — single big-stat answer to "what's
+          your decision quality on the moves that mattered." */}
+      {criticals && criticals.total > 0 && (
+        <Section title="Critical moments">
+          <div className="flex items-center gap-1.5 -mt-1 mb-2 text-[10px] uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
+            <Target size={11} />
+            Best move found when it mattered most
+          </div>
+          <div
+            className="rounded-xl border p-4 flex items-baseline justify-between"
+            style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+            data-testid="critical-moments-card"
+          >
+            <div className="flex flex-col">
+              <div className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
+                Decision quality
+              </div>
+              <div className="text-3xl font-bold tabular-nums" style={{ color: '#22d3ee' }}>
+                {criticals.accuracyPct}%
+              </div>
+              <div className="text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
+                {criticals.found} of {criticals.total} critical positions solved
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2 text-[10px]">
+              {criticals.byPhase.map((p) => (
+                <div key={p.phase} className="text-center">
+                  <div className="capitalize" style={{ color: 'var(--color-text-muted)' }}>{p.phase}</div>
+                  <div className="text-sm font-semibold tabular-nums" style={{ color: 'var(--color-text)' }}>
+                    {p.total > 0 ? `${p.accuracyPct}%` : '—'}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Section>
+      )}
     </div>
   );
 }

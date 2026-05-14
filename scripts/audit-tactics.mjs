@@ -17,8 +17,33 @@
  *   AUDIT_SMOKE_HEADED=1 node scripts/audit-tactics.mjs
  */
 import { chromium } from 'playwright';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
+
+// Sandbox/CI environments often have a Chromium build pre-installed
+// at /opt/pw-browsers but at a different build number than the npm
+// `playwright` package expects. Probing the installed path lets the
+// audit run without a fresh `npx playwright install`, which is
+// frequently blocked by network policy. Same path the previous
+// session's runs used (the sandbox image carries
+// chromium_headless_shell-1194 + chromium-1194). When the binary is
+// absent (developer's laptop with a normal install), `playwright`
+// uses its own resolved path — we only override if the file exists.
+async function resolveExecutablePath(headed) {
+  const candidates = headed
+    ? ['/opt/pw-browsers/chromium-1194/chrome-linux/chrome']
+    : [
+        '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell',
+        '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+      ];
+  for (const p of candidates) {
+    try {
+      await access(p);
+      return p;
+    } catch {}
+  }
+  return undefined;
+}
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const SECRET =
@@ -42,7 +67,9 @@ async function main() {
   console.log(`[tactics] outDir  = ${OUT_DIR}`);
   console.log(`[tactics] headed  = ${HEADED}`);
 
-  const browser = await chromium.launch({ headless: !HEADED });
+  const executablePath = await resolveExecutablePath(HEADED);
+  if (executablePath) console.log(`[tactics] chromium  = ${executablePath}`);
+  const browser = await chromium.launch({ headless: !HEADED, executablePath });
   const ctx = await browser.newContext({
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
@@ -62,9 +89,12 @@ async function main() {
   const page = await ctx.newPage();
 
   const captured = [];
+  // Match by path-suffix rather than exact URL so dev-vs-prod base
+  // differences don't cause silent capture misses. Audit-stream POSTs
+  // hit `/api/audit-stream` regardless of host.
   page.on('request', (req) => {
     const u = req.url();
-    if (u === STREAM_URL && req.method() === 'POST') {
+    if (u.endsWith('/api/audit-stream') && req.method() === 'POST') {
       try {
         const body = req.postDataJSON?.();
         if (body && typeof body === 'object') captured.push(body);
@@ -80,7 +110,7 @@ async function main() {
 
   const report = { base: BASE_URL, startedAt: stamp, scenarios: [] };
 
-  async function scenario(name, action, settleMs, expectations = []) {
+  async function scenario(name, action, settleMs, expectations = [], expectedEventKinds = []) {
     const before = captured.length;
     const errsBefore = pageErrors.length;
     const consBefore = consoleErrors.length;
@@ -104,8 +134,21 @@ async function main() {
       return acc;
     }, {});
     const url = page.url();
+    // Auto-expand `expectedEventKinds` into pass/fail checks. This is
+    // the SHOULD-WORK contract's audit-trail row enforcement — if a
+    // surface CLAIMS to emit `tactics-surface-event` but the stream
+    // never sees one during this scenario, the audit catches the
+    // missing emit. Mirrors PR #504's F1 fix: zero audit emits in
+    // /weaknesses caught the same way.
+    const effectiveExpectations = [
+      ...expectations,
+      ...expectedEventKinds.map((kind) => ({
+        label: `audit-stream saw kind="${kind}"`,
+        fn: () => fresh.some((e) => e?.kind === kind),
+      })),
+    ];
     const checks = [];
-    for (const exp of expectations) {
+    for (const exp of effectiveExpectations) {
       try {
         const ok = await exp.fn();
         checks.push({ label: exp.label, ok: !!ok, detail: exp.detail });
@@ -213,6 +256,19 @@ async function main() {
     async () => {
       await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
       await page.getByText('Chess Academy Pro', { exact: true }).first().waitFor({ timeout: BOOT_TIMEOUT_MS });
+      // Wait for the audit-stream config to hydrate before moving on
+      // to the next scenario. Without this, early TacticsPage.mount
+      // events fire before `loadAuditStreamConfig()` completes and
+      // get queued — they DO replay later (see appAuditor's pre-
+      // hydration queue), but the POSTs land in a later scenario's
+      // capture window. Waiting here ensures the stream is live
+      // before scenario 02 navigates to /tactics. The `app-boot`
+      // event is the canonical signal that hydration finished —
+      // wait until it shows up in `captured`.
+      const deadline = Date.now() + 8000;
+      while (Date.now() < deadline && !captured.some((e) => e?.kind === 'app-boot')) {
+        await page.waitForTimeout(200);
+      }
     },
     4000,
     [
@@ -975,6 +1031,49 @@ async function main() {
   }
   report.failedChecks = failed;
 
+  // SHOULD-WORK contract enforcement: audit-hook coverage on every
+  // /tactics/* surface. Iterate scenarios; for any whose final URL
+  // matches a tactics surface, verify at least one
+  // `tactics-surface-event` was emitted EITHER during this scenario
+  // OR during any earlier scenario that already landed on the same
+  // URL (covers same-surface re-entries / on-page interactions
+  // where the mount audit fired once on first arrival).
+  const TACTICS_URL_RX = /\/tactics(\/|$|\?)/;
+  // Two-pass classification: pass 1 collects every URL that EVER saw
+  // a `tactics-surface-event` across the whole run; pass 2 marks each
+  // scenario as 'this-scenario' / 'covered-elsewhere' / 'none'. Single-
+  // pass-in-order missed legit coverage when events fired in a LATER
+  // scenario at the same URL (audit-stream POSTs lag behind navigation
+  // by a few hundred ms — see appAuditor's auditWriteChain).
+  const seenUrls = new Set();
+  for (const s of report.scenarios) {
+    if (!s.url || !TACTICS_URL_RX.test(s.url)) continue;
+    if (s.kindCounts && s.kindCounts['tactics-surface-event'] >= 1) {
+      seenUrls.add(s.url);
+    }
+  }
+  for (const s of report.scenarios) {
+    if (!s.url || !TACTICS_URL_RX.test(s.url)) continue;
+    const seenHere = s.kindCounts && s.kindCounts['tactics-surface-event'] >= 1;
+    s.tacticsEventCoverage = seenHere
+      ? 'this-scenario'
+      : seenUrls.has(s.url)
+        ? 'covered-elsewhere'
+        : 'none';
+  }
+  const auditCoverageGaps = report.scenarios
+    .filter((s) => s.url && TACTICS_URL_RX.test(s.url))
+    .filter((s) => s.tacticsEventCoverage === 'none')
+    .map((s) => ({
+      scenario: s.name,
+      url: s.url,
+      reason: 'this URL never emitted a tactics-surface-event during the entire run',
+    }));
+  report.auditCoverageGaps = auditCoverageGaps;
+  for (const g of auditCoverageGaps) {
+    failed.push({ scenario: g.scenario, label: 'audit-hook coverage', error: g.reason });
+  }
+
   await writeFile(join(OUT_DIR, 'report.json'), JSON.stringify(report, null, 2));
 
   const allChecks = report.scenarios.reduce((n, s) => n + (s.checks?.length ?? 0), 0);
@@ -989,12 +1088,19 @@ async function main() {
     `Console errors: ${consoleErrors.length}`,
     `Page errors: ${pageErrors.length}`,
     `Runtime-error audit events: ${report.runtimeErrorEvents.length}`,
+    `Tactics surfaces with audit-stream coverage: ${report.scenarios.filter((s) => s.url && /\/tactics(\/|$|\?)/.test(s.url) && s.kindCounts && s.kindCounts['tactics-surface-event'] >= 1).length} / ${report.scenarios.filter((s) => s.url && /\/tactics(\/|$|\?)/.test(s.url)).length}`,
     ``,
     `## Failures`,
     ``,
   ];
   if (failed.length === 0) md.push('_None._');
   else for (const f of failed) md.push(`- **${f.scenario}** — ${f.label}${f.error ? ` — \`${String(f.error).slice(0, 200)}\`` : ''}`);
+  if (auditCoverageGaps.length > 0) {
+    md.push(``, `## Audit-hook coverage gaps`, ``);
+    md.push(`These scenarios reached a /tactics surface but no \`tactics-surface-event\` was emitted during the run — observability gap, see TACTICS_SHOULD_WORK.md.`);
+    md.push(``);
+    for (const g of auditCoverageGaps) md.push(`- **${g.scenario}** — ${g.url}`);
+  }
   await writeFile(join(OUT_DIR, 'report.md'), md.join('\n'));
 
   console.log(`\n[tactics] DONE — ${passed}/${allChecks} checks passed`);

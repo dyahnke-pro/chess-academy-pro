@@ -197,6 +197,10 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
   // the freshly-bumped tier without waiting for React to re-render
   // requestHint with a new closure.
   const levelRef = useRef<HintLevel>(0);
+  // Tracks when this FEN became active so the hint-revealed audit can
+  // carry a meaningful `timeToRevealMs` (how long the student stared
+  // at the position before tapping for help). Reset when FEN changes.
+  const positionEnteredAtRef = useRef<number>(Date.now());
 
   // Reset per-position state when the FEN changes. Memory store records
   // are NOT cleared — they persist so the post-game review can surface
@@ -207,6 +211,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
     fenRef.current = fen;
     bestMoveRef.current = null;
     levelRef.current = 0;
+    positionEnteredAtRef.current = Date.now();
     setHintState((prev) => ({
       ...INITIAL_STATE,
       hintsUsed: prev.hintsUsed,
@@ -330,6 +335,26 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             viaSpine: true,
             tier: nextLevel,
             bestMoveSan: best.bestMoveSan,
+          }),
+          fen,
+        });
+        // Tier 1 analytic emit — `hint-revealed` carries the structured
+        // payload analyticsService.recentHintActivity reads. Pairs with
+        // the next move-attempt on the same FEN (via the join logic in
+        // the service) to derive hint effectiveness.
+        const timeToRevealMs = Date.now() - positionEnteredAtRef.current;
+        void logAppAudit({
+          kind: 'hint-revealed',
+          category: 'subsystem',
+          source: 'useHintSystem.requestHint',
+          summary: `tier ${nextLevel} reveal · ${timeToRevealMs}ms since position`,
+          details: JSON.stringify({
+            surface: 'coach-play',  // useHintSystem is wired in CoachGamePage today
+            reason: 'student-tap',
+            tier: nextLevel,
+            timeToRevealMs,
+            fen,
+            sourceId: gameId ?? undefined,
           }),
           fen,
         });

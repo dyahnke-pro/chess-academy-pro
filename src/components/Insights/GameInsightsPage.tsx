@@ -19,6 +19,7 @@ import { ShareableInsightsStrip } from './ShareableInsightsStrip';
 import { OpeningsTab } from './OpeningsTab';
 import { MistakesTab } from './MistakesTab';
 import { TacticsTab } from './TacticsTab';
+import { PatternsTab } from './PatternsTab';
 import type {
   InsightsTab,
   OverviewInsights,
@@ -32,6 +33,7 @@ const TABS: { id: InsightsTab; label: string }[] = [
   { id: 'openings', label: 'Openings' },
   { id: 'mistakes', label: 'Mistakes' },
   { id: 'tactics', label: 'Tactics' },
+  { id: 'patterns', label: 'Patterns' },
 ];
 
 export function GameInsightsPage(): JSX.Element {
@@ -266,7 +268,18 @@ export function GameInsightsPage(): JSX.Element {
             return (
               <button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={() => {
+                  if (t.id !== tab) {
+                    void logAppAudit({
+                      kind: 'insights-tab-switched',
+                      category: 'subsystem',
+                      source: 'GameInsightsPage.tabSwitch',
+                      summary: `${tab} → ${t.id}`,
+                      details: JSON.stringify({ fromTab: tab, toTab: t.id }),
+                    });
+                  }
+                  setTab(t.id);
+                }}
                 className="flex-1 text-center py-2.5 px-2 text-sm font-semibold rounded-lg transition-all"
                 style={{
                   color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
@@ -302,6 +315,7 @@ export function GameInsightsPage(): JSX.Element {
         {tab === 'openings' && openings && <OpeningsTab data={openings} />}
         {tab === 'mistakes' && mistakes && <MistakesTab data={mistakes} />}
         {tab === 'tactics' && tactics && <TacticsTab data={tactics} />}
+        {tab === 'patterns' && <PatternsTab />}
       </div>
     </motion.div>
   );

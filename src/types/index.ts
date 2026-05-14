@@ -1033,7 +1033,7 @@ export interface MissedTactic {
 
 // ─── Game Insights ──────────────────────────────────────────────────────────
 
-export type InsightsTab = 'overview' | 'openings' | 'mistakes' | 'tactics';
+export type InsightsTab = 'overview' | 'openings' | 'mistakes' | 'tactics' | 'patterns';
 
 export interface OverviewInsights {
   totalGames: number;

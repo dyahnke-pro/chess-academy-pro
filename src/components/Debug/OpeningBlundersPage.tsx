@@ -25,6 +25,7 @@ import { scaledShadow } from '../../utils/neonColors';
 import { createStreamingSpeaker } from '../../services/streamingSpeaker';
 import { voiceService } from '../../services/voiceService';
 import { ScrollHintBar } from '../Common/ScrollHintBar';
+import { logAppAudit } from '../../services/appAuditor';
 import { updatePuzzleRating } from '../../services/puzzleService';
 import { reconstructPathForPuzzle } from '../../services/openingWalkthroughService';
 import {
@@ -275,6 +276,18 @@ export function OpeningBlundersPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const userRating = activeProfile?.puzzleRating ?? 1200;
+
+  // Mount audit — closes the F1 coverage gap on the 12th tactics
+  // surface (/tactics/opening-traps). Mirrors the pattern wired
+  // across the other 11 tactics pages.
+  useEffect(() => {
+    void logAppAudit({
+      kind: 'tactics-surface-event',
+      category: 'subsystem',
+      source: 'OpeningBlundersPage.mount',
+      summary: 'opening-traps hub opened',
+    });
+  }, []);
   const allFamilies = useMemo<OpeningBlunderFamily[]>(() => groupByOpeningFamily(), []);
   // Default to true opening-phase puzzles. Per user: "lets start with
   // early opening puzzles. can you sort by that?" — middlegame-deep
