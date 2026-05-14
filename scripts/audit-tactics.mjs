@@ -278,8 +278,17 @@ async function main() {
     'tactics-profile',
     async () => {
       await page.locator('[data-testid="section-spot"]').click();
+      // The page renders the header instantly in its loading state
+      // (so back-btn is reachable), but the loaded body — Train Your
+      // Weakest CTA + theme rows — waits on getThemeSkills() which on
+      // a cold Dexie races seedPuzzles(). Poll up to 20s for the
+      // loaded state to materialize before running the assertions.
+      await page
+        .locator('[data-testid="begin-training-btn"]')
+        .waitFor({ timeout: 20_000 })
+        .catch(() => {});
     },
-    MED_SETTLE_MS,
+    1500,
     [
       { label: 'route /tactics/profile', fn: () => page.url().endsWith('/tactics/profile') },
       { label: 'page mount', fn: () => visible('tactical-profile-page') },
@@ -583,7 +592,20 @@ async function main() {
     [
       { label: 'orientation unchanged after Play-it-out', fn: async () => (await readOrientation()) === orientationBefore },
       {
-        label: 'engine first move is OPPONENT color (not student color)',
+        // The side-flip bug pre-fix: when the curated solution had an
+        // ODD number of moves, playOutStartFen captured opponent-to-
+        // move. The hook re-derived studentSide from FEN → flipped.
+        // If user then dragged a piece, chess.js accepted (it WAS that
+        // color's turn) and the hook then asked Stockfish to play the
+        // student's actual color. Visible signal: a student-color
+        // piece moves spontaneously after Play-it-out.
+        //
+        // Robust check: post-play-out state must be either (a) no
+        // change at all (even-length puzzle, student is correctly to
+        // move, no Stockfish kick needed), or (b) only opponent-color
+        // pieces moved (Stockfish correctly kicked in to play the
+        // opponent's reply). FAIL if any student-color piece moved.
+        label: 'no side-flip: post-play-out is opponent-moved OR unchanged',
         fn: async () => {
           const after = await readBoardState();
           const colorsMoved = new Set();
@@ -596,9 +618,10 @@ async function main() {
               else if (c === 'b') colorsMoved.add('black');
             }
           }
-          if (colorsMoved.size === 0) return false;
           const opponent = studentBottom === 'white' ? 'black' : 'white';
-          return colorsMoved.has(opponent) && !colorsMoved.has(studentBottom);
+          if (colorsMoved.size === 0) return true; // even-length: student's turn already
+          if (colorsMoved.has(opponent) && !colorsMoved.has(studentBottom)) return true;
+          return false; // student-color piece moved spontaneously → bug
         },
       },
     ],
