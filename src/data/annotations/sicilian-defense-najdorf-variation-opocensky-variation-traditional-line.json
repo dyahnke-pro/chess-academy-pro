@@ -1,5 +1,5 @@
 {
-  "openingId": "sicilian-najdorf",
+  "openingId": "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line",
   "moveAnnotations": [
     {
       "san": "e4",
@@ -402,112 +402,6 @@
         }
       ],
       "shortNarration": "Both kingside castled — White aims for f4 or d5, Black for ...b5 or ...d5."
-    },
-    {
-      "san": "Be3",
-      "annotation": "White develops the bishop to e3, placing it on an active square where it supports d4, controls the a7-g1 diagonal, and works harmoniously with the Nb3. The Be3 also prepares Qd2 and potential Rd1 pressure down the d-file.",
-      "plans": [
-        "Play Qd2 for battery on the d-file",
-        "Support f4 pawn break"
-      ],
-      "alternatives": [
-        "Bg5 — pins the knight but can be challenged by ...Be6 and ...h6"
-      ],
-      "arrows": [
-        {
-          "from": "c1",
-          "to": "e3",
-          "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "c1",
-          "to": "e3",
-          "color": "rgba(0, 180, 80, 0.8)"
-        }
-      ],
-      "shortNarration": "Be3 supports d4, controls a7-g1, and prepares Qd2 with Rd1 pressure down the d-file."
-    },
-    {
-      "san": "Be6",
-      "annotation": "Black develops the bishop to e6, the most active square available. The Be6 pressures the a2-g8 diagonal, controls the critical d5 square, and supports a future ...d5 central break. It also connects with the Nb3 battle over the d4 and c4 squares.",
-      "pawnStructure": "Be6 reinforces d5 control, making it harder for White to plant a piece on that outpost.",
-      "plans": [
-        "Support ...d5 break in favorable conditions",
-        "Connect with ...Nbd7 for full development"
-      ],
-      "arrows": [
-        {
-          "from": "c8",
-          "to": "e6",
-          "color": "rgba(0, 180, 80, 0.8)"
-        },
-        {
-          "from": "c8",
-          "to": "e6",
-          "color": "rgba(0, 180, 80, 0.8)"
-        }
-      ],
-      "highlights": [
-        {
-          "square": "d5",
-          "color": "rgba(0, 200, 100, 0.3)"
-        }
-      ],
-      "shortNarration": "Be6 pressures a2–g8, controls d5, supports ...d5, and fights for d4 and c4."
-    },
-    {
-      "san": "Qd2",
-      "annotation": "White plays Qd2, placing the queen behind the Be3 and creating a battery along the d-file. The Qd2 connects the rooks, supports Rd1, and keeps options open for both a4 (preventing ...b5) and f3-f4 (kingside expansion).",
-      "plans": [
-        "Double rooks on the d-file with Rad1",
-        "Maintain the Be3 securely"
-      ],
-      "alternatives": [
-        "a4 — immediately restraining ...b5"
-      ],
-      "arrows": [
-        {
-          "from": "d1",
-          "to": "d2",
-          "color": "rgba(0, 100, 255, 0.7)"
-        },
-        {
-          "from": "f2",
-          "to": "f4",
-          "color": "rgba(0, 100, 255, 0.7)"
-        }
-      ],
-      "shortNarration": "Qd2 creates a battery on the d-file, connects rooks, and keeps a4 and f3-f4 options open."
-    },
-    {
-      "san": "Nbd7",
-      "annotation": "Black completes development with Nbd7, bringing the last minor piece into the game. The Nd7 supports both e5 and c5, and can reroute to f8-e6 or b6-c4 depending on the position. With all pieces developed, Black is ready for the middlegame battle.",
-      "plans": [
-        "Reroute knight to c5 to pressure e4 and b3",
-        "Play ...Rc8 for c-file pressure"
-      ],
-      "alternatives": [
-        "Rc8 — immediately seizing the c-file"
-      ],
-      "arrows": [
-        {
-          "from": "b8",
-          "to": "d7",
-          "color": "rgba(0, 100, 255, 0.7)"
-        },
-        {
-          "from": "b8",
-          "to": "d7",
-          "color": "rgba(255, 165, 0, 0.7)"
-        }
-      ],
-      "highlights": [
-        {
-          "square": "c5",
-          "color": "rgba(0, 200, 100, 0.3)"
-        }
-      ],
-      "shortNarration": "Black completes development with Nbd7, ready for the middlegame battle."
     }
   ],
   "subLines": [

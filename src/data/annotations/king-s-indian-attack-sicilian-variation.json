@@ -20,11 +20,6 @@
       "san": "Nf6",
       "annotation": "Black develops their knight naturally, attacking our e4 square (which we haven't occupied, but it's still symbolically important) and preparing to support their central advanced d-pawn. This move also enables Black to potentially follow up with moves like Nc6 or Bg4, creating piece activity. We should note that Black is developing actively—they understand that in the King's Indian Attack, counterplay on the queenside and center is their best chance.",
       "shortNarration": "Black's knight attacks e4, supports the d-pawn, and prepares Nc6 or Bg4 for active counterplay."
-    },
-    {
-      "san": "Bg2",
-      "annotation": "We complete our fianchetto by placing the bishop on its ideal diagonal, where it targets the weak d5 pawn and controls long-term pressure toward the center and queenside. The bishop on g2 is a long-term asset in the King's Indian Attack, often becoming a powerful piece as the game develops. This move also allows us to castle kingside safely next, so we're solidifying our structure while maintaining that patient, prophylactic approach.",
-      "shortNarration": "Fianchettoed bishop on g2 targets the weak d5 pawn and controls the long diagonal, preparing to castle kingside."
     }
   ]
 }

@@ -1,27 +1,12 @@
 {
-  "scanned": 1879,
-  "totalErrors": 1766,
+  "scanned": 1889,
+  "totalErrors": 1732,
   "byClass": {
-    "opening-id-pgn-drift": 36,
-    "piece-on-square-mismatch": 1662,
-    "san-mismatch": 47,
-    "annotation-overflow": 21
+    "piece-on-square-mismatch": 1667,
+    "san-mismatch": 64,
+    "opening-id-pgn-drift": 1
   },
   "errors": [
-    {
-      "file": "albin-countergambit.json",
-      "openingId": "albin-countergambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"albin-countergambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "alekhine-defence.json",
-      "openingId": "alekhine-defence",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"alekhine-defence\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
     {
       "file": "alekhine-defense-exchange-variation-karpov-variation.json",
       "openingId": "alekhine-defense-exchange-variation-karpov-variation",
@@ -873,20 +858,6 @@
       "snippet": "side expansion, attacking our pawn on c3 and further opening lines for piece act"
     },
     {
-      "file": "benko-gambit.json",
-      "openingId": "gambit-benko-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"gambit-benko-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "benoni-defence.json",
-      "openingId": "benoni-defence",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"benoni-defence\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "benoni-defense-benoni-staunton-gambit.json",
       "openingId": "benoni-defense-benoni-staunton-gambit",
       "class": "piece-on-square-mismatch",
@@ -1487,13 +1458,6 @@
       "snippet": "threatens ...b4 to attack the knight on c3 and prepares queenside expansion, com"
     },
     {
-      "file": "birds-opening.json",
-      "openingId": "birds-opening",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"birds-opening\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "blackmar-diemer-gambit-accepted-bogoljubow-defense-mad-dog-attack.json",
       "openingId": "blackmar-diemer-gambit-accepted-bogoljubow-defense-mad-dog-attack",
       "class": "piece-on-square-mismatch",
@@ -1802,13 +1766,6 @@
       "claim": "pawn on f6",
       "pgnTruth": "f6 actually has bN after e6",
       "snippet": "es ...d5 while supporting the pawn on f6 and opening a diagonal for the light-sq"
-    },
-    {
-      "file": "budapest-gambit.json",
-      "openingId": "budapest-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"budapest-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
     },
     {
       "file": "canard-opening.json",
@@ -2183,13 +2140,6 @@
       "snippet": "bishop pins the knight to the queen on g4, pressuring our position and forcing a"
     },
     {
-      "file": "caro-kann.json",
-      "openingId": "caro-kann",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"caro-kann\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "carr-defense-zilbermints-gambit.json",
       "openingId": "carr-defense-zilbermints-gambit",
       "class": "piece-on-square-mismatch",
@@ -2500,13 +2450,6 @@
     {
       "file": "catalan-opening.json",
       "openingId": "catalan-opening",
-      "class": "annotation-overflow",
-      "claim": "18 moveAnnotations",
-      "pgnTruth": "6 plies — surplus 12 describes nonexistent positions"
-    },
-    {
-      "file": "catalan-opening.json",
-      "openingId": "catalan-opening",
       "class": "piece-on-square-mismatch",
       "plyIndex": 0,
       "field": "annotation",
@@ -2553,20 +2496,6 @@
       "claim": "bishop on g7",
       "pgnTruth": "g7 is empty after g6",
       "snippet": "Black fianchettoes the bishop on g7 to pressure the center pawns, prepari"
-    },
-    {
-      "file": "danish-gambit.json",
-      "openingId": "danish-gambit",
-      "class": "annotation-overflow",
-      "claim": "47 moveAnnotations",
-      "pgnTruth": "5 plies — surplus 42 describes nonexistent positions"
-    },
-    {
-      "file": "dutch-defence.json",
-      "openingId": "dutch-defence",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"dutch-defence\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
     },
     {
       "file": "dutch-defense-blackburne-variation.json",
@@ -4431,27 +4360,6 @@
       "snippet": "ares to fianchetto our king's bishop on g2, creates potential queenside expansio"
     },
     {
-      "file": "english-opening.json",
-      "openingId": "english-opening",
-      "class": "annotation-overflow",
-      "claim": "16 moveAnnotations",
-      "pgnTruth": "1 plies — surplus 15 describes nonexistent positions"
-    },
-    {
-      "file": "englund-gambit.json",
-      "openingId": "englund-gambit",
-      "class": "annotation-overflow",
-      "claim": "36 moveAnnotations",
-      "pgnTruth": "2 plies — surplus 34 describes nonexistent positions"
-    },
-    {
-      "file": "evans-gambit.json",
-      "openingId": "evans-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"evans-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "formation-hippopotamus-attack.json",
       "openingId": "formation-hippopotamus-attack",
       "class": "piece-on-square-mismatch",
@@ -4510,48 +4418,6 @@
       "claim": "bishop on g2",
       "pgnTruth": "g2 is empty after g3",
       "snippet": " g3, fianchettoing the king's bishop on g2 to command the long diagonal."
-    },
-    {
-      "file": "four-knights-game.json",
-      "openingId": "four-knights-game",
-      "class": "annotation-overflow",
-      "claim": "19 moveAnnotations",
-      "pgnTruth": "6 plies — surplus 13 describes nonexistent positions"
-    },
-    {
-      "file": "french-defense.json",
-      "openingId": "french-defense",
-      "class": "annotation-overflow",
-      "claim": "18 moveAnnotations",
-      "pgnTruth": "4 plies — surplus 14 describes nonexistent positions"
-    },
-    {
-      "file": "gambit-benko-gambit.json",
-      "openingId": "gambit-benko-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"gambit-benko-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "gambit-budapest-gambit.json",
-      "openingId": "gambit-budapest-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"gambit-budapest-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "gambit-evans-gambit.json",
-      "openingId": "gambit-evans-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"gambit-evans-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "gambit-kings-gambit.json",
-      "openingId": "gambit-kings-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"gambit-kings-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
     },
     {
       "file": "goldsmith-defense-picklepuss-defense.json",
@@ -5548,13 +5414,6 @@
       "snippet": " the center, fianchettoes the bishop on g2, and prepares f4 to support it."
     },
     {
-      "file": "grunfeld-defence.json",
-      "openingId": "grunfeld-defence",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"grunfeld-defence\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "horwitz-defense-zilbermints-gambit.json",
       "openingId": "horwitz-defense-zilbermints-gambit",
       "class": "piece-on-square-mismatch",
@@ -6225,11 +6084,28 @@
       "snippet": " fianchetto our light-squared bishop on g2 in many lines. The c4 pawn also gives"
     },
     {
-      "file": "italian-game.json",
-      "openingId": "italian-game",
-      "class": "annotation-overflow",
-      "claim": "20 moveAnnotations",
-      "pgnTruth": "5 plies — surplus 15 describes nonexistent positions"
+      "file": "italian-game-evans-gambit-morphy-attack.json",
+      "openingId": "italian-game-evans-gambit-morphy-attack",
+      "class": "san-mismatch",
+      "plyIndex": 16,
+      "claim": "annotation.san=\"d5\"",
+      "pgnTruth": "PGN ply 17 is Nc3"
+    },
+    {
+      "file": "italian-game-evans-gambit.json",
+      "openingId": "italian-game-evans-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 10,
+      "claim": "annotation.san=\"d4\"",
+      "pgnTruth": "PGN ply 11 is O-O"
+    },
+    {
+      "file": "italian-game-evans-gambit.json",
+      "openingId": "italian-game-evans-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 11,
+      "claim": "annotation.san=\"exd4\"",
+      "pgnTruth": "PGN ply 12 is d6"
     },
     {
       "file": "k-das-opening-k-das-gambit.json",
@@ -6242,11 +6118,84 @@
       "snippet": "ter before we can establish a pawn on d4, claiming space and following opening p"
     },
     {
-      "file": "king-s-gambit.json",
-      "openingId": "king-s-gambit",
-      "class": "annotation-overflow",
-      "claim": "18 moveAnnotations",
-      "pgnTruth": "3 plies — surplus 15 describes nonexistent positions"
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 9,
+      "claim": "annotation.san=\"g4\"",
+      "pgnTruth": "PGN ply 10 is h6"
+    },
+    {
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 10,
+      "claim": "annotation.san=\"Ne5\"",
+      "pgnTruth": "PGN ply 11 is d4"
+    },
+    {
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 11,
+      "claim": "annotation.san=\"Qe7\"",
+      "pgnTruth": "PGN ply 12 is d6"
+    },
+    {
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 12,
+      "claim": "annotation.san=\"d4\"",
+      "pgnTruth": "PGN ply 13 is Nc3"
+    },
+    {
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 13,
+      "claim": "annotation.san=\"d6\"",
+      "pgnTruth": "PGN ply 14 is c6"
+    },
+    {
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 14,
+      "claim": "annotation.san=\"Nd3\"",
+      "pgnTruth": "PGN ply 15 is hxg5"
+    },
+    {
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 15,
+      "claim": "annotation.san=\"Nf6\"",
+      "pgnTruth": "PGN ply 16 is hxg5"
+    },
+    {
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 16,
+      "claim": "annotation.san=\"Nxf4\"",
+      "pgnTruth": "PGN ply 17 is Rxh8"
+    },
+    {
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 17,
+      "claim": "annotation.san=\"Nxe4\"",
+      "pgnTruth": "PGN ply 18 is Bxh8"
+    },
+    {
+      "file": "king-s-gambit-accepted-greco-gambit.json",
+      "openingId": "king-s-gambit-accepted-greco-gambit",
+      "class": "san-mismatch",
+      "plyIndex": 18,
+      "claim": "annotation.san=\"O-O\"",
+      "pgnTruth": "PGN ply 19 is Ne5"
     },
     {
       "file": "king-s-indian-attack-keres-variation.json",
@@ -6297,13 +6246,6 @@
       "claim": "bishop on d5",
       "pgnTruth": "d5 actually has bP after g3",
       "snippet": "g3 fianchetto aims the bishop at d5, building slow but resilient piece co"
-    },
-    {
-      "file": "king-s-indian-attack-sicilian-variation.json",
-      "openingId": "king-s-indian-attack-sicilian-variation",
-      "class": "annotation-overflow",
-      "claim": "5 moveAnnotations",
-      "pgnTruth": "4 plies — surplus 1 describes nonexistent positions"
     },
     {
       "file": "king-s-indian-attack-sicilian-variation.json",
@@ -6432,13 +6374,6 @@
       "claim": "bishop on g2",
       "pgnTruth": "g2 is empty after g3",
       "snippet": "Fianchettoed bishop on g2 eyes d4 and d5, pressuring the center"
-    },
-    {
-      "file": "king-s-indian-attack.json",
-      "openingId": "king-s-indian-attack",
-      "class": "annotation-overflow",
-      "claim": "16 moveAnnotations",
-      "pgnTruth": "3 plies — surplus 13 describes nonexistent positions"
     },
     {
       "file": "king-s-indian-defense-accelerated-averbakh-variation.json",
@@ -9077,20 +9012,6 @@
       "snippet": "Bishop pins knight to queen on g5, pressuring kingside and threatening h"
     },
     {
-      "file": "king-s-indian-defense.json",
-      "openingId": "king-s-indian-defense",
-      "class": "annotation-overflow",
-      "claim": "20 moveAnnotations",
-      "pgnTruth": "5 plies — surplus 15 describes nonexistent positions"
-    },
-    {
-      "file": "kings-indian-defense.json",
-      "openingId": "kings-indian-defense",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"kings-indian-defense\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "lion-defense-bayonet-attack.json",
       "openingId": "lion-defense-bayonet-attack",
       "class": "piece-on-square-mismatch",
@@ -9169,13 +9090,6 @@
       "claim": "pawn on f3",
       "pgnTruth": "f3 actually has wN after h3",
       "snippet": "ld be annoying by pinning our pawn on f3 or simply creating tactical complicatio"
-    },
-    {
-      "file": "london-system.json",
-      "openingId": "london-system",
-      "class": "annotation-overflow",
-      "claim": "16 moveAnnotations",
-      "pgnTruth": "5 plies — surplus 11 describes nonexistent positions"
     },
     {
       "file": "london-system.json",
@@ -9268,13 +9182,6 @@
       "claim": "bishop on g2",
       "pgnTruth": "g2 is empty after g3",
       "snippet": " fianchetto our light-squared bishop on g2 to control the long diagonal. This mo"
-    },
-    {
-      "file": "marshall-attack.json",
-      "openingId": "marshall-attack",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"marshall-attack\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
     },
     {
       "file": "mexican-defense-horsefly-gambit.json",
@@ -10537,13 +10444,6 @@
       "snippet": "pawn and can be targeted by a bishop on b4."
     },
     {
-      "file": "nimzo-indian.json",
-      "openingId": "nimzo-indian",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"nimzo-indian\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "nimzo-larsen-attack-classical-variation.json",
       "openingId": "nimzo-larsen-attack-classical-variation",
       "class": "piece-on-square-mismatch",
@@ -10964,13 +10864,6 @@
       "snippet": "bishop and queen. Now Black's pawn on c6 is directly attacked, so our opponent m"
     },
     {
-      "file": "old-indian-defence.json",
-      "openingId": "old-indian-defence",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"old-indian-defence\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "old-indian-defense-aged-gibbon-gambit.json",
       "openingId": "old-indian-defense-aged-gibbon-gambit",
       "class": "piece-on-square-mismatch",
@@ -11189,27 +11082,6 @@
       "claim": "bishop on b7",
       "pgnTruth": "b7 is empty after b6",
       "snippet": " fianchetto the light-squared bishop on b7, where it will exert long-range press"
-    },
-    {
-      "file": "petrov-s-defense.json",
-      "openingId": "petrov-s-defense",
-      "class": "annotation-overflow",
-      "claim": "18 moveAnnotations",
-      "pgnTruth": "8 plies — surplus 10 describes nonexistent positions"
-    },
-    {
-      "file": "philidor-defense.json",
-      "openingId": "philidor-defense",
-      "class": "annotation-overflow",
-      "claim": "16 moveAnnotations",
-      "pgnTruth": "5 plies — surplus 11 describes nonexistent positions"
-    },
-    {
-      "file": "pirc-defence.json",
-      "openingId": "pirc-defence",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"pirc-defence\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
     },
     {
       "file": "pirc-defense-150-attack-inner-doll-defense.json",
@@ -12129,20 +12001,6 @@
       "snippet": "squares with the fianchettoed bishop on g7."
     },
     {
-      "file": "qga.json",
-      "openingId": "qga",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"qga\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "qgd.json",
-      "openingId": "qgd",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"qgd\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "queen-s-gambit-accepted-bogoljubow-defense.json",
       "openingId": "queen-s-gambit-accepted-bogoljubow-defense",
       "class": "piece-on-square-mismatch",
@@ -12969,13 +12827,6 @@
       "claim": "queen on f6",
       "pgnTruth": "f6 actually has bN after Bg5",
       "snippet": "Bishop pins knight to queen on f6, developing with tempo and creating im"
-    },
-    {
-      "file": "queen-s-gambit.json",
-      "openingId": "queen-s-gambit",
-      "class": "annotation-overflow",
-      "claim": "18 moveAnnotations",
-      "pgnTruth": "3 plies — surplus 15 describes nonexistent positions"
     },
     {
       "file": "queen-s-indian-accelerated.json",
@@ -14472,13 +14323,6 @@
       "snippet": "o fianchetto the dark-squared bishop on g7 where it will eye our long diagonal a"
     },
     {
-      "file": "queens-indian.json",
-      "openingId": "queens-indian",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"queens-indian\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "r-ti-opening-anglo-slav-variation-bled-variation.json",
       "openingId": "r-ti-opening-anglo-slav-variation-bled-variation",
       "class": "piece-on-square-mismatch",
@@ -14597,13 +14441,6 @@
       "claim": "queen on g4",
       "pgnTruth": "g4 actually has bB after Bg4",
       "snippet": "bishop pins the knight to the queen on g4, forcing a response to avoid losing ma"
-    },
-    {
-      "file": "r-ti-opening-anglo-slav-variation-gurevich-system.json",
-      "openingId": "r-ti-opening-anglo-slav-variation-gurevich-system",
-      "class": "annotation-overflow",
-      "claim": "10 moveAnnotations",
-      "pgnTruth": "7 plies — surplus 3 describes nonexistent positions"
     },
     {
       "file": "r-ti-opening-anglo-slav-variation-gurevich-system.json",
@@ -14764,13 +14601,6 @@
       "snippet": "ares to fianchetto the king's bishop on g6, but it's quite passive compared to t"
     },
     {
-      "file": "reti-opening.json",
-      "openingId": "reti-opening",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"reti-opening\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "richter-veresov-attack-boyce-defense.json",
       "openingId": "richter-veresov-attack-boyce-defense",
       "class": "piece-on-square-mismatch",
@@ -14819,13 +14649,6 @@
       "claim": "bishop on b2",
       "pgnTruth": "b2 is empty after b3",
       "snippet": "o fianchetto our dark-squared bishop on b2, creating what's known as the 'Rubins"
-    },
-    {
-      "file": "rubinstein-opening-classical-defense.json",
-      "openingId": "rubinstein-opening-classical-defense",
-      "class": "annotation-overflow",
-      "claim": "15 moveAnnotations",
-      "pgnTruth": "14 plies — surplus 1 describes nonexistent positions"
     },
     {
       "file": "rubinstein-opening-classical-defense.json",
@@ -15332,20 +15155,6 @@
       "snippet": "Knight captures bishop on f6, forcing recapture that damages Black"
     },
     {
-      "file": "ruy-lopez.json",
-      "openingId": "ruy-lopez",
-      "class": "annotation-overflow",
-      "claim": "18 moveAnnotations",
-      "pgnTruth": "5 plies — surplus 13 describes nonexistent positions"
-    },
-    {
-      "file": "scandinavian-defence.json",
-      "openingId": "scandinavian-defence",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"scandinavian-defence\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "scandinavian-defense-anderssen-counterattack-collijn-variation.json",
       "openingId": "scandinavian-defense-anderssen-counterattack-collijn-variation",
       "class": "piece-on-square-mismatch",
@@ -15594,20 +15403,6 @@
       "claim": "pawn on c3",
       "pgnTruth": "c3 actually has wN after d4",
       "snippet": "s. The move also supports our pawn on c3 and prepares potential advances like d5"
-    },
-    {
-      "file": "scotch-gambit.json",
-      "openingId": "scotch-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"scotch-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "scotch-game.json",
-      "openingId": "scotch-game",
-      "class": "annotation-overflow",
-      "claim": "20 moveAnnotations",
-      "pgnTruth": "7 plies — surplus 13 describes nonexistent positions"
     },
     {
       "file": "semi-slav-defense-botvinnik-variation-alatortsev-system.json",
@@ -15998,20 +15793,6 @@
       "snippet": "em. This advance supports the pawn on e4, prevents our pieces from accessing the"
     },
     {
-      "file": "semi-slav.json",
-      "openingId": "semi-slav",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"semi-slav\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "sicilian-alapin.json",
-      "openingId": "sicilian-alapin",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"sicilian-alapin\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "sicilian-defense-alapin-variation-barmen-defense-central-exchange.json",
       "openingId": "sicilian-defense-alapin-variation-barmen-defense-central-exchange",
       "class": "piece-on-square-mismatch",
@@ -16142,6 +15923,36 @@
       "snippet": "e're attacking the undefended pawn on d4 and preparing to relocate the queen to "
     },
     {
+      "file": "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json",
+      "openingId": "sicilian-defense-dragon-variation-yugoslav-attack-old-line",
+      "class": "piece-on-square-mismatch",
+      "plyIndex": 4,
+      "field": "annotation",
+      "claim": "knight on d4",
+      "pgnTruth": "d4 actually has wP after d4",
+      "snippet": "id development, a centralized knight on d4, and open lines for all pieces."
+    },
+    {
+      "file": "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json",
+      "openingId": "sicilian-defense-dragon-variation-yugoslav-attack-old-line",
+      "class": "piece-on-square-mismatch",
+      "plyIndex": 9,
+      "field": "annotation",
+      "claim": "bishop on g7",
+      "pgnTruth": "g7 is empty after g6",
+      "snippet": "lian Dragon. The fianchettoed bishop on g7 will become the most powerful piece o"
+    },
+    {
+      "file": "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json",
+      "openingId": "sicilian-defense-dragon-variation-yugoslav-attack-old-line",
+      "class": "piece-on-square-mismatch",
+      "plyIndex": 10,
+      "field": "annotation",
+      "claim": "bishop on g7",
+      "pgnTruth": "g7 is empty after Be3",
+      "snippet": "hange Black's precious Dragon bishop on g7."
+    },
+    {
       "file": "sicilian-defense-gloria-variation.json",
       "openingId": "sicilian-defense-gloria-variation",
       "class": "piece-on-square-mismatch",
@@ -16192,6 +16003,16 @@
       "snippet": "G3 prepares to fianchetto the bishop on g2, controlling the long diagonal and pr"
     },
     {
+      "file": "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json",
+      "openingId": "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation",
+      "class": "piece-on-square-mismatch",
+      "plyIndex": 4,
+      "field": "annotation",
+      "claim": "knight on d4",
+      "pgnTruth": "d4 actually has wP after d4",
+      "snippet": "development lead, centralized knight on d4, and open lines — while Black gets th"
+    },
+    {
       "file": "sicilian-defense-morphy-gambit-andreaschek-gambit.json",
       "openingId": "sicilian-defense-morphy-gambit-andreaschek-gambit",
       "class": "piece-on-square-mismatch",
@@ -16200,6 +16021,48 @@
       "claim": "pawn on f3",
       "pgnTruth": "f3 actually has wN after e5",
       "snippet": "ning. The e5 pawn attacks our pawn on f3 and also controls the important d4 and "
+    },
+    {
+      "file": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json",
+      "openingId": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense",
+      "class": "piece-on-square-mismatch",
+      "plyIndex": 5,
+      "field": "shortNarration",
+      "claim": "knight on c3",
+      "pgnTruth": "c3 actually has bP after dxc3",
+      "snippet": "pting the gambit, but White's knight on c3 and open c-file trade material for in"
+    },
+    {
+      "file": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json",
+      "openingId": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense",
+      "class": "san-mismatch",
+      "plyIndex": 13,
+      "claim": "annotation.san=\"Nf6\"",
+      "pgnTruth": "PGN ply 14 is a6"
+    },
+    {
+      "file": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json",
+      "openingId": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense",
+      "class": "san-mismatch",
+      "plyIndex": 15,
+      "claim": "annotation.san=\"Be7\"",
+      "pgnTruth": "PGN ply 16 is b5"
+    },
+    {
+      "file": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json",
+      "openingId": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense",
+      "class": "san-mismatch",
+      "plyIndex": 16,
+      "claim": "annotation.san=\"Rd1\"",
+      "pgnTruth": "PGN ply 17 is Bb3"
+    },
+    {
+      "file": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json",
+      "openingId": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense",
+      "class": "san-mismatch",
+      "plyIndex": 17,
+      "claim": "annotation.san=\"O-O\"",
+      "pgnTruth": "PGN ply 18 is Ra7"
     },
     {
       "file": "sicilian-defense-smith-morra-gambit-accepted-classical-formation.json",
@@ -16310,34 +16173,6 @@
       "claim": "bishop on b2",
       "pgnTruth": "b2 is empty after b3",
       "snippet": " fianchetto our light-squared bishop on b2. This move supports the eventual Bb2,"
-    },
-    {
-      "file": "sicilian-dragon.json",
-      "openingId": "sicilian-dragon",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"sicilian-dragon\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "sicilian-najdorf.json",
-      "openingId": "sicilian-najdorf",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"sicilian-najdorf\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "sicilian-sveshnikov.json",
-      "openingId": "sicilian-sveshnikov",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"sicilian-sveshnikov\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "slav-defence.json",
-      "openingId": "slav-defence",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"slav-defence\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
     },
     {
       "file": "slav-defense-czech-variation-carlsbad-variation-morozevich-variation.json",
@@ -16540,13 +16375,6 @@
       "snippet": "Black's knight on c6 attacks c4 and controls e4 and d5, su"
     },
     {
-      "file": "smith-morra-gambit.json",
-      "openingId": "smith-morra-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"smith-morra-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "sodium-attack-celadon-variation.json",
       "openingId": "sodium-attack-celadon-variation",
       "class": "piece-on-square-mismatch",
@@ -16565,13 +16393,6 @@
       "claim": "bishop on g7",
       "pgnTruth": "g7 is empty after g6",
       "snippet": "l opening, and the fianchetto bishop on g7 will be quite strong once developed. "
-    },
-    {
-      "file": "stafford-gambit.json",
-      "openingId": "stafford-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"stafford-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
     },
     {
       "file": "tarrasch-defense-classical-variation-advance-variation.json",
@@ -16904,20 +16725,6 @@
       "snippet": "Black captures the bishop on g5, accepting sharp tactical complicatio"
     },
     {
-      "file": "trompowsky-attack.json",
-      "openingId": "trompowsky-attack",
-      "class": "annotation-overflow",
-      "claim": "20 moveAnnotations",
-      "pgnTruth": "3 plies — surplus 17 describes nonexistent positions"
-    },
-    {
-      "file": "two-knights-defence.json",
-      "openingId": "two-knights-defence",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"two-knights-defence\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
       "file": "valencia-opening.json",
       "openingId": "valencia-opening",
       "class": "piece-on-square-mismatch",
@@ -17096,20 +16903,6 @@
       "claim": "bishop on a2",
       "pgnTruth": "a2 actually has wP after Bc4",
       "snippet": "anchettoing the light-squared bishop on a2–g8 targets f7, Black's weakest square"
-    },
-    {
-      "file": "vienna-gambit.json",
-      "openingId": "vienna-gambit",
-      "class": "opening-id-pgn-drift",
-      "claim": "openingId \"vienna-gambit\" referenced",
-      "pgnTruth": "no matching row in openings-lichess.json"
-    },
-    {
-      "file": "vienna-game.json",
-      "openingId": "vienna-game",
-      "class": "annotation-overflow",
-      "claim": "20 moveAnnotations",
-      "pgnTruth": "3 plies — surplus 17 describes nonexistent positions"
     },
     {
       "file": "ware-opening-cologne-gambit.json",

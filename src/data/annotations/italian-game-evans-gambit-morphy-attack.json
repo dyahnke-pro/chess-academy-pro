@@ -121,81 +121,6 @@
       "annotation": "d5 — the central pawn lever. White pushes the c-knight back to a5 (a passive square) and gains crushing central space.",
       "narration": "d5 — the central pawn lever. White pushes the c-knight back to a5 (a passive square) and gains crushing central space.",
       "shortNarration": "d5 pushes the c-knight back to a5, gaining crushing central space."
-    },
-    {
-      "san": "Na5",
-      "annotation": "Na5 — the c6 knight is forced to the rim where it's poorly placed. Black accepts the awkward retreat to dodge worse alternatives like ...Nb8.",
-      "narration": "Na5 — the c6 knight is forced to the rim where it's poorly placed. Black accepts the awkward retreat to dodge worse alternatives like ...Nb8.",
-      "shortNarration": "Na5 forces the c6 knight to the rim, poorly placed but avoiding worse alternatives like ...Nb8."
-    },
-    {
-      "san": "Bb2",
-      "annotation": "Bb2 — the long-diagonal bishop. The Bb2 stares directly at Black's king on g8 along the a1-h8 diagonal, building the classic Evans attack on the dark squares.",
-      "narration": "Bb2 — the long-diagonal bishop. The Bb2 stares directly at Black's king on g8 along the a1-h8 diagonal, building the classic Evans attack on the dark squares.",
-      "shortNarration": "Bb2 pins the a1-h8 diagonal at Black's king, setting up the Evans attack on dark squares."
-    },
-    {
-      "san": "Ne7",
-      "annotation": "Ne7 develops the kingside knight while sidestepping the d5 pawn's pressure. Black is desperately trying to complete development.",
-      "narration": "Ne7 develops the kingside knight while sidestepping the d5 pawn's pressure. Black is desperately trying to complete development.",
-      "shortNarration": "Ne7 develops the knight, dodging d5's pressure as Black rushes to complete development."
-    },
-    {
-      "san": "Bd3",
-      "annotation": "Bd3 redeploys the bishop where it can support the kingside attack and avoid being kicked by ...c6 or ...c5. The Bd3 lines up with Bb2 to form the classic Evans attacking battery.",
-      "narration": "Bd3 redeploys the bishop where it can support the kingside attack and avoid being kicked by ...c6 or ...c5. The Bd3 lines up with Bb2 to form the classic Evans attacking battery.",
-      "shortNarration": "Bd3 redeploys to support the kingside attack, forming the classic Evans battery with Bb2."
-    },
-    {
-      "san": "O-O",
-      "annotation": "O-O — Black finally gets the king to safety, but the kingside is under siege. White's pieces are coordinated for an attack; Black's are scrambling to defend.",
-      "narration": "O-O — Black finally gets the king to safety, but the kingside is under siege. White's pieces are coordinated for an attack; Black's are scrambling to defend.",
-      "shortNarration": "Black castles but the kingside is under siege — White's coordinated pieces attack while Black's scramble to defend."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "Nc3 develops the queenside knight and joins the central pressure. White's army is now fully mobilized for the attack on Black's king.",
-      "narration": "Nc3 develops the queenside knight and joins the central pressure. White's army is now fully mobilized for the attack on Black's king.",
-      "shortNarration": "Nc3 develops the knight, fully mobilizing White's army for the attack on Black's king."
-    },
-    {
-      "san": "Ng6",
-      "annotation": "Ng6 redeploys the e7 knight to a more active square, defending the kingside and preparing ...f5 if needed.",
-      "arrows": [
-        {
-          "from": "e7",
-          "to": "g6",
-          "color": "rgba(50, 150, 220, 0.8)"
-        }
-      ],
-      "narration": "Ng6 redeploys the e7 knight to a more active square, defending the kingside and preparing ...f5 if needed.",
-      "shortNarration": "Ng6 redeploys the knight to defend the kingside and prepare f5."
-    },
-    {
-      "san": "Ne2",
-      "annotation": "Ne2 — the queen knight reroutes toward the kingside. White is patient: every piece must be on its optimal attacking square before the assault begins.",
-      "arrows": [
-        {
-          "from": "c3",
-          "to": "e2",
-          "color": "rgba(50, 150, 220, 0.8)"
-        }
-      ],
-      "narration": "Ne2 — the queen knight reroutes toward the kingside. White is patient: every piece must be on its optimal attacking square before the assault begins.",
-      "shortNarration": "Ne2 reroutes the knight toward the kingside, preparing the assault."
-    },
-    {
-      "san": "c5",
-      "annotation": "c5 — Black strikes back at White's center, looking for counterplay and trying to relieve the queenside pressure. The position is now a complex strategic battle, the gambit pawn long since transformed into something else.",
-      "arrows": [
-        {
-          "from": "c7",
-          "to": "c5",
-          "color": "rgba(50, 150, 220, 0.8)"
-        }
-      ],
-      "narration": "c5 — Black strikes back at White's center, looking for counterplay and trying to relieve the queenside pressure. The position is now a complex strategic battle, the gambit pawn long since transformed into something else.",
-      "shortNarration": "c5 strikes at White's center, seeking counterplay and relieving queenside pressure."
     }
   ],
   "subLines": [
@@ -2522,5 +2447,5 @@
       ]
     }
   ],
-  "openingId": "gambit-evans-gambit"
+  "openingId": "italian-game-evans-gambit-morphy-attack"
 }

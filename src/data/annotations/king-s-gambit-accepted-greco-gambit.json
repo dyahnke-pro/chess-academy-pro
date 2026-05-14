@@ -134,107 +134,6 @@
       "annotation": "O-O brings the king to safety and the rook to f1, joining the attack along the half-open f-file. With the king in the center, White's whole investment would unravel; castling is non-negotiable.",
       "narration": "O-O brings the king to safety and the rook to f1, joining the attack along the half-open f-file. With the king in the center, White's whole investment would unravel; castling is non-negotiable.",
       "shortNarration": "Castling brings the king to safety and activates the rook on the half-open f-file."
-    },
-    {
-      "san": "d5",
-      "annotation": "d5 — Black gains central space and shields the king from White's threats. The extra pawn becomes meaningful only if Black survives the next ten moves of pressure.",
-      "narration": "d5 — Black gains central space and shields the king from White's threats. The extra pawn becomes meaningful only if Black survives the next ten moves of pressure.",
-      "shortNarration": "d5 gains central space and shields the king, but the extra pawn only matters if Black survives White's next ten moves of pressure."
-    },
-    {
-      "san": "Bb3",
-      "annotation": "Bb3 retreats to dodge ...d4 next while keeping the bishop's diagonal aimed at f7. Quiet, precise — White is reorganizing before the next storm.",
-      "narration": "Bb3 retreats to dodge ...d4 next while keeping the bishop's diagonal aimed at f7. Quiet, precise — White is reorganizing before the next storm.",
-      "shortNarration": "Bb3 retreats to dodge ...d4, keeping the bishop aimed at f7."
-    },
-    {
-      "san": "Nc6",
-      "annotation": "Nc6 develops with pressure on d4 and prepares ...Nb4 or ...O-O-O. Every Black piece has finally found a meaningful square.",
-      "narration": "Nc6 develops with pressure on d4 and prepares ...Nb4 or ...O-O-O. Every Black piece has finally found a meaningful square.",
-      "shortNarration": "Nc6 pressures d4 and prepares ...Nb4 or ...O-O-O — every Black piece now has a meaningful square."
-    },
-    {
-      "san": "Re1",
-      "annotation": "Re1 swings the rook into the e-file battery, eyeing the e4 knight and supporting any future Nf4-d5 ideas. White's coordination reaches its peak.",
-      "narration": "Re1 swings the rook into the e-file battery, eyeing the e4 knight and supporting any future Nf4-d5 ideas. White's coordination reaches its peak.",
-      "shortNarration": "Re1 batteries the e-file, targeting the e4 knight and supporting Nf4-d5."
-    },
-    {
-      "san": "Bf5",
-      "annotation": "Bf5 develops Black's last piece, defends the e4 knight from Re1's pressure, and challenges White's coordination. The position is fully loaded.",
-      "narration": "Bf5 develops Black's last piece, defends the e4 knight from Re1's pressure, and challenges White's coordination. The position is fully loaded.",
-      "shortNarration": "Bf5 develops, defends e4, and challenges White's coordination — the position is fully loaded."
-    },
-    {
-      "san": "Nc3",
-      "annotation": "Nc3 attacks the e4 knight, forcing concrete decisions. Black must trade, retreat, or escalate — White is asking the question.",
-      "narration": "Nc3 attacks the e4 knight, forcing concrete decisions. Black must trade, retreat, or escalate — White is asking the question.",
-      "shortNarration": "Nc3 attacks the e4 knight, forcing Black to trade, retreat, or escalate."
-    },
-    {
-      "san": "Nxc3",
-      "annotation": "Nxc3 simplifies the central tension. The trade relieves immediate pressure but commits Black to facing the structural consequences.",
-      "arrows": [
-        {
-          "from": "e4",
-          "to": "c3",
-          "color": "rgba(50, 150, 220, 0.8)"
-        }
-      ],
-      "narration": "Nxc3 simplifies the central tension. The trade relieves immediate pressure but commits Black to facing the structural consequences.",
-      "shortNarration": "Nxc3 trades knights, relieving pressure but leaving Black with doubled c-pawns."
-    },
-    {
-      "san": "bxc3",
-      "annotation": "bxc3 — White's pawn structure shifts. The doubled c-pawns are ugly but the b-file opens for the rook, and the dark-square diagonal becomes thematic for the c1-bishop.",
-      "arrows": [
-        {
-          "from": "b2",
-          "to": "c3",
-          "color": "rgba(50, 150, 220, 0.8)"
-        }
-      ],
-      "narration": "bxc3 — White's pawn structure shifts. The doubled c-pawns are ugly but the b-file opens for the rook, and the dark-square diagonal becomes thematic for the c1-bishop.",
-      "shortNarration": "Doubled c-pawns open the b-file for the rook and the dark-square diagonal for the c1-bishop."
-    },
-    {
-      "san": "O-O-O",
-      "annotation": "O-O-O — Black castles queenside, signaling commitment to a counterattack on the kingside. Opposite-side castling: the position becomes a race, and tempo is everything.",
-      "arrows": [
-        {
-          "from": "e8",
-          "to": "c8",
-          "color": "rgba(50, 150, 220, 0.8)"
-        }
-      ],
-      "narration": "O-O-O — Black castles queenside, signaling commitment to a counterattack on the kingside. Opposite-side castling: the position becomes a race, and tempo is everything.",
-      "shortNarration": "Black castles queenside, committing to a kingside counterattack — opposite-side castling makes it a race where tempo decides."
-    },
-    {
-      "san": "Ba3",
-      "annotation": "Ba3 — the killer move. White's bishop targets the a3-f8 diagonal, threatens to dismantle Black's queenside structure, and prepares c4 to crack open the lines toward the Black king.",
-      "arrows": [
-        {
-          "from": "c1",
-          "to": "a3",
-          "color": "rgba(50, 150, 220, 0.8)"
-        }
-      ],
-      "narration": "Ba3 — the killer move. White's bishop targets the a3-f8 diagonal, threatens to dismantle Black's queenside structure, and prepares c4 to crack open the lines toward the Black king.",
-      "shortNarration": "Ba3 targets the a3-f8 diagonal, threatens Black's queenside structure, and prepares c4 to open lines toward the king."
-    },
-    {
-      "san": "Qf6",
-      "annotation": "Qf6 protects the bishop and prepares ...Qg6 or ...Qh4 for kingside counterplay. Critical position — both kings exposed, both sides loaded for action.",
-      "arrows": [
-        {
-          "from": "e7",
-          "to": "f6",
-          "color": "rgba(50, 150, 220, 0.8)"
-        }
-      ],
-      "narration": "Qf6 protects the bishop and prepares ...Qg6 or ...Qh4 for kingside counterplay. Critical position — both kings exposed, both sides loaded for action.",
-      "shortNarration": "Both kings exposed; Qf6 protects the bishop and threatens Qg6 or Qh4 for kingside counterplay."
     }
   ],
   "subLines": [
@@ -2619,5 +2518,5 @@
       ]
     }
   ],
-  "openingId": "gambit-kings-gambit"
+  "openingId": "king-s-gambit-accepted-greco-gambit"
 }
