@@ -65,6 +65,19 @@ async function gotoFirstRepertoire(page: Page): Promise<string> {
   return id;
 }
 
+async function gotoOpeningDetail(page: Page, openingId: string): Promise<void> {
+  // Direct nav to `/openings/<id>` skips the explorer's seedDatabase()
+  // call — on a fresh Playwright context the Dexie store is empty and
+  // OpeningDetailPage's getOpeningById returns nothing, rendering
+  // "Opening not found." Always go through `/openings` first so the
+  // seed runs, then click into the target card by its data-testid.
+  await gotoExplorer(page);
+  const card = page.locator(`[data-testid="opening-card-${openingId}"]`).first();
+  await card.waitFor({ timeout: 15_000 });
+  await card.click();
+  await page.waitForSelector('[data-testid="opening-detail"]', { timeout: 15_000 });
+}
+
 test.describe('Openings Hub — full-tab audit', () => {
   // The detail page warms up generators (`generateWalkthroughNarrations`)
   // and the dev server emits big lazy chunks; parallel workers race for
@@ -419,8 +432,7 @@ test.describe('Openings Hub — full-tab audit', () => {
     // be completed in-page — it navigates to /coach/session/practice).
     // We assert the quiz card mounts and the CTA is reachable.
     const rec = recordPage(page);
-    await page.goto('/openings/italian-game');
-    await page.waitForSelector('[data-testid="opening-detail"]', { timeout: 30_000 });
+    await gotoOpeningDetail(page, 'italian-game');
     await expect(page.getByTestId('checkpoint-quiz')).toBeVisible({ timeout: 8000 });
     await expect(page.getByTestId('quiz-practice-full-board')).toBeVisible();
     // Hint affordance is only visible while the quiz is in `waiting` state.
@@ -430,8 +442,7 @@ test.describe('Openings Hub — full-tab audit', () => {
 
   test('MiddlegamePlansSection renders plan cards for Italian Game', async ({ page }) => {
     const rec = recordPage(page);
-    await page.goto('/openings/italian-game');
-    await page.waitForSelector('[data-testid="opening-detail"]', { timeout: 30_000 });
+    await gotoOpeningDetail(page, 'italian-game');
     await expect(page.getByTestId('middlegame-plans-section')).toBeVisible();
     // italian-game has 2 plans per src/data/middlegame-plans.json.
     const planCards = page.locator('[data-testid^="plan-card-"]');
@@ -444,8 +455,7 @@ test.describe('Openings Hub — full-tab audit', () => {
 
   test('CommonMistakesSection mounts and toggles individual mistakes', async ({ page }) => {
     const rec = recordPage(page);
-    await page.goto('/openings/italian-game');
-    await page.waitForSelector('[data-testid="opening-detail"]', { timeout: 30_000 });
+    await gotoOpeningDetail(page, 'italian-game');
     await expect(page.getByTestId('common-mistakes-section')).toBeVisible();
     // italian-game has 3 mistakes per src/data/common-mistakes.json.
     const mistakeRows = page.locator('[data-testid^="mistake-"]');
@@ -461,8 +471,7 @@ test.describe('Openings Hub — full-tab audit', () => {
 
   test('Woodpecker stats panel hidden when reps = 0 (fresh profile)', async ({ page }) => {
     const rec = recordPage(page);
-    await page.goto('/openings/italian-game');
-    await page.waitForSelector('[data-testid="opening-detail"]', { timeout: 30_000 });
+    await gotoOpeningDetail(page, 'italian-game');
     // Fresh seed: `woodpeckerReps = 0` so `wp-reps` should NOT render.
     // The panel is gated on `> 0`. A populated panel would render
     // `wp-reps` + `wp-speed`.
@@ -525,8 +534,7 @@ test.describe('Openings Hub — full-tab audit', () => {
   test('TrainMode controls render via train-traps-btn (smoke)', async ({ page }) => {
     const rec = recordPage(page);
     // Italian Game has trapLines, so train-traps-btn appears.
-    await page.goto('/openings/italian-game');
-    await page.waitForSelector('[data-testid="opening-detail"]', { timeout: 30_000 });
+    await gotoOpeningDetail(page, 'italian-game');
     const trainBtn = page.getByTestId('train-traps-btn');
     if (!(await trainBtn.isVisible().catch(() => false))) {
       test.skip(true, 'Italian Game lost its trapLines? Skipping.');
