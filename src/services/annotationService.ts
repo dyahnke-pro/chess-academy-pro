@@ -60,53 +60,140 @@ const PRO_SUFFIX_TO_SUBLINE: Record<string, string> = {
   'tarrasch-french': 'variation-3',
 };
 
-// Map pro-repertoire suffixes to base annotation IDs
+// Map pro-repertoire suffixes to base annotation IDs.
+//
+// CRITICAL: these values MUST match real files in
+// src/data/annotations/. The May-2026 orphan-rename pass converted
+// every annotation filename from British "Defence" to American
+// "Defense" + Lichess-canonical apostrophe-bearing names
+// ("kings-indian-defense" → "king-s-indian-defense"). Aliases that
+// still pointed at the old filenames silently returned null at
+// runtime, so every pro repertoire whose ID ended in one of these
+// suffixes lost its annotations. Run `node
+// scripts/verify-pro-suffix-bases.mjs` to validate after any edit.
 const PRO_SUFFIX_TO_BASE: Record<string, string> = {
-  'alapin': 'sicilian-alapin',
+  // ─── Sicilian family (sicilian-defense.json is the bare base;
+  // deeper variants for the specific lines that exist post-rename) ─
+  'alapin': 'sicilian-defense-alapin-variation',
+  'anti-sicilian': 'sicilian-defense-alapin-variation',
+  'najdorf': 'sicilian-defense-najdorf-variation-opocensky-variation-traditional-line',
+  'rossolimo': 'sicilian-defense',
+  'sicilian': 'sicilian-defense',
+  'sicilian-najdorf': 'sicilian-defense-najdorf-variation-opocensky-variation-traditional-line',
+  'sveshnikov': 'sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation',
+  // ─── Ruy Lopez family (unchanged; ruy-lopez.json still exists) ─
   'anti-berlin': 'ruy-lopez',
   'anti-marshall': 'ruy-lopez',
-  'anti-sicilian': 'sicilian-alapin',
-  'benko': 'benko-gambit',
-  'benoni': 'benoni-defence',
   'berlin': 'ruy-lopez',
-  'caro-kann': 'caro-kann',
-  'catalan': 'catalan-opening',
-  'dutch': 'dutch-defence',
-  'english': 'english-opening',
-  'englund': 'englund-gambit',
-  'fantasy-caro': 'caro-kann',
-  'french': 'french-defence',
-  'jobava-london': 'london-system',
-  'grunfeld': 'grunfeld-defence',
+  'ponziani': 'italian-game',
+  'ruy-lopez': 'ruy-lopez',
+  // ─── Italian / Two Knights / Evans ─
   'italian': 'italian-game',
-  'kia': 'kings-indian-attack',
-  'kid': 'kings-indian-defence',
-  'kings-gambit': 'kings-gambit',
+  // ─── Open games ─
+  'kings-gambit': 'king-s-gambit',
+  'petroff': 'petrov-s-defense',
+  'scotch': 'scotch-game',
+  'stafford': 'petrov-s-defense-stafford-gambit',
+  'stafford-refute': 'petrov-s-defense-stafford-gambit',
+  'vienna': 'vienna-game',
+  // ─── French ─
+  'french': 'french-defense',
+  'milner-barry': 'french-defense',
+  'tarrasch-french': 'french-defense',
+  // ─── Caro-Kann ─
+  'caro-kann': 'caro-kann-defense',
+  'fantasy-caro': 'caro-kann-defense',
+  // ─── Other 1.e4 ─
+  'scandinavian': 'scandinavian-defense',
+  // ─── 1.d4 Indian systems ─
+  'benoni': 'benoni-defense',
+  'benko': 'benko-gambit-accepted-central-storming-variation',
+  'dutch': 'dutch-defense',
+  'grunfeld': 'gr-nfeld-defense',
+  'kid': 'king-s-indian-defense',
+  'nimzo': 'nimzo-indian-defense',
+  // ─── Closed games (Queen's pawn) ─
+  'catalan': 'catalan-opening',
+  'jobava-london': 'london-system',
   'london': 'london-system',
   'london-d4': 'london-system',
-  'milner-barry': 'french-defence',
-  'najdorf': 'sicilian-najdorf',
-  'nimzo': 'nimzo-indian',
-  'petroff': 'petrov-defence',
-  'ponziani': 'italian-game',
-  'qgd': 'qgd',
-  'rossolimo': 'sicilian-sveshnikov',
-  'ruy-lopez': 'ruy-lopez',
-  'scandinavian': 'scandinavian-defence',
-  'scotch': 'scotch-game',
-  'semi-slav': 'semi-slav',
-  'sicilian': 'sicilian-najdorf',
-  'sicilian-najdorf': 'sicilian-najdorf',
-  'stafford': 'stafford-gambit',
-  'stafford-refute': 'stafford-gambit',
-  'sveshnikov': 'sicilian-sveshnikov',
-  'tarrasch-defense': 'qgd',
-  'tarrasch-french': 'french-defence',
-  'vienna': 'vienna-game',
+  'qgd': 'queen-s-gambit-declined',
+  'semi-slav': 'semi-slav-defense',
+  'tarrasch-defense': 'queen-s-gambit-declined-tarrasch-defense',
+  // ─── 1.Nf3 / 1.c4 ─
+  'english': 'english-opening',
+  'englund': 'englund-gambit',
+  'kia': 'king-s-indian-attack',
+};
+
+// Repertoire / gambits / one-off legacy IDs that pre-date the
+// May-2026 orphan-rename pass. Same class of drift as
+// PRO_SUFFIX_TO_BASE — the source JSONs (repertoire.json,
+// gambits.json) still slugify their IDs with the OLD rules
+// (apostrophe-stripped, British "-defence", umlaut-stripped) so
+// "King's Gambit" reads as `kings-gambit`. Annotation files were
+// renamed to the NEW slugify ("king-s-gambit"), so the bare-id
+// lookup misses. This map repairs the resolution.
+//
+// Locked by scripts/verify-annotation-resolution.test.ts — every
+// value must resolve to a real annotation file.
+const LEGACY_ID_TO_BASE: Record<string, string> = {
+  // Repertoire-list IDs (src/data/repertoire.json) ──────────────────
+  'sicilian-najdorf': 'sicilian-defense-najdorf-variation-opocensky-variation-traditional-line',
+  'sicilian-dragon': 'sicilian-defense-dragon-variation-yugoslav-attack-old-line',
+  'sicilian-sveshnikov': 'sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation',
+  'sicilian-alapin': 'sicilian-defense-alapin-variation',
+  'kings-gambit': 'king-s-gambit',
+  'french-defence': 'french-defense',
+  'caro-kann': 'caro-kann-defense',
+  'pirc-defence': 'pirc-defense',
+  'scandinavian-defence': 'scandinavian-defense',
+  'alekhine-defence': 'alekhine-defense',
+  'philidor-defence': 'philidor-defense',
+  'petrov-defence': 'petrov-s-defense',
+  'queens-gambit': 'queen-s-gambit',
+  'qgd': 'queen-s-gambit-declined',
+  'qga': 'queen-s-gambit-accepted',
+  'slav-defence': 'slav-defense',
+  'semi-slav': 'semi-slav-defense',
+  'kings-indian-defence': 'king-s-indian-defense',
+  'nimzo-indian': 'nimzo-indian-defense',
+  'grunfeld-defence': 'gr-nfeld-defense',
+  'dutch-defence': 'dutch-defense',
+  'benoni-defence': 'benoni-defense',
+  'benko-gambit': 'benko-gambit-accepted-central-storming-variation',
+  'queens-indian': 'queen-s-indian-defense',
+  'budapest-gambit': 'indian-defense-budapest-defense',
+  'old-indian-defence': 'old-indian-defense',
+  'reti-opening': 'r-ti-opening',
+  'kings-indian-attack': 'king-s-indian-attack',
+  'birds-opening': 'bird-opening',
+  'two-knights-defence': 'italian-game-two-knights-defense-modern-bishop-s-opening',
+  'evans-gambit': 'italian-game-evans-gambit',
+  'stafford-gambit': 'petrov-s-defense-stafford-gambit',
+  // Gambits-list IDs (src/data/gambits.json) ────────────────────────
+  // (Gambits use a `gambit-` prefix in their record IDs; the suffix
+  // after that prefix is the canonical gambit name.)
+  'gambit-kings-gambit': 'king-s-gambit',
+  'gambit-evans-gambit': 'italian-game-evans-gambit',
+  'gambit-budapest-gambit': 'indian-defense-budapest-defense',
+  'gambit-benko-gambit': 'benko-gambit-accepted-central-storming-variation',
+  'scotch-gambit': 'scotch-game-scotch-gambit',
+  'vienna-gambit': 'vienna-game-vienna-gambit',
+  'smith-morra-gambit': 'sicilian-defense-smith-morra-gambit',
+  'marshall-attack': 'ruy-lopez-marshall-attack',
+  'albin-countergambit': 'queen-s-gambit-declined-albin-countergambit',
 };
 
 function resolveAnnotationId(openingId: string): string {
   if (Object.hasOwn(ANNOTATION_MODULES, openingId)) return openingId;
+
+  // Legacy-id alias map first — covers repertoire/gambits IDs whose
+  // slug style pre-dates the May-2026 orphan-rename pass.
+  const legacyBase = LEGACY_ID_TO_BASE[openingId];
+  if (legacyBase && Object.hasOwn(ANNOTATION_MODULES, legacyBase)) {
+    return legacyBase;
+  }
 
   // Strip pro-<player>- prefix and try mapping
   const match = /^pro-[a-z]+-(.+)$/.exec(openingId);
@@ -126,12 +213,11 @@ function resolveAnnotationId(openingId: string): string {
   if (ecoStripped) {
     const bare = ecoStripped[1];
     if (Object.hasOwn(ANNOTATION_MODULES, bare)) return bare;
-    // Try American → British spelling as a second fallback (the
-    // annotation files use British "-defence" but Lichess uses
-    // American "-defense").
-    const britishised = bare.replace(/-defense$/, '-defence');
-    if (britishised !== bare && Object.hasOwn(ANNOTATION_MODULES, britishised)) {
-      return britishised;
+    // Last-chance: the legacy-id alias map covers any post-ECO-strip
+    // legacy slug (e.g. ECO entries whose name slugifies the old way).
+    const ecoLegacy = LEGACY_ID_TO_BASE[bare];
+    if (ecoLegacy && Object.hasOwn(ANNOTATION_MODULES, ecoLegacy)) {
+      return ecoLegacy;
     }
   }
 
