@@ -89,9 +89,12 @@ async function main() {
   const page = await ctx.newPage();
 
   const captured = [];
+  // Match by path-suffix rather than exact URL so dev-vs-prod base
+  // differences don't cause silent capture misses. Audit-stream POSTs
+  // hit `/api/audit-stream` regardless of host.
   page.on('request', (req) => {
     const u = req.url();
-    if (u === STREAM_URL && req.method() === 'POST') {
+    if (u.endsWith('/api/audit-stream') && req.method() === 'POST') {
       try {
         const body = req.postDataJSON?.();
         if (body && typeof body === 'object') captured.push(body);
