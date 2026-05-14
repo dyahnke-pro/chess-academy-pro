@@ -30,6 +30,12 @@ function autoMap(): Record<string, AnnotationLoader> {
   return out;
 }
 
+// Hand-registered legacy entries were removed after PR #506
+// (orphan-rename wave) — 41 of the 53 entries pointed at JSONs that
+// no longer exist on disk, so Vite crashed pre-transform with
+// "Failed to resolve import './kings-gambit.json'" before any page
+// could render. The auto-glob above covers every file actually
+// present, so the legacy block was dead weight + a build blocker.
 const ANNOTATION_MODULES: Record<string, AnnotationLoader> = {
   ...autoMap(),
   // Legacy hand-registered entries — the autoMap above already covers
