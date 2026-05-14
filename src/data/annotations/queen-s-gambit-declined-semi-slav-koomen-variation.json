@@ -44,7 +44,7 @@
     {
       "san": "e3",
       "annotation": "We're preparing to recapture the pawn with our bishop while simultaneously supporting our central pawn structure and preparing to castle. This quiet move is much more profound than it appears - it opens the diagonal for our light-squared bishop to recapture on c4, while also supporting potential f2-f3 advances or e3-e4 pawn breaks later. The move also prepares Be2 development and keeps our position flexible. By not rushing to recapture immediately, we maintain additional options and force Black to make more commitments before revealing our plans.",
-      "shortNarration": "Recapturing with the bishop on c4 opens the diagonal, supports central pawn breaks, and keeps options flexible."
+      "shortNarration": "Recapturing with the pawn on c4 opens the diagonal, supports central pawn breaks, and keeps options flexible."
     },
     {
       "san": "b5",

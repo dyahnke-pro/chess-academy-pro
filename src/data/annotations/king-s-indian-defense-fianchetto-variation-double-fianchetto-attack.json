@@ -13,8 +13,8 @@
     },
     {
       "san": "c4",
-      "annotation": "We're expanding our central control by supporting the d4 pawn and preventing Black from playing ...d5, which would give them equal central space. This move also prepares to fianchetto our light-squared bishop on g2, where it will have tremendous scope along the long diagonal. The c4 advance is characteristic of the English Opening systems and gives us excellent piece coordination possibilities. By controlling the d5 and b5 squares, we're also limiting Black's pawn breaks and forcing them to look for more creative ways to generate counterplay.",
-      "shortNarration": "c4 supports d4, prevents ...d5, and fianchettoes the bishop on g2 with long-diagonal scope."
+      "annotation": "We're expanding our central control by supporting the d4 pawn and preventing Black from playing ...d5, which would give them equal central space. This move also prepares to fianchetto our light-squared pawn on g2, where it will have tremendous scope along the long diagonal. The c4 advance is characteristic of the English Opening systems and gives us excellent piece coordination possibilities. By controlling the d5 and b5 squares, we're also limiting Black's pawn breaks and forcing them to look for more creative ways to generate counterplay.",
+      "shortNarration": "c4 supports d4, prevents ...d5, and fianchettoes the pawn on g2 with long-diagonal scope."
     },
     {
       "san": "g6",

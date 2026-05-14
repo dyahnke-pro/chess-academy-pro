@@ -39,7 +39,7 @@
     {
       "san": "Bb7",
       "annotation": "Our opponent completes the characteristic fianchetto of the Queen's Indian Defense, placing the bishop on its ideal square where it controls the long diagonal and particularly eyes our e4 square. This bishop will be a key defensive piece throughout the game, helping to prevent us from establishing a strong pawn center and providing long-range support for Black's position. The bishop also adds pressure to our kingside if we castle short, and it's notoriously difficult to dislodge from this strong diagonal. Black has now established the fundamental structure of the Queen's Indian, with solid development and good piece coordination.",
-      "shortNarration": "Black's fianchettoed bishop on g7 controls the long diagonal, eyeing e4 and adding kingside pressure if White castles short."
+      "shortNarration": "Black's fianchettoed pawn on g7 controls the long diagonal, eyeing e4 and adding kingside pressure if White castles short."
     },
     {
       "san": "Nc3",

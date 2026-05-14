@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich systems in chess. This move immediately stakes a claim to the central d5 and b5 squares while keeping our options completely open regarding pawn structure and piece development. Unlike 1.e4 or 1.d4, the English doesn't commit us to any particular pawn center early on, allowing us to adapt our setup based on Black's response. The c4 pawn also prepares potential expansion with d3 and e4, or we might fianchetto our king's bishop on g2 to create long-term pressure on the long diagonal.",
+      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich systems in chess. This move immediately stakes a claim to the central d5 and b5 squares while keeping our options completely open regarding pawn structure and piece development. Unlike 1.e4 or 1.d4, the English doesn't commit us to any particular pawn center early on, allowing us to adapt our setup based on Black's response. The c4 pawn also prepares potential expansion with d3 and e4, or we might fianchetto our king's pawn on g2 to create long-term pressure on the long diagonal.",
       "shortNarration": "1.c4 claims d5 and b5, keeps pawn structure flexible, and prepares fianchetto or d3/e4 expansion."
     },
     {

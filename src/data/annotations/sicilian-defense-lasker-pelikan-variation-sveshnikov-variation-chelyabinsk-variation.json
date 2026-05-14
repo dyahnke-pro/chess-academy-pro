@@ -92,7 +92,7 @@
     },
     {
       "san": "d4",
-      "annotation": "White plays d4, the defining move of the Open Sicilian. After the exchange, White gets a development lead, centralized knight on d4, and open lines — while Black gets the c-file and an asymmetric pawn structure.",
+      "annotation": "White plays d4, the defining move of the Open Sicilian. After the exchange, White gets a development lead, centralized pawn on d4, and open lines — while Black gets the c-file and an asymmetric pawn structure.",
       "plans": [
         "Recapture on d4 with the knight",
         "Build a central presence with Nc3 and e4"

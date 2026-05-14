@@ -39,7 +39,7 @@
     {
       "san": "Bb7",
       "annotation": "Black completes the fianchetto setup characteristic of the Queen's Indian Defense, placing the bishop on its most active diagonal where it can influence the central light squares for the entire game. This powerful bishop exerts pressure on our e4 square and d4 pawn, making it more difficult for us to achieve the ideal pawn center with e4. The bishop also supports Black's potential ...d5 break and provides excellent long-term piece activity along the long diagonal. However, this setup does take time, and we might be able to exploit Black's slower development with more immediate central pressure.",
-      "shortNarration": "Black's fianchettoed bishop on g7 pressures e4 and d4, supporting ...d5, but Black's slower development invites immediate central pressure."
+      "shortNarration": "Black's fianchettoed pawn on g7 pressures e4 and d4, supporting ...d5, but Black's slower development invites immediate central pressure."
     },
     {
       "san": "Bg5",

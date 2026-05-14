@@ -38,13 +38,13 @@
     },
     {
       "san": "e6",
-      "annotation": "Black supports their pawn on f6 and prepares to develop the light-squared bishop, while also controlling the important d5 and f5 squares. Our opponent is building a solid pawn chain and preparing to complete kingside development safely. This move also prevents any potential knight jumps to d5 and gives Black's king additional escape squares should we create threats later. By playing e6, Black is opting for a classical, solid setup rather than more adventurous alternatives like Bg4 or c6.",
+      "annotation": "Black supports their knight on f6 and prepares to develop the light-squared bishop, while also controlling the important d5 and f5 squares. Our opponent is building a solid pawn chain and preparing to complete kingside development safely. This move also prevents any potential knight jumps to d5 and gives Black's king additional escape squares should we create threats later. By playing e6, Black is opting for a classical, solid setup rather than more adventurous alternatives like Bg4 or c6.",
       "shortNarration": "e6 solidifies the pawn chain, controls d5 and f5, and prepares kingside development while denying knight jumps to d5."
     },
     {
       "san": "Bxc4",
       "annotation": "We're finally recapturing our sacrificed pawn, restoring material equality while developing our light-squared bishop to an excellent central square. From c4, this bishop eyes the f7 square (a common weakness in Black's position) and controls the important a2-g8 diagonal. The bishop also supports potential central advances and puts pressure on Black's kingside, making it harder for our opponent to castle comfortably. This natural recapture completes the basic strategic goal of the Queen's Gambit - we've regained our pawn while achieving superior piece activity.",
-      "shortNarration": "Recapturing the pawn on c4 restores material equality while developing the bishop to c4, eyeing f7 and the a2-g8 diagonal to pressure Black's kingside."
+      "shortNarration": "Recapturing the bishop on c4 restores material equality while developing the bishop to c4, eyeing f7 and the a2-g8 diagonal to pressure Black's kingside."
     },
     {
       "san": "c5",

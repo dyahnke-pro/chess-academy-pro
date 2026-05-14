@@ -3,8 +3,8 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, which is a flexible and positional choice that aims to control the center from a distance rather than occupying it immediately. This move stakes a claim to the important d5 and b5 squares while preparing to fianchetto our light-squared bishop on g2 in many lines. The English is beloved by positional players because it often leads to rich middlegame structures where we can gradually build pressure and outmaneuver our opponent. By starting with c4, we're inviting Black to establish a pawn center with moves like e5 and d5, which we can then challenge with our pieces and pawns later.",
-      "shortNarration": "c4 stakes a claim to d5 and b5, preparing to fianchetto the bishop on g2 and challenge Black's center later."
+      "annotation": "We're opening with the English Opening, which is a flexible and positional choice that aims to control the center from a distance rather than occupying it immediately. This move stakes a claim to the important d5 and b5 squares while preparing to fianchetto our light-squared pawn on g2 in many lines. The English is beloved by positional players because it often leads to rich middlegame structures where we can gradually build pressure and outmaneuver our opponent. By starting with c4, we're inviting Black to establish a pawn center with moves like e5 and d5, which we can then challenge with our pieces and pawns later.",
+      "shortNarration": "c4 stakes a claim to d5 and b5, preparing to fianchetto the pawn on g2 and challenge Black's center later."
     },
     {
       "san": "e5",

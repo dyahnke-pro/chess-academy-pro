@@ -64,7 +64,7 @@
     {
       "san": "Bxf6",
       "annotation": "We're trading our bishop for Black's knight, a decision that damages Black's pawn structure while eliminating one of their most active pieces and opening lines toward Black's king. This exchange creates doubled f-pawns for Black, giving us a long-term structural advantage and potentially weakening Black's kingside pawn cover. The trade also opens the g-file, which could become significant if we later castle queenside or bring our rook to the g-file. In the Anti-Tartakower variation, this immediate capture is preferred over retreating the bishop because we prioritize creating concrete weaknesses in Black's position over maintaining the bishop pair, setting up a middlegame where we can pressure Black's structural defects.",
-      "shortNarration": "Trading bishop for knight on f6 doubles Black's f-pawns, opens the g-file, and weakens kingside cover for a long-term structural edge."
+      "shortNarration": "Trading bishop for bishop on f6 doubles Black's f-pawns, opens the g-file, and weakens kingside cover for a long-term structural edge."
     }
   ]
 }

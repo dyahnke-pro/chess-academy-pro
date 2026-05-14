@@ -48,7 +48,7 @@
     },
     {
       "san": "cxd4",
-      "annotation": "Black recaptures our d4 pawn with their c-pawn, maintaining material equality while opening up the center dramatically. This capture creates an immediate tactical situation since our pawn on c3 is now attacked by the new pawn on d4. Our opponent is following the natural recapture and likely preparing to continue with ...exd5 next, which would create a symmetrical pawn structure. This move leads to sharp, tactical play where both sides need to be very careful about piece coordination and king safety.",
+      "annotation": "Black recaptures our d4 pawn with their c-pawn, maintaining material equality while opening up the center dramatically. This capture creates an immediate tactical situation since our knight on c3 is now attacked by the new pawn on d4. Our opponent is following the natural recapture and likely preparing to continue with ...exd5 next, which would create a symmetrical pawn structure. This move leads to sharp, tactical play where both sides need to be very careful about piece coordination and king safety.",
       "shortNarration": "Black recaptures on d4 with the c-pawn, attacking c3 and opening the center for sharp tactical play."
     },
     {
@@ -74,7 +74,7 @@
     {
       "san": "Qxd8+",
       "annotation": "We're delivering check by capturing Black's queen with our queen, forcing an immediate queen trade and dramatically simplifying the position. This move is the hallmark of the 'Endgame Variation' as it leads directly to an endgame where both sides have given up their queens very early in the game. By forcing this queen trade, we're steering the game toward a more technical, endgame-oriented struggle where pawn structure and piece activity become paramount. This variation requires deep endgame understanding since the resulting positions, while theoretically equal, offer both sides chances to outplay their opponent through superior technique and understanding of the resulting pawn structures.",
-      "shortNarration": "Queen captures queen on f6 forces the trade, simplifying into an early endgame where pawn structure and piece activity decide."
+      "shortNarration": "Queen captures knight on f6 forces the trade, simplifying into an early endgame where pawn structure and piece activity decide."
     }
   ]
 }

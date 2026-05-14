@@ -38,8 +38,8 @@
     },
     {
       "san": "e5",
-      "annotation": "Black strikes back in the center with this thematic pawn advance, immediately attacking our d4 pawn and gaining space on the kingside. This move is the point of Black's setup - the queen on d5 and pawn on c6 both support this central break, creating immediate threats and opening lines for piece development. Our opponent is refusing to retreat passively and instead chooses to create maximum complications in the center. We'll need to handle this central tension carefully, as Black is generating real counterplay and piece activity.",
-      "shortNarration": "Black's c5 advance attacks d4, supported by queen on d5 and pawn on c6, creating central tension and piece activity."
+      "annotation": "Black strikes back in the center with this thematic pawn advance, immediately attacking our d4 pawn and gaining space on the kingside. This move is the point of Black's setup - the queen on d5 and knight on c6 both support this central break, creating immediate threats and opening lines for piece development. Our opponent is refusing to retreat passively and instead chooses to create maximum complications in the center. We'll need to handle this central tension carefully, as Black is generating real counterplay and piece activity.",
+      "shortNarration": "Black's c5 advance attacks d4, supported by queen on d5 and knight on c6, creating central tension and piece activity."
     },
     {
       "san": "Nc3",
@@ -59,7 +59,7 @@
     {
       "san": "Bxc3",
       "annotation": "Black exchanges the bishop for our knight, a critical decision that eliminates our defender of d4 but also gives up the valuable dark-squared bishop. This exchange is typical in Chigorin structures - Black damages our pawn structure by forcing us to recapture with the b-pawn, creating doubled pawns and opening the b-file. However, Black also gives us the bishop pair and removes a key piece that was supporting the e5 pawn. Our opponent is betting that the structural damage and piece activity will provide sufficient compensation for the bishop.",
-      "shortNarration": "Black trades the dark-squared bishop for the knight on c3, doubling our b-pawns but giving us the bishop pair and opening the b-file."
+      "shortNarration": "Black trades the dark-squared bishop for the bishop on c3, doubling our b-pawns but giving us the bishop pair and opening the b-file."
     },
     {
       "san": "Bxc3",

@@ -44,7 +44,7 @@
     {
       "san": "Bg5",
       "annotation": "We're developing our light-squared bishop to an aggressive square, pinning Black's knight to their queen and creating immediate tactical pressure. This bishop move is a key part of many Queen's Gambit systems, as it develops with tempo while creating concrete threats that Black must address. The pin on the f6 knight restricts Black's options and prepares potential tactics involving the knight's removal. However, we must be prepared for Black's typical responses like h6, which will force us to make a decision about maintaining the pin or retreating the bishop.",
-      "shortNarration": "Bishop pins knight to queen on f6, developing with tempo and creating immediate tactical pressure."
+      "shortNarration": "Bishop pins knight to knight on f6, developing with tempo and creating immediate tactical pressure."
     },
     {
       "san": "h6",

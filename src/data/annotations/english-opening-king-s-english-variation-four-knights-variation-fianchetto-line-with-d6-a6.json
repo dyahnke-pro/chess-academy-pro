@@ -13,8 +13,8 @@
     },
     {
       "san": "Nc3",
-      "annotation": "We develop our knight to its most active square, where it supports a future d4 advance while keeping maximum flexibility in our setup. From c3, the knight eyes the central e4 square and can potentially reroute to d5 or e4 depending on how the position develops. This move is also preparing for the King's English setup, where we'll often fianchetto our king's bishop and create a harmonious piece arrangement. The knight on c3 works beautifully with a potential bishop on g2, creating pressure along the long diagonal while supporting central advances.",
-      "shortNarration": "Knight to c3 eyes e4 and d5, supports d4, and pairs with a fianchettoed bishop on g2 for long-diagonal pressure."
+      "annotation": "We develop our knight to its most active square, where it supports a future d4 advance while keeping maximum flexibility in our setup. From c3, the knight eyes the central e4 square and can potentially reroute to d5 or e4 depending on how the position develops. This move is also preparing for the King's English setup, where we'll often fianchetto our king's bishop and create a harmonious piece arrangement. The knight on c3 works beautifully with a potential pawn on g2, creating pressure along the long diagonal while supporting central advances.",
+      "shortNarration": "Knight to c3 eyes e4 and d5, supports d4, and pairs with a fianchettoed pawn on g2 for long-diagonal pressure."
     },
     {
       "san": "Nf6",
@@ -33,7 +33,7 @@
     },
     {
       "san": "g3",
-      "annotation": "We begin our signature King's English setup with the fianchetto of our light-squared bishop, one of the most harmonious ways to develop in this structure. The move g3 prepares Bg2, where our bishop will eye the long diagonal and put pressure on Black's central pawns, particularly if Black ever plays d6. This fianchetto setup works beautifully with our pawn on f3 and the potential central advance d3-e4, creating a flexible and sound piece arrangement. The King's English fianchetto is beloved by positional players because it creates long-term pressure without committing to any particular pawn breaks, keeping our options open for both e4 and d4 advances depending on how Black continues.",
+      "annotation": "We begin our signature King's English setup with the fianchetto of our light-squared bishop, one of the most harmonious ways to develop in this structure. The move g3 prepares Bg2, where our bishop will eye the long diagonal and put pressure on Black's central pawns, particularly if Black ever plays d6. This fianchetto setup works beautifully with our knight on f3 and the potential central advance d3-e4, creating a flexible and sound piece arrangement. The King's English fianchetto is beloved by positional players because it creates long-term pressure without committing to any particular pawn breaks, keeping our options open for both e4 and d4 advances depending on how Black continues.",
       "shortNarration": "g3 fianchettoes the bishop to g2, pressuring Black's center and keeping options open for e4 or d4."
     },
     {

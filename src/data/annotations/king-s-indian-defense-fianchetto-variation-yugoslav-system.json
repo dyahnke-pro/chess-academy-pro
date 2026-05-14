@@ -8,8 +8,8 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while preparing to fianchetto the king's bishop on g7. This signals that our opponent is likely heading for either a King's Indian Defense or Grünfeld Defense setup, both of which involve dynamic counterplay against our center. The knight on f6 also controls important central squares like e4 and d5, preventing us from establishing a broad pawn center too easily. We should be prepared for Black to create imbalances and fight for the initiative through piece activity rather than central pawn control.",
-      "shortNarration": "Black challenges d4 with the knight, fianchettoing the bishop on g7 — typical King's Indian or Grünfeld setup with dynamic counterplay against the center."
+      "annotation": "Black immediately challenges our central pawn with the most active move, attacking d4 while preparing to fianchetto the king's pawn on g7. This signals that our opponent is likely heading for either a King's Indian Defense or Grünfeld Defense setup, both of which involve dynamic counterplay against our center. The knight on f6 also controls important central squares like e4 and d5, preventing us from establishing a broad pawn center too easily. We should be prepared for Black to create imbalances and fight for the initiative through piece activity rather than central pawn control.",
+      "shortNarration": "Black challenges d4 with the knight, fianchettoing the pawn on g7 — typical King's Indian or Grünfeld setup with dynamic counterplay against the center."
     },
     {
       "san": "c4",
@@ -33,7 +33,7 @@
     },
     {
       "san": "g3",
-      "annotation": "We're committing to our own fianchetto setup, preparing to place our light-squared bishop on g2 where it will control the long diagonal and support our central pawns. This move creates a harmonious pawn structure that complements our pieces beautifully – the bishop on g2 will work in tandem with our pawn on f3 and the eventual castle kingside. The Yugoslav System is characterized by this fianchetto approach, leading to rich middlegame positions where both sides have clear plans but plenty of room for creativity. By matching Black's fianchetto, we're preparing for a strategic battle where piece coordination and long-term planning will be more important than immediate tactics.",
+      "annotation": "We're committing to our own fianchetto setup, preparing to place our light-squared bishop on g2 where it will control the long diagonal and support our central pawns. This move creates a harmonious pawn structure that complements our pieces beautifully – the bishop on g2 will work in tandem with our knight on f3 and the eventual castle kingside. The Yugoslav System is characterized by this fianchetto approach, leading to rich middlegame positions where both sides have clear plans but plenty of room for creativity. By matching Black's fianchetto, we're preparing for a strategic battle where piece coordination and long-term planning will be more important than immediate tactics.",
       "shortNarration": "Fianchettoing the light-squared bishop to g2 controls the long diagonal and supports the kingside castle in the Yugoslav System."
     },
     {

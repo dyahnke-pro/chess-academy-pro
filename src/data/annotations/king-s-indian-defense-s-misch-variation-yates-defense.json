@@ -8,8 +8,8 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the Réti move, attacking the d4 pawn and preparing to fianchetto the king's bishop on g7. This is a hypermodern approach - rather than occupying the center with pawns immediately, Black is preparing to control it from the flanks with pieces. The knight on f6 also keeps many options open, as Black hasn't committed to any particular pawn structure yet.",
-      "shortNarration": "Black's Réti challenges d4, fianchettoes the king's bishop on g7, and keeps the knight on f6 flexible."
+      "annotation": "Black immediately challenges our central pawn with the Réti move, attacking the d4 pawn and preparing to fianchetto the king's pawn on g7. This is a hypermodern approach - rather than occupying the center with pawns immediately, Black is preparing to control it from the flanks with pieces. The knight on f6 also keeps many options open, as Black hasn't committed to any particular pawn structure yet.",
+      "shortNarration": "Black's Réti challenges d4, fianchettoes the king's pawn on g7, and keeps the knight on f6 flexible."
     },
     {
       "san": "c4",

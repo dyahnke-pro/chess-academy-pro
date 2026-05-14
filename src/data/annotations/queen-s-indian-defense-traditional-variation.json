@@ -18,8 +18,8 @@
     },
     {
       "san": "e6",
-      "annotation": "Black chooses the Queen's Indian Defense setup by preparing to fianchetto the light-squared bishop on b7, while also supporting a potential ...d5 break in the future. The e6 pawn controls the important d5 and f5 squares, preventing us from immediately advancing with e4-e5 and limiting our knight's access to d5. This move is more flexible than the immediate ...d5, as it keeps the center fluid and allows Black to see how we develop before committing to a specific pawn structure. The Queen's Indian is a solid, hypermodern defense that aims to control light squares and create counterplay along the long diagonal.",
-      "shortNarration": "Black fianchettoes the light-squared bishop on b7, supporting a future ...d5 break while e6 controls d5 and f5."
+      "annotation": "Black chooses the Queen's Indian Defense setup by preparing to fianchetto the light-squared pawn on b7, while also supporting a potential ...d5 break in the future. The e6 pawn controls the important d5 and f5 squares, preventing us from immediately advancing with e4-e5 and limiting our knight's access to d5. This move is more flexible than the immediate ...d5, as it keeps the center fluid and allows Black to see how we develop before committing to a specific pawn structure. The Queen's Indian is a solid, hypermodern defense that aims to control light squares and create counterplay along the long diagonal.",
+      "shortNarration": "Black fianchettoes the light-squared pawn on b7, supporting a future ...d5 break while e6 controls d5 and f5."
     },
     {
       "san": "Nf3",

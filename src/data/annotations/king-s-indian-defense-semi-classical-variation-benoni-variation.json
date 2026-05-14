@@ -8,8 +8,8 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central d4 pawn with the knight, a key idea in hypermodern openings like the King's Indian Defense. This move puts pressure on our center while developing a piece toward an active square, and it prepares to support a future ...e5 or ...d5 pawn break. Our opponent is following hypermodern principles by attacking the center from the flanks rather than occupying it directly with pawns. We should be prepared for Black to fianchetto the king's bishop on g7 and create a powerful long-range piece aimed at our center and queenside.",
-      "shortNarration": "Black's knight challenges d4, preparing ...e5 or ...d5 and a fianchettoed bishop on g7."
+      "annotation": "Black immediately challenges our central d4 pawn with the knight, a key idea in hypermodern openings like the King's Indian Defense. This move puts pressure on our center while developing a piece toward an active square, and it prepares to support a future ...e5 or ...d5 pawn break. Our opponent is following hypermodern principles by attacking the center from the flanks rather than occupying it directly with pawns. We should be prepared for Black to fianchetto the king's pawn on g7 and create a powerful long-range piece aimed at our center and queenside.",
+      "shortNarration": "Black's knight challenges d4, preparing ...e5 or ...d5 and a fianchettoed pawn on g7."
     },
     {
       "san": "c4",

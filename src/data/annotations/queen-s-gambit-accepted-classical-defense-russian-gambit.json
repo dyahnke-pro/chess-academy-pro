@@ -13,7 +13,7 @@
     },
     {
       "san": "c4",
-      "annotation": "Here's the famous Queen's Gambit offer! We're attacking Black's central d5 pawn, not because we want to win it (we can't actually win it by force), but because we want to deflect it from the center and gain a tempo for development. If Black captures on c4, we'll recapture quickly and have gained time while Black's pawn structure becomes slightly compromised. The move also prepares to fianchetto our light-squared bishop on g2 in some variations, and it fights for control of the important d5 and b5 squares. This gambit has been tested at the highest levels for over a century because it offers White excellent practical chances for a slight but lasting initiative.",
+      "annotation": "Here's the famous Queen's Gambit offer! We're attacking Black's central d5 pawn, not because we want to win it (we can't actually win it by force), but because we want to deflect it from the center and gain a tempo for development. If Black captures on c4, we'll recapture quickly and have gained time while Black's pawn structure becomes slightly compromised. The move also prepares to fianchetto our light-squared pawn on g2 in some variations, and it fights for control of the important d5 and b5 squares. This gambit has been tested at the highest levels for over a century because it offers White excellent practical chances for a slight but lasting initiative.",
       "shortNarration": "Queen's Gambit deflects the d5 pawn to gain a tempo and control d5 and b5 squares."
     },
     {
@@ -63,7 +63,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We establish our ideal pawn center with this powerful advance, gaining space and activating our pieces dramatically. The e4 pawn works together with our d4 pawn to control crucial central squares like f5, e5, d5, and c5, while also opening lines for our pieces to create attacking chances. This advance is the culmination of our opening strategy - we've developed our pieces harmoniously and now strike in the center to seize the initiative. Black's pawn on f6 is now under pressure and must find a new home, while we threaten to continue expanding with moves like d5 or e5. The Russian Gambit variation gets its name because Black will now need to create sharp counterplay to justify the opening choice, as we've achieved an excellent position with superior space and piece activity.",
+      "annotation": "We establish our ideal pawn center with this powerful advance, gaining space and activating our pieces dramatically. The e4 pawn works together with our d4 pawn to control crucial central squares like f5, e5, d5, and c5, while also opening lines for our pieces to create attacking chances. This advance is the culmination of our opening strategy - we've developed our pieces harmoniously and now strike in the center to seize the initiative. Black's knight on f6 is now under pressure and must find a new home, while we threaten to continue expanding with moves like d5 or e5. The Russian Gambit variation gets its name because Black will now need to create sharp counterplay to justify the opening choice, as we've achieved an excellent position with superior space and piece activity.",
       "shortNarration": "e4 advances the pawn center, pressuring f6 and threatening d5 or e5 with superior space and piece activity."
     }
   ]

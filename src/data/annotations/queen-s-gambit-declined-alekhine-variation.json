@@ -34,7 +34,7 @@
     {
       "san": "Bg5",
       "annotation": "We're pinning Black's knight to their queen, creating immediate tactical pressure and making it difficult for our opponent to maintain their comfortable development. This bishop move is a key element of many Queen's Gambit systems because it not only develops a piece actively but also creates concrete threats that Black must address. The pin means that if Black moves their knight from f6, they'll lose their queen, so this forces them to either break the pin with a move like Be7 or h6, or accept the pin and work around it. This move also prepares us for potential discoveries if the knight moves, and it puts pressure on Black's kingside before they can castle safely.",
-      "shortNarration": "Bishop pins knight to queen on f6, forcing Black to break the pin with Be7 or h6 before castling."
+      "shortNarration": "Bishop pins knight to knight on f6, forcing Black to break the pin with Be7 or h6 before castling."
     },
     {
       "san": "Nbd7",

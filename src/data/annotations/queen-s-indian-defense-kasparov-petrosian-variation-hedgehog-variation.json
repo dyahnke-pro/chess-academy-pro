@@ -49,7 +49,7 @@
     {
       "san": "g6",
       "annotation": "Our opponent initiates the Hedgehog Variation by preparing to fianchetto the dark-squared bishop, creating a flexible defensive structure that resembles a hedgehog's spines. This move signals Black's intention to play a hypermodern setup with bishops on both long diagonals, creating a solid but somewhat passive position. The g6 advance also prepares kingside castling while giving the king additional safety on the fianchettoed kingside. However, this move does create some weakening around the king, particularly on the dark squares like f6 and h6, which we might be able to exploit with careful play.",
-      "shortNarration": "Black fianchettoes the dark-squared bishop on g6, preparing a hypermodern setup with bishops on both long diagonals, but weakens dark squares like f6 and h6."
+      "shortNarration": "Black fianchettoes the dark-squared pawn on g6, preparing a hypermodern setup with bishops on both long diagonals, but weakens dark squares like f6 and h6."
     }
   ]
 }

@@ -8,7 +8,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Our opponent develops the knight to its ideal square, attacking our d4 pawn and preparing to fianchetto the king's bishop on g7. This move signals that Black is likely heading for a King's Indian Defense setup, where they'll castle kingside and look for counterplay on the kingside later in the game. The knight on f6 also controls important central squares like e4 and d5, making it harder for us to establish a dominant pawn center immediately. We should expect Black to follow up with moves like g6, Bg7, and castling kingside.",
+      "annotation": "Our opponent develops the knight to its ideal square, attacking our d4 pawn and preparing to fianchetto the king's pawn on g7. This move signals that Black is likely heading for a King's Indian Defense setup, where they'll castle kingside and look for counterplay on the kingside later in the game. The knight on f6 also controls important central squares like e4 and d5, making it harder for us to establish a dominant pawn center immediately. We should expect Black to follow up with moves like g6, Bg7, and castling kingside.",
       "shortNarration": "Black's knight to f6 attacks d4, prepares g6 and Bg7 for a King's Indian setup, and controls e4 and d5."
     },
     {
@@ -33,12 +33,12 @@
     },
     {
       "san": "e4",
-      "annotation": "We're establishing the ideal pawn center, creating what's known as the 'classical center' with pawns on d4 and e4 controlling key central squares. This advance gives us a significant space advantage and restricts Black's piece mobility, particularly limiting the movements of the pawn on f6. Our pawn center also opens diagonals for our bishops and creates potential attacking chances on the kingside. However, we must be prepared for Black's typical counterplay with moves like ...e5 or ...c5, which will challenge our central dominance and open lines for Black's pieces.",
+      "annotation": "We're establishing the ideal pawn center, creating what's known as the 'classical center' with pawns on d4 and e4 controlling key central squares. This advance gives us a significant space advantage and restricts Black's piece mobility, particularly limiting the movements of the knight on f6. Our pawn center also opens diagonals for our bishops and creates potential attacking chances on the kingside. However, we must be prepared for Black's typical counterplay with moves like ...e5 or ...c5, which will challenge our central dominance and open lines for Black's pieces.",
       "shortNarration": "Pawns on d4 and e4 control the center, restrict Black's f6 pawn, and open diagonals for bishops, but Black can counter with ...e5 or ...c5."
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies the position by supporting a future ...e5 pawn break while also opening a retreat square for the pawn on f6 if it gets attacked. This move is essential preparation for the typical King's Indian pawn storm, as it allows the e7 pawn to advance to e5 and challenge our center. The d6 pawn also provides additional control over important central squares like c5 and e5. Our opponent is showing patience, building a solid foundation before launching the typical King's Indian counterattack that often comes with moves like ...e5, ...exd4, and kingside pawn advances.",
+      "annotation": "Black solidifies the position by supporting a future ...e5 pawn break while also opening a retreat square for the knight on f6 if it gets attacked. This move is essential preparation for the typical King's Indian pawn storm, as it allows the e7 pawn to advance to e5 and challenge our center. The d6 pawn also provides additional control over important central squares like c5 and e5. Our opponent is showing patience, building a solid foundation before launching the typical King's Indian counterattack that often comes with moves like ...e5, ...exd4, and kingside pawn advances.",
       "shortNarration": "Black's d6 supports ...e5, controls c5 and e5, and prepares the King's Indian pawn storm."
     },
     {
@@ -54,7 +54,7 @@
     {
       "san": "Bg5",
       "annotation": "We're implementing the Steiner Attack by pinning the knight on f6 to the queen, creating immediate tactical pressure and forcing Black to make difficult decisions. This bishop move is more forcing than the typical Be3, as it directly attacks Black's kingside pieces and limits their mobility. The pin creates potential tactics - if Black plays carelessly, we might win material or launch a decisive attack. Our opponent must now decide whether to break the pin with moves like ...h6, accept the doubled pawns after ...Bxf6, or try to live with the pin while organizing counterplay. This aggressive bishop placement perfectly embodies the fighting spirit of the Steiner Attack system.",
-      "shortNarration": "Bishop pins knight to queen on f6, forcing Black to break the pin, accept doubled pawns, or live with the pressure."
+      "shortNarration": "Bishop pins knight to knight on f6, forcing Black to break the pin, accept doubled pawns, or live with the pressure."
     }
   ]
 }

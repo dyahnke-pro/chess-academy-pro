@@ -39,7 +39,7 @@
     {
       "san": "Bg4",
       "annotation": "Black develops the bishop to an active square, pinning our knight to the queen and creating immediate tactical pressure in the center. This is the central idea of the Janowski-Larsen Variation, where Black seeks active piece play to compensate for the lack of central pawns. The bishop on g4 also prepares potential tactics involving the pin and makes it harder for us to play e4 immediately since the knight is somewhat restricted. We need to be careful about how we break this pin - moves like Be2, h3, or Nbd2 all have different positional implications that will shape the middlegame character.",
-      "shortNarration": "Black's bishop pins the knight to the queen on g4, restricting e4 and creating tactical pressure in the center."
+      "shortNarration": "Black's bishop pins the knight to the bishop on g4, restricting e4 and creating tactical pressure in the center."
     }
   ]
 }

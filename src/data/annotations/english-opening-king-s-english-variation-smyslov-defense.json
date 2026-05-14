@@ -3,8 +3,8 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich choices available. This move immediately stakes a claim on the central d5 square and prepares to fianchetto our king's bishop on g2, creating a powerful long diagonal battery. The English is beloved by positional players because it allows us to develop harmoniously while keeping our central pawn structure flexible - we can transpose into many different setups depending on how Black responds. Unlike 1.e4 or 1.d4, the English doesn't immediately occupy the center but controls it from afar, embodying the hypermodern principle of central control through pieces rather than pawns.",
-      "shortNarration": "The English Opening controls d5 from afar, preparing a fianchettoed bishop on g2 for flexible central pressure."
+      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich choices available. This move immediately stakes a claim on the central d5 square and prepares to fianchetto our king's pawn on g2, creating a powerful long diagonal battery. The English is beloved by positional players because it allows us to develop harmoniously while keeping our central pawn structure flexible - we can transpose into many different setups depending on how Black responds. Unlike 1.e4 or 1.d4, the English doesn't immediately occupy the center but controls it from afar, embodying the hypermodern principle of central control through pieces rather than pawns.",
+      "shortNarration": "The English Opening controls d5 from afar, preparing a fianchettoed pawn on g2 for flexible central pressure."
     },
     {
       "san": "e5",

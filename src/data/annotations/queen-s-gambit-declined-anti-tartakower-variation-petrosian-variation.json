@@ -54,7 +54,7 @@
     {
       "san": "Bxf6",
       "annotation": "We decide to capture the knight, accepting the trade of our developed bishop for Black's well-placed knight while damaging our opponent's kingside pawn structure. This exchange gives Black doubled f-pawns, which can be a long-term weakness, but it also eliminates one of our active pieces and hands Black the bishop pair. This is the principled continuation of our aggressive Bg5 setup - we're trading our bishop for concrete structural damage to Black's position. The exchange also opens the g-file, which could become important if Black castles kingside, and it eliminates a key defender of Black's dark squares.",
-      "shortNarration": "Trading bishop for knight on f6 gives Black doubled f-pawns and the bishop pair, but opens the g-file and weakens Black's dark squares."
+      "shortNarration": "Trading bishop for bishop on f6 gives Black doubled f-pawns and the bishop pair, but opens the g-file and weakens Black's dark squares."
     },
     {
       "san": "Bxf6",

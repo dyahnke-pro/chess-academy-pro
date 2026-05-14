@@ -34,7 +34,7 @@
     {
       "san": "Bg5",
       "annotation": "We're developing our bishop to an active square where it pins Black's knight to their queen, creating immediate tactical pressure and forcing Black to think carefully about their next moves. This bishop on g5 is a classical developing choice that serves multiple purposes: it completes our development, puts pressure on Black's kingside, and gives us the option of capturing on f6 to double Black's pawns if the position calls for it. The pin also makes it more difficult for Black to play logical choices like h6 or develop their pieces freely. This setup with Bg5 is one of the main systems against the Queen's Gambit Declined, leading to rich middlegame positions where we often have slight pressure.",
-      "shortNarration": "Bishop to g5 pins the knight to the queen, developing with pressure and threatening to double Black's pawns on f6."
+      "shortNarration": "Bishop to g5 pins the knight to the queen, developing with pressure and threatening to double Black's knights on f6."
     },
     {
       "san": "c6",

@@ -49,7 +49,7 @@
     {
       "san": "Bb4",
       "annotation": "Black develops their dark-squared bishop with tempo, pinning our knight to the king and complicating our plans to immediately regain the c4 pawn. This active piece development is typical of the Semi-Slav, where Black seeks counterplay through piece activity rather than passive defense. The bishop on b4 also supports the c4 pawn indirectly and puts pressure on our position, forcing us to deal with the pin before proceeding with our plans. However, the bishop can become a target later, and Black must be careful about maintaining its activity.",
-      "shortNarration": "Black's dark-squared bishop pins the knight to the king on b4, supporting c4 and forcing us to address the pin before regaining the pawn."
+      "shortNarration": "Black's dark-squared bishop pins the knight to the bishop on b4, supporting c4 and forcing us to address the pin before regaining the pawn."
     },
     {
       "san": "e3",

@@ -3,8 +3,8 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move characterizes the Queen's Indian Defense setup we're heading toward - a more positional, strategic battle compared to the tactical complications of 1.e4. The d4 opening typically leads to rich middlegame positions where understanding pawn structures and piece coordination becomes crucial. Our plan is to build a strong pawn center and develop our pieces to active squares, particularly focusing on controlling the long diagonal with our future fianchettoed bishop on g2.",
-      "shortNarration": "1.d4 stakes a claim to e5 and c5, aiming for a Queen's Indian with a fianchettoed bishop on g2."
+      "annotation": "We're opening with the queen's pawn, immediately staking a claim to the central e5 and c5 squares while preparing to develop our pieces harmoniously. This move characterizes the Queen's Indian Defense setup we're heading toward - a more positional, strategic battle compared to the tactical complications of 1.e4. The d4 opening typically leads to rich middlegame positions where understanding pawn structures and piece coordination becomes crucial. Our plan is to build a strong pawn center and develop our pieces to active squares, particularly focusing on controlling the long diagonal with our future fianchettoed pawn on g2.",
+      "shortNarration": "1.d4 stakes a claim to e5 and c5, aiming for a Queen's Indian with a fianchettoed pawn on g2."
     },
     {
       "san": "Nf6",
@@ -23,7 +23,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing kingside castling and maintaining maximum flexibility. This move also prepares the key g2-g3 fianchetto setup that characterizes our chosen variation of the Queen's Indian Defense. The knight on f3 controls important central squares like e5 and d4, and doesn't block any of our pawns - a hallmark of good opening development. We're following the principle of developing knights before bishops, and this knight will work beautifully with our future bishop on g2 to control the long diagonal and central squares.",
+      "annotation": "We're developing our knight to its ideal square, supporting the d4 pawn while preparing kingside castling and maintaining maximum flexibility. This move also prepares the key g2-g3 fianchetto setup that characterizes our chosen variation of the Queen's Indian Defense. The knight on f3 controls important central squares like e5 and d4, and doesn't block any of our pawns - a hallmark of good opening development. We're following the principle of developing knights before bishops, and this knight will work beautifully with our future pawn on g2 to control the long diagonal and central squares.",
       "shortNarration": "Knight to f3 supports d4, prepares kingside castling and the g3 fianchetto, controlling e5 and d4."
     },
     {

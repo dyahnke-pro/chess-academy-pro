@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and strategically rich choices available to White. By controlling the central d5 square immediately, we're preparing to build a strong pawn center while keeping our options open for piece development. Unlike 1.e4 or 1.d4, the English allows us to transpose into many different pawn structures depending on how Black responds, making it a favorite of positional players who like to maintain flexibility. The move also prepares to fianchetto our light-squared bishop on g2, creating long-term pressure along the long diagonal toward Black's kingside.",
+      "annotation": "We're opening with the English Opening, one of the most flexible and strategically rich choices available to White. By controlling the central d5 square immediately, we're preparing to build a strong pawn center while keeping our options open for piece development. Unlike 1.e4 or 1.d4, the English allows us to transpose into many different pawn structures depending on how Black responds, making it a favorite of positional players who like to maintain flexibility. The move also prepares to fianchetto our light-squared pawn on g2, creating long-term pressure along the long diagonal toward Black's kingside.",
       "shortNarration": "1.c4 controls d5, prepares a g2 fianchetto, and keeps transpositional flexibility for positional play."
     },
     {

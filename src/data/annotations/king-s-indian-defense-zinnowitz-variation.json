@@ -54,7 +54,7 @@
     {
       "san": "Bg5",
       "annotation": "We're entering the Zinnowitz Variation by developing our dark-squared bishop to an aggressive square where it pins Black's knight to the queen and puts immediate pressure on Black's kingside. This move is more direct than the typical Be2 development, showing our intention to create immediate tactical complications rather than simply completing development. The bishop on g5 eyes the e7 and h6 squares, and if Black plays ...h6, we can consider the aggressive Bh4 or the retreat Bxf6, potentially damaging Black's pawn structure. However, we must be careful because this bishop can become a target, and Black might gain tempo with moves like ...h6 or ...c5, challenging our center while our bishop is somewhat out of play—the Zinnowitz Variation requires precise handling to maintain the initiative.",
-      "shortNarration": "Bishop pins knight to queen on g5, pressuring kingside and threatening h6 or Bxf6 to damage Black's pawns."
+      "shortNarration": "Bishop pins knight to bishop on g5, pressuring kingside and threatening h6 or Bxf6 to damage Black's pawns."
     }
   ]
 }

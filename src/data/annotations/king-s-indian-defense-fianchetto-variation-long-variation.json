@@ -8,7 +8,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most flexible developing choice, attacking our d4 pawn while preparing to fianchetto the king's bishop on g7. This is the signature move of the King's Indian Defense, where Black allows us to build a strong pawn center with the plan to undermine and attack it later. The knight on f6 also supports a future ...e5 advance and keeps options open for different defensive setups. Black is essentially saying 'go ahead and build your center - I'll tear it down later with dynamic piece play.'",
+      "annotation": "Black responds with the most flexible developing choice, attacking our d4 pawn while preparing to fianchetto the king's pawn on g7. This is the signature move of the King's Indian Defense, where Black allows us to build a strong pawn center with the plan to undermine and attack it later. The knight on f6 also supports a future ...e5 advance and keeps options open for different defensive setups. Black is essentially saying 'go ahead and build your center - I'll tear it down later with dynamic piece play.'",
       "shortNarration": "Black's knight on f6 attacks d4 and prepares a King's Indian fianchetto, allowing White to build a center that Black will later undermine with ...e5."
     },
     {
@@ -38,12 +38,12 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent creates a solid pawn structure while preparing the thematic ...e5 break that defines the King's Indian Defense. This move supports the pawn on f6 and creates a launching pad for central counterplay, while also opening the c8-h3 diagonal for the light-squared bishop. The d6 pawn might look passive, but it's actually quite flexible - it can support ...e5, ...c5, or even ...c6 depending on how the position develops. Black is completing the basic King's Indian setup, where solid development prepares for explosive central action.",
+      "annotation": "Our opponent creates a solid pawn structure while preparing the thematic ...e5 break that defines the King's Indian Defense. This move supports the knight on f6 and creates a launching pad for central counterplay, while also opening the c8-h3 diagonal for the light-squared bishop. The d6 pawn might look passive, but it's actually quite flexible - it can support ...e5, ...c5, or even ...c6 depending on how the position develops. Black is completing the basic King's Indian setup, where solid development prepares for explosive central action.",
       "shortNarration": "d6 supports ...e5 or ...c5 breaks and opens the c8-h3 diagonal for the bishop in the King's Indian setup."
     },
     {
       "san": "g3",
-      "annotation": "We're beginning our own fianchetto setup, preparing to place our light-squared bishop on g2 where it will dominate the long diagonal and support our central ambitions. This move also creates a safe haven for our king on h1 and supports a future f4 advance, which is often crucial in King's Indian positions. The Fianchetto Variation we're entering tends to lead to rich positional play where both sides have long-term plans - we get central control and queenside play, while Black gets kingside attacking chances. The g3-Bg2 setup is particularly effective because our bishop will support both our central pawns and put pressure on Black's kingside.",
+      "annotation": "We're beginning our own fianchetto setup, preparing to place our light-squared bishop on g2 where it will dominate the long diagonal and support our central ambitions. This move also creates a safe haven for our rook on h1 and supports a future f4 advance, which is often crucial in King's Indian positions. The Fianchetto Variation we're entering tends to lead to rich positional play where both sides have long-term plans - we get central control and queenside play, while Black gets kingside attacking chances. The g3-Bg2 setup is particularly effective because our bishop will support both our central pawns and put pressure on Black's kingside.",
       "shortNarration": "g3 prepares Bg2 to dominate the long diagonal, castle kingside, and support a future f4 advance in the Fianchetto Variation."
     },
     {
@@ -108,7 +108,7 @@
     },
     {
       "san": "a5",
-      "annotation": "Black launches a typical King's Indian queenside demonstration, preparing to advance the a-pawn further and create weaknesses in our camp. This move supports the pawn on c5 by preventing it from being kicked away by b4, while also preparing ...a4 to create concrete threats against our queenside. The a5 advance is part of Black's standard counterplay pattern - since we control the center and kingside, Black needs to create activity on the queenside to balance the position. This move also potentially prepares ...Bd7-a4 ideas or simply creates long-term pressure that we'll need to address carefully in our planning.",
+      "annotation": "Black launches a typical King's Indian queenside demonstration, preparing to advance the a-pawn further and create weaknesses in our camp. This move supports the knight on c5 by preventing it from being kicked away by b4, while also preparing ...a4 to create concrete threats against our queenside. The a5 advance is part of Black's standard counterplay pattern - since we control the center and kingside, Black needs to create activity on the queenside to balance the position. This move also potentially prepares ...Bd7-a4 ideas or simply creates long-term pressure that we'll need to address carefully in our planning.",
       "shortNarration": "Black's a5 supports c5, prepares a4 to create queenside weaknesses, and threatens Bd7-a4 pressure."
     }
   ]

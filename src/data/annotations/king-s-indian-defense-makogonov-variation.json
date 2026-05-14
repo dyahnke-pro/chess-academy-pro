@@ -8,8 +8,8 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the most active move, attacking our e4 square and preparing to fianchetto the king's bishop on g7 in many lines. This knight move is the hallmark of hypermodern openings like the King's Indian Defense - instead of occupying the center with pawns immediately, Black is preparing to control it with pieces from a distance. Our opponent is keeping maximum flexibility here, as this knight can support various pawn structures and doesn't commit Black to any particular setup yet. The knight on f6 will often become a key piece in Black's kingside attacking chances later in the game.",
-      "shortNarration": "Black's knight to f6 attacks e4 and prepares to fianchetto the king's bishop on g7, controlling the center from a distance."
+      "annotation": "Black responds with the most active move, attacking our e4 square and preparing to fianchetto the king's pawn on g7 in many lines. This knight move is the hallmark of hypermodern openings like the King's Indian Defense - instead of occupying the center with pawns immediately, Black is preparing to control it with pieces from a distance. Our opponent is keeping maximum flexibility here, as this knight can support various pawn structures and doesn't commit Black to any particular setup yet. The knight on f6 will often become a key piece in Black's kingside attacking chances later in the game.",
+      "shortNarration": "Black's knight to f6 attacks e4 and prepares to fianchetto the king's pawn on g7, controlling the center from a distance."
     },
     {
       "san": "c4",
@@ -38,7 +38,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent solidifies the kingside and prepares the classic King's Indian pawn break ...e5, which will challenge our central pawn duo directly. This move also supports the pawn on f6 and gives Black's king additional protection, though it does somewhat limit the scope of the light-squared bishop on c8. The d6 pawn creates a solid foundation for Black's position but also signals that Black is committed to a more defensive setup in the short term. We should now be thinking about how to prevent or favorably meet Black's ...e5 advance while improving our piece coordination and possibly preparing h3 and g4 for a kingside attack.",
+      "annotation": "Our opponent solidifies the kingside and prepares the classic King's Indian pawn break ...e5, which will challenge our central pawn duo directly. This move also supports the knight on f6 and gives Black's king additional protection, though it does somewhat limit the scope of the light-squared bishop on c8. The d6 pawn creates a solid foundation for Black's position but also signals that Black is committed to a more defensive setup in the short term. We should now be thinking about how to prevent or favorably meet Black's ...e5 advance while improving our piece coordination and possibly preparing h3 and g4 for a kingside attack.",
       "shortNarration": "Black's ...e5 challenges your central pawn duo, but we can meet it with h3 and g4 for a kingside attack."
     },
     {

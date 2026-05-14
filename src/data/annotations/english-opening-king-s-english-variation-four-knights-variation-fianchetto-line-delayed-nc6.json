@@ -29,7 +29,7 @@
     {
       "san": "Bb4",
       "annotation": "Black pins our knight to the king with this active bishop development, creating immediate tactical pressure and following the principle of developing pieces with tempo. This move forces us to consider the pin carefully - our knight is temporarily unable to move without exposing our king to check, which could disrupt our planned piece coordination. The bishop on b4 also eyes the e1-a5 diagonal and prepares potential tactics involving ...Bxc3+ to damage our pawn structure. Our opponent is playing energetically, seeking to create immediate complications rather than allowing us to complete our development peacefully.",
-      "shortNarration": "Black's bishop pins the knight to the king on b4, threatening ...Bxc3+ to double your c-pawns."
+      "shortNarration": "Black's bishop pins the knight to the bishop on b4, threatening ...Bxc3+ to double your c-pawns."
     },
     {
       "san": "Bg2",

@@ -13,7 +13,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're playing the English Opening move order, controlling the important d5 and b5 squares while preparing to develop our pieces naturally. This move supports our d4 pawn and begins to restrict Black's central pawn breaks, particularly preventing an immediate d7-d5 advance. The c4 pawn also prepares queenside expansion with moves like Nc3 and b2-b3, giving us excellent control over the light squares. By playing c4, we're likely heading into a King's Indian Defense structure where we'll fianchetto our own dark-squared bishop on g2 and castle kingside.",
+      "annotation": "We're playing the English Opening move order, controlling the important d5 and b5 squares while preparing to develop our pieces naturally. This move supports our d4 pawn and begins to restrict Black's central pawn breaks, particularly preventing an immediate d7-d5 advance. The c4 pawn also prepares queenside expansion with moves like Nc3 and b2-b3, giving us excellent control over the light squares. By playing c4, we're likely heading into a King's Indian Defense structure where we'll fianchetto our own dark-squared pawn on g2 and castle kingside.",
       "shortNarration": "c4 controls d5 and b5, restricts d7-d5, and prepares a King's Indian setup with g3 and Bg2."
     },
     {
@@ -48,7 +48,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Our opponent plays the characteristic King's Indian pawn move, solidifying the center while preparing the crucial e7-e5 advance. This pawn supports the pawn on f6 and creates a solid foundation for Black's position, though it does restrict the dark-squared bishop somewhat. The move also prepares various central breaks and gives Black flexibility in choosing when and how to challenge our central control. We should recognize that d6 is often a precursor to e7-e5, which will create the typical King's Indian pawn tension and lead to sharp middlegame positions.",
+      "annotation": "Our opponent plays the characteristic King's Indian pawn move, solidifying the center while preparing the crucial e7-e5 advance. This pawn supports the knight on f6 and creates a solid foundation for Black's position, though it does restrict the dark-squared bishop somewhat. The move also prepares various central breaks and gives Black flexibility in choosing when and how to challenge our central control. We should recognize that d6 is often a precursor to e7-e5, which will create the typical King's Indian pawn tension and lead to sharp middlegame positions.",
       "shortNarration": "d6 solidifies the center, prepares e7-e5, and restricts Black's dark-squared bishop."
     },
     {

@@ -49,7 +49,7 @@
     {
       "san": "Bb4",
       "annotation": "Black plays the central idea of the Manhattan Variation, pinning our knight to the king and creating immediate counterplay against our position. This active bishop move challenges our central knight and forces us to make decisions about how to handle the pin - we might play a3 to challenge the bishop, or Qc2 to support the knight, or even accept doubled pawns after a future Bxc3. The bishop on b4 also prevents us from castling queenside easily and creates tactical possibilities for Black. This is a principled way for Black to seek active piece play and counterchances in what could otherwise become a passive position, showing that our opponent understands the need for piece activity even in slightly inferior positions.",
-      "shortNarration": "Black's bishop pins the knight to the king on b4, preventing queenside castling and creating counterplay."
+      "shortNarration": "Black's bishop pins the knight to the bishop on b4, preventing queenside castling and creating counterplay."
     }
   ]
 }

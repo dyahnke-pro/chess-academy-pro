@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "c4",
-      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich openings in chess. By controlling the central d5 square immediately, we're following the hypermodern principle of controlling the center from afar rather than occupying it directly with pawns. This move also prepares to fianchetto our light-squared bishop on g2, creating a powerful diagonal that will pressure Black's kingside and central dark squares. The English is particularly appealing because it often leads to rich middlegame positions with asymmetrical pawn structures, giving both sides chances for creative play.",
+      "annotation": "We're opening with the English Opening, one of the most flexible and positionally rich openings in chess. By controlling the central d5 square immediately, we're following the hypermodern principle of controlling the center from afar rather than occupying it directly with pawns. This move also prepares to fianchetto our light-squared pawn on g2, creating a powerful diagonal that will pressure Black's kingside and central dark squares. The English is particularly appealing because it often leads to rich middlegame positions with asymmetrical pawn structures, giving both sides chances for creative play.",
       "shortNarration": "c4 controls d5 from afar, preparing a g2 fianchetto to pressure Black's kingside and center."
     },
     {
@@ -53,7 +53,7 @@
     },
     {
       "san": "Bg2",
-      "annotation": "We're completing our fianchetto setup by developing the light-squared bishop to its ideal diagonal, where it becomes a powerful long-range piece that will influence the game for many moves to come. This bishop on g2 is perfectly placed to support both defense and attack – it defends our king position, controls the long diagonal including the crucial f7 square near Black's king, and can support central pawn advances like e4. The bishop also works harmoniously with our knight on f3 and the potential rook on e1 to create a cohesive piece coordination. From g2, this bishop will be particularly effective if we can later open the center with e4, as it will then have maximum scope and can target Black's kingside weaknesses.",
+      "annotation": "We're completing our fianchetto setup by developing the light-squared bishop to its ideal diagonal, where it becomes a powerful long-range piece that will influence the game for many moves to come. This bishop on g2 is perfectly placed to support both defense and attack – it defends our king position, controls the long diagonal including the crucial f7 square near Black's king, and can support central pawn advances like e4. The bishop also works harmoniously with our knight on f3 and the potential king on e1 to create a cohesive piece coordination. From g2, this bishop will be particularly effective if we can later open the center with e4, as it will then have maximum scope and can target Black's kingside weaknesses.",
       "shortNarration": "The fianchettoed bishop on g2 controls the long diagonal, supports e4, and targets f7."
     },
     {

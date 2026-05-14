@@ -8,8 +8,8 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black responds with the Réti move, attacking our d4 pawn immediately and preparing to fianchetto the king's bishop on g7. This is a hypermodern approach where Black allows us to occupy the center with pawns while planning to undermine it later. The knight on f6 also prepares kingside castling and keeps flexible options for pawn breaks like ...d6 and ...e5. Black is essentially saying 'I'll let you have the center for now, but I'm going to challenge it when the time is right.'",
-      "shortNarration": "Black's Réti move attacks d4, fianchettoes the bishop on g7, and prepares to undermine the center with ...d6 and ...e5."
+      "annotation": "Black responds with the Réti move, attacking our d4 pawn immediately and preparing to fianchetto the king's pawn on g7. This is a hypermodern approach where Black allows us to occupy the center with pawns while planning to undermine it later. The knight on f6 also prepares kingside castling and keeps flexible options for pawn breaks like ...d6 and ...e5. Black is essentially saying 'I'll let you have the center for now, but I'm going to challenge it when the time is right.'",
+      "shortNarration": "Black's Réti move attacks d4, fianchettoes the pawn on g7, and prepares to undermine the center with ...d6 and ...e5."
     },
     {
       "san": "c4",
@@ -33,7 +33,7 @@
     },
     {
       "san": "e4",
-      "annotation": "We're establishing our ideal pawn center, creating a massive pawn duo on d4 and e4 that dominates the center of the board. This advance gives us significant space advantage and restricts Black's piece mobility, particularly limiting the pawn on f6. Our pawn center also supports kingside attacking chances and makes it difficult for Black to achieve comfortable piece coordination. However, we must be aware that Black's entire King's Indian strategy revolves around undermining this impressive but potentially vulnerable pawn center.",
+      "annotation": "We're establishing our ideal pawn center, creating a massive pawn duo on d4 and e4 that dominates the center of the board. This advance gives us significant space advantage and restricts Black's piece mobility, particularly limiting the knight on f6. Our pawn center also supports kingside attacking chances and makes it difficult for Black to achieve comfortable piece coordination. However, we must be aware that Black's entire King's Indian strategy revolves around undermining this impressive but potentially vulnerable pawn center.",
       "shortNarration": "The d4-e4 pawn duo dominates the center, granting space and attacking chances, but Black's King's Indian aims to undermine it."
     },
     {

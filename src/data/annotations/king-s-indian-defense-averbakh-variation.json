@@ -8,7 +8,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black immediately challenges our central pawn with the king's knight, a hallmark of hypermodern defense. Rather than occupying the center with pawns right away, our opponent is attacking our d4 pawn from the rim and preparing to fianchetto the king's bishop on g7. This knight move also prepares ...g6 and ...Bg7, setting up the King's Indian Defense structure where Black will launch a kingside attack later in the middlegame. We need to be ready to support our d4 pawn and continue building our central presence.",
+      "annotation": "Black immediately challenges our central pawn with the king's knight, a hallmark of hypermodern defense. Rather than occupying the center with pawns right away, our opponent is attacking our d4 pawn from the rim and preparing to fianchetto the king's pawn on g7. This knight move also prepares ...g6 and ...Bg7, setting up the King's Indian Defense structure where Black will launch a kingside attack later in the middlegame. We need to be ready to support our d4 pawn and continue building our central presence.",
       "shortNarration": "Black's knight challenges d4, preparing the King's Indian setup with g6 and Bg7 to attack the center later."
     },
     {
@@ -38,7 +38,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black solidifies the kingside and prepares the crucial ...e5 pawn break that defines the King's Indian Defense. This move supports the pawn on f6, prevents us from playing e5 ourselves, and creates a solid foundation for Black's counterplay. Our opponent is also preparing to castle kingside and then launch a typical King's Indian attack with moves like ...e5, ...Nbd7, and possibly ...f5 later. The d6 pawn might look modest, but it's the cornerstone of Black's strategy - it allows the dramatic ...e5 advance that will challenge our central dominance and open lines for Black's pieces to create attacking chances.",
+      "annotation": "Black solidifies the kingside and prepares the crucial ...e5 pawn break that defines the King's Indian Defense. This move supports the knight on f6, prevents us from playing e5 ourselves, and creates a solid foundation for Black's counterplay. Our opponent is also preparing to castle kingside and then launch a typical King's Indian attack with moves like ...e5, ...Nbd7, and possibly ...f5 later. The d6 pawn might look modest, but it's the cornerstone of Black's strategy - it allows the dramatic ...e5 advance that will challenge our central dominance and open lines for Black's pieces to create attacking chances.",
       "shortNarration": "Black's d6 supports ...e5, the key King's Indian break challenging White's center and opening lines for counterplay."
     },
     {

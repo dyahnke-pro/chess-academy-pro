@@ -13,13 +13,13 @@
     },
     {
       "san": "d4",
-      "annotation": "We complete our central pawn duo, creating the ideal pawn center and transforming the game into Queen's Pawn territory. This move supports our pawn on f3, controls the crucial c5 and e5 squares, and opens lines for our pieces - particularly preparing to develop our dark-squared bishop to f4 or g5. Now we have a classical space advantage in the center, and we're well-positioned to continue with natural development like Bf4, e3, and Bd3. The position has transposed into familiar Queen's Pawn structures where we can pursue typical plans of central control and kingside piece activity.",
+      "annotation": "We complete our central pawn duo, creating the ideal pawn center and transforming the game into Queen's Pawn territory. This move supports our knight on f3, controls the crucial c5 and e5 squares, and opens lines for our pieces - particularly preparing to develop our dark-squared bishop to f4 or g5. Now we have a classical space advantage in the center, and we're well-positioned to continue with natural development like Bf4, e3, and Bd3. The position has transposed into familiar Queen's Pawn structures where we can pursue typical plans of central control and kingside piece activity.",
       "shortNarration": "Playing d4 completes the central pawn duo, controls c5 and e5, and prepares Bf4 or g5 with a classical space advantage."
     },
     {
       "san": "Bg4",
       "annotation": "Black develops the bishop with immediate purpose, pinning our knight to the queen and creating tactical pressure on f3. This is the signature move of the Anti-Torre system, where Black aims to disrupt our natural development and force us to make early decisions about our piece placement. The bishop on g4 controls the important f3 and h3 squares while also eyeing a potential exchange on f3 that could damage our kingside pawn structure. We now need to decide how to handle this pin - common options include h3 to challenge the bishop, Be2 to break the pin, or even c4 to immediately challenge Black's central pawn, each leading to different types of positions with their own strategic nuances.",
-      "shortNarration": "Black's bishop pins the knight to the queen on g4, threatening f3 and a potential exchange that damages the kingside pawn structure."
+      "shortNarration": "Black's bishop pins the knight to the bishop on g4, threatening f3 and a potential exchange that damages the kingside pawn structure."
     }
   ]
 }

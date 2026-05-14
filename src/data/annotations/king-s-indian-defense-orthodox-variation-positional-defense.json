@@ -18,7 +18,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black chooses a solid, flexible pawn structure that supports the center without committing to any particular pawn break immediately. This move prepares ...e5, which would challenge our central pawn duo, while also opening a retreat square for the pawn on f6 if it gets attacked. The d6 pawn also supports a potential ...c5 break later in the game, giving Black multiple ways to challenge our center. This setup is characteristic of the King's Indian Defense, where Black accepts a slightly cramped position in the opening in exchange for dynamic counterplay opportunities in the middlegame.",
+      "annotation": "Black chooses a solid, flexible pawn structure that supports the center without committing to any particular pawn break immediately. This move prepares ...e5, which would challenge our central pawn duo, while also opening a retreat square for the knight on f6 if it gets attacked. The d6 pawn also supports a potential ...c5 break later in the game, giving Black multiple ways to challenge our center. This setup is characteristic of the King's Indian Defense, where Black accepts a slightly cramped position in the opening in exchange for dynamic counterplay opportunities in the middlegame.",
       "shortNarration": "Black's d6 supports ...e5 or ...c5 breaks, accepting a cramped King's Indian setup for dynamic counterplay."
     },
     {
@@ -38,7 +38,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black strikes back in the center with the typical King's Indian pawn break, challenging our d4 pawn and opening lines for the pieces. This move is the thematic response that defines the King's Indian Defense - Black accepts that the position will become closed and tactical, banking on creating kingside attacking chances. The e5 advance also activates Black's pieces, particularly the bishop on g7 (once it's developed) and potentially the queen and rooks along the e-file. By playing ...e5, Black is committing to a sharp, unbalanced struggle where both sides will have chances for aggressive play.",
+      "annotation": "Black strikes back in the center with the typical King's Indian pawn break, challenging our d4 pawn and opening lines for the pieces. This move is the thematic response that defines the King's Indian Defense - Black accepts that the position will become closed and tactical, banking on creating kingside attacking chances. The e5 advance also activates Black's pieces, particularly the pawn on g7 (once it's developed) and potentially the queen and rooks along the e-file. By playing ...e5, Black is committing to a sharp, unbalanced struggle where both sides will have chances for aggressive play.",
       "shortNarration": "Black's e5 pawn break challenges d4, opening lines for the g7 bishop and e-file, committing to a sharp, unbalanced struggle."
     },
     {
@@ -48,7 +48,7 @@
     },
     {
       "san": "g6",
-      "annotation": "Black begins the characteristic King's Indian fianchetto, preparing to develop the dark-squared bishop to g7 where it will become a powerful long-range piece. This move is essential to Black's setup, as the bishop on g7 will eye our entire queenside and put pressure on our d4 pawn. The g6 advance also prepares a safe haven for Black's king on h8 if needed, and it supports potential pawn advances like ...f5 later in the game. By fianchettoing the bishop, Black is following the hypermodern principle of controlling the center with pieces rather than just pawns, creating long-term pressure against our pawn chain.",
+      "annotation": "Black begins the characteristic King's Indian fianchetto, preparing to develop the dark-squared bishop to g7 where it will become a powerful long-range piece. This move is essential to Black's setup, as the bishop on g7 will eye our entire queenside and put pressure on our d4 pawn. The g6 advance also prepares a safe haven for Black's rook on h8 if needed, and it supports potential pawn advances like ...f5 later in the game. By fianchettoing the bishop, Black is following the hypermodern principle of controlling the center with pieces rather than just pawns, creating long-term pressure against our pawn chain.",
       "shortNarration": "Black fianchettoes the bishop to g7, pressuring d4 and the queenside, while preparing kingside safety and a future ...f5 break."
     },
     {

@@ -18,8 +18,8 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses the solid Queen's Indian Defense setup, supporting an eventual ...d5 advance and preparing to fianchetto the light-squared bishop on b7. This pawn move also opens a diagonal for the dark-squared bishop and keeps the position relatively closed and positional in nature. Black is showing a preference for solid, hypermodern development where pieces will control the center from the flanks rather than occupying it directly. We can expect ...b6 and ...Bb7 to follow, creating pressure along the long diagonal toward our kingside.",
-      "shortNarration": "Black's Queen's Indian setup fianchettoes the light-squared bishop on b7, controlling the long diagonal toward your kingside."
+      "annotation": "Our opponent chooses the solid Queen's Indian Defense setup, supporting an eventual ...d5 advance and preparing to fianchetto the light-squared pawn on b7. This pawn move also opens a diagonal for the dark-squared bishop and keeps the position relatively closed and positional in nature. Black is showing a preference for solid, hypermodern development where pieces will control the center from the flanks rather than occupying it directly. We can expect ...b6 and ...Bb7 to follow, creating pressure along the long diagonal toward our kingside.",
+      "shortNarration": "Black's Queen's Indian setup fianchettoes the light-squared pawn on b7, controlling the long diagonal toward your kingside."
     },
     {
       "san": "Nf3",
@@ -29,7 +29,7 @@
     {
       "san": "b6",
       "annotation": "Black commits to the Queen's Indian Defense structure, preparing to fianchetto the light-squared bishop and exert long-term pressure on our kingside via the a8-h1 diagonal. This move supports a future ...d5 advance and creates a solid, hypermodern setup where Black will control central squares from the flanks rather than occupying them directly with pawns. The b6 move also prepares ...c5 at some point, challenging our central pawn chain and fighting for space on the queenside. We should be aware that this bishop will become a powerful attacking piece if we castle kingside carelessly.",
-      "shortNarration": "Black's b6 fianchetto aims the bishop at h1, pressuring our kingside if we castle short, while preparing ...d5 and ...c5 to challenge the center from the flanks."
+      "shortNarration": "Black's b6 fianchetto aims the rook at h1, pressuring our kingside if we castle short, while preparing ...d5 and ...c5 to challenge the center from the flanks."
     },
     {
       "san": "a3",
@@ -54,7 +54,7 @@
     {
       "san": "cxd5",
       "annotation": "We're accepting the challenge in the center and opening up the position, which generally favors the side with better development - namely us. This capture removes Black's strong central pawn but also opens the c-file and gives our pieces more scope for activity. The exchange also means that Black's knight will likely come to d5, where it will be somewhat exposed to our pieces and tactics. We're maintaining the initiative by keeping the position sharp and complicated, which fits perfectly with the aggressive nature of the Kasparov-Petrosian Variation.",
-      "shortNarration": "Capturing on d5 opens the c-file and exposes Black's knight on d5 to tactics, keeping the initiative sharp."
+      "shortNarration": "Capturing on d5 opens the c-file and exposes Black's pawn on d5 to tactics, keeping the initiative sharp."
     },
     {
       "san": "Nxd5",

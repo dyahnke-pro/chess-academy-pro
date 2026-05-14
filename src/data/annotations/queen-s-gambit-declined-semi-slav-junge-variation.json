@@ -13,7 +13,7 @@
     },
     {
       "san": "c4",
-      "annotation": "We're launching the famous Queen's Gambit, offering our c-pawn to lure Black's central d5 pawn away from the center. This isn't a true gambit since we can easily regain the pawn, but it's a positional offer designed to gain central control. By playing c4, we're attacking the d5 pawn and forcing Black to make a decision: defend it, advance it, or capture our c-pawn. The move also develops our queenside by preparing Nc3 and potentially fianchettoing our light-squared bishop on g2 in some variations.",
+      "annotation": "We're launching the famous Queen's Gambit, offering our c-pawn to lure Black's central d5 pawn away from the center. This isn't a true gambit since we can easily regain the pawn, but it's a positional offer designed to gain central control. By playing c4, we're attacking the d5 pawn and forcing Black to make a decision: defend it, advance it, or capture our c-pawn. The move also develops our queenside by preparing Nc3 and potentially fianchettoing our light-squared pawn on g2 in some variations.",
       "shortNarration": "c4 offers the c-pawn to lure Black's d5 pawn away from the center, gaining central control and preparing Nc3."
     },
     {
@@ -49,7 +49,7 @@
     {
       "san": "Bb4",
       "annotation": "Our opponent develops the dark-squared bishop with tempo, pinning our knight to the king and adding pressure to our position. This active piece development is typical in the Semi-Slav, where Black seeks rapid piece coordination to offset any developmental disadvantage. The bishop on b4 also supports the advanced c4 pawn and prepares to potentially exchange on c3, doubling our pawns and damaging our pawn structure. Black is playing energetically, using tactical motifs to maintain the balance while keeping the extra pawn.",
-      "shortNarration": "Bishop to b4 pins the knight to the king, threatens to double pawns on c3, and supports the extra c4 pawn."
+      "shortNarration": "Bishop to b4 pins the knight to the king, threatens to double knights on c3, and supports the extra c4 pawn."
     },
     {
       "san": "e3",

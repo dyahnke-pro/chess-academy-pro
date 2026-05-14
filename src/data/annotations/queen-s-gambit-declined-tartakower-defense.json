@@ -44,7 +44,7 @@
     {
       "san": "Bg5",
       "annotation": "We develop our light-squared bishop with tempo, pinning Black's knight to their queen and creating immediate tactical pressure in the position. This is one of the most challenging continuations for Black in the Queen's Gambit Declined, as the pin forces them to make a concrete decision about how to deal with this pressure. The bishop on g5 not only attacks the f6 knight but also controls important dark squares like f6 and h6, potentially weakening Black's kingside structure if they're forced to play h6. This move represents a shift from pure positional play to more tactical considerations, as we're now threatening concrete ideas like capturing on f6 or supporting a kingside attack.",
-      "shortNarration": "The bishop pins the knight to the queen on g5, threatening f6 and h6, forcing Black to resolve the pressure."
+      "shortNarration": "The bishop pins the knight to the bishop on g5, threatening f6 and h6, forcing Black to resolve the pressure."
     },
     {
       "san": "h6",

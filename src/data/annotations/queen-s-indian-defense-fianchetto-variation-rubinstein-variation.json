@@ -18,8 +18,8 @@
     },
     {
       "san": "e6",
-      "annotation": "Our opponent chooses a solid, classical approach by supporting the center and preparing to develop the dark-squared bishop. This move signals that we're likely entering one of the Indian Defense systems, where Black will fianchetto the light-squared bishop on b7 and build a flexible pawn structure. The e6 pawn supports a future ...d5 advance while keeping the position closed and maneuvering-based rather than tactical. Black is also preparing to complete development harmoniously, with the bishop likely going to e7 or d6, and this setup often leads to rich middlegame positions where both sides have clear but different plans.",
-      "shortNarration": "Black's e6 supports ...d5, fianchettoes the bishop on b7, and leads to a closed Indian Defense with opposite plans."
+      "annotation": "Our opponent chooses a solid, classical approach by supporting the center and preparing to develop the dark-squared bishop. This move signals that we're likely entering one of the Indian Defense systems, where Black will fianchetto the light-squared pawn on b7 and build a flexible pawn structure. The e6 pawn supports a future ...d5 advance while keeping the position closed and maneuvering-based rather than tactical. Black is also preparing to complete development harmoniously, with the bishop likely going to e7 or d6, and this setup often leads to rich middlegame positions where both sides have clear but different plans.",
+      "shortNarration": "Black's e6 supports ...d5, fianchettoes the pawn on b7, and leads to a closed Indian Defense with opposite plans."
     },
     {
       "san": "Nf3",

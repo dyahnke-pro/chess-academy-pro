@@ -18,7 +18,7 @@
     },
     {
       "san": "g6",
-      "annotation": "Black begins the characteristic King's Indian setup by preparing to fianchetto the dark-squared bishop on g7. This move creates a solid foundation for Black's kingside and prepares to exert long-range pressure on our center from the long diagonal. The pawn on g6 also provides an escape square for the king on h8 if needed and supports a future ...f5 break that's thematic in the King's Indian. We should continue building our center and prepare for Black's typical counterplay against our pawn structure.",
+      "annotation": "Black begins the characteristic King's Indian setup by preparing to fianchetto the dark-squared bishop on g7. This move creates a solid foundation for Black's kingside and prepares to exert long-range pressure on our center from the long diagonal. The pawn on g6 also provides an escape square for the rook on h8 if needed and supports a future ...f5 break that's thematic in the King's Indian. We should continue building our center and prepare for Black's typical counterplay against our pawn structure.",
       "shortNarration": "Black fianchettoes the dark-squared bishop on g7, preparing ...f5 counterplay against White's center."
     },
     {
@@ -38,7 +38,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black establishes a solid pawn structure and prepares the typical King's Indian central break with ...e5. This move supports the pawn on f6 and creates a solid foundation for Black's position while opening the c8-h3 diagonal for the light-squared bishop. The pawn on d6 also prevents our pieces from occupying e5 and prepares Black's counterplay in the center. We should recognize that this modest-looking move is setting up Black's main strategic theme: the ...e5 break that will challenge our impressive pawn center.",
+      "annotation": "Black establishes a solid pawn structure and prepares the typical King's Indian central break with ...e5. This move supports the knight on f6 and creates a solid foundation for Black's position while opening the c8-h3 diagonal for the light-squared bishop. The pawn on d6 also prevents our pieces from occupying e5 and prepares Black's counterplay in the center. We should recognize that this modest-looking move is setting up Black's main strategic theme: the ...e5 break that will challenge our impressive pawn center.",
       "shortNarration": "Black's ...e5 break challenges White's center, supports f6, and opens the c8-h3 diagonal for the bishop."
     },
     {

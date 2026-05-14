@@ -29,7 +29,7 @@
     {
       "san": "Bg4",
       "annotation": "Black develops the bishop with a pin on our knight, creating immediate tactical tension and challenging our piece coordination. This aggressive bishop development puts pressure on our position because the pin makes it difficult to play logical choices like e2-e3 or Nc3 without careful consideration. Black is trying to create early complications and disrupt our smooth development, hoping to generate counterplay before we can consolidate our central advantage. The bishop on g4 also eyes potential tactics involving our queen and king, making this a sharp and provocative choice.",
-      "shortNarration": "Black's bishop pins the knight on g4, pressuring e2-e3 and Nc3 while eyeing queen and king tactics."
+      "shortNarration": "Black's bishop pins the bishop on g4, pressuring e2-e3 and Nc3 while eyeing queen and king tactics."
     },
     {
       "san": "Qa4",
