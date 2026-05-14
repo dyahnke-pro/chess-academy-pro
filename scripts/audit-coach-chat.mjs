@@ -247,7 +247,11 @@ async function main() {
   // first so we start clean.
   await record('clear-session', async () => {
     await page.evaluate(async () => {
-      // Wipe just the coach session messages from Dexie meta.
+      // Wipe both coach session messages AND conversation memory so
+      // each audit run starts from a known zero state. Without wiping
+      // memory the memory-history-gte expectations under chip drives
+      // would always trivially pass because of leftover entries from
+      // prior runs / human use of the deployment.
       await new Promise((resolve) => {
         const req = indexedDB.open('ChessAcademyDB');
         req.onsuccess = () => {
@@ -255,6 +259,7 @@ async function main() {
           if (!db.objectStoreNames.contains('meta')) { resolve(); return; }
           const tx = db.transaction('meta', 'readwrite');
           tx.objectStore('meta').delete('coachSession.v1');
+          tx.objectStore('meta').delete('coachMemory.v1');
           tx.oncomplete = () => resolve();
           tx.onerror = () => resolve();
         };

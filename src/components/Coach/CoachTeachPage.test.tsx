@@ -187,19 +187,23 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     });
   });
 
-  it('forces the Anthropic provider for every coachService.ask call (Learn-only routing)', async () => {
+  it('does NOT pin Anthropic as the provider override (DeepSeek-first per CLAUDE.md)', async () => {
+    // Test history: this used to assert `providerOverride.name === 'anthropic'`
+    // because Learn-with-Coach pinned the Anthropic provider. CLAUDE.md
+    // 2026-05 reversed that — the Anthropic budget is exhausted, so
+    // every surface must default to DeepSeek and let Anthropic act as
+    // a best-effort fallback. Pinning Anthropic guarantees an empty-
+    // budget primary failure before the fallback even fires.
     vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
       options?.onChunk?.('[VOICE: Pulling the position.] Detailed analysis follows.');
       return {
         text: '[VOICE: Pulling the position.] Detailed analysis follows.',
         toolCallIds: [],
-        provider: 'anthropic',
+        provider: 'deepseek',
       };
     });
 
     render(<CoachTeachPage />);
-    // Non-routable ask (doesn't match the surface-level walkthrough
-    // router) so this test exercises the brain path.
     await sendStudentMessage('Why is white better in this position?');
 
     await waitFor(() => {
@@ -208,7 +212,9 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
 
     for (const call of vi.mocked(coachService.ask).mock.calls) {
       const opts = call[1] as { providerOverride?: { name: string } } | undefined;
-      expect(opts?.providerOverride?.name).toBe('anthropic');
+      // No surface should pin Anthropic. The spine's resolveProviderName
+      // defaults to 'deepseek'; leave it alone.
+      expect(opts?.providerOverride?.name).not.toBe('anthropic');
     }
   });
 });

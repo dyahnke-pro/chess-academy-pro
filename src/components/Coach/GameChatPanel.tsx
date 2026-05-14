@@ -266,6 +266,24 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const handleSend = useCallback(async (text: string) => {
       if (!activeProfile || isStreaming) return;
 
+      // Mirror every assistant turn (acks, error stubs, timeouts) into
+      // the spine's conversation memory so the brain's next envelope
+      // reflects the back-and-forth. The user-message memory write
+      // happens once below (line 304) right after the user message
+      // is appended. Pre-fix the LLM path here wrote to memory but
+      // every fast-path / error-stub / timeout-stub wrote only to
+      // local chat state, leaving the brain with dissociative amnesia
+      // for anything it routed deterministically.
+      const recordCoachAck = (textContent: string): void => {
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: isGameOver ? 'chat-home' : 'chat-in-game',
+          role: 'coach',
+          text: textContent,
+          fen: fen || undefined,
+          trigger: null,
+        });
+      };
+
       // WO-FOUNDATION-02 trace harness — generate one UUID per
       // user message and thread it through every audit emit so the
       // pipeline can be reconstructed end-to-end. crypto.randomUUID
@@ -433,6 +451,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             timestamp: Date.now(),
           };
           setMessages([...updatedMessages, ackMsg]);
+          recordCoachAck(ackText);
           if (useAppStore.getState().coachVoiceOn) {
             if (!speechAbortedRef.current) void voiceService.speak(ackText);
           }
@@ -468,6 +487,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           timestamp: Date.now(),
         };
         setMessages([...updatedMessages, ackMsg]);
+        recordCoachAck(ack);
         if (narrationToggle.enable) {
           if (!speechAbortedRef.current) void voiceService.speak(ack);
         } else {
@@ -494,6 +514,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             timestamp: Date.now(),
           };
           setMessages([...updatedMessages, ackMsg]);
+          recordCoachAck(ack);
           return;
         }
         if (inGame?.kind === 'restart' && onRestartGame) {
@@ -505,6 +526,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             timestamp: Date.now(),
           };
           setMessages([...updatedMessages, ack]);
+          recordCoachAck(ack.content);
           if (useAppStore.getState().coachVoiceOn) {
             if (!speechAbortedRef.current) void voiceService.speak(ack.content);
           }
@@ -526,6 +548,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             timestamp: Date.now(),
           };
           setMessages([...updatedMessages, ack]);
+          recordCoachAck(ack.content);
           if (useAppStore.getState().coachVoiceOn) {
             if (!speechAbortedRef.current) void voiceService.speak(ack.content);
           }
@@ -554,6 +577,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               timestamp: Date.now(),
             };
             setMessages([...updatedMessages, ackMsg]);
+            recordCoachAck(routed.ackMessage);
             // Reply-only routes (no `path`) just inject the ack as the
             // coach's response and stay in chat — used for cases like
             // "review my last Catalan" when the user has no Catalan
@@ -738,6 +762,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               timestamp: Date.now(),
             };
             setMessages((prev) => [...prev, timeoutMsg]);
+            recordCoachAck(timeoutMsg.content);
             return;
           }
           const answer = askResult.value;
@@ -845,6 +870,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             timestamp: Date.now(),
           };
           setMessages((prev) => [...prev, errMsg]);
+          recordCoachAck(errMsg.content);
         } finally {
           setIsStreaming(false);
           setStreamingContent('');
@@ -1009,6 +1035,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             timestamp: Date.now(),
           };
           setMessages((prev) => [...prev, timeoutMsg]);
+          recordCoachAck(timeoutMsg.content);
           return;
         }
         const answer = drawerAskResult.value;
@@ -1094,6 +1121,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           timestamp: Date.now(),
         };
         setMessages((prev) => [...prev, errMsg]);
+        recordCoachAck(errMsg.content);
       } finally {
         setIsStreaming(false);
         setStreamingContent('');

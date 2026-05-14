@@ -2412,6 +2412,18 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
                 content: warning,
                 timestamp: Date.now(),
               });
+              // Also mirror into the spine's conversation memory —
+              // useCoachSessionStore feeds the chat UI, but the LLM
+              // envelope assembles from useCoachMemoryStore. Without
+              // this the brain has no memory of the tactic alert when
+              // the student asks "what fork did you mean?" next turn.
+              useCoachMemoryStore.getState().appendConversationMessage({
+                surface: 'chat-in-game',
+                role: 'coach',
+                text: warning,
+                fen: result.fen,
+                trigger: null,
+              });
               // WO-VOICE-LAYER-01 (b): use the personality's secondary
               // voice so the alert cuts through with a different timbre
               // than the main narration.
@@ -2996,13 +3008,24 @@ export function CoachGamePage({ surfaceMode = 'play' }: CoachGamePageProps = {})
         // Mirror the commentary into the shared session so the next
         // chat turn (or the next move's narration) sees what we just
         // said. Skip empties and pure tactic suffixes — we only record
-        // real narration.
+        // real narration. The spine's conversation memory ALSO gets
+        // a copy so the brain's next envelope reflects the running
+        // narration (audit finding 2026-05-14: the play coach's
+        // move-narration was visible in the chat UI but invisible
+        // to the brain, so the LLM forgot its own observations).
         if (llm) {
           useCoachSessionStore.getState().appendMessage({
             id: `narr-${Date.now()}`,
             role: 'assistant',
             content: llm,
             timestamp: Date.now(),
+          });
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-in-game',
+            role: 'coach',
+            text: llm,
+            fen: game.fen,
+            trigger: null,
           });
         }
       } catch {

@@ -1084,6 +1084,13 @@ export function CoachTeachPage(): JSX.Element {
             content: ack,
             timestamp: Date.now(),
           }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'coach',
+            text: ack,
+            fen: gameRef.current.fen,
+            trigger: null,
+          });
           voiceService.stop();
           if (stageHint === 'play-real') {
             walkthrough.stop();
@@ -1128,6 +1135,13 @@ export function CoachTeachPage(): JSX.Element {
           content: ackBuilding,
           timestamp: Date.now(),
         }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'coach',
+          text: ackBuilding,
+          fen: gameRef.current.fen,
+          trigger: null,
+        });
         try {
           const result = await generateOpening(requestedName, {
             mode: faceMode ? 'face' : 'learn',
@@ -1147,6 +1161,13 @@ export function CoachTeachPage(): JSX.Element {
               content: successAck,
               timestamp: Date.now(),
             }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach',
+              role: 'coach',
+              text: successAck,
+              fen: gameRef.current.fen,
+              trigger: null,
+            });
             voiceService.stop();
             // Stage hint takes precedence even on first-time gen.
             // play-real navigates away. Otherwise: walkthrough on
@@ -1179,6 +1200,13 @@ export function CoachTeachPage(): JSX.Element {
               content: failAck,
               timestamp: Date.now(),
             }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach',
+              role: 'coach',
+              text: failAck,
+              fen: gameRef.current.fen,
+              trigger: null,
+            });
           }
         } finally {
           setGenerationStatus(null);
@@ -1634,12 +1662,20 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch (err) {
       console.error('[CoachTeachPage] ask failed:', err);
+      const snagAck = 'Hit a snag — say it again?';
       setMessages((prev) => [...prev, {
         id: `${turnId}-c`,
         role: 'assistant',
-        content: 'Hit a snag — say it again?',
+        content: snagAck,
         timestamp: Date.now(),
       }]);
+      useCoachMemoryStore.getState().appendConversationMessage({
+        surface: 'chat-teach',
+        role: 'coach',
+        text: snagAck,
+        fen: gameRef.current.fen,
+        trigger: null,
+      });
     } finally {
       setStreaming(null);
       setBusy(false);

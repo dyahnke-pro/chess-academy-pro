@@ -11,6 +11,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildStudentStateBlock } from '../../services/studentStateBlock';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from '../../services/coachMemoryService';
+import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { buildGroundingBlock } from '../../services/coachContextEnricher';
 import {
   buildCoachContextSnapshot,
@@ -321,6 +322,22 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
         : 'matched=none (falling through to LLM)',
     });
 
+    // Mirror voice turns into the spine's conversation memory so the
+    // brain's next envelope reflects the back-and-forth. Voice was
+    // flying blind here pre-fix — every routed intent + LLM reply
+    // landed in local chat state but never in memory, leaving the
+    // brain dissociative-amnesic for anything spoken (the audit-found
+    // CoachChatPage class of bugs swept across all chat surfaces).
+    const recordMemory = (role: 'user' | 'coach', textContent: string): void => {
+      useCoachMemoryStore.getState().appendConversationMessage({
+        surface: 'chat-in-game',
+        role,
+        text: textContent,
+        fen: fen || undefined,
+        trigger: null,
+      });
+    };
+
     if (routedIntent) {
       const userMsg: ChatMessage = {
         id: `voice-${Date.now()}`,
@@ -329,6 +346,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
         timestamp: Date.now(),
       };
       setMessages([...messagesRef.current, userMsg]);
+      recordMemory('user', text);
       const beforeMoveCount = getMoveCount?.() ?? -1;
       const beforeFen = getCurrentFen?.() ?? fen;
 
@@ -412,6 +430,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
         timestamp: Date.now(),
       };
       setMessages([...messagesRef.current, userMsg, ack]);
+      recordMemory('coach', ackText);
       voiceService.stop();
       void voiceService.speakForced(ackText);
       return;
@@ -432,6 +451,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
 
     const currentMessages = [...messagesRef.current, userMsg];
     setMessages(currentMessages);
+    recordMemory('user', text);
     setIsStreaming(true);
 
     // Engine analysis is expensive (~500-1000ms). Only run it when the
@@ -584,6 +604,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       timestamp: Date.now(),
     };
     setMessages((prev) => [...prev, assistantMsg]);
+    recordMemory('coach', response);
     setIsStreaming(false);
   }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen]);
 
