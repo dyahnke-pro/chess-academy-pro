@@ -175,6 +175,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // to the ReviewSummaryCard's paragraph view if generation fails.
   const [walkNarration, setWalkNarration] = useState<ReviewNarration | null>(null);
   const [isLoadingWalk, setIsLoadingWalk] = useState(false);
+  // Summary page persists until the user explicitly taps the big
+  // green "Start" button on the summary card. Default false so the
+  // walk-phase never auto-renders — David's call (2026-05-14): "i
+  // want this page to persist until user clicks a start button."
+  // The button itself is gated on `walkNarration` being ready so the
+  // transition is instant when tapped.
+  const [walkStarted, setWalkStarted] = useState(false);
 
   // Pre-compute accuracy + classification counts
   const accuracy = useMemo<GameAccuracy>(() => calculateAccuracy(moves), [moves]);
@@ -759,7 +766,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // ReviewSummaryCard fallback at the bottom of this function renders
   // so the student isn't blocked.
   {
-    if (walkNarration && walkNarration.segments.length > 0) {
+    if (walkStarted && walkNarration && walkNarration.segments.length > 0) {
       const seg = walkPlayback.currentSegment;
       // Board FEN source of truth: the walk segment when available,
       // otherwise the game's move history (moves[ply-1].fen). This
@@ -1524,6 +1531,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // success, normal users never need to click them. Cleanup of
     // those buttons + their tests is deferred to a follow-up commit
     // that rewrites the tests against walk-phase rendering.
+    // Walk-readiness: the big green Start button on the summary card
+    // becomes tappable the moment walk narration is prepped + has
+    // segments. Disabled-with-spinner state covers the prep window
+    // (typically 5–60s) so the user sees the affordance immediately
+    // but can't fire it on an empty narration.
+    const walkReady = !!walkNarration && walkNarration.segments.length > 0;
     return (
       <div className="flex flex-col items-center justify-center w-full h-full overflow-y-auto" data-testid="coach-game-review">
         <ReviewSummaryCard
@@ -1539,9 +1552,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           missedOpportunities={missCount}
           // onStartReview omitted: clicking it would route to the
           // deleted analysis-phase, leaving the user on a dead-end
-          // fallback render with no way forward. Walk-phase auto-
-          // renders the moment walkNarration arrives, so no manual
-          // start button is needed.
+          // fallback render with no way forward. The new big-green
+          // `onStartWalk` button below handles entry into the walk
+          // surface — summary persists until the user taps it.
+          onStartWalk={() => {
+            void logAppAudit({
+              kind: 'review-walk-started',
+              category: 'subsystem',
+              source: 'CoachGameReview.onStartWalk',
+              summary: `user tapped Start (walkReady=${walkReady})`,
+              details: JSON.stringify({
+                walkReady,
+                segmentCount: walkNarration?.segments.length ?? 0,
+              }),
+            });
+            setWalkStarted(true);
+          }}
+          walkReady={walkReady}
           onPlayAgain={onPlayAgain}
           onBackToCoach={onBackToCoach}
         />

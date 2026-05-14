@@ -83,6 +83,10 @@ export type AuditKind =
   // navigate away → auto-resume).
   | 'review-walk-explored'
   | 'review-walk-resumed'
+  // User explicitly tapped the big green "Start" button on the
+  // review summary card to enter the walk-phase UI (replaces the
+  // prior auto-enter-on-prep behavior).
+  | 'review-walk-started'
   // "Show me" punishment-line playout on review screen — Stockfish
   // auto-plays 1-4 plies from seg.fenAfter so the student sees why
   // their move was a mistake/blunder. Silent v1, standard cadence.

@@ -173,14 +173,27 @@ vi.mock('../Board/ChessBoard', () => ({
 // board side carries the same info). See coachGameReview commit.
 
 vi.mock('./ReviewSummaryCard', () => ({
-  ReviewSummaryCard: ({ onStartReview, onPlayAgain, onBackToCoach, result }: {
-    onStartReview: () => void;
+  ReviewSummaryCard: ({ onStartReview, onStartWalk, walkReady, onPlayAgain, onBackToCoach, result }: {
+    onStartReview?: () => void;
+    onStartWalk?: () => void;
+    walkReady?: boolean;
     onPlayAgain: () => void;
     onBackToCoach: () => void;
     result: string;
   }) => (
     <div data-testid="review-summary-card" data-result={result}>
-      <button data-testid="start-review-btn" onClick={onStartReview}>Review Game</button>
+      {onStartReview && (
+        <button data-testid="start-review-btn" onClick={onStartReview}>Review Game</button>
+      )}
+      {onStartWalk && (
+        <button
+          data-testid="start-walk-btn"
+          onClick={onStartWalk}
+          disabled={!walkReady}
+        >
+          Start
+        </button>
+      )}
       <button data-testid="summary-play-again-btn" onClick={onPlayAgain}>Play Again</button>
       <button data-testid="summary-back-btn" onClick={onBackToCoach}>Back to Coach</button>
     </div>
@@ -295,6 +308,17 @@ async function renderWalk(overrides?: Parameters<typeof renderReview>[0]): Promi
     closing: null,
   });
   const result = renderReview(overrides);
+  // Summary page now persists until the user explicitly taps the
+  // big green "Start" button (2026-05-14 David's call). Wait for
+  // the button to become tappable (walkReady flips on once
+  // generateReviewNarration resolves), tap it, then assert the walk
+  // surface mounts. Old tests assumed auto-advance — this helper
+  // preserves their semantics by clicking Start on their behalf.
+  await waitFor(() => {
+    const btn = screen.getByTestId('start-walk-btn');
+    expect(btn).not.toBeDisabled();
+  });
+  fireEvent.click(screen.getByTestId('start-walk-btn'));
   await waitFor(() => {
     expect(screen.getByTestId('coach-game-review-walk')).toBeInTheDocument();
   });
@@ -330,10 +354,16 @@ describe('CoachGameReview', () => {
     expect(screen.queryByTestId('chess-board')).not.toBeInTheDocument();
   });
 
-  it('summary card has Review Game, Play Again, and Back to Coach buttons', () => {
+  it('summary card has Start, Play Again, and Back to Coach buttons', () => {
     renderReview();
 
-    expect(screen.getByTestId('start-review-btn')).toHaveTextContent('Review Game');
+    // Production code passes `onStartWalk` (not the legacy
+    // `onStartReview`) — the big-green "Start" button is the only
+    // CTA that advances into the walk-phase. The legacy Quick/Full
+    // Review buttons are intentionally omitted (would route to the
+    // deleted analysis phase).
+    expect(screen.getByTestId('start-walk-btn')).toBeInTheDocument();
+    expect(screen.queryByTestId('start-review-btn')).not.toBeInTheDocument();
     expect(screen.getByTestId('summary-play-again-btn')).toHaveTextContent('Play Again');
     expect(screen.getByTestId('summary-back-btn')).toHaveTextContent('Back to Coach');
   });

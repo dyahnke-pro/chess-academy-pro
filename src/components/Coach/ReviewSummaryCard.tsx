@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { RotateCcw, Home, ChevronRight, Bot, Target, FastForward } from 'lucide-react';
+import { RotateCcw, Home, ChevronRight, Bot, Target, FastForward, Play, Loader2 } from 'lucide-react';
 import { AnimatedAccuracy } from './AnimatedAccuracy';
 import { ClassificationPills } from './ClassificationPills';
 import { PhaseGrades } from './PhaseGrades';
@@ -21,6 +21,14 @@ interface ReviewSummaryCardProps {
    *  The prep-failed fallback in CoachGameReview opts out so users
    *  don't get routed into the dormant analysis phase via this card. */
   onStartReview?: (depth: 'quick' | 'full') => void;
+  /** Big "Start" CTA wired by CoachGameReview to transition from the
+   *  summary card into the walk-phase UI. When provided, surfaces a
+   *  large green button with a soft glow just below the opening tag.
+   *  When `walkReady` is false the button shows a spinner and is
+   *  disabled — Tap-to-start still works once narration finishes
+   *  preparing on the same screen. */
+  onStartWalk?: () => void;
+  walkReady?: boolean;
   onPlayAgain: () => void;
   onBackToCoach: () => void;
   onNavigateToMistakes?: () => void;
@@ -38,6 +46,8 @@ export function ReviewSummaryCard({
   narrativeSummary,
   missedOpportunities,
   onStartReview,
+  onStartWalk,
+  walkReady = true,
   onPlayAgain,
   onBackToCoach,
   onNavigateToMistakes,
@@ -123,6 +133,35 @@ export function ReviewSummaryCard({
             {openingName}
           </span>
         </motion.div>
+      )}
+
+      {/* Big "Start" CTA — anchored right below the opening tag with
+          a soft green glow. The summary page persists until the user
+          taps this; we don't auto-advance into the walk-phase. While
+          narration is still generating the button shows a spinner and
+          is disabled, then becomes tappable the moment prep finishes
+          (the page does not jump). */}
+      {onStartWalk && (
+        <motion.button
+          initial={{ y: 6, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.32 }}
+          onClick={walkReady ? onStartWalk : undefined}
+          disabled={!walkReady}
+          className="self-center flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-base font-bold transition-all active:scale-[0.97] disabled:cursor-not-allowed"
+          style={{
+            background: walkReady ? '#22c55e' : 'rgba(34, 197, 94, 0.4)',
+            color: 'white',
+            boxShadow: walkReady
+              ? '0 0 24px rgba(34, 197, 94, 0.55), 0 0 48px rgba(34, 197, 94, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3)'
+              : '0 0 12px rgba(34, 197, 94, 0.25)',
+          }}
+          data-testid="start-walk-btn"
+          aria-label={walkReady ? 'Start the review walk-through' : 'Preparing review…'}
+        >
+          {walkReady ? <Play size={20} fill="white" /> : <Loader2 size={20} className="animate-spin" />}
+          {walkReady ? 'Start' : 'Preparing…'}
+        </motion.button>
       )}
 
       {/* Coach Narrative Bubble */}

@@ -91,6 +91,12 @@ async function gotoSession(page: Page, gameId: string): Promise<void> {
     { timeout: 30_000, polling: 500 },
   );
   await page.goto(`/coach/review/${gameId}`);
+  // Summary page persists until the user explicitly taps the green
+  // "Start" button (2026-05-14). Wait for it to become tappable
+  // (walkReady flips on once narration finishes prepping), click it,
+  // then assert the walk surface mounts.
+  await page.waitForSelector('[data-testid="start-walk-btn"]:not([disabled])', { timeout: 60_000 });
+  await page.click('[data-testid="start-walk-btn"]');
   await page.waitForSelector('[data-testid="coach-game-review-walk"]', { timeout: 30_000 });
 }
 
@@ -247,7 +253,10 @@ test.describe('Review with Coach — full-play audit', () => {
     await page.getByTestId('review-game-card-sample-morphy-opera-1858').click();
     await expect(page).toHaveURL(/\/coach\/review\/sample-morphy-opera-1858/);
 
-    // CoachGameReview's walk UI testid.
+    // Summary card now persists until the user explicitly taps the
+    // big green "Start" button. Click it, then assert the walk UI.
+    await page.waitForSelector('[data-testid="start-walk-btn"]:not([disabled])', { timeout: 60_000 });
+    await page.click('[data-testid="start-walk-btn"]');
     await expect(page.getByTestId('coach-game-review-walk')).toBeVisible({ timeout: 30_000 });
     expect(recorder.pageErrors).toEqual([]);
   });
