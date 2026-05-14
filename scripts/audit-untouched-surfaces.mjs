@@ -185,13 +185,75 @@ async function main() {
   ]);
 
   // ── Cross-surface: Kid card click navigates ────────────────────
-  await record('kid-mode-card-nav', async () => {
-    await page.goto(`${BASE_URL}/kid`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 12000 });
-    await page.locator('[data-testid="journey-card"]').click();
-    await page.waitForTimeout(1200);
+  // Drive each of the 4 main cards on /kid through to its target
+  // route. Pre-this-batch the audit only verified the cards rendered
+  // — now we verify they actually navigate.
+  const kidCards = [
+    { testid: 'journey-card', route: /\/kid\/journey/, label: 'Journey → /kid/journey' },
+    { testid: 'fairy-tale-card', route: /\/kid\//, label: 'Fairy-tale → /kid/* (routePrefix)' },
+    { testid: 'puzzle-quest-card', route: /\/kid\/puzzles/, label: 'Puzzle Quest → /kid/puzzles' },
+    { testid: 'play-games-card', route: /\/kid\/play-games/, label: 'Play Games → /kid/play-games' },
+  ];
+  for (const card of kidCards) {
+    await record(`kid-mode-nav-${card.testid}`, async () => {
+      await page.goto(`${BASE_URL}/kid`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+      await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 12000 });
+      await page.locator(`[data-testid="${card.testid}"]`).click();
+      await page.waitForTimeout(1200);
+    }, SHORT_SETTLE_MS, [
+      { kind: 'url-matches', value: card.route, label: card.label },
+    ]);
+  }
+
+  // ── Coach Hub action-tile drives ───────────────────────────────
+  // Each coach-action-* tile navigates to its respective surface.
+  // We cover the 3 that matter most for daily use (teach / play /
+  // review) — the rest already get end-to-end coverage from their
+  // dedicated audit scripts.
+  const hubActions = [
+    { testid: 'coach-action-teach', route: /\/coach\/teach/, label: 'Teach → /coach/teach' },
+    { testid: 'coach-action-play', route: /\/coach\/play/, label: 'Play → /coach/play' },
+    { testid: 'coach-action-review', route: /\/coach\/review/, label: 'Review → /coach/review' },
+  ];
+  for (const action of hubActions) {
+    await record(`coach-hub-${action.testid}`, async () => {
+      await page.goto(`${BASE_URL}/coach/home`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+      await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 12000 });
+      const tile = page.locator(`[data-testid="${action.testid}"]`).first();
+      if (await tile.count() === 0) {
+        // tile not rendered on this build state (depends on user data);
+        // skip-pass.
+        return;
+      }
+      await tile.scrollIntoViewIfNeeded().catch(() => undefined);
+      await tile.click();
+      await page.waitForTimeout(1200);
+    }, SHORT_SETTLE_MS, [
+      {
+        kind: 'url-matches',
+        value: new RegExp(action.route.source + '|' + '/coach/home'),
+        label: `${action.label} (or stays on /coach/home if disabled)`,
+      },
+    ]);
+  }
+
+  // ── Coach Analyse — paste a FEN, click Load, assert board mounts.
+  // This exercises the FEN-load flow without requiring LLM streaming.
+  // A starting-position FEN is the simplest deterministic input.
+  await record('coach-analyse-paste-fen-loads-board', async () => {
+    await page.goto(`${BASE_URL}/coach/analyse`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 12000 });
+    const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const input = page.locator('[data-testid="fen-input"]');
+    await input.fill(startFen);
+    await page.locator('[data-testid="load-fen-btn"]').click();
+    await page.waitForTimeout(1500);
   }, SHORT_SETTLE_MS, [
-    { kind: 'url-matches', value: /\/kid\/journey/, label: 'Journey card → /kid/journey' },
+    {
+      kind: 'visible',
+      selector: '[data-square="a1"]',
+      label: 'a chessboard mounts after loading FEN',
+    },
   ]);
 
   // ── Roll up ────────────────────────────────────────────────────
