@@ -745,11 +745,132 @@ Consequences:
   also be on. He'll say "audit running on X tab" if there's a
   conflict in flight; stand down on those files until clear.
 
+## Post-Deploy Audit (MANDATORY — run after EVERY build)
+
+**Non-negotiable.** After every push that lands on `main` and
+triggers a Vercel deploy, run the relevant Playwright audit script
+against the LIVE production URL and confirm all scenarios green
+before claiming the work is done. Unit tests + typecheck + lint
+are NOT sufficient — they don't catch deploy-pipeline issues
+(wrong bundle aliased, env vars scoped to the wrong environment,
+function cold-start regressions, CDN cache serving stale assets).
+
+This rule comes from the 2026-05-14 back-button-fix incident:
+unit tests passed, code was correct, but the production alias
+lagged behind main and the fix wasn't live. The audit-back-from-
+review.mjs script caught the gap; nothing in the local test suite
+could have. Lesson: **trust the audit, not the test pass.**
+
+### The standard post-deploy ritual
+
+After every `git push origin main`:
+
+1. **Wait for Vercel to finish building.** Check with
+   `npx vercel ls | head -5` — the latest Production-target row
+   should be Ready and newer than the previous one. If a prior
+   deploy is still "Building", wait. Don't audit a stale bundle.
+2. **Confirm the live bundle is the one you just shipped.**
+   `curl -s https://chess-academy-pro.vercel.app/ | grep -oE
+   '/assets/index-[A-Za-z0-9]+\.js' | head -1` — the hash should
+   change after each push. If it doesn't, the alias hasn't moved.
+3. **Pull the audit stream** (lightweight sanity check). Empty
+   pulls are fine; what you're checking for is the endpoint
+   itself responding 200 with `storage: "redis"` or `"memory"`
+   (NOT `error: "server misconfigured: AUDIT_STREAM_SECRET not
+   set"` — that means you aliased a Preview deployment to the
+   production URL by mistake, and the Preview env lacks the
+   secret).
+4. **Run the audit script(s) for every surface you touched.**
+   This is the load-bearing step. The matrix:
+
+   | If you changed… | Run |
+   |---|---|
+   | `/coach/review/*` | `scripts/audit-coach-review.mjs` + `scripts/audit-back-from-review.mjs` |
+   | `/coach/play` | `scripts/audit-coach-play.mjs` |
+   | `/coach/chat` | `scripts/audit-coach-chat.mjs` |
+   | `/coach/teach` (Learn) | (no script yet — write one if you're shipping a real change here) |
+   | `/coach/home` + tile nav | `scripts/audit-untouched-surfaces.mjs` |
+   | `/coach/analyse` / `/plan` / `/train` | `scripts/audit-untouched-surfaces.mjs` |
+   | `/tactics/*` | `scripts/audit-tactics.mjs` |
+   | `/weaknesses` (or its tab/row → review flow) | `scripts/audit-weaknesses.mjs` |
+   | `/openings/*` | `scripts/audit-openings-ui.mjs` (coordinate — often 🚧 in flight) |
+   | `/` (dashboard) + SmartSearchBar | `scripts/audit-dashboard.mjs` |
+   | settings toggles | `scripts/audit-settings-behavior.mjs` |
+   | Cross-surface UI scaffolding | run multiple of the above |
+
+   Every script in `scripts/audit-*.mjs` targets the live prod URL
+   by default (override with `AUDIT_SMOKE_URL` for local).
+
+5. **All scenarios must be green.** If any fail:
+   - Dig into the failure FIRST. Don't dismiss as flake without
+     reproducing twice.
+   - Real regressions: fix + push + re-audit. Don't claim done.
+   - Genuine flakes (cold-start timing, transient network): bump
+     the relevant timeout in the script and re-run, then commit
+     the timeout fix.
+   - Skipped scenarios are NOT failures (e.g. "no mistake-row
+     entries on fresh prod context" is by design — the script
+     seeds synthetic data where it can, but some flows can't be
+     fully exercised cold).
+6. **Save the report.** Each audit drops a JSON report under
+   `audit-reports/<surface>-<iso>/report.json`. Reference it
+   when reporting back to David ("all 20 scenarios green, report
+   at `audit-reports/weaknesses-...`").
+
+### Writing a new audit script
+
+If you touched a surface that has no audit script and the change
+isn't pure content / styling / docs / tests, **write the audit
+script** as part of the same PR. Use existing scripts as templates:
+- `scripts/audit-weaknesses.mjs` — modern reference. Per-scenario
+  try/catch, structured report, synthetic-data seeding via
+  `page.evaluate` + IndexedDB, scenario chain that can skip when
+  preconditions aren't met.
+- `scripts/audit-back-from-review.mjs` — focused regression-class
+  audit (one specific contract, ~10 scenarios). Good for back-
+  button-style contracts.
+- `scripts/audit-coach-review.mjs` — large surface, many
+  expectations, the `expectation` kind pattern (`visible` /
+  `invisible` / `count-gte` / `url-matches` / `audit-present`).
+
+Add the new script to the matrix above AND to `docs/AUDIT_INDEX.md`
+the same commit.
+
+### Deploy-pipeline gotchas (the ones we've actually hit)
+
+- **Vercel free tier caps at 100 deploys/day.** When the cap hits,
+  `vercel --prod` returns `Resource is limited`. GitHub auto-deploy
+  is sometimes affected too. If you hit the cap, the only options
+  are (a) wait ~24h, (b) re-alias an existing successful deploy
+  via `npx vercel alias <preview-url> chess-academy-pro.vercel.app`,
+  (c) push an empty commit and pray.
+- **Aliasing a Preview deployment to the production URL breaks
+  any env var scoped Production-only.** `AUDIT_STREAM_SECRET` is
+  Production-only by design. If you alias a Preview, the
+  audit-stream endpoint returns `error: "server misconfigured…"`.
+  Roll back the alias by re-aliasing the prior Production deploy
+  (`npx vercel ls` → find the most recent `Environment` =
+  Production row, alias that one).
+- **Vercel CDN caches the index.html briefly.** If
+  `curl -I .../` returns `x-vercel-cache: HIT` and the
+  `last-modified` is older than your push, give it 30-60s and
+  re-curl with a cache-buster (`?cache_bust=$(date +%s)`).
+- **Production alias can lag behind main by 5-30 min when Vercel
+  is rate-limited or queued.** Always verify the deployed bundle
+  hash matches your latest commit BEFORE auditing — running an
+  audit against the old bundle wastes time chasing a "regression"
+  that doesn't exist yet because your code isn't shipped.
+
 ## Before Finishing a Session
 
 1. All tests pass (`npm run test:run`)
 2. No TypeScript errors (`npm run typecheck`)
 3. No lint errors (`npm run lint`)
-4. Update MANIFEST.md — mark completed work orders, note any blockers
-5. If you created new files, verify they follow the file organization rules above
-6. Merge and deploy (see Deployment Policy above)
+4. **Post-deploy audit ran AND all scenarios green** (see
+   "Post-Deploy Audit (MANDATORY)" above) — this is the load-
+   bearing step, not the test suite.
+5. Update MANIFEST.md — mark completed work orders, note any blockers
+6. If you created new files, verify they follow the file organization rules above
+7. Merge and deploy (see Deployment Policy above)
+8. If you wrote a new audit script, add it to the matrix in
+   "Post-Deploy Audit" and to `docs/AUDIT_INDEX.md`.
