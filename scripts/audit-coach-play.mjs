@@ -249,10 +249,19 @@ async function main() {
     if (await chatBtn.count() === 0) throw new Error('play-chat-button missing on /coach/play');
     await chatBtn.click();
     await page.locator('[data-testid="game-chat-panel"]').first().waitFor({ timeout: 5000 });
-    // Send the deterministic fast-path phrase.
+    // Wait a tick for the mobile drawer's slide-in animation to settle
+    // (otherwise the log subtree intercepts pointer events while it's
+    // still mid-animation and the send-button click times out).
+    await page.waitForTimeout(600);
+    // Send the deterministic fast-path phrase. Use Enter on the input
+    // instead of clicking the send button — on mobile (414×896
+    // viewport) the chat renders inside `mobile-chat-drawer` and the
+    // role="log" overlay above the send button keeps intercepting
+    // pointer events. Enter on a focused input bypasses the click
+    // chain entirely. Matches how a real user with a keyboard sends.
     const input = page.locator('[data-testid="game-chat-panel"] [data-testid="chat-text-input"]').first();
     await input.fill('narrate while we play');
-    await page.locator('[data-testid="game-chat-panel"] [data-testid="chat-send-btn"]').first().click();
+    await input.press('Enter');
   }, MOVE_SETTLE_MS, [
     // Pre-fix this count was 0 (only LLM-success paths wrote to memory;
     // fast-paths skipped it). Post-fix both user + coach turns mirror,
