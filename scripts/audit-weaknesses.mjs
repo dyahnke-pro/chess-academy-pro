@@ -98,8 +98,12 @@ async function main() {
   // Boot
   // ───────────────────────────────────────────────────────────────
   await scenario('boot-weaknesses', async () => {
-    await page.goto(`${BASE_URL}/weaknesses`, { timeout: 30_000 });
-    await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 20_000 });
+    // First page-load cold-start on Vercel can take 30-45s for a
+    // fresh Production deploy as the function instance warms up
+    // and the bundle parses. Subsequent SPA navigations are <2s
+    // because the bundle is cached. Generous timeout here.
+    await page.goto(`${BASE_URL}/weaknesses`, { timeout: 60_000 });
+    await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 45_000 });
     return 'page mounted';
   });
 
@@ -144,33 +148,30 @@ async function main() {
   // ───────────────────────────────────────────────────────────────
   // Switch through each tab and verify content mounts
   // ───────────────────────────────────────────────────────────────
-  const tabContentMap = {
-    openings: 'openings-tab',
-    mistakes: 'mistakes-tab',
-    tactics: 'tactics-tab',
-    patterns: 'patterns-tab',
+  // PatternsTab uses `patterns-loading` / `patterns-empty` / `patterns-tab`
+  // (different naming convention from other tabs which use the
+  // `<name>-tab` suffix consistently). The variants array captures
+  // every acceptable mount testid per tab.
+  const tabContentVariants = {
+    openings: ['openings-tab'],
+    mistakes: ['mistakes-tab'],
+    tactics: ['tactics-tab'],
+    patterns: ['patterns-tab', 'patterns-loading', 'patterns-empty'],
   };
-  for (const [tab, expectedTestId] of Object.entries(tabContentMap)) {
+  for (const [tab, variants] of Object.entries(tabContentVariants)) {
     await scenario(`switch-to-${tab}-loads-content`, async () => {
       await page.locator(`[data-testid="tab-${tab}"]`).click();
-      // Some tabs have a separate loading / empty state — accept any of
-      // <expectedTestId>, <expectedTestId>-loading, <expectedTestId>-empty.
-      const variants = [
-        `[data-testid="${expectedTestId}"]`,
-        `[data-testid="${expectedTestId}-loading"]`,
-        `[data-testid="${expectedTestId}-empty"]`,
-      ];
+      const selector = variants.map((v) => `[data-testid="${v}"]`).join(', ');
       const ok = await page
-        .locator(variants.join(', '))
+        .locator(selector)
         .first()
         .waitFor({ timeout: 8_000 })
         .then(() => true)
         .catch(() => false);
-      if (!ok) throw new Error(`no content variant of ${expectedTestId} appeared`);
-      // Pull which one matched.
+      if (!ok) throw new Error(`no variant matched: ${variants.join(', ')}`);
       let matched = '?';
       for (const v of variants) {
-        if ((await page.locator(v).count()) > 0) {
+        if ((await page.locator(`[data-testid="${v}"]`).count()) > 0) {
           matched = v;
           break;
         }
@@ -185,6 +186,29 @@ async function main() {
   // (The audit-back-from-review covers state-carrying nav explicitly;
   // here we focus on row presence + click contract.)
   // ───────────────────────────────────────────────────────────────
+  // Visit /coach/review first so the sample-game seeder runs and
+  // populates Dexie with `sample-morphy-opera-1858`. Without this,
+  // the synthetic mistake puzzle below references a non-existent
+  // sourceGameId — the review session page then can't adapt the
+  // GameRecord and the `coach-game-review` container never mounts,
+  // cascading into back-from-review test failure.
+  await scenario('pre-seed-sample-games-via-review-list', async () => {
+    await page.goto(`${BASE_URL}/coach/review`);
+    await page.locator('[data-testid="coach-review-list-page"]').waitFor({ timeout: 15_000 });
+    await page
+      .locator('[data-testid^="review-game-card-"]')
+      .first()
+      .waitFor({ timeout: 30_000 });
+    return 'sample games seeded';
+  });
+
+  // Return to /weaknesses for the synthetic seed + row exercise.
+  await scenario('return-to-weaknesses', async () => {
+    await page.goto(`${BASE_URL}/weaknesses`, { timeout: 60_000 });
+    await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 45_000 });
+    return 'back on /weaknesses';
+  });
+
   await scenario('seed-synthetic-mistake', async () => {
     await page.evaluate(async () => {
       const now = new Date().toISOString();
@@ -246,10 +270,13 @@ async function main() {
   });
 
   await scenario('refresh-and-mistake-row-shows', async () => {
-    await page.reload();
-    await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 20_000 });
+    // Use goto rather than reload — Playwright reload sometimes
+    // races the SPA's hydration phase on a slow Vercel cold start.
+    // goto with a generous timeout is more reliable.
+    await page.goto(`${BASE_URL}/weaknesses`, { timeout: 60_000 });
+    await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 45_000 });
     await page.locator('[data-testid="tab-mistakes"]').click();
-    await page.locator('[data-testid="mistake-row"]').first().waitFor({ timeout: 8_000 });
+    await page.locator('[data-testid="mistake-row"]').first().waitFor({ timeout: 15_000 });
     const count = await page.locator('[data-testid="mistake-row"]').count();
     return `${count} mistake-row(s) rendered`;
   });
@@ -268,16 +295,26 @@ async function main() {
     // From the review page (entered via state-carrying nav above),
     // click the Back button. Should land on /weaknesses with the
     // Mistakes tab restored (not Overview).
-    await page.locator('[data-testid="coach-game-review"]').waitFor({ timeout: 20_000 });
+    await page.locator('[data-testid="coach-game-review"]').waitFor({ timeout: 30_000 });
     const back = page.locator('[data-testid="summary-back-btn"]');
     if ((await back.count()) === 0) throw new Error('summary-back-btn missing');
     await back.click();
-    await page.waitForTimeout(800);
+    // Allow time for the back-navigation + GameInsightsPage to
+    // re-mount with state.tab restored. The mount triggers async
+    // data fetches so the tab content can take a beat to settle.
+    await page.waitForTimeout(2000);
     if (!/\/weaknesses(?!\/)/.test(page.url())) {
       throw new Error(`expected /weaknesses, got ${new URL(page.url()).pathname}`);
     }
-    const mistakesActive = (await page.locator('[data-testid="mistakes-tab"]').count()) > 0;
-    if (!mistakesActive) throw new Error('mistakes tab not active on back-nav');
+    // Wait for the mistakes-tab container to mount specifically —
+    // this is the "active tab" signal since only the active tab's
+    // body is rendered.
+    const ok = await page
+      .locator('[data-testid="mistakes-tab"]')
+      .waitFor({ timeout: 5_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (!ok) throw new Error('mistakes tab not active on back-nav');
     return 'mistakes tab restored';
   });
 
