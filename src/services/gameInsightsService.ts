@@ -6,6 +6,7 @@ import { getPhaseBreakdown } from './gamePhaseService';
 import { detectMissedTactics } from './missedTacticService';
 import { getMistakePuzzleStats } from './mistakePuzzleService';
 import { gameNeedsAnalysis } from './gameAnalysisService';
+import { getOpeningNameByEco } from './openingDetectionService';
 import type {
   GameRecord,
   MoveClassificationCounts,
@@ -327,10 +328,20 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
 
     let entry = openingMap.get(key);
     if (!entry) {
-      // Try to find a name from the repertoire or use ECO code
+      // Resolve the opening's display name with a 3-tier fallback:
+      //   1. User's repertoire — if they have this ECO set up as a
+      //      named opening, use that name (most personal / accurate).
+      //   2. Lichess DB canonical lookup — translate raw ECO codes
+      //      like "C24" into readable names ("Bishop's Opening") so
+      //      cards don't read like serial numbers.
+      //   3. Final fallback to the ECO string itself, then "Unknown".
+      // Pre-fix the surface rendered shareable-insight headlines like
+      // "You win 75% with the C24" — users couldn't tell what they
+      // were good at without knowing the ECO codes by heart.
       const repOpening = repertoire.find((o) => o.eco === eco);
+      const canonical = repOpening?.name ?? getOpeningNameByEco(eco) ?? eco ?? 'Unknown';
       entry = {
-        name: repOpening?.name ?? eco ?? 'Unknown',
+        name: canonical,
         eco,
         openingId: repOpening?.id ?? null,
         games: 0, wins: 0, losses: 0, draws: 0,
@@ -367,9 +378,13 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
 
     let entry = map.get(key);
     if (!entry) {
+      // Same 3-tier name fallback as above so the white/black-split
+      // win-rate-by-opening blocks also render readable names instead
+      // of bare ECOs.
       const repOpening = repertoire.find((o) => o.eco === game.eco);
+      const canonical = repOpening?.name ?? getOpeningNameByEco(game.eco) ?? game.eco ?? 'Unknown';
       entry = {
-        name: repOpening?.name ?? game.eco ?? 'Unknown',
+        name: canonical,
         eco: game.eco,
         openingId: repOpening?.id ?? null,
         games: 0, wins: 0, losses: 0, draws: 0,

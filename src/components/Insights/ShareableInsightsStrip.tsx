@@ -1,10 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ShareableInsightCard } from './ShareableInsightCard';
 import {
   computeShareableInsights,
   type ShareableInsight,
 } from '../../services/shareableInsightsService';
+
+/** Horizontal swipe threshold — fingers drift a few pixels while
+ *  tapping or scrolling, so we need a meaningful minimum to register
+ *  as a deliberate swipe. 40px is comfortable for mobile thumbs
+ *  without competing with the vertical scroll handler. */
+const SWIPE_THRESHOLD_PX = 40;
 
 /**
  * ShareableInsightsStrip — the carousel of "did you know" cards at
@@ -44,8 +50,36 @@ export function ShareableInsightsStrip(): JSX.Element | null {
   if (insights.length === 0) return null;
 
   const current = insights[index];
+  const insightCount = insights.length;
   const hasPrev = index > 0;
-  const hasNext = index < insights.length - 1;
+  const hasNext = index < insightCount - 1;
+
+  // Swipe-to-navigate — captures touch + pointer drags on the card
+  // container. Records the start X on touchstart/pointerdown, then on
+  // release computes the horizontal delta and advances/retreats if it
+  // crosses SWIPE_THRESHOLD_PX. Vertical-dominant gestures fall
+  // through to the native scroll handler so the user can still scroll
+  // the page through this section.
+  const swipeStartXRef = useRef<number | null>(null);
+  const swipeStartYRef = useRef<number | null>(null);
+  function onSwipeStart(x: number, y: number): void {
+    swipeStartXRef.current = x;
+    swipeStartYRef.current = y;
+  }
+  function onSwipeEnd(x: number, y: number): void {
+    const startX = swipeStartXRef.current;
+    const startY = swipeStartYRef.current;
+    swipeStartXRef.current = null;
+    swipeStartYRef.current = null;
+    if (startX === null || startY === null) return;
+    const dx = x - startX;
+    const dy = y - startY;
+    // Vertical-dominant — don't consume; user is probably scrolling.
+    if (Math.abs(dy) > Math.abs(dx)) return;
+    if (Math.abs(dx) < SWIPE_THRESHOLD_PX) return;
+    if (dx < 0 && hasNext) setIndex((i) => Math.min(insightCount - 1, i + 1));
+    else if (dx > 0 && hasPrev) setIndex((i) => Math.max(0, i - 1));
+  }
 
   return (
     <section
@@ -86,7 +120,26 @@ export function ShareableInsightsStrip(): JSX.Element | null {
           </div>
         )}
       </div>
-      <ShareableInsightCard insight={current} />
+      <div
+        onTouchStart={(e) => onSwipeStart(e.touches[0].clientX, e.touches[0].clientY)}
+        onTouchEnd={(e) => onSwipeEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY)}
+        onPointerDown={(e) => {
+          // Only register left-button drags on desktop (skip
+          // right-clicks + middle-clicks). Mobile touch handlers
+          // above own the touch path; this is the desktop / stylus
+          // fallback for users without touchscreens.
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
+          onSwipeStart(e.clientX, e.clientY);
+        }}
+        onPointerUp={(e) => onSwipeEnd(e.clientX, e.clientY)}
+        // `touch-action: pan-y` lets the user keep scrolling
+        // vertically (touch-action lives in CSS, but Tailwind v4
+        // covers it via arbitrary property).
+        style={{ touchAction: 'pan-y', cursor: insights.length > 1 ? 'grab' : 'default' }}
+        data-testid="shareable-insight-swipe-region"
+      >
+        <ShareableInsightCard insight={current} />
+      </div>
     </section>
   );
 }

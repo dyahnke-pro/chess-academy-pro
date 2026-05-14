@@ -429,6 +429,61 @@ export function getOpeningMoves(openingName: string): string[] | null {
   return r ? r.moves : null;
 }
 
+/** Canonical opening name lookup by ECO code. Returns the most-likely
+ *  parent name for a given ECO bucket — strategy:
+ *    1. Prefer names WITHOUT a colon (i.e. unprefixed root openings).
+ *    2. Among those, prefer names WITHOUT ", X" sub-variation suffixes.
+ *    3. Pick the most frequent name in that filtered set.
+ *    4. Fall back to the most common BASE (text before the colon) of
+ *       the full list when no clean root exists.
+ *  Built lazily on first call and memoized; the DB has ~3600 entries
+ *  but only ~500 distinct ECOs.
+ *
+ *  Used by Game Insights to translate ECO codes (e.g. "C24") into
+ *  readable names ("Bishop's Opening") on the shareable-insight cards
+ *  and per-opening drilldown — previously the surface fell back to the
+ *  raw ECO string when the user's repertoire didn't have the opening,
+ *  which read like a serial number ("You win 75% with the C24"). */
+let ecoToCanonicalNameCache: Map<string, string> | null = null;
+export function getOpeningNameByEco(eco: string | null | undefined): string | null {
+  if (!eco) return null;
+  if (!ecoToCanonicalNameCache) {
+    ecoToCanonicalNameCache = new Map();
+    const buckets = new Map<string, string[]>();
+    for (const entry of canonicalOpenings as OpeningEntry[]) {
+      if (!entry.eco || !entry.name) continue;
+      const list = buckets.get(entry.eco) ?? [];
+      list.push(entry.name);
+      buckets.set(entry.eco, list);
+    }
+    for (const [ecoKey, names] of buckets.entries()) {
+      ecoToCanonicalNameCache.set(ecoKey, resolveCanonicalName(names));
+    }
+  }
+  return ecoToCanonicalNameCache.get(eco) ?? null;
+}
+
+function resolveCanonicalName(names: string[]): string {
+  const noColon = names.filter((n) => !n.includes(':'));
+  if (noColon.length > 0) {
+    const noComma = noColon.filter((n) => !n.includes(', '));
+    const pool = noComma.length > 0 ? noComma : noColon;
+    return mostFrequent(pool);
+  }
+  return mostFrequent(names.map((n) => n.split(':')[0].trim()));
+}
+
+function mostFrequent(items: string[]): string {
+  const counts = new Map<string, number>();
+  for (const i of items) counts.set(i, (counts.get(i) ?? 0) + 1);
+  let bestItem = items[0];
+  let bestCount = 0;
+  for (const [item, count] of counts.entries()) {
+    if (count > bestCount) { bestItem = item; bestCount = count; }
+  }
+  return bestItem;
+}
+
 /** All distinct SANs that appear at `prefix.length`-th ply across DB
  *  entries whose first `prefix.length` plies match `prefix` exactly.
  *  Used by find-move stage gen to pick branchpoints — positions where
