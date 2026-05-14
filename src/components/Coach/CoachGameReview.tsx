@@ -1337,9 +1337,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 Walk phase is the canonical review surface. */}
           </div>
 
-          {/* ── Fixed bottom: Play Again + Back to Coach ─────────────── */}
+          {/* ── Fixed bottom: Play Again + Back to Coach ──────────────
+              mb-[4.5rem] (mobile only) lifts the bar above
+              AppLayout's md:hidden fixed bottom-0 nav (≈4.5rem tall)
+              so its click area isn't intercepted. Audit-driven:
+              audit-coach-review.mjs caught `walk-back-to-coach-btn`
+              clicks failing on mobile viewport because the nav sat on
+              top of the bar. md+ hides the nav, so md:mb-0. */}
           <div
-            className="shrink-0 flex items-center gap-2 px-3 py-3 border-t border-theme-border"
+            className="shrink-0 flex items-center gap-2 px-3 py-3 border-t border-theme-border mb-[4.5rem] md:mb-0"
             style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
             data-testid="review-bottom-bar"
           >
