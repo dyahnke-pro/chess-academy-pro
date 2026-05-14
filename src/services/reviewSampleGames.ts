@@ -30,7 +30,14 @@ import { logAppAudit } from './appAuditor';
 // walk-UI green arrow renders. Old .v2-seeded records carry SAN
 // (e.g. "d3") which fails the UCI length>=4 gate in
 // CoachGameReview.tsx:711 — re-seed to fix the regression.
-const SAMPLES_SEEDED_META_KEY = 'review-samples-seeded.v3';
+// .v4 — bumped when the London sample PGN was replaced because it
+// had multiple illegal moves (8.Qxd3 blocked by Nd2; 17.Rae1 blocked
+// by Qb1; 21.Rxe6 blocked by e5-pawn). chess.js loadPgn errored at
+// move 8 → adaptGameRecord returned null → /coach/review/<id>
+// rendered "Loading game…" indefinitely with no error path. Fixed by
+// replacing the PGN with a verified 30-ply London draw and adding
+// `reviewSampleGames.test.ts` so a broken PGN can never seed again.
+const SAMPLES_SEEDED_META_KEY = 'review-samples-seeded.v4';
 
 interface SampleAnnotation {
   /** 1-indexed full move number, matching MoveAnnotation.moveNumber. */
@@ -62,7 +69,7 @@ interface SampleGame {
 /** Five famous, instructive games. Short enough that the per-move
  *  walkthrough in /coach/review feels brisk; varied enough that the
  *  game-style classifier produces a mix of style badges. */
-const SAMPLE_GAMES: SampleGame[] = [
+export const SAMPLE_GAMES: SampleGame[] = [
   {
     id: 'sample-morphy-opera-1858',
     pgn:
@@ -289,6 +296,10 @@ const SAMPLE_GAMES: SampleGame[] = [
     ],
   },
   {
+    // Previous PGN had multiple illegal moves (8.Qxd3 blocked by Nd2,
+    // 17.Rae1 blocked by Qb1, 21.Rxe6 blocked by e5-pawn). Replaced
+    // with a verified 30-ply London draw; chess.js loadPgn now passes
+    // (covered by reviewSampleGames.test.ts).
     id: 'sample-london-amateur-3',
     pgn:
       '[Event "Casual game"]\n' +
@@ -297,10 +308,9 @@ const SAMPLE_GAMES: SampleGame[] = [
       '[White "You"]\n' +
       '[Black "chesscom_opp"]\n' +
       '[Result "1/2-1/2"]\n\n' +
-      '1. d4 d5 2. Nf3 Nf6 3. Bf4 c5 4. e3 Nc6 5. c3 Bf5 6. Nbd2 e6 7. Bd3 Bxd3 ' +
-      '8. Qxd3 Be7 9. O-O O-O 10. h3 Rc8 11. Rfe1 Qb6 12. Qb1 cxd4 13. exd4 Nh5 ' +
-      '14. Bg3 Nxg3 15. fxg3 Bd6 16. Re3 Rfe8 17. Rae1 Rcd8 18. Ne5 Bxe5 ' +
-      '19. dxe5 d4 20. cxd4 Nxd4 21. Rxe6 Nxe6 22. Rxe6 fxe6 1/2-1/2',
+      '1. d4 d5 2. Nf3 Nf6 3. Bf4 e6 4. e3 c5 5. c3 Nc6 6. Bd3 Bd6 7. Bg3 Bxg3 ' +
+      '8. hxg3 cxd4 9. exd4 O-O 10. O-O Bd7 11. Nbd2 Rc8 12. Re1 Qb6 13. Qb3 Qxb3 ' +
+      '14. axb3 Rfd8 15. Ne5 Be8 1/2-1/2',
     white: 'You',
     black: 'chesscom_opp',
     result: '1/2-1/2',
@@ -316,45 +326,31 @@ const SAMPLE_GAMES: SampleGame[] = [
       { m: 2, c: 'white', san: 'Nf3', eval: 30, classification: 'good' },
       { m: 2, c: 'black', san: 'Nf6', eval: 30, classification: 'good' },
       { m: 3, c: 'white', san: 'Bf4', eval: 35, classification: 'good', comment: 'London System.' },
-      { m: 3, c: 'black', san: 'c5', eval: 40, classification: 'good' },
+      { m: 3, c: 'black', san: 'e6', eval: 40, classification: 'good' },
       { m: 4, c: 'white', san: 'e3', eval: 35, classification: 'good' },
-      { m: 4, c: 'black', san: 'Nc6', eval: 40, classification: 'good' },
+      { m: 4, c: 'black', san: 'c5', eval: 40, classification: 'good' },
       { m: 5, c: 'white', san: 'c3', eval: 35, classification: 'good' },
-      { m: 5, c: 'black', san: 'Bf5', eval: 30, classification: 'good' },
-      { m: 6, c: 'white', san: 'Nbd2', eval: 25, classification: 'good' },
-      { m: 6, c: 'black', san: 'e6', eval: 20, classification: 'good' },
-      { m: 7, c: 'white', san: 'Bd3', eval: 30, classification: 'good' },
-      { m: 7, c: 'black', san: 'Bxd3', eval: 35, classification: 'good' },
-      { m: 8, c: 'white', san: 'Qxd3', eval: 30, classification: 'good' },
-      { m: 8, c: 'black', san: 'Be7', eval: 35, classification: 'good' },
-      { m: 9, c: 'white', san: 'O-O', eval: 30, classification: 'good' },
-      { m: 9, c: 'black', san: 'O-O', eval: 35, classification: 'good' },
-      { m: 10, c: 'white', san: 'h3', eval: 25, classification: 'good' },
-      { m: 10, c: 'black', san: 'Rc8', eval: 30, classification: 'good' },
-      { m: 11, c: 'white', san: 'Rfe1', eval: 25, classification: 'good' },
-      { m: 11, c: 'black', san: 'Qb6', eval: 30, classification: 'good' },
-      { m: 12, c: 'white', san: 'Qb1', eval: 20, classification: 'good' },
-      { m: 12, c: 'black', san: 'cxd4', eval: 25, classification: 'good' },
-      { m: 13, c: 'white', san: 'exd4', eval: 25, classification: 'good' },
-      { m: 13, c: 'black', san: 'Nh5', eval: 30, classification: 'good' },
-      { m: 14, c: 'white', san: 'Bg3', eval: 35, classification: 'good' },
-      { m: 14, c: 'black', san: 'Nxg3', eval: 40, classification: 'good' },
-      { m: 15, c: 'white', san: 'fxg3', eval: 30, classification: 'good' },
-      { m: 15, c: 'black', san: 'Bd6', eval: 35, classification: 'good' },
-      { m: 16, c: 'white', san: 'Re3', eval: 25, classification: 'good' },
-      { m: 16, c: 'black', san: 'Rfe8', eval: 30, classification: 'good' },
-      { m: 17, c: 'white', san: 'Rae1', eval: 20, classification: 'good' },
-      { m: 17, c: 'black', san: 'Rcd8', eval: 25, classification: 'good' },
-      { m: 18, c: 'white', san: 'Ne5', eval: 30, classification: 'good' },
-      { m: 18, c: 'black', san: 'Bxe5', eval: 35, classification: 'good' },
-      { m: 19, c: 'white', san: 'dxe5', eval: 30, classification: 'good' },
-      { m: 19, c: 'black', san: 'd4', eval: 35, classification: 'good' },
-      { m: 20, c: 'white', san: 'cxd4', eval: 30, classification: 'good' },
-      { m: 20, c: 'black', san: 'Nxd4', eval: 35, classification: 'good' },
-      { m: 21, c: 'white', san: 'Rxe6', eval: 0, classification: 'good', comment: 'Forcing the perpetual.' },
-      { m: 21, c: 'black', san: 'Nxe6', eval: 0, classification: 'good' },
-      { m: 22, c: 'white', san: 'Rxe6', eval: 0, classification: 'good' },
-      { m: 22, c: 'black', san: 'fxe6', eval: 0, classification: 'good', comment: 'Drawn endgame.' },
+      { m: 5, c: 'black', san: 'Nc6', eval: 30, classification: 'good' },
+      { m: 6, c: 'white', san: 'Bd3', eval: 30, classification: 'good' },
+      { m: 6, c: 'black', san: 'Bd6', eval: 35, classification: 'good' },
+      { m: 7, c: 'white', san: 'Bg3', eval: 35, classification: 'good', comment: 'Sidestepping the trade — the London bishop wants to stay on the long diagonal.' },
+      { m: 7, c: 'black', san: 'Bxg3', eval: 40, classification: 'inaccuracy', comment: 'Trading off your good bishop and giving White the open h-file.' },
+      { m: 8, c: 'white', san: 'hxg3', eval: 35, classification: 'good' },
+      { m: 8, c: 'black', san: 'cxd4', eval: 40, classification: 'good' },
+      { m: 9, c: 'white', san: 'exd4', eval: 35, classification: 'good' },
+      { m: 9, c: 'black', san: 'O-O', eval: 40, classification: 'good' },
+      { m: 10, c: 'white', san: 'O-O', eval: 30, classification: 'good' },
+      { m: 10, c: 'black', san: 'Bd7', eval: 35, classification: 'good' },
+      { m: 11, c: 'white', san: 'Nbd2', eval: 25, classification: 'good' },
+      { m: 11, c: 'black', san: 'Rc8', eval: 30, classification: 'good' },
+      { m: 12, c: 'white', san: 'Re1', eval: 25, classification: 'good' },
+      { m: 12, c: 'black', san: 'Qb6', eval: 25, classification: 'good' },
+      { m: 13, c: 'white', san: 'Qb3', eval: 20, classification: 'good', comment: 'Offering the queen trade to defuse pressure on b2.' },
+      { m: 13, c: 'black', san: 'Qxb3', eval: 15, classification: 'good' },
+      { m: 14, c: 'white', san: 'axb3', eval: 10, classification: 'good' },
+      { m: 14, c: 'black', san: 'Rfd8', eval: 10, classification: 'good' },
+      { m: 15, c: 'white', san: 'Ne5', eval: 5, classification: 'good' },
+      { m: 15, c: 'black', san: 'Be8', eval: 0, classification: 'good', comment: 'Even endgame — both sides agreed to a draw here.' },
     ],
   },
 ];

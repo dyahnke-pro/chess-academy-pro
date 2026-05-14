@@ -247,6 +247,26 @@ export function CoachReviewSessionPage(): JSX.Element {
     [game, playerColor],
   );
 
+  // Audit-driven: if game loaded from Dexie but adaptGameRecord
+  // returned null (PGN unparseable, history empty), the page would
+  // sit on "Loading game…" indefinitely. Surface a concrete error
+  // with a "Back" CTA instead so the user can recover. Production
+  // repro: sample-london-amateur-3 shipped with an illegal 8.Qxd3
+  // that chess.js rejected — caught by audit-coach-review.mjs.
+  useEffect(() => {
+    if (!game || adapted || loadError || analyzing) return;
+    void logAppAudit({
+      kind: 'stockfish-error',
+      category: 'subsystem',
+      source: 'CoachReviewSessionPage.adapt',
+      summary: `adaptGameRecord returned null for game ${game.id} — PGN unparseable or history empty`,
+      details: JSON.stringify({ gameId: game.id, pgnLength: game.pgn.length }),
+    });
+    setLoadError(
+      'We could not replay this game from its PGN. Pick a different game from the list, or import a fresh one.',
+    );
+  }, [game, adapted, loadError, analyzing]);
+
   if (loadError) {
     return (
       <div className="flex flex-col items-center justify-center p-6 gap-3 flex-1">
