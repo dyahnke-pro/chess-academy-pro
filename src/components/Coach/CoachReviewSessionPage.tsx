@@ -291,7 +291,14 @@ export function CoachReviewSessionPage(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col md:flex-row flex-1 min-h-0">
+    // pb-[calc(4.5rem+env(safe-area-inset-bottom))] reserves room for
+    // the fixed mobile bottom nav (md:hidden in AppLayout) PLUS the
+    // iOS home-indicator safe-area inset. Audit caught the
+    // "Back to Coach" button being intercepted by the nav on mobile
+    // viewports — the walk-ui filled the entire viewport including
+    // the bottom 4.5rem the nav covers. md:pb-0 because the nav is
+    // hidden at md+ and the bottom bar can sit flush.
+    <div className="flex flex-col md:flex-row flex-1 min-h-0 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
       {/* `autoStartReview` was previously passed here, forcing
           `reviewPhase` to initialize to `'analysis'`. That made
           sense in the old design where analysis was the dominant
