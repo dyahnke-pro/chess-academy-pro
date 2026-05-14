@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import type { OpeningRecord, ProPlayer } from '../types';
 import proRepertoireData from '../data/pro-repertoires.json';
 import classificationData from '../data/trap-line-classifications.json';
+import { LEARN_SIMPLIFIED } from '../utils/featureFlags';
 
 interface ProRepertoireJson {
   players: ProPlayer[];
@@ -117,6 +118,9 @@ const MAX_TRAP_TILES_PER_PICKER = 4;
 export function findTrapTilesForCanonicalLine(
   canonicalPgn: string,
 ): TrapTile[] {
+  // Live (simplified) Learn surface hides trap tiles entirely. Preview
+  // branches keep the full taxonomy. See src/utils/featureFlags.ts.
+  if (LEARN_SIMPLIFIED) return [];
   const prefix = canonicalPgn.trim();
   if (!prefix) return [];
   const prefixPlies = prefix.split(/\s+/).filter(Boolean).length;

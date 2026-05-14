@@ -1,6 +1,7 @@
 import canonicalOpenings from '../data/openings-lichess.json';
 import extendedOpenings from '../data/openings-lichess-extended.json';
 import type { DetectedOpening } from '../types';
+import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
 
 interface OpeningEntry {
   eco: string;
@@ -618,7 +619,9 @@ export function findSiblingExtensionBranches(
     },
   );
   branches.sort((a, b) => b.count - a.count);
-  return branches.slice(0, 3);
+  // Cap branch count: 6 by default, 3 when VITE_LEARN_SIMPLIFIED=true.
+  // See src/utils/featureFlags.ts.
+  return branches.slice(0, MAX_SIBLING_BRANCHES);
 }
 
 /** Find ALL Lichess-DB entries related to an opening name. Returns
