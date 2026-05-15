@@ -87,16 +87,19 @@ test.describe('Coach walkthrough contract — wire-level verification', () => {
     await page.goto('/coach/teach');
     // The page needs the seed DB before the chat input is reachable.
     // Use a generous wait — fresh IndexedDB cold-start can take 30+s.
-    await page.waitForSelector('input[placeholder*="Ask"], textarea[placeholder*="Ask"], [data-testid="coach-input"]', {
-      timeout: 60_000,
-    });
+    const input = page.getByRole('textbox', { name: /message to coach/i });
+    await input.waitFor({ timeout: 60_000 });
 
-    // Submit a walkthrough request — the exact trigger phrase the
-    // contract is designed for.
-    const input = page.locator('input, textarea').filter({
-      hasText: '',
-    }).first();
-    await input.fill('walk me through the italian');
+    // We're verifying WIRE PRESENCE of the contract, not testing the
+    // walkthrough flow itself. Any chat message that goes to the LLM
+    // will carry the system prompt. We DELIBERATELY avoid "walk me
+    // through X" phrases because those trigger CoachTeachPage's
+    // surface-routing branch (Tier 1 static-tree resolves the
+    // walkthrough in-place + returns early WITHOUT calling the LLM —
+    // confirmed by the first run of this spec landing 0 intercepted
+    // calls). A free-form question goes straight to coachService.ask
+    // and carries the assembled envelope to the LLM.
+    await input.fill('What general opening principles should I know?');
     await page.keyboard.press('Enter');
 
     // Wait for at least one LLM intercept to fire. The surface may
