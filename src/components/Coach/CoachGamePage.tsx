@@ -322,6 +322,9 @@ function enforceMateFloor(rating: number): boolean {
   return rating >= 1000;
 }
 
+// CoachGamePageProps is intentionally empty — reserved for future props
+// without breaking the public type signature.
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CoachGamePageProps {}
 
 export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
@@ -450,7 +453,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         details: JSON.stringify({ ...args, route }),
       });
       try {
-        navigate(route);
+        void navigate(route);
         return { ok: true };
       } catch (err) {
         return { ok: false, reason: err instanceof Error ? err.message : String(err) };
@@ -3250,6 +3253,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       moves: [...prev.moves, playerMove],
       currentHintLevel: 0,
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intendedOpening/liveCoach/subjectParam used only for snapshot inside the callback; tracked for a dedicated exhaustive-deps audit.
   }, [game, handleBackToGame, resetHints, playerColor, gameState.moves, triggerMoveFlash]);
 
   // Handle practice move (when in chat-driven practice mode)

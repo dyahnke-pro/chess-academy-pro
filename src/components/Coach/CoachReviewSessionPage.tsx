@@ -330,7 +330,7 @@ export function CoachReviewSessionPage(): JSX.Element {
       <div className="flex flex-col items-center justify-center p-6 gap-3 flex-1">
         <p className="text-sm text-red-400">{loadError}</p>
         <button
-          onClick={() => navigate('/coach/review')}
+          onClick={() => { void navigate('/coach/review'); }}
           className="px-3 py-1.5 rounded-lg bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 text-xs font-medium"
         >
           Back to game list
@@ -387,8 +387,8 @@ export function CoachReviewSessionPage(): JSX.Element {
         playerName={adapted.playerName}
         playerRating={adapted.playerRating}
         opponentRating={adapted.opponentRating}
-        onPlayAgain={() => navigate('/coach/play')}
-        onBackToCoach={() => navigate(backTarget, { state: backState })}
+        onPlayAgain={() => { void navigate('/coach/play'); }}
+        onBackToCoach={() => { void navigate(backTarget, { state: backState }); }}
         onPracticeInChat={(prompt) => {
           // Route to /coach/chat with the tactic prompt seeded as a
           // URL query param. CoachChatPage reads `?q=` and pre-fills

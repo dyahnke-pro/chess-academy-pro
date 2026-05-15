@@ -78,6 +78,9 @@ describe('accuracyService', () => {
     });
   });
 
+  // Whole describe explicitly tests the deprecated function — keep
+  // it covered until/unless we delete cpLossToAccuracy entirely.
+  /* eslint-disable @typescript-eslint/no-deprecated */
   describe('cpLossToAccuracy (legacy compat)', () => {
     it('returns ~100 for 0 cp loss', () => {
       expect(cpLossToAccuracy(0)).toBeCloseTo(100, 0);
@@ -89,6 +92,7 @@ describe('accuracyService', () => {
       expect(cpLossToAccuracy(300)).toBeLessThan(40);
     });
   });
+  /* eslint-enable @typescript-eslint/no-deprecated */
 
   describe('calculateAccuracy', () => {
     it('returns 0 for empty moves', () => {

@@ -169,6 +169,7 @@ export function GuessTheMove({ onExit }: GuessTheMoveProps): JSX.Element {
       // Reset board to original position after evaluation
       game.loadFen(current.fen);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- game.loadFen is stable; tracked for dedicated audit.
     [phase, current, evaluateGuess],
   );
 

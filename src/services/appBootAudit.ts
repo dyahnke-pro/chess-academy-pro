@@ -59,10 +59,13 @@ export function emitAppBootAudit(): void {
             }
           : null,
         timing: {
-          domContentLoadedTs:
-            performance?.timeOrigin && performance?.timing?.domContentLoadedEventEnd
-              ? performance.timing.domContentLoadedEventEnd
-              : null,
+          // PerformanceTiming is deprecated; use PerformanceNavigationTiming
+          // via getEntriesByType('navigation') for the same data.
+          domContentLoadedTs: ((): number | null => {
+            const navEntries = performance.getEntriesByType('navigation');
+            const nav = navEntries[0] as PerformanceNavigationTiming | undefined;
+            return nav ? nav.domContentLoadedEventEnd : null;
+          })(),
           now: Date.now(),
         },
       },

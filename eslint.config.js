@@ -65,6 +65,15 @@ export default tseslint.config(
       }],
       'no-var': 'error',
       'prefer-const': 'error',
+      // 200+ pre-existing occurrences across production source. Each
+      // is a defensive null/undefined check where TS infers the value
+      // is always present. Two failure modes: (a) the check is truly
+      // dead — safe to remove, but (b) the TS type is wrong and the
+      // check IS load-bearing at runtime. Without runtime evidence
+      // for each, sweep-removing risks shipping null-pointer bugs.
+      // Downgrade to warn so it surfaces in dev (caught by future
+      // edits) without blocking ship until the cleanup pass runs.
+      '@typescript-eslint/no-unnecessary-condition': 'warn',
     },
   },
   // Test utilities — fast-refresh rule doesn't apply to test helpers
@@ -79,6 +88,28 @@ export default tseslint.config(
     files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
     rules: {
       '@typescript-eslint/unbound-method': 'off',
+      // Test mocks frequently need to satisfy a `Promise<T>`-returning
+      // interface without doing real async work (e.g.
+      // `vi.fn(async (env) => responseFixture)`). Forcing
+      // `() => Promise.resolve(x)` everywhere adds noise without
+      // catching real bugs in test code.
+      '@typescript-eslint/require-await': 'off',
+      // Tests routinely do `result!.foo` on outputs the test setup
+      // guarantees are present. Forcing `if (!result) throw ...` or
+      // `expect(result).toBeDefined()` followed by `result!.foo`
+      // before every access in test code is noise that doesn't
+      // surface real bugs (a typo here fails the test instantly).
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      // Test fixtures and mocks often work with loosely-typed data
+      // (e.g. `Record<string, unknown>` props, JSON fixtures cast as
+      // `any`). The unsafe-* rules fire on every access into these,
+      // which adds noise without catching production bugs — the
+      // test setup itself is the safety net.
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
     },
   },
 );

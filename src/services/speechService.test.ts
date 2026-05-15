@@ -46,7 +46,7 @@ describe('speechService', () => {
 
     it('speaks without cancel when nothing is playing', () => {
       const { speechService } = SpeechServiceModule;
-      speechService.speak('Hello world');
+      void speechService.speak('Hello world');
 
       expect(window.speechSynthesis.cancel).not.toHaveBeenCalled();
       expect(window.speechSynthesis.speak).toHaveBeenCalled();
@@ -56,7 +56,7 @@ describe('speechService', () => {
       const { speechService } = SpeechServiceModule;
       const synth = window.speechSynthesis as unknown as Record<string, unknown>;
       synth.speaking = true;
-      speechService.speak('Hello world');
+      void speechService.speak('Hello world');
 
       expect(window.speechSynthesis.cancel).toHaveBeenCalled();
       expect(window.speechSynthesis.speak).toHaveBeenCalled();
@@ -68,7 +68,7 @@ describe('speechService', () => {
       speechService.setEnabled(false);
       vi.clearAllMocks();
 
-      speechService.speak('Hello');
+      void speechService.speak('Hello');
       vi.runAllTimers();
       expect(window.speechSynthesis.speak).not.toHaveBeenCalled();
     });
@@ -79,7 +79,7 @@ describe('speechService', () => {
       speechService.setEnabled(true);
       vi.clearAllMocks();
 
-      speechService.speak('Hello again');
+      void speechService.speak('Hello again');
       vi.runAllTimers();
       expect(window.speechSynthesis.speak).toHaveBeenCalled();
     });

@@ -595,20 +595,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           // regresses), the surface itself enforces the rule. The
           // refusal reasons name [BOARD: arrow:...] so the brain
           // learns to use the marker mandate instead.
-          onPlayMove: async (): Promise<{ ok: false; reason: string }> => ({
+          onPlayMove: (): { ok: false; reason: string } => ({
             ok: false,
             reason:
               'play_move is locked on the review surface — the timeline is the source of truth. Use a [BOARD: arrow:from-to:green] marker to show the move, and the student can tap the suggested piece to explore.',
           }),
-          onTakeBackMove: async (): Promise<{ ok: false; reason: string }> => ({
+          onTakeBackMove: (): { ok: false; reason: string } => ({
             ok: false,
             reason: 'take_back_move is locked on the review surface — the student drives navigation with the forward/back buttons.',
           }),
-          onSetBoardPosition: async (): Promise<{ ok: false; reason: string }> => ({
+          onSetBoardPosition: (): { ok: false; reason: string } => ({
             ok: false,
             reason: 'set_board_position is locked on the review surface — the timeline is the source of truth.',
           }),
-          onResetBoard: async (): Promise<{ ok: false; reason: string }> => ({
+          onResetBoard: (): { ok: false; reason: string } => ({
             ok: false,
             reason: 'reset_board is locked on the review surface — the student can use the Jump-to-Start nav button to rewind.',
           }),
@@ -801,8 +801,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // the suggestion, no need to clutter the post-exploration view.
         if (walkExplorationFen) return undefined;
         if (!seg || !hasArrow) return undefined;
-        const startSquare = seg.bestMoveUci!.slice(0, 2);
-        const endSquare = seg.bestMoveUci!.slice(2, 4);
+        const uci = seg.bestMoveUci;
+        if (!uci) return undefined;
+        const startSquare = uci.slice(0, 2);
+        const endSquare = uci.slice(2, 4);
         return [{ startSquare, endSquare, color: '#22c55e' }];
       })();
       // Walk-mode board is interactive only when a green arrow is on

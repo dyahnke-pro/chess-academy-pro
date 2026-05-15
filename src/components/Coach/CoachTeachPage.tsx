@@ -894,7 +894,7 @@ export function CoachTeachPage(): JSX.Element {
           //   3. Otherwise → play the walkthrough (first-time).
           if (stageHint === 'play-real') {
             walkthrough.stop();
-            navigate(`/coach/play?opening=${encodeURIComponent(staticTree.openingName)}`);
+            void navigate(`/coach/play?opening=${encodeURIComponent(staticTree.openingName)}`);
             return;
           }
           const completed = await getCompletedStages(staticTree.openingName);
@@ -1005,7 +1005,7 @@ export function CoachTeachPage(): JSX.Element {
         if (cachedTree) {
           if (stageHint === 'play-real') {
             walkthrough.stop();
-            navigate(`/coach/play?opening=${encodeURIComponent(cachedTree.openingName)}`);
+            void navigate(`/coach/play?opening=${encodeURIComponent(cachedTree.openingName)}`);
             return;
           }
           const completed = await getCompletedStages(cachedTree.openingName);
@@ -1121,7 +1121,7 @@ export function CoachTeachPage(): JSX.Element {
           voiceService.stop();
           if (stageHint === 'play-real') {
             walkthrough.stop();
-            navigate(`/coach/play?opening=${encodeURIComponent(sharedTree.openingName)}`);
+            void navigate(`/coach/play?opening=${encodeURIComponent(sharedTree.openingName)}`);
           } else if (stageHint) {
             walkthrough.startAtStageMenu(sharedTree, stageHint);
           } else {
@@ -1201,7 +1201,7 @@ export function CoachTeachPage(): JSX.Element {
             // first visit (no chooser since this IS the first visit).
             if (stageHint === 'play-real') {
               walkthrough.stop();
-              navigate(`/coach/play?opening=${encodeURIComponent(result.tree.openingName)}`);
+              void navigate(`/coach/play?opening=${encodeURIComponent(result.tree.openingName)}`);
             } else if (stageHint) {
               walkthrough.startAtStageMenu(result.tree, stageHint);
             } else {
@@ -1487,10 +1487,10 @@ export function CoachTeachPage(): JSX.Element {
           // trip N+1 sees the post-trip-N board state. Without it the
           // brain hallucinates extra moves on the wrong side.
           getLiveFen: () => liveFenRef.current,
-          onPlayMove: async (san: string) => handlePlayMove(san),
-          onTakeBackMove: async (count: number) => handleTakeBack(count),
-          onSetBoardPosition: async (newFen: string) => handleSetBoardPosition(newFen),
-          onResetBoard: async () => handleResetBoard(),
+          onPlayMove: (san: string) => handlePlayMove(san),
+          onTakeBackMove: (count: number) => handleTakeBack(count),
+          onSetBoardPosition: (newFen: string) => handleSetBoardPosition(newFen),
+          onResetBoard: () => handleResetBoard(),
           onNavigate: (path: string) => { void navigate(path); },
           // Walkthrough handoff: when the LLM decides "let's drill this
           // opening line as a guided walkthrough," route the student
@@ -1711,6 +1711,7 @@ export function CoachTeachPage(): JSX.Element {
       setBusy(false);
       setKickoffStatus(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; current deps cover the live callers.
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough]);
 
   // Student-driven moves go through ControlledChessBoard's onMove
@@ -3156,7 +3157,7 @@ function WalkthroughControls({
             onClick={() => {
               const opening = tree?.openingName ?? '';
               walkthrough.stop();
-              navigate(`/coach/play?opening=${encodeURIComponent(opening)}`);
+              void navigate(`/coach/play?opening=${encodeURIComponent(opening)}`);
             }}
             className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
             style={goldGlowStyle}
@@ -3282,16 +3283,6 @@ function QuizPanel({
     quizShowingFeedback,
   } = walkthrough;
 
-  // Punish stage gets a LESSON PICKER (not the MC quiz UI) per user
-  // morning iteration: "Punishment lines need to be in walk through
-  // style following the same pattern we teach the opening in." Each
-  // picked lesson runs as its own mini-walkthrough via
-  // startPunishLesson; the picker re-renders here when the lesson
-  // ends and exitPunishToMenu returns the user to the stage menu.
-  if (activeStage === 'punish' && tree?.punish && tree.punish.length > 0) {
-    return <PunishLessonPicker walkthrough={walkthrough} />;
-  }
-
   // Speak the question prompt aloud whenever a new question appears.
   // User asked for "the coach reads the question out loud — not the
   // answer, just the question." Fires on activeStage change (new
@@ -3321,6 +3312,19 @@ function QuizPanel({
     }
      
   }, [activeStage, stageIndex, tree]);
+
+  // Punish stage gets a LESSON PICKER (not the MC quiz UI) per user
+  // morning iteration: "Punishment lines need to be in walk through
+  // style following the same pattern we teach the opening in." Each
+  // picked lesson runs as its own mini-walkthrough via
+  // startPunishLesson; the picker re-renders here when the lesson
+  // ends and exitPunishToMenu returns the user to the stage menu.
+  // Hoisted BELOW the useEffect above to satisfy rules-of-hooks —
+  // both are kept inside the component but always run in the same
+  // order on every render.
+  if (activeStage === 'punish' && tree?.punish && tree.punish.length > 0) {
+    return <PunishLessonPicker walkthrough={walkthrough} />;
+  }
 
   if (!tree || !activeStage) return <div data-testid="walkthrough-quiz-empty" />;
 

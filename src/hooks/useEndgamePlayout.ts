@@ -323,7 +323,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     // FEN, no student move has happened yet). Skip the promotion
     // check in that case — there's no "last move" to inspect.
     const lastMove = chessRef.current.history({ verbose: true }).slice(-1)[0];
-    if (lastMove && lastMove.flags.includes('p')) {
+    if (lastMove?.isPromotion()) {
       setFallbackOutcome('survived');
       setPhase('complete');
       return;

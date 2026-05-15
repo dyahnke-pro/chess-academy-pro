@@ -141,6 +141,7 @@ export function MiddlegamePractice({
   // Set board orientation
   useEffect(() => {
     game.setOrientation(playerColor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- game.setOrientation is stable; tracked for dedicated audit.
   }, [playerColor, game.setOrientation]);
 
   // Analyze position for engine lines when it's player's turn
@@ -248,7 +249,7 @@ export function MiddlegamePractice({
       if (isNarrating) {
         // LLM response may include chess notation; sanitize before TTS
         // so the student hears plain English instead of "Nxf7".
-        speechService.speak(sanitizeForTTS(response));
+        void speechService.speak(sanitizeForTTS(response));
       }
     } catch {
       if (isMountedRef.current) {
