@@ -569,6 +569,44 @@ class ChessAcademyDB extends Dexie {
     }).upgrade(async () => {
       // No data migration — brand-new store; existing data untouched.
     });
+
+    // v26: kid-mode per-piece adaptive rating. Adds
+    // UserProfile.kidRatingByPiece — one Elo-style number per
+    // ChessPiece, used by the kid puzzle filter (Phase 8) to draw
+    // from puzzles.json + training-puzzles.json by rating band.
+    // No new indexes; just seeding default values on existing rows
+    // so downstream code can rely on the field being present after
+    // first read.
+    this.version(26).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
+      classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
+      openingNarrations: 'id, openingName, variation, moveSan, fen, approved',
+      cachedOpenings: 'normalizedName, eco, generatedAt',
+      endgameProgress: 'id, lessonId, lastPlayedAt',
+      srsOpeningCards: 'id, openingId, nextReviewAt, [openingId+nextReviewAt]',
+    }).upgrade(async (tx) => {
+      const KID_PIECES: Array<'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'> =
+        ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
+      const DEFAULT_RATING = 100;
+      await tx.table('profiles').toCollection().modify((profile: { kidRatingByPiece?: Record<string, number> }) => {
+        if (profile.kidRatingByPiece) return; // already seeded
+        const seeded: Record<string, number> = {};
+        for (const p of KID_PIECES) seeded[p] = DEFAULT_RATING;
+        profile.kidRatingByPiece = seeded;
+      });
+    });
   }
 }
 
