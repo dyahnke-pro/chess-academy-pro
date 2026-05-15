@@ -7,11 +7,23 @@
  * envelope (with the contract included for `teach` surface) and
  * POSTs to the LLM provider.
  *
- * This spec INTERCEPTS that POST via Playwright's route handler,
- * captures the request body, and asserts the system prompt sent
- * to the LLM contains the contract's sentinel phrase. We never
- * actually call the LLM — the intercept returns a stub response
- * so the test doesn't burn API credits or wait on network.
+ * This spec uses a passive `page.on('request')` listener to
+ * capture the request body the moment the SDK initiates the
+ * HTTP send, then asserts the system prompt contains the
+ * contract's sentinel phrase. The request returns a 401 (the
+ * key is `sk-ant-fake-test-key` baked into the dev server at
+ * startup) — we don't care; `page.on('request')` already saw
+ * the body before the response.
+ *
+ * Prerequisite: the dev server MUST be started with fake API
+ * keys baked in, e.g.
+ *   ANTHROPIC_KEY=sk-ant-fake-test-key \
+ *   DEEPSEEK_KEY=sk-ds-fake-test-key \
+ *   npm run dev
+ * Without a key Vite bakes in the empty-string default, the
+ * coach short-circuits at coachApi.ts:802 with
+ * "⚠️ No API key configured", and the SDK never makes the HTTP
+ * call — so the listener captures nothing.
  *
  * What this proves:
  *   - The contract is reaching the wire (not stripped by some
@@ -50,6 +62,20 @@ test.describe('Coach walkthrough contract — wire-level verification', () => {
     // server then 401s, but our listener already saw the body). The
     // earlier page.route() approach required the request to fully
     // round-trip, which couldn't happen without a working key.
+    // Diagnostic: log every external POST so we can see where the
+    // coach SDK actually sends the request. The intercept may miss
+    // if the URL pattern shifts (e.g. SDK upgrade, regional endpoint,
+    // proxy). The assertion below still filters by URL — this debug
+    // capture only matters when the test fails.
+    const allPosts: { url: string; bodyHead: string }[] = [];
+    page.on('request', (req) => {
+      if (req.method() === 'POST' && !req.url().startsWith('http://localhost')) {
+        allPosts.push({
+          url: req.url(),
+          bodyHead: (req.postData() ?? '').slice(0, 200),
+        });
+      }
+    });
     page.on('request', (req) => {
       const url = req.url();
       if (!/api\.deepseek\.com|api\.anthropic\.com/.test(url)) return;
@@ -101,9 +127,22 @@ test.describe('Coach walkthrough contract — wire-level verification', () => {
     // Wait for at least one LLM intercept to fire. The surface may
     // make multiple calls per turn (tool round-trips); we only need
     // to inspect the FIRST one for the contract presence.
-    await expect
-      .poll(() => calls.length, { timeout: 30_000 })
-      .toBeGreaterThan(0);
+    //
+    // `expect.poll`'s `message` parameter is stringified rather than
+    // evaluated when the poll fails — so a lambda printing diagnostic
+    // state just shows the function source. Use try/catch and rethrow
+    // with a real built string so we can see where the SDK actually
+    // sent the request.
+    try {
+      await expect.poll(() => calls.length, { timeout: 30_000 }).toBeGreaterThan(0);
+    } catch (err) {
+      const summary = allPosts.length
+        ? allPosts.map((p) => `  ${p.url}  | body: ${p.bodyHead.replace(/\s+/g, ' ')}`).join('\n')
+        : '  (none)';
+      throw new Error(
+        `No LLM call seen. External POSTs observed (${allPosts.length}):\n${summary}\n\nOriginal: ${(err as Error).message}`,
+      );
+    }
 
     const firstCall = calls[0];
     expect(
