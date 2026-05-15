@@ -60,6 +60,18 @@ test.describe('Stockfish iOS preflight fix', () => {
       }
     });
 
+    // Capture every Stockfish-related request URL. Worker source
+    // URLs DO fire `request` events even though they don't show up
+    // in performance.getEntriesByType('resource'). This is the
+    // most reliable signal for which variant actually loaded.
+    const stockfishRequests: string[] = [];
+    page.on('request', (req) => {
+      const url = req.url();
+      if (/\/stockfish\//.test(url)) {
+        stockfishRequests.push(url);
+      }
+    });
+
     // Pre-seed the sticky-fallback flag — this is the exact state
     // that bypassed iOS detection in the bug.
     await page.addInitScript(() => {
@@ -124,32 +136,19 @@ test.describe('Stockfish iOS preflight fix', () => {
       return null;
     });
 
-    // The Dexie hook isn't exposed for tests; do a softer check via
-    // worker URL — the live Worker constructor's request URL is
-    // observable on the page. If `lila-bridge.worker.js` is what
-    // loaded, the fix worked.
-    const loadedWorkerScript = await page.evaluate(() => {
-      // The most observable signal: peek at performance entries for
-      // /stockfish/*.js requests.
-      const entries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
-      const stockfishRequests = entries
-        .filter((e) => /\/stockfish\//.test(e.name))
-        .map((e) => e.name);
-      return stockfishRequests;
-    });
-
-    // At least one of the loaded Stockfish requests must be the
-    // lila-bridge variant. None should be stockfish-18-lite-single.
-    const loadedLila = loadedWorkerScript.some((u) => /lila-bridge/.test(u));
-    const loadedLite = loadedWorkerScript.some((u) => /stockfish-18-lite/.test(u));
+    // Use the Playwright request listener data captured above —
+    // Worker source URLs fire request events but don't show up in
+    // performance.getEntriesByType('resource').
+    const loadedLila = stockfishRequests.some((u) => /lila-bridge/.test(u));
+    const loadedLite = stockfishRequests.some((u) => /stockfish-18-lite/.test(u));
 
     expect(
       loadedLila,
-      `lila-bridge was NOT loaded. Stockfish requests: ${loadedWorkerScript.join(', ')}`,
+      `lila-bridge was NOT loaded. Stockfish requests: ${stockfishRequests.join(', ') || '(none)'}`,
     ).toBe(true);
     expect(
       loadedLite,
-      `stockfish-18-lite WAS loaded on iOS Safari — fix regressed. Requests: ${loadedWorkerScript.join(', ')}`,
+      `stockfish-18-lite WAS loaded on iOS Safari — fix regressed. Requests: ${stockfishRequests.join(', ')}`,
     ).toBe(false);
   });
 });
