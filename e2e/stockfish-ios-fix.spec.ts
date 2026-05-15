@@ -77,11 +77,23 @@ test.describe('Stockfish iOS preflight fix', () => {
       }
     });
 
-    // /coach/endgame is the surface where the 120 crashes happened.
-    await page.goto('/coach/endgame');
-    // Generous timeout for Stockfish initialization — the lila
-    // bridge worker takes a few seconds to load on a cold start.
-    await page.waitForLoadState('networkidle', { timeout: 30_000 });
+    // Open an opening detail page → click Play → that surface ALWAYS
+    // initializes Stockfish on mount (OpeningPlayMode wires the
+    // engine analyzer directly). /coach/endgame as a HUB doesn't
+    // load Stockfish until the user opens a specific lesson; the
+    // bug surfaced on /coach/endgame because David was inside an
+    // active lesson. The variant routing logic we're testing is
+    // the same regardless of which surface triggers initialize.
+    await page.goto('/openings');
+    await page.waitForSelector('[data-testid="opening-explorer"]', { timeout: 60_000 });
+    const firstCard = page.locator('[data-testid^="opening-card-"]').first();
+    await firstCard.waitFor({ timeout: 15_000 });
+    await firstCard.click();
+    await page.waitForSelector('[data-testid="opening-detail"]', { timeout: 15_000 });
+    await page.getByTestId('play-btn').click();
+    // Wait for the chessboard to mount — proxies "Stockfish init has
+    // started" since OpeningPlayMode boots the engine on mount.
+    await page.waitForSelector('[data-square="a1"]', { timeout: 30_000 });
 
     // Give Stockfish time to either initialize cleanly OR crash. The
     // bug crashed 5×/sec — 15s would have produced ~75 errors.
