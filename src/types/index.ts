@@ -687,6 +687,14 @@ export interface UserProfile {
    *  (and vice versa). Default 1200; updated K=32 Elo against
    *  the puzzle's Lichess rating on each endgame puzzle attempt. */
   endgameRating?: number;
+  /** Kid-mode per-piece adaptive rating. One number per ChessPiece;
+   *  starts at 100 (sub-Lichess floor — kid sees the training-pool
+   *  puzzles in puzzles.json/training-puzzles.json first), capped
+   *  100-2000. +25 on a correct puzzle / -15 on a wrong one. Read
+   *  via kidRatingService.getKidRating with a 100 fallback so
+   *  pre-migration profiles still work. Schema v26 seeds defaults
+   *  for existing profiles. */
+  kidRatingByPiece?: Partial<Record<ChessPiece, number>>;
   xp: number;
   level: number;
   currentStreak: number;
