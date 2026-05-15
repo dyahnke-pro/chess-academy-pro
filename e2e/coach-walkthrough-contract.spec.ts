@@ -38,72 +38,45 @@ interface InterceptedCall {
 test.describe('Coach walkthrough contract — wire-level verification', () => {
   test.setTimeout(120_000);
 
-  // This spec needs the coach to actually issue an LLM HTTP request
-  // so the intercept can capture the system prompt. The sandboxed dev
-  // environment running this test typically does NOT have working
-  // VITE_DEEPSEEK_API_KEY / VITE_ANTHROPIC_API_KEY env vars + the
-  // obfuscated embedded fallback may be inert too. Without a key the
-  // coach short-circuits with a "no key" error BEFORE making the
-  // fetch, so the route handler sees zero calls and the test fails.
-  //
-  // In CI / production environments where the keys ARE present, this
-  // test runs end-to-end and proves the contract reaches the wire.
-  // The unit-level coverage in src/coach/__tests__/envelope.test.ts
-  // (9 cases under "WALKTHROUGH_PROMISE_CONTRACT inclusion") locks
-  // the contract's presence in the assembled envelope without needing
-  // real credentials, so this spec is purely the wire-delivery
-  // confirmation layer.
-  test.skip(
-    !process.env.VITE_DEEPSEEK_API_KEY &&
-      !process.env.VITE_ANTHROPIC_API_KEY &&
-      !process.env.DEEPSEEK_KEY &&
-      !process.env.ANTHROPIC_KEY,
-    'No LLM API key available in env — wire test requires the coach to actually make a request. Envelope unit tests (envelope.test.ts) cover the assembly logic without needing credentials.',
-  );
-
   test('system prompt to LLM contains WALKTHROUGH_PROMISE_CONTRACT on /coach/teach', async ({
     page,
   }) => {
     const calls: InterceptedCall[] = [];
 
-    // Stub both DeepSeek and Anthropic chat endpoints with a fast
-    // canned response — captures the request body so the assertion
-    // can check the system prompt the surface ACTUALLY sent.
-    const stubResponseSSE =
-      'data: {"choices":[{"delta":{"content":"OK — play 1.e4 to start."}}]}\n\n' +
-      'data: {"choices":[{"delta":{"content":""}, "finish_reason":"stop"}]}\n\n' +
-      'data: [DONE]\n\n';
-
-    const captureAndStub = async (route: import('@playwright/test').Route) => {
-      const request = route.request();
-      const body = request.postData() ?? '';
-      let parsed: { messages?: Array<{ role: string; content: string }> } = {};
+    // Passive listener via page.on('request') — captures the request
+    // body the moment the SDK initiates the HTTP send, BEFORE any
+    // auth or response handling. This works even when the LLM key is
+    // invalid/missing: the SDK still builds + sends the request (the
+    // server then 401s, but our listener already saw the body). The
+    // earlier page.route() approach required the request to fully
+    // round-trip, which couldn't happen without a working key.
+    page.on('request', (req) => {
+      const url = req.url();
+      if (!/api\.deepseek\.com|api\.anthropic\.com/.test(url)) return;
+      const body = req.postData() ?? '';
+      let parsed: { messages?: Array<{ role: string; content: string }>; system?: string | { type: string; text: string }[] } = {};
       try {
         parsed = JSON.parse(body);
       } catch {
         /* keep parsed empty */
       }
-      const systemMsg = parsed.messages?.find((m) => m.role === 'system');
+      // OpenAI-style (DeepSeek): system message is in messages[].
+      // Anthropic-style: `system` is a top-level field.
+      let systemPrompt = '';
+      if (typeof parsed.system === 'string') {
+        systemPrompt = parsed.system;
+      } else if (Array.isArray(parsed.system)) {
+        systemPrompt = parsed.system.map((p) => p.text ?? '').join('\n');
+      } else {
+        systemPrompt = parsed.messages?.find((m) => m.role === 'system')?.content ?? '';
+      }
       const userMsg = parsed.messages?.find((m) => m.role === 'user');
       calls.push({
-        url: request.url(),
-        systemPrompt: systemMsg?.content ?? '',
+        url,
+        systemPrompt,
         userMessage: userMsg?.content ?? '',
       });
-      // Return a minimal SSE stream so the surface's streaming
-      // pipeline can drain without hanging the test.
-      await route.fulfill({
-        status: 200,
-        headers: {
-          'content-type': 'text/event-stream',
-          'access-control-allow-origin': '*',
-        },
-        body: stubResponseSSE,
-      });
-    };
-
-    await page.route('**/api.deepseek.com/**', captureAndStub);
-    await page.route('**/api.anthropic.com/**', captureAndStub);
+    });
 
     // /coach/teach is the user-driven chat surface — the contract
     // applies here per envelope.ts's surface routing.
