@@ -894,7 +894,7 @@ export function CoachTeachPage(): JSX.Element {
           //   3. Otherwise → play the walkthrough (first-time).
           if (stageHint === 'play-real') {
             walkthrough.stop();
-            navigate(`/coach/play?opening=${encodeURIComponent(staticTree.openingName)}`);
+            void navigate(`/coach/play?opening=${encodeURIComponent(staticTree.openingName)}`);
             return;
           }
           const completed = await getCompletedStages(staticTree.openingName);
@@ -1005,7 +1005,7 @@ export function CoachTeachPage(): JSX.Element {
         if (cachedTree) {
           if (stageHint === 'play-real') {
             walkthrough.stop();
-            navigate(`/coach/play?opening=${encodeURIComponent(cachedTree.openingName)}`);
+            void navigate(`/coach/play?opening=${encodeURIComponent(cachedTree.openingName)}`);
             return;
           }
           const completed = await getCompletedStages(cachedTree.openingName);
@@ -1121,7 +1121,7 @@ export function CoachTeachPage(): JSX.Element {
           voiceService.stop();
           if (stageHint === 'play-real') {
             walkthrough.stop();
-            navigate(`/coach/play?opening=${encodeURIComponent(sharedTree.openingName)}`);
+            void navigate(`/coach/play?opening=${encodeURIComponent(sharedTree.openingName)}`);
           } else if (stageHint) {
             walkthrough.startAtStageMenu(sharedTree, stageHint);
           } else {
@@ -1201,7 +1201,7 @@ export function CoachTeachPage(): JSX.Element {
             // first visit (no chooser since this IS the first visit).
             if (stageHint === 'play-real') {
               walkthrough.stop();
-              navigate(`/coach/play?opening=${encodeURIComponent(result.tree.openingName)}`);
+              void navigate(`/coach/play?opening=${encodeURIComponent(result.tree.openingName)}`);
             } else if (stageHint) {
               walkthrough.startAtStageMenu(result.tree, stageHint);
             } else {
@@ -3156,7 +3156,7 @@ function WalkthroughControls({
             onClick={() => {
               const opening = tree?.openingName ?? '';
               walkthrough.stop();
-              navigate(`/coach/play?opening=${encodeURIComponent(opening)}`);
+              void navigate(`/coach/play?opening=${encodeURIComponent(opening)}`);
             }}
             className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
             style={goldGlowStyle}

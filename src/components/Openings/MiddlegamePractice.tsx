@@ -248,7 +248,7 @@ export function MiddlegamePractice({
       if (isNarrating) {
         // LLM response may include chess notation; sanitize before TTS
         // so the student hears plain English instead of "Nxf7".
-        speechService.speak(sanitizeForTTS(response));
+        void speechService.speak(sanitizeForTTS(response));
       }
     } catch {
       if (isMountedRef.current) {

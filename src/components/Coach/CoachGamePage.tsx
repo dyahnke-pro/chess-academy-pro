@@ -450,7 +450,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         details: JSON.stringify({ ...args, route }),
       });
       try {
-        navigate(route);
+        void navigate(route);
         return { ok: true };
       } catch (err) {
         return { ok: false, reason: err instanceof Error ? err.message : String(err) };

@@ -69,7 +69,7 @@ export function CoachReviewListPage(): JSX.Element {
     >
       <div className="flex items-center gap-2 max-w-lg mx-auto w-full">
         <button
-          onClick={() => navigate('/coach/home')}
+          onClick={() => { void navigate('/coach/home'); }}
           aria-label="Back to coach"
           className="p-2 rounded-lg hover:bg-theme-border/50 transition-colors"
         >
@@ -147,13 +147,13 @@ export function CoachReviewListPage(): JSX.Element {
               : `No games from ${filter} yet.`}
             <div className="mt-3 flex items-center justify-center gap-2">
               <button
-                onClick={() => navigate('/coach/play')}
+                onClick={() => { void navigate('/coach/play'); }}
                 className="px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-medium hover:bg-emerald-500/25"
               >
                 Play vs Coach
               </button>
               <button
-                onClick={() => navigate('/games/import')}
+                onClick={() => { void navigate('/games/import'); }}
                 className="px-3 py-1.5 rounded-lg bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 text-xs font-medium hover:bg-cyan-500/25"
               >
                 Import games
@@ -167,10 +167,10 @@ export function CoachReviewListPage(): JSX.Element {
             <ReviewGameCard
               key={g.id}
               game={g}
-              onClick={() => navigate(
+              onClick={() => { void navigate(
                 `/coach/review/${encodeURIComponent(g.id)}`,
                 { state: { from: '/coach/review' } },
-              )}
+              ); }}
             />
           ))}
       </div>

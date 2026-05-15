@@ -112,7 +112,7 @@ function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps)
   const [masteredByLesson, setMasteredByLesson] = useState<Record<string, number>>({});
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    void (async () => {
       const entries: Record<string, number> = {};
       for (const lesson of lessons) {
         const records: EndgameProgressRecord[] = await getLessonProgress(lesson.id);
@@ -209,7 +209,7 @@ function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps)
             </button>
             {isFullyMastered && (
               <button
-                onClick={onResetLesson}
+                onClick={() => { void onResetLesson(); }}
                 className="absolute top-2 right-9 w-7 h-7 rounded-md hover:bg-green-500/20 flex items-center justify-center text-green-400/70 hover:text-green-400 transition-colors"
                 aria-label={`Reset progress for ${lesson.name}`}
                 title="Reset progress"
@@ -240,7 +240,7 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
   const [masteryByFen, setMasteryByFen] = useState<Record<string, boolean>>({});
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    void (async () => {
       const records = await getLessonProgress(lesson.id);
       if (cancelled) return;
       const out: Record<string, boolean> = {};
