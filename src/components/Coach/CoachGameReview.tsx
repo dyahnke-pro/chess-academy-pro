@@ -801,8 +801,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // the suggestion, no need to clutter the post-exploration view.
         if (walkExplorationFen) return undefined;
         if (!seg || !hasArrow) return undefined;
-        const startSquare = seg.bestMoveUci!.slice(0, 2);
-        const endSquare = seg.bestMoveUci!.slice(2, 4);
+        const uci = seg.bestMoveUci;
+        if (!uci) return undefined;
+        const startSquare = uci.slice(0, 2);
+        const endSquare = uci.slice(2, 4);
         return [{ startSquare, endSquare, color: '#22c55e' }];
       })();
       // Walk-mode board is interactive only when a green arrow is on

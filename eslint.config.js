@@ -85,6 +85,12 @@ export default tseslint.config(
       // `() => Promise.resolve(x)` everywhere adds noise without
       // catching real bugs in test code.
       '@typescript-eslint/require-await': 'off',
+      // Tests routinely do `result!.foo` on outputs the test setup
+      // guarantees are present. Forcing `if (!result) throw ...` or
+      // `expect(result).toBeDefined()` followed by `result!.foo`
+      // before every access in test code is noise that doesn't
+      // surface real bugs (a typo here fails the test instantly).
+      '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
 );
