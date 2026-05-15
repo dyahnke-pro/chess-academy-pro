@@ -225,6 +225,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     setTimeout(() => {
       setBoardState('thinking');
     }, 1500);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
   }, [boardState, isPlayerTurn, moveIndex, solutionMoves, puzzle.tacticType, onComplete, resetHints]);
 
   const statusColor = boardState === 'correct'

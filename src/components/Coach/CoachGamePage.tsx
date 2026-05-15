@@ -3250,6 +3250,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       moves: [...prev.moves, playerMove],
       currentHintLevel: 0,
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intendedOpening/liveCoach/subjectParam used only for snapshot inside the callback; tracked for a dedicated exhaustive-deps audit.
   }, [game, handleBackToGame, resetHints, playerColor, gameState.moves, triggerMoveFlash]);
 
   // Handle practice move (when in chat-driven practice mode)

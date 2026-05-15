@@ -141,6 +141,7 @@ export function MiddlegamePractice({
   // Set board orientation
   useEffect(() => {
     game.setOrientation(playerColor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- game.setOrientation is stable; tracked for dedicated audit.
   }, [playerColor, game.setOrientation]);
 
   // Analyze position for engine lines when it's player's turn

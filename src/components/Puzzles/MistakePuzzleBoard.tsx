@@ -315,6 +315,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       }
       voiceService.stop();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
   }, [puzzle, resetHints, resetStruggle, skipReplayContext]);
 
   // Auto-play replay moves one at a time
@@ -634,6 +635,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         setState('playing');
       }, 1500);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
   }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {

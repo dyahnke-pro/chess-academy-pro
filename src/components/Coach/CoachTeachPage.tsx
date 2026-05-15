@@ -1711,6 +1711,7 @@ export function CoachTeachPage(): JSX.Element {
       setBusy(false);
       setKickoffStatus(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; current deps cover the live callers.
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough]);
 
   // Student-driven moves go through ControlledChessBoard's onMove

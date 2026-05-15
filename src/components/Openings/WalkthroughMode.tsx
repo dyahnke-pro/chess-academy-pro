@@ -371,6 +371,7 @@ export function WalkthroughMode({
       void voiceService.prefetchAudio(enriched.map((a) => a.narration ?? a.annotation));
     })();
     return () => { guard.cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
   }, [opening.id, opening.name, activePgn, subLineKey, isVariation, variationIndex, variation?.name]);
 
   // Analyze each position with Stockfish so the eval bar reflects

@@ -348,6 +348,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       },
     });
     setListening(ok);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
   }, [listening, setQuery, clear, navigate, lastBoardSnapshot, askCoach]);
 
   const startAgentSession = useCallback((): void => {

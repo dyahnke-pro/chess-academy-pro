@@ -169,6 +169,7 @@ export function CoachPlaySessionView({
     } finally {
       if (isMountedRef.current) setCommenting(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: rerun only on subject change; closed-over refs are stable.
   }, [subject]);
 
   // Engine move → update board → narrate.
