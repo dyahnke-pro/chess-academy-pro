@@ -69,12 +69,32 @@ test.describe('Coach walkthrough contract — wire-level verification', () => {
     // capture only matters when the test fails.
     const allPosts: { url: string; bodyHead: string }[] = [];
     page.on('request', (req) => {
-      if (req.method() === 'POST' && !req.url().startsWith('http://localhost')) {
+      // Capture ALL POSTs, including localhost — earlier diagnostic
+      // run (commit 96d118b3) saw 0 external POSTs even with fake keys
+      // baked in, so the SDK either isn't firing OR is going through
+      // a Vite-proxied localhost URL. Filter narrows in the failure
+      // message; we want the raw list first to understand the path.
+      if (req.method() === 'POST') {
         allPosts.push({
           url: req.url(),
           bodyHead: (req.postData() ?? '').slice(0, 200),
         });
       }
+    });
+    // Mirror browser console + page errors so when the SDK silently
+    // short-circuits we can see WHY. Tag-prefix each so the diagnostic
+    // output is greppable from the failure message.
+    const consoleLines: string[] = [];
+    page.on('console', (msg) => {
+      const text = msg.text();
+      if (
+        /coach|brain|envelope|provider|anthropic|deepseek|api.*key|error/i.test(text)
+      ) {
+        consoleLines.push(`[${msg.type()}] ${text.slice(0, 300)}`);
+      }
+    });
+    page.on('pageerror', (err) => {
+      consoleLines.push(`[pageerror] ${err.message.slice(0, 300)}`);
     });
     page.on('request', (req) => {
       const url = req.url();
@@ -139,8 +159,11 @@ test.describe('Coach walkthrough contract — wire-level verification', () => {
       const summary = allPosts.length
         ? allPosts.map((p) => `  ${p.url}  | body: ${p.bodyHead.replace(/\s+/g, ' ')}`).join('\n')
         : '  (none)';
+      const consoleSummary = consoleLines.length
+        ? consoleLines.slice(0, 50).join('\n')
+        : '  (no relevant console)';
       throw new Error(
-        `No LLM call seen. External POSTs observed (${allPosts.length}):\n${summary}\n\nOriginal: ${(err as Error).message}`,
+        `No LLM call seen. External POSTs observed (${allPosts.length}):\n${summary}\n\nRelevant console output:\n${consoleSummary}\n\nOriginal: ${(err as Error).message}`,
       );
     }
 
