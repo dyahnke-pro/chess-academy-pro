@@ -165,6 +165,7 @@ export function NarrationAuditPanel(): JSX.Element {
       document.body.appendChild(textarea);
       textarea.select();
       try {
+        // eslint-disable-next-line @typescript-eslint/no-deprecated -- fallback when navigator.clipboard is unavailable.
         document.execCommand('copy');
         return true;
       } finally {

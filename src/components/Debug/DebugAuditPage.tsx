@@ -33,6 +33,7 @@ export function DebugAuditPage(): JSX.Element {
         document.body.appendChild(textarea);
         textarea.select();
         try {
+          // eslint-disable-next-line @typescript-eslint/no-deprecated -- execCommand is deprecated but is the only fallback when navigator.clipboard is blocked (insecure context, some iOS WebViews).
           document.execCommand('copy');
         } finally {
           document.body.removeChild(textarea);
