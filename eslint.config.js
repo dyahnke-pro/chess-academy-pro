@@ -28,7 +28,14 @@ export default tseslint.config(
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
-        project: ['./tsconfig.app.json'],
+        // Use tsconfig.eslint.json which extends tsconfig.app.json but
+        // also includes test files. tsc still skips test files via
+        // tsconfig.app.json's `exclude` (test files would fail
+        // typecheck due to vitest mock typing — they're checked at
+        // test-run time by vitest's own type pipeline). Without this
+        // separate eslint tsconfig, the typed lint parser emitted a
+        // Parsing error for every `src/utils/*.test.ts` file.
+        project: ['./tsconfig.eslint.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -67,7 +74,7 @@ export default tseslint.config(
       'react-refresh/only-export-components': 'off',
     },
   },
-  // Test files — relax rules that are impractical in testing contexts
+  // Test files — relax rules that are impractical in testing contexts.
   {
     files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
     rules: {
