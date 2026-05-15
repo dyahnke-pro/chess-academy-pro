@@ -27,7 +27,7 @@ import {
   type ActionContext,
   type ParsedAction,
 } from './coachActionDispatcher';
-import { AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES } from './coachPrompts';
+import { AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES, WALKTHROUGH_PROMISE_CONTRACT } from './coachPrompts';
 import { extractAndRememberNotes, buildCoachMemoryBlock } from './coachMemoryService';
 import { buildStudentStateBlock } from './studentStateBlock';
 import { buildGroundingBlock } from './coachContextEnricher';
@@ -226,7 +226,7 @@ export async function runAgentTurn(
     lastUserInteractionMs: previousUserMs,
   });
 
-  const additions = [AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES, snapshotText];
+  const additions = [AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES, WALKTHROUGH_PROMISE_CONTRACT, snapshotText];
   if (memoryBlock) additions.push(memoryBlock);
   if (studentStateBlock) additions.push(studentStateBlock);
   if (groundingBlock) additions.push(groundingBlock);

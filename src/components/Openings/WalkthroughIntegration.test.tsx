@@ -50,6 +50,7 @@ vi.mock('../../services/voiceService', () => ({
     isPlaying: vi.fn().mockReturnValue(false),
     warmup: vi.fn().mockResolvedValue(undefined),
     clearCache: vi.fn(),
+    prefetchAudio: vi.fn().mockResolvedValue(undefined),
   },
 }));
 
@@ -306,7 +307,7 @@ describe('WalkthroughMode integration — real annotation data', () => {
       expect(mockSpeak).toHaveBeenCalled();
     }, { timeout: 3000 });
 
-    const firstCallText = mockSpeak.mock.calls[0][0] as string;
+    const firstCallText = mockSpeak.mock.calls[0][0];
     expect(typeof firstCallText).toBe('string');
     expect(firstCallText.length).toBeGreaterThan(20);
   });

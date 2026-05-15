@@ -31,7 +31,7 @@ import { readMemorySnapshot } from './sources/memory';
 import { loadRoutesManifest } from './sources/routesManifest';
 import { prepareLiveState } from './sources/liveState';
 import type { CoachPersonality, IntensityLevel } from './types';
-import { PHASE_NARRATION_ADDITION } from '../services/coachPrompts';
+import { PHASE_NARRATION_ADDITION, WALKTHROUGH_PROMISE_CONTRACT } from '../services/coachPrompts';
 
 /** Appended to the identity prompt when the surface is 'teach'. The
  *  /coach/teach surface defaults to GUIDED OPENING PLAY: the student
@@ -417,6 +417,19 @@ export function assembleEnvelope(args: AssembleEnvelopeArgs): AssembledEnvelope 
   // master-game database, and a pile of past games. Use them.
   // `suppressSurfaceMode` opts a single call out of the surface block
   // for shape-conflict cases — see the option's JSDoc above.
+  // The walkthrough-promise contract applies to user-driven surfaces
+  // — `teach` (Learn with Coach), `game-chat` (Play with Coach + chat),
+  // and `standalone-chat` (general coach chat). All three are surfaces
+  // where the student plays their own moves and may ask the coach to
+  // "walk me through" an opening. The contract enforces the loop
+  // "play [move]" → user plays → coach plays opponent reply + states
+  // next move. Live audit (build 7eca7c3) confirmed the coach was
+  // promising and yielding silently before this contract landed.
+  const isUserDrivenChat =
+    args.input.liveState.surface === 'teach' ||
+    args.input.liveState.surface === 'game-chat' ||
+    args.input.liveState.surface === 'standalone-chat';
+
   if (!args.suppressSurfaceMode) {
     if (args.input.liveState.surface === 'teach') {
       identity = `${identity}\n\n${TEACH_MODE_ADDITION}`;
@@ -434,6 +447,9 @@ export function assembleEnvelope(args: AssembleEnvelopeArgs): AssembledEnvelope 
     // (asterisk in fallback, sentence-prefix drop) propagate to /coach/play.
     if (args.input.liveState.surface === 'phase-narration') {
       identity = `${identity}\n\n${PHASE_NARRATION_ADDITION}`;
+    }
+    if (isUserDrivenChat) {
+      identity = `${identity}\n\n${WALKTHROUGH_PROMISE_CONTRACT}`;
     }
   }
   // Verbosity modulator. Wired everywhere — surfaces opt in by passing

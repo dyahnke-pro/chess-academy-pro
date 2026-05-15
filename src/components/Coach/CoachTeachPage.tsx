@@ -686,6 +686,21 @@ export function CoachTeachPage(): JSX.Element {
     // walkthrough.start() directly when the student types an obvious
     // "teach me / walk me through / show me [opening]" ask. The
     // brain only sees asks that DON'T match.
+    //
+    // Live audit (build 7eca7c3) caught the user message being
+    // appended to chat-teach memory TWICE on every non-opening
+    // input: once at line ~852 inside the surface-routing branch
+    // (`if (requestedName)`), and again at line ~1419 in the main
+    // brain path. The flag short-circuits the second append when the
+    // first one fired. It MUST be declared outside the
+    // `if (!opts?.kickoff)` block — the brain-path reference at
+    // line ~1419 is reachable even when the kickoff branch is taken
+    // (kickoff sets the flag false → falls through to the brain
+    // path), and a chat ask like "What general opening principles
+    // should I know?" also falls through. Production audit (build
+    // 7edb4bb): the brain path threw `userMessageAppended is not
+    // defined` because the let was scoped inside the kickoff block.
+    let userMessageAppended = false;
     if (!opts?.kickoff) {
       // /clearcache — emergency lever for the user when iOS Safari's
       // Reset Website Data hasn't been cooperating. Wipes Dexie's
@@ -752,6 +767,10 @@ export function CoachTeachPage(): JSX.Element {
         { regex: /\bplay\s+(?:it\s+)?(?:for\s+)?real\s+(?:the\s+)?/i, stage: 'play-real' },
       ];
       const trimmed = text.trim();
+      // `userMessageAppended` is hoisted to the outer scope — see the
+      // long comment block above `if (!opts?.kickoff)`. Don't
+      // re-declare it here; doing so would shadow the outer let and
+      // re-introduce the "not defined" pageerror on the brain path.
       let stageHint:
         | 'concepts'
         | 'findMove'
@@ -853,9 +872,17 @@ export function CoachTeachPage(): JSX.Element {
           surface: 'chat-teach',
           role: 'user',
           text,
-          fen: gameRef.current.fen,
+          // Self-audit (2026-05-15): use the override FEN when the
+          // caller provides one (board onMove callback). Without this
+          // the first append stores the PRE-move position — and the
+          // dedup flag below blocks the second append that would have
+          // had the correct POST-move FEN. Audit log finding 33 (pre-
+          // move state) vs finding 28 (post-move) confirmed the FEN
+          // skew before this fix.
+          fen: opts?.fenOverride ?? gameRef.current.fen,
           trigger: null,
         });
+        userMessageAppended = true;
 
         // ── Tier 1: Static registry (instant). ─────────────────
         if (staticTree) {
@@ -898,7 +925,7 @@ export function CoachTeachPage(): JSX.Element {
           });
           voiceService.stop();
           if (stageHint) {
-            walkthrough.startAtStageMenu(staticTree, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
+            walkthrough.startAtStageMenu(staticTree, stageHint);
           } else if (walkthroughDone) {
             walkthrough.start(staticTree, { showChooser: true });
           } else {
@@ -1009,7 +1036,7 @@ export function CoachTeachPage(): JSX.Element {
           });
           voiceService.stop();
           if (stageHint) {
-            walkthrough.startAtStageMenu(cachedTree, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
+            walkthrough.startAtStageMenu(cachedTree, stageHint);
           } else if (walkthroughDone) {
             walkthrough.start(cachedTree, { showChooser: true });
           } else {
@@ -1096,7 +1123,7 @@ export function CoachTeachPage(): JSX.Element {
             walkthrough.stop();
             navigate(`/coach/play?opening=${encodeURIComponent(sharedTree.openingName)}`);
           } else if (stageHint) {
-            walkthrough.startAtStageMenu(sharedTree, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
+            walkthrough.startAtStageMenu(sharedTree, stageHint);
           } else {
             walkthrough.start(sharedTree);
           }
@@ -1176,7 +1203,7 @@ export function CoachTeachPage(): JSX.Element {
               walkthrough.stop();
               navigate(`/coach/play?opening=${encodeURIComponent(result.tree.openingName)}`);
             } else if (stageHint) {
-              walkthrough.startAtStageMenu(result.tree, stageHint as 'concepts' | 'findMove' | 'drill' | 'punish');
+              walkthrough.startAtStageMenu(result.tree, stageHint);
             } else {
               walkthrough.start(result.tree);
             }
@@ -1400,13 +1427,16 @@ export function CoachTeachPage(): JSX.Element {
       details: JSON.stringify({ fen, turn: fenTurn, overrideFen: !!overrideFen }),
     });
 
-    useCoachMemoryStore.getState().appendConversationMessage({
-      surface: 'chat-teach',
-      role: 'user',
-      text,
-      fen,
-      trigger: null,
-    });
+    if (!userMessageAppended) {
+      useCoachMemoryStore.getState().appendConversationMessage({
+        surface: 'chat-teach',
+        role: 'user',
+        text,
+        fen,
+        trigger: null,
+      });
+      userMessageAppended = true;
+    }
 
     // Auto-pause the walkthrough when the student asks a chat
     // question while it's running. This frees the audio channel so
@@ -1786,7 +1816,7 @@ export function CoachTeachPage(): JSX.Element {
       speechChainRef.current = Promise.resolve(voiceService.speakForcedPollyOnly(welcomeLine))
         .catch(() => undefined);
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [activeProfile]);
 
   // Layout mirrors CoachGamePage (Play with Coach) — same outer column
@@ -3289,7 +3319,7 @@ function QuizPanel({
       // explanation is being read).
       void voiceService.speakForced(promptToSpeak);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [activeStage, stageIndex, tree]);
 
   if (!tree || !activeStage) return <div data-testid="walkthrough-quiz-empty" />;
@@ -3317,7 +3347,7 @@ function QuizPanel({
     questions = (tree.findMove ?? []).map((q) => ({
       prompt: q.prompt,
       choices: q.candidates.map((c) => ({
-        text: `${c.label}`,
+        text: c.label,
         correct: c.correct,
         explanation: c.explanation,
       })),
