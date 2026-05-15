@@ -4,9 +4,8 @@
  * A permanent gold visual-signature bar that sits below (horizontal)
  * or beside (vertical) a related element. The gold track always
  * renders — it's part of the app's visual identity, not a transient
- * hint. The comet sweep only animates when the tracked element
- * actually overflows AND the student hasn't yet scrolled to discover
- * the off-screen content.
+ * hint. A soft gold-white shine sweeps continuously across the bar
+ * so the surface always reads as alive.
  *
  * Design (David's iterative spec):
  *   - Solid gold track with a layered glow (inner highlight + mid
@@ -16,12 +15,14 @@
  *     track is brightest at that fractional position [0..1] and
  *     fades toward the edges — visually ties the bar to the active
  *     tab above without needing an explicit connector.
- *   - Accent is a comet, not a shape that moves: bright leading
- *     edge with a long trailing gradient, clipped into the arrow
- *     polygon. Reads as motion. Gated on actual overflow +
- *     pre-discovery so the sweep stays meaningful, not perpetual.
+ *   - Shine: a soft, wide gold-white glint slides across the bar
+ *     left → right (or top → bottom) on a continuous loop. No
+ *     arrow shape — the shine is the motion. Always animates.
  *   - Sweeps in ONE direction only — left → right for x, top →
  *     bottom for y. No bouncing.
+ *
+ * `data-comet` continues to reflect the old overflow+pre-discovery
+ * semantics for diagnostic logging — the visual is decoupled.
  *
  * Usage:
  *   const ref = useRef<HTMLDivElement>(null);
@@ -45,32 +46,25 @@ interface ScrollHintBarProps {
   className?: string;
 }
 
-// Arrow polygons — chevron-flag shape pointing in the sweep
-// direction. The accent gets clipped to this shape so the comet
-// trail reads as an arrow head, not a generic shimmer.
-const ARROW_CLIP_X = 'polygon(0% 25%, 70% 25%, 70% 0%, 100% 50%, 70% 100%, 70% 75%, 0% 75%)';
-const ARROW_CLIP_Y = 'polygon(25% 0%, 75% 0%, 75% 70%, 100% 70%, 50% 100%, 0% 70%, 25% 70%)';
-
-// Comet gradients — fully transparent at the tail, ramping through
-// saturated gold and finishing at a near-white leading edge. The
-// clip-path keeps the visible region an arrow. Brightness boosted
-// per David — the comet now reads from across the room instead of
-// blending into the gold track.
-const COMET_GRADIENT_X =
-  'linear-gradient(90deg, rgba(255, 245, 200, 0) 0%, rgba(255, 220, 120, 0.85) 50%, rgba(255, 250, 220, 1) 85%, rgba(255, 255, 255, 1) 100%)';
-const COMET_GRADIENT_Y =
-  'linear-gradient(180deg, rgba(255, 245, 200, 0) 0%, rgba(255, 220, 120, 0.85) 50%, rgba(255, 250, 220, 1) 85%, rgba(255, 255, 255, 1) 100%)';
+// Shine gradients — soft, symmetric falloff from transparent → gold
+// → near-white centre → gold → transparent. No clip-path; the
+// gradient itself IS the shape. Reads as a glint sliding across the
+// bar rather than a discrete shape moving over it.
+const SHINE_GRADIENT_X =
+  'linear-gradient(90deg, rgba(255, 245, 200, 0) 0%, rgba(255, 225, 130, 0.45) 25%, rgba(255, 250, 220, 0.95) 50%, rgba(255, 225, 130, 0.45) 75%, rgba(255, 245, 200, 0) 100%)';
+const SHINE_GRADIENT_Y =
+  'linear-gradient(180deg, rgba(255, 245, 200, 0) 0%, rgba(255, 225, 130, 0.45) 25%, rgba(255, 250, 220, 0.95) 50%, rgba(255, 225, 130, 0.45) 75%, rgba(255, 245, 200, 0) 100%)';
 
 // Three-layer glow: outer halo, mid bloom, inner highlight. Same
 // gold, three magnitudes — the bar reads as "lit" rather than
 // "drawn."
 const TRACK_GLOW =
   '0 0 24px rgba(251, 191, 36, 0.35), 0 0 8px rgba(251, 191, 36, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4)';
-// Accent glow stack: outer halo + mid bloom + tight near-white inner
-// edge. Larger radii than the original 18px/6px so the comet trails
-// a visible glow halo, not just a clipped gradient.
-const ACCENT_GLOW =
-  '0 0 32px rgba(255, 230, 130, 0.9), 0 0 14px rgba(255, 240, 170, 1), 0 0 4px rgba(255, 255, 255, 1)';
+// Shine glow stack: a soft warm bloom that follows the moving glint
+// so the brightness halo travels with it rather than being trapped
+// inside the bar's clip.
+const SHINE_GLOW =
+  '0 0 24px rgba(255, 230, 130, 0.75), 0 0 10px rgba(255, 245, 200, 0.9)';
 
 /** Build a spotlight gradient: brightest gold at `at`, falling off
  *  toward the edges. Falls back to a flat gold when `at` is null. */
@@ -150,18 +144,16 @@ export function ScrollHintBar({
           boxShadow: TRACK_GLOW,
         }}
       >
-        {showComet && (
-          <div className="absolute inset-0 rounded-full overflow-hidden">
-            <div
-              className="absolute top-0 h-full w-32 animate-scroll-hint-x"
-              style={{
-                background: COMET_GRADIENT_X,
-                clipPath: ARROW_CLIP_X,
-                boxShadow: ACCENT_GLOW,
-              }}
-            />
-          </div>
-        )}
+        <div className="absolute inset-0 rounded-full overflow-hidden">
+          <div
+            className="absolute top-0 h-full w-40 animate-scroll-hint-x"
+            data-testid="scroll-hint-shine"
+            style={{
+              background: SHINE_GRADIENT_X,
+              boxShadow: SHINE_GLOW,
+            }}
+          />
+        </div>
       </div>
     );
   }
@@ -176,18 +168,16 @@ export function ScrollHintBar({
         boxShadow: TRACK_GLOW,
       }}
     >
-      {showComet && (
-        <div className="absolute inset-0 rounded-full overflow-hidden">
-          <div
-            className="absolute left-0 w-full h-32 animate-scroll-hint-y"
-            style={{
-              background: COMET_GRADIENT_Y,
-              clipPath: ARROW_CLIP_Y,
-              boxShadow: ACCENT_GLOW,
-            }}
-          />
-        </div>
-      )}
+      <div className="absolute inset-0 rounded-full overflow-hidden">
+        <div
+          className="absolute left-0 w-full h-40 animate-scroll-hint-y"
+          data-testid="scroll-hint-shine"
+          style={{
+            background: SHINE_GRADIENT_Y,
+            boxShadow: SHINE_GLOW,
+          }}
+        />
+      </div>
     </div>
   );
 }
