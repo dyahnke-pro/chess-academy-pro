@@ -15,7 +15,7 @@ vi.mock('./voiceService', () => ({
   },
 }));
 
-const { createStreamingDispatcher, createStreamingSpeaker } = await import(
+const { createStreamingDispatcher, createStreamingSpeaker: _createStreamingSpeaker } = await import(
   './streamingSpeaker'
 );
 const { SENTENCE_END_RE } = await import('./sanitizeCoachText');
