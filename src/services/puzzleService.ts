@@ -2,7 +2,8 @@ import { db } from '../db/schema';
 import { calculateNextInterval, createDefaultSrsFields } from './srsEngine';
 import { getMistakePuzzlesDue } from './mistakePuzzleService';
 import puzzleData from '../data/puzzles.json';
-import type { PuzzleRecord, SrsGrade, CoachDifficulty, MistakePuzzle } from '../types';
+import trainingPuzzleData from '../data/training-puzzles.json';
+import type { PuzzleRecord, SrsGrade, CoachDifficulty, MistakePuzzle, ChessPiece } from '../types';
 
 // ─── Shuffle Utility ───────────────────────────────────────────────────────
 
@@ -72,9 +73,20 @@ interface RawPuzzle {
   openingTags: string | null;
   popularity: number;
   nbPlays: number;
+  /** Optional — populated by scripts/tag-puzzle-moving-piece.mjs on the
+   *  Lichess set, and always set on training-puzzles.json. Used by
+   *  getKidPiecePuzzles for the per-piece kid filter. */
+  movingPiece?: 'K' | 'Q' | 'R' | 'B' | 'N' | 'P';
+  /** Optional — present on training-puzzles.json only. Lets the kid
+   *  picker prefer / report on which pool a puzzle came from. */
+  source?: 'lichess' | 'training';
 }
 
-const PUZZLE_SEED_KEY = 'puzzles_seeded_v2';
+// Bumped to v3 when the sub-400 training pool was added. Without
+// the bump existing installs would skip re-seeding and never see
+// the training puzzles in their local DB. New stores ignore the old
+// 'puzzles_seeded_v2' key entirely.
+const PUZZLE_SEED_KEY = 'puzzles_seeded_v3';
 
 export async function isPuzzleSeeded(): Promise<boolean> {
   const record = await db.meta.get(PUZZLE_SEED_KEY);
@@ -97,7 +109,14 @@ export async function seedPuzzles(): Promise<void> {
 
     const existingIds = new Set(await db.puzzles.toCollection().primaryKeys());
 
-    const records: PuzzleRecord[] = (puzzleData as RawPuzzle[])
+    // Combine the Lichess CC0 pool with the kid-mode sub-400 training
+    // pool. Both carry the same shape; movingPiece and source are
+    // pass-through fields used by the per-piece kid puzzle picker.
+    const lichessRaw = puzzleData as RawPuzzle[];
+    const trainingRaw = trainingPuzzleData as RawPuzzle[];
+    const combined: RawPuzzle[] = [...lichessRaw, ...trainingRaw];
+
+    const records: PuzzleRecord[] = combined
       .filter((p) => !existingIds.has(p.id))
       .map((p) => ({
         id: p.id,
@@ -108,6 +127,8 @@ export async function seedPuzzles(): Promise<void> {
         openingTags: p.openingTags,
         popularity: p.popularity,
         nbPlays: p.nbPlays,
+        movingPiece: p.movingPiece,
+        source: p.source ?? 'lichess',
         srsInterval: defaults.interval,
         srsEaseFactor: defaults.easeFactor,
         srsRepetitions: defaults.repetitions,
@@ -546,6 +567,55 @@ export const KID_DIFFICULTY_BRACKETS: Record<CoachDifficulty, KidDifficultyBrack
   medium: { minRating: 800,  maxRating: 1099 },
   hard:   { minRating: 1100, maxRating: 1399 },
 };
+
+/** Kid-mode per-piece adaptive picker (Phase 8 of the kids-section
+ *  plan). Filters the merged Lichess + training pool to puzzles where
+ *  the kid moves the specified piece, within ±BAND_HALF_WIDTH of the
+ *  kid's per-piece rating. Returns up to `count` shuffled puzzles,
+ *  unattempted first.
+ *
+ *  Below 400 (the Lichess floor) the band collapses against the
+ *  training pool by definition; from 400 up it draws mostly Lichess
+ *  with a few training-pool stragglers if any sit in the band.
+ *
+ *  Used by KidPiecePuzzlesPage (each piece-games hub's Puzzles tile).
+ *  Reads kid rating via kidRatingService.getKidRating(piece). */
+export const KID_PUZZLE_BAND_HALF_WIDTH = 50;
+
+const PIECE_TO_LETTER: Record<ChessPiece, 'K' | 'Q' | 'R' | 'B' | 'N' | 'P'> = {
+  king: 'K',
+  queen: 'Q',
+  rook: 'R',
+  bishop: 'B',
+  knight: 'N',
+  pawn: 'P',
+};
+
+export async function getKidPiecePuzzles(
+  piece: ChessPiece,
+  kidRating: number,
+  count: number = 10,
+): Promise<PuzzleRecord[]> {
+  const letter = PIECE_TO_LETTER[piece];
+  const lo = Math.max(0, kidRating - KID_PUZZLE_BAND_HALF_WIDTH);
+  const hi = kidRating + KID_PUZZLE_BAND_HALF_WIDTH;
+  // No movingPiece index on the table — pull by rating band first
+  // (indexed), then filter by piece in JS. Bands are narrow (~100
+  // points) so the IndexedDB cost stays tiny.
+  const inBand = await db.puzzles
+    .where('rating')
+    .between(lo, hi, true, true)
+    .toArray();
+  const filtered = inBand.filter((p) => p.movingPiece === letter);
+  // Unattempted first, then least-attempted.
+  filtered.sort((a, b) => a.attempts - b.attempts);
+  const pool = filtered.slice(0, Math.min(count * 3, filtered.length));
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, count);
+}
 
 /**
  * Returns puzzles for kid mode filtered by difficulty bracket.

@@ -68,6 +68,7 @@ import { KingEscapeGame } from './components/Kid/KingEscapeGame';
 import { KingMarchGame } from './components/Kid/KingMarchGame';
 import { KingGamesPage } from './components/Kid/KingGamesPage';
 import { BishopGamesPage, BishopVsPawnsRoute, ColorWarsRoute } from './components/Kid/BishopGamesPage';
+import { KidPiecePuzzlesPage } from './components/Kid/KidPiecePuzzlesPage';
 import { KnightGamesPage } from './components/Kid/KnightGamesPage';
 import { LeapFrogGame } from './components/Kid/LeapFrogGame';
 import { KnightSweepGame } from './components/Kid/KnightSweepGame';
@@ -343,6 +344,14 @@ export function App(): JSX.Element {
           <Route path="/kid/play-games" element={<ErrorBoundary><GuidedGameHubPage /></ErrorBoundary>} />
           <Route path="/kid/play-games/:gameId" element={<ErrorBoundary><GuidedGamePage /></ErrorBoundary>} />
           <Route path="/kid/puzzles" element={<ErrorBoundary><KidPuzzlePage /></ErrorBoundary>} />
+          {/* Per-piece adaptive puzzle sessions (Phase 8) — filtered by
+              movingPiece, rating band ±50 of the kid's per-piece rating. */}
+          <Route path="/kid/pawn-games/puzzles"   element={<ErrorBoundary><KidPiecePuzzlesPage piece="pawn" /></ErrorBoundary>} />
+          <Route path="/kid/rook-games/puzzles"   element={<ErrorBoundary><KidPiecePuzzlesPage piece="rook" /></ErrorBoundary>} />
+          <Route path="/kid/knight-games/puzzles" element={<ErrorBoundary><KidPiecePuzzlesPage piece="knight" /></ErrorBoundary>} />
+          <Route path="/kid/bishop-games/puzzles" element={<ErrorBoundary><KidPiecePuzzlesPage piece="bishop" /></ErrorBoundary>} />
+          <Route path="/kid/queen-games/puzzles"  element={<ErrorBoundary><KidPiecePuzzlesPage piece="queen" /></ErrorBoundary>} />
+          <Route path="/kid/king-games/puzzles"   element={<ErrorBoundary><KidPiecePuzzlesPage piece="king" /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>

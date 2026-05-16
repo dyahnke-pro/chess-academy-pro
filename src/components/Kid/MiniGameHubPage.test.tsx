@@ -24,7 +24,7 @@ describe('MiniGameHubPage', () => {
     render(<MiniGameHubPage />);
 
     expect(screen.getByTestId('mini-game-hub')).toBeInTheDocument();
-    expect(screen.getByText('Mini-Games')).toBeInTheDocument();
+    expect(screen.getByText('Pawn Games')).toBeInTheDocument();
   });
 
   it('shows Pawn Wars section', () => {
@@ -59,13 +59,13 @@ describe('MiniGameHubPage', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/kid');
   });
 
-  it('clicking level 1 of pawn wars navigates to /kid/mini-games/pawn-wars/1', () => {
+  it('clicking level 1 of pawn wars navigates to /kid/pawn-games/pawn-wars/1', () => {
     render(<MiniGameHubPage />);
 
     // Pawn Wars is first section, so the first level-select-1 belongs to it
     const levelOneCards = screen.getAllByTestId('level-select-1');
     fireEvent.click(levelOneCards[0]);
-    expect(mockNavigate).toHaveBeenCalledWith('/kid/mini-games/pawn-wars/1');
+    expect(mockNavigate).toHaveBeenCalledWith('/kid/pawn-games/pawn-wars/1');
   });
 
   it('loads progress for both games on mount', async () => {
@@ -87,13 +87,13 @@ describe('MiniGameHubPage', () => {
     }
   });
 
-  it('clicking level 2 of blocker navigates to /kid/mini-games/blocker/2', () => {
+  it('clicking level 2 of blocker navigates to /kid/pawn-games/blocker/2', () => {
     render(<MiniGameHubPage />);
 
     // Blocker is the second section, so the second level-select-2 belongs to it
     const levelTwoCards = screen.getAllByTestId('level-select-2');
     fireEvent.click(levelTwoCards[1]);
-    expect(mockNavigate).toHaveBeenCalledWith('/kid/mini-games/blocker/2');
+    expect(mockNavigate).toHaveBeenCalledWith('/kid/pawn-games/blocker/2');
   });
 
   it('renders all 3 pawn wars levels with correct titles', () => {

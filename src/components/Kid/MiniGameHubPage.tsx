@@ -43,7 +43,7 @@ export function MiniGameHubPage(): JSX.Element {
 
   const handleLevelSelect = useCallback(
     (gameId: string, level: number): void => {
-      void navigate(`/kid/mini-games/${gameId}/${level}`);
+      void navigate(`/kid/pawn-games/${gameId}/${level}`);
     },
     [navigate],
   );
@@ -76,7 +76,7 @@ export function MiniGameHubPage(): JSX.Element {
         >
           <ArrowLeft size={18} />
         </button>
-        <h1 className="text-xl font-bold">Mini-Games</h1>
+        <h1 className="text-xl font-bold">Pawn Games</h1>
       </div>
 
       {/* Game sections */}
@@ -107,6 +107,27 @@ export function MiniGameHubPage(): JSX.Element {
           </div>
         </div>
       ))}
+
+      {/* Per-piece adaptive puzzles — pulls Pawn-move puzzles from the
+          merged Lichess + training pool. Phase 8. */}
+      <button
+        onClick={() => void navigate('/kid/pawn-games/puzzles')}
+        className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+        style={{
+          background: 'var(--color-surface)',
+          borderColor: 'var(--color-accent)',
+          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+        }}
+        data-testid="pawn-puzzles-card"
+      >
+        <span className="text-2xl">🧩</span>
+        <div className="flex-1">
+          <div className="font-bold text-lg">Pawn Puzzles</div>
+          <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Find the pawn move that wins.
+          </div>
+        </div>
+      </button>
     </div>
   );
 }
