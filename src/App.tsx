@@ -70,6 +70,7 @@ import { KingGamesPage } from './components/Kid/KingGamesPage';
 import { BishopGamesPage, BishopVsPawnsRoute, ColorWarsRoute } from './components/Kid/BishopGamesPage';
 import { KidPiecePuzzlesPage } from './components/Kid/KidPiecePuzzlesPage';
 import { PieceMazePage } from './components/Kid/PieceMazePage';
+import { PieceSweepPage } from './components/Kid/PieceSweepPage';
 import { KnightGamesPage } from './components/Kid/KnightGamesPage';
 import { LeapFrogGame } from './components/Kid/LeapFrogGame';
 import { KnightSweepGame } from './components/Kid/KnightSweepGame';
@@ -361,6 +362,13 @@ export function App(): JSX.Element {
           <Route path="/kid/bishop-games/maze/:level" element={<ErrorBoundary><PieceMazePage piece="bishop" /></ErrorBoundary>} />
           <Route path="/kid/queen-games/maze/:level"  element={<ErrorBoundary><PieceMazePage piece="queen" /></ErrorBoundary>} />
           <Route path="/kid/king-games/maze/:level"   element={<ErrorBoundary><PieceMazePage piece="king" /></ErrorBoundary>} />
+          {/* Phase 7b — generic piece-sweep (capture all targets). 5 levels per piece × 6 = 30. */}
+          <Route path="/kid/pawn-games/sweep/:level"   element={<ErrorBoundary><PieceSweepPage piece="pawn" /></ErrorBoundary>} />
+          <Route path="/kid/rook-games/sweep/:level"   element={<ErrorBoundary><PieceSweepPage piece="rook" /></ErrorBoundary>} />
+          <Route path="/kid/knight-games/sweep/:level" element={<ErrorBoundary><PieceSweepPage piece="knight" /></ErrorBoundary>} />
+          <Route path="/kid/bishop-games/sweep/:level" element={<ErrorBoundary><PieceSweepPage piece="bishop" /></ErrorBoundary>} />
+          <Route path="/kid/queen-games/sweep/:level"  element={<ErrorBoundary><PieceSweepPage piece="queen" /></ErrorBoundary>} />
+          <Route path="/kid/king-games/sweep/:level"   element={<ErrorBoundary><PieceSweepPage piece="king" /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>
