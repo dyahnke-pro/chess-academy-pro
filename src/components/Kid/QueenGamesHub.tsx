@@ -217,6 +217,28 @@ export function QueenGamesHub(): JSX.Element {
               </div>
             </div>
           </motion.button>
+
+          {/* Per-piece adaptive puzzles — Phase 8. */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => void navigate('/kid/queen-games/puzzles')}
+            className="rounded-xl p-5 border-2 flex items-center gap-4 text-left transition-colors"
+            style={{
+              background: 'var(--color-surface)',
+              borderColor: 'var(--color-accent)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+            }}
+            data-testid="queen-puzzles-card"
+          >
+            <span className="text-2xl">🧩</span>
+            <div className="flex-1">
+              <div className="font-bold text-lg">Queen Puzzles</div>
+              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                Find the queen move that wins.
+              </div>
+            </div>
+          </motion.button>
         </div>
       )}
     </div>
