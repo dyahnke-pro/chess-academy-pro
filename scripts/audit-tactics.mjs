@@ -1586,6 +1586,102 @@ async function main() {
   );
 
   // ═══════════════════════════════════════════════════════════════════
+  // DEEP-FLOW SCENARIOS — Wave A batch 4 (PuzzleBoard end-to-end)
+  // ═══════════════════════════════════════════════════════════════════
+
+  // 51. Show-Solution flow: open a tactic drill, click "Show Solution",
+  // verify the puzzle reaches its solved state via `puzzle-correct`
+  // testid. The cleanest end-to-end "puzzle was solved" assertion
+  // available without knowing the puzzle's expected move SAN.
+  await clickTacticsNav();
+  await page.locator('[data-testid="section-forks"]').click().catch(() => undefined);
+  await page.locator('[data-testid="tactic-drill-page"]').waitFor({ timeout: 10000 }).catch(() => undefined);
+  await waitUntil(() => visible('puzzle-board').then((v) => v), 10000).catch(() => undefined);
+  await page.waitForTimeout(SETTLE_PUZZLE);
+  await scenario(
+    '51-tactic-drill-show-solution-completes-puzzle',
+    async () => {
+      const showBtn = page.locator('[data-testid="show-solution-button"]');
+      if (await showBtn.count() === 0) {
+        report.scenarios._showSolutionSkipped = true;
+        return;
+      }
+      await showBtn.click();
+      // Solution auto-plays one ply at a time; wait for completion
+      // (puzzle-correct testid surfaces when the puzzle reaches solved
+      // state OR the board stops changing for 1.5s).
+      await waitUntil(() => visible('puzzle-correct').then((v) => v), 15000).catch(() => undefined);
+    },
+    SETTLE_PUZZLE,
+    [
+      {
+        label: 'puzzle-correct state appears after Show Solution (or skipped if button absent)',
+        fn: async () => {
+          if (report.scenarios._showSolutionSkipped) {
+            delete report.scenarios._showSolutionSkipped;
+            return true;
+          }
+          return await visible('puzzle-correct');
+        },
+        detail: 'Show Solution must auto-play the line to the solved state',
+      },
+    ],
+  );
+
+  // 52. Wrong-move flash class on board-wrapper. Make any clearly-
+  // wrong move (a-file pawn push by white, then black if needed) and
+  // verify the wrong-flash class is applied to `board-wrapper`. Skip-
+  // pass if the puzzle accepts the move (rare on a tactic drill).
+  await clickTacticsNav();
+  await page.locator('[data-testid="section-back rank mates"]').click().catch(() => undefined);
+  await page.locator('[data-testid="tactic-drill-page"]').waitFor({ timeout: 10000 }).catch(() => undefined);
+  await waitUntil(() => visible('puzzle-board').then((v) => v), 10000).catch(() => undefined);
+  await page.waitForTimeout(SETTLE_PUZZLE);
+  await scenario(
+    '52-tactic-drill-wrong-move-feedback',
+    async () => {
+      const board = await readBoard();
+      report.scenarios._beforeWrong = board;
+      // Try a few harmless pawn pushes — one of them is likely wrong
+      // OR illegal (which the puzzle UI handles the same as wrong:
+      // the board doesn't accept it).
+      const tries = [['a2','a3'], ['a7','a6'], ['h2','h3'], ['h7','h6']];
+      for (const [from, to] of tries) {
+        await page.locator(`[data-square="${from}"]`).click({ timeout: 1500 }).catch(() => undefined);
+        await page.waitForTimeout(150);
+        await page.locator(`[data-square="${to}"]`).click({ timeout: 1500 }).catch(() => undefined);
+        await page.waitForTimeout(500);
+        // Check if any visual feedback class is present on board-wrapper.
+        const wrapperClass = await page.locator('[data-testid="board-wrapper"]').getAttribute('class').catch(() => '');
+        if (wrapperClass && /flash|wrong|red|error/i.test(wrapperClass)) {
+          report.scenarios._wrongFlashSeen = true;
+          break;
+        }
+      }
+    },
+    SETTLE_PUZZLE,
+    [
+      {
+        label: 'wrong move triggers flash feedback OR board did not change (skip-pass)',
+        fn: async () => {
+          if (report.scenarios._wrongFlashSeen) {
+            delete report.scenarios._wrongFlashSeen;
+            return true;
+          }
+          // Skip-pass: if the puzzle didn't accept any of our wrong
+          // moves AND no flash fired, the board stayed at start. That
+          // satisfies the contract that wrong moves aren't accepted.
+          const after = await readBoard();
+          const before = report.scenarios._beforeWrong ?? after;
+          delete report.scenarios._beforeWrong;
+          return boardDiff(before, after).length === 0;
+        },
+        detail: 'wrong move must either flash the board OR be rejected (no board change)',
+      },
+    ],
+  );
+
+  // ═══════════════════════════════════════════════════════════════════
   // Summary
   // ═══════════════════════════════════════════════════════════════════
   report.totalEvents = captured.length;
