@@ -147,15 +147,15 @@ export function MiniGamePage({ gameId }: MiniGamePageProps): JSX.Element {
 
   const handleNextLevel = useCallback((): void => {
     if (levelNum < 3) {
-      void navigate(`/kid/mini-games/${gameId}/${levelNum + 1}`);
+      void navigate(`/kid/pawn-games/${gameId}/${levelNum + 1}`);
     } else {
-      void navigate('/kid/mini-games');
+      void navigate('/kid/pawn-games');
     }
   }, [navigate, gameId, levelNum]);
 
   const handleBack = useCallback((): void => {
     voiceService.stop();
-    void navigate('/kid/mini-games');
+    void navigate('/kid/pawn-games');
   }, [navigate]);
 
   const handleHint = useCallback((): void => {
