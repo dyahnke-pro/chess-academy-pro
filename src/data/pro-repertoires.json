@@ -2433,13 +2433,13 @@
       "trapLines": [
         {
           "name": "Bc4 e6 Nxe4 Trick",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 b5 O-O Be7 Qf3 Qc7 Qg3 Nxe4 Nxe4 d5 Bg5 dxe4 Bxe7 Kxe7",
-          "explanation": "When White plays Bc4, Black can set up the Nxe4 trick after e6. White's queen is misplaced on g3 and Black wins the e4 pawn while opening lines for counterplay."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 b5 O-O Be7 Qf3 Qc7 Qg3",
+          "explanation": "When White plays Bc4, Black sets up the queenside counterplay. After Qg3 the queen is misplaced — Black is ready for ...Nxe4 + ...d5 tricks to crack open the centre."
         },
         {
           "name": "Overextended g4 Punished",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Qd2 Nbd7 g4 b5 g5 Nh5 O-O-O Nb6 Nd5 Bxd5 exd5 f5",
-          "explanation": "White pushes g4 aggressively but Black strikes back with b5 and f5. The overextended kingside pawns become targets and Black gets strong counterplay."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Qd2 Nbd7 g4 b5 g5 Nh5 O-O-O Nb6 Nd5 Bxd5 exd5",
+          "explanation": "White pushes g4 aggressively but Black strikes back with b5 and the Nh5 manoeuvre. After exd5 the central pawns become long-term targets and Black's queenside counterplay rolls forward."
         }
       ]
     },
