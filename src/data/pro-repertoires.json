@@ -3753,13 +3753,7 @@
           "explanation": "Black tries the tricky 2...e5 gambit. White takes (dxe5) and then plays g3/Bg2 to neutralise Black's d-pawn and pressure the long diagonal."
         }
       ],
-      "trapLines": [
-        {
-          "name": "Premature ...Qxd4 Punished",
-          "pgn": "d4 d5 c4 dxc4 e4 Qxd4 Qxd4",
-          "explanation": "If Black grabs the d-pawn after ...dxc4 + e4, White simply trades queens and emerges with a better centre and structure. This is one of the simplest QGA punishments."
-        }
-      ]
+      "trapLines": []
     },
     {
       "id": "pro-annacramling-london",
