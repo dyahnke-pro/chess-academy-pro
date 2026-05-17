@@ -564,9 +564,6 @@
     "sicilian-dragon::trap::The g-file Counterattack After ...gxh5": [
       "WEAK_TRAP",
       "STUDENT_NOT_PUNISHER"
-    ],
-    "sicilian-dragon::warning::White's h-file Breakthrough": [
-      "TOOTHLESS_WARNING"
     ]
   }
 }
