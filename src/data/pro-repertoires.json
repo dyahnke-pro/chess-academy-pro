@@ -211,37 +211,21 @@
       "variations": [
         {
           "name": "Main Line 2...Nf6",
-          "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 Nf3 Nc6 Bc4 Nb6 Bb3 dxe5 dxe5",
-          "explanation": "The most common continuation. White gets a strong e5 pawn and good development. The endgame is pleasant for White with the space advantage."
+          "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 Nf3 Nc6 Bc4 Nb6 Bb3 dxe5 dxe5 Qxd1+ Bxd1 Nc4 Ba4 Bd7 Bxc6 Bxc6 Nbd2 Nb6 O-O e6",
+          "explanation": "The main line. After 17.dxe5 White's e5 pawn cramps Black; the Qxd1+ trade simplifies into a slightly favorable endgame for White — better pawn structure, more space."
         },
         {
           "name": "2...d5 Center Counter",
-          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Qd8 Nc4 Be7 Be2 O-O O-O cxd4 cxd4",
-          "explanation": "Black challenges the center immediately. After exd5 Qxd5 d4, White gets free development. The isolated d4 pawn is actually a strength here, supporting piece activity."
+          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Qd8 Nc4 Be7 Be2 O-O O-O b6 Bf4 Bb7 Qb3 Nbd7 a4 Bd5 a5 cxd4 cxd4 bxa5",
+          "explanation": "Black challenges the center immediately. White's Na3-c4 maneuver and a4-a5 queenside expansion target Black's b6 setup. The structure stays balanced into the middlegame."
         },
         {
           "name": "2...e6 French Structure",
-          "pgn": "e4 c5 c3 e6 d4 d5 e5 Nc6 Nf3 Bd7 Be2 cxd4 cxd4 Nge7 O-O Nf5 Nc3 Be7",
-          "explanation": "Transposes into a French-like structure. White has a solid space advantage and can build a kingside attack with moves like Bd3 and Qg4."
+          "pgn": "e4 c5 c3 e6 d4 d5 e5 Nc6 Nf3 Bd7 Be2 cxd4 cxd4 Nge7 O-O Nf5 Nc3 Be7 g4 Nh4 Nxh4 Bxh4 Be3 O-O f4 f6 Qd2 fxe5",
+          "explanation": "Transposes into a French-like structure. White's g4 thrust gains kingside space; f4-f5 follows. The f6 break by Black is the standard counter that opens the center."
         }
       ],
-      "trapLines": [
-        {
-          "name": "Premature ...d5 Punished by e5",
-          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O cxd4 cxd4 Nc6 Nc3 Qd8 d5 exd5 Nxd5",
-          "explanation": "Black recaptures with the queen on d5 but after White develops with tempo, the d5 push forks the knight and bishop. White wins material."
-        },
-        {
-          "name": "Knight Fork After ...Nf6 e5",
-          "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 e6 Nf3 b6 Bc4 Nb4 O-O N8a6 d5 exd5 Bxd5 Nxd5 Qxd5",
-          "explanation": "Black develops the knight to b4 prematurely. White plays d5 cracking open the center, and after the exchanges White's queen dominates with threats on a8 and f7."
-        },
-        {
-          "name": "Queen Trapped After ...Qa5",
-          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 cxd4 cxd4 Nc6 Nf3 Bg4 Nc3 Qa5 d5 Bxf3 Qxf3 Nd4 Qd1 Nf5 a3",
-          "explanation": "Black's queen ventures to a5 but after d5 the knight is deflected. White consolidates with Qd1 and a3, and Black's queen has no safe squares on the queenside."
-        }
-      ]
+      "trapLines": []
     },
     {
       "id": "pro-naroditsky-fantasy-caro",
