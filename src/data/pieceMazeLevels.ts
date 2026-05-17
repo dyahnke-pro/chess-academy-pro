@@ -225,6 +225,68 @@ export const PIECE_MAZE_LEVELS: PieceMazeLevel[] = [
     piece: 'pawn', id: 10, name: 'Pawn Path 5',
     pieceStart: 'e2', target: 'e8', obstacles: ["f8","h4","f5","f6"], par: 5,
   },
+
+  // ── Phase 7d — final band-2 fill (queen/rook/bishop maze + pawn sweep) ──
+  {
+    piece: 'queen', id: 6, name: 'Queen Path 6',
+    pieceStart: 'a1', target: 'h3', obstacles: ["a2","b5","b7","e1","e8","f1","f6","g3","h7"], par: 3,
+  },
+  {
+    piece: 'queen', id: 7, name: 'Queen Path 7',
+    pieceStart: 'd1', target: 'b8', obstacles: ["b1","b5","b7","d4","e6","f1","f8","g6","h4"], par: 3,
+  },
+  {
+    piece: 'queen', id: 8, name: 'Queen Path 8',
+    pieceStart: 'a6', target: 'h4', obstacles: ["c1","e2","e4","e8","f6","f7","g5","h6","h8"], par: 3,
+  },
+  {
+    piece: 'queen', id: 9, name: 'Queen Path 9',
+    pieceStart: 'a8', target: 'g3', obstacles: ["a5","a6","c4","e5","f3","f4","g2","g8","h8"], par: 3,
+  },
+  {
+    piece: 'queen', id: 10, name: 'Queen Path 10',
+    pieceStart: 'd1', target: 'b6', obstacles: ["a4","a7","b3","c6","d4","d8","g5","g8","h8"], par: 3,
+  },
+  {
+    piece: 'rook', id: 6, name: 'Rook Path 6',
+    pieceStart: 'h6', target: 'c1', obstacles: ["c2","d1","f1","f3","g2","g4","h1","h3","h4"], par: 3,
+  },
+  {
+    piece: 'rook', id: 7, name: 'Rook Path 7',
+    pieceStart: 'd2', target: 'h6', obstacles: ["a5","b2","c5","d4","e4","e5","g4","h4","h5"], par: 3,
+  },
+  {
+    piece: 'rook', id: 8, name: 'Rook Path 8',
+    pieceStart: 'a5', target: 'f5', obstacles: ["a1","a4","b5","c6","c8","d2","f6","g8","h7"], par: 4,
+  },
+  {
+    piece: 'rook', id: 9, name: 'Rook Path 9',
+    pieceStart: 'd1', target: 'h5', obstacles: ["a2","a7","b1","c6","d3","d5","f7","h4","h6"], par: 3,
+  },
+  {
+    piece: 'rook', id: 10, name: 'Rook Path 10',
+    pieceStart: 'f5', target: 'b3', obstacles: ["a2","a4","a7","d5","e1","e2","f3","g4","h8"], par: 3,
+  },
+  {
+    piece: 'bishop', id: 6, name: 'Bishop Path 6',
+    pieceStart: 'b3', target: 'g8', obstacles: ["d1","d6","e6","f5","g5","h3"], par: 4,
+  },
+  {
+    piece: 'bishop', id: 7, name: 'Bishop Path 7',
+    pieceStart: 'a2', target: 'd7', obstacles: ["b3","b5","b7","c8","h4","h6"], par: 3,
+  },
+  {
+    piece: 'bishop', id: 8, name: 'Bishop Path 8',
+    pieceStart: 'e2', target: 'e8', obstacles: ["b3","c1","c2","d3","d4","f7"], par: 3,
+  },
+  {
+    piece: 'bishop', id: 9, name: 'Bishop Path 9',
+    pieceStart: 'a2', target: 'f7', obstacles: ["b3","b5","c7","d4","f6","g3"], par: 3,
+  },
+  {
+    piece: 'bishop', id: 10, name: 'Bishop Path 10',
+    pieceStart: 'f8', target: 'a7', obstacles: ["b3","b6","d2","d8","f1","h5"], par: 3,
+  },
 ];
 
 export function getMazeLevelsForPiece(

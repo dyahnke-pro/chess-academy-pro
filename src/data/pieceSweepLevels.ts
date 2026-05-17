@@ -244,6 +244,28 @@ export const PIECE_SWEEP_LEVELS: PieceSweepLevel[] = [
     piece: 'knight', id: 10, name: 'Knight Hunt 5',
     pieceStart: 'f2', targets: ["b7","c1","f1","g3"], obstacles: ["b4"], par: 9,
   },
+
+  // ── Phase 7d — final band-2 fill (queen/rook/bishop maze + pawn sweep) ──
+  {
+    piece: 'pawn', id: 6, name: 'Pawn Hunt 6',
+    pieceStart: 'e4', targets: ["e6","f5"], obstacles: [], par: 2,
+  },
+  {
+    piece: 'pawn', id: 7, name: 'Pawn Hunt 7',
+    pieceStart: 'f3', targets: ["f5","g4"], obstacles: [], par: 2,
+  },
+  {
+    piece: 'pawn', id: 8, name: 'Pawn Hunt 8',
+    pieceStart: 'd4', targets: ["d6","e5"], obstacles: [], par: 2,
+  },
+  {
+    piece: 'pawn', id: 9, name: 'Pawn Hunt 9',
+    pieceStart: 'f4', targets: ["f6","g5","g7"], obstacles: [], par: 3,
+  },
+  {
+    piece: 'pawn', id: 10, name: 'Pawn Hunt 10',
+    pieceStart: 'g4', targets: ["g6","h5","h7"], obstacles: [], par: 3,
+  },
 ];
 
 export function getSweepLevelsForPiece(
