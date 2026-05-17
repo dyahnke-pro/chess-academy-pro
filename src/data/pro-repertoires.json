@@ -3235,13 +3235,13 @@
       "trapLines": [
         {
           "name": "Premature e5 Punished",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e5 Nf5 d5 exd5 Bxf5 Bb5+ Nbd7 d6",
-          "explanation": "If White pushes e5 prematurely or plays Nf5 after e5, Black gets dxe5 with a good central position. The pawn structure favors Black who has active piece play."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e5 Nf5",
+          "explanation": "If White pushes e5 prematurely or plays Nf5 after e5, Black gets active piece play challenging the central pawns. The pawn structure favors Black."
         },
         {
           "name": "Nd5 Premature Jump",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Nd5 Nxd5 exd5 e5 Nf3 Be7 O-O O-O Re1 Bg4",
-          "explanation": "If White jumps Nd5 prematurely, Black exchanges knights and after exd5 e5 the knight retreats. Black equalizes comfortably with natural development and active bishops."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Nd5",
+          "explanation": "If White jumps Nd5 prematurely, Black exchanges knights and equalizes comfortably with natural development and active bishops."
         }
       ]
     },
