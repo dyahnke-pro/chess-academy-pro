@@ -2200,7 +2200,7 @@
     "id": "trompowsky-attack",
     "eco": "A45",
     "name": "Trompowsky Attack",
-    "pgn": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Bd3 Nf6 c3 Nc6 Nd2 Bg4 Ngf3 e6 O-O Rc8 Qa4 Nd7 Ne5 Ndxe5 Bxe5 Qd7 Bg3 Bh5 dxc5 Bxc5",
+    "pgn": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Bd3 Nf6 c3 Nc6 Nd2 Bg4 Ngf3 e6 O-O Rc8 Qa4 Nd7 Ne5 Ndxe5 Bxe5 Qd7 Bg3 Bh5 dxc5 Bxc5 Qh4 Bg6 Bxg6 fxg6 Nf3 Be7 Qf4 Bf6",
     "color": "white",
     "style": "Aggressive, Anti-Indian",
     "overview": "The Trompowsky Attack is a brilliant way to sidestep all of Black's prepared Indian defenses. By playing 2.Bg5 immediately, you force Black to deal with the pin on the f6 knight before they can set up their favorite system. It's a practical weapon that gets opponents out of their comfort zone from move two — and the positions are surprisingly rich.",
@@ -2299,7 +2299,7 @@
     "id": "qgd",
     "eco": "D30",
     "name": "Queen's Gambit Declined",
-    "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Rxc3 e5 Bb3 exd4 exd4 Nf6 Re1",
+    "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Rxc3 e5 Bb3 exd4 exd4 Nf6 Re1 Qd6 Ne5 Be6 Bxe6 fxe6 Qb3 Rab8",
     "color": "black",
     "style": "Solid, Classical",
     "overview": "The Queen's Gambit Declined is one of the most solid and respected openings in chess. By playing ...e6, you support your d5 pawn and prepare to develop naturally. The positions are strategic and rich — you're playing the same lines that Capablanca and Karpov used to win World Championships. It's all about understanding pawn structures and piece placement.",
@@ -2398,7 +2398,7 @@
     "id": "qga",
     "eco": "D20",
     "name": "Queen's Gambit Accepted",
-    "pgn": "d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Qe2 b5 Bb3 Bb7 Rd1 Nbd7 Nc3 Be7 e4",
+    "pgn": "d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Qe2 b5 Bb3 Bb7 Rd1 Nbd7 Nc3 Be7 e4 cxd4 Nxd4 Qb8 Bxe6 fxe6 Nxe6 Qe5 Nxg7+ Kf7 f4 Qc5+ Be3 Qc4 Qxc4+ bxc4",
     "color": "black",
     "style": "Active, Counter-attacking",
     "overview": "The Queen's Gambit Accepted is a pragmatic and dynamic choice. You take the pawn on c4 not to hold it, but to develop freely while White recaptures. After ...e6 and ...c5, Black gets an active position with easy piece development. It's been a favorite of players like Anand who love active piece play over static structures.",
@@ -2560,7 +2560,7 @@
       },
       {
         "name": "Winawer Countergambit (...e5!?)",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 h6 Bh4 dxc4 e4 g5",
         "explanation": "The Winawer Countergambit with ...e5!? is a sharp and provocative choice that immediately challenges White's center. Black sacrifices a pawn to open lines and seize the initiative before White can consolidate. After dxe5 d4, the advanced pawn disrupts White's coordination and creates tactical complications. The resulting positions are unbalanced with Black relying on active piece play and central control to compensate for the material deficit."
       },
       {
@@ -2591,7 +2591,7 @@
     "id": "semi-slav",
     "eco": "D43",
     "name": "Semi-Slav Defence",
-    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 h6 Bh4 dxc4 e4 g5 Bg3 b5 Be2 Bb7 O-O Nbd7 Ne5 Bg7 Nxd7 Nxd7",
+    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 h6 Bh4 dxc4 e4 g5 Bg3 b5 Be2 Bb7 O-O Nbd7 Ne5 Bg7 Nxd7 Nxd7 Bd6 a6 a4 b4 Bxb4 Qb6 Ba3 Qxd4 Qc2 c5 Rad1 Qe5",
     "color": "black",
     "style": "Dynamic, Complex",
     "overview": "The Semi-Slav is one of the deepest and most challenging openings in chess — it's been tested at the very highest level for decades. You combine the solid Slav structure (...c6) with the flexible ...e6, and the resulting positions are incredibly rich. The Botvinnik Variation alone has more theory than most entire openings. If you love deep, complex positions where preparation matters, this is your weapon.",
@@ -2685,7 +2685,7 @@
     "id": "kings-indian-defence",
     "eco": "E60",
     "name": "King's Indian Defence",
-    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 Be3 f5 f3 f4 Bf2 g5 Nd3 Nf6 c5 Ng6 Rc1",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 Be3 f5 f3 f4 Bf2 g5 Nd3 Nf6 c5 Ng6 Rc1 Rf7 Kh1 Bf8 Rg1 h5 g3 fxg3 Rxg3 Rg7 Qd2 Nh7 b4 Bd7 Be3 Nf4 Bxf4 exf4 Rgg1 Qf6 c6 bxc6 dxc6 Be6 b5 Kh8 Bd1 g4 Nxf4 gxf3 Rf1 Rf7 Ncd5 Bxd5 Nxd5 Qh4 Bxf3 Bg7",
     "color": "black",
     "style": "Dynamic, Attacking",
     "overview": "The King's Indian Defence is the ultimate fighting weapon for Black. You let White build a big center with d4, c4, and e4, then you blow it apart with ...e5 and ...f5. The positions are incredibly dynamic — Black often launches a kingside attack while White pushes on the queenside. Kasparov used this to win some of his most brilliant games. It's not for positional purists — it's for warriors.",
@@ -2803,7 +2803,7 @@
     "id": "nimzo-indian",
     "eco": "E20",
     "name": "Nimzo-Indian Defence",
-    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qa4 c5",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qa4 c5 dxc5 bxc5 Rc1 Qb6 Bxf6 gxf6 Rc2 Rd8 e3 Bxf1 Rxf1 Nd7 Ke2 Rab8 Rd1 Ne5",
     "color": "black",
     "style": "Positional, Flexible",
     "overview": "The Nimzo-Indian is the crown jewel of Black's 1.d4 defenses. By pinning the knight on c3 with ...Bb4, you immediately fight for control of e4 and create imbalances. The beauty of the Nimzo is its flexibility — you can play solid, aggressive, or positional depending on White's response. Carlsen, Fischer, and virtually every World Champion has played it.",
@@ -2921,7 +2921,7 @@
     "id": "grunfeld-defence",
     "eco": "D80",
     "name": "Grünfeld Defence",
-    "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 cxd4 cxd4 Nc6",
+    "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 cxd4 cxd4 Nc6 Qxa5 Nxa5 Be2 b6 Rc7 Bb7 Rxe7 Rfd8 O-O",
     "color": "black",
     "style": "Dynamic, Counter-attacking",
     "overview": "The Grünfeld is the ultimate counterattacking defense. You actually encourage White to build a massive pawn center with e4 and d4, then systematically destroy it with ...c5, ...Nc6, and the pressure from the Bg7 on the long diagonal. It's been the primary weapon of Kasparov, Grischuk, and MVL. The positions are incredibly dynamic — White has the center, but Black has the initiative.",
@@ -3039,7 +3039,7 @@
     "id": "dutch-defence",
     "eco": "A80",
     "name": "Dutch Defence",
-    "pgn": "d4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 Qe8 d5 Na6 Rb1 Bd7 b4",
+    "pgn": "d4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 Qe8 d5 Na6 Rb1 Bd7 b4 c6 dxc6 bxc6 a3 Nc7 Bb2 Ne6 c5 d5 Ne5 d4 Na4 Ng4 Nf3 Rd8 Nxd4 Nxd4",
     "color": "black",
     "style": "Aggressive, Unbalanced",
     "overview": "The Dutch Defence is a bold, aggressive choice that immediately unbalances the position. By playing ...f5 on move one, you declare your intention to attack the kingside. The Leningrad variation with ...g6 and ...Bg7 is the most popular — you get a King's Indian-type setup with the extra punch of ...f5 already played. It's not the most solid opening, but it creates the kind of fighting positions where anything can happen.",
@@ -3133,7 +3133,7 @@
     "id": "benoni-defence",
     "eco": "A60",
     "name": "Benoni Defence",
-    "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 a4",
+    "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 a4 b6 h3 Rb8 Bb5 Re7 Bf1 a6 Nc4 b5 Na5 Bd7 Bf4 Nfe8 axb5 axb5 Bg5 Bf6",
     "color": "black",
     "style": "Dynamic, Asymmetrical",
     "overview": "The Modern Benoni is one of the most dynamic openings in chess. After ...c5 and ...exd5, you get a lopsided pawn structure where Black has a queenside pawn majority and White has a central majority. The resulting positions are razor-sharp — Black attacks on the queenside with ...b5 while White pushes for e5 or f4-f5. It's Tal's spirit in opening form — unbalanced, aggressive, and full of tactical potential.",
@@ -3321,7 +3321,7 @@
     "id": "queens-indian",
     "eco": "E15",
     "name": "Queen's Indian Defence",
-    "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Qc2 Nxc3 Qxc3 f5 Bf4",
+    "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Qc2 Nxc3 Qxc3 f5 Bf4 Bf6 Qe3 Re8 Rfd1 a5 Rac1 Na6 Bg5 d6 a3 a4 Qd2 Be4 Bxf6 Qxf6 e3 Red8",
     "color": "black",
     "style": "Positional, Solid",
     "overview": "The Queen's Indian Defence is one of the most solid and flexible systems in chess. After 3...b6, Black develops the bishop to b7 to control the central light squares, especially e4 and d5. This is the go-to response when White plays 3.Nf3 instead of 3.Nc3. It's been a favorite of world champions like Karpov and Kramnik because of its rock-solid nature.",
@@ -3509,7 +3509,7 @@
     "id": "old-indian-defence",
     "eco": "A53",
     "name": "Old Indian Defence",
-    "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 Nc5",
+    "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 Nc5 Qc2 a5 Be3 Qc7 Nd2 Bd7 Rfc1 h6 b3 Nh7 a3 Bg5 Bxg5 Nxg5 h4 Nh7 Rab1 Na6 Qd1 c5",
     "color": "black",
     "style": "Solid, Positional",
     "overview": "The Old Indian Defence is a rock-solid system against 1.d4 that flies under the radar. After 2...d6, Black builds a compact pawn structure and aims for ...e5 to challenge the center. It's less theoretical than the King's Indian and gives you a sturdy position where you can outplay opponents in the middlegame. Think of it as the practical player's choice — fewer forced lines, more chess.",
@@ -3603,7 +3603,7 @@
     "id": "english-opening",
     "eco": "A10",
     "name": "English Opening",
-    "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4 Bg2 O-O O-O e4 d3 d6 Nd5 Bc5 Bg5 h6 Bxf6 Qxf6 Nd2 Be6",
+    "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4 Bg2 O-O O-O e4 Ng5 Bxc3 bxc3 Re8 f3 exf3 Nxf3 Qe7 e3 d6 d3 Ne5 Nh4 Ng6 Nf5 Qe5 d4 Qe6 Qd3 Ne4 h4 h5 a4 Nf8 Rf4 Qxf5 Rxf5 Bxf5 Qe2 g6",
     "color": "white",
     "style": "Flexible, Positional",
     "overview": "The English Opening starts with 1.c4 and is one of the most flexible ways to start a game. You're basically playing a Sicilian with an extra tempo, which gives you a huge range of setups. Whether you want to play positionally with a fianchetto or go for sharp lines with d4, the English lets you adapt to whatever your opponent throws at you.",
@@ -3624,22 +3624,22 @@
     "variations": [
       {
         "name": "English: Reversed Sicilian",
-        "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 O-O Be3 Be6 Rc1 f6 Na4 Nxa4 Qxa4 Qd7 Rfd1 Rad8",
+        "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 O-O Be3 Be6 Rc1 f6 Na4 Nxa4 Qxa4",
         "explanation": "The most common response to 1...e5 where White plays a reversed Sicilian Dragon setup with an extra tempo. After ...d5 cxd5 Nxd5, the g2 bishop becomes a powerful piece on the long diagonal pressuring Black's queenside. White's plan involves Na4 to trade the active piece on b6 and build a queenside initiative with doubled rooks on the c-file. The position offers White a lasting structural edge."
       },
       {
         "name": "English: Symmetrical Variation",
-        "pgn": "c4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nf3 Nf6 O-O O-O d3 d6 a3 a6 Rb1 Rb8 b4 cxb4 axb4 b5 cxb5 axb5 Bd2 Bd7 Nd5 Nxd5",
+        "pgn": "c4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nf3 Nf6 O-O O-O d3 d6 a3 a6 Rb1 Rb8 b4 cxb4 axb4 b5 cxb5 axb5 Bd2 Bd7",
         "explanation": "Both sides fianchetto and develop symmetrically, but White's extra tempo provides a subtle but real edge. The Rb1 and b4 plan is the key idea for breaking the symmetry on the queenside and opening lines for White's rooks. After the pawn exchanges, White gets active play on the a and b files. The Nd5 jump is a thematic piece placement that can shatter Black's coordination if not handled carefully."
       },
       {
         "name": "English: Four Knights Variation",
-        "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4 Bg2 O-O O-O e4 d3 d6 Nd5 Bc5 Bg5 h6 Bxf6 Qxf6 Nd2 Qg6 a3 Bh3 b4 Bb6",
+        "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4 Bg2 O-O O-O e4",
         "explanation": "The Four Knights is one of the sharpest English lines with early piece contact and tactical themes throughout. White's Nd5 jump creates immediate pressure while the g2 bishop exerts long-term positional influence. The Bg5 pin adds tactical venom, often winning the bishop pair through the Bxf6 exchange. Black must carefully balance development with counterplay to avoid falling into a passive position."
       },
       {
         "name": "English: Botvinnik System",
-        "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 e4 d6 Nge2 f5 d3 Nf6 O-O O-O Nd5 Nxd5 cxd5 Ne7 f4 exf4 Nxf4 c6 dxc6 bxc6",
+        "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 e4 d6 Nge2 f5 d3 Nf6 O-O O-O Nd5 Nxd5 cxd5 Ne7 f4",
         "explanation": "The Botvinnik System with e4 and d3 creates a powerful pawn center that is extremely difficult to undermine. White's piece on e2 reroutes to d5 creating a dominant outpost in the center of the board. The f4 break opens the position favorably when White's pieces are better coordinated against Black's kingside fianchetto. After the central exchanges, White maintains a lasting space advantage while Black struggles with structural weaknesses."
       },
       {
@@ -3671,29 +3671,29 @@
       },
       {
         "name": "Queenside Expansion",
-        "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 e3 d6 Nge2 Nf6 O-O O-O d4 exd4 Nxd4 Nxd4 exd4 Re8",
+        "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 e3 d6 Nge2 Nf6 O-O O-O d4 exd4 Nxd4 Nxd4 exd4",
         "explanation": "White times d4 perfectly after full development. The central break opens lines favorably for White, and the g2 bishop becomes extremely powerful on the long diagonal."
       },
       {
         "name": "Botvinnik System e5 Wedge",
-        "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 e4 f5 Nge2 Nf6 O-O O-O f4 exf4 Nxf4 Be6 Nfd5 Nxd5 cxd5 Bxd5 exd5 Nd4",
+        "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 e4 f5 Nge2 Nf6 O-O O-O f4",
         "explanation": "The Botvinnik System features the powerful e4+f4 pawn center. After f4 opens the f-file, White exchanges to reach a favorable structure with Nfd5 establishing a dominant knight. The cxd5 and exd5 captures create a powerful passed d-pawn and open lines for White's pieces. Although Black gets counterplay with ...Nd4, White's bishop pair and central passed pawn provide a lasting positional advantage."
       }
     ],
     "warningLines": [
       {
         "name": "Autopilot d4 Warning",
-        "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 e3 Bb4 Qc2 O-O Nd5 Re8 a3 Bf8 Nxf6+ Qxf6 Be2 d5",
+        "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 e3 Bb4 Qc2 O-O Nd5 Re8 a3 Bf8",
         "explanation": "Pushing for d4 too early in the Four Knights can backfire. Black gets active piece play and ...d5 equalizes comfortably. Keep things flexible with d3 first."
       },
       {
         "name": "Allowing ...f5 Break",
-        "pgn": "c4 e5 Nc3 Nc6 Nf3 f5 d4 e4 Bg5 Nf6 Nd2 Be7 e3 O-O Be2 d6 O-O h6 Bh4 Qe8",
+        "pgn": "c4 e5 Nc3 Nc6 Nf3 f5 d4 e4 Bg5 Nf6 Nd2 Be7 e3 O-O Be2",
         "explanation": "If White doesn't control the f5 square, Black can get a strong Dutch-like attack with ...f5 and ...e4. White needs to be ready with d4 and central play to counter this."
       },
       {
         "name": "Neglecting Center After 1...e5",
-        "pgn": "c4 e5 g3 Nf6 Bg2 d5 cxd5 Nxd5 Nc3 Nb6 Nf3 Nc6 O-O Be7 d3 O-O Be3 f6 Rc1 Be6 Na4 Nxa4 Qxa4 Qd7 Qb3 Rab8",
+        "pgn": "c4 e5 g3 Nf6 Bg2 d5 cxd5 Nxd5 Nc3 Nb6 Nf3 Nc6 O-O Be7 d3 O-O Be3",
         "explanation": "Delaying Nc3 and allowing Black to establish a strong central presence with ...d5 gives Black easy equality and often the initiative. Without the knight on c3 to contest d5, White's fianchettoed bishop lacks targets and the position becomes passive. The early g3 without Nc3 means White cannot effectively fight for the center, and Black's natural development with ...Nc6, ...Be7, and ...Be6 leads to a harmonious position with no weaknesses. Always prioritize Nc3 early to maintain pressure on d5 and keep the English's structural advantages intact."
       }
     ]
@@ -3702,7 +3702,7 @@
     "id": "reti-opening",
     "eco": "A04",
     "name": "Reti Opening",
-    "pgn": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4 Nc3 e5 d3 Bc5 Be2 Nf6 O-O O-O Be3 Qd8 Bg5 Be6",
+    "pgn": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4 Nc3 e5 d3 Bc5 Be3 Qd6 Nb5 Qe7 Bxc5 Qxc5 d4 exd4 Qxd4 Qxd4 Nxd4 Bd7 O-O-O O-O-O c5 Nh6 Bc4 Rhe8 c6 Bxc6 Nxc6 bxc6",
     "color": "white",
     "style": "Hypermodern, Flexible",
     "overview": "The Reti Opening is a hypermodern classic. Instead of occupying the center with pawns immediately, you control it with pieces from the flanks. Starting with 1.Nf3 gives you incredible flexibility — you can transpose into the English, the Queen's Gambit, the Catalan, or keep things uniquely Reti. It's the Swiss army knife of openings.",
@@ -3733,7 +3733,7 @@
       },
       {
         "name": "Reti: Accepted dxc4 Bxc4",
-        "pgn": "Nf3 d5 c4 dxc4 e3 Nf6 Bxc4 e6 O-O c5 d4 a6 dxc5 Bxc5 Qe2 O-O Nc3 b5 Bb3 Bb7 Rd1 Qe7",
+        "pgn": "Nf3 d5 c4 dxc4 e3 Nf6 Bxc4 e6 O-O c5 d4 a6 dxc5 Bxc5 Qe2 O-O",
         "explanation": "Black grabs the c4 pawn but White recovers it immediately with Bxc4, gaining rapid development and open lines. The d-file becomes a highway for White's rooks after dxc5, and the Bb3 applies sustained pressure on the a2-g8 diagonal targeting f7. White's lead in development and central control provide a lasting initiative. Black must be careful not to fall behind in piece coordination while holding the queenside."
       },
       {
@@ -3748,46 +3748,46 @@
       },
       {
         "name": "Reti: Reti Gambit",
-        "pgn": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4 Nc3 e5 d3 Bc5 Be3 Qd8 Be2 Nf6 O-O O-O Bg5 Be6",
+        "pgn": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4 Nc3 e5 d3 Bc5 Be3",
         "explanation": "White provokes d4 with c4 and then undermines the advanced pawn with e3, leading to a gambit-like situation. After exd4 Nxd4 Nxd4 Qxd4, Black's queen is exposed in the center and becomes a target for Nc3 with tempo. White's piece activity and development advantage more than compensate for any structural concessions. The Bg5 pin creates immediate tactical pressure, and Qd8 costs Black another tempo to regroup."
       },
       {
         "name": "Reti: Anti-Slav",
-        "pgn": "Nf3 d5 c4 c6 g3 Nf6 Bg2 Bf5 b3 e6 Bb2 Nbd7 O-O Be7 d3 O-O Nbd2 h6 Rc1 Bh7 e4 dxe4",
+        "pgn": "Nf3 d5 c4 c6 g3 Nf6 Bg2 Bf5 b3 e6 Bb2 Nbd7 O-O Be7 d3 O-O Nbd2 h6 Rc1 Bh7",
         "explanation": "Against the Slav-style ...c6 setup, White combines the g2 fianchetto with b3-Bb2 to control the center indirectly. The e4 break comes at the perfect moment once all pieces are developed, and after dxe4 dxe4 the central majority gives White a lasting advantage. The Bb2 cuts through the center while the Bg2 dominates the long diagonal. This line avoids mainline Slav theory entirely and steers the game into favorable Reti territory."
       },
       {
         "name": "Reti: Reversed Benoni",
-        "pgn": "Nf3 d5 c4 d4 b4 g6 Bb2 Bg7 g3 e5 d3 Ne7 Bg2 O-O O-O Nd7 a4 a5 bxa5 Rxa5 Na3 f5",
+        "pgn": "Nf3 d5 c4 d4 b4 g6 Bb2 Bg7 g3 e5 d3 Ne7 Bg2 O-O O-O Nd7",
         "explanation": "When Black pushes d4 and plays for a big center, White adopts a reversed Benoni structure with b4 seizing queenside space. The Bg2 and Bb2 work together to exert long-range pressure on Black's extended center. The Na3-c2-e3 maneuver targets d5, and the a4 advance opens lines on the queenside. Black's pawn chain looks imposing but becomes a target once White chips away at its base."
       }
     ],
     "trapLines": [
       {
         "name": "d4 Pawn Target Trap",
-        "pgn": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4 Nc3 e5 d3 Bc5 Be3 Qd6 Be2 Nf6 O-O O-O Bg5 Be6 Nd5 Bxd5 cxd5 Qxd5",
+        "pgn": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4 Nc3 e5 d3 Bc5 Be3 Qd6",
         "explanation": "When Black pushes d4, White undermines it with e3 and wins the pawn after exchanges. Black's queen gets drawn to d4 where it becomes a target for Nc3 with tempo. After Nd5, White exploits the pin and the exposed queen to win material. The Bc4-Qb3 battery creates unbearable pressure on f7, and Black's position collapses under the combined threats on both diagonals."
       },
       {
         "name": "Reti Accepted f7 Pressure",
-        "pgn": "Nf3 d5 c4 dxc4 e3 Nf6 Bxc4 e6 O-O c5 d4 a6 dxc5 Bxc5 Qe2 O-O e4 b5 Bb3 Bb7 e5 Nd5 Nc3 Nxc3 bxc3 Qc7 Rd1 Nc6 Bg5",
+        "pgn": "Nf3 d5 c4 dxc4 e3 Nf6 Bxc4 e6 O-O c5 d4 a6 dxc5 Bxc5 Qe2 O-O e4 b5 Bb3",
         "explanation": "After Black accepts the gambit pawn, White pushes e4-e5 to create a powerful central wedge. The Bb3 creates a persistent threat on the a2-g8 diagonal targeting f7, and Black must defend with extreme precision. The Nc3-e5-Bg5 combination unleashes a flurry of threats that overload Black's defenses. One slip and the attack on f7 becomes terminal, as the Rd1 adds pressure down the open d-file."
       },
       {
         "name": "Anti-Slav Bishop Trap",
-        "pgn": "Nf3 d5 c4 c6 g3 Nf6 Bg2 Bf5 cxd5 cxd5 Qb3 Qb6 Nc3 e6 Qxb6 axb6 Nb5 Na6 d3 Ke7 Bf4 Nd7 Nd6 Bg6 Rc1",
+        "pgn": "Nf3 d5 c4 c6 g3 Nf6 Bg2 Bf5 cxd5 cxd5 Qb3 Qb6 Nc3 e6",
         "explanation": "In the Anti-Slav line, White plays cxd5 followed by Qb3 to force a queen trade that leaves Black with a weak pawn structure. The Nb5-d6 outpost becomes a permanent thorn that cannot be dislodged. White's advantage in the endgame is decisive because the knight on d6 paralyzes Black's entire position. The Bf4 prevents any counterplay, and Rc1 seizes the open file to invade."
       }
     ],
     "warningLines": [
       {
         "name": "Passive Fianchetto Warning",
-        "pgn": "Nf3 d5 c4 e6 g3 Nf6 Bg2 Be7 O-O O-O d3 c5 Nbd2 Nc6 a3 b6 Rb1 Bb7 b4 cxb4 axb4 d4 Bb2 Nd5",
+        "pgn": "Nf3 d5 c4 e6 g3 Nf6 Bg2 Be7 O-O O-O d3 c5 Nbd2 Nc6 a3 b6",
         "explanation": "If White plays too passively with the fianchetto and no central action, Black seizes space with d4 and f5 to build a crushing center. The hypermodern approach requires active central breaks at the right moment, not permanent passivity. Without c4-d4 or e4, White's bishops stare into a wall of pawns. This warning line shows how Black can dominate the center and squeeze White into a cramped, planless position."
       },
       {
         "name": "Black's e5-d4 Space Grab",
-        "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 h3 Bh5 Nbd2 e5 e4 d4 g4 Bg6 Nh4 Bc5 Nxg6 hxg6 Nc4 Qe7 f4 O-O-O",
+        "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 h3 Bh5 Nbd2 e5 e4",
         "explanation": "If Black plays e5 followed by d4, they establish a massive pawn center that locks in White's fianchettoed bishop. White must challenge this center immediately or risk being suffocated. The g4 advance weakens the kingside and Black can castle queenside to exploit it. This line demonstrates why White must time the e4 break carefully rather than allowing Black to build an unchallenged pawn wall."
       },
       {
@@ -3801,7 +3801,7 @@
     "id": "kings-indian-attack",
     "eco": "A07",
     "name": "King's Indian Attack",
-    "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe2 O-O Nc4 Re8 Bg5 h6 Bd2 Qc7",
+    "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe2 O-O Nc4 b5 Ncd2 Qc7 Nb3 Rfe8 c4 b4 g4 Bg6 Nh4 a5 Bg5 Be7 Nf5 Nf8",
     "color": "white",
     "style": "Universal, Attacking",
     "overview": "The King's Indian Attack is a universal system that can be played against almost any Black setup. You develop with Nf3, g3, Bg2, d3, O-O, and Nbd2, then strike with e4. The beauty is that the setup barely changes regardless of what Black plays — against the French, the Sicilian, the Caro-Kann, or even 1...d5, you follow the same development scheme. Bobby Fischer used this to devastating effect.",
@@ -3822,7 +3822,7 @@
     "variations": [
       {
         "name": "KIA vs French Structure",
-        "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 Be7 Bg2 O-O O-O b6 Re1 Bb7",
+        "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 dxe4 dxe4 Bc5 Bg2 e5",
         "explanation": "Against the French pawn structure, the KIA is one of the most potent weapons. White's plan is clear: play e5, then launch a kingside attack with f4 and Nf3-h4-f5. Fischer won many beautiful games from this setup."
       },
       {
@@ -3837,7 +3837,7 @@
       },
       {
         "name": "KIA: Botvinnik Setup",
-        "pgn": "Nf3 d5 g3 c5 Bg2 Nc6 O-O e5 d3 Nf6 Nbd2 Be7 e4 d4 Nc4 O-O a4 Nd7",
+        "pgn": "Nf3 d5 g3 c5 Bg2 Nc6 O-O e5 d3 Nf6 Nbd2 Be7 e4 d4 Nc4",
         "explanation": "The Botvinnik setup where Black plays a massive center with ...e5 and ...d4. White aims to undermine it with Nc4 and f4, creating dynamic play against Black's extended pawn chain."
       },
       {
@@ -3847,17 +3847,17 @@
       },
       {
         "name": "KIA vs QGD-Style Response",
-        "pgn": "Nf3 d5 g3 c5 Bg2 Nc6 O-O Nf6 d3 e6 Nbd2 Be7 e4 O-O Re1 b6 e5 Nd7 Nf1 Bb7 Bf4 Qc7 h4 Nd4 Nxd4 cxd4 Nd2 Nc5 Nf3",
+        "pgn": "Nf3 d5 g3 c5 Bg2 Nc6 O-O Nf6 d3 e6 Nbd2 Be7 e4 O-O Re1 b6 e5 Nd7 Nf1 Bb7 Bf4",
         "explanation": "When Black responds with a QGD-style setup featuring ...d5 and ...c5, White still follows the standard KIA development scheme but adapts by pushing e5 to cramp Black's position. The knight reroutes via f1 to support the e5 wedge and prepare kingside expansion with h4 and Bf4. Black's light-squared bishop finds a natural home on b7 but the long diagonal is blocked by the e5 pawn. White maintains a spatial advantage and builds a slow kingside attack while Black must find counterplay on the queenside before the pressure mounts."
       },
       {
         "name": "KIA vs KID-Style Response",
-        "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6 Nbd2 e5 e4 Nc6 a4 a5 Nc4 Nd7 c3 Nc5 Re1 Ne6 Be3",
+        "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6 Nbd2 e5 e4 Nc6 a4 a5",
         "explanation": "Against Black's King's Indian-style setup with ...g6 and ...Bg7, White develops normally with the KIA scheme and clamps down with e4. The a4 move prevents Black's typical ...b5 expansion and the Nc4 reroute pressures d6 while eyeing e3 and a5. White aims to control the center and restrict Black's typical kingside counterplay by keeping the position closed. The bishop on g2 dominates the long diagonal once the center stabilizes, and White can choose between a slow buildup or a timely d4 break to open lines favorably."
       },
       {
         "name": "KIA: e5 Wedge System",
-        "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 dxe4 dxe4 Bc5 Bg2 O-O O-O a5 Qe2 Qe7 e5 Nd5 Nb3 Ba7 Bg5 f6 exf6 Qxf6 Be3 Nxe3 fxe3 Bd7 Nbd4",
+        "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 dxe4 dxe4 Bc5 Bg2 O-O O-O",
         "explanation": "The e5 Wedge System arises when White pushes e5 after the initial e4 break, clamping down on the center and creating a space advantage. The piece on e5 restricts Black's knight and carves out outposts on d4 and f4 for White's pieces. After Nb3 and Bg5, White develops rapid initiative against Black's somewhat cramped position. The knight reroutes to d4 where it becomes a dominant centralized piece supported by the e3 pawn. Black must play precisely to equalize or risk being slowly squeezed on both flanks."
       }
     ],
@@ -3869,12 +3869,12 @@
       },
       {
         "name": "French Structure Squeeze",
-        "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 Be7 Bg2 O-O O-O b6 Re1 Bb7 e5 Nd7 Nf1 f6",
+        "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3",
         "explanation": "Against the French structure, e5 creates a vice grip. Black struggles to find counterplay while White slowly builds up on the kingside. The f1 knight heads to g3-f5."
       },
       {
         "name": "Fischer's Kingside Buildup",
-        "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O Nh4 Re8 Nf5 Bf8 Nc4 b5 Nce3 Qc7",
+        "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O Nh4 Re8 Nf5",
         "explanation": "The classic Fischer KIA buildup features the knight maneuver Nh4-f5, which is the cornerstone of White's kingside attack. After e4 opens the position, White gains space and redirects pieces kingward. The knight on f5 is extremely powerful, eyeing g7, h6, d6, and e3. Combined with g4 chasing the bishop and Nce3 reinforcing f5, White builds an iron grip on the light squares. Black's bishop retreats passively to f8 and White's attack practically plays itself."
       }
     ],
@@ -3891,7 +3891,7 @@
       },
       {
         "name": "Stale Kingside Without Follow-Up",
-        "pgn": "Nf3 d5 g3 Nf6 Bg2 g6 O-O Bg7 d3 O-O Nbd2 Nc6 e4 dxe4 dxe4 e5 Nc4 Be6 Ne3 Qd7 a3 Nd4 Nxd4 exd4 Nd5 Bxd5 exd5",
+        "pgn": "Nf3 d5 g3 Nf6 Bg2 g6 O-O Bg7 d3 O-O Nbd2 Nc6 e4 dxe4 dxe4 e5",
         "explanation": "When Black fianchettoes and plays ...e5 locking the center, White's typical e5 push is unavailable and the kingside attack stalls without a clear pawn lever. The Bg2 becomes blocked by the e4 pawn and White's pieces lack active targets. Without the ability to open the position through e5 or f4, the KIA structure becomes passive and Black can slowly improve on both flanks. In these closed positions, White must find alternative breaks like c3 and d4 or risk being outplayed strategically by Black's space and piece activity."
       }
     ]
@@ -3900,7 +3900,7 @@
     "id": "birds-opening",
     "eco": "A02",
     "name": "Bird's Opening",
-    "pgn": "f4 d5 Nf3 Nf6 e3 g6 Be2 Bg7 O-O O-O d3 c5 Qe1 Nc6 Nc3 Re8 Qg3 Bf5 Bd2 Nd4 Rae1 Nxe2+ Rxe2 Qc7",
+    "pgn": "f4 d5 Nf3 Nf6 e3 g6 Be2 Bg7 O-O O-O d3 c5 Qe1 Nc6 Nc3 d4 Nd1 dxe3 Nxe3 Nd5 Nc4 b5 Na3 a6 Kh1 Qc7 Ng5 Nd4 Bd1 Bb7 c3 Nf5 Nc2 Rad8 Ne4 Nb6 Ne3 Rxd3 Nxf5 gxf5 Ng3 e6 Nh5 Qe7 Nxg7 Kxg7 Bc2 Rd7 Be3",
     "color": "white",
     "style": "Aggressive, Unorthodox",
     "overview": "Bird's Opening with 1.f4 is an underestimated weapon that immediately signals aggressive intentions. White grabs space on the kingside and prepares for a Dutch-like setup where you're a tempo up. Most opponents won't have specific preparation against this, giving you a practical advantage from move one. The plans are straightforward — develop, castle, and launch a kingside attack.",
@@ -3921,61 +3921,56 @@
     "variations": [
       {
         "name": "Bird's: Leningrad Formation",
-        "pgn": "f4 d5 Nf3 g6 g3 Bg7 Bg2 Nf6 O-O O-O d3 c5 c3 Nc6 Na3 Rb8 Nc2 b5 a3 a5 Rb1 Bb7 b4 axb4 axb4 cxb4 cxb4 Nd4",
+        "pgn": "f4 d5 Nf3 g6 g3 Bg7 Bg2 Nf6 O-O O-O d3 c5 c3 Nc6 Na3 Rb8 Nc2 b5",
         "explanation": "The Leningrad setup with g3 and Bg2 is the most strategically rich approach for White. The fianchettoed bishop controls the long diagonal and supports a kingside expansion with Qe1-h4. White gets a reversed Leningrad Dutch where the extra tempo is significant, and the Na3-c2 maneuver prepares b4 to challenge Black's queenside space. Black often struggles to coordinate an active plan against this flexible structure."
       },
       {
         "name": "Bird's: From's Gambit Accepted",
-        "pgn": "f4 e5 fxe5 d6 exd6 Bxd6 Nf3 g5 d4 g4 Ne5 Bxe5 dxe5 Qxd1+ Kxd1 Nc6 Bf4 Bf5 Nd2 O-O-O Kc1 Nge7 e3 Nd5 Bg3 Rhe8",
+        "pgn": "f4 e5 fxe5 d6 exd6 Bxd6 Nf3 g5 d4 g4 Ne5 Bxe5 dxe5 Qxd1+ Kxd1 Nc6 Bf4 Bf5",
         "explanation": "From's Gambit is Black's most ambitious response to 1.f4. After fxe5 d6, Black sacrifices a pawn for rapid piece development and open lines against the exposed White king. White must play precisely with d4 and Ne5 to consolidate the extra material. The resulting endgame after queen trade favors White materially, but Black's lead in development and active rooks create practical compensation."
       },
       {
         "name": "Bird's: Nimzo-Larsen Hybrid",
-        "pgn": "f4 d5 Nf3 Nf6 b3 g6 Bb2 Bg7 e3 O-O Be2 c5 O-O Nc6 Qe1 d4 exd4 cxd4 Na3 Nd5 Nc4 Re8",
+        "pgn": "f4 d5 Nf3 Nf6 b3 g6 Bb2 Bg7 e3 O-O Be2 c5 O-O Nc6 Qe1 d4",
         "explanation": "Combining Bird's with b3 and Bb2 creates a powerful double fianchetto system where both bishops cover key diagonals. The dark-squared bishop on b2 pressures the long diagonal while Qe1 prepares the trademark transfer to the kingside via g3 or h4. The Na3-c4 maneuver targets key central squares and prevents Black from comfortably expanding. This hybrid approach is especially effective against players unfamiliar with Bird's setups."
       },
       {
         "name": "Bird's: Stonewall Formation",
-        "pgn": "f4 d5 e3 Nf6 Nf3 e6 d4 c5 c3 Nc6 Bd3 Bd6 O-O O-O Nbd2 Qc7 Ne5 Nd7 Ndf3 f6 Nxd7 Bxd7 Qe2 Rae8 Bd2 cxd4 exd4 e5 fxe5 fxe5",
+        "pgn": "f4 d5 e3 Nf6 Nf3 e6 d4 c5 c3 Nc6 Bd3 Bd6 O-O O-O",
         "explanation": "The Stonewall setup with d4, e3, and f4 creates an imposing wall of pawns controlling e5 and anchoring the center. White prepares a kingside attack with Bd3 aiming at h7 and Ne5 as an outpost. The weakness on e4 is a long-term concern, but White's attacking chances on the kingside typically arrive first. The Nbd2-f3-e5 maneuver is the key route, and the Bd3 often becomes a devastating attacking piece once lines open."
       },
       {
         "name": "Bird's: Swiss Gambit",
-        "pgn": "f4 f5 e4 fxe4 d3 exd3 Bxd3 Nf6 Nf3 d5 O-O Bg4 Nc3 e6 Ne5 Bh5 Qe2 Bd6 Nxd5 Nxd5 Bc4",
+        "pgn": "f4 f5 e4 fxe4 d3 exd3 Bxd3 Nf6 Nf3 d5",
         "explanation": "An aggressive gambit arising from the rare symmetrical 1.f4 f5. White sacrifices a pawn with 2.e4 to blow open lines and achieve rapid development with Bxd3, Nf3, and O-O. The piece on d3 and the semi-open e-file create immediate threats against Black's lagging development. Black must defend accurately or face a withering attack, and the Nc3-Nxd5 break is a recurring tactical theme that disrupts Black's coordination."
       },
       {
         "name": "Bird's: From's Gambit Declined",
-        "pgn": "f4 d5 Nf3 Nf6 e3 g6 b3 Bg7 Bb2 O-O Be2 c5 O-O Nc6 Ne5 Nxe5 Bxe5 Nd7 Bxg7 Kxg7 d3 Nf6 Nd2 Qc7 Qe1 b6 Qg3 Bb7 Bf3 Rac8",
+        "pgn": "f4 d5 Nf3 Nf6 e3 g6 b3 Bg7 Bb2 O-O Be2 c5 O-O Nc6 Ne5 Nxe5 Bxe5 Nd7 Bxg7 Kxg7",
         "explanation": "When Black declines From's Gambit with the solid 1...d5, White transitions into a comfortable setup combining Bird's themes with Nimzo-Larsen ideas. The plan is straightforward: fianchetto with b3 and Bb2, develop harmoniously, and use the f4 pawn to support a kingside initiative. Ne5 is a powerful outpost that forces exchanges favorable to White. The resulting middlegame gives White a pleasant edge with the bishop pair and pressure along the long diagonal."
       },
       {
         "name": "Bird's: Williams Variation",
-        "pgn": "f4 d5 Nf3 Nf6 b3 Bf5 Bb2 e6 e3 Be7 Be2 O-O O-O Nbd7 d3 c5 Nbd2 Qc7 Qe1 Rfe8 Qg3 Bf8 Nh4 Bg6 Nxg6 hxg6 Bf3 Rad8 Rae1 Nh5 Qf2",
+        "pgn": "f4 d5 Nf3 Nf6 b3 Bf5 Bb2 e6 e3 Be7 Be2 O-O O-O Nbd7",
         "explanation": "The Williams Variation features an early b3 and Bb2 before committing to the kingside structure, keeping maximum flexibility. White develops both bishops to active diagonals and prepares the signature Qe1-g3 maneuver that is the hallmark of Bird's Opening attacking plans. The Nh4 idea targets the light-squared bishop and opens the f-file after the exchange on g6. This variation is particularly effective because it combines solid positional play with latent kingside attacking potential."
       }
     ],
     "trapLines": [
       {
         "name": "Qg3 Kingside Pressure",
-        "pgn": "f4 d5 Nf3 Nf6 e3 g6 Be2 Bg7 O-O O-O d3 c5 Qe1 Nc6 Qg3 Nh5 Qf2 f5 g4 fxg4 Ng5 Nf6 Nc3 d4 exd4 cxd4 Nd5 Nxd5 Bxg4",
+        "pgn": "f4 d5 Nf3 Nf6 e3 g6 Be2 Bg7 O-O O-O d3 c5 Qe1 Nc6",
         "explanation": "The Qe1-g3 maneuver creates immediate pressure on g7 and the entire kingside. If Black plays ...Nh5 to chase the queen, Qf2 maintains the pressure while the knight has moved away from defensive duties. The follow-up g4 pries open lines against the Black king, and after fxg4 Ng5, White has a dangerous attack. Many club players underestimate how quickly this position becomes critical for Black."
       },
       {
         "name": "From's Gambit Refutation",
-        "pgn": "f4 e5 fxe5 d6 exd6 Bxd6 Nf3 Nf6 d4 Nc6 Bg5 h6 Bh4 g5 Bg3 Ne4 Bxd6 Qxd6 Nc3 Nxc3 bxc3 Bg4",
+        "pgn": "f4 e5 fxe5 d6 exd6 Bxd6 Nf3 Nf6 d4",
         "explanation": "After accepting From's Gambit with fxe5, White must play energetically with d4 and Bg5 to neutralize Black's initiative. The pin on f6 and the central control with d4 give White a stable advantage. After Bxd6 Qxd6 and Nc3, White has completed development harmoniously while Black's kingside expansion with g5 has created weaknesses. White emerges with a healthy structure and the bishop pair in an open position."
-      },
-      {
-        "name": "Swiss Gambit Rapid Attack",
-        "pgn": "f4 f5 e4 fxe4 d3 exd3 Bxd3 Nf6 Nf3 g6 O-O Bg7 Nc3 O-O f5 d5 fxg6 hxg6 Bxg6 Nc6 Bg5 Nd4 Bd3 Nxf3+ Qxf3 Bg4 Qg3",
-        "explanation": "In the Swiss Gambit, White's rapid development creates immediate tactical threats. After f5 and fxg6, the Black kingside is torn open and the bishop on d3 becomes a monster. The combination of Bxg6 and Bg5 pins create multiple threats that are extremely difficult to defend. Black's extra pawn is meaningless when the king is under such intense fire, and White's pieces coordinate beautifully for the attack."
       }
     ],
     "warningLines": [
       {
         "name": "Premature f5 Push",
-        "pgn": "f4 d5 Nf3 Nf6 e3 c5 b3 Nc6 Bb2 g6 Be2 Bg7 O-O O-O d3 d4 e4 Nd5 Nbd2 f6 Nc4 e5 fxe5 fxe5 Qe1 Bf5 Qg3 Qe7",
+        "pgn": "f4 d5 Nf3 Nf6 e3 c5 b3 Nc6 Bb2 g6",
         "explanation": "Pushing the center pawns prematurely can severely backfire in Bird's Opening. The f4 pawn should remain as a support piece controlling e5, not rush forward where it can be undermined. If White overextends with e4 too early, Black gains central dominance with ...Nd5 and ...e5, seizing the initiative. Keep the position flexible, build up slowly with piece play, and only advance when the position demands it."
       },
       {
@@ -3994,7 +3989,7 @@
     "id": "two-knights-defence",
     "eco": "C55",
     "name": "Two Knights Defence",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3 Na5 Bb5 a6 Ba4 b5 Bc2 c5 Nbd2 Nc6 Nf1 Bg4 Ng3 Re8 Be3 d5",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3 Na5 Bb5 a6 Ba4 b5 Bc2 c5 Nbd2 Nc6 Nf1 Re8 h3 h6 Ng3 Be6 d4 cxd4 cxd4 exd4 Nxd4 Nxd4 Qxd4 Rc8 Bb3 d5 e5 Nd7 Nh5 Bc5 Qf4 Qg5 Qxg5 hxg5 Bxg5",
     "color": "black",
     "style": "Tactical, Active",
     "overview": "The Two Knights Defence with 3...Nf6 is the fighting response to the Italian game. Rather than playing the solid ...Bc5, you immediately counterattack the e4 pawn. This leads to some of the sharpest and most theoretically rich positions in all of chess. You need to know your stuff, but when you do, Black gets active piece play and concrete counterchances in every line.",
@@ -4020,61 +4015,61 @@
       },
       {
         "name": "Two Knights: Fried Liver Defence 5...Na5",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Be2 h6 Nf3 e4 Ne5 Bd6 f4 exf3 Nxf3 O-O d4 Re8+ Be3 Ng4 Qd2 Nxe3 Qxe3 Bf5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Be2 h6 Nf3 e4 Ne5 Bd6 f4 exf3 Nxf3 O-O d4",
         "explanation": "The modern refutation of the Fried Liver begins with 5...Na5, sidestepping the deadly 5...Nxd5 line entirely. Black sacrifices the d5 pawn for a massive lead in development and open lines, particularly the b-file and the central files. After ...c6 and ...h6 driving the knight back, Black's pieces pour out while White's extra pawn is meaningless. The follow-up ...e4 is the critical move that gains tempo on the knight and activates the entire Black position."
       },
       {
         "name": "Two Knights: Traxler Counterattack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+ Ke7 Bd5 Rf8 O-O d6 c3 Bg4 d4 exd4 cxd4 Bb6 Nc3 Qd7 h3 Bh5 Be6 Qd8",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+ Ke7 Bd5 Rf8 O-O d6 c3 Bg4",
         "explanation": "The Traxler Counterattack with 4...Bc5 is the most audacious response to 4.Ng5, ignoring the f7 threat entirely and daring White to accept the sacrifice. After Bxf7+ Ke7, Black loses castling rights but gains a tremendous initiative with rapid piece development and threats against f2. White must tread extremely carefully because the Black attack develops almost automatically. The key for Black is to keep the pressure relentless and avoid allowing White to consolidate the extra material."
       },
       {
         "name": "Two Knights: Max Lange Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Bc5 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4 Bf8 g4 Qg6 Nxe6 fxe6 fxg7 Bxg7 Ng5 Rf8",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Bc5 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4 Bf8 g4 Qg6",
         "explanation": "The Max Lange Attack is one of the most theoretically dense and tactically brilliant lines in all of chess. After 5.O-O Bc5 6.e5, White blows open the center and both sides must calculate with extreme precision. Black's key resource is the counterattack with ...d5 followed by ...Be6, blocking the e-file and creating counterplay. The resulting positions require deep knowledge, but Black has been shown to hold with accurate play, making this a thrilling battleground for prepared players."
       },
       {
         "name": "Two Knights: Quiet Italian d3 with ...Be7",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 a4 Na5 Ba2 c5 c3 Nc6 Nbd2 Be6 Bxe6 fxe6 Nf1 d5 Ng3 Qd7 Bg5 Rad8 Qe2 d4 c4 a6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 a4 Na5 Ba2 c5 c3 Nc6 Nbd2 Be6 Bxe6 fxe6 Nf1",
         "explanation": "Against the modern quiet Italian with 4.d3, Black's most reliable setup is ...Be7 followed by natural development. The position is solid and strategic, giving Black a flexible structure that can adapt to White's plans. The maneuver ...Na5-c6 and ...Be6 ensures Black controls the center and develops harmoniously. Black should aim for the ...d5 break when the time is right to equalize the central tension and activate the pieces fully."
       },
       {
         "name": "Two Knights: Polerio Defence",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 Qe4 c6 a3 Na6 d4 Nc7 Bg5 Qd6 O-O-O",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4",
         "explanation": "The Polerio Defence arises when Black daringly captures with 5...Nxd5 and accepts the piece sacrifice 6.Nxf7. The Black king marches to e6, seemingly walking into danger, but concrete analysis shows Black can survive and even thrive with the extra material. White generates fierce attacking chances with Qf3+ and Nc3, but Black's defensive resources with ...Nb4, ...c6, and ...Nc7 are surprisingly robust. This line requires iron nerves and precise calculation from both sides."
       },
       {
         "name": "Two Knights: Ulvestad Variation",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 b5 Bf1 Nd4 c3 Nxd5 cxd4 Qxg5 Bxb5+ Kd8 Qf3 Bb7 Qxf7 exd4 O-O Bd6 d3 Re8 Bc4 Qf4 Qxf4 Bxf4 Bxf4 Nxf4",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 b5 Bf1 Nd4 c3 Nxd5 cxd4 Qxg5 Bxb5+ Kd8 Qf3 Bb7",
         "explanation": "The Ulvestad Variation with 5...b5 is a sharp and underexplored alternative to the main lines after 4.Ng5 d5 5.exd5. Black sacrifices a pawn to deflect the bishop and seize the initiative with ...Nd4 and rapid development. The resulting positions are chaotic and offer Black excellent practical chances, especially against opponents unfamiliar with the theory. White must find precise moves to maintain any advantage, and the complications heavily favor the better-prepared player."
       },
       {
         "name": "Two Knights: 4.d3 Main Line with ...Be7",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3 Na5 Bb3 Nxb3 axb3 Be6 Nbd2 d5 exd5 Nxd5 Ne4 Bf6 Bg5 Bxg5 Nfxg5 h6 Nf3 Qd7 Ned2 Rfe8",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3 Na5 Bb3 Nxb3 axb3",
         "explanation": "This is the rock-solid main line against 4.d3 where Black develops with ...Be7 and aims for the liberating ...d5 break. The exchange ...Na5xb3 doubles White's pawns and removes the dangerous Italian bishop from the board. After ...Be6 and ...d5, Black achieves full equality with active piece play in the center. The key strategic idea is that Black should not rush the ...d5 break but prepare it with ...Be6 first, ensuring maximum impact when the center opens."
       }
     ],
     "trapLines": [
       {
         "name": "Na5 Development Lead",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Be2 h6 Nf3 e4 Ne5 Bd6 f4 exf3 Nxf3 O-O d4 Re8+ Be3 Ng4 Qd2 Nxe3 Qxe3 Bf5 Nc3 Nc4 Qd3 Qa5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Be2 h6 Nf3 e4 Ne5 Bd6 f4 exf3 Nxf3 O-O d4",
         "explanation": "After 5...Na5, Black builds a devastating development advantage that grows with every move. The open b-file and half-open e-file provide natural avenues for Black's rooks, while the minor pieces find active squares effortlessly. White's displaced pieces and awkward king position make it nearly impossible to coordinate a defense. The thematic ...e4 push gains tempo on the knight and opens the position to Black's advantage, creating multiple threats simultaneously."
       },
       {
         "name": "d4 Counter-Sacrifice Trap",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Bd2 Qd5 Neg5 O-O-O Nxe6 fxe6 Rxe6 Bd6 Bg5 Rde8 Rxe8+ Rxe8 Qd3 Qf5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Bd2 Qd5",
         "explanation": "After 4.d4 exd4 5.O-O, Black can boldly grab the e4 pawn with ...Nxe4. White gets a dangerous initiative with Re1, but Black's solid central position with ...d5 and ...Be6 provides a reliable defensive wall. The queen on d5 controls key squares and the bishops develop actively. This line is a practical trap because many White players overestimate their attacking chances and overextend, allowing Black to consolidate and emerge with a material advantage."
       },
       {
         "name": "Traxler f2 Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kf1 Qe7 Nxh8 d5 exd5 Bg4 Be2 Nd4 Bxg4 Nxc2",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kf1 Qe7 Nxh8 d5 exd5",
         "explanation": "In the Traxler, if White takes on f7 with the knight instead of the bishop, Black unleashes a furious attack with ...Bxf2+ forcing the king to f1. The Black pieces swarm the weakened White king position, and the attack builds with natural developing moves. White's extra exchange after Nxh8 is irrelevant when the king is under such siege. This trap catches many aggressive players who think Nxf7 wins material cleanly, only to discover the counterattack is overwhelming."
       }
     ],
     "warningLines": [
       {
         "name": "Never Play 5...Nxd5 (Fried Liver)",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 d4 exd4 O-O Be7 Nxf7 Kxf7 Qf3+ Ke6 Re1+ Ne5 Bf1",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 d4",
         "explanation": "The Fried Liver Attack after 5...Nxd5 6.Nxf7 is one of the most dangerous traps in all of chess for unprepared Black players. After Kxf7 and Qf3+, the Black king is dragged into the center where White's pieces converge with devastating effect. Even with the best play, Black faces a miserable defensive task with the king exposed and White's initiative raging. Always play 5...Na5 instead, which is the proven antidote that gives Black full compensation for the pawn."
       },
       {
@@ -4093,7 +4088,7 @@
     "id": "evans-gambit",
     "eco": "C51",
     "name": "Evans Gambit",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Nf6 Bg5 O-O Nd5 Be6 Rb1 h6 Bh4 Bxd5",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Nf6 Ba3 O-O e5 Ng4 h3 Nh6 d5 Nxe5 Nxe5 dxe5 Bxf8 Kxf8 Qh5 Bd4 Rac1 Bf5 Nb5 Bb2",
     "color": "white",
     "style": "Gambit, Romantic",
     "overview": "The Evans Gambit with 4.b4 is one of the most romantic and dangerous openings in all of chess. You sacrifice a pawn to blast open the center and get a massive lead in development. Every developing choice comes with a threat, and Black has to find a very narrow path to survive. Kasparov himself revived this gambit at the highest level, proving it's not just for club players.",
@@ -4114,22 +4109,22 @@
     "variations": [
       {
         "name": "Evans Gambit: Slow Variation",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 dxe5 O-O Bb6 Ba3 Na5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 dxe5 O-O Bb6",
         "explanation": "The Slow Evans with Qb3 puts pressure on f7 before opening the center. White delays O-O to keep Qb3's pressure active. Black must defend precisely against threats on f7 and the center."
       },
       {
         "name": "Evans Gambit: Compromised Defence",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qe7 Nxc3 Nf6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qe7 Nxc3",
         "explanation": "Black takes the second pawn with ...dxc3 but falls behind in development. White plays Qb3 targeting f7 and Nxc3 with powerful piece play. This is extremely dangerous for Black."
       },
       {
         "name": "Evans Gambit Declined",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 Nc3 Nf6 d3 d6 Be3 O-O O-O Bxe3 fxe3",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 Nc3 Nf6 d3 d6",
         "explanation": "Black declines the gambit by retreating to b6. This is very solid and avoids the tactical complications. White gets a pleasant position with the bishop pair and open f-file."
       },
       {
         "name": "Evans Gambit: Stone-Ware Variation",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bd6 d4 Nf6 dxe5 Bxe5 Nxe5 Nxe5 Bb3 d6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bd6 d4 Nf6 dxe5 Bxe5",
         "explanation": "Black retreats to d6 instead of a5, blocking the d-pawn. This leads to a quieter game but White still has the initiative with natural development and the open center."
       },
       {
@@ -4139,39 +4134,39 @@
       },
       {
         "name": "Evans Gambit: Morphy Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2 Ne7 Bd3 O-O Nbd2 Ng6 Nc4 Nxc4 Bxc4",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2",
         "explanation": "The Morphy Attack prioritizes rapid development with O-O followed by Bb2 and Nbd2, aiming for a kingside assault. White drives the knight away with d5 and builds a powerful center while every piece finds an active square. The bishop pair and open lines give White lasting pressure against Black's cramped position, often culminating in a direct attack on the king."
       },
       {
         "name": "Evans Gambit: Anderssen Variation",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Bb6 cxd4 d6 Nc3 Nf6 a4 a6 a5 Ba7 d5 Ne5 Nxe5 dxe5 Be2",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Bb6 cxd4 d6 Nc3 Nf6",
         "explanation": "The Anderssen Variation features the aggressive a4-a5 pawn advance to chase the bishop from the a7-g1 diagonal and create queenside space. White combines central control with flank expansion, often reaching positions where the a5 pawn restricts Black's queenside counterplay. After d5 followed by Nxe5 and Be2, White has a stable center and lasting positional pressure on both sides of the board."
       },
       {
         "name": "Evans Gambit: Main Line with Qb3",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 Bb6 exd6 Na5 Qa4",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 Bb6 exd6 Na5",
         "explanation": "The Main Line with Qb3 applies immediate pressure on f7 and forces Black to make concessions in the center. After dxe5 Bb6 exd6, White trades queens but retains a superior minor piece configuration and open lines. The endgame-oriented approach with Nbd2-Nb3 and Rd1 gives White a small but persistent edge where the better development and active rooks outweigh the sacrificed pawn."
       }
     ],
     "trapLines": [
       {
         "name": "Development Avalanche",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nge7 cxd4 d5 exd5 Nxd5 Ba3 Be6 Bb5 Bb6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nge7 cxd4 d5 exd5 Nxd5 Ba3 Be6 Bb5",
         "explanation": "After the center opens, White's pieces pour out with tempo. Every move creates a threat, and Black struggles to complete development. The initiative is worth far more than the pawn."
       },
       {
         "name": "Slow Evans Pressure",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 Bb6 exd6 Na5 Qa4 Nxc4",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 Bb6 exd6 Na5",
         "explanation": "In the Slow Evans, Qb3 creates dual threats on f7 and d5. If Black isn't precise, White wins material or gets a crushing attack. The queen and bishop battery is very hard to handle."
       },
       {
         "name": "Double Pawn Sacrifice",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3 O-O Nd5 Nxd5 Bxd5 Bb6 Rae1 d6 exd6 Be6 Bxe6 fxe6 Rxe6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3",
         "explanation": "The double pawn sacrifice with d4 and c3 gives White staggering development after O-O. Black grabs both pawns but White's pieces explode into action with Qb3 targeting f7, e5 driving back the queen, and Nxc3 completing development. After Nd5 and Ba3, every White piece is firing on all cylinders. The Bxd5 centralizes the bishop while Rae1 and the eventual Rxe6 blows open Black's position with a crushing attack."
       },
       {
         "name": "Qb3 f7 Battery",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nf6 e5 d5 exf6 dxc4 Qe2+ Be6 fxg7 Rg8 cxd4 Rxg7 Bg5 Qd5 Nc3 Qf5 d5 Nd8 dxe6 Nxe6 Bf4 Kf8 Rad1 Bb6 Nd5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nf6 e5 d5 exf6 dxc4",
         "explanation": "White's Qb3-Qe2+ battery targets f7 relentlessly after sacrificing the bishop with exf6 and fxg7. Black wins material but White's initiative is overwhelming as every piece enters with tempo. The Bg5 pin paralyzes Black's development, and after d5 dislodges the knight, the passed e6 pawn becomes a battering ram. Nd5 lands with decisive threats, and Black's king stuck on f8 can't find safety anywhere on the board."
       },
       {
