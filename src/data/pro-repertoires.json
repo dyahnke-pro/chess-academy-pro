@@ -3387,15 +3387,15 @@
         },
         {
           "name": "h3 Najdorf",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 h3 e5 Nde2 Be7 g3 b5 Bg2 Bb7 O-O Nbd7 a4 b4 Nd5 Nxd5 exd5",
-          "explanation": "The modern h3 Najdorf avoids the sharpest lines. White plays more positionally with g3 and Bg2. Pragg responds flexibly and aims for piece activity on both flanks."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 h3 e5 Nde2 Be7",
+          "explanation": "The modern h3 Najdorf avoids the sharpest lines. White plays more positionally with g3 + Bg2 setup; Pragg responds flexibly with Be7 development."
         }
       ],
       "trapLines": [
         {
           "name": "White Overextends with f4",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f4 e5 Nf3 Nbd7 fxe5 dxe5 Bc4 Bb4 O-O Bxc3 bxc3 Nxe4",
-          "explanation": "If White overextends with f4 and fxe5, Black recaptures and the weakened e4 pawn becomes a target. After Nxe4 Black wins a central pawn with active pieces."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f4 e5 Nf3 Nbd7",
+          "explanation": "If White overextends with f4, Black plays e5 + Nbd7 — the weakened e4 pawn becomes a target as Black builds queenside counterplay."
         },
         {
           "name": "e5 Fork Timing",
