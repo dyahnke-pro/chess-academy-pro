@@ -18,15 +18,6 @@
     "petrov-defence::trap::Wrong Move Order Punishment": [
       "WEAK_TRAP"
     ],
-    "catalan-opening::trap::Long Diagonal Rook Skewer": [
-      "STUDENT_NOT_PUNISHER"
-    ],
-    "catalan-opening::trap::a4 Undermining: Queen Fork": [
-      "INVERTED_MATERIAL"
-    ],
-    "catalan-opening::trap::Qc2 Discovery on the Diagonal": [
-      "WEAK_TRAP"
-    ],
     "trompowsky-attack::trap::Ne4 Bh4 Blunder": [
       "PGN_NOT_IN_DB",
       "STUDENT_NOT_PUNISHER",
@@ -583,6 +574,18 @@
     "london-system::warning::Dutch f5-f4 Pawn Storm": [
       "TOOTHLESS_WARNING",
       "PGN_NOT_IN_DB"
+    ],
+    "catalan-opening::trap::Long Diagonal Rook Skewer": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "catalan-opening::trap::a4 Undermining: Queen Fork": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "catalan-opening::trap::Qc2 Discovery on the Diagonal": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
     ]
   }
 }

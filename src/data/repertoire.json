@@ -2106,7 +2106,7 @@
     "id": "catalan-opening",
     "eco": "E00",
     "name": "Catalan Opening",
-    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nc6 Nc3 Nb4 Qb1 Be4",
+    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nc6 Nc3",
     "color": "white",
     "style": "Positional, Pressure",
     "overview": "The Catalan is one of the most sophisticated and powerful openings in modern chess — it combines the Queen's Gambit pawn structure with a fianchettoed bishop on g2. That bishop is an absolute monster on the long diagonal, exerting pressure from g2 all the way to a8. The positions look quiet but are deceptively dangerous for Black. Nearly every top player in the world has this in their repertoire, and for good reason.",
@@ -2127,7 +2127,7 @@
     "variations": [
       {
         "name": "Open Catalan: dxc4 Qc2 Recovery",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Be7 O-O O-O Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Be4 Qc1 Bb7 Ba5 Nbd7 Nc3 c5 dxc5 Bxc5",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Be7 O-O O-O Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Be4 Qc1 Bb7",
         "explanation": "The Open Catalan main line where Black captures on c4 and White recovers with Qc2-Qxc4. The bishop on g2 immediately activates on the long diagonal, pressuring b7 and a8. After White recovers the pawn, the positional compensation is enormous — the bishop pair, better pawn structure, and natural piece coordination give White a lasting edge. Black's ...Be4 maneuver tries to block the diagonal, but after Qc1 and Ba5, White repositions smoothly while maintaining pressure on Black's queenside."
       },
       {
@@ -2137,61 +2137,61 @@
       },
       {
         "name": "Open Catalan: a6-b5 with a4 Break",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O b5 Ne5 Nd5 a4 Bb7 axb5 axb5 Rxa8 Bxa8 Nc3 Nxc3 bxc3 Bxg2 Kxg2 Qd5+",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O b5 Ne5 Nd5 a4 Bb7 axb5 axb5 Rxa8 Bxa8",
         "explanation": "Black tries to hold the c4 pawn with ...a6 and ...b5, which is the most ambitious defensive try. White's a4 break is the critical response — it undermines the b5 pawn and opens the a-file where White already has the rook. After Rxa8 Bxa8, White dominates the a-file and the Ne5 is powerfully placed targeting c4, c6, and d7. The exchange of light-squared bishops via ...Bxg2 Kxg2 actually helps White, as the king is active in the resulting endgame and Black's extra pawn on c4 is easily recovered."
       },
       {
         "name": "Catalan with ...Nbd7 Line",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bf4 Nbd7 Nc3 Nb6 Qd3 Nbd5 Nxd5 Nxd5 Be5 f6",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bf4 Nbd7 Nc3 Nb6 Qd3 Nbd5 Nxd5",
         "explanation": "Black develops the knight to d7 and aims for a solid setup with ...Nb6 challenging the c4 queen. White plays a4 to prevent ...b5 expansion and recaptures on c4 with a space advantage. The Bf4 development is flexible, supporting e5 and controlling the dark squares. After ...Nbd5, White maintains pressure with Nxd5 Nxd5 and the bishop maneuver Be5-d4, controlling the long dark-square diagonal and restricting Black's piece activity. White's space advantage and better-coordinated pieces provide lasting pressure."
       },
       {
         "name": "Catalan vs Slav Setup: ...c6 and ...dxc4",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 g3 dxc4 Bg2 b5 a4 Bb7 Ne5 a6 axb5 cxb5 b3 cxb3 Qxb3 e6 O-O Nbd7 Nxd7 Nxd7 Rd1 Be7 Bf4 O-O Nc3",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 g3 dxc4 Bg2 b5 a4 Bb7 Ne5 a6 axb5",
         "explanation": "Against the Slav move order with ...c6, the Catalan structure still works beautifully. After ...dxc4 and ...b5, White plays a4 to undermine Black's queenside pawns and b3 to recover the c4 pawn. The Ne5 placement pressures c6 and d7 while the bishop on g2 rakes down the long diagonal toward a8. After the pawn exchanges, White emerges with superior development, open lines on the a- and b-files, and the powerful Bg2 targeting Black's weakened queenside. The Nc3 and Rd1 setup creates a harmonious piece configuration."
       },
       {
         "name": "Catalan Declined: ...Be7 without ...dxc4",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 b3 b6 Bb2 Bb7 Nc3 Rc8 e4 dxe4 Nxe4 Nxe4 Qxe4 c5 Rfd1 Qc7",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 b3 b6 Bb2 Bb7 Nc3 Rc8 e4 dxe4 Nxe4 Nxe4 Qxe4",
         "explanation": "In the Catalan Declined, Black keeps the center closed with ...c6 and ...Be7, avoiding the ...dxc4 capture entirely. White builds patiently with b3, Bb2, and Nc3, preparing the e4 central break. The double fianchetto with Bb2 and Bg2 creates a powerful crossfire of bishops, and the e4 advance opens the center when White's pieces are perfectly placed. After dxe4 Nxe4, White has a strong centralized knight and open lines for both bishops. Black's solid but passive setup struggles to generate counterplay against White's harmonious piece coordination."
       },
       {
         "name": "Early Qa4+ Line",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Bd7 Qa4+ Bc6 Qxc4 Bd5 Qd3 c5 Nc3 Bxf3 Bxf3 cxd4 Nb5 Na6 Qxd4 Qxd4 Nxd4 Bc5 Nb3 Bb4+ Bd2 Bxd2+ Kxd2",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Bd7",
         "explanation": "The Qa4+ line is an aggressive early attempt to recover the c4 pawn with check, disrupting Black's development. After ...Bc6 Qxc4, White has the pawn back and threatens Qxc5. Black must play accurately with ...Bd5 to challenge the queen and develop pieces. The resulting positions feature an early queen exchange after ...cxd4 and Qxd4, leading to a nuanced endgame where White's bishop pair and active pieces compensate for Black's solid structure. The Nb5 jump creates threats on c7 and d6 that force Black to solve concrete problems early."
       }
     ],
     "trapLines": [
       {
         "name": "Long Diagonal Rook Skewer",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Nc6 O-O Rb8 Nc3 a6 e4 b5 d5 exd5 exd5 Na5 d6 Bb7 Re1+ Be7 dxe7 Qxe7 Rxe7+ Kxe7",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Nc6 O-O Rb8 Nc3 a6 e4 b5 d5 exd5 exd5",
         "explanation": "After Black plays ...dxc4 and tries to hold with ...Nc6 and ...Rb8, White has the devastating central advance e4-d5. The pawns rip open the center and the Bg2 fires down the long diagonal with lethal effect. The d6 push is the killer blow — the pawn forks the bishop on e7 and threatens promotion. After Re1+ forces the king to move, dxe7 Qxe7 Rxe7+ wins material, and the bishop on g2 cleans up by capturing the undefended Bb7. This trap punishes Black for neglecting the long diagonal."
       },
       {
         "name": "a4 Undermining: Queen Fork",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O b5 a4 Bb7 axb5 axb5 Rxa8 Bxa8 Ne5 Nd5 Nc3 Nxc3 bxc3 Bd5 Nxc4 Bxg2 Kxg2 bxc4 Qa4+ Nd7 Qxc4",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O b5 a4 Bb7 axb5 axb5 Rxa8 Bxa8",
         "explanation": "The a4 pawn break is the Catalan's signature tactical weapon against Black's ...b5 defense. After axb5 axb5 Rxa8, White dominates the a-file and Black's queenside is exposed. The Ne5 centralization targets c4 and c6 simultaneously, and after the exchange sequence Nc3 Nxc3 bxc3, White recovers the pawn with Nxc4. The final Qa4+ is a queen fork that picks up the c4 pawn with check, leaving White with a clearly superior position — better structure, more active pieces, and lasting pressure on Black's weak pawns."
       },
       {
         "name": "Qc2 Discovery on the Diagonal",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Be7 O-O O-O Qc2 a6 Qxc4 b5 Qc2 Bb7 Bf4 Nc6 Nc3 Nb4 Qb1 Be4 Nxe4 Nxe4 a3 Nc6 Qc2 Nd6 Ne5",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Be7 O-O O-O Qc2 a6 Qxc4 b5 Qc2 Bb7 Bf4 Nc6 Nc3 Nb4 Qb1",
         "explanation": "After Qc2 recovers the pawn, the queen and bishop on g2 create a battery on the long diagonal that targets c6, b7, and a8. When Black develops ...Nc6, the pieces block their own bishop's escape route. White plays Nc3 and if Black tries ...Nb4 harassing the queen, the retreat Qb1 maintains the diagonal pressure while ...Be4 is met by Nxe4, opening the diagonal further. The final Ne5 lands powerfully in the center, threatening discovered attacks along the g2-a8 diagonal with devastating effect."
       }
     ],
     "warningLines": [
       {
         "name": "Premature e4 in the Closed Catalan",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 b6 e4 dxe4 Nxe4 Nxe4 Qxe4 Bb7 Qe2 c5 Rd1 Rc8 dxc5",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 b6 e4 dxe4 Nxe4 Nxe4 Qxe4 Bb7",
         "explanation": "Pushing e4 too early in the Closed Catalan is a common mistake that releases the central tension prematurely. After ...dxe4 Nxe4 Nxe4 Qxe4, Black immediately plays ...Bb7 hitting the queen and activating the bishop. The follow-up ...c5 opens the center on Black's terms, and after dxc5 Bxg2 Kxg2 Bxc5, Black has equalized completely with active pieces and no weaknesses. White must be patient and build up with moves like Rd1, b3, and Bb2 before committing to the e4 break."
       },
       {
         "name": "Inaccurate a4 Timing vs ...b5",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 b5 a4 c6 axb5 cxb5 O-O Bb7 Ne5 a5 b3 cxb3 Qxb3 Bd5 Qb2 Bd6 Nc3 Bxg2 Kxg2 O-O",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 b5 a4 c6 axb5 cxb5",
         "explanation": "If White plays a4 without proper preparation against Black's ...b5 defense, Black can consolidate with ...c6 reinforcing the pawn chain and ...Bb7 activating the bishop. The key mistake is allowing ...Bd5 which blocks the g2 bishop's diagonal entirely. After the exchange ...Bxg2 Kxg2, White has lost the prized Catalan bishop and Black's solid pawn structure with the extra space on the queenside gives a comfortable game. The a4 break must be combined with Ne5 and Nc3 pressure to be effective."
       },
       {
         "name": "Ignoring ...c5 Counter in Open Catalan",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Be7 O-O O-O Qc2 a6 Qxc4 b5 Qd3 c5 dxc5 Bxc5 Nc3 Bb7 Bg5 Nbd7 Bxf6 Nxf6 Qxd8 Rfxd8 Rfd1 Rxd1+ Nxd1 Nd5",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Be7 O-O O-O Qc2 a6 Qxc4 b5 Qd3",
         "explanation": "After recovering the c4 pawn, White must not ignore Black's ...c5 counter-break. If White captures dxc5 Bxc5 without maintaining central tension, Black equalizes with active piece play on the open c-file and d-file. The exchange of queens via Qxd8 leads to an endgame where Black's knight on d5 is a powerful blockader and the bishop pair has no targets. White should instead meet ...c5 with Bg5 or a3 to maintain pressure, keeping the center fluid rather than releasing the tension into a simplified position."
       }
     ]
