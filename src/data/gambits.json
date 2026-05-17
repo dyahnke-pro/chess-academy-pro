@@ -855,10 +855,10 @@
     "id": "albin-countergambit",
     "eco": "D08",
     "name": "Albin Countergambit",
-    "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Bg4 a3 Nge7 b4 Ng6 Bb2 a5 b5 Ncxe5 Nxe5 Nxe5 e3 Be7 exd4 Nxc4 Nxc4 O-O Be2 Bf5 O-O Bf6",
+    "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Bg4 a3 Nge7",
     "color": "black",
     "style": "Aggressive, Counterattacking",
-    "overview": "The Albin Countergambit is the Queen's Gambit turned on its head — instead of timidly defending with e6 or c6, Black strikes back with e5 and pushes the d-pawn forward like a battering ram. The advanced d4 pawn cramps White's position and creates the famous Lasker Trap, one of the most beautiful tactical motifs in all of chess. This is a fantastic weapon for players who hate defending passively in the Queen's Gambit and want to seize the initiative as Black.",
+    "overview": "The Albin Countergambit is the Queen's Gambit turned on its head — instead of timidly defending with e6 or c6, Black strikes back with e5 and pushes the d-pawn forward like a battering ram. The advanced d4 pawn cramps White's position and creates the famous Lasker Trap, one of the most beautiful tactical motifs in all of chess. This is a fantastic weapon for players who hate defending passively in the Queen's Gambit and want to seize the initiative as Black. NOTE: at master level the Lasker setup (4.e3) is almost never played because top players know the underpromotion trap — only the Nf3-based mainline appears in significant master games. The 4.e3 lines below preserve the canonical Lasker Trap motif as practical preparation against amateur opponents.",
     "keyIdeas": [
       "The advanced d4 pawn cramps White's entire position and restricts natural development of the dark-squared bishop",
       "Black aims to support the d4 pawn with c5 and develop actively with Nc6, Nge7, Bg4",
@@ -878,72 +878,31 @@
     "variations": [
       {
         "name": "Albin Countergambit: Lasker Trap",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Ke2 fxg1=N+ Rxg1 Bg4+ Kf2 Qxd1 Nc3 Nc6 Nb5 O-O-O Nxa7+ Nxa7 Rxd1 Rd2+ Bxd2 Nf6 exf6 gxf6 Bd3 Bxd1",
-        "explanation": "The legendary Lasker Trap — after Bb4+ Bd2 dxe3 Bxb4 exf2+, the key move is fxg1=N+, underpromoting to a knight with check. The knight forks the king and rook, winning the exchange. Then Bg4+ forces the king further, and Qxd1 wins White's queen. An absolute classic of chess tactics."
+        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Ke2 fxg1=N+",
+        "explanation": "The legendary Lasker Trap — after Bb4+ Bd2 dxe3 Bxb4 exf2+, the key move is fxg1=N+, underpromoting to a knight with check. The knight forks the king and rook on h1, winning the exchange. The most famous underpromotion in chess opening theory — masters at the top level know to avoid 4.e3 precisely because of this trick."
       },
       {
         "name": "Albin Countergambit: Normal Development (Nf3 System)",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Bg4 a3 Qd7 b4 Nge7 Bb2 Ng6 g3 Be7 Bg2 O-O O-O f6 exf6 Bxf6 Nb3 Rae8 Re1 Bxf3 Bxf3 Qd5 Bxd5+ Re6 Bxe6+",
-        "explanation": "The standard line where White plays Nf3 and Nbd2 to handle the d4 pawn. Black develops with Nc6, Bg4, and Nge7. The position is dynamic — White targets the d4 pawn while Black aims for kingside play. The f6 break opens lines for Black's pieces."
-      },
-      {
-        "name": "Albin Countergambit: d3 Push Disruption",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 a3 Nge7 b4 Ng6 Bb2 a5 b5 Ncxe5 Nxe5 Nxe5 e3 Be6 exd4 Nxc4 Bxc4 Bxc4 Qa4 Bd3 Qc4 Bb4+ Qxb4 Qe7+ Qxe7+ Kxe7",
-        "explanation": "The d3 push is one of Black's most dangerous weapons. After the pawn advances to d3, it disrupts White's entire coordination. In this line, the d2+ check wins back material, and after Qxd4+ and Qxa1, Black has recovered everything with an active position."
-      },
-      {
-        "name": "Albin Countergambit: e3 Line (Non-Lasker)",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Kxf2 Qxd1 Nc3 Qd4+ Ke1 Nc6 Nb5 Bg4 Nf3 Bxf3 gxf3 Qe3+ Be2 O-O-O Rg1 Nge7 Rg3 Qb6 a3 Nd4 a4 Ndf5",
-        "explanation": "When White avoids the Lasker Trap by playing Kxf2 instead of Ke2, the position is messy but playable. White has the bishop pair but the king is exposed. Black's active pieces and centralized queen provide enough compensation. Both sides have chances in this double-edged middlegame."
+        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Bg4 a3 Qd7 b4 Nge7",
+        "explanation": "The standard line where White plays Nf3 and Nbd2 to handle the d4 pawn. Black develops with Nc6, Bg4, and Nge7. White prepares queenside expansion with a3 and b4; Black supports the d4 pawn and aims for kingside development with Qd7 connecting the rooks early. The position is dynamic with chances for both sides."
       },
       {
         "name": "Albin Countergambit: Fianchetto System",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4 Bg2 Qd7 O-O Nge7 Nbd2 Ng6 Nb3 Ngxe5 Nxe5 Nxe5 Nbxd4 c5 Nc2 Bh3 f3 Bxg2 Kxg2 Nc6 Ne3 Be7 b3 O-O Bb2 Rad8",
-        "explanation": "White fianchettos to handle the d4 pawn in a more positional way. Black develops naturally with Bg4, Nge7, and Ng6. After recovering the pawn on e5, Black has equal chances. The fianchetto bishop on g2 is strong but Black's centralized pieces provide counterplay."
+        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4 Bg2 Qd7 O-O Nge7",
+        "explanation": "White fianchettos to handle the d4 pawn in a more positional way. Black develops naturally with Bg4, Qd7, and Nge7. The fianchetto bishop on g2 is strong but Black's centralized pieces and the cramping d4 pawn provide counterplay. The game becomes a slow positional battle over the d-file and queenside."
       }
     ],
-    "trapLines": [
-      {
-        "name": "Lasker Trap: Full Brilliancy",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Ke2 fxg1=N+ Ke3 Qxd1 Nc3 Bf5 Nxd1 Nc6 Nc3 O-O-O Bd3 Rxd3+ Kf4 Ne2+ Kxf5 Nh6+ Ke4 Nxc3+ Bxc3 Rd4+",
-        "explanation": "The Lasker Trap at its most spectacular — after the knight promotion, White's king goes on an insane journey. After Ke3, Black plays Qxd1 winning the queen. If White tries Kf4, the sequence g5+ Kxg5 Nf6+ continues the king hunt. The checks never stop and White's position collapses completely."
-      },
-      {
-        "name": "d3 Advance Disruption Trap",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 a3 d3 e3 Bg4 Be2 dxe2 Qxe2 Bxf3 Qxf3 Qd3 Qxc6+ bxc6 e4 Qxe4+ Be3 Qxe3+ fxe3 Bb4+ axb4 O-O-O O-O Nf6 exf6 gxf6",
-        "explanation": "The d3 push disrupts White's piece coordination completely. After dxe2 Qxe2, White has recovered the pawn but the damage is done — the bishop pair is gone and Black has a development lead. After Qd3, Black trades queens and reaches a favorable endgame with active pieces."
-      },
-      {
-        "name": "Bishop Pin Trap",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Bg5 Be7 Bxe7 Qxe7 Nbd2 Bg4 a3 O-O-O b4 d3 e3 Nxe5 Nxe5 Qxe5 Bxd3 Bxd1 Kxd1 Rxd3 Ke2 Rxd2+ Kxd2 Qd4+ Ke1 Qxa1+",
-        "explanation": "The bishop pin on g4 combined with the d3 push creates tactical havoc. After Bg5 Be7 Bxe7 Qxe7, the d3 advance disrupts everything. The sequence of captures leads to Black winning decisive material — the rook sacrifice on d3 followed by the queen checks wins the game."
-      },
-      {
-        "name": "e3 Queen Trap Variation",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Ke2 fxg1=N+ Rxg1 Bg4+ Ke3 Qd4+ Kxd4 Nc6+ Kd5 O-O-O+ Ke4 Nf6+ exf6 Rd4+ Qxd4 Bf5+ Kxf5 Nxd4+ Ke4 Re8+ Kxd4 Re4+",
-        "explanation": "After the Lasker Trap knight promotion, if White tries to develop with Nf3, the Bg4+ pin keeps the pressure on. After Nc6 and Qd3+, the queen invades to the heart of White's position. The knight jumps to b4 and then d3, creating forks that win material."
-      },
-      {
-        "name": "Morozevich's Attacking Idea",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 a3 Bf5 b4 d3 e3 a5 Bb2 axb4 axb4 Rxa1 Bxa1 Nxb4 Bxd3 Bxd3 Qa4+ Nc6 Qxc6+ bxc6 Bd4 Bb4+ Nc3 Bxc3+ Bxc3 Bxc4 e4 Qd2+",
-        "explanation": "Morozevich's attacking idea features aggressive queenside play. After a5 and axb4, Black opens the a-file for the rook. The Rxa1 Bxa1 exchange gives Black a powerful passed d-pawn. The d3 pawn is a constant thorn that ties White down to defense."
-      }
-    ],
+    "trapLines": [],
     "warningLines": [
       {
         "name": "White's Accurate Nf3-Nbd2 Refutation",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Nge7 a3 Ng6 b4 a5 b5 Ncxe5 Nxe5 Nxe5 Nb3 Be6 Nxd4 Bd7 e3 Qf6 Be2 Bc5 O-O O-O Bb2 Qg6 Bf3 Rad8 Nb3 Bf5 Nxc5 Nd3",
-        "explanation": "White's precise Nf3-Nbd2 system methodically dismantles the Albin. The d4 pawn is blockaded and eventually won. After b4 and a3, White controls the queenside. Without the d4 pawn, Black has sacrificed material for nothing. This is why top players rarely employ the Albin."
-      },
-      {
-        "name": "e3 Without Falling for Lasker",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Kxf2 Qxd1 Nc3 Qd4+ Ke1 Qxe5+ Be2 Nc6 Nf3 Qd4 Nd5 Nge7 Bxe7 Nxe7 Nxc7+ Kf8 Ne6+ Bxe6 Nxd4 Bxc4",
-        "explanation": "When White plays Kxf2 instead of Ke2, the Lasker Trap is avoided completely. The position is messy but manageable for White. The bishop pair and active knights give White chances. Black's queen is active but alone — the position requires very precise play from both sides."
+        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Nge7 a3 Ng6",
+        "explanation": "White's precise Nf3-Nbd2 system methodically prepares to dismantle the Albin. After Nge7 and a3, the queenside expansion with b4 is coming and the d4 pawn will eventually be blockaded by Nb3. Black's compensation is real but limited — this is why top players rarely employ the Albin against well-prepared opposition."
       },
       {
         "name": "Alapin Variation: White Plays 4.e4",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 e4 Nc6 f4 f6 exf6 Nxf6 Nf3 Bb4+ Bd2 Bc5 Bd3 Ng4 O-O Nxh2 Kxh2 Qh4+ Kg1 Bg4 Bc2 Bxf3 Qxf3 Qxf4 Qxf4 O-O-O Qxc7+ Kxc7",
-        "explanation": "White's e4 response creates a powerful center immediately. After f4, the center pawns are imposing. While Black gets some tactical chances with Ng4 and Qh4+, accurate play by White neutralizes the threats. The resulting position favors White's superior pawn structure."
+        "pgn": "d4 d5 c4 e5 dxe5 d4 e4 Nc6 f4 f6 exf6 Nxf6",
+        "explanation": "White's e4 response creates a powerful center immediately. After f4, the center pawns are imposing and Black is forced to play f6 to challenge them. After exf6 Nxf6, Black has at least recovered the gambit pawn, but White's space advantage and central control make this an unpleasant version of the Albin to defend."
       }
     ]
   },
