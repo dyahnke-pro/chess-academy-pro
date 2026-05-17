@@ -1866,47 +1866,47 @@
       "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3",
       "color": "white",
       "style": "Theoretical, Sharp",
-      "overview": "Caruana is one of the world's foremost experts on the Marshall Attack. He plays both sides and has prepared the Anti-Marshall lines to incredible depth. His knowledge of the resulting tactical complications is unmatched at the elite level.",
+      "overview": "Caruana plays the Ruy Lopez Anti-Marshall because he's spent more hours analysing the Marshall than any human alive. He plays both sides at elite level — in the 2018 World Championship match against Carlsen, this opening appeared in 4 of 12 classical games. His Anti-Marshall preparation is so deep that even Magnus avoided the most theoretical lines. When Caruana plays White and Black plays the Marshall, you're watching one of chess history's most prepared theoretical positions reach the board.",
       "keyIdeas": [
-        "Meet the Marshall Gambit head-on with precise tactical play — a key strategic concept in Ruy Lopez Anti-Marshall",
-        "After Re1 and d4, White has a classical center supported by all pieces — the Re1 controls the e-file and the d4 pawn dominates the center",
-        "Navigate the sharp tactical complications that arise after d5 exd5 — a key strategic concept in Ruy Lopez Anti-Marshall",
-        "White must defend accurately but can emerge with an advantage — a key strategic concept in Ruy Lopez Anti-Marshall"
+        "If Black plays the Marshall Attack (…d5 instead of …d6), you have ONE choice to make on move 8: play h3 preventing the Marshall (8.h3 — adds a tempo for safety) OR play 8.a4 sidestepping the Marshall entirely. Both are sound; pick based on your preparation.",
+        "If you accept the Marshall (8.c3 d5 9.exd5 Nxd5 10.Nxe5 Nxe5 11.Rxe5 c6), the position is forced for 15 moves. Memorise the defensive moves — every move has only ONE correct answer.",
+        "In the Anti-Marshall 8.a4, the goal is positional: probe Black's queenside with a4 forcing …b4, then play d3 + Nbd2 + Bb3 reaching a slow strategic position. Same Ruy Lopez middlegame, NO Marshall risk.",
+        "The Breyer Variation (with the …Nb8-Nd7 reroute) is another Anti-Marshall — Black's plan is too slow to support a Marshall gambit. Caruana's deep prep handles both Breyer and Anti-Marshall systems."
       ],
       "traps": [
-        "After d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6, White must play d4 immediately or lose the advantage"
+        "Against the Marshall main line (after 11.Rxe5 c6 12.d4), DON'T play 12.dxc6? — losing the c6-pawn isn't worth it. The correct 12.d4 immediately fortifies the centre and prepares the defensive setup (Be3, Nd2, h3) that holds the extra pawn."
       ],
       "warnings": [
-        "The Marshall is extremely dangerous — memorize the key defensive moves",
-        "Do not deviate from known theory without deep calculation"
+        "DON'T accept the Marshall without deep preparation. The defensive lines are forced for 20+ moves; one wrong move loses the pawn back AND the game. If you haven't memorised the Be3/Nd2/h3 setup, play the Anti-Marshall (8.a4) instead.",
+        "Even small move-order changes matter. The Marshall accepted requires precise sequence: 9.exd5 (NOT 9.Nxe5 first), 10.Nxe5 Nxe5 11.Rxe5 (NOT Nxd5), 12.d4 (NOT Nd2 first). Deviation = losing."
       ],
       "variations": [
         {
           "name": "Marshall Attack Main Line",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3",
-          "explanation": "The sharpest Marshall continuation. Black sacrifices a pawn for a ferocious attack. Caruana navigates these complications with deep preparation."
+          "explanation": "The Marshall Attack accepted. Black sacrifices a pawn with 8...d5! and after the forced sequence 9.exd5 Nxd5 10.Nxe5 Nxe5 11.Rxe5 c6, White MUST play 12.d4 fortifying the centre. Black continues 12...Bd6 13.Re1 Qh4 14.g3 Qh3 — the queen on h3 is the Marshall's signature attacking move, eyeing g2 and h2. White's defensive task: prevent the attack from breaking through while consolidating the extra pawn. The lines are 25+ moves deep, fully analysed. Caruana wins these as White because he knows ONE more move of theory than the average elite GM."
         },
         {
           "name": "Anti-Marshall 8.a4",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d3 d6 Nbd2 Na5 Ba2 c5 c3 Rb8",
-          "explanation": "Caruana's sidestep to avoid the Marshall entirely. By playing a4, White gains time and avoids the sharp complications while maintaining a positional edge."
+          "explanation": "Caruana's chess-club-safe Anti-Marshall. 8.a4 probes Black's queenside; after 8...b4 (Black closes the queenside) 9.d3 (modest, keeps options) d6 10.Nbd2 Na5 (kicking the b3-bishop) 11.Ba2 c5 12.c3 Rb8 — both sides have completed development for a slow positional middlegame. The position avoids ALL Marshall tactics; Caruana just plays for the slight space edge with standard Ruy Lopez methods (h3, Nf1-g3, eventual b4 expansion)."
         },
         {
           "name": "Breyer Variation",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Nb8 d4 Nbd7 Nbd2 Bb7 Bc2 Re8 Nf1 Bf8",
-          "explanation": "The Breyer is one of the deepest Ruy Lopez lines. Black retreats the knight to b8 and reroutes via d7 for maximum flexibility. Caruana has deep preparation in these strategic positions."
+          "explanation": "The Breyer Defence (with 9...Nb8) — Black avoids the Marshall by playing the conservative …d6 first. After 8.h3 (prophylaxis) Nb8! (the mysterious knight retreat) 9.d4 Nbd7 (the knight reroutes via d7) — Black has reached a flexible structure. White continues 10.Nbd2 Bb7 11.Bc2 Re8 12.Nf1 Bf8 — both sides regroup for the long strategic battle. The Breyer is the world's deepest opening at GM level; Caruana's preparation here is the deepest of anyone's."
         }
       ],
       "trapLines": [
         {
           "name": "Marshall ...d5 Prevented by h3",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O h3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5",
-          "explanation": "Black tries the Marshall Gambit with ...d5 but h3 first gives White an extra tempo. After Rxe5 White is up a pawn with the e-file and consolidating moves to come."
+          "explanation": "When White plays 8.h3 BEFORE c3, the move-order rules out the Marshall. After 8...d5 (Black tries anyway) 9.exd5 Nxd5 10.Nxe5 Nxe5 11.Rxe5 — White is up a pawn AND has an extra tempo (h3 was a useful waiting move). Black's compensation is missing because the …Bd6/…Qh4 setup is one tempo too slow. White consolidates with d4 + Be3 + Nd2 and the extra pawn wins the endgame."
         },
         {
           "name": "Premature ...d5 Without h3",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4",
-          "explanation": "Black plays ...d5 without preparation, and after the long forced sequence White's defensive resources Be3 + h3 + Nd2 keep the king safe — the extra pawn from the Marshall accepts converts into a winning endgame."
+          "explanation": "If you face the full Marshall and have prepared the modern defence (Be3 + Bg4 line), you reach the position above. After Black's …Bg4 trying to attack via the f3 square, White plays Nd2 + Bf1 (defending h2) + Bxh2 — refuting the attack. The deep theoretical line goes 20+ moves with both sides forced to play exactly. Caruana's depth in this position is unmatched; he's the only player who can confidently accept the Marshall and play for a win as White."
         }
       ]
     },
@@ -1918,37 +1918,37 @@
       "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Nce7 O-O O-O Rfe1 c6",
       "color": "white",
       "style": "Precise, Theoretical",
-      "overview": "Caruana plays the Giuoco Piano with meticulous precision. His preparation in this opening is legendary — he has analyzed the resulting middlegame positions to incredible depth. The IQP positions suit his accurate, calculating style perfectly.",
+      "overview": "Caruana's Italian is what happens when a former World Championship challenger spends ten years analysing one opening. He plays the Giuoco Piano with the c3+d4 break (the IQP version) because the resulting middlegame positions reward precise calculation over creativity — and Caruana calculates better than almost anyone alive. His Italian win-rate at the top level is exceptional. The trick: every line resolves into ONE of three structures (IQP, hanging pawns, or symmetrical), and Caruana knows each one to the endgame.",
       "keyIdeas": [
-        "Build the c3+d4 center and time the d4 break to open lines when pieces are optimally coordinated — the Bc4 targeting f7 becomes lethal once the center opens",
-        "After the IQP arises, use piece activity to compensate for the isolated pawn — this structural feature shapes all future strategic decisions in the position",
-        "Place the queen on b3 to create dual pressure on b7 and d5 — this double attack forces Black to defend awkwardly and restricts queenside development",
-        "The isolated d4 pawn is a strength while pieces are active — this structural feature shapes all future strategic decisions in the position"
+        "The c3+d4 push is the entire opening's engine. After 4.c3 Nf6 5.d4 exd4 6.cxd4, you've reached the IQP structure — accept the isolated d-pawn for the piece activity it generates.",
+        "Qb3 is Caruana's signature move. Placed on b3 the queen creates DOUBLE pressure: hits b7 (defended only by Nb8 if developed) AND defends c4 (sometimes vulnerable). The …Nce7 retreat to defend b7 is forced.",
+        "Keep pieces on the board in the IQP middlegame. The d4-pawn is a strength while attacking; trade pieces and it becomes a structural target in the endgame. Trade only when ahead in development.",
+        "Caruana's preparation depth is the real opening. Every IQP variation has been analysed by his team for years; he reaches the resulting middlegame faster than any opponent and the technical edge wins games."
       ],
       "traps": [
-        "After d4 exd4 cxd4, Black must be careful — taking on e4 can lead to a pin on the d-file"
+        "After 5.d4 exd4 6.cxd4 Bb4+ 7.Bd2 Bxd2+ 8.Nbxd2 d5 9.exd5 Nxd5 10.Qb3! — the queen-pressure on b7 is the position's defining tactical theme. Black's only good move is 10...Nce7 defending b7; ANY other move loses material to Qxb7 or Bxd5 followed by Qxb7."
       ],
       "warnings": [
-        "Once pieces get traded, the IQP becomes a weakness — keep pieces on",
-        "Watch for Nxe4 tricks when the center is unstable"
+        "DON'T trade queens early. The IQP middlegame favours White WITH queens (attacking chances); it favours Black WITHOUT queens (the IQP becomes a weakness). Caruana keeps queens on until the structural game is decided.",
+        "Watch for …Nxe4 tactical resources after the central exchanges. If your e4-pawn is undefended (after c3+d4 trades), Black's pieces might find tactics on the central diagonals."
       ],
       "variations": [
         {
           "name": "Main Line with IQP",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Nce7 O-O O-O Rfe1 c6",
-          "explanation": "Caruana's main line. The isolated d4 pawn gives White active piece play. His deep understanding of these positions makes this a reliable weapon."
+          "explanation": "Caruana's flagship Italian IQP line. The forced sequence: 4.c3 Nf6 5.d4 exd4 6.cxd4 Bb4+ (the standard check) 7.Bd2 Bxd2+ 8.Nbxd2 d5 9.exd5 Nxd5 10.Qb3! — the signature move. Black's c6-knight is now under attack indirectly (the b7-pawn is the real target). After 10...Nce7 (defending b7, forced) 11.O-O O-O 12.Rfe1 c6 — full development reached. White has the isolated d4-pawn AND the queen-on-b3 pressure; Black has solid defence but no active counterplay. Caruana wins by squeezing the IQP middlegame with superior technique."
         },
         {
           "name": "Slow Italian with d3",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O a6 a4 Ba7 Nbd2 O-O Re1 Be6 Bb3 h6",
-          "explanation": "A more restrained approach that Caruana also employs. White plays d3 for a slower build with Nbd2 + Bb3 + Re1 — both sides ready for the eventual d4 break."
+          "explanation": "When Caruana wants a slower game (or his preparation handles the d3 system better against a specific opponent), he plays 4.d3 keeping the central tension closed. After 4...d6 5.O-O a6 6.a4 Ba7 7.Nbd2 O-O 8.Re1 Be6 9.Bb3 h6 — both sides reach a slow positional position. Plan from here: the standard Italian middlegame with Nf1-g3 reroute, h3 prophylaxis, eventual d4 break when conditions are ripe. Same opening, slower tempo."
         }
       ],
       "trapLines": [
         {
           "name": "...exd4 cxd4 Center Steamroll",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O",
-          "explanation": "After ...exd4 cxd4, White gets a powerful IQP with active pieces. The completed development O-O O-O signals the start of the middlegame where White's central pawn advantage steers the play."
+          "explanation": "When Black accepts the standard sequence …exd4 cxd4 …Bb4+ …Bxd2+ …Nbxd2 …d5 …Nxd5, you reach the IQP position with both sides castled. This is the textbook Caruana set-up. From here, the plan is automatic: Qb3 (pressure on b7), Rfe1 (centralising), Nb3 (the d2-knight reroutes to support d4), Bd3 (the c4-bishop reroutes to aim at h7). Every Caruana win in this line follows the same blueprint: build pressure, trade ONLY when ahead, win the endgame."
         }
       ]
     },
@@ -1960,37 +1960,37 @@
       "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Nbd2 Be6 O-O Bd6 Nb3 Qe7",
       "color": "white",
       "style": "Positional, Modern",
-      "overview": "Caruana pioneered many Anti-Berlin ideas to avoid the drawish Berlin Endgame. By playing d3 instead of O-O on move 4, White keeps more pieces on the board and creates an asymmetric middlegame where preparation and understanding matter.",
+      "overview": "Caruana's Anti-Berlin is the answer to the Berlin's biggest problem: it's a draw. The Berlin Endgame after Qxd8+ has a 60%+ drawing rate at elite level — too high for someone who needs wins. So Caruana plays 4.d3 instead of 4.O-O, AVOIDING the queen trade entirely. The result: a middlegame Ruy Lopez where Black has the doubled c-pawns (from Bxc6 trade) but keeps the queens on, and White has the bishop pair plus all the practical winning chances.",
       "keyIdeas": [
-        "Play d3 early to sidestep the Berlin endgame (which Black wants), keeping the queens on and maintaining middlegame attacking chances",
-        "Exchange Bxc6 to saddle Black with doubled c-pawns — this permanent structural damage gives White long-term targets on the queenside",
-        "Preserve and activate the bishop pair in open positions — two bishops working together outperform knight+bishop, especially when targeting weaknesses on both flanks",
-        "Play for a middlegame where White's pieces are more active — a key strategic concept in Anti-Berlin"
+        "4.d3 is the entire Anti-Berlin idea. By playing d3 BEFORE Black can grab e4 with …Nxe4, the queen trade is impossible — Black has to play a middlegame.",
+        "Bxc6 + the doubled c-pawn structure is the strategic battleground. Black's bishop pair is the only real compensation; you target c6+c7 throughout the middlegame.",
+        "Keep queens on the board. The whole point of d3-Anti-Berlin is to AVOID the queenless endgame; trade queens only when ahead in material or structural advantage.",
+        "Develop with Nbd2-b3 reroute (instead of Nc3) — the knight reaches the queenside outpost to support pressure on c5/c6."
       ],
       "traps": [
-        "If Black plays Bc5 carelessly, Bxc6+ dxc6 and the doubled pawns are a permanent weakness"
+        "After 4.d3 Bc5 (Black develops aggressively), 5.Bxc6+! immediately — the doubled c-pawns are permanent AND the c5-bishop is now misplaced (defended only by …Qe7 which is awkward). The structural damage is decisive over 40-50 moves."
       ],
       "warnings": [
-        "Black can equalize with precise play — do not assume a large advantage",
-        "The Anti-Berlin leads to slower games where both sides have chances"
+        "Don't expect a large opening advantage. The Anti-Berlin gives WHITE small positional pluses, not big advantages — your edge comes from the middlegame and Black's natural defensive difficulties.",
+        "If Black plays the …Bc5/Bd6/Be7 setup quickly and accurately, the doubled c-pawns become less of a target. Patience is required to convert."
       ],
       "variations": [
         {
           "name": "d3 Anti-Berlin",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Nbd2 Be6 O-O Bd6 Nb3 Qe7",
-          "explanation": "Caruana's preferred anti-Berlin. White exchanges on c6 and plays for a middlegame with the bishop pair against Black's doubled pawns; the Nb3 + Qe7 setup keeps the queens on the board."
+          "explanation": "The full Anti-Berlin. After 4.d3 Bc5 (Black's most natural reply) 5.Bxc6 dxc6 — doubled c-pawns achieved. The 6.Nbd2 development keeps the b3-square free for the knight reroute. After 6...Be6 7.O-O Bd6 (Black reroutes the bishop to a more useful square) 8.Nb3 Qe7 — both sides have completed development. The middlegame battle: White has the bishop pair AND the d3+e4 stable structure; Black has the doubled c-pawns but active piece play. Caruana's preparation in these positions gives him the edge from move 12 onward."
         },
         {
           "name": "5.O-O Berlin Main Line",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 Nc3 Ke8",
-          "explanation": "For comparison — the main Berlin endgame. After the queen trade Black's bishop pair plus king centralization equalize; Caruana enters this only with specific preparation."
+          "explanation": "For comparison — the regular Berlin Endgame that Caruana AVOIDS by playing 4.d3 instead of 4.O-O. After 4.O-O Nxe4 5.d4 Nd6 6.Bxc6 dxc6 7.dxe5 Nf5 8.Qxd8+ Kxd8 9.Nc3 Ke8 — the queens are off, the position is technically equal but practically drawn. Caruana ONLY enters this position when he needs a draw (rare); usually he prefers the d3-Anti-Berlin keeping queens on the board."
         }
       ],
       "trapLines": [
         {
           "name": "...a6 Bishop Pair Advantage",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 a6 Bxc6 dxc6",
-          "explanation": "Black plays ...a6 kicking the bishop, but White happily trades on c6 and keeps the bishop pair. The doubled c-pawns are a permanent structural weakness for the rest of the game."
+          "explanation": "When Black plays …a6 (the natural Ruy Lopez reaction), Caruana's response is the immediate 5.Bxc6! — happily trading the bishop. The …dxc6 recapture gives Black the doubled c-pawns; White keeps the bishop pair AND has saved the typical Ba4 retreat tempo. The permanent structural damage on the queenside is the trap's payoff: Black has to defend c6+c7 for the entire rest of the game."
         }
       ]
     },
@@ -2002,42 +2002,42 @@
       "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4 Be2 O-O Nc3 Bf5 a3 Nxc3 bxc3 Nc6",
       "color": "black",
       "style": "Solid, Precise",
-      "overview": "Caruana uses the Petroff as his ultra-solid defense against 1.e4. It is the perfect opening for must-draw situations or when he wants to equalize safely. His precise understanding of the resulting structures makes it nearly impossible to beat him in the Petroff.",
+      "overview": "The Petroff is the Berlin Defence's older brother — it's been Black's drawing weapon for 150 years. Caruana plays it as his 'absolutely must not lose' opening: against in-form opponents, in match situations, when a draw clinches a tournament victory. The Petroff's structure is symmetric, the resulting positions are almost forced equality, and Caruana's preparation in the rare unbalanced lines is legendary. If you're trying to beat Caruana in the Petroff with White, you're going to need a lot of theory and a lot of luck.",
       "keyIdeas": [
-        "Navigate the symmetrical Petrov development carefully — small inaccuracies in this equal structure can create lasting advantages for the better-prepared player",
-        "The Petroff eliminates most of White's attacking chances — timing this correctly before the opponent can generate counterplay is critical",
-        "Play d5 to challenge the center and develop the bishop before blocking it with e6",
-        "Aim for simplified positions where accuracy matters more than creativity — a key strategic concept in Petroff Defense"
+        "The symmetric mirror — Black copies White's moves until move 5. After 1.e4 e5 2.Nf3 Nf6, you're playing the Petroff. White's choice on move 3 (Nxe5 or d4) determines the structure; Black equalises either way.",
+        "After 3.Nxe5 d6 4.Nf3 Nxe4 — the standard equalising sequence. Black has recovered the pawn and developed; the position is symmetric. The …d5 break next move is automatic.",
+        "Bishop development order: …Bd6 (active) OR …Be7 (solid) BEFORE …e6 (which locks the c8-bishop in). The Petroff specifically AVOIDS the Caro-Kann's bishop problem by getting the bishops out first.",
+        "Caruana's secret: in the lines where White tries to keep an edge (5.Nc3 instead of 5.d4), Caruana has prepared improvements that turn the position from 'slight White edge' to 'equal'. The Petroff has no losing lines for Black if you know the theory."
       ],
       "traps": [
-        "After Nxe5 d6 Nf3 Nxe4, do not play d4 d5 and leave the knight hanging — Bd3 first"
+        "After 3.Nxe5 d6, NEVER play 4.Nf3 Nxe4 5.d4 d5 6.Nbd2 (instead of 6.Bd3) — Black plays 6...Bf5 with comfortable equality. The correct order is 6.Bd3 first, defending the e4-knight from any tactics."
       ],
       "warnings": [
-        "The Petroff can be boring — make sure you have enough play to try for a win if needed",
-        "Watch for the Cochrane Gambit (Nxf7) — it is unsound but tricky in blitz"
+        "The Petroff IS boring — that's the point. If you NEED to play for a win as Black against 1.e4, the Petroff isn't your weapon; play the Najdorf or Sveshnikov instead.",
+        "Watch for the Cochrane Gambit (4.Nxf7!? Kxf7) — completely unsound objectively but tactically tricky in fast time controls. Caruana has specific defensive preparation; without it, the king walk is dangerous."
       ],
       "variations": [
         {
           "name": "Classical 5.d4",
           "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4 Be2 O-O Nc3 Bf5 a3 Nxc3 bxc3 Nc6",
-          "explanation": "The main line Caruana plays. After d4 d5, the position is symmetrical and solid. White has a slight initiative but Black's position is rock-solid."
+          "explanation": "Caruana's main Petroff line. After the textbook 5.d4 d5 (mirror moves) 6.Bd3 Nc6 7.O-O Be7 8.c4 — White challenges the centre with c4, but Black responds 8...Nb4! kicking the bishop. After 9.Be2 O-O 10.Nc3 Bf5 11.a3 Nxc3 12.bxc3 — White has the doubled c-pawns (structural concession) while Black has the active …Bf5 + …Nc6 piece play. The position is equal but with chances for both sides. Caruana converts these into draws or wins through pure technique."
         },
         {
           "name": "5.Nc3 Main Line",
           "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 Nc3 Nxc3 dxc3 Be7 Bf4 Nd7",
-          "explanation": "An alternative where White plays Nc3 instead of d4. After Nxc3 dxc3 + Be7 + Nd7, Black has a symmetric pawn structure and equal piece play."
+          "explanation": "When White plays 5.Nc3 instead of 5.d4 (avoiding the main lines), Black equalises with 5...Nxc3 6.dxc3 — White has doubled c-pawns immediately. After 6...Be7 7.Bf4 Nd7 — symmetric pawn structure, balanced piece play, no realistic winning chances for either side. The Petroff at its most peaceful."
         }
       ],
       "trapLines": [
         {
           "name": "Premature d4 and ...Qh4 Pressure",
           "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Bd6 O-O O-O c4 c6 Nc3 Nxc3 bxc3 dxc4 Bxc4 Bg4 Rb1 b5 Bd3 Nd7",
-          "explanation": "After d4 + c4 + Nc3, the long forced exchanges leave Black with active piece play. The Bg4 pin plus ...b5 forces White into defensive moves; Black's lead in coordination is the key dynamic factor."
+          "explanation": "When White plays d4 + c4 + Nc3 aiming for an active middlegame, Black responds calmly with mirror development: …Bd6 (active bishop) + …O-O + …c6 (defending d5). After 9.Nxc3 10.bxc3 dxc4 (Black trades) 11.Bxc4 Bg4 (the standard pin) 12.Rb1 b5 (Black expands queenside) 13.Bd3 Nd7 — the dust settles into a position where Black has solid development and active pieces. The forced exchanges have neutralised White's opening edge."
         },
         {
           "name": "Nf3 Retreat Strong Center",
           "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4 Be2 O-O Nc3 Bf5 a3 Nxc3 bxc3 Nc6 Re1 Re8 Bf4",
-          "explanation": "After Nf3 retreats, Black's ...Nxe4 gives a strong central presence. White's d4 pawn becomes a target and Black develops freely with Bf5 and Nc6."
+          "explanation": "After Black's standard equalising sequence reaches the position, both sides develop along clear plans: White completes with 14.Re1 Re8 15.Bf4 attacking c7 (indirectly), Black plays the standard …Nc6 reroute back. The position is dead-equal but the better-prepared side wins. Caruana wins these as Black because his preparation extends 5-10 moves deeper than most opponents'."
         }
       ]
     },
