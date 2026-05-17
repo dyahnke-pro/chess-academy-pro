@@ -3227,7 +3227,7 @@
     "id": "benko-gambit",
     "eco": "A57",
     "name": "Benko Gambit",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5 Bf4 Rfb8",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5 Bf4",
     "color": "black",
     "style": "Positional, Gambit",
     "overview": "The Benko Gambit is one of the most spectacular positional gambits in chess. After 3...b5, Black sacrifices a pawn to rip open the a- and b-files and get long-lasting queenside pressure. The beauty of this opening is that Black's compensation doesn't fade — those open files and the fianchettoed bishop on g7 create permanent pressure that can last well into the endgame.",
@@ -3253,22 +3253,22 @@
       },
       {
         "name": "King Walk Variation",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Re1 Rfb8 Qc2 Ne8 Nd2 Nc7",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Re1 Rfb8",
         "explanation": "White's king walks via f1-g2 to safety. After Re1 and Qc2, White aims to consolidate the extra pawn. Black builds the classic Benko pressure with ...Qa5, ...Rfb8 and ...Ne8-c7 supporting ...Nb5 infiltration."
       },
       {
         "name": "Benko Declined: Nf3 System",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Nc3 g6 e4 d6 Bxc4 Bg7 O-O O-O h3 Nbd7 Re1 Nb6 Bf1 a5 a4 Ba6 Bg5 Qc7",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Nc3 g6 e4 d6 Bxc4 Bg7 O-O O-O h3 Nbd7 Re1 Nb6 Bf1",
         "explanation": "White declines with Nf3 instead of taking on b5. This avoids the typical Benko structure. Black still gets active play with the fianchettoed bishop and ...a5, but without the open a- and b-files the pressure is less automatic."
       },
       {
         "name": "Zaitsev Variation",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 Nf3 Bg7 O-O O-O Bf4 Na6 Qe2 Nc7 Nxc7 Qxc7 a3 Rb8",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 Nf3 Bg7 O-O O-O",
         "explanation": "White plays e4 immediately and Nb5 after ...b4. This aggressive approach fights for the initiative. Black's fianchettoed bishop and rook pressure on the b-file still provide full compensation for the sacrificed pawn."
       },
       {
         "name": "Half-Accepted",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 e3 axb5 Bxb5 Qa5+ Nc3 Bb7 Nge2 Nxd5 O-O Nxc3 Nxc3 Be4 Bd3 Bxd3 Qxd3 g6 Bd2 Qd8 Rfd1 Bg7",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 e3 axb5 Bxb5 Qa5+ Nc3 Bb7",
         "explanation": "White takes on b5 but plays e3, only half-accepting. Black gets active play with ...Qa5+ and ...Bb7 pressuring the long diagonal. The position is less forced than the fully accepted lines but Black's piece activity compensates."
       },
       {
@@ -3278,31 +3278,31 @@
       },
       {
         "name": "Modern 5.f3 System",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 f3 g6 e4 Bxf1 Kxf1 Bg7 g3 O-O Kg2 Nbd7 Nge2 Nb6 a4 Nc4 Re1 Qa5 Nd4 Rfb8",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6",
         "explanation": "The f3 system gives White extra central support but slows the development. The f3 pawn weakens the kingside and blocks the Nf3 square. Black gets even more time for queenside pressure with the rooks on a8/b8 and the queen on a5."
       }
     ],
     "trapLines": [
       {
         "name": "Queenside Bind Trap",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Bd2 Rfb8 Qc2 Ne8 Nd1 Nc7 Ne3 Nb5",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Bd2 Rfb8",
         "explanation": "Black builds the classic bind with ...Qa5, ...Rfb8 and the knight maneuver ...Ne8-c7-b5. The a4 pawn push weakens b3. Black's pressure on the a- and b-files becomes overwhelming once the knight lands on b5."
       },
       {
         "name": "f3 Delay Exploitation",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 f3 g6 e4 Bxf1 Kxf1 Bg7 g3 O-O Kg2 Nbd7 Nge2 Nb6 a4 Nc4 Qc2 Qa5 Nd1 Rfb8",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6",
         "explanation": "When White plays the slow f3, the knight can't go to f3 and development is slower. Black gets extra time for building pressure — the rooks double on the b-file while the knight on c4 pressures both a3 and e3."
       },
       {
         "name": "Exchange Sacrifice on b2",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 Qa5 Qc2 Rfb8 a3 Rb3 Nd2 Rxb2",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 Qa5",
         "explanation": "The exchange sacrifice ...Rxb2 is a key Benko resource when the queen and rook are well-placed. After ...Rxb2, Black's queen and remaining rook dominate the open files while White struggles to coordinate. The Bg7 supports the invasion along the long diagonal."
       }
     ],
     "warningLines": [
       {
         "name": "Premature e5 Break",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 Ne5 Nxe5 dxe5",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1",
         "explanation": "Playing ...e5 abandons the d6 pawn and gives White a protected passed pawn on d5. Black's strength lies on the queenside, not in the center. Keep the pressure with rooks on the open files."
       },
       {
@@ -3312,7 +3312,7 @@
       },
       {
         "name": "Ignoring the Open Files",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 e6 dxe6 fxe6 e5 dxe5 Nxe5",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1",
         "explanation": "Playing ...e6 instead of utilizing the a- and b-files wastes the Benko's strategic concept entirely. After dxe6 fxe6, Black has structural weaknesses and hasn't used the open files. The whole point of the gambit is queenside file pressure."
       }
     ]
