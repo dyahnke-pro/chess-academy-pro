@@ -3594,8 +3594,8 @@
         },
         {
           "name": "vs King's Indian Setup",
-          "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 h3 O-O Be2 Nbd7 O-O c5 c3 Qb6 Qb3",
-          "explanation": "When Black plays the KID fianchetto, Rosen keeps the system simple — h3 to prevent ...Nh5 chasing the bishop, then standard development. If Black plays ...Qb6 to attack b2, Qb3 defends and offers a queen trade that simplifies into a comfortable Carlsbad-like endgame."
+          "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 h3 O-O Be2 Nbd7 O-O c5 c3",
+          "explanation": "When Black plays the KID fianchetto, Rosen keeps the system simple — h3 to prevent ...Nh5 chasing the bishop, then standard development with Be2 + O-O + c3 holding the central structure."
         },
         {
           "name": "Jobava-Style Aggressive Hybrid",
@@ -3603,13 +3603,7 @@
           "explanation": "When Rosen wants more bite, he plays the Jobava setup with Nc3 before Nf3. The knight on c3 hits e4 and supports later e4-d5 pawn breaks. This line resembles Naroditsky's Jobava London teaching."
         }
       ],
-      "trapLines": [
-        {
-          "name": "Premature ...e5 Refuted",
-          "pgn": "d4 d5 Bf4 Nf6 Nf3 e5 dxe5 Nh5 Bg5 Be7 Bxe7 Qxe7 Nc3 Nf4 e3 Ng6 Bd3",
-          "explanation": "If Black tries an early ...e5 hoping to disrupt the London setup, White simply takes (dxe5) and unwinds. The h5/f4 knight tour wastes time — White develops cleanly with c4 ideas to come."
-        }
-      ]
+      "trapLines": []
     },
     {
       "id": "pro-ericrosen-stafford",
