@@ -2049,47 +2049,47 @@
       "pgn": "d4 Nf6 c4 e6 Nc3 d5 Nf3 Be7 Bf4 O-O e3 Nbd7 Be2 c5 dxc5 Nxc5 O-O dxc4 Bxc4 a6 a4",
       "color": "black",
       "style": "Solid, Classical",
-      "overview": "Caruana's reliable weapon against 1.d4. The QGD provides the solid foundation he needs while still offering enough play to press for a win. His precise understanding of the arising middlegame and endgame positions is among the best in the world.",
+      "overview": "Caruana's QGD is reliability incarnate. The structure (d5+e6+Nf6+Be7+O-O) is the most battle-tested defensive setup in chess — Tarrasch, Capablanca, Karpov, all played it for decades. Caruana adds modern theoretical depth: he knows the …c5 break timing in EVERY White system, his Lasker Defence preparation handles the Exchange Variation, and his Ragozin alternative gives him a more combative option when he needs winning chances. Three openings in one repertoire — all solid, all prepared.",
       "keyIdeas": [
-        "Develop solidly with e6, Be7, O-O and challenge the center with c5 — this central control is the foundation for all middlegame operations",
-        "After ...c5 dxc5 Nxc5, Black's knight reaches the active c5 outpost where it pressures e4 and a4 — this is the key to generating counterplay in the QGD",
-        "Play for gradual improvement and exploit White's pawn weaknesses — this structural feature shapes all future strategic decisions in the position",
-        "The positions are balanced but offer long-term chances — a key strategic concept in Queen's Gambit Declined"
+        "The …c5 break is the QGD's equalising lever. Played at the right moment (after both sides develop), …c5 challenges d4 and opens the position. Played too early, White plays d5 closing the centre.",
+        "After …c5 dxc5 …Nxc5, the knight reaches the active c5 outpost. This is Caruana's preferred recapture (instead of …Bxc5) because the knight on c5 pressures e4 AND a4 while the bishop stays on e7 supporting the king.",
+        "The c8-bishop's escape plan is critical. After the standard …c5/dxc5/Nxc5 + …dxc4/Bxc4, Black plays …a6 (preparing …b5) AND …Bd7 (the bishop heads to b7 via …Bb7).",
+        "The Ragozin is the QGD's aggressive alternative. Played with …Bb4 pinning the c3-knight (instead of …Be7), it creates immediate tension and unbalanced positions. Caruana uses it when he needs to win as Black."
       ],
       "traps": [
-        "If White plays cxd5 exd5 too early, Black's isolated d5 pawn is compensated by active pieces"
+        "If White plays the Exchange Variation (cxd5 exd5) before completing development, Black's IQP-shaped position has the better pieces. The …Bf5 + …Nc6 setup combined with …Nb4 ideas pressures the c2-pawn — White's structural edge becomes Black's piece activity."
       ],
       "warnings": [
-        "Do not rush c5 if White can answer with d5 closing the center",
-        "The light-squared bishop can be passive — plan actively for it"
+        "Don't play …c5 if White can answer d5 closing the centre with tempo on your pieces. Wait until the position is open enough that …c5 dxc5 forces White to capture.",
+        "Plan for the c8-bishop from move 6. The …Bd7 + …Bd7-Be8-f5 reroute is slow but reliable; the …b6+…Bb7 fianchetto is faster but requires careful timing to avoid weakening c6."
       ],
       "variations": [
         {
           "name": "5.Bf4 with c5",
           "pgn": "d4 Nf6 c4 e6 Nc3 d5 Nf3 Be7 Bf4 O-O e3 Nbd7 Be2 c5 dxc5 Nxc5 O-O dxc4 Bxc4 a6 a4",
-          "explanation": "Caruana's main line. The recapture Nxc5 + a6 + a4 mirrored move sequence places the knight on its active outpost while preparing ...b6/...Bb7 for full coordination."
+          "explanation": "Caruana's main QGD line against the modern 5.Bf4 system. After 5...Be7 6.e3 (NOT 6.cxd5 — White keeps tension) Nbd7 (development) 7.Be2 c5! (the equalising break played EXACTLY on schedule) 8.dxc5 Nxc5 — the d7-knight reaches the active c5 outpost. After 9.O-O dxc4 10.Bxc4 a6 11.a4 (White prevents …b5) — full development reached, position balanced. From here Caruana plays the standard QGD plan: …b6 + …Bb7 + …Rfc8 for queenside pressure."
         },
         {
           "name": "Exchange Variation",
           "pgn": "d4 Nf6 c4 e6 Nc3 d5 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Nf3 Re8 Qc2 c6 O-O Nf8 h3 Be6",
-          "explanation": "Against the Exchange, Caruana plays the standard minority attack defense. The position is solid and offers chances in the endgame."
+          "explanation": "Against the Exchange Variation (cxd5 exd5), Caruana plays the textbook minority attack DEFENCE. The Carlsbad structure (Black has pawns on c6+d5, White on b/c/d-files) is well-known: White plans Rab1 + b4 + b5 attacking c6; Black defends with …a6 + …Rb8 + …Nb6 protecting c6. The 9...Nf8 manoeuvre is the QGD's signature — reroute the knight via f8 to g6 or e6 supporting the …f5 break or the …Bf5 light-square trade."
         },
         {
           "name": "Ragozin Variation",
           "pgn": "d4 Nf6 c4 e6 Nc3 d5 Nf3 Bb4 Bg5 h6 Bxf6 Qxf6 e3 O-O Rc1 dxc4 Bxc4 c5 O-O cxd4 Ne4 Qe7 exd4 Nc6",
-          "explanation": "The Ragozin adds a combative dimension to Caruana's QGD repertoire. The early Bb4 pins the knight and creates immediate tension. Black gets active piece play and unbalanced positions."
+          "explanation": "Caruana's aggressive QGD alternative — the Ragozin with 4...Bb4 pinning the c3-knight. After 5.Bg5 h6 6.Bxf6 Qxf6 — Black has the bishop pair but doubled queen-side. The …c5 break comes early: 9...c5! 10.O-O cxd4 11.Ne4 (active knight reroute) Qe7 12.exd4 Nc6 — Black has equalised material and reached a balanced middlegame with active piece play. The Ragozin gives Caruana fighting chances as Black against opponents who only prepare the main QGD lines."
         }
       ],
       "trapLines": [
         {
           "name": "Premature e4 Punished",
           "pgn": "d4 Nf6 c4 e6 Nc3 d5 Nf3 Be7 Bf4 O-O e3 Nbd7 Be2 c5 dxc5 Nxc5 O-O dxc4 Bxc4 a6",
-          "explanation": "After dxc4 + a6 setup, if White tries to push e4 prematurely, Black has ...b5 + ...Bb7 ready — the central tension favors Black's coordinated piece play."
+          "explanation": "After the standard QGD development reaches the position 9.O-O dxc4 10.Bxc4 a6, if White tries the premature e4 push, Black has …b5 + …Bb7 ready. The b5-pawn attacks the c4-bishop AND defends c6; the Bb7 hits e4. White's e4 push, far from giving a central advantage, hangs to Black's coordinated queenside attack."
         },
         {
           "name": "Lasker Defense ...Ne4 Exchange",
           "pgn": "d4 Nf6 c4 e6 Nc3 d5 Bg5 Be7 e3 O-O Nf3 h6 Bh4 Ne4 Bxe7 Qxe7 cxd5 Nxc3 bxc3 exd5 Qb3 Rd8 c4 dxc4 Bxc4 Nc6 O-O Na5",
-          "explanation": "The classic Lasker trick: ...Ne4 forces Bxe7 Qxe7 then Nxc3 damages White's structure. Black equalizes easily and the doubled c-pawns become long-term targets for ...Na5 + ...Nxc4."
+          "explanation": "Emanuel Lasker's classic equalising idea, still played a century later. After 7.Bh4 (White avoids the Exchange) Ne4! — the knight reaches a centralised square AND threatens the dark-squared bishop trade. 8.Bxe7 Qxe7 9.cxd5 Nxc3 10.bxc3 exd5 — Black has saddled White with doubled c-pawns AND traded off the active dark-squared bishop. The 13...Na5! manoeuvre attacks c4 directly, forcing White to choose between defending or trading off the bishop pair. Caruana's preparation here ensures the line is essentially forced equality."
         }
       ]
     },
@@ -2101,42 +2101,42 @@
       "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5",
       "color": "black",
       "style": "Strategic, Dynamic",
-      "overview": "Caruana's Nimzo-Indian is one of his most trusted weapons against 1.d4. His deep preparation in this opening has led to many important victories. The structural imbalance after Bxc3+ gives both sides clear plans.",
+      "overview": "Caruana's Nimzo-Indian is the second pillar of his Black repertoire against 1.d4 (alongside the QGD). Where the QGD is rock-solid defence, the Nimzo creates structural imbalances that reward calculation. The 3...Bb4 pin doesn't just attack the c3-knight — it prevents e4 forever as long as the bishop stays on b4. Caruana's preparation in the Nimzo Capablanca (4.Qc2) and Rubinstein (4.e3) systems is so deep that even Magnus avoids the most theoretical lines.",
       "keyIdeas": [
-        "Pin the Nc3 with Bb4 — the entire Nimzo-Indian revolves around this pin preventing e4, which would give White the ideal center",
-        "After Bxc3+ bxc3, Black has better structure while White has the bishop pair — this structural feature shapes all future strategic decisions in the position",
-        "Time the ...d5 and ...c5 central challenges precisely — in the Nimzo-Indian, these breaks must come when White's pieces are committed, not too early or too late",
-        "After Bxc3, target White's doubled c-pawns with rooks on the c-file and knights on d5 — these structural weaknesses are permanent compensation for the bishop"
+        "…Bb4 is the structural pin. As long as the bishop sits on b4, White can never play e4 cleanly — the pin holds the position open for Black's strategic plans.",
+        "After …Bxc3+, the recapture matters: bxc3 (doubled c-pawns for White, structural concession) or Qxc3 (no doubling, but White's queen committed early). Each leads to different middlegame plans.",
+        "The …d5 + …c5 breaks together are the Nimzo's strategic weapons. Time them after White commits the dark-squared bishop (Bg5 or Bd2) to crack open the position with active piece play.",
+        "Target the doubled c-pawns in the bxc3 lines. The …c5 break + …Rc8 + …Na5/Nc4 reroute pile up on c4; White's bishop pair compensates but the structural target never goes away."
       ],
       "traps": [
-        "After 4.Qc2 O-O a3 Bxc3+ Qxc3, Black's d5 thrust creates immediate central tension"
+        "After 4.Qc2 O-O 5.a3 Bxc3+ 6.Qxc3 d5 — Black's immediate central thrust is critical. The c3-queen has to defend the c-pawn (and prepare cxd5 if needed); meanwhile Black completes development with full equality."
       ],
       "warnings": [
-        "Do not allow White to consolidate the bishop pair without challenge",
-        "Time d5 carefully — premature central play can backfire"
+        "Don't surrender the bishop pair without forcing concessions. If White can play a3 and you …Bxc3+ without White having to recapture bxc3, you've given up the bishop for nothing concrete.",
+        "Time …d5 carefully. Played too early (before White commits pieces), …d5 can be met with cxd5 reaching favourable IQP positions for White; played correctly, it's the equalising lever."
       ],
       "variations": [
         {
           "name": "4.Qc2 Main Line",
           "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5",
-          "explanation": "Caruana's main Nimzo line. After Bxc3+ + d5 + c5 + dxc5, Black recovers the pawn with active piece play while White has the bishop pair. The positions require precise play from both sides."
+          "explanation": "The Capablanca Variation — White avoids the doubled c-pawn structure by recapturing with the queen (Qxc3). After 5.a3 Bxc3+ 6.Qxc3 — White has the bishop pair, no structural weaknesses. Black's response: 6...d5 (immediate central challenge) 7.Nf3 c5 (the equalising break) 8.dxc5 — the position simplifies. Black recovers the c5-pawn with …Nbd7 + …Nxc5, reaching a position with the better-coordinated minor pieces vs White's bishop pair. Theoretically balanced, practically a fighting game."
         },
         {
           "name": "4.e3 Rubinstein",
           "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 cxd4 exd4 b6 Bg5 Bb7 Rc1 Nbd7",
-          "explanation": "Against the quieter Rubinstein, Caruana plays classically with c5 and b6. The position is well-known and balanced."
+          "explanation": "The Rubinstein System with the modest 4.e3. After 4...O-O 5.Bd3 d5 (Black challenges immediately) 6.Nf3 c5 (the equalising break) 7.O-O dxc4 8.Bxc4 cxd4 9.exd4 b6 — Black reaches a Hedgehog-like structure with the bishop pair eliminated but excellent piece coordination. The …Bb7 fianchetto + …Nbd7 + …Rc8 plan creates queenside pressure. Caruana plays this when he wants a strategically rich middlegame without sharp tactics."
         }
       ],
       "trapLines": [
         {
           "name": "f3 Overextension Punished",
           "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3 O-O Bd3 b6 Ne2 Ba6 Bxa6 Nxa6 O-O Nc7 Ng3 Re8 Qd3 cxd4",
-          "explanation": "White plays f3 aggressively aiming for e4, but it weakens the kingside. Black follows the standard Nimzo plan with Ba6 trade + Nc7 reroute + cxd4 — Black's piece play targets the weakened c3 and d4 pawns."
+          "explanation": "When White plays the aggressive 4.f3 (Sämisch) supporting e4, Black punishes the kingside weakness immediately: 4...d5 5.a3 Bxc3+ 6.bxc3 (doubled c-pawns AND weakened kingside) c5 7.cxd5 exd5 — Black has the IQP but White's structural problems are worse. After 13...cxd4 — White's d4-pawn falls, the doubled c-pawns become decisive weaknesses, Black's pieces dominate. The Sämisch is sharp but unsound against accurate play."
         },
         {
           "name": "...c5 Catches White Overextended",
           "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5",
-          "explanation": "Black times ...c5 perfectly when White is overextended. After dxc5, Black plans dxc4 + Nbd7 + Nxc5 to recover the pawn with the better piece coordination."
+          "explanation": "The Nimzo's signature tactical idea. After Black's standard development reaches the position, …c5 hits the d4-pawn at the EXACT moment White's queen is committed to c3. After 8.dxc5, Black plays …dxc4 + …Nbd7 + …Nxc5 recovering the pawn with the more active piece structure. The d4-pawn that White seemed to control is gone; the structural game now favours Black's coordinated pieces."
         }
       ]
     },
@@ -2148,47 +2148,47 @@
       "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bf4 Bd6 Nc3 Bxf4 gxf4 Nbd7",
       "color": "white",
       "style": "Precise, Positional",
-      "overview": "Caruana employs the Catalan with surgical precision. Unlike Dubov's creative approach, Caruana uses the Catalan to squeeze small advantages out of the opening. His meticulous preparation ensures he always knows the critical moments in the resulting middlegames.",
+      "overview": "Where Carlsen plays the Catalan as a positional grinder, Caruana plays it as a precision instrument. Same opening, different temperament. Caruana's Catalan preparation extends 25+ moves into specific variations; he reaches the resulting middlegame positions faster than any opponent and the technical edge converts into wins. The Bg2 fianchetto bishop creates the long-term pressure, but it's Caruana's depth of preparation that makes the Catalan deadly in his hands.",
       "keyIdeas": [
-        "The Bg2 creates long-term pressure on the long diagonal, especially against Black's queenside",
-        "Recover the c4 pawn with Qc2 or a4 while maintaining positional pressure — maintaining this pressure forces the opponent to defend passively",
-        "Use the bishop pair and open files to create lasting advantages — piece placement and activity are more important than material in these positions",
-        "The Catalan bishop is the key piece — never trade it without good reason — a key strategic concept in Catalan Opening"
+        "The Bg2 is the opening's defining piece. From g2 it aims at the a8-rook from across the board AND supports queenside pawn pushes. Never trade it without forcing concessions.",
+        "After …dxc4 (the Open Catalan), don't rush to recapture — play Qc2 first, then a4 preventing …b5, THEN Qxc4 with full development advantage.",
+        "Use the bishop pair AND open files together. The Catalan often leads to positions where you have the bishop pair (after exchanges) AND open queenside files (after a4-a5 or c-file opening). Both factors compound.",
+        "Caruana's preparation is the real opening. Every line resolves into one of 4-5 known middlegame structures, all analysed by his team for years. He reaches the critical position 5-10 minutes ahead on the clock."
       ],
       "traps": [
-        "If Black tries to hold c4 with b5, a4 undermines the chain and the Bg2 becomes dominant"
+        "If Black tries to hold the c4-pawn with …b5, you play a4 immediately undermining the chain. After …c6 (defending b5) axb5 cxb5 — Black's queenside is wrecked AND the Bg2 fires down the open diagonal. Greedy …b5-protection costs material."
       ],
       "warnings": [
-        "Do not rush to recover the pawn — the positional pressure is often worth more",
-        "Be careful of Black's c5 break which can equalize if played at the right moment"
+        "DON'T rush to recover the c4-pawn. Pressure is more valuable than the pawn itself — play Qc2 + a4 setting up the recovery rather than immediate Qxc4 which loses time.",
+        "Watch Black's …c5 break. In several Catalan lines (especially after …Bb7 + …Nbd7), the …c5 break opens the centre and dissolves White's structural edge. Play prophylactic moves (a4, b3) to delay this break."
       ],
       "variations": [
         {
           "name": "Open Catalan with Qc2",
           "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bf4 Bd6 Nc3 Bxf4 gxf4 Nbd7",
-          "explanation": "Caruana's main Catalan line. White recovers the pawn with Qc2-Qxc4 and develops with Bf4. The resulting positions are slightly better for White with clear plans."
+          "explanation": "Caruana's flagship Catalan. After 6.O-O dxc4 (Open Catalan — Black grabs the pawn) 7.Qc2 (NOT Qxc4 immediately — prepare first) a6 8.a4 (preventing …b5 forever) Bd7 9.Qxc4 (NOW recover the pawn) Bc6 10.Bf4 (active bishop development) Bd6 (Black trades the dark-squared bishops) 11.Nc3 Bxf4 12.gxf4 — doubled f-pawns for White but the g-file opens for the rook lift AND the Bg2 still controls the diagonal. The position favours White's coordinated pieces; Caruana converts these into wins through pure technique."
         },
         {
           "name": "Closed Catalan",
           "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 b6 e4 Bb7 e5 Ne8 Re1 Nc7",
-          "explanation": "In the Closed Catalan, Black keeps the tension with c6 instead of capturing on c4. After e4-e5 White gains space; Black manoeuvres Ne8-Nc7 then Ba6 to neutralize the long diagonal."
+          "explanation": "In the Closed Catalan, Black plays the safe 5...Nbd7 (instead of …dxc4) keeping the d5-pawn supported. After 6.Qc2 c6 7.Nbd2 b6 (preparing …Bb7 fianchetto) 8.e4! (Caruana's preferred plan — NOW e4 makes sense because Black has committed pieces) Bb7 9.e5 Ne8 (the knight is cramped back) 10.Re1 Nc7 — White has a long-term space advantage. Black's pieces are bottled up; White slowly improves position with no risk."
         },
         {
           "name": "Early Bd7 System",
           "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nbd7",
-          "explanation": "A topical system where Black develops Bd7 early and plays for b5. After Bd2 + Nbd7, both sides finish development and prepare the typical c5 break."
+          "explanation": "The modern Black response — after Caruana's standard 6...dxc4 7.Qc2 a6 sequence, Black sometimes plays 8...b5 directly (skipping the …Bd7 prep). After 9.Qc2 (the queen retreats — White accepts the slight tempo loss) Bb7 10.Bd2 Nbd7 — Black has reached an active queenside setup. White's advantage is reduced; the position becomes a strategic battle where Caruana's preparation depth still gives him the edge."
         }
       ],
       "trapLines": [
         {
           "name": "Pawn Grab ...dxc4 Cannot Hold",
           "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 b5 a4 Rb8",
-          "explanation": "Black grabs c4 and tries to hold with ...b5, but a4 undermines the chain. White's Bg2 + queenside infiltration regains the material with the better structure."
+          "explanation": "When Black tries to actually KEEP the c4-pawn (the dream of every amateur 1.d4 player), the punishment is swift. After 4...dxc4 5.Nf3 a6 (preparing …b5) 6.O-O Nc6 7.e3 Bd7 8.Qe2 b5 9.a4! Rb8 — White's a4 push undermines the b5-pawn structure. The c-pawns are about to fall back to White, AND the queenside pawn structure is wrecked. The Catalan bishop on g2 plus the open files compensate for any temporary material deficit."
         },
         {
           "name": "Bg2 Diagonal Wins Material",
           "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bf4 Nbd7 Nc3 Nb6 Qd3 Nbd5",
-          "explanation": "The Catalan bishop on g2 applies relentless diagonal pressure. After Qd3 + Nbd5, White's central pressure plus the threats along the a8-h1 diagonal yields a long-term advantage."
+          "explanation": "The Catalan's long-term squeeze. After the standard pawn recovery, White's pieces all aim at Black's queenside: the Bg2 hits a8, the Qd3 swings between centre and kingside, the Nc3 supports central breaks. When Black plays …Nbd5 trying to challenge the centre, White responds with Nxd5 + Qxd5 trading pieces. The resulting endgame is structurally balanced but Caruana's bishop pair plus active queen wins the technical phase."
         }
       ]
     },
@@ -2200,47 +2200,43 @@
       "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 Nc3 Ke8 h3 Be7 Bf4 Be6 Rad1 h6",
       "color": "black",
       "style": "Solid, Endgame-focused",
-      "overview": "Caruana's Berlin Defense is his ultimate drawing weapon at the highest level. The Berlin Endgame after Qxd8+ leads to positions where accuracy matters more than creativity. His deep understanding of these technical positions makes him nearly unbeatable.",
+      "overview": "Caruana's Berlin Defence is the world's most prepared draw-weapon. When he needs a half-point as Black against 1.e4, he plays the Berlin — and at the elite level, the Berlin Endgame is essentially unloseable for Black with accurate play. Caruana's preparation in the technical positions arising after 9.Qxd8+ Kxd8 is among the deepest in the world. If you're trying to win against Caruana's Berlin, you'd better know more theory than he does — and that's almost impossible.",
       "keyIdeas": [
-        "Trade queens early with Nxe4 and reach a Berlin Endgame where Black is solid — the structural advantages become more pronounced with fewer pieces on the board",
-        "The king on e8 may look odd but is perfectly safe — it will go to d7 or f8 — a key strategic concept in Berlin Defense",
-        "Develop bishops to e7 (solid, preparing castling) and e6 (controlling d5 and c4) — this is Caruana's trademark solid Berlin setup that creates a fortress",
-        "In the endgame, use the bishop pair to create counterplay — the structural advantages become more pronounced with fewer pieces on the board"
+        "After 4.O-O Nxe4, the queen trade is forced. Black plays 5.d4 Nd6 6.Bxc6 dxc6 7.dxe5 Nf5 8.Qxd8+ Kxd8 — this is the Berlin Endgame. Memorise this sequence; one wrong move is a lost game.",
+        "The king on e8 (then d8, then f7) is FINE. Looks exposed but White's attacking pieces are gone — no queens, soon to trade rooks. The king becomes an active piece in the endgame.",
+        "Both bishops on c8 and f8 are your trumps. Bishop pair in open queenless positions is worth 0.5 pawns — compensation for the doubled c-pawns. Don't trade lightly.",
+        "The …c5 break is the endgame's strategic theme. After …Bd7 + …Re8 + …Ke8-f7, eventually push …c5 opening the position. The doubled c-pawns become irrelevant when one of them is queening."
       ],
       "traps": [
-        "If White gets too aggressive in the endgame, Black can exploit the overextension with precise defense"
-      ],
-      "warnings": [
-        "The Berlin Endgame is drawish — only play it if a draw is an acceptable result",
-        "Do not rush to activate the king — timing of Ke8-d7 or Ke8-f8 is critical"
+        "If White plays aggressively in the endgame (e.g., trying to use the e5-pawn for kingside attack), Black exploits the overextension with precise defence: …Bd7 + …Bc5 + …Re8 piling up on the e5-pawn. Most Berlin White-side attacks are punished by simple development."
       ],
       "variations": [
         {
           "name": "Berlin Endgame Main Line",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 Nc3 Ke8 h3 Be7 Bf4 Be6 Rad1 h6",
-          "explanation": "The main Berlin Endgame. Black develops solidly and aims for counterplay with the bishop pair. Caruana's technique in these positions is world-class."
+          "explanation": "The Berlin Endgame in its purest form. After the forced trade sequence 5.d4 Nd6 6.Bxc6 dxc6 7.dxe5 Nf5 8.Qxd8+ Kxd8, the queens are off the board. Caruana continues 9.Nc3 Ke8 (the king starts walking back to safety) 10.h3 Be7 11.Bf4 Be6 12.Rad1 h6 — full development with the king tucked away. The position is theoretically equal but practically Black has more chances thanks to the bishop pair AND the technical complexity that favours the better-prepared side."
         },
         {
           "name": "Berlin 5.Re1 Sideline",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 Re1 Nd6 Nxe5 Be7 Bf1 Nxe5 Rxe5 O-O d4 Bf6 Re1 Re8 c3 Rxe1 Qxe1 Ne8",
-          "explanation": "White avoids the Berlin Endgame with Re1. Caruana handles this accurately, developing harmoniously and reaching an equal middlegame."
+          "explanation": "When White avoids the queen trade with 5.Re1 (instead of 5.d4), Black equalises with calm development. After 5...Nd6 6.Nxe5 Be7 7.Bf1 (the bishop retreats from the Bb5-pin) Nxe5 8.Rxe5 O-O 9.d4 Bf6 — Black has completed development without the queen trade. After further exchanges 10.Re1 Re8 11.c3 Rxe1 12.Qxe1 Ne8 — the position is balanced, Caruana plays for the endgame technique."
         },
         {
           "name": "Anti-Berlin 4.d3",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Nbd2 Be6 O-O Bd6 Nb3 Nd7",
-          "explanation": "Against the Anti-Berlin with d3, Caruana develops actively with Bc5/Be6 and aims for central play. The Nd7 + Bd6 setup keeps the bishop pair and prepares ...f6/...O-O."
+          "explanation": "When White plays 4.d3 (the Anti-Berlin to avoid the queen trade), Caruana plays the active 4...Bc5 development. After 5.Bxc6 dxc6 (the standard doubled-c-pawn structure) 6.Nbd2 Be6 7.O-O Bd6 (rerouting the bishop) 8.Nb3 Nd7 — Black keeps the bishop pair AND prepares the …f6 break + …O-O. Long-side castling is also an option. The position is balanced; Caruana plays for the middlegame chances his preparation gives him."
         }
       ],
       "trapLines": [
         {
           "name": "...Nd6 Punishes Avoiding Endgame",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 Nc3 Ke8 h3 Be7 Bf4 Be6 Rad1 Rd8",
-          "explanation": "If White avoids the standard endgame, Black's ...Nd6 reroutes perfectly. After Rad1 Rd8, both sides complete development; Black's bishop pair gives long-term equality."
+          "explanation": "The standard Berlin Endgame setup with rook development. After 12.Rad1 (White centralises the rook) Rd8 — Black mirrors with …Rd8 challenging the d-file. Black's plan from here: walk the king to f7 (via …Ke8-…Kd7-…Kc7 if needed), eventually break with …c5 opening the position. The bishop pair plus accurate technique gives Black equality and the practical winning chances in long endgames."
         },
         {
           "name": "Bishop Pair in Berlin Wall",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 Nc3 Ke8 h3 Be7 Bf4 Be6 Rad1",
-          "explanation": "In the Berlin Wall structure, Black's bishop pair provides long-term compensation. After Rad1, both sides centralize rooks — Black aims to keep the bishop pair active on the long diagonals."
+          "explanation": "The Berlin Wall's structural complement to the bishop pair. After 12.Rad1, White has centralised the rooks and seems active — but Black's two bishops (Be6 + Be7, soon to redirect) plus the open c-file create long-term equality. The position is balanced; the better technique wins. Caruana's record from this position is approximately 50% as Black at the elite level — meaning he's NEVER worse, just sometimes equal."
         }
       ]
     },
