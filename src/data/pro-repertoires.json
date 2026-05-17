@@ -2992,7 +2992,7 @@
       "playerId": "dubov",
       "eco": "C45",
       "name": "Scotch Game (Dubov)",
-      "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3 Bd6 Rae1 h6 Bh4 Re8",
+      "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3 Bd6 Rae1 h6 Bh4",
       "color": "white",
       "style": "Creative, Theoretical",
       "overview": "Dubov's Scotch Game features original ideas that have become mainstream theory. His preparation in the Scotch goes incredibly deep, and he has contributed several novelties that changed how the opening is evaluated. The Scotch suits his creative, unbalancing style.",
@@ -3012,8 +3012,8 @@
       "variations": [
         {
           "name": "4...Bc5 Classical",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 Nc3 Nf6 Be2 O-O O-O d6 Be3 Bxe3 fxe3 Be6 Qd3 d5 exd5 Nxd5 Nxd5 Bxd5 Rad1",
-          "explanation": "Dubov's creative Scotch variation with 4...Bc5. White plays Be2 and develops quickly, then uses the half-open f-file and central control after fxe3 to maintain long-term pressure."
+          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 Nc3 Nf6 Be2 O-O O-O",
+          "explanation": "Dubov's creative Scotch variation with 4...Bc5. White plays Nb3 + Be2 to keep options open. After O-O the resulting middlegame keeps the long-term tension Dubov enjoys."
         },
         {
           "name": "4...Nf6 Scotch Four Knights",
@@ -3022,19 +3022,19 @@
         },
         {
           "name": "Dubov's 4...Qh4 Novelty",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Qxe4+ Be2 Qe5 N1c3 Bb4 O-O Bxc3 bxc3 Nf6 Nd4 O-O Nf5 Qe6 Bg5 d5 Bxf6 Qxf6",
-          "explanation": "Against the provocative Qh4, Dubov has prepared deep novelties. White sacrifices a pawn for rapid development and the strong Nf5 outpost creates lasting pressure."
+          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Qxe4+ Be2",
+          "explanation": "Against the provocative Qh4, Dubov plays Nb5 + Be2 — sacrificing the e4 pawn for rapid development and the Nb5 / Nc3 piece-flooding manoeuvre."
         }
       ],
       "trapLines": [
         {
           "name": "Nxe4 Grab Met by Qf3",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 Nxe4 Qf3 d5 O-O Bf5 Nxe4 dxe4 Qxe4+ Be7 Qxf5",
-          "explanation": "Black grabs the e4 pawn with Nxe4 but White plays Qf3 attacking the knight and f7. Black is forced into an awkward defense and White recovers the material with advantage."
+          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3",
+          "explanation": "Black grabs the e4 pawn with ...Nxe4 but White plays Qf3 attacking the knight and f7. Black is forced into an awkward defense and White recovers the material with advantage."
         },
         {
           "name": "Bc5 Be3 Pin",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Bxd4 Bxd4 Nf6 Nc3 O-O Bd3 d6 O-O Be6 Qf3 Nd7 Bxg7 Kxg7 Qg3+ Kh8 Qf4",
+          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Bxd4 Bxd4 Nf6 Nc3 O-O",
           "explanation": "After Bc5, White plays Be3 creating a pin on the d4 diagonal. If Black trades with Bxd4 Bxd4, White's dark-squared bishop dominates and the kingside attack builds quickly."
         }
       ]
