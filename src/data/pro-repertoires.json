@@ -1577,7 +1577,7 @@
       "playerId": "hikaru",
       "eco": "D02",
       "name": "London System (Hikaru)",
-      "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd2 Be7 Be2 O-O O-O Nd7",
+      "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd2 Be7 Be2 O-O O-O",
       "color": "white",
       "style": "Solid, Practical",
       "overview": "Hikaru's blitz weapon of choice. He plays the London system for its reliability and low theoretical requirements. In blitz, the consistent piece placement means he can play on autopilot through the opening and focus his energy on the middlegame.",
@@ -1597,8 +1597,8 @@
       "variations": [
         {
           "name": "Standard vs d5",
-          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd2 Be7 Be2 O-O O-O Nd7",
-          "explanation": "The most common London line. White gets a solid position and aims for an eventual e4 push. Hikaru navigates these positions with ease."
+          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd2 Be7 Be2 O-O O-O",
+          "explanation": "The most common London line. White builds the standard d4-e3-c3 triangle then completes development with Nbd2 + Be2 + O-O — looking for the e4 break once the kingside is safe."
         },
         {
           "name": "vs KID Setup",
@@ -1609,12 +1609,12 @@
       "trapLines": [
         {
           "name": "...Qb6 Meets Qb3 Counter",
-          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd2 Bd6 Bxd6",
+          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd2",
           "explanation": "Black thinks ...Qb6 pressures b2, but Qb3 offers a queen trade that favors White structurally. After the queens stay on, White gets e4 with a strong center."
         },
         {
           "name": "...Nh5 Bishop Hunt Backfires",
-          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Nh5 Bg5 h6 Bh4 g5 Bg3 Nxg3 hxg3 Bg7 Nbd2 cxd4 exd4 Qb6 Qb3",
+          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Nh5 Bg5 h6 Bh4 g5 Bg3 Nxg3 hxg3",
           "explanation": "Black plays ...Nh5 trying to trade or trap the bishop. After Bg5-Bh4-Bg3, White keeps the bishop pair and the open h-file becomes a weapon."
         }
       ]
