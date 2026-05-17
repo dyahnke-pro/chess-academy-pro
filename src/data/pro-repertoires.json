@@ -1950,11 +1950,6 @@
           "name": "...exd4 cxd4 Center Steamroll",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O",
           "explanation": "After ...exd4 cxd4, White gets a powerful IQP with active pieces. The completed development O-O O-O signals the start of the middlegame where White's central pawn advantage steers the play."
-        },
-        {
-          "name": "...Nxe4 Pawn Grab Punished",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3",
-          "explanation": "Black grabs e4 with ...Nxe4 but White's d4-cxd4 + Nc3 sacrifice opens lines toward the black king. After Bxc3 the e-file is open for Re1 + Bxf7+ tactics."
         }
       ]
     },
