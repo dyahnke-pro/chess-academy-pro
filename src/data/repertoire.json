@@ -3509,7 +3509,7 @@
     "id": "old-indian-defence",
     "eco": "A53",
     "name": "Old Indian Defence",
-    "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 Nc5 Bg5 Bg4 Nd2 Bxe2 Qxe2 cxd5",
+    "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 Nc5",
     "color": "black",
     "style": "Solid, Positional",
     "overview": "The Old Indian Defence is a rock-solid system against 1.d4 that flies under the radar. After 2...d6, Black builds a compact pawn structure and aims for ...e5 to challenge the center. It's less theoretical than the King's Indian and gives you a sturdy position where you can outplay opponents in the middlegame. Think of it as the practical player's choice — fewer forced lines, more chess.",
@@ -3530,71 +3530,71 @@
     "variations": [
       {
         "name": "Old Indian: Czech Variation",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Re1 Qc7 Bf1 Re8 d5 c5 g3 Nf8 Bg2 Ng6 Nh4 Nxh4 gxh4 Bd7",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Re1 Qc7 Bf1 Re8 d5 c5",
         "explanation": "The Czech Variation features Black playing ...c6 and ...Qc7 to build a compact defensive structure before committing to a plan. The queen on c7 supports both central and kingside ideas while keeping the position flexible. After d5 c5, the center locks and Black reroutes the knight via f8-g6 to pressure the kingside. The position is rock-solid and difficult for White to crack, making it ideal for patient defenders."
       },
       {
         "name": "Old Indian: Janowski Variation",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Bf5 f3 e5 e4 Bg6 d5 Be7 Nge2 O-O Ng3 Nbd7 Be2 a5 O-O Nc5 Be3 Qc8 Qd2 Bd8 a3 Nh5",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Bf5 f3 e5 e4 Bg6 d5 Be7",
         "explanation": "An unusual setup where Black develops the bishop to f5 before playing ...e5, avoiding standard Old Indian theory entirely. The bishop retreats to g6 where it watches the center from a safe square and cannot be easily challenged. Black's plan involves rerouting pieces to active squares while maintaining the solid pawn structure. This sideline is particularly effective against opponents who rely on main line preparation."
       },
       {
         "name": "Old Indian: Tartakower Variation",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O Re8 Re1 Bf8 Bf1 g6 d5 Bg7 g3 Nh5 Be3 f5 exf5 gxf5 Nd2 Nf4",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O Re8 Re1 Bf8 Bf1 g6",
         "explanation": "Black fianchettoes the dark-squared bishop via f8 and g7, creating a King's Indian-like structure with a solid base. The Nf4 maneuver is a key tactical idea that disrupts White's kingside coordination after the thematic f5 break. After gxf5, Black gets an open g-file and attacking chances against White's king. This flexible approach lets Black generate kingside counterplay while maintaining the structural integrity of the Old Indian."
       },
       {
         "name": "Old Indian: Ukrainian Variation",
-        "pgn": "d4 Nf6 c4 d6 Nc3 e5 Nf3 Nbd7 g3 Be7 Bg2 O-O O-O c6 e4 a5 h3 Re8 Re1 Bf8 Be3 Nc5 d5 cxd5 cxd5 Bd7",
+        "pgn": "d4 Nf6 c4 d6 Nc3 e5 Nf3 Nbd7 g3 Be7 Bg2 O-O O-O c6 e4 a5 h3 Re8",
         "explanation": "In the Ukrainian Variation, White fianchettoes the king's bishop while Black sets up a flexible formation with ...c6 preparing the critical ...d5 break. The a5 move secures queenside space and prevents b4 expansion. After d5 cxd5 cxd5, the c-file opens for Black's rooks and the knight on c5 becomes a powerful outpost. Black's strategy balances solid defense with active piece play on both flanks."
       },
       {
         "name": "Old Indian: Main Line with d5",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 a3 Ne8 Rb1 g6 b4 Ng7 Nd2 f5 f3 Nf6 bxc5 dxc5",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 a3 Ne8 Rb1",
         "explanation": "The critical main line where after d5 c5, the position locks and both sides play on their respective wings. Black aims for the thematic f5 break to challenge White's center while the knight reroutes via e8-g7 to support the kingside attack. White expands on the queenside with a3, Rb1, and b4 trying to open lines. The resulting middlegame is a classic race between opposing wing attacks."
       },
       {
         "name": "Old Indian: Seirawan System",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 Nd2 Ne8 a3 g6 Rb1 Ng7 b4 f5 f3 Nf6 bxc5 dxc5",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5",
         "explanation": "The Seirawan System features a methodical knight rerouting plan that Yasser Seirawan championed for Black. The knight goes to g7 via e8 to support the f5 break while keeping flexible options open. The a6 and b6 setup creates a solid queenside barrier against White's expansion. Black's plan is straightforward but effective: complete the kingside buildup with f5 and generate attacking chances before White breaks through on the opposite wing."
       },
       {
         "name": "Old Indian: Be2 Development",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Qc2 Re8 Rd1 Bf8 d5 c5 a3 a6 b4 b6 Rb1 g6 Bd2 Bg7",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Qc2 Re8 Rd1 Bf8 d5 c5 a3",
         "explanation": "White's Be2 development is the most classical approach to the Old Indian. Black responds with a patient setup, fianchettoing the dark bishop via f8-g7 after the center closes. The queen on c2 supports e4 and prepares queenside expansion while the rook goes to d1 for central pressure. Black must time the f5 break carefully while keeping the queenside stable. This line leads to a deep strategic battle where understanding plans matters more than memorization."
       }
     ],
     "trapLines": [
       {
         "name": "Queenside Overextension Punish",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 a3 Ne8 b4 b6 Rb1 g6 bxc5 bxc5 Bd2 Ng7 Rb7 f5 exf5 Nxf5",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 a3",
         "explanation": "When White overextends with b4 and Rb7, Black strikes with the thematic f5 break to seize the initiative. The rook on b7 looks active but becomes misplaced once Black's central counterplay begins. After exf5 Nxf5, Black's knight dominates on f5 while the open f-file provides attacking chances. White's rook must retreat, having wasted crucial tempi in the process."
       },
       {
         "name": "Knight Outpost on c5",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 d5 Be7 Nf3 O-O Be2 a5 O-O Nc5 Nd2 Bg4 f3 Bd7 a3 b6 Rb1 g6 b4 axb4 axb4 Na6 b5 Nc5",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 d5 Be7 Nf3 O-O Be2",
         "explanation": "The knight reroute to c5 is a foundational idea in the Old Indian, creating a powerful outpost that pressures both e4 and a4 simultaneously. White's attempts to dislodge the knight with b4 often create more weaknesses than they solve. The knight can reroute to a6 and back to c5, maintaining its dominance while probing for weaknesses. If White plays passively, Black gradually improves until a decisive break becomes available."
       },
       {
         "name": "Kingside Attack with f5",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 a3 Ne8 Rb1 g6 b4 Ng7 Bd2 f5 exf5 gxf5",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 a3",
         "explanation": "The f5 break is the signature attacking idea in the Old Indian closed positions. After gxf5, Black gets an open g-file and attacking chances against White's king. White's f4 response tries to block the center but the e4 pawn becomes a powerful wedge that restricts White's pieces. Black's knights find active squares in the resulting tactical melee on the kingside."
       }
     ],
     "warningLines": [
       {
         "name": "Passive Play Warning",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 Nc5 Nd2 a5 a3 Bd7 Rb1 Qc7 b4 axb4 axb4 Na6 b5 Nc5 Nb3 Nxb3",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 Nc5 Nd2 a5",
         "explanation": "If Black plays too passively without a plan, White methodically builds up on the queenside with Nd2, Rb1, b4, and b5 gaining space and opening lines. You must have an active counterplan ready, either the f5 kingside break or knight maneuvers to active squares. Without counterplay, White's space advantage becomes overwhelming and Black gets squeezed into an inferior position."
       },
       {
         "name": "Early e5 Without Support",
-        "pgn": "d4 Nf6 c4 d6 Nc3 e5 Nf3 Nbd7 g3 Be7 Bg2 O-O O-O c6 e4 Re8 Re1 Bf8 d5 c5 Nh4 g6 f4 exf4 gxf4",
+        "pgn": "d4 Nf6 c4 d6 Nc3 e5 Nf3 Nbd7 g3 Be7 Bg2 O-O O-O c6 e4 Re8 Re1 Bf8",
         "explanation": "Playing ...e5 too early without full preparation can leave the d6 pawn chronically weak and give White free tempi for expansion. The Nh4 and f4 advance becomes very dangerous when Black has not consolidated. Make sure ...Nbd7 is in place to support the center and complete development before committing to the ...e5 break. Rushing this critical move is the most common mistake in the Old Indian."
       },
       {
         "name": "Ignoring Queenside Play",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 a3 Ne8 b4 cxb4 axb4",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 a3",
         "explanation": "Focusing exclusively on the kingside while ignoring White's queenside expansion is a recipe for disaster. When White achieves b5 unopposed, the a6 and c6 squares become targets and the queenside crumbles. Black must balance kingside ambitions with solid queenside defense using moves like ...a6, ...b6, and well-timed pawn exchanges. A one-sided strategy fails against opponents who exploit the neglected flank."
       }
     ]

@@ -18,18 +18,6 @@
     "petrov-defence::trap::Wrong Move Order Punishment": [
       "WEAK_TRAP"
     ],
-    "old-indian-defence::trap::Queenside Overextension Punish": [
-      "WEAK_TRAP"
-    ],
-    "old-indian-defence::trap::Knight Outpost on c5": [
-      "WEAK_TRAP"
-    ],
-    "old-indian-defence::trap::Kingside Attack with f5": [
-      "WEAK_TRAP"
-    ],
-    "old-indian-defence::warning::Passive Play Warning": [
-      "TOOTHLESS_WARNING"
-    ],
     "english-opening::trap::Reversed Sicilian Tempo Advantage": [
       "STUDENT_NOT_PUNISHER",
       "WEAK_TRAP"
@@ -667,6 +655,27 @@
       "TOOTHLESS_WARNING"
     ],
     "budapest-gambit::warning::Premature d5 Break": [
+      "TOOTHLESS_WARNING"
+    ],
+    "old-indian-defence::trap::Queenside Overextension Punish": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "old-indian-defence::trap::Knight Outpost on c5": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "old-indian-defence::trap::Kingside Attack with f5": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "old-indian-defence::warning::Passive Play Warning": [
+      "TOOTHLESS_WARNING"
+    ],
+    "old-indian-defence::warning::Early e5 Without Support": [
+      "TOOTHLESS_WARNING"
+    ],
+    "old-indian-defence::warning::Ignoring Queenside Play": [
       "TOOTHLESS_WARNING"
     ]
   }
