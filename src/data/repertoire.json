@@ -3,7 +3,8 @@
     "id": "italian-game",
     "eco": "C50",
     "name": "Italian Game",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Re1 Be6 Ne4 Qd7",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Re1 Nb6 Bb3 Nxd4 Nxd4 Qxd4 Qc2 c6 Ne4 Bf5 Rad1 Bxe4 Rxe4 Qf6 Qe2 c5",
+    "shortOverview": "Italian Game: develop Bc4 aiming at f7, build c3/d4 center, get rich middlegame play with active piece coordination.",
     "color": "white",
     "style": "Classical, Strategic",
     "overview": "The Italian Game is one of the oldest and most natural openings in chess. You develop your bishop to the most active diagonal, aim at f7, and prepare a strong center with c3 and d4. The beauty of the Italian is that it leads to rich middlegame positions where understanding trumps memorization — exactly the kind of chess you want to be playing.",
@@ -31,49 +32,49 @@
       },
       {
         "name": "Giuoco Piano: Greco Attack (Bd2 line)",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Na5 Qa4+ Nc6 Qb3 Nce7 O-O O-O Rfe1 c6 a4 Bf5 Ne5 Qb6 Qd1",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Na5 Qa4+ Nc6 Qb3 Nce7 O-O O-O Rfe1 c6 a4",
         "explanation": "The Greco Attack is the solid positional alternative to the sharp Nc3 line. White recaptures with the knight on d2, accepting doubled pawns won't happen but getting smooth development. After Qb3, White pressures b7 and d5 simultaneously. The resulting positions are strategic with White keeping a slight initiative through active piece placement and the d4 pawn providing central space.",
         "frequency": "common",
         "deviationMove": 8
       },
       {
         "name": "Giuoco Pianissimo: Modern d3 System",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6 Bb3 h6 Nf1 Re8 Ng3 Bxb3 Qxb3 d5 exd5 Nxd5 Nf5 Kh7 d4 exd4",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6 Bb3 h6",
         "explanation": "The Giuoco Pianissimo is the weapon of choice for top GMs like Caruana and So. White avoids early theoretical clashes, builds up with d3, c3, Nbd2-f1-g3, and strikes with d4 at the perfect moment. The knight maneuver Nf1-g3-f5 is a key motif — the knight on f5 exerts tremendous pressure. Black must time the ...d5 break precisely or face a slow positional squeeze.",
         "frequency": "very common",
         "deviationMove": 4
       },
       {
         "name": "Giuoco Pianissimo: Closed Italian with a4/Ba2",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 O-O Re1 a5 Bb5 Ba7 Nbd2 Ne7 Nf1 Ng6 d4 c6 Ba4 Qc7 Bc2 Be6 Ng3 Rad8 h3 d5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 O-O Re1 a5 Bb5 Ba7",
         "explanation": "The Bb5/Ba4/Bc2 maneuver is a sophisticated regrouping — the bishop retreats to avoid ...Na5 while relocating to the b1-h7 diagonal where it eyes the kingside. After Ng3, White has a flexible setup that can attack on either wing. This line has become extremely popular at the super-GM level because it offers rich strategic play without forcing moves.",
         "frequency": "common",
         "deviationMove": 7
       },
       {
         "name": "Evans Gambit Accepted: Main Line",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2 Ne7 Bd3 O-O Nc3 Ng6 Ne2 c5 Qd2 f6 Kh1 Bc7",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2",
         "explanation": "The Evans Gambit remains a dangerous practical weapon. After 8.d5, White closes the center and launches a kingside attack. The key idea is Nc3-e2-g3 with Qd2 and Kh1 preparing f4. Black must generate counterplay with ...c5 and ...f6 before White's attack becomes overwhelming. At the club level, this gambit scores devastatingly well because Black must find precise defensive moves.",
         "frequency": "common",
         "deviationMove": 4
       },
       {
         "name": "Italian: Hungarian Defense",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Be7 d4 d6 dxe5 Nxe5 Nxe5 dxe5 Qh5 g6 Qxe5 Nf6 Bg5 Rf8 Nc3 Be6 Bxe6 fxe6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Be7 d4 d6 dxe5 Nxe5 Nxe5 dxe5 Qh5 g6 Qxe5 Nf6 Bg5",
         "explanation": "The Hungarian Defense with 3...Be7 is passive but gives Black a solid structure. White should strike immediately with d4 to exploit the inactive bishop. After Qh5 picking up the e5 pawn, White maintains a clear structural advantage. The doubled e-pawns and open f-file for White provide lasting pressure, though Black's position is defensible with accurate play.",
         "frequency": "uncommon",
         "deviationMove": 3
       },
       {
         "name": "Italian: Two Knights with d4",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Nxd4 Nxd4 Qxd4",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Neg5 O-O-O Nxe6 fxe6 Rxe6 Bd6",
         "explanation": "The sharp 4.d4 line against the Two Knights leads to a forced sequence. After Re1 d5 Bxd5 Qxd5 Nc3, White recovers the piece with Nxe4 but Black has equalized. The endgame after mass exchanges is roughly level, but White's better pawn structure and active rook give a tiny edge. Know this line to avoid blundering but don't expect a big advantage.",
         "frequency": "common",
         "deviationMove": 4
       },
       {
         "name": "Italian: Modern Moller Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3 Qb3 Bxa1 Bxf7+ Kf8 Bg5 Ne7 Ne5 Bxd4 Bg6 d5 Qf3+ Bf5 Bxf5 Nxf5 Nf7 Qd7",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3 Qb3 Bxa1 Bxf7+ Kf8 Bg5 Ne7 Ne5 Bxd4 Bg6 d5 Qf3+ Bf5 Bxf5",
         "explanation": "The Moller Attack is one of the most spectacular lines in all of chess theory. White sacrifices a full exchange with Qb3 and Bxf7+, then launches a ferocious attack against Black's uncastled king. After 12.Bg5, White threatens Ne5 with devastating effect. This line has been analyzed to a draw in many variations, but the practical danger for Black is enormous — one slip and the attack is overwhelming.",
         "frequency": "rare",
         "deviationMove": 8
@@ -81,51 +82,54 @@
     ],
     "trapLines": [
       {
-        "name": "Blackburne Shilling Gambit Refutation",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5 Qg5 Nxf7 Qxg2 Rf1 Qxe4+ Be2 Nf3",
-        "explanation": "Black tries the tricky 3...Nd4 hoping for Nxe5 Qg5 tricks. After Nxf7! White wins the rook on h8. If Qxg2 Rf1, White is up massive material. The critical point: don't play Bxf7+ instead, which lets Black equalize after ...Ke7."
-      },
-      {
         "name": "Fried Liver Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4 Kd7 Re1 Be7 a3 Na6",
-        "explanation": "The Fried Liver sacrifices a knight on f7 to drag Black's king into the center. After Qf3+ Ke6, the king is in mortal danger with no safe haven. White continues with Nc3, O-O, and d4 building an overwhelming attack. At the club level this wins the vast majority of games. Note: Black should play 5...Na5 or 5...b5 to avoid this, not 5...Nxd5."
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4 Qf6 Qd1 Ke7 Re1 Qg6 a3 Nxc3",
+        "explanation": "The Fried Liver sacrifices a knight on f7 to drag Black's king into the center. After Qf3+ Ke6, the king is in mortal danger with no safe haven. White continues with Nc3, O-O, and d4 building an overwhelming attack. Black's best try is ...Qf6 defending and preparing ...Qg6 to escape the king to e7. Even with precise play, White retains a winning attack at the club level — this is one of the most famous tactical traps in chess.",
+        "shortExplanation": "Fried Liver: Nxf7 sac drags king to e6; Qf3+/Nc3/O-O/d4 builds overwhelming attack against the exposed king."
       },
       {
         "name": "Italian: Legal's Mate Pattern",
         "pgn": "e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5 Bxd1 Bxf7+ Ke7 Nd5",
-        "explanation": "Legal's Mate pattern arises when Black pins the f3 knight with ...Bg4 too early. White sacrifices the queen with Nxe5!, and after Bxd1, the devastating Bxf7+ Ke7 Nd5# is checkmate. Even if Black avoids the mate, White wins back the queen with interest. Always look for this pattern when Black plays ...Bg4 prematurely."
+        "explanation": "Legal's Mate is a classic teaching pattern — masters don't reach it (they play h3 kicking the bishop instead of Bg4), but at club level it punishes lazy opening play. When Black pins the f3 knight with ...Bg4 too early, White sacrifices the queen with Nxe5!, and after Bxd1, the devastating Bxf7+ Ke7 Nd5# is checkmate. Rare in master play — recognize the pattern, don't expect to face it at high levels.",
+        "shortExplanation": "Legal's Mate pattern: ...Bg4 pin too early loses to Nxe5/Bxd1/Bxf7+/Nd5# (rare at master level)."
       },
       {
         "name": "Jerome Gambit",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 Bxf7+ Kxf7 Nxe5+ Nxe5 Qh5+ Ke6 Qf5+ Kd6 f4 Nc6 Qd5+ Ke7 Qxc5+ d6 Qc4 Nf6 d3 Rf8 O-O Bg4 Nc3 Nd4 Qd5 c6 Qa5",
-        "explanation": "The Jerome Gambit sacrifices two minor pieces with Bxf7+ and Nxe5+ to drag Black's king into the open. After Kxf7 Nxe5+ Nxe5 Qh5+, the king is driven to d6 where it becomes a target. White recovers material with Qxc5+ and Qc4, maintaining pressure against the exposed king. Although objectively dubious, the Jerome Gambit is a deadly practical weapon at club level because Black's king never finds safety."
+        "explanation": "The Jerome Gambit sacrifices two minor pieces with Bxf7+ and Nxe5+ to drag Black's king into the open — objectively dubious (not played in master games) but a deadly practical weapon at club level because Black's king never finds safety. After Kxf7 Nxe5+ Nxe5 Qh5+, the king is driven to d6 where it becomes a target. White recovers material with Qxc5+ and Qc4. Rare in master practice — you'll meet it at amateur level, not GM.",
+        "shortExplanation": "Jerome Gambit (dubious, not master-played): Bxf7+/Nxe5+ drags king to d6 for practical attacking chances."
       },
       {
         "name": "Lolli Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 d4 exd4 O-O Be7 Nxf7 Kxf7 Qf3+ Ke6 Nc3 dxc3 Re1+ Ne5 Bf4 Bf6 Bxe5 Bxe5 Rxe5+ Kd6 Qe4 cxb2 Rb1 Qf6",
-        "explanation": "The Lolli Attack features the spectacular Nxf7 sacrifice after Ng5 d5 exd5 Nxd5 d4. After Kxf7 Qf3+, Black's king is chased to e6 where it sits in the center of the crossfire. Nc3 sacrifices another piece to open the e-file, and after Re1+ Ne5, the devastating Bf4 pins everything. White's attack crashes through with Bxe5+ Bxe5 Rxe5+ and the king on d6 faces threats from every direction."
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 d4",
+        "explanation": "The Lolli Attack features the spectacular Nxf7 sacrifice after Ng5 d5 exd5 Nxd5 d4. Black has multiple defensive options at this critical position, with the d4 push challenging the e5 pawn. The actual tactical sequence beyond this point goes off master theory — modern theory shows Black has resources. The validated prefix shows the classical setup, and beyond it Black should consult engine analysis rather than memorize a forced sequence.",
+        "shortExplanation": "Lolli Attack setup: Ng5 d5 exd5 Nxd5 d4 reaches the critical Nxf7-sacrifice position; modern theory favors Black."
       },
       {
         "name": "Giuoco Piano Queen Trap",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 Nxe4 d5 Nxd2 Qb3 Ne4 Qxb7 Nxf2 Qxa8 Nxh1 dxc6 dxc6 Qxa7 O-O Bb5 Qd6",
-        "explanation": "In the Giuoco Piano, if Black greedily takes on e4 with the knight, White's d5 push attacks the c6 knight while Qb3 targets b7 and f7. After Qxb7 wins the pawn, Black's knight on d2 looks active but White's queen rampages through the queenside. The Qxa8 wins the exchange, and after dxc6 the queen escapes via a7. White ends up with a rook and pawns vs two knights, with the Bb5 pinning and restricting Black's counterplay."
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 Nxe4 d5 Nxd2 Qxd2 Ne7 d6 cxd6 O-O d5",
+        "explanation": "In the Giuoco Piano, if Black greedily takes on e4 with the knight, White's d5 push attacks the c6 knight and after ...Nxd2 Qxd2 recovers the piece. The d6 push attempts to fix Black's queenside, but after ...cxd6 Black has a solid position. This isn't a forced material-winning trap — it's a positional setup where White has a slight edge from the more active pieces and better-coordinated rooks.",
+        "shortExplanation": "Greedy ...Nxe4 in the Giuoco: d5/Qxd2 recovery + d6 cramping = small White edge, not a forced win."
       }
     ],
     "warningLines": [
       {
         "name": "Traxler Counterattack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kf1 Qe7 Nxh8 d5 exd5 Nd4 d3 Bg4 Qd2 Nf3 Qc3 Nxh2+",
-        "explanation": "Instead of 4...d5, Black plays the shocking 4...Bc5! sacrificing the f7 pawn to launch a ferocious counterattack. After Bxf2+, Black gets a raging initiative — the king on f1 is exposed and White's extra rook is trapped on h8. If you play 4.Ng5, you MUST know the Traxler or you'll get mated. The safest approach is to take on f7 with the knight, not the bishop."
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kf1 Qe7 Nxh8 d5 exd5 Nd4",
+        "explanation": "Instead of 4...d5, Black plays the shocking 4...Bc5! sacrificing the f7 pawn to launch a ferocious counterattack. After Bxf2+, Black gets a raging initiative — the king on f1 is exposed and White's extra rook is trapped on h8. If you play 4.Ng5, you MUST know the Traxler or you'll get mated. The safest approach is to take on f7 with the knight, not the bishop, and consult modern theory at the critical 15...Nd4 position.",
+        "shortExplanation": "Traxler: 4...Bc5 sacrifice for raging attack. Must know the theory before playing 4.Ng5."
       },
       {
         "name": "Max Lange Attack Theory",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Bc5 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4 Bb6 fxg7 Rg8 g4 Qd5 Nxe6 fxe6 Nf6+",
-        "explanation": "The Max Lange Attack leads to one of the most forcing sequences in chess. After 6.e5 d5 7.exf6 dxc4 8.Re1+ Be6, both sides must play extremely precisely. White sacrifices material for a kingside attack, but Black's counterplay with the extra pieces is formidable. Modern analysis shows the resulting positions are roughly equal with best play, but the practical difficulty for both sides is enormous."
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Bc5 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4 Bb6",
+        "explanation": "The Max Lange Attack leads to one of the most forcing sequences in chess. After 6.e5 d5 7.exf6 dxc4 8.Re1+ Be6, both sides must play extremely precisely. White sacrifices material for a kingside attack, but Black's counterplay with the extra pieces is formidable. Modern analysis shows the resulting positions are roughly equal with best play, but the practical difficulty for both sides is enormous.",
+        "shortExplanation": "Max Lange: forced theoretical line via 6.e5/exf6/Re1+. Roughly equal with best play, both sides need preparation."
       },
       {
         "name": "Giuoco Piano: Black Delays Castling",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Qb3 Be6 Rfe1 Qd6 Ne4 Qd7 Nc5 Qd6 Nxe6 fxe6",
-        "explanation": "After the Bd2 exchange, if Black delays the ...d5 break, White can build up with Qb3 and Rfe1 creating unpleasant pressure. The knight maneuver Ne4-c5 targets the e6 pawn and Black's slightly weakened kingside. White's IQP positions here are actually comfortable because the piece activity is very strong."
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Rc1 Nb6 Bb3 a5 a4 Nd5",
+        "explanation": "After the Bd2 exchange, the Rc1 setup is the master mainline (not Qb3). White prepares the slow positional buildup with Rc1, Bb3, and a4 while Black plays ...Nb6 and ...a5 for queenside expansion. The ...Nd5 maneuver centralizes the knight and challenges White's plan. This warning shows that Black has a clear path to equalize with active piece play rather than passive defense.",
+        "shortExplanation": "Master mainline is Rc1/Bb3/a4 (not Qb3). Black answers with ...Nb6/a5/Nd5 active centralization."
       }
     ]
   },

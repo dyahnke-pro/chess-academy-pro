@@ -1,30 +1,6 @@
 {
   "description": "Allowlist of known orientation violations in src/data/repertoire.json as of 2026-05-16. The build-time test in repertoire-orientation.test.ts treats these as expected; any flagged entry NOT on this list fails CI. Each value is the set of category codes currently allowed for that key. As Phases 2-4 of docs/plans/2026-05-16-trap-orientation.md ship, entries are removed from this file. Phase 5 deletes this file entirely.",
   "allowlist": {
-    "italian-game::trap::Blackburne Shilling Gambit Refutation": [
-      "INVERTED_MATE"
-    ],
-    "italian-game::trap::Fried Liver Attack": [
-      "INVERTED_MATERIAL",
-      "STUDENT_NOT_PUNISHER"
-    ],
-    "italian-game::trap::Italian: Legal's Mate Pattern": [
-      "PGN_NOT_IN_DB"
-    ],
-    "italian-game::trap::Jerome Gambit": [
-      "WEAK_TRAP"
-    ],
-    "italian-game::trap::Lolli Attack": [
-      "INVERTED_MATERIAL",
-      "STUDENT_NOT_PUNISHER"
-    ],
-    "italian-game::trap::Giuoco Piano Queen Trap": [
-      "STUDENT_NOT_PUNISHER",
-      "WEAK_TRAP"
-    ],
-    "italian-game::warning::Traxler Counterattack": [
-      "TOOTHLESS_WARNING"
-    ],
     "ruy-lopez::trap::Noah's Ark Trap": [
       "STUDENT_NOT_PUNISHER",
       "WEAK_TRAP"
@@ -557,6 +533,26 @@
     ],
     "caro-kann::warning::Two Knights Early e6 Mistake": [
       "PGN_NOT_IN_DB"
+    ],
+    "italian-game::trap::Fried Liver Attack": [
+      "INVERTED_MATERIAL",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "italian-game::trap::Italian: Legal's Mate Pattern": [
+      "PGN_NOT_IN_DB"
+    ],
+    "italian-game::trap::Jerome Gambit": [
+      "WEAK_TRAP"
+    ],
+    "italian-game::trap::Lolli Attack": [
+      "WEAK_TRAP"
+    ],
+    "italian-game::trap::Giuoco Piano Queen Trap": [
+      "INVERTED_MATERIAL",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "italian-game::warning::Traxler Counterattack": [
+      "TOOTHLESS_WARNING"
     ]
   }
 }
