@@ -104,7 +104,7 @@
     "id": "gambit-evans-gambit",
     "eco": "C51",
     "name": "Evans Gambit",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2 Ne7 Bd3 O-O Nc3 Ng6 Ne2 c5",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2",
     "color": "white",
     "style": "Aggressive, Classical",
     "overview": "The Evans Gambit is one of the most dangerous weapons in the Italian Game — you sacrifice a whole pawn on b4 to gain a massive center and lightning-fast development. After c3 and d4, your pawns control the center while your pieces fly out to attacking squares. Even Garry Kasparov has played it at the highest level, and at club level, Black is often simply overwhelmed by the speed of the initiative.",
@@ -127,66 +127,66 @@
     "variations": [
       {
         "name": "Evans Gambit: Normal Variation with d5 Push",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2 Ne7 Bd3 O-O Nc3 Ng6 Ne2 c5 Qd2 f6 Kh1 Bd7 Qf4",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2",
         "explanation": "The main line where Black retreats to a5 and plays d6 to hold the center. White gets a powerful d4-d5 pawn chain, develops the dark-squared bishop to b2, and prepares a kingside attack with f4. Black is cramped and must find a way to break free before White's attack crashes through."
       },
       {
         "name": "Evans Gambit: Slow Variation with Be7 Retreat",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Be2 exd4 Qxd4 Nf6 e5 Nc6 Qh4 Nd5 Qg3 d6 O-O Nb6 Rd1 Be6 exd6 O-O Qxg7+",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Be2 exd4 Qxd4 Nf6 e5 Nc6 Qh4 Nd5 Qg3",
         "explanation": "Black retreats the bishop to e7 — a conservative choice avoiding the sharpest lines. White plays d4 and builds up gradually. After Qxd4 and e5, the central space advantage and open lines provide excellent compensation. The queen on g3 eyes both the kingside and the g7 pawn."
       },
       {
         "name": "Evans Gambit Declined: Bb6 System",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 Nc3 Nf6 Nd5 Nxd5 exd5 Nd4 a5 Ba7 Nxd4 Bxd4 c3 Bb6 d4 exd4 O-O dxc3 Qg4 O-O Bg5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 Nc3 Nf6 Nd5 Nxd5 exd5 Nd4 a5 Ba7",
         "explanation": "Black declines with Bb6 — a sensible choice avoiding the sharpest play. White pushes a4-a5 to gain queenside space and plays Nd5 for a central grip. The game becomes less tactical but White retains a dynamic initiative with active pieces and space advantage."
       },
       {
         "name": "Evans Gambit: Compromised Defense (dxc3)",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3 O-O Rac1 Bb6 Nd5 Na5 Qb4 Nxc4 Rxc4",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3 O-O",
         "explanation": "The sharpest line where Black grabs the c3 pawn. White plays Qb3 targeting f7, and e5 gains space with tempo. After Nxc3, Ba3 prevents Black from developing normally. The Nd5 jump creates multiple threats and White's piece activity is overwhelming despite being down two pawns."
       },
       {
         "name": "Evans Gambit: Waller Attack with Qb3",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4 Qa4 Bd7 Qb3 Qe7 Nd5 Qd8 a4 Na5 Qa2 Nxc4 Qxc4 a6 Bg5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4",
         "explanation": "The Waller Attack features Qa4 and Qb3 to create constant pressure on the queenside while aiming at f7. After Nd5, the knight is a monster controlling key squares. Combined with a4 and Bg5, White's pieces coordinate beautifully for a crushing middlegame attack."
       }
     ],
     "trapLines": [
       {
         "name": "Anderssen's Attacking Pattern",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3 O-O Rac1 b6 Nd5 Bb7 Nxe7+ Kh8 Nxg6+ hxg6 Bxf7",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3",
         "explanation": "After Black grabs the c3 pawn, White plays Qb3 targeting f7. The Nd5 jump combined with Ba3 creates an avalanche of threats. After Nxe7+ and Nxg6+, the double check destroys Black's kingside. Most club players simply cannot survive this onslaught."
       },
       {
         "name": "Quick d5 Double Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 Nf6 dxe5 Nxe4 Qd5 Nxc3 Qxf7+",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4",
         "explanation": "If Black greedily plays Nxe4 instead of retreating, White plays the stunning Qd5 with a double attack on f7 and the knight. After Qxf7+ Kd8, the king is stuck in the center and Bg5+ creates a discovered attack. Black loses massive material in all lines."
       },
       {
         "name": "Stone-Ware Trap (d3 Grab Punishment)",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Re1 d2 Bxd2 Nge7 Qa3 O-O Bxf7+ Rxf7 Qxa5 Qxg2+ Kxg2 Nxe5 Qxe5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6",
         "explanation": "Black tries to hold the extra pawn with d3 but this move blocks development fatally. White plays Qb3 and e5 to build overwhelming pressure. The Ba3 move pins down Black's position, preventing normal development. The d3 pawn falls eventually and Black is left with a wrecked position."
       },
       {
         "name": "Lasker Defense Counter-Trap",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d5 exd5 exd4 O-O Be6 dxc6 dxc3 Qxd8+ Kxd8 Nxc3 Bxc4 cxb7 Rb8 Nd5 Bxd5 Bg5+ Nf6 Bxf6+",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4",
         "explanation": "The Lasker Defense looks strong for Black but White has a powerful counter. After O-O and dxc6, the passed b-pawn becomes a monster. Even after queens are traded, Nd5 combined with Bg5+ creates serious problems. White's initiative persists deep into the endgame."
       }
     ],
     "warningLines": [
       {
         "name": "Lasker Defense: Black Equalizes",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d5 exd5 exd4 O-O Be6 Bb5 Nge7 cxd4 O-O Nc3 a6 Ba4 Bg4 h3 Bh5 g4 Bg6 Bb3 Bb6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4",
         "explanation": "Lasker's Defense is considered the strongest reply — Black returns the pawn with d5 to simplify and neutralize White's initiative. After accurate play with Be6 and O-O, Black reaches a comfortable position where the bishop pair provides adequate compensation. White must play very precisely to maintain even a small edge."
       },
       {
         "name": "Compromised Defense: Black Consolidates",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Re1 Nge7 Ba3 b5 Bxb5 Rb8 Qa4 O-O Bd3 Qf5 Nbd2 Bb6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6",
         "explanation": "If Black manages to castle safely and hold the extra d3 pawn, White's initiative can fizzle out. After Nge7, b5, and O-O, Black consolidates and the extra pawn becomes a real asset. This is why tempo is everything in the Evans — delay means death for the attack."
       },
       {
         "name": "Central Counter with d5 exd5 Nxd5",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nf6 e5 d5 exf6 dxc4 Qe2+ Be6 fxg7 Rg8 cxd4 Rxg7 Bg5 Qe7 Bxe7 Kxe7 Nc3 Rxg2+",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nf6 e5 d5 exf6 dxc4",
         "explanation": "Black's precise central counter with d5 and Nf6 challenges White's center directly. After exf6 dxc4, Black has won the key light-squared bishop and has good piece activity. The resulting position is sharp but Black has equalized the material and has real chances."
       }
     ]
