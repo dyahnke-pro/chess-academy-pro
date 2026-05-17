@@ -64,11 +64,37 @@ async function main() {
     { file: 'pro-repertoires.json', shape: 'object.openings' },
     { file: 'gambits.json', shape: 'array' },
     { file: 'model-games.json', shape: 'array', mainOnly: true },
+    { file: 'middlegame-plans.json', shape: 'middlegame' },
   ];
 
   const entries = [];
   for (const { file, shape, mainOnly } of sources) {
     const raw = JSON.parse(await readFile(`src/data/${file}`, 'utf8'));
+    if (shape === 'middlegame') {
+      // middlegame-plans.json has playableLines[] keyed off a critical
+      // position FEN; each playableLine has fen + moves[] (SAN list).
+      // We construct an effective PGN by playing the SAN moves from the
+      // starting FEN. The audit treats these as 'main' role for threshold.
+      for (const plan of raw) {
+        const openingId = plan.openingId ?? plan.id;
+        const planName = plan.title ?? plan.id;
+        for (const line of plan.playableLines ?? []) {
+          if (!line.fen || !line.moves?.length) continue;
+          const startFen = line.fen;
+          const pgnFromFen = line.moves.join(' ');
+          entries.push({
+            source: file,
+            openingId,
+            role: 'middlegame-line',
+            name: `${planName} — ${line.title ?? 'line'}`,
+            pgn: pgnFromFen,
+            startFen,
+            color: plan.color ?? 'white',
+          });
+        }
+      }
+      continue;
+    }
     const arr = shape === 'array' ? raw : raw.openings;
     for (const o of arr) {
       const openingId = o.id ?? o.openingId ?? o.name ?? '(no-id)';
@@ -91,7 +117,9 @@ async function main() {
   for (const e of entries) {
     const threshold = (e.role === 'trap' || e.role === 'warning') ? TRAP_MIN_GAMES : OTHER_MIN_GAMES;
     const moves = e.pgn.split(' ').filter(Boolean);
-    const chess = new Chess();
+    // middlegame-plans entries carry a startFen; initialize chess.js there.
+    // Other sources start from the standard starting position.
+    const chess = e.startFen ? new Chess(e.startFen) : new Chess();
     let validatedPly = 0;
     let firstInvalidPly = null;
     let firstInvalidMove = null;
