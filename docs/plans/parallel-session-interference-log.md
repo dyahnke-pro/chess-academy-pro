@@ -21,6 +21,17 @@ causes, not one. Three state-clobbering + one informational ≠ four
 state-clobbering for diagnosis purposes. Don't revise the threshold
 now; just keep the split visible.
 
+**Protocol when threshold trips (added 2026-05-16, post-Incident-5):**
+when incident 6 lands, the active session MUST stop whatever
+they're doing, log the incident, stash if needed, and surface to
+Dave. Do NOT auto-pivot into the source-fix investigation
+mid-PR. That investigation deserves its own focused scope and its
+own session — not a hijack of whatever WO was in flight when the
+threshold tripped. Same scope-sprawl pattern that was killed at
+PLUMBING-01 kickoff; do not reintroduce it under a different name.
+The source-fix investigation only starts after Dave green-lights it
+as the next session's primary task.
+
 ## Format
 
 For each incident:
@@ -223,16 +234,32 @@ possibly not.
 
 ## Hypothesis (provisional, to refine with more data)
 
+- **Strongest single signal: the Incident 5 recursion.** The
+  parallel session interfered with the file documenting
+  parallel-session interference — and the file vanished from
+  disk because it doesn't exist on their branch. Workflow-class
+  fixes (run `git status` more often, label your stashes,
+  communicate before checkout) cannot prevent a session from
+  clobbering a file that does not exist on the other branch.
+  The failure mode is structural, not workflow. When the
+  6-incident threshold trips, the recursion alone is sufficient
+  evidence to act — no additional data is needed to justify
+  source-fix work.
 - Both sessions use the same repo directory and same `gh`/git
   auth. There's no per-session isolation.
 - One possible fix at the source: **per-session git worktrees**.
   Each Claude session opens its own worktree off `main` (e.g.
   `git worktree add ../chess-academy-pro-session-N <branch>`),
   isolating index/HEAD/working-tree state per session while
-  sharing the underlying object store.
+  sharing the underlying object store. Directly addresses the
+  Incident 5 failure mode — each worktree has its own copy of
+  every tracked file at HEAD, so "file doesn't exist on the
+  other branch" can't manifest as "file vanished from disk."
 - Another possibility: **explicit session pinning** — at session
   start, lock `git checkout` to a known branch and refuse to
-  switch unless the user types a confirmation. Less ergonomic.
+  switch unless the user types a confirmation. Less ergonomic,
+  and doesn't fix the untracked-file-leak sub-pattern of
+  Incident 2.
 
 These are guesses. The log accumulates concrete data; we diagnose
 at the source after Incident 6. Per the category-aware threshold
