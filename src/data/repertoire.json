@@ -2492,7 +2492,7 @@
     "id": "slav-defence",
     "eco": "D10",
     "name": "Slav Defence",
-    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O Nbd7 Qe2 Bg6 e4 O-O Bg5 h6 Bh4 Re8",
+    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O Nbd7 Qe2 Bg6 e4 O-O Bg5 h6 Bh4",
     "color": "black",
     "style": "Solid, Flexible",
     "overview": "The Slav Defence is the thinking player's response to the Queen's Gambit. By supporting d5 with ...c6 instead of ...e6, you keep the light-squared bishop free to develop outside the pawn chain. This is crucial — in the QGD, that bishop often gets stuck behind the e6 pawn. The Slav gives you solid structure AND active pieces.",
@@ -2513,17 +2513,17 @@
     "trapLines": [
       {
         "name": "Qb3 Trap Defense",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 Qb3 Na6 e4 Bg6 Bxc4 Nb4 Be2 e6 O-O Be7 Rd1 O-O Ne5 Nbd5 Nxg6 hxg6 Bf3 Qa5",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5",
         "explanation": "White plays Qb3 hitting b7 and f7 simultaneously, a classic double-attack. Black defends calmly with ...Na6!, routing the knight to b4 where it pressures d3 and c2. After ...Nb4 and ...e6, the queen's threats are fully neutralized and Black completes development with excellent piece activity. The key is not to panic — ...Na6 solves everything."
       },
       {
         "name": "Exchange Slav Qb6 Trick",
-        "pgn": "d4 d5 c4 c6 cxd5 cxd5 Bf4 Nc6 e3 Qb6 Qb3 Nf6 Nc3 Bf5 Nf3 e6 Be2 Bb4 O-O O-O a3 Bxc3 Qxc3 Ne4 Qb3",
+        "pgn": "d4 d5 c4 c6 cxd5 cxd5 Bf4 Nc6 e3 Qb6",
         "explanation": "In the Exchange Slav, after Bf4 Black plays ...Nc6 and ...Qb6! pressuring the b2 pawn. White is forced into an awkward queen placement with Qb3, where the queens stare at each other. Black develops with ...Bf5 and ...Bb4 with easy equality, and if White plays passively, the ...Ne4 jump gives Black active central play and targets."
       },
       {
         "name": "Geller Gambit Refutation",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 e4 b5 e5 Nd5 a4 e6 axb5 Nxc3 bxc3 cxb5 Ng5 Bb7 Qh5 g6 Qg4 Be7 Nxh7 Nd7 Be2 Qb6 O-O O-O-O",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 e4 b5 e5 Nd5 a4 e6 axb5 Nxc3 bxc3 cxb5 Ng5 Bb7 Qh5 g6 Qg4 Be7",
         "explanation": "When White plays the aggressive Geller Gambit with e4-e5, Black must grab the pawn and hold on. After ...Nd5 and ...e6, the center is locked and Black's structure is solid. White tries Ng5 and Qh5 for a kingside attack, but Black calmly develops with ...Bb7, ...Be7, and castles queenside. The extra pawn gives Black long-term winning chances once the attack fizzles out."
       }
     ],
@@ -2535,17 +2535,17 @@
       },
       {
         "name": "Exchange Variation",
-        "pgn": "d4 d5 c4 c6 cxd5 cxd5 Bf4 Nc6 e3 Nf6 Bd3 Bg4 Nf3 e6 Nbd2 Bd6 Bxd6 Qxd6 O-O O-O",
+        "pgn": "d4 d5 c4 c6 cxd5 cxd5 Bf4 Nc6 e3 Nf6 Bd3 Bg4 Nf3 e6 Nbd2",
         "explanation": "White exchanges early for a quiet, strategic game. Black develops naturally and the minority attack with ...b5-b4 is often the key plan. Don't underestimate these positions — they're deceptively complex."
       },
       {
         "name": "Chebanenko Variation (4...a6)",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 a6 e3 Bf5 Be2 e6 O-O Nbd7 c5 Be7 b4 O-O Bb2 Ne4",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 a6 e3 Bf5 Be2 e6 O-O Nbd7",
         "explanation": "The Chebanenko with 4...a6 is a modern approach. Black prepares ...b5 and keeps options flexible. The a6 pawn prevents Nb5 and supports the queenside expansion. It's become very popular at the top level."
       },
       {
         "name": "Quiet Variation (4.e3)",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 e3 Bf5 Nc3 e6 Nh4 Bg6 Nxg6 hxg6 Bd3 Nbd7 O-O Bd6 c5 Bc7",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 e3 Bf5 Nc3 e6 Nh4 Bg6 Nxg6 hxg6 Bd3 Nbd7 O-O Bd6",
         "explanation": "In the quiet 4.e3 line, Black develops the bishop to f5 immediately. After Nh4 Bg6 Nxg6 hxg6, Black gets an open h-file for attacking chances. The doubled g-pawns are actually a strength in the middlegame."
       },
       {
@@ -2560,24 +2560,24 @@
       },
       {
         "name": "Winawer Countergambit (...e5!?)",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e5 dxe5 d4 Ne4 Nxe4 Qxd4 Qxd4 Nxd4 Nd6 e6 Bxe6",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3",
         "explanation": "The Winawer Countergambit with ...e5!? is a sharp and provocative choice that immediately challenges White's center. Black sacrifices a pawn to open lines and seize the initiative before White can consolidate. After dxe5 d4, the advanced pawn disrupts White's coordination and creates tactical complications. The resulting positions are unbalanced with Black relying on active piece play and central control to compensate for the material deficit."
       },
       {
         "name": "Modern Qc2/Qb3 Line",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Qc2 dxc4 Qxc4 Bf5 g3 e6 Bg2 Nbd7 O-O Be7 Nc3 O-O e4 Bg6",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Qc2 dxc4 Qxc4 Bf5 g3 e6 Bg2 Nbd7 O-O Be7 Nc3 O-O",
         "explanation": "The Modern Qc2 line is a sophisticated system where White recovers the c4 pawn with the queen and aims for a rapid e4 advance. After Qxc4 Bf5, Black has already solved the light-squared bishop problem, which is the hallmark of the Slav. White pushes e4 to gain central space, but Black's well-placed bishop on g6 and solid structure with ...Nbd7 and ...Be7 provide excellent defensive resources. The queen exchange after ...Qb6 leads to a balanced endgame where Black's active minor pieces and queenside pawn majority offer comfortable equality."
       }
     ],
     "warningLines": [
       {
         "name": "Premature ...Bf5 Before ...c6",
-        "pgn": "d4 d5 c4 c6 Nf3 Bf5 cxd5 cxd5 Qb3 Qb6 Nc3 Qxb3 axb3 Nc6 Bf4 e6 e3 Bb4 Ne5 Nf6 Be2 O-O O-O a6",
+        "pgn": "d4 d5 c4 c6 Nf3 Bf5 cxd5 cxd5 Qb3 Qb6",
         "explanation": "Playing ...Bf5 before completing development can be premature. White plays Qb3 hitting b7 and d5, and after the queen exchange, White has a pleasant endgame advantage with better pawn structure."
       },
       {
         "name": "Ignoring White's e4 Push",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O O-O Qe2 Bg6 e4 e5 d5 Nbd7 Nh4 Nc5 Nxg6 hxg6 f3 a5",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O O-O Qe2 Bg6 e4",
         "explanation": "If Black ignores White's e4 push and plays passively, White gets a commanding center. The e4-e5 advance cramps Black's position. Always be ready to challenge e4 with ...e5 at the right moment."
       },
       {
