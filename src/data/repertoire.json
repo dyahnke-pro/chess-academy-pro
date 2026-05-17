@@ -3133,7 +3133,7 @@
     "id": "benoni-defence",
     "eco": "A60",
     "name": "Benoni Defence",
-    "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 a4 Bd7 Nf1 b6 Bf4 Nh5 Bg5 Bf6 Bxf6 Qxf6",
+    "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 a4",
     "color": "black",
     "style": "Dynamic, Asymmetrical",
     "overview": "The Modern Benoni is one of the most dynamic openings in chess. After ...c5 and ...exd5, you get a lopsided pawn structure where Black has a queenside pawn majority and White has a central majority. The resulting positions are razor-sharp — Black attacks on the queenside with ...b5 while White pushes for e5 or f4-f5. It's Tal's spirit in opening form — unbalanced, aggressive, and full of tactical potential.",
@@ -3154,12 +3154,12 @@
     "trapLines": [
       {
         "name": "Queenside Pawn Storm Trap",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 f3 Nc7 a4 Rb8 Nc4 b6 Bf4 Nh5 Be3 f5 exf5 Bxf5 Bd3 Bxd3 Qxd3 Nf4 Bxf4",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 f3 Nc7 a4",
         "explanation": "Black regroups with ...Na6-c7 and prepares counterplay on both flanks. After ...f5, Black strikes at White's center and opens the f-file for the rook. The exchange sacrifice motif on e1 followed by ...Qf6 gives Black tremendous activity along the diagonals and open files. White's extra exchange is meaningless against Black's dominant minor pieces and pawn majority rolling forward."
       },
       {
         "name": "Knight Outpost Domination",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 a4 Nd7 Nc4 Ne5 Nxe5 Bxe5 Bf3 Bd7 a5 Rb8 Bd2 b5 axb6 Rxb6 Ra4 Qb8 Qa1 Bg7",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 a4",
         "explanation": "The knight maneuver ...Nd7-e5 is the signature Benoni regrouping when White blocks the queenside with a4. Once the knight reaches e5 it radiates influence over c4, d3, f3, and g4. After the b-file opens via ...b5, Black's rooks flood in with devastating pressure. The Bg7 supports from the long diagonal while the queen reroutes to b8 to join the queenside assault."
       },
       {
@@ -3171,54 +3171,54 @@
     "variations": [
       {
         "name": "Modern Main Line (Nd2/f3) with ...b5 Race",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 f3 Nc7 a4 Rb8 Nc4 Nd7 Bf4 Ne5 Nxe5 Bxe5 Bxe5 Rxe5",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 f3 Nc7 a4 Rb8 Nc4",
         "explanation": "The main theoretical battleground of the Modern Benoni. White's Nd2-f3 setup aims to solidify the center and prepare a slow e5 push. Black counters with the thematic ...Na6-c7, ...Rb8, and the critical ...b5 pawn break which is the lifeblood of Black's queenside counterplay. After ...Ne5 exchanges and the b-file opens, Black's rooks generate enormous pressure down the b-file. The knight landing on b5 attacks both a3 and d4, creating dual threats that are difficult to parry simultaneously."
       },
       {
         "name": "Fianchetto Variation (g3/Bg2)",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 g3 Bg7 Bg2 O-O O-O Nbd7 Nd2 Re8 a4 Ne5 Ra3 Nh5 h3 f5",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 g3 Bg7 Bg2 O-O O-O Nbd7 Nd2 Re8 a4 Ne5",
         "explanation": "The Fianchetto system with g3 is White's most positional approach, aiming to neutralize the Bg7 by placing a bishop on g2 to contest the long diagonal. Black responds with the flexible ...Nbd7-e5 regrouping and the powerful ...f5 break which challenges White's grip on e4. After the f-file opens, Black obtains active piece play on the kingside while maintaining queenside ambitions. The rook lift Ra3 is a modern idea but Black's initiative on both flanks compensates for the slight spatial disadvantage."
       },
       {
         "name": "Classical Variation (Bf4 — d6 Pressure)",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 Bf4 Bg7 e3 O-O Be2 Re8 O-O a6 a4 Bg4 Nd2 Bxe2 Qxe2 Nbd7 Nc4 Ne5 Nxe5 Rxe5 Qd3 Qe7 Rfe1 Rae8",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 Bf4 Bg7 e3 O-O Be2 Re8",
         "explanation": "The Classical Bf4 line immediately pressures the sensitive d6 pawn, which is the chronic weakness in any Benoni structure. Black must be precise with development, using ...a6 to prepare ...b5 and ...Bg4 to exchange off the light-squared bishop before White can exploit the pin. After ...Nbd7-e5, Black activates pieces to challenge the center directly. The rook doubling on the e-file creates latent tactical threats against White's e3 pawn and the exposed king position."
       },
       {
         "name": "Taimanov Variation (f4/Bb5+)",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nc7 Bd3 a6 Bc4 Rb8 Qe2 b5 axb5 axb5 Bxb5 Nxb5 Nxb5 Ba6",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nc7 Bd3 a6",
         "explanation": "The Taimanov Attack with f4 and Bb5+ is one of the most aggressive anti-Benoni weapons. White builds a massive pawn center and the check on b5 disrupts Black's development pattern. Black responds with the critical ...Na6-c7 maneuver followed by the thematic ...a6 and ...b5 break. After the b-file opens, the exchange of light-squared bishops with ...Ba6 gives Black tremendous counterplay along the a6-f1 diagonal and the open b-file. The key is timing the ...b5 break precisely before White consolidates with e5."
       },
       {
         "name": "Four Pawns Attack (...Ng4 Counter)",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Nf3 O-O Be2 Re8 e5 dxe5 fxe5 Ng4 Bg5 Qb6 O-O Nxe5 Nxe5 Rxe5 Bf4 Re8 d6 Nc6 Nd5",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Nf3 O-O Be2 Re8 e5 dxe5 fxe5 Ng4 Bg5 Qb6 O-O Nxe5 Nxe5 Rxe5 Bf4 Re8",
         "explanation": "The Four Pawns Attack is White's most ambitious plan, pushing e4 and f4 to build an imposing center. However, Black has the devastating ...Re8 and ...Ng4 counter which exploits the overextension. After e5 dxe5 fxe5 Ng4, the e5 pawn is indefensible and Black recovers material with a superior position. The d6 push is White's last attempt to create complications, but after ...Nc6 and ...Qd7, Black emerges with the better minor pieces and a healthy pawn structure while White's center has evaporated."
       },
       {
         "name": "Czech Benoni (...e5 Closed Center)",
-        "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 g3 O-O Bg2 Ne8 Nge2 g6 O-O Ng7 f4 f5 h3 Nd7 Be3 Nf6 Qd2 Bd7 Rae1 Kh8 Kh2 Rg8",
+        "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 g3 O-O Bg2 Ne8 Nge2 g6 O-O Ng7 f4",
         "explanation": "The Czech Benoni arises when Black plays ...e5 instead of ...e6, creating a completely closed center. This transforms the game into a slow strategic battle where both sides maneuver behind locked pawns. Black's plan involves ...Ne8-g7, ...f5, and a kingside pawn storm with ...g5-g4. White typically counters on the queenside with b4 or tries to break through with f4. The closed nature means calculation matters less than understanding pawn break timing — Black must choose between ...f5 and ...g5 carefully based on White's piece placement."
       },
       {
         "name": "Snake Benoni (...Bd7-a4 Maneuver)",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7 Nf1 Bd7 Ng3",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7",
         "explanation": "The Snake Benoni is a creative system where Black reroutes the light-squared bishop along an unusual path: ...Bd7-a4-c2 targeting White's e4 pawn from behind. The knight retreats ...Na8-b6 to support the bishop's journey and control c4. This unorthodox maneuver catches many opponents off guard because the bishop's trajectory is counter-intuitive. Once the bishop reaches c2 or captures on e4, Black undermines White's central bastion and the entire Benoni structure comes alive with tactical possibilities along the e-file and the long diagonal."
       }
     ],
     "warningLines": [
       {
         "name": "Allowing e5 Breakthrough",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Bg4 Nd2 Bxe2 Qxe2 Nbd7 e5 dxe5 Nc4 Nd5 Nxe5 Nxe5 Qxe5 Nxc3 bxc3 Qd5 Qxd5",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Bg4 Nd2 Bxe2 Qxe2 Nbd7",
         "explanation": "Allowing White to play e5 unchallenged is the cardinal sin of the Benoni. The center opens in White's favor, the d6 pawn falls, and Black's entire structure collapses. The key prophylactic measure is ...Re8, which must be played early to keep permanent pressure on e4. Without this restraint, White's central majority steamrolls forward and Black's queenside majority never gets a chance to mobilize."
       },
       {
         "name": "Passive Play Without ...b5 Break",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Na6 Re1 Nc7 a4 Rb8 Bf4 Re8 Qd2 a6 a5 Nd7 Nd1 Qh4 Ne3 Nf6 Bd3 Nh5 Be5 f6 Bd4",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Na6",
         "explanation": "Without the timely ...b5 break, Black's position becomes hopelessly cramped. The queenside majority is the entire strategic justification for the Benoni, and if it cannot advance, Black has simply accepted a worse version of a King's Indian. White clamps down with a4-a5, plants pieces on ideal squares, and prepares the e5 break at leisure. Always prioritize preparing ...b5 with ...Na6-c7, ...Rb8, and if needed ...a6 to support the advance."
       },
       {
         "name": "Early ...Nbd7 Blocking the Bishop",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Nbd7 Nd2 Ne5 f4 Neg4 Nc4 Re8 Bf3 Nh6 a4 Rb8 Be3 Nf5 Bf2 Nd7 Re1 Nf6 Qd3 Bd7 Ra3",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Nbd7",
         "explanation": "Playing ...Nbd7 too early blocks the Bg7's influence on the long diagonal and creates coordination problems. The knight belongs on a6 first, heading to c7 to support the ...b5 break. From d7 it obstructs the bishop and makes the ...b5 advance slower. White exploits the tempo loss with f4, a4, and a methodical buildup that leaves Black struggling for counterplay on both flanks."
       }
     ]
