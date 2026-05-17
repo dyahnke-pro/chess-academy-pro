@@ -2965,25 +2965,25 @@
         },
         {
           "name": "Fianchetto Benoni",
-          "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 g3 Bg7 Bg2 O-O O-O Re8 Nd2 Na6 a4 Nc7 a5 b5",
-          "explanation": "Against the fianchetto, Dubov still aims for queenside counterplay. The b5 push is the key break and creates an unbalanced position."
+          "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 g3 Bg7 Bg2 O-O O-O Re8 Nd2 Na6",
+          "explanation": "Against the fianchetto, Dubov still aims for queenside counterplay. The Na6 + Nc7 manoeuvre supports the eventual ...b5 push for an unbalanced middlegame."
         },
         {
           "name": "Taimanov Attack Defense",
-          "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nc7 Bd3 a6 Qe2 Rb8",
-          "explanation": "Against the aggressive Taimanov Attack with f4, Dubov plays Nfd7 and Na6-c7 to reroute pieces. Black aims for b5 counterplay while keeping the center flexible."
+          "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nc7 Bd3 a6",
+          "explanation": "Against the aggressive Taimanov Attack with f4, Dubov plays Nfd7 and Na6-c7 to reroute pieces. After Bd3 a6 Black is ready for ...b5 counterplay while keeping the center flexible."
         }
       ],
       "trapLines": [
         {
           "name": "e4-e5 Overextension Punished",
-          "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 O-O O-O Re8 Nd2 Nbd7 f4 Nxe4 Ndxe4 Nf6 Nxf6+ Bxf6",
+          "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 O-O O-O Re8 Nd2 Nbd7 f4",
           "explanation": "When White pushes e4-e5 too fast, Black gets the f6 break opening lines against the overextended center. The Bg7 comes alive and Black's counterplay is strong."
         },
         {
           "name": "b5 Queenside Expansion",
-          "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 O-O O-O Re8 Nd2 Na6 f3 Nc7 a4 b5 axb5 Nxb5 Nxb5 a6 Nc3 Nd7",
-          "explanation": "Black surprises with the b5 expansion, sacrificing a pawn for queenside activity. The open b-file and active pieces give Black strong compensation and practical chances."
+          "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 O-O O-O Re8 Nd2 Na6 f3 Nc7 a4 b5",
+          "explanation": "Black surprises with the b5 expansion. The open b-file and active pieces give Black strong compensation and practical chances for a queenside attack."
         }
       ]
     },
