@@ -2099,7 +2099,7 @@
       "playerId": "caruana",
       "eco": "E20",
       "name": "Nimzo-Indian Defense (Caruana)",
-      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5 dxc4 Bg5 Nbd7 Rd1 Qa5 Nd2 Nxc5",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5",
       "color": "black",
       "style": "Strategic, Dynamic",
       "overview": "Caruana's Nimzo-Indian is one of his most trusted weapons against 1.d4. His deep preparation in this opening has led to many important victories. The structural imbalance after Bxc3+ gives both sides clear plans.",
@@ -2119,8 +2119,8 @@
       "variations": [
         {
           "name": "4.Qc2 Main Line",
-          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5 dxc4 Bg5 Nbd7 Rd1 Qa5 Nd2 Nxc5",
-          "explanation": "Caruana's main Nimzo line. Black gets active play with c5 and d5 while White has the bishop pair. The positions require precise play from both sides."
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5",
+          "explanation": "Caruana's main Nimzo line. After Bxc3+ + d5 + c5 + dxc5, Black recovers the pawn with active piece play while White has the bishop pair. The positions require precise play from both sides."
         },
         {
           "name": "4.e3 Rubinstein",
@@ -2131,13 +2131,13 @@
       "trapLines": [
         {
           "name": "f3 Overextension Punished",
-          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3 O-O Bd3 b6 Ne2 Ba6 Bxa6 Nxa6 O-O Nc7 Ng3 Re8 Qd3 cxd4 cxd4 Nb5",
-          "explanation": "White plays f3 aggressively aiming for e4, but it weakens the kingside. Black gets ...d5 counterplay and the ...Nb5 hits the weak c3 and d4 pawns."
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3 O-O Bd3 b6 Ne2 Ba6 Bxa6 Nxa6 O-O Nc7 Ng3 Re8 Qd3 cxd4",
+          "explanation": "White plays f3 aggressively aiming for e4, but it weakens the kingside. Black follows the standard Nimzo plan with Ba6 trade + Nc7 reroute + cxd4 — Black's piece play targets the weakened c3 and d4 pawns."
         },
         {
           "name": "...c5 Catches White Overextended",
-          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5 dxc4 Bg5 Nbd7 Rd1 Qa5 Nd2 Nxc5 Qxc4 Nce4",
-          "explanation": "Black times ...c5 perfectly when White is overextended. After recovering the pawn, Black's pieces flood in and the Bb7 diagonal is devastating."
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5",
+          "explanation": "Black times ...c5 perfectly when White is overextended. After dxc5, Black plans dxc4 + Nbd7 + Nxc5 to recover the pawn with the better piece coordination."
         }
       ]
     },
