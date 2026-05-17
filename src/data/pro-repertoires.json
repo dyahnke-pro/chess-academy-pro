@@ -4042,7 +4042,7 @@
         },
         {
           "name": "Advance Variation (3.e5)",
-          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Bg6 Nbd2 Ne7 Nb3 a5 c4 dxc4 Bxc4",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Bg6 Nbd2 Ne7 Nb3 a5",
           "explanation": "If White plays the Advance, Black develops the bishop to f5/g6 first (BEFORE ...e6) so it doesn't get hemmed in. The ...a5 expansion + ...Ne7 maneuvering creates active piece play."
         },
         {
@@ -4052,15 +4052,15 @@
         },
         {
           "name": "Fantasy Variation (3.f3)",
-          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 Nc3 Be7 Bg5",
-          "explanation": "Against the rare 3.f3 (Fantasy), Black takes the pawn (...dxe4) and then strikes the centre with ...e5. The resulting open position favours Black's better-developed pieces."
+          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6",
+          "explanation": "Against the rare 3.f3 (Fantasy), Black takes the pawn (...dxe4) and then strikes the centre with ...e5. After Ngf6 Black has rapid development to challenge White's central pawn duo."
         }
       ],
       "trapLines": [
         {
           "name": "Premature h4 by White Punished",
-          "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h5 Nf3 Nd7 Bd3 Bxd3 Qxd3 Ngf6",
-          "explanation": "If White plays h4 too aggressively without proper preparation, Black responds with ...h5 freezing the h-pawn — then the standard development gives Black a perfectly safe position with the threat of ...h5 always weakening White's kingside."
+          "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h5 Nf3 Nd7 Bd3 Bxd3 Qxd3",
+          "explanation": "If White plays h4 too aggressively without proper preparation, Black responds with ...h5 freezing the h-pawn — then standard development gives Black a perfectly safe position with the kingside permanently weakened."
         }
       ]
     },
