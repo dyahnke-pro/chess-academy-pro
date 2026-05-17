@@ -1723,7 +1723,7 @@
       "playerId": "hikaru",
       "eco": "E20",
       "name": "Nimzo-Indian Defense (Hikaru)",
-      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qc2 Nbd7 e3 c5",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qc2 Nbd7 e3",
       "color": "black",
       "style": "Strategic, Flexible",
       "overview": "Hikaru uses the Nimzo-Indian as his positional weapon against 1.d4. The pin on Nc3 creates immediate pressure and Black gets a flexible position. Hikaru's preparation in the Nimzo is deep and he often has novelties ready.",
@@ -1743,8 +1743,8 @@
       "variations": [
         {
           "name": "Classical 4.Qc2",
-          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qc2 Nbd7 e3 c5",
-          "explanation": "The most common Nimzo line. Black develops harmoniously and gets counterplay with c5 and Ba6. The position is balanced but rich."
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qc2 Nbd7 e3",
+          "explanation": "The most common Nimzo line. After Bxc3+ Qxc3, Black develops Ba6 + Nbd7 + b6 to mobilize the queenside; White completes development with e3 — both sides ready for the c5/c6 breaks."
         },
         {
           "name": "Rubinstein 4.e3",
@@ -1755,8 +1755,8 @@
       "trapLines": [
         {
           "name": "Early a3 Doubles Pawns",
-          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 O-O f3 d5 cxd5 exd5 e3 c5 Bd3 Nc6 Ne2 Re8 O-O cxd4 cxd4 Nb4",
-          "explanation": "White plays a3 too early forcing ...Bxc3+ which permanently doubles the c-pawns. Black targets the weak c3-c4 structure for the rest of the game."
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 O-O f3 d5 cxd5 exd5 e3 c5 Bd3 Nc6 Ne2 Re8 O-O",
+          "explanation": "White plays a3 too early forcing ...Bxc3+ which permanently doubles the c-pawns. After Ne2 + O-O, Black has the open e-file and Black's piece play targets the weak c3-c4 structure."
         },
         {
           "name": "...c5 Timing Trick",
