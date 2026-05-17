@@ -219,12 +219,12 @@
       {
         "name": "Scotch Gambit: Main Line with d5",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 Bxd4",
-        "explanation": "The main line where Black strikes back with d5. After Bb5, White targets the pinned knight on c6. After castling and developing with Be3, the position is dynamic — White has better pawn structure and the bishop pair while Black has centralized knights. Active play is essential for both sides."
+        "explanation": "The main line where Black strikes back with d5. After Bb5, White targets the pinned knight on c6. Bxc6 + bxc6 saddles Black with doubled pawns; the Bxd4 exchange equalizes material but leaves White with a slightly better structure and the bishop pair."
       },
       {
         "name": "Scotch Gambit: Ng4 Retreat Variation",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ng4",
-        "explanation": "Black plays Ng4 to pressure e5 and f2. White can try the aggressive Bf7+ sacrificing a bishop to expose the king, or simply castle and play Re1. The Bf7+ line leads to a fascinating middlegame where Black's king is displaced but has an extra piece — razor-sharp complications."
+        "explanation": "Black plays Ng4 to pressure e5 and f2 — the most popular response to 5.e5. From here White can try the aggressive Bxf7+ sacrifice (exposing Black's king at the cost of a bishop) or the quieter Bxg4 / Nxd4 routes. The decision shapes the whole middlegame."
       },
       {
         "name": "Max Lange Attack: Bc5 Line",
@@ -234,19 +234,19 @@
       {
         "name": "Scotch Gambit: Dubois-Reti Defense",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O d6 c3 dxc3 Nxc3 Bg4",
-        "explanation": "Black plays 4...Bc5 and 6...dxc3 to grab pawns. White sacrifices the c-pawn for rapid development and open lines. After Bxf7+ forces the king to f8, castling is permanently denied. The open g-file and active pieces give White lasting compensation against the displaced king."
+        "explanation": "Black plays 4...Bc5 and 6...dxc3 to grab pawns. White sacrifices the c-pawn for rapid development and open lines. The Bg4 pin pressures the f3 knight; White's Nc3 + Bxf7+ tactical resources are ready to exploit Black's still-uncoordinated pieces."
       },
       {
         "name": "Scotch Gambit: Haxo Gambit with c3",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 dxc3 Bxf7+ Kxf7 Qd5+ Ke8",
-        "explanation": "The Haxo Gambit sacrifices the c3 pawn against Black's Bc5. The stunning Bxf7+ followed by Qd5+ recovers the piece and wins the dark-squared bishop. White ends up with superior development and Black's king has lost castling rights. A devastating surprise weapon."
+        "explanation": "The Haxo Gambit sacrifices the c3 pawn against Black's Bc5. The stunning Bxf7+ followed by Qd5+ chases Black's king back to e8 with no castling rights and a wandering knight on c3 to recapture. White's lead in development plus the lost castling rights provide ample compensation."
       }
     ],
     "trapLines": [
       {
         "name": "Pin Trap After e5",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ne4 Bd5 Nc5 Nxd4",
-        "explanation": "After 5...Ne4, White plays the strong Bd5 hitting the knight. If Black stumbles into Ne6 Nxe6, the Bxc6 recapture followed by Qh5+ starts a devastating king hunt. After Ke7, Qf7+ and Bg5+ lead to a discovered attack winning material."
+        "explanation": "After 5...Ne4, White plays the strong Bd5 hitting the knight. If Black stumbles into Nc5 instead of better defensive moves, Nxd4 wins back the pawn while keeping the pin on the c6 knight active — the resulting position is permanently favorable to White."
       },
       {
         "name": "Qh4+ Scholar's Mate Trick",
@@ -256,7 +256,7 @@
       {
         "name": "d3 Pawn Grab Trap",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Nd7",
-        "explanation": "When Black plays Nd7 instead of the more common Ne4, White can recover the pawn cleanly while maintaining pressure. After O-O and Re1+, the e-file pin is annoying for Black. Nc3 and Bg5 complete the development with threats against Black's slightly weakened kingside."
+        "explanation": "When Black plays Nd7 instead of the more common Ne4, the knight blocks Black's own queenside development. White can recover the d4 pawn cleanly and the Bb5 pin remains uncomfortable for Black — the misplaced Nd7 makes finding good squares for the other pieces difficult."
       },
       {
         "name": "Bc5 Fork on d4",
@@ -268,7 +268,7 @@
       {
         "name": "Black Equalizes with Precise d5 and Ne4",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bc5",
-        "explanation": "If Black plays the precise d5 followed by Ne4, Bc5, and Qh4, the position becomes very sharp but Black has excellent counterplay. The queen on h4 creates real threats and the centralized knight on e4 is a powerful piece. White needs to play very accurately to maintain even a small edge."
+        "explanation": "If Black plays the precise d5 + Ne4 + Bc5 sequence, the centralized knight on e4 and the Bc5 bishop both eye White's kingside. White must play very accurately to maintain even a small edge — this is Black's best objective response to the Scotch Gambit."
       },
       {
         "name": "Max Lange Attack: Black Knows Theory",
@@ -278,7 +278,7 @@
       {
         "name": "4...Bb4+ System Equalizes",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 bxc3 Ba5",
-        "explanation": "The Bb4+ check gives Black an easy way to equalize by disrupting White's center. After c3 dxc3 bxc3, White has an open b-file but doubled c-pawns. Black develops naturally with d5 and Nf6, and the position becomes roughly equal. This is the most solid approach for Black."
+        "explanation": "The Bb4+ check gives Black an easy way to equalize by disrupting White's center. After c3 dxc3 bxc3, White has an open b-file but doubled c-pawns. The Ba5 retreat keeps Black's structure sound — the most solid approach for Black against the Scotch Gambit."
       }
     ]
   },
