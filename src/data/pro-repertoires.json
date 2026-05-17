@@ -2688,13 +2688,7 @@
           "explanation": "If Black accepts the pawn and re-takes on b4 with the bishop, White's c3 takes back. Ba3 immediately targets the king's-side dark squares — classic Evans Gambit themes with the bishop pair and central pressure."
         }
       ],
-      "trapLines": [
-        {
-          "name": "Dubov's Queen Sacrifice",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 b4 Bb6 e5 Ne4 Bd5 Nxc3 Nxc3 dxc3 Bg5 Ne7 O-O h6 Bh4",
-          "explanation": "The opening of Dubov-Karjakin 2020. After the long forced sequence ending Bg5 Ne7 + O-O h6 Bh4, White has the bishop pair, kingside pressure, and the e-file ready for action — the queen sacrifice followed several moves later."
-        }
-      ]
+      "trapLines": []
     },
     {
       "id": "pro-dubov-catalan",
