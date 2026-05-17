@@ -353,7 +353,7 @@
         {
           "name": "Mar del Plata Main Line",
           "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 f3 f5 g4 Kh8 Nd3 Ng8 Kh1 a5 Rg1 b6 Bd2 Nc5",
-          "explanation": "The most important position in the King's Indian. After d5 closes the centre, both sides go to their respective flanks and the slowest army wins. Black's plan is fixed: …f5 first, then the knight dance Ne7–Ng8 (defending h6 and rerouting to f6/h6), …Nd7–Nc5–Na4–Nb6 reroutes for the queenside, and the heavy artillery (Rf6–h6, Qd8–e8) comes last. White's Kh1, Rg1 set-up is mirror-image. The first attack to break through wins, and Black usually breaks through first because the …f4 break is more forcing than White's c5 break."
+          "explanation": "This is the heart of the King's Indian — the position every KID player dreams about reaching. Walk it carefully. After 6...e5 7.O-O Nc6 8.d5! (the move that closes the centre permanently — d5 is what makes the whole opening work) 8...Ne7, both sides know the future: White attacks the queenside, Black attacks the kingside, the king that gets caught first loses. 9.Ne1 (rerouting the f3-knight out of the way of f-pawn) 9...Nd7 10.f3 (preparing g4) 10...f5! — your signature break. Now White plays 11.g4 trying to slow you down, but you play 11...Kh8 (tucking the king away from a possible bishop check) and the dance begins: 12.Nd3 (White's knight redeployed to support the queenside) 12...Ng8 (your knight reroutes via g8 to h6 or f6 to support …f4), 13.Kh1 (mirror) 13...a5 (challenges b4), 14.Rg1 b6 (overprotecting the c5-square that White wants), 15.Bd2 Nc5 (knight reaches its outpost). Pause and look: Black has three knights aimed at the kingside, a rook ready for the lift Rf6-h6, and the bishop on g7 waiting. White has slow queenside development. The attack will break through; the game is essentially decided strategically."
         },
         {
           "name": "Classical 9.b4 Line",
@@ -370,7 +370,7 @@
         {
           "name": "f5-f4 Pawn Storm Crush",
           "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 f3 f5 Be3 f4 Bf2 g5 Nd3 Ng6 c5 Nf6 cxd6",
-          "explanation": "The textbook Mar del Plata punishment when White's queenside play is one tempo too slow. Black's pawn storm flies — …f5, …f4, …g5, all natural KID moves — while White's c5 break only achieves cxd6 after Black is already crashing through. By move 25 in this line, the …Rf6–Rh6 lift is on, the queen comes to e8–h5, and the kingside collapses. The line shows the dream version of the KID: when both sides race, Black usually wins the race."
+          "explanation": "The dream sequence. After the standard 10...f5 11.Be3 (White inserts the bishop on the way to defence), Black plays the killer 11...f4! — sealing the kingside, gaining the g3-square forever. White's bishop must move (12.Bf2) and Black follows up with the dagger 12...g5! The kingside pawn wave is locked and unstoppable. Now Black brings up the rest: 13.Nd3 (White rerouting too slowly) 13...Ng6 (the knight heads for f4 via h4 or directly), 14.c5 — White finally tries the queenside break, but it's too late. 14...Nf6 (Black keeps developing) 15.cxd6 — but the c-file opening for White comes after Black already has all the attacking pieces lined up. From the resulting position, …Rf6 and …Qe8-h5 finish the picture. The KID at its absolute best: locked centre, unstoppable kingside avalanche, every Black piece pointed at one square."
         }
       ]
     },
@@ -422,12 +422,12 @@
         {
           "name": "Exchange Qa4+ Counter",
           "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Qa4+ Nd7 Nf3 O-O Be2 c5 O-O cxd4 cxd4 Nc5 dxc5 Bxa1",
-          "explanation": "A famous Grünfeld trap. White's Qa4+ looks like a smart developing check, but Black has the calm …Nd7 blocking. After castling and …c5, White grabs the apparent free pawn with dxc5 — and Black plays the killer …Bxa1! winning the exchange (the queen can't recapture because of …Bxc3+!). White's centre is gone, Black has the bishop pair PLUS extra material. The lesson: in the Grünfeld, even checks have to be calculated to a finish."
+          "explanation": "A textbook Grünfeld trap. After 5.e4 Nxc3 6.bxc3 Bg7 7.Qa4+ — looks like a useful developing check, but Black's calm 7...Nd7 blocks AND defends c5 simultaneously. Black continues 8.Nf3 O-O 9.Be2 c5 striking at the centre on schedule. White's natural 10.O-O cxd4 11.cxd4 sets up the trap moment: Black plays 11...Nc5! attacking the queen on a4. White's 'obvious' 12.dxc5? grabs the knight back — and now Black plays the killer 12...Bxa1! grabbing the rook on the long diagonal. Why doesn't the queen recapture? Because the queen on a4 can't reach a1: the a2-pawn blocks the a-file, and the c1-bishop blocks the back rank. The bishop on a1 is permanently safe. Black has won the exchange. The lesson: in the Grünfeld, the Bg7 is always aiming at a1 — every time White's rook is undefended, calculate Bxa1."
         },
         {
           "name": "Overextended Center Strike",
           "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 O-O Ne2 c5 O-O Nc6 Be3 Bg4 f3 Na5 Bd3 cxd4 cxd4 Be6 d5 Bxa1 Qxa1 f6",
-          "explanation": "Classic Grünfeld punishment for over-ambition. White's d5 push tries to wall off Black's pieces, but the Bg7 has been aimed at a1 for the whole game — …Bxa1! collects the exchange. Even after Qxa1, the d5-pawn isn't really worth a rook, and White's dark squares are permanently weakened (no Bg7 to defend them, and the dark-squared bishop is dead too). Strategic win for Black."
+          "explanation": "The Grünfeld's signature exchange sacrifice. White spends moves 13-27 building a centre with Bc4, Ne2, O-O, Be3, f3, Bd3, and finally 27.d5 — the dream push. But the Bg7 has been pointed at a1 since move 6, and the d4-square that was protecting a1's diagonal just emptied with 25.cxd4 and then 27.d5. Black plays 27...Bxa1! collecting the rook. White must recapture 28.Qxa1 (the d1-queen slides along the now-empty back rank: c1 was vacated by Be3 on move 19, b1 was empty all game). Material count: Black is up the exchange. Yes, Black gave up the fianchetto bishop and the kingside dark squares now lack a defender — but with a clean rook-for-bishop trade and White's d5-pawn isolated far from queening, the exchange wins. The Bg7-versus-a1 dynamic is what makes the entire Grünfeld worth playing."
         },
         {
           "name": "Early Queen Trap on d1",
