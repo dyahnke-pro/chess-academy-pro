@@ -242,6 +242,15 @@ function buildResultFromLichess(
               : '1/2-1/2',
       }))
     : undefined;
+  // An empty Lichess response — moves:[], totalGames:0 — carries no
+  // grounded data, so callers must be able to distinguish it from a
+  // successful response with statistics. Collapse to source:'none' so
+  // the claim validator's "no chess claims allowed" branch fires
+  // uniformly whether the source missed locally, missed live, or
+  // returned an empty live response.
+  if (out.length === 0 && totalGames === 0) {
+    return { fen: positionFen(fen), totalGames: 0, moves: [], source: 'none' };
+  }
   return {
     fen: positionFen(fen),
     totalGames,
