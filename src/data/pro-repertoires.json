@@ -967,7 +967,7 @@
       "playerId": "gothamchess",
       "eco": "B12",
       "name": "Fantasy Variation vs Caro-Kann (GothamChess)",
-      "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5 e5 Nd5 Qe2 O-O Nxd4 Nb6 Bb3",
+      "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5",
       "color": "white",
       "style": "Aggressive, Central",
       "overview": "Levy's weapon of choice when facing the Caro-Kann as White. The Fantasy Variation (3.f3) builds a formidable center that many Caro-Kann players are unprepared for. White accepts a slightly weakened kingside in exchange for a massive pawn center and attacking chances.",
@@ -988,37 +988,21 @@
       "variations": [
         {
           "name": "Main Line 3...dxe4 4.fxe4",
-          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5 e5 Nd5 Qe2 O-O Nxd4 Nb6 Bb3",
-          "explanation": "Black takes the bait and captures on e4. After fxe4, White has a dream center. The game becomes tactical with White's powerful e-pawn and open f-file creating real threats."
+          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5",
+          "explanation": "Black takes the bait and captures on e4. After Bc4 + O-O White has the open f-file and active piece play; the position is tactical and rewards the prepared side."
         },
         {
           "name": "Solid 3...e6",
-          "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Ne7 Qd3 b6 a3 Ba5 e5 c5 Nge2 Nbc6 dxc5 bxc5",
-          "explanation": "Black's most solid response. After e6, Black develops normally and the game is more positional. White still has the center but Black is solid. Levy recommends Nc3 and Bf4 to keep the pressure."
+          "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Ne7 Qd3 b6",
+          "explanation": "Black's most solid response. After e6 Black develops normally and the b6 + Bb7 fianchetto adds long-diagonal pressure as White's center comes under fire."
         },
         {
           "name": "Aggressive 3...g6",
-          "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 dxe4 fxe4 Nf6 Nf3 O-O Bd3 Bg4 O-O Nbd7 e5 Nd5 Nxd5 cxd5",
-          "explanation": "A rare response where Black fianchettoes. White gets a strong center and piece activity. The bishop on g7 bites on granite against White's d4-e5 chain."
+          "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 dxe4 fxe4 Nf6 Nf3 O-O Bd3",
+          "explanation": "A rare response where Black fianchettoes. After Bd3 White builds the standard f3+e4+d4 center with Bd3 pointing at h7 — Black's Bg7 bites on granite against the d4-e5 chain."
         }
       ],
-      "trapLines": [
-        {
-          "name": "Premature e5 Demolition",
-          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 dxe5 Qxd1+ Kxd1 Bc5 Nf3 Ne7 Nc3 O-O Bc4 Ng6 Rf1",
-          "explanation": "Black plays e5 too early after fxe4 and loses a pawn to dxe5. Even after trading queens, White has an extra pawn and active pieces."
-        },
-        {
-          "name": "Qh4+ Check Trick Fails",
-          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Qh4+ g3 Qe7 O-O Nf6 e5 Nd5 Nxd4",
-          "explanation": "After e5 opens the diagonal, Black tries Qh4+ but g3 forces the queen back. Black has wasted two tempi and White gets a powerful center and rapid development."
-        },
-        {
-          "name": "f-File Rook Lift Attack",
-          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 e5 Nd5 O-O Be7 Nxd4 O-O Rxf7 Rxf7 Bxd5 cxd5 Qh5",
-          "explanation": "A sacrificial attack — White gives up rook and bishop for a mating net, not for immediate material. After Rxf7 Rxf7 Bxd5 cxd5 Qh5, White is DOWN material on paper but Black's king has no defenders on the kingside, the f-file is wide open, and the Qh5 threat is overwhelming. The advantage is positional: Black has to defend with imprecise moves under pressure, and material recovers through the attack. Tell the student: this isn't 'win a piece in two moves' — it's 'play a position you can't lose with care.'"
-        }
-      ]
+      "trapLines": []
     },
     {
       "id": "pro-gothamchess-milner-barry",
