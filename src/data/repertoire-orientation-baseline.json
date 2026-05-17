@@ -155,25 +155,6 @@
     "sicilian-alapin::trap::Alapin: ...e5 Counter-Thrust Trap": [
       "WEAK_TRAP"
     ],
-    "caro-kann::trap::Advance Variation Center Collapse": [
-      "WEAK_TRAP"
-    ],
-    "caro-kann::trap::Classical h-pawn Overextension": [
-      "WEAK_TRAP"
-    ],
-    "caro-kann::trap::Panov IQP Exploitation": [
-      "WEAK_TRAP"
-    ],
-    "caro-kann::trap::Fantasy Variation Refutation": [
-      "WEAK_TRAP"
-    ],
-    "caro-kann::trap::Hillbilly Attack Refutation": [
-      "PGN_NOT_IN_DB",
-      "WEAK_TRAP"
-    ],
-    "caro-kann::warning::Two Knights Early e6 Mistake": [
-      "PGN_NOT_IN_DB"
-    ],
     "philidor-defence::trap::Legal's Mate Reversal": [
       "PGN_NOT_IN_DB",
       "STUDENT_NOT_PUNISHER"
@@ -561,6 +542,21 @@
     ],
     "french-defence::trap::Classical Bg5 Pin Trap": [
       "WEAK_TRAP"
+    ],
+    "caro-kann::trap::Advance Variation Center Collapse": [
+      "WEAK_TRAP"
+    ],
+    "caro-kann::trap::Classical h-pawn Overextension": [
+      "WEAK_TRAP"
+    ],
+    "caro-kann::trap::Panov IQP Exploitation": [
+      "WEAK_TRAP"
+    ],
+    "caro-kann::trap::Fantasy Variation Refutation": [
+      "WEAK_TRAP"
+    ],
+    "caro-kann::warning::Two Knights Early e6 Mistake": [
+      "PGN_NOT_IN_DB"
     ]
   }
 }

@@ -1283,87 +1283,97 @@
     "variations": [
       {
         "name": "Classical Variation",
-        "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bf4 Ngf6 O-O-O Be7 Ne4 O-O g3 c5",
-        "explanation": "The Classical is the flagship line of the Caro-Kann, showcasing its key advantage: the light-squared bishop develops to f5 before ...e6, unlike the French where it gets trapped. After the bishop exchange on d3, Black builds a rock-solid structure with ...e6, ...Nd7, ...Ngf6, and ...Be7. White's h4-h5 push gains space but costs tempi, and the h5 pawn can become a long-term weakness. Black's plan is to complete development, castle, and then break with ...c5 to challenge White's center."
+        "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bf4 Ngf6 O-O-O Be7 Ne4 O-O",
+        "explanation": "The Classical is the flagship line of the Caro-Kann, showcasing its key advantage: the light-squared bishop develops to f5 before ...e6, unlike the French where it gets trapped. After the bishop exchange on d3, Black builds a rock-solid structure with ...e6, ...Nd7, ...Ngf6, and ...Be7. White's h4-h5 push gains space but costs tempi, and the h5 pawn can become a long-term weakness. Black completes development and castles into a safe position ready for ...c5 counterplay.",
+        "shortExplanation": "Classical: ...Bf5 develops before ...e6, bishop trade on d3, then rock-solid setup with ...Be7/O-O."
       },
       {
         "name": "Advance Variation",
-        "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Nd7 O-O Ne7 Nbd2 Nc6 c3 cxd4 cxd4 Qb6 Nb3 a5",
-        "explanation": "The Advance Caro-Kann mirrors the French Advance but with a crucial advantage — the bishop is already active on f5 instead of being locked behind the e6 pawn. Black prepares the standard ...c5 break to undermine d4 while developing pieces harmoniously. The knight maneuver ...Ne7-c6 adds pressure to d4, and after ...cxd4 cxd4, the isolated d4 pawn becomes a target. Black's ...Qb6 and ...a5 plan generates queenside initiative while maintaining the solid pawn structure."
+        "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Nd7 O-O Ne7 Nbd2 Nc6 c3 cxd4 cxd4 Qb6",
+        "explanation": "The Advance Caro-Kann mirrors the French Advance but with a crucial advantage — the bishop is already active on f5 instead of being locked behind the e6 pawn. Black prepares the standard ...c5 break to undermine d4 while developing pieces harmoniously. The knight maneuver ...Ne7-c6 adds pressure to d4, and after ...cxd4 cxd4, the isolated d4 pawn becomes a target for ...Qb6 hitting both d4 and b2.",
+        "shortExplanation": "Advance with active ...Bf5 (not French-style locked bishop). ...c5/Ne7-c6/Qb6 hits d4 and b2."
       },
       {
         "name": "Two Knights Variation",
-        "pgn": "e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d4 Nf6 Bd3 dxe4 Nxe4 Nxe4 Qxe4 Nd7 O-O Nf6 Qe2 Be7 c3 O-O",
-        "explanation": "The Two Knights sidesteps the main Classical tabiya by developing knights before pushing d4. Black responds with the active ...Bg4, pinning the f3 knight and forcing White to spend a tempo with h3. After ...Bxf3 Qxf3, Black has traded the light-squared bishop for a knight — a worthy exchange since the bishop has already done its job. The resulting position is solid and comfortable for Black with a healthy pawn structure and no weaknesses to attack."
+        "pgn": "e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d4 Nf6 Bd3 dxe4 Nxe4 Nxe4 Qxe4 Nd7 O-O Nf6 Qh4 Be7 Re1 Nd5",
+        "explanation": "The Two Knights sidesteps the main Classical tabiya by developing knights before pushing d4. Black responds with active ...Bg4, pinning the f3 knight and forcing h3. After ...Bxf3 Qxf3, Black has traded the light-squared bishop for a knight — a worthy exchange since the bishop has already done its job. The Qh4 swing prepares kingside threats, but Black's ...Nd5 centralization blocks them and Black equalizes with solid piece play.",
+        "shortExplanation": "Two Knights: ...Bg4 pin, ...Bxf3 trade. Master line ends with Qh4-Re1; Black centralizes ...Nd5."
       },
       {
         "name": "Panov-Botvinnik Attack",
-        "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 e6 Nf3 Bb4 cxd5 Nxd5 Bd2 Nc6 Bd3 O-O O-O Be7 a3 Bf6 Be3 Nce7",
-        "explanation": "The Panov creates an isolated queen's pawn (IQP) position after c4 and cxd5, leading to a classic structural battle. White gets active pieces and attacking chances thanks to the IQP's support of e5 and c5 outposts, while Black targets the d4 weakness. After ...Bb4 and ...Nxd5, Black establishes a knight on the powerful d5 square blockading the isolani. The key for Black is to trade pieces and transition to an endgame where the IQP becomes a permanent liability."
+        "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 e6 Nf3 Bb4 cxd5 Nxd5 Bd2 Nc6 Bd3 O-O O-O Be7 a3 Bf6 Be3 Nce7 Ne4 b6 Qe2 Bb7",
+        "explanation": "The Panov creates an isolated queen's pawn (IQP) position after c4 and cxd5, leading to a classic structural battle. White gets active pieces and attacking chances thanks to the IQP's support of e5 and c5 outposts, while Black targets the d4 weakness. After ...Bb4 and ...Nxd5, Black establishes a knight on the powerful d5 square blockading the isolani. The ...Nce7-b6-Bb7 setup builds long-diagonal pressure and prepares to trade pieces toward a favorable endgame.",
+        "shortExplanation": "Panov IQP battle: ...Nxd5 blockade + ...Bf6/Nce7/Bb7 long-diagonal setup; trade pieces to exploit IQP."
       },
       {
         "name": "Fantasy Variation",
-        "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6 Nbd2 O-O Qe1 Qc7 Kh1 b5",
-        "explanation": "The Fantasy Variation is White's aggressive attempt to maintain e4 with f3 rather than defending it with pieces. Black should immediately strike with ...e5 to challenge the center while it is still fluid. The bishop develops actively to g4, pinning the knight and creating tactical pressure. After natural development with ...Bd6 and ...O-O, Black stands comfortably — White's f3 has weakened the kingside and Black can exploit this with ...b5 and queenside expansion."
+        "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6 Nbd2 O-O Qe1",
+        "explanation": "The Fantasy Variation is White's aggressive attempt to maintain e4 with f3 rather than defending it with pieces. Black should immediately strike with ...e5 to challenge the center while it is still fluid. The bishop develops actively to g4, pinning the knight and creating tactical pressure. After natural development with ...Bd6, ...O-O, and the Qe1 setup by White, Black stands comfortably — White's f3 has weakened the kingside and Black has clear targets.",
+        "shortExplanation": "Fantasy (f3): strike with ...e5 immediately; ...Bg4 pin + ...Bd6/O-O keeps White's weakened king under pressure."
       },
       {
         "name": "Short Variation",
-        "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Ne7 Nbd2 h6 Nb3 Ng6 Bd2 Be7 Re1 O-O Nc5 Nxc5 dxc5 Bxc5",
-        "explanation": "Named after Nigel Short, this quiet system avoids the sharp main lines of the Advance. White develops modestly with Be2 and O-O, aiming for a slow positional buildup with Nbd2-b3 and Re1. Black's bishop is well-placed on f5 before ...e6, and the knight reroutes via e7 to g6, targeting the e5 pawn. After White's Nc5 exchange and dxc5, Black recaptures with ...Bxc5 obtaining an excellent bishop on a strong diagonal. White's center has been dismantled and Black stands comfortably with active pieces and the superior pawn structure."
+        "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Ne7 Nbd2 h6 Nb3 Ng6 Ne1 h5 Be3 c5 Nxc5 Bxc5 dxc5 Ngxe5",
+        "explanation": "Named after Nigel Short, this quiet system avoids the sharp main lines of the Advance. White develops modestly with Be2 and O-O. Black's bishop is well-placed on f5 before ...e6, and the knight reroutes via e7 to g6 targeting e5. The Ne1 maneuver tries to reroute, but Black plays ...h5/c5 with ...Nxc5/dxc5/Ngxe5 — capturing the central pawn after the trades. The resulting position has Black with active pieces and a healthy structure.",
+        "shortExplanation": "Short Variation: quiet Be2/O-O; Black reroutes ...Ne7-Ng6, then ...c5/Nxc5 captures the e5 pawn."
       },
       {
         "name": "Exchange Variation",
-        "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 Bf4 Bg4 Qb3 Qd7 Nd2 e6 Ngf3 Bd6 Bxd6 Qxd6 O-O O-O Rfe1 Rab8",
-        "explanation": "The Exchange Variation without c4 leads to a quieter game than the Panov, but Black should not relax. White aims for a small edge based on the slightly more active minor pieces and the open e-file. Black develops actively with ...Nc6, ...Bg4, and ...Bd6, maintaining equality through piece activity. The key strategic idea is that Black's pawn structure is perfectly healthy — the c6 pawn has recaptured on d5, creating a solid base for queenside expansion with ...b5."
+        "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 Bf4 Bg4 Qb3 Qd7 Nd2 e6 Ngf3 Bd6 Bxd6 Qxd6 O-O O-O Rfe1 Rab8 Ne5 Bh5 a4 Bg6",
+        "explanation": "The Exchange Variation without c4 leads to a quieter game than the Panov, but Black should not relax. White aims for a small edge based on the slightly more active minor pieces and the open e-file. Black develops actively with ...Nc6, ...Bg4, and ...Bd6, maintaining equality through piece activity. After the Bxd6 trade, Black's Rab8 prepares ...b5 expansion and the ...Bh5-Bg6 maneuver keeps the bishop active on the long diagonal.",
+        "shortExplanation": "Exchange (no c4): healthy structure for Black. ...Bg4 pin + ...Bd6 trade + ...Rab8/b5 queenside play."
       },
       {
         "name": "Tartakower/Breyer Variation",
-        "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bd6 Bd3 O-O Qc2 Re8+ Ne2 h5 Be3 Nd7 O-O-O Nf8",
-        "explanation": "Black voluntarily accepts doubled f-pawns after Nxf6+ exf6, gaining the half-open e-file and the bishop pair in return. The doubled pawns are not as weak as they appear — the f5 square becomes available for pieces, and the f6 pawn supports a future ...f5-f4 kingside advance. Black's bishop pair and open e-file provide dynamic compensation, while the d6 bishop is excellently placed. This variation is ideal for players who enjoy active, unbalanced positions with clear piece-play plans."
+        "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bd6 Bd3 O-O Qc2 Re8+ Ne2 h5 Be3 Nd7 O-O-O Nf8 Kb1 Be6 c4 Rc8",
+        "explanation": "Black voluntarily accepts doubled f-pawns after Nxf6+ exf6, gaining the half-open e-file and the bishop pair in return. The doubled pawns are not as weak as they appear — the f5 square becomes available for pieces, and the f6 pawn supports a future ...f5-f4 kingside advance. After opposite-side castling, ...Be6 develops the bad bishop and ...Rc8 prepares queenside operations against White's king on b1.",
+        "shortExplanation": "Doubled f-pawns + bishop pair + e-file. After opposite-side castle, ...Be6/Rc8 builds queenside attack."
       }
     ],
     "trapLines": [
       {
         "name": "Advance Variation Center Collapse",
-        "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 O-O Nc6 c3 cxd4 cxd4 Nge7 Nc3 Ng6 Na4 Qb6 Nc5 Nxd4 Nxd4 Qxb2 Ndxe6 fxe6 Rb1 Qa3",
-        "explanation": "Black methodically undermines White's d4 pawn with ...c5 and ...Nc6, then the knight reroutes via e7 to g6 adding pressure on e5. When White plays the ambitious Na4-c5, Black exploits the loose d4 pawn with ...Nxd4. After Nxd4, Black grabs the undefended b2 pawn with ...Qxb2, winning material. White's desperate Ndxe6 sacrifice tries to create complications but after ...fxe6 and ...Qa3, Black consolidates the extra material with an active queen and a dominant position."
+        "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 O-O Nc6 c3 cxd4 cxd4 Nge7 Nc3 Bg4 Nh4 Bxe2 Nxe2 Ng6 Nf3 Be7 g3 O-O",
+        "explanation": "Black methodically undermines White's d4 pawn with ...c5 and ...Nc6, then plays ...Nge7 supporting the position. The ...Bg4 pin against f3 forces Nh4, and after ...Bxe2 Nxe2 the light-squared bishop is traded favorably. Black completes development with ...Ng6/Be7/O-O, reaching a comfortable position where White's isolated d4 pawn is a long-term target. This is a positional plan, not a forced tactical win.",
+        "shortExplanation": "Advance: ...c5/Nc6/Nge7 + ...Bg4 pin + ...Bxe2 trade + ...Ng6/Be7 = solid position vs d4 isolani."
       },
       {
         "name": "Classical h-pawn Overextension",
-        "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 h5 Bh7 Bd3 Bxd3 Qxd3 Nd7 Nf3 Qc7 Bd2 e6 O-O-O Ngf6 Ne4 O-O-O g3 Nxe4 Qxe4 Nf6",
-        "explanation": "White pushes h4-h5 aggressively in the Classical but this leaves the h5 pawn permanently weak and costs valuable development tempi. Black develops smoothly with ...Nd7, ...Qc7, ...e6, ...Ngf6, and castles queenside into a safe position. The queen on c7 controls the important e5 square and supports future ...c5 breaks. With both sides castled queenside, Black can target the overextended h5 pawn in the endgame while maintaining a rock-solid structure."
+        "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Nf3 Nf6 Bd2 c5 O-O-O Nc6 Bc3 Qd5",
+        "explanation": "White pushes h4-h5 aggressively in the Classical but this leaves the h5 pawn permanently weak and costs valuable development tempi. Black develops smoothly with ...e6/Nf6/c5 and castles queenside into a safe position. The ...Nc6 supports the central pressure and ...Qd5 centralizes the queen attacking key squares. Black's structure is healthy, the bishop pair argument is muted by the trade on d3, and the overextended h5 pawn remains a long-term liability.",
+        "shortExplanation": "Classical h4-h5: hurts White's structure. Black develops normally; ...c5/Nc6/Qd5 centralizes against weak h5."
       },
       {
         "name": "Panov IQP Exploitation",
-        "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 e6 Nf3 Bb4 cxd5 Nxd5 Bd2 Nc6 Bd3 O-O O-O Be7 Nxd5 exd5 Qb3 Na5 Qc2 Bg4",
-        "explanation": "In the Panov, Black establishes a knight on d5 blockading White's isolated d4 pawn. If White trades with Nxd5, Black recaptures with ...exd5, now giving White the IQP while Black has a symmetrical but slightly superior structure. After ...Na5 and ...Bg4, Black's pieces are actively placed targeting d4, and the pin on f3 creates tactical pressure. White's IQP becomes a clear weakness in the middlegame and especially the endgame."
+        "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 e6 Nf3 Bb4 cxd5 Nxd5 Bd2 Nc6 Bd3 O-O O-O Be7 Nxd5 exd5 Qb3 Bf6 Bc3 Rb8 Rfe1 Be6",
+        "explanation": "In the Panov, Black establishes a knight on d5 blockading White's isolated d4 pawn. If White trades with Nxd5, Black recaptures with ...exd5, now giving White the IQP while Black has a symmetrical but slightly superior structure. After Qb3 attempting queenside pressure, Black plays ...Bf6 attacking d4 and ...Rb8/Be6 completing piece coordination. White's IQP becomes a clear weakness in the middlegame and especially the endgame.",
+        "shortExplanation": "Panov: ...Nxd5 blockade. After Nxd5 exd5 Qb3 Bf6/Rb8/Be6, Black targets d4 isolani in middlegame."
       },
       {
         "name": "Fantasy Variation Refutation",
-        "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 e5 Nd5 O-O Be7 Nxd4 O-O c3 Nd7 Nd2 Nc5 N2f3 a5 Qc2 Be6 Bd3 Nxd3 Qxd3 Bg4",
-        "explanation": "The Fantasy Variation with 3.f3 weakens White's kingside significantly. After ...dxe4 fxe4 e5, Black immediately challenges the center. The ...Nf6 and ...Nd5 setup exploits the weakened e3 and g3 squares. After castling, Black develops smoothly with ...Nd7-c5 targeting d3 and e4. The ...Bg4 pin at the end creates concrete tactical threats, and White's weakened king position from f3 becomes a permanent liability."
-      },
-      {
-        "name": "Hillbilly Attack Refutation",
-        "pgn": "e4 c6 d4 d5 Bc4 dxe4 Nc3 Nf6 f3 exf3 Nxf3 Bg4 h3 Bxf3 Qxf3 e6 Be3 Nd5 O-O-O Be7 Bd3 O-O Qh5 g6 Qh6 Bf6 Ne4 Bg7",
-        "explanation": "The Hillbilly Attack with 3.Bc4 looks aggressive but is theoretically dubious. After ...dxe4 and ...Nf6, Black develops naturally while White sacrifices a pawn with f3. Black calmly takes the pawn and exchanges bishops with ...Bg4xf3. The ...Nd5 centralization is rock-solid, and after castling Black plays ...g6 and ...Bf6-g7 to neutralize White's kingside threats. The Bg7 defends perfectly while Black enjoys an extra pawn and superior structure."
+        "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Nbd7",
+        "explanation": "The Fantasy Variation with 3.f3 weakens White's kingside significantly. After ...dxe4 fxe4 e5, Black immediately challenges the center. White's gambit-style Bc4 + O-O setup is the canonical try, but Black plays ...Nf6 + Nbd7 developing safely. White has some development lead but Black's extra pawn from the dxe4-exd4 exchange settles the position with patient consolidation.",
+        "shortExplanation": "Fantasy refutation: ...e5 challenges center, ...exd4 wins pawn; ...Nf6/Nbd7 consolidates extra material."
       }
     ],
     "warningLines": [
       {
         "name": "Fantasy Variation Gambit Danger",
         "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Bb4+ c3 dxc3 bxc3 Ba5 O-O Ne7 Qb3 O-O Bxf7+ Kh8",
-        "explanation": "White sacrifices pawns in the Fantasy for a massive lead in development and dangerous attacking lines. After Bc4 and O-O, White's pieces swarm toward Black's king with threats like Bxf7+ and Ng5. Black must resist the temptation to grab the c3 pawn — each captured pawn costs a crucial tempo while White's attack builds. The correct approach for Black is to return material and focus on completing development safely."
+        "explanation": "White sacrifices pawns in the Fantasy for a massive lead in development and dangerous attacking lines. After Bc4 and O-O, White's pieces swarm toward Black's king with threats like Bxf7+ and Ng5. Black must resist the temptation to grab the c3 pawn — each captured pawn costs a crucial tempo while White's attack builds. The correct approach for Black is to return material and focus on completing development safely.",
+        "shortExplanation": "Fantasy gambit: Bc4 + Bxf7+ attacks rip open Black's king. Recognize the pattern; return material, develop safely."
       },
       {
         "name": "Advance Bishop Exchange Danger",
         "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Be7 Nh4 Bg6 Nxg6 hxg6 c3 c5 Nd2 Ngf6 Nf3 Qb6 dxc5 Nxc5",
-        "explanation": "In the Short/Advance Variation, White's Nh4 exchanges off Black's prized light-squared bishop — the very piece that distinguishes the Caro-Kann from the French. After Nxg6 hxg6, Black gets a half-open h-file but loses the bishop advantage permanently. Black must prevent this by playing ...c5 early before White gets Nh4 in, or by rerouting the bishop to h7 where it remains safe. Losing this bishop turns the position into a worse version of the French Defence."
+        "explanation": "In the Short/Advance Variation, White's Nh4 exchanges off Black's prized light-squared bishop — the very piece that distinguishes the Caro-Kann from the French. After Nxg6 hxg6, Black gets a half-open h-file but loses the bishop advantage permanently. Black must prevent this by playing ...c5 early before White gets Nh4 in, or by rerouting the bishop to h7 where it remains safe. Losing this bishop turns the position into a worse version of the French Defence.",
+        "shortExplanation": "Nh4 exchanges off the prized light-squared bishop, turning Caro-Kann into a worse French. Prevent with early ...c5 or ...Bh7."
       },
       {
         "name": "Two Knights Early e6 Mistake",
         "pgn": "e4 c6 Nf3 d5 Nc3 e6 d4 Nf6 e5 Nfd7 Bd3 c5 O-O Nc6 Be3 Be7 Qd2 O-O a3 cxd4 Nxd4 Nxd4 Bxd4",
-        "explanation": "Playing ...e6 before ...Bg4 or ...dxe4 in the Two Knights is a serious mistake — it transposes into a French Defence structure where the light-squared bishop is locked behind the pawn chain. The entire point of the Caro-Kann is to develop this bishop actively before playing ...e6. Once the bishop is trapped on c8, Black faces the same cramped, passive positions that French players endure, but without the specific French counterplay plans. Always develop ...Bg4 or capture ...dxe4 first."
+        "explanation": "Playing ...e6 before ...Bg4 or ...dxe4 in the Two Knights is a serious mistake — it transposes into a French Defence structure where the light-squared bishop is locked behind the pawn chain. The entire point of the Caro-Kann is to develop this bishop actively before playing ...e6. Once the bishop is trapped on c8, Black faces the same cramped, passive positions that French players endure, but without the specific French counterplay plans. Always develop ...Bg4 or capture ...dxe4 first.",
+        "shortExplanation": "Premature ...e6 transposes to a French structure trapping the c8 bishop. Always ...Bg4 or ...dxe4 first."
       }
     ]
   },
