@@ -674,37 +674,21 @@
       "variations": [
         {
           "name": "Standard Setup vs d5",
-          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-O Bb7",
-          "explanation": "The standard London setup. White builds a fortress and then looks for e4 to open the position. Very reliable at all levels."
+          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-O Bb7 Qe2 Bxg3 hxg3 Qc7 dxc5 bxc5 e4 h6 Rad1 Rfe8",
+          "explanation": "The standard London setup. After both sides develop, the Bxg3 trade simplifies the structure; the e4 break opens the center for the active piece play that defines the London middlegame."
         },
         {
           "name": "vs King's Indian (Bh6 + Opposite-Side Castle Attack)",
-          "pgn": "d4 Nf6 Bf4 g6 Nc3 Bg7 Qd2 O-O Bh6 Bxh6 Qxh6 c5 O-O-O Qa5 h4 cxd4 Nb5",
-          "explanation": "Levy's actual recommendation against the King's Indian setup — NOT the quiet Nf3/e3/Be2 line. The key idea is Nc3 (claiming e4) + Qd2 + Bh6 to trade Black's dark-squared fianchetto bishop, then O-O-O so the h4-h5 pawn storm doesn't expose White's own king. e3 is delayed so the d2-h6 diagonal stays open for Qxh6 after the bishop trade. The resulting position resembles a Pirc or Sicilian Dragon with reversed-color attacks: opposite-side castling, White rolls the h-pawn, Black tries ...b5/...b4. Source: Levy's 'London System vs King's Indian/Grünfeld Complete Guide' (YouTube/Lichess)."
+          "pgn": "d4 Nf6 Bf4 g6 Nc3 Bg7 Qd2 O-O Bh6 Bxh6 Qxh6 c5 O-O-O",
+          "explanation": "Levy's recommendation against the King's Indian setup — NOT the quiet Nf3/e3/Be2 line. The key idea is Nc3 + Qd2 + Bh6 to trade Black's dark-squared fianchetto bishop, then O-O-O so the h4-h5 pawn storm doesn't expose White's own king. Source: Levy's 'London System vs King's Indian/Grünfeld Complete Guide' (YouTube/Lichess)."
         },
         {
           "name": "Aggressive Jobava-London Hybrid",
-          "pgn": "d4 d5 Nc3 Nf6 Bf4 e6 e3 c5 Nf3 Nc6 Bd3 Bd6 Bg3 O-O O-O b6 Re1 Bb7",
-          "explanation": "A more ambitious version where White plays Nc3 before Nf3. This gives more flexibility and the knight can go to b5 or e5."
+          "pgn": "d4 d5 Nc3 Nf6 Bf4 e6 e3 c5 Nf3 a6 Be2 Nc6 O-O Bd6 Bxd6 Qxd6 Na4 cxd4 exd4 O-O",
+          "explanation": "A more ambitious version where White plays Nc3 before Nf3. After a6 Black prepares b5; White trades the dark-squared bishops with Bxd6 + Na4 to grip c5 squares — a structural concession but lasting initiative."
         }
       ],
-      "trapLines": [
-        {
-          "name": "Qb6 Walks Into Nb5",
-          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Qb6 Nc3 Qxb2 Nb5 Na6 Bc7",
-          "explanation": "Black plays Qb6 hitting b2, but after Nc3 Qxb2 Nb5, White threatens Nc7+ forking the king and rook. The queen is trapped on b2."
-        },
-        {
-          "name": "Nh5 Bishop Chase Punished",
-          "pgn": "d4 d5 Nf3 Nf6 Bf4 Nh5 Bg5 h6 Bh4 g5 Bg3 Nxg3 hxg3 Bg7 e3 O-O Bd3",
-          "explanation": "Black plays Nh5 trying to trade the bishop, but White sidesteps to g5 then g3. Black wastes tempi and weakens the kingside with g5 and h6."
-        },
-        {
-          "name": "Premature e5 Refuted",
-          "pgn": "d4 d5 Nf3 Nf6 Bf4 e5 dxe5 Nh5 Bg5 Be7 Bxe7 Qxe7 Nc3 Nf4 e3 Ng6 Bd3",
-          "explanation": "Black pushes e5 too early and after dxe5 White wins a central pawn. Black lacks compensation and White develops comfortably."
-        }
-      ]
+      "trapLines": []
     },
     {
       "id": "pro-gothamchess-stafford-refute",
