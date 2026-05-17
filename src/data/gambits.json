@@ -310,12 +310,12 @@
       {
         "name": "Vienna Gambit: Main Line with Ng8 Retreat",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3",
-        "explanation": "In the main line, Black retreats the knight and White pushes d4 to dominate the center. Even after queens are exchanged, White's lead in development and active pieces give excellent compensation. The endgame is surprisingly dangerous for Black — White's rooks on the open files create lasting pressure."
+        "explanation": "The main line. After 3.f4 exf4 4.e5 the Nf6 has no good square except back to g8 — Black has wasted three tempi on the knight by move 4. Nf3 develops and prepares d4 to dominate the center with the moved-back knight unable to defend."
       },
       {
         "name": "Vienna Gambit: Qe7 Variation",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5",
-        "explanation": "Black pins the e5 pawn with Qe7. White plays Qe2 to support the pawn and continues developing. After d4, Bxf4, and O-O-O, White has a strong attacking setup with open lines against Black's king. The Nd5 jump is a powerful thematic shot that disrupts Black's coordination."
+        "explanation": "After 4.e5 Black can pin the e5 pawn with ...Qe7 instead of retreating the knight. White plays Qe2 to defend e5 and continues developing — the position remains sharp with both sides racing to complete development."
       },
       {
         "name": "Frankenstein-Dracula Variation",
@@ -325,31 +325,31 @@
       {
         "name": "Vienna Gambit: Nd5 Variation",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5",
-        "explanation": "Black places the knight on d5 instead of retreating. White recaptures on c3 with the d-pawn, opening the d-file. After rapid development with Bxf4, Bd3, and Qe2, the Greek Gift sacrifice Bxh7+ followed by Qe4+ is a classic attacking pattern that demolishes Black's kingside when they castle into it."
+        "explanation": "Black can also place the knight on d5 instead of retreating to g8. From the position after 4.e5, White's pieces can develop naturally; the d-file and f-file both open as the structure simplifies, giving White attacking chances on the kingside."
       },
       {
         "name": "Vienna Gambit: Pierce Gambit",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3",
-        "explanation": "The Pierce Gambit features a sharp queenless middlegame. After the queen trade, White's king walks to e2 and the position is deceptively dangerous. White's bishop pair and open files provide excellent compensation. Black must be very careful not to allow a devastating pin on the d-file."
+        "explanation": "The Pierce Gambit transposes to the main Vienna Gambit position after 5.Nf3. From here White can choose between d4 / Bc4 / Bd3 setups; the Pierce specifically delays the bishop development to keep more flexibility."
       }
     ],
     "trapLines": [
       {
         "name": "Frankenstein-Dracula: Qxf7 Mate Threat",
         "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Be7 Nf3 Nc6",
-        "explanation": "In the Frankenstein-Dracula, after Qh5, if Black plays Be7 instead of the critical Nc6, the knight lands on g5 with devastating effect. Qf3 threatens Qf7 mate, and after f5, Qd5 creates multiple threats. The Nf7-Nd5 combination tears Black's position apart."
+        "explanation": "In the Frankenstein-Dracula, after 4.Qh5, Black's natural defense 4...Nd6 + 5.Bb3 Be7 leaves the knight on c6 still undeveloped. Nf3 + threatening Ng5 keeps the pressure on Black's tangled kingside — the queen on h5 + bishop on b3 + knight ready to invade f7 creates lasting attack."
       }
     ],
     "warningLines": [
       {
         "name": "Black Plays d5 Early: Best Defense",
         "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5 d4 Bb4 Bd2 Nxd2 Qxd2",
-        "explanation": "If Black plays the strong 3...d5, the center opens up and Black gets active piece play immediately. After fxe5 Nxe4, Black's knight is powerfully centralized. White must play carefully through a series of exchanges to avoid ending up in an inferior position."
+        "explanation": "If Black plays the strong 3...d5, the center opens up and Black gets active piece play immediately. After fxe5 Nxe4, Black's knight is powerfully centralized; the Bd2-Nxd2 trade simplifies into a balanced position where Black's piece activity matches White's space."
       },
       {
         "name": "Vienna Game: Black Avoids f4 with d5",
         "pgn": "e4 e5 Nc3 Nf6 f4 d5 exd5 e4 d3 Bb4 dxe4 Nxe4",
-        "explanation": "The immediate 3...d5 counter strike is one of Black's most dangerous options. After exd5 e4, the pawn on e4 cramps White's position and disrupts development. If White is not careful, Black's initiative in the center can become overwhelming. This line requires specific preparation."
+        "explanation": "The immediate 3...d5 counter-strike is one of Black's most dangerous options. After exd5 e4, the pawn on e4 cramps White; the Bb4 pin + Nxe4 recovery gives Black active piece play and central pressure — White needs specific preparation to handle this."
       }
     ]
   },
