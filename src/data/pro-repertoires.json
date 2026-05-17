@@ -3488,25 +3488,25 @@
         },
         {
           "name": "Bg5 Najdorf",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 Bd3 b5 Rhe1 Bb7 Qg3 b4 Nce2 d5",
-          "explanation": "Against the classical Bg5, Niemann plays the solid e6 setup and looks for the d5 break at the right moment. The position is deeply theoretical and rewards precise calculation."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 Bd3 b5 Rhe1 Bb7 Qg3 b4",
+          "explanation": "Against the classical Bg5, Niemann plays the solid e6 setup with b5 expansion. After Qg3 b4 the position is deeply theoretical and rewards precise calculation."
         },
         {
           "name": "6.f3 Modern",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Nbd7 Qd2 Be7 O-O-O b5 g4 b4 Nd5 Nxd5 exd5 Bf5",
-          "explanation": "The modern f3 approach. White builds a flexible center. Niemann responds with natural development and aims for the b5-b4 pawn push to generate queenside counterplay."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Nbd7 Qd2 Be7 O-O-O b5 g4 b4 Nd5",
+          "explanation": "The modern f3 approach. White builds a flexible center. Niemann responds with natural development and the b5-b4 pawn push to generate queenside counterplay against White's Nd5 outpost."
         }
       ],
       "trapLines": [
         {
           "name": "White's Premature Kingside Attack",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5 g5 b4 gxf6 bxc3 Qxc3 Bxf6",
-          "explanation": "If White pushes g5 too aggressively, Black sacrifices the knight and after bxc3 Qxc3 Bxf6 Black has powerful bishops and open lines against White's king."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5 g5 b4 gxf6 bxc3 Qxc3",
+          "explanation": "If White pushes g5 too aggressively, Black sacrifices the knight and after bxc3 Qxc3, Black has powerful bishops and open lines for the impending attack."
         },
         {
           "name": "e5 Central Trick",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e5 Nf3 Be7 O-O O-O Re1 b5 Bf1 Bb7 a4 b4 Na2 Nbd7 c3",
-          "explanation": "After Bc4 e5, the knight retreats and Black gets a comfortable position. The e5 push gains central space and Black develops naturally with Be7, O-O, and b5 for queenside expansion."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e5 Nf3 Be7 O-O",
+          "explanation": "After Bc4 e5, the knight retreats and Black gets a comfortable position. The e5 push gains central space and prepares the typical Najdorf queenside expansion with b5."
         }
       ]
     },
