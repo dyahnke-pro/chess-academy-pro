@@ -637,7 +637,7 @@
     "variations": [
       {
         "name": "Spanish Four Knights: 4.Bb5 Bb4 Main Line",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Ne6 Bh4 c6 Bd3 Ng5 Nxg5",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Ne6 Bh4",
         "explanation": "The main Spanish Four Knights line where both sides play symmetrical bishop moves. After White castles and plays d3-Bg5, Black must decide how to break the symmetry. The exchange ...Bxc3 gives White the bishop pair and doubled c-pawns, but White's center is flexible. The plan d4 opens the position to exploit the bishop pair advantage, and after ...Ne6-g5, White trades into a favorable structure with better long-term minor pieces."
       },
       {
@@ -647,66 +647,66 @@
       },
       {
         "name": "Belgrade Gambit: 4.d4 exd4 5.Nd5",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 Nxe4 Bc4 Ne5",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 Nxe4 Bc4",
         "explanation": "The Belgrade Gambit sacrifices a pawn with 5.Nd5 for powerful piece activity. The knight on d5 is a dominant piece controlling key central squares and creating threats against f6 and c7. After Bc4, White develops with tempo and the open e-file combined with the strong knight give lasting compensation. Black's damaged kingside pawn structure after Nxf6+ gxf6 is a permanent weakness, and White can build a strong attack by combining Re1, Be3, and Nxd4 to centralize all pieces."
       },
       {
         "name": "Halloween Gambit: 4.Nxe5",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Nxe5 Nxe5 d4 Nc6 d5 Ne5 f4 Ng6 e5 Ng8 d6 cxd6 exd6 Qf6 Nb5 Qxd6 Qxd6 Bxd6 Nxd6+ Ke7 Nxc8+ Rxc8",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Nxe5 Nxe5 d4 Nc6 d5 Ne5 f4 Ng6 e5 Ng8 d6 cxd6 exd6 Qf6 Nb5",
         "explanation": "The Halloween Gambit is a shocking knight sacrifice for two central pawns and a massive space advantage. After 4.Nxe5 Nxe5 5.d4, Black's knight is pushed back and White's pawns roll forward aggressively with d5, f4, and e5. The pawns cramp Black's position severely, making development extremely difficult. While objectively dubious with best play, the practical difficulties for Black are enormous — one wrong move and the pawn avalanche becomes unstoppable. Best used in rapid and blitz for maximum surprise value."
       },
       {
         "name": "Symmetrical Variation: 4.Bb5 Bb4",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Ne2 Ne7 c3 Ba5 Ng3 Ng6 d4 Bb6 Bg5 h6 Be3 Re8 Qd2 c6 Bd3",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Ne2 Ne7 c3 Ba5 Ng3 Ng6 d4 Bb6",
         "explanation": "The Symmetrical Variation features near-mirror play until White finds the right moment to break the symmetry. White repositions the knight via e2-g3 to target the kingside while Black must decide between ...Ba5 retreating the bishop or exchanging on c3. The critical move d4 challenges the center at the optimal moment when White's pieces are better coordinated. The Ng3 placement pressures f5 and h5, giving White a subtle kingside initiative, while ...Ng6 is passive and allows White to build with Be3, Qd2, and the central break."
       },
       {
         "name": "Italian Four Knights: 4.Bc4",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nxe4 Bxf7+ Kxf7 Nxe4 d5 Neg5+ Kg8 d4 e4 Nh3 Bg4 Nf4 Bd6 c3 Qf6 Qb3",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nxe4 Bxf7+ Kxf7 Nxe4 d5 Neg5+ Kg8 d4",
         "explanation": "The Italian approach with 4.Bc4 targets f7 directly and leads to sharp tactical play. After 4...Nxe4 5.Bxf7+, White sacrifices the bishop to expose Black's king, winning back the material while leaving the piece on f7 vulnerable. The resulting positions are complex with the Black king displaced and White's knights dancing into aggressive squares. While theory considers the sacrifice sound, the practical difficulties for Black are severe as every move must be precise to avoid falling into a mating attack."
       },
       {
         "name": "Rubinstein Variation: 4.Bb5 Nd4",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Nd4 Nxd4 exd4 e5 dxc3 exf6 Qxf6 dxc3 Qe5+ Qe2 Qxe2+ Bxe2 c6 Bf3 d5 O-O Bd6 Re1+ Kf8 Be3 Be5 c4 d4 Bd2",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Nd4 Nxd4 exd4 e5 dxc3 exf6 Qxf6 dxc3 Qe5+ Qe2 Qxe2+ Bxe2",
         "explanation": "The Rubinstein Variation with 4...Nd4 is Black's most active reply to 4.Bb5. After 5.Nxd4 exd4, the critical continuation 6.e5 chases the knight and leads to a forcing sequence. White aims for the endgame with Qe2 where the extra piece on c3 and superior bishop pair provide a long-term edge. Black gets activity in the short term but White's structure is more flexible. Understanding when to simplify into the endgame versus maintaining tension in the middlegame is the key strategic decision for White."
       },
       {
         "name": "Metger Unpin: ...Qe7 System",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Ne6 Bc1 c6 Bd3 Rd8 Bg5 Nxg5 Nxg5 Qd7 Qf3",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Ne6 Bc1 c6 Bd3",
         "explanation": "The Metger Unpin is a classic method for Black to break the Bg5 pin by playing ...Qe7, connecting the rooks and preparing to reroute the knight. White responds with Re1 and d4, using the center to generate play. The critical battle is over the d4 break — White wants to open the position for the bishop pair while Black aims to keep the center stable with ...c6 and ...Nd8-e6. The Bc1-g5 maneuver re-pins the knight and forces Black into careful maneuvering. White's long-term advantage lies in the bishop pair and central space."
       }
     ],
     "trapLines": [
       {
         "name": "Rubinstein Counter-Trap: Nd4 Nxe5 Qe7",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Nd4 Nxe5 Qe7 f4 Nxb5 Nxb5 d6 Nf3 Qxe4+ Kf2 Ng4+ Kg3 Qd5 Nbd4 Qc5 h3 Nf6 c3 Nh5+ Kh2 Nxf4",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Nd4 Nxe5 Qe7 f4 Nxb5 Nxb5 d6 Nf3 Qxe4+ Kf2 Ng4+ Kg3",
         "explanation": "After 4...Nd4, the careless 5.Nxe5 walks into a well-known trap. Black plays 5...Qe7 pinning the knight to the king, and after 6.f4 Nxb5 7.Nxb5 d6, the e5 knight is in serious danger. White must navigate extremely carefully — after Nf3 Qxe4+ Kf2, Black has ...Ng4+ forking the king, and the resulting attack with the queen and knight pair is devastating. White should prefer 5.Ba4 or 5.Bc4 instead of the greedy Nxe5 to avoid falling into this well-prepared counter-trap."
       },
       {
         "name": "Belgrade Gambit Nd5 Central Bind",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 Nxd5 exd5 Ne7 Nxd4 Nxd5 Bc4 Nb6 Bb3 d6 O-O Be7 Re1 O-O Bg5 Bxg5 Nf5 Bxf5 Qxd6",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 Nxd5 exd5",
         "explanation": "In the Belgrade Gambit after 5.Nd5, if Black captures with ...Nxd5, White recaptures with exd5 creating a powerful passed pawn that restricts Black's knight. After Nxd4, White has recovered the pawn with a strong center and lead in development. The Bc4 placement targets f7 and supports the d5 pawn, while O-O and Re1 generate pressure on the open e-file. Black's pieces become passive trying to blockade d5, and the Bg5-Nf5 maneuver opens up a winning attack when Black's minor pieces are poorly coordinated."
       },
       {
         "name": "Scotch Four Knights Fork Trick",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Nxe4 Nxc6 bxc6 Bd3 Nf6 O-O Be7 Re1 O-O Bg5 d5",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Nxe4 Nxc6",
         "explanation": "After 4.d4 exd4 5.Nxd4, Black sometimes plays the careless 5...Nxe4 trying to win a pawn. White has the powerful 6.Nxc6 bxc6, recovering the piece with a damaged pawn structure for Black. The doubled c-pawns are a lasting weakness and White's development advantage with Bd3, O-O, and Re1 creates strong initiative. The Bg5 pin on f6 ties Black down further, and the Nf5 sacrifice leads to a forced sequence where White wins material by exploiting the pin and the weak d-pawn."
       }
     ],
     "warningLines": [
       {
         "name": "Symmetry Drawish Tendency",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bg4 Nd5 Nd4 Nxb4 Nxb5 Nd5 Nxd5 exd5 Bxf3 Qxf3 Qxg5 c4 Rae8",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5",
         "explanation": "When both sides mirror each other move for move, the game drifts toward sterile equality with mass exchanges. The bishops cancel out, the knights trade on d4/d5, and the resulting endgame offers almost no winning chances for either side. As White, you must consciously avoid this symmetrical trap by timing d4 or Bg5 before Black can mirror your moves. The key is to break the pattern early — delay the symmetrical Bb5 response and play d4 or Bc4 first to create genuine imbalances in the position."
       },
       {
         "name": "Halloween Gambit Refutation with ...d6",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Nxe5 Nxe5 d4 Nc6 d5 Bb4 dxc6 Nxe4 Qd4 Qe7 Be2 d5 Qxe4 Qxe4",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Nxe5 Nxe5 d4 Nc6 d5",
         "explanation": "If Black knows the correct defense to the Halloween Gambit, White ends up a piece down without sufficient compensation. After ...Nc6 retreating and ...Bb4 pinning the knight, Black returns some material but reaches a position where the extra piece dominates the pawns. The critical line with ...Nxe4 and ...Qe7 forces simplifications that neutralize White's pawn center entirely. Only deploy the Halloween Gambit in faster time controls where your opponent is unlikely to know this precise defensive sequence."
       },
       {
         "name": "Passive Play in Spanish: Missing d4 Break",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 h6 Bh4 Bg4 h3 Bh5 Nd5 Nd4 Nxb4 Nxb5 a4 Nc3 bxc3 Bxf3 Qxf3 g5 Bg3",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5",
         "explanation": "If White plays too passively in the Spanish Four Knights without executing the d4 break, Black equalizes comfortably and can even seize the initiative. The slow d3 setup without a follow-up plan allows Black to trade pieces favorably and simplify the position. White's bishop pair advantage evaporates when Black forces exchanges with ...Nd4 and ...Bxf3. The lesson is clear: the d4 central break must be prepared and executed while White still has a development lead, otherwise the position stagnates into a slightly worse endgame for White."
       }
     ]
