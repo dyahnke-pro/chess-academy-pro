@@ -669,66 +669,66 @@
       {
         "name": "Marshall Attack: Classical Main Line",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 Rae8 Nd2 Re6 a4 Qh5 axb5",
-        "explanation": "The classical main line where Black builds the attack step by step. After Nxd5, Bd6, and Qh4, every piece aims at White's king. The queen on h3 combined with the bishops and rooks creates overwhelming pressure. The f5 push is the final piece of the attack, opening the f-file."
+        "explanation": "The classical main line where Black builds the attack step by step. After Qh4 + g3 Qh3 the queen settles on h3; the Rae8 + Re6 rook lift is the key Marshall motif — every piece coordinates toward White's king while White's a4 + axb5 try to generate counterplay on the queenside."
       },
       {
         "name": "Marshall Attack: Bf5 Modern Setup",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Bf5",
-        "explanation": "A more modern approach where Black develops the bishop to f5 before committing the queen. This is considered more precise by theory, as it avoids some defensive resources. The bishop on f5 controls d3 and supports the f5 push. After Re6-Rg6, the rook joins the attack directly."
+        "explanation": "A more modern approach where Black develops the bishop to f5 before committing the queen. This is considered more precise by theory, as it avoids some defensive resources. The bishop on f5 controls d3 and supports the upcoming Re8 + rook-lift attack."
       },
       {
         "name": "Marshall Attack: Re6 Rook Lift",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Qf3 Bg4 Qg2",
-        "explanation": "In some lines, Black can trade queens and still maintain a dangerous initiative. The rook lift Re8 and Re2 invades White's second rank. Even in the endgame, Black's piece activity and White's structural weaknesses make the position very unpleasant to defend."
+        "explanation": "When White plays Qf3 to challenge the queen, Black has Bg4 + Qg2 — even trading queens, the rook lift Re8-Re2 invades the second rank. Black's piece activity creates an unpleasant endgame for White to defend despite the trades."
       },
       {
         "name": "Marshall Attack: d5-d4 Pawn Storm",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re2",
-        "explanation": "The pawn storm with f5-f4 is a powerful attacking idea in the Marshall. After gxf4 Bxf4, Black has completely destroyed White's kingside pawn cover. The rooks double on the f-file with devastating effect. White's king is exposed and the attack practically plays itself."
+        "explanation": "After Re2 (a more passive defense by White), Black still has the typical Marshall plan of Bd6 + Qh4 + Bf5/Bg4 building toward the kingside. The f5-f4 pawn storm idea later in the game completely destroys White's kingside pawn cover."
       },
       {
         "name": "Marshall Attack: Spassky Variation",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Re4",
-        "explanation": "Named after Spassky's brilliant games, this variation features the Re4 defense by White. Black responds with Bf5-Bd3-Bg4, shifting the bishop to create new threats. After Re2 and Rxb2, Black invades the second rank with the rook. The queenside pawns fall and the initiative is overwhelming."
+        "explanation": "Named after Spassky's brilliant games. The Re4 defense places the rook actively to block the attack, but Black responds with Bf5 to attack the rook — shifting the bishop to gain time and continuing the kingside pressure."
       }
     ],
     "trapLines": [
       {
         "name": "Back Rank Devastation",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d3 Bd6 Re1 Qh4 g3 Qh3 Re4",
-        "explanation": "A classic Marshall trick exploiting the back rank. After Re1+, White's king is forced to g2 and Black's bishop slides to d3 cutting off escape routes. The combination of rook on e1, bishop on d3, and queen on h3 creates a mating net that's nearly impossible to break."
+        "explanation": "A classic Marshall trick. When White plays the slow d3 + Re4 defense, Black's queen on h3 + bishop diagonals + open lines all converge — the back-rank weaknesses and the typical Bf5/Bd3 maneuver create a mating net that's nearly impossible to break."
       },
       {
         "name": "Qh4-g3 Attack Pattern",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 f5",
-        "explanation": "The Qh4 to h3 maneuver is the Marshall's trademark. After g3 Qh3, White's kingside is weakened. The f5-f4 push tears open the position. After gxf4 Bxf4, the dark-squared bishop dominates and the queen on g3+ leads to a winning exchange. The Bishop ending after Bxf3 is decisive."
+        "explanation": "The Qh4 to h3 maneuver is the Marshall's trademark. After g3 Qh3, White's kingside is permanently weakened. The f5 push tears open the position — Black's pieces flood in with the open lines and weakened light squares."
       },
       {
         "name": "Re8 Sacrifice Line",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 Rae8 Nd2 Re6 a4 f5",
-        "explanation": "The Re8-Re6 rook lift is a classic Marshall motif. The rook swings to the kingside where it joins the attack. After f5-f4, the position rips open and the sacrificial sequence with fxe3 and Rf2 creates unstoppable threats. White's kingside pawns are shattered beyond repair."
+        "explanation": "The Re8-Re6 rook lift is a classic Marshall motif. The rook swings to the kingside where it joins the attack. After f5, Black's pieces are fully coordinated against White's exposed king — the typical fxe3 + Rf2 sacrificial resources are always available."
       },
       {
         "name": "d5-d4 Pawn Wedge",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Re4 g5 Nd2",
-        "explanation": "The g5-f5-f4 pawn storm is devastating when White plays Re4 to block. After the pawns advance, the Black pieces flood in. The sequence Rf2+ Kd3 Qf3+ leads to a mating attack that cannot be stopped. The king is chased all the way across the board."
+        "explanation": "When White plays Re4 to block the attack, Black responds with g5 — preparing the f5-f4 pawn storm. After Nd2 White retreats to defense; Black's g5 + f5-f4 pawn avalanche creates unstoppable threats against the king."
       }
     ],
     "warningLines": [
       {
         "name": "Anti-Marshall 8.a4",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d3 d6 Nbd2 Na5 Ba2 c5 c3",
-        "explanation": "White sidesteps the Marshall entirely with 8.a4 before Black can play d5. This is the most popular choice at the top level. Black must be prepared with a different setup — typically d6, Na5, and c5 for a slower Chigorin-style game. Without the Marshall attack, the game is more positional."
+        "explanation": "White sidesteps the Marshall entirely with 8.a4 before Black can play d5. This is the most popular choice at the top level. Black must be prepared with a different setup — typically d6, Na5, and c5 for a slower Chigorin-style game."
       },
       {
         "name": "White's Fortress: Qf3-d3-Nd2 Setup",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 f5",
-        "explanation": "The correct defensive setup with Be3, Qd3, f3, and Nd2 allows White to contain the attack. All entry points are blocked and White slowly consolidates the extra pawn. This is the nightmare scenario for Marshall players — a well-prepared defender who knows every defensive resource."
+        "explanation": "The correct defensive setup with Be3 + Qd3 contains the attack. Black's f5 push is the standard breakthrough attempt; with the Be3-Qd3 defensive setup White can slowly consolidate the extra pawn — the nightmare scenario for Marshall players."
       },
       {
         "name": "8.h3 Anti-Marshall Sideline",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O h3 d6 c3 Na5 Bc2 c5 d4 Qc7 Nbd2 Nc6 d5 Nd8 Nf1 Ne8 g4 g6 Ng3 Ng7 Kh2",
-        "explanation": "The 8.h3 sideline prevents Bg4 ideas and takes the game into quieter territory. Black cannot play the Marshall attack and must settle for a normal Ruy Lopez middlegame. This is another way White avoids the sharp Marshall theory entirely."
+        "explanation": "The 8.h3 sideline prevents Bg4 ideas and takes the game into quieter territory. Black cannot play the Marshall attack and must settle for a normal Ruy Lopez middlegame — White trades the sharp theoretical challenge for a manageable positional game."
       }
     ]
   },
