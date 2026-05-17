@@ -1485,47 +1485,47 @@
       "pgn": "Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 c5 e4 Nc6 Re1 b5 e5 Nd7 Nf1 a5 Bf4 Ba6",
       "color": "white",
       "style": "Flexible, Attacking",
-      "overview": "Hikaru's universal weapon with White. The KIA can be played against virtually any Black setup. He uses it to avoid theory entirely and rely on his superior understanding of the resulting middlegame positions. The setup is simple but the plans are deep.",
+      "overview": "Hikaru plays the King's Indian Attack as his blitz-chess Swiss Army knife — one setup, every game, against literally anything Black plays. The KIA is the world's most universal opening: regardless of whether Black plays …d5 or …e5 or …c5 or …g6 or some weird sideline, you place the same pieces on the same squares (Nf3, g3, Bg2, O-O, d3, Nbd2, e4) and reach a position you've seen 10,000 times. Hikaru's edge: while opponents are remembering theory for ten different White first moves, he's analysing the middlegame from move one. In bullet chess this matters enormously — and Hikaru is the fastest in the world.",
       "keyIdeas": [
-        "Set up Nf3-g3-Bg2-O-O-d3-Nbd2-e4 regardless of Black's setup — a key strategic concept in King's Indian Attack",
-        "Push e4-e5 to cramp Black and open lines for the Bg2 — the timing of this advance determines whether it creates an advantage or a weakness",
-        "After e5, reroute the knight via f1-e3 or f1-h2-g4 — piece placement and activity are more important than material in these positions",
-        "Launch a kingside attack with f4 and h4 in the right positions — timing this correctly before the opponent can generate counterplay is critical"
+        "The 'setup before plan' principle: place every piece on its KIA square (Nf3, Bg2, O-O, d3, Nbd2) BEFORE thinking about what to do with them. The plan emerges from the position; the setup is fixed.",
+        "e4 followed by e4-e5 is the strategic engine. Once your Nbd2 supports e4, push it. After e5 cramps Black's f6-knight, you have time to reroute pieces to the kingside for the attack.",
+        "The kingside attack uses pieces, not pawns initially. The Nf1-h2-g4 reroute (knight from d2 to f1 to h2 to g4) is the KIA's signature manoeuvre — knight reaches a key attacking square WITHOUT compromising king safety.",
+        "Against …c5+…e6 (French-like structures), the KIA is at its best. The e5-pawn cramps Black's c8-bishop AND blocks the …f6 break; your knight on g4 + bishop on g2 + rook on e1 all aim at the kingside."
       ],
       "traps": [
-        "If Black plays d4 closing the center, White gets a free kingside attack with e5, Nf1-h2-g4, f4"
+        "If Black panics and plays …d4 closing the centre, you've won the opening — the d4-pawn isn't attacking anything, but it permanently locks the centre and you can launch the kingside attack with no central counterplay possible. Hikaru's KIA wins are full of opponents who played …d4 without thinking."
       ],
       "warnings": [
-        "Do not push e4-e5 if Black can undermine it with f6 immediately",
-        "The KIA can be slow — do not fall behind in development on the queenside"
+        "DON'T push e4-e5 if Black can immediately undermine with …f6. The right moment for e5 is after Black has committed to a kingside setup (…Be7, …O-O) where …f6 would weaken their own king.",
+        "The KIA looks slow because it IS slow — don't let Black get TOO much queenside space. If Black plays …b5 + …a5 + …Bb7 quickly, you might need to play a4 to prevent the queenside expansion before launching your kingside attack."
       ],
       "variations": [
         {
           "name": "vs French-like Setup",
           "pgn": "Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 c5 e4 Nc6 Re1 b5 e5 Nd7 Nf1 a5",
-          "explanation": "Against the most common setup, White builds up with e4-e5 and reroutes pieces to the kingside. The position resembles a French Defense where White has extra flexibility."
+          "explanation": "The KIA's most common position. Black plays a French-like setup with …d5 + …e6 + …c5. You go through the textbook setup: 2.g3 Nf6 3.Bg2 e6 4.O-O Be7 5.d3 O-O 6.Nbd2 c5 7.e4 — there's your trademark central push. After 7...Nc6 8.Re1 b5 9.e5! (timing it perfectly — Black committed pieces) Nd7 10.Nf1 a5 — White's knight starts the f1-h2-g4 reroute while Black expands queenside. The resulting position is a perfect KIA: kingside attack coming with Nh2-g4 + h4-h5, Black has queenside space but no targets. The position has been Hikaru's bullet bread-and-butter for years."
         },
         {
           "name": "vs Sicilian-like Setup",
           "pgn": "Nf3 d5 g3 c5 Bg2 Nc6 O-O e5 d3 Nf6 Nbd2 Be7 e4 O-O Re1 d4 a4 Be6 Nc4 Nd7",
-          "explanation": "When Black plays c5 and e5, the position resembles a Reversed Sicilian. White maneuvers slowly and looks for breaks with f4 or b4."
+          "explanation": "When Black plays the …d5 + …c5 + …e5 setup (a Reverse Sicilian), the KIA adapts. After 6.e4 O-O 7.Re1 — White waits. Black often plays 7...d4 (closing the centre), which White WELCOMES: 8.a4 (preventing …b5) Be6 9.Nc4 — the knight reaches a beautiful outpost on c4, attacking e5 and supporting future a4-a5 ideas. Black has the closed centre they wanted, but White's pieces are perfectly placed for the slow positional grind."
         },
         {
           "name": "vs Caro-Kann Setup",
           "pgn": "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O Nh4 Re8",
-          "explanation": "Against the Caro-Kann structure with c6 and Bg4, Hikaru builds with d3-Nbd2-e4. Once the center opens, the Bg2 becomes powerful and White gets a pleasant initiative on the kingside."
+          "explanation": "Against the Caro-Kann structure (…d5 + …c6 + …Bg4), the KIA is slightly different. Black's …Bg4 pin needs to be addressed. You complete development with 7.d3 Ngf6 8.Nbd2 e5 (Black grabs space) 9.e4! — opening the centre on YOUR terms. After 9...dxe4 10.dxe4 Bc5 11.h3 Bh5 12.Qe1 O-O 13.Nh4 — the knight reroutes to f5 (eventually) and the kingside attack begins. Hikaru's win-rate in this specific setup is among the highest of any elite-level KIA player."
         }
       ],
       "trapLines": [
         {
           "name": "Premature ...d4 Pawn Storm",
           "pgn": "Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 d4",
-          "explanation": "Black closes the center with ...d4 thinking it restricts White, but it frees White to launch a devastating kingside pawn storm with f4-f5 against the now-permanent dark-square structure."
+          "explanation": "When Black plays …d4 closing the centre prematurely (without securing the d-pawn with proper support), they've actually helped you. The d4-pawn isn't attacking anything important AND locks the centre forever. You can now launch the kingside attack with no central counterplay possible — f4 + f5 + Nh2-g4 + h4-h5 — Black has no way to break open the centre to slow you down. The trap exposes the amateur fear of 'losing the centre'; closing it is often worse than abandoning it."
         },
         {
           "name": "Early ...c5 Long Diagonal",
           "pgn": "Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 c5 e4 dxe4 dxe4",
-          "explanation": "Black grabs space with ...c5 too early without securing d5. After e4 dxe4 dxe4, White's Bg2 dominates the open long diagonal — the e4 pawn supports the central e5 push."
+          "explanation": "When Black plays …c5 + …dxe4 quickly without ensuring the long diagonal stays closed, the Bg2 becomes devastating. After 7.e4 dxe4 8.dxe4, the diagonal a8-h1 is now open with NO Black piece to block it. The Bg2 stares at b7 AND eyes future e4-e5 advances. Black's pieces lack coordination because they haven't been developed yet, while White's pieces are all ready. This is why the KIA's opening principle ('setup before plan') matters: Black needs a setup BEFORE engaging, but the KIA is hard to engage."
         }
       ]
     },
@@ -1537,37 +1537,37 @@
       "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Ba6 b3 g6 f4 Bg7",
       "color": "white",
       "style": "Tactical, Dynamic",
-      "overview": "Hikaru plays the Scotch Four Knights and the classical Scotch as a surprise weapon. His approach is direct — open the center, develop rapidly, and create tactical complications. He often catches opponents off guard with this choice.",
+      "overview": "When Hikaru rolls out the Scotch in bullet, he's not surprising opponents — he's announcing 'I'm not playing slow chess today.' Where Naroditsky teaches the Scotch as tempo arithmetic for the long haul, Hikaru uses it as a direct-attack opening: blast open the centre with 3.d4, trade pieces fast with 5.Nxc6, push 6.e5 cramping, and have all pieces on attacking squares by move 12. In bullet this is unbeatable because Black is still trying to remember whether to play …Bc5 or …Nf6 while Hikaru is already attacking.",
       "keyIdeas": [
-        "Open the center immediately with d4 and aim for piece activity — this central control is the foundation for all middlegame operations",
-        "After Nxc6 bxc6, Black's doubled c-pawns are a permanent structural weakness — target them with Rc1 and Na4 while Black struggles to activate the damaged queenside",
-        "Push e5 to gain kingside space and drive Black's knight from f6, creating a cramped position where Black's pieces struggle to coordinate",
-        "Use the half-open d-file and active pieces for pressure — maintaining this pressure forces the opponent to defend passively"
+        "5.Nxc6 is the Hikaru move — not 5.Be3 (Naroditsky's preference). After 5.Nxc6 bxc6 you immediately damage Black's queenside structure AND open the b-file for your rook. The price: you trade off your centralised d4-knight.",
+        "Doubled c-pawns are a permanent target. After Nxc6 bxc6, Black has c6 + c7 doubled — a structural weakness that doesn't recover until the endgame. Target the c-pawns with Rc1 + Na4 + Bb3 (eyeing c6 indirectly).",
+        "The e5 push is non-optional after Nxc6 bxc6. Play it immediately — it kicks Black's f6-knight, cramps the king-side, AND opens the e-file with no obstruction. Pause for any other move and Black plays …d5 equalising.",
+        "Aim for the f4-f5 kingside attack with a4-Ba3 supporting. The Ba3 + f4-f5 + e5-pawn combination creates a vise that's nearly impossible to defend in fast time controls."
       ],
       "traps": [
-        "After Nxc6 bxc6 e5, Black must be careful not to lose a pawn — Qe7 is forced"
+        "After 5.Nxc6 bxc6 6.e5 — Black's queen MUST go to e7 to defend the f6-knight. If Black plays anything else (like 6...Nd5? thinking it 'centralises'), 7.c4! kicks the knight to a poor square AND attacks while keeping the e5-pawn cramping."
       ],
       "warnings": [
-        "Do not allow Black to consolidate with d5 and Bf5 — keep the pressure up",
-        "Be careful of Qe7 and Ba6 targeting c4"
+        "Don't let Black consolidate with …d5 + …Bf5. If you give Black two moves of breathing room, the doubled c-pawns become defensible and the position equalises. The Scotch's edge is the IMMEDIATE pressure, not the long-term endgame.",
+        "Watch the c4-pawn carefully. Once you play 7.c4 attacking the d5-knight, Black has resources like …Ba6 (attacking c4) — be ready with b3 supporting OR allow the trade if it serves you."
       ],
       "variations": [
         {
           "name": "Scotch 4...Nf6 5.Nxc6",
           "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Ba6 b3 g6 f4 Bg7",
-          "explanation": "Hikaru's preferred line. The e5 pawn cramps Black and White has a clear plan of development with Ba3, f4, and kingside expansion."
+          "explanation": "Hikaru's full Scotch attacking sequence. After 5.Nxc6 bxc6 6.e5 (the forcing cramp) Qe7 (only square — defending Nf6 from the e5-pawn capture) 7.Qe2 (pinning the f6-knight) Nd5 (the knight goes where it has to) 8.c4 (kicking) Ba6 (Black hits the c4-pawn) 9.b3 (supporting) g6 10.f4 (kingside attack starts) Bg7 — Black has reached full development but White has a beautiful attacking position. The pawn chain e5+f4 cramps Black's kingside; the Ba3 (planned next) will eye the long diagonal; the open b-file is yours for the rook. By move 15, you're typically launching f5 cracking the position open."
         },
         {
           "name": "Scotch 4...Bc5 Classical",
           "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nxc6 Qf6 Qd2 dxc6 Nc3 Ne7",
-          "explanation": "Against 4...Bc5, Hikaru plays Nxc6 + Qd2 and gets a comfortable position. The Ne7 development is forced — White's superior pawn structure and lead in development give a lasting edge."
+          "explanation": "Against the classical 4...Bc5, Hikaru plays the unusual 5.Nxc6 Qf6 (the queen attacks the knight on c6 AND keeps options) 6.Qd2 (defending the c6-knight indirectly — if Qxc6+ Qxc6, you've kept a defensible position) dxc6 7.Nc3 Ne7 — Black has equalised material but White has the better-coordinated pieces and the easier game. Less ambitious than the 4...Nf6 line but more solid; useful when you want a controllable game without sharp tactics."
         }
       ],
       "trapLines": [
         {
           "name": "Misplaced Queen ...Qh4",
           "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Qxe4+ Be2",
-          "explanation": "Black plays ...Qh4 grabbing the e4 pawn but the queen becomes a target. After Nb5 White's pieces flood the queenside and Black's queen wanders — White develops with tempo for the rest of the opening."
+          "explanation": "The same 4...Qh4 trap that punishes Naroditsky's Scotch — White's response is 5.Nb5! threatening Nxc7+ AND Nd6+, forcing 5...Qxe4+ 6.Be2 (calmly developing). Black has bought ONE pawn for the next 10 moves of misery; meanwhile Hikaru is calculating moves 3 ahead and Black hasn't completed development yet. The same trap works in bullet because the queen-wandering pattern is forced — Black can't think their way out."
         }
       ]
     },
@@ -1579,42 +1579,42 @@
       "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd2 Be7 Be2 O-O O-O",
       "color": "white",
       "style": "Solid, Practical",
-      "overview": "Hikaru's blitz weapon of choice. He plays the London system for its reliability and low theoretical requirements. In blitz, the consistent piece placement means he can play on autopilot through the opening and focus his energy on the middlegame.",
+      "overview": "Hikaru's London System is built for bullet — three-second-per-move chess where you don't have time to think about openings. Same pieces every game: Bf4 + e3 + c3 + Nbd2 + Bd3 + O-O. Memorise the move order, play it 10,000 times, and you can reach move 15 in 4 seconds of clock time. The trade-off: against well-prepared GMs, the London is barely an opening — your opponent equalises automatically. But against everyone else (and in bullet against EVERYONE), it's a tempo factory. Hikaru's blitz/bullet rating is partly built on this opening.",
       "keyIdeas": [
-        "Develop Bf4 BEFORE playing e3 — this move order is critical because after e3, the dark-squared bishop would be permanently locked behind the pawn chain",
-        "Build a solid center with d4, e3, c3 and look for e4 later — this central control is the foundation for all middlegame operations",
-        "After Qb6 targeting b2, play Qb3 to trade queens or Qc2 to keep them on — maintaining this pressure forces the opponent to defend passively",
-        "The London is a system — same setup works against most Black responses — a key strategic concept in London System"
+        "Bf4 BEFORE e3 — non-negotiable, every time. If you play e3 first, the bishop is locked behind its own pawn permanently. This is the single rule you can't break in the London.",
+        "Handle …Qb6 with Qb3 (offering the queen trade), NOT Qc1 (passive). The Qb3 forces Black to choose: trade queens into a slightly worse endgame OR retreat the queen losing a tempo.",
+        "The Bf4-Bg3 retreat after …Nh5 attacks is the bishop's safety move. Don't trade Bf4 for the knight just because Black offers; retreat to g3 where the bishop keeps its diagonal AND the e2-pawn defends it from further harassment.",
+        "Don't play e4 for 20+ moves. The London works because of patient piece improvement: Bd3 → eventually swing the rook to e1 → maybe Ne5 outpost → THEN consider e4 break once Black has run out of useful moves."
       ],
       "traps": [
-        "If Black plays Qb6 attacking b2, Qb3! offers a queen trade that favors White structurally"
+        "Against …Qb6 hitting b2, the immediate Qb3! is the answer. Black has a tactical problem: if they trade queens with Qxb3, axb3 gives White an open a-file AND the b3-pawn defends c4 perfectly; if they retreat the queen, they've lost two tempos for nothing."
       ],
       "warnings": [
-        "Play Bf4 before e3 — this is critical; e3 first traps the bishop",
-        "Do not overextend on the kingside without first securing the center"
+        "DON'T play e3 before Bf4 — bishop trapped forever.",
+        "DON'T overextend the kingside without securing the centre. Premature h4 or g4 in the London exposes your king when Black still has the …c5 break ready to crack the centre open."
       ],
       "variations": [
         {
           "name": "Standard vs d5",
           "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd2 Be7 Be2 O-O O-O",
-          "explanation": "The most common London line. White builds the standard d4-e3-c3 triangle then completes development with Nbd2 + Be2 + O-O — looking for the e4 break once the kingside is safe."
+          "explanation": "The London System against …d5, with Hikaru's specific move-order. After 5.e3 (NOT before Bf4!) Nc6 6.c3 Qb6 (Black hits b2) 7.Qb3! (the standard counter — offers queen trade) c4 (Black declines the trade by pushing the c-pawn) 8.Qc2 Bf5 (Black develops to a useful square) 9.Qc1 (the queen retreats to a safe square) e6 10.Nbd2 Be7 11.Be2 O-O 12.O-O — full development reached. The position is balanced; the London has done its job by avoiding theory and reaching a playable middlegame. From here it's pure technique."
         },
         {
           "name": "vs KID Setup",
           "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 O-O Be2 d6 h3 Nbd7 O-O c5 c3 b6 Nbd2 Bb7 a4 a6",
-          "explanation": "Against the fianchetto, the London remains solid. White plays h3 to prevent Nh5 and develops smoothly."
+          "explanation": "When Black plays the fianchetto with 2...g6 + 3...Bg7, the London adapts. Hikaru uses 4.e3 O-O 5.Be2 (modest setup — the Bd3 attacking idea doesn't work against a fianchettoed king) d6 6.h3! (prophylaxis against …Nh5 trying to trade the f4-bishop). After natural development 7.O-O Nbd7 8.c3 c5 9.Nbd2 b6 10.Bb7 11.a4 a6 — both sides have completed development. The position is solid; Hikaru wins these games through superior middlegame play, not opening tricks."
         }
       ],
       "trapLines": [
         {
           "name": "...Qb6 Meets Qb3 Counter",
           "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd2",
-          "explanation": "Black thinks ...Qb6 pressures b2, but Qb3 offers a queen trade that favors White structurally. After the queens stay on, White gets e4 with a strong center."
+          "explanation": "The standard …Qb6 → Qb3 → …c4 → Qc2 → …Bf5 → Qc1 sequence. Black thinks they're pressuring b2 and winning a tempo; in reality, White's queen dance forces Black to commit pieces (Qc2 + Bf5 + Qc1 brings the queen back to a safe square AND Black has spent two tempos with the queen and Bf5). The position transposes into a normal London. The trap exposes the amateur's belief that hitting b2 wins material — it doesn't, because White has prepared resources."
         },
         {
           "name": "...Nh5 Bishop Hunt Backfires",
           "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Nh5 Bg5 h6 Bh4 g5 Bg3 Nxg3 hxg3",
-          "explanation": "Black plays ...Nh5 trying to trade or trap the bishop. After Bg5-Bh4-Bg3, White keeps the bishop pair and the open h-file becomes a weapon."
+          "explanation": "When Black plays …Nh5 trying to harass the f4-bishop, the London teacher's response is the bishop tour: 5...Nh5 6.Bg5 h6 7.Bh4 g5 8.Bg3 Nxg3 9.hxg3 — Black has traded the f6-knight for your dark-squared bishop. Material is even (minor piece for minor piece). The structural picture: White has doubled g-pawns (g2+g3) — visually ugly but actually compensated by the OPEN h-file for your rook lift. Black has FORCED their own kingside weakening (…h6+…g5) to win the trade. With your rook on h1 staring down the open file at Black's vulnerable kingside, you're attacking immediately while Black struggles to coordinate. The 'ugly' doubled g-pawns are the price of the attacking lane."
         }
       ]
     },
