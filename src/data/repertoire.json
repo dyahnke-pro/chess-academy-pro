@@ -971,66 +971,66 @@
     "variations": [
       {
         "name": "Sveshnikov: Main Line 9.Nd5 (Deep)",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Be2 Be6 O-O Bh4 Nce3 Rb8 g3 Bg5 Ng4 Nd4",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Be2 Be6 O-O",
         "explanation": "The deepest main line of the Sveshnikov. After 11...O-O 12.Nc2, Black reroutes the bishop to g5 to unblock the f-pawn for a future ...f5 break. White plays Be2, O-O, and Nce3 to reinforce d5, while Black maneuvers with ...Bh4 provoking g3, retreats to g5, and plays ...Nd4 seizing the initiative before White consolidates."
       },
       {
         "name": "Sveshnikov: 9.Bxf6 gxf6 Early Exchange",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Bxf6 gxf6 Nd5 Bg7 c3 f5 exf5 Bxf5 Nc2 Be6 Nce3 O-O Bd3 f5 Qh5 Rb8",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Bxf6 gxf6 Nd5 Bg7 c3 f5 exf5 Bxf5 Nc2 Be6 Nce3 O-O Bd3 f5 Qh5",
         "explanation": "White exchanges on f6 before playing Nd5, giving Black doubled f-pawns but the devastating bishop pair on g7 and the long diagonal. The key ...f5 break opens the e-file and activates the light-squared bishop, while ...Be6 challenges d5 directly. Black follows with a second ...f5 creating dynamic central tension that White must handle carefully to avoid being overwhelmed by the bishops."
       },
       {
         "name": "Sveshnikov: Chelyabinsk (c4 System)",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c4 b4 Nc2 a5 Be2 O-O O-O Bg5 Qd3 Be6 Nce3 Rb8",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c4 b4 Nc2 a5 Be2 O-O O-O Bg5 Qd3 Be6",
         "explanation": "The Chelyabinsk system where White plays 11.c4 to permanently clamp down on d5 and prevent Black's ...b4 expansion. Black responds with ...b4 pushing the knight to c2, then expands with ...a5 to secure queenside space. After castling, Black repositions with ...Bg5 and ...Be6 to challenge the d5 knight. The strategic struggle revolves around whether White's d5 control outweighs Black's bishop pair and queenside space advantage."
       },
       {
         "name": "Sveshnikov: Novosibirsk (...Bg5 System)",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bg5 Nc2 Rb8 h4 Bh6 Be2 O-O O-O Be6 Bg4 Bxd5 exd5 Ne7",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bg5 Nc2 Rb8 h4 Bh6 Be2 O-O",
         "explanation": "The Novosibirsk features ...Bg5 instead of the standard ...O-O, going to g5 to control dark squares and provoke h4 before retreating to h6. Black delays castling to play ...Rb8 first, preparing queenside expansion. After White trades bishops on g4, Black recaptures on d5 and reroutes the knight via e7 to challenge d5 or head to f5."
       },
       {
         "name": "Anti-Sveshnikov: 6.Nf3 Quiet Retreat",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 Bb4 Bd3 d5 exd5 Nxd5 Bd2 Nxc3 bxc3 Bd6 O-O O-O Re1 Bg4 Be4 Qf6 Rb1 Bxf3 Bxf3 Nd4",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 Bb4 Bd3 d5 exd5 Nxd5 Bd2",
         "explanation": "White retreats with 6.Nf3 instead of 6.Ndb5 to avoid the theoretical storm of the main Sveshnikov. Black immediately exploits the tempo loss with ...Bb4 pinning the knight, then strikes with ...d5 opening the center. After exchanges on d5 and c3, Black gets the bishop pair and a harmonious setup. The key idea is ...Bg4 pinning the f3-knight, followed by ...Qf6 adding pressure, and eventually ...Nd4 occupying the outpost."
       },
       {
         "name": "Sveshnikov: 11.c4 Queenside Grip",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c4 b4 Nc2 O-O g3 a5 Bg2 Bg5 O-O Be6 Qd3 a4 Nce3 Rb8",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c4 b4 Nc2 O-O g3 a5 Bg2 Bg5 O-O Be6 Qd3",
         "explanation": "In this c4 system, White fianchettoes with g3 and Bg2 to reinforce the d5 knight from the long diagonal. Black counters with ...a5-a4 expanding on the queenside and fixing White's a-pawn as a potential weakness. The bishop goes to g5 to prepare the ...f5 break while ...Be6 challenges d5 directly. Black's plan is to create queenside counterplay with ...Rb8 and ...a4, while White tries to use the d5 outpost and the g2 bishop's pressure along the long diagonal."
       },
       {
         "name": "Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 N1c3 a6 Na3 b5 Nd5 Nf6 c4 b4 Nc2 Nxd5 exd5 Ne7 Be2 Ng6 O-O Be7 Bg4 O-O Bxc8 Rxc8",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 N1c3 a6 Na3 b5 Nd5 Nf6 c4 b4 Nc2",
         "explanation": "The Kalashnikov is the Sveshnikov's close cousin where Black plays 4...e5 before ...Nf6, avoiding the Bg5 pin entirely. After 5.Nb5 d6 and Nd5, Black develops with ...Nf6 and responds to c4 with ...b4, trading pieces to reach a position where the knight on g6 aims for f4. The strategic ideas parallel the Sveshnikov but the different move order gives Black unique options."
       },
       {
         "name": "Sveshnikov: ...Rb8 Expansion Plan",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Rb8 a4 bxa4 Rxa4 a5 Be2 Be6 O-O Bg5 Nce3 Nd4",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Rb8 a4 bxa4 Rxa4 a5",
         "explanation": "Black plays ...Rb8 early to support the b-pawn and prepare queenside expansion, accepting the exchange after a4 with ...bxa4 and fixing the rook with ...a5. The follow-up is ...Be6 challenging d5, ...Bg5 unblocking the f-pawn, and ...Nd4 seizing the central outpost. This plan gives Black excellent counterplay against White's queenside structure while maintaining pressure on d5."
       }
     ],
     "trapLines": [
       {
         "name": "Sveshnikov: ...f5 Breakthrough Combination",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Be2 Be6 O-O f5 exf5 Bxf5 Bd3 Bxd3 Qxd3 Bf4 Nce3 Nd4",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Be2 Be6 O-O",
         "explanation": "The ...f5 pawn break is the Sveshnikov's most powerful tactical resource, requiring Black to first reroute the bishop from f6 to g5 to unblock the f-pawn. Once ...f5 lands, Black exchanges light-squared bishops to eliminate a defender of d5, then plays ...Bf4 eyeing e3 and the kingside. The culminating ...Nd4 creates dual threats on c2 and f3, often winning material."
       },
       {
         "name": "Sveshnikov: b4 Queenside Demolition",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Rb8 a4 b4 cxb4 Nxb4 Ncxb4 Rxb4 Nc3 Be6 Be2 Qb8 O-O Rb2",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Rb8 a4",
         "explanation": "Black sacrifices the queenside pawn structure with ...b4 to activate the rook on the second rank via b4-b2. White struggles to coordinate because the Nc3 is tied to defending e2 and a2 simultaneously. The devastating ...Qb8 and ...Rb2 invades the seventh rank, creating threats against a2, f2, and the exposed White king."
       },
       {
         "name": "Sveshnikov: ...Nd4 Central Occupation",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Be2 Be6 O-O Nd4 Nxd4 exd4 c4 bxc4 Bxc4 Bxd5 Bxd5 Rb8",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Be2 Be6 O-O",
         "explanation": "Black plays the surprising ...Nd4, seizing the key central square. After Nxd4 exd4, Black gets a powerful passed d-pawn and opens the e-file. White must respond with c4, but after ...bxc4 Bxc4 Bxd5 Bxd5 Rb8, Black has the bishop pair, an active rook on the b-file, and a mobile d-pawn. The position is dynamically balanced but practically easier for Black because White's king position is loosened and the d-pawn ties down White's pieces."
       }
     ],
     "warningLines": [
       {
         "name": "White's d5 Knight Becomes Permanent",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Rb8 Be2 Kh8 O-O g6 Nce3 Bg7 Qd2 f5 exf5 gxf5",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Rb8 Be2",
         "explanation": "This warning shows what happens when Black delays ...Be6 too long, allowing White to consolidate with Nc2-e3 reinforcing d5. After ...g6 weakens the kingside, White's queen maneuvers to h6 when the ...f5 break creates holes around the Black king. Always prioritize ...Be6 to challenge d5 before it becomes an unassailable fortress."
       },
       {
