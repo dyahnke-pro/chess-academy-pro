@@ -377,7 +377,7 @@
       "playerId": "naroditsky",
       "eco": "D85",
       "name": "Grunfeld Defense (Naroditsky)",
-      "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 cxd4 cxd4 Qxd2+ Nxd2",
+      "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 cxd4 cxd4 Qxd2+ Nxd2 e6 Nb3 b6 f3 Ba6 Be2 Rd8",
       "color": "black",
       "style": "Dynamic, Counter-attacking",
       "overview": "Naroditsky uses the Grunfeld as his secondary weapon against 1.d4. Black allows White to build a massive center, then attacks it with c5 and Bg7 pressure. The positions are concrete and require precise calculation.",
@@ -397,30 +397,30 @@
       "variations": [
         {
           "name": "Exchange Variation Main Line",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1",
-          "explanation": "The most common line. White builds a big center but Black's pressure on c3 and d4 creates dynamic counterplay. The Bg7 is extremely powerful here."
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 Rd8 d5 e6 Bg5 f6 Be3 Nc6 Bd3 exd5",
+          "explanation": "The most common line. White builds a big center but Black pressures c3 with Qa5 + Rd8 and breaks with e6 — the Bg7 rakes the long diagonal once the center opens."
         },
         {
           "name": "Russian System",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 Qb3 dxc4 Qxc4 O-O e4 a6 Be2 b5 Qb3 c5 dxc5 Be6",
-          "explanation": "White develops the queen early. Black gets active play with b5 and c5, pressuring White's center and creating queenside counterplay."
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 Qb3 dxc4 Qxc4 O-O e4 a6 Be2 b5 Qb3 c5 dxc5 Be6 Qc2 Nbd7 Be3 Rc8 Rd1 b4 Nd5 Bxd5",
+          "explanation": "White develops the queen early. Black builds queenside counterplay with b5+c5; the Nd5 outpost is challenged by Bxd5 and the resulting bishop-pair endgame favors Black's dynamic chances."
         },
         {
           "name": "Fianchetto Grunfeld",
-          "pgn": "d4 Nf6 c4 g6 g3 d5 Bg2 Bg7 cxd5 Nxd5 Nf3 Nb6 Nc3 Nc6 e3 O-O O-O Re8 Re1 e5 d5 Na5 e4 c6",
-          "explanation": "White fianchettoes instead of building the big center. Black plays more flexibly with Nb6 and e5. Naroditsky likes this because it avoids the heavy Exchange Variation theory."
+          "pgn": "d4 Nf6 c4 g6 g3 d5 Bg2 Bg7 cxd5 Nxd5 Nf3 Nb6 Nc3 Nc6 e3 O-O O-O Re8 Re1 e5 d5 Na5 e4 c6 b3 cxd5 exd5 Bg4 Ba3 e4 Nxe4 Qxd5",
+          "explanation": "White fianchettoes instead of building the big center. After Re8/e5/Na5 Black breaks with c6; the long forced sequence ends in a queen-and-piece middlegame where Black's piece activity compensates for the slight structural concession."
         },
         {
           "name": "4.Bf4 Anti-Grunfeld",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Bf4 Bg7 e3 O-O cxd5 Nxd5 Nxd5 Qxd5 Bxc7 Na6 Bxa6 bxa6 Nf3 Qb5 Bf4 Bb7",
-          "explanation": "A tricky sideline where White plays Bf4 instead of cxd5. Danya shows that after Bxc7 Black gets the bishop pair and active piece play as compensation for the pawn structure."
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Bf4 Bg7 e3 O-O cxd5 Nxd5 Nxd5 Qxd5 Bxc7 Na6 Bxa6 bxa6 Nf3 Bf5 Qb3 Qc6 Bg3 Be4 O-O Rfc8 Qa3 e6",
+          "explanation": "A tricky sideline where White plays Bf4 + Bxc7. Black gets the bishop pair and active piece play; after Bf5/Be4 + Rfc8 the open c-file targets White's shattered queenside pawns."
         }
       ],
       "trapLines": [
         {
-          "name": "Exchange Nxc3 Bxa1 Trick",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Qa4+ Nd7 Ba3 c5 Nf3 cxd4 Bb5 O-O Bxd7 Bxd7 Qxd4 Bc6",
-          "explanation": "White tries to develop aggressively with Qa4+ and Ba3 but Black calmly develops. After the exchanges Black's Grunfeld bishop on g7 rakes the long diagonal and White's shattered queenside pawns are a permanent weakness."
+          "name": "Exchange Qa4+ Counter",
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Qa4+ Nd7 Nf3 O-O Be2 c5 O-O cxd4 cxd4 Nc5 dxc5 Bxa1",
+          "explanation": "White's Qa4+ tries to disrupt Black's development. Black calmly plays Nd7 + O-O + c5 — when White grabs the c5 pawn, Bxa1 wins the exchange. Black's bishop pair plus open files dominate the resulting position."
         },
         {
           "name": "Overextended Center Strike",
@@ -429,8 +429,8 @@
         },
         {
           "name": "Early Queen Trap on d1",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 cxd4 cxd4 Qxd2+ Nxd2 Rd8 d5 e6 Nc4 exd5 exd5 b5 Na5",
-          "explanation": "In the endgame line, White pushes d5 to maintain the center but Black undermines it with ...e6 and ...b5. The knight on a5 is offside and Black wins the c1 rook's pawn with ...Bxb2."
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 cxd4 cxd4 Qxd2+ Nxd2 Rd8 d5 e6",
+          "explanation": "In the queenless middlegame, White pushes d5 to maintain space — but Black's Rd8 + ...e6 break challenges the d-pawn at its weakest moment, undermining White's structural advantage."
         }
       ]
     },
