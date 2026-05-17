@@ -1062,7 +1062,7 @@
       "playerId": "gothamchess",
       "eco": "B30",
       "name": "Anti-Sicilian Rossolimo (GothamChess)",
-      "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4 Be7 c4 Nf6 Nc3",
+      "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4",
       "color": "white",
       "style": "Positional, Anti-Theoretical",
       "overview": "Levy's anti-Sicilian weapon. Instead of entering the Open Sicilian's massive theory, White plays Bb5 (Rossolimo) and gets a comfortable game with less memorization. The idea is to disrupt Black's typical Sicilian plans and steer toward positions where understanding trumps preparation.",
@@ -1082,35 +1082,35 @@
       "variations": [
         {
           "name": "Rossolimo 3.Bb5 e6",
-          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4 Be7 c4 Nf6 Nc3",
-          "explanation": "The main line Levy recommends. After 3...e6, White retreats the bishop and plays for a central break with d4. The resulting IQP positions favor White's active pieces."
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4",
+          "explanation": "The main line Levy recommends. After 3...e6, White retreats the bishop and plays for a central break with d4. The Qxd4 recapture gives White an active queen and central control."
         },
         {
           "name": "Rossolimo 3.Bb5 g6",
-          "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 e5 Bxc6 dxc6 d3 Nf6 Nbd2 O-O Nc4 Nd7 a4 Re8 a5",
-          "explanation": "When Black fianchettoes, White takes on c6 and plays for the d6 square. The doubled c-pawns give White long-term positional pressure. A slower, strategic approach."
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 e5 Bxc6 dxc6 d3",
+          "explanation": "When Black fianchettoes, White takes on c6 and plays for the d5/d6 squares. The doubled c-pawns give White long-term positional pressure."
         },
         {
           "name": "Accelerated Pawn Storm (Carlsen-inspired)",
-          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 Bxc6 bxc6 d3 d5 e5 f6 exf6 Nxf6 O-O Bd6 Nbd2 O-O Re1 e5 Nc4 Bc7",
-          "explanation": "A more aggressive approach where White takes on c6 early and plays for a kingside attack. Inspired by Carlsen's accelerated development strategy that scores very well in practice."
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 Bxc6 bxc6 d3 d5 e5",
+          "explanation": "A more aggressive approach where White takes on c6 early. After e5 Black's structural weaknesses combined with White's space lead create lasting initiative."
         }
       ],
       "trapLines": [
         {
           "name": "a6 Bxc6 Doubled Pawns",
-          "pgn": "e4 c5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 d3 Bg4 Nbd2 e5 h3 Bh5 g4 Bg6 Qe2 Bd6 Nc4",
-          "explanation": "After a6, White takes Bxc6 dxc6 doubling Black's pawns. The pawn structure is permanently damaged and White targets the weak c-pawns."
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 d3 Bg4",
+          "explanation": "After a6, White takes Bxc6 dxc6 doubling Black's pawns. The resulting structure is permanently damaged; White targets the weak c-pawns long into the middlegame."
         },
         {
           "name": "Nd4 Fork Trick Exploited",
-          "pgn": "e4 c5 Nf3 Nc6 Bb5 Nd4 Nxd4 cxd4 O-O a6 Bc4 e6 d3 Nf6 Bg5 Be7 Nd2 O-O f4",
-          "explanation": "Black plays Nd4 trying to fork bishop and knight, but after Nxd4 cxd4, White castles and the d4 pawn becomes a target. White builds a kingside attack with f4."
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 Nd4 Nxd4 cxd4 O-O a6 Bc4 e6",
+          "explanation": "Black plays Nd4 trying to fork bishop and knight, but after Nxd4 cxd4 + O-O White's lead in development becomes overwhelming — the d4 pawn is a target, not a strength."
         },
         {
           "name": "Slow Development d4 Push",
-          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 d4 cxd4 Nxd4 a6 Be2 Nxd4 Qxd4 Nc6 Qd1 Bc5 Nc3 O-O Be3",
-          "explanation": "If Black develops slowly, White pushes d4 and opens the center. White gets a harmonious position with all pieces active while Black still struggles to coordinate."
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 d4 cxd4 Nxd4 a6 Be2 Nxd4 Qxd4 Nc6",
+          "explanation": "If Black develops slowly, White pushes d4 and opens the center. After the trades White's harmonious development keeps the initiative against Black's still-uncoordinated pieces."
         }
       ]
     },
