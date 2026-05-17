@@ -1847,20 +1847,15 @@
         },
         {
           "name": "vs King's Indian Setup",
-          "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 Nf3 f5 O-O Nf6 Rb1 O-O b4 h6 b5 Ne7 Ba3 Be6 Nd2 g5",
-          "explanation": "Against the King's Indian-like setup with g6 and f5, Hikaru expands on the queenside with b4-b5 and Ba3 targeting d6. Black attacks on the kingside but White's queenside play often arrives first."
+          "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 Nf3 f5 O-O Nf6 Rb1 O-O b4 h6 b5 Ne7 Ba3 Be6 Nd2",
+          "explanation": "Against the King's Indian-like setup with g6 and f5, Hikaru expands on the queenside with b4-b5 and Ba3 targeting d6. Nd2 prepares the f4 break — White's queenside play often arrives first."
         }
       ],
       "trapLines": [
         {
           "name": "Premature ...d4 Closing Center",
-          "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 O-O Be3 f5 Rc1 Be6 Na4 Nxa4 Qxa4 Bd5 Bc5",
-          "explanation": "Black plays ...d4 closing the center, but it gives White a free hand to maneuver. The Bg2 dominates and White exploits the dark squares with Bc5."
-        },
-        {
-          "name": "...e4 Fork Exploited",
-          "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 e4 Ng5 Qe7 Bg2 h6 Nh3 g5 d3 exd3",
-          "explanation": "Black pushes ...e4 trying to fork, but the knight retreats to g5 then h3. White opens the center with d3 and gets powerful piece play on the open files."
+          "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 O-O Be3 f5 Rc1 Be6 Na4 Nxa4",
+          "explanation": "Black plays the f5 expansion while White maneuvers Na4 — when Black trades the knight, White claims dark-square pressure with Bc5 + Bg2 fully active."
         }
       ]
     },
