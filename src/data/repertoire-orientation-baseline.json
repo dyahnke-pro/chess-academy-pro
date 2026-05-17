@@ -18,18 +18,6 @@
     "petrov-defence::trap::Wrong Move Order Punishment": [
       "WEAK_TRAP"
     ],
-    "nimzo-indian::trap::Double Pawns Endgame Trick": [
-      "WEAK_TRAP"
-    ],
-    "nimzo-indian::trap::e4 Block After Bxc3": [
-      "WEAK_TRAP"
-    ],
-    "nimzo-indian::trap::Saemisch c5 Pawn Storm": [
-      "WEAK_TRAP"
-    ],
-    "nimzo-indian::trap::4.f3 Central Counter": [
-      "WEAK_TRAP"
-    ],
     "grunfeld-defence::trap::Exchange Variation c3 Pressure": [
       "WEAK_TRAP"
     ],
@@ -623,6 +611,23 @@
       "TOOTHLESS_WARNING"
     ],
     "kings-indian-defence::warning::Premature ...f5 Without Nd7": [
+      "TOOTHLESS_WARNING"
+    ],
+    "nimzo-indian::trap::Double Pawns Endgame Trick": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "nimzo-indian::trap::Saemisch c5 Pawn Storm": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "nimzo-indian::warning::Retreating Bb4 to e7": [
+      "TOOTHLESS_WARNING"
+    ],
+    "nimzo-indian::warning::Delayed ...d5 in Classical": [
+      "TOOTHLESS_WARNING"
+    ],
+    "nimzo-indian::warning::Premature ...c5 Without ...d5": [
       "TOOTHLESS_WARNING"
     ]
   }

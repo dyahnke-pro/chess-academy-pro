@@ -2803,7 +2803,7 @@
     "id": "nimzo-indian",
     "eco": "E20",
     "name": "Nimzo-Indian Defence",
-    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qa4 c5 O-O-O Nc6 e4 Bb7 Bd3 Na5 d5 exd5 exd5 Nxd5",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qa4 c5",
     "color": "black",
     "style": "Positional, Flexible",
     "overview": "The Nimzo-Indian is the crown jewel of Black's 1.d4 defenses. By pinning the knight on c3 with ...Bb4, you immediately fight for control of e4 and create imbalances. The beauty of the Nimzo is its flexibility — you can play solid, aggressive, or positional depending on White's response. Carlsen, Fischer, and virtually every World Champion has played it.",
@@ -2824,7 +2824,7 @@
     "trapLines": [
       {
         "name": "Double Pawns Endgame Trick",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qa4 h6 Bxf6 Qxf6 e3 Bb7 Be2 Nd7 O-O e5 d5 Nc5 Qa5 Nd3",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qa4 h6 Bxf6 Qxf6",
         "explanation": "If White gets careless in the Classical Variation, Black can create threats along the long diagonal and the d-file. The knight maneuvering to d3 via c5 is a powerful idea that disrupts White's coordination."
       },
       {
@@ -2834,7 +2834,7 @@
       },
       {
         "name": "Saemisch c5 Pawn Storm",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 b6 O-O Na5 Ng3 Ba6 e4 d6 f4 Rc8",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 b6 O-O",
         "explanation": "After 4.a3 Bxc3+ 5.bxc3, White has the bishop pair but a shattered pawn structure. Black plays ...c5 and ...Nc6 to target the weak c3 and d4 pawns. The knight reroutes via a5 to pressure c4, while ...Ba6 exchanges the light-squared bishops to expose holes around White's king. With ...Rc8 targeting the c-file, Black has concrete queenside pressure and can prepare ...d5 or ...f5 breaks while White struggles to coordinate."
       },
       {
@@ -2853,66 +2853,66 @@
       },
       {
         "name": "Rubinstein System (4.e3)",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 Nbd7 Qe2 b6 Rd1 Bb7 d5 Bxc3 bxc3 exd5 Bxd5 Nxd5 Rxd5 Qc7 e4 Nf6 Rd3 Rfd8",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 Nbd7 Qe2 b6 Rd1 Bb7 d5 Bxc3",
         "explanation": "The Rubinstein creates the famous IQP positions after ...c5 and ...dxc4. When White plays d5, the position becomes sharp and tactical — Black captures on c3 doubling the pawns while White gets a powerful central advance. The IQP on d5 (or d4 after recapture) determines the game's character: White attacks with piece activity, Black blockades and targets the isolated pawn. These positions are the most instructive in chess.",
         "frequency": "very common",
         "deviationMove": 4
       },
       {
         "name": "Huebner Variation (4.e3 c5)",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Bd3 Nc6 Nf3 Bxc3+ bxc3 d6 O-O e5 Nd2 O-O Nb3 Re8 f4 e4 Be2 Bf5 g4 Bg6 f5 Bh5",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Bd3 Nc6 Nf3 Bxc3+ bxc3 d6 O-O e5 Nd2 O-O Nb3 Re8",
         "explanation": "The Huebner with ...c5 and ...Nc6 aims to pressure d4 and exploit the doubled c-pawns from the start. Black exchanges on c3 early, saddling White with the structural weakness. The key idea is ...d6 followed by ...e5, building a strong center. White compensates with the bishop pair and kingside attacking chances via f4-f5, but Black's solid pawn structure and central control make this a reliable equalizing system.",
         "frequency": "common",
         "deviationMove": 5
       },
       {
         "name": "Leningrad Variation (4.Bg5)",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Bg5 h6 Bh4 c5 d5 d6 e3 Bxc3+ bxc3 e5 Bd3 Nbd7 Ne2 Qe7 O-O g5 Bg3 Nh5 f3 Nf4 Nxf4 gxf4 Bf2 Nf6 e4 Rg8",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Bg5 h6 Bh4 c5 d5 d6 e3 Bxc3+ bxc3 e5 Bd3 Nbd7 Ne2 Qe7 O-O g5 Bg3",
         "explanation": "The Leningrad with 4.Bg5 tries to control e4 by pinning the knight. Black reacts with ...h6 Bh4 c5 and ...d6, establishing a Benoni-type structure. After ...Bxc3+ bxc3, the doubled pawns are offset by White's bishop pair. The critical line involves ...g5 and ...Nh5 with a kingside attack. Black must play aggressively since White's two bishops become very strong in open positions.",
         "frequency": "uncommon",
         "deviationMove": 4
       },
       {
         "name": "Kasparov Variation (4.Nf3)",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Nf3 c5 g3 cxd4 Nxd4 O-O Bg2 d5 cxd5 Nxd5 Qb3 Qa5 Bd2 Nc6 Nxc6 bxc6 O-O Bxc3 bxc3 Ba6 Rfd1 Qc5 Be1 Rab8 Qa4 Rb6",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Nf3 c5 g3 cxd4 Nxd4 O-O Bg2 d5 cxd5 Nxd5 Qb3 Qa5 Bd2 Nc6 Nxc6 bxc6 O-O Bxc3 bxc3 Ba6 Rfd1 Qc5",
         "explanation": "Kasparov's 4.Nf3 leads to a unique Catalan-like structure. After ...c5 and g3, the fianchettoed bishop on g2 becomes very powerful. Black must play ...d5 at the right moment to challenge the center. The exchange on c6 gives Black doubled pawns but the open b-file and active pieces provide full compensation. This variation rewards understanding over memorization.",
         "frequency": "common",
         "deviationMove": 4
       },
       {
         "name": "Saemisch Variation (4.a3)",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 b6 e4 Ne8 O-O Ba6 f4 d6 Ng3 f5 e5 Na5 Qe2 Nc4 Be3 d5 a4",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 b6 e4 Ne8 O-O Ba6 f4",
         "explanation": "The Saemisch with 4.a3 forces the bishop exchange immediately, giving White the bishop pair at the cost of doubled c-pawns. The resulting positions are strategically complex — White aims for a powerful center with e4 and f4, while Black blockades with ...Ne8, ...f5 and targets the c3 pawn. The knight maneuver ...Na5-c4 is a key resource, pressuring the weak doubled pawns. This was Fischer's preferred system against the Nimzo.",
         "frequency": "common",
         "deviationMove": 4
       },
       {
         "name": "4.f3 (Aggressive Center)",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3 c4 Nh3 Nc6 Nf2 O-O Be2 Re8 O-O b5 Ng4 Nxg4 fxg4 Qg5 Rf4 Na5",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3 c4 Nh3",
         "explanation": "The aggressive 4.f3 aims to build a massive center with e4. Black should respond with ...d5 immediately to prevent e4. After the exchange on c3, White has the two bishops and central ambitions, but the f3 pawn weakens the kingside. Black can develop rapidly and target the weakened dark squares. The positions are unbalanced and require precise play from both sides.",
         "frequency": "uncommon",
         "deviationMove": 4
       },
       {
         "name": "Fischer Variation (4.e3 b6)",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 b6 Bd3 Bb7 Nf3 O-O O-O d5 cxd5 exd5 a3 Bd6 b4 Nbd7 Qb3 a5 bxa5 bxa5 Rb1 Qe7 Ne2 Rfc8 Ng3 c5",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 b6 Bd3 Bb7 Nf3 O-O O-O d5 cxd5 exd5 a3 Bd6 b4 Nbd7 Qb3 a5",
         "explanation": "Fischer's plan with ...b6 and ...Bb7 develops the light-squared bishop before committing to a pawn structure. The bishop on b7 controls e4 and the long diagonal. Black delays ...d5 until the bishop is actively placed, then plays ...d5 followed by ...c5 to challenge the center. This flexible approach avoids the main theoretical battlegrounds while maintaining all of Black's strategic options."
       }
     ],
     "warningLines": [
       {
         "name": "Retreating Bb4 to e7",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 Be7 O-O b6 cxd5 exd5 Ne5 Bb7 Qf3 c5 dxc5 bxc5 Rd1 Nc6 Nxc6 Bxc6 Nb5 Bxb5 Bxb5 Qa5 Bd2 Qb6 Bc4",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3",
         "explanation": "Retreating the bishop to e7 after ...Bb4 wastes two critical tempi. The whole point of the Nimzo-Indian is the pin on c3 — if you retreat, White gets a comfortable QGD-type position without any structural concessions. The bishop has made two moves to arrive where it could have gone in one with 3...Be7. Always commit to the exchange on c3 or maintain the pin productively."
       },
       {
         "name": "Delayed ...d5 in Classical",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 b6 Bg5 Bb7 e3 d6 Bd3 Nbd7 Ne2 h6 Bh4 e5 d5 a5 Ng3 Nc5 O-O Nxd3 Qxd3 Nd7 f4 exf4 exf4",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 b6 Bg5 Bb7 e3 d6",
         "explanation": "Playing ...d6 instead of ...d5 gives White time to consolidate a strong center with e3-e4. Without the ...d5 pawn break, Black's light-squared bishop on b7 lacks targets and the position becomes cramped. White can build up with Ne2-g3, O-O, and f4, launching a dangerous kingside attack. Always prioritize the central ...d5 break in the Nimzo."
       },
       {
         "name": "Premature ...c5 Without ...d5",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Bd3 d6 Nf3 Bxc3+ bxc3 e5 d5 O-O O-O Nbd7 Nd2 Ne8 f4 f5 Rb1 exf4 exf4 g6 Nf3 Ng7 Nh4 Nf6",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Bd3 d6",
         "explanation": "Playing ...c5 without first establishing ...d5 can lead to a passive Benoni-like structure where White has the bishop pair advantage. The c3 pawns become a strength rather than a weakness in this structure because they support d4 and cover key squares. Black's lack of central presence lets White expand freely with f4 and e4. The correct approach is ...d5 first, then ...c5 to create central tension."
       }
     ]
