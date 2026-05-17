@@ -155,15 +155,6 @@
     "sicilian-alapin::trap::Alapin: ...e5 Counter-Thrust Trap": [
       "WEAK_TRAP"
     ],
-    "french-defence::trap::Advance Variation Qb6 Fork Trap": [
-      "WEAK_TRAP"
-    ],
-    "french-defence::trap::Winawer Poisoned Pawn Counterattack": [
-      "WEAK_TRAP"
-    ],
-    "french-defence::trap::Classical Bg5 Pin Trap": [
-      "WEAK_TRAP"
-    ],
     "caro-kann::trap::Advance Variation Center Collapse": [
       "WEAK_TRAP"
     ],
@@ -561,6 +552,15 @@
     ],
     "scandinavian-defence::warning::Queen Wandering Danger": [
       "PGN_NOT_IN_DB"
+    ],
+    "french-defence::trap::Advance Variation Qb6 Fork Trap": [
+      "WEAK_TRAP"
+    ],
+    "french-defence::trap::Winawer Poisoned Pawn Counterattack": [
+      "WEAK_TRAP"
+    ],
+    "french-defence::trap::Classical Bg5 Pin Trap": [
+      "WEAK_TRAP"
     ]
   }
 }

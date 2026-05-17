@@ -1148,10 +1148,11 @@
     "id": "french-defence",
     "eco": "C00",
     "name": "French Defence",
-    "pgn": "e4 e6 d4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 Be7 Qd2 O-O Be2 b6 O-O a5 a3 Ba6 Bxa6 Rxa6",
+    "pgn": "e4 e6 d4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 Be7 Qd2 O-O Be2 b6 O-O f5 exf6 Nxf6 Kh1 Bb7 Rad1 Rc8 Qe1 Kh8",
     "color": "black",
     "style": "Solid, Strategic",
-    "overview": "The French Defence is one of the most rock-solid responses to 1.e4 — you're immediately contesting central control with ...e6 and ...d5. The pawn structure gives you a clear plan: attack White's d4 pawn with ...c5, develop your pieces behind a strong chain, and aim for counterplay on the queenside. It's a bit cramped at first, but once you break through, the positions are rich and full of strategic ideas.",
+    "overview": "The French Defence is one of the most rock-solid responses to 1.e4 — challenge central control with ...e6 and ...d5. The pawn structure gives you a clear plan: attack White's d4 pawn with ...c5, develop behind a strong chain, and aim for counterplay on the queenside or kingside. The Classical mainline goes ...Nc6/Be7/O-O/b6 with the key ...f5 break followed by exf6 Nxf6 opening the f-file. The light-squared bishop develops to b7 on the long diagonal.",
+    "shortOverview": "Contest center with ...e6 + ...d5, attack d4 with ...c5, then ...f5/exf6 break opens the f-file with ...Bb7 long-diagonal pressure.",
     "keyIdeas": [
       "Attack White's pawn center with ...c5 to undermine d4",
       "Develop the light-squared bishop to b7 or a6 depending on the variation",
@@ -1169,77 +1170,91 @@
     "variations": [
       {
         "name": "Advance Variation",
-        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 a3 c4 Nbd2 Na5 Be2 Bd7 O-O Ne7 Rb1 Nf5",
-        "explanation": "White grabs space with 3.e5 but Black immediately pressures d4 with ...c5 and ...Qb6, targeting the b2 pawn. After White stabilizes with a3, Black locks the queenside with ...c4, gaining space and preparing ...Na5-b3. The knight reroute to f5 targets the d4 pawn and the dark squares weakened by the e5 advance. Black's light-squared bishop develops via d7-b5 later, solving the traditional French bishop problem."
+        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 a3 c4 Nbd2 Na5 Be2 Bd7 O-O Ne7 Rb1 Nf5 Qc2 h6 g4",
+        "explanation": "White grabs space with 3.e5 but Black immediately pressures d4 with ...c5 and ...Qb6, targeting the b2 pawn. After White stabilizes with a3, Black locks the queenside with ...c4, gaining space and preparing ...Na5-b3. The knight reroute to f5 targets d4 and the weakened dark squares; ...h6 prepares against g4 expansion. White's eventual g4 advance is the critical test — Black needs precise piece coordination to weather the storm.",
+        "shortExplanation": "...c5/Qb6 hits d4, ...c4 locks queenside, ...Na5/Ne7-Nf5 reroute pressures e5; ...h6 prepares against g4."
       },
       {
         "name": "Winawer Variation",
-        "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 Qc7 Qxg7 Rg8 Qxh7 cxd4 Ne2 Nbc6 f4 dxc3 Qd3 d4",
-        "explanation": "The Poisoned Pawn Winawer is one of the sharpest lines in all of opening theory. Black sacrifices two kingside pawns in exchange for massive central counterplay and a dangerous passed c3 pawn. White's queen is offside on h7, costing tempi to reposition while Black generates threats with ...d4 opening the center. The key for Black is speed — the initiative compensates for the material deficit as long as Black keeps creating threats against White's weakened dark squares."
+        "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 Qc7 Qxg7 Rg8 Qxh7 cxd4 Ne2 Nbc6 f4 dxc3 Qd3 d4 Nxd4 Nxd4 Qxd4 Bd7",
+        "explanation": "The Poisoned Pawn Winawer is one of the sharpest lines in opening theory. Black sacrifices two kingside pawns for massive central counterplay and a dangerous passed c3 pawn. White's queen is offside on h7 while Black generates threats with ...d4 opening the center. After Nxd4 Nxd4 Qxd4, the queens are centralized and Black develops ...Bd7 preparing ...O-O-O for active piece coordination on the open g- and h-files. Speed is everything — Black's initiative compensates for the material deficit.",
+        "shortExplanation": "Poisoned Pawn: sacrifice g7/h7 for ...d4 central break + ...Bd7-O-O-O active piece play on open files."
       },
       {
         "name": "Classical Variation",
         "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 f4 O-O Nf3 c5 Qd2 Nc6 O-O-O f6 exf6 Qxf6",
-        "explanation": "The Classical is a heavyweight positional battle where both sides have clear plans. White builds a strong pawn center with f4 supporting e5, while Black systematically undermines it with ...c5 and the well-timed ...f6 break. After Bxe7 Qxe7, Black avoids doubled pawns and keeps the queen active. The ...f6 break is critical — Black must time it carefully after completing development, as it opens the f-file for the rook and challenges White's entire center."
+        "explanation": "The Classical is a heavyweight positional battle where both sides have clear plans. White builds a strong pawn center with f4 supporting e5, while Black systematically undermines it with ...c5 and the well-timed ...f6 break. After Bxe7 Qxe7, Black avoids doubled pawns and keeps the queen active. The ...f6 break opens the f-file for Black's rook and challenges White's entire center; queens recapture on f6 keeps Black's pieces actively placed.",
+        "shortExplanation": "Classical: Bxe7 Qxe7 avoids doubled pawns; ...c5/...f6 breaks dismantle e5/d4 center; opposite-side castling middlegame."
       },
       {
         "name": "Tarrasch Variation",
-        "pgn": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 cxd4 cxd4 f6 exf6 Nxf6 O-O Bd6 Nf3 Qc7",
-        "explanation": "White plays 3.Nd2 to avoid the Winawer pin, keeping a more solid but less aggressive structure. Black executes the standard ...c5 and ...f6 pawn breaks to demolish White's center. After the exchanges on d4 and f6, the position opens up and Black's pieces become very active, with the bishop finally freed to d6. The queen on c7 eyes both the kingside and supports future ...e5 or ...b5 advances."
+        "pgn": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 cxd4 cxd4 f6 exf6 Nxf6 O-O Bd6 Nf3 Qc7 Bg5 O-O Bh4 Nh5",
+        "explanation": "White plays 3.Nd2 to avoid the Winawer pin, keeping a more solid but less aggressive structure. Black executes the standard ...c5 and ...f6 pawn breaks to demolish White's center. After exchanges on d4 and f6, the position opens and Black's pieces become very active. The Bg5 pin is met by ...O-O completing development and ...Nh5 challenging the bishop. Black equalizes with active piece play on both flanks.",
+        "shortExplanation": "Tarrasch ...Nd2 avoids Winawer pin; ...c5/...f6 breaks open the center; ...Bd6/Qc7/Nh5 active counterplay."
       },
       {
         "name": "Exchange Variation",
-        "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O Bg5 Bg4 Nbd2 Nbd7 c3 Re8 Qc2 Qe7",
-        "explanation": "The Exchange Variation leads to a symmetrical pawn structure but Black should not play passively. The light-squared bishop develops naturally to g4, pinning the f3 knight, which is a key advantage over many French lines. Black can generate kingside play with ...Qe7 and ...Re8 on the open e-file, while the d6 bishop eyes the kingside. Despite its drawish reputation, Black can play for a win by keeping the pieces active and avoiding premature exchanges."
+        "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O Bg5 Bg4 Nbd2 Nbd7 c3 Re8 Qc2",
+        "explanation": "The Exchange Variation leads to a symmetrical pawn structure but Black should not play passively. The light-squared bishop develops naturally to g4, pinning the f3 knight, which is a key advantage over many French lines. Black generates kingside play with ...Re8 on the open e-file while the d6 bishop eyes the kingside. Despite its drawish reputation, Black can play for a win by keeping pieces active and avoiding premature exchanges.",
+        "shortExplanation": "Symmetrical pawn structure; ...Bg4 pin + ...Re8 + ...Bd6 = active piece play, no premature trades."
       },
       {
         "name": "Burn Variation",
         "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 Bxf6 Nf3 Nd7 Qd2 O-O O-O-O Be7 Bd3 b6 Kb1 Bb7",
-        "explanation": "Named after Amos Burn, Black captures on e4 early and accepts a slightly passive but extremely solid position. After Bxf6 Bxf6, Black gets the bishop pair as compensation for White's central control. The key plan is ...b6 and ...Bb7, developing the traditionally problematic French light-squared bishop to the long diagonal where it becomes powerful. With opposite-side castling, Black must be ready for both queenside counterplay via ...c5 and careful kingside defense."
+        "explanation": "Named after Amos Burn, Black captures on e4 early and accepts a slightly passive but extremely solid position. After Bxf6 Bxf6, Black gets the bishop pair as compensation for White's central control. The key plan is ...b6 and ...Bb7, developing the traditionally problematic French light-squared bishop to the long diagonal where it becomes powerful. With opposite-side castling, Black must be ready for both queenside counterplay via ...c5 and careful kingside defense.",
+        "shortExplanation": "Burn ...dxe4/Bxf6 trade — solid + bishop pair, ...b6/Bb7 activates the bad bishop on the long diagonal."
       },
       {
         "name": "Fort Knox Variation",
-        "pgn": "e4 e6 d4 d5 Nd2 dxe4 Nxe4 Bd7 Nf3 Bc6 Bd3 Nd7 O-O Ngf6 Nxf6+ Nxf6 Re1 Be7 c3 O-O Ne5 Bd5",
-        "explanation": "The Fort Knox is the ultimate solid approach for Black in the French — the name says it all. Black solves the light-squared bishop problem immediately with ...Bd7-c6, placing it on its best diagonal early. The structure after ...dxe4 gives Black a flexible, symmetrical center. While White has a slight space advantage, Black's piece coordination with ...Bd5 and the solid pawn structure makes it nearly impossible to break down."
+        "pgn": "e4 e6 d4 d5 Nd2 dxe4 Nxe4 Bd7 Nf3 Bc6 Bd3 Nd7 O-O Ngf6 Nxf6+ Nxf6 Re1 Be7 c3",
+        "explanation": "The Fort Knox is the ultimate solid approach for Black in the French — the name says it all. Black solves the light-squared bishop problem immediately with ...Bd7-c6, placing it on its best diagonal early. The structure after ...dxe4 gives Black a flexible, symmetrical center. While White has a slight space advantage, Black's piece coordination with the active c6 bishop and the solid pawn structure make it nearly impossible to break down.",
+        "shortExplanation": "Fort Knox ...Bd7-c6 places the bad bishop on its best diagonal; symmetrical structure, hard to crack."
       },
       {
         "name": "Advance: Milner-Barry Gambit",
-        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 a6 Qe2 Ne7 Kh1 Nc6",
-        "explanation": "The Milner-Barry Gambit sees White sacrifice the d4 pawn with Bd3 and O-O for rapid development and attacking chances. Black should accept the pawn with ...Nxd4 followed by ...Qxd4, grabbing material while staying alert. After Nc3, White has open lines and active pieces aimed at Black's king, but Black's extra pawn and solid structure provide long-term compensation. The key is for Black to consolidate with ...a6, ...Ne7-c6, and prepare to weather the tactical storm."
+        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 a6 Qe2 Ne7 Kh1 Nc6 f4 Nb4 Rd1 Nxd3",
+        "explanation": "The Milner-Barry Gambit sees White sacrifice the d4 pawn with Bd3 and O-O for rapid development and attacking chances. Black accepts the pawn with ...Nxd4 followed by ...Qxd4, grabbing material while staying alert. After Nc3 a6 Qe2 Ne7 the knight reroutes back to c6 and ...Nb4 attacks the d3 bishop. ...Nxd3 simplifies decisively into a winning endgame — Black's extra pawn plus the bishop pair settles the position.",
+        "shortExplanation": "Milner-Barry: accept d4 pawn, consolidate with ...a6/Ne7-c6, then ...Nb4/Nxd3 simplifies into winning endgame."
       }
     ],
     "trapLines": [
       {
         "name": "Advance Variation Qb6 Fork Trap",
-        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 Qxe5 Re1 Qb8 Nxd5 Bd6",
-        "explanation": "If White plays the careless Bd3 and O-O without protecting d4, Black wins two central pawns by force with ...Nxd4, ...Qxd4, and ...Qxe5. After Re1 Qb8, White has some compensation from the open lines but Black is up two pawns with a solid position. The bishop develops to d6 naturally, and Black's extra material should prevail with careful play in the middlegame."
+        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 Qxe5 Re1 Qb8 Nxd5 Bd6 Qg4 Kf8 Bd2 h5",
+        "explanation": "If White plays the careless Bd3 and O-O without protecting d4, Black wins two central pawns by force with ...Nxd4, ...Qxd4, and ...Qxe5. After Re1 Qb8 Nxd5, White recovers a pawn but Black retains the material advantage. The ...Bd6 development is critical, and after Qg4 Kf8 Bd2 h5, Black has consolidated with king safety and an extra pawn. White's compensation evaporates with precise defense.",
+        "shortExplanation": "Bd3+O-O without protecting d4 = ...Nxd4/Qxd4/Qxe5 wins two pawns; consolidate with ...Bd6/Kf8/h5."
       },
       {
         "name": "Winawer Poisoned Pawn Counterattack",
-        "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 Qc7 Qxg7 Rg8 Qxh7 cxd4 Ne2 Nbc6 f4 dxc3 Qd3 d4 g3 Bd7",
-        "explanation": "In this classic trap, White greedily captures on g7 and h7 but the queen becomes stranded far from the action. Black's ...dxc3 creates a monster passed pawn on c3 that ties down White's pieces. After ...d4, Black's center is rolling forward with tremendous energy while White struggles to coordinate. The bishop develops to d7 preparing ...O-O-O, when Black's rooks will dominate the open g- and h-files with a winning attack."
+        "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 Qc7 Qxg7 Rg8 Qxh7 cxd4 Ne2 Nbc6 f4 dxc3 Qd3 d4",
+        "explanation": "In this classic trap, White greedily captures on g7 and h7 but the queen becomes stranded far from the action. Black's ...dxc3 creates a monster passed pawn on c3 that ties down White's pieces. After ...d4 the center rolls forward with tremendous energy while White struggles to coordinate. Black continues with ...Bd7 preparing ...O-O-O, when the rooks dominate the open g- and h-files with a winning attack.",
+        "shortExplanation": "Poisoned Pawn: g7/h7 captures strand White's queen; ...dxc3/d4 + ...O-O-O = winning attack on open files."
       },
       {
         "name": "Classical Bg5 Pin Trap",
-        "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 Qd2 O-O f4 c5 Nf3 Nc6 O-O-O f6 exf6 Nxf6 dxc5 Qxc5 Kb1 Bd7",
-        "explanation": "White plays Qd2 with the idea of O-O-O, but this allows Black to execute the ...f6 break under favorable circumstances. After exf6 Nxf6, Black has completely dissolved White's center and the pieces flow to active squares. The capture dxc5 Qxc5 gives Black a centralized queen, and with ...Bd7 the light-squared bishop finally enters the game. Black stands better due to the superior pawn structure and active piece play."
+        "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 Qd2 O-O f4 c5 Nf3 Nc6 O-O-O f6 exf6 Nxf6",
+        "explanation": "White plays Qd2 with the idea of O-O-O, but this allows Black to execute the ...f6 break under favorable circumstances. After exf6 Nxf6, Black has completely dissolved White's center and the pieces flow to active squares. The half-open f-file plus active piece coordination on c5 and the central squares give Black solid equality with attacking chances on both flanks.",
+        "shortExplanation": "Classical Qd2/O-O-O setup: ...c5 + ...f6 break dissolves the e5 chain; ...Nxf6 active piece play."
       }
     ],
     "warningLines": [
       {
         "name": "Passive Bishop Catastrophe",
         "pgn": "e4 e6 d4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 Be7 Qd2 O-O Be2 f5 O-O a6 a3 b5 Nd1 Qe8",
-        "explanation": "Playing ...f5 too early is a strategic disaster in the French — it permanently entombs the light-squared bishop on c8 behind the e6-f5 pawn chain. Without ...b6 and ...Ba6 or ...Bb7, Black has essentially a piece less in the middlegame. White can calmly build on the kingside with g4 while Black has no counterplay. Always prioritize activating the c8 bishop before committing to ...f5."
+        "explanation": "Playing ...f5 too early is a strategic disaster — rarely played at master level because masters know it permanently entombs the light-squared bishop on c8 behind the e6-f5 pawn chain. Without ...b6 and ...Ba6 or ...Bb7 first, Black has essentially a piece less in the middlegame. White can calmly build on the kingside with g4 while Black has no counterplay. Always prioritize activating the c8 bishop before committing to ...f5.",
+        "shortExplanation": "...f5 too early entombs the c8 bishop; activate via ...b6/Ba6 or ...Bb7 first."
       },
       {
         "name": "Premature f6 Break",
         "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 f6 exf6 gxf6 dxc5 Bxc5 Bd3 Nge7 O-O O-O b4 Bd6 Bb2 e5",
-        "explanation": "Playing ...f6 before completing development shatters Black's kingside pawn structure and creates permanent weaknesses on e6, f6, and h6. While Black eventually gets ...e5, the exposed king and weak pawns provide White with long-term targets. The correct approach is to develop pieces first with ...Qb6, ...Bd7, ...Nge7, and only then consider the ...f6 break when the position is ready."
+        "explanation": "Playing ...f6 before completing development shatters Black's kingside pawn structure and creates permanent weaknesses on e6, f6, and h6. While Black eventually achieves ...e5, the exposed king and weak pawns provide White with long-term targets. The correct approach is to develop with ...Qb6, ...Bd7, ...Nge7, then consider ...f6 only when the position supports it.",
+        "shortExplanation": "Premature ...f6 shatters kingside pawn structure; complete development with ...Qb6/Bd7/Nge7 first."
       },
       {
         "name": "Tarrasch Passive Setup",
         "pgn": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 Be7 Nf3 O-O O-O a6 a3 b5 dxc5 Nxc5 Bc2 Bb7",
-        "explanation": "In the Tarrasch, delaying the ...f6 break too long allows White to consolidate with Nf3, O-O, and piece coordination behind the e5 pawn. Black's position becomes cramped without the liberating pawn breaks, and the light-squared bishop on b7 is blocked by the d5 pawn. The correct plan requires urgency — play ...cxd4 followed by ...f6 before White fully develops, or Black risks a slow squeeze."
+        "explanation": "In the Tarrasch, delaying the ...f6 break too long allows White to consolidate with Nf3, O-O, and piece coordination behind the e5 pawn. Black's position becomes cramped without the liberating pawn breaks, and the b7 bishop is blocked by the d5 pawn. The correct plan requires urgency — play ...cxd4 followed by ...f6 before White fully develops, or Black risks a slow squeeze in a cramped position.",
+        "shortExplanation": "Delaying ...f6 lets White consolidate behind e5; ...cxd4 + ...f6 must come before slow White development crushes you."
       }
     ]
   },
