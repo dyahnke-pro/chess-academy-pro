@@ -18,15 +18,6 @@
     "petrov-defence::trap::Wrong Move Order Punishment": [
       "WEAK_TRAP"
     ],
-    "queens-gambit::trap::QGA e4 Thrust": [
-      "INVERTED_MATERIAL"
-    ],
-    "queens-gambit::trap::Minority Attack Breakthrough": [
-      "WEAK_TRAP"
-    ],
-    "queens-gambit::trap::Exchange Variation Knight Outpost": [
-      "WEAK_TRAP"
-    ],
     "london-system::trap::Nh5 Misplacement Trap": [
       "PGN_NOT_IN_DB",
       "WEAK_TRAP"
@@ -570,6 +561,21 @@
     "sicilian-alapin::trap::Alapin: ...e5 Counter-Thrust Trap": [
       "WEAK_TRAP",
       "STUDENT_NOT_PUNISHER"
+    ],
+    "queens-gambit::trap::QGA e4 Thrust": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "queens-gambit::trap::Minority Attack Breakthrough": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "queens-gambit::trap::Exchange Variation Knight Outpost": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "queens-gambit::warning::Premature e4 Push": [
+      "TOOTHLESS_WARNING"
     ]
   }
 }

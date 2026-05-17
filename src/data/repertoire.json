@@ -1893,7 +1893,7 @@
     "id": "queens-gambit",
     "eco": "D06",
     "name": "Queen's Gambit",
-    "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Nf3 Re8 Qc2 c6 O-O Nf8 Bf4 Bg4 Rab1 Nh5 Be5 f6 Bg3 Nxg3 hxg3 Be6",
+    "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Nf3 Re8 Qc2 c6 O-O Nf8 Bf4 Bg4",
     "color": "white",
     "style": "Classical, Strategic",
     "overview": "The Queen's Gambit is one of the most principled and classical openings in chess — you immediately fight for central control with 2.c4, putting pressure on Black's d5 pawn. It's not really a gambit since you can always win the pawn back, but the point is to either gain a central pawn majority or saddle Black with an isolated queen's pawn. This opening has been a cornerstone of every world champion's repertoire since Steinitz.",
@@ -1919,12 +1919,12 @@
       },
       {
         "name": "Classical Mainline",
-        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Rxc3 e5 dxe5 Nxe5 Nxe5 Qxe5 Bb3 Bf5 Qd4",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Rxc3 e5 dxe5 Nxe5 Nxe5 Qxe5",
         "explanation": "The tabiya of the Queen's Gambit Declined where White develops Bg5, e3, Nf3, Rc1, Bd3 in the classic Capablanca order. After Black releases tension with ...dxc4, White recaptures with the bishop and enjoys a lead in development. The key is that White's pieces coordinate beautifully with Rc1 already on the open file, and the initiative persists well into the middlegame."
       },
       {
         "name": "Tartakower Variation",
-        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 h6 Bh4 b6 cxd5 Nxd5 Bxe7 Qxe7 Nxd5 exd5 Rc1 Be6 Qa4 c5 Qa3 Rc8 Bb5 Nd7 dxc5",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 h6 Bh4 b6 cxd5 Nxd5 Bxe7 Qxe7 Nxd5 exd5 Rc1 Be6 Qa4 c5 Qa3 Rc8 Bb5",
         "explanation": "Black plays ...h6 and ...b6 to fianchetto the light-squared bishop, a favorite of Tartakower. White should exchange on d5 to fix the pawn structure, then target the hanging pawns or isolated d-pawn. The Qa4-a3 maneuver pressures both the queenside and the c5 break. White's edge lies in the superior pawn structure and piece activity along the c-file."
       },
       {
@@ -1939,41 +1939,41 @@
       },
       {
         "name": "Semi-Slav Response",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 Bb7 O-O a6 e4 c5 d5 e5 a4 b4 Nb1 c4 Bc2 Bc5 Nbd2",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 Bb7 O-O a6 e4 c5 d5 e5",
         "explanation": "The Semi-Slav with ...c6 and ...e6 is one of the richest structures in chess. White aims for the e4 push to claim the center, and if Black allows d5, the passed pawn becomes a monster. The sharp tactical play after e4 c5 d5 leads to complex middlegames where White's central space advantage and piece activity provide lasting initiative."
       },
       {
         "name": "Catalan Transposition",
-        "pgn": "d4 d5 c4 e6 Nf3 Nf6 g3 Be7 Bg2 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nd5 Nc3 Nxc3 Bxc3 Nd7 e4 Rc8 Rfe1",
+        "pgn": "d4 d5 c4 e6 Nf3 Nf6 g3 Be7 Bg2 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2",
         "explanation": "White fianchettoes with g3 and Bg2 instead of the classical e3/Bd3 setup, transposing into a Catalan structure. The bishop on g2 is an absolute monster on the long diagonal, pressuring b7 and c6. Combined with Qc2, White creates a battery that makes it very hard for Black to develop the queenside comfortably. This hybrid approach combines QGD piece placement with Catalan diagonal power."
       },
       {
         "name": "Anti-QGD: Early Bf4 System",
-        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bf4 Bd6 Bg3 O-O e3 c5 dxc5 Bxc5 Nf3 Nc6 cxd5 exd5 Be2 d4 exd4 Nxd4 O-O Be6 Nxd4 Bxd4 Bg4 Re8",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bf4 Bd6 Bg3 O-O e3 c5",
         "explanation": "Instead of the standard Bg5, White develops the bishop to f4 early, avoiding the main theoretical lines of the QGD. This sidesteps the Tartakower and Lasker variations entirely. If Black challenges with ...Bd6, the retreat to g3 maintains the bishop and after c5 dxc5, White enjoys a comfortable IQP position with active pieces and clear attacking prospects against Black's king."
       }
     ],
     "trapLines": [
       {
         "name": "QGA e4 Thrust",
-        "pgn": "d4 d5 c4 dxc4 e4 e5 Nf3 exd4 Bxc4 Nc6 O-O Be6 Bxe6 fxe6 Qb3 Qd7 Qxb7 Rb8 Qa6 Nf6 Nxd4 Nxd4 Bg5 Be7 Bxf6 Bxf6 Nc3",
+        "pgn": "d4 d5 c4 dxc4 e4 e5 Nf3 exd4 Bxc4 Nc6 O-O Be6 Bxe6 fxe6 Qb3 Qd7 Qxb7 Rb8 Qa6 Nf6",
         "explanation": "After Black takes ...dxc4, White seizes the center with the aggressive e4 thrust. If Black matches with ...e5, the position opens and White's superior development tells quickly. The Qxb7 raid wins a pawn while maintaining pressure, and after Nxd4 the centralized pieces dominate. Black's shattered pawn structure on e6 is a permanent liability."
       },
       {
         "name": "Minority Attack Breakthrough",
-        "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Nf3 Re8 Qc2 c6 O-O Nf8 Rab1 a5 a3 Ng6 b4 axb4 axb4 Bd6 b5 cxb5 Rxb5 Bc7 Rb3",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Nf3 Re8 Qc2 c6 O-O Nf8 Rab1 a5 a3 Ng6 b4 axb4 axb4 Bd6 b5",
         "explanation": "The minority attack in full execution: White plays a3, b4, b5 targeting the c6 pawn. When bxc5 arrives, Black is left with either a backward c-pawn on an open file or an isolated d-pawn, both chronic weaknesses. White's rook swings to b3 to triple on the b-file. This plan has won countless grandmaster games because Black has no active counterplay against it."
       },
       {
         "name": "Exchange Variation Knight Outpost",
-        "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 c6 Qc2 Nbd7 Nf3 Re8 O-O Nf8 Ne5 Ng6 f4 Ne4 Bxe7 Qxe7 Nxe4 dxe4 Bc4",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 c6 Qc2 Nbd7 Nf3 Re8 O-O Nf8 Ne5 Ng6",
         "explanation": "In the Exchange Variation, White can establish a powerful knight on e5 supported by f4. This outpost is nearly impossible to dislodge and controls critical squares d7, c6, and f7. If Black tries to challenge with ...Nf8-g6, White reinforces with f4 and the knight becomes a permanent fixture dominating the position."
       }
     ],
     "warningLines": [
       {
         "name": "Premature e4 Push",
-        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e4 dxe4 Nxe4 Nxe4 Bxe7 Qxe7 Qd2 Nc6 O-O-O e5 d5 Nd4 Nf3 Nxf3 gxf3 O-O Qe3 Bf5",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7",
         "explanation": "Pushing e4 without proper preparation lets Black equalize easily. After the simplifying sequence ...dxe4 Nxe4 Nxe4 Bxe7, pieces fly off the board and Black gets active play with ...e5 and ...Nd4 with tempo. White's shattered kingside pawns after gxf3 are a lasting weakness. Always prepare e4 with Nf3 and Bd3 first."
       },
       {
@@ -1983,7 +1983,7 @@
       },
       {
         "name": "Semi-Slav Meran Counterattack",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 a6 e4 c5 e5 cxd4 Nxb5 axb5 exf6 gxf6 O-O Bb7 Qe2 Bd6",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 a6 e4 c5 e5 cxd4 Nxb5 axb5 exf6 gxf6 O-O",
         "explanation": "The Meran Variation of the Semi-Slav gives Black powerful counterplay with ...b5 and ...c5 challenging White's center. After e5 cxd4 Nxb5, the position is razor-sharp and a single inaccuracy from White can be fatal. Black's bishop pair and open g-file provide dangerous attacking chances against White's king."
       }
     ]
