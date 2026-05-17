@@ -1464,10 +1464,11 @@
     "id": "scandinavian-defence",
     "eco": "B01",
     "name": "Scandinavian Defence",
-    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 O-O Nc6 a3 Bxc3 Bxc3 Qb6 Re1 O-O Bd3 Bxd3 Qxd3 Rfd8",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 O-O Nc6 a3 Bxc3 Bxc3 Qb6 Re1 O-O-O Qc1 Nd5 Bxd5 Rxd5 h3 h6",
     "color": "black",
     "style": "Solid, Practical",
-    "overview": "The Scandinavian is one of the most straightforward and practical responses to 1.e4 — you immediately challenge the center with ...d5 and recapture with the queen. Yes, your queen comes out early, but after ...Qa5 you develop rapidly with ...Nf6, ...Bf5, ...e6, and you get a solid, compact position. It's easy to learn, hard to refute, and leads to positions where understanding trumps memorization.",
+    "overview": "The Scandinavian is one of the most straightforward responses to 1.e4 — challenge the center with ...d5 and recapture with the queen. The queen comes out early but after ...Qa5 you develop rapidly with ...Nf6, ...Bf5, ...e6 and complete the setup with ...Bb4 + Bxc3 trading the dark-squared bishop to disrupt White's pawn structure. Black queenside-castles into an opposite-side attacking middlegame where Black's structural edge competes with White's better-developed pieces.",
+    "shortOverview": "Challenge with ...d5, recapture ...Qxd5-Qa5, develop ...Nf6/Bf5/e6/Bb4, then ...Bxc3 wrecks White's queenside pawns.",
     "keyIdeas": [
       "Recapture on d5 with the queen and relocate to a5 for active play",
       "Develop the light-squared bishop to f5 BEFORE playing ...e6",
@@ -1485,77 +1486,91 @@
     "variations": [
       {
         "name": "Qa5 Main Line",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 O-O-O Nbd7 Kb1 O-O d5 Bxc3 Bxc3 Qb6 dxe6 fxe6 Nd4 Bg6",
-        "explanation": "The main line Scandinavian with Qa5 is the most reliable and well-tested variation. Black develops the bishop to f5 before closing the diagonal with ...e6, then builds a compact structure with ...c6 and ...Nbd7. After White castles queenside, the position becomes double-edged with mutual attacks. The key is that Black can castle either side depending on White's setup, and the ...Bb4 pin on c3 creates persistent pressure."
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 O-O-O Nbd7 Kb1 O-O",
+        "explanation": "The main line Scandinavian with Qa5 is the most reliable and well-tested variation. Black develops the bishop to f5 before closing the diagonal with ...e6, then builds a compact structure with ...c6 and ...Nbd7. After White castles queenside the position becomes double-edged with mutual attacks. Black can castle kingside (as here) or queenside depending on White's setup, and the ...Bb4 pin on c3 creates persistent pressure.",
+        "shortExplanation": "Qa5 mainline: ...Bf5 before ...e6, then ...c6/Nbd7 setup. Black castles after kingside development."
       },
       {
         "name": "Nf6 Modern Variation",
-        "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6 Nc3 Nc6 d5 Na5 Nd4 c6 dxc6 bxc6 Be3 Be6 b3 Naxc4 bxc4 Nxc4 Bf3 Nxe3",
-        "explanation": "The Modern Scandinavian with ...Nf6 avoids the early queen exposure entirely, recapturing with the knight instead. Black fianchettoes the kingside bishop for a Grunfeld-like structure where the g7 bishop pressures d4 from the long diagonal. The knight retreats to b6 after c4, maintaining flexibility. After ...Nc6 and ...Na5, Black targets the c4 pawn while the g7 bishop rakes the queenside, creating dynamic counterplay against White's center."
+        "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6 Nc3 Nc6 d5 Na5 c5 Bxc3 bxc3 Nxd5 Qd4 Nc6",
+        "explanation": "The Modern Scandinavian with ...Nf6 avoids the early queen exposure entirely, recapturing with the knight instead. Black fianchettoes the kingside bishop for a Grunfeld-like structure where the g7 bishop pressures d4 from the long diagonal. The knight retreats to b6 then back to ...Nc6-Na5 attacking the c4 pawn. The c5-Bxc3 sequence trades the dark-squared bishop, and ...Nxd5-Nc6 creates active piece play against White's center.",
+        "shortExplanation": "Modern: ...Nxd5 recapture, fianchetto kingside, ...Nc6-Na5 attacks c4, ...Bxc3 trade gives active counterplay."
       },
       {
         "name": "Icelandic Gambit",
-        "pgn": "e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Bxb4 Qxb4+ Qd2 Qxd2+ Nxd2 Nc6 Ngf3 O-O-O Be2 Rhe8 O-O Ng4 Rfe1 Bf5 Nf1 Rxe2 Rxe2 Nd4",
-        "explanation": "The Icelandic Gambit is a sharp pawn sacrifice where Black gives up the d5 pawn to gain rapid development and active piece play. After ...e6 forces dxe6 Bxe6, Black has all minor pieces developed while White struggles to complete development. The double check with ...Bb4+ is key, forcing simplifications that favor Black's activity. Even in the endgame after queens trade, Black's lead in development provides lasting compensation with threats along the d-file and against White's weak pawns."
+        "pgn": "e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Bxb4 Qxb4+ Qd2 Nc6 d5 O-O-O Nc3 Bg4 f3 Rhe8+ Be2 Bf5",
+        "explanation": "The Icelandic Gambit is a sharp pawn sacrifice where Black gives up the d5 pawn to gain rapid development and active piece play. After ...e6 forces dxe6 Bxe6, Black has all minor pieces developing while White struggles to complete development. The Bb4+ pin disrupts White's coordination, and Black queenside-castles for fast piece coordination on the d-file and e-file. The bishop pair plus open lines provide lasting compensation for the pawn.",
+        "shortExplanation": "Sharp pawn sacrifice: ...e6 forces dxe6 Bxe6, then Bb4+ pin + queenside castle = active piece play."
       },
       {
         "name": "Qd6 Tiviakov Variation",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 Be2 Bf5 O-O e6 Ne5 Nbd7 Bf4 Qb4 Nxd7 Nxd7 a3 Qb6 Na4",
-        "explanation": "The Qd6 variation, popularized by Tiviakov, keeps the queen centrally and avoids the theoretical battles of the Qa5 lines. The piece on d6 supports ...e5 if needed and can swing to b6 or c7 depending on White's setup. Black develops with ...a6 preparing ...b5, and ...Bf5 remains the priority bishop development. The Nbd7 maneuver maintains central control while the flexible structure allows Black to adapt to White's plan without committing to one side of the board."
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 Be2 Bf5 O-O e6 Ne5",
+        "explanation": "The Qd6 variation, popularized by Tiviakov, keeps the queen centrally and avoids the theoretical battles of the Qa5 lines. The piece on d6 supports ...e5 if needed and can swing to b6 or c7 depending on White's setup. Black develops with ...a6 preparing ...b5, and ...Bf5 remains the priority bishop development. The Ne5 jump by White is the critical test of Black's setup.",
+        "shortExplanation": "Tiviakov ...Qd6 setup. ...a6 prepares ...b5; ...Bf5 + ...e6 + flexible structure; Ne5 is critical test."
       },
       {
         "name": "Portuguese Variation",
-        "pgn": "e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 e6 O-O Nc6 c4 Qd8 Nc3 Be7 d5 exd5 cxd5 Nb4 Bf4 Nbxd5 Nxd5 Nxd5 Bg3 O-O Rfe1 Bf6 Rad1 c6",
-        "explanation": "The Portuguese Variation features the early ...Bg4 development before recapturing the d5 pawn, exchanging Black's light-squared bishop for White's. This trade eliminates the piece that typically becomes passive behind the ...e6 pawn chain. After the queen recaptures on e2, Black gets a harmonious position with no weaknesses. The resulting middlegame is strategically clear for Black, who aims for rapid development and central control with ...Nc6 and ...Be7."
+        "pgn": "e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 e6 O-O Nc6 c4",
+        "explanation": "The Portuguese Variation features the early ...Bg4 development before recapturing the d5 pawn, exchanging Black's light-squared bishop for White's. This trade eliminates the piece that typically becomes passive behind the ...e6 pawn chain. After the queen recaptures on e2, Black gets a harmonious position with no weaknesses. The c4 push by White is the typical test, after which Black completes development with ...Nc6 and ...Be7.",
+        "shortExplanation": "Portuguese: ...Bg4-Bxe2 trade eliminates the bad bishop, then ...Qxd5 + ...Nc6 + clear development."
       },
       {
         "name": "Gubinsky-Melts (3...Qd8)",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 Bc4 e6 h3 Bh5 O-O Nc6 Be3 Be7 Qd2 O-O a3 a6 Rad1 Na5 Ba2 c5 dxc5 Qc7 g4 Bg6",
-        "explanation": "The Gubinsky-Melts retreat with 3...Qd8 looks passive but avoids all queen harassment lines and allows Black to develop naturally. The queen retreats only once instead of being chased around the board, saving tempo in the long run. Black plays ...Bg4 to pin the f3 knight and ...Nc6 to pressure d4 immediately. The pawn break ...c5 is the thematic equalizer, and after it resolves, Black's pieces are actively placed with no weaknesses in the structure."
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 Bc4 e6 h3 Bh5 O-O",
+        "explanation": "The Gubinsky-Melts retreat with 3...Qd8 looks passive but avoids all queen harassment lines and allows Black to develop naturally. The queen retreats only once instead of being chased around the board, saving tempo in the long run. Black plays ...Bg4 to pin the f3 knight and ...e6 supports the structure. The h3-Bh5 sequence is forced and Black completes development with ...Nc6 and ...Be7 next.",
+        "shortExplanation": "Gubinsky-Melts ...Qd8 retreat avoids harassment. ...Bg4 pin + ...e6 + classical development."
       },
       {
         "name": "Qa5 with Bd2 Main Line",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bd2 c6 Bc4 e6 Qe2 Bb4 O-O-O Nbd7 Kb1 Qc7 Ne5 O-O g4 Bg6 Nxg6 hxg6 h4 Nb6 Bb3 a5 h5 a4",
-        "explanation": "When White plays Bd2 instead of the sharper Bc4 lines, a slower strategic battle develops where both sides maneuver for advantage. Black's key idea is ...Bb4 pinning the c3 knight, and after O-O-O the position becomes a mutual attack. The ...Nb6 development targets the c4 bishop while ...a5-a4 opens the a-file against White's king. The g4-h4 pawn advance from White looks threatening but Black's queenside attack with ...a4 arrives first, creating a race where Black has good practical chances."
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bd2 c6 Bc4 e6 Qe2 Bb4 O-O-O Nbd7 Kb1 Qc7 Ne5",
+        "explanation": "When White plays Bd2 instead of the sharper Bc4 lines, a slower strategic battle develops where both sides maneuver for advantage. Black's key idea is ...Bb4 pinning the c3 knight, and after O-O-O the position becomes a mutual attack. The ...Qc7 covers important central squares while the Ne5 jump by White is the critical test — Black must find precise responses to maintain coordination.",
+        "shortExplanation": "Bd2 line: ...Bb4 pin, opposite-side castle, ...Qc7 centralizes; Ne5 is White's critical test."
       }
     ],
     "trapLines": [
       {
         "name": "Qa5 b2 Trap",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bd2 Qb6 Nf3 Bg4 Be2 Nc6 O-O O-O-O d5 Bxf3 Bxf3 Nd4 Be2 Nxe2+ Qxe2 Ne4 Nxe4",
-        "explanation": "After ...Qb6 attacking b2, White often plays Nf3 to develop, but Black gets free development with ...Bg4 and ...Nc6 targeting d4. The ...Nd4 jump is devastating, hitting both e2 and f3 simultaneously. If White tries to hold everything together, the exchange sequence leads to a winning endgame where Black's rook infiltrates on d1. This trap punishes White for the passive Bd2 development when Bc4 or Nf3 first was required."
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bd2 Qb6 Nf3 Bg4 h3 Bxf3 Qxf3",
+        "explanation": "After ...Qb6 attacking b2, White's Nf3 develops but allows ...Bg4 pinning the knight. White's h3 forces the bishop trade Bxf3, and Qxf3 recaptures. Black has traded the light-squared bishop while keeping queenside pressure on b2 and central pressure with ...Nf6. From this position Black continues with ...Nc6 and ...O-O-O for active piece coordination — a structural lesson about exploiting passive Bd2 development.",
+        "shortExplanation": "...Qb6/Bg4 setup after Bd2. h3 forces ...Bxf3 trade; Black keeps b2 pressure and structural edge."
       },
       {
         "name": "Nb4 Fork Threat",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 O-O c6 Re1 Bb4 Bd2 Nd5 a3 Bxc3 Bxc3 Qb6 Bd3 Bxd3 cxd3 Nxc3 bxc3 Nd7 Qc2 Nf6 Rab1 Qc7",
-        "explanation": "Black develops rapidly with ...Bb4 pinning the c3 knight, then trades the dark-squared bishop for it to weaken White's pawn structure. The ...Nd5 centralization threatens ...Nxc3, doubling White's c-pawns after the inevitable exchange. After Bxd3, Black has structurally won the strategic battle with White's doubled isolated c-pawns becoming permanent weaknesses. The resulting position gives Black a clear long-term advantage despite the seemingly equal material."
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 O-O c6 Re1 Bb4 Bd2 O-O a3 Bxc3 Bxc3 Qc7",
+        "explanation": "Black develops rapidly with ...Bb4 pinning the c3 knight, then castles to safety before trading the bishop on c3. The a3-Bxc3 sequence wrecks White's pawn structure (doubled c-pawns) and ...Qc7 prepares queenside play. White has the bishop pair but Black's structural advantage and active piece coordination on the open b-file give long-term equality with practical chances.",
+        "shortExplanation": "...Bb4 pin + ...O-O + ...Bxc3 trade: Black wrecks White's queenside pawns for structural advantage."
       },
       {
         "name": "Nf6 c4 Counter",
-        "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb4 Qa4+ N8c6 d5",
-        "explanation": "In the Nf6 line, if White gets greedy with c4, Black's knight jumps to b4 with tempo hitting c2. After Qa4+ N8c6, the knight on d4 creates a devastating fork threat. The sacrifice sequence leads to Black winning the exchange and establishing a dominant position with active bishops and rooks. White's king is stuck in the center without castling rights, making this a practical nightmare to defend."
+        "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb4 a3 N4c6 Be3 e5 d5 Ne7",
+        "explanation": "In the Nf6 line, if White pushes c4, Black's knight jumps to b4 hitting c2. After a3, the knight retreats to c6 keeping pressure on d4. The ...e5 push challenges the center immediately, and after d5 the knight reroutes via e7 to maintain flexibility. This isn't a forced material-winning trap — it's a positional lesson showing Black's knight maneuvering keeps the position dynamic against White's space advantage.",
+        "shortExplanation": "...Nb4 jump + a3 N4c6 retreat + ...e5 challenge: positional flexibility against c4 d4 center."
       },
       {
         "name": "Blackmar-Diemer Style e5 Refutation",
-        "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nc3 e5 d5 Bc5 Be2 O-O Nf3 e4 Ng5 Bf5 O-O h6 Nh3 Re8 Nf4 g5 Nh5 e3 Bxe3 Bxe3 fxe3 Rxe3",
-        "explanation": "When White plays d4 and c4 trying to build a big center like in the Blackmar-Diemer, Black strikes with ...e5 to challenge immediately. After d5 creates a closed center, ...Bc5 develops with tempo and ...e4 pushes the knight away. The key combination is ...g5 chasing the knight, then ...e3 sacrificing the pawn to blow open White's kingside. After Bxe3 Bxe3 fxe3 Rxe3, Black dominates the open e-file with the rook infiltrating White's position."
+        "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nc3 e5 d5 Bc5 Nf3 O-O Be2",
+        "explanation": "When White plays d4 and c4 building a big center, Black strikes back with ...e5 immediately. After d5 closes the center, ...Bc5 develops with tempo against f2. White's Nf3-Be2 setup is the canonical defense, and from this position Black continues with ...Re8 and ...Nc6 for active piece coordination. The lesson: don't let White's center consolidate uncontested — strike with ...e5 before development crystallizes.",
+        "shortExplanation": "...e5 challenges White's c4-d4 center immediately; ...Bc5 develops with tempo for active counterplay."
       }
     ],
     "warningLines": [
       {
         "name": "Queen Wandering Danger",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qe5+ Be2 Bg4 d4 Qa5 Nf3 Bxf3 Bxf3 c6 O-O Nf6 Re1 e6 Bd2 Qc7 Qe2 Be7 Rad1 O-O d5 exd5 Nxd5 Nxd5 Bxd5 Nd7 c4 Nf6",
-        "explanation": "Moving the queen to e5+ wastes critical development time as White gains tempi with natural developing moves. After Be2 and d4, the queen must retreat again while White has completed kingside development. By the time Black castles, White has a fully coordinated army with pressure on every file. Each queen move is a tempo gifted to White for development, and the resulting position is strategically lost for Black."
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qe5+ Be2 Bg4 d4 Bxe2 Ngxe2 Qa5 O-O Nf6 b4 Qh5",
+        "explanation": "Moving the queen to e5+ wastes critical development time as White gains tempi with natural developing moves. After Be2 and d4, Black plays ...Bxe2 trading the bishop, but Ngxe2 keeps White's development flowing. The queen retreats again to a5 then h5 while White completes castling and starts the b4 expansion. Each queen move is a tempo gifted to White, and the resulting position favors White's coordinated army against Black's wandering queen.",
+        "shortExplanation": "Qe5+ wastes tempi: White gains time with Be2-d4, then b4 expansion outpaces Black's wandering queen."
       },
       {
         "name": "c4 Tempo Gain in Nf6 Line",
-        "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nc3 e6 Nf3 Bb4 Bd3 O-O O-O Bxc3 bxc3 c5 Rb1 Nc6 d5 exd5 cxd5 Na5 Bg5 Qd6 c4",
-        "explanation": "In the ...Nf6 variation, White's c4 push gains time against the knight and establishes a powerful center with c4-d4. If Black plays ...Bb4 trying for the pin, the exchange on c3 gives White the bishop pair and open b-file. The d5 pawn push blows open the center where White's bishops dominate. Black must choose the right moment for ...c5 or risk falling into a passive position where White's space advantage is suffocating."
+        "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nc3 e5 d5 Bb4 Qb3 Bxc3+ Qxc3 O-O Be3 c6",
+        "explanation": "In the ...Nf6 variation, White's c4 push gains time against the knight and establishes a powerful center. The natural-looking ...e5 push is the master move here (not the passive ...e6), challenging White's center directly. After d5 closes the position, ...Bb4 pins the c3 knight and the trade on c3 weakens White's pawn structure. ...c6 attacks the d5 pawn, and Black has solved opening problems with active piece play. The lesson: against c4-d4 strike with ...e5 immediately, not the passive ...e6.",
+        "shortExplanation": "Against c4-d4, play ...e5 (not ...e6) to challenge the center; ...Bb4-Bxc3 trade weakens White's pawns."
       },
       {
         "name": "Qa5 Bd2 King Safety Neglect",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 O-O Bxc3 Bxc3 Qb6 Ne5 Nbd7 Nxf7 Kxf7 Bxe6+ Kxe6 Qg4+ Kf7 Qxg7+ Ke8 Qxh8+ Nf8",
-        "explanation": "If Black delays castling too long in the Qa5 lines, White can exploit the exposed king with tactical shots. The Nxf7 sacrifice rips open the position, and after Bxe6+ the king is dragged into the open where White's queen delivers devastating checks. The lesson is that Black must castle as soon as possible and not spend extra moves on queenside play before securing the king. This line punishes the natural but slow ...Bb4 and ...Qb6 sequence."
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 O-O Nc6 a3 Bxc3 Bxc3 Qb6 a4 a5 Bb5 O-O Nd2 Nb4",
+        "explanation": "In the Qa5 lines, after the ...Bb4-Bxc3 trade Black must develop and castle before commiting to ...Qb6. The a4 push by White pressures Black's queenside before Bb5 pins the c6 knight. Black's ...Nb4 maneuver attempts counterplay but it arrives just in time — castling on move 23 is borderline. The lesson: don't let queenside play delay king safety; ...O-O should come earlier in the sequence to avoid tempo loss.",
+        "shortExplanation": "Don't delay castling for queenside play: a4-Bb5 pressure makes late ...O-O nearly too slow."
       }
     ]
   },

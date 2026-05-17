@@ -183,23 +183,6 @@
     "caro-kann::warning::Two Knights Early e6 Mistake": [
       "PGN_NOT_IN_DB"
     ],
-    "scandinavian-defence::trap::Qa5 b2 Trap": [
-      "INVERTED_MATERIAL",
-      "STUDENT_NOT_PUNISHER"
-    ],
-    "scandinavian-defence::trap::Nb4 Fork Threat": [
-      "WEAK_TRAP"
-    ],
-    "scandinavian-defence::trap::Nf6 c4 Counter": [
-      "STUDENT_NOT_PUNISHER",
-      "WEAK_TRAP"
-    ],
-    "scandinavian-defence::trap::Blackmar-Diemer Style e5 Refutation": [
-      "WEAK_TRAP"
-    ],
-    "scandinavian-defence::warning::Queen Wandering Danger": [
-      "PGN_NOT_IN_DB"
-    ],
     "philidor-defence::trap::Legal's Mate Reversal": [
       "PGN_NOT_IN_DB",
       "STUDENT_NOT_PUNISHER"
@@ -561,6 +544,23 @@
     ],
     "alekhine-defence::trap::Four Pawns Attack Counter": [
       "WEAK_TRAP"
+    ],
+    "scandinavian-defence::trap::Qa5 b2 Trap": [
+      "STUDENT_NOT_PUNISHER",
+      "WEAK_TRAP"
+    ],
+    "scandinavian-defence::trap::Nb4 Fork Threat": [
+      "WEAK_TRAP"
+    ],
+    "scandinavian-defence::trap::Nf6 c4 Counter": [
+      "WEAK_TRAP"
+    ],
+    "scandinavian-defence::trap::Blackmar-Diemer Style e5 Refutation": [
+      "STUDENT_NOT_PUNISHER",
+      "WEAK_TRAP"
+    ],
+    "scandinavian-defence::warning::Queen Wandering Danger": [
+      "PGN_NOT_IN_DB"
     ]
   }
 }
