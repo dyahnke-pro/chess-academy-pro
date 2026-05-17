@@ -3541,13 +3541,13 @@
         },
         {
           "name": "Russian System 4.Qb3",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Qb3 dxc4 Qxc4 Bg7 e4 O-O Be2 Nc6 Nf3 Nd7 Be3 Nb6 Qd3 f5 exf5 Bxf5 Qd2 Na5",
-          "explanation": "The Russian System with Qb3 puts early pressure on d5. Black develops actively and challenges the center. Niemann navigates this theory-heavy line with deep preparation."
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Qb3 dxc4 Qxc4 Bg7 e4 O-O Be2 Nc6 Nf3 Nd7 Be3 Nb6 Qd3 f5",
+          "explanation": "The Russian System with Qb3 puts early pressure on d5. After Black's Nb6 + f5 setup, both sides reach a dynamic middlegame where Black challenges the center."
         },
         {
           "name": "Fianchetto Grunfeld",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 g3 O-O Bg2 dxc4 Na4 c3 bxc3 c5 O-O Nc6 Ba3 cxd4 cxd4 Qa5",
-          "explanation": "The Fianchetto variation is quieter but still dynamic. Both sides fianchetto their bishops and fight for the long diagonals. Niemann likes this when he wants a slightly less theoretical Grunfeld."
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 g3 O-O Bg2 dxc4",
+          "explanation": "The Fianchetto variation is quieter but still dynamic. Both sides fianchetto their bishops; after dxc4 the central tension drives the middlegame."
         }
       ],
       "trapLines": [
@@ -3558,8 +3558,8 @@
         },
         {
           "name": "Center Overextension",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 f4 c5 Nf3 O-O Be2 cxd4 cxd4 Qa5+ Bd2 Qa3 d5 Bg4 O-O Nc6",
-          "explanation": "If White overextends with e4, f4, and d5, Black targets the overextended pawns. After Qa5+ and Qa3, Black attacks the weak pawns while the Bg7 pressures the center from the flank."
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 f4 c5",
+          "explanation": "If White overextends with e4, f4, and d5, Black targets the overextended pawns with c5 — the Bg7 pressures the center from the flank as the structure cracks."
         }
       ]
     },
