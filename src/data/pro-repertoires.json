@@ -3452,8 +3452,8 @@
         },
         {
           "name": "Premature d5 Punished",
-          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 e4 Bc2 exf3 Qxf3 Bg4 Qg3 Bd6 f4",
-          "explanation": "If Black pushes d5 but follows with e4 prematurely, White plays Bc2 and after exf3 Qxf3, White has open lines and a strong attack. The f4 push creates dangerous kingside threats."
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 e4",
+          "explanation": "If Black pushes d5 but follows with e4 prematurely, White plays Bc2 + Qf3 with open lines and a strong attack on the weakened light squares."
         }
       ]
     },
