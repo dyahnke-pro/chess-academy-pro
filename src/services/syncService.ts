@@ -218,6 +218,10 @@ export async function importUserData(json: string): Promise<void> {
     // until its next hydrate() call (typically next app boot), so the
     // import lands but the live store keeps its current state until
     // reload. Acceptable for a manual import flow.
-    await db.meta.bulkPut(data.meta as { key: string; value: unknown }[]);
+    // MetaRecord.value is `string` (src/types/index.ts:347) — the in-app
+    // writers serialize before persist. Cast accordingly so the Dexie
+    // type-check passes (prior `value: unknown` cast was too loose and
+    // broke every Vercel deploy after commit 719809cf).
+    await db.meta.bulkPut(data.meta as Array<{ key: string; value: string }>);
   }
 }

@@ -147,7 +147,7 @@ export async function prefetchMasterPlay(
 
   // Look-ahead pass — only on the top-level call AND only if we got
   // a non-empty master-play result. No data → nothing to look ahead from.
-  if (opts.skipLookahead || result.moves.length === 0 || LOOKAHEAD_DEPTH === 0) {
+  if (opts.skipLookahead || result.moves.length === 0) {
     return;
   }
   const candidates = result.moves.slice(0, LOOKAHEAD_CANDIDATES);
