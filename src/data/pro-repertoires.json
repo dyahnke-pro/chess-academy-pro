@@ -2679,20 +2679,20 @@
         },
         {
           "name": "Black Declines Gambit with ...Bb6",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 b4 Bb6 cxd4 d6 e5 dxe5 Nxe5 Nxe5 dxe5 Nd7",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 b4 Bb6 cxd4",
           "explanation": "If Black retreats with 6...Bb6 and refuses to take on b4, White recaptures on d4 with the c-pawn, getting a big centre. Black's bishop on b6 is misplaced and Black has nothing to show for the loss of tempo."
         },
         {
           "name": "Bc5xb4 (Pure Evans Gambit transposition)",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 b4 Bxb4 cxb4 Nxb4 Ba3 Nc6 O-O d6 Re1",
-          "explanation": "If Black accepts the pawn and re-takes on b4 with the bishop, White's c3 takes back and we transpose to a pure Evans Gambit accepted. Ba3 immediately targets the king's-side dark squares, and after the knight retreats, O-O + Re1 gives White overwhelming central pressure — classic Evans Gambit themes."
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 b4 Bxb4 cxb4 Nxb4 Ba3 Nc6",
+          "explanation": "If Black accepts the pawn and re-takes on b4 with the bishop, White's c3 takes back. Ba3 immediately targets the king's-side dark squares — classic Evans Gambit themes with the bishop pair and central pressure."
         }
       ],
       "trapLines": [
         {
           "name": "Dubov's Queen Sacrifice",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 b4 Bb6 e5 Ne4 Bd5 Nxc3 Nxc3 dxc3 Bg5 Ne7 O-O h6 Bh4 O-O Re1 Qe8 Bb3 a5 Bf6 a4 Bc4 Ng6 Qd3 d5 exd6 Be6 Qxg6",
-          "explanation": "The famous Qxg6!! queen sacrifice from Dubov-Karjakin 2020. After Black blocked the bishop with Ng6 and ...d5 challenging the centre, Dubov played the immortal Qxg6 — White's pieces dominate the e-file and after fxg6 Rxe6, Black's position collapses. One of the greatest games of the 21st century."
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 b4 Bb6 e5 Ne4 Bd5 Nxc3 Nxc3 dxc3 Bg5 Ne7 O-O h6 Bh4",
+          "explanation": "The opening of Dubov-Karjakin 2020. After the long forced sequence ending Bg5 Ne7 + O-O h6 Bh4, White has the bishop pair, kingside pressure, and the e-file ready for action — the queen sacrifice followed several moves later."
         }
       ]
     },
