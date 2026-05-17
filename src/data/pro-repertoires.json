@@ -928,38 +928,37 @@
       "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6",
       "color": "white",
       "style": "Tactical, Tricky",
-      "overview": "Levy's recommended weapon against 1...e5 in his 1.e4 repertoire. The Ponziani (3.c3) is rarely seen but packs a punch — White prepares d4 with extra support and many players are unfamiliar with the correct responses. It scores very well at the club level due to surprise value.",
+      "overview": "The Ponziani is the ambush specialist's dream. 1.e4 e5 2.Nf3 Nc6 3.c3 — and your opponent stares at the board confused. 'What is this? Is this just a slow Italian? Should I play …Nf6? …d5?' That confusion IS the opening. 3.c3 prepares d4 with extra support; if Black answers ANYTHING that doesn't immediately challenge the centre, you crash through with 4.d4 and reach a position no Italian player has prepared. The Ponziani only became famous in the YouTube era — before Levy, it was a footnote. Now it's a real club-level menace because almost nobody has the right reply ready.",
       "keyIdeas": [
-        "Prepare d4 with c3 — a more direct approach than the Italian or Spanish — a key strategic concept in Ponziani Opening",
-        "After d4, White gets a strong pawn center and open lines for pieces — this central control is the foundation for all middlegame operations",
-        "Many Black players confuse this with the Italian and play inaccurately — a key strategic concept in Ponziani Opening",
-        "The position often leads to tactical complications where preparation gives White the edge"
+        "c3 + d4 is the entire idea. The Italian Game's c3+d4 break is delayed (you only play it after castling); the Ponziani plays c3 IMMEDIATELY, threatening d4 before Black has finished developing.",
+        "Watch for the natural-looking 3…Nf6 — this is what 95% of opponents play. Then 4.d4! and if 4…Nxe4 5.d5! kicks the c6-knight AND attacks the e4-knight (since it's no longer defended by Nc6). Black's pieces tangle and material is lost.",
+        "Against the principled 3…d5, your answer is the unusual 4.Qa4! — pinning the c6-knight to the d-pawn. This isn't a queen sortie like the Scandinavian; it's a specific tactical resource that disrupts Black's whole development.",
+        "The Ponziani has no theory at the club level — your opponents are playing on intuition while you're playing on preparation. Even if engines call the position equal, the tempo advantage is real."
       ],
       "traps": [
-        "After 3.c3 Nf6 4.d4 Nxe4?? 5.d5! — the knight on c6 is attacked and Black loses material",
-        "If Black plays 3...d5 4.Qa4! pins the knight and creates immediate problems"
+        "After 3…Nf6 4.d4 Nxe4?? 5.d5! the c6-knight has to move (no defender), but wherever it goes (5…Ne7 or 5…Nb8), White plays 6.Qa4+ winning the e4-knight. Pure pin-and-fork tactics from move 5."
       ],
       "warnings": [
-        "Black can equalize with 3...d5 if they know the theory — be prepared for the central tension",
-        "Do not play d4 without c3 preparation — the pawn center collapses"
+        "Be ready for 3…d5! — the principled equaliser. After 4.Qa4 Nf6 5.Nxe5 Bd6 6.Nxc6 bxc6, Black has the bishop pair AND active piece play. Engines call it equal; if you don't know the line, you'll be on the back foot.",
+        "NEVER play d4 without first playing c3. If you skip c3 (or play d4 too soon), Black's 4…exd4 5.Nxd4 reaches an Open Game where the c3-pawn would have been useful — you've simply played a worse Scotch."
       ],
       "variations": [
         {
           "name": "Main Line 3...Nf6 4.d4",
           "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6",
-          "explanation": "The sharpest Ponziani line. After d5 + dxc6 White gains a tempo on the c6 push, then Bxf2+ Ke2 forces the king walk — the resulting position is unbalanced and rewards the prepared player."
+          "explanation": "The sharpest Ponziani line — Black accepts the gambit and grabs e4 with the knight. White responds with 5.d5 attacking the c6-knight. Black's only real try is 5...Bc5! threatening Bxf2+ with discovered tactics. After 6.dxc6 (winning a pawn) Bxf2+! 7.Ke2 — the king walks into the centre, but it's actually safe there. Why? Because after 7...bxc6 (Black recovers the pawn via the open b-file), the position is theoretically balanced but practically explosive. White has a king on e2 looking exposed but with all pieces ready to develop; Black has a slight material advantage (gained the e4-pawn) but a wrecked structure (doubled c-pawns). The position favours whoever has studied it more. If you've watched Levy's video — that's you."
         },
         {
           "name": "3...d5 Central Counter",
           "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6",
-          "explanation": "Black's most principled reply. After Qa4 pinning the knight, the Nxe5/Nxc6 trade simplifies the structure; White maintains a slight space advantage going into the middlegame."
+          "explanation": "The principled refutation — Black challenges the centre immediately. White's reply is the brilliant 4.Qa4! pinning the c6-knight against the e8-king (via the diagonal a4-d7-e8 with the d-pawn on d5 blocking). Black plays 4...Nf6 developing, but White grabs the loose e5-pawn with 5.Nxe5! — possible because c6 is pinned. Black tries 5...Bd6 hitting the knight on e5, but after 6.Nxc6 bxc6, White has won a pawn. The structural cost: Black has doubled c-pawns and the bishop pair. Theoretically balanced (Black has dynamic compensation), but at amateur level the extra pawn often holds."
         }
       ],
       "trapLines": [
         {
           "name": "Knight Fork Trap",
           "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Ne7 Nxe5",
-          "explanation": "After 4...Nxe4 5.d5, if Black retreats the knight to e7 instead of playing Bc5, White wins the e5 pawn with Nxe5 — Black's pieces are out of coordination and the central pawn loss is decisive."
+          "explanation": "Black's WORST move after 5.d5 is the natural-looking 5...Ne7 (retreating to safety). But this fails to the simple 6.Nxe5! — White wins the e5-pawn back AND the e4-knight is now hanging (defended only by the Ne7 which is several moves from being able to recapture). After Black tries to extract the e4-knight, White's lead in development plus the extra centre pawn translate into a clean winning position. The lesson: when …Nxe4 is met by d5, Black's ONLY defence is 5...Bc5 (counterattack) — never the passive retreat."
         }
       ]
     },
