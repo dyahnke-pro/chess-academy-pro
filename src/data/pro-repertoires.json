@@ -2171,25 +2171,25 @@
         },
         {
           "name": "Closed Catalan",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 b6 e4 Bb7 e5 Ne8 Re1 Nc7 Nf1 Ba6",
-          "explanation": "In the Closed Catalan, Black keeps the tension with c6 instead of capturing on c4. Caruana pushes e4-e5 to gain space and restrict Black's pieces."
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 b6 e4 Bb7 e5 Ne8 Re1 Nc7",
+          "explanation": "In the Closed Catalan, Black keeps the tension with c6 instead of capturing on c4. After e4-e5 White gains space; Black manoeuvres Ne8-Nc7 then Ba6 to neutralize the long diagonal."
         },
         {
           "name": "Early Bd7 System",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nbd7 Nc3 c5 dxc5 Nxc5 Be3 Qd6 Rac1 Rfd8",
-          "explanation": "A topical system where Black develops Bd7 early and plays for b5. White must balance recovering material with maintaining pressure."
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nbd7",
+          "explanation": "A topical system where Black develops Bd7 early and plays for b5. After Bd2 + Nbd7, both sides finish development and prepare the typical c5 break."
         }
       ],
       "trapLines": [
         {
           "name": "Pawn Grab ...dxc4 Cannot Hold",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 b5 a4 Rb8 b3 cxb3 axb5 axb5 Qxb5",
-          "explanation": "Black grabs c4 and tries to hold with ...b5, but a4 undermines the chain. The Bg2 x-rays through to a8 and White wins back the material with interest."
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 b5 a4 Rb8",
+          "explanation": "Black grabs c4 and tries to hold with ...b5, but a4 undermines the chain. White's Bg2 + queenside infiltration regains the material with the better structure."
         },
         {
           "name": "Bg2 Diagonal Wins Material",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bf4 Nbd7 Nc3 Nb6 Qd3 Nbd5 Nxd5 Bxd5 Ne5",
-          "explanation": "The Catalan bishop on g2 applies relentless diagonal pressure. After Ne5, White wins material as Black cannot defend both the queenside and the long diagonal."
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bf4 Nbd7 Nc3 Nb6 Qd3 Nbd5",
+          "explanation": "The Catalan bishop on g2 applies relentless diagonal pressure. After Qd3 + Nbd5, White's central pressure plus the threats along the a8-h1 diagonal yields a long-term advantage."
         }
       ]
     },
