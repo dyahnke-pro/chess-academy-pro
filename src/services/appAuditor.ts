@@ -151,6 +151,24 @@ export type AuditKind =
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
   | 'coach-surface-migrated'
+  // Rolodex entry beat (WO-ROLODEX-PLUMBING-01 item 1). Fires once per
+  // session per opening when /coach/play (or another coach surface in
+  // future) is loaded with `?opening=<name>` and the captured intent
+  // produces the rolodex's signature entry-narration line.
+  | 'rolodex-entry-beat'
+  // Training Plan rolodex active-card pointer changes (WO-ROLODEX-UI-01
+  // PR-1). Fires when a card becomes the front of its color's stack,
+  // which is also the signal that bumps lastActiveRolodexColor (drives
+  // the mobile manila-tab default). Filter on this kind to trace
+  // "which card has been at the top of which folder over time."
+  | 'coach-memory-rolodex-active-card-set'
+  // Training Plan rolodex per-color custom drag order (WO-ROLODEX-
+  // UI-01 PR-4). Fires every time the user reorders cards via the
+  // long-press drag gesture OR the page's mount-time reconciliation
+  // resolves a new sequence (prepending new favorites, pruning
+  // unfavorited entries). Filter on this to trace "what's the user's
+  // intentional repertoire arrangement vs the system's defaults."
+  | 'coach-memory-rolodex-order-set'
   // Coach-hub navigation (WO-COACH-UNIFY-01 audit item #15). Fires
   // when the user taps a tile on the Coach hub so a "I went to
   // Coach but ended up somewhere else" report has a trail.

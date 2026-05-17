@@ -99,6 +99,193 @@ describe('useCoachMemoryStore persistence', () => {
   });
 });
 
+describe('useCoachMemoryStore.setActiveOpeningCard', () => {
+  it('sets the active card for the given color and bumps lastActiveRolodexColor', () => {
+    useCoachMemoryStore.getState().setActiveOpeningCard('white', 'italian-game-id');
+    const s = useCoachMemoryStore.getState();
+    expect(s.activeOpeningCardId).toEqual({ white: 'italian-game-id', black: null });
+    expect(s.lastActiveRolodexColor).toBe('white');
+    expect(auditCalls.some((c) => c.kind === 'coach-memory-rolodex-active-card-set')).toBe(true);
+  });
+
+  it('updates only the color passed; the other slot is untouched', () => {
+    const s = useCoachMemoryStore.getState();
+    s.setActiveOpeningCard('white', 'italian-game-id');
+    s.setActiveOpeningCard('black', 'caro-kann-id');
+    const state = useCoachMemoryStore.getState();
+    expect(state.activeOpeningCardId).toEqual({
+      white: 'italian-game-id',
+      black: 'caro-kann-id',
+    });
+    expect(state.lastActiveRolodexColor).toBe('black');
+  });
+
+  it('is a no-op when the same id is set again for the same color', () => {
+    const s = useCoachMemoryStore.getState();
+    s.setActiveOpeningCard('white', 'italian-game-id');
+    auditCalls.length = 0;
+    s.setActiveOpeningCard('white', 'italian-game-id');
+    expect(auditCalls).toHaveLength(0);
+  });
+
+  it('re-runs when the same id is set for the same color but folder was last-touched elsewhere', () => {
+    const s = useCoachMemoryStore.getState();
+    s.setActiveOpeningCard('white', 'italian-game-id');
+    s.setActiveOpeningCard('black', 'caro-kann-id');
+    auditCalls.length = 0;
+    s.setActiveOpeningCard('white', 'italian-game-id');
+    expect(useCoachMemoryStore.getState().lastActiveRolodexColor).toBe('white');
+    expect(auditCalls).toHaveLength(1);
+  });
+
+  it('accepts null to clear the active card for a color (last favorite removed)', () => {
+    const s = useCoachMemoryStore.getState();
+    s.setActiveOpeningCard('white', 'italian-game-id');
+    s.setActiveOpeningCard('white', null);
+    expect(useCoachMemoryStore.getState().activeOpeningCardId.white).toBeNull();
+  });
+});
+
+describe('useCoachMemoryStore rolodex persistence', () => {
+  it('roundtrips activeOpeningCardId + lastActiveRolodexColor through Dexie via hydrate', async () => {
+    useCoachMemoryStore.getState().setActiveOpeningCard('white', 'italian-game-id');
+    useCoachMemoryStore.getState().setActiveOpeningCard('black', 'caro-kann-id');
+    await __flushCoachMemoryPersistForTests();
+
+    __resetCoachMemoryStoreForTests();
+    expect(useCoachMemoryStore.getState().activeOpeningCardId).toEqual({
+      white: null,
+      black: null,
+    });
+
+    await useCoachMemoryStore.getState().hydrate();
+
+    expect(useCoachMemoryStore.getState().activeOpeningCardId).toEqual({
+      white: 'italian-game-id',
+      black: 'caro-kann-id',
+    });
+    expect(useCoachMemoryStore.getState().lastActiveRolodexColor).toBe('black');
+  });
+
+  it('falls back to defaults when a legacy persisted blob omits the rolodex fields', async () => {
+    // Simulate a persisted blob written before the rolodex fields existed —
+    // the keys are simply absent from the JSON payload.
+    await db.meta.put({
+      key: 'coachMemory.v1',
+      value: JSON.stringify({
+        intendedOpening: null,
+        conversationHistory: [],
+        preferences: { likes: [], dislikes: [], style: null },
+        hintRequests: [],
+        blunderPatterns: [],
+        growthMap: [],
+        gameHistory: [],
+        savedPosition: null,
+        autoSavedPosition: null,
+      }),
+    });
+
+    __resetCoachMemoryStoreForTests();
+    await useCoachMemoryStore.getState().hydrate();
+
+    expect(useCoachMemoryStore.getState().activeOpeningCardId).toEqual({
+      white: null,
+      black: null,
+    });
+    expect(useCoachMemoryStore.getState().lastActiveRolodexColor).toBeNull();
+  });
+});
+
+describe('useCoachMemoryStore.setFavoritedAt', () => {
+  it('records a timestamp for a new opening id', () => {
+    useCoachMemoryStore.getState().setFavoritedAt('italian-game', '2026-05-17T00:00:00.000Z');
+    expect(useCoachMemoryStore.getState().favoritedAt['italian-game']).toBe('2026-05-17T00:00:00.000Z');
+  });
+
+  it('is a no-op when an entry already exists (preserves original favorite time)', () => {
+    const s = useCoachMemoryStore.getState();
+    s.setFavoritedAt('italian-game', '2026-01-01T00:00:00.000Z');
+    s.setFavoritedAt('italian-game', '2026-05-17T00:00:00.000Z');
+    expect(useCoachMemoryStore.getState().favoritedAt['italian-game']).toBe('2026-01-01T00:00:00.000Z');
+  });
+
+  it('respects force=true so the unfavorite→re-favorite flow can refresh the timestamp', () => {
+    const s = useCoachMemoryStore.getState();
+    s.setFavoritedAt('italian-game', '2026-01-01T00:00:00.000Z');
+    s.setFavoritedAt('italian-game', '2026-05-17T00:00:00.000Z', true);
+    expect(useCoachMemoryStore.getState().favoritedAt['italian-game']).toBe('2026-05-17T00:00:00.000Z');
+  });
+
+  it('defaults to now when no timestamp is provided', () => {
+    const before = Date.now();
+    useCoachMemoryStore.getState().setFavoritedAt('italian-game');
+    const stored = useCoachMemoryStore.getState().favoritedAt['italian-game'];
+    expect(new Date(stored).getTime()).toBeGreaterThanOrEqual(before);
+  });
+});
+
+describe('useCoachMemoryStore.setRolodexOrder', () => {
+  it('replaces the order for a color and emits an audit', () => {
+    useCoachMemoryStore.getState().setRolodexOrder('white', ['italian', 'ruy-lopez', 'london']);
+    const state = useCoachMemoryStore.getState();
+    expect(state.userOrderedFavorites.white).toEqual(['italian', 'ruy-lopez', 'london']);
+    expect(state.userOrderedFavorites.black).toEqual([]);
+    expect(auditCalls.some((c) => c.kind === 'coach-memory-rolodex-order-set')).toBe(true);
+  });
+
+  it('updates the other color independently', () => {
+    const s = useCoachMemoryStore.getState();
+    s.setRolodexOrder('white', ['italian']);
+    s.setRolodexOrder('black', ['caro-kann', 'french']);
+    const state = useCoachMemoryStore.getState();
+    expect(state.userOrderedFavorites).toEqual({
+      white: ['italian'],
+      black: ['caro-kann', 'french'],
+    });
+  });
+
+  it('is a no-op when the new order matches the existing order (no audit)', () => {
+    const s = useCoachMemoryStore.getState();
+    s.setRolodexOrder('white', ['italian', 'ruy-lopez']);
+    auditCalls.length = 0;
+    s.setRolodexOrder('white', ['italian', 'ruy-lopez']);
+    expect(auditCalls).toHaveLength(0);
+  });
+
+  it('accepts an empty array to clear back to default ordering', () => {
+    const s = useCoachMemoryStore.getState();
+    s.setRolodexOrder('white', ['italian']);
+    s.setRolodexOrder('white', []);
+    expect(useCoachMemoryStore.getState().userOrderedFavorites.white).toEqual([]);
+  });
+});
+
+describe('useCoachMemoryStore PR-4 persistence', () => {
+  it('roundtrips favoritedAt + userOrderedFavorites through Dexie via hydrate', async () => {
+    const s = useCoachMemoryStore.getState();
+    s.setFavoritedAt('italian', '2026-05-17T00:00:00.000Z');
+    s.setFavoritedAt('caro-kann', '2026-05-16T00:00:00.000Z');
+    s.setRolodexOrder('white', ['italian']);
+    s.setRolodexOrder('black', ['caro-kann']);
+    await __flushCoachMemoryPersistForTests();
+
+    __resetCoachMemoryStoreForTests();
+    expect(useCoachMemoryStore.getState().favoritedAt).toEqual({});
+    expect(useCoachMemoryStore.getState().userOrderedFavorites).toEqual({ white: [], black: [] });
+
+    await useCoachMemoryStore.getState().hydrate();
+
+    expect(useCoachMemoryStore.getState().favoritedAt).toEqual({
+      italian: '2026-05-17T00:00:00.000Z',
+      'caro-kann': '2026-05-16T00:00:00.000Z',
+    });
+    expect(useCoachMemoryStore.getState().userOrderedFavorites).toEqual({
+      white: ['italian'],
+      black: ['caro-kann'],
+    });
+  });
+});
+
 describe('tryCaptureOpeningIntent', () => {
   it('captures Caro-Kann from a chat message and writes to the store', () => {
     const result = tryCaptureOpeningIntent(

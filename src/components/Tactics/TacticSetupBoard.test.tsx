@@ -3,6 +3,35 @@ import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { TacticSetupBoard } from './TacticSetupBoard';
 import { buildSetupPuzzle, resetFactoryCounter } from '../../test/factories';
 
+// API-leak guard (WO-TEST-CLEANUP-01 Part A) — intercepts modern
+// brain entry point + all 6 network-wrapping coachApi exports.
+vi.mock('../../coach/coachService', () => ({
+  coachService: {
+    // Non-empty text so `hintState.nudgeText` populates and the
+    // `hint-nudge` conditional render fires for the hint-level-2
+    // assertion. Distinctive prefix is greppable in any future
+    // debugging — if this string shows up in production logs,
+    // the brain path was unmocked when it shouldn't have been.
+    ask: vi.fn().mockResolvedValue({
+      text: '[TEST MOCK] hint nudge text',
+      toolCallIds: [],
+      provider: 'deepseek',
+    }),
+  },
+}));
+vi.mock('../../services/coachApi', async (importOriginal) => {
+  const orig = await importOriginal<typeof import('../../services/coachApi')>();
+  return {
+    ...orig,
+    getCoachCommentary: vi.fn().mockResolvedValue(''),
+    getCoachChatResponse: vi.fn().mockResolvedValue(''),
+    getCoachStructuredResponse: vi.fn().mockResolvedValue({}),
+    getKidLlmResponse: vi.fn().mockResolvedValue(''),
+    callAnthropicWithTool: vi.fn().mockResolvedValue({}),
+    callDeepseekWithTool: vi.fn().mockResolvedValue({}),
+  };
+});
+
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 const mockSpeak = vi.fn().mockResolvedValue(undefined);
