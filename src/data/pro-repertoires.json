@@ -293,13 +293,13 @@
       "variations": [
         {
           "name": "6.Be2 English Attack",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O Be6 f4 Qc7 a4 Nbd7",
-          "explanation": "Naroditsky's preferred setup against Be2. Black develops harmoniously and prepares to counter on the queenside with b6, Rc8, and eventually b5."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O Be6 f4 Qc7 a4 Nbd7 Kh1 O-O Be3 exf4 Rxf4 Ne5 a5 Rac8",
+          "explanation": "Naroditsky's preferred setup against Be2. After castling kingside, Black grabs the e-file with Ne5 and Rac8; the resulting middlegame features balanced piece-play on both flanks."
         },
         {
           "name": "6.Bg5 Classical",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 g4 b5",
-          "explanation": "Against the aggressive Bg5, Black plays e6 and prepares the thematic b5 push. The position is razor-sharp with attacks on opposite wings."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 g4 b5 Bxf6 Nxf6 g5 Nd7 f5 Bxg5+ Kb1 Ne5",
+          "explanation": "Against the aggressive Bg5, both sides storm opposite wings — White's g4-g5-f5 pawn cascade vs Black's b5-Nd7-Ne5 counterattack. Razor-sharp throughout."
         },
         {
           "name": "6.Be3 English Attack (Danya's ...a5)",
@@ -308,8 +308,8 @@
         },
         {
           "name": "6.f3 English Attack",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Be7 Qd2 Nbd7 O-O-O b5 g4 b4 Nd5 Nxd5 exd5 Bf5",
-          "explanation": "The most aggressive approach. White castles queenside and storms the kingside with g4-g5. Black counters with b5-b4 on the queenside. Danya's recommendation is to play Bf5 retreating the bishop to a safe diagonal."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Be7 Qd2 Nbd7 O-O-O b5 g4 b4 Nd5 Bxd5 exd5 Nb6 Qxb4 Nfxd5",
+          "explanation": "The most aggressive approach. White castles queenside and storms the kingside with g4-g5. After Nd5 Black recaptures with the bishop and counters with Nb6 + Nfxd5 — the central knight pair compensates for the missing pawn."
         },
         {
           "name": "6.Bc4 Fischer Attack",
@@ -320,8 +320,8 @@
       "trapLines": [
         {
           "name": "Poisoned Pawn Trap",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qb6 Qd2 Qxb2 Rb1 Qa3 e5 dxe5 fxe5 Nfd7 Ne4",
-          "explanation": "The famous Poisoned Pawn variation. Black grabs b2 but White gets a massive attack. Ne4 threatens to dominate the center. Even top GMs have lost with Black here."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qb6 Qd2 Qxb2 Rb1 Qa3 e5 dxe5 fxe5 Nfd7 Ne4 h6 Bh4 Qxa2 Rd1 Qd5 Qe3 Qxe5",
+          "explanation": "The famous Poisoned Pawn variation. Black grabs b2 and after the sharpest line wins back material on a2 and e5 — but the king's exposure means precise calculation is required at every move."
         }
       ]
     },
