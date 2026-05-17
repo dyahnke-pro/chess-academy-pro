@@ -2725,20 +2725,20 @@
         },
         {
           "name": "Gambit Catalan",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Be7 O-O O-O Ne5 Nc6 Bxc6 bxc6 Nxc6 Qe8 Nxe7+ Qxe7 Qa4 e5 dxe5 Qxe5 Be3 Nd5",
-          "explanation": "Dubov's creative gambit approach. White sacrifices the bishop pair for active piece play and structural advantages. The resulting positions are unbalanced and favor creative play."
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Be7 O-O O-O Ne5 Nc6 Bxc6 bxc6 Nxc6 Qe8 Nxe7+ Qxe7 Qa4 e5 dxe5 Qxe5",
+          "explanation": "Dubov's creative gambit approach. White sacrifices the bishop pair for active piece play; the resulting unbalanced position rewards creative play and concrete calculation."
         }
       ],
       "trapLines": [
         {
           "name": "c4 Grab and Bg2 Recovery",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 b5 a4 Rb8 axb5 axb5 Rd1 Be7 Nc3 O-O Nxb5",
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 b5 a4 Rb8 axb5 axb5",
           "explanation": "Black grabs the c4 pawn and tries to hold it with b5, but White's Bg2 on the long diagonal combined with a4 undermines the structure. White recovers the pawn with interest."
         },
         {
           "name": "Long Diagonal Skewer",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bf4 Bd5 Qc2 Nc6 Nc3 Nb4 Qd2 Be4 Nxe4 Nxe4 Qe3 Nd5 Qe4",
-          "explanation": "The Bg2 creates a devastating long diagonal skewer targeting the rook on a8. Black's attempts to block with pieces fail as White's pressure builds relentlessly."
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bf4",
+          "explanation": "The Bg2 creates a devastating long diagonal threat. After Bf4 White has full development with pressure on Black's queenside; the long diagonal continues to be the dominant strategic theme."
         }
       ]
     },
