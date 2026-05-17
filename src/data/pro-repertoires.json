@@ -695,7 +695,7 @@
       "playerId": "gothamchess",
       "eco": "C42",
       "name": "Stafford Gambit Refutation (GothamChess)",
-      "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 O-O Ng4 h3 Qd6 hxg4 hxg4 Nd2",
+      "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5",
       "color": "white",
       "style": "Tactical, Theoretical",
       "overview": "Levy made the Stafford Gambit famous and also showed how to refute it properly. Knowing the correct response to the Stafford is essential since many online players try it. White must play precisely but emerges with a clear advantage.",
@@ -715,27 +715,16 @@
       "variations": [
         {
           "name": "Main Refutation d3",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 O-O Ng4 h3 Qd6 hxg4 hxg4",
-          "explanation": "The correct way to handle the Stafford. White plays d3 instead of d4, keeps the extra pawn, and develops safely. Black's attack runs out of steam."
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5",
+          "explanation": "The correct way to handle the Stafford. White plays d3 instead of d4, keeps the extra pawn, and develops safely. Black's attacking attempts past this point are not represented in master games — the position is just unbalanced enough that White's material lead is decisive."
         },
         {
           "name": "4...dxc6 5.e5 Line",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Bc5 dxe4 Bxf2+ Ke2 Bg4+ Kxf2 Qxd1",
-          "explanation": "An alternative where White pushes e5. The position simplifies and White's material advantage becomes decisive."
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4",
+          "explanation": "An alternative where White pushes e5 — Black's knight goes to e4 but the simplifying d3 + Bxc5 line keeps the extra pawn safe."
         }
       ],
-      "trapLines": [
-        {
-          "name": "Bc5 Queen Trap Refuted",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 O-O Qh4 h3 Nxf2 Rxf2 Bxf2+ Kh1 Bg3 Qe1",
-          "explanation": "Black tries the classic Stafford trick with Bc5, Ng4, and Qh4. White calmly plays d3 and h3, then Qe1 defuses the attack completely."
-        },
-        {
-          "name": "d3 Defense Over d4",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 O-O Ng4 h3 Qd6 hxg4 hxg4 Nd2",
-          "explanation": "The key refutation is d3 instead of d4. After d3 White safely develops and Black's attacking ideas fizzle. The extra pawn is decisive in the endgame."
-        }
-      ]
+      "trapLines": []
     },
     {
       "id": "pro-gothamchess-caro-kann",
