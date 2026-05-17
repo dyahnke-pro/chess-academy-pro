@@ -1901,13 +1901,13 @@
       "trapLines": [
         {
           "name": "Marshall ...d5 Prevented by h3",
-          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O h3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Re4",
-          "explanation": "Black tries the Marshall Gambit with ...d5 but h3 gives White an extra tempo. After Re4, the rook defends while White consolidates the extra pawn."
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O h3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5",
+          "explanation": "Black tries the Marshall Gambit with ...d5 but h3 first gives White an extra tempo. After Rxe5 White is up a pawn with the e-file and consolidating moves to come."
         },
         {
           "name": "Premature ...d5 Without h3",
-          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Nd2 Rae8",
-          "explanation": "Black plays ...d5 without preparation, and White calmly defends. After a4, the queenside pressure combined with the central pawn majority is decisive."
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4",
+          "explanation": "Black plays ...d5 without preparation, and after the long forced sequence White's defensive resources Be3 + h3 + Nd2 keep the king safe — the extra pawn from the Marshall accepts converts into a winning endgame."
         }
       ]
     },
