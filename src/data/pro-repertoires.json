@@ -3631,25 +3631,25 @@
       "variations": [
         {
           "name": "Main Trap Line",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4+",
-          "explanation": "The famous Stafford Gambit trap. After dxe4 and Bxf2+, Black wins the queen or delivers checkmate. This is the line that made Eric Rosen famous — the queen capture on d8 looks winning but it is actually a disaster."
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
+          "explanation": "The famous Stafford Gambit setup. After d3 Bc5, Black has the Bxf2+ + Bg4+ trap available — the queen capture on d8 looks winning for White but is actually a disaster."
         },
         {
           "name": "Nxc6 dxc6 Best Play",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4 Qh4 g3 Qh3 Bf4 Bc5 Qe2 Bf5 Bg2 Qg4 Bxe4 Bxe4 Nd2 Bg6",
-          "explanation": "White's best response avoiding all traps. The position is better for White objectively, but Black has active pieces and practical chances. Rosen still scores well here because the positions are messy."
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4",
+          "explanation": "White's best response avoiding all traps. After d4 the position is better for White objectively, but the positions remain messy and rewarding for Black's creative play."
         },
         {
           "name": "Nc3 Blunder",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 Be2 h5 d3 Ng4 Bxg4 hxg4 Qxg4 Qd4 Qe2 Qf2+ Qxf2 Bxf2+ Kxf2 Bh3",
-          "explanation": "If White plays the natural Nc3, Black gets a strong initiative. The position becomes sharp and White must navigate carefully to avoid falling into one of Rosen's many tactical tricks."
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 Be2 h5 d3 Ng4 Bxg4 hxg4 Qxg4 Qd4",
+          "explanation": "If White plays the natural Nc3, Black gets a strong initiative. The position becomes sharp and White must navigate carefully to avoid falling into one of Rosen's tactical tricks."
         }
       ],
       "trapLines": [
         {
           "name": "Oh No My Queen Trap",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4+",
-          "explanation": "The signature Rosen trap. White takes the queen thinking they are winning, but Bxf2+ followed by Bg4+ leads to either checkmate or winning White's queen back with interest."
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
+          "explanation": "The signature Rosen trap setup. After d3 Bc5, if White plays Bg5 hoping to trade pieces, the Stafford's signature Bxd8 'Oh No My Queen' resource awaits — Bxf2+ followed by Bg4+ leads to either checkmate or winning White's queen back."
         }
       ]
     },
