@@ -2878,8 +2878,8 @@
       "trapLines": [
         {
           "name": "Nd5 Nxd5 Central Control",
-          "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Nce3 Ne7 Nf6+ gxf6 Nd5 Kh8",
-          "explanation": "When White plays Nd5, Black captures Nxd5 exd5 gaining central pawns. The d5 pawn cramps White and Black gets active piece play with the bishop pair."
+          "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Nce3",
+          "explanation": "When White plays Nd5, Black accepts the trade — after Bxf6 Bxf6 + c3 + Nc2 + Nce3, both sides maneuver in the Sveshnikov main line where Black's bishop pair counterbalances White's central control."
         },
         {
           "name": "a6-b5 Knight Trap",
