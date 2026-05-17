@@ -1368,20 +1368,20 @@
         },
         {
           "name": "Ragozin Variation",
-          "pgn": "d4 Nf6 c4 e6 Nc3 d5 Nf3 Bb4 Bg5 dxc4 e4 c5 Bxc4 cxd4 Nxd4 Qa5 Bd2 Qc5 Nb3 Qe7 O-O O-O",
-          "explanation": "The Ragozin is a dynamic alternative for Black where Bb4 pins the knight early. Carlsen has used this to create imbalanced positions where his superior technique decides."
+          "pgn": "d4 Nf6 c4 e6 Nc3 d5 Nf3 Bb4 Bg5 dxc4 e4 c5 Bxc4 cxd4 Nxd4 Qa5 Bd2 Qc5",
+          "explanation": "The Ragozin is a dynamic alternative for Black where Bb4 pins the knight early. After Qa5 + Qc5 the queen probes both diagonals — Carlsen uses this to create imbalanced positions where his technique decides."
         }
       ],
       "trapLines": [
         {
           "name": "Premature e4 Tactics",
           "pgn": "d4 Nf6 c4 e6 Nc3 d5 Bg5 Be7 e3 O-O Nf3 Nbd7 Bd3 dxc4 Bxc4 c5 O-O cxd4 exd4 Nb6 Bb3 Nbd5",
-          "explanation": "White plays e4 too early and Black responds with ...dxe4 Nxe4 tactics. The pin on g5 can be exploited and Black wins the central pawn with active piece play."
+          "explanation": "After Bg5 + e3 + Nf3 + Bd3 + cxd4 setup, Black plays the typical ...Nb6 + ...Nbd5 manoeuvre to claim the e4 square. The pin on g5 makes any premature e4 break tactical, and Black's piece activity becomes the dominant theme."
         },
         {
           "name": "Bishop Catch with h6-g5",
-          "pgn": "d4 Nf6 c4 e6 Nc3 d5 Bg5 Be7 e3 O-O Nf3 h6 Bh4 b6 cxd5 Nxd5 Bxe7 Qxe7 Nxd5 exd5 Bd3 Bb7 O-O c5",
-          "explanation": "After Bg5 Be7 e3 h6 Bh4 g5, if White is not careful the bishop on h4 gets trapped. Black gains the bishop pair and a strong center after ...g5 Bg3 Ne4."
+          "pgn": "d4 Nf6 c4 e6 Nc3 d5 Bg5 Be7 e3 O-O Nf3 h6 Bh4 b6 cxd5 Nxd5 Bxe7 Qxe7 Nxd5 exd5 Bd3",
+          "explanation": "After Bg5 Be7 e3 h6 Bh4, if White trades on e7 + d5, Black gets the bishop pair and central pressure with ...c5 — White's bishop pair was traded away when the h-pawn was provoked."
         }
       ]
     },
