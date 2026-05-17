@@ -1215,30 +1215,30 @@
       "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 O-O Be3 Be6 Rc1 f6",
       "color": "white",
       "style": "Flexible, Positional",
-      "overview": "Carlsen occasionally plays the English to avoid heavy 1.e4 or 1.d4 theory. It is the ultimate flexible opening — White can transpose into many structures depending on Black's response. Magnus uses it to get opponents out of their preparation.",
+      "overview": "Most chess teachers tell you to pick ONE opening and learn it deeply. Magnus picked the English partly because he can play it as five DIFFERENT openings depending on what Black does. 1.c4 commits to almost nothing — you can transpose into a Queen's Indian, a Reverse Sicilian, a Catalan, an Open Sicilian (with d4 later), or a King's Indian Attack. The English is the world champion's anti-preparation weapon: by move 4 you've sidestepped 95% of opening theory and your opponent is improvising. Magnus uses it specifically against opponents who've prepared 1.e4 lines for him — the surprise factor at the highest level is worth half a point.",
       "keyIdeas": [
-        "Control the d5 square and maintain a flexible pawn structure — this structural feature shapes all future strategic decisions in the position",
-        "The fianchettoed bishop on g2 works perfectly with the c4 pawn — this structural feature shapes all future strategic decisions in the position",
-        "Transpose into favorable structures depending on Black's setup — the structural advantages become more pronounced with fewer pieces on the board",
-        "Avoid committal moves early and let Black reveal their plan first — this practical approach reduces the opponent's preparation advantage significantly"
+        "The d5-square is the strategic battleground. Every English variation revolves around control of d5 — the c4-pawn supports it, the g2-bishop attacks it, the Nc3-knight can land on it. If you control d5, you control the position.",
+        "Don't commit your central pawn structure early. The English's flexibility is its weapon — by NOT playing d4 in the first 10 moves, you keep the options of d3 (King's Indian Attack style), d4 (transpose to QGD), or even no central pawn push at all (pure pieces and fianchetto play).",
+        "Watch for Reverse Sicilian opportunities. If Black plays 1...e5, you're now in a Sicilian a tempo up. Use that tempo to play the closed Sicilian setup (Bg2 + d3 + Be3) and outplay Black in slow strategic chess.",
+        "The g3 + Bg2 fianchetto is the English's spine. Don't deviate without a specific reason — the bishop's permanent home is g2 where it eyes the long diagonal AND defends g3 (no king-side weaknesses)."
       ],
       "traps": [
-        "After c4 e5, if Black overextends with d5 cxd5 Nxd5, Bg2 creates strong pressure on the long diagonal"
+        "After 1.c4 e5 (Reverse Sicilian), if Black overextends with 4...d5 5.cxd5 Nxd5, the bishop on g2 stares straight at d5 + b7. Combined with Nc3 attacking Nd5, Black's queen often has to come to d8 wasting tempos — pure positional tempo theft."
       ],
       "warnings": [
-        "Do not play d4 too early — the English is about flexibility",
-        "Be aware of Reversed Sicilian structures where Black has the extra tempo"
+        "DON'T play d4 in the first 6 moves. The English is FLEXIBLE — once d4 is played, you've committed to a Queen's pawn structure and Black's prep helps them. Keep d-pawn options open as long as possible.",
+        "Reverse Sicilian structures favour the side that plays patiently. If you try to attack like an Open Sicilian player from the White side, you'll find your own setup doesn't quite work — adapt to slow strategic chess."
       ],
       "variations": [
         {
           "name": "Reversed Sicilian",
           "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 O-O Be3 Be6",
-          "explanation": "White plays a Sicilian with an extra tempo. The d3-Be3-Rc1 setup gives White a solid, flexible position. Carlsen navigates these structures masterfully."
+          "explanation": "When Black plays 1...e5, you're now playing a Sicilian with the white pieces and an extra tempo. After 2.Nc3 Nf6 3.Nf3 Nc6 4.g3 d5 (Black challenges the centre) 5.cxd5 Nxd5 — you've reached a position structurally identical to a Sicilian Dragon, but YOU have the extra move. 6.Bg2 Nb6 (the d5-knight retreats) 7.O-O Be7 8.d3 (modest, not d4 — keep flexibility) O-O 9.Be3 — a classic English setup. White's plan: Qd2, Nd5 manoeuvre, eventual b4 expansion. The extra tempo means you reach attacking positions one move faster than the regular Open Sicilian permits. Magnus's blitz games are full of these positions."
         },
         {
           "name": "Symmetrical English",
           "pgn": "c4 c5 Nc3 Nf6 Nf3 d5 cxd5 Nxd5 e3 Nc6 Bc4 Nb6 Bb3",
-          "explanation": "A more common structure where both sides play c-pawns. The Bb3 + Nf3 setup eyes the f7 and central squares; the position can transpose into a Maroczy Bind."
+          "explanation": "Black plays 1...c5 mirroring — a common amateur reply that hopes for symmetry. You break the symmetry on move 5: instead of fianchetto, play 5.e3 followed by 6.Bc4! The bishop comes out aggressively eyeing f7 (the standard target). After 6...Nb6 (Black kicks) 7.Bb3 (retreat) you've reached a Hedgehog-style structure but with White's pieces more active. The Bb3 + Nf3 setup also enables a future Maroczy Bind (with d3 + e4) cramping Black's queenside. Symmetrical structures favour the better-developed side; you've developed faster."
         }
       ],
       "trapLines": []
@@ -1251,37 +1251,37 @@
       "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5",
       "color": "black",
       "style": "Dynamic, Counter-attacking",
-      "overview": "Carlsen adopted the Sveshnikov as one of his main Sicilian weapons. The trademark e5 push creates a hole on d5 but gives Black dynamic piece play and pawn breaks. Magnus excels at navigating the complex middlegame positions that arise.",
+      "overview": "Magnus chose the Sveshnikov for his 2018 World Championship match against Caruana — a defining moment in modern opening theory. Why? Because the Sveshnikov is the most paradoxical opening in chess: Black voluntarily creates a positional weakness (the d5-square hole) and dares White to exploit it. The opponent can't. Black's bishop pair plus dynamic piece play overcomes the structural concession every time, IF you know what you're doing. Magnus knew. He drew Caruana every game with Black using this opening — and the line he chose is now copy-pasted into every World-class repertoire. Be warned: this opening is theory-heavy. Don't try it without study.",
       "keyIdeas": [
-        "Push e5 to gain central space and restrict White's knight on d4 — this central control is the foundation for all middlegame operations",
-        "Accept the d5 weakness in exchange for active piece play — a key strategic concept in Sicilian Sveshnikov",
-        "The bishop pair compensates for structural weaknesses — piece placement and activity are more important than material in these positions",
-        "Time the ...f5 break carefully to open the f-file and activate the rooks — this is the key to converting the Sveshnikov's dynamic piece play into a concrete attack"
+        "…e5 is the move that names the opening. After 5.Nc3, Black plays 5...e5 KICKING White's d4-knight to b5 — a paradoxical move that gives up the d5-square but gains the bishop pair and central pawn structure.",
+        "The d5-square IS weak — embrace it. White will park a knight on d5 and you can't prevent it. Your compensation: the bishop pair, the half-open f-file (after the eventual …f5 break), and the dynamic piece play that comes from a more active Black queen and rook structure.",
+        "The …f5 break is your strategic goal for the entire game. Once you achieve …f5, the kingside opens, your rooks reach the half-open f-file, and the bishop pair on b7 + g7 (after fianchetto) aims at White's king. Without …f5, the Sveshnikov becomes a slow loss; with …f5, it's a powerful attacking opening.",
+        "Magnus's signature: don't fear the structural weakness. Most amateurs hate playing positions where they have a 'hole' on a key square. The Sveshnikov teaches you that holes are only weaknesses if the opponent can EXPLOIT them — and with active pieces, you can prevent the exploitation."
       ],
       "traps": [
-        "After Ndb5 d6 Bg5 a6 Na3, avoid b5 if the timing is wrong — check for Bxf6 and Nd5 tactics"
+        "After 5.Nc3 e5 6.Ndb5 d6 7.Bg5 a6 8.Na3 — Black's natural 8...b5 is the principled move. But timing is critical: if you delay …b5 by one move (playing …Be7 first), White's Bxf6 + Nd5 sequence wins time and reaches a structurally better version of the position."
       ],
       "warnings": [
-        "The d5 square is a permanent weakness — do not let White park a knight there for free",
-        "Be careful of Na3-c2-e3 maneuvers blocking the f5 break"
+        "The d5-square needs constant attention. If you let White park a knight there permanently (Nd5 with no Black piece able to challenge it), the position becomes positionally lost. Plan …Nbd7-Nb6 or …Be7-…Bxf6/g5 routes to challenge the d5-outpost.",
+        "Beware the Na3-Nc2-Ne3 manoeuvre. White's a3-knight (after 8.Na3) re-routes via c2 to e3 to f5 (eventually), AND blocks your …f5 break by occupying f5 first. Time your moves to prevent this rerouting."
       ],
       "variations": [
         {
           "name": "Main Line with 9.Nd5",
           "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5",
-          "explanation": "The most critical line. White grabs d5 but Black has active piece play. The position is double-edged and requires precise play from both sides."
+          "explanation": "The Sveshnikov's main highway — every elite-level Sicilian player has studied this position. After Black's 8...b5 9.Nd5! White plants the knight on d5, and 9...Be7 (defending f6) 10.Bxf6 (trading the dark-squared bishop) Bxf6 — Black keeps the bishop pair. 11.c3 (preparing Nc2-Ne3 reroute) O-O 12.Nc2 — White prepares the long-term squeeze of the d5-outpost. Black's 12...Bg5! is the signature — the bishop swings back to active play, eyes f4 or e3, and prepares the …f5 break. Carlsen-Caruana 2018 World Championship match featured 5 games in this exact position, all drawn."
         },
         {
           "name": "Chelyabinsk Variation",
           "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Bxf6 gxf6 Nd5 f5 Bd3 Be6 O-O Bg7",
-          "explanation": "An alternative where Black recaptures on f6 with the g-pawn. The resulting positions are very sharp with Black's king being more exposed but the bishop pair provides compensation."
+          "explanation": "When White plays 9.Bxf6 (instead of 9.Nd5), Black has a choice: recapture with bishop or with g-pawn. The Chelyabinsk recaptures with the g-pawn: 9...gxf6! Yes, doubled f-pawns AND a wrecked kingside structure — but the resulting position has the half-open g-file for Black's rook AND the trumps of the bishop pair on b7+g7 (after fianchetto). 10.Nd5 f5! immediately — Black plays the …f5 break THE NEXT MOVE, accepting the king exposure for the open files. After 11.Bd3 Be6 12.O-O Bg7 the position is wild: White's king is safer but Black has multiple files for attack. This is the most ambitious Sveshnikov choice."
         }
       ],
       "trapLines": [
         {
           "name": "Exchange Sac on c1",
           "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bg5 Nc2 O-O g3",
-          "explanation": "After the Sveshnikov main line settles, Black prepares the thematic ...Bxc1 exchange sac followed by ...f5. The exchange returns through the bishop pair + passed pawn structure."
+          "explanation": "The Sveshnikov's signature tactical theme. After the mainline reaches the standard middlegame, Black's bishop on g5 prepares the thematic exchange sacrifice …Bxc1. After 13.g3 (White prevents …Bxh2+ tactics first), Black has the resource of …Bxc1 in many continuations — sacrificing the dark-squared bishop for the rook. Why? Because Black gets the bishop pair + the powerful e-pawn + dynamic piece play, and the exchange (worth ~2 points) is more than compensated by the position. Magnus has employed this exchange sac at elite level — the lesson: in the Sveshnikov, material count is less important than activity."
         }
       ]
     },
