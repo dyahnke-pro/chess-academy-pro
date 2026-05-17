@@ -256,7 +256,7 @@
     "id": "scotch-game",
     "eco": "C45",
     "name": "Scotch Game",
-    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6 Nd2 Bd7 f4 Bb6 Nf5 Nxf5 exf5 Qxf5",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6 Nxc6 Nxc6 Bxc5 dxc5 f4 Be6 Bb5 Rad8 Qe2 Bc8 Nd2 a6 Ba4 b5 Bc2 c4 e5 Qh6 Ne4 Kh8 Ng5 g6 Ne4 Bf5 Nf6 Bxc2 Qxc2 Ne7 Rf3 Qg7 g4 Nd5 g5 Nxf6",
     "color": "white",
     "style": "Open, Dynamic",
     "overview": "The Scotch Game is an aggressive, direct approach to the center — you immediately strike with d4 on move 3, opening up the position before Black has a chance to solidify. Garry Kasparov revived this opening at the top level, and it remains one of the best ways to fight for an advantage without drowning in Ruy Lopez theory. The positions are open, the pieces are active, and concrete calculation matters more than memorization.",
@@ -277,55 +277,55 @@
     "variations": [
       {
         "name": "Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6 Nd2 Bd7 f4 Bb6 Nf5 Nxf5 exf5 Qxf5 Bxb6 axb6 Qb3 Ne5 Be2",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6",
         "explanation": "The main theoretical line of the Classical Scotch. After Be3 Qf6 c3, White builds a solid Maroczy-style center. The knight maneuver Nd2-f5 is the key attacking idea, forcing Black to trade off the strong knight. After the recaptures White stands slightly better due to the bishop pair and open a-file. Black must be careful not to allow Qb3 pressure on b7 and f7 simultaneously.",
         "frequency": 0.35,
         "deviationMove": "Bc5"
       },
       {
         "name": "Scotch: Mieses Variation 4...Nf6 (e5 Push)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Ba6 b3 g6 Ba3 d6 f4 Bg7 Nc3 Nxc3 Qe4 Nd5",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Ba6 b3 g6 Ba3 d6",
         "explanation": "The Mieses is the sharpest response to the Scotch. After 5.Nxc6 bxc6 6.e5, Black's queen goes to e7 and the knight retreats to d5. White gains space with c4 and the Ba3 diagonal is devastating, targeting d6 and the dark squares around Black's king. The f4 push reinforces the e5 wedge. Black has forfeited castling rights in many lines and must rely on the fianchettoed bishop for king safety.",
         "frequency": 0.25,
         "deviationMove": "Nf6"
       },
       {
         "name": "Scotch Gambit (4.Bc4)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 Bxd4 Bxd4 O-O Nd2 Nxd2 Qxd2 Qg5 f3 Bf5 Rfe1",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 Bxd4",
         "explanation": "By playing 4.Bc4 instead of 4.Nxd4, White enters the Scotch Gambit, sacrificing a tempo on the d-pawn for rapid piece development. After e5 and Bb5, the position transposes into sharp Italian-like territory where White's lead in development compensates for the pawn deficit. The key plan is Be3, exchanging dark-squared bishops to weaken Black's kingside, then building pressure with Nd2, Qd2, and Rfe1 targeting the e-file. Black must play precisely to avoid falling into a passive position.",
         "frequency": 0.15,
         "deviationMove": "Bc4"
       },
       {
         "name": "Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3 Be7 Rae1 Be6 Bxf6 Bxf6 Nxd5 Bxd5 Qxd5",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3 Be7 Rae1 Be6",
         "explanation": "The Schmidt Variation is Black's most solid approach in the Scotch. After 5...Bb4 pinning the knight and 7...d5, Black strikes at the center immediately. White plays Bd3, O-O, and Bg5 to create pressure on the kingside. The critical moment comes with Nxd5 followed by Bxf6 and Qxd5, where White wins back the pawn with the initiative. The resulting position favors White slightly due to the better pawn structure and active rook on the open e-file.",
         "frequency": 0.1,
         "deviationMove": "Bb4"
       },
       {
         "name": "Scotch: Göring Gambit (4.c3)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 Bb4 Bc4 d6 O-O Bxc3 bxc3 Nf6 Nd4 O-O f3 Ne5 Bb3 c5 Nf5 Bxf5 exf5 d5 Ba3 Re8 Qd2",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 Bb4 Bc4 d6 O-O Bxc3 bxc3 Nf6",
         "explanation": "The Goring Gambit sacrifices the c-pawn for massive development and open lines. After dxc3 Nxc3, White's knight is powerfully centralized and the Bc4 puts immediate pressure on f7. The plan is O-O, Nd4, and f3 to build a pawn center while keeping all pieces aimed at the kingside. After Nf5 White gets a strong outpost and Ba3 pins the rook. At club level this gambit is extremely dangerous because Black must find precise defensive moves for 15+ moves to survive. The open b-file and bishop pair give White lasting compensation.",
         "frequency": 0.05,
         "deviationMove": "c3"
       },
       {
         "name": "Scotch: 4...Qh4 (Steinitz Variation)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Bb4+ c3 Ba5 Bc4 Qxe4+ Be2 Kd8 O-O Nf6 a4",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Bb4+ c3 Ba5",
         "explanation": "The aggressive 4...Qh4 is a favorite surprise weapon online, immediately hitting the unprotected e4 pawn. After 5.Nb5, White threatens Nc7+ forking king and rook. The critical line continues with Bb4+ c3 Ba5 and Black grabs the e4 pawn. Black loses castling rights but gains material. White must play energetically with O-O and Re1 to exploit the exposed king on d8. The position is double-edged: White has development and open lines, Black has an extra pawn and the bishop pair.",
         "frequency": 0.08
       },
       {
         "name": "Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Ne2 Bd6 Ng3 h6 Bh4 Re8 Re1 Rxe1+ Qxe1 Qb6",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Ne2 Bd6 Ng3 h6",
         "explanation": "A major transposition into Scotch Four Knights territory. Black plays solidly with Bb4, d5, and c6 to build a compact pawn structure. White develops with Bg5 and reroutes the knight via e2-g3 to target f5. The Re1 rook lift supports the central tension. After the rook exchange, Black's queen becomes active on b6, targeting b2 and d4. This is one of the most theoretically important lines because Black can equalize with accurate play, so White must understand the nuances of the Bg5 pin and the Ng3 maneuver to maintain any edge.",
         "frequency": 0.12,
         "deviationMove": "Nf6"
       },
       {
         "name": "Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 Nc3 Nf6 Qe2 d6 Be3 Bxe3 Qxe3 O-O O-O-O Be6 f3 d5 exd5 Nxd5 Nxd5 Bxd5 Kb1 Qe7 Qe2",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 Nc3 Nf6 Qe2 d6 Be3 Bxe3 Qxe3 O-O O-O-O Be6 f3",
         "explanation": "Kasparov's favorite weapon at the highest level. Instead of Be3, White retreats the knight to b3 to avoid the Bc5 pin entirely. After Nc3, Qe2, Be3, and O-O-O, White launches a kingside pawn storm while Black counterattacks on the queenside. The exchange of dark-squared bishops with Bxe3 Qxe3 gives White a centralized queen. The plan with f3 and Kb1 prepares a safe king while pushing forward. This line led to several of Kasparov's most famous victories against Karpov and Short.",
         "frequency": 0.1,
         "deviationMove": "Bc5"
@@ -334,46 +334,46 @@
     "trapLines": [
       {
         "name": "Mieses Center Domination Trap",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Nb6 Nc3 Qe6 Qe4 Bb7 Bd3 g6 O-O Bg7 Re1 O-O f4 d6 f5 Qd7 e6",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Nb6 Nc3 Qe6 Qe4 Bb7 Bd3",
         "explanation": "In the Mieses Variation, White's central pawn avalanche can become overwhelming if Black plays passively. After c4 pushes the knight away and Nc3 develops with tempo, the Qe4 batteries against both b7 and the kingside. The f4-f5 push opens the f-file and the e6 pawn thrust breaks open Black's position entirely. Black's bishop on b7 is buried behind its own pawns, and the e6 wedge cuts the position in half. This is a recurring theme that wins games at every level."
       },
       {
         "name": "Scotch Gambit Nd5 Fork Trap",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ne4 Qxd4 Nc5 Bg5 Be7 Bxe7 Qxe7 Nc3 Ne6 Nd5 Qd8 Nf6+ gxf6 exf6 Rg8 O-O-O d5 Bb5",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ne4",
         "explanation": "The Scotch Gambit is loaded with tactical traps. After Qxd4 centralizes the queen, White plays Bg5 followed by Nc3 and the devastating Nd5 jump. The knight on d5 threatens Nf6+ with a discovered attack. If Black plays gxf6, the exf6 push leaves Black's kingside completely shattered. White then castles queenside and Bb5 pins the knight to the king. The combination of the f6 pawn wedge and active pieces creates a mating attack."
       },
       {
         "name": "Goring Gambit Kingside Storm",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 Bb4 Bc4 Nf6 O-O Bxc3 bxc3 Nxe4 Qb3 d5 Bb5 O-O Ba3 Re8 Rae1 Nd6 Bxc6 bxc6 Bxd6 cxd6 Rxe8+ Qxe8 Re1",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 Bb4 Bc4 Nf6",
         "explanation": "In the Goring Gambit, Black often grabs the e4 pawn thinking it is free, but White's lead in development creates concrete threats. After Qb3 targets b7 and d5 simultaneously, forcing Black into defensive contortions. The Ba3 pin immobilizes the rook, and Rae1 piles pressure on the e-file. The exchange sacrifice sequence with Bxc6, Bxd6, and Rxe8+ leaves White with a dominant rook on the open e-file and Black's pawn structure in ruins. The weak isolated d-pawn becomes a permanent target."
       },
       {
         "name": "Scotch Gambit Bxf7+ Sacrifice",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 Bxf7+ Kxf7 Nxd4+ d5 O-O Nf6 f3 Re8 Nc3 Rxe4 fxe4 dxe4 Bg5 Be7 Rxf6+ Bxf6 Qf1+ Kg8",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5",
         "explanation": "The Scotch Gambit's Bxf7+ sacrifice drags Black's king into the open. After Kxf7 Nxd4+, White regains material while Black's king is exposed in the center. The f3 push prepares to recapture on e4 and open the f-file. After Nc3 develops with tempo and Bg5 pins the knight, the Rxf6+ exchange sacrifice rips apart Black's kingside pawn cover. Even after Kg8, Black's king remains vulnerable with shattered pawns and White's pieces dominating."
       },
       {
         "name": "4...Qh4 Refutation",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Qxe4+ Be2 Kd8 O-O a6 N5c3 Qg6 Nd5 Nf6 Bg5 Be7 Nxe7 Kxe7 Nc3 d5 Nxd5+ Kf8 Nxf6 gxf6 Bh6+ Kg8 Bf3 Qf5 Bxc6 bxc6 Qd4",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Qxe4+ Be2 Kd8 O-O",
         "explanation": "When Black tries the aggressive 4...Qh4 in the Scotch, White refutes it with the precise Nb5 threatening Nc7+. After Qxe4+ Be2, Black must move the king as ...Kd8 is forced. White develops smoothly with O-O and N5c3 while Black's queen is pushed around. The devastating Nd5+ fork wins material, and after Nxf6 gxf6 Bh6+, Black's kingside is completely destroyed. White's queen centralizes on d4 with a winning attack against the exposed king."
       }
     ],
     "warningLines": [
       {
         "name": "Scotch: Steinitz Trap (4...Qh4 Full Line)",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Bb4+ c3 Ba5 N1a3 Qxe4+ Be2 Kd8 O-O Nf6 Nb1 d6 Re1 Qg6 Bf1 Re8 N5a3",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Bb4+ c3 Ba5",
         "explanation": "The 4...Qh4 line is the most dangerous surprise weapon Black can deploy in the Scotch. After Nb5, the Bb4+ intermezzo complicates matters considerably. If White plays c3, Black retreats to a5 and captures the e4 pawn. Although Black loses castling rights, the extra pawn and active queen provide serious compensation. White must navigate precisely with O-O and Re1 to generate enough activity. Know this line cold because unprepared players lose quickly to the queen's aggression.",
         "deviationMove": "Qh4"
       },
       {
         "name": "Scotch Four Knights: Black's Equalizing ...d5 Break",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3 Be7 Bxf6 Bxf6 Rae1 Be6 Ne2 Qb6 b3 Bd4 Nxd4 Qxd4",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3 Be7",
         "explanation": "The Scotch Four Knights with 5...Bb4 and 7...d5 is the most reliable equalizing method for Black. After cxd5, Black gets the isolated d-pawn but active piece play and the bishop pair compensate. White's Bg5 pin is natural but after Bxf6 Bxf6, Black has the two bishops. The key defensive resource is Be6 supporting d5 and Qb6 hitting b2. After the bishop exchange on d4, the position is balanced. White should not overpress here; a small positional edge with Rae1 and Ne2 is the realistic goal.",
         "deviationMove": "Bb4"
       },
       {
         "name": "Scotch Classical: Premature Nf5 Refutation",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nf5 d5 exd5 Bxf5 dxc6 Qf6 cxb7 Rb8 Qe2+ Be6 Nc3",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nf5 d5",
         "explanation": "A critical warning line: playing Nf5 on move 5 instead of Be3 looks aggressive but Black refutes it with the central break d5. After exd5, Black recaptures with the bishop on f5 and the dxc6 pawn grab backfires because Black's pieces become incredibly active. The Qf6 threatens both f5 and f2. Even after White wins the b7 pawn and grabs the rook, Black's piece coordination with Be6, Nf6, and the open g-file provides more than enough compensation. This is the classic example of why concrete calculation beats superficial aggression in the Scotch."
       }
     ]

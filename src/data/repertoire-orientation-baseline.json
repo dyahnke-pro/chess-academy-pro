@@ -1,22 +1,6 @@
 {
   "description": "Allowlist of known orientation violations in src/data/repertoire.json as of 2026-05-16. The build-time test in repertoire-orientation.test.ts treats these as expected; any flagged entry NOT on this list fails CI. Each value is the set of category codes currently allowed for that key. As Phases 2-4 of docs/plans/2026-05-16-trap-orientation.md ship, entries are removed from this file. Phase 5 deletes this file entirely.",
   "allowlist": {
-    "scotch-game::trap::Mieses Center Domination Trap": [
-      "WEAK_TRAP"
-    ],
-    "scotch-game::trap::Scotch Gambit Nd5 Fork Trap": [
-      "INVERTED_MATERIAL"
-    ],
-    "scotch-game::trap::Goring Gambit Kingside Storm": [
-      "INVERTED_MATERIAL"
-    ],
-    "scotch-game::trap::Scotch Gambit Bxf7+ Sacrifice": [
-      "STUDENT_NOT_PUNISHER",
-      "WEAK_TRAP"
-    ],
-    "scotch-game::trap::4...Qh4 Refutation": [
-      "WEAK_TRAP"
-    ],
     "vienna-game::trap::Vienna Trap (Qh5 Attack)": [
       "STUDENT_NOT_PUNISHER"
     ],
@@ -557,6 +541,26 @@
     ],
     "ruy-lopez::warning::Open Ruy Lopez Counterattack": [
       "TOOTHLESS_WARNING"
+    ],
+    "scotch-game::trap::Mieses Center Domination Trap": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "scotch-game::trap::Scotch Gambit Nd5 Fork Trap": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "scotch-game::trap::Goring Gambit Kingside Storm": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "scotch-game::trap::Scotch Gambit Bxf7+ Sacrifice": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "scotch-game::trap::4...Qh4 Refutation": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
     ]
   }
 }
