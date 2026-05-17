@@ -4196,18 +4196,18 @@
       "variations": [
         {
           "name": "Rubinstein 4.e3",
-          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 Nbd7 Qe2 b6 Rd1 cxd4 exd4 Bb7 d5 Bxc3 bxc3 exd5 Bxd5 Qc7",
-          "explanation": "The Rubinstein Variation. White plays e3 and develops classically. Samay likes this because both sides have clear plans — White pushes e4, Black plays against the IQP. Easy to understand, hard to master."
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 Nbd7 Qe2 b6 Rd1 cxd4 exd4 Bb7 d5 Bxc3 bxc3 exd5",
+          "explanation": "The Rubinstein Variation. White plays e3 and develops classically. After exd5 the IQP structure forms; both sides have clear plans — White pushes for piece activity, Black plays against the central pawn."
         },
         {
           "name": "Classical 4.Qc2",
-          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qa4 Bb7 e3 c5 Be2 Nbd7 O-O Rc8",
-          "explanation": "The Classical with Qc2 avoids doubled pawns. After Bxc3+ Qxc3, the position is strategic. Samay plays this solidly, developing naturally and looking for the right moment to break with c5."
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 Bg5 Ba6 Qa4 Bb7 e3",
+          "explanation": "The Classical with Qc2 avoids doubled pawns. After Bxc3+ Qxc3 + e3, the position is strategic — Samay plays solidly, developing naturally and looking for the right moment to break with c5."
         },
         {
           "name": "Samisch 4.a3",
-          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 d6 O-O e5 Ng3 Re8 d5 Na5 e4 Nd7 f4 f5",
-          "explanation": "The Samisch forces Black to decide about the bishop immediately. After Bxc3+ bxc3, White has the bishop pair but damaged pawns. Samay embraces the resulting battle between structure and dynamics."
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 d6 O-O e5 Ng3 Re8 d5 Na5 e4 Nd7",
+          "explanation": "The Samisch forces Black to decide about the bishop immediately. After Bxc3+ bxc3, White has the bishop pair but damaged pawns — Samay embraces the resulting battle between structure and dynamics."
         }
       ],
       "trapLines": [
