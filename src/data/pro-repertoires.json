@@ -3984,30 +3984,30 @@
       "variations": [
         {
           "name": "King's Knight Gambit",
-          "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 Bc4 d5 exd5 Bd6 d4 Nh5 O-O Qxh4 Qe1 Qxe1 Rxe1 f3 gxf3 Bxe5 dxe5 O-O",
-          "explanation": "The aggressive King's Knight Gambit. White plays Nf3 and aims for rapid development while Black tries to hold the f4 pawn. Akeem teaches this to show that sacrificing material can lead to powerful attacks."
+          "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 Bc4 d5 exd5 Bd6 d4 Nh5 O-O Qxh4 Qe1 Qxe1 Rxe1",
+          "explanation": "The aggressive King's Knight Gambit. White plays Nf3 and aims for rapid development; after the queen trade, White retains the open f-file and active piece play for the sacrificed pawn."
         },
         {
           "name": "Bishop's Gambit",
-          "pgn": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 d6 Nf3 Qh5 d4 Nf6 Nc3 Be7 Bxf4 O-O Kg1 Bg4 Be2 Nc6 Be3 d5 e5 Ne4 Nxe4 dxe4 Nd2",
-          "explanation": "The Bishop's Gambit develops the bishop first. After Kf1, White gives up castling rights but gains attacking chances. Akeem uses this to teach that sometimes you need to sacrifice comfort for opportunities."
+          "pgn": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 d6 Nf3 Qh5 d4 Nf6 Nc3 Be7",
+          "explanation": "The Bishop's Gambit develops the bishop first. After Kf1, White gives up castling rights but gains attacking chances — Akeem teaches that sometimes sacrificing comfort buys opportunities."
         },
         {
           "name": "Declined: 2...d5",
-          "pgn": "e4 e5 f4 d5 exd5 e4 d3 Nf6 dxe4 Nxe4 Nf3 Bc5 Qe2 Bf5 Nc3 Qe7 Be3 Bxe3 Qxe3 Nxc3 Qxe7+ Kxe7 bxc3 Re8",
-          "explanation": "When Black declines with d5, the game takes a different character. The position is more strategic but still dynamic. Akeem shows that even in quieter positions, the King's Gambit spirit of bold play applies."
+          "pgn": "e4 e5 f4 d5 exd5 e4 d3 Nf6 dxe4 Nxe4 Nf3 Bc5 Qe2 Bf5 Nc3 Qe7 Be3 Bxe3 Qxe3 Nxc3 Qxe7+ Kxe7 bxc3",
+          "explanation": "When Black declines with d5, the game takes a different character. The position is more strategic but still dynamic. The doubled c-pawns give long-term play to both sides."
         }
       ],
       "trapLines": [
         {
           "name": "Accepted with Strong Center",
-          "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 Bg7 O-O d6 d4 h6 c3 Nf6 Qb3 Qe7 e5 dxe5 dxe5 Nh5 Bxf7+ Kd8 Re1",
-          "explanation": "After exf4, White develops rapidly with Nf3, Bc4, and O-O. The open f-file and central control give White a powerful attack. Bxf7+ sacrifice exposes the king decisively."
+          "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 Bg7 O-O d6 d4 h6 c3 Nf6",
+          "explanation": "After exf4, White develops rapidly with Nf3, Bc4, and O-O. The open f-file and central control set up the typical King's Gambit Bxf7+ attacking themes against Black's exposed king."
         },
         {
           "name": "d5 Knight Catch",
-          "pgn": "e4 e5 f4 d5 exd5 e4 Nc3 Nf6 d3 Bb4 Bd2 exd3 Bxd3 O-O Nge2 Nxd5 Nxd5 Qxd5 O-O Bxd2 Qxd2 Nc6 Qe3",
-          "explanation": "If Black declines with d5, White captures and opens the center. After exd5 e4, White plays Nc3 and d3 to undermine Black's advanced pawn. White gets active piece play and open lines."
+          "pgn": "e4 e5 f4 d5 exd5 e4 Nc3 Nf6 d3 Bb4 Bd2 exd3 Bxd3 O-O",
+          "explanation": "If Black declines with d5, White captures and opens the center. After Nc3 and d3, White undermines Black's advanced pawn for active piece play and open lines."
         }
       ]
     },
