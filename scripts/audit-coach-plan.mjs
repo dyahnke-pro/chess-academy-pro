@@ -1,28 +1,33 @@
 #!/usr/bin/env node
 /**
- * Audit-coach-plan — drives /coach/plan (Training Plan tab) end-to-end
- * and verifies the full LLM + narration round-trip. Sits in the
- * Post-Deploy Audit matrix for any change that touches the plan
- * surface or its supporting spine.
+ * Audit-coach-plan — drives /coach/plan (Training Plan rolodex)
+ * end-to-end. Rewritten in WO-ROLODEX-UI-01 PR-2 when the rolodex
+ * replaced the LLM-generated session-plan UI.
  *
  * Surfaces / behaviors exercised:
  *   - /coach/home → "Training Plan" tile → /coach/plan navigation
- *   - Initial render: loading state, then plan blocks + explanation
- *   - Spine round-trip: ask-received → envelope-assembled →
- *     provider-called → answer-returned (plus model-selected pair
- *     for the Anthropic/DeepSeek fallback chain)
- *   - Voice narration: at least one coach-narration-spoken event
- *     fires from the explanation stream
- *   - Streaming narration sanity: same text shouldn't be spoken more
- *     than 3× in quick succession (regression guard for the duplicate
- *     "Alright" / sentence-loop bug seen in earlier prod audits)
- *   - Pushback round-trip: typing an adjustment fires a second spine
- *     turn and re-renders the plan
- *   - Back button returns to /coach
+ *   - Empty state: zero favorites → per-color "Browse Openings" CTA
+ *   - Card stack render: seed favorites via raw IndexedDB,
+ *     reload, verify the active card body + back card tabs
+ *   - Tab activation: tap a back card → it becomes active,
+ *     `coach-memory-rolodex-active-card-set` audit fires
+ *   - Mobile manila-folder default: folder for `lastActiveRolodexColor`
+ *     reads as the selected tab on a 414px viewport
+ *
+ * Out of scope (later PRs):
+ *   - Row deep-links (PR-3)
+ *   - Drag-reorder (PR-4)
+ *   - Star animation from /openings (PR-5)
  *
  * Default target = prod (chess-academy-pro.vercel.app). Override:
  *   AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-coach-plan.mjs
  *   AUDIT_SMOKE_HEADED=1 node scripts/audit-coach-plan.mjs
+ *
+ * Seeding strategy: opens the `ChessAcademyDB` IndexedDB directly via
+ * `indexedDB.open()` (no version arg — attaches to whatever Dexie just
+ * opened during app boot, no schema upgrade triggered). Writes minimal
+ * OpeningRecord rows with `isFavorite: true` for the rolodex to pick
+ * up on the next route mount.
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
@@ -34,27 +39,111 @@ const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.verce
 const PROD_SECRET =
   process.env.AUDIT_STREAM_SECRET ??
   '06fe5f2383534090df8b6ba11e79088eb665ec780175df4f032befc02a530782';
-// Use the local sidecar listener when running against localhost — the
-// browser POSTs go to a real handler we control, so we verify the
-// full streaming round-trip (not just the outgoing body via
-// page.on('request')). Against prod we still use the deployed
-// /api/audit-stream endpoint.
 const USE_SIDECAR = BASE_URL.includes('localhost');
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/coach-plan-${stamp}`;
 
 const BOOT_TIMEOUT_MS = 30_000;
-const HYDRATE_SETTLE_MS = 1500;
-const NAV_SETTLE_MS = 1500;
-const SHORT_SETTLE_MS = 3500;
-// Plan generation calls generateCoachSession (deterministic) plus a
-// streaming spine ask for the explanation. End-to-end on prod runs
-// 8-15s. Allow 30s before declaring a failure.
-const PLAN_READY_TIMEOUT_MS = 30_000;
-// The streaming spine response takes a few extra seconds after the
-// start button surfaces before all narration sentences land.
-const NARRATION_SETTLE_MS = 6000;
+// The rolodex auto-activate effect waits on three async steps after
+// mount: coachMemoryStore.hydrate (Dexie read), getFavoriteOpenings
+// (Dexie scan), then the effect itself runs. Pre-hydration audits
+// queue until loadAuditStreamConfig resolves, and the POST adds
+// another network hop. Local Vite dev observed ~4.5s end-to-end
+// between reload and the audit POST landing in the listener, so the
+// settle has to clear that window or events bleed into the next
+// scenario's capture.
+const HYDRATE_SETTLE_MS = 5000;
+const NAV_SETTLE_MS = 2500;
+const SHORT_SETTLE_MS = 2000;
+
+/** Seed N opening records into Dexie's `openings` store with
+ *  `isFavorite: true`. Runs in the page context — uses raw IDB
+ *  (not Dexie's module API) so we don't need the app to expose its
+ *  `db` instance to window. */
+async function seedFavorites(page, openings) {
+  await page.evaluate((rows) => {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('ChessAcademyDB');
+      req.onerror = () => reject(req.error);
+      req.onsuccess = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains('openings')) {
+          db.close();
+          reject(new Error('openings object store missing'));
+          return;
+        }
+        const tx = db.transaction(['openings'], 'readwrite');
+        const store = tx.objectStore('openings');
+        for (const row of rows) {
+          store.put(row);
+        }
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+        tx.onerror = () => {
+          db.close();
+          reject(tx.error);
+        };
+      };
+    });
+  }, openings);
+}
+
+/** Clear all openings (and the persisted coachMemory rolodex state)
+ *  for a clean per-scenario baseline. */
+async function resetRolodexState(page) {
+  await page.evaluate(() => {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('ChessAcademyDB');
+      req.onerror = () => reject(req.error);
+      req.onsuccess = () => {
+        const db = req.result;
+        const stores = ['openings'];
+        if (db.objectStoreNames.contains('meta')) stores.push('meta');
+        const tx = db.transaction(stores, 'readwrite');
+        for (const name of stores) {
+          tx.objectStore(name).clear();
+        }
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+        tx.onerror = () => {
+          db.close();
+          reject(tx.error);
+        };
+      };
+    });
+  });
+}
+
+function makeOpening({ id, name, color, eco }) {
+  return {
+    id,
+    eco,
+    name,
+    pgn: '',
+    uci: '',
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    color,
+    style: 'classical',
+    isRepertoire: false,
+    overview: null,
+    keyIdeas: null,
+    traps: null,
+    warnings: null,
+    variations: null,
+    drillAccuracy: 0,
+    drillAttempts: 0,
+    lastStudied: null,
+    woodpeckerReps: 0,
+    woodpeckerSpeed: null,
+    woodpeckerLastDate: null,
+    isFavorite: true,
+  };
+}
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
@@ -62,10 +151,6 @@ async function main() {
   console.log(`[coach-plan] outDir  = ${OUT_DIR}`);
   console.log(`[coach-plan] headed  = ${HEADED}`);
 
-  // Stand up a sidecar /audit-stream listener when targeting localhost
-  // so the browser's POSTs land on a real handler and we can verify
-  // the round-trip (POST in → GET out). Against prod we point at the
-  // deployed endpoint as before.
   const listener = USE_SIDECAR ? await startAuditListener() : null;
   const STREAM_URL = listener?.url ?? `${BASE_URL}/api/audit-stream`;
   const SECRET = listener?.secret ?? PROD_SECRET;
@@ -77,7 +162,7 @@ async function main() {
   const ctx = await browser.newContext({
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
-    userAgent: 'AuditCoachPlanBot/1.0 (chromium)',
+    userAgent: 'AuditCoachPlanBot/2.0 (chromium, rolodex)',
   });
 
   await ctx.addInitScript(
@@ -179,9 +264,6 @@ async function main() {
         } else if (exp.kind === 'url-matches') {
           actual = page.url();
           ok = exp.value.test(actual);
-        } else if (exp.kind === 'url-not-matches') {
-          actual = page.url();
-          ok = !exp.value.test(actual);
         } else if (exp.kind === 'audit-present') {
           actual = kinds[exp.audit] ? 'present' : 'absent';
           ok = !!kinds[exp.audit];
@@ -189,41 +271,10 @@ async function main() {
           const n = kinds[exp.audit] ?? 0;
           actual = String(n);
           ok = n >= exp.value;
-        } else if (exp.kind === 'text-contains') {
-          const text = await page.locator(exp.selector).first().textContent().catch(() => '');
-          actual = (text ?? '').slice(0, 80);
-          ok = (text ?? '').toLowerCase().includes(exp.value.toLowerCase());
-        } else if (exp.kind === 'text-length-gte') {
-          const text = await page.locator(exp.selector).first().textContent().catch(() => '');
-          actual = String((text ?? '').length);
-          ok = (text ?? '').length >= exp.value;
-        } else if (exp.kind === 'narration-duplicate-cap') {
-          // Regression guard: count coach-narration-spoken events per
-          // textPreview; fail if any text appears more than `value`
-          // times in this surface's window. The streaming-speaker bug
-          // surfaced as the same opener ("Alright.") narrated 5+ times
-          // in a row as new chunks arrived — see audit logs from
-          // 2026-05-15 (build 36b7472).
-          const counts = new Map();
-          for (const ev of fresh) {
-            if (ev.kind !== 'coach-narration-spoken') continue;
-            // Extract textPreview from the structured payload that
-            // narration audits carry. Fall back to summary line for
-            // older event shapes.
-            let text = '';
-            try {
-              const payload = typeof ev.payload === 'string' ? JSON.parse(ev.payload) : ev.payload;
-              text = String(payload?.textPreview ?? ev.summary ?? '').slice(0, 60);
-            } catch {
-              text = String(ev.summary ?? '').slice(0, 60);
-            }
-            counts.set(text, (counts.get(text) ?? 0) + 1);
-          }
-          const offenders = [...counts.entries()].filter(([, n]) => n > exp.value);
-          actual = offenders.length === 0
-            ? `max=${Math.max(0, ...counts.values())}`
-            : `over-cap: ${offenders.map(([t, n]) => `"${t.slice(0, 24)}"×${n}`).join(', ')}`;
-          ok = offenders.length === 0;
+        } else if (exp.kind === 'attr-equals') {
+          const v = await page.locator(exp.selector).first().getAttribute(exp.attr).catch(() => null);
+          actual = String(v);
+          ok = v === exp.value;
         }
       } catch (err) {
         actual = `error: ${err.message}`;
@@ -251,12 +302,16 @@ async function main() {
   // ── Boot ─────────────────────────────────────────────────────────
   await record('boot-dashboard', async () => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.getByText('Chess Academy Pro', { exact: true }).first().waitFor({ timeout: BOOT_TIMEOUT_MS });
-  }, 4000, [
+    await page.waitForTimeout(HYDRATE_SETTLE_MS);
+  }, 2000, [
     { kind: 'audit-present', audit: 'app-boot', label: 'app-boot audit fires' },
   ]);
 
-  // ── /coach/home ──────────────────────────────────────────────────
+  // Reset Dexie now that the schema is open from boot — guarantees a
+  // clean per-run starting state for the rolodex tests.
+  await resetRolodexState(page);
+
+  // ── /coach/home + Training Plan tile present ─────────────────────
   await record('coach-home', async () => {
     await page.goto(`${BASE_URL}/coach/home`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
     await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 15_000 });
@@ -265,83 +320,111 @@ async function main() {
     { kind: 'visible', selector: '[data-testid="coach-action-plan"]', label: 'Training Plan tile present' },
   ]);
 
-  // ── Tile click → /coach/plan ─────────────────────────────────────
+  // ── Tile click → /coach/plan (rolodex page mounts) ───────────────
   await record('plan-tile-click', async () => {
-    const tile = page.locator('[data-testid="coach-action-plan"]');
-    await tile.click();
+    await page.locator('[data-testid="coach-action-plan"]').click();
     await page.waitForURL(/\/coach\/plan/, { timeout: 10_000 });
-    await page.locator('[data-testid="coach-session-plan-page"]').waitFor({ timeout: 15_000 });
+    await page.locator('[data-testid="training-plan-rolodex-page"]').waitFor({ timeout: 15_000 });
   }, NAV_SETTLE_MS, [
     { kind: 'url-matches', value: /\/coach\/plan/, label: 'navigated to /coach/plan' },
-    { kind: 'visible', selector: '[data-testid="coach-session-plan-page"]', label: 'plan page root mounts' },
-    { kind: 'audit-present', audit: 'coach-hub-tile-clicked', label: 'tile click audit fires' },
-    { kind: 'audit-present', audit: 'route-changed', label: 'route change audit fires' },
+    { kind: 'visible', selector: '[data-testid="training-plan-rolodex-page"]', label: 'rolodex page root mounts' },
+    { kind: 'visible', selector: '[data-testid="rolodex-folder-tabs"]', label: 'mobile folder tabs render' },
   ]);
 
-  // ── Plan generation + streaming explanation ──────────────────────
-  // The spine round-trip emits the full envelope (ask-received,
-  // envelope-assembled, provider-called, answer-returned) plus the
-  // model-selected pair. Streaming narration drops one coach-
-  // narration-spoken per sentence boundary.
-  await record('plan-generation', async () => {
-    // Wait for the Start Session button to surface — only renders
-    // once plan generation has settled (loading flag flips off).
-    await page.locator('[data-testid="start-session-btn"]').waitFor({ timeout: PLAN_READY_TIMEOUT_MS });
-    // Give streaming narration a moment to drain after the button
-    // appears so audit counts reflect the full session.
-    await page.waitForTimeout(NARRATION_SETTLE_MS);
-  }, 1500, [
-    { kind: 'visible', selector: '[data-testid="start-session-btn"]', label: 'Start Session button rendered' },
-    { kind: 'visible', selector: '[data-testid="plan-explanation"]', label: 'plan explanation text rendered' },
-    { kind: 'text-length-gte', selector: '[data-testid="plan-explanation"]', value: 80, label: 'explanation has substantive content (>=80 chars)' },
-    { kind: 'audit-present', audit: 'coach-brain-ask-received', label: 'spine: ask received' },
-    { kind: 'audit-present', audit: 'coach-brain-envelope-assembled', label: 'spine: envelope assembled' },
-    { kind: 'audit-present', audit: 'coach-brain-provider-called', label: 'spine: provider called' },
-    { kind: 'audit-present', audit: 'coach-brain-answer-returned', label: 'spine: answer returned' },
-    { kind: 'audit-present', audit: 'coach-llm-model-selected', label: 'model selection logged' },
-    { kind: 'audit-present', audit: 'coach-narration-spoken', label: 'narration spoken at least once' },
-    // Regression guard for the duplicate-narration streaming bug
-    // (audit-driven finding 2026-05-15): same sentence narrated
-    // 5+ times back-to-back when streaming chunks re-dispatch the
-    // first sentence. Allow up to 3 same-text utterances to give
-    // streamingSpeaker.add() de-dup some headroom.
-    { kind: 'narration-duplicate-cap', value: 3, label: 'no sentence narrated more than 3× (streaming-dup guard)' },
-  ]);
-
-  // ── Pushback / adjustment round-trip ─────────────────────────────
-  // The plan page hosts a ChatInput at the bottom; sending text
-  // triggers handlePushback → generateCoachSession(text) → second
-  // spine round-trip with the adjusted plan.
-  await record('plan-pushback', async () => {
-    const input = page.locator('[data-testid="chat-text-input"]');
-    if ((await input.count()) === 0) throw new Error('chat-text-input missing on plan page');
-    await input.click();
-    await input.fill('shorter please, 20 minutes max');
-    await page.locator('[data-testid="chat-send-btn"]').click();
-    // Adjustment streams in over a few seconds; wait for narration
-    // settle to land too.
-    await page.waitForTimeout(PLAN_READY_TIMEOUT_MS / 2);
-  }, NARRATION_SETTLE_MS, [
-    { kind: 'url-matches', value: /\/coach\/plan/, label: 'stays on /coach/plan during adjust' },
-    { kind: 'visible', selector: '[data-testid="start-session-btn"]', label: 'Start Session still rendered post-adjust' },
-    { kind: 'audit-count-gte', audit: 'coach-brain-ask-received', value: 1, label: 'adjustment fires another spine turn' },
-    { kind: 'audit-count-gte', audit: 'coach-brain-answer-returned', value: 1, label: 'adjustment receives an answer' },
-  ]);
-
-  // ── Back to /coach via header back button ────────────────────────
-  // The plan page header has a chevron-left that navigates to
-  // /coach (the hub). Verify it doesn't accidentally land somewhere
-  // else.
-  await record('plan-back-button', async () => {
-    // Header back button is an unlabeled <button> with an
-    // ArrowLeft icon — locate by its position in the header.
-    const back = page.locator('[data-testid="coach-session-plan-page"] >> button').first();
-    if ((await back.count()) === 0) throw new Error('header back button missing');
-    await back.click();
-    await page.waitForTimeout(800);
+  // ── Empty state: zero favorites → per-color Browse Openings CTA ──
+  // Both panels (mobile-shown + desktop-hidden) render in the DOM, so
+  // the empty-state testid appears twice. count-gte=1 is the strict
+  // check; we don't pin a specific count to avoid coupling to the
+  // dual-panel rendering pattern.
+  await record('plan-empty-state', async () => {
+    // No favorites have been seeded yet; the page should be in empty
+    // state for both colors.
+    await page.waitForTimeout(HYDRATE_SETTLE_MS);
   }, NAV_SETTLE_MS, [
-    { kind: 'url-matches', value: /\/coach(\/home)?(\?|$|\/)/, label: 'lands on /coach or /coach/home' },
-    { kind: 'url-not-matches', value: /\/coach\/plan/, label: 'no longer on /coach/plan' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-empty-state-white"]', value: 1, label: 'white empty state renders' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-empty-state-black"]', value: 1, label: 'black empty state renders' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-empty-cta-white"]', value: 1, label: 'white Browse Openings CTA renders' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-empty-cta-black"]', value: 1, label: 'black Browse Openings CTA renders' },
+  ]);
+
+  // ── Seed 1 white favorite, reload, verify single-card active state
+  await record('plan-single-favorite', async () => {
+    await seedFavorites(page, [
+      makeOpening({ id: 'italian-game', name: 'Italian Game', color: 'white', eco: 'C50' }),
+    ]);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('[data-testid="training-plan-rolodex-page"]').waitFor({ timeout: 15_000 });
+    await page.waitForTimeout(HYDRATE_SETTLE_MS);
+  }, NAV_SETTLE_MS, [
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-stack-white"]', value: 1, label: 'white stack renders' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-header-italian-game"]', value: 1, label: 'Italian Game card is active (header visible)' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-rows-italian-game"]', value: 1, label: 'active card body shows 8-row list' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-row-theory-lines"]', value: 1, label: 'Theory & Lines row present' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-row-puzzles"]', value: 1, label: 'Puzzles row present' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-row-gm-games"]', value: 1, label: 'GM Games row present' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-row-traps"]', value: 1, label: 'Traps row present' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-row-blunders"]', value: 1, label: 'Blunders row present' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-row-walkthrough"]', value: 1, label: 'Walkthrough row present' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-row-practice-from-start"]', value: 1, label: 'Practice from move 1 row present' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-row-practice-middlegame"]', value: 1, label: 'Practice middlegame row present' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-empty-state-black"]', value: 1, label: 'black still empty (only seeded white)' },
+    { kind: 'audit-present', audit: 'coach-memory-rolodex-active-card-set', label: 'first-favorite auto-activate audit fires' },
+  ]);
+
+  // ── Seed multiple favorites; verify active card body + back tabs ─
+  await record('plan-multi-favorite-stack', async () => {
+    await seedFavorites(page, [
+      makeOpening({ id: 'ruy-lopez', name: 'Ruy Lopez', color: 'white', eco: 'C60' }),
+      makeOpening({ id: 'kings-indian-attack', name: "King's Indian Attack", color: 'white', eco: 'A07' }),
+      makeOpening({ id: 'caro-kann', name: 'Caro-Kann Defense', color: 'black', eco: 'B10' }),
+    ]);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('[data-testid="training-plan-rolodex-page"]').waitFor({ timeout: 15_000 });
+    await page.waitForTimeout(HYDRATE_SETTLE_MS);
+  }, NAV_SETTLE_MS, [
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-stack-white"]', value: 1, label: 'white stack renders with multiple favorites' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-stack-black"]', value: 1, label: 'black stack now renders too' },
+    // Italian remains the active card from the prior scenario (active id persisted via coachMemoryStore)
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-header-italian-game"]', value: 1, label: 'Italian Game still active (persisted active id survived reload)' },
+    // The two new white favorites should render as collapsed tabs
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-tab-ruy-lopez"]', value: 1, label: 'Ruy Lopez sits behind as collapsed tab' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-tab-kings-indian-attack"]', value: 1, label: "King's Indian Attack sits behind as collapsed tab" },
+    // Caro-Kann is the only black favorite → it becomes active in its own column
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-header-caro-kann"]', value: 1, label: 'Caro-Kann active in the black column' },
+  ]);
+
+  // ── Tap a back card tab → it becomes active, audit fires ─────────
+  await record('plan-tab-activation', async () => {
+    // Pick the Ruy Lopez tab from whichever panel is hit by .first()
+    // (mobile panel by default for a 414w viewport).
+    await page.locator('[data-testid="rolodex-card-tab-ruy-lopez"]').first().click();
+    await page.waitForTimeout(HYDRATE_SETTLE_MS);
+  }, NAV_SETTLE_MS, [
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-header-ruy-lopez"]', value: 1, label: 'Ruy Lopez is now the active card (header visible)' },
+    { kind: 'count-gte', selector: '[data-testid="rolodex-card-tab-italian-game"]', value: 1, label: 'Italian Game demoted to back-card tab' },
+    { kind: 'audit-present', audit: 'coach-memory-rolodex-active-card-set', label: 'active-card-set audit fires on tab activation' },
+  ]);
+
+  // ── Mobile folder default after activation (should be white) ─────
+  await record('plan-mobile-folder-default', async () => {
+    // The previous tab activation was on a white card, so
+    // `lastActiveRolodexColor` is now 'white'. Reload to confirm
+    // the default sticks across page mounts.
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('[data-testid="training-plan-rolodex-page"]').waitFor({ timeout: 15_000 });
+    await page.waitForTimeout(HYDRATE_SETTLE_MS);
+  }, NAV_SETTLE_MS, [
+    { kind: 'attr-equals', selector: '[data-testid="rolodex-folder-tab-white"]', attr: 'aria-selected', value: 'true', label: 'white tab is aria-selected on reload' },
+    { kind: 'attr-equals', selector: '[data-testid="rolodex-folder-tab-black"]', attr: 'aria-selected', value: 'false', label: 'black tab is NOT aria-selected on reload' },
+  ]);
+
+  // ── Tap the black folder tab → switch panel ──────────────────────
+  await record('plan-mobile-folder-switch', async () => {
+    await page.locator('[data-testid="rolodex-folder-tab-black"]').click();
+    await page.waitForTimeout(HYDRATE_SETTLE_MS);
+  }, NAV_SETTLE_MS, [
+    { kind: 'attr-equals', selector: '[data-testid="rolodex-folder-tab-black"]', attr: 'aria-selected', value: 'true', label: 'black tab becomes selected after click' },
+    { kind: 'attr-equals', selector: '[data-testid="rolodex-folder-tab-white"]', attr: 'aria-selected', value: 'false', label: 'white tab is no longer selected' },
   ]);
 
   // ── Roll up + write report ──────────────────────────────────────
@@ -358,11 +441,6 @@ async function main() {
     (s.expectations ?? []).filter((e) => !e.ok).map((e) => ({ surface: s.name, ...e })),
   );
 
-  // Round-trip check: when running with the sidecar listener, compare
-  // browser-side intercepted POST bodies against what the listener
-  // actually received and stored. Any divergence means a POST failed
-  // server-side (network error, secret mismatch, malformed body)
-  // even though the browser thought it sent.
   if (listener) {
     const listenerEvents = listener.getCapturedEvents();
     report.listenerRoundTrip = {
@@ -370,15 +448,10 @@ async function main() {
       listenerSideReceived: listenerEvents.length,
       mismatch: captured.length !== listenerEvents.length,
       kindCountsListener: listener.countByKind(),
-      narrationSampleFromListener: listener
-        .eventsOfKind('coach-narration-spoken')
-        .slice(0, 5)
-        .map((e) => ({
-          textPreview:
-            (typeof e.payload === 'object' ? e.payload?.textPreview : null) ??
-            String(e.summary ?? '').slice(0, 80),
-          timestamp: e.timestamp,
-        })),
+      rolodexEventsFromListener: listener
+        .eventsOfKind('coach-memory-rolodex-active-card-set')
+        .slice(0, 10)
+        .map((e) => ({ summary: e.summary, timestamp: e.timestamp })),
     };
     console.log(
       `[coach-plan] listener: browser-sent=${captured.length}  server-received=${listenerEvents.length}  ${report.listenerRoundTrip.mismatch ? '⚠ MISMATCH' : '✓ round-trip ok'}`,
