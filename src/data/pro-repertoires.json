@@ -2275,25 +2275,25 @@
         },
         {
           "name": "Giuoco Pianissimo",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6 Bb3 h6 Nf1 Re8 Ng3 d5",
-          "explanation": "A slower approach that Firouzja uses occasionally. White builds up behind d3 and aims for a slow kingside attack."
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6 Bb3 h6",
+          "explanation": "A slower approach that Firouzja uses occasionally. White builds up behind d3 with the Nbd2 + Bb3 + Re1 setup, preparing the slow Nf1-Ng3 manoeuvre to launch a kingside attack."
         },
         {
           "name": "Evans Gambit Spirit",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4 Qa4 Bd7 Qb3 Na5 Bxf7+ Kf8",
-          "explanation": "Firouzja occasionally plays Evans Gambit-style positions, sacrificing the b4 pawn for rapid development and a powerful center. The initiative can be overwhelming if Black defends passively."
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4",
+          "explanation": "Firouzja occasionally plays Evans Gambit-style positions, sacrificing the b4 pawn for rapid development and a powerful center. The Bg4 pin sets up the typical sharp tactical play that follows."
         }
       ],
       "trapLines": [
         {
           "name": "Nxe4 Grab Punished by d5",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 Nxe4 d5 Ne7 Nxe5 d6 Bb5+ Bd7 Nxd7 Qxd7 Bxd7+ Kxd7",
-          "explanation": "Black grabs the e4 pawn with Nxe4 but White plays d5 forking the knight and bishop. After Nxe5, White wins material and keeps a dominating center."
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 Nxe4",
+          "explanation": "Black grabs the e4 pawn with Nxe4 too early — White's response d5 forks the knight and bishop, winning material with a dominating center."
         },
         {
           "name": "exd4 Center Steamroll",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb6 d5 Ne7 e5 Ne4 d6 cxd6 exd6 Nf5 Bg5 Qe7 O-O",
-          "explanation": "After exd4 cxd4, White's center pawns steamroll forward with d5 and e5. Black's pieces get pushed back and White's initiative becomes overwhelming."
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4",
+          "explanation": "After exd4 cxd4, White's center pawns are ready to steamroll forward with d5 and e5. Black must play with extreme care or get rolled by the central pawn duo."
         }
       ]
     },
