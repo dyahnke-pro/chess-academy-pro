@@ -3324,25 +3324,25 @@
       "variations": [
         {
           "name": "Open Catalan with dxc4",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nbd7 Rc1 c5 dxc5 Bxc5",
-          "explanation": "Black takes the c4 pawn. White recovers it naturally and the Bg2 comes alive. Pragg plays these positions with exceptional technique, slowly improving his pieces until the position cracks."
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nbd7 Rc1",
+          "explanation": "Black takes the c4 pawn. White recovers it naturally and the Bg2 comes alive. Pragg plays these positions with exceptional technique, slowly improving his pieces."
         },
         {
           "name": "Closed Catalan",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 b6 e4 Bb7 e5 Ne8 Nh4 g6 f4 Nc7",
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 b6 e4 Bb7 e5 Ne8",
           "explanation": "Black keeps the center closed. White builds up with e4-e5 and aims for a kingside attack. The Bg2 supports the center while White's space advantage grows."
         },
         {
           "name": "Early Nbd7 Line",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Nc3 c6 Qd3 dxc4 Qxc4 e5 Bg5 exd4 Nxd4 Nb6 Qb3",
-          "explanation": "Black develops the knight to d7 and plays c6. White keeps flexible development. After the center opens, Pragg's pieces spring to life and the Bg2 becomes a dominant force."
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Nc3 c6 Qd3 dxc4 Qxc4 e5",
+          "explanation": "Black develops the knight to d7 and plays c6. After the center opens, Pragg's pieces spring to life and the Bg2 becomes a dominant force."
         }
       ],
       "trapLines": [
         {
           "name": "c4 Pawn Grab Recovery",
-          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 b5 a4 Rb8 b3 cxb3 axb5 axb5 Qxb5",
-          "explanation": "Black grabs the c4 pawn and tries to hold with b5 and a6, but White undermines the structure with a4 and b3. The Bg2 applies crushing pressure down the long diagonal."
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 b5 a4 Rb8",
+          "explanation": "Black grabs the c4 pawn and tries to hold with b5 and a6, but White undermines the structure with a4. The Bg2 applies crushing pressure down the long diagonal."
         },
         {
           "name": "Diagonal Pin Trap",
