@@ -108,7 +108,7 @@ describe('TrainingPlanRolodexPage — cold load with zero favorites', () => {
 });
 
 describe('TrainingPlanRolodexPage — cold load with one White favorite', () => {
-  it('renders the White stack placeholder with the favorite name and an empty Black state', async () => {
+  it('renders the White card stack with the favorite active and an empty Black state', async () => {
     mockGetFavoriteOpenings.mockResolvedValueOnce([
       buildOpening({ id: 'italian', name: 'Italian Game', color: 'white' }),
     ]);
@@ -116,11 +116,13 @@ describe('TrainingPlanRolodexPage — cold load with one White favorite', () => 
 
     await waitFor(() => {
       expect(
-        within(getDesktopWhiteColumn()).getByTestId('rolodex-stack-placeholder-white'),
+        within(getDesktopWhiteColumn()).getByTestId('rolodex-card-stack-white'),
       ).toBeInTheDocument();
     });
+    // The Italian card renders in its active state (header testid only
+    // emits when the card body is expanded).
     expect(
-      within(getDesktopWhiteColumn()).getByTestId('rolodex-active-card-name-white'),
+      within(getDesktopWhiteColumn()).getByTestId('rolodex-card-header-italian'),
     ).toHaveTextContent('Italian Game');
     expect(
       within(getDesktopBlackColumn()).getByTestId('rolodex-empty-state-black'),
@@ -159,17 +161,21 @@ describe('TrainingPlanRolodexPage — cold load with multiple favorites in both 
 
     await waitFor(() => {
       expect(
-        within(getDesktopWhiteColumn()).getByTestId('rolodex-stack-placeholder-white'),
+        within(getDesktopWhiteColumn()).getByTestId('rolodex-card-stack-white'),
       ).toBeInTheDocument();
     });
     // Persisted KIA id is still in the favorites list, so the
     // resolver should keep it active rather than reverting to the
     // first favorite (Italian).
     expect(
-      within(getDesktopWhiteColumn()).getByTestId('rolodex-active-card-name-white'),
+      within(getDesktopWhiteColumn()).getByTestId('rolodex-card-header-kings-indian-attack'),
     ).toHaveTextContent("King's Indian Attack");
+    // Italian sits behind KIA as a collapsed tab — still visible but in tab form.
     expect(
-      within(getDesktopBlackColumn()).getByTestId('rolodex-active-card-name-black'),
+      within(getDesktopWhiteColumn()).getByTestId('rolodex-card-tab-italian'),
+    ).toBeInTheDocument();
+    expect(
+      within(getDesktopBlackColumn()).getByTestId('rolodex-card-header-caro-kann'),
     ).toHaveTextContent('Caro-Kann Defense');
   });
 
@@ -185,7 +191,7 @@ describe('TrainingPlanRolodexPage — cold load with multiple favorites in both 
 
     await waitFor(() => {
       expect(
-        within(getDesktopWhiteColumn()).getByTestId('rolodex-active-card-name-white'),
+        within(getDesktopWhiteColumn()).getByTestId('rolodex-card-header-italian'),
       ).toHaveTextContent('Italian Game');
     });
     // The stale persisted id was overwritten with the resolved fallback.

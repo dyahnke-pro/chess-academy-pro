@@ -39,6 +39,7 @@ import { useNavigate } from 'react-router-dom';
 import { FolderOpen, Sparkles } from 'lucide-react';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { getFavoriteOpenings } from '../../services/openingService';
+import { RolodexCardStack } from './RolodexCardStack';
 import type { OpeningRecord } from '../../types';
 
 type RolodexColor = 'white' | 'black';
@@ -92,47 +93,6 @@ function RolodexEmptyState({ color }: { color: RolodexColor }): JSX.Element {
         <Sparkles size={16} aria-hidden="true" />
         Browse Openings
       </button>
-    </div>
-  );
-}
-
-/** Placeholder for the card stack itself. Renders only the
- *  active card id + favorites count, with a labeled "PR-2"
- *  marker. Replaced wholesale by `<RolodexCardStack />` in PR-2.
- *  Keeping it visually distinct (dashed border + muted) so a
- *  reviewer can't mistake it for the final card UI. */
-function RolodexStackPlaceholder({
-  color,
-  favorites,
-  activeId,
-}: {
-  color: RolodexColor;
-  favorites: OpeningRecord[];
-  activeId: string | null;
-}): JSX.Element {
-  const activeOpening = favorites.find((o) => o.id === activeId);
-  const colorLabel = color === 'white' ? 'White' : 'Black';
-  return (
-    <div
-      className="flex flex-col gap-3 p-4 rounded-2xl border-2 border-dashed border-theme-border bg-theme-surface/30"
-      data-testid={`rolodex-stack-placeholder-${color}`}
-    >
-      <p className="text-xs uppercase tracking-wide text-theme-text-muted font-semibold">
-        {colorLabel} repertoire · {favorites.length} favorite
-        {favorites.length === 1 ? '' : 's'}
-      </p>
-      {activeOpening && (
-        <p
-          className="text-base text-theme-text font-semibold"
-          data-testid={`rolodex-active-card-name-${color}`}
-        >
-          {activeOpening.name}
-        </p>
-      )}
-      <p className="text-xs text-theme-text-muted italic">
-        Card stack with peeking tabs lands in PR-2. The 8-row content + deep
-        links land in PR-3.
-      </p>
     </div>
   );
 }
@@ -227,10 +187,15 @@ export function TrainingPlanRolodexPage(): JSX.Element {
         return <RolodexEmptyState color={color} />;
       }
       return (
-        <RolodexStackPlaceholder color={color} favorites={list} activeId={activeId} />
+        <RolodexCardStack
+          color={color}
+          favorites={list}
+          activeId={activeId}
+          onActivate={(id) => setActiveOpeningCard(color, id)}
+        />
       );
     },
-    [loaded, white, black, resolvedWhiteActive, resolvedBlackActive],
+    [loaded, white, black, resolvedWhiteActive, resolvedBlackActive, setActiveOpeningCard],
   );
 
   const mobileTabClass = (color: RolodexColor): string => {
