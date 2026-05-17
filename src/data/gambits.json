@@ -544,7 +544,7 @@
     "id": "stafford-gambit",
     "eco": "C42",
     "name": "Stafford Gambit",
-    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 O-O Ng4 h3 Qd6 hxg4 hxg4 Bxg4 Bxg4 Qxg4 Qd4 Qf3 Qxf2+ Qxf2 Bxf2+ Rxf2 O-O e5 f6",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5",
     "color": "black",
     "style": "Trappy, Surprise Weapon",
     "overview": "The Stafford Gambit is the ultimate trap opening — objectively dubious, but practically devastating. After White takes on e5 and c6, Black gets wide-open lines and incredible piece activity targeting f2 and the White king. Every natural-looking move for White can walk into a hidden trap. Eric Rosen made this gambit famous on YouTube, and for good reason — it produces an absurd win rate at rapid and blitz time controls where opponents don't know the theory.",
@@ -567,76 +567,76 @@
     "variations": [
       {
         "name": "Stafford Gambit: Bg5 Main Trap Line",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4+",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
         "explanation": "The signature Stafford trap — Black sacrifices the queen with Nxe4, then plays Bxf2+ Ke2 Bg4+ and initiates a devastating king hunt. White's king gets dragged across the entire board with a series of checks. The checkmate pattern is one of the most beautiful in chess."
       },
       {
         "name": "Stafford Gambit: Ng4 Direct Attack",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 Bxg4 Bxg4 Qxg4 Bxf2+ Kd1 Qd4 Qe2 Qxd3+ cxd3 O-O e5 Bd4 Nc3 Bxe5 Qxe5 f6",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 Bxg4",
         "explanation": "The Ng4 attack is another tricky line where Black sacrifices the knight directly. After Bxg4 Bxf2+, the king is dragged out and Qd4 creates multiple threats. Even if White defends the immediate tactics, the practical complications are enormous and very hard to navigate."
       },
       {
         "name": "Stafford Gambit: h5 Pawn Storm",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 O-O Ng4 h3 Qd6 hxg4 hxg4 g3 Qd4 Kg2 Qxe4+ dxe4 O-O e5 Be6 Bxg4 Bd5+ Qxd5 cxd5",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5",
         "explanation": "The h5 variation prepares to crack open the h-file against White's castled king. After Ng4 and hxg4, the open h-file becomes a highway for the rook. The queen on d6 repositions to d4 with maximum attacking potential. Even engines struggle to find clean defensive paths for White."
       },
       {
         "name": "Stafford Gambit: Nc3 Variation",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 d3 Ng4 Be2 Qd4 Bxg4 Bxg4 f3 O-O-O fxg4 Qf2+",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5",
         "explanation": "When White plays Nc3 instead of d3, Black still has the Bc5 and Ng4 battery. After Qd4 threatens Qxf2 mate, White must be extremely careful. The sequence of captures starting with Qf2+ drags the king out and leads to a decisive material advantage for Black."
       },
       {
         "name": "Stafford Gambit: e5 Push Line",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Bc5 dxe4 Bxf2+ Ke2 Bg4+ Kxf2 Qd4+ Be3 Qxe4 Qd3 Qxe3+ Qxe3 O-O Qxa7 Rxa7 Nc3 Rxa2 Nxa2 f6",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4",
         "explanation": "After 5.e5, Black plays Ne4 and the Bxf2+ sacrifice begins a devastating tactical sequence. Even after queens are traded, Black's pieces are much more active and the resulting endgame is better for Black despite being a pawn down earlier. The initiative compensates for everything."
       }
     ],
     "trapLines": [
       {
         "name": "Oh No My Queen",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4+",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
         "explanation": "The most iconic Stafford trap. White plays Bg5 and thinks they've won a queen. But Bxf2+ Ke2 Bg4+ starts a king hunt that cannot be stopped. The checks keep coming and White loses massive material or gets checkmated. This trap has won thousands of online games."
       },
       {
         "name": "Nc2 Fork Trap",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4 Bb6 Bxg4 hxg4 Qxg4 Qf6 Qe2 Bf5 g4 O-O-O gxf5 Rxd4 cxd4 Bxd4 Be3 Bc3+ Nd2 Re8",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2",
         "explanation": "In this variation, Black sacrifices the knight on g4 to open the h-file. After hxg4 and Qf6, Black's pieces are aimed directly at White's kingside. The Bf5 development combined with O-O-O creates devastating threats on the d-file. White's center collapses under the pressure."
       },
       {
         "name": "Qh4 Discovered Attack",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4+",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
         "explanation": "A variation of the Oh No My Queen trap where after Bg5, the knight and bishops coordinate to trap White's king. The discovered attack pattern with Ne4+ and Bxd1 wins decisive material. Even if White avoids the worst, Black emerges with a winning position in every line."
       },
       {
         "name": "Ng4 f2 Assault",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 O-O Qh4 h3 Nxf2 Rxf2 Bxf2+ Kh1 Bg3 Bg5 Bf2 Qe1 Bxh3 Qxf2 Qxf2 gxh3 O-O",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2",
         "explanation": "After Be2 and O-O, Black plays Ng4 and Qh4 to create a deadly battery against f2. The Nxf2 sacrifice tears open the king position. After Rxf2 Bxf2+ Kh1 Bg3, the bishop dominates the dark squares and White's kingside is permanently weakened. Material recovery follows naturally."
       },
       {
         "name": "Bishop Sacrifice on f2",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Nc3 O-O Be2 Re8 O-O Ng4 h3 Nxf2 Rxf2 Bxf2+ Kh1 Qd4 Qe1 b6 Bf3 Bf5 Ne2 Qe3 Qd1 Rxe4",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
         "explanation": "When White plays Nc3 and O-O, the Nxf2 sacrifice still works beautifully. After Rxf2 Bxf2+ Kh1, Black's queen invades to d4 with threats everywhere. The bishop retreats to b6 maintaining the pressure, and Bf5 develops with tempo. White's position crumbles under the weight of Black's activity."
       },
       {
         "name": "d4 Counter Trap",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 d4 Bxd4 Bxg4 Bxg4 Qxg4 Bxf2+ Kxf2 Qd4+ Be3 Qxe3+ Kxe3 O-O Qxg7+ Kxg7 e5 f6 exf6+ Rxf6 Nc3 Rf3+ Kxf3",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2",
         "explanation": "An alternative approach where Black captures on d4 instead of the standard Bxf2+. After Qxd4+ and Bxf2+, the king is displaced and Black recovers material with interest. The double bishop attack on the exposed king creates problems that persist deep into the endgame."
       }
     ],
     "warningLines": [
       {
         "name": "White Plays d3-Be2-O-O Accurately",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4 Bb6 Bxg4 hxg4 Qxg4 Bxg4 O-O Qf6 Nd2 O-O-O Nc4 Rd5 Nxb6+ axb6 Be3",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2",
         "explanation": "When White knows the theory — d3, Be2, c3, d4 — the Stafford's tricks are defused systematically. White returns the extra pawn to consolidate and reaches a stable position where Black's initiative has evaporated completely. This is the honest truth about the Stafford."
       },
       {
         "name": "Endgame Collapse: Black Has Nothing",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 O-O O-O Re8 Nc3 Bf5 Bg5 h6 Bh4 Nd7 Bg3 Ne5 Nd5 Bxf2+ Bxf2 cxd5 exd5 Nf3+ Bxf3 Qxd5 Bxd5 Bxd3 Bxf7+",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2",
         "explanation": "If White develops sensibly with d3, Be2, O-O, and Nc3 without falling for tricks, Black is simply down a pawn with no compensation. The Stafford is a one-trick pony, and if the tricks don't work, you're left with a worse endgame and a long suffering defense."
       },
       {
         "name": "Aggressive e5 Refutation",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Nc5 d4 Ne6 Bc4 c5 d5 Qxd5 O-O Qxg2+ Kxg2 Nf4+ Bxf4 Bh3+ Kxh3 Bd6 Bxf7+ Kxf7 Qd5+ Ke8 Qc6+",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6",
         "explanation": "White's aggressive 5.e5 pushes Black back immediately. After d3-d4, the center is firmly in White's control. The Bc4 development combined with Bf4 creates a powerful setup. Black has no counterplay and is simply worse — this is the clearest refutation of the Stafford."
       }
     ]
