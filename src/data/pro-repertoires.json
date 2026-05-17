@@ -1280,14 +1280,9 @@
       ],
       "trapLines": [
         {
-          "name": "Premature Nd5 Punished",
-          "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nd5 Nxd5 exd5 Nb4 c4 d6 a3 Na6 Be2 Be7 O-O O-O",
-          "explanation": "White jumps Nd5 too early without Ndb5 preparation. Black captures Nxd5 exd5 and gets a strong center, while the d5 pawn becomes a long-term target."
-        },
-        {
           "name": "Exchange Sac on c1",
-          "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bg5 Nc2 O-O g3 a5 Bg2 Rb8 O-O",
-          "explanation": "Black sacrifices the exchange with ...Bxc1 Rxc1 and follows up with ...f5, cracking open the center. The activity and potential passed pawns give Black excellent compensation."
+          "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bg5 Nc2 O-O g3",
+          "explanation": "After the Sveshnikov main line settles, Black prepares the thematic ...Bxc1 exchange sac followed by ...f5. The exchange returns through the bishop pair + passed pawn structure."
         }
       ]
     },
