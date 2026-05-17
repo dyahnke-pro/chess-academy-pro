@@ -4148,25 +4148,25 @@
         },
         {
           "name": "Classical 6.Be2",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Qd2 Nbd7 a4 Rc8 a5 Qc7 f3 d5",
-          "explanation": "The classical Be2 setup is less sharp but still rich. Samay likes it because the positions are more about understanding than memorization. Black develops naturally and looks for the d5 break."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Qd2 Nbd7 a4 Rc8 a5 Qc7 f3",
+          "explanation": "The classical Be2 setup is less sharp but still rich. After f3 White prepares the typical English Attack setup; Black develops naturally and looks for the d5 break."
         },
         {
           "name": "Anti-English with Be6",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Nbd7 Qd2 Be7 O-O-O b5 g4 b4 Nd5 Bxd5 exd5 Nb6 Kb1 Nbxd5 Bd3",
-          "explanation": "Against the modern f3 setup, Samay develops solidly with Be6 and looks for the b5 push. The position is complex but the plans are clear — push on the queenside while keeping the center stable."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Nbd7 Qd2 Be7 O-O-O b5 g4 b4 Nd5 Bxd5 exd5 Nb6 Kb1",
+          "explanation": "Against the modern f3 setup, Samay develops solidly with Be6 and looks for the b5 push. After Kb1 White completes king safety; both sides race their queenside/kingside attacks."
         }
       ],
       "trapLines": [
         {
           "name": "Premature White Attack",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O b5 Kb1 b4 Na4 Nxe4 fxe4 Bxb3",
-          "explanation": "If White castles queenside and plays passively, Black pushes b5-b4 driving the knight away. After Nxe4 and Bxa4, Black wins a piece exploiting the uncoordinated white pieces."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O b5 Kb1 b4",
+          "explanation": "If White castles queenside and plays passively, Black pushes b5-b4 driving the knight away. The Na4 + Nxe4 follow-up exploits the uncoordinated white pieces."
         },
         {
           "name": "e5 Fork Trick",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Qd2 Nbd7 a4 Rc8 a5 d5 exd5 Nxd5 Nxd5 Bxd5",
-          "explanation": "Black times e5 to push the knight back, then plays d5 at the right moment to break open the center. After Nxd5 Bxd5, Black has active pieces and full equality."
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Qd2 Nbd7 a4 Rc8 a5",
+          "explanation": "Black times e5 to push the knight back, then plans d5 at the right moment to break open the center. The a5 setup confines White's queenside pieces ahead of the central break."
         }
       ]
     },
