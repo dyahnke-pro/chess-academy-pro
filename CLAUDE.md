@@ -196,9 +196,12 @@ header. The secret is in per-project memory.
 - **Default to proactive.** The whole point of this feature is to
   close the loop without David copy-pasting. After any push that
   touches a runtime path that emits audits — coach brain, walkthrough
-  runtime, voice, navigation, tool calls, stage gen, uncaught errors
-  — pull the recent events automatically once enough time has passed
-  that David would have exercised it. Don't ask permission every time.
+  runtime, voice, navigation, tool calls, stage gen, uncaught errors,
+  master-play grounding pipeline (`master-play-prefetch`,
+  `master-play-lookup`, `claim-validator-trip`,
+  `master-play-enforcement-fallback`) — pull the recent events
+  automatically once enough time has passed that David would have
+  exercised it. Don't ask permission every time.
 - **Pull immediately when David says:** "test it", "I just reproduced
   X", "check the live build", "what just happened", or names a runtime
   symptom — fetch first, ask questions after.
@@ -268,6 +271,30 @@ spine; don't reinvent it.
   when both LLMs fail. Don't remove a layer.
 - **Lichess DB is canonical.** No fabricated sidelines. If a name
   isn't in `openings-lichess.json`, it doesn't exist for our app.
+- **Coach grounding pipeline is the runtime instrument of G3
+  (WO-COACH-MASTER-INTEGRATION).** Four cooperating layers gate every
+  move-question chat turn so the coach can't invent SANs, frequencies,
+  player names, or "what masters play" figures:
+  - **Layer A** — `masterPlayWatcher.prefetchMasterPlay` warms the
+    cache for the current FEN + top-3 child positions on every
+    surface mount / FEN change. Mounted via `useMasterPlayWatcher`
+    in coach surfaces. **NEVER mount on `/kid/*`** — kid contract.
+  - **Layer B** — pre-injection. `getCoachChatResponse` detects
+    move-question intent on the last user message and injects the
+    `masterPlayContext` block (current + look-ahead) into the system
+    prompt before sending to the LLM.
+  - **Layer C** — optional `lookup_master_play(fen)` tool. v1
+    skipped (look-ahead pre-injection covers the practical use
+    case); deferred to a follow-up PR.
+  - **Layer D** — `claimValidator` scans the response for SAN /
+    numeric / entity / comparative claims that aren't grounded in
+    the master-play context. On violations, regenerate up to 2x
+    with a strengthened addendum. On exhaustion, emit
+    `master-play-enforcement-fallback` and serve the stock "I can't
+    verify which moves are sound" response.
+  - **Don't remove a layer** — they're defense-in-depth. The audit
+    `scripts/audit-coach-master-integration.mjs` verifies each
+    layer's audit events fire under the expected scenarios.
 
 **Resolver / picker contracts (`openingDetectionService.ts`):**
 - `NAME_ALIASES` is the only place to map shorthand and ambiguous
@@ -1007,6 +1034,7 @@ After every `git push origin main`:
    | `/coach/play` | `scripts/audit-coach-play.mjs` |
    | `/coach/chat` | `scripts/audit-coach-chat.mjs` |
    | `/coach/teach` (Learn) | (no script yet — write one if you're shipping a real change here) |
+   | coach surfaces (any) — master-play grounding | `scripts/audit-coach-master-integration.mjs` |
    | `/coach/home` + tile nav | `scripts/audit-untouched-surfaces.mjs` |
    | `/coach/plan` (Training Plan) | `scripts/audit-coach-plan.mjs` |
    | `/coach/analyse` / `/train` | `scripts/audit-untouched-surfaces.mjs` |
