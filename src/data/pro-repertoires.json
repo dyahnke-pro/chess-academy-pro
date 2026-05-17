@@ -924,7 +924,7 @@
       "playerId": "gothamchess",
       "eco": "C44",
       "name": "Ponziani Opening (GothamChess)",
-      "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6 Qd5 Qe7 Kd1 Bb6 Nbd2 Nxd2 Bxd2",
+      "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6",
       "color": "white",
       "style": "Tactical, Tricky",
       "overview": "Levy's recommended weapon against 1...e5 in his 1.e4 repertoire. The Ponziani (3.c3) is rarely seen but packs a punch — White prepares d4 with extra support and many players are unfamiliar with the correct responses. It scores very well at the club level due to surprise value.",
@@ -945,25 +945,20 @@
       "variations": [
         {
           "name": "Main Line 3...Nf6 4.d4",
-          "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6 Qd5 Qe7 Kd1 Bb6 Nbd2 Nxd2 Bxd2",
-          "explanation": "The sharpest line. After d5, Black's knight is pushed and White gets a dangerous initiative despite the king walk. Levy's main recommendation — the complications favor the prepared player."
+          "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6",
+          "explanation": "The sharpest Ponziani line. After d5 + dxc6 White gains a tempo on the c6 push, then Bxf2+ Ke2 forces the king walk — the resulting position is unbalanced and rewards the prepared player."
         },
         {
           "name": "3...d5 Central Counter",
-          "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6 exd5 Nxd5 d4 O-O Be2 Re8 O-O Bf5 Nd2",
-          "explanation": "Black's most principled reply. After Qa4 pinning the knight, White maintains pressure. The position is more strategic — White aims for d4 and a slight space advantage."
-        },
-        {
-          "name": "3...Bc5 Italian-like",
-          "pgn": "e4 e5 Nf3 Nc6 c3 Bc5 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Qxd5 Bc4 Qd8 O-O Nge7 Re1 O-O d5 Na5 Bb5 a6 Ba4",
-          "explanation": "If Black plays Bc5, the game transposes into Italian-like structures. White gets the pawn center with d4 and active piece play. Very comfortable for White."
+          "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6",
+          "explanation": "Black's most principled reply. After Qa4 pinning the knight, the Nxe5/Nxc6 trade simplifies the structure; White maintains a slight space advantage going into the middlegame."
         }
       ],
       "trapLines": [
         {
           "name": "Knight Fork Trap",
-          "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Ne7 Nxe5 d6 Bb5+ c6 dxc6 bxc6 Ba4",
-          "explanation": "After 4...Nxe4 5.d5, if Black retreats the knight to e7 instead of playing Bc5, White wins the e5 pawn with Nxe5 and maintains a powerful initiative."
+          "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Ne7 Nxe5",
+          "explanation": "After 4...Nxe4 5.d5, if Black retreats the knight to e7 instead of playing Bc5, White wins the e5 pawn with Nxe5 — Black's pieces are out of coordination and the central pawn loss is decisive."
         }
       ]
     },
