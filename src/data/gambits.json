@@ -195,7 +195,7 @@
     "id": "scotch-gambit",
     "eco": "C44",
     "name": "Scotch Gambit",
-    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 O-O Nd2 Nxd2 Qxd2 Bxd4 Bxd4 c5 Be3 Be6",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 O-O Nd2 Nxd2 Qxd2",
     "color": "white",
     "style": "Aggressive, Tactical",
     "overview": "The Scotch Gambit is a sneaky way to avoid heavy theory while getting a razor-sharp position. Instead of recapturing on d4, you play Bc4 and e5, kicking Black's knight and seizing space. It's like the Italian Game on steroids — you get rapid development, open lines, and attacking chances while Black struggles to find safe squares for the knights. The positions demand tactical alertness from both sides.",
@@ -218,66 +218,66 @@
     "variations": [
       {
         "name": "Scotch Gambit: Main Line with d5",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 Bxd4 Bxd4 O-O f3 Ng5 Nc3 f6 exf6 Rxf6 Qd3 Ne6 Be3",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 Bxd4",
         "explanation": "The main line where Black strikes back with d5. After Bb5, White targets the pinned knight on c6. After castling and developing with Be3, the position is dynamic — White has better pawn structure and the bishop pair while Black has centralized knights. Active play is essential for both sides."
       },
       {
         "name": "Scotch Gambit: Ng4 Retreat Variation",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ng4 Bf7+ Ke7 O-O d5 exd6+ Kxf7 Re1 Be6 Nxd4 Qxd6 Nxe6 Qxe6 Nc3 Qd7 Qf3+ Qf5 Qxf5+ Nf6",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ng4",
         "explanation": "Black plays Ng4 to pressure e5 and f2. White can try the aggressive Bf7+ sacrificing a bishop to expose the king, or simply castle and play Re1. The Bf7+ line leads to a fascinating middlegame where Black's king is displaced but has an extra piece — razor-sharp complications."
       },
       {
         "name": "Max Lange Attack: Bc5 Line",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O Nf6 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4 O-O-O g4 Qd5 fxg7 Rhg8 Nxe6 fxe6 Nxc5",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O Nf6 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4 O-O-O g4 Qd5",
         "explanation": "The Max Lange Attack arises when Black plays 4...Bc5. After O-O Nf6 e5 d5 exf6 dxc4, the position becomes incredibly sharp. White has the initiative with Re1+ and Ng5, while Black counters with O-O-O and piece activity. Both sides must play with extreme precision."
       },
       {
         "name": "Scotch Gambit: Dubois-Reti Defense",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O d6 c3 dxc3 Nxc3 Bg4 Qb3 Bxf3 Bxf7+ Kf8 gxf3 Ne5 Bh5 g6 Ne2 Kg7 f4 Nc6 f5 Nf6",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O d6 c3 dxc3 Nxc3 Bg4",
         "explanation": "Black plays 4...Bc5 and 6...dxc3 to grab pawns. White sacrifices the c-pawn for rapid development and open lines. After Bxf7+ forces the king to f8, castling is permanently denied. The open g-file and active pieces give White lasting compensation against the displaced king."
       },
       {
         "name": "Scotch Gambit: Haxo Gambit with c3",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 dxc3 Bxf7+ Kxf7 Qd5+ Ke8 Qxc5 d6 Qxc3 Nf6 O-O Be6 Qxc6+ bxc6 e5 dxe5 Nxe5 Bxa2 Nxc6 Bxb1 Re1+",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 dxc3 Bxf7+ Kxf7 Qd5+ Ke8",
         "explanation": "The Haxo Gambit sacrifices the c3 pawn against Black's Bc5. The stunning Bxf7+ followed by Qd5+ recovers the piece and wins the dark-squared bishop. White ends up with superior development and Black's king has lost castling rights. A devastating surprise weapon."
       }
     ],
     "trapLines": [
       {
         "name": "Pin Trap After e5",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ne4 Bd5 Nc5 Nxd4 Ne6 Nxe6 fxe6 Bxc6 dxc6 Qh5+ Ke7 Qf7+ Kxf7 O-O Bd6 exd6",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ne4 Bd5 Nc5 Nxd4",
         "explanation": "After 5...Ne4, White plays the strong Bd5 hitting the knight. If Black stumbles into Ne6 Nxe6, the Bxc6 recapture followed by Qh5+ starts a devastating king hunt. After Ke7, Qf7+ and Bg5+ lead to a discovered attack winning material."
       },
       {
         "name": "Qh4+ Scholar's Mate Trick",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 Ng5 Nh6 Nxf7 Nxf7 Bxf7+ Kxf7 Qh5+ g6 Qxc5 d5 Qb5 dxe4 O-O Qf6 Nc3 Bf5 Qxb7 Rab8 Qa6",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 Ng5 Nh6 Nxf7 Nxf7 Bxf7+ Kxf7 Qh5+ g6 Qxc5 d5",
         "explanation": "After 4...Bc5, the sneaky Ng5 targets f7 directly. If Black plays Nh6 to defend, Nxf7 Nxf7 Bxf7+ Kxf7 Qh5+ wins the bishop back with tempo and leaves Black's king exposed. The h5 check creates a permanent problem for Black's king safety."
       },
       {
         "name": "d3 Pawn Grab Trap",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Nd7 Nxd4 Ndxe5 O-O Bd7 Bxc6 Nxc6 Nxc6 bxc6 Re1+ Be7 Qh5 O-O Nc3 Bf6 Bg5 Bxg5 Qxg5",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Nd7",
         "explanation": "When Black plays Nd7 instead of the more common Ne4, White can recover the pawn cleanly while maintaining pressure. After O-O and Re1+, the e-file pin is annoying for Black. Nc3 and Bg5 complete the development with threats against Black's slightly weakened kingside."
       },
       {
         "name": "Bc5 Fork on d4",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 Nf6 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Na5 Qa4+ Bd7 Qd1 Nc3 Bxf7+ Kxf7 Ne5+ Kf6 Nxd7+ Qxd7",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 Nf6 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Na5 Qa4+",
         "explanation": "After 4...Bc5 5.c3, the Bb4+ check disrupts White's smooth development. If White plays Bd2, the doubled pawns after Bxd2+ create structural weaknesses. Black's d5 break equalizes the center, and the resulting position offers Black comfortable play with active piece placement."
       }
     ],
     "warningLines": [
       {
         "name": "Black Equalizes with Precise d5 and Ne4",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bc5 Nxc6 bxc6 Bd3 Qh4 O-O Bg4 Qe1 O-O-O Ba6+ Kd7 e6+ Kxe6 Qxe4+ dxe4",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bc5",
         "explanation": "If Black plays the precise d5 followed by Ne4, Bc5, and Qh4, the position becomes very sharp but Black has excellent counterplay. The queen on h4 creates real threats and the centralized knight on e4 is a powerful piece. White needs to play very accurately to maintain even a small edge."
       },
       {
         "name": "Max Lange Attack: Black Knows Theory",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Re1+ Be6 Bg5 Qd5 Nc3 Qf5 Nce4 Qxe4 Nxd4 Qxg2+ Kxg2 Nxd4 Rxe6+ fxe6 Qxd4 Bxd4",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Re1+ Be6 Bg5 Qd5 Nc3 Qf5",
         "explanation": "In the Max Lange Attack, well-prepared Black players know the d5 and Rg8 defense. The rook on g8 recaptures the g7 pawn and the position becomes a double-edged battle. One wrong move from either side is fatal — this is why deep preparation is essential before entering these lines."
       },
       {
         "name": "4...Bb4+ System Equalizes",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 bxc3 Ba5 e5 d5 exd6 Qxd6 O-O Nf6 Qb3 O-O Bxf7+ Rxf7 Qxf7+ Kxf7 Ne5+ Nxe5 Be3 Nf3+ gxf3 Qxh2+",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 bxc3 Ba5",
         "explanation": "The Bb4+ check gives Black an easy way to equalize by disrupting White's center. After c3 dxc3 bxc3, White has an open b-file but doubled c-pawns. Black develops naturally with d5 and Nf6, and the position becomes roughly equal. This is the most solid approach for Black."
       }
     ]
