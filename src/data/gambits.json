@@ -790,7 +790,7 @@
     "id": "gambit-budapest-gambit",
     "eco": "A51",
     "name": "Budapest Gambit",
-    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 Nxe5 Nxe5 e3 Bxd2+ Qxd2 d6 Be2 O-O O-O Bf5 b4 a5 Rab1 Rfe8 Rfc1 axb4 axb4",
+    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 Nxe5 Nxe5 e3 Bxd2+ Qxd2 d6 Be2 O-O O-O Bf5",
     "color": "black",
     "style": "Aggressive, Counterattacking",
     "overview": "The Budapest Gambit is one of the nastiest surprise weapons against 1.d4 — you sacrifice a pawn with e5 and immediately launch an attack with Ng4, putting pressure on e5 and f2. White players expecting a quiet Queen's Indian or Nimzo suddenly face razor-sharp tactics that require specific knowledge to navigate. The knight on g4 is incredibly annoying, and combined with Bc5 and Qh4, the threats pile up faster than White can handle.",
@@ -813,67 +813,41 @@
     "variations": [
       {
         "name": "Budapest Gambit: Alekhine Variation (Bf4)",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 Nxe5 Nxe5 e3 Bxd2+ Qxd2 d6 Be2 O-O O-O Bf5 Rac1 a5 b3 Rfe8 Rfd1 Rad8",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 Nxe5 Nxe5 e3 Bxd2+ Qxd2 d6 Be2 O-O O-O Bf5",
         "explanation": "The main line where White plays Bf4 to hold the e5 pawn. Black continues developing with Nc6, Bb4+, and Qe7. After recovering the pawn with Ngxe5, Black has active piece play and a comfortable middlegame. The position is roughly equal but easier to play for Black."
       },
       {
         "name": "Budapest Gambit: Rubinstein Variation (Nd2)",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 e3 Ngxe5 Nxe5 Nxe5 Be2 d6 O-O O-O a3 Bxd2 Qxd2 Bf5 b4 a5 bxa5 Rxa5 Rfb1 Rfa8 Rb5 Nc6",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 e3 Ngxe5 Nxe5 Nxe5 Be2 d6 O-O O-O a3 Bxd2 Qxd2 Bf5",
         "explanation": "The Rubinstein line with Nbd2 is one of White's most solid responses. Black plays Qe7 and recovers the pawn naturally. After O-O and Bf5, Black has comfortable development and the bishop pair provides dynamic potential. The resulting middlegame features balanced chances with play on both flanks."
       },
       {
         "name": "Budapest Gambit: Adler Variation (Nf3 Bc5)",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Be2 Ngxe5 Nxe5 Nxe5 O-O d6 b3 O-O Bb2 Bf5 Nd2 Qh4 g3 Qh3 Bf3 Bc2 Qxc2 Nxf3+ Nxf3 Qxh2+ Nxh2 Bxe3 Qxh7+",
-        "explanation": "The Adler Variation features Nf3 by White and Bc5 by Black. The bishop on c5 targets f2 aggressively. After natural development with Nc6 and O-O, Black has a harmonious setup. The Qh4-Qh3 maneuver combined with Bf5 creates attacking chances on the kingside."
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Be2 Ngxe5 Nxe5 Nxe5 O-O d6",
+        "explanation": "The Adler Variation features Nf3 by White and Bc5 by Black. The bishop on c5 targets f2 aggressively. After Ngxe5 Nxe5 Nxe5, Black recovers the gambit pawn naturally and reaches a balanced position with active pieces. From here Black typically aims for kingside expansion with Bf5 and Qh4 ideas."
       },
       {
-        "name": "Budapest Gambit: f4 Pawn Grab",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 f4 d6 exd6 Bxd6 Nf3 O-O e3 Nc6 Be2 Re8 O-O Nxe3 Bxe3 Rxe3 Nc3 Bb4 Qb3 Bxc3 bxc3 Qf6 Nd4 Re4 Nxc6 bxc6 Bd3 Re3",
-        "explanation": "If White tries to hold the pawn with f4, the center is fatally weakened. After d6 exd6 Bxd6, Black has excellent development and the f4 pawn is a target. The Nxe3 sacrifice opens up White's position and the resulting complications heavily favor Black's active pieces."
-      },
-      {
-        "name": "Budapest Gambit: Qh4 Attack Line",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Nc6 Bf4 Bb4+ Nc3 Bxc3+ bxc3 Qe7 Qd5 f6 exf6 Nxf6 Qd3 d5 cxd5 Nb4 Qd4 Nbxd5 Bg5 O-O e3 c5 Qa4 Nxe3 fxe3 Qxe3+ Be2 Bg4",
-        "explanation": "The aggressive Qh4 attack line where Black sacrifices material for a direct kingside assault. After Bb4+ and Qe7, the threats against e5 and the center build up. The f6 break opens the position and Black's piece activity provides more than enough compensation for the pawn."
+        "name": "Budapest Gambit: Bb4+ vs Nc3 (Doubled Pawns)",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Nc6 Bf4 Bb4+ Nc3 Bxc3+ bxc3 Qe7 Qd5 f6 exf6 Nxf6 Qd3",
+        "explanation": "When White blocks Bb4+ with Nc3 instead of Nbd2, Black trades the dark-squared bishop and saddles White with doubled c-pawns. After Qe7 and the f6 break, Black regains the gambit pawn with the better structure. The doubled pawns and Black's active pieces give real practical chances despite the slight material deficit being equalized."
       }
     ],
-    "trapLines": [
-      {
-        "name": "Bc5 Fork Trick",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Nc3 Ngxe5 Nxe5 Nxe5 Be2 d6 O-O O-O b3 Bf5 Bb2 Qh4 g3 Qh3 Nd5 Bd3 Re1 Ng4 Bf3 Nxe3 fxe3 Qg2",
-        "explanation": "The Bc5 fork trick involves Black developing the bishop to target f2 and then switching to a kingside attack. After Qh4 and Qh3, the threats against g2 are real. The Ng4 sacrifice followed by Nxe3 rips open the kingside. White's king has nowhere to hide."
-      },
-      {
-        "name": "Ng4 Retreat Trap",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 f6 exf6 Nxf6 e3 d5 cxd5 Nxd5 Bg3 O-O Bd3 Bg4 O-O Rxf3 Bxh7+ Kxh7 Qc2+ Bf5 Qxf5+ Rxf5 e4 Rxf2 exd5",
-        "explanation": "After White plays Bf4, Black can try f6 to undermine the e5 pawn. The resulting position features open lines and active piece play. The Bg4 pin combined with Ncb4 creates pressure on White's queenside. The knight invasion to d3 is a classic Budapest motif."
-      },
-      {
-        "name": "Qh4 Kingside Attack",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Be2 Ngxe5 Nxe5 Nxe5 O-O d6 b3 Qh4 g3 Qh3 Bb2 Bg4 f3 Bh5 Nd2 O-O-O Ne4 Nxf3+ Bxf3 Bxf3 Qxf3 Qg2+",
-        "explanation": "The Qh4-Qh3 battery is a powerful attacking setup. After Bg4 and Bh5, the threats against f3 and g2 mount. The Nxf3+ sacrifice opens all the lines toward White's king. After Bxf3 Qg2, it's checkmate. This trap works because White's pieces are on the queenside and cannot help defend."
-      },
-      {
-        "name": "Ne3 Fork Pattern",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Nc6 Bf4 Bc5 e3 d6 exd6 Bxd6 Bxd6 Qxd6 Qxd6 cxd6 Nbd2 Nge5 Nxe5 Nxe5 Nb3 O-O Be2 Bf5 O-O Rac8 Nd4 Bg6 b3 Nc6 Nxc6 Rxc6 Bf3 Rc7 Rac1 Rfc8",
-        "explanation": "The Ne3 fork is always lurking in the Budapest. In this line, after simplification, Black recovers the pawn and reaches an equal endgame with active rooks on the c-file. The open lines and bishop pair give Black long-term prospects. A solid practical result from a surprise weapon."
-      }
-    ],
+    "trapLines": [],
     "warningLines": [
       {
         "name": "White Holds with Bf4 System",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 axb4 Nxf3+ gxf3 Nxb4 Rg1 d6 e4 O-O Bg2 Be6 Bxd6 Nd3+ Ke2 Nf4+ Bxf4 Bxc4+ Nxc4",
-        "explanation": "White plays the precise Bf4 system and after exchanges, emerges with the bishop pair and a solid center. The doubled f-pawns are irrelevant because the open g-file gives White attacking chances. Black's gambit has yielded no lasting advantage in this line."
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5",
+        "explanation": "When White plays the precise Bf4 system, the gambit gets fully contained. After a3 forcing the bishop's hand and Ngxe5 recovering the pawn, Black has equalized material but White retains a small structural edge and the easier game. Don't expect to break through against this setup — settle for equality and play the middlegame on merit."
       },
       {
         "name": "Fajarowicz Refutation (3...Ne4)",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ne4 a3 d6 exd6 Bxd6 Nf3 O-O e3 Nc6 Be2 Bf5 O-O Re8 Nc3 Nxc3 bxc3 Qf6 Nd4 Nxd4 cxd4 Bxh2+ Kxh2 Qe5+ dxe5 Rxe5 Qd8+ Rxd8",
-        "explanation": "The Fajarowicz 3...Ne4 is even riskier than the main Budapest. After a3 and d6, White reaches a solid position where Black's compensation is minimal. The knight on e4 is eventually traded and White's bishop pair dominates. Not recommended without deep study."
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ne4 a3 d6",
+        "explanation": "The Fajarowicz 3...Ne4 is even riskier than the main Budapest. White's calm a3 prepares to chase the knight, and after d6 trying to recover the pawn, White keeps a comfortable structural edge with the bishop pair in prospect. Don't reach for this variation unless you've studied the specific theory — it's far more dubious than the mainline 3...Ng4."
       },
       {
         "name": "e4 Central Grab",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 e4 Nxe5 f4 Ng6 Nc3 Bb4 Bd3 Bxc3+ bxc3 d6 Nf3 O-O O-O Nc6 Be3 b6 Qe2 Bb7 Rae1 Re8 Nd4 Nxd4 Bxd4 c5 Bxc5 Rxe4",
-        "explanation": "White's ambitious e4 central grab creates a massive pawn center. After f4, the pawns on e4 and f4 control the center completely. Black's knight is pushed to g6 where it's passive. White's space advantage and central dominance make this a very unpleasant position for the Budapest player."
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 e4 Nxe5 f4 Ng6 Nc3 Bb4",
+        "explanation": "White's ambitious e4 central grab creates a massive pawn center. After f4, the pawns on e4 and f4 control the center completely and Black's knight is shoved back to g6 where it's passive. Even with Bb4 trying to disrupt the development, White's space advantage and central dominance make this a very unpleasant position for the Budapest player."
       }
     ]
   },
