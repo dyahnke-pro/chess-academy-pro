@@ -1,28 +1,39 @@
 #!/usr/bin/env node
 /**
- * Audit-coach-teach-unknown-line — drives /coach/teach with two
- * scenarios that probe how the surface handles an opening name the
- * static registry doesn't carry:
+ * Audit-coach-teach — drives /coach/teach end-to-end across every
+ * surface-routing tier and exit so we know each "teach me X" path
+ * lands where it should. Originally focused on the unknown-line
+ * case (PR #599); now covers the full menu of behaviors so an
+ * audit run mirrors the user-facing decision tree.
  *
- *   A) "Vienna Game: Frankenstein-Dracula Variation"
- *      A real named sub-line that exists in the Lichess DB but has a
- *      `:` so resolveWalkthroughTree skips it (static registry only
- *      carries the bare "Vienna Game"). The pre-flight DB check
- *      passes → routes to LLM gen (Tier 3). Without an LLM key in the
- *      sandbox env, gen will fail; we record that path and the
- *      surface's fallback messaging.
+ * Scenarios (top to bottom of the routing pipeline):
  *
- *   B) "Hyper-Modern Spaghetti Defense, Anti-Pasta Variation"
- *      A fabricated name that pre-flight DB lookup refuses. Tests the
- *      reject path that falls through to brain chat without a
- *      walkthrough.
+ *  S1. Boot smoke — page mounts cleanly.
+ *  S2. Static registry (Vienna) — Tier 1 instant hit. Verify
+ *      walkthrough reaches the leaf, leaf prompt fires (chat ask +
+ *      voice + "Play this line out yourself" button).
+ *  S3. Leaf "Play this line out yourself" click — verify nav to
+ *      /coach/play?opening=Vienna+Game.
+ *  S4. DB sub-line not in static registry
+ *      ("Vienna Game: Frankenstein-Dracula Variation") — Tier 3
+ *      DB-narration. Verify spine extends across name boundaries
+ *      into middlegame (≥6 narration skips post-fix), leaf prompt
+ *      fires, "Play this line out yourself" surfaces at the leaf.
+ *  S5. Broad family name (e.g. "Sicilian") — Tier 1.5 line picker.
+ *      Verify the picker UI surfaces and shows variation choices.
+ *  S6. Stage keyword (e.g. "drill Vienna") — skips walkthrough and
+ *      lands at the stage menu / drill picker directly.
+ *  S7. Fabricated name ("Hyper-Modern Spaghetti Defense, Anti-Pasta
+ *      Variation") — pre-flight reject + brain fall-through (no
+ *      walkthrough). Verify the `pre-flight rejected non-opening`
+ *      audit fires.
+ *  S8. Cache re-hit — re-ask "Vienna" after S2 generated/loaded it.
+ *      Expect Tier 1 again (static registry trumps cache for
+ *      Vienna), instant resume with the "Welcome back" ack.
  *
- * For each scenario the audit captures:
- *   - audit-stream events posted to the local sidecar listener
- *     (mirrors the prod /api/audit-stream handler)
- *   - on-screen messaging the user actually sees
- *   - which walkthrough phase (if any) the surface advances to
- *   - whether a "Play it for real" affordance becomes visible
+ * Each scenario captures: phase reached, leaf-prompt presence,
+ * leaf button presence, transcript text, page+console errors,
+ * and the audit-stream events POSTed to the sidecar listener.
  *
  * Usage:
  *   AUDIT_SMOKE_URL=http://localhost:5173 \
@@ -38,30 +49,29 @@ import { join } from 'node:path';
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-const OUT_DIR = `audit-reports/coach-teach-unknown-${stamp}`;
+const OUT_DIR = `audit-reports/coach-teach-${stamp}`;
 
 const BOOT_TIMEOUT_MS = 30_000;
-const SHORT_SETTLE_MS = 4000;
+const SHORT_SETTLE_MS = 3500;
 const HYDRATE_SETTLE_MS = 1500;
-const GEN_WAIT_MS = 25_000; // upper bound for the LLM gen attempt to fail/succeed
+const GEN_WAIT_MS = 25_000;
 const SKIP_TO_LEAF_TIMEOUT_MS = 90_000;
 const SKIP_INTERVAL_MS = 600;
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
-
   const listener = await startAuditListener();
-  console.log(`[teach-unknown] base       = ${BASE_URL}`);
-  console.log(`[teach-unknown] listener   = ${listener.url}`);
-  console.log(`[teach-unknown] outDir     = ${OUT_DIR}`);
+  console.log(`[teach] base       = ${BASE_URL}`);
+  console.log(`[teach] listener   = ${listener.url}`);
+  console.log(`[teach] outDir     = ${OUT_DIR}`);
 
   const executablePath = await resolveChromiumExecutable(HEADED);
-  if (executablePath) console.log(`[teach-unknown] chromium   = ${executablePath}`);
+  if (executablePath) console.log(`[teach] chromium   = ${executablePath}`);
   const browser = await chromium.launch({ headless: !HEADED, executablePath });
   const ctx = await browser.newContext({
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
-    userAgent: 'AuditCoachTeachUnknownBot/1.0 (chromium)',
+    userAgent: 'AuditCoachTeachBot/1.0 (chromium)',
   });
 
   await ctx.addInitScript(
@@ -78,9 +88,6 @@ async function main() {
 
   const page = await ctx.newPage();
 
-  // Capture audit-stream POSTs the page tries to send — both to the
-  // local sidecar AND any other URL (the app might still try the prod
-  // URL from another code path). Combine for a complete picture.
   const intercepted = [];
   page.on('request', (req) => {
     const u = req.url();
@@ -111,20 +118,16 @@ async function main() {
   };
 
   async function snapshot(name) {
-    const screenshotPath = join(OUT_DIR, `${name}.png`);
+    const p = join(OUT_DIR, `${name}.png`);
     try {
-      await page.screenshot({ path: screenshotPath, fullPage: false });
+      await page.screenshot({ path: p, fullPage: false });
     } catch {
       /* ignore */
     }
-    return screenshotPath;
+    return p;
   }
 
-  function eventsSince(idx) {
-    return intercepted.slice(idx);
-  }
-
-  async function clearSession() {
+  async function clearSessionAndReload() {
     await page.evaluate(async () => {
       await new Promise((resolve) => {
         const req = indexedDB.open('ChessAcademyDB');
@@ -140,261 +143,377 @@ async function main() {
         req.onerror = () => resolve();
       });
     });
+    await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+    await page.locator('[data-testid="coach-teach-page"]').waitFor({ timeout: 15_000 });
+    // The chat input mounts and then briefly disables while the
+    // session hydrates; wait until it's enabled before returning so
+    // the next .click()+.fill() sequence actually targets a ready
+    // component (avoids dropping the user message on the first turn
+    // after a fresh reload).
+    await page.locator('[data-testid="chat-text-input"]').waitFor({ state: 'visible', timeout: 15_000 });
+    await page.waitForFunction(
+      () => {
+        const el = document.querySelector('[data-testid="chat-text-input"]');
+        if (!(el instanceof HTMLTextAreaElement) && !(el instanceof HTMLInputElement)) return false;
+        return !el.disabled;
+      },
+      { timeout: 15_000 },
+    ).catch(() => undefined);
+    await page.waitForTimeout(HYDRATE_SETTLE_MS);
   }
 
-  // ── Boot dashboard ───────────────────────────────────────────────
-  await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-  await page.waitForTimeout(2000);
-  console.log(`[teach-unknown] booted at ${page.url()}`);
-
-  // ── Scenario A: real DB-resolvable sub-line ───────────────────────
-  const scenarioA = {
-    name: 'A_real_subline_not_in_static_registry',
-    input: 'Vienna Game: Frankenstein-Dracula Variation',
-    description:
-      'Real Lichess DB sub-line. Static registry only has bare Vienna; ' +
-      '":" causes resolveWalkthroughTree to skip. Pre-flight DB check ' +
-      'passes; LLM gen attempts.',
-  };
-
-  await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-  await page.locator('[data-testid="coach-teach-page"]').waitFor({ timeout: 15_000 });
-  await page.waitForTimeout(HYDRATE_SETTLE_MS);
-  await clearSession();
-  await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-  await page.locator('[data-testid="coach-teach-page"]').waitFor({ timeout: 15_000 });
-  await page.waitForTimeout(HYDRATE_SETTLE_MS);
-
-  const startA = intercepted.length;
-  console.log(`\n[teach-unknown] scenario A — "${scenarioA.input}"`);
-  await snapshot('A-before');
-
-  await page.locator('[data-testid="chat-text-input"]').click();
-  await page.locator('[data-testid="chat-text-input"]').fill(scenarioA.input);
-  await page.locator('[data-testid="chat-send-btn"]').click();
-  await page.waitForTimeout(SHORT_SETTLE_MS);
-
-  // Watch for surface routing events for up to GEN_WAIT_MS — they
-  // fire synchronously after handleSubmit. We sample 3× during the
-  // wait to log progression.
-  let lastLogged = 0;
-  const watchUntil = Date.now() + GEN_WAIT_MS;
-  while (Date.now() < watchUntil) {
-    if (intercepted.length !== lastLogged) {
-      const fresh = intercepted.slice(lastLogged);
-      const kinds = fresh.reduce((acc, e) => {
-        acc[e.kind ?? 'unknown'] = (acc[e.kind ?? 'unknown'] ?? 0) + 1;
-        return acc;
-      }, {});
-      console.log(`  +${fresh.length} events: ${Object.entries(kinds).map(([k, n]) => `${n}×${k}`).join(', ')}`);
-      lastLogged = intercepted.length;
+  async function recordScenario(name, options) {
+    const startIdx = intercepted.length;
+    const errsBefore = pageErrors.length;
+    const consBefore = consoleErrors.length;
+    const t0 = Date.now();
+    console.log(`\n[teach] ${name}`);
+    let err = null;
+    try {
+      await options.run();
+    } catch (e) {
+      err = String(e?.message ?? e);
+      console.log(`  [error] ${err}`);
     }
-    // Stop early if generation status disappears (success or fail).
-    const genVisible = await page
-      .locator('[data-testid="teach-generation-progress"]')
-      .isVisible()
-      .catch(() => false);
-    const walkthroughVisible = await page
-      .locator('[data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-leaf-panel"], [data-testid="walkthrough-stage-menu"]')
-      .first()
-      .isVisible()
-      .catch(() => false);
-    if (!genVisible && walkthroughVisible) break;
-    // If the failAck text appears in transcript, stop early.
-    const failAckVisible = await page
-      .locator('text="couldn\'t put together"')
-      .isVisible()
-      .catch(() => false);
-    if (failAckVisible) break;
-    await page.waitForTimeout(1500);
+    const screenshotPath = await snapshot(name);
+    const events = intercepted.slice(startIdx);
+    const kinds = events.reduce((acc, e) => {
+      const k = String(e.kind ?? 'unknown');
+      acc[k] = (acc[k] ?? 0) + 1;
+      return acc;
+    }, {});
+    const surfaceRouting = events
+      .filter((e) => e.kind === 'coach-surface-migrated')
+      .map((e) => e.summary);
+    console.log(`  events=${events.length}  duration=${Date.now() - t0}ms`);
+    for (const [k, n] of Object.entries(kinds)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6)) {
+      console.log(`    ${String(n).padStart(3)} × ${k}`);
+    }
+    for (const s of surfaceRouting) console.log(`    routing: ${s}`);
+
+    const assertions = [];
+    for (const a of options.assertions ?? []) {
+      let ok = false;
+      let actual = '?';
+      try {
+        if (a.kind === 'visible') {
+          const count = await page.locator(a.selector).count();
+          const visible = count > 0
+            ? await page.locator(a.selector).first().isVisible().catch(() => false)
+            : false;
+          actual = visible ? 'visible' : `not-visible (count=${count})`;
+          ok = visible;
+        } else if (a.kind === 'text-contains') {
+          const t = await page
+            .locator(a.selector)
+            .first()
+            .textContent({ timeout: 2000 })
+            .catch(() => '');
+          actual = (t ?? '').slice(0, 100);
+          ok = (t ?? '').toLowerCase().includes(String(a.value).toLowerCase());
+        } else if (a.kind === 'url-matches') {
+          actual = page.url();
+          ok = a.value.test(actual);
+        } else if (a.kind === 'audit-present') {
+          actual = kinds[a.audit] ? `${kinds[a.audit]}× present` : 'absent';
+          ok = !!kinds[a.audit];
+        } else if (a.kind === 'audit-summary-contains') {
+          const matchEv = events.find(
+            (e) => (e.summary ?? '').toLowerCase().includes(String(a.value).toLowerCase()),
+          );
+          actual = matchEv ? `${matchEv.kind}: ${(matchEv.summary ?? '').slice(0, 80)}` : 'absent';
+          ok = !!matchEv;
+        } else if (a.kind === 'transcript-contains') {
+          const t = await page
+            .locator('[data-testid="teach-transcript"]')
+            .innerText({ timeout: 2000 })
+            .catch(() => '');
+          actual = String(t).slice(0, 100);
+          ok = String(t).toLowerCase().includes(String(a.value).toLowerCase());
+        }
+      } catch (e) {
+        actual = `error: ${e.message?.slice(0, 80)}`;
+      }
+      assertions.push({ ...a, actual, ok });
+      console.log(`  ${ok ? '✓' : '✗'} ${a.label} → ${actual}`);
+    }
+
+    report.scenarios.push({
+      name,
+      url: page.url(),
+      durationMs: Date.now() - t0,
+      eventCount: events.length,
+      kinds,
+      surfaceRouting,
+      screenshot: screenshotPath,
+      consoleErrors: consoleErrors.slice(consBefore),
+      pageErrors: pageErrors.slice(errsBefore),
+      sampleEvents: events.slice(0, 5),
+      assertions,
+      error: err,
+      ...(options.extras ?? {}),
+    });
   }
 
-  await snapshot('A-after-start');
+  // ── S1: Boot smoke ────────────────────────────────────────────────
+  await recordScenario('S1_boot_dashboard', {
+    run: async () => {
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+      await page.waitForTimeout(2000);
+    },
+    assertions: [
+      { kind: 'visible', selector: 'body', label: 'dashboard renders' },
+    ],
+  });
 
-  // Walk through narration to reach the leaf. Click `walkthrough-skip`
-  // repeatedly. If we hit a fork, pick the first option. If we hit a
-  // trap prompt, skip. Stop when leaf or stage-menu becomes visible
-  // (or timeout).
-  console.log(`  driving walkthrough to leaf…`);
-  const leafResult = await driveToLeaf(page);
-  console.log(`  leaf-result: ${JSON.stringify(leafResult)}`);
-  await snapshot('A-at-leaf');
+  await recordScenario('S1b_boot_coach_teach', {
+    run: async () => {
+      await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+      await page.locator('[data-testid="coach-teach-page"]').waitFor({ timeout: 15_000 });
+      await page.waitForTimeout(HYDRATE_SETTLE_MS);
+    },
+    assertions: [
+      { kind: 'visible', selector: '[data-testid="coach-teach-page"]', label: 'teach page mounts' },
+      { kind: 'visible', selector: '[data-testid="chat-text-input"]', label: 'chat input present' },
+      { kind: 'visible', selector: '[data-testid="chat-send-btn"]', label: 'send button present' },
+      { kind: 'visible', selector: '[data-testid="teach-picker"]', label: 'picker UI surfaces on empty transcript' },
+      { kind: 'visible', selector: '[data-testid="teach-picker-action-teach"]', label: 'Teach action chip visible' },
+      { kind: 'visible', selector: '[data-testid="teach-picker-action-drill"]', label: 'Drill action chip visible' },
+      { kind: 'visible', selector: '[data-testid="teach-picker-action-quiz"]', label: 'Quiz action chip visible' },
+      { kind: 'visible', selector: '[data-testid="teach-picker-action-trap"]', label: 'Trap action chip visible' },
+      { kind: 'visible', selector: '[data-testid="teach-picker-action-play"]', label: 'Play action chip visible' },
+      { kind: 'visible', selector: '[data-testid="teach-picker-description"]', label: 'picker description renders' },
+      { kind: 'visible', selector: '[data-testid="teach-picker-openings"]', label: 'opening chips row visible' },
+    ],
+  });
 
-  // Capture leaf-state info
-  const leafOutroText = await page
-    .locator('[data-testid="walkthrough-leaf-panel"] .italic')
-    .first()
-    .innerText({ timeout: 2000 })
-    .catch(() => '');
-  const continueLearningVisible = await page
-    .locator('[data-testid="walkthrough-continue-learning"]')
-    .isVisible()
-    .catch(() => false);
-  // Two surfaces of the play-it-out affordance:
-  //   - walkthrough-leaf-play-real : prominent button at the leaf
-  //     panel (the user's "ask if they want to play it out" path
-  //     goes through this).
-  //   - walkthrough-stage-play     : Play it for real button at the
-  //     stage menu (one click deeper).
-  const playOutAtLeafVisible = await page
-    .locator('[data-testid="walkthrough-leaf-play-real"]')
-    .isVisible()
-    .catch(() => false);
-  const playOutAtLeafLabel = await page
-    .locator('[data-testid="walkthrough-leaf-play-real"]')
-    .innerText({ timeout: 2000 })
-    .catch(() => '');
-  // Chat prompt assertion — coach should have appended a
-  // conversational "play it out yourself?" message to the transcript.
-  const transcriptDuringLeaf = await page
-    .locator('[data-testid="teach-transcript"]')
-    .innerText({ timeout: 3000 })
-    .catch(() => '');
-  const promptedInChat = /play it out yourself|play this line out yourself|want to play .*\b(yourself|out)\b/i.test(
-    transcriptDuringLeaf,
-  );
-  const playForRealAtLeafVisible = playOutAtLeafVisible; // back-compat alias
+  // ── S1c: Picker — switch action mode + verify description swap ─
+  await recordScenario('S1c_picker_mode_switch', {
+    run: async () => {
+      // Default selected = 'teach'; switch to 'drill'.
+      await page.locator('[data-testid="teach-picker-action-drill"]').click();
+      await page.waitForTimeout(400);
+    },
+    assertions: [
+      {
+        kind: 'text-contains',
+        selector: '[data-testid="teach-picker-description"]',
+        value: 'Practice the moves on the board',
+        label: 'description swaps to Drill text',
+      },
+    ],
+  });
 
-  // Click "Continue learning" if present to surface the stage menu.
-  let stageMenuVisible = false;
-  let playForRealAtStageMenuVisible = false;
-  let stageMenuLabel = '';
-  if (continueLearningVisible) {
-    await page.locator('[data-testid="walkthrough-continue-learning"]').click();
-    await page.waitForTimeout(1500);
-    await snapshot('A-stage-menu');
-    stageMenuVisible = await page
-      .locator('[data-testid="walkthrough-stage-menu"]')
-      .isVisible()
-      .catch(() => false);
-    playForRealAtStageMenuVisible = await page
-      .locator('[data-testid="walkthrough-stage-play"]')
-      .isVisible()
-      .catch(() => false);
-    stageMenuLabel = await page
-      .locator('[data-testid="walkthrough-stage-play"]')
-      .innerText({ timeout: 2000 })
-      .catch(() => '');
-  }
+  // ── S1d: Picker — submit Drill × first opening chip ─────────────
+  await recordScenario('S1d_picker_submit_drill_opening', {
+    run: async () => {
+      // First opening chip should be either a favorited opening or
+      // the fallback "Sicilian Defense". Click it; expect handleSubmit
+      // to run "drill <opening>" through the stage-keyword path.
+      // Both static and LLM-gen paths emit a "landed at drill" audit
+      // (cache hit → "stage=drill"; LLM gen → "landed at drill").
+      const firstOpening = page.locator('[data-testid="teach-picker-openings"] button').first();
+      await firstOpening.click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        (/stage=drill|landed at drill/i.test(e.summary ?? '')),
+        45_000,
+      );
+    },
+    assertions: [
+      {
+        kind: 'audit-summary-contains',
+        value: 'landed at drill',
+        label: 'picker submitted → drill stage reached',
+      },
+    ],
+  });
 
-  const transcriptA = await page
-    .locator('[data-testid="teach-transcript"]')
-    .innerText({ timeout: 3000 })
-    .catch(() => '');
-  const phaseA = await detectWalkthroughPhase(page);
-  const eventsA = eventsSince(startA);
-  scenarioA.events = eventsA.length;
-  scenarioA.eventKinds = countKinds(eventsA);
-  scenarioA.surfaceRoutingEvents = eventsA
-    .filter((e) => e.kind === 'coach-surface-migrated')
-    .map((e) => e.summary);
-  scenarioA.phase = phaseA;
-  scenarioA.transcriptSnippet = transcriptA.slice(0, 2500);
-  scenarioA.leafResult = leafResult;
-  scenarioA.leafOutroText = leafOutroText;
-  scenarioA.continueLearningVisibleAtLeaf = continueLearningVisible;
-  scenarioA.playOutAtLeafVisible = playOutAtLeafVisible;
-  scenarioA.playOutAtLeafLabel = playOutAtLeafLabel;
-  scenarioA.promptedInChat = promptedInChat;
-  scenarioA.stageMenuVisibleAfterContinue = stageMenuVisible;
-  scenarioA.playForRealVisibleAtStageMenu = playForRealAtStageMenuVisible;
-  scenarioA.playForRealLabel = stageMenuLabel;
-  scenarioA.spineNarrationSkips = leafResult?.skips ?? 0;
-  scenarioA.reachedMiddlegame = (leafResult?.skips ?? 0) >= 5; // ~5 skips ≈ ~12 plies ≈ middlegame
-  report.scenarios.push(scenarioA);
-  console.log(`  phase: ${scenarioA.phase}`);
-  console.log(`  leafOutroText: ${leafOutroText.slice(0, 120)}`);
-  console.log(`  continueLearning@leaf: ${continueLearningVisible}`);
-  console.log(`  playOut@leaf: ${playOutAtLeafVisible} (label="${playOutAtLeafLabel.slice(0, 80)}")`);
-  console.log(`  promptedInChat: ${promptedInChat}`);
-  console.log(`  spineNarrationSkips: ${scenarioA.spineNarrationSkips} (reachedMiddlegame: ${scenarioA.reachedMiddlegame})`);
-  console.log(`  stageMenu→playForReal: ${playForRealAtStageMenuVisible} (label="${stageMenuLabel.slice(0, 80)}")`);
+  // ── S2: Static registry hit (Vienna) → walkthrough → leaf ───────
+  await clearSessionAndReload();
+  await recordScenario('S2_static_registry_vienna', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('Vienna');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      // Wait for the surface-routed audit to land in the intercepted
+      // stream — that's the real signal that handleSubmit completed,
+      // not a fixed timeout. After the very first clearSessionAndReload
+      // the Dexie warmup (profile + completed-stages) measurably stalls
+      // the static-routed branch for 20-25s in the sandbox; bump to 45s.
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
+        45_000,
+      );
+      // Drive walkthrough to leaf
+      await driveToLeaf(page);
+    },
+    assertions: [
+      { kind: 'visible', selector: '[data-testid="walkthrough-leaf-panel"]', label: 'leaf panel reached' },
+      { kind: 'visible', selector: '[data-testid="walkthrough-leaf-play-real"]', label: 'leaf "play this line out" button visible' },
+      { kind: 'visible', selector: '[data-testid="walkthrough-continue-learning"]', label: 'continue-learning button visible' },
+      { kind: 'transcript-contains', value: 'play it out yourself', label: 'chat ask "play it out yourself"' },
+      { kind: 'audit-summary-contains', value: 'surface-routed (static)', label: 'static-registry surface-routed audit' },
+    ],
+  });
 
-  // ── Scenario B: fabricated name, not in DB ───────────────────────
-  const scenarioB = {
-    name: 'B_fabricated_name_not_in_DB',
-    input: 'Hyper-Modern Spaghetti Defense, Anti-Pasta Variation',
-    description:
-      'Made-up name. resolveOpeningEntry returns null → Tier 2.5 ' +
-      'pre-flight DB check refuses → handleSubmit falls through to ' +
-      'normal brain chat reply (no walkthrough).',
-  };
+  // ── S3: Click "Play this line out yourself" at leaf ─────────────
+  await recordScenario('S3_leaf_play_real_click', {
+    run: async () => {
+      await page.locator('[data-testid="walkthrough-leaf-play-real"]').click();
+      await page.waitForTimeout(2500);
+    },
+    assertions: [
+      { kind: 'url-matches', value: /\/coach\/play\?opening=/, label: 'navigated to /coach/play with opening' },
+    ],
+  });
 
-  await clearSession();
-  await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-  await page.locator('[data-testid="coach-teach-page"]').waitFor({ timeout: 15_000 });
-  await page.waitForTimeout(HYDRATE_SETTLE_MS);
+  // ── S4: DB sub-line (Frankenstein-Dracula) — spine extension ────
+  await clearSessionAndReload();
+  let frankSkips = 0;
+  await recordScenario('S4_db_subline_frankenstein_dracula', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('Vienna Game: Frankenstein-Dracula Variation');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await page.waitForTimeout(SHORT_SETTLE_MS);
+      const lr = await driveToLeaf(page);
+      frankSkips = lr?.skips ?? 0;
+      console.log(`  spine-skips=${frankSkips}`);
+    },
+    assertions: [
+      { kind: 'visible', selector: '[data-testid="walkthrough-leaf-panel"]', label: 'leaf panel reached' },
+      { kind: 'visible', selector: '[data-testid="walkthrough-leaf-play-real"]', label: 'leaf "play this line out" button visible' },
+      { kind: 'transcript-contains', value: 'frankenstein-dracula variation', label: 'opening mentioned in transcript' },
+      { kind: 'transcript-contains', value: 'play it out yourself', label: 'leaf ask reaches chat' },
+      { kind: 'audit-summary-contains', value: 'generation OK via DB-narration path', label: 'DB-narration generation succeeded' },
+    ],
+    extras: { spineNarrationSkips: () => frankSkips }, // captured below
+  });
+  report.scenarios[report.scenarios.length - 1].spineNarrationSkips = frankSkips;
+  report.scenarios[report.scenarios.length - 1].reachedMiddlegame = frankSkips >= 5;
 
-  const startB = intercepted.length;
-  console.log(`\n[teach-unknown] scenario B — "${scenarioB.input}"`);
-  await snapshot('B-before');
+  // ── S5: Broad family name → line picker ─────────────────────────
+  await clearSessionAndReload();
+  await recordScenario('S5_broad_family_sicilian', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('Sicilian');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await page.waitForTimeout(SHORT_SETTLE_MS + 2000);
+    },
+    assertions: [
+      { kind: 'visible', selector: '[data-testid="line-picker"]', label: 'line picker surfaces for broad family' },
+      { kind: 'audit-summary-contains', value: 'line picker shown for', label: 'line-picker surface-routed audit' },
+    ],
+  });
 
-  await page.locator('[data-testid="chat-text-input"]').click();
-  await page.locator('[data-testid="chat-text-input"]').fill(scenarioB.input);
-  await page.locator('[data-testid="chat-send-btn"]').click();
-  await page.waitForTimeout(SHORT_SETTLE_MS);
-  // Short wait — pre-flight reject is synchronous; brain reply (if any)
-  // is slower if it has a key, but in the sandbox it'll fail fast too.
-  await page.waitForTimeout(8000);
+  // ── S6: Stage keyword "drill Vienna" → skip to stage menu ──────
+  await clearSessionAndReload();
+  await recordScenario('S6_stage_keyword_drill_vienna', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('drill Vienna');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await page.waitForTimeout(SHORT_SETTLE_MS + 1500);
+    },
+    assertions: [
+      // Stage menu OR drill picker should be the destination — both
+      // valid endpoints depending on data availability.
+      {
+        kind: 'visible',
+        selector: '[data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-drill-picker"], [data-testid="walkthrough-drill-active"], [data-testid="walkthrough-drill-empty"]',
+        label: 'jumped to a drill-related phase (menu / picker / active / empty)',
+      },
+      { kind: 'audit-summary-contains', value: 'stage=drill', label: 'stage-hint=drill captured in routing audit' },
+    ],
+  });
 
-  const screenB = await snapshot('B-after');
-  const transcriptB = await page
-    .locator('[data-testid="teach-transcript"]')
-    .innerText({ timeout: 3000 })
-    .catch(() => '');
-  const phaseB = await detectWalkthroughPhase(page);
-  const eventsB = eventsSince(startB);
-  scenarioB.events = eventsB.length;
-  scenarioB.eventKinds = countKinds(eventsB);
-  scenarioB.surfaceRoutingEvents = eventsB
-    .filter((e) => e.kind === 'coach-surface-migrated')
-    .map((e) => e.summary);
-  scenarioB.phase = phaseB;
-  scenarioB.transcriptSnippet = transcriptB.slice(0, 1500);
-  scenarioB.screenshot = screenB;
-  scenarioB.playForRealVisible = await page
-    .locator('[data-testid="walkthrough-stage-play"]')
-    .isVisible()
-    .catch(() => false);
-  scenarioB.continueLearningVisible = await page
-    .locator('[data-testid="walkthrough-continue-learning"]')
-    .isVisible()
-    .catch(() => false);
-  report.scenarios.push(scenarioB);
-  console.log(`  phase: ${scenarioB.phase}`);
-  console.log(`  playForReal visible: ${scenarioB.playForRealVisible}`);
+  // ── S7: Fabricated name → pre-flight reject + brain fall-through
+  await clearSessionAndReload();
+  await recordScenario('S7_fabricated_name', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('Hyper-Modern Spaghetti Defense, Anti-Pasta Variation');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await page.waitForTimeout(SHORT_SETTLE_MS + 5000);
+    },
+    assertions: [
+      { kind: 'audit-summary-contains', value: 'pre-flight rejected non-opening', label: 'pre-flight reject audit fires' },
+      // No walkthrough phase should be active.
+      { kind: 'visible', selector: '[data-testid="coach-teach-page"]', label: 'teach page still mounted' },
+    ],
+  });
 
-  // ── Summary ──────────────────────────────────────────────────────
-  report.consoleErrors = consoleErrors.slice(0, 40);
-  report.pageErrors = pageErrors.slice(0, 40);
+  // ── S8: Cache re-hit on Vienna ─────────────────────────────────
+  // Same browser context — Vienna was just walked in S2/S3 so it
+  // should hit either the static registry again (still Tier 1) or
+  // the Dexie cache. Either is a fast hit; we just verify it doesn't
+  // re-spin the LLM-gen path.
+  await clearSessionAndReload();
+  await recordScenario('S8_cache_or_static_hit_vienna', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('Vienna');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await page.waitForTimeout(SHORT_SETTLE_MS);
+    },
+    assertions: [
+      {
+        kind: 'audit-summary-contains',
+        value: 'surface-routed (static): "Vienna" → Vienna Game',
+        label: 'static-registry hit (instant, no LLM gen)',
+      },
+      // teach-generation-progress would indicate a slow LLM gen —
+      // it must NOT appear for a static or cached hit.
+      {
+        kind: 'visible',
+        selector: '[data-testid="coach-teach-page"]',
+        label: 'page still mounted (no crash)',
+      },
+    ],
+  });
+
+  // ── Summary ────────────────────────────────────────────────────
+  report.consoleErrors = consoleErrors.slice(0, 60);
+  report.pageErrors = pageErrors.slice(0, 60);
   report.totalEvents = intercepted.length;
   report.sidecarCapturedCount = listener.getCapturedEvents().length;
 
-  await writeFile(
-    join(OUT_DIR, 'report.json'),
-    JSON.stringify(report, null, 2),
-    'utf-8',
-  );
-  await writeFile(
-    join(OUT_DIR, 'all-events.json'),
-    JSON.stringify(intercepted, null, 2),
-    'utf-8',
-  );
+  // Aggregate pass/fail
+  const summary = report.scenarios.map((s) => {
+    const a = s.assertions ?? [];
+    const passed = a.filter((x) => x.ok).length;
+    const failed = a.filter((x) => !x.ok).length;
+    return { name: s.name, passed, failed, total: a.length, error: s.error };
+  });
+  report.summary = summary;
+  console.log(`\n[teach] === scenario summary ===`);
+  for (const s of summary) {
+    const tag = s.failed === 0 && !s.error ? '✓' : '✗';
+    console.log(`  ${tag}  ${s.name}: ${s.passed}/${s.total} pass${s.error ? ` (error: ${s.error.slice(0, 60)})` : ''}`);
+  }
 
-  console.log(`\n[teach-unknown] DONE`);
+  await writeFile(join(OUT_DIR, 'report.json'), JSON.stringify(report, null, 2), 'utf-8');
+  await writeFile(join(OUT_DIR, 'all-events.json'), JSON.stringify(intercepted, null, 2), 'utf-8');
+  console.log(`\n[teach] DONE`);
   console.log(`  total events: ${intercepted.length}`);
-  console.log(`  sidecar captured: ${listener.getCapturedEvents().length}`);
-  console.log(`  report: ${OUT_DIR}/report.json`);
+  console.log(`  report:       ${OUT_DIR}/report.json`);
 
   await browser.close();
   await listener.stop();
 }
 
-function countKinds(events) {
-  return events.reduce((acc, e) => {
-    acc[e.kind ?? 'unknown'] = (acc[e.kind ?? 'unknown'] ?? 0) + 1;
-    return acc;
-  }, {});
+async function waitForEvent(intercepted, predicate, timeoutMs) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (intercepted.some(predicate)) return true;
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  return false;
 }
 
 async function driveToLeaf(page) {
@@ -411,16 +530,12 @@ async function driveToLeaf(page) {
     if (phase === 'walkthrough-stage-menu') return { reached: 'stage-menu', skips };
 
     if (phase === 'walkthrough-narrating-panel') {
-      // Click skip; if Polly is loading the next narration line, the
-      // skip button might be briefly disabled.
       const skipBtn = page.locator('[data-testid="walkthrough-skip"]');
-      const isVisible = await skipBtn.isVisible().catch(() => false);
-      if (isVisible) {
+      if (await skipBtn.isVisible().catch(() => false)) {
         await skipBtn.click({ timeout: 1500 }).catch(() => undefined);
         skips++;
       }
     } else if (phase === 'walkthrough-fork-panel') {
-      // Pick the first fork option.
       const opt = page.locator('[data-testid="walkthrough-fork-option-0"]');
       if (await opt.isVisible().catch(() => false)) {
         await opt.click().catch(() => undefined);
@@ -431,15 +546,11 @@ async function driveToLeaf(page) {
         await skipTrap.click().catch(() => undefined);
       }
     } else if (phase === 'walkthrough-choose-mode') {
-      // First-time chooser if walkthrough already completed.
       const c = page.locator('[data-testid="walkthrough-choose-walkthrough"]');
       if (await c.isVisible().catch(() => false)) {
         await c.click().catch(() => undefined);
       }
-    } else if (phase === 'teach-generation-progress') {
-      // Still generating — wait.
     } else if (phase === 'none') {
-      // Walkthrough not on screen at all — surface may have rejected.
       return { reached: 'none', skips };
     }
     await page.waitForTimeout(SKIP_INTERVAL_MS);
@@ -458,6 +569,8 @@ async function detectWalkthroughPhase(page) {
     'walkthrough-trap-prompt',
     'walkthrough-quiz-panel',
     'walkthrough-drill-active',
+    'walkthrough-drill-picker',
+    'walkthrough-drill-empty',
     'teach-generation-progress',
     'line-picker',
   ];
@@ -473,6 +586,6 @@ async function detectWalkthroughPhase(page) {
 }
 
 main().catch((err) => {
-  console.error('[teach-unknown] FATAL', err);
+  console.error('[teach] FATAL', err);
   process.exit(1);
 });

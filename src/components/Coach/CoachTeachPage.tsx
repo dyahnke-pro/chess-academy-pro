@@ -60,6 +60,8 @@ import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
 import { db } from '../../db/schema';
+import { getFavoriteOpenings } from '../../services/openingService';
+import type { OpeningRecord } from '../../types';
 import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
@@ -75,6 +77,56 @@ const SUGGESTIONS = [
   'Show me the Italian Game main line',
   'How do I attack a castled king?',
   'What is the Sicilian Defense and why play it?',
+];
+
+/** Action modes the picker offers above the chat input. Each maps to
+ *  a typed-input phrasing that `handleSubmit`'s STAGE_PATTERNS regexes
+ *  recognize — tapping a mode + opening combination becomes the same
+ *  text input the user could have typed by hand, so the picker is
+ *  purely additive UI and never bypasses the normal routing. */
+const PICKER_ACTIONS = [
+  {
+    id: 'teach',
+    label: 'Teach me',
+    description: 'Walk through the opening from move 1 with voice narration.',
+    buildInput: (opening: string) => opening,
+  },
+  {
+    id: 'drill',
+    label: 'Drill',
+    description: 'Practice the moves on the board, ply by ply.',
+    buildInput: (opening: string) => `drill ${opening}`,
+  },
+  {
+    id: 'quiz',
+    label: 'Quiz me on',
+    description: 'Multiple-choice questions on the key ideas.',
+    buildInput: (opening: string) => `quiz me on ${opening}`,
+  },
+  {
+    id: 'trap',
+    label: 'Trap lines for',
+    description: 'Common opponent slips and how to punish them.',
+    buildInput: (opening: string) => `punish lines for ${opening}`,
+  },
+  {
+    id: 'play',
+    label: 'Play',
+    description: 'Live game vs the coach starting from this opening.',
+    buildInput: (opening: string) => `play it for real ${opening}`,
+  },
+] as const;
+type PickerActionId = (typeof PICKER_ACTIONS)[number]['id'];
+
+/** Fallback openings shown when the student has no favorites yet —
+ *  a curated mix of the most-asked-about ones across both colors. */
+const FALLBACK_OPENING_NAMES: string[] = [
+  'Sicilian Defense',
+  'Italian Game',
+  'Caro-Kann Defense',
+  'French Defense',
+  "Queen's Gambit",
+  'Vienna Game',
 ];
 
 /** A deep-dive entry point pulled from the walkthrough tree. Every
@@ -235,6 +287,28 @@ export function CoachTeachPage(): JSX.Element {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Picker state — drives the starter chips shown above the chat
+  // input while the transcript is empty. `pickerAction` is the
+  // currently-selected mode (Teach / Drill / Quiz / Trap / Play);
+  // tapping an opening chip combines the action with the opening
+  // and submits via the normal handleSubmit path so the picker is
+  // purely additive UI.
+  const [pickerAction, setPickerAction] = useState<PickerActionId>('teach');
+  const [favoriteOpenings, setFavoriteOpenings] = useState<OpeningRecord[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const rows = await getFavoriteOpenings();
+        if (!cancelled) setFavoriteOpenings(rows);
+      } catch {
+        if (!cancelled) setFavoriteOpenings([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const [linePicker, setLinePicker] = useState<{
     canonicalName: string;
     options: LinePickerOption[];
@@ -2443,22 +2517,122 @@ export function CoachTeachPage(): JSX.Element {
             </div>
           ))}
 
-          {messages.length === 0 && !streaming && !kickoffStatus && (
-            <div className="text-xs space-y-2" style={{ color: 'var(--color-text-muted)' }}>
-              <div>Ask your coach to teach you anything chess. Try:</div>
-              {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => void handleSubmit(s)}
-                  className="block w-full text-left px-2 py-1.5 rounded-md border text-xs hover:bg-theme-bg"
-                  style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-                  data-testid={`teach-suggestion-${s.slice(0, 12).replace(/\W+/g, '-').toLowerCase()}`}
+          {messages.length <= 1 && !streaming && !kickoffStatus && !linePicker && !walkthrough.isActive && (() => {
+            const activeAction =
+              PICKER_ACTIONS.find((a) => a.id === pickerAction) ?? PICKER_ACTIONS[0];
+            const openingNames =
+              favoriteOpenings.length > 0
+                ? favoriteOpenings.slice(0, 8).map((o) => o.name)
+                : FALLBACK_OPENING_NAMES;
+            const openingsSourceLabel =
+              favoriteOpenings.length > 0
+                ? 'Your favorited openings'
+                : 'Popular openings';
+            return (
+              <div
+                className="space-y-3"
+                data-testid="teach-picker"
+                style={{ color: 'var(--color-text)' }}
+              >
+                <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                  Pick what you want to do, then tap an opening.
+                </div>
+                {/* Action chips */}
+                <div
+                  className="flex flex-wrap gap-1.5"
+                  data-testid="teach-picker-actions"
+                  role="radiogroup"
+                  aria-label="Pick a lesson type"
                 >
-                  "{s}"
-                </button>
-              ))}
-            </div>
-          )}
+                  {PICKER_ACTIONS.map((a) => {
+                    const selected = a.id === pickerAction;
+                    return (
+                      <button
+                        key={a.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        onClick={() => setPickerAction(a.id)}
+                        className="px-2.5 py-1.5 rounded-full border text-xs font-semibold transition-colors"
+                        style={{
+                          borderColor: selected
+                            ? 'var(--color-accent, #06b6d4)'
+                            : 'var(--color-border)',
+                          backgroundColor: selected
+                            ? 'var(--color-accent, #06b6d4)'
+                            : 'transparent',
+                          color: selected
+                            ? 'var(--color-bg)'
+                            : 'var(--color-text)',
+                        }}
+                        data-testid={`teach-picker-action-${a.id}`}
+                      >
+                        {a.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                {/* Description of what the selected action does. */}
+                <div
+                  className="text-xs italic px-1"
+                  style={{ color: 'var(--color-text-muted)' }}
+                  data-testid="teach-picker-description"
+                >
+                  {activeAction.description}
+                </div>
+                {/* Opening chips — favorites if any, fallback popular otherwise. */}
+                <div
+                  className="text-[11px] font-medium uppercase tracking-wide px-1"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  {openingsSourceLabel}
+                </div>
+                <div
+                  className="flex flex-wrap gap-1.5"
+                  data-testid="teach-picker-openings"
+                >
+                  {openingNames.map((name) => (
+                    <button
+                      key={name}
+                      type="button"
+                      onClick={() => void handleSubmit(activeAction.buildInput(name))}
+                      className="px-2.5 py-1.5 rounded-md border text-xs hover:opacity-80 transition-opacity"
+                      style={{
+                        borderColor: 'var(--color-border)',
+                        color: 'var(--color-text)',
+                      }}
+                      data-testid={`teach-picker-opening-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                    >
+                      {name}
+                    </button>
+                  ))}
+                </div>
+                {/* Free-form starter examples — kept compact under the picker
+                    so the user knows they can also just type a question. */}
+                <details
+                  className="text-xs"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  <summary className="cursor-pointer select-none">
+                    Or ask a free-form question…
+                  </summary>
+                  <div className="mt-2 space-y-1.5">
+                    {SUGGESTIONS.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => void handleSubmit(s)}
+                        className="block w-full text-left px-2 py-1.5 rounded-md border text-xs hover:bg-theme-bg"
+                        style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                        data-testid={`teach-suggestion-${s.slice(0, 12).replace(/\W+/g, '-').toLowerCase()}`}
+                      >
+                        "{s}"
+                      </button>
+                    ))}
+                  </div>
+                </details>
+              </div>
+            );
+          })()}
 
           {/* Rolodex Start button (WO-ROLODEX-PLUMBING-01 item 3a).
               When the page was opened via `?opening=<name>`, the
