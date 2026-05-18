@@ -67,6 +67,7 @@ import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { withTimeout } from '../../coach/withTimeout';
@@ -1811,6 +1812,33 @@ export function CoachTeachPage(): JSX.Element {
       // unsanitized text would teach the LLM that markup is normal.
       const finalText = sanitizeCoachText(result.text);
       if (finalText) {
+        // G3 enforcement (Phase 2.5 of WO-COACH-TACTICAL-AWARENESS):
+        // scan the response for tactic vocabulary against the bounded
+        // context we sent in the envelope. Audit-only for now — log
+        // violations so we can observe how often the brain invents
+        // tactics in prod. Future iteration: trigger a regen with a
+        // strengthened addendum (mirrors the master-play claim
+        // validator's regen pattern).
+        const validation = validateTacticClaims(finalText, tacticsForAsk);
+        if (validation.violations.length > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.tacticClaimValidator',
+            summary: `out-of-vocab tactics: ${validation.violations.map((v) => v.type).join(', ')}`,
+            details: JSON.stringify({
+              violations: validation.violations,
+              tacticContext: {
+                immediateTypes: tacticsForAsk.immediate.map((t) => t.type),
+                threatTypes: tacticsForAsk.threats.map((t) => t.type),
+                opportunityTypes: tacticsForAsk.opportunities.map((t) => t.type),
+                hangingCount: tacticsForAsk.hanging.length,
+                lookaheadDepth: tacticsForAsk.lookaheadDepth,
+              },
+            }),
+            fen,
+          });
+        }
         setMessages((prev) => [...prev, {
           id: `${turnId}-c`,
           role: 'assistant',
