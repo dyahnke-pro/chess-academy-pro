@@ -579,7 +579,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         summary: `extracted [VOICE: ...] block (${inner.length} chars)`,
         details: JSON.stringify({ length: inner.length, preview: inner.slice(0, 80) }),
       });
-      void voiceService.speakForcedPollyOnly(inner);
+      void voiceService.speakForced(inner);
     };
 
     void coachService

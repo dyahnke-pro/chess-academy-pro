@@ -2602,7 +2602,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               // WO-VOICE-LAYER-01 (b): use the personality's secondary
               // voice so the alert cuts through with a different timbre
               // than the main narration.
-              void voiceService.speakAlert(warning).catch((err: unknown) => {
+              void voiceService.speakForced(warning).catch((err: unknown) => {
                 console.warn('[tactic-alert] TTS failed:', err);
               });
             }
