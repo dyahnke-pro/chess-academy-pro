@@ -627,6 +627,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             gameChatStudentColor,
             gameChatStudentRating,
           );
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'GameChatPanel.handleSend.buildLiveTactics',
+            summary: `tactics ctx: immediate=${gameChatTactics.immediate.length} hanging=${gameChatTactics.hanging.length} threats=${gameChatTactics.threats.length} opps=${gameChatTactics.opportunities.length} depth=${gameChatTactics.lookaheadDepth}`,
+            fen: fen || undefined,
+          });
           const liveState: LiveState = {
             surface: 'game-chat',
             fen,

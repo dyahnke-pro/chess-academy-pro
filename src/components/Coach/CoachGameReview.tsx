@@ -520,6 +520,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       reviewStudentColor,
       reviewStudentRating,
     );
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachGameReview.handleAskSend.buildLiveTactics',
+      summary: `tactics ctx: immediate=${reviewTactics.immediate.length} hanging=${reviewTactics.hanging.length} threats=${reviewTactics.threats.length} opps=${reviewTactics.opportunities.length} depth=${reviewTactics.lookaheadDepth}`,
+      fen: fenForQ,
+    });
     const reviewLiveState: LiveState = {
       surface: 'review',
       fen: fenForQ,

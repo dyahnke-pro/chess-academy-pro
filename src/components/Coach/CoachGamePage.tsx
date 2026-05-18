@@ -1252,6 +1252,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         exploreStudentColor,
         exploreRating,
       );
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachGamePage.exploreChat.buildLiveTactics',
+        summary: `tactics ctx: immediate=${exploreTactics.immediate.length} hanging=${exploreTactics.hanging.length} threats=${exploreTactics.threats.length} opps=${exploreTactics.opportunities.length} depth=${exploreTactics.lookaheadDepth}`,
+        fen: newFen,
+      });
       void coachService.ask(
         {
           surface: 'game-chat',
@@ -1999,6 +2006,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           moveSelectorStudentColor,
           moveSelectorRating,
         );
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachGamePage.moveSelector.buildLiveTactics',
+          summary: `tactics ctx: immediate=${moveSelectorTactics.immediate.length} hanging=${moveSelectorTactics.hanging.length} threats=${moveSelectorTactics.threats.length} opps=${moveSelectorTactics.opportunities.length} depth=${moveSelectorTactics.lookaheadDepth}`,
+          fen: game.fen,
+        });
         const moveSelectorLiveState: LiveState = {
           surface: 'move-selector',
           fen: game.fen,
@@ -2765,8 +2779,19 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     if (engineBestMoveUci) {
       try {
         engineBestMoveSan = uciMoveToSan(engineBestMoveUci, preFen);
+        // uciMoveToSan falls back to the raw UCI when chess.move()
+        // throws (= the move is illegal in this position, usually
+        // because the preAnalysis cache is stale and the suggested
+        // piece isn't on the source square anymore). Audit caught
+        // this rendering "Try c8d7" in the blunder modal when c8
+        // was empty. Surface the failure as '?' so the modal's
+        // best-move suggestion hides cleanly rather than showing a
+        // confusing UCI string.
+        if (engineBestMoveSan === engineBestMoveUci) {
+          engineBestMoveSan = '?';
+        }
       } catch {
-        engineBestMoveSan = engineBestMoveUci;
+        engineBestMoveSan = '?';
       }
     }
 
@@ -3320,6 +3345,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           blunderStudentColor,
           blunderStudentRating,
         );
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachGamePage.blunderAlert.buildLiveTactics',
+          summary: `tactics ctx: immediate=${blunderTactics.immediate.length} hanging=${blunderTactics.hanging.length} threats=${blunderTactics.threats.length} opps=${blunderTactics.opportunities.length} depth=${blunderTactics.lookaheadDepth}`,
+          fen: moveResult.fen,
+        });
         const spineAlert = await coachService.ask(
           {
             surface: 'game-chat',
@@ -4413,14 +4445,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                     >
                       Take Back
                     </button>
-                    <button
-                      onClick={handleBlunderTryBestMove}
-                      className="flex-1 py-2 rounded-xl text-xs font-semibold border-2 border-green-500/40 transition-colors"
-                      style={{ background: 'color-mix(in srgb, var(--color-success, #22c55e) 15%, var(--color-surface))', color: 'var(--color-text)' }}
-                      data-testid="blunder-try-best"
-                    >
-                      Try {blunderPause.bestMoveSan}
-                    </button>
+                    {blunderPause.bestMoveSan && blunderPause.bestMoveSan !== '?' && (
+                      <button
+                        onClick={handleBlunderTryBestMove}
+                        className="flex-1 py-2 rounded-xl text-xs font-semibold border-2 border-green-500/40 transition-colors"
+                        style={{ background: 'color-mix(in srgb, var(--color-success, #22c55e) 15%, var(--color-surface))', color: 'var(--color-text)' }}
+                        data-testid="blunder-try-best"
+                      >
+                        Try {blunderPause.bestMoveSan}
+                      </button>
+                    )}
                   </div>
                 </motion.div>
               )}
