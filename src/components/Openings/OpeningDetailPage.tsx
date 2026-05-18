@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { sanitizeForTTS } from '../../services/voiceService';
+import { sanitizeForTTS, voiceService } from '../../services/voiceService';
 import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarrator';
 import { DrillMode } from './DrillMode';
 import { PracticeMode } from './PracticeMode';
@@ -110,7 +110,6 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeTrapLineIndex, setActiveTrapLineIndex] = useState(-1);
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [quizIndex, setQuizIndex] = useState(0);
@@ -163,10 +162,9 @@ export function OpeningDetailPage(): JSX.Element {
     }
   }, [opening, srsEnrolled, srsBusy]);
 
-  // Cleanup speech on unmount
   useEffect(() => {
     return () => {
-      window.speechSynthesis.cancel();
+      voiceService.stop();
     };
   }, []);
 
@@ -271,22 +269,10 @@ export function OpeningDetailPage(): JSX.Element {
       setNarratingSection(null);
       return;
     }
-    // Sanitize chess notation + piece-letter shorthand before the Web
-    // Speech engine sees it. Raw SpeechSynthesisUtterance bypasses
-    // voiceService, so we normalise here instead.
-    const utterance = new SpeechSynthesisUtterance(sanitizeForTTS(text));
-    utterance.rate = 0.95;
-    utterance.onend = () => {
-      setNarratingSection(null);
-      utteranceRef.current = null;
-    };
-    utterance.onerror = () => {
-      setNarratingSection(null);
-      utteranceRef.current = null;
-    };
-    utteranceRef.current = utterance;
     setNarratingSection(sectionId);
-    window.speechSynthesis.speak(utterance);
+    void voiceService.speakForced(sanitizeForTTS(text)).finally(() => {
+      setNarratingSection((current) => (current === sectionId ? null : current));
+    });
   }, []);
 
   const toggleNarration = useCallback((
@@ -295,17 +281,14 @@ export function OpeningDetailPage(): JSX.Element {
     options?: { kind?: 'traps' | 'warnings'; bullets?: string[] | null },
   ): void => {
     if (narratingSection === sectionId || loadingSection === sectionId) {
-      // Stop (or cancel an in-flight fetch)
-      window.speechSynthesis.cancel();
+      voiceService.stop();
       narrationRequestToken.current += 1;
       setNarratingSection(null);
       setLoadingSection(null);
-      utteranceRef.current = null;
       return;
     }
 
-    // Stop any current narration
-    window.speechSynthesis.cancel();
+    voiceService.stop();
     narrationRequestToken.current += 1;
     const token = narrationRequestToken.current;
 
