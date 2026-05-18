@@ -528,7 +528,11 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
         selectedIndex < resultsOffset + results.length
       ) {
         handleSelect(results[selectedIndex - resultsOffset]);
-      } else if (selectedIndex === askCoachIndex) {
+      } else if (selectedIndex === askCoachIndex && showAskCoach) {
+        // Guard with `showAskCoach`: when the suggestion is hidden,
+        // `askCoachIndex` collapses to -1 and would spuriously match
+        // the default `selectedIndex === -1`. Without the guard the
+        // bar fires `askCoach()` on every Enter in a scoped search.
         askCoach(query.trim());
       } else if (selectedIndex === -1 && pureSearch && results.length > 0) {
         // Scoped search: Enter on the default state submits to the
