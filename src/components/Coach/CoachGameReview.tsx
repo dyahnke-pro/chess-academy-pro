@@ -30,6 +30,7 @@ import type { LiveState } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { logAppAudit } from '../../services/appAuditor';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
@@ -637,6 +638,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       .then((answer) => {
         // WO-BRAIN-04: persist coach reply into conversation history.
         if (!abortSignal.aborted && answer.text.trim().length > 0) {
+          // G3 enforcement on the review-ask reply.
+          const validation = validateTacticClaims(answer.text, reviewTactics);
+          if (validation.violations.length > 0) {
+            void logAppAudit({
+              kind: 'claim-validator-trip',
+              category: 'subsystem',
+              source: 'CoachGameReview.askResponse.tacticClaimValidator',
+              summary: `out-of-vocab tactics: ${validation.violations.map((v) => v.type).join(', ')}`,
+              details: JSON.stringify({
+                violations: validation.violations,
+                surface: 'review',
+                fen: fenForQ,
+              }),
+              fen: fenForQ,
+            });
+          }
           useCoachMemoryStore.getState().appendConversationMessage({
             surface: 'chat-review-ask',
             role: 'coach',

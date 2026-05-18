@@ -52,6 +52,7 @@ import { emergencyPickMove } from '../../coach/coachTurnFallback';
 import type { LiveState } from '../../coach/types';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import {
@@ -1271,6 +1272,22 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         },
       ).then((spineAnswer) => {
         const reaction = unwrapSpineError(spineAnswer.text);
+        // G3 enforcement on explore-mode coach reactions.
+        const exploreValidation = validateTacticClaims(reaction, exploreTactics);
+        if (exploreValidation.violations.length > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachGamePage.exploreReaction.tacticClaimValidator',
+            summary: `out-of-vocab tactics: ${exploreValidation.violations.map((v) => v.type).join(', ')}`,
+            details: JSON.stringify({
+              violations: exploreValidation.violations,
+              surface: 'game-chat',
+              fen: newFen,
+            }),
+            fen: newFen,
+          });
+        }
         setExploreMessages((prev) => [
           ...prev,
           { role: 'user', content: userMsg },
@@ -3326,6 +3343,24 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         const trimmed = alertText.trim();
         if (trimmed && !trimmed.startsWith('⚠️')) {
           explanation = trimmed;
+          // G3 enforcement: scan the blunder-alert prose for tactic
+          // claims outside the bounded vocabulary the envelope shipped.
+          // Audit-only — observes hallucination rate in prod.
+          const validation = validateTacticClaims(trimmed, blunderTactics);
+          if (validation.violations.length > 0) {
+            void logAppAudit({
+              kind: 'claim-validator-trip',
+              category: 'subsystem',
+              source: 'CoachGamePage.blunderAlert.tacticClaimValidator',
+              summary: `out-of-vocab tactics: ${validation.violations.map((v) => v.type).join(', ')}`,
+              details: JSON.stringify({
+                violations: validation.violations,
+                surface: 'game-chat',
+                fen: moveResult.fen,
+              }),
+              fen: moveResult.fen,
+            });
+          }
         }
       } catch {
         // fall through with the clean template
