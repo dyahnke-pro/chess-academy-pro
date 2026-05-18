@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-18T21:56:34.310Z",
+  "generatedAt": "2026-05-18T22:34:29.938Z",
   "base": "http://localhost:5173",
   "sample": 30,
   "openings": [
@@ -43681,6 +43681,4253 @@
       "warnings": [],
       "startedAt": "2026-05-18T21:49:31.993Z",
       "finishedAt": "2026-05-18T21:56:34.310Z"
+    },
+    {
+      "openingId": "pro-dubov-sveshnikov",
+      "openingName": "Sicilian Sveshnikov (Dubov)",
+      "source": "pro",
+      "color": "black",
+      "eco": "B33",
+      "detailPageTestIds": [
+        "quick-feedback-button",
+        "mobile-menu-btn",
+        "quick-feedback-button",
+        "theme-toggle-btn",
+        "opening-detail",
+        "back-button",
+        "favorite-btn",
+        "mastery-percent",
+        "lines-discovered",
+        "lines-perfected",
+        "walkthrough-btn",
+        "learn-btn",
+        "practice-btn",
+        "play-btn",
+        "srs-enroll-row",
+        "srs-enroll-btn",
+        "narrate-overview",
+        "narrate-keyIdeas",
+        "middlegame-plans-section",
+        "plan-card-mp-pro-dubov-sveshnikov-a5",
+        "play-plan-mp-pro-dubov-sveshnikov-a5",
+        "plan-card-mp-pro-dubov-sveshnikov-f5",
+        "play-plan-mp-pro-dubov-sveshnikov-f5",
+        "model-games-empty",
+        "narrate-traps",
+        "train-traps-btn",
+        "trap-line-0",
+        "trap-walkthrough-0",
+        "trap-learn-0",
+        "trap-practice-0",
+        "trap-play-0",
+        "trap-line-1",
+        "trap-walkthrough-1",
+        "trap-learn-1",
+        "trap-practice-1",
+        "trap-play-1",
+        "narrate-warnings",
+        "variation-0",
+        "variation-walkthrough-0",
+        "variation-learn-0",
+        "variation-practice-0",
+        "variation-play-0",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-1",
+        "variation-walkthrough-1",
+        "variation-learn-1",
+        "variation-practice-1",
+        "variation-play-1",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-2",
+        "variation-walkthrough-2",
+        "variation-learn-2",
+        "variation-practice-2",
+        "variation-play-2",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "nav-home-tab",
+        "nav-openings-tab",
+        "nav-coach-home-tab",
+        "nav-tactics-tab",
+        "nav-weaknesses-tab",
+        "build-version-widget"
+      ],
+      "mainLine": {
+        "walkthrough": {
+          "mounted": true,
+          "plies": [
+            {
+              "ply": 1,
+              "expectedSan": "e4",
+              "label": "1. e4",
+              "text": "This is the Sicilian Sveshnikov, one of the most dynamic and theoretically rich openings in modern chess. White plays 1.e4, claiming central space. The Sveshnikov leads to complex positions where Black accepts structural weaknesses (the d5 "
+            },
+            {
+              "ply": 2,
+              "expectedSan": "c5",
+              "label": "1...c5",
+              "text": "Black plays 1...c5, the Sicilian Defense — fighting for d4 asymmetrically and ensuring an unbalanced game from move one. The c5 pawn will be exchanged for White's d4 pawn, giving Black the semi-open c-file and queenside pawn majority."
+            },
+            {
+              "ply": 3,
+              "expectedSan": "Nf3",
+              "label": "2. Nf3",
+              "text": "White develops the knight to f3, preparing the d4 central break. The Nf3 controls d4 and e5, and is the standard precursor to the Open Sicilian's center-opening strategy."
+            },
+            {
+              "ply": 4,
+              "expectedSan": "Nc6",
+              "label": "2...Nc6",
+              "text": "Black develops the knight to c6, adding pressure to d4 and preparing the Sveshnikov's defining ...e5 advance. The Nc6 is essential — it supports the e5 push and fights for central squares."
+            },
+            {
+              "ply": 5,
+              "expectedSan": "d4",
+              "label": "3. d4",
+              "text": "White plays d4, the defining move of the Open Sicilian. After the exchange, White gets a development lead, centralized pawn on d4, and open lines — while Black gets the c-file and an asymmetric pawn structure."
+            },
+            {
+              "ply": 6,
+              "expectedSan": "cxd4",
+              "label": "3...cxd4",
+              "text": "Black captures cxd4, opening the c-file for future queenside counterplay. This exchange is automatic in the Open Sicilian — allowing d5 or dxc5 would surrender too much central ground."
+            },
+            {
+              "ply": 7,
+              "expectedSan": "Nxd4",
+              "label": "4. Nxd4",
+              "text": "White recaptures Nxd4, centralizing the knight on d4 where it commands b5, c6, e6, and f5. The Nd4 is the anchor of White's Open Sicilian setup and will be challenged by Black's coming ...e5 thrust."
+            },
+            {
+              "ply": 8,
+              "expectedSan": "Nf6",
+              "label": "4...Nf6",
+              "text": "Black develops the knight to f6, attacking e4 with tempo and preparing the critical ...e5 advance. The Nf6 pressures the center immediately, forcing White to defend e4 before doing anything else."
+            },
+            {
+              "ply": 9,
+              "expectedSan": "Nc3",
+              "label": "5. Nc3",
+              "text": "White plays Nc3, defending e4 with the most active piece. The Nc3 controls d5 — which will become the key strategic outpost after Black's ...e5 creates a hole there."
+            },
+            {
+              "ply": 10,
+              "expectedSan": "e5",
+              "label": "5...e5",
+              "text": "Black plays the Sveshnikov's defining move: ...e5! This bold central thrust seizes space, kicks the Nd4, and establishes a strong pawn on e5. The cost is clear — the d5 square becomes a permanent outpost for White's pieces, and the d6 pawn "
+            },
+            {
+              "ply": 11,
+              "expectedSan": "Ndb5",
+              "label": "6. Ndb5",
+              "text": "White jumps to Ndb5, targeting the d6 weakness and threatening Nc7 forking the king and rook. The Nb5 is incredibly annoying for Black — it must be dealt with immediately, and every response has drawbacks. This is White's most critical move"
+            },
+            {
+              "ply": 12,
+              "expectedSan": "d6",
+              "label": "6...d6",
+              "text": "Black defends with d6, reinforcing the backward pawn and preventing Nd6+. The d6 pawn is the structural weakness that defines the Sveshnikov — it's backward on the open d-file and can never advance. But Black accepts this in exchange for th"
+            },
+            {
+              "ply": 13,
+              "expectedSan": "Bg5",
+              "label": "7. Bg5",
+              "text": "White plays Bg5, pinning the Nf6 to the queen and pressuring Black's key central defender. The strategic point is devastating: by exchanging Bxf6, White saddles Black with doubled f-pawns and removes the piece that contests d5. The entire S"
+            },
+            {
+              "ply": 14,
+              "expectedSan": "a6",
+              "label": "7...a6",
+              "text": "Black plays a6, challenging the Nb5 and forcing it to retreat. The a6 pawn also prepares ...b5 queenside expansion — a critical source of counterplay where Black gains space, develops the Bc8, and creates threats against White's queenside."
+            },
+            {
+              "ply": 15,
+              "expectedSan": "Na3",
+              "label": "8. Na3",
+              "text": "The knight retreats to a3 — normally a terrible square, but in the Sveshnikov this is well-established theory. From a3, the knight will reroute via c2 to e3 or d4, reaching active central positions. The detour costs time but is the only way"
+            },
+            {
+              "ply": 16,
+              "expectedSan": "b5",
+              "label": "8...b5",
+              "text": "Black pushes b5, seizing queenside space and preparing to develop the light-squared bishop. The b5 pawn controls a4 and c4 (restricting the Na3), supports a future ...Bb7 developing the bishop to the long diagonal, and is Black's main sourc"
+            },
+            {
+              "ply": 17,
+              "expectedSan": "Nd5",
+              "label": "9. Nd5",
+              "text": "White occupies the d5 outpost with Nd5 — this is the strategic payoff for allowing ...e5. The Nd5 is an absolute monster: centralized, supported by e4, and controlling c7, e7, b6, and f6. It's nearly impossible to dislodge and dominates the"
+            },
+            {
+              "ply": 18,
+              "expectedSan": "Be7",
+              "label": "9...Be7",
+              "text": ""
+            },
+            {
+              "ply": 19,
+              "expectedSan": "Bxf6",
+              "label": "10. Bxf6",
+              "text": ""
+            },
+            {
+              "ply": 20,
+              "expectedSan": "Bxf6",
+              "label": "10...Bxf6",
+              "text": ""
+            },
+            {
+              "ply": 21,
+              "expectedSan": "c4",
+              "label": "11. c4",
+              "text": ""
+            },
+            {
+              "ply": 22,
+              "expectedSan": "b4",
+              "label": "11...b4",
+              "text": ""
+            },
+            {
+              "ply": 23,
+              "expectedSan": "Nc2",
+              "label": "12. Nc2",
+              "text": ""
+            },
+            {
+              "ply": 24,
+              "expectedSan": "a5",
+              "label": "12...a5",
+              "text": ""
+            }
+          ]
+        },
+        "practice": {
+          "mounted": true,
+          "attempts": [
+            {
+              "index": 1,
+              "expectedSan": "c5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 3,
+              "expectedSan": "Nc6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 5,
+              "expectedSan": "cxd4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 7,
+              "expectedSan": "Nf6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 9,
+              "expectedSan": "e5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 11,
+              "expectedSan": "d6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 13,
+              "expectedSan": "a6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 15,
+              "expectedSan": "b5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 17,
+              "expectedSan": "Be7",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 19,
+              "expectedSan": "Bxf6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            }
+          ]
+        },
+        "play": {
+          "mounted": true,
+          "plies": 60,
+          "outcome": "aborted-at-60-plies",
+          "postReport": {
+            "correct": null,
+            "deviation": null,
+            "recommendation": null
+          }
+        }
+      },
+      "variations": [
+        {
+          "name": "Main Line with c4",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "White opens with the king's pawn. We're heading into the Sveshnikov, but this time with Dubov's c4 system — a sharp alternative to the standard 11.c3."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "c5",
+                "label": "1...c5",
+                "text": "The Sicilian Defense. Black fights for d4 and sets up the asymmetric pawn structure that defines the Sicilian."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": "White develops the knight toward d4, preparing the Open Sicilian."
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": "Black develops the knight to c6, putting immediate pressure on d4. This commits to the Sveshnikov/Kalashnikov family of lines rather than the Najdorf."
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": "White strikes in the center, opening the position for the Open Sicilian."
+              },
+              {
+                "ply": 6,
+                "expectedSan": "cxd4",
+                "label": "3...cxd4",
+                "text": "Black captures, creating the open c-file and asymmetric pawn structure that gives the Sicilian its dynamic character."
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxd4",
+                "label": "4. Nxd4",
+                "text": "White recaptures with the knight, centralizing it on d4 where it controls key squares across the board."
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": "Black develops to f6, attacking e4. Combined with ...Nc6, this prepares the trademark Sveshnikov move ...e5."
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nc3",
+                "label": "5. Nc3",
+                "text": "White defends e4 and develops. Now Black will play the defining Sveshnikov move."
+              },
+              {
+                "ply": 10,
+                "expectedSan": "e5",
+                "label": "5...e5",
+                "text": "The Sveshnikov! Black boldly pushes ...e5, gaining central space at the cost of creating a hole on d5. This is the fundamental Sveshnikov bargain — activity and space versus a structural weakness."
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Ndb5",
+                "label": "6. Ndb5",
+                "text": "White's knight leaps to b5, targeting the d6 and c7 squares. This is the main line — the knight eyes the weak d6 pawn and threatens to establish a powerful outpost."
+              },
+              {
+                "ply": 12,
+                "expectedSan": "d6",
+                "label": "6...d6",
+                "text": "Black defends with ...d6, supporting the e5 pawn and covering the c7 invasion square. The d6 pawn is a target but also a defender — this tension is at the heart of the Sveshnikov."
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bg5",
+                "label": "7. Bg5",
+                "text": "White pins the Nf6 against the queen, increasing the pressure on d5. If Black doesn't handle this carefully, White will dominate the d5 outpost."
+              },
+              {
+                "ply": 14,
+                "expectedSan": "a6",
+                "label": "7...a6",
+                "text": "Black plays ...a6, challenging the Nb5. White must decide where to place the knight — this move forces a critical decision in the position."
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Na3",
+                "label": "8. Na3",
+                "text": "The knight retreats to a3, a seemingly awkward square. However, it's heading for c2-e3 or will reroute via c4. The knight is temporarily offside but will find a good home."
+              },
+              {
+                "ply": 16,
+                "expectedSan": "b5",
+                "label": "8...b5",
+                "text": "Black expands on the queenside with ...b5, gaining space and restricting the Na3. This pawn also prepares ...Bb7 development and keeps the a3 knight sidelined."
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nd5",
+                "label": "9. Nd5",
+                "text": "White plants the knight on the dream d5 outpost. This is White's strategic anchor — the Nd5 controls f4, f6, e3, c3, b4, b6, e7, and c7."
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Be7",
+                "label": "9...Be7",
+                "text": "Black develops the bishop to e7, breaking the Bg5 pin on the Nf6. This is necessary before Black can challenge d5 with ...Nxd5 or play other moves without the pin causing problems."
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Bxf6",
+                "label": "10. Bxf6",
+                "text": "White captures on f6, exchanging the bishop for the knight. This damages Black's pawn structure but gives up the bishop pair."
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Bxf6",
+                "label": "10...Bxf6",
+                "text": "Black recaptures with the bishop, maintaining control of the dark squares. The bishop on f6 is a strong piece, supporting ...e5 and controlling the a1-h8 diagonal."
+              },
+              {
+                "ply": 21,
+                "expectedSan": "c4",
+                "label": "11. c4",
+                "text": "Dubov's move — White plays c4 directly instead of the standard c3. This immediately challenges Black's b5 pawn, tries to open lines on the queenside, and reinforces the Nd5 by securing the c4 square."
+              },
+              {
+                "ply": 22,
+                "expectedSan": "b4",
+                "label": "11...b4",
+                "text": "Black pushes ...b4, advancing the queenside pawns and gaining space. This drives the Na3 further offside and opens potential lines toward White's queenside."
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Nc2",
+                "label": "12. Nc2",
+                "text": "The knight reroutes to c2, heading for e3 where it will support the Nd5 and eye the f5 and d5 squares. The knight finally escapes the rim."
+              },
+              {
+                "ply": 24,
+                "expectedSan": "a5",
+                "label": "12...a5",
+                "text": "Black plays ...a5, continuing the queenside expansion. The a-pawn supports ...b4 and prepares ...a4, creating a dangerous passed pawn duo."
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "c5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "cxd4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "a6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "b5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "Be7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "Bxf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Chelyabinsk with gxf6",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Sveshnikov: 9.Bxf6 (Early Exchange) is an important variation of the Sicilian: Sveshnikov. White exchanges on f6 before Nd5, giving Black doubled f-pawns but the powerful bishop pair."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "c5",
+                "label": "1...c5",
+                "text": "Black replies with c5. This is the defining move of the Sveshnikov: 9.Bxf6 (Early Exchange) — it shapes the pawn structure and determines the resulting plans."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "cxd4",
+                "label": "3...cxd4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxd4",
+                "label": "4. Nxd4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nc3",
+                "label": "5. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "e5",
+                "label": "5...e5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Ndb5",
+                "label": "6. Ndb5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "d6",
+                "label": "6...d6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bg5",
+                "label": "7. Bg5",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "a6",
+                "label": "7...a6",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Na3",
+                "label": "8. Na3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "b5",
+                "label": "8...b5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Bxf6",
+                "label": "9. Bxf6",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "gxf6",
+                "label": "9...gxf6",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Nd5",
+                "label": "10. Nd5",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Bg7",
+                "label": "10...Bg7",
+                "text": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Bd3",
+                "label": "11. Bd3",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Ne7",
+                "label": "11...Ne7",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Nxe7",
+                "label": "12. Nxe7",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Qxe7",
+                "label": "12...Qxe7",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "c5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "cxd4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "a6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "b5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "gxf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "Bg7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "9...f5 Counter-attack",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Sveshnikov: Chelyabinsk Variation is an important variation of the Sicilian: Sveshnikov. White plays c4 to lock down the queenside and fight for d5 permanently."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "c5",
+                "label": "1...c5",
+                "text": "Black replies with c5. This is the defining move of the Sveshnikov: Chelyabinsk Variation — it shapes the pawn structure and determines the resulting plans."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "cxd4",
+                "label": "3...cxd4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxd4",
+                "label": "4. Nxd4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nc3",
+                "label": "5. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "e5",
+                "label": "5...e5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Ndb5",
+                "label": "6. Ndb5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "d6",
+                "label": "6...d6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bg5",
+                "label": "7. Bg5",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "a6",
+                "label": "7...a6",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Na3",
+                "label": "8. Na3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "b5",
+                "label": "8...b5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nd5",
+                "label": "9. Nd5",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Be7",
+                "label": "9...Be7",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Bxf6",
+                "label": "10. Bxf6",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Bxf6",
+                "label": "10...Bxf6",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "c3",
+                "label": "11. c3",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "O-O",
+                "label": "11...O-O",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Nc2",
+                "label": "12. Nc2",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Bg5",
+                "label": "12...Bg5",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "a4",
+                "label": "13. a4",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "bxa4",
+                "label": "13...bxa4",
+                "text": ""
+              },
+              {
+                "ply": 27,
+                "expectedSan": "Rxa4",
+                "label": "14. Rxa4",
+                "text": ""
+              },
+              {
+                "ply": 28,
+                "expectedSan": "a5",
+                "label": "14...a5",
+                "text": ""
+              },
+              {
+                "ply": 29,
+                "expectedSan": "Bc4",
+                "label": "15. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 30,
+                "expectedSan": "Rb8",
+                "label": "15...Rb8",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "c5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "cxd4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "a6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "b5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "Be7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "Bxf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "traps": [
+        {
+          "name": "Nd5 Nxd5 Central Control",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Sicilian: Sveshnikov, the Sveshnikov: ...f5 Breakthrough is a tactical pattern you should know. The ...f5 pawn break is the Sveshnikov's nuclear option."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "c5",
+                "label": "1...c5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "cxd4",
+                "label": "3...cxd4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxd4",
+                "label": "4. Nxd4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nc3",
+                "label": "5. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "e5",
+                "label": "5...e5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Ndb5",
+                "label": "6. Ndb5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "d6",
+                "label": "6...d6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bg5",
+                "label": "7. Bg5",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "a6",
+                "label": "7...a6",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Na3",
+                "label": "8. Na3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "b5",
+                "label": "8...b5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nd5",
+                "label": "9. Nd5",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Be7",
+                "label": "9...Be7",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Bxf6",
+                "label": "10. Bxf6",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Bxf6",
+                "label": "10...Bxf6",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "c3",
+                "label": "11. c3",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "O-O",
+                "label": "11...O-O",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Nc2",
+                "label": "12. Nc2",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Bg5",
+                "label": "12...Bg5",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "Nce3",
+                "label": "13. Nce3",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "c5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "cxd4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "a6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "b5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "Be7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "Bxf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "a6-b5 Knight Trap",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Sicilian: Sveshnikov, the Sveshnikov: b4-a5 Queenside Expansion is a tactical pattern you should know. Black pushes ...b4 to crack open the queenside."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "c5",
+                "label": "1...c5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "cxd4",
+                "label": "3...cxd4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxd4",
+                "label": "4. Nxd4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nc3",
+                "label": "5. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "e5",
+                "label": "5...e5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Ndb5",
+                "label": "6. Ndb5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "d6",
+                "label": "6...d6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bg5",
+                "label": "7. Bg5",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "a6",
+                "label": "7...a6",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Na3",
+                "label": "8. Na3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "b5",
+                "label": "8...b5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Bxf6",
+                "label": "9. Bxf6",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "gxf6",
+                "label": "9...gxf6",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Nd5",
+                "label": "10. Nd5",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Bg7",
+                "label": "10...Bg7",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Bd3",
+                "label": "11. Bd3",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Ne7",
+                "label": "11...Ne7",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Nxe7",
+                "label": "12. Nxe7",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Qxe7",
+                "label": "12...Qxe7",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "c3",
+                "label": "13. c3",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "f5",
+                "label": "13...f5",
+                "text": ""
+              },
+              {
+                "ply": 27,
+                "expectedSan": "Nc2",
+                "label": "14. Nc2",
+                "text": ""
+              },
+              {
+                "ply": 28,
+                "expectedSan": "O-O",
+                "label": "14...O-O",
+                "text": ""
+              },
+              {
+                "ply": 29,
+                "expectedSan": "O-O",
+                "label": "15. O-O",
+                "text": ""
+              },
+              {
+                "ply": 30,
+                "expectedSan": "f4",
+                "label": "15...f4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "c5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "cxd4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "a6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "b5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "gxf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "Bg7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "warnings": [],
+      "startedAt": "2026-05-18T22:11:53.505Z",
+      "finishedAt": "2026-05-18T22:20:08.311Z"
+    },
+    {
+      "openingId": "pro-niemann-anti-marshall",
+      "openingName": "Ruy Lopez Anti-Marshall (Niemann)",
+      "source": "pro",
+      "color": "white",
+      "eco": "C88",
+      "detailPageTestIds": [
+        "quick-feedback-button",
+        "mobile-menu-btn",
+        "quick-feedback-button",
+        "theme-toggle-btn",
+        "opening-detail",
+        "back-button",
+        "favorite-btn",
+        "mastery-percent",
+        "lines-discovered",
+        "lines-perfected",
+        "walkthrough-btn",
+        "learn-btn",
+        "practice-btn",
+        "play-btn",
+        "srs-enroll-row",
+        "srs-enroll-btn",
+        "narrate-overview",
+        "narrate-keyIdeas",
+        "middlegame-plans-section",
+        "plan-card-mp-pro-niemann-antimarshall-Nf5",
+        "play-plan-mp-pro-niemann-antimarshall-Nf5",
+        "plan-card-mp-pro-niemann-antimarshall-d5",
+        "play-plan-mp-pro-niemann-antimarshall-d5",
+        "model-games-empty",
+        "narrate-traps",
+        "train-traps-btn",
+        "trap-line-0",
+        "trap-walkthrough-0",
+        "trap-learn-0",
+        "trap-practice-0",
+        "trap-play-0",
+        "trap-line-1",
+        "trap-walkthrough-1",
+        "trap-learn-1",
+        "trap-practice-1",
+        "trap-play-1",
+        "narrate-warnings",
+        "variation-0",
+        "variation-walkthrough-0",
+        "variation-learn-0",
+        "variation-practice-0",
+        "variation-play-0",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-1",
+        "variation-walkthrough-1",
+        "variation-learn-1",
+        "variation-practice-1",
+        "variation-play-1",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-2",
+        "variation-walkthrough-2",
+        "variation-learn-2",
+        "variation-practice-2",
+        "variation-play-2",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "nav-home-tab",
+        "nav-openings-tab",
+        "nav-coach-home-tab",
+        "nav-tactics-tab",
+        "nav-weaknesses-tab",
+        "build-version-widget"
+      ],
+      "mainLine": {
+        "walkthrough": {
+          "mounted": true,
+          "plies": [
+            {
+              "ply": 1,
+              "expectedSan": "e4",
+              "label": "1. e4",
+              "text": "This is the Ruy Lopez, one of the oldest and most respected openings in chess. White plays 1.e4, placing a pawn on e4 to control d5 and f5 while opening the f1-a6 diagonal for the bishop. The entire Ruy Lopez strategy begins with this move."
+            },
+            {
+              "ply": 2,
+              "expectedSan": "e5",
+              "label": "1...e5",
+              "text": "Black responds with 1...e5, claiming symmetrical central space and controlling d4 and f4. This classical response leads to the Open Game — a direct fight for central control where piece activity and development speed are paramount."
+            },
+            {
+              "ply": 3,
+              "expectedSan": "Nf3",
+              "label": "2. Nf3",
+              "text": "White develops the knight to f3, attacking Black's e5 pawn and controlling the critical d4 square. The Nf3 prepares kingside castling and is the natural precursor to the Ruy Lopez's Bb5, which will come next."
+            },
+            {
+              "ply": 4,
+              "expectedSan": "Nc6",
+              "label": "2...Nc6",
+              "text": "Black defends e5 with the knight on c6, developing to an active central square. The Nc6 also controls d4, making it harder for White to achieve the central break. This is preferred over ...d6 because it doesn't block the dark-squared bishop"
+            },
+            {
+              "ply": 5,
+              "expectedSan": "Bb5",
+              "label": "3. Bb5",
+              "text": "This is the defining move of the Ruy Lopez. White places the bishop on b5, pinning the Nc6 that defends e5. Unlike the Italian Game's Bc4 (which targets f7 directly), the Bb5 puts long-term strategic pressure on Black's center by threatenin"
+            },
+            {
+              "ply": 6,
+              "expectedSan": "a6",
+              "label": "3...a6",
+              "text": ""
+            },
+            {
+              "ply": 7,
+              "expectedSan": "Ba4",
+              "label": "4. Ba4",
+              "text": ""
+            },
+            {
+              "ply": 8,
+              "expectedSan": "Nf6",
+              "label": "4...Nf6",
+              "text": ""
+            },
+            {
+              "ply": 9,
+              "expectedSan": "O-O",
+              "label": "5. O-O",
+              "text": ""
+            },
+            {
+              "ply": 10,
+              "expectedSan": "Be7",
+              "label": "5...Be7",
+              "text": ""
+            },
+            {
+              "ply": 11,
+              "expectedSan": "Re1",
+              "label": "6. Re1",
+              "text": ""
+            },
+            {
+              "ply": 12,
+              "expectedSan": "b5",
+              "label": "6...b5",
+              "text": ""
+            },
+            {
+              "ply": 13,
+              "expectedSan": "Bb3",
+              "label": "7. Bb3",
+              "text": ""
+            },
+            {
+              "ply": 14,
+              "expectedSan": "O-O",
+              "label": "7...O-O",
+              "text": ""
+            },
+            {
+              "ply": 15,
+              "expectedSan": "c3",
+              "label": "8. c3",
+              "text": ""
+            },
+            {
+              "ply": 16,
+              "expectedSan": "d5",
+              "label": "8...d5",
+              "text": ""
+            },
+            {
+              "ply": 17,
+              "expectedSan": "exd5",
+              "label": "9. exd5",
+              "text": ""
+            }
+          ]
+        },
+        "practice": {
+          "mounted": true,
+          "attempts": [
+            {
+              "index": 0,
+              "expectedSan": "e4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 2,
+              "expectedSan": "Nf3",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 4,
+              "expectedSan": "Bb5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 6,
+              "expectedSan": "Ba4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 8,
+              "expectedSan": "O-O",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 10,
+              "expectedSan": "Re1",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 12,
+              "expectedSan": "Bb3",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 14,
+              "expectedSan": "c3",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 16,
+              "expectedSan": "exd5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            }
+          ]
+        },
+        "play": {
+          "mounted": true,
+          "plies": 60,
+          "outcome": "aborted-at-60-plies",
+          "postReport": {
+            "correct": null,
+            "deviation": null,
+            "recommendation": null
+          }
+        }
+      },
+      "variations": [
+        {
+          "name": "Main Line 9.exd5 Nxd5",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Ruy Lopez begins with 1.e4, controlling the center."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black contests the center with 1...e5."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": "White develops the knight, attacking e5."
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": "Black defends e5 with the knight."
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Bb5",
+                "label": "3. Bb5",
+                "text": "The Ruy Lopez bishop. White creates long-term pressure on Black's queenside."
+              },
+              {
+                "ply": 6,
+                "expectedSan": "a6",
+                "label": "3...a6",
+                "text": "The Morphy Defense — Black challenges the bishop immediately, asking it to declare its intentions."
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Ba4",
+                "label": "4. Ba4",
+                "text": "The bishop retreats to a4, maintaining the pin on the knight."
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": "Black develops the knight to f6, pressuring e4."
+              },
+              {
+                "ply": 9,
+                "expectedSan": "O-O",
+                "label": "5. O-O",
+                "text": "White castles, side-stepping any ...b5 ideas and connecting the rooks."
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Be7",
+                "label": "5...Be7",
+                "text": "Black develops the bishop to a solid square, preparing to castle."
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Re1",
+                "label": "6. Re1",
+                "text": "The rook supports the e4 pawn, a standard Ruy Lopez maneuver."
+              },
+              {
+                "ply": 12,
+                "expectedSan": "b5",
+                "label": "6...b5",
+                "text": "Black expands on the queenside, pushing the bishop back and gaining space."
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bb3",
+                "label": "7. Bb3",
+                "text": "The bishop retreats to b3, where it targets the f7 pawn diagonally."
+              },
+              {
+                "ply": 14,
+                "expectedSan": "O-O",
+                "label": "7...O-O",
+                "text": "Black castles. Now the critical moment — White must choose how to handle Black's next move."
+              },
+              {
+                "ply": 15,
+                "expectedSan": "c3",
+                "label": "8. c3",
+                "text": "White prepares d4, supporting the center. This allows Black to play the Marshall Attack."
+              },
+              {
+                "ply": 16,
+                "expectedSan": "d5",
+                "label": "8...d5",
+                "text": "The Marshall Attack! Black sacrifices a pawn with ...d5, blowing open the center for attacking chances against White's king."
+              },
+              {
+                "ply": 17,
+                "expectedSan": "exd5",
+                "label": "9. exd5",
+                "text": "White accepts the pawn. Declining with d3 is safe but passive."
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Nxd5",
+                "label": "9...Nxd5",
+                "text": "Black recaptures with the knight, centralizing it powerfully."
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Nxe5",
+                "label": "10. Nxe5",
+                "text": "White takes the e5 pawn, going two pawns up materially. But Black's compensation is enormous."
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Nxe5",
+                "label": "10...Nxe5",
+                "text": "Black recaptures, opening the e-file for the rook."
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Rxe5",
+                "label": "11. Rxe5",
+                "text": "White's rook occupies the open e-file."
+              },
+              {
+                "ply": 22,
+                "expectedSan": "c6",
+                "label": "11...c6",
+                "text": "Black secures the Nd5 and prepares to develop the bishop with attacking ideas."
+              },
+              {
+                "ply": 23,
+                "expectedSan": "d4",
+                "label": "12. d4",
+                "text": "White pushes d4 to activate the pieces and challenge Black's center."
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Bd6",
+                "label": "12...Bd6",
+                "text": "The bishop develops aggressively to d6, targeting the h2 pawn and aiming at White's king."
+              },
+              {
+                "ply": 25,
+                "expectedSan": "Re1",
+                "label": "13. Re1",
+                "text": "The rook retreats to e1, a key defensive move. White consolidates the extra pawns."
+              },
+              {
+                "ply": 26,
+                "expectedSan": "Qh4",
+                "label": "13...Qh4",
+                "text": "The queen comes to h4 with direct threats. Black's pieces coordinate beautifully for a kingside attack."
+              },
+              {
+                "ply": 27,
+                "expectedSan": "g3",
+                "label": "14. g3",
+                "text": "White creates luft and defends h2. This weakens the kingside but is necessary."
+              },
+              {
+                "ply": 28,
+                "expectedSan": "Qh3",
+                "label": "14...Qh3",
+                "text": "The queen slides to h3, maintaining pressure. Caruana's preparation goes deep in this critical line — White must navigate carefully to hold the extra material."
+              },
+              {
+                "ply": 29,
+                "expectedSan": "Be3",
+                "label": "15. Be3",
+                "text": ""
+              },
+              {
+                "ply": 30,
+                "expectedSan": "Bg4",
+                "label": "15...Bg4",
+                "text": ""
+              },
+              {
+                "ply": 31,
+                "expectedSan": "Qd3",
+                "label": "16. Qd3",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "Bb5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Ba4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Re1",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "Bb3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "exd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 18,
+                "expectedSan": "Nxe5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Anti-Marshall with d3",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Ruy Lopez starts with 1.e4, controlling the center."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with 1...e5."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": "The knight develops to f3, attacking the e5 pawn."
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": "Black defends e5 with the knight."
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Bb5",
+                "label": "3. Bb5",
+                "text": "The Ruy Lopez! The bishop puts indirect pressure on e5 through the Nc6."
+              },
+              {
+                "ply": 6,
+                "expectedSan": "a6",
+                "label": "3...a6",
+                "text": "The Morphy Defense — challenging the bishop."
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Ba4",
+                "label": "4. Ba4",
+                "text": "The bishop stays active on the a4-e8 diagonal."
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": "Black develops and pressures e4."
+              },
+              {
+                "ply": 9,
+                "expectedSan": "O-O",
+                "label": "5. O-O",
+                "text": "White castles, connecting the rooks and preparing central action."
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Be7",
+                "label": "5...Be7",
+                "text": "Black develops the bishop, preparing to castle next move."
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Re1",
+                "label": "6. Re1",
+                "text": "The rook supports the e4 pawn. A standard Ruy Lopez setup move."
+              },
+              {
+                "ply": 12,
+                "expectedSan": "b5",
+                "label": "6...b5",
+                "text": "Black gains space on the queenside and pushes the bishop back."
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bb3",
+                "label": "7. Bb3",
+                "text": "The bishop retreats to b3, maintaining its diagonal pressure toward f7."
+              },
+              {
+                "ply": 14,
+                "expectedSan": "O-O",
+                "label": "7...O-O",
+                "text": "Black castles. This is the Closed Ruy Lopez tabiya — the starting point for many deep theoretical lines. Praggnanandhaa's repertoire covers the key ideas from this position."
+              },
+              {
+                "ply": 15,
+                "expectedSan": "c3",
+                "label": "8. c3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "d6",
+                "label": "8...d6",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "d4",
+                "label": "9. d4",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Bg4",
+                "label": "9...Bg4",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "d5",
+                "label": "10. d5",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Na5",
+                "label": "10...Na5",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Bc2",
+                "label": "11. Bc2",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "c6",
+                "label": "11...c6",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "dxc6",
+                "label": "12. dxc6",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Qc7",
+                "label": "12...Qc7",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "Nbd2",
+                "label": "13. Nbd2",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "Qxc6",
+                "label": "13...Qxc6",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "Bb5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Ba4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Re1",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "Bb3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 18,
+                "expectedSan": "d5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "8.h3 Anti-Marshall",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The game begins with 1.e4."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds symmetrically."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": "Knight develops, attacking e5."
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": "Black defends e5."
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Bb5",
+                "label": "3. Bb5",
+                "text": "The Ruy Lopez bishop creates long-term pressure."
+              },
+              {
+                "ply": 6,
+                "expectedSan": "a6",
+                "label": "3...a6",
+                "text": "The Morphy Defense."
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Ba4",
+                "label": "4. Ba4",
+                "text": "The bishop retreats, maintaining the tension."
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": "Black develops, pressuring e4."
+              },
+              {
+                "ply": 9,
+                "expectedSan": "O-O",
+                "label": "5. O-O",
+                "text": "White castles kingside."
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Be7",
+                "label": "5...Be7",
+                "text": "Black prepares to castle."
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Re1",
+                "label": "6. Re1",
+                "text": "The rook supports e4."
+              },
+              {
+                "ply": 12,
+                "expectedSan": "b5",
+                "label": "6...b5",
+                "text": "Black expands on the queenside."
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bb3",
+                "label": "7. Bb3",
+                "text": "The bishop settles on b3, targeting f7."
+              },
+              {
+                "ply": 14,
+                "expectedSan": "O-O",
+                "label": "7...O-O",
+                "text": "Black castles. The critical moment for the Anti-Marshall."
+              },
+              {
+                "ply": 15,
+                "expectedSan": "h3",
+                "label": "8. h3",
+                "text": "The Anti-Marshall move! By playing 8.h3 instead of 8.c3, White avoids the Marshall Attack entirely. Black cannot play ...d5 effectively here."
+              },
+              {
+                "ply": 16,
+                "expectedSan": "Bb7",
+                "label": "8...Bb7",
+                "text": "Black develops the bishop to b7, a solid setup. Without the Marshall option, Black opts for a slower plan."
+              },
+              {
+                "ply": 17,
+                "expectedSan": "d3",
+                "label": "9. d3",
+                "text": "Dubov's approach — the quiet d3 setup instead of d4. This creates a slow positional battle where White maneuvers with Nbd2, a4, and c3."
+              },
+              {
+                "ply": 18,
+                "expectedSan": "d6",
+                "label": "9...d6",
+                "text": "Black plays ...d6, solidifying the center. The position is closed and strategic."
+              },
+              {
+                "ply": 19,
+                "expectedSan": "a3",
+                "label": "10. a3",
+                "text": "White prevents ...Nb4 and prepares a slow queenside expansion with b4."
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Na5",
+                "label": "10...Na5",
+                "text": "Black reroutes the knight toward c4 via a5, targeting the weak b3 bishop."
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Ba2",
+                "label": "11. Ba2",
+                "text": "The bishop retreats to a2, staying on the a2-g8 diagonal while giving the knight c4 access."
+              },
+              {
+                "ply": 22,
+                "expectedSan": "c5",
+                "label": "11...c5",
+                "text": "Black strikes in the center with ...c5, gaining space and challenging White's d3-e4 structure."
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Nbd2",
+                "label": "12. Nbd2",
+                "text": "White develops the knight to d2, supporting e4 and preparing Nf1-g3 or Nf1-e3."
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Nc6",
+                "label": "12...Nc6",
+                "text": "The knight returns to c6, repositioning for central play. The position is rich and maneuvering-heavy — typical of Dubov's Anti-Marshall approach."
+              },
+              {
+                "ply": 25,
+                "expectedSan": "Nf1",
+                "label": "13. Nf1",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "Qc7",
+                "label": "13...Qc7",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "Bb5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Ba4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Re1",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "Bb3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "h3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "d3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 18,
+                "expectedSan": "a3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "traps": [
+        {
+          "name": "Marshall d5 Prevented",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Ruy Lopez begins with 1.e4, controlling the center."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black contests the center with 1...e5."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": "White develops the knight, attacking e5."
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": "Black defends e5 with the knight."
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Bb5",
+                "label": "3. Bb5",
+                "text": "The Ruy Lopez bishop. White creates long-term pressure on Black's queenside."
+              },
+              {
+                "ply": 6,
+                "expectedSan": "a6",
+                "label": "3...a6",
+                "text": "The Morphy Defense — Black challenges the bishop immediately, asking it to declare its intentions."
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Ba4",
+                "label": "4. Ba4",
+                "text": "The bishop retreats to a4, maintaining the pin on the knight."
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": "Black develops the knight to f6, pressuring e4."
+              },
+              {
+                "ply": 9,
+                "expectedSan": "O-O",
+                "label": "5. O-O",
+                "text": "White castles, side-stepping any ...b5 ideas and connecting the rooks."
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Be7",
+                "label": "5...Be7",
+                "text": "Black develops the bishop to a solid square, preparing to castle."
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Re1",
+                "label": "6. Re1",
+                "text": "The rook supports the e4 pawn, a standard Ruy Lopez maneuver."
+              },
+              {
+                "ply": 12,
+                "expectedSan": "b5",
+                "label": "6...b5",
+                "text": "Black expands on the queenside, pushing the bishop back and gaining space."
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bb3",
+                "label": "7. Bb3",
+                "text": "The bishop retreats to b3, where it targets the f7 pawn diagonally."
+              },
+              {
+                "ply": 14,
+                "expectedSan": "O-O",
+                "label": "7...O-O",
+                "text": "Black castles. Now the critical moment — White must choose how to handle Black's next move."
+              },
+              {
+                "ply": 15,
+                "expectedSan": "c3",
+                "label": "8. c3",
+                "text": "White prepares d4, supporting the center. This allows Black to play the Marshall Attack."
+              },
+              {
+                "ply": 16,
+                "expectedSan": "d5",
+                "label": "8...d5",
+                "text": "The Marshall Attack! Black sacrifices a pawn with ...d5, blowing open the center for attacking chances against White's king."
+              },
+              {
+                "ply": 17,
+                "expectedSan": "exd5",
+                "label": "9. exd5",
+                "text": "White accepts the pawn. Declining with d3 is safe but passive."
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Nxd5",
+                "label": "9...Nxd5",
+                "text": "Black recaptures with the knight, centralizing it powerfully."
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Nxe5",
+                "label": "10. Nxe5",
+                "text": "White takes the e5 pawn, going two pawns up materially. But Black's compensation is enormous."
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Nxe5",
+                "label": "10...Nxe5",
+                "text": "Black recaptures, opening the e-file for the rook."
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Rxe5",
+                "label": "11. Rxe5",
+                "text": "White's rook occupies the open e-file."
+              },
+              {
+                "ply": 22,
+                "expectedSan": "c6",
+                "label": "11...c6",
+                "text": "Black secures the Nd5 and prepares to develop the bishop with attacking ideas."
+              },
+              {
+                "ply": 23,
+                "expectedSan": "d4",
+                "label": "12. d4",
+                "text": "White pushes d4 to activate the pieces and challenge Black's center."
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Bd6",
+                "label": "12...Bd6",
+                "text": "The bishop develops aggressively to d6, targeting the h2 pawn and aiming at White's king."
+              },
+              {
+                "ply": 25,
+                "expectedSan": "Re1",
+                "label": "13. Re1",
+                "text": "The rook retreats to e1, a key defensive move. White consolidates the extra pawns."
+              },
+              {
+                "ply": 26,
+                "expectedSan": "Qh4",
+                "label": "13...Qh4",
+                "text": "The queen comes to h4 with direct threats. Black's pieces coordinate beautifully for a kingside attack."
+              },
+              {
+                "ply": 27,
+                "expectedSan": "g3",
+                "label": "14. g3",
+                "text": "White creates luft and defends h2. This weakens the kingside but is necessary."
+              },
+              {
+                "ply": 28,
+                "expectedSan": "Qh3",
+                "label": "14...Qh3",
+                "text": "The queen slides to h3, maintaining pressure. Caruana's preparation goes deep in this critical line — White must navigate carefully to hold the extra material."
+              },
+              {
+                "ply": 29,
+                "expectedSan": "Be3",
+                "label": "15. Be3",
+                "text": ""
+              },
+              {
+                "ply": 30,
+                "expectedSan": "Bg4",
+                "label": "15...Bg4",
+                "text": ""
+              },
+              {
+                "ply": 31,
+                "expectedSan": "Qd3",
+                "label": "16. Qd3",
+                "text": ""
+              },
+              {
+                "ply": 32,
+                "expectedSan": "Rae8",
+                "label": "16...Rae8",
+                "text": ""
+              },
+              {
+                "ply": 33,
+                "expectedSan": "Nd2",
+                "label": "17. Nd2",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "Bb5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Ba4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Re1",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "Bb3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "exd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 18,
+                "expectedSan": "Nxe5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Premature d5 Punished",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Ruy Lopez starts with 1.e4, controlling the center."
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with 1...e5."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": "The knight develops to f3, attacking the e5 pawn."
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nc6",
+                "label": "2...Nc6",
+                "text": "Black defends e5 with the knight."
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Bb5",
+                "label": "3. Bb5",
+                "text": "The Ruy Lopez! The bishop puts indirect pressure on e5 through the Nc6."
+              },
+              {
+                "ply": 6,
+                "expectedSan": "a6",
+                "label": "3...a6",
+                "text": "The Morphy Defense — challenging the bishop."
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Ba4",
+                "label": "4. Ba4",
+                "text": "The bishop stays active on the a4-e8 diagonal."
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": "Black develops and pressures e4."
+              },
+              {
+                "ply": 9,
+                "expectedSan": "O-O",
+                "label": "5. O-O",
+                "text": "White castles, connecting the rooks and preparing central action."
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Be7",
+                "label": "5...Be7",
+                "text": "Black develops the bishop, preparing to castle next move."
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Re1",
+                "label": "6. Re1",
+                "text": "The rook supports the e4 pawn. A standard Ruy Lopez setup move."
+              },
+              {
+                "ply": 12,
+                "expectedSan": "b5",
+                "label": "6...b5",
+                "text": "Black gains space on the queenside and pushes the bishop back."
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bb3",
+                "label": "7. Bb3",
+                "text": "The bishop retreats to b3, maintaining its diagonal pressure toward f7."
+              },
+              {
+                "ply": 14,
+                "expectedSan": "O-O",
+                "label": "7...O-O",
+                "text": "Black castles. This is the Closed Ruy Lopez tabiya — the starting point for many deep theoretical lines. Praggnanandhaa's repertoire covers the key ideas from this position."
+              },
+              {
+                "ply": 15,
+                "expectedSan": "c3",
+                "label": "8. c3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "d5",
+                "label": "8...d5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "exd5",
+                "label": "9. exd5",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "e4",
+                "label": "9...e4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "Bb5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Ba4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Re1",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "Bb3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "exd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "warnings": [],
+      "startedAt": "2026-05-18T22:20:08.327Z",
+      "finishedAt": "2026-05-18T22:28:19.845Z"
+    },
+    {
+      "openingId": "pro-naroditsky-alapin",
+      "openingName": "Alapin Sicilian (Naroditsky)",
+      "source": "pro",
+      "color": "white",
+      "eco": "B22",
+      "detailPageTestIds": [
+        "quick-feedback-button",
+        "mobile-menu-btn",
+        "quick-feedback-button",
+        "theme-toggle-btn",
+        "opening-detail",
+        "back-button",
+        "favorite-btn",
+        "mastery-percent",
+        "lines-discovered",
+        "lines-perfected",
+        "walkthrough-btn",
+        "learn-btn",
+        "practice-btn",
+        "play-btn",
+        "srs-enroll-row",
+        "srs-enroll-btn",
+        "narrate-overview",
+        "narrate-keyIdeas",
+        "middlegame-plans-section",
+        "plan-card-mp-pro-naroditsky-alapin-e5",
+        "play-plan-mp-pro-naroditsky-alapin-e5",
+        "plan-card-mp-pro-naroditsky-alapin-rooks",
+        "play-plan-mp-pro-naroditsky-alapin-rooks",
+        "model-games-empty",
+        "narrate-traps",
+        "narrate-warnings",
+        "variation-0",
+        "variation-walkthrough-0",
+        "variation-learn-0",
+        "variation-practice-0",
+        "variation-play-0",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-1",
+        "variation-walkthrough-1",
+        "variation-learn-1",
+        "variation-practice-1",
+        "variation-play-1",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-2",
+        "variation-walkthrough-2",
+        "variation-learn-2",
+        "variation-practice-2",
+        "variation-play-2",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "nav-home-tab",
+        "nav-openings-tab",
+        "nav-coach-home-tab",
+        "nav-tactics-tab",
+        "nav-weaknesses-tab",
+        "build-version-widget"
+      ],
+      "mainLine": {
+        "walkthrough": {
+          "mounted": true,
+          "plies": [
+            {
+              "ply": 1,
+              "expectedSan": "e4",
+              "label": "1. e4",
+              "text": "We're opening with the king's pawn, immediately claiming the central squares d5 and f5 while freeing our light-squared bishop and queen for future development. This classical first move puts immediate pressure on Black to respond to our cen"
+            },
+            {
+              "ply": 2,
+              "expectedSan": "c5",
+              "label": "1...c5",
+              "text": "Black immediately signals their intention to play the Sicilian Defense, one of the most popular and combative responses to 1.e4. Instead of meeting our central advance symmetrically, our opponent strikes at our center from the side, specifi"
+            },
+            {
+              "ply": 3,
+              "expectedSan": "c3",
+              "label": "2. c3",
+              "text": "We're entering the Alapin Variation of the Sicilian, a solid and straightforward system that prepares d2-d4 to establish our ideal pawn center. This move supports the crucial d4 advance and gives us a classical pawn structure where we can f"
+            },
+            {
+              "ply": 4,
+              "expectedSan": "Nf6",
+              "label": "2...Nf6",
+              "text": ""
+            },
+            {
+              "ply": 5,
+              "expectedSan": "e5",
+              "label": "3. e5",
+              "text": ""
+            },
+            {
+              "ply": 6,
+              "expectedSan": "Nd5",
+              "label": "3...Nd5",
+              "text": ""
+            },
+            {
+              "ply": 7,
+              "expectedSan": "d4",
+              "label": "4. d4",
+              "text": ""
+            },
+            {
+              "ply": 8,
+              "expectedSan": "cxd4",
+              "label": "4...cxd4",
+              "text": ""
+            },
+            {
+              "ply": 9,
+              "expectedSan": "cxd4",
+              "label": "5. cxd4",
+              "text": ""
+            },
+            {
+              "ply": 10,
+              "expectedSan": "d6",
+              "label": "5...d6",
+              "text": ""
+            },
+            {
+              "ply": 11,
+              "expectedSan": "Nf3",
+              "label": "6. Nf3",
+              "text": ""
+            },
+            {
+              "ply": 12,
+              "expectedSan": "Nc6",
+              "label": "6...Nc6",
+              "text": ""
+            },
+            {
+              "ply": 13,
+              "expectedSan": "Bc4",
+              "label": "7. Bc4",
+              "text": ""
+            },
+            {
+              "ply": 14,
+              "expectedSan": "Nb6",
+              "label": "7...Nb6",
+              "text": ""
+            },
+            {
+              "ply": 15,
+              "expectedSan": "Bb3",
+              "label": "8. Bb3",
+              "text": ""
+            },
+            {
+              "ply": 16,
+              "expectedSan": "dxe5",
+              "label": "8...dxe5",
+              "text": ""
+            },
+            {
+              "ply": 17,
+              "expectedSan": "dxe5",
+              "label": "9. dxe5",
+              "text": ""
+            },
+            {
+              "ply": 18,
+              "expectedSan": "Qxd1+",
+              "label": "9...Qxd1+",
+              "text": ""
+            },
+            {
+              "ply": 19,
+              "expectedSan": "Bxd1",
+              "label": "10. Bxd1",
+              "text": ""
+            },
+            {
+              "ply": 20,
+              "expectedSan": "Nc4",
+              "label": "10...Nc4",
+              "text": ""
+            },
+            {
+              "ply": 21,
+              "expectedSan": "Ba4",
+              "label": "11. Ba4",
+              "text": ""
+            },
+            {
+              "ply": 22,
+              "expectedSan": "Bd7",
+              "label": "11...Bd7",
+              "text": ""
+            },
+            {
+              "ply": 23,
+              "expectedSan": "Bxc6",
+              "label": "12. Bxc6",
+              "text": ""
+            },
+            {
+              "ply": 24,
+              "expectedSan": "Bxc6",
+              "label": "12...Bxc6",
+              "text": ""
+            },
+            {
+              "ply": 25,
+              "expectedSan": "Nbd2",
+              "label": "13. Nbd2",
+              "text": ""
+            },
+            {
+              "ply": 26,
+              "expectedSan": "Nb6",
+              "label": "13...Nb6",
+              "text": ""
+            },
+            {
+              "ply": 27,
+              "expectedSan": "O-O",
+              "label": "14. O-O",
+              "text": ""
+            },
+            {
+              "ply": 28,
+              "expectedSan": "e6",
+              "label": "14...e6",
+              "text": ""
+            }
+          ]
+        },
+        "practice": {
+          "mounted": true,
+          "attempts": [
+            {
+              "index": 0,
+              "expectedSan": "e4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 2,
+              "expectedSan": "c3",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 4,
+              "expectedSan": "e5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 6,
+              "expectedSan": "d4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 8,
+              "expectedSan": "cxd4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 10,
+              "expectedSan": "Nf3",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 12,
+              "expectedSan": "Bc4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 14,
+              "expectedSan": "Bb3",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 16,
+              "expectedSan": "dxe5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 18,
+              "expectedSan": "Bxd1",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            }
+          ]
+        },
+        "play": {
+          "mounted": true,
+          "plies": 60,
+          "outcome": "aborted-at-60-plies",
+          "postReport": {
+            "correct": null,
+            "deviation": null,
+            "recommendation": null
+          }
+        }
+      },
+      "variations": [
+        {
+          "name": "Main Line 2...Nf6",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "c5",
+                "label": "1...c5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "c3",
+                "label": "2. c3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "e5",
+                "label": "3. e5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nd5",
+                "label": "3...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "d4",
+                "label": "4. d4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxd4",
+                "label": "4...cxd4",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "cxd4",
+                "label": "5. cxd4",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "d6",
+                "label": "5...d6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nf3",
+                "label": "6. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Nc6",
+                "label": "6...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bc4",
+                "label": "7. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Nb6",
+                "label": "7...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Bb3",
+                "label": "8. Bb3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "dxe5",
+                "label": "8...dxe5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "dxe5",
+                "label": "9. dxe5",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Qxd1+",
+                "label": "9...Qxd1+",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Bxd1",
+                "label": "10. Bxd1",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Nc4",
+                "label": "10...Nc4",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Ba4",
+                "label": "11. Ba4",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Bd7",
+                "label": "11...Bd7",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Bxc6",
+                "label": "12. Bxc6",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Bxc6",
+                "label": "12...Bxc6",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "Nbd2",
+                "label": "13. Nbd2",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "Nb6",
+                "label": "13...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 27,
+                "expectedSan": "O-O",
+                "label": "14. O-O",
+                "text": ""
+              },
+              {
+                "ply": 28,
+                "expectedSan": "e6",
+                "label": "14...e6",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "cxd4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "Bb3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "dxe5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 18,
+                "expectedSan": "Bxd1",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "2...d5 Center Counter",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "c5",
+                "label": "1...c5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "c3",
+                "label": "2. c3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "d5",
+                "label": "2...d5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "exd5",
+                "label": "3. exd5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Qxd5",
+                "label": "3...Qxd5",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "d4",
+                "label": "4. d4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nf6",
+                "label": "4...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nf3",
+                "label": "5. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "e6",
+                "label": "5...e6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Na3",
+                "label": "6. Na3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Qd8",
+                "label": "6...Qd8",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Nc4",
+                "label": "7. Nc4",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Be7",
+                "label": "7...Be7",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Be2",
+                "label": "8. Be2",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "O-O",
+                "label": "8...O-O",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "O-O",
+                "label": "9. O-O",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "b6",
+                "label": "9...b6",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Bf4",
+                "label": "10. Bf4",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Bb7",
+                "label": "10...Bb7",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Qb3",
+                "label": "11. Qb3",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Nbd7",
+                "label": "11...Nbd7",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "a4",
+                "label": "12. a4",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Bd5",
+                "label": "12...Bd5",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "a5",
+                "label": "13. a5",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "cxd4",
+                "label": "13...cxd4",
+                "text": ""
+              },
+              {
+                "ply": 27,
+                "expectedSan": "cxd4",
+                "label": "14. cxd4",
+                "text": ""
+              },
+              {
+                "ply": 28,
+                "expectedSan": "bxa5",
+                "label": "14...bxa5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "exd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Na3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "Nc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "Be2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 18,
+                "expectedSan": "Bf4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "2...e6 French Structure",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "c5",
+                "label": "1...c5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "c3",
+                "label": "2. c3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "e6",
+                "label": "2...e6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d5",
+                "label": "3...d5",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "e5",
+                "label": "4. e5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nc6",
+                "label": "4...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nf3",
+                "label": "5. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bd7",
+                "label": "5...Bd7",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Be2",
+                "label": "6. Be2",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "cxd4",
+                "label": "6...cxd4",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "cxd4",
+                "label": "7. cxd4",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Nge7",
+                "label": "7...Nge7",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "O-O",
+                "label": "8. O-O",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "Nf5",
+                "label": "8...Nf5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nc3",
+                "label": "9. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Be7",
+                "label": "9...Be7",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "g4",
+                "label": "10. g4",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Nh4",
+                "label": "10...Nh4",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Nxh4",
+                "label": "11. Nxh4",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Bxh4",
+                "label": "11...Bxh4",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Be3",
+                "label": "12. Be3",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "O-O",
+                "label": "12...O-O",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "f4",
+                "label": "13. f4",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "f6",
+                "label": "13...f6",
+                "text": ""
+              },
+              {
+                "ply": 27,
+                "expectedSan": "Qd2",
+                "label": "14. Qd2",
+                "text": ""
+              },
+              {
+                "ply": 28,
+                "expectedSan": "fxe5",
+                "label": "14...fxe5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Be2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "cxd4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "Nc3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 18,
+                "expectedSan": "g4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "traps": [],
+      "warnings": [],
+      "startedAt": "2026-05-18T22:28:19.860Z",
+      "finishedAt": "2026-05-18T22:34:29.937Z"
     }
   ],
   "totalEvents": 0
