@@ -3566,7 +3566,7 @@
       "pgn": "d4 d5 Bf4 Nf6 Nf3 e6 e3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 O-O Bb7",
       "color": "white",
       "style": "Solid, System-Based",
-      "overview": "Alongside the Stafford Gambit, the London System is Eric Rosen's other signature opening — a calm, principled foundation he leans on when he wants positional chess rather than tactical fireworks. The London is a complete system that plays itself: Bf4 + e3 + c3 + Nbd2 + Bd3 every game, regardless of what Black does. Rosen teaches it as the perfect first opening for club players because it lets you focus on middlegame plans instead of memorising theory.",
+      "overview": "Alongside the Stafford Gambit, the London System is Eric Rosen's other signature opening — a calm, principled foundation he leans on when he wants positional chess. The London takes its name from the 1922 London tournament where the world's best players experimented with it; Capablanca employed it occasionally; Petrosian and Botvinnik used it as ultra-solid drawing weapons. The modern boom came when Carlsen began playing it at the elite level in the 2010s — proving systems-based openings could compete with sharp theoretical lines. Rosen teaches it as the perfect first opening for club players because it lets you focus on middlegame plans instead of memorising theory.",
       "keyIdeas": [
         "Build the exact same setup every game: Bf4 (before e3 so the bishop isn't hemmed in), then e3 + c3 + Bd3 + Nbd2 + O-O — this consistency lets you focus on middlegame plans rather than opening prep",
         "Bf4 controls the e5 square — preventing Black from establishing a strong central pawn or knight outpost there is the London's core positional theme",
@@ -3608,20 +3608,20 @@
       "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6",
       "color": "black",
       "style": "Gambit, Trappy",
-      "overview": "The Stafford Gambit is Eric Rosen's signature weapon. After Nxe5 Nc6 (instead of the standard d6), Black sacrifices a pawn for explosive tactical play. The traps are everywhere — most players at club level fall into one of them. Rosen has scored hundreds of brilliant wins with this gambit, proving that even theoretically dubious openings can be devastatingly effective when played with creativity.",
+      "overview": "The Stafford Gambit is Eric Rosen's signature weapon — and the opening he turned from a forgotten footnote into a YouTube phenomenon. Invented by American master Joseph Stafford in the 1950s and dismissed as unsound for nearly 70 years, the gambit lived in obscurity until Rosen began posting Stafford trap videos in 2018-2019; his content quickly accumulated millions of views and made the opening a household name among online chess players. After 1.e4 e5 2.Nf3 Nf6 3.Nxe5 Nc6 (instead of the standard 3...d6), Black sacrifices a pawn for explosive tactical play. The traps are everywhere — most players at club level fall into one of them. Rosen has scored hundreds of brilliant wins with this gambit, proving that even theoretically dubious openings can be devastating when played with creativity.",
       "keyIdeas": [
-        "Sacrifice the e5 pawn for rapid development and tactical chances — completing development before committing to a plan gives maximum flexibility",
-        "After Nxc6 dxc6, Black has open lines for pieces and threats against f2 — a key strategic concept in Stafford Gambit",
-        "Look for Bc5, Ng4, and Qh4 patterns to create mating threats — a key strategic concept in Stafford Gambit",
-        "Play for tricks and complications — the Stafford is not about equality — a key strategic concept in Stafford Gambit"
+        "Sacrifice the e5-pawn for rapid development and tactical chances. The gambit's whole philosophy: tempo > material when the opponent doesn't know the theory.",
+        "After 4.Nxc6 dxc6 (Black recaptures with the d-pawn — keeping the c-pawn structure), Black has open lines for the queen and bishop AND immediate threats against f2.",
+        "Bc5 + …Ng4 + …Qh4 is the standard attacking battery. Three pieces aimed at f2 with the queen joining via the h4-square — opponents who haven't studied the antidote get mated quickly.",
+        "Play for tricks and complications. The Stafford isn't about equality — it's about WINNING with Black on move 12 because your opponent walks into a trap."
       ],
       "traps": [
-        "After Nxc6 dxc6 Nc3?? Nd4! wins immediately with Nf3 fork threats",
-        "If White plays d3, Bc5 followed by Ng4 creates irresistible pressure on f2"
+        "After 4.Nxc6 dxc6 5.Nc3?? (a natural-looking developing move), Black plays 5...Nd4! threatening …Nxf3+ AND …Nxc2+ forks. White loses material immediately.",
+        "If White plays the calm 5.d3, Black plays 5...Bc5 followed by …Ng4 — the pressure on f2 builds, and if White EVER plays Bg5 (the natural pin), Black's 'Oh No My Queen' resource (Bxf2+ + Bg4+) leads to either mate or queen capture."
       ],
       "warnings": [
-        "The Stafford is objectively dubious — use it for fun and in blitz, not serious games",
-        "If White knows the refutation, Black can be worse — have a backup plan"
+        "The Stafford is objectively DUBIOUS. With accurate play (d3 + Be2 + O-O — Levy's refutation video), White is up a clean pawn for nothing. Use the gambit for fun and blitz, not serious games.",
+        "If White knows the refutation (specifically d3 not d4!), Black has no compensation. Have a backup opening ready for prepared opponents."
       ],
       "variations": [
         {
@@ -3656,20 +3656,20 @@
       "pgn": "d4 e5",
       "color": "black",
       "style": "Gambit, Surprise",
-      "overview": "The Englund Gambit is Eric Rosen's surprise weapon against 1.d4. Most d4 players have never studied this opening, which gives Black a huge practical advantage. After dxe5, Black develops rapidly and sets traps that claim countless victims. It is objectively unsound, but in the hands of a trap artist like Rosen, it is surprisingly effective.",
+      "overview": "The Englund Gambit is Eric Rosen's surprise weapon against 1.d4 — and one of chess's most theoretically dubious openings. Named after Swedish master Fritz Englund who promoted the line in the early 1900s (he organised a 1932 tournament where 1.d4 e5 was required from all Black players!), the gambit was widely dismissed as unsound for a century. Modern players use it almost exclusively as a surprise weapon: most 1.d4 players have never studied 1.d4 e5 because every reasonable opening book tells you the move is bad. That ignorance is exactly Black's edge — the traps are so well-hidden that even strong opponents fall for them. Rosen has built half of his YouTube channel on Englund Gambit highlight reels.",
       "keyIdeas": [
-        "Sacrifice the e5 pawn to take White out of their preparation — this structural feature shapes all future strategic decisions in the position",
-        "Develop quickly with Nc6, Qe7, and aim for piece activity — completing development before committing to a plan gives maximum flexibility",
-        "Target the e5 pawn and f2 square with tactical tricks — maintaining this pressure forces the opponent to defend passively",
-        "Create chaos in a position White has never studied — a key strategic concept in Englund Gambit"
+        "Sacrifice the e5-pawn to take White out of preparation. The gambit's whole strategic point: you've never studied the Englund either, but Black has — that asymmetry is the gambit's strength.",
+        "Develop quickly with …Nc6 + …Qe7 + …Bb4+ aiming at f2 and the white king. Speed matters more than material.",
+        "Target the e5-pawn (which White has now grabbed) and the f2-square with tactical tricks. The Qb4+ + Qxb2 + Nb5 attacking patterns are the Englund's main scoring tactic.",
+        "Create chaos. The Englund's value isn't theoretical — it's PSYCHOLOGICAL. White players who get 1.d4 e5 on the board often play below their level because they're confused."
       ],
       "traps": [
-        "After dxe5 Nc6 Nf3 Qe7, Black threatens to recover the pawn immediately",
-        "The trap f3?? Qh4+ g3 Qxg3 is a classic Englund smothered mate pattern"
+        "After 2.dxe5 Nc6 3.Nf3 Qe7, Black threatens to recover the pawn immediately AND creates tactical complications. White must play very precisely (4.Bf4 + 5.Nbd2 sequence) to maintain the extra pawn.",
+        "The classic Englund Smothered Mate: 1.d4 e5 2.dxe5 Nc6 3.Nf3 Qe7 4.Bf4 Qb4+ 5.Bd2 Qxb2 6.Bc3 Bb4 7.Qd2 Bxc3 8.Qxc3 Qc1#! — Black mates on c1 with the queen. White must play 4.Nc3 (instead of 4.Bf4) to avoid this."
       ],
       "warnings": [
-        "The Englund is objectively bad — White is better with correct play",
-        "Only use as a surprise weapon in blitz — switch to something sound for classical"
+        "The Englund is objectively BAD. With accurate play (3.Nf3 + 4.Bf4 + Nbd2 reroute), White is up a pawn with a clean position.",
+        "Only use as a surprise weapon in blitz/online play. For classical chess, switch to something sound — the Englund's tricks don't survive 30-minute time controls against prepared opponents."
       ],
       "variations": [
         {
@@ -3711,7 +3711,7 @@
       "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5",
       "color": "white",
       "style": "Positional, Classical",
-      "overview": "Anna Cramling's flagship opening, taught alongside her mother GM Pia Cramling in her Chessable course 'Anna Cramling's 1.d4' (Parts 1 & 2). The Queen's Gambit is the heart of her published repertoire — she covers the main Queen's Gambit Declined when Black answers 1...d5, plus weapons against the Slav, Albin Countergambit, and Indian setups (Nimzo, KID) in Part 2. Anna's approach is the same positional, principle-first chess her mother is known for.",
+      "overview": "Anna Cramling's flagship opening, taught alongside her mother GM Pia Cramling in her Chessable course 'Anna Cramling's 1.d4' (Parts 1 & 2). The Queen's Gambit itself is one of chess's oldest analyzed openings — documented in 1490s Spanish manuscripts, refined by Wilhelm Steinitz in the 1880s, made famous by Capablanca who never lost a QGD game with Black through his career, and immortalized to a new generation by Netflix's 'The Queen's Gambit' (2020). Anna covers the main QGD when Black answers 1...d5, plus weapons against the Slav, Albin Countergambit, and Indian setups (Nimzo, KID) in Part 2. Her approach is the same positional, principle-first chess her mother is known for.",
       "keyIdeas": [
         "Pressure d5 with c4 immediately — the Queen's Gambit's whole purpose is to give Black an awkward choice: hold d5 with ...e6 (locking the c8-bishop in) or release central tension early",
         "Build the classical pawn triangle d4/c4/e3 + develop pieces to natural squares (Nc3, Nf3, Bg5, Bd3) — the Cramling-style 1.d4 is about consistent piece placement, not memorising sharp tactics",
@@ -3758,20 +3758,20 @@
       "pgn": "d4 d5 Bf4 Nf6 e3 e6 Nf3 Be7 Bd3",
       "color": "white",
       "style": "Solid, Positional",
-      "overview": "Anna's London System is her reliable go-to opening. The London is perfect for her style — solid, structured, and hard to crack. By developing the bishop to f4 before e3, White gets a harmonious setup that works against almost anything Black plays. Anna's London is about comfortable development and waiting for the right moment to push.",
+      "overview": "Anna's London System is her reliable go-to opening. The London takes its name from the 1922 London tournament where Capablanca and others experimented with it; it stayed a tournament sideline for decades, used by Soviet greats Petrosian and Botvinnik as ultra-solid drawing weapons. Magnus Carlsen's adoption of the London at the elite level in the 2010s shocked the chess world — proving that systems-based openings could compete with theoretical mainlines. Anna plays the London because it fits her style: solid, structured, hard to crack. By developing Bf4 before e3, you get a harmonious setup that works against almost anything Black plays.",
       "keyIdeas": [
-        "Develop the bishop to f4 before playing e3 — this is the London move order — a key strategic concept in London System",
-        "Build a solid structure with d4-e3-c3 and develop pieces to natural squares — completing development before committing to a plan gives maximum flexibility",
-        "Maneuver the knight via Nbd2-f1-e3 or Nbd2-e5 to reach a dominant outpost — the knight on e5 controls d7, f7, c6, and g4, anchoring White's entire position",
-        "The London works against everything — no need to memorize 50 lines — a key strategic concept in London System"
+        "Bf4 BEFORE e3 — non-negotiable. If you play e3 first the bishop is locked behind its own pawn permanently. This is the London's only critical move-order rule.",
+        "Build the d4+e3+c3 pawn triangle — the unbreakable structural foundation. Add Bd3 (eyeing h7) + Nbd2 + O-O and you're ready for any middlegame plan.",
+        "The Ne5 outpost is the London's signature manoeuvre. Once you've completed development, route the f3-knight to e5 — it controls d7/f7/c6/g4 and anchors any attacking plan.",
+        "The London works against EVERYTHING — d5, Nf6, g6, c5. Same setup, slight adjustments. Five plans to memorise, not fifty."
       ],
       "traps": [
-        "After Bf4, if Black plays c5 immediately, dxc5 can lead to a favorable pawn structure",
-        "If Black allows Bd3 and h3, White can build a slow kingside attack"
+        "If Black plays …c5 early hitting d4, you can capture with dxc5 reaching a favourable structure where Black has to spend tempo recapturing on c5.",
+        "If Black allows the full development Bd3 + h3 (preventing …Nh5 ideas), you can build a slow kingside attack with Qd2 + Bh6 trade ideas and Ne5 outpost."
       ],
       "warnings": [
-        "The London can become passive if you do not look for active play",
-        "Against the King's Indian setup (g6, Bg7), be ready for Black's f5 push"
+        "The London can become PASSIVE if you don't look for active play. Once developed, find a concrete plan — Ne5 outpost, e4 break, or h3+g4 kingside expansion. Don't just shuffle pieces.",
+        "Against the King's Indian setup (g6+Bg7), be ready for Black's …f5 push challenging the e4-square. Have h3 prophylaxis ready."
       ],
       "variations": [
         {
