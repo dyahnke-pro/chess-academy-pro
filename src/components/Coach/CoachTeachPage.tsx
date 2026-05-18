@@ -1444,7 +1444,7 @@ export function CoachTeachPage(): JSX.Element {
       speechChainRef.current = speechChainRef.current
         .then(() => {
           if (turnAbortRef.aborted) return;
-          return voiceService.speakForcedPollyOnly(sentence);
+          return voiceService.speakForced(sentence);
         })
         .catch(() => undefined);
     };
@@ -2036,7 +2036,7 @@ export function CoachTeachPage(): JSX.Element {
         trigger: null,
       });
       voiceService.stop();
-      speechChainRef.current = Promise.resolve(voiceService.speakForcedPollyOnly(welcomeLine))
+      speechChainRef.current = Promise.resolve(voiceService.speakForced(welcomeLine))
         .catch(() => undefined);
     })();
 

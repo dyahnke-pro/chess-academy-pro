@@ -532,84 +532,14 @@ class VoiceService {
   }
 
   /** Speak using the personality's SECONDARY voice — for short tactic
-   *  alerts / interjections that should cut through main narration
-   *  with a different timbre. WO-VOICE-LAYER-01 (b). Falls back to
-   *  the primary speak path if no prefs are loaded. */
-  async speakAlert(text: string): Promise<void> {
-    this.logSpeakInvoked('speakAlert', text);
-    // WO-VOICE-LAYER-01 (b) was originally meant to give tactic alerts
-    // a different timbre via a SECONDARY voice. Production audit
-    // (build 06b6d5d) showed users hearing "two voices" — the regular
-    // coach voice AND the alert voice — which reads as a second
-    // character chiming in rather than a coach with a single voice.
-    // Drop the secondary-voice override; alerts now use the same
-    // primary personality voice as everything else. The
-    // PERSONALITY_SECONDARY_VOICE_DEFAULTS map + supporting state
-    // is left in place in case we revisit this with a clearer UX
-    // signal (e.g. a distinct chime *before* the alert plays).
-    return this.speakInternal(sanitizeForTTS(text), false, { useSecondary: false });
-  }
-
-  /** Low-latency speak for training modes — skips Polly/voice-packs and DB reads.
-   *  Uses cached preferences (from warmup) and goes straight to Web Speech API. */
-  async speakFast(text: string): Promise<void> {
-    this.logSpeakInvoked('speakFast', text);
-    // Mirror the speakInternal Coach Narration = "silent" gate. speakFast
-    // bypasses speakInternal for low-latency drills, so we re-check the
-    // setting here to keep the Silent promise consistent.
-    if (resolveCoachNarration(useAppStore.getState().activeProfile?.preferences) === 'silent') return;
-    if (this.cachedPrefs && !this.cachedPrefs.voiceEnabled) return;
-
-    // Stop any in-flight speech without going through the full stop() chain
-    if (speechService.isSpeaking) {
-      speechService.stop();
-    }
-
-    const speed = this.cachedPrefs?.voiceSpeed ?? this.speed;
-    if (this.cachedPrefs?.systemVoiceURI) {
-      speechService.setVoice(this.cachedPrefs.systemVoiceURI);
-    }
-    if (WEB_SPEECH_FALLBACK_ENABLED) {
-      await speechService.speak(sanitizeForTTS(text), { ...WEB_SPEECH_FALLBACK, rate: speed });
-    }
-  }
-
-  /** Speak regardless of the voiceEnabled preference.
-   *  Used by the voice-chat mic where the user explicitly opted into voice. */
+   *  Speak regardless of the voiceEnabled preference.
+   *  Used by streaming sentence chains, walkthroughs, voice-chat mic
+   *  responses, and any callsite where the user has explicitly opted
+   *  into the voice flow. Honors the Coach Narration = "silent" gate
+   *  via speakInternal — silent always wins over force. */
   async speakForced(text: string): Promise<void> {
     this.logSpeakInvoked('speakForced', text);
     return this.speakInternal(sanitizeForTTS(text), true);
-  }
-
-  /** Polly-only speakForced. Identical to speakForced but skips the
-   *  Web Speech fallback when Polly transiently fails. Used by the
-   *  /coach/teach streaming sentence chain so a brief Polly cooldown
-   *  doesn't cause the iOS Safari speech-synth tail to overlap with
-   *  the next Polly sentence — the production audit (build 30fe8c8)
-   *  showed `tts-concurrent-speak prevTier=web-speech` 4× in one
-   *  session, which the user heard as "two voices." With this method,
-   *  a sentence whose Polly call fails is simply skipped audibly
-   *  (still rendered in chat); Polly recovers naturally after the
-   *  15s cooldown for the next sentence. Single-engine consistency,
-   *  no cancel-tail race. */
-  async speakForcedPollyOnly(text: string): Promise<void> {
-    this.logSpeakInvoked('speakForcedPollyOnly', text);
-    return this.speakInternal(sanitizeForTTS(text), true, { noFallback: true });
-  }
-
-  /** Queue a sentence without stopping current speech. For streaming voice responses. */
-  speakQueuedForced(text: string): void {
-    this.logSpeakInvoked('speakQueuedForced', text);
-    // Mirror the speakInternal Coach Narration = "silent" gate. This
-    // path goes straight to speechService.queue, so we re-check here.
-    if (resolveCoachNarration(useAppStore.getState().activeProfile?.preferences) === 'silent') return;
-    if (this.cachedPrefs?.systemVoiceURI) {
-      speechService.setVoice(this.cachedPrefs.systemVoiceURI);
-    }
-    const speed = this.cachedPrefs?.voiceSpeed ?? this.speed;
-    if (WEB_SPEECH_FALLBACK_ENABLED) {
-      speechService.queue(sanitizeForTTS(text), { rate: speed, pitch: 0.78 });
-    }
   }
 
   private async speakInternal(
