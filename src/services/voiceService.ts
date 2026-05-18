@@ -11,6 +11,58 @@ import type { CoachPersonality } from '../coach/types';
 import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarration';
 
+/** Shape of `window.ManagedMediaSource` on iOS Safari 17.1+. Not in
+ *  lib.dom.d.ts yet, so we describe just the surface we use:
+ *  constructor + static `isTypeSupported`, plus the two new
+ *  lifecycle events on instances. The runtime object extends
+ *  `MediaSource`, so we narrow to that for everything else. */
+interface ManagedMediaSourceCtor {
+  new (): MediaSource;
+  isTypeSupported(type: string): boolean;
+}
+
+export function getManagedMediaSource(): ManagedMediaSourceCtor | null {
+  if (typeof window === 'undefined') return null;
+  const mms = (window as unknown as { ManagedMediaSource?: ManagedMediaSourceCtor }).ManagedMediaSource;
+  return mms ?? null;
+}
+
+/** Pure decision function — does the runtime support progressive
+ *  MP3 streaming? Extracted from the class so unit tests can probe
+ *  every UA + capability combination without spinning a VoiceService.
+ *
+ *  Decision order (mirrors what the platform actually exposes):
+ *    1. ManagedMediaSource present (iOS 17.1+): ask its
+ *       `isTypeSupported` — that's the only path to streaming on iOS.
+ *    2. No MediaSource at all (old Chrome / Firefox / Safari): false.
+ *    3. iOS UA + no ManagedMediaSource (iOS < 17.1): false. The bare
+ *       MediaSource on iOS is restricted in ways that break our
+ *       pipeline.
+ *    4. Everything else (desktop Chrome / Firefox / Safari + Android
+ *       Chrome / Firefox / Samsung Internet): ask MediaSource's
+ *       `isTypeSupported`. Android Chrome has supported audio/mpeg
+ *       in MediaSource since ~Chrome 30, so this returns true on any
+ *       modern Android device. */
+export function canStreamProgressivePlaybackFor(
+  hasMediaSource: boolean,
+  mediaSourceIsTypeSupported: (type: string) => boolean,
+  managedMediaSource: ManagedMediaSourceCtor | null,
+  userAgent: string,
+  hasTouchAndMac: boolean,
+): boolean {
+  if (managedMediaSource) {
+    try { return managedMediaSource.isTypeSupported('audio/mpeg'); } catch { return false; }
+  }
+  if (!hasMediaSource) return false;
+  const isIos = /iPhone|iPad|iPod/.test(userAgent) || (userAgent.includes('Mac') && hasTouchAndMac);
+  if (isIos) return false;
+  try {
+    return mediaSourceIsTypeSupported('audio/mpeg');
+  } catch {
+    return false;
+  }
+}
+
 // WO-COACH-PERSONALITY-VOICE — voice and personality are orthogonal
 // dials. Each personality has a default voice (the one that matches
 // its base mood best out of the box), but the user can override any
@@ -941,27 +993,20 @@ class VoiceService {
     }
   }
 
-  /** Progressive MP3 playback supported here? MediaSource + MP3
-   *  codec are widely supported on desktop + Android Chromium /
-   *  Firefox; iOS Safari uses ManagedMediaSource with a different
-   *  lifecycle, so we keep iOS on the arrayBuffer fallback for now
-   *  (separate follow-up to wire ManagedMediaSource cleanly). */
+  /** Progressive MP3 playback supported here? Delegates to the pure
+   *  helper `canStreamProgressivePlaybackFor` so the decision logic
+   *  can be unit-tested across UA + capability combinations without
+   *  instantiating a VoiceService. */
   private canStreamProgressivePlayback(): boolean {
     if (typeof window === 'undefined') return false;
-    if (typeof window.MediaSource === 'undefined') return false;
-    // iOS Safari exposes MediaSource only via ManagedMediaSource;
-    // the bare MediaSource constructor on iOS is the Audio-element-
-    // controlled flavor with stricter rules. Detect Safari + iOS via
-    // user agent — narrow gate that errs on the side of the
-    // arrayBuffer fallback when uncertain.
-    const ua = navigator.userAgent;
-    const isIos = /iPhone|iPad|iPod/.test(ua) || (ua.includes('Mac') && 'ontouchend' in document);
-    if (isIos) return false;
-    try {
-      return window.MediaSource.isTypeSupported('audio/mpeg');
-    } catch {
-      return false;
-    }
+    const hasMS = typeof window.MediaSource !== 'undefined';
+    return canStreamProgressivePlaybackFor(
+      hasMS,
+      hasMS ? (t) => window.MediaSource.isTypeSupported(t) : () => false,
+      getManagedMediaSource(),
+      navigator.userAgent,
+      'ontouchend' in document,
+    );
   }
 
   /** Stream Polly's MP3 chunks into a `<audio>` element via
@@ -986,9 +1031,52 @@ class VoiceService {
     audio.playbackRate = this.speed;
     audio.preload = 'auto';
 
-    const mediaSource = new MediaSource();
+    // Pick ManagedMediaSource on iOS Safari 17.1+, bare MediaSource
+    // everywhere else. ManagedMediaSource adds two responsibilities:
+    //   1. The audio element MUST disable remote playback before the
+    //      MediaSource is wired up, or AirPlay routing tears the
+    //      stream down on init.
+    //   2. We can only `appendBuffer` while the source is in its
+    //      "streaming" state; the platform fires `endstreaming` when
+    //      memory pressure / buffer fill says back off, and
+    //      `startstreaming` when it's safe to resume. Standard
+    //      MediaSource has no such gate — appends are always allowed.
+    const MMS = getManagedMediaSource();
+    const usingManagedMediaSource = MMS !== null;
+    const mediaSource: MediaSource = usingManagedMediaSource ? new MMS() : new MediaSource();
+    if (usingManagedMediaSource) {
+      // `disableRemotePlayback` is on HTMLMediaElement but the type
+      // isn't always present in lib.dom; cast through `unknown`.
+      (audio as unknown as { disableRemotePlayback: boolean }).disableRemotePlayback = true;
+    }
     const objectUrl = URL.createObjectURL(mediaSource);
     audio.src = objectUrl;
+
+    // ManagedMediaSource streaming-permission gate. Starts true; the
+    // platform fires `endstreaming` to ask us to stop appending and
+    // `startstreaming` to resume. `appendPermitted` is the latest
+    // boolean; `whenPermitted` is a promise the pump can await when
+    // the gate is closed. On non-iOS this gate stays open forever.
+    let appendPermitted = true;
+    let whenPermitted: Promise<void> = Promise.resolve();
+    let resolveWhenPermitted: (() => void) | null = null;
+    if (usingManagedMediaSource) {
+      mediaSource.addEventListener('endstreaming', () => {
+        if (!appendPermitted) return;
+        appendPermitted = false;
+        whenPermitted = new Promise<void>((resolve) => {
+          resolveWhenPermitted = resolve;
+        });
+      });
+      mediaSource.addEventListener('startstreaming', () => {
+        if (appendPermitted) return;
+        appendPermitted = true;
+        if (resolveWhenPermitted) {
+          resolveWhenPermitted();
+          resolveWhenPermitted = null;
+        }
+      });
+    }
 
     const sourceOpen = new Promise<void>((resolve, reject) => {
       mediaSource.addEventListener('sourceopen', () => resolve(), { once: true });
@@ -1038,13 +1126,17 @@ class VoiceService {
 
     // Pump response body → SourceBuffer. Append serially because
     // appendBuffer is async (fires 'updateend') and overlapping
-    // appends throw InvalidStateError.
+    // appends throw InvalidStateError. On ManagedMediaSource the
+    // gate may close mid-pump (memory pressure) — we await
+    // `whenPermitted` before each append so the platform stays in
+    // charge of when bytes go in.
     const pumpResult = (async (): Promise<boolean> => {
       try {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
           chunks.push(value);
+          if (!appendPermitted) await whenPermitted;
           await new Promise<void>((resolve, reject) => {
             const onEnd = (): void => {
               sourceBuffer.removeEventListener('updateend', onEnd);
@@ -1132,12 +1224,12 @@ class VoiceService {
         return false;
       }
 
-      // Progressive playback path (Phase A.5 of streaming-TTS
-      // standardization, CLAUDE.md G4). MediaSource starts playing
-      // as soon as ~5KB is buffered instead of waiting for the full
-      // download. Falls back to the arrayBuffer path on iOS Safari
-      // (ManagedMediaSource has different lifecycle requirements;
-      // separate follow-up).
+      // Progressive playback path (streaming-TTS standardization,
+      // CLAUDE.md G4). MediaSource (desktop + Android) and
+      // ManagedMediaSource (iOS Safari 17.1+) both start playing as
+      // soon as ~5KB is buffered instead of waiting for the full
+      // download. Falls back to the arrayBuffer path only on old
+      // iOS that has neither.
       if (this.canStreamProgressivePlayback()) {
         this.abortController = null;
         const ok = await this.playAudioFromStream(response, key);
