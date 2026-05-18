@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
+import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
@@ -612,12 +613,26 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         let streamMarkupBuf = '';
         let streamSafeBuf = '';
         try {
+          // Tactical context for the in-game chat — when the student
+          // asks "what's the threat?" or "what should I play?" mid-
+          // game, the brain gets the named patterns + PV scan so it
+          // can answer by tactic name instead of citing eval alone.
+          const gameChatStudentColor = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+          const gameChatStudentRating =
+            useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+          const gameChatTactics = buildTacticsLiveContext(
+            fen,
+            null,
+            gameChatStudentColor,
+            gameChatStudentRating,
+          );
           const liveState: LiveState = {
             surface: 'game-chat',
             fen,
             moveHistory: history,
             userJustDid: text,
             currentRoute: '/coach/play',
+            tactics: gameChatTactics,
           };
           void logAppAudit({
             kind: 'coach-surface-migrated',
