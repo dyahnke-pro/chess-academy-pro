@@ -655,6 +655,181 @@ async function main() {
     ],
   });
 
+  // ─────────────────────────────────────────────────────────────────
+  // Non-Vienna e2e — repeat the 5-mode sweep against an opening the
+  // static registry does NOT carry, so every path runs through the
+  // Tier 3 DB-narration pipeline. Caro-Kann Defense: Classical
+  // Variation is the target: 2 same-name DB entries (8 + 14 plies),
+  // 6 sub-variations for forks, and a Lichess puzzle pool large
+  // enough that the punish stage mines real tactical lessons.
+  // Without an LLM key in the sandbox, modes that require LLM
+  // content generation (Quiz / Drill) gracefully fall back to the
+  // template-narration path and may surface fewer stage tiles —
+  // those scenarios assert the system DEGRADES cleanly rather than
+  // crashing, which is the production contract.
+  // ─────────────────────────────────────────────────────────────────
+
+  const NON_VIENNA = 'Caro-Kann Defense: Classical Variation';
+
+  // ── F1: Teach (non-static) — full walkthrough to leaf ───────────
+  await clearSessionAndReload();
+  await recordScenario('F1_teach_non_static_full_loop', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill(NON_VIENNA);
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        (e.summary ?? '').includes('generation OK via DB-narration path'),
+        90_000,
+      );
+      await driveToLeaf(page);
+    },
+    assertions: [
+      { kind: 'visible', selector: '[data-testid="walkthrough-leaf-panel"]', label: 'walkthrough reaches leaf' },
+      { kind: 'visible', selector: '[data-testid="walkthrough-leaf-play-real"]', label: 'leaf "play this line out" button visible' },
+      { kind: 'transcript-contains', value: 'play it out yourself', label: 'coach asks in chat at leaf' },
+      { kind: 'audit-summary-contains', value: 'generation OK via DB-narration path', label: 'DB-narration tier 3 fired' },
+      { kind: 'audit-summary-contains', value: NON_VIENNA.toLowerCase(), label: `opening "${NON_VIENNA}" referenced in routing` },
+    ],
+  });
+
+  // ── F2: Drill (non-static) — picker submission ──────────────────
+  // Without LLM keys, drill stage data may be empty for the non-
+  // static path (drill needs LLM for {name, subtitle}). Verify the
+  // routing fires and the surface degrades cleanly — either the
+  // drill picker appears or the stage menu surfaces without the
+  // drill tile. Either is a valid graceful fallback.
+  await clearSessionAndReload();
+  await recordScenario('F2_drill_non_static', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill(`drill ${NON_VIENNA}`);
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        /\[stage=drill\]|landed at drill|generation OK via DB-narration/i.test(e.summary ?? ''),
+        90_000,
+      );
+      // Try to interact if a drill picker / active state appears.
+      const pickerLine = page.locator('[data-testid="walkthrough-drill-line-0"]');
+      if (await pickerLine.isVisible({ timeout: 8000 }).catch(() => false)) {
+        await pickerLine.click();
+        await page.waitForTimeout(2000);
+        await tryMove(page, 'e2', 'e4').catch(() => undefined);
+        await page.waitForTimeout(2000);
+      }
+    },
+    assertions: [
+      {
+        kind: 'visible',
+        selector:
+          '[data-testid="walkthrough-drill-picker"], [data-testid="walkthrough-drill-active"], [data-testid="walkthrough-drill-empty"], [data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-leaf-panel"]',
+        label: 'drill UI surfaces OR degrades to walkthrough / stage menu',
+      },
+      {
+        kind: 'audit-summary-contains',
+        value: 'caro-kann',
+        label: 'routing references the non-Vienna opening',
+      },
+    ],
+  });
+
+  // ── F3: Quiz (non-static) — concepts stage is LLM-only ──────────
+  // Without LLM, concepts array stays empty. Verify graceful
+  // fallback — either the quiz panel renders with template content
+  // OR the surface degrades to stage-menu / walkthrough.
+  await clearSessionAndReload();
+  await recordScenario('F3_quiz_non_static', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill(`quiz me on ${NON_VIENNA}`);
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        /\[stage=concepts\]|landed at concepts|generation OK via DB-narration/i.test(e.summary ?? ''),
+        90_000,
+      );
+      // If a quiz question renders, exercise one round.
+      const choice0 = page.locator('[data-testid="walkthrough-quiz-choice-0"]');
+      if (await choice0.isVisible({ timeout: 8000 }).catch(() => false)) {
+        await choice0.click();
+        const next = page.locator('[data-testid="walkthrough-quiz-next"]');
+        if (await next.isVisible().catch(() => false)) {
+          await next.click();
+          await page.waitForTimeout(1500);
+        }
+      }
+    },
+    assertions: [
+      {
+        kind: 'visible',
+        selector:
+          '[data-testid="walkthrough-quiz-panel"], [data-testid="walkthrough-quiz-complete"], [data-testid="walkthrough-quiz-empty"], [data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-leaf-panel"]',
+        label: 'quiz UI surfaces OR degrades cleanly',
+      },
+    ],
+  });
+
+  // ── F4: Trap (non-static) — punish via Lichess puzzle DB ────────
+  await clearSessionAndReload();
+  await recordScenario('F4_trap_non_static', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill(`punish lines for ${NON_VIENNA}`);
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        /\[stage=punish\]|landed at punish|punish via Lichess-puzzle-DB/i.test(e.summary ?? ''),
+        90_000,
+      );
+      const lesson = page.locator('[data-testid="walkthrough-punish-lesson-0"]');
+      if (await lesson.isVisible({ timeout: 8000 }).catch(() => false)) {
+        await lesson.click();
+        const choice = page.locator('[data-testid="walkthrough-quiz-choice-0"]');
+        if (await choice.isVisible({ timeout: 8000 }).catch(() => false)) {
+          await choice.click();
+          await page.waitForTimeout(1500);
+        }
+      }
+    },
+    assertions: [
+      {
+        kind: 'visible',
+        selector:
+          '[data-testid="walkthrough-punish-picker"], [data-testid="walkthrough-punish-empty"], [data-testid="walkthrough-quiz-panel"], [data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-trap-playing"], [data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-leaf-panel"], [data-testid="walkthrough-fork-panel"]',
+        label: 'trap UI surfaces (picker / question / animation / completion)',
+      },
+      {
+        kind: 'audit-summary-contains',
+        value: 'punish',
+        label: 'punish stage routing fired',
+      },
+    ],
+  });
+
+  // ── F5: Play (non-static) — picker submit "play ..." → /coach/play
+  await clearSessionAndReload();
+  await recordScenario('F5_play_non_static', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill(`play it for real ${NON_VIENNA}`);
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await page.waitForURL(/\/coach\/play/, { timeout: 30_000 }).catch(() => undefined);
+      await page.waitForTimeout(3000);
+      await tryMove(page, 'e2', 'e4').catch(() => undefined);
+      await page.waitForTimeout(2500);
+    },
+    assertions: [
+      { kind: 'url-matches', value: /\/coach\/play/, label: 'navigated to /coach/play' },
+      {
+        kind: 'audit-present',
+        audit: 'coach-turn-checkpoint',
+        label: 'coach turn fired (engine pipeline alive)',
+      },
+    ],
+  });
+
   // ── Summary ────────────────────────────────────────────────────
   report.consoleErrors = consoleErrors.slice(0, 60);
   report.pageErrors = pageErrors.slice(0, 60);
