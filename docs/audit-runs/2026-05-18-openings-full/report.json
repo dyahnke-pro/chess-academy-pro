@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-18T23:37:13.822Z",
+  "generatedAt": "2026-05-18T23:45:10.997Z",
   "base": "http://localhost:5173",
   "sample": 30,
   "openings": [
@@ -60061,6 +60061,1288 @@
       ],
       "startedAt": "2026-05-18T23:25:32.475Z",
       "finishedAt": "2026-05-18T23:37:13.822Z"
+    },
+    {
+      "openingId": "stafford-gambit",
+      "openingName": "Stafford Gambit",
+      "source": "gambit",
+      "color": "black",
+      "eco": "C42",
+      "detailPageTestIds": [
+        "quick-feedback-button",
+        "mobile-menu-btn",
+        "quick-feedback-button",
+        "theme-toggle-btn",
+        "opening-detail",
+        "back-button",
+        "favorite-btn",
+        "mastery-percent",
+        "lines-discovered",
+        "lines-perfected",
+        "walkthrough-btn",
+        "learn-btn",
+        "practice-btn",
+        "play-btn",
+        "srs-enroll-row",
+        "srs-enroll-btn",
+        "narrate-overview",
+        "narrate-keyIdeas",
+        "middlegame-plans-empty",
+        "model-games-empty",
+        "narrate-traps",
+        "train-traps-btn",
+        "trap-line-0",
+        "trap-walkthrough-0",
+        "trap-learn-0",
+        "trap-practice-0",
+        "trap-play-0",
+        "trap-line-1",
+        "trap-walkthrough-1",
+        "trap-learn-1",
+        "trap-practice-1",
+        "trap-play-1",
+        "trap-line-2",
+        "trap-walkthrough-2",
+        "trap-learn-2",
+        "trap-practice-2",
+        "trap-play-2",
+        "trap-line-3",
+        "trap-walkthrough-3",
+        "trap-learn-3",
+        "trap-practice-3",
+        "trap-play-3",
+        "trap-line-4",
+        "trap-walkthrough-4",
+        "trap-learn-4",
+        "trap-practice-4",
+        "trap-play-4",
+        "trap-line-5",
+        "trap-walkthrough-5",
+        "trap-learn-5",
+        "trap-practice-5",
+        "trap-play-5",
+        "narrate-warnings",
+        "train-warnings-btn",
+        "warning-line-0",
+        "warning-walkthrough-0",
+        "warning-learn-0",
+        "warning-practice-0",
+        "warning-play-0",
+        "warning-line-1",
+        "warning-walkthrough-1",
+        "warning-learn-1",
+        "warning-practice-1",
+        "warning-play-1",
+        "warning-line-2",
+        "warning-walkthrough-2",
+        "warning-learn-2",
+        "warning-practice-2",
+        "warning-play-2",
+        "variation-0",
+        "variation-walkthrough-0",
+        "variation-learn-0",
+        "variation-practice-0",
+        "variation-play-0",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-1",
+        "variation-walkthrough-1",
+        "variation-learn-1",
+        "variation-practice-1",
+        "variation-play-1",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-2",
+        "variation-walkthrough-2",
+        "variation-learn-2",
+        "variation-practice-2",
+        "variation-play-2",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-3",
+        "variation-walkthrough-3",
+        "variation-learn-3",
+        "variation-practice-3",
+        "variation-play-3",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-4",
+        "variation-walkthrough-4",
+        "variation-learn-4",
+        "variation-practice-4",
+        "variation-play-4",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "nav-home-tab",
+        "nav-openings-tab",
+        "nav-coach-home-tab",
+        "nav-tactics-tab",
+        "nav-weaknesses-tab",
+        "build-version-widget"
+      ],
+      "mainLine": {
+        "walkthrough": {
+          "mounted": true,
+          "plies": [
+            {
+              "ply": 1,
+              "expectedSan": "e4",
+              "label": "1. e4",
+              "text": "White opens with the king's pawn — the most popular first move in chess. Little does White know, they may be walking into one of the trickiest gambits in modern online chess. The Stafford Gambit, popularized by Eric Rosen, is lurking just a"
+            },
+            {
+              "ply": 2,
+              "expectedSan": "e5",
+              "label": "1...e5",
+              "text": "Black mirrors with e5, entering the Open Game. This symmetrical setup is the gateway to the Stafford Gambit. Black is already planning to meet Nf3 with Nf6, steering toward the Petrov's Defense structure where the Stafford surprise lives."
+            },
+            {
+              "ply": 3,
+              "expectedSan": "Nf3",
+              "label": "2. Nf3",
+              "text": "White develops the knight to its natural square, attacking the e5 pawn and preparing to castle. This is the most common second move. Black's response here separates the Stafford Gambit from the normal Petrov's Defense."
+            },
+            {
+              "ply": 4,
+              "expectedSan": "Nf6",
+              "label": "2...Nf6",
+              "text": "Black plays Nf6, entering the Petrov's Defense. But Black has no intention of playing a quiet Petrov! This knight attacks e4, and when White captures on e5, Black's devastating reply Nc6 will turn the tables."
+            },
+            {
+              "ply": 5,
+              "expectedSan": "Nxe5",
+              "label": "3. Nxe5",
+              "text": "White grabs the free pawn — this looks great, and in normal Petrov's play Black would respond with d6 or Nxe4. But the Stafford Gambit diverges here. White's knight on e5 is seemingly dominant, but it's actually a target."
+            },
+            {
+              "ply": 6,
+              "expectedSan": "Nc6",
+              "label": "3...Nc6",
+              "text": "THIS is the Stafford Gambit! Instead of the normal d6 or Nxe4, Black plays Nc6, immediately attacking White's knight on e5. Eric Rosen has made this move famous — it's objectively dubious, but absolutely LOADED with traps. Black sacrifices "
+            },
+            {
+              "ply": 7,
+              "expectedSan": "Nxc6",
+              "label": "4. Nxc6",
+              "text": "White captures the knight — the most natural response. White is now up a clean pawn. But this is exactly what Black wanted! The d-file is about to blow open, and Black's pieces will pour out with terrifying speed."
+            },
+            {
+              "ply": 8,
+              "expectedSan": "dxc6",
+              "label": "4...dxc6",
+              "text": "Black recaptures with the d-pawn, and suddenly the position is ALIVE. The d-file is wide open, the queen can swing to d4 or d6, the c8 bishop is free, and Black's pieces coordinate beautifully. White is up a pawn, but Black has open lines, "
+            },
+            {
+              "ply": 9,
+              "expectedSan": "d3",
+              "label": "5. d3",
+              "text": ""
+            },
+            {
+              "ply": 10,
+              "expectedSan": "Bc5",
+              "label": "5...Bc5",
+              "text": ""
+            },
+            {
+              "ply": 11,
+              "expectedSan": "Be2",
+              "label": "6. Be2",
+              "text": ""
+            },
+            {
+              "ply": 12,
+              "expectedSan": "h5",
+              "label": "6...h5",
+              "text": ""
+            }
+          ]
+        },
+        "practice": {
+          "mounted": true,
+          "attempts": [
+            {
+              "index": 1,
+              "expectedSan": "e5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 3,
+              "expectedSan": "Nf6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 5,
+              "expectedSan": "Nc6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 7,
+              "expectedSan": "dxc6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 9,
+              "expectedSan": "Bc5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 11,
+              "expectedSan": "h5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            }
+          ]
+        },
+        "play": {
+          "mounted": true,
+          "plies": 60,
+          "outcome": "aborted-at-60-plies",
+          "postReport": {
+            "correct": null,
+            "deviation": null,
+            "recommendation": null
+          }
+        }
+      },
+      "variations": [
+        {
+          "name": "Stafford Gambit: Bg5 Main Trap Line",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Stafford Gambit: Bg5 Main Trap Line is an important variation of the Stafford Gambit. The signature Stafford trap — Black sacrifices the queen with Nxe4, then plays Bxf2+ Ke2 Bg4+ and initiates a devastating king hunt. White's king gets"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Stafford Gambit: Bg5 Main Trap Line."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Nxe5",
+                "label": "3. Nxe5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nc6",
+                "label": "3...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxc6",
+                "label": "4. Nxc6",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "dxc6",
+                "label": "4...dxc6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "d3",
+                "label": "5. d3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bc5",
+                "label": "5...Bc5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "dxc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "Bc5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Stafford Gambit: Ng4 Direct Attack",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Stafford Gambit: Ng4 Direct Attack is an important variation of the Stafford Gambit. The Ng4 attack is another tricky line where Black sacrifices the knight directly. After Bxg4 Bxf2+, the king is dragged out and Qd4 creates multiple th"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Stafford Gambit: Ng4 Direct Attack."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Nxe5",
+                "label": "3. Nxe5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nc6",
+                "label": "3...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxc6",
+                "label": "4. Nxc6",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "dxc6",
+                "label": "4...dxc6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "d3",
+                "label": "5. d3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bc5",
+                "label": "5...Bc5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Be2",
+                "label": "6. Be2",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Ng4",
+                "label": "6...Ng4",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bxg4",
+                "label": "7. Bxg4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "dxc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "Bc5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "Ng4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Stafford Gambit: h5 Pawn Storm",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Stafford Gambit: h5 Pawn Storm is an important variation of the Stafford Gambit. The h5 variation prepares to crack open the h-file against White's castled king. After Ng4 and hxg4, the open h-file becomes a highway for the rook. The qu"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Stafford Gambit: h5 Pawn Storm."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Nxe5",
+                "label": "3. Nxe5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nc6",
+                "label": "3...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxc6",
+                "label": "4. Nxc6",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "dxc6",
+                "label": "4...dxc6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "d3",
+                "label": "5. d3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bc5",
+                "label": "5...Bc5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Be2",
+                "label": "6. Be2",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "h5",
+                "label": "6...h5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "dxc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "Bc5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "h5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Stafford Gambit: Nc3 Variation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Stafford Gambit: Nc3 Variation is an important variation of the Stafford Gambit. When White plays Nc3 instead of d3, Black still has the Bc5 and Ng4 battery. After Qd4 threatens Qxf2 mate, White must be extremely careful. The sequence o"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Stafford Gambit: Nc3 Variation."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Nxe5",
+                "label": "3. Nxe5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nc6",
+                "label": "3...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxc6",
+                "label": "4. Nxc6",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "dxc6",
+                "label": "4...dxc6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nc3",
+                "label": "5. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bc5",
+                "label": "5...Bc5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "dxc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "Bc5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Stafford Gambit: e5 Push Line",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Stafford Gambit: e5 Push Line is an important variation of the Stafford Gambit. After 5.e5, Black plays Ne4 and the Bxf2+ sacrifice begins a devastating tactical sequence. Even after queens are traded, Black's pieces are much more activ"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Stafford Gambit: e5 Push Line."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Nxe5",
+                "label": "3. Nxe5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nc6",
+                "label": "3...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxc6",
+                "label": "4. Nxc6",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "dxc6",
+                "label": "4...dxc6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "e5",
+                "label": "5. e5",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Ne4",
+                "label": "5...Ne4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "dxc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "Ne4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "traps": [
+        {
+          "name": "Oh No My Queen",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Stafford Gambit, the Oh No My Queen is a tactical pattern you should know. The most iconic Stafford trap. White plays Bg5 and thinks they've won a queen. But Bxf2+ Ke2 Bg4+ starts a king hunt that cannot be stopped. The checks keep c"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Nxe5",
+                "label": "3. Nxe5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nc6",
+                "label": "3...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxc6",
+                "label": "4. Nxc6",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "dxc6",
+                "label": "4...dxc6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "d3",
+                "label": "5. d3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bc5",
+                "label": "5...Bc5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "dxc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "Bc5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Nc2 Fork Trap",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Stafford Gambit, the Nc2 Fork Trap is a tactical pattern you should know. In this variation, Black sacrifices the pawn on g4 to open the h-file. After hxg4 and Qf6, Black's pieces are aimed directly at White's kingside. The Bf5 devel"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Nxe5",
+                "label": "3. Nxe5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nc6",
+                "label": "3...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxc6",
+                "label": "4. Nxc6",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "dxc6",
+                "label": "4...dxc6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "d3",
+                "label": "5. d3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bc5",
+                "label": "5...Bc5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Be2",
+                "label": "6. Be2",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "dxc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "Bc5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Qh4 Discovered Attack",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Stafford Gambit, the Qh4 Discovered Attack is a tactical pattern you should know. A variation of the Oh No My Queen trap where after Bg5, the knight and bishops coordinate to trap White's king. The discovered attack pattern with Ne4+"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nf3",
+                "label": "2. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Nxe5",
+                "label": "3. Nxe5",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nc6",
+                "label": "3...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nxc6",
+                "label": "4. Nxc6",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "dxc6",
+                "label": "4...dxc6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "d3",
+                "label": "5. d3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bc5",
+                "label": "5...Bc5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "dxc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "Bc5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "warnings": [],
+      "startedAt": "2026-05-18T23:37:13.839Z",
+      "error": "page.waitForTimeout: Target page, context or browser has been closed",
+      "finishedAt": "2026-05-18T23:45:10.933Z"
+    },
+    {
+      "openingId": "marshall-attack",
+      "openingName": "Marshall Attack",
+      "source": "gambit",
+      "color": "black",
+      "eco": "C89",
+      "detailPageTestIds": [],
+      "mainLine": {
+        "walkthrough": null,
+        "practice": null,
+        "play": null
+      },
+      "variations": [],
+      "traps": [],
+      "warnings": [],
+      "startedAt": "2026-05-18T23:45:10.961Z",
+      "error": "page.goto: Target page, context or browser has been closed",
+      "finishedAt": "2026-05-18T23:45:10.962Z"
+    },
+    {
+      "openingId": "englund-gambit",
+      "openingName": "Englund Gambit",
+      "source": "gambit",
+      "color": "black",
+      "eco": "A40",
+      "detailPageTestIds": [],
+      "mainLine": {
+        "walkthrough": null,
+        "practice": null,
+        "play": null
+      },
+      "variations": [],
+      "traps": [],
+      "warnings": [],
+      "startedAt": "2026-05-18T23:45:10.979Z",
+      "error": "page.goto: Target page, context or browser has been closed",
+      "finishedAt": "2026-05-18T23:45:10.979Z"
+    },
+    {
+      "openingId": "gambit-budapest-gambit",
+      "openingName": "Budapest Gambit",
+      "source": "gambit",
+      "color": "black",
+      "eco": "A51",
+      "detailPageTestIds": [],
+      "mainLine": {
+        "walkthrough": null,
+        "practice": null,
+        "play": null
+      },
+      "variations": [],
+      "traps": [],
+      "warnings": [],
+      "startedAt": "2026-05-18T23:45:10.996Z",
+      "error": "page.goto: Target page, context or browser has been closed",
+      "finishedAt": "2026-05-18T23:45:10.997Z"
     }
   ],
   "totalEvents": 0

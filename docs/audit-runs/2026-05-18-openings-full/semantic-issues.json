@@ -1,0 +1,454 @@
+{
+  "piecemismatch": [
+    {
+      "opening": "ruy-lopez",
+      "subline": "var:Closed Ruy Lopez (Zaitsev)",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "Knight develops, attacking e5.",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "ruy-lopez",
+      "subline": "warn:Marshall Attack Danger",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "french-defence",
+      "subline": "var:Advance: Milner-Barry Gambit",
+      "ply": 6,
+      "expected": "c5",
+      "text": "Black immediately strikes at the base of White's pawn chain. This is the standard counterplay — attacking d4 to undermine the e5 pawn.",
+      "reason": "text says king but move is pawn"
+    },
+    {
+      "opening": "french-defence",
+      "subline": "var:Advance: Milner-Barry Gambit",
+      "ply": 14,
+      "expected": "Bd7",
+      "text": "Black develops the bishop, preparing to bring the knight to e7 and castle. A solid but slightly passive choice.",
+      "reason": "text says knight but move is bishop"
+    },
+    {
+      "opening": "kings-indian-defence",
+      "subline": "main",
+      "ply": 4,
+      "expected": "g6",
+      "text": "Black plays g6, the King's Indian setup. The g6 pawn prepares the fianchetto of the dark-squared bishop to g7, where it will become Black's most powerful piece — controlling the lo",
+      "reason": "text says bishop but move is pawn"
+    },
+    {
+      "opening": "scotch-game",
+      "subline": "main",
+      "ply": 7,
+      "expected": "Nxd4",
+      "text": "White recaptures Nxd4, placing the knight on the dominant central square. The Nd4 controls c6, e6, f5, b5, and c2 — it's the most powerful piece on the board. White can later jump ",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "pro-naroditsky-scotch",
+      "subline": "main",
+      "ply": 7,
+      "expected": "Nxd4",
+      "text": "White recaptures Nxd4, placing the knight on the dominant central square. The Nd4 controls c6, e6, f5, b5, and c2 — it's the most powerful piece on the board. White can later jump ",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "pro-naroditsky-scotch",
+      "subline": "var:4...Nf6 Schmidt Variation",
+      "ply": 1,
+      "expected": "e4",
+      "text": "The Scotch: Mieses Variation (4...Nf6) is an important variation of the Scotch Game. Black plays 4...Nf6 immediately attacking e4. After 5.Nxc6 bxc6, Black has doubled pawns but ac",
+      "reason": "text says king but move is pawn"
+    },
+    {
+      "opening": "pro-carlsen-catalan",
+      "subline": "main",
+      "ply": 5,
+      "expected": "g3",
+      "text": "White plays g3, the defining move of the Catalan. Instead of developing the bishop to d3 or e2, White prepares to fianchetto it to g2 — the most powerful square available. The Bg2 ",
+      "reason": "text says bishop but move is pawn"
+    },
+    {
+      "opening": "pro-carlsen-catalan",
+      "subline": "var:Open Catalan Main Line",
+      "ply": 5,
+      "expected": "g3",
+      "text": "The Catalan! White fianchettoes the bishop to g2, creating long-term pressure on the light squares.",
+      "reason": "text says bishop but move is pawn"
+    },
+    {
+      "opening": "pro-caruana-ruy-lopez",
+      "subline": "var:Marshall Attack Main Line",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "pro-caruana-ruy-lopez",
+      "subline": "trap:Premature ...d5 Without h3",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "main",
+      "ply": 5,
+      "expected": "Bf4",
+      "text": "Now we play Bf4, the London signature move. By waiting until move 3, we've ensured Black has already committed their knight to f6, making it harder for them to harass our bishop wi",
+      "reason": "text says knight but move is bishop"
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "main",
+      "ply": 16,
+      "expected": "b6",
+      "text": "Black prepares to fianchetto the light-squared bishop to b7, where it will pressure e4 and the long diagonal. A solid queenside development plan.",
+      "reason": "text says bishop but move is pawn"
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "var:Standard Setup vs d5",
+      "ply": 5,
+      "expected": "Bf4",
+      "text": "Now we play Bf4, the London signature move. By waiting until move 3, we've ensured Black has already committed their knight to f6, making it harder for them to harass our bishop wi",
+      "reason": "text says knight but move is bishop"
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "var:Standard Setup vs d5",
+      "ply": 16,
+      "expected": "b6",
+      "text": "Black prepares to fianchetto the light-squared bishop to b7, where it will pressure e4 and the long diagonal. A solid queenside development plan.",
+      "reason": "text says bishop but move is pawn"
+    },
+    {
+      "opening": "pro-praggnanandhaa-ruy-lopez",
+      "subline": "var:Anti-Marshall 8.c3",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "pro-dubov-sveshnikov",
+      "subline": "var:Main Line with c4",
+      "ply": 8,
+      "expected": "Nf6",
+      "text": "Black develops to f6, attacking e4. Combined with ...Nc6, this prepares the trademark Sveshnikov move ...e5.",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:Main Line 9.exd5 Nxd5",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:8.h3 Anti-Marshall",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "Knight develops, attacking e5.",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:8.h3 Anti-Marshall",
+      "ply": 21,
+      "expected": "Ba2",
+      "text": "The bishop retreats to a2, staying on the a2-g8 diagonal while giving the knight c4 access.",
+      "reason": "text says knight but move is bishop"
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "trap:Marshall d5 Prevented",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "scotch-gambit",
+      "subline": "main",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight to its best square, attacking e5 and preparing kingside castling. This sets up the key decision on move 3: the Scotch Gambit with d4. The knight on f3 wil",
+      "reason": "text says king but move is knight"
+    },
+    {
+      "opening": "scotch-gambit",
+      "subline": "var:Scotch Gambit: Dubois-Reti Defense",
+      "ply": 1,
+      "expected": "e4",
+      "text": "The Scotch Gambit: Dubois-Reti Defense is an important variation of the Scotch Gambit. Black plays 4...Bc5 and 6...dxc3 to grab pawns. White sacrifices the c-pawn for rapid develop",
+      "reason": "text says king but move is pawn"
+    }
+  ],
+  "squaremismatch": [
+    {
+      "opening": "ruy-lopez",
+      "subline": "var:Closed Ruy Lopez (Zaitsev)",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "Knight develops, attacking e5.",
+      "reason": "text says square e5 but move went to f3"
+    },
+    {
+      "opening": "ruy-lopez",
+      "subline": "warn:Marshall Attack Danger",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says square e5 but move went to f3"
+    },
+    {
+      "opening": "french-defence",
+      "subline": "var:Advance: Milner-Barry Gambit",
+      "ply": 6,
+      "expected": "c5",
+      "text": "Black immediately strikes at the base of White's pawn chain. This is the standard counterplay — attacking d4 to undermine the e5 pawn.",
+      "reason": "text says square d4 but move went to c5"
+    },
+    {
+      "opening": "french-defence",
+      "subline": "var:Advance: Milner-Barry Gambit",
+      "ply": 14,
+      "expected": "Bd7",
+      "text": "Black develops the bishop, preparing to bring the knight to e7 and castle. A solid but slightly passive choice.",
+      "reason": "text says square e7 but move went to d7"
+    },
+    {
+      "opening": "kings-indian-defence",
+      "subline": "main",
+      "ply": 4,
+      "expected": "g6",
+      "text": "Black plays g6, the King's Indian setup. The g6 pawn prepares the fianchetto of the dark-squared bishop to g7, where it will become Black's most powerful piece — controlling the lo",
+      "reason": "text says square g7 but move went to g6"
+    },
+    {
+      "opening": "scotch-game",
+      "subline": "main",
+      "ply": 7,
+      "expected": "Nxd4",
+      "text": "White recaptures Nxd4, placing the knight on the dominant central square. The Nd4 controls c6, e6, f5, b5, and c2 — it's the most powerful piece on the board. White can later jump ",
+      "reason": "text says square g7 but move went to d4"
+    },
+    {
+      "opening": "pro-naroditsky-scotch",
+      "subline": "main",
+      "ply": 7,
+      "expected": "Nxd4",
+      "text": "White recaptures Nxd4, placing the knight on the dominant central square. The Nd4 controls c6, e6, f5, b5, and c2 — it's the most powerful piece on the board. White can later jump ",
+      "reason": "text says square g7 but move went to d4"
+    },
+    {
+      "opening": "pro-hikaru-najdorf",
+      "subline": "main",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight toward d4. Standard Open Sicilian preparation.",
+      "reason": "text says square d4 but move went to f3"
+    },
+    {
+      "opening": "pro-hikaru-najdorf",
+      "subline": "var:English Attack 6.Be3",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight toward d4. Standard Open Sicilian preparation.",
+      "reason": "text says square d4 but move went to f3"
+    },
+    {
+      "opening": "pro-carlsen-catalan",
+      "subline": "main",
+      "ply": 5,
+      "expected": "g3",
+      "text": "White plays g3, the defining move of the Catalan. Instead of developing the bishop to d3 or e2, White prepares to fianchetto it to g2 — the most powerful square available. The Bg2 ",
+      "reason": "text says square d3 but move went to g3"
+    },
+    {
+      "opening": "pro-carlsen-catalan",
+      "subline": "var:Open Catalan Main Line",
+      "ply": 5,
+      "expected": "g3",
+      "text": "The Catalan! White fianchettoes the bishop to g2, creating long-term pressure on the light squares.",
+      "reason": "text says square g2 but move went to g3"
+    },
+    {
+      "opening": "pro-caruana-ruy-lopez",
+      "subline": "var:Marshall Attack Main Line",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says square e5 but move went to f3"
+    },
+    {
+      "opening": "pro-caruana-ruy-lopez",
+      "subline": "trap:Premature ...d5 Without h3",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says square e5 but move went to f3"
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "main",
+      "ply": 5,
+      "expected": "Bf4",
+      "text": "Now we play Bf4, the London signature move. By waiting until move 3, we've ensured Black has already committed their knight to f6, making it harder for them to harass our bishop wi",
+      "reason": "text says square f6 but move went to f4"
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "main",
+      "ply": 16,
+      "expected": "b6",
+      "text": "Black prepares to fianchetto the light-squared bishop to b7, where it will pressure e4 and the long diagonal. A solid queenside development plan.",
+      "reason": "text says square b7 but move went to b6"
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "var:Standard Setup vs d5",
+      "ply": 5,
+      "expected": "Bf4",
+      "text": "Now we play Bf4, the London signature move. By waiting until move 3, we've ensured Black has already committed their knight to f6, making it harder for them to harass our bishop wi",
+      "reason": "text says square f6 but move went to f4"
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "var:Standard Setup vs d5",
+      "ply": 16,
+      "expected": "b6",
+      "text": "Black prepares to fianchetto the light-squared bishop to b7, where it will pressure e4 and the long diagonal. A solid queenside development plan.",
+      "reason": "text says square b7 but move went to b6"
+    },
+    {
+      "opening": "pro-praggnanandhaa-ruy-lopez",
+      "subline": "var:Anti-Marshall 8.c3",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says square e5 but move went to f3"
+    },
+    {
+      "opening": "pro-dubov-sveshnikov",
+      "subline": "var:Main Line with c4",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight toward d4, preparing the Open Sicilian.",
+      "reason": "text says square d4 but move went to f3"
+    },
+    {
+      "opening": "pro-dubov-sveshnikov",
+      "subline": "var:Main Line with c4",
+      "ply": 8,
+      "expected": "Nf6",
+      "text": "Black develops to f6, attacking e4. Combined with ...Nc6, this prepares the trademark Sveshnikov move ...e5.",
+      "reason": "text says square e4 but move went to f6"
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:Main Line 9.exd5 Nxd5",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says square e5 but move went to f3"
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:8.h3 Anti-Marshall",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "Knight develops, attacking e5.",
+      "reason": "text says square e5 but move went to f3"
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:8.h3 Anti-Marshall",
+      "ply": 20,
+      "expected": "Na5",
+      "text": "Black reroutes the knight toward c4 via a5, targeting the weak b3 bishop.",
+      "reason": "text says square c4 but move went to a5"
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:8.h3 Anti-Marshall",
+      "ply": 21,
+      "expected": "Ba2",
+      "text": "The bishop retreats to a2, staying on the a2-g8 diagonal while giving the knight c4 access.",
+      "reason": "text says square c4 but move went to a2"
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "trap:Marshall d5 Prevented",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight, attacking e5.",
+      "reason": "text says square e5 but move went to f3"
+    },
+    {
+      "opening": "scotch-gambit",
+      "subline": "main",
+      "ply": 3,
+      "expected": "Nf3",
+      "text": "White develops the knight to its best square, attacking e5 and preparing kingside castling. This sets up the key decision on move 3: the Scotch Gambit with d4. The knight on f3 wil",
+      "reason": "text says square e5 but move went to f3"
+    },
+    {
+      "opening": "scotch-gambit",
+      "subline": "var:Scotch Gambit: Dubois-Reti Defense",
+      "ply": 1,
+      "expected": "e4",
+      "text": "The Scotch Gambit: Dubois-Reti Defense is an important variation of the Scotch Gambit. Black plays 4...Bc5 and 6...dxc3 to grab pawns. White sacrifices the c-pawn for rapid develop",
+      "reason": "text says square f8 but move went to e4"
+    }
+  ],
+  "colormismatch": [
+    {
+      "opening": "gambit-evans-gambit",
+      "subline": "var:Evans Gambit: Slow Variation with Be7 Retreat",
+      "ply": 17,
+      "expected": "e5",
+      "text": "Black responds with e5, contesting the center. This is the move that defines the Evans Gambit: Compromised Defence.",
+      "reason": "text says black but it is white to move"
+    },
+    {
+      "opening": "gambit-evans-gambit",
+      "subline": "var:Evans Gambit: Compromised Defense (dxc3)",
+      "ply": 17,
+      "expected": "e5",
+      "text": "Black responds with e5, contesting the center. This is the move that defines the Evans Gambit: Stone-Ware Variation.",
+      "reason": "text says black but it is white to move"
+    }
+  ],
+  "repeated": [],
+  "dropped": [],
+  "emptylabel": [
+    {
+      "opening": "smith-morra-gambit",
+      "subline": "warn:Black Plays d5 Counterstrike",
+      "ply": 17,
+      "expected": "Rd1"
+    }
+  ],
+  "templateClassA": [
+    {
+      "opening": "pro-firouzja-vienna",
+      "subline": "var:Vienna Gambit",
+      "ply": 15,
+      "expected": "bxc3",
+      "text": "White develops the king's knight to its ideal square, completing the basic piece development and preparing to castle.",
+      "reason": "qualifier mentions knight but move is pawn"
+    }
+  ],
+  "templateClassB": [],
+  "crosslinedrift": []
+}
