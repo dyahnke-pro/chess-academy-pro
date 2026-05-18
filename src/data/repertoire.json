@@ -7,7 +7,7 @@
     "shortOverview": "Italian Game: develop Bc4 aiming at f7, build c3/d4 center, get rich middlegame play with active piece coordination.",
     "color": "white",
     "style": "Classical, Strategic",
-    "overview": "The Italian Game is one of the oldest and most natural openings in chess. You develop your bishop to the most active diagonal, aim at f7, and prepare a strong center with c3 and d4. The beauty of the Italian is that it leads to rich middlegame positions where understanding trumps memorization — exactly the kind of chess you want to be playing.",
+    "overview": "The Italian Game is one of the oldest analyzed openings in chess — documented in Pedro Damiano's 1512 chess treatise and refined by Greco's 1620s manuscripts. Paul Morphy demonstrated its devastating attacking potential in his 1858 European tour, producing brilliancies still studied today; in the modern era, Magnus Carlsen revived the slow d3 system as a serious World Championship-level weapon. You develop your bishop to the most active diagonal, aim at f7 (chess's weakest square), and prepare a strong centre with c3 and d4. The beauty of the Italian: it leads to rich middlegame positions where understanding trumps memorization.",
     "keyIdeas": [
       "Build a strong pawn center with c3 and d4",
       "The bishop on c4 targets the f7 weakness",
@@ -141,7 +141,7 @@
     "shortOverview": "Pin the e5 knight with Bb5, build c3/d4 center, long-term plans with Nb8-d7 reroute and slow strategic battle.",
     "color": "white",
     "style": "Classical, Positional",
-    "overview": "The Ruy Lopez is the king of openings — the most tested and trusted weapon for White at every level of chess. By pinning the knight that defends e5, White creates long-term pressure on Black's position. The plans are deep and strategic: you're not looking for a quick knockout, you're building a lasting advantage that converts in the middlegame and endgame.",
+    "overview": "The Ruy Lopez (or Spanish Game) is the king of openings — named after Spanish priest Ruy López de Segura, who analyzed it in his 1561 book *Libro del Ajedrez*. For 460 years it has been the flagship of 1.e4: Steinitz refined the theory in the 1880s, Tarrasch made it the foundation of his 'rules of position', Capablanca and Lasker lived in it, Fischer reportedly said 'best by test' specifically because the Ruy Lopez exists, Kasparov-Karpov 1985 marathon featured 24 Spanish games, and Magnus Carlsen has the most dominant Ruy Lopez record in modern history. By pinning the knight that defends e5, you create long-term pressure on Black's position. The plans are deep and strategic — you're not looking for a quick knockout, you're building a lasting advantage that converts in the middlegame and endgame.",
     "keyIdeas": [
       "Maintain pressure on e5 via the Bb5-a4-b3 diagonal and Re1",
       "Build a strong center with c3 and d4 at the right moment",
@@ -259,7 +259,7 @@
     "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6 Nxc6 Nxc6 Bxc5 dxc5 f4 Be6 Bb5 Rad8 Qe2 Bc8 Nd2 a6 Ba4 b5 Bc2 c4 e5 Qh6 Ne4 Kh8 Ng5 g6 Ne4 Bf5 Nf6 Bxc2 Qxc2 Ne7 Rf3 Qg7 g4 Nd5 g5 Nxf6",
     "color": "white",
     "style": "Open, Dynamic",
-    "overview": "The Scotch Game is an aggressive, direct approach to the center — you immediately strike with d4 on move 3, opening up the position before Black has a chance to solidify. Garry Kasparov revived this opening at the top level, and it remains one of the best ways to fight for an advantage without drowning in Ruy Lopez theory. The positions are open, the pieces are active, and concrete calculation matters more than memorization.",
+    "overview": "The Scotch Game takes its name from the 1824 London-Edinburgh correspondence match where the Scottish team's 3.d4 challenge gave the line its identity; Wilhelm Steinitz analyzed it deeply in the 1880s. The Scotch fell out of favour at the top level for nearly a century before Garry Kasparov revived it in the 1990s (including in his 1990 match against Karpov) — breaking the Spanish/Italian monopoly and proving the modern engines wrong about its supposed harmlessness. Today it remains a fixture of elite tournament play. The positions are open, the pieces are active, and concrete calculation matters more than memorization — exactly what you want when avoiding Ruy Lopez theoretical labyrinths.",
     "keyIdeas": [
       "Open the center immediately with d4, exploiting White's development lead",
       "After Nxd4, the knight is powerful in the center — use it to dictate the pace",
@@ -385,7 +385,7 @@
     "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 O-O Nf3 d6 O-O c6 Bb3 Nbd7 Ne2 Bb6 c3 Nc5 Bc2 Bg4 Ng3 Nh5 d4 exd4 cxd4 Ne6 Nf5 d5 h3 Bxf5 exf5 Nc7 Bg5 Qd6 Qd2 Rfe8 g4 Nf6 Bf4 Qf8 Be5 Ne4 Qf4 Rac8",
     "color": "white",
     "style": "Classical, Flexible",
-    "overview": "The Vienna Game is one of the most flexible openings for White. Rather than committing to a specific plan immediately, you develop the knight to c3 and keep all options open — f4, Bc4, Nf3, d4, or even g3. It's a great weapon because Black can't just play routine moves without getting into trouble.",
+    "overview": "The Vienna Game is named after the Viennese chess club where Wilhelm Steinitz (the first official World Champion) and his students experimented with it in the 1860s-1880s. The opening was a popular tournament weapon through the early 1900s before the Italian and Spanish overshadowed it; modern theoretical preparation has resurrected it, with elite players like Ivanchuk and Adams using it occasionally. The Vienna's strength is flexibility: rather than committing to a specific plan immediately, you develop the knight to c3 and keep options open — f4 (gambit), Bc4 (Italian-style), Nf3 (quiet), d4 (central), or g3 (fianchetto). Black can't autopilot through routine moves without getting into trouble.",
     "keyIdeas": [
       "Control the center with d4 or f4 at the right moment",
       "The knight on c3 supports the e4 pawn and prepares f4",
@@ -494,7 +494,7 @@
     "pgn": "e4 e5 f4 exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5 O-O Be7 d4 O-O Bxd5 Qxd5 Nc3 Qd8 Bxf4 Bf5 Qe2 Nc6 Kh1 Re8 Nb5 Rc8 Nxc7 Rxc7 Bxc7 Qxc7 c3 Bg4",
     "color": "white",
     "style": "Romantic, Aggressive",
-    "overview": "The King's Gambit is the ultimate attacking opening — you sacrifice a pawn on move 2 to rip open the f-file and launch a direct assault on Black's king. This is chess at its most romantic and exciting. Yes, engines say Black can equalize with perfect play, but in practice, the attacking player has all the fun. If you love tactical chess and want to put your opponent under pressure from move one, this is your opening.",
+    "overview": "The King's Gambit is the ultimate attacking opening — and the most romantic in chess history. Played at the highest level for 300+ years: Greco analyzed it in the 1620s; Paul Morphy used it for his attacking masterpieces in the 1850s-60s; Anderssen's 'Immortal Game' of 1851 was a King's Gambit (sacrificing queen + both rooks for mate); Spassky played it in his 1960s prime including the famous Spassky-Bronstein 1960 brilliancy. Bobby Fischer's 1961 article 'A Bust to the King's Gambit' helped knock it out of elite play, but it remains a beloved teaching tool because it embodies attacking principles in their purest form. You sacrifice a pawn on move 2 to rip open the f-file and launch a direct assault on Black's king. Engines say Black equalizes with perfect play; in practice, the attacking player has all the fun.",
     "keyIdeas": [
       "Open the f-file for your rook after O-O — the rook on f1 becomes a monster",
       "Develop quickly with Nf3, Bc4, d4 — speed is everything in the King's Gambit",
@@ -619,7 +619,7 @@
     "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Bg4",
     "color": "white",
     "style": "Solid, Symmetrical",
-    "overview": "The Four Knights Game is a solid, classical opening that leads to balanced positions rich in strategic ideas. Both sides develop their knights symmetrically, and the battle is about who breaks the symmetry more favorably. It's an excellent opening for building positional understanding — you can't just play moves on autopilot, you need to find the right moment to create an imbalance.",
+    "overview": "The Four Knights Game has been around since the early 1800s and reached peak popularity in the late 19th and early 20th centuries — Steinitz, Tarrasch, and Lasker all played it. It fell from elite favour for decades because the symmetric positions tended toward draws, but Boris Spassky used it occasionally and modern players like Kramnik have revived the Spanish Four Knights (4.Bb5) as a serious weapon. It's a solid, classical opening leading to balanced positions rich in strategic ideas. Both sides develop knights symmetrically; the battle is about who breaks the symmetry more favourably. Excellent for building positional understanding — you can't autopilot, you need to find the right moment to create an imbalance.",
     "keyIdeas": [
       "Bb5 (Spanish Four Knights) creates asymmetry and prepares d3-d4",
       "The symmetrical structure means small advantages in development or pawn structure matter a lot",
@@ -718,7 +718,7 @@
     "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Qd2 Nbd7",
     "color": "black",
     "style": "Dynamic, Counterattacking",
-    "overview": "The Najdorf is the king of all Sicilian variations — Bobby Fischer's weapon, Kasparov's weapon, and the choice of every ambitious chess player who wants to fight for a win with Black. The move 5...a6 is incredibly flexible: it prevents Bb5, prepares ...e5 or ...b5, and keeps all options open. You're telling White that you're not afraid of complications — in fact, you welcome them.",
+    "overview": "The Najdorf is the king of all Sicilian variations — named after Argentine GM Miguel Najdorf, who fled Poland for Argentina in 1939 right before WWII (his entire family was killed in the Holocaust); he made Argentina his home and pioneered the …a6 move in the 1940s. Bobby Fischer immortalized it in his 1972 World Championship match against Spassky; Garry Kasparov played it for thirty years against Karpov in their championship matches of the 1980s; today Magnus Carlsen uses it as his Black wins-with-Black weapon. The …a6 move is extraordinarily flexible: it prevents Bb5, prepares …e5 or …b5, and keeps all options open. You're telling White that you're not afraid of complications — in fact, you welcome them.",
     "keyIdeas": [
       "...a6 prevents Bb5+ and prepares the queenside expansion with ...b5",
       "...e5 is the main plan, kicking the knight from d4 and seizing central space",
@@ -832,7 +832,7 @@
     "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8",
     "color": "black",
     "style": "Sharp, Aggressive",
-    "overview": "The Dragon is one of the most thrilling openings in all of chess — it's a full-on battle where both sides attack the opposing king. Black fianchettoes the bishop on g7 creating a dragon-like pawn formation, and the battle lines are drawn: White attacks on the kingside with h4-h5 and g4, Black attacks on the queenside with ...Rc8, ...a5, and ...Ne5. It's a pure race, and the player who executes their attack faster wins.",
+    "overview": "The Sicilian Dragon — named because Black's pawn structure (with …d6, …g6 fianchetto) resembles a dragon's spine — is one of the most thrilling and theoretical openings in chess. Pioneered by Russian master Henry Bird in 1880, the Dragon became Black's main aggressive Sicilian weapon for a century. World champions Petrosian, Spassky, and Kasparov all played it; Magnus Carlsen used the Dragon as a surprise weapon at the elite level. The opening is a full-on battle where both sides attack the opposing king: White attacks kingside with h4-h5 and g4 (the Yugoslav Attack), Black attacks queenside with …Rc8, …a5, and the famous …Rxc3! exchange sacrifice. The faster attack wins; the position has been analyzed to the 30+ move mark in critical lines.",
     "keyIdeas": [
       "The g7 bishop is the Dragon's pride — it controls the a1-h8 diagonal and pressures White's center",
       "...Rc8 puts the rook on the semi-open c-file, targeting White's king after O-O-O",
@@ -953,7 +953,7 @@
     "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Be2 Be6 O-O Rb8",
     "color": "black",
     "style": "Dynamic, Unbalanced",
-    "overview": "The Sveshnikov is one of the most dynamic and ambitious Sicilians — you deliberately weaken d5 by playing ...e5, but in return you get incredible piece activity, the powerful bishop on f6, and central space. Every world-class player from Kasparov to Carlsen has used this opening. The key insight is that the d5 weakness is only a weakness if White can exploit it — and with proper play, Black's activity more than compensates.",
+    "overview": "The Sveshnikov is named after Soviet GM Evgeny Sveshnikov who pioneered the …e5 idea in the 1970s when chess orthodoxy said you should NEVER voluntarily create a weakness on d5. Sveshnikov spent years analyzing it, publishing his 1988 book that proved the structural concession was worth the dynamic compensation. Kasparov used it as an auxiliary weapon in the 1990s; Carlsen drew Caruana every game with Black using the Sveshnikov in their 2018 World Championship match in London — cementing its elite status. You deliberately weaken d5 by playing …e5, but get incredible piece activity, the powerful bishop pair, and central space in return. The d5 weakness only matters if White can exploit it — and with proper play, Black's activity more than compensates.",
     "keyIdeas": [
       "...e5 grabs central space and activates the pieces, even though d5 becomes weak",
       "The dark-squared bishop on f6/g7 is incredibly powerful after ...Bxf6",
@@ -1052,7 +1052,7 @@
     "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 Nf3 e6 Nc3 Nxc3 bxc3 Qc7 Bd2 Nd7 exd6 Bxd6 Bd3 b6 O-O Bb7 Re1 O-O h3 Bf4",
     "color": "black",
     "style": "Solid, Anti-Sicilian",
-    "overview": "The Alapin (2.c3) is White's attempt to build a big center with d4 without allowing the Open Sicilian. As Black, you shouldn't be annoyed — you should be happy! White has given up the right to play the dangerous Open Sicilian mainlines. Your job is to challenge the center immediately, develop naturally, and show that c3 is a wasted move. The positions are strategically rich and favor the player who understands pawn structures better.",
+    "overview": "The Alapin Sicilian (2.c3) is named after Russian master Semyon Alapin, who systematized this anti-Sicilian system in the late 1800s. It stayed an obscure sideline until GM Evgeny Sveshnikov championed it in the 1980s, and Dutch GM Sergei Tiviakov made it his lifework — winning thousands of games and earning the nickname 'Mr. Alapin.' White's idea: build a strong central pawn duo (e4+d4) without allowing the Open Sicilian's massive theoretical battles. As Black, you should be HAPPY when facing the Alapin — White has given up the right to play the most dangerous Open Sicilian mainlines. Your job: challenge the centre immediately with …Nf6 or …d5, develop naturally, and show that c3 was a wasted move.",
     "keyIdeas": [
       "Challenge White's center immediately with ...Nf6 and ...d5 or ...d6 and ...dxe5",
       "After ...cxd4 cxd4, White has an isolated d-pawn — target it!",
