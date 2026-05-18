@@ -94,6 +94,106 @@ doesn't have a forced material gain in the DB, classify it as
 `mistake` (positional advantage); never extend with invented book
 moves.
 
+### G4. TTS = streaming canonical. Buffered MP3 is gone.
+
+`/api/tts` MUST return Polly's audio stream directly to the
+client (chunked transfer, no Content-Length). The buffered
+`await result.AudioStream.transformToByteArray()` path is dead
+— do not reintroduce it for "caching" or "easier debug" or any
+other rationale. Production audit (2026-05-18, David's report)
+proved the buffered path was the primary source of voice lag:
+per-sentence narrations paid the full Polly synthesis time
+(~600-1500ms) before a single byte hit the client. Streaming
+overlaps synthesis-time with transit-time and cuts perceived
+latency in half.
+
+Client-side: `voiceService` consumes the streamed body via
+progressive playback (MediaSource / ManagedMediaSource on
+iOS). When you add a NEW narration surface or a NEW
+TTS-adjacent feature, route it through the canonical
+`speakStreamed*` methods on `voiceService` — do not write a
+new fetch-then-decode-then-play helper. If you find yourself
+calling `response.arrayBuffer()` on a `/api/tts` response,
+STOP — that's the dead path. Use the streamed reader.
+
+This is David's directive verbatim (2026-05-18):
+*"TTS narration is a production standard. Log into memory and
+even remove the other form of streaming so it can't get
+confused or forgotten again."*
+
+### G5. Verbosity setting is RESPECTED, not hinted at.
+
+`coachNarration` has three values: `silent` / `brief` / `full`.
+Every one of them is a HARD CONTRACT, not a soft hint to the LLM:
+
+- **silent** = no voice fires anywhere. `voiceService.speakInternal`
+  short-circuits at the silent gate.
+- **brief** = MAX 2 sentences / MAX 30 words. Enforced two ways:
+  1. The `fast` verbosity prompt instruction in
+     `coachPrompts.ts:VERBOSITY_INSTRUCTIONS` puts the hard cap in
+     the system prompt.
+  2. `applyBriefVoiceCap` in `utils/coachNarration.ts` is a
+     post-process safety net wired into `voiceService.speakInternal`
+     — it clips voice text to the cap regardless of what the LLM
+     shipped. The chat bubble still shows the full prose; only the
+     spoken voice obeys the brief budget.
+- **full** = no cap.
+
+When you add a new narration surface or modify the prompt:
+- Do NOT add new soft phrasing ("keep it tight", "be concise")
+  that the brain can interpret liberally — production audit caught
+  the brain shipping 497-char responses on "brief" because the
+  rule was soft. Use a numeric cap (X sentences, Y words).
+- Do NOT bypass `voiceService.speakInternal` to skip the brief-cap.
+  If you find yourself wanting to "just speak this directly without
+  the cap," route it through the canonical method and let the cap
+  apply. The user picked "brief" specifically because they don't
+  want long prose.
+- Audit when the cap fires: the wired `voice-speak-invoked` audit
+  with `source=voiceService.speakInternal.briefCap` is the
+  observability signal that tells us how often the LLM violates the
+  cap. Don't suppress that audit.
+
+This is David's directive verbatim (2026-05-18):
+*"Make sure voice narration ties into verbosity settings. Right
+now mine is set on short. There is also a full narration setting
+and none."* And: *"Both narration fixes are MUSTS."*
+
+### G6. Arrows on every step-by-step coach move. No asking.
+
+When the student is walking through a line move-by-move (typing
+"I played e4. Your move." / "I played Nc6. Your move." etc.),
+EVERY coach response MUST include arrows. Two specific obligations
+on every step:
+
+1. **Arrow on the move the coach just played.** If the brain called
+   `play_move {"san":"e5"}`, it must emit `[BOARD: arrow:e7-e5:green]`
+   in the same response. The animation is gone in 200ms; the arrow
+   lingers.
+2. **Arrow on every SAN mentioned in prose.** Threats, candidates,
+   what-ifs. The full rule is in
+   `src/coach/envelope.ts:TEACH_MODE_ADDITION` under
+   `═══ STEP-BY-STEP WALKTHROUGHS — ARROW ON EVERY COACH MOVE ═══`.
+
+`validateArrowClaims` in `src/services/arrowClaimValidator.ts` is
+the programmatic check — scans the response for SAN-shaped tokens
+without matching `[BOARD: arrow:from-to:color]` markers and emits
+a `claim-validator-trip` audit with `source=arrowClaimValidator`.
+Wired at the response-finalization site in
+`CoachTeachPage.handleSubmit`. Audit-only for now; future iteration
+may add a regen step when violations fire.
+
+When you add a NEW brain-call surface that does step-by-step
+coaching, wire the arrow validator into its response-finalization
+the same way (one import, one call to `validateArrowClaims(finalText)`,
+emit the audit on violations). Do not skip this — David's audit
+caught the rule being ignored even with the NON-NEGOTIABLE label;
+the programmatic validator is what catches the relapse.
+
+This is David's directive verbatim (2026-05-18):
+*"add the arrows for step by step walk throughs so I don't have to
+ask each time."*
+
 Violating these gates wastes David's money and erodes trust faster
 than missing the underlying task. The shallow-work failure mode IS
 the harm here.
