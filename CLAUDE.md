@@ -910,30 +910,36 @@ the log. Don't let it rot.
 
 ## Deployment Policy
 
-**Land every change on `main` as fast as possible.** David doesn't
-want preview-deploy latency — every commit ships.
+**Land every change DIRECTLY on `main`.** David's call 2026-05-18:
+*"I don't want preview deploys! Remove that command from your
+memory and replace with straight to main production! The pre and
+post deploy playwright audits are good enough to fix anything
+that's broken."*
 
-**Workflow (Claude Code via the harness):**
+**Workflow:**
 
 1. Run tests, typecheck, lint — fix any failures.
-2. Branch from `main` as `claude/<short-topic>` (the harness blocks
-   direct pushes to `main` with 403, so branch + PR is the
-   functional equivalent of "push to main").
-3. Open a PR with `mcp__github__create_pull_request` (not draft).
-4. Merge it immediately with `mcp__github__merge_pull_request`
-   (squash). Vercel picks up the merged commit and deploys.
-5. iOS / TestFlight builds are produced locally via Capacitor when
-   needed.
+2. Run the relevant Playwright audit script for the surface you
+   touched (G1). If it's green, ship.
+3. `git checkout main && git fetch origin main && git reset --hard origin/main`
+4. Commit on `main` directly. Push: `git push origin main`.
+5. Vercel deploys the production from main. NO preview-PR step.
 
-**Branch hygiene:** delete `claude/*` branches after their PR
-merges. The harness blocks `git push --delete origin <branch>`, so
-clean-up needs the GitHub UI or a follow-up tooling pass. Don't let
-old branches accumulate — a fresh session looking at the branch
-list gets buried in stale Claude branches and can't tell what's
-current.
+**DO NOT open a PR for every change.** PRs trigger Vercel preview
+deploys that count against the 100/day free-tier cap. Two days of
+heavy work landed 30+ PRs and hit the cap; from now on commits go
+straight to main.
 
-**Don't ask for permission to push or merge.** Just do it. Asking
-adds round-trips David doesn't want.
+**When IS a PR appropriate?**
+- Long-running review by David where he wants threaded comments
+- Mergeable-only-after-CI scenarios (rare in this single-user app)
+- Otherwise, NEVER. Push to main.
+
+**iOS / TestFlight builds** are produced locally via Capacitor when
+needed.
+
+**Don't ask for permission to push.** Just do it. Asking adds
+round-trips David doesn't want.
 
 **Auth for `git push` from Claude sessions.** Dave keeps a GitHub
 Personal Access Token labeled **"Claude Code repo token"** in his
