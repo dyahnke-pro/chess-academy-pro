@@ -66,6 +66,8 @@ import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalys
 import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { withTimeout } from '../../coach/withTimeout';
 
@@ -426,6 +428,10 @@ export function CoachTeachPage(): JSX.Element {
             fen,
             evalCp: a.isMate ? 0 : a.evaluation,
             mateIn: a.mateIn,
+            // Capture the full StockfishAnalysis so handleSubmit can
+            // pre-compute the tactical context block (forks/pins/
+            // threats/opportunities) without re-querying the engine.
+            analysis: a,
           };
         } catch {
           // Stockfish hiccup — leave the bar at the last known value
@@ -555,7 +561,12 @@ export function CoachTeachPage(): JSX.Element {
   // production audit (build 4e628e5). We only surface the eval when
   // its FEN matches the FEN we're asking about, so a one-ply-stale
   // eval doesn't get misattributed to the new position.
-  const latestEvalRef = useRef<{ fen: string; evalCp: number; mateIn: number | null } | null>(null);
+  const latestEvalRef = useRef<{
+    fen: string;
+    evalCp: number;
+    mateIn: number | null;
+    analysis: StockfishAnalysis | null;
+  } | null>(null);
   // Pre-fetched Lichess explorer snapshot for the current FEN. Same
   // pattern as the eval bar — the surface fires the expensive request
   // BEFORE the brain has to ask for it, then injects the compact
@@ -1519,6 +1530,30 @@ export function CoachTeachPage(): JSX.Element {
       lichessRef && lichessRef.fen === fen
         ? { lichessSnapshot: lichessRef.snapshot }
         : undefined;
+    // Tactical context (Phase 1+2 of WO-COACH-TACTICAL-AWARENESS):
+    // pre-compute named tactics in the live FEN + threats and
+    // opportunities scanned through Stockfish's PV up to the
+    // rating-adaptive lookahead depth (4 plies for intermediate
+    // students per David's call). The brain's tactical vocabulary
+    // is bounded by this block — G3 contract identical to the
+    // master-play / opening-name grounding pattern. Only attaches
+    // when we have a fresh analysis for this exact FEN; stale evals
+    // would mislead the scan.
+    const cachedAnalysis =
+      latestEvalRef.current && latestEvalRef.current.fen === fen
+        ? latestEvalRef.current.analysis
+        : null;
+    const studentColor = fenTurn === 'white' ? 'w' : 'b';
+    // Rating proxy = puzzleRating (1200 fresh, drifts up/down with
+    // adaptive puzzles). Drives lookahead depth via
+    // `getTacticLookahead` — 4 plies once the student crosses 1400.
+    const studentRating = activeProfile?.puzzleRating ?? 1200;
+    const tacticsForAsk = buildTacticsLiveContext(
+      fen,
+      cachedAnalysis,
+      studentColor,
+      studentRating,
+    );
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
@@ -1530,9 +1565,16 @@ export function CoachTeachPage(): JSX.Element {
       // when it was Black's turn but the position needed White's
       // response, then chess.js rejected it 5 trips in a row.
       whoseTurn: fenTurn,
+      tactics: tacticsForAsk,
       ...(evalForAsk ?? {}),
       ...(lichessForAsk ?? {}),
     };
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachTeachPage.buildLiveTactics',
+      summary: `tactics ctx: immediate=${tacticsForAsk.immediate.length} hanging=${tacticsForAsk.hanging.length} threats=${tacticsForAsk.threats.length} opps=${tacticsForAsk.opportunities.length} depth=${tacticsForAsk.lookaheadDepth}`,
+    });
 
     void logAppAudit({
       kind: 'coach-surface-migrated',
