@@ -3094,20 +3094,20 @@
       "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+",
       "color": "white",
       "style": "Classical, Attacking",
-      "overview": "Gukesh's Italian Game is a masterclass in building slow pressure from a classical opening. The youngest World Champion uses the Giuoco Piano to create positions where his deep calculation can shine. By playing c3 and d4, White builds a strong center and opens lines for a kingside attack — the kind of position where Gukesh's tactical vision is devastating.",
+      "overview": "Gukesh Dommaraju became the youngest undisputed World Chess Champion in history in December 2024 (age 18, defeating Ding Liren in Singapore) — and his Italian Game played a central role in that match. The Italian itself is among chess's oldest analyzed openings — Pedro Damiano's 1512 treatise and Greco's 1620s manuscripts laid its foundations; Paul Morphy demonstrated its attacking potential in his 1858 European tour; Carlsen revived the slow d3 system as White's main weapon in the 2010s. Gukesh uses the c3+d4 break version — the IQP positions reward his deep calculation. When the world's youngest World Champion sits down with the Italian, you're watching the modern evolution of chess's most timeless opening.",
       "keyIdeas": [
-        "Build a powerful pawn center with c3 and d4 to control the game — this central control is the foundation for all middlegame operations",
-        "After Bb4+ Bd2 or Nc3, White gets active piece play and central dominance — this central control is the foundation for all middlegame operations",
-        "Use the half-open c-file and central pawns to generate a kingside attack — this central control is the foundation for all middlegame operations",
-        "Transition from quiet development into sharp tactics — Gukesh's signature approach"
+        "Build the c3+d4 pawn duo. After 4.c3 Nf6 5.d4 exd4 6.cxd4, you have a classical central position with active piece play and the Bc4 aimed at f7.",
+        "After 6...Bb4+ 7.Bd2 or 7.Nc3, you reach the standard IQP middlegame. The d4-pawn is YOUR strength while pieces are active — the kingside attack flows naturally.",
+        "Use the c-file (after the trades) AND the central pawn for a kingside attack. The Bc4 + Bd2 + Nbxd2 → Nf1 → Ng3 manoeuvre brings the queenside knight to the attacking square.",
+        "Transition from classical development to sharp tactics. Gukesh's signature — calm opening play that suddenly becomes a violent attack once the centre opens."
       ],
       "traps": [
-        "After d4 exd4 cxd4 Bb4+ Nc3, if Black takes Bxc3+ bxc3, White has a massive center and open b-file",
-        "If Black plays Nxe4 prematurely in the Giuoco Piano, d5 wins the knight after the discovered attack"
+        "After 6...Bb4+ 7.Nc3 (the gambit option) Nxe4 8.O-O Bxc3 9.bxc3 — White has doubled c-pawns but a HUGE centre, open b-file, and the bishop pair. The compensation is real; engines call it equal but the practical chances favour White.",
+        "If Black plays Nxe4 prematurely (before completing development), 5.d5! attacks the knight AND the Nc6, winning material via the discovered attack pattern."
       ],
       "warnings": [
-        "The isolated d4 pawn can become a weakness in endgames — keep pieces active",
-        "Watch for Black's counterplay with d5 break in the center"
+        "The isolated d4-pawn becomes a weakness in endgames. Trade pieces ONLY when you've achieved a concrete advantage; keep queens on as long as possible.",
+        "Watch for Black's …d5 break challenging the centre. If Black plays …d5 with pieces fully developed, the IQP structure dissolves and your strategic edge evaporates."
       ],
       "variations": [
         {
@@ -3142,20 +3142,20 @@
       "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2",
       "color": "white",
       "style": "Positional, Strategic",
-      "overview": "The Catalan is Gukesh's weapon of choice in long classical games. The fianchettoed bishop on g2 is a monster — it controls the long diagonal and puts constant pressure on Black's queenside. Gukesh uses Qc2 to regain the c4 pawn while building a slow, crushing positional advantage. This is how a World Champion squeezes wins from nothing.",
+      "overview": "The Catalan is Gukesh's weapon of choice in long classical games. The opening was christened at the 1929 Barcelona tournament when Savielly Tartakower fianchettoed his bishop and named it for the host region; Botvinnik used it as a championship weapon; Vladimir Kramnik elevated it to the elite level in the 2000s; Magnus Carlsen made it his signature 1.d4 weapon. Gukesh inherits this lineage and brings 21st-century engine preparation to lines other players think are exhausted. The fianchettoed bishop on g2 is the opening's defining piece — it controls the long diagonal from across the board AND supports queenside operations. This is how a World Champion squeezes wins from positions Stockfish calls equal.",
       "keyIdeas": [
-        "Fianchetto the bishop to g2 — it becomes the most powerful piece on the board — a key strategic concept in Catalan Opening",
-        "Recapture the c4 pawn with Qc2 while keeping positional pressure — maintaining this pressure forces the opponent to defend passively",
-        "Use the long diagonal (a8-h1) to create constant threats against Black's queenside",
-        "Grind slowly with a small but lasting edge — classic Gukesh — a key strategic concept in Catalan Opening"
+        "The Bg2 is the entire opening. It stares at the a8-rook from across the board AND supports queenside pawn pushes. NEVER trade it lightly — a Catalan without the g2-bishop is just a worse Queen's Gambit.",
+        "Recover the c4 pawn flexibly — Qc2 (mainline), Qa4+ (Karpov's choice), or a4 (positional probe). Each recovery gives a different middlegame; Gukesh prefers Qc2 for the central queen placement.",
+        "Use the a8-h1 diagonal as a permanent threat. Even when no immediate tactic exists, the Bg2 silently pressures Black's queenside throughout the entire game.",
+        "Patience wins. The Catalan's edge is positional — small advantages accumulating across 40-50 moves. Most amateurs lose Catalan positions by getting impatient and forcing tactics; Gukesh keeps the slow pressure on."
       ],
       "traps": [
-        "After dxc4, Black must be careful not to hold the pawn — a4 and Qc2 recover it with interest",
-        "If Black plays b5 trying to hold c4, a4 undermines the chain and opens the a-file"
+        "After 5...dxc4 (Black grabs the pawn) — DON'T recapture immediately. Play 6.Qc2 + 7.a4 first, THEN recover the pawn. The setup-before-recovery approach gains a tempo every time.",
+        "If Black tries to hold c4 with …b5, you play a4! immediately undermining the chain. After …c6 (defending b5) axb5 cxb5 — Black's queenside is wrecked AND the open a-file is yours."
       ],
       "warnings": [
-        "Do not rush — the Catalan is a slow squeeze, not a blitz attack",
-        "Be patient about recovering the c4 pawn; the positional pressure is more important"
+        "DON'T rush. The Catalan is a 50-move squeeze, not a 20-move attack. Premature pushes (e4 too early, c5 push, queenside expansion before development) lose the structural pluses.",
+        "Be patient about pawn recovery. The c4-pawn isn't going anywhere — Black can't hold it safely. Use the pressure to gain tempos and dominate the middlegame."
       ],
       "variations": [
         {
@@ -3195,20 +3195,20 @@
       "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
       "color": "black",
       "style": "Dynamic, Theoretical",
-      "overview": "Gukesh's choice of the Najdorf as Black shows his fighting spirit. The Najdorf is the most theoretically complex opening in chess, and Gukesh navigates it with the precision of a World Champion. The move a6 prepares b5 and e5, giving Black dynamic counterplay. When Gukesh sits down with the Najdorf, he's saying: bring your best preparation — I'll outplay you.",
+      "overview": "Gukesh's choice of the Najdorf as Black shows his fighting spirit. The opening is named after Argentine GM Miguel Najdorf, who fled Poland for Argentina in 1939 right before WWII (his entire family was killed in the Holocaust); he made Argentina his home and pioneered the …a6 move in the 1940s. Bobby Fischer immortalized it in his 1972 World Championship run, Kasparov played it for thirty years against Karpov, Carlsen used it for wins-with-Black at the elite level. Gukesh — the youngest undisputed World Champion in history (December 2024) — brings 21st-century engine preparation to the most theoretically complex opening in chess. When Gukesh sits down with the Najdorf, he's saying: bring your best preparation — I'll outprep you.",
       "keyIdeas": [
-        "Play ...a6 to prevent Nb5 and prepare ...b5 queenside expansion — this is the Najdorf's signature plan that gains space and creates the ...Bb7 fianchetto opportunity",
-        "Time the ...e5 central break carefully — playing it too early leaves d5 weak, but delaying it allows White to consolidate. The right moment is when all pieces support the advance",
-        "Station a rook on the semi-open c-file with ...Rc8 to create lasting pressure — the c-file is Black's primary counterattacking highway in the Sicilian",
-        "Create asymmetric positions where deep calculation decides the game — a key strategic concept in Sicilian Najdorf"
+        "…a6 (the Najdorf move) is prophylactic AND preparatory — prevents Nb5 forks AND prepares …b5 queenside expansion. One move, two strategic purposes.",
+        "Time the …e5 central break carefully — playing it too early leaves d5 weak, delaying it lets White consolidate. The right moment: when White has committed Be3 or Be2 AND your pieces support the …e5 + …d5-defending setup.",
+        "Use the half-open c-file with …Rc8 to create lasting queenside pressure. Combined with …Qa5 or …Qb6, the c-file becomes Black's primary attacking lane.",
+        "Create asymmetric positions where calculation decides. Gukesh's Najdorf turns into a calculation contest by move 15 — and at age 18, he calculates faster than anyone."
       ],
       "traps": [
-        "In the English Attack, after Be3 e5 Nb3 Be6, Black has natural development and counterplay",
-        "After f3 e5, if White plays Nb3 too early, Be6 followed by d5 can equalize quickly"
+        "In the English Attack after 6.Be3 e5 7.Nb3, the natural 7...Be6 gives Black both control of d5 AND active development. Don't be afraid of the apparent weakness on d5 — it's defended thrice and Black's pieces are coordinated.",
+        "After 6.f3 e5 7.Nb3, if Black times the …Be6 + …d5 sequence right (when White's pieces are uncoordinated), Black equalizes quickly with central control."
       ],
       "warnings": [
-        "The Najdorf requires deep theoretical knowledge — study the main lines carefully",
-        "Avoid playing e5 too early when White has not committed to a setup"
+        "The Najdorf requires DEEP theoretical knowledge. Without engine-checked preparation in your specific variation, you can be checkmated in 25 moves. Don't play 'on principle' in the Najdorf.",
+        "Avoid playing …e5 too early. The …e5 break creates a permanent weakness on d5 — wait until White has committed pieces away from d5-defense before playing it."
       ],
       "variations": [
         {
