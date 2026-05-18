@@ -72,17 +72,26 @@ export function buildPieceRenderer(
       <img
         src={url}
         alt={key}
-        onError={() => {
-          // Phase 5 audit (#4 deferred): when a piece sprite 404s the
-          // board shows the alt-text fallback (e.g. "bB"). Without
-          // browser DevTools this used to be undiagnosable from logs.
-          // One audit entry per failed sprite (de-duped by the
-          // appAuditor session-summary collapsing) gives the trail.
+        onError={(e) => {
+          // Audit (2026-05-18, David's flag): piece SVGs sometimes
+          // fail to load on the first board mount and show alt-text
+          // ("bR", "wP", etc.) until the user closes + reopens the
+          // app. Symptoms match a CDN cold-start race — jsdelivr is
+          // momentarily slow / throttled and the browser caches the
+          // failed response. Retry once with a cache-busting query
+          // before giving up to the alt-text fallback. Second failure
+          // logs the audit row and surrenders.
+          const img = e.currentTarget as HTMLImageElement;
+          if (!img.dataset.retried) {
+            img.dataset.retried = '1';
+            img.src = `${url}?retry=${Date.now()}`;
+            return;
+          }
           void logAppAudit({
             kind: 'asset-load-error',
             category: 'subsystem',
             source: 'pieceSetService',
-            summary: `piece=${key} set=${setName} url=${url}`,
+            summary: `piece=${key} set=${setName} url=${url} (retry exhausted)`,
           });
         }}
         style={{
@@ -97,6 +106,30 @@ export function buildPieceRenderer(
   }
 
   return pieces;
+}
+
+/** Preload every piece SVG for the given set into the browser cache
+ *  so the next board mount renders the images instantly instead of
+ *  showing the alt-text fallback during the CDN round-trip.
+ *  Fire-and-forget — failed preloads are silent (the live `onError`
+ *  retry handles those at render time). Idempotent: subsequent calls
+ *  with the same set name short-circuit on the per-set in-flight
+ *  cache. */
+const preloadedSets = new Set<string>();
+export function preloadPieceSet(pieceSetId: string): void {
+  if (typeof window === 'undefined') return;
+  const config = PIECE_SETS.find((ps) => ps.id === pieceSetId);
+  const setName = config?.lichessName ?? 'cburnett';
+  if (preloadedSets.has(setName)) return;
+  preloadedSets.add(setName);
+  for (const file of Object.values(PIECE_MAP)) {
+    const url = `${LICHESS_CDN}/${setName}/${file}.svg`;
+    const img = new Image();
+    img.src = url;
+    // No onload / onerror handlers — the browser caches the response
+    // either way, and we don't care about failures here (the real
+    // `<img>` element renders later with its own onError retry).
+  }
 }
 
 export function getPieceSetConfig(id: string): PieceSetConfig {

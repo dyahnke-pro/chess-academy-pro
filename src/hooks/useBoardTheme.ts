@@ -2,11 +2,11 @@
 // Every board in the app must derive its colors, piece set, glow, animations,
 // and border from this hook so the look stays identical across screens.
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSettings } from './useSettings';
 import { useBoardGlow } from './useBoardGlow';
 import { getBoardColor, type BoardColorScheme } from '../services/boardColorService';
-import { buildPieceRenderer } from '../services/pieceSetService';
+import { buildPieceRenderer, preloadPieceSet } from '../services/pieceSetService';
 import { buildPieceGlowFilter } from '../utils/neonColors';
 
 /** Standard animation duration (ms) for piece movement. */
@@ -59,6 +59,18 @@ export function useBoardTheme(): BoardTheme {
     () => buildPieceRenderer(settings.pieceSet, pieceFilters),
     [settings.pieceSet, pieceFilters],
   );
+
+  // Warm the browser cache with every piece SVG for the active set
+  // the moment any board mounts (or the set changes). Without this
+  // the first board render can race the CDN cold-start and show the
+  // alt-text fallback ("bR" / "wP" text labels in place of pieces)
+  // until the user closes + reopens the app. Audit (2026-05-18,
+  // David's report): the alt-text bug is intermittent and per-set;
+  // preloading eliminates the race for the active set. Idempotent —
+  // `preloadPieceSet` no-ops on the second call for the same set.
+  useEffect(() => {
+    preloadPieceSet(settings.pieceSet);
+  }, [settings.pieceSet]);
 
   const darkSquareStyle = useMemo(
     () => ({ backgroundColor: scheme.darkSquare }),
