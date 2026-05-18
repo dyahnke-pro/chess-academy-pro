@@ -68,6 +68,7 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
+import { validateArrowClaims } from '../../services/arrowClaimValidator';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { withTimeout } from '../../coach/withTimeout';
@@ -1835,6 +1836,31 @@ export function CoachTeachPage(): JSX.Element {
                 hangingCount: tacticsForAsk.hanging.length,
                 lookaheadDepth: tacticsForAsk.lookaheadDepth,
               },
+            }),
+            fen,
+          });
+        }
+        // Arrow-claim validator (Phase D of streaming-TTS standardization,
+        // 2026-05-18). Scans the response for SAN-shaped move
+        // mentions that don't have a matching [BOARD: arrow:from-to:color]
+        // marker. The TEACH_MODE_ADDITION block has a NON-NEGOTIABLE
+        // rule requiring arrows on every step-by-step move; this is
+        // the observability layer that catches violations the prompt
+        // missed (David's audit caught the brain shipping 5 coach
+        // moves without arrows in a Vienna walkthrough).
+        // Audit-only first cut — observe violation rate before
+        // deciding whether to trigger a regen.
+        const arrowValidation = validateArrowClaims(finalText);
+        if (arrowValidation.violations.length > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.arrowClaimValidator',
+            summary: `coach mentioned SAN without arrow: ${arrowValidation.violations.map((v) => v.san).join(', ')}`,
+            details: JSON.stringify({
+              violations: arrowValidation.violations,
+              mentionedSans: arrowValidation.mentionedSans,
+              arrowMarkerCount: arrowValidation.arrowMarkers.length,
             }),
             fen,
           });
