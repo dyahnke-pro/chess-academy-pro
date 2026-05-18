@@ -2745,19 +2745,19 @@
       "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O h3 Bb7 d3 d6 a3 Na5 Ba2 c5 Nbd2 Nc6",
       "color": "white",
       "style": "Theoretical, Flexible",
-      "overview": "Dubov plays the Anti-Marshall Ruy Lopez to avoid the sharp Marshall Gambit while keeping dynamic chances. His deep preparation in these quiet-looking positions often catches opponents by surprise when tactical complications arise from seemingly calm structures.",
+      "overview": "Dubov plays the Anti-Marshall to avoid the Marshall Attack — the dangerous gambit Frank Marshall unveiled in his 1918 New York game against Capablanca (Marshall had supposedly prepared the gambit for ten years specifically to use against the Cuban). The Anti-Marshall systems (8.h3, 8.a4, 8.d3) developed in the 1980s-1990s as elite-level responses; today every top Ruy Lopez player has Anti-Marshall preparation in reserve. Dubov's preference is the slow h3+d3 system — keeping the position seemingly quiet, then unleashing creative tactical resources when the opponent relaxes. His deep preparation in these positions often catches opponents off guard.",
       "keyIdeas": [
-        "Sidestep the dangerous Marshall Attack by playing h3 and d3 early — this denies Black the ...d5 sacrifice that leads to the sharp Marshall gambit",
-        "Build a solid center and prepare a slow kingside expansion — this central control is the foundation for all middlegame operations",
-        "The a3 and Ba2 setup secures the bishop and prepares b4 — piece placement and activity are more important than material in these positions",
-        "Look for central breaks with d4 or c3-d4 when ready — this central control is the foundation for all middlegame operations"
+        "h3 BEFORE Black can play …d5 is the Anti-Marshall's defining move. The h3 'wastes' a tempo but rules out the Marshall Gambit entirely — Black's …d5 thrust now hangs to exd5 without the typical compensation.",
+        "Build the d3+c3 setup keeping the centre flexible. Don't push d4 until ALL pieces are developed (Re1, Nbd2, Ba2, h3). Premature d4 loses the structural pluses.",
+        "Bb3-Ba2 is the standard manoeuvre to dodge Black's …Na5 kick. The bishop stays on the a2-g8 diagonal eyeing f7; from a2 it's safer than b3 and supports the future b4 push.",
+        "Look for the right moment to break with d4 or c3-d4. The Anti-Marshall middlegame is positional but contains tactical resources — Dubov finds them where other players grind."
       ],
       "traps": [
-        "If Black plays d5 prematurely, exd5 Nxd5 gives White pressure on e5 and the open e-file"
+        "If Black plays the desperate 9...d5 (trying the Marshall anyway), 10.exd5 Nxd5 11.Nxe5 — White is up a pawn AND has the extra h3 tempo. The Marshall's typical compensation (…Bd6/…Qh4 attack) is one tempo too slow."
       ],
       "warnings": [
-        "Do not rush d4 without preparation — the center must be ready",
-        "Watch for a5-a4 pawn breaks that target the b3/a2 bishop diagonal"
+        "Don't rush d4. In the Anti-Marshall, central pushes only work when ALL pieces are developed — pawn structure changes premature lose the structural pluses.",
+        "Watch for a5-a4 pushes targeting the Ba2 bishop. Black's queenside pawn expansion can force the bishop to move (Bxa4 or Bb1) — be ready with a3 supporting OR accept the bishop trade for structural integrity."
       ],
       "variations": [
         {
@@ -2792,19 +2792,19 @@
       "pgn": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 cxd4 cxd4 f6 exf6 Nxf6 O-O Bd6 Nf3 O-O",
       "color": "white",
       "style": "Positional, Solid",
-      "overview": "Dubov uses the Tarrasch Variation against the French Defense. By playing 3.Nd2 instead of Nc3, White avoids the Winawer complications and steers toward a positional battle. The resulting positions offer White a space advantage and clear plans.",
+      "overview": "Dubov uses the Tarrasch Variation against the French Defence — Siegbert Tarrasch's elegant solution to the French question. Tarrasch (the 'Praeceptor Germaniae' or Germany's chess teacher) championed 3.Nd2 in his late 1800s analyses as a way to avoid both the sharp Winawer complications AND the slow Classical squeeze. Anatoly Karpov adopted the Tarrasch in his World Championship matches against Korchnoi (1978, 1981) and never lost a Tarrasch game with White against him. Today it remains a tournament-tested system favoured by players who want stability over fireworks. By playing 3.Nd2 instead of Nc3, White steers toward a positional battle with a space advantage and clear strategic plans.",
       "keyIdeas": [
-        "Nd2 avoids the Winawer and keeps a solid pawn structure — this structural feature shapes all future strategic decisions in the position",
-        "Build a center with e5 and restrict Black's pieces — this central control is the foundation for all middlegame operations",
-        "After c3 and Ne2, White has a flexible setup for d4 support — a key strategic concept in Tarrasch French",
-        "The f6 break by Black opens the position but White is better prepared — the timing of this advance determines whether it creates an advantage or a weakness"
+        "3.Nd2 avoids the Winawer's structural concessions (the typical Bxc3+ doubled c-pawns) while keeping White's pieces flexible. The cost: Black gets more space initially; the benefit: no permanent weaknesses.",
+        "Build the e4-e5 chain quickly. After Black's standard …Nf6 + …c5, push 4.e5 cramping Black's kingside and keeping the centre locked.",
+        "The c3+Ne2 setup is the Tarrasch's signature — both pieces support d4 indirectly while keeping the king bishop on a long diagonal (after eventual Bd3 or Bb5+).",
+        "Respect the …f6 break. Black's main counterplay against the e5-pawn is …f6 — if you've prepared with O-O + Nf3 + Bd3, you can meet …f6 with exf6 reaching favourable open positions; if you haven't, the centre cracks against you."
       ],
       "traps": [
-        "If Black delays c5 too long, White builds up with Ngf3 and O-O with a dominating center"
+        "If Black delays …c5 (the standard equalising break), White can build up with Ngf3 + O-O + Re1 + Nf1 reaching a dominating central position. Without the …c5 break, the French becomes a positional collapse for Black."
       ],
       "warnings": [
-        "Do not play f4 too early — it can leave the e4-e5 chain overextended",
-        "Respect the c5 break — it is Black's main source of counterplay"
+        "DON'T play f4 too early in support of the e5-pawn. The f4 push weakens e3 and creates targets for Black's …c5 / …Qb6 counterplay. Wait until ALL pieces are developed.",
+        "Respect the …c5 break — Black's only real source of counterplay. If you allow …c5 cxd4 without proper preparation, the position simplifies and your space advantage evaporates."
       ],
       "variations": [
         {
@@ -2839,19 +2839,19 @@
       "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c4 b4 Nc2 a5",
       "color": "black",
       "style": "Dynamic, Counter-attacking",
-      "overview": "Dubov plays the Sveshnikov with his trademark creativity. He has contributed many original ideas to this opening, particularly in the critical middlegame positions. His willingness to accept structural weaknesses for dynamic play makes the Sveshnikov ideal for his style.",
+      "overview": "Dubov plays the Sveshnikov with his trademark creativity. Named after Soviet GM Evgeny Sveshnikov, who pioneered the …e5 idea in the 1970s when chess orthodoxy said you should NEVER voluntarily create a weakness on d5; Sveshnikov spent years analysing it, publishing his 1988 book that proved the structural concession was worth the dynamic compensation. Kasparov used it as an auxiliary weapon in the 1990s; Carlsen drew Caruana every game with Black using the Sveshnikov in their 2018 World Championship match. Dubov brings the next layer: original ideas in the critical middlegame positions where standard theory ends. His willingness to accept structural weaknesses for dynamic play makes the Sveshnikov ideal for his style.",
       "keyIdeas": [
-        "Push e5 early to gain space and restrict White's knight — piece placement and activity are more important than material in these positions",
-        "Accept the d5 weakness for active piece play and the bishop pair — piece placement and activity are more important than material in these positions",
-        "Expand with ...a6 and ...b5 on the queenside, gaining space and preparing the ...Bb7 fianchetto — this is the Sveshnikov's primary source of counterplay",
-        "The f5 break is the key to Black's counterplay in most lines — the timing of this advance determines whether it creates an advantage or a weakness"
+        "5.Nc3 e5 is the move that names the opening. After 5...e5, White's knight is shoved to b5, and Black accepts the permanent d5-square weakness in exchange for the bishop pair and central pawn structure.",
+        "The d5-square hole IS the position's defining feature. Don't fight it — embrace it. White will park a knight on d5; your compensation comes from active piece play around the outpost.",
+        "…a6 + …b5 + …Bb7 is the queenside expansion plan. Push these pawns to gain space AND develop the c8-bishop to b7 where it aims at the long diagonal.",
+        "The …f5 break is the opening's strategic goal. Once you achieve …f5, the kingside opens, your rooks reach the half-open f-file, and the bishop pair plus pawn break creates dynamic chances."
       ],
       "traps": [
-        "After Nd5 Be7 Bxf6 Bxf6, Black can play c4 to gain the bishop pair and queenside space"
+        "In the modern mainline after 9.Nd5 Be7 10.Bxf6 Bxf6 11.c4 — Black's 11...b4! kicks White's knight and creates queenside space. The c4-c3 trade structure favours Black's piece coordination."
       ],
       "warnings": [
-        "The d5 square is a permanent weakness — fight for activity to compensate",
-        "Do not allow White to blockade on d5 without creating counterplay elsewhere"
+        "Don't let White consolidate the d5 outpost without counterplay. If White's Nd5 sits unchallenged for 10 moves while Black has no active plan, the structural weakness becomes a positional collapse.",
+        "Watch for c-file tactics. White's c4 push (in modern lines) creates threats against the b5-pawn and Black's queenside structure. The …b4 push must be timed carefully."
       ],
       "variations": [
         {
@@ -2891,19 +2891,19 @@
       "pgn": "d4 d5 c4 e6 Nc3 c5 cxd5 exd5 Nf3 Nc6 g3 Nf6 Bg2 Be7 O-O O-O Bg5 cxd4 Nxd4 h6 Be3 Re8",
       "color": "black",
       "style": "Active, Dynamic",
-      "overview": "Dubov plays the Tarrasch Defense for its active piece play. The IQP on d5 gives Black open lines and dynamic possibilities. While the pawn is technically weak, Dubov uses the activity it provides to create attacking chances.",
+      "overview": "Dubov plays the Tarrasch Defence for its activity. Siegbert Tarrasch invented this defence (and immortalised it in his 1909 book 'Die moderne Schachpartie' / 'The Modern Chess Game') as a hypermodern challenge to chess orthodoxy — Tarrasch declared that the IQP on d5 wasn't a weakness but a STRENGTH because of the piece activity it created. Most contemporaries laughed; Tarrasch went on to be a World Championship challenger. The defence stayed in the shadow of the QGD for decades until Boris Spassky used it in the 1960s-70s; Kasparov played it against Karpov in their 1984 marathon match. Dubov uses it for the dynamic possibilities — while the d5-pawn is technically weak, the activity it provides creates attacking chances.",
       "keyIdeas": [
-        "Accept the isolated d5 pawn willingly — in the Tarrasch, this IQP provides active piece play, open lines, and dynamic chances that outweigh the structural weakness",
-        "The d5 pawn controls c4 and e4, supporting piece activity — this structural feature shapes all future strategic decisions in the position",
-        "Develop actively with Nc6, Nf6, Be7 and use the open c-file — completing development before committing to a plan gives maximum flexibility",
-        "The IQP is a strength in the middlegame — push for activity before it becomes a weakness"
+        "Accept the isolated d5-pawn willingly. The Tarrasch's philosophy: IQP equals piece activity, and activity wins MIDDLEGAMES (the weakness only matters in endgames).",
+        "The d5-pawn controls c4 and e4, denying White's knights central outposts AND supporting Black's piece activity. It's a strength while pieces are on the board.",
+        "Develop with …Nc6 + …Nf6 + …Be7 + …O-O standard. The open c-file (created by …c5 + …cxd4) is yours — get your rook there with …Rc8 quickly.",
+        "Aim for the middlegame, not the endgame. If you let the queens trade and pieces simplify, the IQP becomes a real weakness. Push for attacks; trade pieces only when ahead."
       ],
       "traps": [
-        "If White plays passively, the d5 pawn supports a powerful attack with pieces flooding the kingside"
+        "If White plays passively (slow positional moves without addressing the d5-pawn), Black's pieces flood the kingside — …Nf6-g4, …Bg5-Bh4, …Qh5 attacking patterns work cleanly. The IQP supports an entire attacking battery."
       ],
       "warnings": [
-        "In the endgame, the isolated d5 pawn can become a liability — avoid trading too many pieces",
-        "Watch for Nxd5 captures — always verify tactics before they appear"
+        "In the endgame, the d5-pawn becomes a structural liability. Trade pieces ONLY if you've achieved a concrete advantage; otherwise keep the position complex.",
+        "Always check for Nxd5 tactical captures. In Tarrasch positions, if your defenders of d5 ever drop below the count of attackers, the pawn falls and the position collapses."
       ],
       "variations": [
         {
@@ -2938,19 +2938,19 @@
       "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 O-O O-O Re8 Nd2 Na6 f3 Nc7",
       "color": "black",
       "style": "Dynamic, Ambitious",
-      "overview": "The Modern Benoni is Dubov's most ambitious Black weapon against 1.d4. It creates an asymmetric pawn structure with clear attacking plans for both sides. Dubov thrives in the resulting complex middlegame positions where creativity matters more than pure calculation.",
+      "overview": "The Modern Benoni is Dubov's most ambitious Black weapon — and one of chess's most violent defences. The opening's name comes from the 1825 chess book 'Ben-Oni' by Aaron Reinganum (Hebrew for 'son of sorrow'), though the modern treatment emerged in the 1950s. Mikhail Tal used the Benoni for spectacular tactical wins in his 1960 World Championship run; Bobby Fischer played it in his Candidates Tournament games of 1959-1971; Mikhail Tal's pupil Garry Kasparov used it as his main wins-with-Black weapon against Karpov in the 1980s. The opening creates an asymmetric pawn structure where both sides have clear attacking plans — perfect for Dubov's creative middlegame style.",
       "keyIdeas": [
-        "Create an asymmetric structure with c5 and e6 against d5 — this structural feature shapes all future strategic decisions in the position",
-        "The d6 pawn anchors Black's queenside pawn majority (a7-b7-c5-d6) — this majority can create a dangerous passed pawn in the endgame while White's center is fixed",
-        "Push ...b5 and ...a5 to create queenside counterplay — in the Benoni, the queenside pawn storm must arrive before White's central and kingside pressure becomes overwhelming",
-        "The Bg7 is a powerful piece controlling the long diagonal — a key strategic concept in Modern Benoni"
+        "After 3.d5 e6 4.Nc3 exd5 5.cxd5 d6 — the Benoni structure is fixed. White has the d5-pawn cramping Black; Black has the queenside pawn majority (a7+b7+c5).",
+        "The d6-pawn anchors Black's queenside pawn majority. In endgames, this majority creates dangerous passed pawns; in middlegames, it supports queenside expansion with …b5.",
+        "…b5 + …a5 is the queenside attack engine. The pawn storm must arrive BEFORE White's kingside/central pressure becomes overwhelming.",
+        "The Bg7 fianchetto bishop controls the long diagonal forever. It supports the queenside attack indirectly AND eyes the white king if it castles short."
       ],
       "traps": [
-        "After d5 d6, if White plays f4 too aggressively, e5! or b5 creates strong counterplay"
+        "After 3.d5 e6 4.Nc3 exd5 5.cxd5 d6 6.e4 g6 7.f4 (the aggressive Taimanov Attack), Black has the counterintuitive 7...e5! or the standard 7...Bg7 8.Bb5+ Nfd7 9.a4 O-O — both lead to dynamic positions where Black's queenside counterplay races against White's kingside attack."
       ],
       "warnings": [
-        "The d6 pawn can become a weakness — protect it carefully",
-        "White's central space advantage can be crushing if Black is passive"
+        "The d6-pawn is the Benoni's structural soft spot. White can target it with Nb5-Nd6 ideas or Bg5-Bxf6-Nxd6 sacrifices. Defend it actively, not passively.",
+        "White's central space advantage CAN be crushing if Black plays passively. The Benoni requires concrete counterplay every move; if you don't attack queenside, you lose."
       ],
       "variations": [
         {
@@ -2990,19 +2990,19 @@
       "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3 Bd6 Rae1 h6 Bh4",
       "color": "white",
       "style": "Creative, Theoretical",
-      "overview": "Dubov's Scotch Game features original ideas that have become mainstream theory. His preparation in the Scotch goes incredibly deep, and he has contributed several novelties that changed how the opening is evaluated. The Scotch suits his creative, unbalancing style.",
+      "overview": "Dubov's Scotch Game features original ideas that have BECOME mainstream theory. The opening dates to the 1824 London-Edinburgh correspondence match where the Scottish team's 3.d4 gave the opening its name; Steinitz analysed it deeply in the 1880s; Garry Kasparov revived it in the 1990s (he played it against Karpov in 1990); today it's a fixture of elite tournament play. Dubov's contributions: novelties in critical middlegame positions that engines now confirm as best moves. He has changed how the Scotch is evaluated in several variations. The Scotch suits his creative, unbalancing style — open the centre on move 3, then find the unexpected resource on move 12.",
       "keyIdeas": [
-        "Open the center immediately with d4 for active piece play — this central control is the foundation for all middlegame operations",
-        "After Nxc6 bxc6, Black has doubled c-pawns — a lasting structural weakness — a key strategic concept in Scotch Game",
-        "Develop rapidly with Bd3, O-O, Bg5 to create pressure against the isolated d-pawn",
-        "Look for creative middlegame ideas rather than grinding positional edges — a key strategic concept in Scotch Game"
+        "3.d4 opens the centre immediately. Black has to choose between 3...exd4 (mainline) or refusing (where Black just loses a pawn). Either way, your knight on d4 sits on the most centralized square in chess.",
+        "After 5.Nxc6 bxc6, Black has doubled c-pawns — a lasting structural weakness that becomes a real target in the endgame. White's typical plan: trade pieces toward the endgame where the structural plus matters.",
+        "Develop rapidly: Bd3 (or Bc4 in some lines), O-O, Bg5 — pressure on the kingside builds quickly. Dubov's novelty in many Scotch lines involves the early Bg5 development creating tactical resources.",
+        "Look for creative middlegame ideas rather than slow positional pressure. The Scotch's open central position rewards tactical resources — Dubov finds them where other players grind."
       ],
       "traps": [
-        "After Nxc6 bxc6 Bd3, if Black delays castling, e5 can cause immediate problems"
+        "After 5.Nxc6 bxc6 6.e5 (cramping) Qe7 7.Qe2 (pinning the f6-knight) Nd5 8.c4 — Black's knight has to retreat to a passive square; if Black plays the wrong retreat (Nb4 instead of Nb6), c5 + Nc3 wins material."
       ],
       "warnings": [
-        "The Scotch can equalize quickly if White plays too passively — maintain initiative",
-        "Watch for Nxd4 Qh4 which requires precise handling"
+        "Don't let the position simplify too early. The Scotch's structural plusses matter in the middlegame WITH pieces; trading down to a pure endgame often gives Black drawing chances.",
+        "Watch for 4...Qh4 (the desperate Black try). The reply is 5.Nb5! forcing 5...Qxe4+ 6.Be2 with massive development advantage. Don't reply with the wrong move-order."
       ],
       "variations": [
         {
@@ -3042,19 +3042,19 @@
       "pgn": "d4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 Nc6 d5 Ne5 Nxe5 dxe5 Qb3 Kh8 Be3",
       "color": "black",
       "style": "Dynamic, Unbalancing",
-      "overview": "Dubov uses the Leningrad Dutch as his most ambitious Black weapon. The f5 pawn creates an unbalanced structure from move one, leading to the creative, dynamic middlegames that Dubov excels in. His deep understanding of the resulting pawn structures is key to his success.",
+      "overview": "Dubov uses the Leningrad Dutch — chess's most provocative defence. 1.d4 f5! immediately stakes a kingside pawn claim and signals 'I'm here to fight.' The Dutch was popularised by 19th-century English master Henry Bird and earned its Leningrad name from the Soviet Leningrad chess school (Spassky, Tal, Korchnoi) who developed the …g6 + …Bg7 + …f5 attacking treatment in the 1950s-60s. Boris Spassky used the Leningrad in tournament play; Bent Larsen made it a famous weapon. The opening fits Dubov's creative style perfectly — the f5-pawn creates an unbalanced structure from move one, leading to the dynamic middlegames he excels in.",
       "keyIdeas": [
-        "Play f5 early to create an asymmetric structure and kingside attacking chances — timing this correctly before the opponent can generate counterplay is critical",
-        "Fianchetto the bishop to g7 for pressure on the long diagonal — maintaining this pressure forces the opponent to defend passively",
-        "Push e5 to build a strong center and support kingside operations — this central control is the foundation for all middlegame operations",
-        "The Dutch leads to positions where creative play matters more than pure technique"
+        "1...f5 immediately stakes the kingside attacking claim. The pawn on f5 is the entire opening's strategic identity — it controls e4, supports a future …e5 push, and creates the half-open f-file for the rook.",
+        "The …g6 + …Bg7 fianchetto is mandatory. The Bg7 controls the long diagonal AND supports the central …e5 push when it comes.",
+        "…e5 is the key central break. Once you achieve …e5 (usually around move 6-8), you've built a strong central pawn duo and the long-diagonal Bg7 becomes a real attacking piece.",
+        "Aim for unbalanced positions. The Dutch isn't about equality — it's about creating positions where calculation and creativity decide. Dubov plays here for the win as Black."
       ],
       "traps": [
-        "After d4 f5, if White plays e4 trying to refute the Dutch, fxe4 gives Black a strong center"
+        "If White plays the Staunton Gambit 2.e4 (named for English master Howard Staunton), Black accepts with 2...fxe4. White's compensation is real but Black's extra pawn gives genuine chances if defended accurately."
       ],
       "warnings": [
-        "The Dutch weakens the e5 and h5 squares — watch for knight invasions",
-        "Against strong preparation, the Dutch can be objectively challenging for Black"
+        "The …f5 push permanently weakens the e5 and h5 squares. Watch for White's knight invasions (Nh4 → Ng5 or similar) targeting these holes.",
+        "Against strong White preparation, the Dutch is objectively challenging. Black has to know specific defensive resources in 2-3 critical lines (Staunton Gambit, Anti-Dutch with c4+Qc2)."
       ],
       "variations": [
         {
