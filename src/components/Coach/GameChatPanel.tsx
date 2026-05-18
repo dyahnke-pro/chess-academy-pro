@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
@@ -852,6 +853,24 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // assistant text into the prompt; if [[ACTION:...]] markup
           // is in there, the LLM learns the wrong protocol.
           const assistantText = sanitizeCoachText(textWithoutBoardTags);
+          // G3 enforcement on in-game chat replies. Bounded vocabulary
+          // is the gameChatTactics block we attached to the envelope
+          // above; out-of-vocab claims surface as audit events.
+          const inGameValidation = validateTacticClaims(assistantText, gameChatTactics);
+          if (inGameValidation.violations.length > 0) {
+            void logAppAudit({
+              kind: 'claim-validator-trip',
+              category: 'subsystem',
+              source: 'GameChatPanel.inGameAsk.tacticClaimValidator',
+              summary: `out-of-vocab tactics: ${inGameValidation.violations.map((v) => v.type).join(', ')}`,
+              details: JSON.stringify({
+                violations: inGameValidation.violations,
+                surface: 'chat-in-game',
+                fen: fen || null,
+              }),
+              fen: fen || undefined,
+            });
+          }
           const assistantMsg: ChatMessageType = {
             id: `gmsg-${Date.now()}-resp`,
             role: 'assistant',
