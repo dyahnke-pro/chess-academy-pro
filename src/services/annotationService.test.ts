@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { loadAnnotations, loadSubLineAnnotations, clearAnnotationCache } from './annotationService';
+import { loadAnnotations, loadAnnotationsForPgn, loadSubLineAnnotations, clearAnnotationCache } from './annotationService';
 
 describe('annotationService', () => {
   beforeEach(() => {
@@ -100,5 +100,73 @@ describe('annotationService', () => {
     const withStructure = annotations.filter((a) => a.pawnStructure);
     expect(withPlans.length).toBeGreaterThan(0);
     expect(withStructure.length).toBeGreaterThan(0);
+  });
+
+  describe('loadAnnotationsForPgn — cross-line drift guard', () => {
+    // 2026-05-18 deep-walk audit caught this class. Pro repertoire
+    // openings reuse a parent opening's annotation file via
+    // `PRO_SUFFIX_TO_BASE` (e.g. Ponziani → italian-game.json,
+    // Sveshnikov → sicilian-defense-lasker-pelikan-...json). When the
+    // pro line's PGN diverges from the parent's PGN after a few
+    // shared opening moves, the loader used to return annotations
+    // whose tail described a DIFFERENT continuation. Worst case the
+    // narration claimed Black played a move that White actually made.
+    //
+    // The fix: when the annotation set's SAN multiset overlaps the
+    // PGN's SAN multiset by less than 70 %, trim to the strict
+    // matching prefix (or return null if the prefix is too short).
+    //
+    // Note: these tests use REAL data files so the assertions are
+    // about behavior rather than exact return values. The contract:
+    // every returned annotation's `san` must equal the PGN's SAN at
+    // the same index.
+
+    it('Ponziani variation-0 PGN: returned annotations are a strict prefix of the PGN', async () => {
+      const ponziPgn = 'e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6';
+      const sans = ponziPgn.trim().split(/\s+/);
+      // The pro repertoire's opening id is `pro-gothamchess-ponziani`
+      // but loadAnnotationsForPgn takes an opening id at the
+      // annotation-file level, so we use the resolved base id.
+      const annotations = await loadAnnotationsForPgn('pro-gothamchess-ponziani', ponziPgn);
+      if (annotations) {
+        for (let i = 0; i < annotations.length; i++) {
+          expect(annotations[i].san).toBe(sans[i]);
+        }
+      }
+    });
+
+    it('returns annotations whose every SAN matches the PGN at the same index', async () => {
+      // Pick an opening that resolves cleanly (same line as its
+      // annotation file). The italian-game's main PGN should fully
+      // match its own annotations.
+      const itPgn = 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4';
+      const sans = itPgn.trim().split(/\s+/);
+      const annotations = await loadAnnotationsForPgn('italian-game', itPgn);
+      expect(annotations).not.toBeNull();
+      if (annotations === null) throw new Error('Expected non-null');
+      // The annotations may be longer than the PGN (italian-game
+      // covers more plies than we test). The leading plies must
+      // match the PGN sans.
+      for (let i = 0; i < Math.min(sans.length, annotations.length); i++) {
+        expect(annotations[i].san).toBe(sans[i]);
+      }
+    });
+
+    it('Ponziani-style cross-line: no annotation describes a different ply', async () => {
+      // This is the regression test for the audit finding. Even if
+      // some annotations are returned, none should describe a SAN
+      // that doesn't match the PGN at the same index.
+      const proPgns = [
+        'e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6', // Ponziani variation-0
+      ];
+      for (const pgn of proPgns) {
+        const sans = pgn.trim().split(/\s+/);
+        const annotations = await loadAnnotationsForPgn('pro-gothamchess-ponziani', pgn);
+        if (annotations === null) continue;
+        for (let i = 0; i < Math.min(annotations.length, sans.length); i++) {
+          expect(annotations[i].san).toBe(sans[i]);
+        }
+      }
+    });
   });
 });

@@ -295,6 +295,57 @@ function countMatchingMoves(pgn: string, annotations: OpeningMoveAnnotation[]): 
 }
 
 /**
+ * Compute the ratio of the annotation set's SANs that are present in the
+ * PGN's SAN sequence (respecting multiplicity). Catches the "same prefix,
+ * divergent tail" case where `countMatchingMoves` passes but the
+ * annotation's tail describes positions that don't exist in this PGN —
+ * 2026-05-18 deep-walk audit caught this on Ponziani Opening / variation-0
+ * ply 9, where italian-game.json's annotations matched the first 7 plies
+ * but the tail described Italian Game's d5-by-Black push (different move
+ * order, different color, narration "Black advances..." on White's d5).
+ *
+ * Returns a number in [0, 1]. 1.0 = every annotation SAN appears in the
+ * PGN with the same or greater multiplicity (same-line). Lower means the
+ * annotation set carries SANs not in this PGN's move set — cross-line.
+ */
+function annotationSetOverlap(pgn: string, annotations: OpeningMoveAnnotation[]): number {
+  if (annotations.length === 0) return 1;
+  const sans = parsePgnToSans(pgn);
+  const expectedCount = new Map<string, number>();
+  for (const s of sans) expectedCount.set(s, (expectedCount.get(s) ?? 0) + 1);
+  let matched = 0;
+  for (const ann of annotations) {
+    const c = expectedCount.get(ann.san) ?? 0;
+    if (c > 0) {
+      matched += 1;
+      expectedCount.set(ann.san, c - 1);
+    }
+  }
+  return matched / annotations.length;
+}
+
+/**
+ * Trim an annotation set to the longest prefix whose `san` field
+ * matches the PGN at the same index. Past that boundary the annotations
+ * describe positions that don't appear in this PGN; better to hand them
+ * off to the WalkthroughMode synth/LLM-enrich fallback than to render
+ * wrong-color narration. Used by `loadAnnotationsForPgn` when overlap
+ * is borderline.
+ */
+function trimAnnotationsToPgnPrefix(
+  pgn: string,
+  annotations: OpeningMoveAnnotation[],
+): OpeningMoveAnnotation[] {
+  const sans = parsePgnToSans(pgn);
+  let n = 0;
+  for (let i = 0; i < Math.min(sans.length, annotations.length); i++) {
+    if (annotations[i].san === sans[i]) n = i + 1;
+    else break;
+  }
+  return annotations.slice(0, n);
+}
+
+/**
  * Load annotations for an opening, using the PGN to find the best-matching
  * annotation set. When the main line annotations diverge from the opening's
  * PGN, this searches subLines for a better match.
@@ -342,6 +393,34 @@ export async function loadAnnotationsForPgn(
   const pgnLen = pgnMoveCount;
   if (pgnLen > 0 && bestMatch * 2 < pgnLen) {
     return null;
+  }
+
+  // Cross-line drift guard (2026-05-18 deep-walk audit):
+  // The 50% prefix check above passes annotation sets whose FIRST N
+  // plies match but whose TAIL describes a different opening's
+  // continuation. Real example: Ponziani Opening / variation-0
+  // resolves to `italian-game.json`. The first 7 plies match
+  // (e4 e5 Nf3 Nc6 c3 Nf6 d4), then Italian Game's subline plays
+  // Black's d5 push at index 8 while Ponziani plays White's d5 push.
+  // The narration "Black advances the central pawn..." rendered on
+  // Ponziani's ply 9 was the smoking gun.
+  //
+  // Defense: when the annotation set's tail carries SANs that aren't
+  // in this PGN's SAN multiset (low set-overlap), trim to the strict
+  // prefix and hand the rest off to the synth/LLM-enrich fallback.
+  // Pure same-line annotations (overlap ≥ 0.7) keep the full tail —
+  // the existing SAN-first resolver in WalkthroughMode handles light
+  // intra-line reordering.
+  const overlap = annotationSetOverlap(pgn, bestAnnotations);
+  if (overlap < 0.7) {
+    const trimmed = trimAnnotationsToPgnPrefix(pgn, bestAnnotations);
+    // Refuse to return a tiny prefix (≤ 2 plies) on a long PGN — the
+    // student would see two annotated moves then six synth fallbacks.
+    // Better to fully fall through to synth + LLM enrich.
+    if (trimmed.length < 3 || (pgnLen >= 8 && trimmed.length * 3 < pgnLen)) {
+      return null;
+    }
+    return trimmed;
   }
 
   return bestAnnotations;
