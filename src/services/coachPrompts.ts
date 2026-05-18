@@ -4,7 +4,12 @@ import { detectTactics } from './tacticsDetector';
 // ─── Verbosity Prompt Modifier ─────────────────────────────────────────────
 
 const VERBOSITY_INSTRUCTIONS: Record<Exclude<CoachVerbosity, 'none'>, string> = {
-  fast: `VERBOSITY: Keep replies tight — prioritize the single most important idea so the student can keep playing. No preamble, no encouragement fluff.`,
+  fast: `VERBOSITY (HARD CAP — student set "Short / Brief" narration):
+- MAXIMUM 2 sentences. MAXIMUM 30 words total. No exceptions.
+- Pick the SINGLE most important idea and ship that. No second idea, no caveats, no "but also…".
+- No preamble. No encouragement. No "Let me explain". No "Great question".
+- If you find yourself writing a third sentence, STOP and delete it. The student picked Brief specifically because they don't want long prose.
+- This cap applies to BOTH the chat text and the [VOICE: ...] marker contents — both must obey 30 words. Production audit (2026-05-18, David's report): "short" setting was being honored as a soft hint and the brain shipped 497-char responses. This is the hard rule the audit found missing.`,
   medium: `VERBOSITY: Natural pacing — as long or short as the moment deserves. A routine move gets one idea; a critical moment gets the full picture. No hard cap, no filler.`,
   slow: `VERBOSITY: Go as deep as the teaching needs. Cover the idea, the alternatives, the plans for both sides, and how it connects to the student's past patterns. Speak like a trainer sitting next to them — thorough, but never lecturing.`,
   unlimited: `VERBOSITY: No cap. The student wants the full personal-trainer experience — walk through the move, both sides' plans, alternatives considered, how this links to past games, known weaknesses, common traps in the line, and what to watch for next. Go as long as teaching value demands. Still no filler — every sentence earns its place.`,

@@ -4,6 +4,7 @@ import {
   coachNarrationToLength,
   resolvePhaseNarrationVerbosity,
   resolveLlmNarrationDensity,
+  applyBriefVoiceCap,
 } from './coachNarration';
 
 describe('resolveCoachNarration', () => {
@@ -181,5 +182,67 @@ describe('resolveLlmNarrationDensity', () => {
     expect(resolveLlmNarrationDensity({ coachVerbosity: 'fast' })).toBe('fast');
     expect(resolveLlmNarrationDensity({ coachVerbosity: 'none' })).toBe('none');
     expect(resolveLlmNarrationDensity({ coachVerbosity: 'unlimited' })).toBe('unlimited');
+  });
+});
+
+describe('applyBriefVoiceCap', () => {
+  it('passes through when verbosity is full', () => {
+    const long = 'This is a long response. '.repeat(20).trim();
+    const r = applyBriefVoiceCap(long, 'full');
+    expect(r.text).toBe(long);
+    expect(r.truncated).toBe(false);
+  });
+
+  it('passes through when verbosity is silent (caller decides whether to speak)', () => {
+    const r = applyBriefVoiceCap('whatever', 'silent');
+    expect(r.text).toBe('whatever');
+    expect(r.truncated).toBe(false);
+  });
+
+  it('passes short text through unchanged on brief', () => {
+    const short = 'Knight to f3.';
+    const r = applyBriefVoiceCap(short, 'brief');
+    expect(r.text).toBe(short);
+    expect(r.truncated).toBe(false);
+  });
+
+  it('caps to 2 sentences on brief', () => {
+    const text = 'First sentence is here. Second sentence is here. Third sentence is here. Fourth sentence is here.';
+    const r = applyBriefVoiceCap(text, 'brief');
+    expect(r.truncated).toBe(true);
+    expect(r.text).not.toContain('Third');
+    expect(r.text).not.toContain('Fourth');
+    expect(r.text).toContain('First');
+    expect(r.text).toContain('Second');
+  });
+
+  it('caps to 30 words on brief even if sentences fit', () => {
+    // 35 words, single sentence so the sentence cap doesn't trigger
+    // — only the word cap should fire.
+    const text =
+      'The Vienna Gambit starts with f4 a sharp pawn sacrifice to rip open the f-file for your rook giving you fast development and an attack on the f7 square which is often weak in many openings indeed.';
+    const r = applyBriefVoiceCap(text, 'brief');
+    expect(r.truncated).toBe(true);
+    const wordCount = r.text.split(/\s+/).length;
+    expect(wordCount).toBeLessThanOrEqual(30);
+  });
+
+  it("matches David's audit example — 497-char response gets clipped to ≤30 words on brief", () => {
+    // From audit Finding 5 (the response that ignored "short"):
+    const audited =
+      "The move is f4 — that's what turns this into the Vienna Gambit. By pushing the f-pawn forward, you're offering it as a sacrifice to open up lines for your pieces and create attacking chances against Black's king. The key idea is to gain rapid development and put pressure on f7, which is often weak in the opening. This sacrifice can lead to dynamic positions where White has the initiative.";
+    const r = applyBriefVoiceCap(audited, 'brief');
+    expect(r.truncated).toBe(true);
+    // Audit Finding 5 reported length=497 in prod; our test fixture
+    // is shorter (we transcribed only the visible textPreview). 300
+    // is the loose lower bound that proves the truncator fired.
+    expect(r.originalLength).toBeGreaterThan(300);
+    const words = r.text.split(/\s+/).length;
+    expect(words).toBeLessThanOrEqual(30);
+  });
+
+  it('returns originalLength so callers can audit how much was clipped', () => {
+    const r = applyBriefVoiceCap('  hello world  ', 'brief');
+    expect(r.originalLength).toBe(15);
   });
 });

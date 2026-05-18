@@ -9,7 +9,7 @@ import { stripCoachMarkup, formatForSpeech } from './sanitizeCoachText';
 import { db } from '../db/schema';
 import type { CoachPersonality } from '../coach/types';
 import { useAppStore } from '../stores/appStore';
-import { resolveCoachNarration } from '../utils/coachNarration';
+import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarration';
 
 // WO-COACH-PERSONALITY-VOICE — voice and personality are orthogonal
 // dials. Each personality has a default voice (the one that matches
@@ -629,7 +629,8 @@ class VoiceService {
     // "Silent" promise is incomplete. Logged as `voice-speak-silenced`
     // so audit traces still show the attempt was suppressed by policy.
     const narrationPrefs = useAppStore.getState().activeProfile?.preferences;
-    if (resolveCoachNarration(narrationPrefs) === 'silent') {
+    const narrationVerbosity = resolveCoachNarration(narrationPrefs);
+    if (narrationVerbosity === 'silent') {
       void import('./appAuditor').then(({ logAppAudit }) => {
         void logAppAudit({
           kind: 'voice-speak-silenced',
@@ -640,6 +641,30 @@ class VoiceService {
         });
       }).catch(() => undefined);
       return;
+    }
+
+    // Verbosity hard-cap (Phase C of streaming-TTS standardization,
+    // 2026-05-18). When the user set Coach Narration = "brief", clip
+    // the spoken text to ≤2 sentences / ≤30 words even if the LLM
+    // ignored the corresponding prompt rule (which production audit
+    // caught it doing — 497-char responses on "short"). The chat
+    // bubble still shows the full prose; only the VOICE respects
+    // the brief budget. Audit when truncation fires so we observe
+    // how often the brain violates the cap in prod.
+    if (narrationVerbosity === 'brief') {
+      const cap = applyBriefVoiceCap(text, 'brief');
+      if (cap.truncated) {
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'voice-speak-invoked',
+            category: 'subsystem',
+            source: 'voiceService.speakInternal.briefCap',
+            summary: `brief-cap applied: ${cap.originalLength}→${cap.text.length} chars`,
+            details: `original (first 80): "${text.slice(0, 80)}"; clipped: "${cap.text}"`,
+          });
+        }).catch(() => undefined);
+      }
+      text = cap.text;
     }
     // Audit-driven (build 6459def+ Findings 5, 7): the streaming
     // sentence dispatchers can split text like "X . . . " into
