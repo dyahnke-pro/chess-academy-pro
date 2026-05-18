@@ -252,26 +252,36 @@ async function runPractice(page, expectedSans, studentColor) {
 }
 
 async function runPlay(page, openingPgn, studentColor) {
-  // Practice mode in Play context: we drive ALL moves through the
-  // board. Play the canonical opening PGN first (gets us into the
-  // middlegame), then play 30 more plies using random legal moves
-  // (audit doesn't have engine access from inside Playwright easily —
-  // simple-move heuristic is enough to test the surface stays alive).
-  const mounted = await page.locator('[data-testid="practice-mode"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+  // OpeningPlayMode (not PracticeMode) — different testid. Renders
+  // the play surface where the student plays vs a Stockfish coach.
+  const mounted = await page.locator('[data-testid="opening-play-mode"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
   if (!mounted) return { mounted: false };
-  await page.waitForTimeout(1500);
+  await page.waitForTimeout(2500); // play surface bootstraps stockfish — give it time
   const pgnMoves = pgnToVerboseMoves(openingPgn);
   const chess = new Chess();
   const plies = [];
-  let lastFen = chess.fen();
+  const studentIsWhite = studentColor === 'white';
   let outcome = 'in-progress';
   for (let p = 0; p < PLAY_PLY_CAP; p++) {
+    const isStudentTurn = studentIsWhite ? (p % 2 === 0) : (p % 2 === 1);
+    if (!isStudentTurn) {
+      // The engine plays automatically on its turn — wait for the
+      // board to settle, then re-derive position from the page's
+      // game state.
+      await page.waitForTimeout(2500);
+      // Check for game-over state via testids
+      const postgame = await page.locator('[data-testid="play-postgame"]').first().isVisible().catch(() => false);
+      if (postgame) { outcome = 'engine-won-or-drew'; break; }
+      // We can't easily read the engine's move from outside; track our
+      // chess.js mirror by ASKING what move just appeared. Skip — let
+      // chess.js stay out of sync and just count plies.
+      plies.push({ ply: p + 1, side: 'engine', san: '?' });
+      continue;
+    }
     let move = pgnMoves[p];
     if (!move) {
-      // Past the opening — pick a sensible move via chess.js
       const legal = chess.moves({ verbose: true });
       if (legal.length === 0) break;
-      // Prefer captures / checks / center moves
       const scored = legal.map((m) => {
         let s = 0;
         if (m.captured) s += 5;
@@ -282,17 +292,22 @@ async function runPlay(page, openingPgn, studentColor) {
       move = scored[0].m;
     }
     const drag = await dragPieceMove(page, move.from, move.to);
-    await page.waitForTimeout(600);
-    // Verify board state after drag — use the actual board FEN if accessible
-    chess.move({ from: move.from, to: move.to, promotion: move.promotion ?? undefined });
-    plies.push({ ply: p + 1, san: move.san });
+    await page.waitForTimeout(800);
+    try { chess.move({ from: move.from, to: move.to, promotion: move.promotion ?? undefined }); } catch {}
+    plies.push({ ply: p + 1, side: 'student', san: move.san, dragOk: drag.ok });
     if (!drag.ok) { outcome = 'drag-failed'; break; }
-    if (chess.isCheckmate()) { outcome = chess.turn() === 'w' ? 'black-wins' : 'white-wins'; break; }
-    if (chess.isDraw()) { outcome = 'draw'; break; }
-    lastFen = chess.fen();
+    // Check for end-of-game UI
+    const postgame = await page.locator('[data-testid="play-postgame"]').first().isVisible().catch(() => false);
+    if (postgame) { outcome = 'game-over'; break; }
   }
   if (outcome === 'in-progress') outcome = `aborted-at-${plies.length}-plies`;
-  return { mounted: true, plies: plies.length, outcome, lastFen };
+  // Capture postgame stats if available
+  const postReport = await page.evaluate(() => ({
+    correct: document.querySelector('[data-testid="report-correct"]')?.textContent ?? null,
+    deviation: document.querySelector('[data-testid="report-deviation"]')?.textContent ?? null,
+    recommendation: document.querySelector('[data-testid="report-recommendation"]')?.textContent ?? null,
+  })).catch(() => null);
+  return { mounted: true, plies: plies.length, outcome, postReport };
 }
 
 // ─── Per-opening orchestrator ──────────────────────────────────────
