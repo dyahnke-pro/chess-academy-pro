@@ -1151,7 +1151,7 @@
     "pgn": "e4 e6 d4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 Be7 Qd2 O-O Be2 b6 O-O f5 exf6 Nxf6 Kh1 Bb7 Rad1 Rc8 Qe1 Kh8",
     "color": "black",
     "style": "Solid, Strategic",
-    "overview": "The French Defence is one of the most rock-solid responses to 1.e4 — challenge central control with ...e6 and ...d5. The pawn structure gives you a clear plan: attack White's d4 pawn with ...c5, develop behind a strong chain, and aim for counterplay on the queenside or kingside. The Classical mainline goes ...Nc6/Be7/O-O/b6 with the key ...f5 break followed by exf6 Nxf6 opening the f-file. The light-squared bishop develops to b7 on the long diagonal.",
+    "overview": "The French Defence is one of chess's oldest analyzed defences, famously played in the 1834 La Bourdonnais–McDonnell match (the first 'world championship' of the modern era). Aron Nimzowitsch championed it for 30 years and considered it 'theoretically inferior but practically excellent'; Mikhail Botvinnik used it to win World Championship games; Wolfgang Uhlmann played it as his lifework at elite level; modern champions Korchnoi and Morozevich have used it as their main 1.e4 defence. The structure (…e6 + …d5) is one of the most reliable in chess. Your plan: attack d4 with …c5, develop behind a strong pawn chain, and aim for counterplay on either flank. The Classical mainline goes …Nc6/Be7/O-O/b6 with the key …f5 break followed by exf6 Nxf6 opening the f-file.",
     "shortOverview": "Contest center with ...e6 + ...d5, attack d4 with ...c5, then ...f5/exf6 break opens the f-file with ...Bb7 long-diagonal pressure.",
     "keyIdeas": [
       "Attack White's pawn center with ...c5 to undermine d4",
@@ -1265,7 +1265,7 @@
     "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bf4 Ngf6 O-O-O Be7 Ne4 O-O Kb1 c5",
     "color": "black",
     "style": "Solid, Positional",
-    "overview": "The Caro-Kann is the ultimate solid defense against 1.e4 — you get a rock-solid pawn structure and, crucially, your light-squared bishop develops outside the pawn chain before you play ...e6. This is the key advantage over the French. Positions tend to be strategic and long-term, but don't be fooled — there's plenty of venom in the sharper lines.",
+    "overview": "The Caro-Kann is named after German amateur Horatio Caro and Austrian master Marcus Kann who independently analyzed the opening in the 1880s. It became respectable when Capablanca made it his preferred drawing weapon in the 1920s; Tigran Petrosian raised it to championship status in the 1960s with his impenetrable defensive treatment; Anatoly Karpov played it through his entire World Championship career. The Caro is the ultimate solid defence against 1.e4 — you get a healthy pawn structure AND your light-squared bishop develops outside the pawn chain before …e6 (this is the key advantage over the French). Positions tend to be strategic and long-term, but don't be fooled — there's plenty of venom in the sharper lines.",
     "keyIdeas": [
       "Develop the light-squared bishop to f5 or g6 BEFORE playing ...e6",
       "Maintain a solid pawn structure with pawns on c6, d5, and e6",
@@ -1384,7 +1384,7 @@
     "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 Bg4 Bc4 Nc7 h3 Bxf3 Qxf3 a6 a4 b6 Qd3 Qc8 f5 Nd7 Qg3 Ne8 Qh4 Bf6 Qe1 Bd4+ Kh1 Nef6 Qh4 Qb7 Bh6 Be5 Rae1 Rfb8 fxg6 hxg6 Be2 b5 axb5 axb5 Rf3 c4",
     "color": "black",
     "style": "Hypermodern, Flexible",
-    "overview": "The Pirc is a hypermodern defense — let White build a big pawn center, then strike with ...c5 to break it down. The g7 fianchetto pressures the long diagonal while ...Na6-c7 develops with tempo against the d-pawn. After ...c5 d5, the ...Bg4-Bxf3 trade simplifies White's attack and ...a6-b6 prepares ...Bb7 to undermine d5. The middlegame plays out with mutual attacks: White's f5 push targets Black's king, while Black's queenside expansion with ...b5 cracks the a-file. Patience plus precise counterattacking timing — the Pirc rewards understanding over memorization.",
+    "overview": "The Pirc Defence is named after Slovenian GM Vasja Pirc, who pioneered the 1.e4 d6 + 2.d4 Nf6 + 3.Nc3 g6 setup in the 1940s as part of the hypermodern movement. It's the same hypermodern philosophy as the King's Indian and Grünfeld: LET White build a big pawn centre, then strike to break it down. Boris Spassky played the Pirc in his championship matches; modern champions Topalov and Anand have used it as a surprise weapon. The g7 fianchetto pressures the long diagonal; …Na6-c7 develops with tempo against the d-pawn. After …c5 d5, the …Bg4-Bxf3 trade simplifies White's attack and …a6-b6 prepares …Bb7 undermining d5. White's f5 push targets the king; Black's …b5 expansion cracks the a-file. Patience plus precise counterattacking timing wins.",
     "shortOverview": "Hypermodern: let White build the center, strike with ...c5, fianchetto pressure on the long diagonal, ...Bg4-Bxf3 trade simplifies White's attack.",
     "keyIdeas": [
       "Fianchetto the bishop to g7 to pressure d4 and the long diagonal",
@@ -1492,7 +1492,7 @@
     "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 O-O Nc6 a3 Bxc3 Bxc3 Qb6 Re1 O-O-O Qc1 Nd5 Bxd5 Rxd5 h3 h6",
     "color": "black",
     "style": "Solid, Practical",
-    "overview": "The Scandinavian is one of the most straightforward responses to 1.e4 — challenge the center with ...d5 and recapture with the queen. The queen comes out early but after ...Qa5 you develop rapidly with ...Nf6, ...Bf5, ...e6 and complete the setup with ...Bb4 + Bxc3 trading the dark-squared bishop to disrupt White's pawn structure. Black queenside-castles into an opposite-side attacking middlegame where Black's structural edge competes with White's better-developed pieces.",
+    "overview": "The Scandinavian Defence has ancient roots — it appears in chess manuscripts dating to 1475, making it one of the oldest analyzed openings on record. Modern revival came from Danish GM Bent Larsen and English GM Tony Miles, who famously beat Anatoly Karpov with the Scandinavian in 1980 (a stunning upset at the time). It's one of the most straightforward responses to 1.e4 — challenge the centre with …d5 and recapture with the queen. The queen comes out early but after …Qa5 you develop rapidly with …Nf6, …Bf5, …e6 and complete the setup with …Bb4 + Bxc3 disrupting White's pawn structure. Black queenside-castles into an opposite-side attacking middlegame.",
     "shortOverview": "Challenge with ...d5, recapture ...Qxd5-Qa5, develop ...Nf6/Bf5/e6/Bb4, then ...Bxc3 wrecks White's queenside pawns.",
     "keyIdeas": [
       "Recapture on d5 with the queen and relocate to a5 for active play",
@@ -1606,7 +1606,7 @@
     "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 Nc3 O-O Be3 N8d7 exd6 cxd6 b3 Nf6 Rc1 Nbd7 h3 Bh5 g4 Bg6 Nh4 d5 Nxg6 hxg6 Bf3 dxc4 bxc4 Rc8 c5 b6",
     "color": "black",
     "style": "Provocative, Dynamic",
-    "overview": "Alekhine's Defence is a provocative opening — invite White to push pawns forward and overextend. After 1...Nf6 you provoke 2.e5 attacking the knight, then retreat ...Nd5 and develop while White commits to the big center. The Modern main line goes ...Bg4 pin and ...e6 with the c4 push and exd6 simplification; Black's flexible structure outweighs White's space. The middlegame revolves around Black's ...Bh5-Bg6 maneuvering against White's central pawn duo and the queenside push with ...b6 supporting the c-file battery.",
+    "overview": "Alekhine's Defence is named after Russian World Champion Alexander Alekhine, who introduced it at the 1921 Budapest tournament — an opening that broke every classical rule by inviting White to push pawns forward. The chess world initially dismissed it as 'unsound provocation' until Alekhine demonstrated its strength repeatedly; modern champions Tal, Korchnoi, and Carlsen have all used it as a surprise weapon. After 1...Nf6 you provoke 2.e5 attacking the knight, then retreat …Nd5 and develop while White commits to a big centre. The Modern mainline goes …Bg4 pin and …e6 with c4 and exd6 simplification; Black's flexibility outweighs White's space. The middlegame is about manoeuvring against White's central pawn duo and queenside expansion with …b6.",
     "shortOverview": "Provoke 2.e5 with ...Nf6, retreat ...Nd5, develop while White overextends. The Bg4 pin and ...e6 setup gives flexible counterplay.",
     "keyIdeas": [
       "Provoke White's pawns forward to create targets for counterattack",
@@ -1708,7 +1708,7 @@
     "pgn": "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Re1 c6 a4 b6 Be3 Bb7 Qd2 d5",
     "color": "black",
     "style": "Solid, Flexible",
-    "overview": "The Philidor Defence is an underrated, incredibly solid choice against 1.e4 e5. Instead of the more common ...Nc6, you play ...d6 which supports the e5 pawn and gives you a very flexible setup. You develop with ...Nf6, ...Be7, ...O-O, and ...Nbd7, creating a compact structure that's tough to crack. The Hanham setup in particular is a fortress that even GMs struggle to break down.",
+    "overview": "The Philidor Defence is named after François-André Danican Philidor, the legendary 18th-century French master who was the strongest player in the world and famously declared 'pawns are the soul of chess' in his 1749 treatise *Analyse du Jeu des Échecs*. The Philidor was the principal Black defence to 1.e4 for over a century before being eclipsed by the Italian and Spanish. Today it's an underrated, solid choice — instead of the common …Nc6, you play …d6 supporting the e5-pawn and giving a flexible setup. You develop with …Nf6, …Be7, …O-O, and …Nbd7, creating a compact structure. The Hanham setup in particular is a fortress even GMs struggle to break down.",
     "keyIdeas": [
       "Support the e5 pawn with ...d6 to create a solid central structure",
       "Use the Hanham setup: ...Nf6, ...Be7, ...O-O, ...Nbd7, ...c6 for maximum solidity",
@@ -1802,12 +1802,12 @@
     "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4 Be2 O-O Nc3 Bf5 a3 Nxc3 bxc3 Nc6 Bf4 Na5",
     "color": "black",
     "style": "Solid, Symmetrical",
-    "overview": "The Petrov (or Russian Game) is the ultimate drawing weapon but don't let that fool you — it's also a very dangerous opening in the right hands. By mirroring White's move with 2...Nf6, you immediately challenge e4 and signal you're not afraid of a fight. The positions are extremely solid for Black, and the theory leads to positions where Black is never worse. World champions like Caruana and Kramnik have used it extensively.",
+    "overview": "The Petrov Defence (also called the Russian Game) is named after Russian master Alexander Petrov (or Petroff in transliteration), who analyzed it in the 1840s. It's been Black's drawing weapon for 180 years; modern revival came from Vladimir Kramnik who used it as his main weapon at the elite level in the 1990s — scoring a famous string of Petroff draws and wins against Kasparov. Caruana has played it as his 'absolutely must not lose' opening in critical match situations. By mirroring White's move with 2...Nf6, you challenge e4 and signal you're not afraid of a fight. The positions are solid; the theory leads to lines where Black is never worse.",
     "keyIdeas": [
       "Mirror White's attack on e5 with ...Nf6 attacking e4",
       "After Nxe5, play ...d6 first (NOT ...Nxe4 immediately) to force the knight back",
       "Build a solid center with ...d5 and develop smoothly",
-      "Use the rock-solid structure to play for equality and then slowly outplay your opponent"
+      "Use the solid symmetric structure to equalize first, then slowly outplay your opponent in the middlegame"
     ],
     "traps": [
       "After Nxe5, if White plays Nxf7?? Qe7 wins the knight — there's no safe square",
@@ -1896,7 +1896,7 @@
     "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Nf3 Re8 Qc2 c6 O-O Nf8 Bf4 Bg4",
     "color": "white",
     "style": "Classical, Strategic",
-    "overview": "The Queen's Gambit is one of the most principled and classical openings in chess — you immediately fight for central control with 2.c4, putting pressure on Black's d5 pawn. It's not really a gambit since you can always win the pawn back, but the point is to either gain a central pawn majority or saddle Black with an isolated queen's pawn. This opening has been a cornerstone of every world champion's repertoire since Steinitz.",
+    "overview": "The Queen's Gambit is one of chess's oldest analyzed openings — documented in Spanish manuscripts dating to the 1490s, refined by Wilhelm Steinitz in his championship matches of the 1880s-1890s. Capablanca, Lasker, Alekhine, Botvinnik, Karpov, Kasparov, Kramnik, Anand, and Carlsen — every world champion since Steinitz has played the Queen's Gambit at some point in their career. The Netflix series 'The Queen's Gambit' (2020) brought the opening to a new generation of viewers. It's not really a gambit since you can always win the pawn back; the point is to either gain a central pawn majority or saddle Black with an isolated queen's pawn. This opening has been a cornerstone of championship chess for 140 years.",
     "keyIdeas": [
       "Pressure d5 with c4 — if Black captures, recapture and enjoy the central majority",
       "Develop pieces to optimal squares: Nc3, Bg5, Nf3, e3, Bd3",
@@ -1995,7 +1995,7 @@
     "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 Be2 O-O O-O Nbd7 h3 b6 c3 Bb7 Nbd2 Ne4 Nxe4 Bxe4",
     "color": "white",
     "style": "Solid, Universal",
-    "overview": "The London System is the ultimate low-maintenance opening — you develop Bf4, e3, Nf3, Bd3, Nbd2, c3 in almost any order regardless of what Black does. It's incredibly reliable and gives you a solid, playable position against virtually anything. The dark-squared bishop on f4 is the star piece, and from there you can launch kingside attacks or play a positional game depending on what Black gives you.",
+    "overview": "The London System takes its name from the 1922 London tournament where Capablanca and others experimented with it. It stayed a tournament sideline for decades, used by Soviet greats Tigran Petrosian and Mikhail Botvinnik as ultra-solid drawing weapons. Magnus Carlsen's adoption of the London at the elite level in the 2010s shocked the chess world — proving systems-based openings could compete with sharp theoretical mainlines. It's the ultimate low-maintenance opening: develop Bf4, e3, Nf3, Bd3, Nbd2, c3 in almost any order regardless of what Black does. Bf4 is the star piece; from there you launch kingside attacks or play positionally depending on what Black gives you.",
     "keyIdeas": [
       "Develop Bf4 early — this is the signature move, get it out before e3 blocks it in",
       "Build a solid pyramid with d4, e3, c3 — hard to break down",
@@ -2109,7 +2109,7 @@
     "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Qc2 Bb7 Bd2 Nc6 Nc3",
     "color": "white",
     "style": "Positional, Pressure",
-    "overview": "The Catalan is one of the most sophisticated and powerful openings in modern chess — it combines the Queen's Gambit pawn structure with a fianchettoed bishop on g2. That bishop is an absolute monster on the long diagonal, exerting pressure from g2 all the way to a8. The positions look quiet but are deceptively dangerous for Black. Nearly every top player in the world has this in their repertoire, and for good reason.",
+    "overview": "The Catalan was christened at the 1929 Barcelona tournament when Savielly Tartakower, asked by the organizers for a new variation, fianchettoed his king's bishop and called it 'the Catalan' in honour of the host region. Botvinnik used it sparingly; it became a true champion's weapon when Vladimir Kramnik adopted it in the 2000s, and Magnus Carlsen made it his signature 1.d4 weapon — winning World Championship games from positions Stockfish calls equal. It combines the Queen's Gambit pawn structure with a fianchettoed bishop on g2 — a monster on the long diagonal exerting pressure from g2 all the way to a8. Positions look quiet but are deceptively dangerous; nearly every top player has this in their repertoire.",
     "keyIdeas": [
       "The fianchettoed bishop on g2 creates long-term pressure on the queenside",
       "If Black takes ...dxc4, White often plays Qc2 and recovers the pawn with positional compensation",
@@ -2203,7 +2203,7 @@
     "pgn": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Bd3 Nf6 c3 Nc6 Nd2 Bg4 Ngf3 e6 O-O Rc8 Qa4 Nd7 Ne5 Ndxe5 Bxe5 Qd7 Bg3 Bh5 dxc5 Bxc5 Qh4 Bg6 Bxg6 fxg6 Nf3 Be7 Qf4 Bf6",
     "color": "white",
     "style": "Aggressive, Anti-Indian",
-    "overview": "The Trompowsky Attack is a brilliant way to sidestep all of Black's prepared Indian defenses. By playing 2.Bg5 immediately, you force Black to deal with the pin on the f6 knight before they can set up their favorite system. It's a practical weapon that gets opponents out of their comfort zone from move two — and the positions are surprisingly rich.",
+    "overview": "The Trompowsky Attack is named after Brazilian champion Octavio Trompowsky de Almeida who championed the 2.Bg5 system at international tournaments in the 1930s-40s. It stayed an obscure sideline for decades until English GM Julian Hodgson made it his lifework in the 1980s-90s, winning hundreds of tournament games and proving its theoretical viability. Modern players from Carlsen to Nakamura use it as a surprise weapon to sidestep all of Black's prepared Indian defences. By playing 2.Bg5 immediately, you force Black to deal with the pin on the f6-knight before they can set up their favourite system. It's a practical weapon that gets opponents out of their comfort zone from move two — and the positions are surprisingly rich.",
     "keyIdeas": [
       "2.Bg5 forces Black to react immediately, preventing standard Indian setups",
       "After 2...Ne4 3.Bf4, White gets the bishop pair and a space advantage",
