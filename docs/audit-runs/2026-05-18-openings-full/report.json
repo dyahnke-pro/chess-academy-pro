@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-18T20:56:19.326Z",
+  "generatedAt": "2026-05-18T21:09:13.744Z",
   "base": "http://localhost:5173",
   "sample": 30,
   "openings": [
@@ -32029,6 +32029,2911 @@
       ],
       "startedAt": "2026-05-18T20:42:09.637Z",
       "finishedAt": "2026-05-18T20:56:19.326Z"
+    },
+    {
+      "openingId": "alekhine-defence",
+      "openingName": "Alekhine's Defence",
+      "source": "main",
+      "color": "black",
+      "eco": "B02",
+      "detailPageTestIds": [
+        "quick-feedback-button",
+        "mobile-menu-btn",
+        "quick-feedback-button",
+        "theme-toggle-btn",
+        "opening-detail",
+        "back-button",
+        "favorite-btn",
+        "mastery-percent",
+        "lines-discovered",
+        "lines-perfected",
+        "walkthrough-btn",
+        "learn-btn",
+        "practice-btn",
+        "play-btn",
+        "srs-enroll-row",
+        "srs-enroll-btn",
+        "narrate-overview",
+        "narrate-keyIdeas",
+        "middlegame-plans-empty",
+        "model-games-empty",
+        "narrate-traps",
+        "train-traps-btn",
+        "trap-line-0",
+        "trap-walkthrough-0",
+        "trap-learn-0",
+        "trap-practice-0",
+        "trap-play-0",
+        "trap-line-1",
+        "trap-walkthrough-1",
+        "trap-learn-1",
+        "trap-practice-1",
+        "trap-play-1",
+        "trap-line-2",
+        "trap-walkthrough-2",
+        "trap-learn-2",
+        "trap-practice-2",
+        "trap-play-2",
+        "narrate-warnings",
+        "train-warnings-btn",
+        "warning-line-0",
+        "warning-walkthrough-0",
+        "warning-learn-0",
+        "warning-practice-0",
+        "warning-play-0",
+        "warning-line-1",
+        "warning-walkthrough-1",
+        "warning-learn-1",
+        "warning-practice-1",
+        "warning-play-1",
+        "variation-0",
+        "variation-walkthrough-0",
+        "variation-learn-0",
+        "variation-practice-0",
+        "variation-play-0",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-1",
+        "variation-walkthrough-1",
+        "variation-learn-1",
+        "variation-practice-1",
+        "variation-play-1",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-2",
+        "variation-walkthrough-2",
+        "variation-learn-2",
+        "variation-practice-2",
+        "variation-play-2",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-3",
+        "variation-walkthrough-3",
+        "variation-learn-3",
+        "variation-practice-3",
+        "variation-play-3",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-4",
+        "variation-walkthrough-4",
+        "variation-learn-4",
+        "variation-practice-4",
+        "variation-play-4",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-5",
+        "variation-walkthrough-5",
+        "variation-learn-5",
+        "variation-practice-5",
+        "variation-play-5",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-6",
+        "variation-walkthrough-6",
+        "variation-learn-6",
+        "variation-practice-6",
+        "variation-play-6",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "nav-home-tab",
+        "nav-openings-tab",
+        "nav-coach-home-tab",
+        "nav-tactics-tab",
+        "nav-weaknesses-tab",
+        "build-version-widget"
+      ],
+      "mainLine": {
+        "walkthrough": {
+          "mounted": true,
+          "plies": [
+            {
+              "ply": 1,
+              "expectedSan": "e4",
+              "label": "1. e4",
+              "text": ""
+            },
+            {
+              "ply": 2,
+              "expectedSan": "Nf6",
+              "label": "1...Nf6",
+              "text": ""
+            },
+            {
+              "ply": 3,
+              "expectedSan": "e5",
+              "label": "2. e5",
+              "text": ""
+            },
+            {
+              "ply": 4,
+              "expectedSan": "Nd5",
+              "label": "2...Nd5",
+              "text": ""
+            },
+            {
+              "ply": 5,
+              "expectedSan": "d4",
+              "label": "3. d4",
+              "text": ""
+            },
+            {
+              "ply": 6,
+              "expectedSan": "d6",
+              "label": "3...d6",
+              "text": ""
+            },
+            {
+              "ply": 7,
+              "expectedSan": "Nf3",
+              "label": "4. Nf3",
+              "text": ""
+            },
+            {
+              "ply": 8,
+              "expectedSan": "Bg4",
+              "label": "4...Bg4",
+              "text": ""
+            },
+            {
+              "ply": 9,
+              "expectedSan": "Be2",
+              "label": "5. Be2",
+              "text": ""
+            },
+            {
+              "ply": 10,
+              "expectedSan": "e6",
+              "label": "5...e6",
+              "text": ""
+            },
+            {
+              "ply": 11,
+              "expectedSan": "O-O",
+              "label": "6. O-O",
+              "text": ""
+            },
+            {
+              "ply": 12,
+              "expectedSan": "Be7",
+              "label": "6...Be7",
+              "text": ""
+            },
+            {
+              "ply": 13,
+              "expectedSan": "c4",
+              "label": "7. c4",
+              "text": ""
+            },
+            {
+              "ply": 14,
+              "expectedSan": "Nb6",
+              "label": "7...Nb6",
+              "text": ""
+            },
+            {
+              "ply": 15,
+              "expectedSan": "Nc3",
+              "label": "8. Nc3",
+              "text": ""
+            },
+            {
+              "ply": 16,
+              "expectedSan": "O-O",
+              "label": "8...O-O",
+              "text": ""
+            },
+            {
+              "ply": 17,
+              "expectedSan": "Be3",
+              "label": "9. Be3",
+              "text": ""
+            },
+            {
+              "ply": 18,
+              "expectedSan": "N8d7",
+              "label": "9...N8d7",
+              "text": ""
+            },
+            {
+              "ply": 19,
+              "expectedSan": "exd6",
+              "label": "10. exd6",
+              "text": ""
+            },
+            {
+              "ply": 20,
+              "expectedSan": "cxd6",
+              "label": "10...cxd6",
+              "text": ""
+            },
+            {
+              "ply": 21,
+              "expectedSan": "b3",
+              "label": "11. b3",
+              "text": ""
+            },
+            {
+              "ply": 22,
+              "expectedSan": "Nf6",
+              "label": "11...Nf6",
+              "text": ""
+            },
+            {
+              "ply": 23,
+              "expectedSan": "Rc1",
+              "label": "12. Rc1",
+              "text": ""
+            },
+            {
+              "ply": 24,
+              "expectedSan": "Nbd7",
+              "label": "12...Nbd7",
+              "text": ""
+            },
+            {
+              "ply": 25,
+              "expectedSan": "h3",
+              "label": "13. h3",
+              "text": ""
+            },
+            {
+              "ply": 26,
+              "expectedSan": "Bh5",
+              "label": "13...Bh5",
+              "text": ""
+            },
+            {
+              "ply": 27,
+              "expectedSan": "g4",
+              "label": "14. g4",
+              "text": ""
+            },
+            {
+              "ply": 28,
+              "expectedSan": "Bg6",
+              "label": "14...Bg6",
+              "text": ""
+            },
+            {
+              "ply": 29,
+              "expectedSan": "Nh4",
+              "label": "15. Nh4",
+              "text": ""
+            },
+            {
+              "ply": 30,
+              "expectedSan": "d5",
+              "label": "15...d5",
+              "text": ""
+            },
+            {
+              "ply": 31,
+              "expectedSan": "Nxg6",
+              "label": "16. Nxg6",
+              "text": ""
+            },
+            {
+              "ply": 32,
+              "expectedSan": "hxg6",
+              "label": "16...hxg6",
+              "text": ""
+            },
+            {
+              "ply": 33,
+              "expectedSan": "Bf3",
+              "label": "17. Bf3",
+              "text": ""
+            },
+            {
+              "ply": 34,
+              "expectedSan": "dxc4",
+              "label": "17...dxc4",
+              "text": ""
+            },
+            {
+              "ply": 35,
+              "expectedSan": "bxc4",
+              "label": "18. bxc4",
+              "text": ""
+            },
+            {
+              "ply": 36,
+              "expectedSan": "Rc8",
+              "label": "18...Rc8",
+              "text": ""
+            },
+            {
+              "ply": 37,
+              "expectedSan": "c5",
+              "label": "19. c5",
+              "text": ""
+            },
+            {
+              "ply": 38,
+              "expectedSan": "b6",
+              "label": "19...b6",
+              "text": ""
+            }
+          ]
+        },
+        "practice": {
+          "mounted": true,
+          "attempts": [
+            {
+              "index": 1,
+              "expectedSan": "Nf6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 3,
+              "expectedSan": "Nd5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 5,
+              "expectedSan": "d6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 7,
+              "expectedSan": "Bg4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 9,
+              "expectedSan": "e6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 11,
+              "expectedSan": "Be7",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 13,
+              "expectedSan": "Nb6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 15,
+              "expectedSan": "O-O",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 17,
+              "expectedSan": "N8d7",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 19,
+              "expectedSan": "cxd6",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            }
+          ]
+        },
+        "play": {
+          "mounted": true,
+          "plies": 60,
+          "outcome": "aborted-at-60-plies",
+          "postReport": {
+            "correct": null,
+            "deviation": null,
+            "recommendation": null
+          }
+        }
+      },
+      "variations": [
+        {
+          "name": "Four Pawns Attack",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "c4",
+                "label": "4. c4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nb6",
+                "label": "4...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "f4",
+                "label": "5. f4",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "dxe5",
+                "label": "5...dxe5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "fxe5",
+                "label": "6. fxe5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Nc6",
+                "label": "6...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Be3",
+                "label": "7. Be3",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Bf5",
+                "label": "7...Bf5",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Nc3",
+                "label": "8. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "e6",
+                "label": "8...e6",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nf3",
+                "label": "9. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Bb4",
+                "label": "9...Bb4",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Rc1",
+                "label": "10. Rc1",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nb6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "dxe5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "Bf5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "e6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "Bb4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Modern Variation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nf3",
+                "label": "4. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Bg4",
+                "label": "4...Bg4",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Be2",
+                "label": "5. Be2",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "e6",
+                "label": "5...e6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "O-O",
+                "label": "6. O-O",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Be7",
+                "label": "6...Be7",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "c4",
+                "label": "7. c4",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Nb6",
+                "label": "7...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Nc3",
+                "label": "8. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "O-O",
+                "label": "8...O-O",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Be3",
+                "label": "9. Be3",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "d5",
+                "label": "9...d5",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "c5",
+                "label": "10. c5",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Bxf3",
+                "label": "10...Bxf3",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Bxf3",
+                "label": "11. Bxf3",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Nc4",
+                "label": "11...Nc4",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Bf4",
+                "label": "12. Bf4",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "b6",
+                "label": "12...b6",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "b3",
+                "label": "13. b3",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "Na5",
+                "label": "13...Na5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Bg4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "e6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "Be7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "Nb6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "d5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "Bxf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Exchange Variation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "c4",
+                "label": "4. c4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nb6",
+                "label": "4...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "exd6",
+                "label": "5. exd6",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "exd6",
+                "label": "5...exd6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nf3",
+                "label": "6. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Be7",
+                "label": "6...Be7",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Be2",
+                "label": "7. Be2",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "O-O",
+                "label": "7...O-O",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "O-O",
+                "label": "8. O-O",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "Nc6",
+                "label": "8...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nc3",
+                "label": "9. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Bf5",
+                "label": "9...Bf5",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "b3",
+                "label": "10. b3",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nb6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "exd6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "Be7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "Bf5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Two Pawns Attack",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c4",
+                "label": "3. c4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nb6",
+                "label": "3...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "d4",
+                "label": "4. d4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "d6",
+                "label": "4...d6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "exd6",
+                "label": "5. exd6",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "exd6",
+                "label": "5...exd6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nf3",
+                "label": "6. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Be7",
+                "label": "6...Be7",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Be2",
+                "label": "7. Be2",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "O-O",
+                "label": "7...O-O",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "O-O",
+                "label": "8. O-O",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "Bf5",
+                "label": "8...Bf5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nc3",
+                "label": "9. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Nc6",
+                "label": "9...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Be3",
+                "label": "10. Be3",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "d5",
+                "label": "10...d5",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "c5",
+                "label": "11. c5",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Nc4",
+                "label": "11...Nc4",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Bxc4",
+                "label": "12. Bxc4",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "dxc4",
+                "label": "12...dxc4",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "Qa4",
+                "label": "13. Qa4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nb6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "exd6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "Be7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "Bf5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "d5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Chase Variation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c4",
+                "label": "3. c4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nb6",
+                "label": "3...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "c5",
+                "label": "4. c5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nd5",
+                "label": "4...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "d4",
+                "label": "5. d4",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "d6",
+                "label": "5...d6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "cxd6",
+                "label": "6. cxd6",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "exd6",
+                "label": "6...exd6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Nf3",
+                "label": "7. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "dxe5",
+                "label": "7...dxe5",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "dxe5",
+                "label": "8. dxe5",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "Bb4+",
+                "label": "8...Bb4+",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Bd2",
+                "label": "9. Bd2",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "O-O",
+                "label": "9...O-O",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Bc4",
+                "label": "10. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "Nc6",
+                "label": "10...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "O-O",
+                "label": "11. O-O",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Bg4",
+                "label": "11...Bg4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "Nb6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "exd6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "dxe5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "Bb4+",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Scandinavian Transposition",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nf3",
+                "label": "4. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "dxe5",
+                "label": "4...dxe5",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nxe5",
+                "label": "5. Nxe5",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Nd7",
+                "label": "5...Nd7",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nxd7",
+                "label": "6. Nxd7",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Bxd7",
+                "label": "6...Bxd7",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "c4",
+                "label": "7. c4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "dxe5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "Nd7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "Bxd7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Voronezh Variation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "c4",
+                "label": "4. c4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nb6",
+                "label": "4...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "exd6",
+                "label": "5. exd6",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "cxd6",
+                "label": "5...cxd6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nc3",
+                "label": "6. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "g6",
+                "label": "6...g6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Be3",
+                "label": "7. Be3",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Bg7",
+                "label": "7...Bg7",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Rc1",
+                "label": "8. Rc1",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "O-O",
+                "label": "8...O-O",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "b3",
+                "label": "9. b3",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "e5",
+                "label": "9...e5",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "d5",
+                "label": "10. d5",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "h6",
+                "label": "10...h6",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Nf3",
+                "label": "11. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Bg4",
+                "label": "11...Bg4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nb6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "cxd6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "g6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "Bg7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "h6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "traps": [
+        {
+          "name": "Four Pawns Attack Counter",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "c4",
+                "label": "4. c4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nb6",
+                "label": "4...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "f4",
+                "label": "5. f4",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "dxe5",
+                "label": "5...dxe5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "fxe5",
+                "label": "6. fxe5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Nc6",
+                "label": "6...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Be3",
+                "label": "7. Be3",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Bf5",
+                "label": "7...Bf5",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Nc3",
+                "label": "8. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "e6",
+                "label": "8...e6",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nf3",
+                "label": "9. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Bb4",
+                "label": "9...Bb4",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Be2",
+                "label": "10. Be2",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "O-O",
+                "label": "10...O-O",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "O-O",
+                "label": "11. O-O",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Na5",
+                "label": "11...Na5",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "c5",
+                "label": "12. c5",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Bxc3",
+                "label": "12...Bxc3",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "bxc3",
+                "label": "13. bxc3",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "Nbc4",
+                "label": "13...Nbc4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nb6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "dxe5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "Nc6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "Bf5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "e6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "Bb4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Bg4 Pin Pressure",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Nf3",
+                "label": "4. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Bg4",
+                "label": "4...Bg4",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Be2",
+                "label": "5. Be2",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "e6",
+                "label": "5...e6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "O-O",
+                "label": "6. O-O",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Be7",
+                "label": "6...Be7",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "c4",
+                "label": "7. c4",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Nb6",
+                "label": "7...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "exd6",
+                "label": "8. exd6",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "cxd6",
+                "label": "8...cxd6",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nc3",
+                "label": "9. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "O-O",
+                "label": "9...O-O",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Be3",
+                "label": "10. Be3",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "d5",
+                "label": "10...d5",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "c5",
+                "label": "11. c5",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Bxf3",
+                "label": "11...Bxf3",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Bxf3",
+                "label": "12. Bxf3",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Nc4",
+                "label": "12...Nc4",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "Bc1",
+                "label": "13. Bc1",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "Nc6",
+                "label": "13...Nc6",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Bg4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "e6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "Be7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "Nb6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "cxd6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 17,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 19,
+                "expectedSan": "d5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Exchange Variation Development Lead",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "c4",
+                "label": "4. c4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nb6",
+                "label": "4...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "exd6",
+                "label": "5. exd6",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "exd6",
+                "label": "5...exd6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nf3",
+                "label": "6. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Be7",
+                "label": "6...Be7",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Be2",
+                "label": "7. Be2",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "O-O",
+                "label": "7...O-O",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "O-O",
+                "label": "8. O-O",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "Bf5",
+                "label": "8...Bf5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nc3",
+                "label": "9. Nc3",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 1,
+                "expectedSan": "Nf6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 3,
+                "expectedSan": "Nd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 5,
+                "expectedSan": "d6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 7,
+                "expectedSan": "Nb6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 9,
+                "expectedSan": "exd6",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 11,
+                "expectedSan": "Be7",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 13,
+                "expectedSan": "O-O",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 15,
+                "expectedSan": "Bf5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "warnings": [
+        {
+          "name": "Four Pawns Steamroll",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "c4",
+                "label": "4. c4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nb6",
+                "label": "4...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "f4",
+                "label": "5. f4",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "dxe5",
+                "label": "5...dxe5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "fxe5",
+                "label": "6. fxe5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "g6",
+                "label": "6...g6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Nc3",
+                "label": "7. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Bg7",
+                "label": "7...Bg7",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "c5",
+                "label": "8. c5",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "Nd5",
+                "label": "8...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Bc4",
+                "label": "9. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Nxc3",
+                "label": "9...Nxc3",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "bxc3",
+                "label": "10. bxc3",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "O-O",
+                "label": "10...O-O",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Nf3",
+                "label": "11. Nf3",
+                "text": ""
+              }
+            ]
+          }
+        },
+        {
+          "name": "Exchange Passive Play Danger",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "Nf6",
+                "label": "1...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "e5",
+                "label": "2. e5",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nd5",
+                "label": "2...Nd5",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "d4",
+                "label": "3. d4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d6",
+                "label": "3...d6",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "c4",
+                "label": "4. c4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nb6",
+                "label": "4...Nb6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "exd6",
+                "label": "5. exd6",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "cxd6",
+                "label": "5...cxd6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nc3",
+                "label": "6. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "g6",
+                "label": "6...g6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Be3",
+                "label": "7. Be3",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Bg7",
+                "label": "7...Bg7",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Rc1",
+                "label": "8. Rc1",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "O-O",
+                "label": "8...O-O",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "b3",
+                "label": "9. b3",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "e5",
+                "label": "9...e5",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "dxe5",
+                "label": "10. dxe5",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "dxe5",
+                "label": "10...dxe5",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "Qxd8",
+                "label": "11. Qxd8",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Rxd8",
+                "label": "11...Rxd8",
+                "text": ""
+              },
+              {
+                "ply": 23,
+                "expectedSan": "c5",
+                "label": "12. c5",
+                "text": ""
+              },
+              {
+                "ply": 24,
+                "expectedSan": "N6d7",
+                "label": "12...N6d7",
+                "text": ""
+              },
+              {
+                "ply": 25,
+                "expectedSan": "Bc4",
+                "label": "13. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 26,
+                "expectedSan": "Nc6",
+                "label": "13...Nc6",
+                "text": ""
+              }
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-05-18T20:56:19.337Z",
+      "finishedAt": "2026-05-18T21:09:13.743Z"
     }
   ],
   "totalEvents": 0
