@@ -649,6 +649,47 @@ export function CoachTeachPage(): JSX.Element {
     [walkthrough],
   );
 
+  // Coach asks the student whether they want to play the line out
+  // themselves the first time they reach the leaf of a given opening.
+  // Conversational prompt that matches the user's path into the
+  // lesson (typed chat → walkthrough plays → coach asks at the end).
+  // Tracks per-opening so re-visits / backtrack→leaf cycles don't
+  // re-ask. The "Play this line out yourself" button at the leaf
+  // panel is the one-click action that closes the loop.
+  const playOutPromptedFor = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    const openingName = walkthrough.tree?.openingName;
+    if (walkthrough.phase !== 'leaf' || !openingName) return;
+    if (playOutPromptedFor.current.has(openingName)) return;
+    playOutPromptedFor.current.add(openingName);
+    const msg = `That's the canonical line into the middlegame for the ${openingName}. Want to play it out yourself against me? Tap "Play this line out yourself" — or keep learning with quizzes and drills if you'd rather lock it in first.`;
+    const id = `play-out-prompt-${Date.now()}`;
+    setMessages((prev) => [
+      ...prev,
+      { id, role: 'assistant', content: msg, timestamp: Date.now() },
+    ]);
+    useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'chat-teach',
+      role: 'coach',
+      text: msg,
+      fen: gameRef.current.fen,
+      trigger: null,
+    });
+    // Speak a tight summary — the full sentence above is long for
+    // voice. The position changing in the student's favor IS the
+    // acknowledgment (per CLAUDE.md narration rules); voice carries
+    // only the ask itself.
+    void voiceService
+      .speakForced(`Want to play this line out yourself? Or keep learning?`)
+      .catch(() => undefined);
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachTeachPage.leafPlayOutPrompt',
+      summary: `leaf reached — asked student to play out "${openingName}"`,
+    });
+  }, [walkthrough.phase, walkthrough.tree?.openingName]);
+
   const handleSubmit = useCallback(async (
     text: string,
     opts?: {
@@ -3018,6 +3059,20 @@ function WalkthroughControls({
             >
               <ChevronRight size={16} />
               Continue learning
+            </button>
+          )}
+          {tree && (
+            <button
+              onClick={() => {
+                walkthrough.stop();
+                void navigate(`/coach/play?opening=${encodeURIComponent(tree.openingName)}`);
+              }}
+              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
+              style={goldGlowStrongStyle}
+              data-testid="walkthrough-leaf-play-real"
+            >
+              <ChevronRight size={16} />
+              Play this line out yourself
             </button>
           )}
           {tree && extractDeepDiveOptions(tree).length > 0 && (
