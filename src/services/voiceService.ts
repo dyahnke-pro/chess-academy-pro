@@ -264,6 +264,11 @@ export function sanitizeForTTS(text: string): string {
 
 class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
+  /** Set when the streaming-progressive-playback path (MediaSource +
+   *  HTMLAudioElement) is in flight. Mutually exclusive with
+   *  currentSource — the two playback paths never share an Audio
+   *  pipeline. stop() must clear whichever one is live. */
+  private currentAudioElement: HTMLAudioElement | null = null;
   private abortController: AbortController | null = null;
   private playing = false;
   /** Monotonic counter incremented on every `stop()`. Speech chains
@@ -836,6 +841,21 @@ class VoiceService {
       }
       this.currentSource = null;
     }
+    if (this.currentAudioElement) {
+      // Streaming-playback path — pause + drop the source. The
+      // associated MediaSource + object URL revoke on the 'ended' /
+      // 'error' handlers inside playAudioFromStream; we trigger
+      // 'pause' here so a stop() mid-stream doesn't keep the
+      // browser decoding the rest of the buffered MP3.
+      try {
+        this.currentAudioElement.pause();
+        this.currentAudioElement.removeAttribute('src');
+        this.currentAudioElement.load();
+      } catch {
+        // Already disposed
+      }
+      this.currentAudioElement = null;
+    }
     this.playing = false;
     // Only call cancel() when something is actually speaking — avoids the
     // costly cancel()-induced delay on iOS/Safari when the queue is empty.
@@ -921,37 +941,217 @@ class VoiceService {
     }
   }
 
+  /** Progressive MP3 playback supported here? MediaSource + MP3
+   *  codec are widely supported on desktop + Android Chromium /
+   *  Firefox; iOS Safari uses ManagedMediaSource with a different
+   *  lifecycle, so we keep iOS on the arrayBuffer fallback for now
+   *  (separate follow-up to wire ManagedMediaSource cleanly). */
+  private canStreamProgressivePlayback(): boolean {
+    if (typeof window === 'undefined') return false;
+    if (typeof window.MediaSource === 'undefined') return false;
+    // iOS Safari exposes MediaSource only via ManagedMediaSource;
+    // the bare MediaSource constructor on iOS is the Audio-element-
+    // controlled flavor with stricter rules. Detect Safari + iOS via
+    // user agent — narrow gate that errs on the side of the
+    // arrayBuffer fallback when uncertain.
+    const ua = navigator.userAgent;
+    const isIos = /iPhone|iPad|iPod/.test(ua) || (ua.includes('Mac') && 'ontouchend' in document);
+    if (isIos) return false;
+    try {
+      return window.MediaSource.isTypeSupported('audio/mpeg');
+    } catch {
+      return false;
+    }
+  }
+
+  /** Stream Polly's MP3 chunks into a `<audio>` element via
+   *  MediaSource so playback starts AS chunks arrive instead of
+   *  after the full body downloads. Phase A.5 of the streaming-TTS
+   *  standardization (CLAUDE.md G4). PR #615 streamed the response
+   *  server-side; this is the client consumer that actually delivers
+   *  the latency win.
+   *
+   *  Also accumulates chunks into a Uint8Array for caching — when
+   *  the stream completes we write the combined buffer to the LRU
+   *  so the NEXT speak of the same text hits cache and plays
+   *  instantly via the existing playAudioBuffer path. */
+  private async playAudioFromStream(
+    response: Response,
+    cacheKey: string,
+  ): Promise<boolean> {
+    if (!response.body) return false;
+    const reader = response.body.getReader();
+    const chunks: Uint8Array[] = [];
+    const audio = new Audio();
+    audio.playbackRate = this.speed;
+    audio.preload = 'auto';
+
+    const mediaSource = new MediaSource();
+    const objectUrl = URL.createObjectURL(mediaSource);
+    audio.src = objectUrl;
+
+    const sourceOpen = new Promise<void>((resolve, reject) => {
+      mediaSource.addEventListener('sourceopen', () => resolve(), { once: true });
+      mediaSource.addEventListener('error', () => reject(new Error('MediaSource error')), { once: true });
+    });
+
+    try {
+      await sourceOpen;
+    } catch {
+      URL.revokeObjectURL(objectUrl);
+      return false;
+    }
+
+    const sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
+    sourceBuffer.mode = 'sequence';
+
+    const ended = new Promise<void>((resolve) => {
+      const onEnded = (): void => {
+        this.playing = false;
+        this.currentAudioElement = null;
+        URL.revokeObjectURL(objectUrl);
+        resolve();
+      };
+      audio.addEventListener('ended', onEnded, { once: true });
+      audio.addEventListener('error', () => {
+        // Audio decode failed mid-stream. Stop playback, resolve so
+        // the awaiter unblocks; the cache write below will not fire.
+        this.playing = false;
+        this.currentAudioElement = null;
+        URL.revokeObjectURL(objectUrl);
+        resolve();
+      }, { once: true });
+    });
+
+    this.playing = true;
+    this.currentAudioElement = audio;
+    // Try to start playback once we have some data buffered. The
+    // browser handles "wait until enough data" automatically — we
+    // just call play() and let the audio element begin when ready.
+    const playStartPromise = audio.play().catch((err: unknown) => {
+      // Autoplay restriction (no user gesture). Log + resolve so the
+      // pump below still runs and caches the data for a later
+      // user-gestured replay.
+      this.lastSpeakDiagnostic.error = `audio.play rejected: ${err instanceof Error ? err.message : String(err)}`;
+      return undefined;
+    });
+
+    // Pump response body → SourceBuffer. Append serially because
+    // appendBuffer is async (fires 'updateend') and overlapping
+    // appends throw InvalidStateError.
+    const pumpResult = (async (): Promise<boolean> => {
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          await new Promise<void>((resolve, reject) => {
+            const onEnd = (): void => {
+              sourceBuffer.removeEventListener('updateend', onEnd);
+              resolve();
+            };
+            const onErr = (): void => {
+              sourceBuffer.removeEventListener('error', onErr);
+              reject(new Error('sourceBuffer error'));
+            };
+            sourceBuffer.addEventListener('updateend', onEnd, { once: true });
+            sourceBuffer.addEventListener('error', onErr, { once: true });
+            sourceBuffer.appendBuffer(value);
+          });
+        }
+        if (mediaSource.readyState === 'open') {
+          mediaSource.endOfStream();
+        }
+        return true;
+      } catch {
+        if (mediaSource.readyState === 'open') {
+          try { mediaSource.endOfStream('decode'); } catch { /* ignore */ }
+        }
+        return false;
+      }
+    })();
+
+    await playStartPromise;
+    const pumpOk = await pumpResult;
+    await ended;
+
+    // Cache the full audio for next speak of the same text. Only
+    // when the pump completed cleanly — partial streams cached as
+    // valid would replay broken on the next call.
+    if (pumpOk && chunks.length > 0) {
+      const totalLen = chunks.reduce((n, c) => n + c.byteLength, 0);
+      const combined = new Uint8Array(totalLen);
+      let offset = 0;
+      for (const c of chunks) {
+        combined.set(c, offset);
+        offset += c.byteLength;
+      }
+      // Slice to ArrayBuffer (combined.buffer may be a shared
+      // ArrayBuffer view; .slice() gives us a standalone copy).
+      this.setAudioCacheEntry(cacheKey, combined.buffer.slice(combined.byteOffset, combined.byteOffset + combined.byteLength));
+    }
+    return true;
+  }
+
   private async speakPolly(text: string, voice: string, style?: string): Promise<boolean> {
     this.lastSpeakDiagnostic.pollyAttempted = true;
     try {
       // Cache key includes style so a style change doesn't return
       // a stale audio buffer from an earlier prosody setting.
       const key = this.pollyKey(text, voice) + (style ? `|${style}` : '');
-      let arrayBuffer = this.touchAudioCacheEntry(key);
+      const cachedBuffer = this.touchAudioCacheEntry(key);
 
-      if (!arrayBuffer) {
-        this.abortController = new AbortController();
-        const timeoutSignal = AbortSignal.timeout(10_000);
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        const combinedSignal = AbortSignal.any
-          ? AbortSignal.any([this.abortController.signal, timeoutSignal])
-          : this.abortController.signal;
-        const url = getTtsUrl(text, voice, true, style);
-        const response = await fetch(url, { signal: combinedSignal });
-        this.lastSpeakDiagnostic.pollyStatus = response.status;
-        this.lastSpeakDiagnostic.pollyOk = response.ok;
-        if (!response.ok) {
-          this.coolDownPolly(`API error ${response.status}`);
-          this.lastSpeakDiagnostic.error = `Polly /api/tts returned ${response.status}`;
+      // Cache hit → play the buffered audio directly (no streaming,
+      // no fetch). This stays on the existing decodeAudioData path
+      // because we already have the complete MP3 in memory.
+      if (cachedBuffer) {
+        this.lastSpeakDiagnostic.pollyOk = true;
+        this.lastSpeakDiagnostic.pollyStatus = 200;
+        const played = await this.playAudioBuffer(cachedBuffer.slice(0));
+        if (!played) {
+          this.lastSpeakDiagnostic.error = 'AudioContext suspended (need user gesture)';
           return false;
         }
-        arrayBuffer = await response.arrayBuffer();
-        this.abortController = null;
-        this.setAudioCacheEntry(key, arrayBuffer);
-      } else {
-        this.lastSpeakDiagnostic.pollyOk = true;
-        this.lastSpeakDiagnostic.pollyStatus = 200; // cache hit
+        return true;
       }
+
+      // Cache miss → fetch from /api/tts.
+      this.abortController = new AbortController();
+      const timeoutSignal = AbortSignal.timeout(10_000);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      const combinedSignal = AbortSignal.any
+        ? AbortSignal.any([this.abortController.signal, timeoutSignal])
+        : this.abortController.signal;
+      const url = getTtsUrl(text, voice, true, style);
+      const response = await fetch(url, { signal: combinedSignal });
+      this.lastSpeakDiagnostic.pollyStatus = response.status;
+      this.lastSpeakDiagnostic.pollyOk = response.ok;
+      if (!response.ok) {
+        this.coolDownPolly(`API error ${response.status}`);
+        this.lastSpeakDiagnostic.error = `Polly /api/tts returned ${response.status}`;
+        return false;
+      }
+
+      // Progressive playback path (Phase A.5 of streaming-TTS
+      // standardization, CLAUDE.md G4). MediaSource starts playing
+      // as soon as ~5KB is buffered instead of waiting for the full
+      // download. Falls back to the arrayBuffer path on iOS Safari
+      // (ManagedMediaSource has different lifecycle requirements;
+      // separate follow-up).
+      if (this.canStreamProgressivePlayback()) {
+        this.abortController = null;
+        const ok = await this.playAudioFromStream(response, key);
+        return ok;
+      }
+
+      // Fallback: buffer the full MP3 then decode + play. Same path
+      // as before A.5 — what iOS Safari and any client without
+      // MediaSource support runs on. Server is still streaming the
+      // body (PR #615); the win is partial but real (synthesis-
+      // time and transit-time overlap even when the client buffers).
+      const arrayBuffer = await response.arrayBuffer();
+      this.abortController = null;
+      this.setAudioCacheEntry(key, arrayBuffer);
 
       const played = await this.playAudioBuffer(arrayBuffer.slice(0));
       if (!played) {
