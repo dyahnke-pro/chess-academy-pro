@@ -59,9 +59,19 @@ const OPENING_BOOK_PRIORITIES = new Set([
   'e4', 'd4', 'Nf3', 'Nc3', 'Bc4', 'Bb5', 'Bf4', 'O-O', 'O-O-O', 'd3', 'c3', 'Re1',
 ]);
 
+function pickTopMovesLocally(chess, n) {
+  const ranked = rankAllLegalMoves(chess);
+  return ranked.slice(0, n);
+}
+
 function pickMoveLocally(chess) {
+  const ranked = rankAllLegalMoves(chess);
+  return ranked[0] ?? null;
+}
+
+function rankAllLegalMoves(chess) {
   const legal = chess.moves({ verbose: true });
-  if (legal.length === 0) return null;
+  if (legal.length === 0) return [];
 
   /** Lightweight SEE — check if the destination square would be
    *  immediately recaptured. If the cheapest recapturer is worth
@@ -110,7 +120,7 @@ function pickMoveLocally(chess) {
   }
 
   legal.sort((a, b) => rank(b) - rank(a));
-  return legal[0];
+  return legal;
 }
 
 // ─── tryMove (Playwright click-to-move) ────────────────────────────
@@ -132,6 +142,21 @@ async function tryMove(page, from, to, promotion = null) {
       await promoBtn.click();
     }
   }
+}
+
+async function resignIfPossible(page) {
+  const resignBtn = page.locator('[data-testid="resign-btn"]');
+  if (await resignBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+    await resignBtn.click().catch(() => undefined);
+    await page.waitForTimeout(700);
+    const yesBtn = page.locator('[data-testid="resign-yes"]');
+    if (await yesBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
+      await yesBtn.click().catch(() => undefined);
+      await page.waitForTimeout(2500);
+      return true;
+    }
+  }
+  return false;
 }
 
 async function main() {
@@ -221,32 +246,37 @@ async function main() {
     // 1420 Stockfish; resigning is the deterministic path to review).
     if (ply >= RESIGN_AFTER_PLY) {
       console.log(`[full-game] ply ${ply}: hit RESIGN_AFTER_PLY — clicking resign to reach review`);
-      const resignBtn = page.locator('[data-testid="resign-btn"]');
-      if (await resignBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
-        await resignBtn.click().catch(() => undefined);
-        await page.waitForTimeout(700);
-        const yesBtn = page.locator('[data-testid="resign-yes"]');
-        if (await yesBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
-          await yesBtn.click().catch(() => undefined);
-          await page.waitForTimeout(2500);
-        }
-      }
+      await resignIfPossible(page);
       break;
     }
 
     // Pick + play our move (white when ply is even; coach plays black when odd).
     if (mirror.turn() === 'w') {
-      const move = pickMoveLocally(mirror);
-      if (!move) {
+      // Try up to 5 candidate moves in ranked order — if one fails to
+      // click (board orientation oddity, blunder-modal blocking, etc.),
+      // fall through to the next-best so the audit doesn't dead-end.
+      const candidates = pickTopMovesLocally(mirror, 5);
+      if (candidates.length === 0) {
         console.log(`[full-game] ply ${ply}: no legal moves for student`);
         break;
       }
-      console.log(`[full-game] ply ${ply}: student plays ${move.san} (${move.from}→${move.to})`);
+      let clicked = false;
+      let move = null;
       const startIdx = intercepted.length;
-      try {
-        await tryMove(page, move.from, move.to, move.promotion);
-      } catch (e) {
-        console.log(`[full-game] move click failed: ${String(e?.message ?? e).slice(0, 120)}`);
+      for (const c of candidates) {
+        console.log(`[full-game] ply ${ply}: trying ${c.san} (${c.from}→${c.to})`);
+        try {
+          await tryMove(page, c.from, c.to, c.promotion);
+          clicked = true;
+          move = c;
+          break;
+        } catch (e) {
+          console.log(`  click failed: ${String(e?.message ?? e).slice(0, 80)} — trying next candidate`);
+        }
+      }
+      if (!clicked || !move) {
+        console.log(`[full-game] ply ${ply}: all candidate clicks failed — resigning to reach review`);
+        await resignIfPossible(page);
         break;
       }
       mirror.move({ from: move.from, to: move.to, promotion: move.promotion ?? undefined });
@@ -350,7 +380,8 @@ async function main() {
       await page.waitForTimeout(750);
     }
     if (!coachReplied) {
-      console.log(`[full-game] ply ${ply}: coach did not reply within ${COACH_MOVE_WAIT_MS}ms — aborting`);
+      console.log(`[full-game] ply ${ply}: coach did not reply within ${COACH_MOVE_WAIT_MS}ms — resigning to reach review`);
+      await resignIfPossible(page);
       break;
     }
     try {
