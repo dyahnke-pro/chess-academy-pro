@@ -21,6 +21,18 @@ tests + typecheck + lint are NOT sufficient — they don't catch deploy
 pipeline issues. The 2026-05-14 back-button incident proved this:
 green local tests, broken on prod, only the audit caught it.
 
+**🚨 MERGING A PR IS NOT THE END OF THE WORK.** When you merge a PR
+via `mcp__github__merge_pull_request` (or any other path that lands
+code on `main`), your work IS NOT DONE. The very next thing you do
+— before any wrap-up text, before any "green light" message, before
+declaring success — is run the audit matrix scripts for the surfaces
+you changed. Then report results to David. The 2026-05-18 incident
+proved this: a 16-commit PR landed on main and the session moved on
+without running the audit; David had to call it out. If you find
+yourself about to say "PR merged — try it on your phone", STOP and
+run the audits first. The audit step is the merge's COMPLETION, not
+a follow-up step.
+
 **You CAN run Playwright in the Claude Code sandbox.** Don't claim
 you can't. The pattern (battle-tested 2026-05-16):
 
