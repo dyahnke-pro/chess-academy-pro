@@ -6,7 +6,7 @@
     "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 Bg7 h4 g4",
     "color": "white",
     "style": "Aggressive, Romantic",
-    "overview": "The King's Gambit is the most famous attacking opening in chess history — you throw a pawn at Black on move two and say 'come and get it.' The idea is simple: sacrifice the f-pawn to rip open the f-file, blast open the center, and launch a ferocious kingside attack before Black can consolidate. Fischer called it 'a bust,' but club players keep getting destroyed by it because the resulting positions are incredibly sharp and demand precise knowledge from the defender.",
+    "overview": "The King's Gambit is the most famous attacking opening in chess history. Documented in Greco's 1620s manuscripts, played at the highest level for 300+ years: Paul Morphy used it for his attacking masterpieces in the 1850s-60s; Anderssen's celebrated 'Immortal Game' of 1851 (vs Kieseritzky in London) was a King's Gambit where Anderssen sacrificed queen + both rooks for mate; Boris Spassky played it through his 1960s prime including the famous Spassky-Bronstein 1960 brilliancy. Bobby Fischer's 1961 article 'A Bust to the King's Gambit' helped knock it out of elite play, but the opening remains a beloved teaching tool because it embodies attacking principles in their purest form. You sacrifice the f-pawn to rip open the f-file, blast open the centre, and launch a ferocious kingside attack.",
     "keyIdeas": [
       "Sacrifice the f-pawn to rip open the f-file — after castling, the Rf1 has a direct highway toward Black's castled king, and the open file combined with Bc4 targeting f7 creates devastating pressure",
       "Play d4 quickly to dominate the center with two pawns and free the dark-squared bishop",
@@ -107,7 +107,7 @@
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2",
     "color": "white",
     "style": "Aggressive, Classical",
-    "overview": "The Evans Gambit is one of the most dangerous weapons in the Italian Game — you sacrifice a whole pawn on b4 to gain a massive center and lightning-fast development. After c3 and d4, your pawns control the center while your pieces fly out to attacking squares. Even Garry Kasparov has played it at the highest level, and at club level, Black is often simply overwhelmed by the speed of the initiative.",
+    "overview": "The Evans Gambit was invented by Welsh sea captain William Davies Evans in 1827, who first played it during a ship voyage between Wales and Cork. The opening dominated 19th-century chess — Adolf Anderssen, Paul Morphy, and Mikhail Chigorin all played it for spectacular attacking wins. It fell out of favour in the early 1900s after Lasker's analyses showed Black's defensive resources, but Garry Kasparov famously revived it at the highest level in his 1995 match against Vishy Anand at Riga — beating Anand in a 25-move kingside attack that's still studied today. You sacrifice the b-pawn to gain a massive centre and lightning-fast development; after c3 and d4, your pawns dominate while pieces fly to attacking squares.",
     "keyIdeas": [
       "Sacrifice b4 to gain time — Black's bishop must move twice while you build the center with c3 and d4",
       "After c3 and d4, White has a dream pawn center and open diagonals for both bishops",
@@ -198,7 +198,7 @@
     "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 O-O Nd2 Nxd2 Qxd2",
     "color": "white",
     "style": "Aggressive, Tactical",
-    "overview": "The Scotch Gambit is a sneaky way to avoid heavy theory while getting a razor-sharp position. Instead of recapturing on d4, you play Bc4 and e5, kicking Black's knight and seizing space. It's like the Italian Game on steroids — you get rapid development, open lines, and attacking chances while Black struggles to find safe squares for the knights. The positions demand tactical alertness from both sides.",
+    "overview": "The Scotch Gambit emerged from 19th-century romantic chess as a sharper alternative to the standard Scotch — the Italian player's response after 4.d4 exd4 5.Bc4 (instead of the calm Nxd4). It was a favourite of attacking masters in the 1850s-60s, including Adolf Anderssen, and remained a popular club-level weapon into the modern era. The opening avoids heavy theoretical mainlines while creating concrete tactical positions. Instead of recapturing on d4, you play Bc4 and e5, kicking Black's knight and seizing space. Like the Italian Game on steroids — rapid development, open lines, and attacking chances while Black struggles to find safe squares.",
     "keyIdeas": [
       "Push e5 to kick Black's Nf6 from its defensive post and seize a commanding space advantage — the displaced knight leaves f7 and the kingside vulnerable to the Bc4's diagonal pressure",
       "Complete development with O-O, Re1 bolstering the e-file, and Bg5 pinning pieces — this coordinated setup maximizes pressure while Black struggles to untangle from the tactical complications",
@@ -289,7 +289,7 @@
     "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3",
     "color": "white",
     "style": "Aggressive, Surprising",
-    "overview": "The Vienna Gambit is the King's Gambit's sneaky cousin — you delay f4 by one move, first developing the knight to c3 to control d5. When f4 comes, it's with more structural support and the e5 push gains time against Black's knight. This is a fantastic surprise weapon because most players prepare against the King's Gambit but have no clue what to do against the Vienna, and the resulting positions are incredibly sharp with attacking chances on both flanks.",
+    "overview": "The Vienna Gambit was named for the Viennese chess club where Wilhelm Steinitz (the first official World Champion) and his students experimented with the system in the 1860s-1880s. The Vienna was a popular tournament weapon through the early 1900s before being overshadowed by the Italian and Spanish. Modern theoretical preparation has resurrected it as a surprise weapon at the elite level — players like Vassily Ivanchuk and Adams use it occasionally. The Vienna Gambit is the King's Gambit's sneaky cousin — you delay f4 by one move, first developing Nc3 to control d5. When f4 comes, it has structural support AND the e5 push gains time against Black's knight. Most players prepare against the King's Gambit; few know what to do against the Vienna.",
     "keyIdeas": [
       "Delay f4 until Nc3 supports the center — the e5 push comes with tempo against the f6 knight",
       "After e5, the Nf6 is forced to retreat (usually to d5 or g8), and White seizes control of the d5 square — the displaced knight and White's space advantage create a dominating central position",
@@ -360,7 +360,7 @@
     "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 Nf6 e5",
     "color": "white",
     "style": "Ultra-Aggressive, Romantic",
-    "overview": "The Danish Gambit is chess on steroids — you sacrifice not one but TWO pawns to get a dream position with bishops on c4 and b2, both aimed at Black's king like heat-seeking missiles. If Black grabs both pawns, you'll have every piece developed while Black is still figuring out where to put the knights. This is the ultimate 'punish the greedy player' opening and produces some of the most exciting middlegame positions in all of chess.",
+    "overview": "The Danish Gambit was popularized in the late 1800s by Danish-Australian master Martin From and championed by Danish players including Bjørn Nielsen — earning the 'Danish' label. The opening reached its peak of popularity in the romantic chess era of the 19th century, when sacrificing pawns for development was considered the highest form of chess. By the early 1900s, defensive theory had caught up — but in the modern era, the Danish remains a fearsome club-level surprise weapon. Chess on steroids: sacrifice TWO pawns for bishops on c4 and b2, both aimed at Black's king like heat-seeking missiles. If Black grabs both pawns, you'll have every piece developed while Black is still figuring out where to put the knights.",
     "keyIdeas": [
       "Sacrifice two pawns for a devastating lead in development — your pieces are out before Black has moved anything",
       "The bishop pair on c4 and b2 creates deadly pressure on f7 and the long diagonal simultaneously",
@@ -456,7 +456,7 @@
     "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 Be7 Rd1 O-O",
     "color": "white",
     "style": "Aggressive, Anti-Sicilian",
-    "overview": "Tired of getting outbooked in the Sicilian? The Smith-Morra Gambit blows up all of Black's preparation in one move. You sacrifice a pawn with d4 and c3 to get rapid piece development, open lines, and a dangerous initiative against the Sicilian. White's pieces pour out like water while Black struggles to untangle — it's the ultimate anti-Sicilian weapon for attacking players who want to dictate the terms of the battle.",
+    "overview": "The Smith-Morra Gambit is named after Frenchman Pierre Morra (who analyzed the gambit in the 1940s-50s) and Texan master Ken Smith (who championed it in tournament play in the 1960s-70s and wrote extensively about it). The gambit has remained a fearsome club-level weapon for 70 years — though almost never seen at top GM level, it scores devastatingly well at amateur level because Sicilian players typically have zero Smith-Morra preparation. Sacrifice a pawn with d4 and c3 to get rapid piece development, open lines, and a dangerous initiative against the Sicilian. White's pieces pour out like water while Black struggles to untangle.",
     "keyIdeas": [
       "Sacrifice a pawn to get a full tempo lead in development against the Sicilian structure",
       "The open c-file combined with Bc4 creates pressure against the f7 square and d-file",
@@ -547,7 +547,7 @@
     "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5",
     "color": "black",
     "style": "Trappy, Surprise Weapon",
-    "overview": "The Stafford Gambit is the ultimate trap opening — objectively dubious, but practically devastating. After White takes on e5 and c6, Black gets wide-open lines and incredible piece activity targeting f2 and the White king. Every natural-looking move for White can walk into a hidden trap. Eric Rosen made this gambit famous on YouTube, and for good reason — it produces an absurd win rate at rapid and blitz time controls where opponents don't know the theory.",
+    "overview": "The Stafford Gambit was invented by American master Joseph Stafford in the 1950s and dismissed as unsound by every serious analyst for nearly 70 years. The opening lived in obscurity until IM Eric Rosen began posting Stafford trap videos to YouTube in 2018-2019; his content quickly accumulated millions of views and made the Stafford a household name among online chess players. Today, the gambit has a cult following — objectively dubious, but practically devastating. After White takes on e5 and c6, Black gets wide-open lines and incredible piece activity targeting f2 and the White king. Every natural-looking move for White walks into a hidden trap.",
     "keyIdeas": [
       "Sacrifice a pawn for rapid development and open lines targeting the White king and f2 square",
       "The open d-file and diagonals create immediate tactical threats that are hard to see",
@@ -648,7 +648,7 @@
     "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 Rae8 Nd2 Re6 a4 f5",
     "color": "black",
     "style": "Sacrificial, Dynamic",
-    "overview": "The Marshall Attack is one of the greatest prepared opening inventions in chess history — Frank Marshall supposedly kept it secret for years before unleashing it against Capablanca in 1918. Black sacrifices a full pawn with d5 to get a ferocious kingside attack with open lines, active pieces, and relentless pressure. At the highest levels, this is considered fully sound, and even World Champions have struggled to defend against it when the attack flows naturally.",
+    "overview": "The Marshall Attack is one of the most famous opening inventions in chess history. American champion Frank Marshall unveiled it in his 1918 New York game against José Raúl Capablanca — Marshall had supposedly prepared the gambit for ten years specifically to use against the Cuban chess king. Capablanca won that game (defending Marshall's preparation accurately), but the opening entered chess history. The Marshall has been a championship-level weapon for over a century: World Champions Anand, Aronian, and Caruana all use it. At the highest level it's considered fully sound; defending against it accurately requires deep preparation. Black sacrifices a full pawn with 8...d5 to get a ferocious kingside attack with open lines, active pieces, and relentless pressure.",
     "keyIdeas": [
       "Sacrifice the e5 pawn to activate every piece toward White's king — total mobilization",
       "After exd5 Nxd5, the knight on d5 is a monster and e4 is coming with tempo against White's knight",
@@ -739,7 +739,7 @@
     "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3",
     "color": "black",
     "style": "Trappy, Unorthodox",
-    "overview": "The Englund Gambit is the black sheep of the gambit family — objectively terrible, but loaded with traps that club players fall into like clockwork. After 1...e5 against d4, Black gives up a pawn to create immediate chaos and trick White into losing material. It's the perfect weapon for blitz games where your opponent expects a Queen's Gambit and instead gets blindsided by tactical mayhem that they've never seen before. NOTE: the entire opening is essentially off-master-game theory — Lichess Explorer shows zero high-level masters playing 1...e5 against 1.d4. The lines below come from popular online and amateur theory rather than master games.",
+    "overview": "The Englund Gambit is named after Swedish master Fritz Englund who promoted the line in the early 1900s — he even organized a 1932 tournament in Stockholm where all participants were required to play 1.d4 e5 as Black! Despite this enthusiastic championing, the gambit was widely dismissed as unsound for nearly a century. Modern players use it almost exclusively as a surprise weapon: most 1.d4 players have never studied 1.d4 e5 because every reasonable opening book tells you the move is bad. That ignorance is exactly Black's edge — the traps are so well-hidden that even strong opponents fall for them. NOTE: the entire opening is essentially off-master-game theory — Lichess Explorer shows zero high-level masters playing 1...e5 against 1.d4. The lines come from popular online and amateur theory.",
     "keyIdeas": [
       "Sacrifice the e5 pawn to shatter White's normal d4 development routine — opponents expecting a Queen's Gambit or Indian Defense are thrown into unfamiliar tactical territory from move one",
       "Qe7 pins the e5 pawn to White's king — if White isn't careful, the pawn drops back for free",
@@ -793,7 +793,7 @@
     "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 Nxe5 Nxe5 e3 Bxd2+ Qxd2 d6 Be2 O-O O-O Bf5",
     "color": "black",
     "style": "Aggressive, Counterattacking",
-    "overview": "The Budapest Gambit is one of the nastiest surprise weapons against 1.d4 — you sacrifice a pawn with e5 and immediately launch an attack with Ng4, putting pressure on e5 and f2. White players expecting a quiet Queen's Indian or Nimzo suddenly face razor-sharp tactics that require specific knowledge to navigate. The knight on g4 is incredibly annoying, and combined with Bc5 and Qh4, the threats pile up faster than White can handle.",
+    "overview": "The Budapest Gambit was first played at the 1896 Budapest tournament (giving it the name) but only became serious tournament theory in 1916 when Hungarian master István Abonyi defeated GM Géza Maróczy with the gambit at Budapest — a stunning upset that introduced the opening to the chess world. The Budapest had brief popularity in the 1920s before being analyzed into respectability by Akiba Rubinstein and later played by Bronstein in the 1960s. Today it's a surprise weapon against 1.d4 — White players expecting a quiet Queen's Indian or Nimzo suddenly face sharp tactics requiring specific knowledge. You sacrifice a pawn with …e5 and immediately launch an attack with …Ng4, putting pressure on e5 and f2.",
     "keyIdeas": [
       "After dxe5 Ng4, the knight attacks e5 and eyes f2 for tactical shots in multiple variations",
       "Bc5 or Bb4+ creates a two-piece battery targeting f2 or disrupting White's development",
@@ -858,7 +858,7 @@
     "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Bg4 a3 Nge7",
     "color": "black",
     "style": "Aggressive, Counterattacking",
-    "overview": "The Albin Countergambit is the Queen's Gambit turned on its head — instead of timidly defending with e6 or c6, Black strikes back with e5 and pushes the d-pawn forward like a battering ram. The advanced d4 pawn cramps White's position and creates the famous Lasker Trap, one of the most beautiful tactical motifs in all of chess. This is a fantastic weapon for players who hate defending passively in the Queen's Gambit and want to seize the initiative as Black. NOTE: at master level the Lasker setup (4.e3) is almost never played because top players know the underpromotion trap — only the Nf3-based mainline appears in significant master games. The 4.e3 lines below preserve the canonical Lasker Trap motif as practical preparation against amateur opponents.",
+    "overview": "The Albin Countergambit was first played by Adolf Albin (an Austrian-Romanian master) against Emanuel Lasker in New York 1893. Ironically, Lasker himself later analyzed the famous trap that bears his name — the Lasker Trap, featuring the most celebrated underpromotion in chess (...fxg1=N+!) — one of the most beautiful tactical motifs in chess history. The Albin had brief popularity in the early 1900s but was analyzed into theoretical disfavor; modern players use it as a surprise weapon. The Queen's Gambit turned on its head — instead of timidly defending with …e6 or …c6, Black strikes back with …e5 and pushes the d-pawn forward like a battering ram. NOTE: at master level the Lasker setup (4.e3) is almost never played because top players know the underpromotion trap — only the Nf3-based mainline appears in significant master games. The 4.e3 lines preserve the canonical Lasker Trap motif as practical preparation against amateur opponents.",
     "keyIdeas": [
       "The advanced d4 pawn cramps White's entire position and restricts natural development of the dark-squared bishop",
       "Black aims to support the d4 pawn with c5 and develop actively with Nc6, Nge7, Bg4",
@@ -913,7 +913,7 @@
     "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5 Qc2 Rfb8",
     "color": "black",
     "style": "Positional, Queenside Pressure",
-    "overview": "The Benko Gambit is the most positionally sound gambit in chess — Black sacrifices a pawn not for a quick attack, but for long-lasting queenside pressure that can grind White down over the entire game. After b5 and a6, Black opens the a and b files and gets sustained initiative with rooks, bishops, and queens all participating in the pressure. Unlike most gambits, the Benko works beautifully in the endgame too — those open files and active pieces give Black compensation even without queens on the board.",
+    "overview": "The Benko Gambit is named after Hungarian-American GM Pal Benko, who defected from Hungary in 1957 and spent his career championing the gambit before formally publishing his definitive Benko Gambit book in 1974. The opening became serious tournament theory in the 1970s-1980s as players like Topalov and Karpov played both sides; today it remains a respected weapon when Black needs winning chances against 1.d4. It's the most positionally sound gambit in chess — Black sacrifices a pawn not for a quick attack, but for long-lasting queenside pressure. After …b5 and …a6, Black opens the a- and b-files for sustained initiative; unlike most gambits, the Benko works beautifully in the endgame too — open files and active pieces give Black compensation even without queens.",
     "keyIdeas": [
       "Open the a-file and b-file for rooks to create lasting queenside pressure that never goes away",
       "Fianchetto the bishop to g7 — it controls the long diagonal and supports queenside operations with latent power",
