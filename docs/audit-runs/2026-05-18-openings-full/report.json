@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-18T23:09:17.608Z",
+  "generatedAt": "2026-05-18T23:25:32.445Z",
   "base": "http://localhost:5173",
   "sample": 30,
   "openings": [
@@ -54818,6 +54818,2895 @@
       ],
       "startedAt": "2026-05-18T22:58:04.206Z",
       "finishedAt": "2026-05-18T23:09:17.608Z"
+    },
+    {
+      "openingId": "vienna-gambit",
+      "openingName": "Vienna Gambit",
+      "source": "gambit",
+      "color": "white",
+      "eco": "C25",
+      "detailPageTestIds": [
+        "quick-feedback-button",
+        "mobile-menu-btn",
+        "quick-feedback-button",
+        "theme-toggle-btn",
+        "opening-detail",
+        "back-button",
+        "favorite-btn",
+        "mastery-percent",
+        "lines-discovered",
+        "lines-perfected",
+        "walkthrough-btn",
+        "learn-btn",
+        "practice-btn",
+        "play-btn",
+        "srs-enroll-row",
+        "srs-enroll-btn",
+        "narrate-overview",
+        "narrate-keyIdeas",
+        "middlegame-plans-empty",
+        "model-games-empty",
+        "narrate-traps",
+        "train-traps-btn",
+        "trap-line-0",
+        "trap-walkthrough-0",
+        "trap-learn-0",
+        "trap-practice-0",
+        "trap-play-0",
+        "narrate-warnings",
+        "train-warnings-btn",
+        "warning-line-0",
+        "warning-walkthrough-0",
+        "warning-learn-0",
+        "warning-practice-0",
+        "warning-play-0",
+        "warning-line-1",
+        "warning-walkthrough-1",
+        "warning-learn-1",
+        "warning-practice-1",
+        "warning-play-1",
+        "variation-0",
+        "variation-walkthrough-0",
+        "variation-learn-0",
+        "variation-practice-0",
+        "variation-play-0",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-1",
+        "variation-walkthrough-1",
+        "variation-learn-1",
+        "variation-practice-1",
+        "variation-play-1",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-2",
+        "variation-walkthrough-2",
+        "variation-learn-2",
+        "variation-practice-2",
+        "variation-play-2",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-3",
+        "variation-walkthrough-3",
+        "variation-learn-3",
+        "variation-practice-3",
+        "variation-play-3",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-4",
+        "variation-walkthrough-4",
+        "variation-learn-4",
+        "variation-practice-4",
+        "variation-play-4",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "nav-home-tab",
+        "nav-openings-tab",
+        "nav-coach-home-tab",
+        "nav-tactics-tab",
+        "nav-weaknesses-tab",
+        "build-version-widget"
+      ],
+      "mainLine": {
+        "walkthrough": {
+          "mounted": true,
+          "plies": [
+            {
+              "ply": 1,
+              "expectedSan": "e4",
+              "label": "1. e4",
+              "text": "White opens with the king's pawn, the starting move of the Vienna Game and its gambit variation. The Vienna Gambit is like a delayed King's Gambit — White will play Nc3 first before pushing f4, getting an extra developing choice before the "
+            },
+            {
+              "ply": 2,
+              "expectedSan": "e5",
+              "label": "1...e5",
+              "text": "Black mirrors with e5, entering the Open Game. This is the response the Vienna Gambit is designed to punish. Black occupies the center naturally, but the e5 pawn is about to become a target — except White will be even better prepared than i"
+            },
+            {
+              "ply": 3,
+              "expectedSan": "Nc3",
+              "label": "2. Nc3",
+              "text": "White develops the knight to c3 — this is the Vienna Game. The knight supports e4 and controls d5. The real point is what comes next: f4! Unlike the King's Gambit where f4 comes on move 2, the Vienna gets the knight developed first for a te"
+            },
+            {
+              "ply": 4,
+              "expectedSan": "Nf6",
+              "label": "2...Nf6",
+              "text": "Black develops the knight to f6, the most natural response. The knight attacks e4 and prepares to castle. This walks right into the Vienna Gambit — after f4, the knight on f6 will need to deal with the opened f-file and White's aggressive i"
+            },
+            {
+              "ply": 5,
+              "expectedSan": "f4",
+              "label": "3. f4",
+              "text": "The Vienna Gambit! White pushes f4, challenging Black's e5 pawn just like the King's Gambit — but with Nc3 already developed, a full tempo ahead. The f-file is about to open, and White's king can still maneuver to safety. Black must decide:"
+            },
+            {
+              "ply": 6,
+              "expectedSan": "exf4",
+              "label": "3...exf4",
+              "text": ""
+            },
+            {
+              "ply": 7,
+              "expectedSan": "e5",
+              "label": "4. e5",
+              "text": ""
+            },
+            {
+              "ply": 8,
+              "expectedSan": "Ng8",
+              "label": "4...Ng8",
+              "text": ""
+            },
+            {
+              "ply": 9,
+              "expectedSan": "Nf3",
+              "label": "5. Nf3",
+              "text": ""
+            }
+          ]
+        },
+        "practice": {
+          "mounted": true,
+          "attempts": [
+            {
+              "index": 0,
+              "expectedSan": "e4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 2,
+              "expectedSan": "Nc3",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 4,
+              "expectedSan": "f4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 6,
+              "expectedSan": "e5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 8,
+              "expectedSan": "Nf3",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            }
+          ]
+        },
+        "play": {
+          "mounted": true,
+          "plies": 60,
+          "outcome": "aborted-at-60-plies",
+          "postReport": {
+            "correct": null,
+            "deviation": null,
+            "recommendation": null
+          }
+        }
+      },
+      "variations": [
+        {
+          "name": "Vienna Gambit: Main Line with Ng8 Retreat",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Vienna Gambit: Main Line with Ng8 Retreat is an important variation of the Vienna Gambit. In the main line, Black retreats the knight and White pushes d4 to dominate the center. Even after queens are exchanged, White's lead in developme"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Vienna Gambit: Main Line with Ng8 Retreat."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nc3",
+                "label": "2. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "f4",
+                "label": "3. f4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "exf4",
+                "label": "3...exf4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "e5",
+                "label": "4. e5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Ng8",
+                "label": "4...Ng8",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nf3",
+                "label": "5. Nf3",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nc3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "f4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Vienna Gambit: Qe7 Variation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Vienna Gambit: Qe7 Variation is an important variation of the Vienna Gambit. Black pins the e5 pawn with Qe7. White plays Qe2 to support the pawn and continues developing. After d4, Bxf4, and O-O-O, White has a strong attacking setup wi"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Vienna Gambit: Qe7 Variation."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nc3",
+                "label": "2. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "f4",
+                "label": "3. f4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "exf4",
+                "label": "3...exf4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "e5",
+                "label": "4. e5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nc3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "f4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Frankenstein-Dracula Variation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Frankenstein-Dracula Variation is an important variation of the Vienna Gambit. The wildly named Frankenstein-Dracula arises after 3.Bc4 Nxe4. This is one of the sharpest positions in all of chess — both sides are throwing punches from m"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Frankenstein-Dracula Variation."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nc3",
+                "label": "2. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Bc4",
+                "label": "3. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nxe4",
+                "label": "3...Nxe4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Qh5",
+                "label": "4. Qh5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nd6",
+                "label": "4...Nd6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bb3",
+                "label": "5. Bb3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Nc6",
+                "label": "5...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nb5",
+                "label": "6. Nb5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "g6",
+                "label": "6...g6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Qf3",
+                "label": "7. Qf3",
+                "text": "Qf3 activates the queen. From f3, the queen has maximum influence across multiple diagonals and files."
+              },
+              {
+                "ply": 14,
+                "expectedSan": "f5",
+                "label": "7...f5",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Qd5",
+                "label": "8. Qd5",
+                "text": "Qd5 activates the queen. From d5, the queen has maximum influence across multiple diagonals and files."
+              },
+              {
+                "ply": 16,
+                "expectedSan": "Qe7",
+                "label": "8...Qe7",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Nxc7+",
+                "label": "9. Nxc7+",
+                "text": ""
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Kd8",
+                "label": "9...Kd8",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Nxa8",
+                "label": "10. Nxa8",
+                "text": ""
+              },
+              {
+                "ply": 20,
+                "expectedSan": "b6",
+                "label": "10...b6",
+                "text": ""
+              },
+              {
+                "ply": 21,
+                "expectedSan": "d3",
+                "label": "11. d3",
+                "text": ""
+              },
+              {
+                "ply": 22,
+                "expectedSan": "Bb7",
+                "label": "11...Bb7",
+                "text": "Bb7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+              },
+              {
+                "ply": 23,
+                "expectedSan": "Qf3",
+                "label": "12. Qf3",
+                "text": "Qf3 activates the queen. From f3, the queen has maximum influence across multiple diagonals and files."
+              },
+              {
+                "ply": 24,
+                "expectedSan": "Nd4",
+                "label": "12...Nd4",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nc3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Qh5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bb3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Nb5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "Qf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "Qd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "Nxc7+",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 18,
+                "expectedSan": "Nxa8",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Vienna Gambit: Nd5 Variation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Vienna Gambit: Nd5 Variation is an important variation of the Vienna Gambit. Black places the pawn on d5 instead of retreating. White recaptures on c3 with the d-pawn, opening the d-file. After rapid development with Bxf4, Bd3, and Qe2,"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Vienna Gambit: Nd5 Variation."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nc3",
+                "label": "2. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "f4",
+                "label": "3. f4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "exf4",
+                "label": "3...exf4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "e5",
+                "label": "4. e5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nc3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "f4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Vienna Gambit: Pierce Gambit",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Vienna Gambit: Pierce Gambit is an important variation of the Vienna Gambit. The Pierce Gambit features a sharp queenless middlegame. After the queen trade, White's king walks to e2 and the position is deceptively dangerous. White's bis"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Vienna Gambit: Pierce Gambit."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nc3",
+                "label": "2. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "f4",
+                "label": "3. f4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "exf4",
+                "label": "3...exf4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "e5",
+                "label": "4. e5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Ng8",
+                "label": "4...Ng8",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nf3",
+                "label": "5. Nf3",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nc3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "f4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "traps": [
+        {
+          "name": "Frankenstein-Dracula: Qxf7 Mate Threat",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Vienna Gambit, the Frankenstein-Dracula: Qxf7 Mate Threat is a tactical pattern you should know. In the Frankenstein-Dracula, after Qh5, if Black plays Be7 instead of the critical Nc6, the knight lands on g5 with devastating effect. "
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nc3",
+                "label": "2. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "Bc4",
+                "label": "3. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "Nxe4",
+                "label": "3...Nxe4",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Qh5",
+                "label": "4. Qh5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nd6",
+                "label": "4...Nd6",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bb3",
+                "label": "5. Bb3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Be7",
+                "label": "5...Be7",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nf3",
+                "label": "6. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Nc6",
+                "label": "6...Nc6",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "Nc3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Qh5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bb3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "warnings": [
+        {
+          "name": "Black Plays d5 Early: Best Defense",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Vienna Gambit, the Black Plays d5 Early: Best Defense is a dangerous line you must be aware of. If Black plays the strong 3...d5, the center opens up and Black gets active piece play immediately. After fxe5 Nxe4, Black's knight is po"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nc3",
+                "label": "2. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "f4",
+                "label": "3. f4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d5",
+                "label": "3...d5",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "fxe5",
+                "label": "4. fxe5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Nxe4",
+                "label": "4...Nxe4",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Nf3",
+                "label": "5. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bc5",
+                "label": "5...Bc5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "d4",
+                "label": "6. d4",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Bb4",
+                "label": "6...Bb4",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bd2",
+                "label": "7. Bd2",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Nxd2",
+                "label": "7...Nxd2",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Qxd2",
+                "label": "8. Qxd2",
+                "text": ""
+              }
+            ]
+          }
+        },
+        {
+          "name": "Vienna Game: Black Avoids f4 with d5",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Vienna Gambit, the Vienna Game: Black Avoids f4 with d5 is a dangerous line you must be aware of. The immediate 3...d5 counter strike is one of Black's most dangerous options. After exd5 e4, the pawn on e4 cramps White's position and"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "Nc3",
+                "label": "2. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "Nf6",
+                "label": "2...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "f4",
+                "label": "3. f4",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d5",
+                "label": "3...d5",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "exd5",
+                "label": "4. exd5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "e4",
+                "label": "4...e4",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "d3",
+                "label": "5. d3",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Bb4",
+                "label": "5...Bb4",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "dxe4",
+                "label": "6. dxe4",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Nxe4",
+                "label": "6...Nxe4",
+                "text": ""
+              }
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-05-18T23:09:17.636Z",
+      "finishedAt": "2026-05-18T23:16:02.839Z"
+    },
+    {
+      "openingId": "danish-gambit",
+      "openingName": "Danish Gambit",
+      "source": "gambit",
+      "color": "white",
+      "eco": "C21",
+      "detailPageTestIds": [
+        "quick-feedback-button",
+        "mobile-menu-btn",
+        "quick-feedback-button",
+        "theme-toggle-btn",
+        "opening-detail",
+        "back-button",
+        "favorite-btn",
+        "mastery-percent",
+        "lines-discovered",
+        "lines-perfected",
+        "walkthrough-btn",
+        "learn-btn",
+        "practice-btn",
+        "play-btn",
+        "srs-enroll-row",
+        "srs-enroll-btn",
+        "narrate-overview",
+        "narrate-keyIdeas",
+        "middlegame-plans-empty",
+        "model-games-empty",
+        "narrate-traps",
+        "train-traps-btn",
+        "trap-line-0",
+        "trap-walkthrough-0",
+        "trap-learn-0",
+        "trap-practice-0",
+        "trap-play-0",
+        "trap-line-1",
+        "trap-walkthrough-1",
+        "trap-learn-1",
+        "trap-practice-1",
+        "trap-play-1",
+        "trap-line-2",
+        "trap-walkthrough-2",
+        "trap-learn-2",
+        "trap-practice-2",
+        "trap-play-2",
+        "trap-line-3",
+        "trap-walkthrough-3",
+        "trap-learn-3",
+        "trap-practice-3",
+        "trap-play-3",
+        "trap-line-4",
+        "trap-walkthrough-4",
+        "trap-learn-4",
+        "trap-practice-4",
+        "trap-play-4",
+        "narrate-warnings",
+        "train-warnings-btn",
+        "warning-line-0",
+        "warning-walkthrough-0",
+        "warning-learn-0",
+        "warning-practice-0",
+        "warning-play-0",
+        "warning-line-1",
+        "warning-walkthrough-1",
+        "warning-learn-1",
+        "warning-practice-1",
+        "warning-play-1",
+        "warning-line-2",
+        "warning-walkthrough-2",
+        "warning-learn-2",
+        "warning-practice-2",
+        "warning-play-2",
+        "variation-0",
+        "variation-walkthrough-0",
+        "variation-learn-0",
+        "variation-practice-0",
+        "variation-play-0",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-1",
+        "variation-walkthrough-1",
+        "variation-learn-1",
+        "variation-practice-1",
+        "variation-play-1",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-2",
+        "variation-walkthrough-2",
+        "variation-learn-2",
+        "variation-practice-2",
+        "variation-play-2",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-3",
+        "variation-walkthrough-3",
+        "variation-learn-3",
+        "variation-practice-3",
+        "variation-play-3",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "variation-4",
+        "variation-walkthrough-4",
+        "variation-learn-4",
+        "variation-practice-4",
+        "variation-play-4",
+        "sideline-explainer",
+        "sideline-explain-btn",
+        "nav-home-tab",
+        "nav-openings-tab",
+        "nav-coach-home-tab",
+        "nav-tactics-tab",
+        "nav-weaknesses-tab",
+        "build-version-widget"
+      ],
+      "mainLine": {
+        "walkthrough": {
+          "mounted": true,
+          "plies": [
+            {
+              "ply": 1,
+              "expectedSan": "e4",
+              "label": "1. e4",
+              "text": "White opens with the king's pawn, claiming central space and preparing for one of the most audacious gambits in chess. The Danish Gambit will sacrifice not one but TWO pawns for a devastating lead in development."
+            },
+            {
+              "ply": 2,
+              "expectedSan": "e5",
+              "label": "1...e5",
+              "text": "Black responds symmetrically, occupying the center and opening the diagonal for the dark-squared bishop. This is the most natural reply, but Black is walking into dangerous territory — the Danish Gambit thrives against this classical setup."
+            },
+            {
+              "ply": 3,
+              "expectedSan": "d4",
+              "label": "2. d4",
+              "text": "White strikes in the center immediately! By pushing d4, we challenge Black's e5 pawn and begin to open lines. This is the first step of the Danish Gambit sequence — we WANT Black to capture. Every pawn Black takes opens another line for our"
+            },
+            {
+              "ply": 4,
+              "expectedSan": "exd4",
+              "label": "2...exd4",
+              "text": "Black captures the pawn — the most natural and principled response. Black is up a pawn and the center is open. But this is exactly what White wants. The d-file is now open and White's next move will offer yet another pawn sacrifice."
+            },
+            {
+              "ply": 5,
+              "expectedSan": "c3",
+              "label": "3. c3",
+              "text": "The first real gambit move! White offers a SECOND pawn with c3, daring Black to grab it. The idea is brilliant: if Black takes on c3, the b2 pawn will be next, but then White's bishops will be firing on all cylinders. White is playing for t"
+            },
+            {
+              "ply": 6,
+              "expectedSan": "dxc3",
+              "label": "3...dxc3",
+              "text": ""
+            },
+            {
+              "ply": 7,
+              "expectedSan": "Bc4",
+              "label": "4. Bc4",
+              "text": ""
+            },
+            {
+              "ply": 8,
+              "expectedSan": "cxb2",
+              "label": "4...cxb2",
+              "text": ""
+            },
+            {
+              "ply": 9,
+              "expectedSan": "Bxb2",
+              "label": "5. Bxb2",
+              "text": ""
+            },
+            {
+              "ply": 10,
+              "expectedSan": "Nf6",
+              "label": "5...Nf6",
+              "text": ""
+            },
+            {
+              "ply": 11,
+              "expectedSan": "e5",
+              "label": "6. e5",
+              "text": ""
+            }
+          ]
+        },
+        "practice": {
+          "mounted": true,
+          "attempts": [
+            {
+              "index": 0,
+              "expectedSan": "e4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 2,
+              "expectedSan": "d4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 4,
+              "expectedSan": "c3",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 6,
+              "expectedSan": "Bc4",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 8,
+              "expectedSan": "Bxb2",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            },
+            {
+              "index": 10,
+              "expectedSan": "e5",
+              "dragOk": true,
+              "correct": false,
+              "wrong": false,
+              "completed": false
+            }
+          ]
+        },
+        "play": {
+          "mounted": true,
+          "plies": 60,
+          "outcome": "aborted-at-60-plies",
+          "postReport": {
+            "correct": null,
+            "deviation": null,
+            "recommendation": null
+          }
+        }
+      },
+      "variations": [
+        {
+          "name": "Danish Gambit: Full Accepted with e5 Push",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Danish Gambit: Full Accepted with e5 Push is an important variation of the Danish Gambit. Black takes both pawns and tries to hold on. White plays e5 to kick the knight and Qb3 to triple on f7. After O-O and Re1, White's position is a t"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Danish Gambit: Full Accepted with e5 Push."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": "Bxb2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Nf6",
+                "label": "5...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "e5",
+                "label": "6. e5",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bxb2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "e5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Danish Gambit: d5 Return (Schlechter Defense)",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Danish Gambit: d5 Return (Schlechter Defense) is an important variation of the Danish Gambit. The strongest defense — Black returns a pawn with d5 to break up White's attack. After Bxd5 Nf6, the position simplifies significantly. White "
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Danish Gambit: d5 Return (Schlechter Defense)."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": "Bxb2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+              },
+              {
+                "ply": 10,
+                "expectedSan": "d5",
+                "label": "5...d5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Bxd5",
+                "label": "6. Bxd5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Nf6",
+                "label": "6...Nf6",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Bxf7+",
+                "label": "7. Bxf7+",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Kxf7",
+                "label": "7...Kxf7",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Qxd8",
+                "label": "8. Qxd8",
+                "text": ""
+              },
+              {
+                "ply": 16,
+                "expectedSan": "Bb4+",
+                "label": "8...Bb4+",
+                "text": ""
+              },
+              {
+                "ply": 17,
+                "expectedSan": "Qd2",
+                "label": "9. Qd2",
+                "text": "Qd2 activates the queen. From d2, the queen has maximum influence across multiple diagonals and files."
+              },
+              {
+                "ply": 18,
+                "expectedSan": "Bxd2+",
+                "label": "9...Bxd2+",
+                "text": ""
+              },
+              {
+                "ply": 19,
+                "expectedSan": "Nxd2",
+                "label": "10. Nxd2",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bxb2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Bxd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 12,
+                "expectedSan": "Bxf7+",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 14,
+                "expectedSan": "Qxd8",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 16,
+                "expectedSan": "Qd2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 18,
+                "expectedSan": "Nxd2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Danish Gambit: One Pawn Accepted with d5",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Danish Gambit: One Pawn Accepted with d5 is an important variation of the Danish Gambit. Black takes one pawn but counters with d5 instead of dxc3. This leads to a more positional game where White has an isolated d-pawn but active piece"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Danish Gambit: One Pawn Accepted with d5."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d5",
+                "label": "3...d5",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "exd5",
+                "label": "4. exd5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Qxd5",
+                "label": "4...Qxd5",
+                "text": "Qxd5 develops the queen to a strong central post on d5, where it controls key squares and supports the center."
+              },
+              {
+                "ply": 9,
+                "expectedSan": "cxd4",
+                "label": "5. cxd4",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Nc6",
+                "label": "5...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nf3",
+                "label": "6. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Bb4+",
+                "label": "6...Bb4+",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "exd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "cxd4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Nf3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Danish Gambit: Bb4+ Intermezzo",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Danish Gambit: Bb4+ Intermezzo is an important variation of the Danish Gambit. After the Bb4+ intermezzo, White loses castling rights but gains time with the king walk. The fxg7 pawn creates threats of promotion and the open lines towar"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Danish Gambit: Bb4+ Intermezzo."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": "Bxb2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bxb2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Danish Gambit: Lindehn Continuation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "The Danish Gambit: Lindehn Continuation is an important variation of the Danish Gambit. The Lindehn Continuation features a slower buildup where White plays Qb3 and develops calmly before striking with e5. After Nxe5, the centralized knight"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": "Black responds with e5, contesting the center. This is the move that defines the Danish Gambit: Lindehn Continuation."
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": "Bxb2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea."
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bxb2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "traps": [
+        {
+          "name": "f7 Avalanche",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Danish Gambit, the f7 Avalanche is a tactical pattern you should know. After Black plays Bb4+ and Nf6, White pushes e5 kicking the knight and creating chaos. The fxg7 pawn threatens to promote and Qh5 adds more fire. The open lines t"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bxb2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Greedy Grab Punishment",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Danish Gambit, the Greedy Grab Punishment is a tactical pattern you should know. If Black develops slowly with Nc6 and d6, the Bxf7+ sacrifice rips open the king. After Kd8, the Black king is permanently stuck and Qa4 creates multipl"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bxb2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Bxf7+ Sacrifice Pattern",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Danish Gambit, the Bxf7+ Sacrifice Pattern is a tactical pattern you should know. The Bxf7+ sacrifice followed by Ng5+ tears the Black king out of safety. After Qxh5+ and Qh4, White's queen dominates the board while Black's king is s"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bxb2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "d5 Counterstrike Refutation",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Danish Gambit, the d5 Counterstrike Refutation is a tactical pattern you should know. When Black plays the d5 counterstrike, White can try the aggressive Bxf7+ anyway. After Kxf7 and Qb3+, the king is exposed. While this isn't object"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "d5",
+                "label": "5...d5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Bxd5",
+                "label": "6. Bxd5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Nf6",
+                "label": "6...Nf6",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bxb2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 10,
+                "expectedSan": "Bxd5",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "Nc6 Slow Development Trap",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Danish Gambit, the Nc6 Slow Development Trap is a tactical pattern you should know. After Black develops both knights passively, the e5 push opens the position perfectly for White's bishops. Re1+ creates a devastating pin, and after "
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": ""
+              }
+            ]
+          },
+          "practice": {
+            "mounted": true,
+            "attempts": [
+              {
+                "index": 0,
+                "expectedSan": "e4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 2,
+                "expectedSan": "d4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 4,
+                "expectedSan": "c3",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 6,
+                "expectedSan": "Bc4",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              },
+              {
+                "index": 8,
+                "expectedSan": "Bxb2",
+                "dragOk": true,
+                "correct": false,
+                "wrong": false,
+                "completed": false
+              }
+            ]
+          }
+        }
+      ],
+      "warnings": [
+        {
+          "name": "Schlechter Defense: Best Response",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Danish Gambit, the Schlechter Defense: Best Response is a dangerous line you must be aware of. The Schlechter Defense with ...d5 is the reason the Danish isn't played at the top level. Black returns the pawn to neutralize the attack "
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "d5",
+                "label": "5...d5",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Bxd5",
+                "label": "6. Bxd5",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Nf6",
+                "label": "6...Nf6",
+                "text": ""
+              }
+            ]
+          }
+        },
+        {
+          "name": "Sorensen Defense: d5 Before Taking Both Pawns",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": "In the Danish Gambit, the Sorensen Defense: d5 Before Taking Both Pawns is a dangerous line you must be aware of. Black plays d5 before taking the second pawn, leading to a sane position where White's isolated d-pawn is a weakness. The resu"
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "d5",
+                "label": "3...d5",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "exd5",
+                "label": "4. exd5",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "Qxd5",
+                "label": "4...Qxd5",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "cxd4",
+                "label": "5. cxd4",
+                "text": ""
+              },
+              {
+                "ply": 10,
+                "expectedSan": "Nc6",
+                "label": "5...Nc6",
+                "text": ""
+              },
+              {
+                "ply": 11,
+                "expectedSan": "Nf3",
+                "label": "6. Nf3",
+                "text": ""
+              },
+              {
+                "ply": 12,
+                "expectedSan": "Bg4",
+                "label": "6...Bg4",
+                "text": ""
+              },
+              {
+                "ply": 13,
+                "expectedSan": "Nc3",
+                "label": "7. Nc3",
+                "text": ""
+              },
+              {
+                "ply": 14,
+                "expectedSan": "Bb4",
+                "label": "7...Bb4",
+                "text": ""
+              },
+              {
+                "ply": 15,
+                "expectedSan": "Be2",
+                "label": "8. Be2",
+                "text": ""
+              }
+            ]
+          }
+        },
+        {
+          "name": "Two Knights Defense: Black Returns Pawn Wisely",
+          "walkthrough": {
+            "mounted": true,
+            "plies": [
+              {
+                "ply": 1,
+                "expectedSan": "e4",
+                "label": "1. e4",
+                "text": ""
+              },
+              {
+                "ply": 2,
+                "expectedSan": "e5",
+                "label": "1...e5",
+                "text": ""
+              },
+              {
+                "ply": 3,
+                "expectedSan": "d4",
+                "label": "2. d4",
+                "text": ""
+              },
+              {
+                "ply": 4,
+                "expectedSan": "exd4",
+                "label": "2...exd4",
+                "text": ""
+              },
+              {
+                "ply": 5,
+                "expectedSan": "c3",
+                "label": "3. c3",
+                "text": ""
+              },
+              {
+                "ply": 6,
+                "expectedSan": "dxc3",
+                "label": "3...dxc3",
+                "text": ""
+              },
+              {
+                "ply": 7,
+                "expectedSan": "Bc4",
+                "label": "4. Bc4",
+                "text": ""
+              },
+              {
+                "ply": 8,
+                "expectedSan": "cxb2",
+                "label": "4...cxb2",
+                "text": ""
+              },
+              {
+                "ply": 9,
+                "expectedSan": "Bxb2",
+                "label": "5. Bxb2",
+                "text": ""
+              }
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-05-18T23:16:02.860Z",
+      "finishedAt": "2026-05-18T23:25:32.445Z"
     }
   ],
   "totalEvents": 0
