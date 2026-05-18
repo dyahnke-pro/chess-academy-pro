@@ -243,12 +243,27 @@ describe('SmartSearchBar', () => {
       });
     });
 
-    it('does not open coach drawer on Enter when scoped', async () => {
+    it('does not open coach drawer on Enter when scoped (with results visible)', async () => {
+      // Seed an opening so the search hook produces a non-empty result
+      // set. Without this, totalItems collapses to 0 and the keyDown
+      // handler bails out early — masking the real bug where
+      // `selectedIndex === askCoachIndex` matches -1 === -1.
+      await db.openings.add(
+        buildOpeningRecord({ id: 'enter-test', name: 'Sicilian Defense', eco: 'B20' }),
+      );
+
       const user = userEvent.setup();
       renderWithRouter(<SmartSearchBar scope="opening" />);
 
       const input = screen.getByTestId('smart-search-input');
-      await user.type(input, 'teach me the Sicilian');
+      await user.type(input, 'Sicilian');
+
+      // Wait for the result to render in the dropdown so we know
+      // totalItems > 0 and the Enter branch will actually execute.
+      await waitFor(() => {
+        expect(screen.getByText('Sicilian Defense')).toBeInTheDocument();
+      }, { timeout: 3000 });
+
       await user.keyboard('{Enter}');
 
       const state = useAppStore.getState();
