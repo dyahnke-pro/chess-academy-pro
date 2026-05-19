@@ -37,10 +37,10 @@ import {
 import {
   getOpeningMoves,
   findLinePickerOptions,
-  resolveOpeningEntry,
   findOpeningByPgnPrefix,
   type LinePickerOption,
 } from '../../services/openingDetectionService';
+import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import {
   getCompletedStages,
@@ -291,6 +291,13 @@ export function CoachTeachPage(): JSX.Element {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Brain-emitted answer chips. Set when the streaming response
+  // contains a `[CHOICES: A | B | C]` marker (typically because
+  // the brain is asking a disambiguation question — e.g.
+  // "Did you mean Najdorf or Dragon?"). Tapping a chip submits
+  // the chosen text and clears the chips so the next turn starts
+  // fresh. null = no choices on offer.
+  const [coachChoices, setCoachChoices] = useState<string[] | null>(null);
   // Picker state — drives the starter chips shown above the chat
   // input while the transcript is empty. `pickerAction` is the
   // currently-selected mode (Teach / Drill / Quiz / Trap / Play);
@@ -793,6 +800,12 @@ export function CoachTeachPage(): JSX.Element {
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
+    // Any new turn invalidates an outstanding [CHOICES:] prompt —
+    // the brain's previous question has been answered (or
+    // superseded), so clear the chips before the new response
+    // streams. tryExtractChoicesMarker re-sets them if the new
+    // response is itself another disambiguation.
+    setCoachChoices(null);
     // If a walkthrough is mid-narration when the student types a
     // question, pause it so voice doesn't talk over the coach's
     // reply. The student can hit Resume on the walkthrough panel
@@ -951,26 +964,82 @@ export function CoachTeachPage(): JSX.Element {
         // verb, > 60 chars, or end with ?/.).
         requestedName = workingInput;
       }
-      // Tier 0: canonicalize the user's request against the Lichess
-      // DB BEFORE any routing tiers run. The user's word: "tie the
-      // user's request to the FIRST opening — so the LLM can match
-      // the request to an opening before even getting started."
-      // Without this, typos like "phillador" → cache miss; bare
-      // shorthand like "najdorf" → cache key on shorthand instead of
-      // canonical "Sicilian Defense: Najdorf Variation". Static
-      // registry queries (e.g. "Vienna") and unmatchable typos still
-      // fall through with the original name — DB resolution only
-      // kicks in when there's a confident match.
+      // Tier 0: fuzzy-match the user's request against the Lichess
+      // DB BEFORE any routing tiers run. Three outcomes:
+      //
+      //   - autoAccept: top candidate is dominant (score ≥ 0.92, gap
+      //     ≥ 0.15 to runner-up). Canonicalize requestedName to it
+      //     and continue through the routing tiers.
+      //   - candidates without autoAccept: emit a "did you mean..."
+      //     coach message with [CHOICES: ...] picker chips so the
+      //     student taps a canonical answer. Short-circuit — no
+      //     further tier runs.
+      //   - no candidates: leave requestedName as the user typed.
+      //     Tier 2.5 pre-flight rejection will catch it and drop to
+      //     brain handling.
+      //
+      // David's wide-berth rule (2026-05-19): when in doubt, ASK —
+      // never silently pick. The matcher's auto-accept gate is the
+      // tight cutoff that decides "ask" vs "go."
       if (requestedName) {
-        const dbEntry = resolveOpeningEntry(requestedName);
-        if (dbEntry && dbEntry.canonicalName !== requestedName) {
+        const fuzzy = fuzzyMatchOpening(requestedName);
+        if (fuzzy.autoAccept && fuzzy.candidates[0]) {
+          const top = fuzzy.candidates[0];
+          if (top.canonicalName !== requestedName) {
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.surfaceRouting',
+              summary: `canonicalized "${requestedName}" → "${top.canonicalName}" (fuzzy/${top.source}, score=${top.score.toFixed(2)})`,
+            });
+            requestedName = top.canonicalName;
+          }
+        } else if (fuzzy.candidates.length > 0) {
+          // Ambiguous — surface the picker. Append the user's ask
+          // first so the transcript shows what they typed.
+          const ambiguousTurnId = `t-${Date.now()}-fuzzy-picker`;
+          setMessages((prev) => [...prev, {
+            id: `${ambiguousTurnId}-u`,
+            role: 'user',
+            content: text,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'user',
+            text,
+            fen: opts?.fenOverride ?? gameRef.current.fen,
+            trigger: null,
+          });
+          const topNames = fuzzy.candidates.map((c) => c.canonicalName);
+          // Inline [CHOICES:] marker — the choices extractor on the
+          // next user turn won't see this (it scans the brain
+          // stream, not chat history), so we set the picker state
+          // directly here.
+          const prose = topNames.length === 1
+            ? `I don't have an exact match for "${fuzzy.query}". Did you mean ${topNames[0]}?`
+            : `I don't have an exact match for "${fuzzy.query}". Did you mean one of these?`;
+          setMessages((prev) => [...prev, {
+            id: `${ambiguousTurnId}-c`,
+            role: 'assistant',
+            content: prose,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'coach',
+            text: prose,
+            fen: opts?.fenOverride ?? gameRef.current.fen,
+            trigger: null,
+          });
+          setCoachChoices(topNames);
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-            summary: `canonicalized "${requestedName}" → "${dbEntry.canonicalName}" via Lichess DB`,
+            summary: `fuzzy ambiguity for "${fuzzy.query}" — surfacing picker (${topNames.length} options): ${topNames.join(' | ')}`,
           });
-          requestedName = dbEntry.canonicalName;
+          return;
         }
       }
       // Cache key includes face-mode + tour-mode prefixes so the
@@ -1430,11 +1499,44 @@ export function CoachTeachPage(): JSX.Element {
     // rambling-by-multiple-markers is not the goal.
     let voiceRawBuffer = '';
     let voiceSpokenForTurn = false;
+    let choicesExtractedForTurn = false;
     /** `[VOICE: summary]` — captures inner content lazily so the
      *  marker closes on the first `]` rather than greedily consuming
      *  past it. Multi-line content allowed because the summary itself
      *  may span 3-4 sentences (positional, structural, plan). */
     const VOICE_MARKER_RE = /\[VOICE:\s*([\s\S]*?)\]/g;
+    /** `[CHOICES: A | B | C]` — answer chips the brain offers when
+     *  asking a discrete question. Same lazy-close shape as the
+     *  voice marker so a `]` mid-prose can't accidentally swallow
+     *  the rest of the stream. */
+    const CHOICES_MARKER_RE = /\[CHOICES:\s*([\s\S]*?)\]/g;
+    /** Pull chips out of the raw stream once per turn. Same one-shot
+     *  pattern as voice: scan the buffer for a closed `[CHOICES:]`
+     *  block, split on `|`, trim, surface as picker state. Subsequent
+     *  markers in the same turn are ignored. */
+    const tryExtractChoicesMarker = (): void => {
+      if (choicesExtractedForTurn) return;
+      CHOICES_MARKER_RE.lastIndex = 0;
+      const match = CHOICES_MARKER_RE.exec(voiceRawBuffer);
+      if (!match) return;
+      const inner = match[1].trim();
+      if (!inner) return;
+      choicesExtractedForTurn = true;
+      const items = inner
+        .split('|')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0)
+        .slice(0, 6); // hard cap so a runaway brain can't overflow
+      if (items.length === 0) return;
+      setCoachChoices(items);
+      void logAppAudit({
+        kind: 'coach-voice-marker-extracted',
+        category: 'subsystem',
+        source: 'CoachTeachPage.tryExtractChoicesMarker',
+        summary: `extracted [CHOICES: ...] (${items.length} options)`,
+        details: JSON.stringify({ count: items.length, preview: items.slice(0, 4) }),
+      });
+    };
     let lastQueuedSentence = '';
     const queueSpeak = (raw: string): void => {
       const sentence = formatForSpeech(raw);
@@ -1805,6 +1907,7 @@ export function CoachTeachPage(): JSX.Element {
             //      double-show in the transcript.
             voiceRawBuffer += chunk;
             tryExtractVoiceMarker();
+            tryExtractChoicesMarker();
             markupBuffer += chunk;
             const { safe, pending } = sanitizeCoachStream(markupBuffer);
             markupBuffer = pending;
@@ -1833,6 +1936,7 @@ export function CoachTeachPage(): JSX.Element {
       // to emit `[VOICE: ...]` entirely, speak the first sentence of
       // the final response so the student isn't left in silence.
       tryExtractVoiceMarker();
+      tryExtractChoicesMarker();
       if (!voiceSpokenForTurn) {
         const finalText = sanitizeCoachText(result.text);
         const firstSentenceMatch = SENTENCE_END_RE.exec(finalText);
@@ -2465,6 +2569,11 @@ export function CoachTeachPage(): JSX.Element {
             onSend={(text) => void handleSubmit(text)}
             disabled={busy}
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
+            coachChoices={coachChoices}
+            onPickCoachChoice={(choice) => {
+              setCoachChoices(null);
+              void handleSubmit(choice);
+            }}
           />
         </div>
 
