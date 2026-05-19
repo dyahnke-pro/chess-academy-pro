@@ -40,6 +40,77 @@ function record(scenario, ok, detail) {
   console.log(`${color}${marker}\x1b[0m  ${scenario} → ${detail}`);
 }
 
+/** Concerning audit-event kinds. When any of these fire during a
+ *  scenario, the audit treats it as a soft failure that should be
+ *  investigated before the loop converges. Distinct from the
+ *  pass/fail assertions: those check expected UI shapes; these
+ *  surface the underlying instrumentation events that should never
+ *  fire on a healthy path. */
+const CONCERNING_KINDS = new Set([
+  'claim-validator-trip',
+  'sanitizer-leak',
+  'tts-failure',
+  'llm-error',
+  'dexie-error',
+  'uncaught-error',
+  'unhandled-rejection',
+  'tool-call-error',
+  'navigation-error',
+  'error-boundary',
+  'bad-fen',
+  'phase-transition-suppressed',
+]);
+
+/** Read the Dexie audit log and return only events with timestamp >
+ *  `since`. Used between scenarios to surface concerning instrumentation
+ *  events the user-facing assertions might miss. Returns [] when the
+ *  log isn't populated yet (boot race) instead of throwing. */
+async function readAuditLogSince(page, since) {
+  return await page.evaluate(async (sinceTs) => {
+    try {
+      const dbReq = indexedDB.open('ChessAcademyDB');
+      await new Promise((r, rj) => {
+        dbReq.onsuccess = () => r();
+        dbReq.onerror = () => rj(dbReq.error);
+      });
+      const db = dbReq.result;
+      const tx = db.transaction('meta', 'readonly');
+      const rec = await new Promise((r) => {
+        const g = tx.objectStore('meta').get('app-audit-log.v1');
+        g.onsuccess = () => r(g.result);
+        g.onerror = () => r(null);
+      });
+      db.close();
+      if (!rec) return [];
+      const all = JSON.parse(rec.value);
+      return all.filter((e) => e.timestamp > sinceTs);
+    } catch {
+      return [];
+    }
+  }, since);
+}
+
+let lastAuditCheckpointTs = 0;
+const concerningPerScenario = [];
+
+/** Streams concerning audit events that fired since the last call.
+ *  Returns the count so callers can fold it into the pass/fail
+ *  tally. Always records the checkpoint timestamp regardless of
+ *  outcome so the next call only sees newer events. */
+async function inspectAuditLog(page, scenarioName) {
+  const events = await readAuditLogSince(page, lastAuditCheckpointTs);
+  lastAuditCheckpointTs = Date.now();
+  const concerning = events.filter((e) => CONCERNING_KINDS.has(e.kind));
+  if (concerning.length > 0) {
+    console.log(`\x1b[33m  ⚠ ${concerning.length} concerning audit event(s) during "${scenarioName}":\x1b[0m`);
+    for (const e of concerning) {
+      console.log(`    [${e.kind}] ${e.source}: ${e.summary}`);
+    }
+    concerningPerScenario.push({ scenario: scenarioName, events: concerning });
+  }
+  return concerning.length;
+}
+
 async function clearAllStorage(page) {
   await page.evaluate(async () => {
     const dbs = await indexedDB.databases?.();

@@ -179,11 +179,13 @@ export function synthesizeMissingArrows(
   // already imports it).
   ChessCtor: new (fen?: string) => {
     move: (san: string, opts?: { strict?: boolean }) => { from: string; to: string } | null;
+    fen: () => string;
+    load: (fen: string) => void;
   },
   color: 'green' | 'blue' | 'red' | 'yellow' = 'green',
 ): { text: string; synthesized: string[]; failed: string[] } {
   if (violations.length === 0) return { text: response, synthesized: [], failed: [] };
-  let chess: ReturnType<() => InstanceType<typeof ChessCtor>>;
+  let chess: InstanceType<typeof ChessCtor>;
   try {
     chess = new ChessCtor(fen);
   } catch {
@@ -192,18 +194,69 @@ export function synthesizeMissingArrows(
   const arrows: string[] = [];
   const synthesized: string[] = [];
   const failed: string[] = [];
-  for (const v of violations) {
+  /** Try a SAN at a specific FEN. Returns the move on success. Spins
+   *  a fresh Chess so the running `chess` state isn't mutated. */
+  const tryAt = (probeFen: string, san: string): { from: string; to: string } | null => {
     try {
-      const move = chess.move(v.san, { strict: false });
-      if (move) {
-        arrows.push(`[BOARD: arrow:${move.from}-${move.to}:${color}]`);
-        synthesized.push(v.san);
-      } else {
-        failed.push(v.san);
-      }
+      const probe = new ChessCtor(probeFen);
+      return probe.move(san, { strict: false });
     } catch {
-      failed.push(v.san);
+      return null;
     }
+  };
+  /** Flip the side-to-move char in a FEN. */
+  const toggleTurn = (probeFen: string): string => {
+    const parts = probeFen.split(' ');
+    if (parts.length < 2) return probeFen;
+    parts[1] = parts[1] === 'w' ? 'b' : 'w';
+    return parts.join(' ');
+  };
+  for (const v of violations) {
+    // 1. Try at the running chess state (sequence semantics).
+    let move: { from: string; to: string } | null = null;
+    try {
+      move = chess.move(v.san, { strict: false });
+    } catch {
+      move = null;
+    }
+    if (move) {
+      arrows.push(`[BOARD: arrow:${move.from}-${move.to}:${color}]`);
+      synthesized.push(v.san);
+      continue;
+    }
+    // 2. Sequence path failed. The brain may be discussing
+    //    hypothetical candidates at branch points where turn order
+    //    doesn't match the running sequence (e.g. "after Italian
+    //    setup, white could play Ng5 or d3; black could play Bc5").
+    //    Retry at the ORIGINAL fen — captures candidates referenced
+    //    from a fixed branch point.
+    move = tryAt(fen, v.san);
+    if (move) {
+      arrows.push(`[BOARD: arrow:${move.from}-${move.to}:${color}]`);
+      synthesized.push(v.san);
+      continue;
+    }
+    // 3. Original fen also failed. Retry with the turn flipped at
+    //    the original fen. Catches "black could play Bc5" written
+    //    from a white-to-move snapshot. The arrow's still rendered
+    //    on the SAN's actual from→to squares; chess.js just needs
+    //    the right side to consider it legal.
+    move = tryAt(toggleTurn(fen), v.san);
+    if (move) {
+      arrows.push(`[BOARD: arrow:${move.from}-${move.to}:${color}]`);
+      synthesized.push(v.san);
+      continue;
+    }
+    // 4. Same retry path against the RUNNING chess state's fen
+    //    (post-sequence position). Catches candidates the brain
+    //    described from the END of its sequence narration.
+    move = tryAt(toggleTurn(chess.fen()), v.san);
+    if (move) {
+      arrows.push(`[BOARD: arrow:${move.from}-${move.to}:${color}]`);
+      synthesized.push(v.san);
+      continue;
+    }
+    failed.push(v.san);
   }
   if (arrows.length === 0) return { text: response, synthesized: [], failed };
   return { text: `${response} ${arrows.join(' ')}`, synthesized, failed };

@@ -26,6 +26,13 @@ const PIECE_MAP: Record<string, string> = {
   bP: 'bP', bN: 'bN', bB: 'bB', bR: 'bR', bQ: 'bQ', bK: 'bK',
 };
 
+/** Per-session dedup for asset-load-error events. One failed sprite
+ *  URL produces one audit entry per session — without this the same
+ *  failing URL re-emits on every board render (32+ pieces × 5+ moves
+ *  in a walkthrough = 160+ duplicated audit rows that drown out
+ *  meaningful events in the rolling 1000-entry buffer). */
+const loggedAssetFailures = new Set<string>();
+
 /** CC0 piece SVGs hosted by Lichess in their public lila repo. The
  *  legacy `https://lichess1.org/assets/piece/<set>/<piece>.svg` path
  *  stopped serving without a content-hash prefix (Lichess switched
@@ -81,12 +88,23 @@ export function buildPieceRenderer(
           // failed response. Retry once with a cache-busting query
           // before giving up to the alt-text fallback. Second failure
           // logs the audit row and surrenders.
+          //
+          // Dedup (2026-05-19): without per-URL dedup this fires once
+          // PER FAILED SPRITE PER BOARD RENDER. A walkthrough animating
+          // 5 moves emits 100+ events for the same handful of failed
+          // URLs and floods the rolling 1000-entry audit buffer,
+          // displacing the events the audit actually cares about
+          // (claim-validator-trip, llm-token-usage, etc.). The module-
+          // level Set below remembers URLs we've already audited so
+          // each unique failure is logged once per session.
           const img = e.currentTarget as HTMLImageElement;
           if (!img.dataset.retried) {
             img.dataset.retried = '1';
             img.src = `${url}?retry=${Date.now()}`;
             return;
           }
+          if (loggedAssetFailures.has(url)) return;
+          loggedAssetFailures.add(url);
           void logAppAudit({
             kind: 'asset-load-error',
             category: 'subsystem',
