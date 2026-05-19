@@ -1,0 +1,425 @@
+{
+  "round": 3,
+  "generatedAt": "2026-05-19T14:38:15.470Z",
+  "inProgress": true,
+  "openingsCompleted": 5,
+  "results": [
+    {
+      "round": 3,
+      "openingId": "italian-game",
+      "name": "Italian Game",
+      "color": "white",
+      "startedAt": "2026-05-19T14:35:11.712Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Italia Game",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Italian",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Italia Game",
+            "Italian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "chat-pivot",
+          "findings": [
+            "P6: Learn button did not navigate to coach surface — url=http://localhost:5174/openings/italian-game"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [
+            "P7: rapid back left us on bad URL: about:blank",
+            "P7: rapid back left blank body content"
+          ],
+          "endedOn": "about:blank"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:35:47.682Z"
+    },
+    {
+      "round": 3,
+      "openingId": "ruy-lopez",
+      "name": "Ruy Lopez",
+      "color": "white",
+      "startedAt": "2026-05-19T14:35:47.683Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Ruy opez",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Ruy",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Ruy opez",
+            "Ruy"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "chat-pivot",
+          "findings": [
+            "P6: Learn button did not navigate to coach surface — url=http://localhost:5174/openings/ruy-lopez"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [
+            "P7: rapid back left us on bad URL: about:blank",
+            "P7: rapid back left blank body content"
+          ],
+          "endedOn": "about:blank"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:36:24.267Z"
+    },
+    {
+      "round": 3,
+      "openingId": "scotch-game",
+      "name": "Scotch Game",
+      "color": "white",
+      "startedAt": "2026-05-19T14:36:24.267Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Scotc Game",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Scotch",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Scotc Game",
+            "Scotch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "chat-pivot",
+          "findings": [
+            "P6: Learn button did not navigate to coach surface — url=http://localhost:5174/openings/scotch-game"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [
+            "P7: rapid back left us on bad URL: about:blank",
+            "P7: rapid back left blank body content"
+          ],
+          "endedOn": "about:blank"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:37:00.996Z"
+    },
+    {
+      "round": 3,
+      "openingId": "vienna-game",
+      "name": "Vienna Game",
+      "color": "white",
+      "startedAt": "2026-05-19T14:37:00.996Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Vienn Game",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Vienna",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Vienn Game",
+            "Vienna"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "chat-pivot",
+          "findings": [
+            "P6: Learn button did not navigate to coach surface — url=http://localhost:5174/openings/vienna-game"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [
+            "P7: rapid back left us on bad URL: about:blank",
+            "P7: rapid back left blank body content"
+          ],
+          "endedOn": "about:blank"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:37:37.905Z"
+    },
+    {
+      "round": 3,
+      "openingId": "kings-gambit",
+      "name": "King's Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:37:37.905Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Kings Gambit",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King'sGambit",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King's",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Kings Gambit",
+            "King'sGambit",
+            "King's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "chat-pivot",
+          "findings": [
+            "P6: Learn button did not navigate to coach surface — url=http://localhost:5174/openings/kings-gambit"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [
+            "P7: rapid back left us on bad URL: about:blank",
+            "P7: rapid back left blank body content"
+          ],
+          "endedOn": "about:blank"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:38:15.470Z"
+    }
+  ]
+}
