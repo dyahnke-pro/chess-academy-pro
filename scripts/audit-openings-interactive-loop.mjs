@@ -102,7 +102,7 @@ async function getCurrentRound() {
   return max + 1;
 }
 
-async function probeOpening(page, opening, round, allEvents) {
+async function probeOpening(page, opening, round, allEvents, options = {}) {
   const result = {
     round,
     openingId: opening.id,
@@ -114,7 +114,6 @@ async function probeOpening(page, opening, round, allEvents) {
     auditEvents: [],
   };
 
-  const errsBefore = result.consoleErrors.length;
   page.removeAllListeners('console');
   page.removeAllListeners('pageerror');
   page.on('console', (m) => {
@@ -129,20 +128,39 @@ async function probeOpening(page, opening, round, allEvents) {
   });
   const evtsBefore = allEvents.length;
 
-  // === P1: Off-canonical search ===
+  // NON-DESTRUCTIVE probes run on every opening
   result.probes.offCanonical = await runP1(page, opening);
-  // === P2: Cold-cache ===
-  result.probes.coldCache = await runP2(page, opening);
-  // === P3: First-time-user ===
-  result.probes.firstTimeUser = await runP3(page, opening);
-  // === P4: Pick-before-load ===
   result.probes.pickBeforeLoad = await runP4(page, opening);
-  // === P5: Out-of-order ===
   result.probes.outOfOrder = await runP5(page, opening);
+
+  // DESTRUCTIVE probes (P2, P3) only on sampled openings — they clear
+  // IndexedDB which means subsequent probes pay the reseed cost (~30-60s).
+  // Sampling keeps round time tractable (~80 min instead of ~6h).
+  if (options.runDestructive) {
+    result.probes.coldCache = await runP2(page, opening);
+    result.probes.firstTimeUser = await runP3(page, opening);
+  } else {
+    result.probes.coldCache = { kind: 'cold-cache', skipped: 'not in this round sample' };
+    result.probes.firstTimeUser = { kind: 'first-time-user', skipped: 'not in this round sample' };
+  }
 
   result.auditEvents = allEvents.slice(evtsBefore);
   result.finishedAt = new Date().toISOString();
   return result;
+}
+
+/** Ensure /openings is fully seeded — page has the SmartSearchBar
+ *  and opening cards rendered. Navigates if needed; waits up to 90s
+ *  for `opening-explorer` testid to appear. Returns true on success.
+ */
+async function ensureSeeded(page) {
+  // Check if already mounted
+  let mounted = await page.locator('[data-testid="opening-explorer"]').first().isVisible().catch(() => false);
+  if (mounted) return true;
+  // Navigate and wait long for seed
+  await page.goto(`${BASE_URL}/openings`, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
+  mounted = await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 90_000 }).then(() => true).catch(() => false);
+  return mounted;
 }
 
 async function runP1(page, opening) {
@@ -151,26 +169,31 @@ async function runP1(page, opening) {
   result.attemptedVariants = variants;
   for (const v of variants) {
     try {
-      await page.goto(`${BASE_URL}/openings`, { waitUntil: 'domcontentloaded', timeout: 20000 });
-      await page.waitForTimeout(1000);
-      // Find search input
-      const search = page.locator('input[placeholder*="Search" i], [data-testid="search-input"], [data-testid="smart-search-input"]').first();
+      const seeded = await ensureSeeded(page);
+      if (!seeded) {
+        result.findings.push(`P1[${v}]: /openings did not reseed within 90s — seed pipeline broken`);
+        continue;
+      }
+      const search = page.locator('[data-testid="smart-search-input"]').first();
       const visible = await search.isVisible().catch(() => false);
       if (!visible) {
-        result.findings.push(`P1[${v}]: no search input visible on /openings`);
+        result.findings.push(`P1[${v}]: search input not visible even after seed (UI regression)`);
         continue;
       }
       await search.fill(v);
       await page.waitForTimeout(800);
-      // Look for results
-      const resultCount = await page.locator('[data-testid="search-result"], [data-testid="opening-card"]').count().catch(() => 0);
+      // Look for results — opening-card-<id> testids surface what got matched
+      const cardCount = await page.locator('[data-testid^="opening-card-"]').count().catch(() => 0);
+      const dropdownCount = await page.locator('[data-testid="search-result"]').count().catch(() => 0);
       const noResultsVisible = await page.locator('text=/no.*result/i, text=/no match/i').count().catch(() => 0);
-      result.inputs.push({ v, resultCount, noResultsVisible });
+      result.inputs.push({ v, cardCount, dropdownCount, noResultsVisible });
       // Failure modes:
-      if (resultCount === 0 && noResultsVisible === 0) {
-        // Silent empty state — neither matched the opening NOR shown "no results"
-        result.findings.push(`P1[${v}]: silent empty state — search returned 0 results AND no "no results" message`);
+      // - No cards AND no "no results" message = silent empty state
+      if (cardCount === 0 && dropdownCount === 0 && noResultsVisible === 0) {
+        result.findings.push(`P1[${v}]: silent empty state — 0 cards, 0 dropdown results, no "no match" message`);
       }
+      // - Search-bar rejects valid variant entirely (filtered out without showing the canonical match)
+      //   Only flag if cardCount = 0 (no matches at all)
       await search.fill('');
       await page.waitForTimeout(200);
     } catch (e) {
@@ -189,11 +212,19 @@ async function runP2(page, opening) {
       for (const d of dbs) { if (d.name) indexedDB.deleteDatabase(d.name); }
     }).catch(() => {});
     await page.waitForTimeout(500);
+    // Detail page doesn't auto-seed — must go through /openings first
+    // (OpeningExplorerPage is where seedDatabase() lives).
+    await page.goto(`${BASE_URL}/openings`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    const reseeded = await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 90_000 }).then(() => true).catch(() => false);
+    if (!reseeded) {
+      result.findings.push('P2: /openings did not reseed after IndexedDB wipe — seed pipeline broken under cold cache');
+      return result;
+    }
     await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     const mounted = await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 25000 }).then(() => true).catch(() => false);
     result.detailMounted = mounted;
     if (!mounted) {
-      result.findings.push('P2: detail page never mounted after cold cache');
+      result.findings.push('P2: detail page never mounted after cold cache (even with /openings reseed first)');
       return result;
     }
     await page.waitForTimeout(2000);
@@ -237,6 +268,10 @@ async function runP3(page, opening) {
       try { localStorage.clear(); sessionStorage.clear(); } catch {}
     }).catch(() => {});
     await page.waitForTimeout(500);
+    // Go to /openings FIRST so seedDatabase() fires
+    await page.goto(`${BASE_URL}/openings`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    const reseeded = await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 90_000 }).then(() => true).catch(() => false);
+    if (!reseeded) { result.findings.push('P3: /openings did not seed for first-time user — seed broken on fresh storage'); return result; }
     await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     const detail = await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
     if (!detail) { result.findings.push('P3: detail did not mount for first-time user'); return result; }
@@ -381,10 +416,17 @@ async function main() {
     console.log(`\n=== ROUND ${round} starting at ${new Date().toISOString()} ===`);
     const roundResults = [];
     const roundPath = join(OUT_DIR, `findings-round-${round}.json`);
+    // Pick a deterministic sample of 15 openings to run destructive
+    // probes (P2 cold-cache + P3 first-time-user) on. Different sample
+    // each round so over many rounds every opening gets covered.
+    const sampleStart = (round * 15) % queue.length;
+    const destructiveSet = new Set();
+    for (let s = 0; s < 15; s++) destructiveSet.add(queue[(sampleStart + s) % queue.length].id);
     for (let i = 0; i < queue.length; i++) {
       const opening = queue[i];
+      const runDestructive = destructiveSet.has(opening.id);
       try {
-        const r = await probeOpening(page, opening, round, allEvents);
+        const r = await probeOpening(page, opening, round, allEvents, { runDestructive });
         roundResults.push(r);
         // Count findings
         const findings = Object.values(r.probes).flatMap((p) => p.findings || []);
