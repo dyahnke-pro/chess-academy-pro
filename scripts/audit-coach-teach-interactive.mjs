@@ -119,6 +119,39 @@ async function main() {
 
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
 
+  // Audit-mode provider override (2026-05-19): force the coach to
+  // route through DeepSeek for the duration of this audit run.
+  // David: "i just didnt want to bur anthropic API tokens on audits.
+  // deepseek is much cheaper." The flag is set in Dexie's meta table;
+  // getProviderConfig reads it and honors the override without
+  // touching real user preferences. Set this AFTER the initial goto
+  // so Dexie is open. Default: force deepseek; opt out with
+  // AUDIT_FORCE_PROVIDER=anthropic to test the production path.
+  const FORCE_PROVIDER = process.env.AUDIT_FORCE_PROVIDER ?? 'deepseek';
+  if (FORCE_PROVIDER !== 'none') {
+    await page.evaluate(async (provider) => {
+      try {
+        const dbReq = indexedDB.open('ChessAcademyDB');
+        await new Promise((resolve, reject) => {
+          dbReq.onsuccess = () => resolve(dbReq.result);
+          dbReq.onerror = () => reject(dbReq.error);
+        });
+        const db = dbReq.result;
+        const tx = db.transaction('meta', 'readwrite');
+        const store = tx.objectStore('meta');
+        store.put({ key: 'auditForceProvider', value: provider });
+        await new Promise((resolve, reject) => {
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
+        db.close();
+      } catch (e) {
+        console.warn('[audit] failed to set auditForceProvider:', e);
+      }
+    }, FORCE_PROVIDER);
+    console.log(`[audit] forcing provider=${FORCE_PROVIDER} via Dexie auditForceProvider override`);
+  }
+
   // ── Scenario 1: cold cache + first-time user. ──────────────
   console.log('\n[1] cold-cache / first-time-user baseline');
   await clearAllStorage(page);
@@ -265,6 +298,32 @@ async function main() {
   console.log(`  RESULT: ${report.counts.passes}/${report.counts.total} passed, ${report.counts.fails} failed`);
   console.log(`  report: ${join(OUT_DIR, 'report.json')}`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+  // Clear the audit-mode provider override so a subsequent run that
+  // uses a fresh Dexie (or the same Dexie via the same context) doesn't
+  // inherit the override stale. Best-effort — failure here doesn't
+  // affect the audit report itself.
+  if (FORCE_PROVIDER !== 'none') {
+    try {
+      await page.evaluate(async () => {
+        const dbReq = indexedDB.open('ChessAcademyDB');
+        await new Promise((resolve, reject) => {
+          dbReq.onsuccess = () => resolve(dbReq.result);
+          dbReq.onerror = () => reject(dbReq.error);
+        });
+        const db = dbReq.result;
+        const tx = db.transaction('meta', 'readwrite');
+        tx.objectStore('meta').delete('auditForceProvider');
+        await new Promise((resolve, reject) => {
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
+        db.close();
+      });
+    } catch {
+      /* best-effort cleanup */
+    }
+  }
 
   await browser.close();
   process.exit(report.counts.fails === 0 ? 0 : 1);

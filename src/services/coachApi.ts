@@ -244,6 +244,24 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     const deepseekEnvKey = getDeepseekKey();
 
     const profile = await db.profiles.get('main');
+
+    // Audit-mode provider override (2026-05-19): the Playwright loop
+    // audit re-runs the coach dozens of times per scenario and David
+    // doesn't want to burn Anthropic API tokens on test traffic.
+    // When the audit script (or any caller) sets `auditForceProvider`
+    // in Dexie's `meta` table to 'deepseek' or 'anthropic',
+    // `getProviderConfig` honors it for the duration of the override.
+    // Real user settings are untouched — this is a per-tab / per-test
+    // override that the audit script clears at teardown. Less critical
+    // now that the prod default is also DeepSeek (see note below), but
+    // retained as belt-and-suspenders so the audit pins the provider
+    // regardless of cooldowns / key availability.
+    const auditOverrideRecord = await db.meta.get('auditForceProvider');
+    const auditOverride =
+      auditOverrideRecord?.value === 'deepseek' || auditOverrideRecord?.value === 'anthropic'
+        ? (auditOverrideRecord.value as AiProvider)
+        : null;
+
     // DeepSeek is the primary as of 2026-05-19 (David's call: "switch
     // to deepseek tokens"). Previously Anthropic-first since 2026-05-14
     // for pedagogy reasons. The fallback chain below auto-retries on
@@ -255,18 +273,30 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     // still gets Anthropic.
     const anthropicReachable = !!anthropicEnvKey && !isProviderInCooldown('anthropic');
     const deepseekReachable = !!deepseekEnvKey && !isProviderInCooldown('deepseek');
-    const provider: AiProvider = deepseekReachable
-      ? 'deepseek'
-      : (anthropicReachable
-          ? 'anthropic'
-          // Both keys absent OR both in cooldown — fall through to
-          // whichever key exists (try-anyway over no-coach), then to
-          // profile preference. Cooldown lifts on its own after 60s.
-          : (deepseekEnvKey
-              ? 'deepseek'
-              : (anthropicEnvKey
-                  ? 'anthropic'
-                  : (profile?.preferences.aiProvider ?? 'deepseek'))));
+    const provider: AiProvider = auditOverride
+      ? auditOverride
+      : (deepseekReachable
+          ? 'deepseek'
+          : (anthropicReachable
+              ? 'anthropic'
+              // Both keys absent OR both in cooldown — fall through to
+              // whichever key exists (try-anyway over no-coach), then to
+              // profile preference. Cooldown lifts on its own after 60s.
+              : (deepseekEnvKey
+                  ? 'deepseek'
+                  : (anthropicEnvKey
+                      ? 'anthropic'
+                      : (profile?.preferences.aiProvider ?? 'deepseek')))));
+
+    if (auditOverride) {
+      void logAppAudit({
+        kind: 'coach-llm-model-selected',
+        category: 'subsystem',
+        source: 'coachApi.getProviderConfig.auditOverride',
+        summary: `audit-mode override forcing provider=${provider}`,
+        details: JSON.stringify({ override: auditOverride, willPick: provider }),
+      });
+    }
 
     const preferredModel = profile?.preferences.preferredModel;
 
