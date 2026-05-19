@@ -5,6 +5,24 @@ const ALLOWED_ORIGINS = [
   'https://chess-academy-pro.vercel.app',
 ];
 
+/** Local-dev origins. Gated on `!VERCEL_ENV` so this list is
+ *  empty in any deployed environment (preview or production) and
+ *  only matters when the function runs under `vercel dev` /
+ *  `vite dev` locally. Without this, `/api/tts` 403s every
+ *  request from a developer machine — making voice dead in dev
+ *  and breaking interactive audits that need to verify Polly
+ *  fires. The per-IP rate limit (600 req/hr) still caps abuse
+ *  even if a request somehow originated from localhost in
+ *  production. */
+const LOCAL_DEV_ORIGINS = process.env.VERCEL_ENV
+  ? []
+  : [
+      'http://localhost:5173',
+      'http://localhost:4173',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:4173',
+    ];
+
 /** Vercel preview deployments use auto-generated subdomains under
  *  the project's vercel.app namespace. Allowlist them so the voice
  *  service can reach Polly during PR-preview testing — without this
@@ -17,6 +35,7 @@ const PREVIEW_ORIGIN_RE = /^https:\/\/chess-academy-pro(?:-git-[a-z0-9-]+)?-dyah
 
 function isAllowedOrigin(origin: string): boolean {
   if (ALLOWED_ORIGINS.includes(origin)) return true;
+  if (LOCAL_DEV_ORIGINS.includes(origin)) return true;
   if (PREVIEW_ORIGIN_RE.test(origin)) return true;
   return false;
 }
