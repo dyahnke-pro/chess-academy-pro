@@ -63,17 +63,17 @@
     },
     {
       "san": "Bb2",
-      "annotation": "Continuing Semi Slav Defense Normal Variation: Bb2 is a known theory move in this line.",
+      "annotation": "Bb2 pins the knight on f3 to your king, pressuring the center and preparing to support the d4 pawn's defense along the long diagonal.",
       "shortNarration": "Bb2 is a known theory move in the Semi-Slav Normal Variation."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Semi Slav Defense Normal Variation: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside removes Black's king from the center before the position opens, ensuring safety while keeping the bishop pair intact.",
       "shortNarration": "O-O is the theory move in the Semi-Slav Normal Variation."
     },
     {
       "san": "Be2",
-      "annotation": "Continuing Semi Slav Defense Normal Variation: Be2 is a known theory move in this line.",
+      "annotation": "Be2 completes the setup, placing the bishop on a flexible square where it supports d4 and can later reroute to contest Black's pieces if needed.",
       "shortNarration": "Be2 develops the bishop and prepares kingside castling in the Semi-Slav Normal Variation."
     }
   ]

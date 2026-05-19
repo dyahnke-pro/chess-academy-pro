@@ -33,32 +33,32 @@
     },
     {
       "san": "Bg2",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: Bg2 is a known theory move in this line.",
+      "annotation": "The fianchettoed bishop on g2 controls the long diagonal, exerting quiet pressure on Black's center and d5 square from afar.",
       "shortNarration": "Bg2 is the standard fianchetto in the Kings Indian Debrecen Defense."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside tucks the king to safety and connects the rooks, preparing to coordinate pressure along the back rank and center files.",
       "shortNarration": "White castles kingside in the Kings Indian Fianchetto Debrecen Defense."
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: Nc3 is a known theory move in this line.",
+      "annotation": "The knight on c3 supports the d4 pawn and eyes e4, a key square to contest once Black commits to a plan.",
       "shortNarration": "Nc3 is the standard theory move in the Kings Indian Fianchetto Debrecen Defense."
     },
     {
       "san": "d6",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: d6 is a known theory move in this line.",
+      "annotation": "Pushing the d-pawn to d6 solidifies Black's grip on e5 and prepares to reroute the queen or knight while supporting the fianchetto structure.",
       "shortNarration": "d6 is theory in the Kings Indian Fianchetto Debrecen Defense."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: Nf3 is a known theory move in this line.",
+      "annotation": "Nf3 completes White's minor-piece setup, enabling potential e4 advances and ready flexibility in the center battle.",
       "shortNarration": "Nf3 is theory in the Kings Indian Fianchetto Debrecen Defense."
     },
     {
       "san": "Nbd7",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: Nbd7 is a known theory move in this line.",
+      "annotation": "Nbd7 supports e5 and prepares f6-e5 maneuvers, while keeping the queen's escape route open on the queenside.",
       "shortNarration": "Nbd7 is theory in the Kings Indian Fianchetto Debrecen Defense."
     }
   ]

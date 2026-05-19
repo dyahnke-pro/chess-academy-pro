@@ -23,17 +23,17 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Pirc Defense Kholmov System: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 supports the d4 pawn and prepares f4, amplifying central pressure before Black completes the fianchetto setup.",
       "shortNarration": "Nc3 is the standard Kholmov System move in the Pirc Defense."
     },
     {
       "san": "g6",
-      "annotation": "Continuing Pirc Defense Kholmov System: g6 is a known theory move in this line.",
+      "annotation": "Black fianchettoes the kingside bishop to challenge White's d4 pawn from the long diagonal and prepare flexible piece placement.",
       "shortNarration": "g6 is theory in the Pirc Kholmov System."
     },
     {
       "san": "Bc4",
-      "annotation": "Continuing Pirc Defense Kholmov System: Bc4 is a known theory move in this line.",
+      "annotation": "Bc4 seizes control of f7, the weakest square in Black's kingside once the bishop lands on g7, creating lasting tactical pressure.",
       "shortNarration": "Bc4 is the theory move in the Pirc Kholmov System."
     }
   ]

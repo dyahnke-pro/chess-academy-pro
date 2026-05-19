@@ -63,37 +63,37 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 supports the center and prepares to reroute the knight to d5 or e4, controlling critical squares in Black's position.",
       "shortNarration": "Nc3 is the standard Korchnoi Line in the Panno Variation of the KID Fianchetto."
     },
     {
       "san": "a6",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: a6 is a known theory move in this line.",
+      "annotation": "The pawn advance to a6 prevents White's b-pawn from advancing to b5, which would cramp Black's queenside.",
       "shortNarration": "a6 is a known theory move in the KID Fianchetto Panno Korchnoi line."
     },
     {
       "san": "h3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: h3 is a known theory move in this line.",
+      "annotation": "Spacing the h-pawn to h3 stops Black's g-pawn from advancing to h4 and prepares to support kingside expansion if needed.",
       "shortNarration": "h3 is theory in the KID Fianchetto Panno Korchnoi Line, preventing Ng4 and preparing g4."
     },
     {
       "san": "Rb8",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: Rb8 is a known theory move in this line.",
+      "annotation": "Swinging the rook to b8 targets the weak b4-square and signals Black's plan to pressure the queenside via b5.",
       "shortNarration": "Rb8 is the Panno Variation Korchnoi Line — Black prepares b5 to attack White's queenside."
     },
     {
       "san": "Be3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: Be3 is a known theory move in this line.",
+      "annotation": "Be3 completes White's piece setup, stationing the bishop on a long diagonal where it supports d4 and eyes the a1–h8 axis.",
       "shortNarration": "Be3 is theory in the KID Fianchetto Panno Korchnoi Line."
     },
     {
       "san": "b5",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: b5 is a known theory move in this line.",
+      "annotation": "Black pushes b5 to challenge White's center and create immediate queenside tension, forcing White to decide on cxb5 or allowing pressure on d4.",
       "shortNarration": "b5 is the theory move in the Kings Indian Defense Fianchetto Panno Korchnoi line."
     },
     {
       "san": "Nd2",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Panno Variation Korchnoi Line: Nd2 is a known theory move in this line.",
+      "annotation": "Nd2 regroups the knight toward f3 or f4, maintaining flexibility while keeping the center intact and avoiding premature capture on b5.",
       "shortNarration": "Nd2 is theory in the KID Fianchetto Panno Korchnoi Line."
     }
   ]

@@ -23,17 +23,17 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Queens Gambit Declined Chigorin Defense Janowski Variation: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 supports the center and prepares to recapture on c4 if Black exchanges pawns, keeping White's pawn structure intact while developing.",
       "shortNarration": "Nc3 is theory in the Janowski Variation of the Queen's Gambit Declined Chigorin Defense."
     },
     {
       "san": "dxc4",
-      "annotation": "Continuing Queens Gambit Declined Chigorin Defense Janowski Variation: dxc4 is a known theory move in this line.",
+      "annotation": "Black captures on c4, forcing White to decide whether to recapture immediately or develop first, testing White's preference between material security and tempo.",
       "shortNarration": "dxc4 is theory in the Janowski Variation of the Queen's Gambit Declined Chigorin Defense."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Queens Gambit Declined Chigorin Defense Janowski Variation: Nf3 is a known theory move in this line.",
+      "annotation": "Nf3 develops with tempo by threatening the c4 pawn, pushing Black to commit to defending or surrendering the gambit pawn.",
       "shortNarration": "Nf3 is the theoretical move in the Janowski Variation of the Queen's Gambit Declined Chigorin Defense."
     }
   ]

@@ -73,17 +73,17 @@
     },
     {
       "san": "Qc2",
-      "annotation": "Continuing Nimzo Indian Defense Spielmann Variation Stahlberg Variation: Qc2 is a known theory move in this line.",
+      "annotation": "Qc2 unpins the d2-bishop and prepares to reroute it to e3, controlling key central squares while keeping the queenside flexible.",
       "shortNarration": "Qc2 is a theory move in the Nimzo-Indian Stahlberg Variation."
     },
     {
       "san": "f5",
-      "annotation": "Continuing Nimzo Indian Defense Spielmann Variation Stahlberg Variation: f5 is a known theory move in this line.",
+      "annotation": "Black strikes at e4's defender with f5, initiating counterplay on the kingside and forcing White to clarify the knight's placement.",
       "shortNarration": "f5 is a known theory move in the Nimzo-Indian Defense Stahlberg Variation."
     },
     {
       "san": "g3",
-      "annotation": "Continuing Nimzo Indian Defense Spielmann Variation Stahlberg Variation: g3 is a known theory move in this line.",
+      "annotation": "White fianchettoes the kingside bishop, cementing control of the long diagonal and preparing castling while the center remains tense.",
       "shortNarration": "g3 is a known theory move in the Nimzo-Indian Defense Stahlberg Variation."
     }
   ]

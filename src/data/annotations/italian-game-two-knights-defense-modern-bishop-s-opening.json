@@ -622,12 +622,12 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black challenges White's center immediately, forcing a decision: White can capture and launch an attack down the a2–g8 diagonal, or allow Black's pawn tension to persist.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
           "san": "exd5",
-          "annotation": "exd5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White recaptures on d5, centralizing the pawn and opening the e-file for a potential discovered attack when the knight moves. This tempo is crucial for the Fried Liver attack.",
           "arrows": [
             {
               "from": "e4",
@@ -698,7 +698,7 @@
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. We're reaching the critical position of this variation.",
+          "annotation": "White pushes forward to trap the knight on e4 and seize space after Black's defensive maneuvers. This advance signals the shift from tactics to positional pressure.",
           "arrows": [
             {
               "from": "e5",
@@ -823,7 +823,7 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Notice how the pieces coordinate in this position.",
+          "annotation": "The d4 push opens the e-file for White's rook and attacks Black's e5 pawn, forcing a decision: Black must either capture, allowing White's center to solidify, or allow the pawns to trade and release central tension.",
           "arrows": [
             {
               "from": "d2",
@@ -879,12 +879,12 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White pushes through the center, challenging Black's e5 pawn and opening lines toward Black's kingside. This aggressive continuance defines the Max Lange Attack.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
           "san": "exd4",
-          "annotation": "exd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black recaptures and maintains central presence, but White's next move will exploit the d4 square's weakness with tempo threats against Black's pieces.",
           "arrows": [
             {
               "from": "e5",
@@ -904,12 +904,12 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White advances with tempo, attacking the bishop on d4 and gaining space. The pawn on e5 cramps Black's knight and prepares f4 to splinter Black's kingside.",
           "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black counterattacks the bishop and opens the d-file, fighting for activity. This counterstrike is essential to avoid passive defense after White's space advantage.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -1132,12 +1132,12 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black counterattacks the center, forcing White to decide whether to maintain the e4 pawn or recapture and accept a symmetrical pawn structure.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
           "san": "exd5",
-          "annotation": "exd5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White recaptures and opens the e-file, where the rook will soon pressure Black's position along with the advanced d5 pawn.",
           "arrows": [
             {
               "from": "e4",
@@ -1966,7 +1966,7 @@
         },
         {
           "san": "exd5",
-          "annotation": "exd5 — this capture changes the character of the position. Be alert.",
+          "annotation": "White opens the center and exposes Black's king by eliminating the e5 pawn. This sets up the tactical blow on f7, which becomes critically weak without the central shield.",
           "arrows": [
             {
               "from": "e4",
@@ -1978,7 +1978,7 @@
         },
         {
           "san": "Nxd5",
-          "annotation": "Nxd5 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black recaptures to maintain material, but the knight on d5 is poorly placed and will be attacked. White's bishop on c4 and knight on g5 now coordinate to threaten f7 directly.",
           "shortNarration": "Nxd5 changes the position — the recapture opens lines and shifts the tactical balance."
         },
         {
@@ -1999,12 +1999,12 @@
         },
         {
           "san": "Nxf7",
-          "annotation": "Nxf7 — this capture changes the character of the position. Be alert.",
+          "annotation": "White sacrifices the knight on f7 to rip open Black's king. The king must move, abandoning castling rights and leaving the back rank dangerously exposed to follow-up tactics.",
           "shortNarration": "Nxf7 wins a pawn and exposes the king."
         },
         {
           "san": "Kxf7",
-          "annotation": "Kxf7 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black's king steps into the center and loses the right to castle. White's queen and bishop now dominate the exposed king; Black's pieces cannot coordinate quickly enough to defend.",
           "arrows": [
             {
               "from": "e8",
@@ -2734,12 +2734,12 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White pushes through the center, opening lines toward Black's kingside and preparing to attack the weakened f7 square with threats like Ng5.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
           "san": "exd4",
-          "annotation": "exd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black recaptures and maintains central presence, but the d4 pawn now sits on an outpost where White's pieces can target it with tempo.",
           "arrows": [
             {
               "from": "e5",
@@ -2759,12 +2759,12 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White advances aggressively, pinning the knight to the king and gaining space; Black's pieces become cramped while f7 grows more vulnerable.",
           "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black counterattacks the bishop and opens escape squares, but White's advanced e-pawn and control of key central files give White dangerous compensation.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {

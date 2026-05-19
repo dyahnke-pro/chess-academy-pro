@@ -73,17 +73,17 @@
     },
     {
       "san": "Rc1",
-      "annotation": "Continuing Alekhine Defense Exchange Variation Voronezh Variation: Rc1 is a known theory move in this line.",
+      "annotation": "The rook moves to the c-file to pressure Black's potential queenside weaknesses and support the center's control after the d6 pawn is fixed.",
       "shortNarration": "Rc1 is the theory move in the Alekhine Defense Exchange Voronezh Variation."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Alekhine Defense Exchange Variation Voronezh Variation: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside connects the rooks and removes the king from the center before White's queenside expansion begins.",
       "shortNarration": "O-O is theory in the Alekhine Defense Exchange Voronezh Variation."
     },
     {
       "san": "b3",
-      "annotation": "Continuing Alekhine Defense Exchange Variation Voronezh Variation: b3 is a known theory move in this line.",
+      "annotation": "This advance prepares a5, attacking the Nb6 and forcing it to make a decision while White controls d4 and c4.",
       "shortNarration": "b3 is a theory move in the Alekhine Defense Exchange Variation Voronezh Variation."
     }
   ]

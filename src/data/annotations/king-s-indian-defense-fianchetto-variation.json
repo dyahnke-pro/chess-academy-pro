@@ -23,17 +23,17 @@
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation: Nf3 is a known theory move in this line.",
+      "annotation": "Nf3 controls e5 and d4, preventing Black's knight from settling on aggressive central squares while supporting White's pawn chain.",
       "shortNarration": "Nf3 develops, attacks e5, and supports the fianchetto setup."
     },
     {
       "san": "Bg7",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation: Bg7 is a known theory move in this line.",
+      "annotation": "Bg7 seats the bishop on the long diagonal to pressure d4 and exert influence along the major diagonal—the thematic placement in Black's fianchetto setup.",
       "shortNarration": "Bg7 fianchettoes the bishop, pressuring d4 and e5 in the Kings Indian Defense."
     },
     {
       "san": "g3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation: g3 is a known theory move in this line.",
+      "annotation": "White fianchettoes on g3, preparing Bg2 to control the long diagonal and create a flexible kingside structure that supports the d4 pawn.",
       "shortNarration": "g3 is the standard fianchetto setup in the Kings Indian Defense."
     }
   ]

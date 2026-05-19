@@ -18,12 +18,12 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Continuing Polish Opening With D5: Nf6 is a known theory move in this line.",
+      "annotation": "Black's knight move controls e4 and supports the d5 pawn, preventing White from easily establishing a strong central outpost after b4.",
       "shortNarration": "Nf6 is the theory move in the Polish Opening after d5."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Polish Opening With D5: Nf3 is a known theory move in this line.",
+      "annotation": "White develops the kingside knight to support the b2 bishop's long diagonal while keeping options open for central play or a kingside assault.",
       "shortNarration": "Nf3 is the theory move, developing and controlling e5."
     }
   ]

@@ -53,17 +53,17 @@
     },
     {
       "san": "Ne5",
-      "annotation": "Continuing Slav Defense Czech Variation Krause Attack Fazekas Gambit: Ne5 is a known theory move in this line.",
+      "annotation": "Ne5 centralizes the knight and prepares to challenge White's d4 pawn while supporting the bishop pair strategy. This aggressive placement forces White to respond to immediate threats.",
       "shortNarration": "Ne5 is a known theory move in the Slav Defense Czech Variation Krause Attack Fazekas Gambit."
     },
     {
       "san": "Na6",
-      "annotation": "Continuing Slav Defense Czech Variation Krause Attack Fazekas Gambit: Na6 is a known theory move in this line.",
+      "annotation": "Na6 reroutes the knight away from potential forks and prepares to redeploy it to c5, pressuring White's d4 and creating tactical complications around the center.",
       "shortNarration": "Na6 is theory in the Slav Czech Variation Krause Attack Fazekas Gambit."
     },
     {
       "san": "e4",
-      "annotation": "Continuing Slav Defense Czech Variation Krause Attack Fazekas Gambit: e4 is a known theory move in this line.",
+      "annotation": "Pushing e4 seizes space and gains control of f5, preventing Black's knight from retreating safely while opening lines for White's pieces and attacking the c4 pawn.",
       "shortNarration": "e4 is the main line in the Slav Czech Variation Krause Attack Fazekas Gambit."
     }
   ]

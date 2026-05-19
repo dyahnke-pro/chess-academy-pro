@@ -18,7 +18,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Continuing Queens Gambit Declined Chigorin Defense Tartakower Gambit: Nc6 is a known theory move in this line.",
+      "annotation": "Nc6 attacks your d4 pawn directly and prepares the Chigorin setup. Black will contest the center with c5, forcing you to decide whether to defend d4 or advance with cxd5.",
       "shortNarration": "Nc6 is theory in the Queen's Gambit Declined Chigorin Defense Tartakower Gambit."
     },
     {

@@ -13,17 +13,17 @@
     },
     {
       "san": "d4",
-      "annotation": "Continuing Caro Kann Defense Mieses Gambit: d4 is a known theory move in this line.",
+      "annotation": "The pawn advances to d4, establishing a classical two-pawn center and immediately pressuring Black's c6 strongpoint. This setup defines the Mieses Gambit, where White controls the fourth rank.",
       "shortNarration": "d4 is theory in the Caro-Kann Mieses Gambit, opening lines for development."
     },
     {
       "san": "d5",
-      "annotation": "Continuing Caro Kann Defense Mieses Gambit: d5 is a known theory move in this line.",
+      "annotation": "Black strikes at e4 with the d-pawn, challenging White's center immediately. This counterattack is essential—allowing White an unopposed e4–d4 wedge would give White a lasting spatial advantage.",
       "shortNarration": "d5 is theory in the Caro-Kann Mieses Gambit, challenging the center."
     },
     {
       "san": "Be3",
-      "annotation": "Continuing Caro Kann Defense Mieses Gambit: Be3 is a known theory move in this line.",
+      "annotation": "The bishop moves to e3, preparing to support the center and eyeing the long diagonal toward a1. This develops a piece while keeping flexible options for f3, defending against Black's potential threats on d4.",
       "shortNarration": "Be3 is theory in the Caro-Kann Mieses Gambit, developing with tempo."
     }
   ]

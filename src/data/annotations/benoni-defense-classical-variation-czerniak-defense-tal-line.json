@@ -33,67 +33,67 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 supports d5 and prepares Be2, keeping White's space advantage while allowing flexible piece placement.",
       "shortNarration": "Nc3 is theory in the Benoni Classical Czerniak Tal line."
     },
     {
       "san": "exd5",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: exd5 is a known theory move in this line.",
+      "annotation": "Black captures on d5, forcing White to recapture and establishing a central tension that defines the resulting pawn structure.",
       "shortNarration": "exd5 is theory in the Benoni Classical Czerniak Tal Line."
     },
     {
       "san": "cxd5",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: cxd5 is a known theory move in this line.",
+      "annotation": "White recaptures with the c-pawn, creating an isolated d5 pawn that becomes a target for the rest of the game.",
       "shortNarration": "cxd5 is the theory move in the Benoni Classical Czerniak Tal Line."
     },
     {
       "san": "d6",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: d6 is a known theory move in this line.",
+      "annotation": "Black plants a second pawn on d6, reinforcing the center and preventing immediate pressure on the e6 square.",
       "shortNarration": "d6 is theory in the Benoni Classical Czerniak Tal Line."
     },
     {
       "san": "e4",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: e4 is a known theory move in this line.",
+      "annotation": "White pushes e4, controlling key central squares and gaining space while preventing Black's counterplay on e5.",
       "shortNarration": "e4 is theory in the Benoni Classical Czerniak Tal Line, opening lines for the queen and bishop."
     },
     {
       "san": "g6",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: g6 is a known theory move in this line.",
+      "annotation": "Black fianchettoes the kingside bishop, aiming it at the long diagonal to challenge White's central control.",
       "shortNarration": "g6 is theory in the Benoni Classical Czerniak Tal Line."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Nf3 is a known theory move in this line.",
+      "annotation": "Nf3 completes White's solid setup, preparing Be2 and castling while keeping the center locked and secure.",
       "shortNarration": "Nf3 develops and pressures e5 in the Benoni Classical Czerniak Tal Line."
     },
     {
       "san": "Bg7",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Bg7 is a known theory move in this line.",
+      "annotation": "Bg7 completes Black's fianchetto setup, exerting pressure along the long diagonal and preparing kingside castling.",
       "shortNarration": "Bg7 follows Benoni Classical Czerniak Tal theory."
     },
     {
       "san": "Be2",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Be2 is a known theory move in this line.",
+      "annotation": "Be2 prepares kingside castling while keeping the bishop flexible on the long diagonal, avoiding early commitments that Black might exploit.",
       "shortNarration": "Be2 is theory in the Classical Variation Czerniak Defense Tal Line."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside secures White's king and connects the rooks, establishing a stable setup to support the d5 pawn and control central tensions.",
       "shortNarration": "Benoni Classical Czerniak Tal: O-O is the theory move."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: O-O is a known theory move in this line.",
+      "annotation": "Black castles to safety as well, mirroring White's setup. Both sides now have secured kings and can focus on the middlegame struggle for d5 and the c5 pawn.",
       "shortNarration": "O-O is the theory move in the Benoni Classical Czerniak Tal Line."
     },
     {
       "san": "Re8",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Re8 is a known theory move in this line.",
+      "annotation": "The rook moves to e8 to pressure the e4 pawn and prepare potential exchanges, increasing Black's pressure along the e-file against White's center.",
       "shortNarration": "Re8 is theory in the Benoni Classical Czerniak Tal Line."
     },
     {
       "san": "Nd2",
-      "annotation": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: Nd2 is a known theory move in this line.",
+      "annotation": "Nd2 retreats the knight to support e4 and prepare potential f3 or c4 moves, while maintaining flexibility to reroute the knight toward critical squares like f3 or b3.",
       "shortNarration": "Nd2 is theory in the Benoni Classical Czerniak Tal Line."
     }
   ]

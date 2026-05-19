@@ -1148,12 +1148,12 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "This pawn break opens the center and forces Black to decide whether to capture or allow White a strong presence on d4. The tension on the center defines the character of the position.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
           "san": "cxd4",
-          "annotation": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black resolves the tension symmetrically, but White recaptures with the knight—not a pawn—which keeps piece pressure on d4 and prepares rapid development with strong piece coordination.",
           "arrows": [
             {
               "from": "c5",
@@ -1289,12 +1289,12 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White plants a pawn on d4, challenging Black's c5 foothold and opening lines toward the center. This move forces Black to make an immediate decision about the pawn structure.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
           "san": "cxd4",
-          "annotation": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black recaptures with the c-pawn, maintaining tension while keeping d4 under fire. This setup—a pawn on d4 facing pressure—defines the critical middlegame battleground.",
           "arrows": [
             {
               "from": "c5",
@@ -1364,7 +1364,7 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White advances e5 to dislodge the knight from f6 and open the e-file toward Black's king. This space grab targets the fragile kingside and forces Black's pieces into passive squares.",
           "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -2142,12 +2142,12 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White opens the center with a pawn break, forcing Black to choose between recapturing immediately or maintaining the tension with a more flexible setup.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
           "san": "cxd4",
-          "annotation": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black recaptures on d4, accepting a symmetrical pawn structure that permits White's knight to reroute via the d4 square, a key outpost in the Dragon.",
           "arrows": [
             {
               "from": "c5",
@@ -2579,7 +2579,7 @@
         },
         {
           "san": "cxd4",
-          "annotation": "cxd4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black opens the d-file and commits to a symmetrical pawn center. White's knight is now free to jump to d4, the ideal square for applying pressure.",
           "arrows": [
             {
               "from": "c5",
@@ -2591,7 +2591,7 @@
         },
         {
           "san": "Nxd4",
-          "annotation": "Nxd4 — this capture changes the character of the position. Be alert.",
+          "annotation": "The knight lands on d4, where it attacks c6 and f5 while anchoring White's grip on the middle. Black's pieces must now respond to this commanding outpost.",
           "shortNarration": "Nxd4 changes the position — the knight now eyes f5 and threatens Qh4+."
         },
         {
@@ -2668,7 +2668,7 @@
         },
         {
           "san": "hxg4",
-          "annotation": "hxg4 — this capture changes the character of the position. Be alert.",
+          "annotation": "White captures on g4, opening the h-file toward Black's exposed king. The h-file becomes a highway for a decisive attack.",
           "arrows": [
             {
               "from": "h5",
@@ -2684,7 +2684,7 @@
         },
         {
           "san": "Nxh5",
-          "annotation": "Nxh5 — this capture changes the character of the position. Be alert.",
+          "annotation": "The knight removes Black's defender on h5 and clears the h-file further for White's rook and queen to deliver a back-rank threat.",
           "shortNarration": "Nxh5 sacrifices the knight for a pawn, altering the position's dynamics."
         },
         {
@@ -2728,7 +2728,7 @@
         },
         {
           "san": "cxd4",
-          "annotation": "cxd4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black recaptures on d4, accepting a symmetrical pawn center. White now has the luxury of choosing whether to challenge it immediately or develop first.",
           "arrows": [
             {
               "from": "c5",
@@ -2740,7 +2740,7 @@
         },
         {
           "san": "Nxd4",
-          "annotation": "Nxd4 — this capture changes the character of the position. Be alert.",
+          "annotation": "The knight recaptures, establishing a centralized outpost on d4. This move signals White's intention to keep pressure on Black's position while maintaining piece coordination.",
           "shortNarration": "Nxd4 changes the position — the knight captures on d4."
         },
         {
@@ -2801,7 +2801,7 @@
         },
         {
           "san": "gxf5",
-          "annotation": "gxf5 — this capture changes the character of the position. Be alert.",
+          "annotation": "Recapturing toward the center opens the g-file and reinforces White's control of the light squares. Black's premature ...e5 has weakened the dark squares around the kingside.",
           "arrows": [
             {
               "from": "g6",

@@ -63,17 +63,17 @@
     },
     {
       "san": "Bd2",
-      "annotation": "Continuing Slav Defense Quiet Variation Landau Variation: Bd2 is a known theory move in this line.",
+      "annotation": "Bd2 prepares to reroute the bishop away from Black's long diagonal while keeping pressure on a5. This move supports the queenside and avoids early bishop trades.",
       "shortNarration": "Bd2 is the theory move in the Slav Defense Quiet Variation Landau line."
     },
     {
       "san": "e6",
-      "annotation": "Continuing Slav Defense Quiet Variation Landau Variation: e6 is a known theory move in this line.",
+      "annotation": "Playing e6 solidifies the center and gains space on the fifth rank. Black locks in the bishop pair and prepares to complete development with Bb4 or Be7.",
       "shortNarration": "In the Slav Defense Landau Variation, e6 is the theory move."
     },
     {
       "san": "Na3",
-      "annotation": "Continuing Slav Defense Quiet Variation Landau Variation: Na3 is a known theory move in this line.",
+      "annotation": "Na3 removes the knight from the weakened b1 square and eyes c4, where it pressures Black's advanced pawns. This maneuver sidesteps Black's Bb4 pin threat.",
       "shortNarration": "Na3 is a known theory move in the Slav Defense Landau Variation."
     }
   ]

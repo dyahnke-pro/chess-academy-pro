@@ -33,42 +33,42 @@
     },
     {
       "san": "g3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: g3 is a known theory move in this line.",
+      "annotation": "White fianchettoes the kingside bishop, preparing to plant it on the long diagonal where it pressures Black's center and queenside.",
       "shortNarration": "g3 is the standard fianchetto setup against the Hungarian Variation of the King's Indian Defense."
     },
     {
       "san": "d6",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: d6 is a known theory move in this line.",
+      "annotation": "Black anchors the center with d6, supporting a future e5 advance and preparing to reroute the knight via e6 or c6.",
       "shortNarration": "d6 is the Hungarian Variation in the KID Fianchetto."
     },
     {
       "san": "Bg2",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: Bg2 is a known theory move in this line.",
+      "annotation": "The bishop settles on g2, where it dominates the long diagonal and exerts lasting control over c6 and d5.",
       "shortNarration": "Bg2 develops the bishop to the long diagonal, a key idea in the KID Fianchetto Hungarian Variation."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: O-O is a known theory move in this line.",
+      "annotation": "Black castles kingside to safety, removing the king from the center before White's pieces coordinate around the d5 square.",
       "shortNarration": "O-O is the theory move in the KID Fianchetto Hungarian Variation."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: O-O is a known theory move in this line.",
+      "annotation": "White castles kingside, stabilizing the king and connecting the rooks in preparation for central play.",
       "shortNarration": "O-O is the standard theory move in the Kings Indian Defense Fianchetto Variation Hungarian Variation."
     },
     {
       "san": "Nbd7",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: Nbd7 is a known theory move in this line.",
+      "annotation": "The knight heads toward the center via d7, readying supports for a potential e5 pawn break or reinforcing the c5 square.",
       "shortNarration": "Nbd7 is a theoretical move in the KID Fianchetto Hungarian Variation."
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: Nc3 is a known theory move in this line.",
+      "annotation": "White adds a defender to d5 and prepares to challenge Black's position with potential Nd5 or Nd4 ideas in the near future.",
       "shortNarration": "Nc3 is the standard theory move in the KID Fianchetto Hungarian Variation."
     },
     {
       "san": "a6",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: a6 is a known theory move in this line.",
+      "annotation": "Black secures the queenside with a6, preventing White's knight from landing on b5 and preparing potential b5 counterplay later.",
       "shortNarration": "a6 is a known theory move in the KID Fianchetto Hungarian Variation."
     }
   ]

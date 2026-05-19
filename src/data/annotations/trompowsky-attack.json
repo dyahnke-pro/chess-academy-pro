@@ -104,7 +104,7 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black challenges your central d4 pawn immediately, forcing you to decide whether to capture on f6 or maintain tension. This move tests whether the Trompowsky's pin justifies White's unusual setup.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -233,7 +233,7 @@
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Pushing to e4 completes White's pawn duo and opens the long diagonal for the bishop on g5, creating immediate tactical leverage against Black's exposed kingside.",
           "shortNarration": "e4 stakes central space, restricting Black's piece activity."
         },
         {
@@ -362,7 +362,7 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Pushing to d5 gains space and forces Black's knight to decide whether to stay on f6 or retreat. This advance locks the center in White's favor.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -397,7 +397,7 @@
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Supporting the d5 pawn with e4 creates a strong pawn duo and opens lines for the bishop on d2. Black cannot capture on d5 without abandoning the c5 strongpoint.",
           "shortNarration": "e4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
@@ -2666,17 +2666,17 @@
         },
         {
           "san": "Nxd2",
-          "annotation": "Nxd2 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black's knight on e4 removes White's defender of d4. This trades off an active piece and simplifies the center, favoring White's space advantage.",
           "shortNarration": "Nxd2 recaptures, changing the position's character."
         },
         {
           "san": "Qxd2",
-          "annotation": "Qxd2 — this capture changes the character of the position. Be alert.",
+          "annotation": "White recaptures toward the center, keeping the d4 pawn supported and maintaining the bishop pair. The queen on d2 adds flexibility for kingside castling.",
           "shortNarration": "Qxd2 recaptures, changing the position's character."
         },
         {
           "san": "cxd4",
-          "annotation": "cxd4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black captures the d4 pawn with the c-file rook, opening lines and preparing counterplay against White's center before White solidifies it.",
           "arrows": [
             {
               "from": "c5",
@@ -2688,7 +2688,7 @@
         },
         {
           "san": "exd4",
-          "annotation": "exd4 — this capture changes the character of the position. Be alert.",
+          "annotation": "White recaptures with the e-pawn, rebuilding the d4 strongpoint. This move keeps the center locked and preserves White's spatial control.",
           "arrows": [
             {
               "from": "e3",
@@ -2708,12 +2708,12 @@
         },
         {
           "san": "Bxd3",
-          "annotation": "Bxd3 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black's bishop on d3 trades off White's light-squared bishop, reducing White's piece activity and opening the d-file for Black's rook.",
           "shortNarration": "Bxd3 changes the position — the bishop pair is gone, and White's knight now eyes f5."
         },
         {
           "san": "Qxd3",
-          "annotation": "Qxd3 — this capture changes the character of the position. Be alert.",
+          "annotation": "White's queen recaptures and centralizes on d3, eyeing both the kingside and maintaining support for the d4 pawn. Black's compensation remains unclear.",
           "shortNarration": "Qxd3 changes the position — the queen recaptures, keeping material even."
         },
         {

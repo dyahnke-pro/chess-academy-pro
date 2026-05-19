@@ -602,7 +602,7 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Pushing to d4 opens lines for the queen and light-squared bishop while gaining space; Black's d6 pawn now blocks the e5 square, limiting piece mobility.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
@@ -3186,7 +3186,7 @@
         },
         {
           "san": "exf4",
-          "annotation": "exf4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black accepts the gambit pawn. White has traded the f-pawn for Black's center pawn—a key space-gaining trade that opens lines toward Black's kingside.",
           "arrows": [
             {
               "from": "e5",
@@ -3222,7 +3222,7 @@
         },
         {
           "san": "Nxg4",
-          "annotation": "Nxg4 — this capture changes the character of the position. Be alert.",
+          "annotation": "White's knight captures on g4, removing Black's advanced pawn and opening the h-file toward Black's exposed king on e8.",
           "shortNarration": "Nxg4 changes the position — the knight is gone, and the board opens up."
         },
         {
@@ -3231,12 +3231,12 @@
         },
         {
           "san": "Nxf6+",
-          "annotation": "Nxf6+ — this capture changes the character of the position. Be alert.",
+          "annotation": "This check forces Black's hand decisively. The knight forks king and queen on f6, winning material by force after the queen moves.",
           "shortNarration": "Nxf6+ changes the position — Black recaptures with the g-pawn, opening the g-file and weakening the king."
         },
         {
           "san": "Qxf6",
-          "annotation": "Qxf6 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black recaptures with the queen to recover the knight, but White has won the e4 pawn and Black's king remains vulnerable in the center.",
           "shortNarration": "Qxf6 changes the position — Black's king safety is now the key factor."
         },
         {

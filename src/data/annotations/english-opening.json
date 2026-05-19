@@ -2682,7 +2682,7 @@
         },
         {
           "san": "Nxf6+",
-          "annotation": "Nxf6+ — this capture changes the character of the position. Be alert.",
+          "annotation": "The knight on f6 captures with check, forcing Black to recapture and opening the e-file while weakening Black's kingside pawn shelter. White has shifted from positional pressure to concrete tactical play.",
           "shortNarration": "Nxf6+ trades a knight for a pawn, opening lines and shifting the position."
         },
         {

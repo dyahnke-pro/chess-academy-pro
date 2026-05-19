@@ -4321,7 +4321,7 @@
         },
         {
           "san": "exd4",
-          "annotation": "exd4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black's central capture on d4 abandons the d6 pawn's support, leaving it vulnerable to tactics on the long diagonal and permitting White's knight to centralize with tempo.",
           "arrows": [
             {
               "from": "e5",
@@ -4333,7 +4333,7 @@
         },
         {
           "san": "Nxd4",
-          "annotation": "Nxd4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Recapturing with the knight plants White's piece on d4, the board's strongest square, where it pressures both d6 and f5 while keeping Black's development restricted.",
           "shortNarration": "Nxd4 changes the position — Black's knight now eyes f3 and threatens discovered attacks."
         },
         {

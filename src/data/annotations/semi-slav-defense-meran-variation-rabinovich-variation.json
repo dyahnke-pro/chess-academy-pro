@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "Continuing Semi Slav Defense Meran Variation Rabinovich Variation: d4 is a known theory move in this line.",
+      "annotation": "The queen's pawn move stakes the center and opens lines for the bishop on c1 and queen on d1, establishing the positional foundation of the Meran system.",
       "shortNarration": "d4 is a known theory move in the Semi-Slav Meran Rabinovich Variation."
     },
     {
@@ -98,7 +98,7 @@
     },
     {
       "san": "cxd4",
-      "annotation": "Continuing Semi Slav Defense Meran Variation Rabinovich Variation: cxd4 is a known theory move in this line.",
+      "annotation": "Recapturing on d4 with the c-file pawn centralizes White's material while keeping the c-file open for future rook activity and maintaining pressure against Black's exposed queenside.",
       "shortNarration": "cxd4 is theory in the Meran Rabinovich, maintaining the pawn tension."
     },
     {

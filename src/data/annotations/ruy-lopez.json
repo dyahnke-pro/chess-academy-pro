@@ -4946,7 +4946,7 @@
         },
         {
           "san": "Nxe4",
-          "annotation": "Nxe4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black sacrifices the e-pawn to activate the knight on e4, attacking f2 and forcing White to reckon with piece safety rather than material count.",
           "shortNarration": "Nxe4 changes the position — the pawn is gone, and the knight now sits on e4."
         },
         {
@@ -4959,12 +4959,12 @@
         },
         {
           "san": "Bxc6",
-          "annotation": "Bxc6 — this capture changes the character of the position. Be alert.",
+          "annotation": "White eliminates Black's knight on c6, the defender of the center. This exchange clears the way for White's pawn advance and leaves Black with a damaged pawn structure.",
           "shortNarration": "Bxc6 trades a bishop for a knight, altering the pawn structure and piece dynamics."
         },
         {
           "san": "dxc6",
-          "annotation": "dxc6 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black recaptures, creating doubled c-pawns and a weakened queenside. White now has space and a superior pawn majority in the center.",
           "arrows": [
             {
               "from": "d7",
@@ -4976,7 +4976,7 @@
         },
         {
           "san": "dxe5",
-          "annotation": "dxe5 — this capture changes the character of the position. Be alert.",
+          "annotation": "White pushes through the center, dominating the d5 and e5 squares. This pawn controls the critical dark squares and cramps Black's knight.",
           "arrows": [
             {
               "from": "d4",
@@ -4992,12 +4992,12 @@
         },
         {
           "san": "Qxd8+",
-          "annotation": "Qxd8+ — this capture changes the character of the position. Be alert.",
+          "annotation": "White forces the king to move with check. Trading queens shifts the game into an endgame where White's pawn structure and piece activity offer a long-term edge.",
           "shortNarration": "Qxd8+ trades queens, simplifying into a rook endgame."
         },
         {
           "san": "Kxd8",
-          "annotation": "Kxd8 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black's king moves to d8, landing on a square attacked by White's e5 pawn. White now enjoys a clear strategic advantage with space and pawn control in a simplified endgame.",
           "arrows": [
             {
               "from": "e8",

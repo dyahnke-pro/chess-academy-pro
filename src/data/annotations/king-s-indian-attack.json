@@ -148,7 +148,7 @@
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Pushing to e4 completes the KIA setup and attacks d5, preventing Black from anchoring a knight there and forcing a choice between allowing White's spatial grip or playing d5 immediately.",
           "shortNarration": "e4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
@@ -215,7 +215,7 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black contests the center immediately with d5, forcing you to decide whether to hold the e4 pawn or allow a central exchange. This move establishes a symmetrical pawn structure typical of the Caro-Kann.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -224,7 +224,7 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black advances to e5, creating a central tension and preventing your knight from developing naturally to f3. You now face a choice: capture on e5 or maintain flexibility by retreating the pawn.",
           "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -333,7 +333,7 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black plants a second central pawn, challenging White's Nf3 and preparing to open lines. This dual control of d4 and e5 contests White's space.",
           "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -354,12 +354,12 @@
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White punches at the heart of Black's center, fixing the d5 and e5 pawns as targets. This break threatens to isolate or win material on the next move.",
           "shortNarration": "e4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black captures toward the center with tempo, forcing White to recapture and release the pressure. This counterattack keeps White from consolidating control.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
@@ -422,7 +422,7 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black advances to challenge White's e4 pawn immediately. This d5 thrust forces White to commit to a central strategy rather than preserve flexibility.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -485,7 +485,7 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Notice how the pieces coordinate in this position.",
+          "annotation": "Black strikes at e5, attacking White's knight on f3 and forcing it to make a decision. The move also opens lines for Black's rooks and bishops while maintaining central tension.",
           "arrows": [
             {
               "from": "e4",
@@ -771,7 +771,7 @@
         },
         {
           "san": "dxe4",
-          "annotation": "dxe4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black captures on e4, removing White's advanced pawn and opening the d-file where Black's queen and rook align—a critical tactical asset White must respect.",
           "arrows": [
             {
               "from": "d5",
@@ -783,7 +783,7 @@
         },
         {
           "san": "dxe4",
-          "annotation": "dxe4 — this capture changes the character of the position. Be alert.",
+          "annotation": "White recaptures, but now the d-file pressure persists; Black's queen on d8 and rook on d8 create a second-rank threat if White neglects to defend accurately.",
           "arrows": [
             {
               "from": "d3",

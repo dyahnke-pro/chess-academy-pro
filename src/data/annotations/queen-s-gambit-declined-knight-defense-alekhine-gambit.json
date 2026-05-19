@@ -13,52 +13,52 @@
     },
     {
       "san": "c4",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: c4 is a known theory move in this line.",
+      "annotation": "The gambit pawn advances, staking a claim on d5 and opening the long diagonal for the queen. This move defines White's plan to dominate the center despite being down material.",
       "shortNarration": "c4 is theory in the Queen's Gambit Declined Knight Defense Alekhine Gambit."
     },
     {
       "san": "e6",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: e6 is a known theory move in this line.",
+      "annotation": "Black solidifies the center and prevents d5 from becoming an outpost. The e6 pawn also prepares to support the d5 advance, securing Black's counterplay.",
       "shortNarration": "e6 is theory in the Queen's Gambit Declined Knight Defense Alekhine Gambit."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Nf3 is a known theory move in this line.",
+      "annotation": "White develops naturally while keeping an eye on d5. The knight also opens lines for the bishop pair and supports a potential d5 push in the future.",
       "shortNarration": "Nf3 is theory in the Queen's Gambit Declined Knight Defense Alekhine Gambit."
     },
     {
       "san": "d5",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: d5 is a known theory move in this line.",
+      "annotation": "Black strikes at the center before White consolidates. This d5 move directly challenges White's pawn duo and forces a decision about the gambit pawn's fate.",
       "shortNarration": "d5 is theory in the Queen's Gambit Declined Knight Defense Alekhine Gambit."
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Nc3 is a known theory move in this line.",
+      "annotation": "The c3 knight joins the defense of the center and prepares to recapture on d5 if needed. This move also opens b1 for the queen and solidifies White's spatial grip.",
       "shortNarration": "Nc3 is the main line in the Queen's Gambit Declined Knight Defense Alekhine Gambit."
     },
     {
       "san": "Nbd7",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Nbd7 is a known theory move in this line.",
+      "annotation": "Black develops the queenside knight to a natural square, supporting d5 and preparing to reroute if White pushes. The d7 knight also eyes e5 and c5 as future outposts.",
       "shortNarration": "Nbd7 is theory in the Queen's Gambit Declined Knight Defense Alekhine Gambit."
     },
     {
       "san": "Bg5",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Bg5 is a known theory move in this line.",
+      "annotation": "White pins the f6 knight and pressures e6, threatening to undermine Black's pawn shield. This pin forces Black to make a decision about managing the tension on the kingside.",
       "shortNarration": "Bg5 pins the knight on f6, pressuring Black's center and threatening doubled pawns."
     },
     {
       "san": "h6",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: h6 is a known theory move in this line.",
+      "annotation": "Black immediately challenges the pin before White can exploit it further. The h6 move weakens the kingside slightly but gives Black flexibility to unpin and continue development.",
       "shortNarration": "h6 is a known theory move in the Queen's Gambit Declined Knight Defense Alekhine Gambit."
     },
     {
       "san": "Bh4",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: Bh4 is a known theory move in this line.",
+      "annotation": "Retreating the bishop to h4 keeps pressure on the knight while avoiding the pin on f6. This move preserves White's fianchetto setup and prepares c5, a key pawn break in this structure.",
       "shortNarration": "Bh4 is theory in the Queen's Gambit Declined Knight Defense Alekhine Gambit."
     },
     {
       "san": "dxc4",
-      "annotation": "Continuing Queens Gambit Declined Knight Defense Alekhine Gambit: dxc4 is a known theory move in this line.",
+      "annotation": "Black captures on c4, accepting White's gambit pawn. This opens the d-file toward Black's king and allows White rapid piece activity—the hallmark of White's compensation in this line.",
       "shortNarration": "dxc4 is a known theory move in the Queen's Gambit Declined Knight Defense Alekhine Gambit."
     }
   ]

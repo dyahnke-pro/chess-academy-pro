@@ -33,27 +33,27 @@
     },
     {
       "san": "Bg2",
-      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: Bg2 is a known theory move in this line.",
+      "annotation": "The bishop fianchetto on g2 controls the long diagonal, exerting pressure on Black's center and d5-square where Black will naturally want to advance.",
       "shortNarration": "Bg2 is theory in the Neo-Grünfeld Classical Variation."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside removes the king to safety and connects White's rooks, preparing to support the central tension with the f-rook if needed.",
       "shortNarration": "O-O is the standard theory move in the Classical Variation of the Neo-Grünfeld."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: O-O is a known theory move in this line.",
+      "annotation": "Black castles kingside to match White's king safety while maintaining flexibility in the center—delaying the d5 break until White commits more pieces.",
       "shortNarration": "Neo-Grünfeld Classical: O-O is the theory move."
     },
     {
       "san": "d5",
-      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: d5 is a known theory move in this line.",
+      "annotation": "The d5 push challenges White's center immediately; Black gains space and forces White to decide whether to capture, advance, or solidify on c4.",
       "shortNarration": "d5 is the theory move in the Classical Variation of the Neo-Grünfeld Defense."
     },
     {
       "san": "c4",
-      "annotation": "Continuing Neo Gr Nfeld Defense Classical Variation: c4 is a known theory move in this line.",
+      "annotation": "Playing c4 attacks Black's d5 pawn, offering a classical pawn-tension choice: Black can exchange, advance, or retreat, each leading to distinct middlegame structures.",
       "shortNarration": "c4 is a theory move in the Neo-Grünfeld Classical Variation."
     }
   ]

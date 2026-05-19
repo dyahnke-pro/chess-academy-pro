@@ -206,7 +206,7 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White plants a pawn on d4, attacking Black's centralized knight on e5 and forcing it to make a critical decision while White's bishop on c4 bears down on f7.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
@@ -260,7 +260,7 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. We're reaching the critical position of this variation.",
+          "annotation": "Black advances to d5, challenging White's center and creating a passed pawn threat, but this also opens the long diagonal where White's bishop on c4 now has dangerous influence.",
           "arrows": [
             {
               "from": "d6",
@@ -362,7 +362,7 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White opens the d-file toward Black's king and seizes space before Black can consolidate. The d4 pawn, supported by the e4 pawn, creates a formidable pawn duo that limits Black's counterplay.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
@@ -562,7 +562,7 @@
         },
         {
           "san": "fxe5",
-          "annotation": "fxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. We're reaching the critical position of this variation.",
+          "annotation": "Capturing on e5 opens the f-file toward Black's king and eliminates Black's mobile central pawn, giving White's rooks potential along the newly opened file.",
           "arrows": [
             {
               "from": "f4",
@@ -619,12 +619,12 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black counters with a central thrust, attacking the e4 pawn and opening lines for piece development. This is the Falkbeer Countergambit—a principled rejection of the King's Gambit sacrifice.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
           "san": "exd5",
-          "annotation": "exd5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White accepts the counterattack by recapturing on d5. The resulting pawn on d5 is advanced but exposed, requiring careful play to justify the extra material commitment.",
           "arrows": [
             {
               "from": "e4",
@@ -636,7 +636,7 @@
         },
         {
           "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black strikes back at f4, creating an immediate tactical problem. White's kingside weakens as both the f-file and the long diagonal become targets for Black's pieces.",
           "shortNarration": "e4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
@@ -649,7 +649,7 @@
         },
         {
           "san": "dxe4",
-          "annotation": "dxe4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White recaptures, but Black's knight on f6 pressures the center and eyes d4. This position rewards Black's active piece placement over White's extra space.",
           "arrows": [
             {
               "from": "d3",
@@ -892,7 +892,7 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White pushes d4 to open lines and seize space before Black consolidates around the exposed king. This break exploits the weakened kingside and prevents Black's queen from defending both flanks.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
         },
         {
@@ -2032,7 +2032,7 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Be alert — a mistake in this position would be very costly.",
+          "annotation": "Black's d5 strike challenges your e4 pawn and opens the long diagonal toward your king—a concrete threat you must address immediately in this sharp, opposite-flanks attack.",
           "shortNarration": "d5 stakes a central claim, controlling space and restricting piece activity — a mistake here is costly."
         },
         {
@@ -2169,7 +2169,7 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Be alert — a mistake in this position would be very costly.",
+          "annotation": "White plants a pawn on d4, establishing a classical two-pawn center and gaining space to support the knight on f3. Black's light-squared bishop on f8 now faces a cramped diagonal.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's pieces — a mistake here is costly."
         },
         {
@@ -2318,7 +2318,7 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Be alert — a mistake in this position would be very costly.",
+          "annotation": "Black counterattacks the center immediately with d5, challenging your e4 pawn before you can consolidate. This forces you to decide whether to defend, exchange, or advance.",
           "shortNarration": "d5 stakes a central claim — a mistake here is costly as pawns control space and restrict piece activity."
         },
         {
@@ -2380,7 +2380,7 @@
         },
         {
           "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Be alert — a mistake in this position would be very costly.",
+          "annotation": "Pushing d4 establishes a strong pawn duo and opens the long diagonal for your bishop on c1. This advance pressures Black's knight on d5 and gains space in the middle.",
           "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's pieces."
         },
         {
@@ -2438,7 +2438,7 @@
         },
         {
           "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Be alert — a mistake in this position would be very costly.",
+          "annotation": "Your d5 pawn is now a deep, passed pawn threatening to advance further. Black's pieces lack effective coordination to stop or blockade it, giving you a powerful spatial advantage.",
           "shortNarration": "d5 stakes a central claim — a mistake here would be costly."
         },
         {

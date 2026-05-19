@@ -23,27 +23,27 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: Nc3 is a known theory move in this line.",
+      "annotation": "The knight settles on c3, supporting the d4 pawn and preparing to reroute toward e2 or g4 depending on Black's setup.",
       "shortNarration": "Nc3 is the standard theory move in the Pirc Classical Schlechter Variation."
     },
     {
       "san": "g6",
-      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: g6 is a known theory move in this line.",
+      "annotation": "Black fianchettoes the kingside bishop, preparing to aim it along the long diagonal and control key central squares from afar.",
       "shortNarration": "g6 is theory in the Pirc Classical Schlechter Variation."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: Nf3 is a known theory move in this line.",
+      "annotation": "White places the knight on f3, reinforcing d4 and keeping options open to support a kingside attack or advance e5 later.",
       "shortNarration": "Nf3 is the Schlechter Variation of the Pirc Defense Classical line."
     },
     {
       "san": "Bg7",
-      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: Bg7 is a known theory move in this line.",
+      "annotation": "The bishop completes Black's fianchetto setup, now exerting pressure on the long diagonal and eyeing White's potentially weak light squares.",
       "shortNarration": "Bg7 is theory in the Pirc Classical Schlechter Variation."
     },
     {
       "san": "h3",
-      "annotation": "Continuing Pirc Defense Classical Variation Schlechter Variation: h3 is a known theory move in this line.",
+      "annotation": "A prophylactic move that prevents Black's knight from jumping to g4 and prepares to secure g3 for the bishop or knight later.",
       "shortNarration": "h3 prevents Ng4 and prepares g4 to gain space on the kingside."
     }
   ]

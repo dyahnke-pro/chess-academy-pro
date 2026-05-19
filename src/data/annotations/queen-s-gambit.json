@@ -5913,7 +5913,7 @@
         },
         {
           "san": "dxc4",
-          "annotation": "dxc4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black captures on c4, accepting a loose pawn that White can pressure with moves like e3 and Bxc4, shifting to a race between Black's piece activity and White's central control.",
           "arrows": [
             {
               "from": "d5",
@@ -5949,7 +5949,7 @@
         },
         {
           "san": "Bxc4",
-          "annotation": "Bxc4 — this capture changes the character of the position. Be alert.",
+          "annotation": "White recaptures on c4 with the bishop, establishing a powerful diagonal toward f7 while Black's kingside remains underdeveloped—this bishop becomes the long-term asset in the resulting endgame structure.",
           "shortNarration": "Bxc4 changes the position — the bishop now eyes f7 and the queen's diagonal opens."
         },
         {

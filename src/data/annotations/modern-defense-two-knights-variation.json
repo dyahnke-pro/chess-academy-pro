@@ -23,17 +23,17 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Modern Defense Two Knights Variation: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 supports the d4 pawn and prepares to contest the long diagonal where Black's fianchettoed bishop bears down. This centralization opens lines for White's pieces.",
       "shortNarration": "Nc3 is theory in the Modern Defense Two Knights Variation."
     },
     {
       "san": "d6",
-      "annotation": "Continuing Modern Defense Two Knights Variation: d6 is a known theory move in this line.",
+      "annotation": "Black props up e5 with d6, stabilizing the center against White's space advantage. This solid setup lets Black prepare queenside counterplay without immediate tactical concessions.",
       "shortNarration": "d6 is theory in the Modern Defense Two Knights Variation."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Modern Defense Two Knights Variation: Nf3 is a known theory move in this line.",
+      "annotation": "Nf3 completes White's opening setup by controlling e5 and d4 simultaneously. The knight eyes d5, a key outpost if Black's center weakens later.",
       "shortNarration": "Nf3 is a theory move in the Modern Defense Two Knights Variation."
     }
   ]

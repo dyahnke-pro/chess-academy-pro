@@ -13,7 +13,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Sicilian Defense: Nf3 is a known theory move in this line.",
+      "annotation": "The knight controls d4 and e5, the critical central squares Black contests in the Sicilian. This move prepares d4, White's main strategic thrust.",
       "shortNarration": "Nf3 develops and attacks d4, a key Sicilian move."
     }
   ],
@@ -34,22 +34,22 @@
         },
         {
           "san": "Nf3",
-          "annotation": "Continuing Sicilian Defense: Nf3 is a known theory move in this line.",
+          "annotation": "Nf3 supports the e4 pawn and prepares d4, the key central break that transforms White's space advantage into concrete piece play.",
           "shortNarration": "Nf3 develops and attacks d4, a key Sicilian move."
         },
         {
           "san": "d6",
-          "annotation": "Continuing Sicilian Defense: d6 is a known theory move in this line.",
+          "annotation": "Black solidifies the d6 square before playing the typical ...e6, preventing White from later occupying d6 with a knight and keeping the d-file closed.",
           "shortNarration": "d6 is a standard Sicilian move, preparing a kingside fianchetto or e5 break."
         },
         {
           "san": "d4",
-          "annotation": "Continuing Sicilian Defense: d4 is a known theory move in this line.",
+          "annotation": "d4 strikes at Black's c5 outpost and forces an immediate choice: allowing White's center or conceding space by capturing on d4.",
           "shortNarration": "d4 is the standard Sicilian break, opening the center for piece play."
         },
         {
           "san": "cxd4",
-          "annotation": "Continuing Sicilian Defense: cxd4 is a known theory move in this line.",
+          "annotation": "Capturing with the c-pawn opens the c-file for Black's rook and avoids leaving a weak pawn on d4, which would become a long-term target.",
           "shortNarration": "cxd4 is the theoretical recapture in this Sicilian line."
         }
       ]

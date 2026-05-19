@@ -23,27 +23,27 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: Nc3 is a known theory move in this line.",
+      "annotation": "The knight controls d5 and e4, preventing Black from pushing the center pawn and seizing critical squares in the middlegame.",
       "shortNarration": "Nc3 is theory in the Pterodactyl Sicilian Siroccopteryx."
     },
     {
       "san": "c5",
-      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: c5 is a known theory move in this line.",
+      "annotation": "Black strikes at the center's weak point immediately, attacking d4 and forcing White to clarify the pawn tension early.",
       "shortNarration": "c5 is the Pterodactyl Defense Sicilian Siroccopteryx move, challenging e4 and entering sharp theory."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: Nf3 is a known theory move in this line.",
+      "annotation": "Completing development while keeping d5 blockaded, Nf3 supports the d4 pawn and prepares to castle before Black can create threats.",
       "shortNarration": "Nf3 is the theory move in the Siroccopteryx Pterodactyl Defense."
     },
     {
       "san": "Qa5",
-      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: Qa5 is a known theory move in this line.",
+      "annotation": "The queen move to the rim pins the Nc3 to the king, pressuring White's coordination and threatening tactical complications if the knight shifts.",
       "shortNarration": "In the Pterodactyl Sicilian Siroccopteryx, Qa5 is the theoretical move."
     },
     {
       "san": "Bc4",
-      "annotation": "Continuing Pterodactyl Defense Sicilian Siroccopteryx: Bc4 is a known theory move in this line.",
+      "annotation": "The bishop targets f7, Black's softest square, and secures kingside attacking chances while maintaining pressure on Black's position.",
       "shortNarration": "Bc4 is theory in the Pterodactyl Defense Siroccopteryx, targeting f7 and pressuring Black's kingside."
     }
   ]

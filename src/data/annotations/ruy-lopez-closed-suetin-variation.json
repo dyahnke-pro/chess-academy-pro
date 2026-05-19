@@ -73,17 +73,17 @@
     },
     {
       "san": "c3",
-      "annotation": "Continuing Ruy Lopez Closed Suetin Variation: c3 is a known theory move in this line.",
+      "annotation": "White reinforces the center and prepares to advance d4 without allowing Black counterplay on c3. This prophylactic move blocks Black's natural queenside expansion.",
       "shortNarration": "c3 is theory in the Ruy Lopez Closed Suetin, preparing d4 to challenge Black's center."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Ruy Lopez Closed Suetin Variation: O-O is a known theory move in this line.",
+      "annotation": "Black castles kingside to secure the king before White's central breakthrough. This move completes Black's setup and prepares to reposition the knight from f6.",
       "shortNarration": "O-O is the theory move in the Ruy Lopez Closed Suetin Variation."
     },
     {
       "san": "a3",
-      "annotation": "Continuing Ruy Lopez Closed Suetin Variation: a3 is a known theory move in this line.",
+      "annotation": "White prevents Black's pawn from reaching a3 and fixes Black's queenside pawns. The move prepares b4 to gain space and open lines on the queenside.",
       "shortNarration": "a3 is a standard Ruy Lopez Closed Suetin move, preparing to retreat the bishop and maintain the pin."
     }
   ]

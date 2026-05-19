@@ -555,7 +555,7 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Pushing to e5 seizes space and prevents Black's bishop on f2 from retreating to safety via e3 or d4, keeping White's initiative alive despite the material deficit.",
           "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -754,7 +754,7 @@
         },
         {
           "san": "dxe4",
-          "annotation": "dxe4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black recaptures toward the center, but White's e4 pawn now stands alone and advanced—a potential target if Black cannot generate enough counterplay.",
           "arrows": [
             {
               "from": "d3",
@@ -770,7 +770,7 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "White pushes e5, seizing space and cutting off Black's bishop on c5 from retreating to e7. This gain of ground supports the upcoming kingside assault.",
           "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -1044,7 +1044,7 @@
         },
         {
           "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Pushing the e-pawn to e5 establishes a powerful advanced outpost that cramps Black's pieces, especially the knight on f6, while keeping central space under White's control.",
           "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
         },
         {
@@ -1061,7 +1061,7 @@
         },
         {
           "san": "dxe4",
-          "annotation": "dxe4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "annotation": "Black recaptures on e4, but this leaves the c6 pawn isolated and the d-file half-open—White's pieces will have better access to pressure Black's kingside and center.",
           "arrows": [
             {
               "from": "d3",
@@ -2047,7 +2047,7 @@
         },
         {
           "san": "Nxe5",
-          "annotation": "Nxe5 — this capture changes the character of the position. Be alert.",
+          "annotation": "White seizes the e5 pawn with tempo, forcing Black to respond to the knight threat while White retains space in the center.",
           "shortNarration": "Nxe5 changes the position — the knight now threatens a fork on f7."
         },
         {
@@ -2056,12 +2056,12 @@
         },
         {
           "san": "Nxc6",
-          "annotation": "Nxc6 — this capture changes the character of the position. Be alert.",
+          "annotation": "White forks the queen and f7 weakness, exploiting Black's undefended queenside pieces and gaining material advantage.",
           "shortNarration": "Nxc6 wins a pawn and leaves Black with doubled c-pawns."
         },
         {
           "san": "dxc6",
-          "annotation": "dxc6 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black recaptures toward the center, but the doubled c-pawns weaken the dark squares and leave Black's king safety compromised.",
           "arrows": [
             {
               "from": "d7",
@@ -2105,12 +2105,12 @@
         },
         {
           "san": "Bxg4",
-          "annotation": "Bxg4 — this capture changes the character of the position. Be alert.",
+          "annotation": "White's bishop captures on g4, removing Black's fianchettoed bishop and opening the h-file toward Black's king.",
           "shortNarration": "Bxg4 sacrifices the bishop to open the h-file for a mating attack."
         },
         {
           "san": "hxg4",
-          "annotation": "hxg4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black recaptures with the h-pawn, but this move shatters kingside pawn shelter and exposes the g-file dangerously.",
           "arrows": [
             {
               "from": "h5",
@@ -2122,12 +2122,12 @@
         },
         {
           "san": "Qxg4",
-          "annotation": "Qxg4 — this capture changes the character of the position. Be alert.",
+          "annotation": "White's queen seizes the g4 square with menace, pinning the bishop on g4 while aiming directly at Black's exposed king.",
           "shortNarration": "Qxg4 wins the knight, changing the position's character."
         },
         {
           "san": "Bxg4",
-          "annotation": "Bxg4 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black's bishop recaptures, but White maintains overwhelming pressure on the light squares and g-file with superior piece coordination.",
           "shortNarration": "Bxg4 changes the position — the bishop pair is gone, and Black's king is now exposed."
         },
         {
@@ -2198,7 +2198,7 @@
         },
         {
           "san": "Nxe5",
-          "annotation": "Nxe5 — this capture changes the character of the position. Be alert.",
+          "annotation": "White's knight seizes the central pawn, but this aggressive grab leaves the knight on e5 exposed to harassment—Black's knight on f6 and queen both eye it immediately.",
           "shortNarration": "Nxe5 changes the position — White wins a pawn but opens lines for Black's pieces."
         },
         {
@@ -2207,12 +2207,12 @@
         },
         {
           "san": "Nxc6",
-          "annotation": "Nxc6 — this capture changes the character of the position. Be alert.",
+          "annotation": "White eliminates Black's knight, but the recapture will damage Black's pawn structure decisively, giving White a long-term advantage in the resulting position.",
           "shortNarration": "Nxc6 changes the position — White trades a knight for a pawn, opening the b-file and leaving Black's queenside pawns doubled."
         },
         {
           "san": "dxc6",
-          "annotation": "dxc6 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black recaptures with the d-pawn, creating a doubled c-pawn that will become a chronic weakness and limit Black's piece mobility throughout the middlegame.",
           "arrows": [
             {
               "from": "d7",
@@ -2284,17 +2284,17 @@
         },
         {
           "san": "Bxf2+",
-          "annotation": "Bxf2+ — this capture changes the character of the position. Be alert.",
+          "annotation": "Black's bishop sacrifices itself on f2 with check, forcing White's king to move and allowing Black counterplay—but White's pieces are too coordinated to let this tactic survive.",
           "shortNarration": "Bxf2+ sacrifices the bishop to expose the king and open lines."
         },
         {
           "san": "Bxf2",
-          "annotation": "Bxf2 — this capture changes the character of the position. Be alert.",
+          "annotation": "White recaptures the bishop, consolidating material and removing Black's most active piece while keeping the king safe on g1.",
           "shortNarration": "Bxf2 wins a pawn and threatens the rook, forcing a recapture."
         },
         {
           "san": "cxd5",
-          "annotation": "cxd5 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black captures the d5 pawn, but White's pawn is replaced by an even stronger one, and Black's center collapses under White's spatial advantage.",
           "arrows": [
             {
               "from": "c6",
@@ -2306,7 +2306,7 @@
         },
         {
           "san": "exd5",
-          "annotation": "exd5 — this capture changes the character of the position. Be alert.",
+          "annotation": "White recaptures with the e-pawn, positioning a far-advanced passed pawn on d5 that Black cannot blockade and Black's pieces cannot dislodge—the decisive breakthrough.",
           "arrows": [
             {
               "from": "e4",
@@ -2322,12 +2322,12 @@
         },
         {
           "san": "Bxf3",
-          "annotation": "Bxf3 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black exchanges the bishop for White's f3 bishop in desperation, but this only simplifies toward an endgame where White's d5 pawn is unstoppable.",
           "shortNarration": "Bxf3 trades a bishop for a knight, altering the pawn structure and piece dynamics."
         },
         {
           "san": "Qxd5",
-          "annotation": "Qxd5 — this capture changes the character of the position. Be alert.",
+          "annotation": "White recaptures on d5, centralizing the queen and exploiting Black's exposed back rank—the rook on e8 and undefended pieces create tactical vulnerabilities White can now hunt.",
           "shortNarration": "Qxd5 wins a pawn."
         },
         {
@@ -2367,7 +2367,7 @@
         },
         {
           "san": "Nxe5",
-          "annotation": "Nxe5 — this capture changes the character of the position. Be alert.",
+          "annotation": "White seizes the central pawn and activates the knight to e5, a powerful outpost where it pressures Black's pieces and controls critical squares.",
           "shortNarration": "Nxe5 changes the position — the knight now attacks f7 and threatens the queen."
         },
         {
@@ -2376,12 +2376,12 @@
         },
         {
           "san": "Nxc6",
-          "annotation": "Nxc6 — this capture changes the character of the position. Be alert.",
+          "annotation": "The knight strikes at c6, removing Black's defender and forcing Black to recapture with the d-pawn, which weakens the queenside structure.",
           "shortNarration": "Nxc6 trades a knight for a pawn, changing the position's character."
         },
         {
           "san": "dxc6",
-          "annotation": "dxc6 — this capture changes the character of the position. Be alert.",
+          "annotation": "Black recaptures with the d-pawn, creating a doubled c-pawn and leaving the d-file exposed for White's rooks and queen.",
           "arrows": [
             {
               "from": "d7",
@@ -2429,7 +2429,7 @@
         },
         {
           "san": "Qxd5",
-          "annotation": "Qxd5 — this capture changes the character of the position. Be alert.",
+          "annotation": "White's queen captures on d5, centralizing with tempo and forcing Black's knight to abandon defense of critical squares.",
           "shortNarration": "Qxd5 wins a pawn but opens the d-file for Black's rook."
         },
         {
@@ -2438,12 +2438,12 @@
         },
         {
           "san": "Qxg2+",
-          "annotation": "Qxg2+ — this capture changes the character of the position. Be alert.",
+          "annotation": "Black's queen checks from g2, threatening immediate mate on g1 and forcing White's king into the open where it becomes a target.",
           "shortNarration": "Qxg2+ wins a pawn and forces the king to move."
         },
         {
           "san": "Kxg2",
-          "annotation": "Kxg2 — this capture changes the character of the position. Be alert.",
+          "annotation": "The king must move to g2, placing it on an exposed square surrounded by Black's attacking pieces with no safe retreat.",
           "arrows": [
             {
               "from": "g1",
@@ -2459,7 +2459,7 @@
         },
         {
           "san": "Bxf4",
-          "annotation": "Bxf4 — this capture changes the character of the position. Be alert.",
+          "annotation": "White's light-squared bishop captures on f4, reducing Black's attacking potential and preparing to defend the exposed king.",
           "shortNarration": "Bxf4 captures the pawn, altering the position's dynamics."
         },
         {
@@ -2468,7 +2468,7 @@
         },
         {
           "san": "Kxh3",
-          "annotation": "Kxh3 — this capture changes the character of the position. Be alert.",
+          "annotation": "The king captures on h3, stepping away from immediate threats but remaining far from safety while Black's pieces coordinate for the kill.",
           "arrows": [
             {
               "from": "g2",
@@ -2484,12 +2484,12 @@
         },
         {
           "san": "Bxf7+",
-          "annotation": "Bxf7+ — this capture changes the character of the position. Be alert.",
+          "annotation": "The bishop sacrifice on f7 forces the king into the open; Black's king must capture, abandoning kingside safety for the endgame ahead.",
           "shortNarration": "Bxf7+ sacrifices a bishop for a pawn, exposing the black king and opening lines for White's attack."
         },
         {
           "san": "Kxf7",
-          "annotation": "Kxf7 — this capture changes the character of the position. Be alert.",
+          "annotation": "White's rooks and queen now dominate Black's exposed king on f7, which cannot return to shelter—the pawn on e5 controls escape squares.",
           "arrows": [
             {
               "from": "e8",

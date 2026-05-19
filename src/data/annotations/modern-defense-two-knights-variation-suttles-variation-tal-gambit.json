@@ -23,42 +23,42 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Nc3 is a known theory move in this line.",
+      "annotation": "The knight supports the d4 pawn and prepares to reroute to e2 or d5 depending on Black's setup, controlling key central squares.",
       "shortNarration": "Nc3 is the book move in the Tal Gambit of the Modern Defense Two Knights Variation."
     },
     {
       "san": "d6",
-      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: d6 is a known theory move in this line.",
+      "annotation": "Black establishes a solid pawn on d6, supporting the fianchettoed bishop and keeping White's center from expanding further.",
       "shortNarration": "d6 is theory in the Modern Defense Two Knights Variation Suttles Variation Tal Gambit."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Nf3 is a known theory move in this line.",
+      "annotation": "Completing the knight pair on f3 attacks the e5 square and prepares castling while maintaining flexible piece placement.",
       "shortNarration": "Nf3 is theory in the Modern Defense Two Knights Variation Suttles Variation Tal Gambit."
     },
     {
       "san": "c6",
-      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: c6 is a known theory move in this line.",
+      "annotation": "The c6 pawn props up d5 and prevents White's knight from landing there, restricting White's space advantage.",
       "shortNarration": "c6 is theory in the Modern Defense Two Knights Variation Suttles Variation Tal Gambit."
     },
     {
       "san": "Bg5",
-      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Bg5 is a known theory move in this line.",
+      "annotation": "The bishop targets the c1–h6 diagonal, pinning a future knight on f6 and adding pressure toward the kingside.",
       "shortNarration": "Bg5 is theory in the Modern Defense Two Knights Suttles Tal Gambit."
     },
     {
       "san": "Qb6",
-      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Qb6 is a known theory move in this line.",
+      "annotation": "Black's queen attacks b2 and threatens White's queenside structure, forcing White to address the pin on the long diagonal.",
       "shortNarration": "Qb6 is theory in the Tal Gambit, Modern Defense Two Knights Variation Suttles Variation."
     },
     {
       "san": "Qd2",
-      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Qd2 is a known theory move in this line.",
+      "annotation": "Defending b2 and preparing to reroute the queen, White sidesteps the capture threat while keeping central control intact.",
       "shortNarration": "Qd2 is theory in the Tal Gambit, preparing to castle queenside and attack."
     },
     {
       "san": "Qxb2",
-      "annotation": "Continuing Modern Defense Two Knights Variation Suttles Variation Tal Gambit: Qxb2 is a known theory move in this line.",
+      "annotation": "Black seizes the loose pawn on b2, exploiting White's commitment to the center and winning material in the opening.",
       "shortNarration": "Qxb2 is theory in the Tal Gambit, sacrificing a pawn for rapid development and open lines."
     }
   ]

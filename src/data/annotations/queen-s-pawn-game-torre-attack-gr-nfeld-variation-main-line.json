@@ -48,7 +48,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Queens Pawn Game Torre Attack Gr Nfeld Variation Main Line: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside secures the king before the center opens. This move prepares to reroute the knight from d2 to c4, where it pressures e5 and d6.",
       "shortNarration": "O-O is the main line in the Torre Attack Grünfeld Variation."
     }
   ]
