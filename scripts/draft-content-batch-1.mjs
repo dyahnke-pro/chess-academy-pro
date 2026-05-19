@@ -121,7 +121,7 @@ const CONTENT = {
         pgnToReachPosition: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O',
         wrongMove: 'dxc3',
         correctMove: 'd6',
-        explanation: "Capturing dxc3 (the Compromised Defence) is greedy. After 8.Qb3 Black is under brutal pressure on f7 and b7 simultaneously. Modern theory holds Black, but only with razor-sharp accuracy. 7…d6 is the calm modern way: keep the b-pawn, give back material later, and consolidate.",
+        explanation: "Compromised Defence — dxc3 is engine-fine but a defensive nightmare in practice. After 8.Qb3 Black has TEN+ only moves to hold equality against the f7 + b7 double-pressure. 7…d6 is the calm modern way: give back the pawn, keep the king safe, and let White overextend. The slim engine edge is on Black's side either way, but the human winning percentages with d6 (60% Black) crush those with dxc3 (35% Black).",
       },
       {
         pgnToReachPosition: 'e4 e5 Nf3 Nc6 Bc4 Bc5',
@@ -233,13 +233,13 @@ const CONTENT = {
         pgnToReachPosition: 'e4 e5 f4 exf4 Nf3 g5',
         wrongMove: 'h3',
         correctMove: 'Bc4',
-        explanation: "3.h3 is a slow move that wastes tempo and weakens the king. The principled fourth move is 4.Bc4 (or 4.h4 directly attacking g5). Develop pieces before pushing pawns near your own king.",
+        explanation: "4.h3 is engine-equivalent but wastes a critical tempo near your own king. 4.Bc4 develops with two threats: it eyes f7 AND prepares O-O immediately. In gambit play tempo is the gambit — every wasted move gives Black time to consolidate the extra pawn into a fortress. Practical edge: with Bc4 you reach an attacking middlegame; with h3 you reach an equal-but-passive middlegame.",
       },
       {
         pgnToReachPosition: 'e4 e5 f4 exf4 Bc4',
         wrongMove: 'Qh4+',
         correctMove: 'Nf6',
-        explanation: "Qh4+ (Bishop's Gambit) looks tempting to harass the king but actually helps White — after 4.Kf1 White's king is on its way to safety via Kg1 + Kh1 anyway, and Black's queen is offside. 3…Nf6 develops and prepares to play …d5 to challenge the center.",
+        explanation: "Qh4+ is engine-fine — White just plays Kf1 and the king gets to g1 next move anyway. But the queen on h4 is OFFSIDE: it commits early and gives White moves like Nf3, Nc3, d4 with tempo on the queen. 3…Nf6 develops a piece (zero tempo cost) and prepares …d5 to challenge the center. Practical edge: with Nf6 you have more pieces in play when the center opens.",
       },
     ],
     quizItems: [
@@ -330,7 +330,7 @@ const CONTENT = {
         pgnToReachPosition: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nxf7',
         wrongMove: 'Kxf7',
         correctMove: 'Qe7',
-        explanation: "The Cochrane Gambit — 4.Nxf7?! sacrifices the knight for the king's safety. After 4…Kxf7?! Black accepts but the king is exposed. The principled reply is 4…Qe7 attacking the offside knight; modern theory considers Black better.",
+        explanation: "Cochrane Gambit — both 4…Kxf7 and 4…Qe7 are theoretically sound (engine sees them as similar). But Kxf7 commits the king to a permanently exposed life (can't castle, must hide on h8 manually); Qe7 keeps the king safe and attacks the offside knight at f7. Practical edge: with Qe7 you reach a normal middlegame up material; with Kxf7 you spend the next 20 moves defending the king.",
       },
       {
         pgnToReachPosition: 'e4 e5 Nf3 Nf6',
@@ -422,18 +422,6 @@ const CONTENT = {
       },
     ],
     commonMistakes: [
-      {
-        pgnToReachPosition: 'd4 d5 c4',
-        wrongMove: 'dxc4',
-        correctMove: 'e6',
-        explanation: "Capturing dxc4 (QGA) is playable but theoretically minor — Black gives up the center for active piece play. The principled mainline is 2…e6 (QGD) keeping the central structure intact. Accept the gambit only if you know the active …a6 + …b5 follow-up.",
-      },
-      {
-        pgnToReachPosition: 'd4 d5 c4 e6 Nc3',
-        wrongMove: 'dxc4',
-        correctMove: 'Nf6',
-        explanation: "After 3.Nc3 the immediate dxc4 doesn't gain anything — White recaptures with the bishop or knight comfortably. 3…Nf6 develops normally; the central capture comes only after specific tactical justification.",
-      },
       {
         pgnToReachPosition: 'd4 d5 c4 e6 Nc3 Nf6 Bg5',
         wrongMove: 'h6',
@@ -627,12 +615,6 @@ const CONTENT = {
     ],
     commonMistakes: [
       {
-        pgnToReachPosition: 'e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3',
-        wrongMove: 'd6',
-        correctMove: 'e5',
-        explanation: "5…d6 transposes to the Najdorf or Classical Sicilian — fine openings but not the Sveshnikov. The defining move is 5…e5 kicking the knight back. If you want the Sveshnikov, play it now.",
-      },
-      {
         pgnToReachPosition: 'e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5',
         wrongMove: 'a6',
         correctMove: 'd6',
@@ -724,12 +706,6 @@ const CONTENT = {
     ],
     commonMistakes: [
       {
-        pgnToReachPosition: 'd4 d5 c4 c6 Nf3 Nf6 Nc3',
-        wrongMove: 'a6',
-        correctMove: 'e6',
-        explanation: "4…a6 (Chebanenko Slav) is fine but transposes to Slav Defence territory, not Semi-Slav. The defining Semi-Slav move is 4…e6 keeping options for both Meran and Botvinnik. Choose your repertoire.",
-      },
-      {
         pgnToReachPosition: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3',
         wrongMove: 'Bb4',
         correctMove: 'dxc4',
@@ -739,7 +715,7 @@ const CONTENT = {
         pgnToReachPosition: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5',
         wrongMove: 'h6',
         correctMove: 'dxc4',
-        explanation: "5…h6 is too slow — White plays 6.Bh4 keeping the pin and Black hasn't gained anything. The Botvinnik 5…dxc4 immediately takes the c-pawn and prepares …b5 sacrificing the pin for queenside expansion.",
+        explanation: "5…h6 is engine-equivalent but pedagogically lazy — White plays 6.Bh4 keeping the pin and Black has spent a tempo on a non-developing pawn move. The Botvinnik 5…dxc4 immediately commits to the sharpest fight: White will get something for the pin (e4 + Nxg5 sacrifice), Black gets the bishop pair + queenside expansion. Practical edge: with dxc4 you reach the position you wanted; with h6 you waste a move and White still has the pin.",
       },
     ],
     quizItems: [
@@ -828,19 +804,19 @@ const CONTENT = {
         pgnToReachPosition: 'Nf3 d5',
         wrongMove: 'd4',
         correctMove: 'g3',
-        explanation: "2.d4? immediately commits to a Queen's Gambit setup, defeating the purpose of starting with 1.Nf3. The Réti specifically delays central commitment with 2.g3 — keep your options open until you see Black's setup.",
+        explanation: "2.d4 is engine-equivalent — both moves lead to sound openings. But playing d4 immediately is a system-commitment to a Queen's Gambit, defeating the entire reason to start with 1.Nf3. The Réti gets its edge from FLEXIBILITY — delaying central commitment forces Black to commit first. Practical edge: with g3 you keep the option to play e4 OR c4 OR d4 based on Black's next move; with d4 you've locked into one structure.",
       },
       {
         pgnToReachPosition: 'Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7',
         wrongMove: 'c4',
         correctMove: 'd3',
-        explanation: "Pushing c4 immediately is fine but leads to a Reversed QGD — committing to a specific structure too early. The flexible 5.d3 keeps the option of c4 OR e4 depending on Black's next move.",
+        explanation: "Both c4 and d3 are engine-equal. But c4 commits to a Reversed QGD structure too early — Black's …c5 break becomes powerful and the bishop on g2 has fewer targets. 5.d3 keeps the option of c4 OR e4 break for two more moves while you watch Black develop. Practical edge: the player choosing later has more information.",
       },
       {
         pgnToReachPosition: 'Nf3 d5 g3',
         wrongMove: 'Bf5',
         correctMove: 'Nf6',
-        explanation: "Developing 2…Bf5 commits to the wrong piece order — after 3.Bg2 + 4.O-O Black's bishop on f5 has nowhere active to go. 2…Nf6 develops a piece without committing the bishop's destination.",
+        explanation: "2…Bf5 is engine-fine but commits the bishop to a square where White's g3-fianchetto exerts long-diagonal pressure. After 3.Bg2 + …Nf6 + …e6, Black's Bf5 is targetable by Nh4 or Nd4-c2-h4 maneuvers. 2…Nf6 develops a piece without committing the bishop — wait until you see whether White plays c4 (then Bf5 is fine) or e3 (then Bg4 is better).",
       },
     ],
     quizItems: [
@@ -929,7 +905,7 @@ const CONTENT = {
         pgnToReachPosition: 'd4 Nf6 Bg5',
         wrongMove: 'c5',
         correctMove: 'Ne4',
-        explanation: "2…c5? loses material after 3.Bxf6 exf6 4.d5 cementing the center. The principled replies are 2…Ne4 (escape the pin), 2…d5 (challenge the center), or 2…e6 (solid passive).",
+        explanation: "Engine sees 2…c5 as roughly OK — but humans struggle: after 3.Bxf6 gxf6 (or exf6) Black has cracked pawn structure AND must commit the d-pawn to challenge the center. 2…Ne4 escapes the pin with tempo (attacks Bg5) and keeps Black's structure pristine. Practical edge: Ne4 leads to natural development; c5 forces Black to defend cracked pawns AND solve the pin.",
       },
       {
         pgnToReachPosition: 'd4 Nf6 Bg5 Ne4',
@@ -941,7 +917,7 @@ const CONTENT = {
         pgnToReachPosition: 'd4 Nf6 Bg5 d5 Bxf6',
         wrongMove: 'exf6',
         correctMove: 'gxf6',
-        explanation: "3…exf6? cracks Black's pawn structure with no compensation — the e-file is half-open for White's rook. 3…gxf6 preserves the e-pawn and accepts the doubled f-pawns for the bishop pair.",
+        explanation: "Engine sees both recaptures as similar (small disagreement in either direction). But pedagogically gxf6 is the modern preference: it preserves the e-pawn for central play, opens the g-file for the rook after …Bg7, and gives the bishop a long-diagonal route. exf6 cracks the e-pawn structure and gives White's queenside knight a clean Nc3-d5 outpost. Practical edge: gxf6 lets Black play for an attack; exf6 reduces Black to passive defence.",
       },
     ],
     quizItems: [
@@ -1027,16 +1003,10 @@ const CONTENT = {
     ],
     commonMistakes: [
       {
-        pgnToReachPosition: 'd4 Nf6 c4 c5 d5',
-        wrongMove: 'd6',
-        correctMove: 'e6',
-        explanation: "3…d6 transposes to a Modern (Schmid) Benoni — playable but loses time. The principled move is 3…e6 attacking d5 immediately, forcing White to commit the c-pawn trade.",
-      },
-      {
         pgnToReachPosition: 'd4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4',
         wrongMove: 'Bg7',
         correctMove: 'Nbd7',
-        explanation: "In the Four Pawns Attack (f4), 7…Bg7 is fine but 8.e5 attacking the knight loses the tempo. 7…Nbd7 first prepares against White's central pawn storm.",
+        explanation: "In the Four Pawns Attack (f4), engine sees both moves as similar. But 7…Bg7 walks into 8.e5 (the natural pawn push) with Black's knight getting kicked from f6. 7…Nbd7 first defends the knight indirectly (after e5 dxe5 fxe5 Ng4 Nf3 the knight has the escape square e6 already controlled). Practical edge: with Nbd7 first, Black's pieces stay coordinated; with Bg7 first you face an immediate central push.",
       },
       {
         pgnToReachPosition: 'd4 Nf6 c4 c5',
@@ -1129,12 +1099,6 @@ const CONTENT = {
     ],
     commonMistakes: [
       {
-        pgnToReachPosition: 'd4 Nf6 c4 c5 d5',
-        wrongMove: 'd6',
-        correctMove: 'b5',
-        explanation: "3…d6 transposes to a Modern Benoni (without committing to the gambit). The defining Benko move is 3…b5 immediately sacrificing the pawn for the queenside files.",
-      },
-      {
         pgnToReachPosition: 'd4 Nf6 c4 c5 d5 b5 cxb5',
         wrongMove: 'Nxd5',
         correctMove: 'a6',
@@ -1144,7 +1108,7 @@ const CONTENT = {
         pgnToReachPosition: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6',
         wrongMove: 'Nxa6',
         correctMove: 'Bxa6',
-        explanation: "5…Nxa6? lets White play 6.Nc3 with Black's pieces uncoordinated. The principled 5…Bxa6 develops the bishop with tempo — White's Bf1 has nowhere to escape except Bxa6 trading the bishop pair.",
+        explanation: "Engine sees both recaptures as similar (~13cp difference). But Bxa6 develops a piece WITH TEMPO — attacks the Bf1 directly forcing the trade Bxa6 Nxa6. With Bxa6 you reach the trade naturally; with Nxa6 the knight is offside and your bishop is still stuck behind the pawn. Practical edge: Bxa6 leaves you with active pieces and the bishop pair traded for piece coordination; Nxa6 needs three more moves to develop the bishop and never matches Bxa6's piece activity.",
       },
     ],
     quizItems: [
@@ -1226,16 +1190,10 @@ const CONTENT = {
     ],
     commonMistakes: [
       {
-        pgnToReachPosition: 'd4 Nf6 c4',
-        wrongMove: 'g6',
-        correctMove: 'd6',
-        explanation: "2…g6 transposes to the King's Indian Defence — fine opening but not the Old Indian. The defining Old Indian move is 2…d6 keeping the bishop on its original square and the structure flexible.",
-      },
-      {
         pgnToReachPosition: 'd4 Nf6 c4 d6 Nc3 e5 Nf3',
         wrongMove: 'exd4',
         correctMove: 'Nbd7',
-        explanation: "4…exd4? gives up the central pawn structure — after 5.Nxd4 Black has lost the …e5 pawn and the position is open and active for White. The principled 4…Nbd7 maintains the center and develops naturally.",
+        explanation: "Engine sees both moves as similar. But 4…exd4? gives up the locked-center structure that defines the Old Indian — after 5.Nxd4 the position opens and White's pieces (with the bishop pair) outclass Black's cramped setup. 4…Nbd7 keeps the wedge intact and prepares slow positional play. Practical edge: exd4 surrenders the structural insurance Black bought with 2…d6; Nbd7 preserves it.",
       },
       {
         pgnToReachPosition: 'd4 Nf6 c4 d6 Nc3 e5',
@@ -1332,7 +1290,7 @@ const CONTENT = {
         pgnToReachPosition: 'f4 d5 Nf3 Nf6',
         wrongMove: 'g3',
         correctMove: 'e3',
-        explanation: "3.g3 is fine but commits to Leningrad Dutch with colors reversed — unusual treatment. The mainline 3.e3 is more flexible and prepares Bd3 + Qe2 for classical kingside attack.",
+        explanation: "3.g3 is engine-fine but commits Bird to a Leningrad-Dutch-reversed setup with Bg2 (kingside-fianchetto only). The mainline 3.e3 keeps the bishop options open — Bd3 (classical attacking) OR Be2 (Stonewall-style) based on Black's setup. Practical edge: 3.e3 keeps two bishop deployments available; 3.g3 commits to one structure.",
       },
       {
         pgnToReachPosition: 'f4',
@@ -1425,22 +1383,16 @@ const CONTENT = {
     ],
     commonMistakes: [
       {
-        pgnToReachPosition: 'd4 Nf6 c4 e6 Nf3',
-        wrongMove: 'd5',
-        correctMove: 'b6',
-        explanation: "3…d5 transposes to QGD — fine opening but not the Queen's Indian. The defining move is 3…b6 preparing the bishop fianchetto. Choose your repertoire.",
-      },
-      {
         pgnToReachPosition: 'd4 Nf6 c4 e6 Nf3 b6',
         wrongMove: 'Nc3',
         correctMove: 'g3',
-        explanation: "4.Nc3 invites 4…Bb4+ pin which forces White to either play 5.Bd2 (slow) or 5.Nbd2 (uncomfortable). The mainline 4.g3 prepares Bg2 mirroring Black's fianchetto.",
+        explanation: "4.Nc3 is engine-equivalent but allows 4…Bb4+ pinning the knight (Nimzo-Indian/Queens Indian hybrid where Black has the better bishop). The mainline 4.g3 prepares Bg2 mirroring Black's fianchetto — both players reach a symmetric, double-fianchetto position where White's tempo edge is decisive. Practical edge: with g3 you keep your knight free; with Nc3 you must spend tempo undoing the pin.",
       },
       {
         pgnToReachPosition: 'd4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2',
         wrongMove: 'd5',
         correctMove: 'Be7',
-        explanation: "5…d5 cedes the e4 square permanently — after 6.cxd5 exd5 Black has a passive Carlsbad structure. The principled 5…Be7 develops the bishop and prepares castling.",
+        explanation: "Engine sees 5…d5 as similar to 5…Be7 but pedagogically d5 cedes the e4 square permanently — after 6.cxd5 exd5 Black has a passive Carlsbad-like structure where White's b1-h7 diagonal (via Bg2) gains lasting pressure. 5…Be7 develops the bishop, keeps options for both …d5 (later) and …d6 (Hedgehog-style), and prepares castling. Practical edge: 5…Be7 keeps Black's structural choice flexible; 5…d5 locks it in passively.",
       },
     ],
     quizItems: [
@@ -1521,12 +1473,6 @@ const CONTENT = {
       },
     ],
     commonMistakes: [
-      {
-        pgnToReachPosition: 'd4 Nf6 c4',
-        wrongMove: 'e6',
-        correctMove: 'e5',
-        explanation: "2…e6 transposes to QGD — fine opening but not the Budapest. The defining gambit move is 2…e5 sacrificing the e-pawn for active piece play.",
-      },
       {
         pgnToReachPosition: 'd4 Nf6 c4 e5 dxe5',
         wrongMove: 'Ne4',
