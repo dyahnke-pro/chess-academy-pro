@@ -7,6 +7,7 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useBoardGlow } from '../../hooks/useBoardGlow';
+import { BOARD_ARROW_OPTIONS } from '../../hooks/useBoardTheme';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import { buildPieceGlowFilter } from '../../utils/neonColors';
@@ -357,6 +358,7 @@ export function ChessBoard({
               onSquareClick: handleSquareClick,
               onPieceDrag: handlePieceDrag,
               ...(arrows && arrows.length > 0 ? { arrows, clearArrowsOnPositionChange: true } : {}),
+              arrowOptions: BOARD_ARROW_OPTIONS,
             }}
           />
           {/* Move quality border flash */}

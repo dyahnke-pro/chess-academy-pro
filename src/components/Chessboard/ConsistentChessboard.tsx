@@ -25,7 +25,7 @@ import type {
   PieceHandlerArgs,
 } from 'react-chessboard';
 import { ControlledChessBoard, type ControlledChessBoardProps, pieceAnimationSpeedToMs } from '../Board/ControlledChessBoard';
-import { useBoardTheme, BOARD_ANIMATION_MS } from '../../hooks/useBoardTheme';
+import { useBoardTheme, BOARD_ANIMATION_MS, BOARD_ARROW_OPTIONS } from '../../hooks/useBoardTheme';
 import { buildGlowSquareStyles } from '../../hooks/useBoardGlow';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { detectMoveFromFen } from '../../utils/boardMoveDetect';
@@ -216,6 +216,7 @@ function StaticBoard({
           ...(arrows !== undefined
             ? { arrows, clearArrowsOnPositionChange: true }
             : {}),
+          arrowOptions: BOARD_ARROW_OPTIONS,
           ...(onPieceDrop ? { onPieceDrop } : {}),
           ...(onSquareClick ? { onSquareClick } : {}),
           ...(onPieceDrag ? { onPieceDrag } : {}),
