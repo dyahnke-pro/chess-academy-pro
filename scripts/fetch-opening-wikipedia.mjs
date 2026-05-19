@@ -58,19 +58,32 @@ const OPENINGS = [
   { id: 'trompowsky-attack', wikipediaTitle: 'Trompowsky_Attack' },
 ];
 
-// Wikipedia REST API — returns plain-text intro section. CC BY-SA 4.0.
+// Wikipedia action API with prop=extracts — returns the FULL intro
+// section as plain text (multi-paragraph). The REST summary endpoint
+// (page/summary) truncates to one sentence for many articles, so we
+// use the longer action endpoint instead. CC BY-SA 4.0.
 function buildUrl(title) {
-  return `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+  const params = new URLSearchParams({
+    action: 'query',
+    format: 'json',
+    prop: 'extracts|info',
+    exintro: '1',
+    explaintext: '1',
+    inprop: 'url',
+    redirects: '1',
+    titles: title,
+  });
+  return `https://en.wikipedia.org/w/api.php?${params.toString()}`;
 }
 
-async function fetchOne(opening) {
+async function fetchOne(opening, attempt = 1) {
   const url = buildUrl(opening.wikipediaTitle);
-  console.log(`\n[${opening.id}] ${opening.wikipediaTitle}`);
+  console.log(`\n[${opening.id}] ${opening.wikipediaTitle}${attempt > 1 ? ` (attempt ${attempt})` : ''}`);
   let response;
   try {
     response = await fetch(url, {
       headers: {
-        'user-agent': 'chess-academy-pro/1.0 (opening-content-fetcher)',
+        'user-agent': 'chess-academy-pro/1.0 (opening-content-fetcher; david@chess-academy-pro.local)',
         accept: 'application/json',
       },
     });
@@ -78,21 +91,32 @@ async function fetchOne(opening) {
     console.log(`  fetch error: ${e.message}`);
     return { ...opening, status: 'fetch-error', error: e.message };
   }
+  if (response.status === 429 && attempt < 4) {
+    const backoff = attempt * 8000;
+    console.log(`  HTTP 429 — retrying in ${backoff / 1000}s`);
+    await new Promise((r) => setTimeout(r, backoff));
+    return fetchOne(opening, attempt + 1);
+  }
   if (!response.ok) {
     console.log(`  HTTP ${response.status}`);
     return { ...opening, status: 'http-error', code: response.status };
   }
   const data = await response.json();
-  console.log(`  title: ${data.title}`);
-  console.log(`  extract length: ${(data.extract ?? '').length} chars`);
+  const pages = data.query?.pages ?? {};
+  const page = Object.values(pages)[0];
+  if (!page || page.missing || !page.extract) {
+    console.log(`  no extract`);
+    return { ...opening, status: 'no-extract' };
+  }
+  console.log(`  title: ${page.title}`);
+  console.log(`  extract length: ${page.extract.length} chars`);
   const out = {
     id: opening.id,
     status: 'fetched',
-    wikipediaTitle: data.title,
-    extract: data.extract,
-    extractHtml: data.extract_html,
-    canonicalUrl: data.content_urls?.desktop?.page,
-    pageId: data.pageid,
+    wikipediaTitle: page.title,
+    extract: page.extract,
+    canonicalUrl: page.fullurl,
+    pageId: page.pageid,
     attribution: 'CC BY-SA 4.0 — Wikipedia',
     fetchedAt: new Date().toISOString(),
   };
@@ -106,8 +130,8 @@ async function main() {
   for (const opening of OPENINGS) {
     const result = await fetchOne(opening);
     manifest.push(result);
-    // 1-second courtesy delay between Wikipedia requests
-    await new Promise((r) => setTimeout(r, 1000));
+    // 3-second courtesy delay between Wikipedia requests to avoid 429s
+    await new Promise((r) => setTimeout(r, 3000));
   }
   writeFileSync(`${OUT_DIR}/manifest.json`, JSON.stringify({
     generatedAt: new Date().toISOString(),
