@@ -303,13 +303,11 @@ export function GameInsightsPage(): JSX.Element {
                   }
                   setTab(t.id);
                 }}
-                className="flex-1 text-center py-2.5 px-2 text-sm font-semibold rounded-lg transition-all"
-                style={{
-                  color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
-                  border: isActive ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
-                  background: isActive ? 'color-mix(in srgb, var(--color-accent) 8%, var(--color-surface))' : 'transparent',
-                  boxShadow: isActive ? '0 0 8px color-mix(in srgb, var(--color-accent) 40%, transparent)' : 'none',
-                }}
+                className={`flex-1 text-center py-2.5 px-2 text-sm font-semibold rounded-lg border transition-colors ${
+                  isActive
+                    ? 'bg-theme-accent/10 border-theme-accent text-theme-accent'
+                    : 'bg-theme-surface border-theme-border text-theme-text-muted hover:border-theme-accent/30'
+                }`}
                 data-testid={`tab-${t.id}`}
               >
                 {t.label}
