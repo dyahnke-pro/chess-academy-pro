@@ -650,5 +650,389 @@
       "hint": "White just pushed h4 threatening h5. This looks scary — what does Black typically play here that walks into our attack?",
       "concept": "Recognizing Dangerous Castling"
     }
+  ],
+  "evans-gambit": [
+    {
+      "fen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2BPP3/2P2N2/P4PPP/RNBQK2R b KQkq - 0 6",
+      "correctMove": "exd4",
+      "hint": "White just played d4, sacrificing tempo for the central crash. What is the principled reply?",
+      "concept": "Accepting the central pawn"
+    },
+    {
+      "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 b kq - 1 7",
+      "correctMove": "d6",
+      "hint": "White has castled. Black is up a pawn but behind in development. Which move keeps the structure flexible and prepares safe development?",
+      "concept": "Modern Evans defence with d6"
+    },
+    {
+      "fen": "r1bqk2r/pppp1ppp/2n2n2/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 w kq - 2 8",
+      "correctMove": "e5",
+      "hint": "Black has developed Nf6 and is preparing to castle. What pawn push kicks the knight before it cements the kingside?",
+      "concept": "Central pawn push e5"
+    },
+    {
+      "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "correctMove": "b4",
+      "hint": "The hallmark sacrifice of this opening. Which move offers the b-pawn to deflect Blacks bishop and gain central tempi?",
+      "concept": "The Evans pawn sacrifice"
+    }
+  ],
+  "kings-gambit": [
+    {
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "exf4",
+      "hint": "White offers a pawn to open the f-file and gain rapid attacking chances. What is the principled reply?",
+      "concept": "Accepting the gambit pawn"
+    },
+    {
+      "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+      "correctMove": "g5",
+      "hint": "Black has accepted the pawn. Which move keeps the extra pawn defended and prepares fianchetto?",
+      "concept": "Defending the f4 pawn with g5"
+    },
+    {
+      "fen": "rnbqkbnr/ppp2ppp/3p4/8/2B1Pp2/5N2/PPPP2PP/RNBQK2R b KQkq - 1 4",
+      "correctMove": "h6",
+      "hint": "White has developed Bc4. Which move prevents Ng5 ideas while preparing g5 to support f4?",
+      "concept": "Pawn shield with h6"
+    },
+    {
+      "fen": "rnbqkbnr/pppp1p1p/8/6p1/2B1Pp2/5N2/PPPP2PP/RNBQK2R b KQkq - 1 4",
+      "correctMove": "Bg7",
+      "hint": "Black has the g5 pawn. Which bishop development fianchettos and defends g5?",
+      "concept": "Bg7 fianchetto defending g5"
+    }
+  ],
+  "petrov-defence": [
+    {
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "correctMove": "Nf6",
+      "hint": "Black wants to counter-attack the e4 pawn symmetrically. Which knight move does this?",
+      "concept": "The defining Petrov move"
+    },
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+      "correctMove": "d6",
+      "hint": "White has captured your e5 pawn. Why does immediate Nxe4 lose? What is the correct move that kicks the white knight first?",
+      "concept": "Kick before capture"
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/3p1n2/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 4",
+      "correctMove": "Nxe4",
+      "hint": "White retreated the knight to f3. Now is the right moment to grab the pawn. Which knight move recovers the material?",
+      "concept": "Recapture with safety"
+    },
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+      "correctMove": "exd4",
+      "hint": "White challenges the center with 3.d4 (Steinitz Attack). What is the principled reply?",
+      "concept": "Accepting the central trade"
+    }
+  ],
+  "queens-gambit": [
+    {
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+      "correctMove": "c4",
+      "hint": "The defining move of this opening complex. Which pawn push offers a gambit pawn to deflect Blacks d-pawn?",
+      "concept": "The Queens Gambit"
+    },
+    {
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "correctMove": "Nc3",
+      "hint": "Black declined the gambit with 2…e6. Which knight development supports the c4 pawn and attacks d5?",
+      "concept": "Developing Nc3 in QGD"
+    },
+    {
+      "fen": "rnbq1rk1/ppp1bppp/4pn2/3p2B1/2PP4/2N1P3/PP3PPP/R2QKBNR w KQ - 1 6",
+      "correctMove": "cxd5",
+      "hint": "White wants to fix Blacks pawn structure for a minority attack. Which capture creates the Carlsbad pawn formation?",
+      "concept": "Exchange variation cxd5"
+    },
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "correctMove": "Nf3",
+      "hint": "Black plays the Slav 2…c6. Which natural developing move keeps options open for both e3 and e4 breaks later?",
+      "concept": "Flexible Nf3 development"
+    }
+  ],
+  "qga": [
+    {
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "dxc4",
+      "hint": "The defining move of this variation. Which capture accepts the gambit pawn?",
+      "concept": "Accepting the Queens Gambit"
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2pP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+      "correctMove": "Bxc4",
+      "hint": "Recovering the gambit pawn. Which bishop development recaptures the c4-pawn?",
+      "concept": "Recovering the gambit pawn"
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2BP4/4PN2/PP3PPP/RNBQK2R b KQkq - 0 5",
+      "correctMove": "c5",
+      "hint": "Now Black must fight for the center. Which pawn push challenges Whites d4 pawn?",
+      "concept": "Central counter-push"
+    },
+    {
+      "fen": "rnbqkbnr/1pp1pppp/p7/8/2pP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+      "correctMove": "b5",
+      "hint": "In this Mainline QGA, Black has played 3…a6 preparing queenside expansion. Which pawn push is the principled follow-up?",
+      "concept": "Mainline QGA queenside expansion"
+    }
+  ],
+  "sicilian-sveshnikov": [
+    {
+      "fen": "r1bqkb1r/pp1ppppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+      "correctMove": "e5",
+      "hint": "The defining move of the Sveshnikov. Which pawn push kicks the d4-knight and accepts the backward d-pawn?",
+      "concept": "The Sveshnikov pawn push"
+    },
+    {
+      "fen": "r1bqkb1r/pp1p1ppp/2n2n2/1N2p3/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+      "correctMove": "d6",
+      "hint": "The white knight has jumped to b5 attacking d6 and threatening Nd6+. Which pawn move defends d6 and chases the knight?",
+      "concept": "Defending the d6 square"
+    },
+    {
+      "fen": "r1bqkb1r/pp3ppp/2np1n2/1N2p1B1/4P3/2N5/PPP2PPP/R2QKB1R b KQkq - 1 7",
+      "correctMove": "a6",
+      "hint": "The pin on f6 is annoying. Which pawn move kicks the knight while preparing …b5?",
+      "concept": "Kicking the knight with a6"
+    },
+    {
+      "fen": "r1bqkb1r/5ppp/p1np1B2/1p2p3/4P3/N1N5/PPP2PPP/R2QKB1R b KQkq - 0 9",
+      "correctMove": "gxf6",
+      "hint": "The bishop took on f6. Which recapture maintains the central pawn structure?",
+      "concept": "Doubled f-pawns recapture"
+    }
+  ],
+  "semi-slav": [
+    {
+      "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 3 4",
+      "correctMove": "e6",
+      "hint": "The defining Semi-Slav move. Which pawn push combines Slav (c6) with QGD (e6) for maximum flexibility?",
+      "concept": "The Semi-Slav setup"
+    },
+    {
+      "fen": "r1bqkb1r/pp1n1ppp/2p1pn2/3p4/2PP4/2NBPN2/PP3PPP/R1BQK2R b KQkq - 2 6",
+      "correctMove": "dxc4",
+      "hint": "White has played the slow 5.e3. Which capture starts the Meran with active piece play?",
+      "concept": "Starting the Meran"
+    },
+    {
+      "fen": "r1bqkb1r/pp1n1ppp/2p1pn2/8/2BP4/2N1PN2/PP3PPP/R1BQK2R b KQkq - 0 7",
+      "correctMove": "b5",
+      "hint": "White recaptured with the bishop. Which pawn push kicks the bishop and prepares …a6 + …c5?",
+      "concept": "Mainline Meran kick"
+    },
+    {
+      "fen": "rnbqkb1r/pp3ppp/2p1pn2/3p2B1/2PP4/2N2N2/PP2PPPP/R2QKB1R b KQkq - 1 5",
+      "correctMove": "dxc4",
+      "hint": "White has played the sharp 5.Bg5. Which capture starts the Botvinnik System?",
+      "concept": "Starting the Botvinnik"
+    }
+  ],
+  "reti-opening": [
+    {
+      "fen": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1",
+      "correctMove": "d5",
+      "hint": "White has played the flexible 1.Nf3. Which classical central move stakes a claim on the center?",
+      "concept": "Classical central response"
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/8/5NP1/PPPPPP1P/RNBQKB1R w KQkq - 1 3",
+      "correctMove": "Bg2",
+      "hint": "The Réti hallmark. Which bishop development takes the long diagonal pressure?",
+      "concept": "Réti fianchetto"
+    },
+    {
+      "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7",
+      "correctMove": "e4",
+      "hint": "White has completed development. Which central break challenges Blacks pawn structure and activates the Bg2?",
+      "concept": "Central e4 break"
+    },
+    {
+      "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/8/3P1NP1/PPP1PPBP/RNBQ1RK1 b kq - 0 5",
+      "correctMove": "O-O",
+      "hint": "Black has developed solidly. Which natural move completes development and prepares the queenside expansion?",
+      "concept": "Castling and consolidating"
+    }
+  ],
+  "trompowsky-attack": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "correctMove": "Bg5",
+      "hint": "The defining Trompowsky move. Which immediate bishop development pins the f6-knight?",
+      "concept": "The Trompowsky pin"
+    },
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "correctMove": "Ne4",
+      "hint": "Black wants to escape the pin without weakening the structure. Which knight move escapes to a central square?",
+      "concept": "Escaping the pin"
+    },
+    {
+      "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
+      "correctMove": "Bf4",
+      "hint": "The bishop is being attacked. Which retreat keeps the bishop active and pressures c7?",
+      "concept": "Maintaining bishop pressure"
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "correctMove": "Bxf6",
+      "hint": "Black has challenged the center with 2…d5. Which capture damages Blacks pawn structure?",
+      "concept": "Structural exchange"
+    }
+  ],
+  "benoni-defence": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "c5",
+      "hint": "The defining Benoni move. Which pawn push challenges Whites center asymmetrically?",
+      "concept": "The Benoni structure"
+    },
+    {
+      "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+      "correctMove": "e6",
+      "hint": "White has committed to the wedge with d5. Which pawn push challenges d5 and prepares Modern Benoni structure?",
+      "concept": "Challenging the wedge"
+    },
+    {
+      "fen": "rnbqkb1r/pp3ppp/3p1n2/2pP4/8/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 1 6",
+      "correctMove": "g6",
+      "hint": "The Modern Benoni fianchetto preparation. Which pawn move prepares Bg7?",
+      "concept": "Modern Benoni setup"
+    },
+    {
+      "fen": "rnbq1rk1/pp3pbp/3p1np1/2pP4/4P3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 4 9",
+      "correctMove": "a6",
+      "hint": "Black has completed setup. Which queenside expansion move starts the …b5 plan?",
+      "concept": "Queenside expansion start"
+    }
+  ],
+  "benko-gambit": [
+    {
+      "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+      "correctMove": "b5",
+      "hint": "The defining Benko Gambit move. Which pawn push sacrifices a pawn for queenside file pressure?",
+      "concept": "The Benko sacrifice"
+    },
+    {
+      "fen": "rnbqkb1r/p2ppppp/5n2/1PpP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 4",
+      "correctMove": "a6",
+      "hint": "Black continues the gambit. Which pawn move challenges the b5 pawn and invites the exchange?",
+      "concept": "Forcing the exchange"
+    },
+    {
+      "fen": "rnbqkb1r/3ppppp/P4n2/2pP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 5",
+      "correctMove": "Bxa6",
+      "hint": "White accepted the gambit. Which capture develops the bishop with tempo on Whites Bf1?",
+      "concept": "Developing the bishop"
+    },
+    {
+      "fen": "rn1qkb1r/4pp1p/3p1np1/2pP4/4P3/2N5/PP3PPP/R1BQ1KNR w kq - 0 9",
+      "correctMove": "Nf3",
+      "hint": "After the bishop trade, Whites king is on f1. Which natural development move completes Whites kingside setup?",
+      "concept": "Completing development"
+    }
+  ],
+  "old-indian-defence": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "d6",
+      "hint": "The defining Old Indian move. Which pawn push commits to a Philidor-style solid structure?",
+      "concept": "Old Indian setup"
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+      "correctMove": "e5",
+      "hint": "Black challenges Whites center symmetrically. Which pawn push fixes the central structure?",
+      "concept": "Central pawn structure"
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/3p1n2/4p3/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 1 4",
+      "correctMove": "Nbd7",
+      "hint": "Black needs to develop without losing the central pawn. Which natural development move keeps the structure solid?",
+      "concept": "Solid Nbd7 development"
+    },
+    {
+      "fen": "r1bqkb1r/pppn1ppp/3p1n2/4p3/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 0 5",
+      "correctMove": "c6",
+      "hint": "White has built up the center. Which pawn push solidifies Blacks position and prepares queenside expansion?",
+      "concept": "Solidifying with c6"
+    }
+  ],
+  "bird-opening": [
+    {
+      "fen": "rnbqkbnr/pppppppp/8/8/5P2/8/PPPPP1PP/RNBQKBNR b KQkq - 0 1",
+      "correctMove": "d5",
+      "hint": "White has played the unusual 1.f4 (Birds Opening). Which classical central move challenges it?",
+      "concept": "Classical central response"
+    },
+    {
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/5P2/5N2/PPPPP1PP/RNBQKB1R b KQkq - 1 2",
+      "correctMove": "Nf6",
+      "hint": "White has developed Nf3. Which natural development move attacks e4 from f6?",
+      "concept": "Mirror development"
+    },
+    {
+      "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/5P2/4PN2/PPPPB1PP/RNBQ1RK1 b kq - 3 5",
+      "correctMove": "O-O",
+      "hint": "White has castled. Which natural move completes Blacks development?",
+      "concept": "Completing development"
+    }
+  ],
+  "queens-indian": [
+    {
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+      "correctMove": "b6",
+      "hint": "The defining Queens Indian move. Which pawn push prepares the queens bishop fianchetto?",
+      "concept": "Queens Indian setup"
+    },
+    {
+      "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 4",
+      "correctMove": "Bb7",
+      "hint": "White has prepared the kingside fianchetto. Which natural development move occupies Blacks long diagonal?",
+      "concept": "Bishop fianchetto development"
+    },
+    {
+      "fen": "rn1q1rk1/pbppbppp/1p2pn2/8/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b - - 6 7",
+      "correctMove": "d5",
+      "hint": "White has developed Nc3 threatening to attack d5. Which central pawn push challenges Whites structure?",
+      "concept": "Central d5 challenge"
+    },
+    {
+      "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+      "correctMove": "g3",
+      "hint": "The mainline development. Which White move prepares Bg2 to mirror Blacks fianchetto?",
+      "concept": "Mirror fianchetto setup"
+    }
+  ],
+  "budapest-gambit": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "e5",
+      "hint": "The defining Budapest Gambit move. Which pawn push sacrifices a pawn for active piece development?",
+      "concept": "The Budapest sacrifice"
+    },
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+      "correctMove": "Ng4",
+      "hint": "White has captured. Which knight move recovers the pawn and develops with tempo?",
+      "concept": "Knight to g4 recovery"
+    },
+    {
+      "fen": "rnbqkb1r/pppp1ppp/8/4P3/2P3n1/5N2/PP2PPPP/RNBQKB1R b KQkq - 2 4",
+      "correctMove": "Bc5",
+      "hint": "Black wants to attack f2. Which bishop development creates a battery against Whites weak square?",
+      "concept": "Targeting f2"
+    },
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "correctMove": "dxe5",
+      "hint": "White must respond to the gambit. Which capture accepts the pawn (the principled mainline)?",
+      "concept": "Accepting the gambit"
+    }
   ]
 }
