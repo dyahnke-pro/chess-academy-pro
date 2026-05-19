@@ -344,14 +344,17 @@ function scanFile(filePath, content) {
 function walkAnnotationSequence(file, openingId, sublineLabel, annotations, findings) {
   let prevText = '';
   // Replay the SAN sequence with chess.js to catch illegal moves
-  // (data corruption / wrong PGN).
+  // (data corruption / wrong PGN). Also collect per-ply from-square
+  // so we can validate arrow.from values.
   const chess = new Chess();
+  const fromSquares = [];
   for (let i = 0; i < annotations.length; i++) {
     const a = annotations[i];
     const san = a.san;
-    if (!san) continue;
+    if (!san) { fromSquares.push(null); continue; }
     try {
-      chess.move(san);
+      const m = chess.move(san);
+      fromSquares.push(m.from);
     } catch (e) {
       findings.push({
         file, openingId, subline: sublineLabel, ply: i + 1, san,
@@ -359,7 +362,6 @@ function walkAnnotationSequence(file, openingId, sublineLabel, annotations, find
         severity: 'p0',
         evidence: `chess.js rejected ${san}: ${e.message}`,
       });
-      // Halt this sequence — further plies depend on the rejected move
       return;
     }
   }
@@ -377,12 +379,14 @@ function walkAnnotationSequence(file, openingId, sublineLabel, annotations, find
     const expectedFromSquare = sanFromSquareHint(san); // partial; for ambiguous SANs only
 
     // Arrow consistency check — flag only if NO arrow's destination
-    // matches the SAN target. Several arrows may exist (threat / control
-    // / plan arrows); we just need ONE pointing at the actual move's
-    // destination.
+    // matches the SAN target AND from-square. Several arrows may
+    // exist (threat / control / plan arrows); we need ONE that's the
+    // actual move trajectory (from-square match AND to-square match).
     if (a.arrows && Array.isArray(a.arrows) && a.arrows.length > 0 && expectedSquare) {
-      const anyMatch = a.arrows.some((ar) => ar?.to && ar.to.toLowerCase() === expectedSquare);
-      if (!anyMatch) {
+      const fromSquare = fromSquares[i];
+      const anyTargetMatch = a.arrows.some((ar) => ar?.to && ar.to.toLowerCase() === expectedSquare);
+      const anyMoveMatch = a.arrows.some((ar) => ar?.to && ar?.from && ar.to.toLowerCase() === expectedSquare && ar.from.toLowerCase() === fromSquare);
+      if (!anyTargetMatch) {
         findings.push({
           file, openingId, subline: sublineLabel, ply: idx, san,
           kind: 'arrow-target-missing',
@@ -390,6 +394,17 @@ function walkAnnotationSequence(file, openingId, sublineLabel, annotations, find
           arrows: a.arrows.map((ar) => `${ar.from}-${ar.to}`).join(','),
           expectedSquare,
           evidence: `no arrow points to ${expectedSquare}; arrows: ${a.arrows.map(ar=>ar.from+'->'+ar.to).join(',')}`,
+        });
+      } else if (fromSquare && !anyMoveMatch) {
+        // Has target match but no from-match: arrow is wrong-from
+        findings.push({
+          file, openingId, subline: sublineLabel, ply: idx, san,
+          kind: 'arrow-from-mismatch',
+          severity: 'p0',
+          arrows: a.arrows.map((ar) => `${ar.from}-${ar.to}`).join(','),
+          expectedSquare,
+          expectedFromSquare: fromSquare,
+          evidence: `no arrow has from=${fromSquare} & to=${expectedSquare}; arrows: ${a.arrows.map(ar=>ar.from+'->'+ar.to).join(',')}`,
         });
       }
     }
