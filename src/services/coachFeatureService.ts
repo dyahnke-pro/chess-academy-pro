@@ -13,7 +13,8 @@ import {
 import { getThemeSkills } from './puzzleService';
 import { logAppAudit } from './appAuditor';
 import { sanitizeCoachStream, sanitizeCoachText, unwrapSpineError } from './sanitizeCoachText';
-import type { BadHabit, CoachContext, UserProfile } from '../types';
+import { resolveCoachNarration } from '../utils/coachNarration';
+import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -211,6 +212,9 @@ export async function generateNarrativeSummary(
   playerRating: number,
   onStream?: (chunk: string) => void,
   moveData?: NarrativeMoveData[],
+  /** Verbosity override for tests. Production reads the user's
+   *  `coachNarration` profile setting (Settings → Coach). */
+  verbosityOverride?: CoachNarration,
 ): Promise<string> {
   // No per-move analysis → bail out with the graceful fallback.
   // Writing prose from nothing is exactly the hallucination path
@@ -219,6 +223,29 @@ export async function generateNarrativeSummary(
     onStream?.(NARRATIVE_SUMMARY_NO_DATA);
     return NARRATIVE_SUMMARY_NO_DATA;
   }
+
+  // Verbosity tie-in (Bug D-2, David's 2026-05-19 directive on /
+  // weaknesses): the recap honors the user's coachNarration setting.
+  // silent → no recap at all (short stub); brief → 1-2 sentences;
+  // full → the existing 2-4 moments / ~180 words. Drives both the
+  // prompt's word/moment budget AND the max_tokens ceiling so the
+  // generated text matches what's promised AND what the user pays
+  // for downstream.
+  const profile = await db.profiles.get('main').catch(() => null);
+  const verbosity: CoachNarration = verbosityOverride ?? resolveCoachNarration(profile?.preferences);
+  if (verbosity === 'silent') {
+    const stub = 'Game complete. Open Full Review for analysis.';
+    onStream?.(stub);
+    return stub;
+  }
+  // briefRules / fullRules are appended to GAME_POST_REVIEW_ADDITION
+  // so the spine prompt's grounding rules stay untouched. The verbosity
+  // delta is the LAST text the LLM reads, so it overrides the default
+  // 2-4 moments / 180 words ceiling baked into the addition.
+  const verbosityRules = verbosity === 'brief'
+    ? `\n\nVERBOSITY OVERRIDE — BRIEF: the student set Coach Narration to "Brief". Identify ONE moment only. Keep the entire summary to 1-2 short sentences (< 40 words total). Skip the "next-game tip" sentence. If you find yourself writing a second moment, STOP.`
+    : '';  // full → no override (existing GAME_POST_REVIEW_ADDITION rules apply)
+  const verbosityMaxTokens = verbosity === 'brief' ? 200 : 800;
 
   // Count errors across ALL student (non-coach) moves for the tone guide.
   let blunderCount = 0;
@@ -316,9 +343,15 @@ export async function generateNarrativeSummary(
       // envelope doesn't push deepseek-reasoner into empty-content.
       // See the segments call below for the full rationale.
       task: 'chat_response',
-      maxTokens: 800,
+      // Verbosity-driven cap. Brief mode pulls the ceiling down so
+      // the brain doesn't generate 800 tokens we then truncate to
+      // 1-2 sentences. Full mode keeps the existing budget.
+      maxTokens: verbosityMaxTokens,
       maxToolRoundTrips: 1,
-      systemPromptAddition: GAME_POST_REVIEW_ADDITION,
+      // Appending verbosity rules AFTER the base addition so the
+      // override is the last instruction the brain reads. Empty
+      // string for full mode is a no-op.
+      systemPromptAddition: GAME_POST_REVIEW_ADDITION + verbosityRules,
       // GAME_POST_REVIEW_ADDITION wants grounded prose; surface block's
       // [VOICE:] / [BOARD:] marker mandate would leak markers into the
       // streamed summary card. Memory + live-state still inject.
