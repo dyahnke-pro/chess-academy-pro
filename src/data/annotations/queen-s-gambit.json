@@ -185,9 +185,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but c3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to c3 improves piece coordination and flexibility."
         },
         {
@@ -268,9 +265,6 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "alternatives": [
-            "The bishop could go to other squares, but g5 maximizes its influence on the k..."
-          ],
           "shortNarration": "Bishop to g5 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -346,9 +340,6 @@
           "plans": [
             "Improve piece placement and prepare the middlegame plan",
             "Look for pawn breaks to open lines for the active pieces"
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but d3 maximizes its influence on the k..."
           ],
           "shortNarration": "Bishop to d3 controls key diagonal squares and keeps active piece play."
         },
@@ -426,9 +417,6 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "alternatives": [
-            "A different knight move was possible, but f3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -501,9 +489,6 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
-          ],
           "shortNarration": "Rook to b1 activates it, improving White's piece coordination."
         },
         {
@@ -569,9 +554,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
           ]
         },
         {
@@ -643,10 +625,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e3, isolated pawn on b.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d4 and e3, isolated pawn on b."
         }
       ]
     },
@@ -742,9 +721,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but c3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to c3 improves piece coordination and flexibility."
         },
         {
@@ -821,10 +797,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e3.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d4 and e3."
         },
         {
           "san": "O-O",
@@ -904,9 +877,6 @@
             "Improve piece placement and prepare the middlegame plan",
             "Look for pawn breaks to open lines for the active pieces"
           ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
-          ],
           "shortNarration": "Rook to c1 activates it, improving White's piece coordination."
         },
         {
@@ -979,9 +949,6 @@
               "square": "c4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but c4 maximizes its influence on the k..."
           ],
           "shortNarration": "White captures on c4, removing Black's pawn, and the bishop on c4 controls key diagonal squares."
         },
@@ -1059,9 +1026,6 @@
               "square": "g1",
               "color": "rgba(0, 180, 80, 0.3)"
             }
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ]
         },
         {
@@ -1137,9 +1101,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
           ]
         },
         {
@@ -1215,9 +1176,6 @@
               "square": "b3",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but b3 maximizes its influence on the k..."
           ],
           "shortNarration": "Bishop to b3 controls key diagonal squares and maintains active piece play."
         },
@@ -1356,9 +1314,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but c3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to c3 improves piece coordination and flexibility."
         },
         {
@@ -1435,10 +1390,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e3.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d4 and e3."
         },
         {
           "san": "O-O",
@@ -1513,9 +1465,6 @@
             "Improve piece placement and prepare the middlegame plan",
             "Look for pawn breaks to open lines for the active pieces"
           ],
-          "alternatives": [
-            "The bishop could go to other squares, but h4 maximizes its influence on the k..."
-          ],
           "shortNarration": "Bishop to h4 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -1587,9 +1536,6 @@
               "square": "e7",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but e7 maximizes its influence on the k..."
           ],
           "shortNarration": "White takes on e7, removing Black's bishop that controlled key diagonal squares for active piece play."
         },
@@ -1669,9 +1615,6 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
-          ],
           "shortNarration": "Rook to c1 activates it, improving White's piece coordination."
         },
         {
@@ -1747,9 +1690,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ],
           "shortNarration": "Queen to a3 eyes multiple targets from an influential outpost."
         },
@@ -1827,10 +1767,7 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e3.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a central pawn on e3."
         }
       ]
     },
@@ -1931,9 +1868,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but f3 offers the best combination of a..."
-          ],
           "shortNarration": "White's knight on f3 improves piece coordination and flexibility."
         },
         {
@@ -2003,9 +1937,6 @@
               "square": "c4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but c4 maximizes its influence on the k..."
           ],
           "shortNarration": "Exchanging on c4 removes Black's pawn, keeping the bishop active on the long diagonal."
         },
@@ -2077,9 +2008,6 @@
             "Improve piece placement and prepare the middlegame plan",
             "Look for pawn breaks to open lines for the active pieces"
           ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
-          ],
           "shortNarration": "Queen on e2 eyes multiple targets from an influential central post."
         },
         {
@@ -2149,9 +2077,6 @@
               "square": "d1",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ],
           "shortNarration": "White's rook on d1 pressures the d-file, targeting Black's queen and central pawns."
         },
@@ -2225,10 +2150,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d5 and e3.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d5 and e3."
         },
         {
           "san": "exd5",
@@ -2308,9 +2230,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but d5 maximizes its influence on the k..."
           ],
           "shortNarration": "White takes on d5, removing the knight, and the bishop on d5 controls key diagonal squares."
         },
@@ -2467,9 +2386,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but f3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -2546,10 +2462,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e2.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d4 and e2."
         },
         {
           "san": "Bf5",
@@ -2621,9 +2534,6 @@
           "plans": [
             "Improve piece placement and prepare the middlegame plan",
             "Look for pawn breaks to open lines for the active pieces"
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but c4 maximizes its influence on the k..."
           ],
           "shortNarration": "White exchanges on c4, removing Black's pawn and keeping the bishop active on the long diagonal."
         },
@@ -2699,9 +2609,6 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
-          ],
           "shortNarration": "Queen to e2 eyes multiple targets from an influential central square."
         },
         {
@@ -2772,9 +2679,6 @@
               "square": "d3",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but d3 maximizes its influence on the k..."
           ],
           "shortNarration": "Bishop to d3 controls key diagonal squares and maintains active piece play."
         }
@@ -2873,9 +2777,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but f3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -2947,10 +2848,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e3.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d4 and e3."
         },
         {
           "san": "Nbd7",
@@ -3032,9 +2930,6 @@
             "Improve piece placement and prepare the middlegame plan",
             "Look for pawn breaks to open lines for the active pieces"
           ],
-          "alternatives": [
-            "The bishop could go to other squares, but c4 maximizes its influence on the k..."
-          ],
           "shortNarration": "White captures on c4, removing Black's pawn and activating the bishop on the key diagonal."
         },
         {
@@ -3104,9 +2999,6 @@
               "square": "g1",
               "color": "rgba(0, 180, 80, 0.3)"
             }
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ]
         },
         {
@@ -3164,10 +3056,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d5 and e4.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d5 and e4."
         },
         {
           "san": "e5",
@@ -3232,9 +3121,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "A different knight move was possible, but b1 offers the best combination of a..."
           ],
           "shortNarration": "Knight to b1 improves piece coordination and flexibility."
         },
@@ -3306,9 +3192,6 @@
               "square": "d2",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "A different knight move was possible, but d2 offers the best combination of a..."
           ],
           "shortNarration": "Knight to d2 improves coordination and flexibility."
         }
@@ -3406,9 +3289,6 @@
           "plans": [
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
-          ],
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
           ]
         },
         {
@@ -3484,9 +3364,6 @@
               "square": "c4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but c4 maximizes its influence on the k..."
           ],
           "shortNarration": "White removes the defender on c4, winning a pawn and keeping the bishop active on the key diagonal."
         },
@@ -3566,9 +3443,6 @@
           "plans": [
             "Look for tactical opportunities to exploit the opponent's inaccuracy",
             "Maintain piece pressure while avoiding counter-tactics"
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but e6 maximizes its influence on the k..."
           ]
         },
         {
@@ -3645,9 +3519,6 @@
               "square": "b7",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ]
         },
         {
@@ -3722,9 +3593,6 @@
               "square": "d4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "A different knight move was possible, but d4 offers the best combination of a..."
           ],
           "shortNarration": "White exchanges on d4, clearing the way for a knight outpost on d4 controlling key squares."
         },
@@ -3805,9 +3673,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but f6 maximizes its influence on the k..."
           ],
           "shortNarration": "White captures on f6, removing the knight; the bishop on f6 controls key diagonals and maintains active piece play."
         },
@@ -3939,9 +3804,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but c3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to c3 improves piece coordination and flexibility."
         },
         {
@@ -4022,9 +3884,6 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "alternatives": [
-            "The bishop could go to other squares, but g5 maximizes its influence on the k..."
-          ],
           "shortNarration": "Bishop to g5 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -4100,9 +3959,6 @@
           "plans": [
             "Look for tactical opportunities to exploit the opponent's inaccuracy",
             "Maintain piece pressure while avoiding counter-tactics"
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but d3 maximizes its influence on the k..."
           ]
         },
         {
@@ -4177,9 +4033,6 @@
               "square": "c2",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ]
         },
         {
@@ -4250,9 +4103,6 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
-          ],
           "shortNarration": "Rook to b1 activates it, improving White's piece coordination."
         },
         {
@@ -4317,9 +4167,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
           ]
         },
         {
@@ -4391,10 +4238,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e3, isolated pawn on b.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d4 and e3, isolated pawn on b."
         },
         {
           "san": "cxb5",
@@ -4469,9 +4313,6 @@
               "square": "b3",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ],
           "shortNarration": "Rook to b3 activates it, improving White's piece coordination."
         }
@@ -4569,9 +4410,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but c3 offers the best combination of a..."
-          ],
           "shortNarration": "White's knight on c3 improves piece coordination and flexibility."
         },
         {
@@ -4648,10 +4486,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
         },
         {
           "san": "dxe4",
@@ -4732,9 +4567,6 @@
             "Be alert to the opponent's active ideas in this position",
             "Maintain solid piece coordination to neutralize threats"
           ],
-          "alternatives": [
-            "The bishop could go to other squares, but e7 maximizes its influence on the k..."
-          ],
           "shortNarration": "White wins the bishop on e7, but Black's position still holds hidden tactical threats."
         },
         {
@@ -4810,9 +4642,6 @@
               "square": "c1",
               "color": "rgba(0, 180, 80, 0.3)"
             }
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ]
         },
         {
@@ -4878,9 +4707,6 @@
               "square": "f3",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "A different knight move was possible, but f3 offers the best combination of a..."
           ],
           "shortNarration": "Knight to f3 — Black must watch for hidden tactical threats."
         },
@@ -4961,9 +4787,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ],
           "shortNarration": "Queen to e3 — Black must watch for hidden tactical threats."
         },
@@ -5182,9 +5005,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but f3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight f3 improves piece coordination and flexibility."
         },
         {
@@ -5259,9 +5079,6 @@
               "square": "g2",
               "color": "rgba(0, 180, 80, 0.3)"
             }
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but g2 maximizes its influence on the k..."
           ]
         },
         {
@@ -5342,9 +5159,6 @@
             "Improve piece placement and prepare the middlegame plan",
             "Look for pawn breaks to open lines for the active pieces"
           ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
-          ],
           "shortNarration": "Queen to c2 eyes multiple targets from an influential central square."
         },
         {
@@ -5410,9 +5224,6 @@
               "square": "c2",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ],
           "shortNarration": "Queen to c2 eyes multiple targets."
         },
@@ -5490,9 +5301,6 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "alternatives": [
-            "A different knight move was possible, but c3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to c3 improves piece coordination and flexibility."
         },
         {
@@ -5568,9 +5376,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
           ]
         },
         {
@@ -5703,9 +5508,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but c3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to c3 improves piece coordination and flexibility."
         },
         {
@@ -5787,9 +5589,6 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "alternatives": [
-            "The bishop could go to other squares, but g3 maximizes its influence on the k..."
-          ],
           "shortNarration": "Bishop to g3 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -5861,9 +5660,6 @@
           "plans": [
             "Improve piece placement and prepare the middlegame plan",
             "Look for pawn breaks to open lines for the active pieces"
-          ],
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
           ],
           "shortNarration": "White captures on c5, improving piece placement before the critical phase."
         },
@@ -5942,9 +5738,6 @@
             }
           ],
           "pawnStructure": "White has a strong central pawn duo on d5 and e3.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ],
           "shortNarration": "White captures on d5, improving piece placement before the critical phase."
         },
         {
@@ -6018,10 +5811,7 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on d4, isolated pawn on d.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a central pawn on d4, isolated pawn on d."
         },
         {
           "san": "Nxd4",
@@ -6100,9 +5890,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "A different knight move was possible, but d4 offers the best combination of a..."
           ],
           "shortNarration": "White wins the d4 knight, removing Black's central outpost that controlled key squares."
         },
@@ -6258,9 +6045,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but c3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to c3 improves piece coordination and flexibility."
         },
         {
@@ -6341,9 +6125,6 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "alternatives": [
-            "The bishop could go to other squares, but g5 maximizes its influence on the k..."
-          ],
           "shortNarration": "Bishop to g5 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -6418,9 +6199,6 @@
           "plans": [
             "Look for tactical opportunities to exploit the opponent's inaccuracy",
             "Maintain piece pressure while avoiding counter-tactics"
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but d3 maximizes its influence on the k..."
           ]
         },
         {
@@ -6491,9 +6269,6 @@
               "square": "f3",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "A different knight move was possible, but f3 offers the best combination of a..."
           ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
@@ -6569,9 +6344,6 @@
               "square": "e5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "A different knight move was possible, but e5 offers the best combination of a..."
           ]
         },
         {
@@ -6646,9 +6418,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but e7 maximizes its influence on the k..."
           ]
         },
         {
@@ -6724,9 +6493,6 @@
               "square": "c4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but c4 maximizes its influence on the k..."
           ],
           "shortNarration": "Bishop to c4 controls the key diagonal and keeps active piece play."
         }
@@ -6825,9 +6591,6 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
-          "alternatives": [
-            "A different knight move was possible, but f3 offers the best combination of a..."
-          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -6899,10 +6662,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e3.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d4 and e3."
         },
         {
           "san": "Nbd7",
@@ -6984,9 +6744,6 @@
             "Be alert to the opponent's active ideas in this position",
             "Maintain solid piece coordination to neutralize threats"
           ],
-          "alternatives": [
-            "The bishop could go to other squares, but c4 maximizes its influence on the k..."
-          ],
           "shortNarration": "White removes the defender on c4, and Black's pawn drops — hidden tactical threats remain."
         },
         {
@@ -7048,10 +6805,7 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic req..."
-          ]
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
         },
         {
           "san": "c5",
@@ -7118,9 +6872,6 @@
               "square": "b5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
-          ],
-          "alternatives": [
-            "A different knight move was possible, but b5 offers the best combination of a..."
           ],
           "shortNarration": "White wins the piece on b5, but Black must watch for hidden tactical threats."
         },
@@ -7202,9 +6953,6 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
           ]
         },
         {
