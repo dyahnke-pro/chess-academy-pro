@@ -1707,11 +1707,93 @@ export function CoachTeachPage(): JSX.Element {
               walkthrough.start(tree);
               return { ok: true };
             }
-            const params = new URLSearchParams();
-            params.set('subject', opening);
-            if (orientation) params.set('orientation', orientation);
-            void navigate(`/coach/session/walkthrough?${params.toString()}`);
-            return { ok: true };
+            // No static / cached tree — generate in-place via the
+            // canonical DB-narration path, exactly like the URL-param
+            // kickoff at line ~1300. Previously this branch bounced
+            // the user to /coach/session/walkthrough (the legacy
+            // stripped-down surface); production audit (David,
+            // 2026-05-19) confirmed the boomerang fired when the
+            // brain tool emitted start_walkthrough for an opening
+            // outside the static registry and uncached.
+            const ackBuilding = `Putting together ${lessonLabel(opening)} — this takes about a minute. The first time only; after this it'll be instant.`;
+            const brainTurnId = `brain-walk-${Date.now()}`;
+            setMessages((prev) => [...prev, {
+              id: `${brainTurnId}-c`,
+              role: 'assistant',
+              content: ackBuilding,
+              timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach',
+              role: 'coach',
+              text: ackBuilding,
+              fen: gameRef.current.fen,
+              trigger: null,
+            });
+            setBusy(true);
+            setGenerationStatus({ openingName: opening, startedAt: Date.now() });
+            // Pre-flip the board to the brain's requested side (or
+            // the heuristic) BEFORE the LLM finishes — same trick
+            // as the URL-param kickoff to avoid the 30-60s
+            // wrong-orientation flash.
+            const requestedSide =
+              orientation === 'white' || orientation === 'black'
+                ? orientation
+                : inferStudentSide(opening);
+            if (requestedSide !== playerColor) {
+              setPlayerColor(requestedSide);
+              game.setOrientation(requestedSide);
+            }
+            // Silence the brain's [VOICE:] preamble so we don't get
+            // a "two voices" overlap when the generated walkthrough
+            // starts narrating. Same guard as the cached-tree path
+            // above.
+            voiceService.stop();
+            turnAbortRef.aborted = true;
+            try {
+              const genResult = await generateOpening(opening, {
+                mode: 'learn',
+                pace,
+              });
+              if (genResult.ok && genResult.tree) {
+                await cacheOpening(opening, genResult.tree);
+                void writeSharedCache(opening, genResult.tree);
+                const successAck = `Ready — let's walk through the ${genResult.tree.openingName}.`;
+                setMessages((prev) => [...prev, {
+                  id: `${brainTurnId}-c2`,
+                  role: 'assistant',
+                  content: successAck,
+                  timestamp: Date.now(),
+                }]);
+                useCoachMemoryStore.getState().appendConversationMessage({
+                  surface: 'chat-teach',
+                  role: 'coach',
+                  text: successAck,
+                  fen: gameRef.current.fen,
+                  trigger: null,
+                });
+                walkthrough.start(genResult.tree);
+                if (pace !== 'tour') {
+                  void generateMissingStagesInBackground(
+                    genResult.tree.openingName,
+                    genResult.tree,
+                    handleStageMerged,
+                  );
+                }
+                return { ok: true };
+              }
+              const errAck = `I couldn't build the ${lessonLabel(opening)} walkthrough this time. Try again or pick a different opening.`;
+              setMessages((prev) => [...prev, {
+                id: `${brainTurnId}-err`,
+                role: 'assistant',
+                content: errAck,
+                timestamp: Date.now(),
+              }]);
+              return { ok: false };
+            } finally {
+              setBusy(false);
+              setGenerationStatus(null);
+            }
           },
           onChunk: (chunk: string) => {
             // Two streams off each delta:

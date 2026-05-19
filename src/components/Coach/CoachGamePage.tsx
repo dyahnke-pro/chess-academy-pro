@@ -443,12 +443,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       orientation?: 'white' | 'black';
       pgn?: string;
     }): { ok: boolean; reason?: string } => {
+      // Walkthroughs always start on /coach/teach (the canonical
+      // Learn-with-Coach surface). The legacy
+      // /coach/session/walkthrough page is gone — CoachSessionPage
+      // redirects it to /coach/teach.
       const params = new URLSearchParams();
-      params.set('subject', args.opening);
+      params.set('opening', args.opening);
       if (args.variation) params.set('variation', args.variation);
       if (args.orientation) params.set('orientation', args.orientation);
       if (args.pgn) params.set('pgn', args.pgn);
-      const route = `/coach/session/walkthrough?${params.toString()}`;
+      const route = `/coach/teach?${params.toString()}`;
       void logAppAudit({
         kind: 'walkthrough-started-from-coach',
         category: 'subsystem',
