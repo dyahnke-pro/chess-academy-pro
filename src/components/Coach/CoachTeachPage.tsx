@@ -53,6 +53,7 @@ import type { CoachDifficulty } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
+import { resolveCoachNarration } from '../../utils/coachNarration';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
@@ -377,6 +378,18 @@ export function CoachTeachPage(): JSX.Element {
   // the student played e4; this ref is the fix.
   const gameRef = useRef(game);
   gameRef.current = game;
+  // Audit-instrumentation phase-3 (2026-05-19): track recent user
+  // messages so handleSubmit can detect "retry" patterns — the same
+  // user typing two semantically similar inputs in a row, signal
+  // that the prior turn's resolution didn't satisfy them. Surfaces
+  // the "I wanted the danish gambit" → re-tap pattern from the live
+  // audit log. Capped at the last 3 entries to bound memory.
+  const recentUserInputsRef = useRef<Array<{ text: string; at: number }>>([]);
+  // Rolling response-length tracking per verbosity tier — when the
+  // brain's responses at `brief` average > prompt budget, that's the
+  // signal we need to tighten the rules. Capped at 20 entries per
+  // tier (rolling). Computed p50/p90 on every emit.
+  const responseLengthsRef = useRef<Record<string, number[]>>({});
   // liveFenRef is the SYNCHRONOUS source of truth for the FEN — written
   // by every successful handler (handlePlayMove, handleTakeBack,
   // handleSetBoardPosition, handleResetBoard) immediately after the
@@ -807,6 +820,69 @@ export function CoachTeachPage(): JSX.Element {
     // the id, so the audit log is pivotable by turn.
     const turnAuditId = mintTurnId('teach');
     setCurrentTurnId(turnAuditId);
+
+    // Audit-instrumentation phase-3: user-retry detection. Compare
+    // this input against the previous user input. When the two share
+    // a major content token AND the previous turn isn't very old,
+    // emit a `user-retry-detected` event — signal the prior turn's
+    // resolution probably missed what they wanted.
+    const trimmedText = text.trim();
+    {
+      const prev = recentUserInputsRef.current[recentUserInputsRef.current.length - 1];
+      if (prev && Date.now() - prev.at < 5 * 60_000) {
+        const norm = (s: string) =>
+          s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+        const prevTokens = new Set(norm(prev.text).split(' ').filter((t) => t.length >= 4));
+        const currTokens = norm(trimmedText).split(' ').filter((t) => t.length >= 4);
+        const shared = currTokens.filter((t) => prevTokens.has(t));
+        if (shared.length >= 1 && shared.length / Math.max(currTokens.length, 1) >= 0.4) {
+          void logAppAudit({
+            kind: 'user-retry-detected',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.retryDetector',
+            summary: `user retry: "${trimmedText.slice(0, 50)}" follows "${prev.text.slice(0, 50)}" (shared tokens: ${shared.join(', ')})`,
+            details: JSON.stringify({
+              currentInput: trimmedText,
+              previousInput: prev.text,
+              previousAt: prev.at,
+              gapMs: Date.now() - prev.at,
+              sharedTokens: shared,
+            }),
+          });
+        }
+      }
+      // Track current input for the NEXT retry check. Cap at 3 entries.
+      recentUserInputsRef.current.push({ text: trimmedText, at: Date.now() });
+      if (recentUserInputsRef.current.length > 3) recentUserInputsRef.current.shift();
+    }
+
+    // Audit-instrumentation phase-3: followup-context-check. Short
+    // followups (< 5 words) after a state-changing prior turn often
+    // expose context-loss bugs (e.g. user types "which is most
+    // aggressive?" right after the coach set the board to Danish
+    // Gambit; if the brain replies about a different opening, the
+    // context was lost). Captures the prior opening on the board so
+    // post-turn analysis can compare against the brain's reply.
+    {
+      const wordCount = trimmedText.split(/\s+/).length;
+      const prior = recentUserInputsRef.current[recentUserInputsRef.current.length - 2];
+      if (wordCount < 5 && prior) {
+        void logAppAudit({
+          kind: 'followup-context-check',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.followupDetector',
+          summary: `short follow-up (${wordCount} words): "${trimmedText}" — expecting context: ${walkthrough.tree?.openingName ?? '(none)'}`,
+          details: JSON.stringify({
+            currentInput: trimmedText,
+            wordCount,
+            walkthroughOpening: walkthrough.tree?.openingName ?? null,
+            priorInput: prior.text,
+            currentFen: gameRef.current.fen,
+          }),
+        });
+      }
+    }
+
     // Any new turn invalidates an outstanding [CHOICES:] prompt —
     // the brain's previous question has been answered (or
     // superseded), so clear the chips before the new response
@@ -1981,6 +2057,41 @@ export function CoachTeachPage(): JSX.Element {
       // the final response so the student isn't left in silence.
       tryExtractVoiceMarker();
       tryExtractChoicesMarker();
+
+      // Audit-instrumentation phase-3: verbosity response-length
+      // distribution. Tracks the rolling p50/p90 per verbosity tier.
+      // When the cap fires often or p50 drifts above the prompt budget
+      // we know the brain is ignoring the rule and we tighten.
+      {
+        const verbosity = resolveCoachNarration(activeProfile?.preferences) ?? 'full';
+        const lengths = responseLengthsRef.current[verbosity] ?? [];
+        lengths.push(result.text.length);
+        if (lengths.length > 20) lengths.shift();
+        responseLengthsRef.current[verbosity] = lengths;
+        const sorted = [...lengths].sort((a, b) => a - b);
+        const p = (q: number): number => {
+          if (sorted.length === 0) return 0;
+          const idx = Math.min(sorted.length - 1, Math.floor(q * sorted.length));
+          return sorted[idx];
+        };
+        const p50 = p(0.5);
+        const p90 = p(0.9);
+        void logAppAudit({
+          kind: 'verbosity-response-length',
+          category: 'subsystem',
+          source: 'CoachTeachPage.responseLengthTracker',
+          summary: `verbosity=${verbosity} length=${result.text.length}c rolling[n=${lengths.length}] p50=${p50} p90=${p90}`,
+          details: JSON.stringify({
+            verbosity,
+            currentLength: result.text.length,
+            rollingCount: lengths.length,
+            p50,
+            p90,
+            min: sorted[0],
+            max: sorted[sorted.length - 1],
+          }),
+        });
+      }
 
       // Bug A2 enforcement audit (2026-05-19): when the brain called a
       // state-changing tool (set_board_position / start_walkthrough_for_opening)
