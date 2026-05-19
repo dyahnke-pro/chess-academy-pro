@@ -47,7 +47,10 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ANNOTATIONS_DIR = 'src/data/annotations';
-const ANNOTATIONS_BUNDLE = 'src/data/annotations-bundle.json';
+// annotations-bundle.json is LEGACY data not loaded at runtime — see
+// src/data/annotations/index.ts comment. Scan-and-exclude is the safe
+// default; pass SCAN_BUNDLE=1 to include it.
+const ANNOTATIONS_BUNDLE = process.env.SCAN_BUNDLE === '1' ? 'src/data/annotations-bundle.json' : null;
 const OUT_DIR = 'docs/audit-runs/2026-05-19-content-scan';
 const OUT_PATH = join(OUT_DIR, 'findings.json');
 
@@ -72,6 +75,28 @@ function sanTargetSquare(san) {
   if (san === 'O-O') return null;
   const m = san.replace(/[+#]/g, '').match(/([a-h][1-8])(?:=[QRNB])?$/);
   return m ? m[1] : null;
+}
+
+/**
+ * For ambiguous SANs like 'Nbd2', 'R1e1', 'Rae1', returns the
+ * file/rank disambiguator as a partial from-square hint
+ * (e.g. 'Nbd2' → 'b' file).
+ */
+function sanFromSquareHint(san) {
+  if (!san || /^O-O/.test(san)) return null;
+  // strip check/mate/promotion
+  const core = san.replace(/[+#]/g, '').replace(/=[QRNB]$/, '');
+  // Piece + optional from-file/rank + optional capture + dest
+  // Examples: Nbd2, R1e1, Rae1, Qh4xe1
+  const m = core.match(/^([KQRBN])([a-h])?([1-8])?x?([a-h][1-8])$/);
+  if (m && (m[2] || m[3])) {
+    // Has disambiguator
+    const file = m[2] || '';
+    const rank = m[3] || '';
+    if (file && rank) return file + rank;
+    return null; // partial only — we'd need actual game state to resolve
+  }
+  return null;
 }
 
 // ─── Subject-of-move detectors ─────────────────────────────────────
@@ -264,13 +289,33 @@ function walkAnnotationSequence(file, openingId, sublineLabel, annotations, find
     const text = a.annotation || '';
     const idx = i + 1; // 1-based ply
     if (!san) continue;
+
+    const expectedPiece = sanPieceWord(san);
+    const expectedSquare = sanTargetSquare(san);
+    const expectedFromSquare = sanFromSquareHint(san); // partial; for ambiguous SANs only
+
+    // Arrow consistency check — flag only if NO arrow's destination
+    // matches the SAN target. Several arrows may exist (threat / control
+    // / plan arrows); we just need ONE pointing at the actual move's
+    // destination.
+    if (a.arrows && Array.isArray(a.arrows) && a.arrows.length > 0 && expectedSquare) {
+      const anyMatch = a.arrows.some((ar) => ar?.to && ar.to.toLowerCase() === expectedSquare);
+      if (!anyMatch) {
+        findings.push({
+          file, openingId, subline: sublineLabel, ply: idx, san,
+          kind: 'arrow-target-missing',
+          severity: 'p0',
+          arrows: a.arrows.map((ar) => `${ar.from}-${ar.to}`).join(','),
+          expectedSquare,
+          evidence: `no arrow points to ${expectedSquare}; arrows: ${a.arrows.map(ar=>ar.from+'->'+ar.to).join(',')}`,
+        });
+      }
+    }
+
     if (!text || !text.trim()) {
-      // Empty annotation — silence is OK per CLAUDE.md, no finding
       prevText = text;
       continue;
     }
-    const expectedPiece = sanPieceWord(san);
-    const expectedSquare = sanTargetSquare(san);
 
     // 1) Piece-mismatch (subject only)
     const subjectPiece = findSubjectPiece(text);
@@ -380,7 +425,8 @@ async function main() {
   console.log('[scan] loading annotation files...');
   const files = await listAnnotationFiles();
   console.log(`[scan] ${files.length} annotation files`);
-  console.log(`[scan] + annotations-bundle.json`);
+  if (ANNOTATIONS_BUNDLE) console.log(`[scan] + annotations-bundle.json`);
+  else console.log(`[scan] skipping annotations-bundle.json (legacy/unused)`);
 
   let allFindings = [];
   let totalFiles = 0;
@@ -399,16 +445,18 @@ async function main() {
     }
   }
 
-  // Bundle
-  try {
-    const bundle = await readFile(ANNOTATIONS_BUNDLE, 'utf-8');
-    const findings = scanBundle(bundle);
-    allFindings.push(...findings);
-    const doc = JSON.parse(bundle);
-    for (const arr of Object.values(doc)) if (Array.isArray(arr)) totalEntries += arr.length;
-    totalFiles++;
-  } catch (e) {
-    console.warn(`[scan] bundle scan error: ${e.message}`);
+  // Bundle (legacy, off by default)
+  if (ANNOTATIONS_BUNDLE) {
+    try {
+      const bundle = await readFile(ANNOTATIONS_BUNDLE, 'utf-8');
+      const findings = scanBundle(bundle);
+      allFindings.push(...findings);
+      const doc = JSON.parse(bundle);
+      for (const arr of Object.values(doc)) if (Array.isArray(arr)) totalEntries += arr.length;
+      totalFiles++;
+    } catch (e) {
+      console.warn(`[scan] bundle scan error: ${e.message}`);
+    }
   }
 
   // Sort by file then ply

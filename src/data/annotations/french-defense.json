@@ -44,6 +44,11 @@
       ],
       "arrows": [
         {
+          "from": "e7",
+          "to": "e6",
+          "color": "rgba(0, 180, 80, 0.8)"
+        },
+        {
           "from": "d7",
           "to": "d5",
           "color": "rgba(0, 100, 255, 0.7)"
@@ -2623,6 +2628,11 @@
           "san": "e6",
           "annotation": "Black plays the French Defence. The e6 pawn supports ...d5 next, creating the classic central tension. The trade-off is the light-squared bishop gets locked behind the pawn chain.",
           "arrows": [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
             {
               "from": "d7",
               "to": "d5",

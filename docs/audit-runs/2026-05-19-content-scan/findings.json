@@ -1,40 +1,14 @@
 {
-  "generatedAt": "2026-05-19T00:08:51.723Z",
-  "totalFiles": 1893,
-  "totalEntries": 32358,
-  "totalFindings": 43,
+  "generatedAt": "2026-05-19T00:17:35.577Z",
+  "totalFiles": 1892,
+  "totalEntries": 31114,
+  "totalFindings": 41,
   "byKind": {
-    "piece-mismatch-subject": 4,
-    "qualifier-mismatch": 1,
     "repeated-narration": 36,
+    "piece-mismatch-subject": 3,
     "square-mismatch-subject": 2
   },
   "findings": [
-    {
-      "file": "src/data/annotations-bundle.json",
-      "openingId": "birds-opening",
-      "subline": "main-bundle",
-      "ply": 6,
-      "san": "g6",
-      "kind": "piece-mismatch-subject",
-      "severity": "p1",
-      "textPiece": "bishop",
-      "expectedPiece": "pawn",
-      "evidence": "Black fianchettoes the king's bishop, which is a very modern and flexible approach. The bishop on g7 will be a powerhouse on the long diagonal, pressuring White's center and queenside. Combined with d"
-    },
-    {
-      "file": "src/data/annotations-bundle.json",
-      "openingId": "birds-opening",
-      "subline": "main-bundle",
-      "ply": 6,
-      "san": "g6",
-      "kind": "qualifier-mismatch",
-      "severity": "p0",
-      "qualifier": "kings",
-      "qualifierPiece": "bishop",
-      "expectedPiece": "pawn",
-      "evidence": "Black fianchettoes the king's bishop, which is a very modern and flexible approach. The bishop on g7 will be a powerhouse on the long diagonal, pressuring White's center and queenside. Combined with d"
-    },
     {
       "file": "src/data/annotations/benoni-defense-classical-variation-czerniak-defense-tal-line.json",
       "openingId": "benoni-defense-classical-variation-czerniak-defense-tal-line",

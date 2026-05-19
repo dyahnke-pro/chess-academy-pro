@@ -2502,6 +2502,11 @@
           "annotation": "Here's the Ponziani! Instead of Bc4 or Bb5, White plays c3 to prepare a big d4 push. It looks slow, but the idea is to build a strong pawn center quickly. Most opponents won't know the theory here.",
           "arrows": [
             {
+              "from": "c2",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            },
+            {
               "from": "d2",
               "to": "d4",
               "color": "rgba(0, 180, 80, 0.8)"
