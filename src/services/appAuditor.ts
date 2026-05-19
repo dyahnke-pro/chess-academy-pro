@@ -539,6 +539,14 @@ export type AuditKind =
   //   coach served the stock "I can't verify which moves are sound"
   //   response. Last-line G3 protection.
   | 'master-play-enforcement-fallback'
+  // Book grounding (chess-concepts.json — 7 Gutenberg classics).
+  //   Fires whenever the coach OR the opening narrator injects a
+  //   passage from Capablanca / Lasker / Staunton / Young / Edge /
+  //   Bird into the LLM's system prompt. The audit's summary names
+  //   the surface (`coachApi.bookGrounding` /
+  //   `openingGenerator.bookGrounding`) and char count. Used to
+  //   confirm the wiring is live + measure injection frequency.
+  | 'book-grounding-injected'
   // Opening-play opponent move source trail. Fired by
   //   `coachGameEngine.getAdaptiveMove` for every move the opponent
   //   makes once past the canonical repertoire line. The `source`

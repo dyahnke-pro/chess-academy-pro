@@ -1,0 +1,105 @@
+{
+  "fetchedAt": "2026-05-19T18:59:34.284Z",
+  "books": [
+    {
+      "slug": "capablanca-chess-fundamentals",
+      "gutenbergId": 33870,
+      "title": "Chess Fundamentals",
+      "authors": "Capablanca, José Raúl",
+      "focus": "positional principles, endgame technique, pawn structures",
+      "subjects": [
+        "Chess"
+      ],
+      "bytes": 262843,
+      "path": "capablanca-chess-fundamentals.txt",
+      "textUrl": "https://www.gutenberg.org/ebooks/33870.txt.utf-8",
+      "status": "fetched"
+    },
+    {
+      "slug": "edward-lasker-chess-strategy",
+      "gutenbergId": 5614,
+      "title": "Chess Strategy",
+      "authors": "Lasker, Edward",
+      "focus": "opening systems, planning, classical principles",
+      "subjects": [
+        "Chess"
+      ],
+      "bytes": 570888,
+      "path": "edward-lasker-chess-strategy.txt",
+      "textUrl": "https://www.gutenberg.org/ebooks/5614.txt.utf-8",
+      "status": "fetched"
+    },
+    {
+      "slug": "staunton-blue-book-of-chess",
+      "gutenbergId": 16377,
+      "title": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+      "authors": "Staunton, Howard",
+      "focus": "classical opening analysis, rudiments of play",
+      "subjects": [
+        "Chess"
+      ],
+      "bytes": 679414,
+      "path": "staunton-blue-book-of-chess.txt",
+      "textUrl": "https://www.gutenberg.org/ebooks/16377.txt.utf-8",
+      "status": "fetched"
+    },
+    {
+      "slug": "edward-lasker-chess-and-checkers",
+      "gutenbergId": 4913,
+      "title": "Chess and Checkers : the Way to Mastership",
+      "authors": "Lasker, Edward",
+      "focus": "mastership progression, beginner-to-advanced theory",
+      "subjects": [
+        "Checkers",
+        "Chess"
+      ],
+      "bytes": 374775,
+      "path": "edward-lasker-chess-and-checkers.txt",
+      "textUrl": "https://www.gutenberg.org/ebooks/4913.txt.utf-8",
+      "status": "fetched"
+    },
+    {
+      "slug": "young-chess-generalship",
+      "gutenbergId": 55278,
+      "title": "Chess Generalship, Vol. I. Grand Reconnaissance",
+      "authors": "Young, Franklin K.‏ (Franklin Knowles)",
+      "focus": "middlegame planning, strategic principles",
+      "subjects": [
+        "Chess"
+      ],
+      "bytes": 280690,
+      "path": "young-chess-generalship.txt",
+      "textUrl": "https://www.gutenberg.org/ebooks/55278.txt.utf-8",
+      "status": "fetched"
+    },
+    {
+      "slug": "edge-paul-morphy-exploits",
+      "gutenbergId": 34180,
+      "title": "The Exploits and Triumphs, in Europe, of Paul Morphy, the Chess Champion",
+      "authors": "Edge, Frederick Milnes",
+      "focus": "attacking play, romantic era game collection",
+      "subjects": [
+        "Chess",
+        "Morphy, Paul Charles, 1837-1884"
+      ],
+      "bytes": 352550,
+      "path": "edge-paul-morphy-exploits.txt",
+      "textUrl": "https://www.gutenberg.org/ebooks/34180.txt.utf-8",
+      "status": "fetched"
+    },
+    {
+      "slug": "bird-chess-history-reminiscences",
+      "gutenbergId": 4902,
+      "title": "Chess History and Reminiscences",
+      "authors": "Bird, H. E. (Henry Edward)",
+      "focus": "historical context for opening + style attribution",
+      "subjects": [
+        "Chess"
+      ],
+      "bytes": 409386,
+      "path": "bird-chess-history-reminiscences.txt",
+      "textUrl": "https://www.gutenberg.org/ebooks/4902.txt.utf-8",
+      "status": "fetched"
+    }
+  ]
+}

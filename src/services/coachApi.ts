@@ -40,6 +40,8 @@ import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
+import { getOpeningMasterContext, formatBestCounterAsNarration, formatRepGameRef } from './bestCounterService';
+import { buildCoachChatContext } from './chessConceptService';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -909,6 +911,15 @@ export interface MasterGroundingOptions {
   /** Force the grounding pipeline ON regardless of intent detection.
    *  Used by integration tests; production surfaces leave undefined. */
   forceEngage?: boolean;
+  /** Canonical opening ID the user is studying (e.g. 'italian-game',
+   *  'pro-carlsen-catalan'). When set, the grounding pipeline injects
+   *  pre-baked best-counter stats + a representative master game from
+   *  src/services/bestCounterService so the coach has instant
+   *  concept-level narration material per CLAUDE.md narration rule
+   *  ('name the concept every time'). Surfaces that don't know the
+   *  current openingId leave undefined — the live master-play
+   *  context still grounds based on currentFen. */
+  openingId?: string;
 }
 
 /** Move-question intent patterns. The detector matches the last user
@@ -1291,6 +1302,35 @@ export async function getCoachChatResponse(
     ? renderMasterPlayContextBlock(masterPlayContext)
     : '';
 
+  // Book grounding — pulls relevant passages from the 7 Gutenberg
+  // classics for any opening / concept named in the latest user
+  // message. Empty string when nothing matched; otherwise a compact
+  // reference block keyed off the same opening/concept vocabulary
+  // the narration generator uses. The brain grounds its prose in
+  // Capablanca / Lasker / Staunton rather than inventing stock
+  // explanations. See chessConceptService.ts for the data shape.
+  //
+  // KID CONTRACT — book grounding is GATED on `skipPersonality === false`.
+  // Pre-1929 chess prose can carry archaic phrasings, SAN, and adult
+  // language tone that violates the kid-safety prompt. Surfaces that
+  // pass `skipPersonality: true` (kid path via `getKidLlmResponse`)
+  // get NO book grounding. CLAUDE.md kid §3 + §17.
+  const latestUserMsg = (() => {
+    for (let i = messages.length - 1; i >= 0; i -= 1) {
+      if (messages[i].role === 'user') return messages[i].content;
+    }
+    return '';
+  })();
+  const bookGroundingBlock = skipPersonality ? '' : buildCoachChatContext(latestUserMsg);
+  if (bookGroundingBlock) {
+    void logAppAudit({
+      kind: 'book-grounding-injected',
+      category: 'subsystem',
+      source: 'coachApi.bookGrounding',
+      summary: `coach chat grounded with book passages (${bookGroundingBlock.length} chars)`,
+    });
+  }
+
   const buildSystemPromptFor = (extraAddendum: string = ''): string => {
     return buildSystemPromptWithVerbosity(
       SYSTEM_PROMPT,
@@ -1299,6 +1339,7 @@ export async function getCoachChatResponse(
         personalityAddition,
         responseLengthAddition,
         groundingBlock,
+        bookGroundingBlock,
         systemPromptAddition,
         extraAddendum,
       ]
