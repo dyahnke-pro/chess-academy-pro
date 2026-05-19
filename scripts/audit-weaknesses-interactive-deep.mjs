@@ -32,14 +32,16 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const PASS = Number(process.env.AUDIT_PASS ?? '1');
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
+const FIXTURE_PATH = process.env.AUDIT_FIXTURE
+  ?? 'audit-reports/.fixtures/david-games.json';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-const OUT_DIR = `audit-reports/weaknesses-interactive-pass${PASS}-${stamp}`;
+const OUT_DIR = `audit-reports/weaknesses-interactive-deep-pass${PASS}-${stamp}`;
 
 if (![1, 2, 3].includes(PASS)) {
   console.error(`AUDIT_PASS must be 1, 2, or 3 — got ${PASS}`);
@@ -190,6 +192,68 @@ async function main() {
       await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 60_000 });
       return 'IndexedDB cleared + page reloaded cold';
     });
+  }
+
+  // ─── Fixture import: David's real account data ───────────────
+  // Audit-reports/.fixtures/david-games.json is exported once via
+  // a DevTools snippet against his real browser. When present, the
+  // audit imports it into the headless browser's IDB so scenarios
+  // run against POPULATED real data instead of synthetic seeds.
+  // See docs comment at top + scripts/devtools-export-dexie.js.
+  let fixtureLoaded = false;
+  try {
+    await stat(FIXTURE_PATH);
+    const fixtureRaw = await readFile(FIXTURE_PATH, 'utf-8');
+    const fixture = JSON.parse(fixtureRaw);
+    await scenario('fixture-load-real-account-data', async () => {
+      const result = await page.evaluate(async (data) => {
+        const STORES = Object.keys(data.stores ?? {});
+        if (STORES.length === 0) return { wrote: 0, stores: 0 };
+        return await new Promise((resolve, reject) => {
+          const req = indexedDB.open('ChessAcademyDB');
+          req.onerror = () => reject(new Error('open failed'));
+          req.onsuccess = () => {
+            const db = req.result;
+            // Only target stores that exist in the schema — silently
+            // drop unknown ones so a fixture exported from a newer
+            // schema doesn't crash the older audit browser.
+            const present = STORES.filter((s) => db.objectStoreNames.contains(s));
+            if (present.length === 0) {
+              db.close();
+              resolve({ wrote: 0, stores: 0, skipped: STORES });
+              return;
+            }
+            const tx = db.transaction(present, 'readwrite');
+            const counts = {};
+            for (const s of present) {
+              const rows = data.stores[s];
+              counts[s] = Array.isArray(rows) ? rows.length : 0;
+              if (Array.isArray(rows)) {
+                const store = tx.objectStore(s);
+                for (const r of rows) store.put(r);
+              }
+            }
+            tx.oncomplete = () => {
+              db.close();
+              const total = Object.values(counts).reduce((a, b) => a + b, 0);
+              resolve({ wrote: total, stores: present.length, perStore: counts });
+            };
+            tx.onerror = () => { db.close(); reject(new Error('fixture put failed')); };
+          };
+        });
+      }, fixture);
+      // Reload so React picks up the imported data.
+      await page.goto(`${BASE_URL}/weaknesses`, { timeout: 60_000 });
+      await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 60_000 });
+      fixtureLoaded = true;
+      return `imported ${result.wrote} rows into ${result.stores} stores (${JSON.stringify(result.perStore).slice(0, 200)})`;
+    });
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      console.log(`  - fixture-load: ${FIXTURE_PATH} not found, using synthetic seed`);
+    } else {
+      console.log(`  - fixture-load: ${err.message}, falling back to synthetic seed`);
+    }
   }
 
   // ─── Header controls ─────────────────────────────────────────
@@ -672,6 +736,9 @@ async function main() {
   // as-white games across 2 openings so the audit can exercise
   // the populated paths.
   await scenario('seed-bulk-player-games', async () => {
+    if (fixtureLoaded) {
+      return 'skipped (fixture loaded — real account data already in IDB)';
+    }
     // Each pass uses a different ECO so passes don't collide.
     const ecoMap = { 1: 'C50', 2: 'B20', 3: 'C42' };
     const eco = ecoMap[PASS];
