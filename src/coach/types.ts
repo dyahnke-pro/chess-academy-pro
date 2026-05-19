@@ -411,6 +411,12 @@ export interface CoachAnswer {
   text: string;
   /** Tool call IDs the service dispatched in fulfilling this ask. */
   toolCallIds: string[];
+  /** Tool NAMES dispatched in fulfilling this ask, in dispatch order.
+   *  Surfaces use this to detect state-changing tool calls
+   *  (`set_board_position`, `start_walkthrough_for_opening`) and
+   *  enforce the "Setting the board to {name}." spoken sentence per
+   *  Bug A2 (audit 2026-05-19). */
+  dispatchedToolNames: string[];
   /** Provider used for this call (for debugging / audit). */
   provider: ProviderName;
 }
