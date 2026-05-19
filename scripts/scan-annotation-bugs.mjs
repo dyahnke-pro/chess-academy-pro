@@ -45,6 +45,7 @@
 import { readFile, writeFile, readdir, mkdir, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { Chess } from 'chess.js';
 
 const ANNOTATIONS_DIR = 'src/data/annotations';
 // annotations-bundle.json is LEGACY data not loaded at runtime — see
@@ -250,6 +251,65 @@ function findNamedLineReferences(text) {
   return hits;
 }
 
+/**
+ * Reusable content-check block. Runs against any prose field
+ * (annotation, shortNarration, plans[i], pawnStructure, alternatives[i]).
+ * Less-strict than the main annotation check — only emits findings
+ * for clear contradictions (no future-tense / drift sensitivity yet).
+ */
+function runContentChecks(file, openingId, sublineLabel, idx, san, expectedPiece, expectedSquare, fieldName, text, findings) {
+  const subjectPiece = findSubjectPiece(text);
+  if (subjectPiece && subjectPiece !== expectedPiece) {
+    findings.push({
+      file, openingId, subline: sublineLabel, ply: idx, san,
+      kind: 'piece-mismatch-subject',
+      field: fieldName,
+      severity: 'p1',
+      textPiece: subjectPiece,
+      expectedPiece,
+      evidence: text.slice(0, 200),
+    });
+  }
+  const subjectTarget = findSubjectTarget(text);
+  if (subjectTarget && expectedSquare && subjectTarget !== expectedSquare) {
+    findings.push({
+      file, openingId, subline: sublineLabel, ply: idx, san,
+      kind: 'square-mismatch-subject',
+      field: fieldName,
+      severity: 'p1',
+      textSquare: subjectTarget,
+      expectedSquare,
+      evidence: text.slice(0, 200),
+    });
+  }
+  const qual = findQualifierPiece(text);
+  if (qual && qual.piece !== expectedPiece) {
+    findings.push({
+      file, openingId, subline: sublineLabel, ply: idx, san,
+      kind: 'qualifier-mismatch',
+      field: fieldName,
+      severity: 'p0',
+      qualifier: qual.qualifier,
+      qualifierPiece: qual.piece,
+      expectedPiece,
+      evidence: text.slice(0, 200),
+    });
+  }
+  const subjectColor = findColorSubject(text);
+  const actualColor = ((idx % 2) === 1) ? 'white' : 'black';
+  if (subjectColor && subjectColor !== actualColor) {
+    findings.push({
+      file, openingId, subline: sublineLabel, ply: idx, san,
+      kind: 'color-mismatch',
+      field: fieldName,
+      severity: 'p0',
+      textColor: subjectColor,
+      actualColor,
+      evidence: text.slice(0, 200),
+    });
+  }
+}
+
 // ─── File walk ──────────────────────────────────────────────────────
 
 async function listAnnotationFiles() {
@@ -283,6 +343,28 @@ function scanFile(filePath, content) {
 
 function walkAnnotationSequence(file, openingId, sublineLabel, annotations, findings) {
   let prevText = '';
+  // Replay the SAN sequence with chess.js to catch illegal moves
+  // (data corruption / wrong PGN).
+  const chess = new Chess();
+  for (let i = 0; i < annotations.length; i++) {
+    const a = annotations[i];
+    const san = a.san;
+    if (!san) continue;
+    try {
+      chess.move(san);
+    } catch (e) {
+      findings.push({
+        file, openingId, subline: sublineLabel, ply: i + 1, san,
+        kind: 'illegal-san-sequence',
+        severity: 'p0',
+        evidence: `chess.js rejected ${san}: ${e.message}`,
+      });
+      // Halt this sequence — further plies depend on the rejected move
+      return;
+    }
+  }
+  // Second pass for the content-level checks (now that we know the
+  // sequence is legal)
   for (let i = 0; i < annotations.length; i++) {
     const a = annotations[i];
     const san = a.san;
@@ -309,6 +391,33 @@ function walkAnnotationSequence(file, openingId, sublineLabel, annotations, find
           expectedSquare,
           evidence: `no arrow points to ${expectedSquare}; arrows: ${a.arrows.map(ar=>ar.from+'->'+ar.to).join(',')}`,
         });
+      }
+    }
+
+    // Also scan shortNarration, plans[], alternatives[], pawnStructure
+    // for the same content bug classes.
+    for (const [fieldName, fieldText] of [
+      ['shortNarration', a.shortNarration],
+      ['pawnStructure', a.pawnStructure],
+    ]) {
+      if (typeof fieldText === 'string' && fieldText.trim()) {
+        runContentChecks(file, openingId, sublineLabel, idx, san, expectedPiece, expectedSquare, fieldName, fieldText, findings);
+      }
+    }
+    if (Array.isArray(a.plans)) {
+      for (let pi = 0; pi < a.plans.length; pi++) {
+        const p = a.plans[pi];
+        if (typeof p === 'string' && p.trim()) {
+          runContentChecks(file, openingId, sublineLabel, idx, san, expectedPiece, expectedSquare, `plans[${pi}]`, p, findings);
+        }
+      }
+    }
+    if (Array.isArray(a.alternatives)) {
+      for (let ai = 0; ai < a.alternatives.length; ai++) {
+        const v = a.alternatives[ai];
+        if (typeof v === 'string' && v.trim()) {
+          runContentChecks(file, openingId, sublineLabel, idx, san, expectedPiece, expectedSquare, `alternatives[${ai}]`, v, findings);
+        }
       }
     }
 

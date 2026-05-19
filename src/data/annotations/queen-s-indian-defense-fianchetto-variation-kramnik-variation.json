@@ -19,7 +19,7 @@
     {
       "san": "e6",
       "annotation": "Black chooses the Queen's Indian Defense approach, preparing to fianchetto the light-squared pawn on b7 while maintaining flexibility in the center. This move supports an eventual ...d5 advance and keeps the option of ...Bb4+ in some lines, putting pressure on our center. The pawn on e6 also prepares to support pieces on d5 and f5, and creates a solid but somewhat passive pawn structure. Our opponent is steering toward a hypermodern defense, planning to attack our pawn center from the flanks rather than occupying it directly.",
-      "shortNarration": "Black fianchettoes the bishop to b7, preparing ...d5 and keeping ...Bb4+ in reserve to pressure the center."
+      "shortNarration": "Black plays e6, preparing the bishop fianchetto to b7, preparing ...d5 and keeping ...Bb4+ in reserve to pressure the center."
     },
     {
       "san": "Nf3",
@@ -29,7 +29,7 @@
     {
       "san": "b6",
       "annotation": "Black commits to the Queen's Indian Defense, preparing to fianchetto the light-squared bishop on b7 where it will exert long-range pressure on our center. This move creates immediate tension along the long diagonal and signals that Black will fight against our pawn center from a distance. The b6 advance also prepares potential queenside play with moves like ...a6 and ...c5, giving Black counterplay on the flanks. This is the defining move of the Queen's Indian, showing Black's intent to use piece pressure rather than pawn occupation to challenge our center.",
-      "shortNarration": "Black fianchettoes the bishop on b7 to pressure the center from the long diagonal, preparing queenside counterplay with ...c5."
+      "shortNarration": "Black plays b6, preparing the bishop fianchetto on b7 to pressure the center from the long diagonal, preparing queenside counterplay with ...c5."
     },
     {
       "san": "g3",

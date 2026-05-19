@@ -69,7 +69,7 @@
     {
       "san": "b6",
       "annotation": "Our opponent plays the characteristic move of the Tartakower Defense, preparing to develop the light-squared bishop to b7 where it will pressure our long diagonal and central pawns. This fianchetto development is Black's main idea for achieving piece activity despite the somewhat passive pawn structure, as the bishop on b7 will be a long-range piece that contests important central squares. The move b6 also prepares potential queenside expansion with ...a6 and ...c5, giving Black counterplay on the queenside.",
-      "shortNarration": "Black fianchettoes the bishop to b7, pressuring the long diagonal and central pawns while preparing queenside expansion with ...a6 and ...c5."
+      "shortNarration": "Black plays b6, preparing the bishop fianchetto to b7, pressuring the long diagonal and central pawns while preparing queenside expansion with ...a6 and ...c5."
     },
     {
       "san": "cxd5",

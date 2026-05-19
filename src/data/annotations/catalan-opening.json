@@ -136,7 +136,7 @@
           "color": "rgba(255, 255, 0, 0.4)"
         }
       ],
-      "shortNarration": "White fianchettoes the bishop to g2, exerting pressure along the a8-h1 diagonal."
+      "shortNarration": "White plays g3, preparing the bishop fianchetto to g2, exerting pressure along the a8-h1 diagonal."
     },
     {
       "san": "d5",
@@ -1331,7 +1331,7 @@
         {
           "san": "g3",
           "annotation": "The Catalan! White fianchettoes the bishop to g2, creating long-term pressure on the light squares.",
-          "shortNarration": "White fianchettoes the bishop to g2, pressuring the light squares long-term."
+          "shortNarration": "White plays g3, preparing the bishop fianchetto to g2, pressuring the light squares long-term."
         },
         {
           "san": "d5",

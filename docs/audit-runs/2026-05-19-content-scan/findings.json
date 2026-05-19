@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-05-19T00:17:35.577Z",
+  "generatedAt": "2026-05-19T00:21:55.643Z",
   "totalFiles": 1892,
   "totalEntries": 31114,
-  "totalFindings": 41,
+  "totalFindings": 43,
   "byKind": {
     "repeated-narration": 36,
-    "piece-mismatch-subject": 3,
+    "piece-mismatch-subject": 5,
     "square-mismatch-subject": 2
   },
   "findings": [
@@ -18,6 +18,19 @@
       "kind": "repeated-narration",
       "severity": "p1",
       "evidence": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: O-O is a known theory move in this line."
+    },
+    {
+      "file": "src/data/annotations/blackmar-diemer-gambit-lemberger-countergambit-endgame-variation.json",
+      "openingId": "blackmar-diemer-gambit-lemberger-countergambit-endgame-variation",
+      "subline": "main",
+      "ply": 4,
+      "san": "dxe4",
+      "kind": "piece-mismatch-subject",
+      "field": "shortNarration",
+      "severity": "p1",
+      "textPiece": "knight",
+      "expectedPiece": "pawn",
+      "evidence": "Black accepts the gambit, taking the e4 pawn, and White develops the knight to e4 with tempo, gaining open lines and active piece play for the pawn."
     },
     {
       "file": "src/data/annotations/catalan-opening.json",
@@ -132,6 +145,19 @@
       "kind": "repeated-narration",
       "severity": "p1",
       "evidence": "dxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
+    },
+    {
+      "file": "src/data/annotations/italian-game.json",
+      "openingId": "italian-game",
+      "subline": "Ponziani Opening",
+      "ply": 20,
+      "san": "Nxd2",
+      "kind": "piece-mismatch-subject",
+      "field": "shortNarration",
+      "severity": "p1",
+      "textPiece": "bishop",
+      "expectedPiece": "knight",
+      "evidence": "Black trades knights, letting White develop the bishop with tempo."
     },
     {
       "file": "src/data/annotations/king-s-indian-attack.json",

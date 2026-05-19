@@ -59,7 +59,7 @@
     {
       "san": "g6",
       "annotation": "Our opponent fianchettoes their king's bishop, developing it to the long diagonal where it will become a powerful defensive and potentially offensive piece. The g6 move also prepares ...Bg7 and ...0-0, getting Black's king to safety while creating potential counterplay along the long diagonal. This is the most natural development in the Benoni, as the bishop on g7 will eye our central pawns and support Black's typical piece activity. However, this move also slightly weakens Black's kingside, particularly the f6 and h6 squares, which we might be able to exploit later with moves like f4-f5 or h4-h5.",
-      "shortNarration": "Black fianchettoes the king's bishop to g7, eyeing the center and weakening f6 and h6 for potential f4-f5 or h4-h5 breaks."
+      "shortNarration": "Black plays g6, preparing the king's bishop fianchetto to g7, eyeing the center and weakening f6 and h6 for potential f4-f5 or h4-h5 breaks."
     },
     {
       "san": "f4",

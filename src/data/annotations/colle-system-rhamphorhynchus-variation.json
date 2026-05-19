@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black prepares to fianchetto the kingside bishop to g7, creating a long diagonal that controls our center and preparing kingside castling. This setup is typical in Sicilian Defenses and gives Black's pieces good scope, though it takes a move and weakens the d6 square slightly.",
-      "shortNarration": "Black fianchettoes the bishop to g7, controlling the center long-diagonal and preparing kingside castling, but slightly weakens d6."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to g7, controlling the center long-diagonal and preparing kingside castling, but slightly weakens d6."
     },
     {
       "san": "d4",

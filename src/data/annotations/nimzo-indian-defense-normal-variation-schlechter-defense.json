@@ -39,7 +39,7 @@
     {
       "san": "b6",
       "annotation": "Black is preparing the Schlechter Defense setup by preparing to fianchetto the queen's bishop on b7, where it will rake down the long diagonal toward our kingside. This move also supports a potential ...c5 pawn break in the future and gives Black's queen access to the queenside via Qc7 or Qa5 in some lines. The b6 move shows that our opponent is planning a patient, positional approach rather than immediate tactical complications, aiming to gradually equalize through piece activity. We should note that this fianchetto setup often combines well with the bishop on b4, creating a two-bishop battery that can be quite annoying to handle, especially if we're not careful about our king safety.",
-      "shortNarration": "Black fianchettoes the bishop on b7, supporting ...c5 and aiming the long diagonal at White's kingside."
+      "shortNarration": "Black plays b6, preparing the bishop fianchetto on b7, supporting ...c5 and aiming the long diagonal at White's kingside."
     },
     {
       "san": "Bd3",

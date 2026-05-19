@@ -39,7 +39,7 @@
     {
       "san": "g6",
       "annotation": "Black chooses a hypermodern setup with g6, preparing to fianchetto the dark-squared bishop on g7 where it will exert tremendous pressure along the long diagonal. This move supports the eventual ...Bg7, which will eye our d4 pawn and challenge our central control from afar. The pawn on g6 also creates a safe haven for Black's king on the kingside while maintaining flexibility with the knight on d5. This fianchetto development is typical of the Modern Variation of the Alekhine Defense, where Black aims for piece activity rather than challenging our pawns immediately with moves like ...dxe5.",
-      "shortNarration": "Black fianchettoes the bishop to g7, pressuring d4 and preparing kingside castling in the Alekhine Defense."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to g7, pressuring d4 and preparing kingside castling in the Alekhine Defense."
     },
     {
       "san": "Bc4",

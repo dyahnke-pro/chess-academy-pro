@@ -54,7 +54,7 @@
     {
       "san": "b3",
       "annotation": "We're preparing to fianchetto our dark-squared bishop on b2, which is a key component of the Colle System and creates tremendous pressure along the long diagonal. This move supports our strategy of building piece pressure rather than relying solely on pawn advances, and the bishop will soon eye Black's kingside once it reaches b2. The b3 advance also gives our bishop a retreat square on a3 if needed and supports potential expansion with c4 later in the game. By developing our bishop to b2, we'll complete our development efficiently while maintaining pressure on Black's position and preparing for typical middlegame plans involving e4 or kingside attacks.",
-      "shortNarration": "Bishop to b2 pressures the long diagonal, supports c4 expansion, and eyes Black's kingside."
+      "shortNarration": "White pushes b3, preparing the dark-squared bishop fianchetto to b2 to pressure the long diagonal."
     },
     {
       "san": "Nc6",

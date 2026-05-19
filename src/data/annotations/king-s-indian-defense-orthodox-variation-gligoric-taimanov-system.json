@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black commits to the King's Indian Defense with this fianchetto move, preparing to develop the dark-squared bishop to g7 where it will become a powerful long-range piece. This move signals Black's intention to castle kingside quickly while maintaining flexibility in the center - they can still play ...e5 or ...c5 depending on our setup. The fianchetto bishop will exert tremendous pressure along the long diagonal, particularly targeting our b2 square and potentially supporting future tactics involving ...Nh5 or ...f5 breaks. We should be aware that Black is prioritizing king safety and piece activity over immediate central occupation, which is typical of hypermodern opening philosophy.",
-      "shortNarration": "Black fianchettoes the bishop to g7, pressuring b2 and preparing kingside castling with flexible central breaks."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to g7, pressuring b2 and preparing kingside castling with flexible central breaks."
     },
     {
       "san": "Nc3",

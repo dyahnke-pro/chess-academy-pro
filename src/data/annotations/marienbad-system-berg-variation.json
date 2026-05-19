@@ -19,7 +19,7 @@
     {
       "san": "b6",
       "annotation": "Black plays the Queen's Indian setup, preparing to fianchetto the light-squared bishop on b7 where it will exert long-range pressure on our kingside and central light squares. This is a hypermodern approach - instead of immediately occupying the center with pawns, Black aims to control it from a distance with pieces. The move also prepares ...Bb7, which will pin our knight if we don't take precautions, and creates potential pressure along the long diagonal. This system is particularly effective against 1.d4 because it avoids the main theoretical battles of the Queen's Gambit while maintaining solid, flexible development.",
-      "shortNarration": "Black fianchettoes the bishop to b7, pressuring the long diagonal and preparing to pin the knight on f3."
+      "shortNarration": "Black plays b6, preparing the bishop fianchetto to b7, pressuring the long diagonal and preparing to pin the knight on f3."
     },
     {
       "san": "g3",
