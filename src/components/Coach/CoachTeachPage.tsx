@@ -1004,6 +1004,38 @@ export function CoachTeachPage(): JSX.Element {
         } else if (fuzzy.candidates.length > 0) {
           // Ambiguous — surface the picker. Append the user's ask
           // first so the transcript shows what they typed.
+          //
+          // Audit-instrumentation phase-1: capture every candidate
+          // score, not just the names. Lets us see whether the
+          // runner-up gap was tight (close call — maybe retune
+          // AUTO_ACCEPT_GAP) or wide (clear "did you mean…" case).
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.fuzzyPickerScores',
+            summary:
+              `fuzzy candidates for "${fuzzy.query}": ` +
+              fuzzy.candidates
+                .map((c) => `${c.canonicalName} (${c.score.toFixed(2)})`)
+                .join(' | '),
+            details: JSON.stringify({
+              query: fuzzy.query,
+              candidates: fuzzy.candidates.map((c) => ({
+                canonicalName: c.canonicalName,
+                eco: c.eco,
+                score: c.score,
+                source: c.source,
+              })),
+              autoAcceptThreshold: 0.92,
+              autoAcceptGapThreshold: 0.15,
+              autoAccepted: fuzzy.autoAccept,
+              topScore: fuzzy.candidates[0]?.score ?? null,
+              runnerUpScore: fuzzy.candidates[1]?.score ?? null,
+              gap: fuzzy.candidates.length >= 2
+                ? (fuzzy.candidates[0].score - fuzzy.candidates[1].score)
+                : null,
+            }),
+          });
           const ambiguousTurnId = `t-${Date.now()}-fuzzy-picker`;
           setMessages((prev) => [...prev, {
             id: `${ambiguousTurnId}-u`,
@@ -2698,6 +2730,28 @@ export function CoachTeachPage(): JSX.Element {
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
             coachChoices={coachChoices}
             onPickCoachChoice={(choice) => {
+              // Audit-instrumentation phase-1: log every chip tap as
+              // its own event kind so the audit log can answer "what
+              // did the user actually tap, and where did it route?"
+              // without spelunking through coach-surface-migrated
+              // events for the resolution outcome.
+              void logAppAudit({
+                kind: 'chip-tap-resolved',
+                category: 'subsystem',
+                source: 'CoachTeachPage.coachChoiceChip',
+                summary: `chip tap: "${choice.slice(0, 60)}" → routed through handleSubmit`,
+                details: JSON.stringify({
+                  chipText: choice,
+                  source: 'coach-choice-chip',
+                  // Context the resolver will see when handleSubmit
+                  // runs: current FEN, walkthrough's opening, intended
+                  // opening. Lets us replay the resolution if the
+                  // outcome surprises us.
+                  contextFen: gameRef.current.fen,
+                  walkthroughOpening: walkthrough.tree?.openingName ?? null,
+                }),
+                fen: gameRef.current.fen,
+              });
               setCoachChoices(null);
               void handleSubmit(choice);
             }}
@@ -2773,6 +2827,27 @@ export function CoachTeachPage(): JSX.Element {
                   <button
                     key={opt.fullName}
                     onClick={() => {
+                      // Audit-instrumentation phase-1: every line-
+                      // picker tile tap as chip-tap-resolved with the
+                      // canonical destination opening + mode.
+                      void logAppAudit({
+                        kind: 'chip-tap-resolved',
+                        category: 'subsystem',
+                        source: 'CoachTeachPage.linePickerTile',
+                        summary: `picker tile tap: "${opt.fullName}" mode=${linePickerMode}`,
+                        details: JSON.stringify({
+                          chipText: opt.fullName,
+                          source: 'line-picker-tile',
+                          mode: linePickerMode,
+                          eco: opt.eco,
+                          style: opt.style,
+                          studentSide: opt.studentSide,
+                          leadingSide: opt.leadingSide,
+                          pickerCanonicalName: linePicker.canonicalName,
+                          contextFen: gameRef.current.fen,
+                        }),
+                        fen: gameRef.current.fen,
+                      });
                       setLinePicker(null);
                       // FACE mode submits a "Face: X" prefix that
                       // handleSubmit recognizes and routes to a

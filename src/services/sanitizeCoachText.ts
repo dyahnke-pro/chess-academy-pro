@@ -121,11 +121,36 @@ function stripMarkup(text: string): string {
  *  me show you…", etc.) from the head — see SCAFFOLDING_PREFIXES.
  *  The prompt bans these at every verbosity, but the LLM ignores the
  *  ban; this strip is the enforcement so the user never sees the
- *  filler in the chat bubble or hears it via the voice fallback. */
+ *  filler in the chat bubble or hears it via the voice fallback.
+ *
+ *  When stripping happens, fires a `scaffolding-stripped` audit so we
+ *  can observe how often the LLM ignores the prompt ban — feedback
+ *  signal for prompt tuning. The audit is best-effort (import is
+ *  dynamic to avoid a top-level dep cycle); failures are silent. */
 export function sanitizeCoachText(text: string | null | undefined): string {
   if (!text) return '';
   const noMarkup = stripMarkup(text).trim();
-  const { text: noScaffolding } = stripScaffolding(noMarkup);
+  const { text: noScaffolding, strippedCount, stripped } = stripScaffolding(noMarkup);
+  if (strippedCount > 0) {
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'scaffolding-stripped',
+        category: 'subsystem',
+        source: 'sanitizeCoachText',
+        summary: `stripped ${strippedCount} scaffolding opener(s): ${stripped.map((p) => `"${p.slice(0, 30)}"`).join(', ')}`,
+        details: JSON.stringify({
+          strippedCount,
+          strippedPhrases: stripped,
+          originalLength: noMarkup.length,
+          cleanedLength: noScaffolding.length,
+          // Cap the previews so massive responses don't bloat the audit
+          // log — first 120 chars on each side gives enough context.
+          originalPreview: noMarkup.slice(0, 120),
+          cleanedPreview: noScaffolding.slice(0, 120),
+        }),
+      });
+    }).catch(() => undefined);
+  }
   return noScaffolding;
 }
 
