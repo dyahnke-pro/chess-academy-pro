@@ -194,6 +194,73 @@ This is David's directive verbatim (2026-05-18):
 *"add the arrows for step by step walk throughs so I don't have to
 ask each time."*
 
+### G7. Playwright audits MUST be INTERACTIVE. No exceptions.
+
+The 2026-05-19 incident proved this: I ran scripted Playwright
+audits (`audit-coach-teach-unknown-line.mjs`, `audit-coach-plan.mjs`,
+`audit-untouched-surfaces.mjs`) that came back 100% green, then
+declared the surfaces shipped. The SAME DAY, David typed "Philidor
+Defence" into `/coach/teach` and got bounced to the legacy
+`/coach/session/walkthrough` page; clicked the trap stage cold and
+got an empty/broken state; the British spelling slipped past the
+canonicalizer entirely. The scripted audits had no scenario for any
+of these because the scenarios were built around canonical
+happy-path inputs.
+
+**"Audit green" doesn't mean "surface works." It means "the wires I
+tested still work."** Every audit run, after every build (whether in
+the sandbox against `localhost:5173` or on David's machine against
+prod), MUST include interactive failure-mode probing — not just
+canonical happy-path scenarios. Concretely, on every audit run for
+every surface touched:
+
+1. **Off-canonical user input.** Type misspellings, alternate
+   spellings (British/American), abbreviations, partial names,
+   diacritics. Examples that have hit prod:
+   `"Philidor Defence"` (British) vs `"Philidor Defense"` (American),
+   `"Najdorff"` (typo) vs `"Najdorf"`, `"Caro Cann"` vs `"Caro-Kann"`,
+   `"KID"` vs `"King's Indian Defense"`, `"Evans"` vs
+   `"Italian Game: Evans Gambit"`. At least 3 such inputs per chat /
+   search / typed-input surface.
+2. **Cold-cache scenarios.** Clear IndexedDB before the run. Use
+   an opening / position / puzzle that has NEVER been generated /
+   cached on this device. Surfaces a wholly different code path
+   (generation pipeline, network fetch, fallback chain) than
+   warm-cache scenarios.
+3. **First-time-user flows.** Fresh storage, no session state, no
+   warmed pools, no favorites, no SRS enrollments. Run through the
+   surface as a user who just installed.
+4. **Pick-before-load.** Tap a menu item / chip / tile / stage
+   before its underlying data finishes loading. Common failure
+   mode: user clicks "punish lines" while `generateMissingStagesInBackground`
+   is still 30s away from delivering them → user gets an empty
+   state instead of a wait-and-jump.
+5. **Out-of-order interactions.** Don't follow the intended
+   sequence. Real users skip around; try things in any order.
+
+**If the existing scripted audit only covers happy paths, the
+session ADDS the failure-mode scenarios to that script (or writes
+a new exploratory audit, e.g. `scripts/audit-<surface>-fuzzy.mjs`)
+BEFORE shipping.** Cannot claim "audit green" until failure modes
+have been probed.
+
+**When a check can't be automated** (voice playback in headless,
+real-device touch gestures, iOS-specific behavior) — say so
+explicitly and route it to David. Don't substitute "scripted audit
+green" for "I tested it."
+
+**Cannot claim "done" without:**
+- The scripted audit pass count + report path, AND
+- An explicit interactive-probe paragraph naming the off-canonical
+  inputs / cold-cache scenarios / pick-before-load attempts you
+  actually drove, AND
+- Anything you couldn't probe in the sandbox, explicitly flagged
+  for David.
+
+This is David's directive verbatim (2026-05-19):
+*"THE PLAYWRIGHT NEEDS TO BE INTERACTIVE!! NO EXCEPTIONS!! FILE
+THIS TO MEMORY!!"*
+
 Violating these gates wastes David's money and erodes trust faster
 than missing the underlying task. The shallow-work failure mode IS
 the harm here.
