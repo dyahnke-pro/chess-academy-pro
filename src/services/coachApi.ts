@@ -1309,13 +1309,19 @@ export async function getCoachChatResponse(
   // the narration generator uses. The brain grounds its prose in
   // Capablanca / Lasker / Staunton rather than inventing stock
   // explanations. See chessConceptService.ts for the data shape.
+  //
+  // KID CONTRACT — book grounding is GATED on `skipPersonality === false`.
+  // Pre-1929 chess prose can carry archaic phrasings, SAN, and adult
+  // language tone that violates the kid-safety prompt. Surfaces that
+  // pass `skipPersonality: true` (kid path via `getKidLlmResponse`)
+  // get NO book grounding. CLAUDE.md kid §3 + §17.
   const latestUserMsg = (() => {
     for (let i = messages.length - 1; i >= 0; i -= 1) {
       if (messages[i].role === 'user') return messages[i].content;
     }
     return '';
   })();
-  const bookGroundingBlock = buildCoachChatContext(latestUserMsg);
+  const bookGroundingBlock = skipPersonality ? '' : buildCoachChatContext(latestUserMsg);
   if (bookGroundingBlock) {
     void logAppAudit({
       kind: 'book-grounding-injected',
