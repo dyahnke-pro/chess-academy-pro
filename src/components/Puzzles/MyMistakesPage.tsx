@@ -10,8 +10,9 @@ import {
   type MistakePuzzleStats,
   type ReanalysisProgress,
 } from '../../services/mistakePuzzleService';
-import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown } from 'lucide-react';
+import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown, Search, X } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
+import { tacticTypeLabel } from '../../services/tacticAlertService';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 
 type ClassificationFilter = MistakeClassification | 'all';
@@ -80,6 +81,12 @@ export function MyMistakesPage(): JSX.Element {
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>(navState.initialStatus ?? 'all');
   const [openingFilter, setOpeningFilter] = useState<string | null>(initialOpeningFromUrlOrState);
+  /** Smart-search query — matches against opponent name OR tactic
+   *  type label, case-insensitive substring. Empty = no filter.
+   *  David's directive 2026-05-19: "a search bar so i can search
+   *  for specific users ive faced, or specific puzzle type. one
+   *  smart search bar should be good!". */
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState<ReanalysisProgress | null>(null);
@@ -114,12 +121,26 @@ export function MyMistakesPage(): JSX.Element {
     void loadData();
   }, [loadData]);
 
+  const searchQ = searchQuery.trim().toLowerCase();
   const filtered = puzzles.filter((p) => {
     if (phaseTab !== 'all' && p.gamePhase !== phaseTab) return false;
     if (classFilter !== 'all' && p.classification !== classFilter) return false;
     if (sourceFilter !== 'all' && p.sourceMode !== sourceFilter) return false;
     if (statusFilter !== 'all' && p.status !== statusFilter) return false;
     if (openingFilter !== null && p.openingName !== openingFilter) return false;
+    // Smart-search: OR-match across opponent name + tactic label.
+    // Empty query = no filter.
+    if (searchQ) {
+      const oppMatch = p.opponentName?.toLowerCase().includes(searchQ) ?? false;
+      const tacticMatch = p.tacticType
+        ? tacticTypeLabel(p.tacticType).toLowerCase().includes(searchQ)
+        : false;
+      // Opening name as a bonus match — searching "italian" should
+      // also surface Italian-Game puzzles even if the opponent name
+      // and tactic don't contain "italian".
+      const openingMatch = p.openingName?.toLowerCase().includes(searchQ) ?? false;
+      if (!oppMatch && !tacticMatch && !openingMatch) return false;
+    }
     return true;
   }).sort((a, b) => {
     // Newest games first; games older than 1 year sink to the bottom
@@ -307,6 +328,36 @@ export function MyMistakesPage(): JSX.Element {
           {PHASE_TABS.find((t) => t.phase === phaseTab)?.description}
         </p>
       )}
+
+      {/* Smart search — matches opponent name, tactic type, or
+          opening name. One input, OR semantics across the three
+          fields. Empty = no filter. */}
+      <div className="relative mb-3" data-testid="mistakes-search">
+        <Search
+          size={14}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-text-muted pointer-events-none"
+        />
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search opponent, tactic (fork, skewer, …), or opening…"
+          className="w-full pl-9 pr-9 py-2 rounded-lg bg-theme-surface text-sm text-theme-text placeholder:text-theme-text-muted border border-theme-border focus:outline-none focus:border-theme-accent transition-colors"
+          data-testid="mistakes-search-input"
+          aria-label="Search puzzles by opponent, tactic, or opening"
+        />
+        {searchQuery.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setSearchQuery('')}
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-theme-border/40 transition-colors"
+            aria-label="Clear search"
+            data-testid="mistakes-search-clear"
+          >
+            <X size={14} className="text-theme-text-muted" />
+          </button>
+        )}
+      </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2 mb-4" data-testid="filters">

@@ -507,6 +507,11 @@ export interface UserPreferences {
    *  disabling all in-app audio. Defaults to true (trainer-mode
    *  default) and syncs with appStore.coachVoiceOn. */
   coachVoiceOn?: boolean;
+  /** Show the named tactic (Skewer / Fork / Pin / etc.) at the top
+   *  of every mistake-puzzle. When OFF the chip is hidden so the
+   *  student can find the tactic blind. Toggle lives next to the
+   *  chip itself. Defaults to true (named-tactic shown). */
+  puzzleShowTacticName?: boolean;
   dailySessionMinutes: number;
   aiProvider: AiProvider;
   apiKeyEncrypted: string | null;

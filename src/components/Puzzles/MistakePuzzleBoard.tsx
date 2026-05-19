@@ -9,11 +9,11 @@ import { getCoachCommentary } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
-import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle } from 'lucide-react';
+import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle, Eye, EyeOff, Target } from 'lucide-react';
 import { HintButton } from '../Coach/HintButton';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { detectTacticType } from '../../services/missedTacticService';
-import { getCoachingMessage, recordTacticOutcome } from '../../services/tacticAlertService';
+import { getCoachingMessage, recordTacticOutcome, tacticTypeLabel } from '../../services/tacticAlertService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -143,6 +143,8 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
   const { settings } = useSettings();
   const activeProfile = useAppStore((s) => s.activeProfile);
+  const puzzleShowTacticName = useAppStore((s) => s.puzzleShowTacticName);
+  const togglePuzzleShowTacticName = useAppStore((s) => s.togglePuzzleShowTacticName);
   const [whyLoading, setWhyLoading] = useState(false);
   const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
 
@@ -668,6 +670,37 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded bg-theme-surface text-theme-text-muted border border-theme-border" data-testid="opening-name">
             <BookOpen size={10} />
             {puzzle.openingName}
+          </span>
+        )}
+        {/* Tactic-name chip — surfaces the named pattern (Skewer /
+            Fork / Pin / etc.) so the student can target their
+            search. Eye-icon toggle next to the chip hides the name
+            when the student wants to find the tactic blind.
+            Toggle persists per-profile via appStore /
+            UserPreferences.puzzleShowTacticName.
+            David's directive 2026-05-19: "a name of the tactic I'm
+            suppose to be looking/missed at the top the puzzle. With
+            a little on off toggle next to it". */}
+        {puzzle.tacticType && puzzle.tacticType !== 'tactical_sequence' && (
+          <span
+            className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded bg-theme-accent/15 text-theme-accent border border-theme-accent/40 font-semibold"
+            data-testid="tactic-name-chip"
+          >
+            <Target size={10} />
+            {puzzleShowTacticName
+              ? tacticTypeLabel(puzzle.tacticType)
+                  .replace(/^./, (c) => c.toUpperCase())
+              : 'Hidden'}
+            <button
+              type="button"
+              onClick={() => togglePuzzleShowTacticName()}
+              className="ml-1 p-0.5 rounded hover:bg-theme-accent/20 transition-colors"
+              aria-label={puzzleShowTacticName ? 'Hide tactic name' : 'Show tactic name'}
+              data-testid="tactic-name-toggle"
+              data-tactic-name-shown={puzzleShowTacticName ? 'true' : 'false'}
+            >
+              {puzzleShowTacticName ? <Eye size={11} /> : <EyeOff size={11} />}
+            </button>
           </span>
         )}
       </div>

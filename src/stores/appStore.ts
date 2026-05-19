@@ -25,6 +25,20 @@ function persistCoachVoiceOn(profile: UserProfile | null, on: boolean): void {
   });
 }
 
+/** Same fire-and-forget pattern for the puzzle tactic-name toggle.
+ *  Mirrors the value to profile.preferences so it sticks across
+ *  reloads (David's call 2026-05-19: "I want a little on off
+ *  toggle next to the tactic name"). */
+function persistPuzzleShowTacticName(profile: UserProfile | null, on: boolean): void {
+  if (!profile) return;
+  profile.preferences.puzzleShowTacticName = on;
+  void db.profiles.update(profile.id, {
+    preferences: { ...profile.preferences, puzzleShowTacticName: on },
+  }).catch((err: unknown) => {
+    console.warn('[appStore] persistPuzzleShowTacticName failed:', err);
+  });
+}
+
 interface AppState {
   // Auth / Profile
   activeProfile: UserProfile | null;
@@ -48,6 +62,9 @@ interface AppState {
   coachBubbleText: string;
   coachVoiceOn: boolean;
   coachTipsOn: boolean;
+  /** Show the named tactic above each mistake puzzle. Toggleable
+   *  by the student via the eye-icon button next to the chip. */
+  puzzleShowTacticName: boolean;
 
   // Background analysis
   backgroundAnalysisRunning: boolean;
@@ -112,6 +129,8 @@ interface AppActions {
   toggleCoachVoice: () => void;
   setCoachVoiceOn: (on: boolean) => void;
   toggleCoachTips: () => void;
+  togglePuzzleShowTacticName: () => void;
+  setPuzzleShowTacticName: (on: boolean) => void;
   setBackgroundAnalysis: (running: boolean, progress?: string | null) => void;
   setCoachDrawerOpen: (open: boolean) => void;
   setCoachDrawerInitialMessage: (msg: string | null, modality?: 'voice' | 'text') => void;
@@ -142,6 +161,7 @@ const DEFAULT_STATE: AppState = {
   coachBubbleText: '',
   coachVoiceOn: true,
   coachTipsOn: false,
+  puzzleShowTacticName: true,
   backgroundAnalysisRunning: false,
   backgroundAnalysisProgress: null,
   coachDrawerOpen: false,
@@ -166,7 +186,13 @@ export const useAppStore = create<AppState & AppActions>()(
       // isn't present on the profile yet.
       const persisted = profile?.preferences.coachVoiceOn;
       const nextVoiceOn = typeof persisted === 'boolean' ? persisted : true;
-      set({ activeProfile: profile, coachVoiceOn: nextVoiceOn });
+      const persistedTacticName = profile?.preferences.puzzleShowTacticName;
+      const nextPuzzleShowTacticName = typeof persistedTacticName === 'boolean' ? persistedTacticName : true;
+      set({
+        activeProfile: profile,
+        coachVoiceOn: nextVoiceOn,
+        puzzleShowTacticName: nextPuzzleShowTacticName,
+      });
     },
 
     setLoading: (loading) => set({ isLoading: loading }),
@@ -206,6 +232,17 @@ export const useAppStore = create<AppState & AppActions>()(
     }),
 
     toggleCoachTips: () => set((state) => ({ coachTipsOn: !state.coachTipsOn })),
+
+    togglePuzzleShowTacticName: () => set((state) => {
+      const next = !state.puzzleShowTacticName;
+      persistPuzzleShowTacticName(state.activeProfile, next);
+      return { puzzleShowTacticName: next };
+    }),
+
+    setPuzzleShowTacticName: (on) => set((state) => {
+      persistPuzzleShowTacticName(state.activeProfile, on);
+      return { puzzleShowTacticName: on };
+    }),
 
     setBackgroundAnalysis: (running, progress) =>
       set({ backgroundAnalysisRunning: running, backgroundAnalysisProgress: progress ?? null }),
