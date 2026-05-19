@@ -3,16 +3,65 @@ import { detectTactics } from './tacticsDetector';
 
 // ─── Verbosity Prompt Modifier ─────────────────────────────────────────────
 
+/** Scaffolding / filler phrases BANNED at every verbosity level. The
+ *  brain has historically opened responses with "Great question",
+ *  "Let me show you", "Now we'll see", etc. — none of these say
+ *  anything about chess, and at brief they crowd out the actual
+ *  teaching content. Audit 2026-05-19 (Bug I): voice was clipped
+ *  mid-thought because the LLM burned the first 8 words on filler.
+ *  The post-process `stripScaffolding` covers the same patterns, but
+ *  the prompt-level ban is the first line of defence — every word
+ *  saved in the LLM's output is a word it spends on chess. */
+const NO_SCAFFOLDING_RULE = `OPENERS — BANNED AT EVERY VERBOSITY:
+- Never open with "Great question", "Good question", "Excellent question", "That's a great question", "Interesting question", "Nice one"
+- Never open with "Great", "Excellent", "Perfect", "Nice", "Awesome", "Well done"
+- Never open with "Let me show you", "Let me explain", "Let me walk you through", "Let me tell you"
+- Never open with "I think", "Now", "So", "Okay", "Alright", "Let's see"
+- Open with the chess fact directly. The student already knows you heard them — affirming the question wastes the breath they're listening for.
+
+REWRITE EXAMPLES (study these):
+- BAD: "Great question — the Vienna fits your aggressive style."  →  GOOD: "Vienna fits your aggressive style."
+- BAD: "Let me show you the trap. Black plays Bxf2+ winning the queen."  →  GOOD: "Bxf2+ wins the queen — Black is busted."
+- BAD: "Now we'll see why d4 is the sharpest. After exd4 c3..."  →  GOOD: "d4 is sharpest: after exd4 c3, the c-pawn opens lines."
+- BAD: "Great! You played the right move. Continue with Nf3."  →  GOOD: "Right move. Play Nf3 next."`;
+
 const VERBOSITY_INSTRUCTIONS: Record<Exclude<CoachVerbosity, 'none'>, string> = {
-  fast: `VERBOSITY (HARD CAP — student set "Short / Brief" narration):
-- MAXIMUM 2 sentences. MAXIMUM 30 words total. No exceptions.
-- Pick the SINGLE most important idea and ship that. No second idea, no caveats, no "but also…".
-- No preamble. No encouragement. No "Let me explain". No "Great question".
-- If you find yourself writing a third sentence, STOP and delete it. The student picked Brief specifically because they don't want long prose.
-- This cap applies to BOTH the chat text and the [VOICE: ...] marker contents — both must obey 30 words. Production audit (2026-05-18, David's report): "short" setting was being honored as a soft hint and the brain shipped 497-char responses. This is the hard rule the audit found missing.`,
-  medium: `VERBOSITY: Natural pacing — as long or short as the moment deserves. A routine move gets one idea; a critical moment gets the full picture. No hard cap, no filler.`,
-  slow: `VERBOSITY: Go as deep as the teaching needs. Cover the idea, the alternatives, the plans for both sides, and how it connects to the student's past patterns. Speak like a trainer sitting next to them — thorough, but never lecturing.`,
-  unlimited: `VERBOSITY: No cap. The student wants the full personal-trainer experience — walk through the move, both sides' plans, alternatives considered, how this links to past games, known weaknesses, common traps in the line, and what to watch for next. Go as long as teaching value demands. Still no filler — every sentence earns its place.`,
+  fast: `VERBOSITY: BRIEF — the student wants chess, not prose.
+
+How to speak at this tier:
+- Direct and immediate. Open with the chess fact itself.
+- One idea per response. Pick the SINGLE most important thing — the threat, the pattern, the verdict — and ship that. Don't try to teach three things at once; chain the others to later turns.
+- Skip restating what the student already sees (the move that just played, the position they're looking at). Voice the WHY, not the WHAT.
+- Voice: a coach giving a quick read between moves — not a lecture, not a tour. Compact, conversational sentences.
+- If a sentence isn't earning its place, delete it.
+
+${NO_SCAFFOLDING_RULE}`,
+  medium: `VERBOSITY: NORMAL — natural pacing.
+
+How to speak at this tier:
+- Cover the chess idea, then maybe one beat of "what to look for next." That's usually enough.
+- A routine move gets one sentence; a critical moment can stretch to a short paragraph.
+- Don't pad. If the position is quiet, the response is quiet.
+- Voice: a coach narrating thoughtfully, not lecturing.
+
+${NO_SCAFFOLDING_RULE}`,
+  slow: `VERBOSITY: DEEP — go as far as the teaching warrants.
+
+How to speak at this tier:
+- Cover the idea, the alternatives, both sides' plans, and the connection to past patterns when relevant.
+- Name the tension in the position — squares, files, pawn breaks that decide the next several moves.
+- Speak like a trainer sitting next to the student — thorough, but never lecturing for its own sake.
+- Length follows content; if the position is genuinely complex, take the space. If it isn't, don't.
+
+${NO_SCAFFOLDING_RULE}`,
+  unlimited: `VERBOSITY: FULL — the personal-trainer experience.
+
+How to speak at this tier:
+- Walk through the move, both sides' plans, alternatives considered, how this links to past games, known weaknesses, common traps in the line, and what to watch for next.
+- Length follows content. Every sentence earns its place. No filler.
+- Voice: an experienced trainer who has time to teach properly.
+
+${NO_SCAFFOLDING_RULE}`,
 };
 
 export function getVerbosityInstruction(verbosity: CoachVerbosity): string {

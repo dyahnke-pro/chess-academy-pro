@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from './sanitizeCoachText';
+import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, stripScaffolding } from './sanitizeCoachText';
 
 describe('sanitizeCoachText', () => {
   describe('passthrough', () => {
@@ -281,5 +281,69 @@ describe('formatForSpeech', () => {
 
   it('handles empty / null input', () => {
     expect(formatForSpeech('')).toBe('');
+  });
+});
+
+describe('stripScaffolding (Bug I)', () => {
+  // Live audit 2026-05-19: every brief-mode response opened with
+  // filler ("Great question — ", "Let me show you …") even though
+  // the prompt explicitly banned these openers. Strip enforcement
+  // ensures the user never sees or hears the filler.
+
+  const FILLER_OPENERS = [
+    ['Great question — Vienna fits your aggressive style.', 'Vienna fits your aggressive style.'],
+    ['Great question! The trap is Bxf2+.', 'The trap is Bxf2+.'],
+    ['Good question — d4 here is sharpest.', 'd4 here is sharpest.'],
+    ['Excellent question, Black should play Nc6.', 'Black should play Nc6.'],
+    ["That's a great question — the Najdorf is razor-sharp.", 'the Najdorf is razor-sharp.'],
+    ['Let me show you the trap. Bxf2+ wins the queen.', 'Bxf2+ wins the queen.'],
+    ['Let me explain why d4 works. After exd4 c3, the file opens.', 'After exd4 c3, the file opens.'],
+    ["Let's see — push the c-pawn.", 'push the c-pawn.'],
+    ['Now, push the c-pawn.', 'push the c-pawn.'],
+    ['Okay, push the c-pawn.', 'push the c-pawn.'],
+    ['I think the move is e5.', 'the move is e5.'],
+  ];
+
+  for (const [input, expected] of FILLER_OPENERS) {
+    it(`strips "${input.slice(0, 30)}…" → "${expected.slice(0, 30)}…"`, () => {
+      expect(stripScaffolding(input).text).toBe(expected);
+      // sanitizeCoachText also applies the strip transparently.
+      expect(sanitizeCoachText(input)).toBe(expected);
+    });
+  }
+
+  it('strips stacked scaffolding ("Great! Let me show you…")', () => {
+    const input = "Great! Let me show you the trap. Bxf2+ wins.";
+    expect(stripScaffolding(input).text).toBe('Bxf2+ wins.');
+  });
+
+  it('counts how many scaffolding stacks were stripped', () => {
+    const r = stripScaffolding('Great question — let me show you. The trap is Bxf2+.');
+    expect(r.strippedCount).toBeGreaterThanOrEqual(2);
+    expect(r.text).toBe('The trap is Bxf2+.');
+  });
+
+  it('passes through clean chess prose unchanged', () => {
+    const clean = 'The Vienna sacrifices the e-pawn for f4 attacks.';
+    expect(stripScaffolding(clean).text).toBe(clean);
+    expect(stripScaffolding(clean).strippedCount).toBe(0);
+  });
+
+  it('does NOT strip mid-sentence "great" or "nice"', () => {
+    // "Great" / "Nice" as adjectives in chess content must survive —
+    // we only strip when they're filler openers.
+    const adj = 'Bc4 is a great square for the bishop.';
+    expect(stripScaffolding(adj).text).toBe(adj);
+  });
+
+  it('does NOT mistake a SAN-starting word for filler', () => {
+    // Defensive: ensure no opening pattern eats real SAN-prefixed text.
+    const sanStart = 'Nf3 develops the knight and eyes e5.';
+    expect(stripScaffolding(sanStart).text).toBe(sanStart);
+  });
+
+  it('handles empty / whitespace input', () => {
+    expect(stripScaffolding('').text).toBe('');
+    expect(stripScaffolding('   ').text).toBe('');
   });
 });

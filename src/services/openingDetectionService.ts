@@ -81,6 +81,19 @@ function isTeachableEntry(e: OpeningEntry): boolean {
   return !getTerminalShortPgns().has(e.pgn);
 }
 
+/** Public re-export of the teachable-entry test. Other modules — the
+ *  fuzzy matcher in particular — need the same "this entry is rich
+ *  enough to teach" decision so the picker can include the canonical
+ *  bare parent (e.g. "Danish Gambit," 5 plies but with rich sub-
+ *  variation children) alongside its named sub-variations. Audit
+ *  2026-05-19 (Bug C): the fuzzy matcher was using a stricter
+ *  ply-count-only filter that hid "Danish Gambit" from the picker
+ *  while keeping its sub-variations, so the user who typed "danish
+ *  gambit" got a picker missing the canonical parent. */
+export function isTeachable(e: OpeningEntry): boolean {
+  return isTeachableEntry(e);
+}
+
 function buildTrie(entries: OpeningEntry[]): TrieNode {
   const root: TrieNode = { children: new Map(), opening: null };
 
@@ -200,9 +213,48 @@ function tokensMatchTarget(query: string, target: string): boolean {
   const tNorm = normalizeNameForMatch(target);
   const qTokens = qNorm.split(' ').filter((t) => t.length >= 3);
   if (qTokens.length === 0) return false;
+  // Reject token sets composed entirely of stopwords / common chat
+  // noise — see RESOLVER_STOPWORDS for the rationale.
+  if (qTokens.every((t) => RESOLVER_STOPWORDS.has(t))) return false;
   const tTokens = new Set(tNorm.split(' '));
   return qTokens.every((t) => tTokens.has(t));
 }
+
+/** Short tokens that should NEVER be allowed to canonicalize to an
+ *  opening name via substring / token-set match. Audit 2026-05-19
+ *  (Bug D): `resolveOpeningEntry("it")` returned `Italian Game` via
+ *  substring match at score 1.00, because chip text "Walk me through
+ *  it" got TEACH_PATTERN-captured as `requestedName = "it"`. Any
+ *  conversational pronoun / particle / common verb that happens to
+ *  appear as a substring of an opening name would have done the
+ *  same. The exact-match path is unaffected: a user who literally
+ *  types one of these still gets exact-match behavior (which returns
+ *  null for these since none are themselves opening names). */
+const RESOLVER_STOPWORDS = new Set([
+  // Pronouns
+  'it', 'its', 'he', 'she', 'we', 'us', 'you', 'they', 'them', 'this', 'that',
+  // Articles + particles
+  'the', 'a', 'an', 'of', 'to', 'in', 'on', 'at', 'by', 'for', 'with', 'as',
+  // Verbs
+  'is', 'am', 'are', 'was', 'were', 'be', 'do', 'did', 'does', 'has', 'had',
+  // Conjunctions
+  'and', 'or', 'but', 'if', 'so',
+  // Common chat noise
+  'yes', 'no', 'ok', 'okay', 'sure', 'maybe', 'please',
+  // Question words
+  'how', 'why', 'what', 'who', 'when', 'where',
+  // Adverbs / spatial
+  'more', 'less', 'next', 'back', 'here', 'now', 'too',
+  // Common short conversational verbs
+  'go', 'see', 'try', 'get', 'put', 'use', 'show', 'tell', 'ask', 'say', 'let',
+]);
+
+/** Below this query length we refuse substring + token-set matches.
+ *  The shortest legitimate opening name in the Lichess DB is 4 chars
+ *  ("Pirc", "Slav", "Reti"), so anything shorter is conversational
+ *  text — never an opening name. Exact + prefix match still run for
+ *  short queries (alias map covers "kid", "qgd", etc. there). */
+const RESOLVER_MIN_FUZZY_LEN = 4;
 
 /** Aliases for acronyms + common alt-names the DB doesn't index.
  *  Keys are lowercase normalized inputs; values are canonical names
@@ -434,6 +486,21 @@ export function resolveOpeningEntry(
   // 1. Exact match (case + diacritic + apostrophe + hyphen insensitive).
   const exact = entries.filter((e) => normalizeNameForMatch(e.name) === queryNorm);
   if (exact.length > 0) return emit(pick(exact));
+
+  // Guard against the Bug D failure mode: queries this short or this
+  // common are chat noise, not opening names. Without this guard,
+  // `resolveOpeningEntry("it")` returns `Italian Game` (prefix match)
+  // at score 1.00 — chip text "Walk me through it" got TEACH_PATTERN-
+  // captured as `requestedName = "it"` and silently bounced the
+  // student to a wholly unrelated opening. Anything below this gate
+  // falls through to the brain path, where the conversation context
+  // can resolve the antecedent. Exact match above is intentionally
+  // preserved: a user who literally types one of these still hits
+  // null (none are themselves canonical opening names), but aliases
+  // resolved earlier ("kid" → "King's Indian Defense") expanded long
+  // before we got here, so the alias path is unaffected.
+  if (queryNorm.length < RESOLVER_MIN_FUZZY_LEN) return null;
+  if (RESOLVER_STOPWORDS.has(queryNorm)) return null;
 
   // 2. Prefix match (normalized) — "Kings Indian" → "King's Indian Defense".
   const prefix = entries.filter((e) =>
