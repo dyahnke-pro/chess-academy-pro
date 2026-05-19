@@ -1,8 +1,8 @@
 {
   "round": 6,
-  "generatedAt": "2026-05-19T15:45:10.341Z",
+  "generatedAt": "2026-05-19T15:52:41.532Z",
   "inProgress": true,
-  "openingsCompleted": 5,
+  "openingsCompleted": 10,
   "results": [
     {
       "round": 6,
@@ -595,6 +595,592 @@
       },
       "longTasks": 0,
       "finishedAt": "2026-05-19T15:45:10.341Z"
+    },
+    {
+      "round": 6,
+      "openingId": "four-knights-game",
+      "name": "Four Knights Game",
+      "color": "white",
+      "startedAt": "2026-05-19T15:45:10.342Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Four Knihts Game",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Four",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Four Knihts Game",
+            "Four"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [
+            "P4: tap-before-load — walkthrough mounted but annotation never resolved after 15s (empty-card=false)"
+          ]
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": []
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/four-knights-game"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "Deprecated API for given entry type."
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 677
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 53397281,
+        "heapAfterBytes": 54299626,
+        "growthBytes": 902345
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "networkStats": {
+        "requestCount": 1015,
+        "failedCount": 747,
+        "byHost": {
+          "fonts.googleapis.com": 20,
+          "cdn.jsdelivr.net": 687,
+          "localhost:5174": 4,
+          "api.anthropic.com": 21,
+          "api.deepseek.com": 15
+        },
+        "byStatus": {
+          "200": 244,
+          "403": 28
+        }
+      },
+      "longTasks": 0,
+      "finishedAt": "2026-05-19T15:46:40.342Z"
+    },
+    {
+      "round": 6,
+      "openingId": "sicilian-najdorf",
+      "name": "Sicilian: Najdorf",
+      "color": "black",
+      "startedAt": "2026-05-19T15:46:40.343Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Najdorf",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Najdorf",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [
+            "P4: tap-before-load — walkthrough mounted but annotation never resolved after 15s (empty-card=false)"
+          ]
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": []
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/sicilian-najdorf"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "Deprecated API for given entry type."
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 729
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 54299626,
+        "heapAfterBytes": 56422416,
+        "growthBytes": 2122790
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "networkStats": {
+        "requestCount": 1008,
+        "failedCount": 744,
+        "byHost": {
+          "fonts.googleapis.com": 20,
+          "cdn.jsdelivr.net": 687,
+          "localhost:5174": 4,
+          "api.anthropic.com": 18,
+          "api.deepseek.com": 15
+        },
+        "byStatus": {
+          "200": 240,
+          "403": 28
+        }
+      },
+      "longTasks": 0,
+      "finishedAt": "2026-05-19T15:48:11.065Z"
+    },
+    {
+      "round": 6,
+      "openingId": "sicilian-dragon",
+      "name": "Sicilian: Dragon",
+      "color": "black",
+      "startedAt": "2026-05-19T15:48:11.065Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Dragon",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Dragon",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [
+            "P4: tap-before-load — walkthrough mounted but annotation never resolved after 15s (empty-card=false)"
+          ]
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": []
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/sicilian-dragon"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "Deprecated API for given entry type."
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 694
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 56422416,
+        "heapAfterBytes": 57141269,
+        "growthBytes": 718853
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "networkStats": {
+        "requestCount": 1011,
+        "failedCount": 742,
+        "byHost": {
+          "fonts.googleapis.com": 20,
+          "cdn.jsdelivr.net": 686,
+          "api.anthropic.com": 18,
+          "api.deepseek.com": 15,
+          "localhost:5174": 3
+        },
+        "byStatus": {
+          "200": 244,
+          "403": 28
+        }
+      },
+      "longTasks": 0,
+      "finishedAt": "2026-05-19T15:49:41.573Z"
+    },
+    {
+      "round": 6,
+      "openingId": "sicilian-sveshnikov",
+      "name": "Sicilian: Sveshnikov",
+      "color": "black",
+      "startedAt": "2026-05-19T15:49:41.573Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian: veshnikov",
+              "cardCount": 1,
+              "dropdownCount": 1,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian: veshnikov",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [
+            "P4: tap-before-load — walkthrough mounted but annotation never resolved after 15s (empty-card=false)"
+          ]
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": []
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/sicilian-sveshnikov"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "Deprecated API for given entry type."
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 730
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 57141269,
+        "heapAfterBytes": 58484411,
+        "growthBytes": 1343142
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "networkStats": {
+        "requestCount": 612,
+        "failedCount": 348,
+        "byHost": {
+          "fonts.googleapis.com": 20,
+          "localhost:5174": 4,
+          "cdn.jsdelivr.net": 291,
+          "api.anthropic.com": 18,
+          "api.deepseek.com": 15
+        },
+        "byStatus": {
+          "200": 240,
+          "403": 28
+        }
+      },
+      "longTasks": 0,
+      "finishedAt": "2026-05-19T15:51:11.547Z"
+    },
+    {
+      "round": 6,
+      "openingId": "sicilian-alapin",
+      "name": "Sicilian: Alapin",
+      "color": "black",
+      "startedAt": "2026-05-19T15:51:11.547Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Alapin",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Alapin",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [
+            "P4: tap-before-load — walkthrough mounted but annotation never resolved after 15s (empty-card=false)"
+          ]
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": []
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/sicilian-alapin"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "Deprecated API for given entry type."
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 720
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 58484411,
+        "heapAfterBytes": 57154744,
+        "growthBytes": -1329667
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "networkStats": {
+        "requestCount": 1005,
+        "failedCount": 734,
+        "byHost": {
+          "fonts.googleapis.com": 20,
+          "cdn.jsdelivr.net": 678,
+          "api.anthropic.com": 18,
+          "api.deepseek.com": 15,
+          "localhost:5174": 3
+        },
+        "byStatus": {
+          "200": 246,
+          "403": 28
+        }
+      },
+      "longTasks": 0,
+      "finishedAt": "2026-05-19T15:52:41.531Z"
     }
   ]
 }
