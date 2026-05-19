@@ -14,6 +14,36 @@ export const BOARD_ANIMATION_MS = 200;
 /** Standard animation duration for demonstration boards (slightly longer for clarity). */
 export const BOARD_DEMO_ANIMATION_MS = 400;
 
+/** Centralized arrow styling for react-chessboard's `arrowOptions`
+ *  prop. The library defaults to `arrowWidthDenominator: 5` (arrow
+ *  width = squareWidth / 5) — too skinny on the lesson surfaces
+ *  where coach-drawn arrows are the focal point. David's audit
+ *  2026-05-19 (Bug G) called out /coach/teach specifically; bumping
+ *  the width to squareWidth / 3.5 here lifts every board's arrows
+ *  to the same thickness so the visual signature is consistent
+ *  app-wide. Colors stay overridable per-arrow via the LLM's
+ *  `[BOARD: arrow:from-to:color]` markers — only the default + the
+ *  width/opacity defaults are pinned here. */
+export const BOARD_ARROW_OPTIONS = {
+  /** Default color when an arrow doesn't specify one. The LLM almost
+   *  always specifies; this is the fallback. */
+  color: '#ffaa00',
+  secondaryColor: '#0088ff',
+  tertiaryColor: '#9933cc',
+  /** Lower denominator = thicker arrow. 5 (library default) was the
+   *  pre-fix skinny one; 3.5 is the new default — readable from
+   *  across the room without overwhelming the pieces. */
+  arrowWidthDenominator: 3.5,
+  arrowLengthReducerDenominator: 8,
+  sameTargetArrowLengthReducerDenominator: 4,
+  activeArrowWidthMultiplier: 1.2,
+  /** Opaque enough to read on every square color, transparent enough
+   *  to see the pieces beneath when an arrow crosses one. */
+  opacity: 0.9,
+  activeOpacity: 1,
+  arrowStartOffset: 0.2,
+};
+
 export interface BoardTheme {
   scheme: BoardColorScheme;
   darkSquareStyle: { backgroundColor: string };

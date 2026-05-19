@@ -14,6 +14,7 @@
  * unified default should respect that, not regress to verbose.
  */
 import type { CoachNarration, PhaseNarrationVerbosity, UserPreferences } from '../types';
+import { stripScaffolding } from '../services/sanitizeCoachText';
 
 export function resolveCoachNarration(
   prefs: Pick<
@@ -138,27 +139,61 @@ export function applyBriefVoiceCap(
 ): { text: string; truncated: boolean; originalLength: number } {
   const originalLength = text.length;
   if (verbosity !== 'brief') return { text, truncated: false, originalLength };
-  const trimmed = text.trim();
+  // Strip leading scaffolding ("Great question — ", "Let me show you …")
+  // BEFORE the cap counts words. The LLM ignores the prompt ban; this
+  // strip recovers the chess content that would otherwise get clipped
+  // off the back when the cap fires. Live audit 2026-05-19 (Bug I).
+  const trimmed = stripScaffolding(text.trim()).text;
   if (!trimmed) return { text: trimmed, truncated: false, originalLength };
 
-  // Sentence-split — split on `. ! ?` terminators followed by
-  // whitespace. Keep each terminator with its sentence so reassembly
-  // preserves punctuation. Numbers like "f3." (terminator preceded
-  // by digit) are not sentence ends — that's the SAN-disambiguation
-  // negative-lookbehind from sanitizeCoachText.ts SENTENCE_END_RE.
-  const sentenceRe = /[^.!?\n]+(?<!\d)[.!?]?/g;
-  const matches = trimmed.match(sentenceRe);
-  const sentences = matches && matches.length > 0
-    ? matches.map((s) => s.trim()).filter((s) => s.length > 0)
-    : [trimmed];
+  // Sentence-split — scan for `. ! ?` terminators followed by
+  // whitespace OR end-of-string, AND not preceded by a digit (digits
+  // before periods are SAN-disambiguation like "Nbd7." or "f3.", not
+  // sentence ends). Each sentence keeps its trailing terminator so
+  // joining preserves the period/question/exclamation between
+  // sentences.
+  //
+  // Bug F regression (audit 2026-05-19): the previous greedy regex
+  // `/[^.!?\n]+(?<!\d)[.!?]?/g` backtracked when the lookbehind
+  // failed, eating the trailing digit of any SAN ending in [1-8]
+  // followed by a period. "Nbd7." became "Nbd" in the sentence
+  // boundary, and the join-with-space dropped the period too — so
+  // "Correct, Nbd7. Nbd7 gets..." spoke as "Correct, Nbd Nbd7
+  // gets..." and "Nb4. Your..." spoke as "knight to b Your...".
+  // Same bug, two visible failure modes. Scan-and-skip below avoids
+  // the backtracking entirely.
+  const sentences: string[] = [];
+  {
+    const SENTENCE_TERMINATOR_RE = /[.!?]+(?=\s|$)/g;
+    let cursor = 0;
+    let m: RegExpExecArray | null;
+    SENTENCE_TERMINATOR_RE.lastIndex = 0;
+    while ((m = SENTENCE_TERMINATOR_RE.exec(trimmed)) !== null) {
+      const beforeIdx = m.index - 1;
+      // SAN-disambiguation guard: "Nbd7." — the period is part of
+      // the move number, not a sentence end. Skip this terminator
+      // and let the next one (or the end of string) close the
+      // sentence.
+      if (beforeIdx >= 0 && /\d/.test(trimmed[beforeIdx])) continue;
+      const end = m.index + m[0].length;
+      sentences.push(trimmed.slice(cursor, end).trim());
+      cursor = end;
+    }
+    if (cursor < trimmed.length) sentences.push(trimmed.slice(cursor).trim());
+  }
+  const filteredSentences = sentences.filter((s) => s.length > 0);
+  const sentencesForCap = filteredSentences.length > 0 ? filteredSentences : [trimmed];
 
   // Early-out: input already obeys both caps → return it unchanged.
   const totalWords = trimmed.split(/\s+/).length;
-  if (sentences.length <= BRIEF_VOICE_SENTENCE_CAP && totalWords <= BRIEF_VOICE_WORD_CAP) {
+  if (sentencesForCap.length <= BRIEF_VOICE_SENTENCE_CAP && totalWords <= BRIEF_VOICE_WORD_CAP) {
     return { text: trimmed, truncated: false, originalLength };
   }
 
-  let chosen = sentences.slice(0, BRIEF_VOICE_SENTENCE_CAP).join(' ').trim();
+  // Join with a single space — each kept sentence still carries its
+  // own terminator from the slice above, so the result reads as
+  // separate sentences instead of a run-on.
+  let chosen = sentencesForCap.slice(0, BRIEF_VOICE_SENTENCE_CAP).join(' ').trim();
 
   // Word-count cap. When the kept sentences still exceed the word
   // budget, truncate to the cap and close cleanly with a period.

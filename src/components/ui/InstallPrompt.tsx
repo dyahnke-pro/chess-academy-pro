@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Download, X } from 'lucide-react';
 import { db } from '../../db/schema';
+import { logAppAudit } from '../../services/appAuditor';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -22,16 +23,42 @@ export function InstallPrompt(): JSX.Element | null {
     const handler = (e: Event): void => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
+      // Audit-instrumentation phase-1: PWA lifecycle visibility.
+      void logAppAudit({
+        kind: 'pwa-install-prompt',
+        category: 'subsystem',
+        source: 'InstallPrompt.beforeinstallprompt',
+        summary: 'browser surfaced beforeinstallprompt — install banner can render',
+      });
+    };
+    const installedHandler = (): void => {
+      void logAppAudit({
+        kind: 'pwa-installed',
+        category: 'subsystem',
+        source: 'InstallPrompt.appinstalled',
+        summary: 'PWA install completed (appinstalled event)',
+      });
     };
 
     window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+    window.addEventListener('appinstalled', installedHandler);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener('appinstalled', installedHandler);
+    };
   }, []);
 
   const handleInstall = useCallback(async (): Promise<void> => {
     if (!deferredPrompt) return;
     await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
+    void logAppAudit({
+      kind: 'pwa-install-prompt',
+      category: 'subsystem',
+      source: 'InstallPrompt.userChoice',
+      summary: `install prompt outcome: ${outcome}`,
+      details: JSON.stringify({ outcome }),
+    });
     if (outcome === 'accepted') {
       setDeferredPrompt(null);
     }
@@ -41,6 +68,12 @@ export function InstallPrompt(): JSX.Element | null {
     setDismissed(true);
     setDeferredPrompt(null);
     void db.meta.put({ key: 'install_dismissed', value: 'true' });
+    void logAppAudit({
+      kind: 'pwa-install-prompt',
+      category: 'subsystem',
+      source: 'InstallPrompt.userDismissed',
+      summary: 'user dismissed install banner (will not re-show)',
+    });
   }, []);
 
   if (!deferredPrompt || dismissed) return null;

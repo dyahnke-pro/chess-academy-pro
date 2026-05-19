@@ -38,7 +38,7 @@
  * with `[CHOICES:]` picker chips.
  */
 import openingsData from '../data/openings-lichess.json';
-import { resolveOpeningEntry } from './openingDetectionService';
+import { resolveOpeningEntry, isTeachable } from './openingDetectionService';
 
 interface OpeningEntry {
   name: string;
@@ -193,30 +193,53 @@ function tokenScore(qTokens: string[], cTokens: string[]): number {
   return sum / qTokens.length;
 }
 
+/** Reverse token score: of CANDIDATE tokens, how many find a match
+ *  in QUERY tokens? This is the precision side of the equation. The
+ *  forward `tokenScore` measures recall (did the query find what it
+ *  was looking for in this candidate). Without this, candidates with
+ *  many extra tokens score the same as focused matches:
+ *
+ *    query = "danish gambit"
+ *    A: "Danish Gambit"                              recall=1.0 precision=1.0
+ *    B: "Sicilian: Smith-Morra Gambit, Danish Var."  recall=1.0 precision=~0.3
+ *
+ *  F1 combines them so A beats B. Audit 2026-05-19 (Bug C). */
 function scoreCandidate(qNorm: string, cNorm: string): number {
   const qTokens = tokenize(qNorm);
   const cTokens = tokenize(cNorm);
-  const tokens = tokenScore(qTokens, cTokens);
+  const recall = tokenScore(qTokens, cTokens);
   const flat = similarity(qNorm, cNorm);
-  // Weighted blend: token score dominates (catches partial matches
-  // against multi-word canonical names) but flat similarity stays
-  // in the mix so a query that matches the whole candidate string
-  // closely scores higher than one that only matches one of many
-  // tokens.
-  return Math.max(tokens, tokens * 0.7 + flat * 0.3);
+  // Single-token queries (typos like "Najdorff") have no precision
+  // signal — a 1-token query against a multi-token candidate always
+  // has low precision, which over-penalizes legitimate typo
+  // surfacing. Fall back to the original recall+flat blend.
+  if (qTokens.length <= 1) {
+    return Math.max(recall, recall * 0.7 + flat * 0.3);
+  }
+  const precision = tokenScore(cTokens, qTokens);
+  // F1: harmonic mean of precision + recall. Guards against
+  // division-by-zero when both sides are 0 (no matches at all).
+  const f1 = recall + precision > 0
+    ? (2 * recall * precision) / (recall + precision)
+    : 0;
+  // Final score: F1-led blend. Flat similarity stays in the mix so
+  // a tight whole-string match still gets credit; keeping `recall`
+  // in the blend protects against F1 collapsing when the candidate
+  // is legitimately long (e.g. matching the full canonical name of
+  // a deep variation). Weights tuned to reproduce the live-audit
+  // failure mode (Danish Gambit vs Sicilian Smith-Morra Danish Var)
+  // and verify the bare parent now wins.
+  return Math.max(f1, f1 * 0.6 + recall * 0.25 + flat * 0.15);
 }
 
-const TEACHABLE: OpeningEntry[] = (openingsData as OpeningEntry[]).filter(
-  (e) => {
-    // Loose teachable filter mirroring isTeachableEntry — drops
-    // terminal-short namesake-only rows. Anything with ≥ 8 plies or
-    // any sub-variation expressed via colon stays.
-    const plies = e.pgn.split(/\s+/).filter(Boolean).length;
-    if (plies >= 8) return true;
-    if (e.name.includes(':')) return true;
-    return false;
-  },
-);
+/** Pool of entries the fuzzy matcher considers. Was a stricter
+ *  ply-count filter (≥ 8 plies OR has ":") that incorrectly hid the
+ *  canonical bare parent of well-known short openings (Danish Gambit
+ *  at 5 plies, King's Gambit, Vienna Game). Switched to the shared
+ *  `isTeachable` decision from openingDetectionService — that one
+ *  keeps any entry with DB sub-variations, regardless of its own
+ *  ply count. Audit 2026-05-19 (Bug C). */
+const TEACHABLE: OpeningEntry[] = (openingsData as OpeningEntry[]).filter(isTeachable);
 
 /** Deduplicate candidates by canonical name (the DB has many entries
  *  with the same name at different depths). Keep the highest score. */

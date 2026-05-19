@@ -52,7 +52,8 @@ import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
-import { logAppAudit } from '../../services/appAuditor';
+import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
+import { resolveCoachNarration } from '../../utils/coachNarration';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
@@ -68,7 +69,7 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
-import { validateArrowClaims } from '../../services/arrowClaimValidator';
+import { validateArrowClaims, synthesizeMissingArrows } from '../../services/arrowClaimValidator';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { withTimeout } from '../../coach/withTimeout';
@@ -377,6 +378,18 @@ export function CoachTeachPage(): JSX.Element {
   // the student played e4; this ref is the fix.
   const gameRef = useRef(game);
   gameRef.current = game;
+  // Audit-instrumentation phase-3 (2026-05-19): track recent user
+  // messages so handleSubmit can detect "retry" patterns — the same
+  // user typing two semantically similar inputs in a row, signal
+  // that the prior turn's resolution didn't satisfy them. Surfaces
+  // the "I wanted the danish gambit" → re-tap pattern from the live
+  // audit log. Capped at the last 3 entries to bound memory.
+  const recentUserInputsRef = useRef<Array<{ text: string; at: number }>>([]);
+  // Rolling response-length tracking per verbosity tier — when the
+  // brain's responses at `brief` average > prompt budget, that's the
+  // signal we need to tighten the rules. Capped at 20 entries per
+  // tier (rolling). Computed p50/p90 on every emit.
+  const responseLengthsRef = useRef<Record<string, number[]>>({});
   // liveFenRef is the SYNCHRONOUS source of truth for the FEN — written
   // by every successful handler (handlePlayMove, handleTakeBack,
   // handleSetBoardPosition, handleResetBoard) immediately after the
@@ -800,6 +813,115 @@ export function CoachTeachPage(): JSX.Element {
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
+    // Audit-instrumentation phase-1 (2026-05-19): mint a turn id and
+    // make it the module-default for the duration of this handleSubmit.
+    // Every logAppAudit call from any code reached during this turn
+    // (chat surface, brain, tools, voice service, etc.) auto-stamps
+    // the id, so the audit log is pivotable by turn.
+    const turnAuditId = mintTurnId('teach');
+    setCurrentTurnId(turnAuditId);
+
+    // Audit-instrumentation phase-3: user-retry detection. Compare
+    // this input against the previous user input. When the two share
+    // a major content token AND the previous turn isn't very old,
+    // emit a `user-retry-detected` event — signal the prior turn's
+    // resolution probably missed what they wanted.
+    const trimmedText = text.trim();
+    {
+      const prev = recentUserInputsRef.current[recentUserInputsRef.current.length - 1];
+      if (prev && Date.now() - prev.at < 5 * 60_000) {
+        const norm = (s: string) =>
+          s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+        const prevTokens = new Set(norm(prev.text).split(' ').filter((t) => t.length >= 4));
+        const currTokens = norm(trimmedText).split(' ').filter((t) => t.length >= 4);
+        const shared = currTokens.filter((t) => prevTokens.has(t));
+        if (shared.length >= 1 && shared.length / Math.max(currTokens.length, 1) >= 0.4) {
+          void logAppAudit({
+            kind: 'user-retry-detected',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.retryDetector',
+            summary: `user retry: "${trimmedText.slice(0, 50)}" follows "${prev.text.slice(0, 50)}" (shared tokens: ${shared.join(', ')})`,
+            details: JSON.stringify({
+              currentInput: trimmedText,
+              previousInput: prev.text,
+              previousAt: prev.at,
+              gapMs: Date.now() - prev.at,
+              sharedTokens: shared,
+            }),
+          });
+        }
+      }
+      // Track current input for the NEXT retry check. Cap at 3 entries.
+      recentUserInputsRef.current.push({ text: trimmedText, at: Date.now() });
+      if (recentUserInputsRef.current.length > 3) recentUserInputsRef.current.shift();
+    }
+
+    // Audit-instrumentation phase-5 (2026-05-19): classify the user's
+    // ask when it's a future-moves / positional-ideas question — the
+    // shape that hits stockfish_eval + lookup_master_play. Lets us
+    // pivot the audit log by question type and see whether the brain
+    // answers these well (e.g. cites grounded data vs invents lines).
+    {
+      const lowered = trimmedText.toLowerCase();
+      const futureMoves =
+        /\b(best move|best response|what should i play|what should i do|what would you play|what now|what.s next|continuation|continue with|best continuation|best line|what move)\b/.test(lowered);
+      const positionalIdeas =
+        /\b(plan|plans|strategy|positional|maneuver|idea|ideas|what.s the (point|plan|idea)|long.term|long term|midgame plan|middlegame plan|pawn structure|piece activity)\b/.test(lowered);
+      if (futureMoves || positionalIdeas) {
+        void logAppAudit({
+          kind: 'followup-context-check',
+          category: 'subsystem',
+          source: 'CoachTeachPage.questionClassifier',
+          summary:
+            `coach question: ${futureMoves ? 'future-moves ' : ''}${positionalIdeas ? 'positional-ideas ' : ''}` +
+            `"${trimmedText.slice(0, 50)}" — expecting Stockfish + master-play grounding`,
+          details: JSON.stringify({
+            currentInput: trimmedText,
+            classifications: {
+              futureMoves,
+              positionalIdeas,
+            },
+            walkthroughOpening: walkthrough.tree?.openingName ?? null,
+            currentFen: gameRef.current.fen,
+            // These are the audit kinds we expect to see fire downstream
+            // on this turn — if the brain replied without one of them
+            // the grounding pipeline missed.
+            expectedAudits: [
+              'coach-brain-tool-called (stockfish_eval)',
+              futureMoves ? 'master-play-prefetch / master-play-lookup' : null,
+            ].filter(Boolean),
+          }),
+        });
+      }
+    }
+
+    // Audit-instrumentation phase-3: followup-context-check. Short
+    // followups (< 5 words) after a state-changing prior turn often
+    // expose context-loss bugs (e.g. user types "which is most
+    // aggressive?" right after the coach set the board to Danish
+    // Gambit; if the brain replies about a different opening, the
+    // context was lost). Captures the prior opening on the board so
+    // post-turn analysis can compare against the brain's reply.
+    {
+      const wordCount = trimmedText.split(/\s+/).length;
+      const prior = recentUserInputsRef.current[recentUserInputsRef.current.length - 2];
+      if (wordCount < 5 && prior) {
+        void logAppAudit({
+          kind: 'followup-context-check',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.followupDetector',
+          summary: `short follow-up (${wordCount} words): "${trimmedText}" — expecting context: ${walkthrough.tree?.openingName ?? '(none)'}`,
+          details: JSON.stringify({
+            currentInput: trimmedText,
+            wordCount,
+            walkthroughOpening: walkthrough.tree?.openingName ?? null,
+            priorInput: prior.text,
+            currentFen: gameRef.current.fen,
+          }),
+        });
+      }
+    }
+
     // Any new turn invalidates an outstanding [CHOICES:] prompt —
     // the brain's previous question has been answered (or
     // superseded), so clear the chips before the new response
@@ -997,6 +1119,38 @@ export function CoachTeachPage(): JSX.Element {
         } else if (fuzzy.candidates.length > 0) {
           // Ambiguous — surface the picker. Append the user's ask
           // first so the transcript shows what they typed.
+          //
+          // Audit-instrumentation phase-1: capture every candidate
+          // score, not just the names. Lets us see whether the
+          // runner-up gap was tight (close call — maybe retune
+          // AUTO_ACCEPT_GAP) or wide (clear "did you mean…" case).
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.fuzzyPickerScores',
+            summary:
+              `fuzzy candidates for "${fuzzy.query}": ` +
+              fuzzy.candidates
+                .map((c) => `${c.canonicalName} (${c.score.toFixed(2)})`)
+                .join(' | '),
+            details: JSON.stringify({
+              query: fuzzy.query,
+              candidates: fuzzy.candidates.map((c) => ({
+                canonicalName: c.canonicalName,
+                eco: c.eco,
+                score: c.score,
+                source: c.source,
+              })),
+              autoAcceptThreshold: 0.92,
+              autoAcceptGapThreshold: 0.15,
+              autoAccepted: fuzzy.autoAccept,
+              topScore: fuzzy.candidates[0]?.score ?? null,
+              runnerUpScore: fuzzy.candidates[1]?.score ?? null,
+              gap: fuzzy.candidates.length >= 2
+                ? (fuzzy.candidates[0].score - fuzzy.candidates[1].score)
+                : null,
+            }),
+          });
           const ambiguousTurnId = `t-${Date.now()}-fuzzy-picker`;
           setMessages((prev) => [...prev, {
             id: `${ambiguousTurnId}-u`,
@@ -1277,7 +1431,7 @@ export function CoachTeachPage(): JSX.Element {
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-            summary: `pre-flight rejected non-opening: "${text.slice(0, 60)}"`,
+            summary: `pre-flight: input doesn't resolve to an opening — routing to brain (conversational): "${text.slice(0, 60)}"`,
           });
           // Don't take over the chat flow — fall through to the
           // brain so the user gets a normal coach reply. Setting
@@ -1538,11 +1692,16 @@ export function CoachTeachPage(): JSX.Element {
       });
     };
     let lastQueuedSentence = '';
+    /** Track every line we hand to TTS so the Bug A2 post-process can
+     *  check whether the LLM honored the "Setting the board to {name}."
+     *  prompt rule on state-changing turns. */
+    const spokenForTurn: string[] = [];
     const queueSpeak = (raw: string): void => {
       const sentence = formatForSpeech(raw);
       if (!sentence) return;
       if (sentence === lastQueuedSentence) return;
       lastQueuedSentence = sentence;
+      spokenForTurn.push(sentence);
       speechChainRef.current = speechChainRef.current
         .then(() => {
           if (turnAbortRef.aborted) return;
@@ -1937,6 +2096,120 @@ export function CoachTeachPage(): JSX.Element {
       // the final response so the student isn't left in silence.
       tryExtractVoiceMarker();
       tryExtractChoicesMarker();
+
+      // Audit-instrumentation phase-3: verbosity response-length
+      // distribution. Tracks the rolling p50/p90 per verbosity tier.
+      // When the cap fires often or p50 drifts above the prompt budget
+      // we know the brain is ignoring the rule and we tighten.
+      {
+        const verbosity = resolveCoachNarration(activeProfile?.preferences) ?? 'full';
+        const lengths = responseLengthsRef.current[verbosity] ?? [];
+        lengths.push(result.text.length);
+        if (lengths.length > 20) lengths.shift();
+        responseLengthsRef.current[verbosity] = lengths;
+        const sorted = [...lengths].sort((a, b) => a - b);
+        const p = (q: number): number => {
+          if (sorted.length === 0) return 0;
+          const idx = Math.min(sorted.length - 1, Math.floor(q * sorted.length));
+          return sorted[idx];
+        };
+        const p50 = p(0.5);
+        const p90 = p(0.9);
+        void logAppAudit({
+          kind: 'verbosity-response-length',
+          category: 'subsystem',
+          source: 'CoachTeachPage.responseLengthTracker',
+          summary: `verbosity=${verbosity} length=${result.text.length}c rolling[n=${lengths.length}] p50=${p50} p90=${p90}`,
+          details: JSON.stringify({
+            verbosity,
+            currentLength: result.text.length,
+            rollingCount: lengths.length,
+            p50,
+            p90,
+            min: sorted[0],
+            max: sorted[sorted.length - 1],
+          }),
+        });
+      }
+
+      // Bug A2 enforcement audit (2026-05-19): when the brain called a
+      // state-changing tool (set_board_position / start_walkthrough_for_opening)
+      // its [VOICE:] block was supposed to begin with "Setting the
+      // board to {name}." (or "Starting the {name} walkthrough.") so
+      // the spoken signal matches the visual signal. Audit the
+      // violations so we can observe how often the LLM ignores the
+      // prompt rule. Active prepend is a follow-up — see
+      // docs/plans/2026-05-19-coach-audit-rerun-9bugs.md (Bug A).
+      const stateChangingTools = result.dispatchedToolNames.filter((n) =>
+        n === 'set_board_position' || n === 'start_walkthrough_for_opening',
+      );
+      if (stateChangingTools.length > 0 && spokenForTurn.length > 0) {
+        const firstSpoken = spokenForTurn[0].toLowerCase();
+        const announcedBoard =
+          firstSpoken.startsWith('setting the board') ||
+          firstSpoken.startsWith('starting the ') ||
+          firstSpoken.startsWith("let's set the board") ||
+          firstSpoken.startsWith("i'm setting the board");
+        if (!announcedBoard) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.setBoardSentenceValidator',
+            summary:
+              `state-changing tools fired (${stateChangingTools.join(', ')}) ` +
+              `but voice did NOT begin with "Setting the board to…": "${spokenForTurn[0].slice(0, 60)}"`,
+            details: JSON.stringify({
+              tools: stateChangingTools,
+              firstSpoken: spokenForTurn[0].slice(0, 200),
+              allSpokenForTurn: spokenForTurn.map((s) => s.slice(0, 80)),
+            }),
+            fen,
+          });
+        }
+      }
+
+      // Bug A spoken-vs-displayed divergence audit (audit-improvement
+      // #1 from the 2026-05-19 discussion). Compares what the LLM
+      // SPOKE (first voice line) against what the BOARD now shows
+      // (walkthrough opening name) — when they don't both reference
+      // the same opening, the student hears one thing and sees
+      // another. Audit-only first cut; the data tells us how often
+      // it happens before we decide on active fix-up.
+      if (spokenForTurn.length > 0) {
+        const boardOpeningName =
+          walkthrough.tree?.openingName ?? null;
+        if (boardOpeningName) {
+          // Normalize for substring containment: drop punctuation,
+          // lower-case. The spoken text mentions the opening name if
+          // any meaningful token from the name appears in the voice.
+          const norm = (s: string) =>
+            s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+          const spokenNorm = norm(spokenForTurn.join(' '));
+          const nameTokens = norm(boardOpeningName)
+            .split(' ')
+            .filter((t) => t.length >= 4); // ≥4 chars per Bug D guard
+          const mentionedOnVoice =
+            nameTokens.length === 0 ||
+            nameTokens.some((t) => spokenNorm.includes(t));
+          if (!mentionedOnVoice) {
+            void logAppAudit({
+              kind: 'claim-validator-trip',
+              category: 'subsystem',
+              source: 'CoachTeachPage.voiceDisplayedDivergence',
+              summary:
+                `voice did NOT mention the board opening "${boardOpeningName}" — ` +
+                `student hears one thing, sees another. ` +
+                `Spoken: "${spokenForTurn[0].slice(0, 60)}"`,
+              details: JSON.stringify({
+                boardOpeningName,
+                spokenPreview: spokenForTurn[0].slice(0, 200),
+                allSpokenForTurn: spokenForTurn.map((s) => s.slice(0, 80)),
+              }),
+              fen,
+            });
+          }
+        }
+      }
       if (!voiceSpokenForTurn) {
         const finalText = sanitizeCoachText(result.text);
         const firstSentenceMatch = SENTENCE_END_RE.exec(finalText);
@@ -2034,22 +2307,54 @@ export function CoachTeachPage(): JSX.Element {
         // the observability layer that catches violations the prompt
         // missed (David's audit caught the brain shipping 5 coach
         // moves without arrows in a Vienna walkthrough).
-        // Audit-only first cut — observe violation rate before
-        // deciding whether to trigger a regen.
+        //
+        // ENFORCEMENT (Bug E, 2026-05-19): when violations exist,
+        // synthesize the missing arrows by replaying the SANs through
+        // chess.js at the current FEN and emit `[BOARD: arrow:from-to:color]`
+        // markers. The synthesized markers are re-parsed below so the
+        // board renders the arrows the LLM forgot — closes the G6
+        // loop without an extra LLM round-trip.
         const arrowValidation = validateArrowClaims(finalText);
         if (arrowValidation.violations.length > 0) {
+          const synthesis = synthesizeMissingArrows(
+            finalText,
+            fen,
+            arrowValidation.violations,
+            Chess,
+            'green',
+          );
           void logAppAudit({
             kind: 'claim-validator-trip',
             category: 'subsystem',
             source: 'CoachTeachPage.arrowClaimValidator',
-            summary: `coach mentioned SAN without arrow: ${arrowValidation.violations.map((v) => v.san).join(', ')}`,
+            summary:
+              `coach mentioned SAN without arrow: ${arrowValidation.violations.map((v) => v.san).join(', ')} ` +
+              `· synthesized ${synthesis.synthesized.length}/${arrowValidation.violations.length}`,
             details: JSON.stringify({
               violations: arrowValidation.violations,
               mentionedSans: arrowValidation.mentionedSans,
               arrowMarkerCount: arrowValidation.arrowMarkers.length,
+              synthesized: synthesis.synthesized,
+              failedToSynthesize: synthesis.failed,
             }),
             fen,
           });
+          // Parse the synthesized arrows out of the augmented text and
+          // merge them onto the board. The original arrows (from any
+          // LLM-emitted markers) were already set above; append the
+          // new ones without clobbering. Display text (`finalText`)
+          // stays as the LLM wrote it — the brackets get stripped by
+          // sanitizeCoachText on the way into the chat bubble.
+          if (synthesis.synthesized.length > 0) {
+            const synthBoard = parseBoardTags(synthesis.text);
+            const synthArrows: BoardArrow[] = [];
+            for (const cmd of synthBoard.commands) {
+              if (cmd.type === 'arrow' && cmd.arrows) synthArrows.push(...cmd.arrows);
+            }
+            if (synthArrows.length > 0) {
+              setArrows((prev) => [...prev, ...synthArrows]);
+            }
+          }
         }
         setMessages((prev) => [...prev, {
           id: `${turnId}-c`,
@@ -2107,6 +2412,10 @@ export function CoachTeachPage(): JSX.Element {
       setStreaming(null);
       setBusy(false);
       setKickoffStatus(null);
+      // Audit-instrumentation phase-1: clear the per-turn id so
+      // out-of-turn events (route changes, background tasks) don't
+      // get mis-tagged with the just-finished turn.
+      setCurrentTurnId(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; current deps cover the live callers.
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough]);
@@ -2571,6 +2880,28 @@ export function CoachTeachPage(): JSX.Element {
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
             coachChoices={coachChoices}
             onPickCoachChoice={(choice) => {
+              // Audit-instrumentation phase-1: log every chip tap as
+              // its own event kind so the audit log can answer "what
+              // did the user actually tap, and where did it route?"
+              // without spelunking through coach-surface-migrated
+              // events for the resolution outcome.
+              void logAppAudit({
+                kind: 'chip-tap-resolved',
+                category: 'subsystem',
+                source: 'CoachTeachPage.coachChoiceChip',
+                summary: `chip tap: "${choice.slice(0, 60)}" → routed through handleSubmit`,
+                details: JSON.stringify({
+                  chipText: choice,
+                  source: 'coach-choice-chip',
+                  // Context the resolver will see when handleSubmit
+                  // runs: current FEN, walkthrough's opening, intended
+                  // opening. Lets us replay the resolution if the
+                  // outcome surprises us.
+                  contextFen: gameRef.current.fen,
+                  walkthroughOpening: walkthrough.tree?.openingName ?? null,
+                }),
+                fen: gameRef.current.fen,
+              });
               setCoachChoices(null);
               void handleSubmit(choice);
             }}
@@ -2646,6 +2977,27 @@ export function CoachTeachPage(): JSX.Element {
                   <button
                     key={opt.fullName}
                     onClick={() => {
+                      // Audit-instrumentation phase-1: every line-
+                      // picker tile tap as chip-tap-resolved with the
+                      // canonical destination opening + mode.
+                      void logAppAudit({
+                        kind: 'chip-tap-resolved',
+                        category: 'subsystem',
+                        source: 'CoachTeachPage.linePickerTile',
+                        summary: `picker tile tap: "${opt.fullName}" mode=${linePickerMode}`,
+                        details: JSON.stringify({
+                          chipText: opt.fullName,
+                          source: 'line-picker-tile',
+                          mode: linePickerMode,
+                          eco: opt.eco,
+                          style: opt.style,
+                          studentSide: opt.studentSide,
+                          leadingSide: opt.leadingSide,
+                          pickerCanonicalName: linePicker.canonicalName,
+                          contextFen: gameRef.current.fen,
+                        }),
+                        fen: gameRef.current.fen,
+                      });
                       setLinePicker(null);
                       // FACE mode submits a "Face: X" prefix that
                       // handleSubmit recognizes and routes to a

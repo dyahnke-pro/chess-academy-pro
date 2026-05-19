@@ -5,6 +5,36 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { SYSTEM_PROMPT, buildChessContextMessage, getVerbosityInstruction } from './coachPrompts';
 import { recordApiUsage } from './coachCostService';
+
+/** Audit-instrumentation phase-1 (2026-05-19): emit a per-LLM-call
+ *  token usage event so per-turn cost trends are visible in the
+ *  audit log without scraping provider invoices. Paired with every
+ *  recordApiUsage call so the local cost dashboard and the audit
+ *  stream stay in sync. */
+function emitLlmTokenUsage(
+  task: string,
+  model: string,
+  provider: 'deepseek' | 'anthropic',
+  promptTokens: number,
+  completionTokens: number,
+  finishReason: string | null = null,
+): void {
+  void logAppAudit({
+    kind: 'llm-token-usage',
+    category: 'subsystem',
+    source: `coachApi.${provider}`,
+    summary: `task=${task} model=${model} provider=${provider} in=${promptTokens} out=${completionTokens}`,
+    details: JSON.stringify({
+      task,
+      model,
+      provider,
+      promptTokens,
+      completionTokens,
+      totalTokens: promptTokens + completionTokens,
+      finishReason,
+    }),
+  });
+}
 import { lookupMasterPlay } from './masterPlayLookup';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -214,6 +244,22 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     const deepseekEnvKey = getDeepseekKey();
 
     const profile = await db.profiles.get('main');
+
+    // Audit-mode provider override (2026-05-19): the Playwright loop
+    // audit re-runs the coach dozens of times per scenario and David
+    // doesn't want to burn Anthropic API tokens on test traffic.
+    // When the audit script (or any caller) sets `auditForceProvider`
+    // in Dexie's `meta` table to 'deepseek', `getProviderConfig`
+    // honors it for the duration of the override. Real user settings
+    // are untouched — this is a per-tab / per-test override that the
+    // audit script clears at teardown. Anthropic is still the prod
+    // default per CLAUDE.md.
+    const auditOverrideRecord = await db.meta.get('auditForceProvider');
+    const auditOverride =
+      auditOverrideRecord?.value === 'deepseek' || auditOverrideRecord?.value === 'anthropic'
+        ? (auditOverrideRecord.value as AiProvider)
+        : null;
+
     // Anthropic is the primary on every surface as of 2026-05-14
     // (David's call) — Sonnet/Haiku produce noticeably better chess
     // pedagogy than DeepSeek. The fallback chain below auto-retries
@@ -225,18 +271,30 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     // A user with ONLY a DeepSeek key still gets DeepSeek.
     const anthropicReachable = !!anthropicEnvKey && !isProviderInCooldown('anthropic');
     const deepseekReachable = !!deepseekEnvKey && !isProviderInCooldown('deepseek');
-    const provider: AiProvider = anthropicReachable
-      ? 'anthropic'
-      : (deepseekReachable
-          ? 'deepseek'
-          // Both keys absent OR both in cooldown — fall through to
-          // whichever key exists (try-anyway over no-coach), then to
-          // profile preference. Cooldown lifts on its own after 60s.
-          : (anthropicEnvKey
-              ? 'anthropic'
-              : (deepseekEnvKey
-                  ? 'deepseek'
-                  : (profile?.preferences.aiProvider ?? 'anthropic'))));
+    const provider: AiProvider = auditOverride
+      ? auditOverride
+      : (anthropicReachable
+          ? 'anthropic'
+          : (deepseekReachable
+              ? 'deepseek'
+              // Both keys absent OR both in cooldown — fall through to
+              // whichever key exists (try-anyway over no-coach), then to
+              // profile preference. Cooldown lifts on its own after 60s.
+              : (anthropicEnvKey
+                  ? 'anthropic'
+                  : (deepseekEnvKey
+                      ? 'deepseek'
+                      : (profile?.preferences.aiProvider ?? 'anthropic')))));
+
+    if (auditOverride) {
+      void logAppAudit({
+        kind: 'coach-llm-model-selected',
+        category: 'subsystem',
+        source: 'coachApi.getProviderConfig.auditOverride',
+        summary: `audit-mode override forcing provider=${provider}`,
+        details: JSON.stringify({ override: auditOverride, willPick: provider }),
+      });
+    }
 
     const preferredModel = profile?.preferences.preferredModel;
 
@@ -470,6 +528,7 @@ async function callDeepSeek(
 
   if (response.usage) {
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
+    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null);
   }
   const choice = response.choices[0];
   // DeepSeek-reasoner emits `reasoning_content` separately from
@@ -528,6 +587,7 @@ async function callAnthropicStream(
     finalMsg.usage.input_tokens,
     finalMsg.usage.output_tokens,
   );
+  emitLlmTokenUsage('stream', model, 'anthropic', finalMsg.usage.input_tokens, finalMsg.usage.output_tokens, finalMsg.stop_reason ?? null);
   return fullText;
 }
 
@@ -552,6 +612,7 @@ async function callAnthropic(
   });
 
   void recordApiUsage(task, model, response.usage.input_tokens, response.usage.output_tokens);
+  emitLlmTokenUsage(task, model, 'anthropic', response.usage.input_tokens, response.usage.output_tokens, response.stop_reason ?? null);
   const content = response.content[0];
   return content.type === 'text' ? content.text : '';
 }
@@ -606,6 +667,7 @@ export async function callAnthropicWithTool(
     tool_choice: { type: 'tool', name: toolName },
   });
   void recordApiUsage(task, model, response.usage.input_tokens, response.usage.output_tokens);
+  emitLlmTokenUsage(task, model, 'anthropic', response.usage.input_tokens, response.usage.output_tokens, response.stop_reason ?? null);
   for (const block of response.content) {
     if (block.type === 'tool_use' && block.name === toolName) {
       return block.input;
@@ -716,6 +778,7 @@ export async function callDeepseekWithTool(
   });
   if (response.usage) {
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
+    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null);
   }
   const choice = response.choices[0];
   const toolCall = choice?.message?.tool_calls?.[0];

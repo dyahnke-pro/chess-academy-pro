@@ -294,6 +294,48 @@ describe('openingDetectionService', () => {
     });
   });
 
+  describe('Bug D regression — short / stopword queries do NOT canonicalize', () => {
+    // Live audit 2026-05-19: `resolveOpeningEntry("it")` returned
+    // `Italian Game` via prefix match at score 1.00, because chip
+    // text "Walk me through it" was TEACH_PATTERN-captured as
+    // `requestedName = "it"` and the resolver silently bounced the
+    // student to a wholly unrelated opening. The guard below the
+    // exact-match path now refuses any query shorter than 4 chars
+    // and any query in the stopword set.
+    const SHOULD_NOT_RESOLVE = [
+      'it',     // pronoun — was matching "Italian Game"
+      'the',    // article
+      'a',      // article
+      'go',     // verb
+      'do',     // verb
+      'show',   // 4 chars but stopword
+      'yes',    // chip-tap confirmation
+      'no',     // chip-tap rejection
+      'sure',   // chip-tap confirmation
+    ];
+    for (const q of SHOULD_NOT_RESOLVE) {
+      it(`"${q}" → null (no canonicalization)`, () => {
+        expect(resolveOpeningEntry(q)).toBeNull();
+      });
+    }
+
+    // Counter-cases: real short opening names still resolve.
+    const SHOULD_RESOLVE = [
+      ['Pirc', 'Pirc Defense'],
+      ['Slav', 'Slav Defense'],
+      ['Reti', 'Réti Opening'],
+      ['kid', "King's Indian Defense"],
+      ['qgd', "Queen's Gambit Declined"],
+    ] as const;
+    for (const [q, expected] of SHOULD_RESOLVE) {
+      it(`"${q}" → ${expected}`, () => {
+        const r = resolveOpeningEntry(q);
+        expect(r).not.toBeNull();
+        expect(r?.canonicalName).toBe(expected);
+      });
+    }
+  });
+
   describe('findContinuationsAtPly', () => {
     it('returns multiple SANs at the starting position', () => {
       const map = findContinuationsAtPly([]);
