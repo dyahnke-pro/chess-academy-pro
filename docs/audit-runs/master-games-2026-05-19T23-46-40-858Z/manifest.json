@@ -1,0 +1,203 @@
+{
+  "generatedAt": "2026-05-19T23:49:50.650Z",
+  "source": "lichess masters explorer + game export (CC0)",
+  "perOpeningCap": 3,
+  "entries": [
+    {
+      "id": "italian-game",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4",
+      "depth": 10,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "vienna-game",
+      "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6",
+      "depth": 8,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "kings-gambit",
+      "pgn": "e4 e5 f4 exf4 Nf3 d5",
+      "depth": 6,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "four-knights-game",
+      "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4",
+      "depth": 8,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "sicilian-najdorf",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+      "depth": 10,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "sicilian-dragon",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6",
+      "depth": 10,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "sicilian-sveshnikov",
+      "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5",
+      "depth": 10,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "french-defence",
+      "pgn": "e4 e6 d4 d5 Nc3 Nf6",
+      "depth": 6,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "caro-kann",
+      "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5",
+      "depth": 8,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "scandinavian-defence",
+      "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5",
+      "depth": 6,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "petrov-defence",
+      "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4",
+      "depth": 8,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "queens-gambit",
+      "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7",
+      "depth": 8,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "london-system",
+      "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7",
+      "depth": 6,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "trompowsky-attack",
+      "pgn": "d4 Nf6 Bg5",
+      "depth": 3,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "qgd",
+      "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7",
+      "depth": 12,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "qga",
+      "pgn": "d4 d5 c4 dxc4 Nf3 Nf6 e3 e6",
+      "depth": 8,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "semi-slav",
+      "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6",
+      "depth": 8,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "kings-indian-defence",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6",
+      "depth": 8,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "benoni-defence",
+      "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6",
+      "depth": 10,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "benko-gambit",
+      "pgn": "d4 Nf6 c4 c5 d5 b5",
+      "depth": 6,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "queens-indian",
+      "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7",
+      "depth": 8,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "budapest-gambit",
+      "pgn": "d4 Nf6 c4 e5 dxe5 Ng4",
+      "depth": 6,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "old-indian-defence",
+      "pgn": "d4 Nf6 c4 d6 Nc3 e5",
+      "depth": 6,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "english-opening",
+      "pgn": "c4 e5 Nc3 Nf6",
+      "depth": 4,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "reti-opening",
+      "pgn": "Nf3 d5 c4",
+      "depth": 3,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "birds-opening",
+      "pgn": "f4 d5 Nf3 Nf6",
+      "depth": 4,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "two-knights-defence",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5",
+      "depth": 7,
+      "status": "fetched",
+      "gameCount": 3
+    },
+    {
+      "id": "evans-gambit",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4",
+      "depth": 7,
+      "status": "fetched",
+      "gameCount": 3
+    }
+  ]
+}

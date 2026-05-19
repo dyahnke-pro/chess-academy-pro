@@ -1,0 +1,44 @@
+{
+  "openingId": "italian-game",
+  "fromPgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4",
+  "depth": 10,
+  "games": [
+    {
+      "id": "FbwSGQj3",
+      "white": "Nepomniachtchi, I.",
+      "whiteRating": 2792,
+      "black": "Carlsen, M.",
+      "blackRating": 2855,
+      "winner": null,
+      "year": 2021,
+      "month": "2021-09",
+      "url": "https://lichess.org/FbwSGQj3",
+      "pgn": "[Event \"9th Norway Chess 2021\"]\n[Site \"Stavanger NOR\"]\n[Date \"2021.09.17\"]\n[Round \"10.1\"]\n[White \"Nepomniachtchi, I.\"]\n[Black \"Carlsen, M.\"]\n[Result \"1/2-1/2\"]\n[GameId \"FbwSGQj3\"]\n[WhiteElo \"2792\"]\n[BlackElo \"2855\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C54\"]\n[Opening \"Italian Game: Classical Variation, Greco Gambit, Modern Line\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. e5 d5 7. Bb5 Ne4 8. cxd4 Bb6 9. Nc3 O-O 10. Be3 Bg4 11. h3 Bh5 12. Qc2 Nxc3 13. bxc3 f6 14. exf6 Qxf6 15. Be2 Na5 16. O-O Bxf3 17. Bxf3 c6 18. Rae1 Nc4 19. Bc1 Qg6 20. Qd1 Rae8 21. Rxe8 Qxe8 22. Be2 Qe6 23. Bxc4 dxc4 24. Re1 Qf7 25. Qe2 Ba5 26. Qe3 h6 27. Ba3 Rd8 28. h4 Kh7 29. Re2 Qf5 30. Qc1 Rd5 31. f3 b5 32. Re4 Bb6 33. Be7 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "55GlUBTE",
+      "white": "So, W..",
+      "whiteRating": 2770,
+      "black": "Carlsen, M..",
+      "blackRating": 2862,
+      "winner": "white",
+      "year": 2021,
+      "month": "2021-02",
+      "url": "https://lichess.org/55GlUBTE",
+      "pgn": "[Event \"Opera Euro Rapid KO 2021\"]\n[Site \"chess24.com INT\"]\n[Date \"2021.02.13\"]\n[Round \"3.14\"]\n[White \"So, W..\"]\n[Black \"Carlsen, M..\"]\n[Result \"1-0\"]\n[GameId \"55GlUBTE\"]\n[WhiteElo \"2770\"]\n[BlackElo \"2862\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C54\"]\n[Opening \"Italian Game: Classical Variation, Greco Gambit, Modern Line\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. e5 d5 7. Bb5 Ne4 8. cxd4 Bb6 9. Nc3 O-O 10. Be3 Bg4 11. h3 Bh5 12. Qc2 Bg6 13. Qb3 Ne7 14. O-O c6 15. Bd3 Nf5 16. Qc2 Nxc3 17. bxc3 Nxe3 18. fxe3 Bxd3 19. Qxd3 f6 20. c4 Bc7 21. cxd5 Qxd5 22. exf6 gxf6 23. e4 Qd7 24. Rad1 Rad8 25. Nh4 Kh8 26. Nf5 c5 27. d5 Be5 28. Rb1 b6 29. Qc4 Rfe8 30. Kh1 Bd4 31. Rf4 Rxe4 32. Rxe4 Qxf5 33. Rbe1 Rxd5 34. Rg4 h5 35. Re8+ Kh7 36. Re7+ Kh8 37. Qc1 1-0\n\n\n"
+    },
+    {
+      "id": "LtaxEabX",
+      "white": "Giri, A..",
+      "whiteRating": 2764,
+      "black": "Carlsen, M..",
+      "blackRating": 2862,
+      "winner": null,
+      "year": 2020,
+      "month": "2020-11",
+      "url": "https://lichess.org/LtaxEabX",
+      "pgn": "[Event \"Skilling Open KO 2020\"]\n[Site \"chess24.com INT\"]\n[Date \"2020.11.26\"]\n[Round \"1.21\"]\n[White \"Giri, A..\"]\n[Black \"Carlsen, M..\"]\n[Result \"1/2-1/2\"]\n[GameId \"LtaxEabX\"]\n[WhiteElo \"2764\"]\n[BlackElo \"2862\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C54\"]\n[Opening \"Italian Game: Classical Variation, Greco Gambit, Modern Line\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. e5 d5 7. Bb5 Ne4 8. cxd4 Bb6 9. Nc3 O-O 10. Be3 Bg4 11. h3 Bh5 12. Qc2 Nxc3 13. bxc3 f6 14. Bxc6 bxc6 15. exf6 Bxf3 16. fxg7 Rf7 17. gxf3 Qd6 18. Rg1 c5 19. Rg5 cxd4 20. cxd4 Rxg7 21. Rxg7+ Kxg7 22. Ke2 Qg6 23. Qa4 Rd8 24. Rc1 Kf7 25. Bf4 Re8+ 26. Be5 Re7 27. Qb3 Bxd4 28. Qxd5+ Qe6 29. Qxd4 Qxe5+ 30. Qxe5 Rxe5+ 31. Kd3 Ra5 32. Rxc7+ Kg6 33. Rc2 Kf5 34. Kc4 Ra3 35. Kb4 Rxf3 36. Rc7 a5+ 37. Kxa5 Ra3+ 38. Kb4 Rxa2 39. Rxh7 Kg6 40. Rh8 Rxf2 41. Kc3 Rf5 42. Kd4 Rh5 43. Rxh5 Kxh5 44. h4 Kxh4 1/2-1/2\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:46:47.930Z"
+}

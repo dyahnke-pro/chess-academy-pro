@@ -1,0 +1,44 @@
+{
+  "openingId": "semi-slav",
+  "fromPgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6",
+  "depth": 8,
+  "games": [
+    {
+      "id": "0H6H5Wpx",
+      "white": "Carlsen, M.",
+      "whiteRating": 2882,
+      "black": "Ding Liren",
+      "blackRating": 2805,
+      "winner": null,
+      "year": 2019,
+      "month": "2019-08",
+      "url": "https://lichess.org/0H6H5Wpx",
+      "pgn": "[Event \"7th Sinquefield Cup TB\"]\n[Site \"Saint Louis USA\"]\n[Date \"2019.08.29\"]\n[Round \"1\"]\n[White \"Carlsen, M.\"]\n[Black \"Ding Liren\"]\n[Result \"1/2-1/2\"]\n[GameId \"0H6H5Wpx\"]\n[WhiteElo \"2882\"]\n[BlackElo \"2805\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"D43\"]\n[Opening \"Semi-Slav Defense\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 e6 3. Nf3 d5 4. Nc3 c6 5. g3 dxc4 6. Ne5 Nbd7 7. Nxc4 b5 8. Ne5 Nxe5 9. dxe5 Qxd1+ 10. Kxd1 Nd5 11. Ne4 Bb7 12. Bg2 c5 13. Bd2 Be7 14. Rc1 c4 15. Kc2 O-O-O 16. Rhd1 f5 17. Nd6+ Bxd6 18. exd6 Rxd6 19. Bxd5 exd5 20. Bc3 Re8 21. e3 g5 22. Rd4 Re4 23. Rh1 Rh6 24. h4 Kd7 25. a3 g4 26. Rxe4 fxe4 27. b4 Ra6 28. Kb2 h5 29. Rd1 Ke6 30. Rd2 Bc6 31. Bd4 Be8 32. Bc3 Bc6 33. Bd4 Be8 34. Bc3 Bc6 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "IyXf8bOi",
+      "white": "Carlsen, M.",
+      "whiteRating": 2876,
+      "black": "Topalov, V.",
+      "blackRating": 2798,
+      "winner": "black",
+      "year": 2015,
+      "month": "2015-06",
+      "url": "https://lichess.org/IyXf8bOi",
+      "pgn": "[Event \"3rd Norway Chess 2015\"]\n[Site \"Stavanger NOR\"]\n[Date \"2015.06.16\"]\n[Round \"1.2\"]\n[White \"Carlsen, M.\"]\n[Black \"Topalov, V.\"]\n[Result \"0-1\"]\n[GameId \"IyXf8bOi\"]\n[WhiteElo \"2876\"]\n[BlackElo \"2798\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"D43\"]\n[Opening \"Semi-Slav Defense\"]\n[Termination \"Unknown\"]\n\n1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 e6 5. Bg5 h6 6. Bxf6 Qxf6 7. e3 Nd7 8. Rc1 g6 9. Be2 Bg7 10. cxd5 exd5 11. b4 a6 12. a4 O-O 13. b5 axb5 14. axb5 Qd6 15. O-O Nb6 16. Qb3 Rb8 17. Nd1 Bf5 18. Nb2 Rfc8 19. Nd3 Bxd3 20. Qxd3 c5 21. dxc5 Rxc5 22. h4 Na4 23. h5 Rbc8 24. Rxc5 Nxc5 25. Qc2 gxh5 26. Nd4 Qg6 27. Nf5 Bf8 28. Rd1 Qe6 29. Rc1 Nb3 30. Qxc8 Nxc1 31. Qxc1 Qxf5 32. Qc7 Qb1+ 33. Bf1 d4 34. exd4 Qd1 35. Qe5 Bg7 36. Qe8+ Bf8 37. Qd8 Kg7 38. Qd5 b6 39. Qe5+ Kg8 40. Qf6 Bg7 41. Qxb6 Bxd4 42. Qxh6 Qg4 43. Qd6 Qd1 44. Qd8+ Kh7 45. Qc7 Kg7 46. b6 Qg4 47. b7 Qh4 48. g3 Qf6 49. Qc2 Qe5 50. Qd3 Ba7 51. Qf3 Qf6 52. Qe2 Qc3 53. Kh2 Qd4 54. Qf3 Bb8 55. Kh3 Bc7 56. Be2 Bb8 57. Bd1 f5 58. Be2 f4 59. Qxh5 Qxf2 60. Qg5+ Kf7 0-1\n\n\n"
+    },
+    {
+      "id": "Um5Pxzih",
+      "white": "Ding Liren",
+      "whiteRating": 2799,
+      "black": "Carlsen, M.",
+      "blackRating": 2864,
+      "winner": "black",
+      "year": 2022,
+      "month": "2022-03",
+      "url": "https://lichess.org/Um5Pxzih",
+      "pgn": "[Event \"Charity Cup KO 2022\"]\n[Site \"chess24.com INT\"]\n[Date \"2022.03.24\"]\n[Round \"2.24\"]\n[White \"Ding Liren\"]\n[Black \"Carlsen, M.\"]\n[Result \"0-1\"]\n[GameId \"Um5Pxzih\"]\n[WhiteElo \"2799\"]\n[BlackElo \"2864\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"D43\"]\n[Opening \"Semi-Slav Defense\"]\n[Termination \"Unknown\"]\n\n1. d4 d5 2. c4 e6 3. Nc3 c6 4. Nf3 Nf6 5. Bg5 Be7 6. e3 Nbd7 7. Qc2 h6 8. Bf4 Nh5 9. Be5 Nhf6 10. Bg3 Nh5 11. O-O-O Nxg3 12. hxg3 dxc4 13. Bxc4 b5 14. Bd3 Bb7 15. Kb1 Qb6 16. g4 a6 17. g5 O-O-O 18. gxh6 Rxh6 19. Rxh6 gxh6 20. Be2 f5 21. e4 fxe4 22. Nxe4 Kb8 23. Rc1 Qc7 24. a3 Qf4 25. Nfd2 c5 26. g3 Qf5 27. dxc5 Nxc5 28. Bf3 Rc8 29. Nxc5 Rxc5 30. Qxf5 Rxc1+ 31. Kxc1 exf5 32. Bxb7 Kxb7 33. Nf3 Bc5 34. Nh4 f4 35. g4 Bxf2 36. Nf5 f3 37. Kd2 Kc6 38. Nxh6 Kd5 39. g5 Ke4 40. g6 Be3+ 0-1\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:48:36.232Z"
+}

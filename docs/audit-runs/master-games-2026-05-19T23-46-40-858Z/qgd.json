@@ -1,0 +1,44 @@
+{
+  "openingId": "qgd",
+  "fromPgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7",
+  "depth": 12,
+  "games": [
+    {
+      "id": "XyOyGGhV",
+      "white": "Aronian, Levon",
+      "whiteRating": 2813,
+      "black": "Carlsen, Magnus",
+      "blackRating": 2868,
+      "winner": null,
+      "year": 2013,
+      "month": "2013-05",
+      "url": "https://lichess.org/XyOyGGhV",
+      "pgn": "[Event \"Norway Chess\"]\n[Site \"Stavanger\"]\n[Date \"2013.05.18\"]\n[Round \"9\"]\n[White \"Aronian, Levon\"]\n[Black \"Carlsen, Magnus\"]\n[Result \"1/2-1/2\"]\n[GameId \"XyOyGGhV\"]\n[WhiteElo \"2813\"]\n[BlackElo \"2868\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"D63\"]\n[Opening \"Queen's Gambit Declined: Orthodox Defense, Henneberger Variation\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 e6 3. Nf3 d5 4. Nc3 Nbd7 5. Bg5 Be7 6. e3 O-O 7. Rc1 a6 8. Qc2 dxc4 9. Bxc4 c5 10. Be2 b5 11. a4 b4 12. Ne4 cxd4 13. Nxf6+ Nxf6 14. Nxd4 Bb7 15. Nc6 Bxc6 16. Qxc6 Rc8 17. Qxc8 Qxc8 18. Rxc8 Rxc8 19. O-O a5 20. b3 Kf8 21. Bxf6 Bxf6 22. Rd1 Rc3 23. Bc4 h5 24. Kf1 Ke7 25. Ke2 Be5 26. h3 h4 27. Rd3 Rc2+ 28. Rd2 Rc3 29. Rd3 Rc2+ 30. Rd2 Rc3 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "5MTULzEv",
+      "white": "Carlsen, M..",
+      "whiteRating": 2847,
+      "black": "Karjakin, Sergey",
+      "blackRating": 2757,
+      "winner": "white",
+      "year": 2021,
+      "month": "2021-03",
+      "url": "https://lichess.org/5MTULzEv",
+      "pgn": "[Event \"Magnus Carlsen Inv Prelim\"]\n[Site \"chess24.com INT\"]\n[Date \"2021.03.14\"]\n[Round \"9.6\"]\n[White \"Carlsen, M..\"]\n[Black \"Karjakin, Sergey\"]\n[Result \"1-0\"]\n[GameId \"5MTULzEv\"]\n[WhiteElo \"2847\"]\n[BlackElo \"2757\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"D61\"]\n[Opening \"Queen's Gambit Declined: Orthodox Defense, Rubinstein Variation\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 e6 3. Nf3 d5 4. Nc3 Be7 5. Bg5 O-O 6. e3 Nbd7 7. Qc2 h6 8. Bh4 c5 9. cxd5 Nxd5 10. Bxe7 Qxe7 11. Nxd5 exd5 12. dxc5 Nxc5 13. Be2 Bg4 14. O-O Rac8 15. Rad1 Rfd8 16. h3 Ne6 17. Qa4 Bxf3 18. Bxf3 Qc5 19. b4 Qc4 20. Qxa7 d4 21. exd4 Nxd4 22. Bxb7 Rc7 23. Qa5 Rcd7 24. Ba6 Qe6 25. Kh1 Rd6 26. b5 g6 27. a4 Qf5 28. Qb4 Qe5 29. Qc3 Qf4 30. Bb7 Nxb5 31. Rxd6 Nxc3 32. Rxd8+ Kg7 33. a5 Qc7 34. a6 Nb5 35. Rfd1 h5 36. Kg1 h4 37. R8d7 Qc2 38. Ra1 Qc3 39. Rdd1 g5 40. a7 1-0\n\n\n"
+    },
+    {
+      "id": "8NogdEns",
+      "white": "Ding Liren",
+      "whiteRating": 2778,
+      "black": "Mamedyarov, S.",
+      "blackRating": 2814,
+      "winner": null,
+      "year": 2018,
+      "month": "2018-04",
+      "url": "https://lichess.org/8NogdEns",
+      "pgn": "[Event \"Vugar Gashimov Mem 2018\"]\n[Site \"Shamkir AZE\"]\n[Date \"2018.04.25\"]\n[Round \"6.1\"]\n[White \"Ding Liren\"]\n[Black \"Mamedyarov, S.\"]\n[Result \"1/2-1/2\"]\n[GameId \"8NogdEns\"]\n[WhiteElo \"2778\"]\n[BlackElo \"2814\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"D60\"]\n[Opening \"Queen's Gambit Declined: Orthodox Defense\"]\n[Termination \"Normal\"]\n\n1. c4 Nf6 2. Nc3 e6 3. Nf3 d5 4. d4 Be7 5. Bg5 O-O 6. e3 Nbd7 7. Be2 h6 8. Bh4 c5 9. cxd5 Nxd5 10. Bxe7 Nxe7 11. O-O cxd4 12. Nxd4 Nf6 13. Qb3 Qa5 14. a3 Rd8 15. Qb4 Qxb4 16. axb4 Nc6 17. Nc2 Rd2 18. Rfc1 Nd5 19. Nxd5 exd5 20. b5 Rxe2 21. bxc6 d4 22. exd4 bxc6 23. Kf1 Re4 24. f3 Rh4 25. Nb4 Bd7 26. Nxc6 Bxc6 27. Rxc6 Rxd4 28. Rc2 a5 29. b3 Rb4 30. Ra3 Rab8 31. Rxa5 Rxb3 32. Kf2 Rb2 33. Rxb2 Rxb2+ 34. Kf1 Rb1+ 35. Kf2 Rb2+ 36. Kf1 Rb1+ 37. Kf2 Rb2+ 1/2-1/2\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:48:22.640Z"
+}

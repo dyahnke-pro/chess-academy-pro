@@ -1,0 +1,44 @@
+{
+  "openingId": "budapest-gambit",
+  "fromPgn": "d4 Nf6 c4 e5 dxe5 Ng4",
+  "depth": 6,
+  "games": [
+    {
+      "id": "n8Whokp2",
+      "white": "Giri, A.",
+      "whiteRating": 2782,
+      "black": "Mamedyarov, S.",
+      "blackRating": 2801,
+      "winner": "white",
+      "year": 2018,
+      "month": "2018-09",
+      "url": "https://lichess.org/n8Whokp2",
+      "pgn": "[Event \"chess.com Speed 5m+1spm 2018\"]\n[Site \"chess.com INT\"]\n[Date \"2018.09.07\"]\n[Round \"1.5\"]\n[White \"Giri, A.\"]\n[Black \"Mamedyarov, S.\"]\n[Result \"1-0\"]\n[GameId \"n8Whokp2\"]\n[WhiteElo \"2782\"]\n[BlackElo \"2801\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A52\"]\n[Opening \"Indian Defense: Budapest Defense, Adler Variation\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 e5 3. dxe5 Ng4 4. Nf3 Bc5 5. e3 Nc6 6. Be2 O-O 7. O-O Ngxe5 8. Nc3 Nxf3+ 9. Bxf3 Ne5 10. Be2 Re8 11. b3 a5 12. Na4 Bf8 13. Bb2 d6 14. Nc3 c6 15. Qd2 Qh4 16. f4 Ng4 17. Bxg4 Bxg4 18. e4 a4 19. Rae1 axb3 20. axb3 f6 21. Ra1 Bh5 22. f5 Bf7 23. Rxa8 Rxa8 24. Rd1 Re8 25. Ba3 b5 26. cxb5 cxb5 27. Nxb5 Bxb3 28. Rb1 Bf7 29. Nc3 g6 30. Bxd6 Rd8 31. Qf4 Qxf4 32. Bxf4 Bc5+ 33. Kh1 Re8 34. fxg6 hxg6 35. Rb8 Rxb8 36. Bxb8 Kg7 37. h3 g5 38. Kh2 Bg6 39. Kg3 Bb4 40. Nd5 Bc5 41. Kf3 Kf7 42. g4 Ke6 43. Bc7 Bd4 44. Ba5 Be8 45. Nc7+ Kf7 46. Nxe8 Kxe8 47. Ke2 Kf7 48. Kd3 Bf2 49. Bc3 Ke6 50. Bd4 Bg3 51. Kc4 Bd6 52. Kd3 Bf4 53. Ke2 Bd6 54. Kf3 Bf4 55. h4 1-0\n\n\n"
+    },
+    {
+      "id": "kvS4RZiB",
+      "white": "Aronian, Levon",
+      "whiteRating": 2809,
+      "black": "Ivanchuk, Vassily",
+      "blackRating": 2757,
+      "winner": "white",
+      "year": 2013,
+      "month": "2013-03",
+      "url": "https://lichess.org/kvS4RZiB",
+      "pgn": "[Event \"FIDE Candidates\"]\n[Site \"London\"]\n[Date \"2013.03.27\"]\n[Round \"10\"]\n[White \"Aronian, Levon\"]\n[Black \"Ivanchuk, Vassily\"]\n[Result \"1-0\"]\n[GameId \"kvS4RZiB\"]\n[WhiteElo \"2809\"]\n[BlackElo \"2757\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A52\"]\n[Opening \"Indian Defense: Budapest Defense, Adler Variation\"]\n[Termination \"Unknown\"]\n\n1. d4 Nf6 2. c4 e5 3. dxe5 Ng4 4. Nf3 Nc6 5. Bf4 Bb4+ 6. Nc3 Bxc3+ 7. bxc3 Qe7 8. Qd5 f6 9. exf6 Nxf6 10. Qd3 d6 11. g3 O-O 12. Bg2 Bg4 13. O-O Rae8 14. Rae1 Kh8 15. Nd4 Ne5 16. Bxe5 dxe5 17. Nf5 Bxf5 18. Qxf5 Nd7 19. Qe4 c6 20. Rd1 Nb6 21. Rd3 Qc5 22. Qh4 g6 23. Be4 Kg7 24. Kg2 Qxc4 25. Rfd1 Qxa2 26. g4 Rf4 27. Bf5 Nd5 28. Rh3 Rh8 29. e3 gxf5 30. exf4 1-0\n\n\n"
+    },
+    {
+      "id": "zLxWOn3b",
+      "white": "Kramnik, Vladimir",
+      "whiteRating": 2799,
+      "black": "Mamedyarov, Shakhriyar",
+      "blackRating": 2760,
+      "winner": "black",
+      "year": 2008,
+      "month": "2008-03",
+      "url": "https://lichess.org/zLxWOn3b",
+      "pgn": "[Event \"Amber-rapid 17th\"]\n[Site \"Nice\"]\n[Date \"2008.03.17\"]\n[Round \"3\"]\n[White \"Kramnik, Vladimir\"]\n[Black \"Mamedyarov, Shakhriyar\"]\n[Result \"0-1\"]\n[GameId \"zLxWOn3b\"]\n[WhiteElo \"2799\"]\n[BlackElo \"2760\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A52\"]\n[Opening \"Indian Defense: Budapest Defense\"]\n[Termination \"Unknown\"]\n\n1. d4 Nf6 2. c4 e5 3. dxe5 Ng4 4. Nc3 Nc6 5. e3 Ngxe5 6. a3 a5 7. f4 Ng6 8. Bd3 Bc5 9. Qh5 d6 10. Nf3 a4 11. Bd2 O-O 12. Ne4 Qe8 13. O-O-O f5 14. Nxc5 dxc5 15. Kb1 Nge7 16. Qh4 h6 17. Bc3 Be6 18. Rhg1 Rd8 19. Ka1 Rxd3 20. Rxd3 Bxc4 21. Bxg7 Kxg7 22. g4 Ng6 23. gxf5 Rxf5 24. Rc3 Bf7 25. Qf2 Qe6 26. b3 axb3 27. Nh4 Rh5 28. Kb2 Qf6 29. Nxg6 Bxg6 30. e4 c4 31. Qd2 Qd4 32. Qxd4+ Nxd4 33. Rcg3 Rxh2+ 34. Kb1 Kf7 35. Rxg6 c3 36. Rg7+ Ke8 37. R7g2 Rxg2 38. Rxg2 Nf3 39. Kc1 Nd2 0-1\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:49:10.087Z"
+}

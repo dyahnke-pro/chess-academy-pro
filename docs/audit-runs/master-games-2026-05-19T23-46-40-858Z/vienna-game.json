@@ -1,0 +1,44 @@
+{
+  "openingId": "vienna-game",
+  "fromPgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6",
+  "depth": 8,
+  "games": [
+    {
+      "id": "DzMqspxx",
+      "white": "Firouzja, Alireza",
+      "whiteRating": 2759,
+      "black": "Carlsen, M..",
+      "blackRating": 2847,
+      "winner": "white",
+      "year": 2021,
+      "month": "2021-06",
+      "url": "https://lichess.org/DzMqspxx",
+      "pgn": "[Event \"Goldmoney Asian Prelim\"]\n[Site \"chess24.com INT\"]\n[Date \"2021.06.26\"]\n[Round \"1.6\"]\n[White \"Firouzja, Alireza\"]\n[Black \"Carlsen, M..\"]\n[Result \"1-0\"]\n[GameId \"DzMqspxx\"]\n[WhiteElo \"2759\"]\n[BlackElo \"2847\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C26\"]\n[Opening \"Bishop's Opening: Vienna Hybrid, Spielmann Attack\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. Nc3 Nf6 3. Bc4 Bc5 4. d3 d6 5. f4 Nc6 6. Nf3 a6 7. Bb3 h6 8. Qe2 Bg4 9. fxe5 dxe5 10. Be3 Nd4 11. Qf2 Bxf3 12. gxf3 Nh5 13. O-O-O Nf4 14. Kb1 Nxb3 15. Bxc5 Nxc5 16. Qxc5 Qd6 17. Qxd6 cxd6 18. d4 O-O-O 19. Rd2 Ne6 20. Ne2 Rhf8 21. d5 Ng5 22. Rd3 Nh3 23. Rc1 f5 24. c4 fxe4 25. fxe4 Rf2 26. Nc3 Rxh2 27. c5 Nf4 28. Rdd1 Kb8 29. c6 Rc8 30. Na4 Re2 31. Nb6 Rc7 32. Nd7+ Ka7 33. Rc4 h5 34. Rg1 g6 35. a4 h4 36. b4 b6 37. b5 a5 38. Nxe5 h3 39. Rh1 Nxd5 40. Nxg6 Ne3 41. Rc3 Ng4 42. Nf4 Rxe4 43. Nd5 Nf2 44. Nxc7 Nxh1 45. Rxh3 1-0\n\n\n"
+    },
+    {
+      "id": "lCaIIqnr",
+      "white": "Caruana, F.",
+      "whiteRating": 2799,
+      "black": "Grischuk, A.",
+      "blackRating": 2782,
+      "winner": "black",
+      "year": 2017,
+      "month": "2017-11",
+      "url": "https://lichess.org/lCaIIqnr",
+      "pgn": "[Event \"Champions Showdown G10\"]\n[Site \"Saint Louis USA\"]\n[Date \"2017.11.11\"]\n[Round \"3.2\"]\n[White \"Caruana, F.\"]\n[Black \"Grischuk, A.\"]\n[Result \"0-1\"]\n[GameId \"lCaIIqnr\"]\n[WhiteElo \"2799\"]\n[BlackElo \"2782\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C26\"]\n[Opening \"Bishop's Opening: Vienna Hybrid, Spielmann Attack\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. Bc4 Nf6 3. d3 Bc5 4. Nc3 d6 5. Na4 Bb6 6. Nxb6 axb6 7. Nf3 Be6 8. Bxe6 fxe6 9. O-O O-O 10. c3 Qe8 11. Re1 Nbd7 12. a4 Qg6 13. b4 h6 14. h3 Nh5 15. Kh2 Rf6 16. Be3 Raf8 17. a5 Nf4 18. Bxf4 Rxf4 19. axb6 Nxb6 20. Ra7 Rb8 21. d4 exd4 22. cxd4 Qe8 23. Qb3 Kh8 24. Re2 Qb5 25. Re1 Nc4 26. Ra2 Rbf8 27. Rc2 d5 28. exd5 exd5 29. Ne5 Nxe5 30. dxe5 Rxb4 31. Qa3 c5 32. e6 b6 33. e7 Re8 34. Qf3 Qd7 35. Rce2 Qd6+ 36. g3 Re4 37. Rxe4 dxe4 38. Rxe4 Qf6 39. Qe3 Qf7 40. Kg1 Kh7 41. Re6 b5 42. Re5 c4 43. Qc5 c3 44. Qxc3 Rxe7 45. Qd3+ g6 46. Rxb5 Rd7 47. Qc3 Rc7 48. Qb2 Re7 49. Rb8 Re8 50. Rb6 Re7 51. h4 Qd5 52. Rb5 Re1+ 0-1\n\n\n"
+    },
+    {
+      "id": "2NIYGBtv",
+      "white": "Caruana, F.",
+      "whiteRating": 2799,
+      "black": "Grischuk, A.",
+      "blackRating": 2782,
+      "winner": "white",
+      "year": 2017,
+      "month": "2017-11",
+      "url": "https://lichess.org/2NIYGBtv",
+      "pgn": "[Event \"Champions Showdown G10\"]\n[Site \"Saint Louis USA\"]\n[Date \"2017.11.11\"]\n[Round \"5.2\"]\n[White \"Caruana, F.\"]\n[Black \"Grischuk, A.\"]\n[Result \"1-0\"]\n[GameId \"2NIYGBtv\"]\n[WhiteElo \"2799\"]\n[BlackElo \"2782\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C26\"]\n[Opening \"Bishop's Opening: Vienna Hybrid, Spielmann Attack\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. Bc4 Nf6 3. d3 Bc5 4. Nc3 d6 5. Na4 Bd4 6. c3 Bxf2+ 7. Kxf2 c6 8. Bb3 b5 9. Nf3 bxa4 10. Bxa4 Qb6+ 11. Ke1 O-O 12. Qe2 Nbd7 13. Be3 Qc7 14. h3 Ba6 15. Qc2 d5 16. Rd1 Nb6 17. Bb3 c5 18. exd5 Nbxd5 19. Bg5 Rae8 20. Kf2 Qb6 21. Bxd5 Nxd5 22. Rhe1 c4+ 23. d4 e4 24. Nh2 f5 25. Bc1 Qg6 26. Kg1 h5 27. Re2 Kh7 28. Rde1 Bb7 29. b3 Ba6 30. Rf2 f4 31. bxc4 Bxc4 32. Qa4 Nb6 33. Qxa7 e3 34. Rb2 Nd5 35. Nf3 Nxc3 36. h4 Ne4 37. Qa5 Rf5 38. Qa4 Bd5 39. Rb6 Re6 40. Rxe6 Qxe6 41. Qc2 Qg6 42. a4 Nf2 43. Qe2 Qg3 44. Rf1 Nh3+ 45. Kh1 Nf2+ 46. Kg1 Bxf3 47. Qxf3 Qxf3 48. gxf3 Ra5 49. Re1 Rxa4 50. Bxe3 fxe3 51. Rxe3 Nh3+ 52. Kg2 Nf4+ 53. Kg3 Rxd4 54. Re5 Kh6 55. Rf5 Ng6 56. Ra5 Rxh4 57. Ra6 Rd4 58. Kf2 Rf4 59. Ke3 Rf6 60. Ra5 Nh4 61. f4 Ng6 62. Kf3 Rxf4+ 63. Ke3 Rg4 64. Kd2 Rg5 65. Ra6 1-0\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:46:54.692Z"
+}

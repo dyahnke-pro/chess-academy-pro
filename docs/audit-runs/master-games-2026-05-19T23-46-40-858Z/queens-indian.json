@@ -1,0 +1,44 @@
+{
+  "openingId": "queens-indian",
+  "fromPgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7",
+  "depth": 8,
+  "games": [
+    {
+      "id": "IHJjuOuQ",
+      "white": "Aronian, Levon",
+      "whiteRating": 2816,
+      "black": "Carlsen, Magnus",
+      "blackRating": 2843,
+      "winner": null,
+      "year": 2012,
+      "month": "2012-10",
+      "url": "https://lichess.org/IHJjuOuQ",
+      "pgn": "[Event \"Grand Slam Final 5th\"]\n[Site \"Sao Paulo/Bilbao\"]\n[Date \"2012.10.13\"]\n[Round \"10\"]\n[White \"Aronian, Levon\"]\n[Black \"Carlsen, Magnus\"]\n[Result \"1/2-1/2\"]\n[GameId \"IHJjuOuQ\"]\n[WhiteElo \"2816\"]\n[BlackElo \"2843\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"E18\"]\n[Opening \"Queen's Indian Defense: Classical Variation, Traditional Variation\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 e6 3. Nf3 b6 4. g3 Bb7 5. Bg2 Be7 6. O-O O-O 7. Nc3 Ne4 8. Bd2 Bf6 9. Ne5 Nxc3 10. Bxc3 Bxg2 11. Kxg2 d5 12. Ng4 Nd7 13. Qa4 Be7 14. Rfd1 Nf6 15. Ne5 Qe8 16. Nc6 Kh8 17. f3 a6 18. Be1 Bd6 19. Rac1 b5 20. cxb5 axb5 21. Qxb5 Rxa2 22. Ba5 Qa8 23. Rd3 Nd7 24. Rdc3 Nb8 25. b4 Nxc6 26. Rxc6 Rb2 27. R6c2 Rxc2 28. Rxc2 Qa7 29. e3 h6 30. Qc6 Kg8 31. Kf2 Qa8 32. Kg2 Qxc6 33. Rxc6 Rb8 34. Bxc7 Bxc7 35. Rxc7 Rxb4 36. g4 Rb2+ 37. Kg3 g5 38. Rc3 Re2 39. h4 Kg7 40. Ra3 Kg6 41. h5+ Kf6 42. Rb3 Kg7 43. Ra3 Kf6 44. Rb3 Kg7 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "4hVkYUap",
+      "white": "Nakamura, Hi",
+      "whiteRating": 2787,
+      "black": "Carlsen, M.",
+      "blackRating": 2853,
+      "winner": "black",
+      "year": 2016,
+      "month": "2016-10",
+      "url": "https://lichess.org/4hVkYUap",
+      "pgn": "[Event \"chess.com Blitz Final 5m+2spm 2016\"]\n[Site \"chess.com INT\"]\n[Date \"2016.10.27\"]\n[Round \"9\"]\n[White \"Nakamura, Hi\"]\n[Black \"Carlsen, M.\"]\n[Result \"0-1\"]\n[GameId \"4hVkYUap\"]\n[WhiteElo \"2787\"]\n[BlackElo \"2853\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"E18\"]\n[Opening \"Queen's Indian Defense: Classical Variation, Tiviakov Defense\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 e6 3. Nf3 b6 4. g3 Bb7 5. Bg2 Be7 6. Nc3 Na6 7. O-O O-O 8. d5 Bb4 9. Bd2 Nc5 10. Nh4 Re8 11. a3 Bxc3 12. Bxc3 exd5 13. cxd5 Nce4 14. Bd4 c5 15. dxc6 dxc6 16. f3 c5 17. Bxf6 Nxf6 18. e4 Qc7 19. Nf5 Rad8 20. Qc1 h6 21. Qc3 Kh7 22. Rfe1 Bc8 23. Ne3 Kg8 24. Rad1 Be6 25. Bf1 Rxd1 26. Rxd1 Rd8 27. Rd2 Rxd2 28. Qxd2 Qd7 29. Qxd7 Nxd7 30. f4 f6 31. Bb5 Nb8 32. Kf2 Kf7 33. Ke2 a6 34. Bc4 b5 35. Bxe6+ Kxe6 36. Nf5 Kf7 37. g4 Nc6 38. Kd3 g6 39. Nd6+ Ke7 40. Nb7 c4+ 41. Kc3 g5 42. fxg5 hxg5 43. h3 Ne5 44. Nc5 a5 45. Nb7 Kd7 46. Nxa5 Kc7 47. b4 Kb6 48. a4 Ka6 49. axb5+ Kxb5 50. Nb7 Nf7 51. Na5 Nd6 52. Kd4 Kxb4 53. Nxc4 Nxc4 54. Kd5 Nd2 55. e5 fxe5 56. Kxe5 Nf3+ 57. Ke4 Nh4 58. Kd4 Kb3 59. Kd3 Kb2 60. Kd2 Ng2 0-1\n\n\n"
+    },
+    {
+      "id": "N8XEWWZo",
+      "white": "Nakamura, Hi",
+      "whiteRating": 2787,
+      "black": "Carlsen, M.",
+      "blackRating": 2853,
+      "winner": "black",
+      "year": 2016,
+      "month": "2016-10",
+      "url": "https://lichess.org/N8XEWWZo",
+      "pgn": "[Event \"chess.com Blitz Final 3m+2spm 2016\"]\n[Site \"chess.com INT\"]\n[Date \"2016.10.27\"]\n[Round \"11\"]\n[White \"Nakamura, Hi\"]\n[Black \"Carlsen, M.\"]\n[Result \"0-1\"]\n[GameId \"N8XEWWZo\"]\n[WhiteElo \"2787\"]\n[BlackElo \"2853\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"E17\"]\n[Opening \"Queen's Indian Defense: Fianchetto Variation, Kramnik Variation\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 e6 3. Nf3 b6 4. g3 Bb7 5. Bg2 Be7 6. O-O O-O 7. Re1 Na6 8. Nc3 d5 9. cxd5 exd5 10. Bf4 Re8 11. Rc1 c5 12. dxc5 Nxc5 13. Nd4 a6 14. a3 Bf8 15. b4 Ne6 16. Nxe6 fxe6 17. Na4 Rc8 18. Rxc8 Qxc8 19. Qd4 b5 20. Rc1 Qd8 21. Nc5 Bxc5 22. Qxc5 Qd7 23. Qb6 Rc8 24. Rxc8+ Bxc8 25. Bh3 Kf7 26. Be5 Qe7 27. Qc6 Qd7 28. Qc3 Bb7 29. f3 Ne8 30. Qd3 Kg8 31. Qe3 Bc8 32. Qc5 Nf6 33. Kf2 Kf7 34. Ke3 Qb7 35. Qc3 Bd7 36. Kf2 Qb6+ 37. Bd4 Qd6 38. Qe3 h6 39. Be5 Qc6 40. Qa7 Ne8 41. Qb8 Qc8 42. Qxc8 Bxc8 43. Ke3 Nf6 44. Kd4 Nd7 45. Bc7 Bb7 46. e3 Ke7 47. Bf1 Nf6 48. g4 h5 49. g5 Nd7 50. Bd3 Kf7 51. h4 g6 52. Bd6 Bc6 53. f4 Bb7 54. Bc2 Nb6 55. Kc5 Nd7+ 56. Kd4 Nb6 57. Bd3 Nd7 58. Bc7 Bc6 59. Bc2 Kg7 60. Bd1 Kf7 61. Be2 Kg7 62. Bf3 Kf7 63. f5 exf5 64. Bxd5+ Bxd5 65. Kxd5 Ke7 66. Kc6 Ke6 67. Bf4 Ne5+ 68. Kb6 Nc4+ 69. Kxa6 Nxa3 70. Kb6 Kd5 71. Kc7 Ke4 72. Kc6 Nc4 73. Kxb5 Nxe3 74. Bxe3 Kxe3 75. Kc5 f4 76. b5 f3 77. b6 f2 78. b7 f1=Q 79. b8=Q Qf5+ 80. Kc6 Kf3 81. Qb4 Kg3 82. Kd6 Qf8+ 0-1\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:49:03.278Z"
+}
