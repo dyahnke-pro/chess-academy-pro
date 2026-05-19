@@ -1271,8 +1271,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Control d4 and e4 center squares with pawn",
+            "Open e-file and long diagonal for future pieces",
+            "Control d4 and e4 center squares with pawn",
+            "Open e-file and long diagonal for future pieces"
+          ],
+          "alternatives": [
+            "d4 — symmetrical centre, less forcing than e4",
+            "d4 — symmetrical centre, less forcing than e4"
           ]
         },
         {
@@ -1326,8 +1332,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Attack e4 pawn with knight from c6",
+            "Block e5 square to limit White's space",
+            "Attack e4 pawn with knight from c6",
+            "Block e5 square to limit White's space"
+          ],
+          "alternatives": [
+            "d6 — solid setup supporting e5 pawn defence",
+            "d6 — solid setup supporting e5 pawn defence"
           ]
         },
         {
@@ -1381,8 +1393,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Threaten f7 weakling with knight on g5",
+            "Create d4 outpost after forcing e5 knight retreat",
+            "Threaten f7 weakling with knight on g5",
+            "Create d4 outpost after forcing e5 knight retreat"
+          ],
+          "alternatives": [
+            "Bc4 — direct bishop pin on f7, less aggressive",
+            "Bc4 — direct bishop pin on f7, less aggressive"
           ]
         },
         {
@@ -1436,8 +1454,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Displace White's bishop from c4 with knight move",
+            "Reroute knight from c6 to b7 or c5 via a5",
+            "Displace White's bishop from c4 with knight move",
+            "Reroute knight from c6 to b7 or c5 via a5"
+          ],
+          "alternatives": [
+            "exd4 — open centre and simplify with pawn trade",
+            "exd4 — open centre and simplify with pawn trade"
           ]
         },
         {
@@ -1491,8 +1515,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Create passed c6 pawn threatening c7 promotion",
+            "Capture knight on a5, removing Black's defensive piece",
+            "Create passed c6 pawn threatening c7 promotion",
+            "Capture knight on a5, removing Black's defensive piece"
+          ],
+          "alternatives": [
+            "Nxf7 — seize material on f7 square immediately",
+            "Nxf7 — seize material on f7 square immediately"
           ]
         },
         {
@@ -1546,8 +1576,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Weaken g5 knight by attacking it with h6",
+            "Prepare g7-g6 escape route for king or bishop",
+            "Weaken g5 knight by attacking it with h6",
+            "Prepare g7-g6 escape route for king or bishop"
+          ],
+          "alternatives": [
+            "Qb6 — attack c6 pawn and b2 square simultaneously",
+            "Qb6 — attack c6 pawn and b2 square simultaneously"
           ]
         },
         {
@@ -1601,8 +1637,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Centralize knight on e5, controlling key squares",
+            "Threaten Nxd7 fork or Nf7 attacking rook",
+            "Centralize knight on e5, controlling key squares",
+            "Threaten Nxd7 fork or Nf7 attacking rook"
+          ],
+          "alternatives": [
+            "Nxe5 — exchange knights, reduce White's attacking force",
+            "Nxe5 — exchange knights, reduce White's attacking force"
           ]
         },
         {
@@ -1656,8 +1698,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Capture f3 to weaken White's king position",
+            "Remove bishop defender near White's king on e1",
+            "Capture f3 to weaken White's king position",
+            "Remove bishop defender near White's king on e1"
+          ],
+          "alternatives": [
+            "Nxe5 — trade knights instead of pawn capture",
+            "Nxe5 — trade knights instead of pawn capture"
           ]
         },
         {
@@ -1712,8 +1760,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Advance d4 pawn, opening d-file and c-file",
+            "Attack undefended c6 bishop with central break",
+            "Advance d4 pawn, opening d-file and c-file",
+            "Attack undefended c6 bishop with central break"
+          ],
+          "alternatives": [
+            "Kh7 — tuck king away from back-rank tactics",
+            "Kh7 — tuck king away from back-rank tactics"
           ]
         },
         {
@@ -1767,8 +1821,14 @@
             }
           ],
           "plans": [
-            "Continue developing and improving piece placement",
-            "Look for tactical opportunities"
+            "Attack f2 with knight from g4, threatening promotion",
+            "Threaten discovered attack on e1 if bishop moves",
+            "Attack f2 with knight from g4, threatening promotion",
+            "Threaten discovered attack on e1 if bishop moves"
+          ],
+          "alternatives": [
+            "Bxd4 — remove central pawn, relieve pressure immediately",
+            "Bxd4 — remove central pawn, relieve pressure immediately"
           ]
         }
       ]
@@ -2098,8 +2158,14 @@
           "highlights": [],
           "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
           "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
+            "Occupy e4 center square, control d5 and f5",
+            "Prepare Nf3 to complete kingside development",
+            "Occupy e4 center square, control d5 and f5",
+            "Prepare Nf3 to complete kingside development"
+          ],
+          "alternatives": [
+            "d4 — occupy center immediately with pawn",
+            "d4 — occupy center immediately with pawn"
           ]
         },
         {
@@ -2115,8 +2181,14 @@
           "highlights": [],
           "pawnStructure": "Black has a strong central pawn duo on d7 and e5.",
           "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
+            "Mirror e4 pawn, contest central control",
+            "Support d4 square, prepare knight development",
+            "Mirror e4 pawn, contest central control",
+            "Support d4 square, prepare knight development"
+          ],
+          "alternatives": [
+            "c5 — attack center asymmetrically, Sicilian style",
+            "c5 — attack center asymmetrically, Sicilian style"
           ]
         },
         {
@@ -2136,10 +2208,16 @@
             }
           ],
           "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
+            "Attack e5 pawn, support d4 square",
+            "Enable Bc4 bishop to target f7 weakness",
+            "Attack e5 pawn, support d4 square",
+            "Enable Bc4 bishop to target f7 weakness"
           ],
-          "shortNarration": "Knight to f3 improves piece coordination and flexibility."
+          "shortNarration": "Knight to f3 improves piece coordination and flexibility.",
+          "alternatives": [
+            "d4 — open center, challenge e5 immediately",
+            "d4 — open center, challenge e5 immediately"
+          ]
         },
         {
           "san": "Nc6",
@@ -2158,10 +2236,16 @@
             }
           ],
           "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
+            "Defend e5 pawn with second piece",
+            "Control d4 square before White advances",
+            "Defend e5 pawn with second piece",
+            "Control d4 square before White advances"
           ],
-          "shortNarration": "Black's knight to c6 improves piece coordination and flexibility."
+          "shortNarration": "Black's knight to c6 improves piece coordination and flexibility.",
+          "alternatives": [
+            "d6 — support e5 pawn from behind",
+            "d6 — support e5 pawn from behind"
+          ]
         },
         {
           "san": "Bc4",
@@ -2180,11 +2264,14 @@
             }
           ],
           "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
+            "Target f7 weakness with bishop on long diagonal",
+            "Prepare d4 pawn break or Ng5 attack",
+            "Target f7 weakness with bishop on long diagonal",
+            "Prepare d4 pawn break or Ng5 attack"
           ],
           "alternatives": [
-            "The bishop could go to other squares, but c4 maximizes its influence on the key diagonals."
+            "d4 — open center before White advances",
+            "d4 — open center before White advances"
           ],
           "shortNarration": "Bishop to c4 controls the key diagonal and keeps White's pieces active."
         },
@@ -2205,10 +2292,16 @@
             }
           ],
           "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
+            "Attack Nf3 knight with tempo",
+            "Support e5 pawn, prepare castling kingside",
+            "Attack Nf3 knight with tempo",
+            "Support e5 pawn, prepare castling kingside"
           ],
-          "shortNarration": "Black's knight on f6 improves piece coordination and flexibility."
+          "shortNarration": "Black's knight on f6 improves piece coordination and flexibility.",
+          "alternatives": [
+            "d4 — open center, challenge bishop on c4",
+            "d4 — open center, challenge bishop on c4"
+          ]
         },
         {
           "san": "Ng5",
@@ -2228,10 +2321,16 @@
           ],
           "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
           "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
+            "Attack e5 and f7, create Nxe5 threat",
+            "Force Black to make committal response",
+            "Attack e5 and f7, create Nxe5 threat",
+            "Force Black to make committal response"
           ],
-          "shortNarration": "Knight to g5 improves coordination and flexibility."
+          "shortNarration": "Knight to g5 improves coordination and flexibility.",
+          "alternatives": [
+            "d4 — capture center, open bishop diagonal",
+            "d4 — capture center, open bishop diagonal"
+          ]
         },
         {
           "san": "d5",
@@ -2264,7 +2363,14 @@
           ],
           "pawnStructure": "White has a strong central pawn duo on d5 and d2, doubled pawns on the d-file.",
           "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+            "Nxe5 — capture e5 pawn directly",
+            "Nxe5 — capture e5 pawn directly"
+          ],
+          "plans": [
+            "Capture with tempo toward f7 weakness",
+            "Control c6 square, support Ng5 knight",
+            "Capture with tempo toward f7 weakness",
+            "Control c6 square, support Ng5 knight"
           ]
         },
         {
@@ -2280,8 +2386,14 @@
           "highlights": [],
           "pawnStructure": "Black has a central pawn on e5.",
           "plans": [
-            "Look for tactical opportunities to exploit the opponent's inaccuracy",
-            "Maintain piece pressure while avoiding counter-tactics"
+            "Attack bishop on c4, force retreat or trade",
+            "Create b4 square for future piece maneuvers",
+            "Attack bishop on c4, force retreat or trade",
+            "Create b4 square for future piece maneuvers"
+          ],
+          "alternatives": [
+            "Na5 — attack bishop on c4 immediately",
+            "Na5 — attack bishop on c4 immediately"
           ]
         },
         {
@@ -2332,11 +2444,14 @@
           "highlights": [],
           "pawnStructure": "White has a strong central pawn duo on d5 and d2, doubled pawns on the d-file.",
           "plans": [
-            "Look for tactical opportunities to exploit the opponent's inaccuracy",
-            "Maintain piece pressure while avoiding counter-tactics"
+            "Support d5 pawn, prevent Nxd5 captures",
+            "Open c-file for queen and rook pressure",
+            "Support d5 pawn, prevent Nxd5 captures",
+            "Open c-file for queen and rook pressure"
           ],
           "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+            "Nxd5 — capture pawn, eliminate White's strong passer",
+            "Nxd5 — capture pawn, eliminate White's strong passer"
           ],
           "shortNarration": "c3 supports d4, a key central advance."
         },
@@ -2393,10 +2508,16 @@
             }
           ],
           "plans": [
-            "Look for tactical opportunities to exploit the opponent's inaccuracy",
-            "Maintain piece pressure while avoiding counter-tactics"
+            "Queen captures g5, removing Black's attacking queen from the board.",
+            "Control d4 square with queen after Qxg5 to restrict Black's pieces.",
+            "Queen captures g5, removing Black's attacking queen from the board.",
+            "Control d4 square with queen after Qxg5 to restrict Black's pieces."
           ],
-          "shortNarration": "Black captures on g5, removing the knight; White's queen now eyes multiple targets from g5."
+          "shortNarration": "Black captures on g5, removing the knight; White's queen now eyes multiple targets from g5.",
+          "alternatives": [
+            "Bxb5+ — checks king, wins b5 pawn with tempo",
+            "Bxb5+ — checks king, wins b5 pawn with tempo"
+          ]
         },
         {
           "san": "Bxb5+",
@@ -2415,9 +2536,16 @@
             }
           ],
           "alternatives": [
-            "The bishop could go to other squares, but b5 maximizes its influence on the key diagonals."
+            "Ke2 — develops king off back rank to avoid back-rank issues",
+            "Ke2 — develops king off back rank to avoid back-rank issues"
           ],
-          "shortNarration": "White captures on b5 with check, removing a pawn and keeping the bishop active on the long diagonal."
+          "shortNarration": "White captures on b5 with check, removing a pawn and keeping the bishop active on the long diagonal.",
+          "plans": [
+            "Bishop takes on b5 with check, forcing king to move immediately.",
+            "After check, bishop occupies b5 square controlling a6 and c6.",
+            "Bishop takes on b5 with check, forcing king to move immediately.",
+            "After check, bishop occupies b5 square controlling a6 and c6."
+          ]
         },
         {
           "san": "Kd8",
@@ -2455,8 +2583,14 @@
           ],
           "pawnStructure": "White has a strong central pawn duo on d4 and d2, doubled pawns on the d-file, isolated pawn on d and d.",
           "plans": [
-            "Convert the positional advantages into concrete gains",
-            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+            "Queen moves to f3, attacking Black's f7 pawn and d5 knight.",
+            "f3 positions queen on long diagonal toward a8, supporting Bc4.",
+            "Queen moves to f3, attacking Black's f7 pawn and d5 knight.",
+            "f3 positions queen on long diagonal toward a8, supporting Bc4."
+          ],
+          "alternatives": [
+            "Kf2 — centralizes king off back rank, prepares rook deployment",
+            "Kf2 — centralizes king off back rank, prepares rook deployment"
           ]
         },
         {
@@ -2494,9 +2628,16 @@
             }
           ],
           "alternatives": [
-            "The bishop could go to other squares, but c4 maximizes its influence on the key diagonals."
+            "O-O — castles kingside, removes king from center to safety",
+            "O-O — castles kingside, removes king from center to safety"
           ],
-          "shortNarration": "Bishop to c4 controls the key diagonal and keeps active piece play."
+          "shortNarration": "Bishop to c4 controls the key diagonal and keeps active piece play.",
+          "plans": [
+            "Bc4 targets the f7 pawn, creating serious threats near Black's king.",
+            "Bishop on c4 cooperates with Qf3 to menace weak f7 square.",
+            "Bc4 targets the f7 pawn, creating serious threats near Black's king.",
+            "Bishop on c4 cooperates with Qf3 to menace weak f7 square."
+          ]
         },
         {
           "san": "Nf4",
@@ -2515,8 +2656,14 @@
             }
           ],
           "plans": [
-            "Convert the positional advantages into concrete gains",
-            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+            "Nf4 from d5 attacks e6 square and e2-g1 diagonal control.",
+            "Black knight reaches f4, an advanced outpost attacking White's formation.",
+            "Nf4 from d5 attacks e6 square and e2-g1 diagonal control.",
+            "Black knight reaches f4, an advanced outpost attacking White's formation."
+          ],
+          "alternatives": [
+            "Nf6+ — checks White king, forcing it to move with tempo",
+            "Nf6+ — checks White king, forcing it to move with tempo"
           ]
         },
         {

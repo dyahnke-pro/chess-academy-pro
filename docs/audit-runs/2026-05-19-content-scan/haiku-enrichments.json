@@ -39968,14 +39968,104 @@
         "White's queen on d5 controls key central and kingside squares; Black king trapped"
       ],
       "alternative": "Qe8+ — checks king, forces Qxe8, wins Black's queen for knight and bishop"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::15": {
+      "ply": 16,
+      "san": "exd3",
+      "plans": [
+        "Remove White's passed d-pawn to ease Black's defensive burden.",
+        "Eliminate the pawn that threatens d2 and controls central squares."
+      ],
+      "alternative": "dxe2 — queen recapture maintains more central control"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::16": {
+      "ply": 17,
+      "san": "cxd3",
+      "plans": [
+        "Recapture with the c-pawn, keeping the d3 pawn centralized.",
+        "Support the d3 pawn and reinforce control of d4."
+      ],
+      "alternative": "fxe3 — bishop recapture opens f-file but weakens kingside"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::18": {
+      "ply": 19,
+      "san": "O-O",
+      "plans": [
+        "Tuck the king to g8, moving it away from the exposed f7 square.",
+        "Complete kingside castling to link rooks and secure the king."
+      ],
+      "alternative": "Ke8 — centralize king but blocks queenside rook development"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::20": {
+      "ply": 21,
+      "san": "Nf4",
+      "plans": [
+        "Jump knight to f4, attacking the g2 square and eyeing e2.",
+        "Activate the knight on f4 to probe White's kingside weaknesses."
+      ],
+      "alternative": "Nd4 — centralize knight but allows d3–d4 pawn advance"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::21": {
+      "ply": 22,
+      "san": "Nc6",
+      "plans": [
+        "Develop the queenside knight to c6, defending d4 and e5 squares.",
+        "Add defender to d4 and prepare rook activation on the d-file."
+      ],
+      "alternative": "Ke7 — move king to safety but delays piece development"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::24": {
+      "ply": 25,
+      "san": "Qb3",
+      "plans": [
+        "Attack the bishop on d5 with the queen from b3.",
+        "Force the dark-squared bishop to make a decision on d5."
+      ],
+      "alternative": "Nxe4 — trade knight for bishop but removes active piece"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::27": {
+      "ply": 28,
+      "san": "Bxe3",
+      "plans": [
+        "Capture the bishop on e3 with your bishop to relieve pressure.",
+        "Remove the strong bishop on e3 that dominates White's position."
+      ],
+      "alternative": "Qd1 — attack f1 rook but blocks king escape squares"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::28": {
+      "ply": 29,
+      "san": "fxe3",
+      "plans": [
+        "Recapture with the f-pawn, keeping the e3 square controlled.",
+        "Restore the pawn shield in front of the kingside."
+      ],
+      "alternative": "gxe3 — pawn recapture but weakens kingside severely"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::30": {
+      "ply": 31,
+      "san": "Qxd5+",
+      "plans": [
+        "Give check with the queen on d5 to displace Black's king.",
+        "Launch the queen to d5 with tempo, forcing Black's response."
+      ],
+      "alternative": "Nxe4 — capture knight but loses the d5 check"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::32": {
+      "ply": 33,
+      "san": "Qb5",
+      "plans": [
+        "Plant the queen on b5, attacking both the knight on e5 and king.",
+        "Reposition the queen to b5 to increase pressure on e5 and f1."
+      ],
+      "alternative": "Qd7 — centralize queen but abandons attack on e5 knight"
     }
   },
   "totals": {
-    "calls": 536,
-    "inputTokens": 567104,
-    "outputTokens": 386123,
+    "calls": 537,
+    "inputTokens": 568277,
+    "outputTokens": 387009,
     "cacheReads": 0,
     "cacheWrites": 0,
-    "costUSD": 2.497718999999998
+    "costUSD": 2.5033219999999976
   }
 }
