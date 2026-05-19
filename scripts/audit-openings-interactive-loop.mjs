@@ -108,6 +108,36 @@ async function getCurrentRound() {
   return max + 1;
 }
 
+/** New tool: dump a DOM HTML snapshot when a probe finding fires.
+ *  Helps debug the actual visible state when the audit detected a bug.
+ *  Stored at: <OUT_DIR>/dom-snapshots/round-<N>/<openingId>-<probe>.html */
+async function saveDomSnapshot(page, round, openingId, probeName) {
+  try {
+    const dir = join(OUT_DIR, 'dom-snapshots', `round-${round}`);
+    await mkdir(dir, { recursive: true });
+    const html = await page.content().catch(() => '');
+    await writeFile(join(dir, `${openingId}-${probeName}.html`), html.slice(0, 500_000)); // cap at 500KB
+  } catch { /* ignore */ }
+}
+
+/** New tool: per-round memory growth tracking. Computes cross-opening
+ *  heap-growth distribution after a round completes. Linear growth
+ *  per opening = leak signature. */
+function summarizeMemory(roundResults) {
+  const samples = roundResults.map(r => r.memorySnapshot?.growthBytes).filter(g => typeof g === 'number');
+  if (samples.length === 0) return null;
+  samples.sort((a, b) => a - b);
+  const sum = samples.reduce((s, x) => s + x, 0);
+  return {
+    samples: samples.length,
+    minGrowthMB: (samples[0] / 1024 / 1024).toFixed(1),
+    medianGrowthMB: (samples[Math.floor(samples.length / 2)] / 1024 / 1024).toFixed(1),
+    maxGrowthMB: (samples[samples.length - 1] / 1024 / 1024).toFixed(1),
+    totalGrowthMB: (sum / 1024 / 1024).toFixed(1),
+    sustainedGrowthRate: ((sum / samples.length) / 1024 / 1024).toFixed(2) + ' MB/opening',
+  };
+}
+
 /** Capture a screenshot for a probe stage. Only enabled when
  *  options.screenshots is truthy (default off for storage reasons).
  *  Screenshots saved to <OUT_DIR>/screenshots/<round>/<openingId>-<stage>.png */
@@ -136,10 +166,15 @@ async function probeOpening(page, opening, round, allEvents, options = {}) {
     memorySnapshot: null,
     a11yViolations: [],
     errorBoundaryTrips: 0,
+    networkStats: { requestCount: 0, failedCount: 0, byHost: {}, byStatus: {} },
+    longTasks: 0,
   };
 
   page.removeAllListeners('console');
   page.removeAllListeners('pageerror');
+  page.removeAllListeners('request');
+  page.removeAllListeners('requestfailed');
+  page.removeAllListeners('response');
   // Improvement #2: capture WARN as well as ERROR
   page.on('console', (m) => {
     const t = m.text();
@@ -150,6 +185,24 @@ async function probeOpening(page, opening, round, allEvents, options = {}) {
   page.on('pageerror', (e) => {
     const t = 'PAGE: ' + e.message;
     if (!isSandboxNoise(t)) result.consoleErrors.push(t.slice(0, 250));
+  });
+  // Network stats (new tool)
+  page.on('request', (req) => {
+    result.networkStats.requestCount++;
+    if (req.url().includes('/api/audit-stream') && req.method() === 'POST') {
+      try { const b = req.postDataJSON?.(); if (b) allEvents.push({ at: Date.now(), ...b }); } catch {}
+    }
+  });
+  page.on('requestfailed', (req) => {
+    result.networkStats.failedCount++;
+    try {
+      const host = new URL(req.url()).host;
+      result.networkStats.byHost[host] = (result.networkStats.byHost[host] || 0) + 1;
+    } catch {}
+  });
+  page.on('response', (resp) => {
+    const s = resp.status();
+    result.networkStats.byStatus[s] = (result.networkStats.byStatus[s] || 0) + 1;
   });
   const evtsBefore = allEvents.length;
 
@@ -209,6 +262,14 @@ async function probeOpening(page, opening, round, allEvents, options = {}) {
   if (heapBefore && heapAfter) {
     result.memorySnapshot = { heapBeforeBytes: heapBefore, heapAfterBytes: heapAfter, growthBytes: heapAfter - heapBefore };
   }
+
+  // New tool: long-task tracking. Performance API logs tasks > 50ms
+  // that block main thread. Catches jank during probe sequence.
+  const longTaskCount = await page.evaluate(() => {
+    const entries = performance.getEntriesByType('longtask') || [];
+    return entries.length;
+  }).catch(() => 0);
+  result.longTasks = longTaskCount;
 
   // Improvement #10: A11y snapshot — count nodes with role but no
   // accessible name, plus serializable snapshot for diffing.
@@ -386,7 +447,10 @@ async function runP3(page, opening) {
 
 async function runP4(page, opening) {
   const result = { kind: 'pick-before-load', findings: [] };
-  if (!(opening.variations || []).length && !(opening.trapLines || []).length) {
+  // Queue stores varCount/trapCount (numbers), not arrays — my old
+  // (opening.variations||[]).length check always evaluated false
+  // because there's no 'variations' field on the queue entry.
+  if ((opening.varCount || 0) === 0 && (opening.trapCount || 0) === 0) {
     result.skipped = 'no variations or traps';
     return result;
   }
@@ -397,7 +461,7 @@ async function runP4(page, opening) {
     const detail = await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 8000 }).then(() => true).catch(() => false);
     if (!detail) { result.findings.push('P4: detail did not appear even briefly'); return result; }
     // Don't wait for full settle — try to click immediately
-    const tile = opening.variations?.[0]
+    const tile = (opening.varCount || 0) > 0
       ? page.locator(`[data-testid="variation-walkthrough-0"]`).first()
       : page.locator(`[data-testid="trap-walkthrough-0"]`).first();
     const tileVisible = await tile.isVisible({ timeout: 1000 }).catch(() => false);
@@ -451,8 +515,11 @@ async function runP6(page, opening) {
     if (!detail) { result.findings.push('P6: detail did not mount'); return result; }
     await page.waitForTimeout(1200);
     // For each mode button: click → verify expected mode component mounts → back to detail
+    // Learn mode renders <DrillMode> which has testid 'drill-mode',
+    // NOT 'learn-mode'. Source-verified in OpeningDetailPage:390 +
+    // DrillMode.tsx:424.
     const modes = [
-      { btn: 'learn-btn', mode: 'learn-mode', label: 'learn' },
+      { btn: 'learn-btn', mode: 'drill-mode', label: 'learn' },
       { btn: 'practice-btn', mode: 'practice-mode', label: 'practice' },
       { btn: 'play-btn', mode: 'opening-play-mode', label: 'play' },
     ];
@@ -845,8 +912,20 @@ async function main() {
     // Round finished
     const totalFindings = roundResults.reduce((sum, r) => sum + Object.values(r.probes).flatMap((p) => p.findings || []).length, 0);
     const totalConsole = roundResults.reduce((sum, r) => sum + r.consoleErrors.length, 0);
-    await writeFile(roundPath, JSON.stringify({ round, generatedAt: new Date().toISOString(), inProgress: false, openingsCompleted: roundResults.length, totalFindings, totalConsoleErrors: totalConsole, results: roundResults }, null, 2));
-    console.log(`=== ROUND ${round} DONE — ${totalFindings} findings, ${totalConsole} console errors ===`);
+    const totalWarnings = roundResults.reduce((sum, r) => sum + r.consoleWarnings.length, 0);
+    const memSummary = summarizeMemory(roundResults);
+    const totalNetReq = roundResults.reduce((sum, r) => sum + (r.networkStats?.requestCount || 0), 0);
+    const totalNetFail = roundResults.reduce((sum, r) => sum + (r.networkStats?.failedCount || 0), 0);
+    const totalLongTask = roundResults.reduce((sum, r) => sum + (r.longTasks || 0), 0);
+    const totalBoundaryTrips = roundResults.reduce((sum, r) => sum + (r.errorBoundaryTrips || 0), 0);
+    await writeFile(roundPath, JSON.stringify({
+      round, generatedAt: new Date().toISOString(), inProgress: false,
+      openingsCompleted: roundResults.length, totalFindings, totalConsoleErrors: totalConsole, totalConsoleWarnings: totalWarnings,
+      memorySummary: memSummary, totalNetworkRequests: totalNetReq, totalNetworkFailures: totalNetFail,
+      totalLongTasks: totalLongTask, totalErrorBoundaryTrips: totalBoundaryTrips,
+      results: roundResults,
+    }, null, 2));
+    console.log(`=== ROUND ${round} DONE — findings=${totalFindings}, errs=${totalConsole}, warns=${totalWarnings}, mem-leak-rate=${memSummary?.sustainedGrowthRate ?? 'n/a'}, longTasks=${totalLongTask}, netReq=${totalNetReq}, boundaryTrips=${totalBoundaryTrips} ===`);
     // Brief pause then restart
     await page.waitForTimeout(5000);
   }
