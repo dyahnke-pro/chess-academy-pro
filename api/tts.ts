@@ -5,23 +5,25 @@ const ALLOWED_ORIGINS = [
   'https://chess-academy-pro.vercel.app',
 ];
 
-/** Local-dev origins. Gated on `!VERCEL_ENV` so this list is
- *  empty in any deployed environment (preview or production) and
- *  only matters when the function runs under `vercel dev` /
- *  `vite dev` locally. Without this, `/api/tts` 403s every
- *  request from a developer machine — making voice dead in dev
- *  and breaking interactive audits that need to verify Polly
- *  fires. The per-IP rate limit (600 req/hr) still caps abuse
- *  even if a request somehow originated from localhost in
- *  production. */
-const LOCAL_DEV_ORIGINS = process.env.VERCEL_ENV
-  ? []
-  : [
-      'http://localhost:5173',
-      'http://localhost:4173',
-      'http://127.0.0.1:5173',
-      'http://127.0.0.1:4173',
-    ];
+/** Local-dev origins. Always allowed on every environment, even
+ *  prod — because `vite dev` proxies `/api/*` to the deployed
+ *  prod endpoint, and the request arrives at prod with an
+ *  `Origin: http://localhost:5173` header. If the prod allowlist
+ *  doesn't include localhost, every dev session 403s its way
+ *  through Polly and voice is dead in dev (and interactive
+ *  audits can't verify TTS fires).
+ *
+ *  Risk: a malicious page could spoof `Origin: http://localhost…`
+ *  to consume Polly tokens. Bounded by the per-IP rate limit
+ *  (600 req/hr at `isRateLimited`) which caps cost-amplification
+ *  to an acceptable ceiling. David's call (2026-05-19): trade
+ *  this tiny security ceiling for working dev voice. */
+const LOCAL_DEV_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:4173',
+];
 
 /** Vercel preview deployments use auto-generated subdomains under
  *  the project's vercel.app namespace. Allowlist them so the voice
