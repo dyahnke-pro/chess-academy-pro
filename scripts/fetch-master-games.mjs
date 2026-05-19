@@ -82,14 +82,25 @@ function pgnToUci(pgn, depth) {
   return uci.join(',');
 }
 
+const TOKEN = process.env.LICHESS_TOKEN;
+if (!TOKEN) {
+  console.error('LICHESS_TOKEN env var required.');
+  console.error('Create one at https://lichess.org/account/oauth/token/create (no scopes needed)');
+  console.error('Then run: export LICHESS_TOKEN=lip_... && node scripts/fetch-master-games.mjs');
+  process.exit(1);
+}
+
+function authHeaders(extra = {}) {
+  return {
+    authorization: `Bearer ${TOKEN}`,
+    'user-agent': 'chess-academy-pro/1.0 (master-game-fetcher)',
+    ...extra,
+  };
+}
+
 async function fetchMastersTopGames(uci, n) {
   const url = `https://explorer.lichess.ovh/masters?play=${uci}&topGames=${n}&moves=0`;
-  const r = await fetch(url, {
-    headers: {
-      'user-agent': 'chess-academy-pro/1.0 (master-game-fetcher)',
-      accept: 'application/json',
-    },
-  });
+  const r = await fetch(url, { headers: authHeaders({ accept: 'application/json' }) });
   if (!r.ok) throw new Error(`explorer HTTP ${r.status}`);
   const data = await r.json();
   return data.topGames ?? [];
@@ -97,12 +108,7 @@ async function fetchMastersTopGames(uci, n) {
 
 async function fetchGamePgn(gameId) {
   const url = `https://lichess.org/game/export/${gameId}?moves=true&clocks=false&evals=false&opening=true`;
-  const r = await fetch(url, {
-    headers: {
-      'user-agent': 'chess-academy-pro/1.0 (master-game-fetcher)',
-      accept: 'application/x-chess-pgn',
-    },
-  });
+  const r = await fetch(url, { headers: authHeaders({ accept: 'application/x-chess-pgn' }) });
   if (!r.ok) throw new Error(`game export HTTP ${r.status}`);
   return await r.text();
 }
