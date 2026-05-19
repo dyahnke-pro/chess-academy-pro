@@ -883,6 +883,25 @@ class VoiceService {
     if (prefs.systemVoiceURI) {
       speechService.setVoice(prefs.systemVoiceURI);
     }
+    // Audit-instrumentation phase-1 (2026-05-19): explicit
+    // voice-fallover event when Polly fails over to Web Speech. The
+    // existing polly-fallback event only fires on `noFallback`
+    // skips; this catches the in-flow demotion that today is silent
+    // unless someone reads the lastTier change.
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'voice-fallover',
+        category: 'subsystem',
+        source: 'voiceService.speakInternal',
+        summary: `Polly failed → Web Speech for "${text.slice(0, 40)}"`,
+        details: JSON.stringify({
+          fromTier: 'polly',
+          toTier: 'web-speech',
+          textLength: text.length,
+          textPreview: text.slice(0, 120),
+        }),
+      });
+    }).catch(() => undefined);
     await this.speakFallback(text);
     this.lastTier = 'web-speech';
     this.lastSpeakDiagnostic.tier = 'web-speech';

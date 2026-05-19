@@ -446,7 +446,20 @@ export async function getCachedOpening(
   try {
     const normalized = normalizeOpeningName(name);
     const cached = await db.cachedOpenings.get(normalized);
-    if (!cached) return null;
+    if (!cached) {
+      // Audit-instrumentation phase-1 (2026-05-19): per-cache-lookup
+      // hit/miss event. Generation is the most expensive operation in
+      // the app; cache hit rate matters. Without this audit we can't
+      // see how often a "lesson" call is fresh gen vs cached.
+      void logAppAudit({
+        kind: 'opening-cache-miss',
+        category: 'subsystem',
+        source: 'openingGenerator.getCachedOpening',
+        summary: `cache miss: "${name}" → fresh generation`,
+        details: JSON.stringify({ name, normalized }),
+      });
+      return null;
+    }
     // Sanity-check the cached tree before returning. If illegal SANs
     // were saved before the tree-legality gate existed, evict the
     // record so the next request goes through fresh generation.
@@ -460,9 +473,30 @@ export async function getCachedOpening(
         summary: `evicting broken cached tree for "${name}" — ${errors.length} legality errors`,
         details: errors.slice(0, 3).map((e) => e.message).join('; '),
       });
+      void logAppAudit({
+        kind: 'opening-cache-invalidated',
+        category: 'subsystem',
+        source: 'openingGenerator.getCachedOpening',
+        summary: `cache invalidated: "${name}" — broken tree evicted`,
+        details: JSON.stringify({ name, normalized, errorCount: errors.length }),
+      });
       await db.cachedOpenings.delete(normalized);
       return null;
     }
+    void logAppAudit({
+      kind: 'opening-cache-hit',
+      category: 'subsystem',
+      source: 'openingGenerator.getCachedOpening',
+      summary: `cache hit: "${name}" (${cached.tree.openingName}, generated ${new Date(cached.generatedAt).toISOString().slice(0, 10)})`,
+      details: JSON.stringify({
+        name,
+        normalized,
+        cachedName: cached.tree.openingName,
+        cachedEco: cached.eco,
+        generatedAt: cached.generatedAt,
+        ageMs: Date.now() - cached.generatedAt,
+      }),
+    });
     return cached.tree;
   } catch {
     return null;
