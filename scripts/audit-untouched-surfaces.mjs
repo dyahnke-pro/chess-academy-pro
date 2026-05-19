@@ -167,13 +167,18 @@ async function main() {
   ]);
 
   // ── /coach/plan ────────────────────────────────────────────────
+  // /coach/plan now renders TrainingPlanRolodexPage (WO-ROLODEX-UI-01).
+  // The legacy `coach-session-plan-page` testid is gone; deep audit
+  // lives in scripts/audit-coach-plan.mjs. Here we just check the
+  // mount.
   await record('coach-plan', async () => {
     await page.goto(`${BASE_URL}/coach/plan`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-session-plan-page"]').waitFor({ timeout: 12000 });
+    await page.locator('[data-testid="training-plan-rolodex-page"]').waitFor({ timeout: 12000 });
   }, SHORT_SETTLE_MS, [
-    { kind: 'visible', selector: '[data-testid="coach-session-plan-page"]', label: 'Coach Plan mounts' },
-    // Plan explanation OR start-session button (depending on plan-load state).
-    { kind: 'count-gte', selector: '[data-testid="plan-explanation"], [data-testid="start-session-btn"]', value: 0, label: 'plan content area renders (any state OK)' },
+    { kind: 'visible', selector: '[data-testid="training-plan-rolodex-page"]', label: 'Training Plan mounts' },
+    // Either the white column (favorites present) or the per-color empty
+    // state should be visible — both signal the page rendered.
+    { kind: 'count-gte', selector: '[data-testid="rolodex-white-column"], [data-testid="rolodex-empty-state-white"], [data-testid="rolodex-mobile-panel"]', value: 1, label: 'rolodex content area renders (any state OK)' },
     { kind: 'no-pageerrors-this-step', label: 'no pageerrors during mount' },
   ]);
 
