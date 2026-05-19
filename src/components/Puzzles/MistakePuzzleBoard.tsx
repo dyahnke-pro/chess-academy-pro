@@ -10,7 +10,7 @@ import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
 import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle, Eye, EyeOff, Target } from 'lucide-react';
-import { HintButton } from '../Coach/HintButton';
+import { ShowMeButton } from '../Coach/ShowMeButton';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { detectTacticType } from '../../services/missedTacticService';
 import { getCoachingMessage, recordTacticOutcome, tacticTypeLabel } from '../../services/tacticAlertService';
@@ -793,13 +793,26 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         </div>
       )}
 
-      {/* Hint controls */}
+      {/* Show Me button — instant reveal of the best move (arrow on
+          board + voice). Progressive hints fire AUTOMATICALLY after
+          each wrong attempt (handleMove → concept on 1st, piece on
+          2nd, square on 3rd+); the button is the "I give up, just
+          show me" escape hatch. David's directive 2026-05-19:
+          "turn the hint button into [show me]. have the coach give
+          progressive hints automatically after each failed attempt." */}
       {state === 'playing' && settings.showHints && (
         <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
-          <HintButton
-            currentLevel={hintState.level}
-            onRequestHint={requestHint}
+          <ShowMeButton
+            onShow={() => {
+              // Skip the hint ladder — jump straight to tier 3 (best
+              // move arrow + final answer). requestHint() bumps one
+              // tier; three consecutive calls reach tier 3.
+              if (hintState.level < 1) requestHint();
+              if (hintState.level < 2) requestHint();
+              if (hintState.level < 3) requestHint();
+            }}
             disabled={hintState.isAnalyzing}
+            revealed={hintState.level >= 3}
           />
           {hintState.nudgeText && (
             <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
