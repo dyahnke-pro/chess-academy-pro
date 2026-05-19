@@ -152,7 +152,7 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
                 }];
                 void navigate(`/weaknesses/games?f=${encodeFilters(filters)}`);
               },
-              testId: `drill-accuracy-row-${o.eco ?? o.name}`,
+              testId: `drill-accuracy-row-${o.name}`,
             }))}
             maxValue={100}
           />
