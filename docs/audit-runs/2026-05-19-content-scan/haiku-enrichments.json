@@ -38411,14 +38411,1571 @@
         "Kingside castling prepares Rf1 pressure on f4 pawn."
       ],
       "alternative": "d5 — central break, opens light squares for attack"
+    },
+    "vienna-game.json::Vienna vs 2...Nc6::15": {
+      "ply": 16,
+      "san": "fxg3",
+      "plans": [
+        "Recapture on g3, opening h-file for kingside attack",
+        "Remove Black's fianchettoed bishop defender after hxg3"
+      ],
+      "alternative": "gxf4 — keeps pawn tension, prepares Nd5"
+    },
+    "vienna-game.json::Vienna vs 2...Nc6::16": {
+      "ply": 17,
+      "san": "hxg3",
+      "plans": [
+        "Open h-file threatens Nxg5 and weakens Black's king",
+        "g3-pawn controls f4 and h4 outpost squares"
+      ],
+      "alternative": "Bxf4 — develops bishop, controls d2-a5 diagonal"
+    },
+    "vienna-game.json::Vienna vs 2...Nc6::18": {
+      "ply": 19,
+      "san": "Qd3",
+      "plans": [
+        "Queen on d3 targets g5-pawn and coordinates with Bc4",
+        "Threaten Nxg5 with queen pinning g5 to king"
+      ],
+      "alternative": "Nxg5 — seizes weak pawn, forces hxg5 opening h-file"
+    },
+    "vienna-game.json::Vienna vs 2...Nc6::20": {
+      "ply": 21,
+      "san": "Bb5+",
+      "plans": [
+        "Bb5+ forces Bd7 or Na6, compromises Black's structure",
+        "Check binds knight, prevents ...Nfxe4 counterplay"
+      ],
+      "alternative": "Nxg5 — immediately captures weak pawn on g5"
+    },
+    "vienna-game.json::Vienna vs 2...Nc6::21": {
+      "ply": 22,
+      "san": "Bd7",
+      "plans": [
+        "Bd7 blocks c-file, ties bishop to defense",
+        "White continues kingside attack with e5 or Nxg5 tempo"
+      ],
+      "alternative": "Nbd7 — develops knight, prepares ...Nf6 rerouting"
+    },
+    "vienna-game.json::Vienna vs 2...Nc6::24": {
+      "ply": 25,
+      "san": "Be3",
+      "plans": [
+        "Be3 completes development, supports d4 and queen",
+        "Defends g5 with queen, threatens ...Nxd4 trap"
+      ],
+      "alternative": "Nxg5 — captures weak g5-pawn, forces hxg5 opening h-file"
+    },
+    "vienna-game.json::Vienna vs 2...Nc6::27": {
+      "ply": 28,
+      "san": "Rae8",
+      "plans": [
+        "Rae8 doubles rooks on e-file, pressures e4-pawn",
+        "Open e-file threatens e4 and supports ...Ne4 fork ideas"
+      ],
+      "alternative": "Qe6 — centralizes queen, prepares ...Qe7 regrouping"
+    },
+    "vienna-game.json::Vienna vs 2...Nc6::28": {
+      "ply": 29,
+      "san": "Nd5",
+      "plans": [
+        "Nd5 occupies outpost, attacks queen and e7-rook pressure",
+        "Knight on d5 can jump to f4 or c7 with tempo"
+      ],
+      "alternative": "Rf6 — attacks f4-pawn, prepares to triple on e-file"
+    },
+    "vienna-game.json::Vienna vs 2...Nc6::30": {
+      "ply": 31,
+      "san": "exd5",
+      "plans": [
+        "Recapture exd5, opens d-file toward queen on d-file",
+        "d5-pawn passed, controls c6 and e6 squares"
+      ],
+      "alternative": "Qxd5 — centralizes queen, removes dangerous knight outpost"
+    },
+    "vienna-game.json::Vienna Gambit Accepted::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawn strength",
+        "Open lines for queenside rook and dark-squared bishop"
+      ],
+      "alternative": "d4 — symmetrical center control, less aggressive"
+    },
+    "vienna-game.json::Vienna Gambit Accepted::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, contest central space symmetrically",
+        "Prepare Nf6 development on next move"
+      ],
+      "alternative": "c5 — Sicilian setup, attacks d4 indirectly"
+    },
+    "vienna-game.json::Vienna Gambit Accepted::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support f4 gambit advance with queen's knight",
+        "Control d5 and e4 squares, prevent Black piece jumps"
+      ],
+      "alternative": "d4 — classical Vienna, trades center immediately"
+    },
+    "vienna-game.json::Vienna Gambit Accepted::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Attack f4 pawn, trade active pieces safely",
+        "Develop kingside knight toward center control"
+      ],
+      "alternative": "exd4 — accept pawn, avoid complications immediately"
+    },
+    "vienna-game.json::Vienna Gambit Accepted::4": {
+      "ply": 5,
+      "san": "f4",
+      "plans": [
+        "Sacrifice f4 pawn, open f-file for rook attack",
+        "Build pawn center with e5, chase Black's knight"
+      ],
+      "alternative": "d4 — restore central tension, avoid gambit"
+    },
+    "vienna-game.json::Vienna Gambit Accepted::5": {
+      "ply": 6,
+      "san": "exf4",
+      "plans": [
+        "Accept f4 pawn sacrifice, grab material for position",
+        "Keep knight on f6 to harass White's e5 pawn"
+      ],
+      "alternative": "Nc5 — decline gambit, attack f4 indirectly later"
+    },
+    "vienna-game.json::Vienna Gambit Accepted::6": {
+      "ply": 7,
+      "san": "e5",
+      "plans": [
+        "Push pawn to e5, advance kingside space, trap f6 knight",
+        "Prepare Bb5 or Be2 development with space advantage"
+      ],
+      "alternative": "Bb5 — check immediately, force Black rook response"
+    },
+    "vienna-game.json::Paulsen Attack::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 central squares with pawn presence",
+        "Support potential knight development to f3 or c3"
+      ],
+      "alternative": "d4 — fight for center immediately with symmetry"
+    },
+    "vienna-game.json::Paulsen Attack::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, contest White's central control",
+        "Prepare knight jump to f6 or d6"
+      ],
+      "alternative": "c5 — challenge center asymmetrically, Sicilian-style"
+    },
+    "vienna-game.json::Paulsen Attack::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Place knight on c3, supports d5 square and center",
+        "Prepare fianchetto setup with g3 and Bg2"
+      ],
+      "alternative": "f4 — aggressive center push, Austrian Attack style"
+    },
+    "vienna-game.json::Paulsen Attack::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Attack e4 pawn with knight from f6",
+        "Prepare counterattack on d4 and center collapse"
+      ],
+      "alternative": "c6 — solidify structure, prepare d5 advance"
+    },
+    "vienna-game.json::Paulsen Attack::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto kingside bishop to g2 via long diagonal",
+        "Control d5 and e4 squares with Bg2 placement"
+      ],
+      "alternative": "Bg5 — pin knight to queen, develop with tempo"
+    },
+    "vienna-game.json::Paulsen Attack::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Strike d5 square, liquidate White's space advantage",
+        "Force recapture decision on d5 pawn"
+      ],
+      "alternative": "Bc5 — develop actively, pressure f2 weakness"
+    },
+    "vienna-game.json::Paulsen Attack::6": {
+      "ply": 7,
+      "san": "exd5",
+      "plans": [
+        "Recapture d5 pawn with knight, centralize piece",
+        "Exchange d-pawn, reduce White's pawn tension"
+      ],
+      "alternative": "Nxd5 — knight takes immediately, same centralization"
+    },
+    "vienna-game.json::Paulsen Attack::8": {
+      "ply": 9,
+      "san": "Bg2",
+      "plans": [
+        "Place Bg2 on long diagonal, target d5 knight",
+        "Complete fianchetto, pressure center from a8-h1"
+      ],
+      "alternative": "Nf3 — develop knight first, delay bishop setup"
+    },
+    "vienna-game.json::Paulsen Attack::9": {
+      "ply": 10,
+      "san": "Nxc3",
+      "plans": [
+        "Capture c3 knight, eliminate White's defender",
+        "Force bxc3, create doubled pawns on c-file"
+      ],
+      "alternative": "Be6 — develop bishop, prepare castling kingside"
+    },
+    "vienna-game.json::Paulsen Attack::12": {
+      "ply": 13,
+      "san": "Nf3",
+      "plans": [
+        "Develop Nf3, support e5 and control d4 square",
+        "Prepare kingside castling after queen placement"
+      ],
+      "alternative": "Be2 — solid development, fianchetto completion"
+    },
+    "vienna-game.json::Paulsen Attack::15": {
+      "ply": 16,
+      "san": "O-O",
+      "plans": [
+        "Push d3 to control e4 square and prepare Bg4 pressure",
+        "Position Bf4 to contest Black's Bc5 on long diagonal"
+      ],
+      "alternative": "d4 — challenge e5 center pawn immediately"
+    },
+    "vienna-game.json::Paulsen Attack::16": {
+      "ply": 17,
+      "san": "d3",
+      "plans": [
+        "Place rook on b1 to pressure Black's c6 knight and d-file",
+        "Keep Bf4 to maintain tension on Black's light squares"
+      ],
+      "alternative": "Bg4 — attack f6 pawn and limit Black's options"
+    },
+    "vienna-game.json::Paulsen Attack::18": {
+      "ply": 19,
+      "san": "Rb1",
+      "plans": [
+        "Double rooks on e-file to control central lines",
+        "Watch Black's Bc5 and c6 knight for tactical weaknesses"
+      ],
+      "alternative": "Nd4 — centralize knight and attack c6 immediately"
+    },
+    "vienna-game.json::Paulsen Attack::20": {
+      "ply": 21,
+      "san": "Re1",
+      "plans": [
+        "Occupy e-file with both rooks to pressure e5 pawn",
+        "Support d3 pawn and restrict Black's pieces"
+      ],
+      "alternative": "Bf4 — pin Black's knight and control dark squares"
+    },
+    "vienna-game.json::Paulsen Attack::21": {
+      "ply": 22,
+      "san": "Bd6",
+      "plans": [
+        "Threaten Ne4 to fork e5 pawn and d6 bishop",
+        "Attack f6 pawn and centralize Nf3 aggressively"
+      ],
+      "alternative": "Bf4 — exchange Black's fianchetto bishop on long diagonal"
+    },
+    "vienna-game.json::Paulsen Attack::24": {
+      "ply": 25,
+      "san": "Ne4",
+      "plans": [
+        "Knight on e4 controls d6 and f6, attacks c5 bishop",
+        "Coordinate Ne4 with doubled rooks on e-file for breakthrough"
+      ],
+      "alternative": "Nd4 — attack c6 knight and c-file immediately"
+    },
+    "vienna-game.json::Copycat Variation::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control center with e4 pawn; prepare knight to c3.",
+        "Seize d4 and e5 squares for piece placement."
+      ],
+      "alternative": "d4 — symmetric pawn center control"
+    },
+    "vienna-game.json::Copycat Variation::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn; prepare c6-knight development.",
+        "Contest d4 square and center equilibrium."
+      ],
+      "alternative": "c5 — hypermodern challenge to e4"
+    },
+    "vienna-game.json::Copycat Variation::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Post knight on c3; eye d5 and e4 support.",
+        "Prepare Bc4 diagonal to target f7 weakness."
+      ],
+      "alternative": "f4 — aggressive Vienna gambit for space"
+    },
+    "vienna-game.json::Copycat Variation::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Match White's c3-knight with c6-knight.",
+        "Control d4 and prepare piece coordination."
+      ],
+      "alternative": "Nf6 — develop toward kingside defense"
+    },
+    "vienna-game.json::Copycat Variation::4": {
+      "ply": 5,
+      "san": "Bc4",
+      "plans": [
+        "Aim Bc4 at weak f7 square.",
+        "Create mating threat on f7 with queen jump later."
+      ],
+      "alternative": "d3 — solid support for e4 center"
+    },
+    "vienna-game.json::Copycat Variation::5": {
+      "ply": 6,
+      "san": "Bc5",
+      "plans": [
+        "Mirror Bc4 with Bc5; attack f2 pawn.",
+        "Build symmetry and eye weak f2 square."
+      ],
+      "alternative": "Nf6 — develop and defend f7"
+    },
+    "vienna-game.json::Copycat Variation::6": {
+      "ply": 7,
+      "san": "Qg4",
+      "plans": [
+        "Jump queen to g4; threaten g7 and e5 pawn.",
+        "Prepare Qg4-f7 checkmate threat immediately."
+      ],
+      "alternative": "d3 — consolidate center without immediate attack"
+    },
+    "vienna-game.json::Copycat Variation::8": {
+      "ply": 9,
+      "san": "Nd5",
+      "plans": [
+        "Fork queen and f7 with Nd5; centralize knight.",
+        "Nd5 hits both Qg4 and f7 square at once."
+      ],
+      "alternative": "Nxe4 — exchange knight for central pawn"
+    },
+    "vienna-game.json::Copycat Variation::9": {
+      "ply": 10,
+      "san": "Qxf2+",
+      "plans": [
+        "Capture f2 with check; disrupt White king safety.",
+        "Check on f2 forces king move; hunt exposed king."
+      ],
+      "alternative": "Rf8 — evacuate f-file and prepare defense"
+    },
+    "vienna-game.json::Copycat Variation::12": {
+      "ply": 13,
+      "san": "Nh3",
+      "plans": [
+        "Reroute knight to g5; threaten Nf3 and queen escape.",
+        "Nh3-g5 attacks Black's queen on f2."
+      ],
+      "alternative": "Bf1 — retreat bishop and defend f2 pawn"
+    },
+    "vienna-game.json::Copycat Variation::15": {
+      "ply": 16,
+      "san": "d6",
+      "plans": [
+        "Black's d6 blocks queen's retreat; check if Nf4 attacks undefended pieces.",
+        "Nd5 dominates e7 and f6; prepare Nxc7+ or Nf6+ with tempo."
+      ],
+      "alternative": "Nf4 — attacks queen and threatens Ne6+ fork"
+    },
+    "vienna-game.json::Copycat Variation::16": {
+      "ply": 17,
+      "san": "Qf3",
+      "plans": [
+        "Queen on f3 controls long diagonal toward a8; opens e-file for rook.",
+        "Nd5 still pressures e7; watch for Nf6+ check after Black moves."
+      ],
+      "alternative": "Qh5 — threatens f7 and keeps queen active on kingside"
+    },
+    "vienna-game.json::Copycat Variation::18": {
+      "ply": 19,
+      "san": "Nxf6",
+      "plans": [
+        "Nxf6 removes f6 defender; exposes Black's king and damages pawn structure.",
+        "After recapture, f7 becomes weak; prepare Qh5 or Bf4 to exploit it."
+      ],
+      "alternative": "Nxe5 — wins the e5 pawn with queen still attacking queen"
+    },
+    "vienna-game.json::Copycat Variation::20": {
+      "ply": 21,
+      "san": "Bg5",
+      "plans": [
+        "Bg5 pins f6 pawn to king; limits Black's f6 pawn defense of e5.",
+        "Queen on d4 is attacked; when it moves, Nxf6+ discovered check wins material."
+      ],
+      "alternative": "Nxe5 — captures pawn and attacks undefended queen directly"
+    },
+    "vienna-game.json::f4 Gambit Endgame Trick::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with central pawn",
+        "Prepare knight development to f3 or c3"
+      ],
+      "alternative": "d4 — symmetric central tension"
+    },
+    "vienna-game.json::f4 Gambit Endgame Trick::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Meet e4 symmetrically, dispute d4 square control",
+        "Allow Vienna setup with f4 gambit threat"
+      ],
+      "alternative": "c5 — challenge e4 from side"
+    },
+    "vienna-game.json::f4 Gambit Endgame Trick::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Develop queen's knight, support f4 break later",
+        "Control d5 outpost square against Nf6"
+      ],
+      "alternative": "f4 — immediate gambit without delays"
+    },
+    "vienna-game.json::f4 Gambit Endgame Trick::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Attack e4 pawn with tempo, prepare d5 push",
+        "Force White's f4 decision with tactical pressure"
+      ],
+      "alternative": "exf4 — accept gambit immediately"
+    },
+    "vienna-game.json::f4 Gambit Endgame Trick::4": {
+      "ply": 5,
+      "san": "f4",
+      "plans": [
+        "Sacrifice f4 pawn, open central lines for pieces",
+        "Create f-file access after Black captures"
+      ],
+      "alternative": "Bc4 — avoid gambit, build kingside attack"
+    },
+    "vienna-game.json::f4 Gambit Endgame Trick::5": {
+      "ply": 6,
+      "san": "exf4",
+      "plans": [
+        "Accept gambit, capture center pawn material",
+        "Allow e5 advance and developing attack setup"
+      ],
+      "alternative": "d5 — decline gambit, fight center control"
+    },
+    "vienna-game.json::f4 Gambit Endgame Trick::6": {
+      "ply": 7,
+      "san": "e5",
+      "plans": [
+        "Push pawn, attack Nf6 and gain space",
+        "Open lines for bishop development via c4"
+      ],
+      "alternative": "Nxf4 — recapture gambit pawn with knight"
+    },
+    "vienna-game.json::f4 Gambit Endgame Trick::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Complete minor piece development, support e5 pawn",
+        "Prepare Bc4 or Be2, control critical d4 square"
+      ],
+      "alternative": "Bc4 — attack f7, threaten discovered attack tactics"
+    },
+    "vienna-game.json::f4 Gambit Endgame Trick::9": {
+      "ply": 10,
+      "san": "d6",
+      "plans": [
+        "Attack e5 pawn, open lines toward e-file",
+        "Prepare Qxd6 threat via queen development"
+      ],
+      "alternative": "Nh5 — reposition knight, avoid f3 pin tactics"
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawn duo.",
+        "Enable Nc3 knight development to f3 or e2."
+      ],
+      "alternative": "d4 — occupies center immediately, transposes to Italian."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, contest d4 and e4 squares.",
+        "Prepare knight to f6 and open diagonal for bishop."
+      ],
+      "alternative": "c5 — sidestep symmetry, fight for d4 asymmetrically."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Develop queen's knight, support e4 pawn and control d5.",
+        "Prepare f3 pawn push to dominate d4 and e5."
+      ],
+      "alternative": "f4 — attack e5 immediately, accept open position."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Mirror Nc3 with queen's knight, control d4 square.",
+        "Prepare d6 and e6 pawn setup against kingside."
+      ],
+      "alternative": "exd4 — capture center, accept recapture variations."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::4": {
+      "ply": 5,
+      "san": "Bc4",
+      "plans": [
+        "Attack f7 weakness with bishop on long diagonal.",
+        "Develop bishop actively, threaten Ng5 fork later."
+      ],
+      "alternative": "f4 — attack e5 pawn, open f-file for rook."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Defend against Ng5 ideas with f6 knight.",
+        "Control d4 and e4 with centralized knight."
+      ],
+      "alternative": "Be7 — solidify kingside, avoid early tactics."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::6": {
+      "ply": 7,
+      "san": "d3",
+      "plans": [
+        "Build f4 pawn push with d3 support.",
+        "Prepare kingside attack with f4 and Qg4 alignment."
+      ],
+      "alternative": "f4 — strike e5 immediately, open f-file."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::8": {
+      "ply": 9,
+      "san": "Qf3",
+      "plans": [
+        "Activate queen on f3, threaten Na4 or Ng5 tactics.",
+        "Prepare g4 pawn push and Qg4 maneuver."
+      ],
+      "alternative": "d4 — directly challenge e5 pawn center."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::9": {
+      "ply": 10,
+      "san": "Nxc4",
+      "plans": [
+        "Recapture on c4 with queen to centralize it.",
+        "Qxc4 places queen on long diagonal toward f7."
+      ],
+      "alternative": "dxc4 — pawn recapture, avoid queen exposure."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::12": {
+      "ply": 13,
+      "san": "Bg5",
+      "plans": [
+        "Pin f6 knight to king with Bg5, prepare Nxe5.",
+        "Create Qxf6 threat and Nxe5 removal tactics."
+      ],
+      "alternative": "f4 — attack e5 directly, open kingside lines."
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::15": {
+      "ply": 16,
+      "san": "Be6",
+      "plans": [
+        "Nxf6+ forces king move, then Qh5 threatens h7 with mating attack",
+        "Bxf6 opens g-file toward Black's castled king after Qh5"
+      ],
+      "alternative": "Nf4 — controls key central squares, maintains knight pressure"
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::16": {
+      "ply": 17,
+      "san": "Nxf6+",
+      "plans": [
+        "After gxf6, g-file opens toward h7; Qh5 threatens checkmate",
+        "Doubled f-pawns weaken Black's kingside light squares permanently"
+      ],
+      "alternative": "exd5 — simplifies, removes central tension, reduces White's attack"
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::18": {
+      "ply": 19,
+      "san": "Bh6",
+      "plans": [
+        "Threaten Qxf7, forcing Black's weak g7 to defend h7",
+        "Bxf6 threatens Qh5 checkmate if Black captures on h6"
+      ],
+      "alternative": "Nxf6+ — immediate exchange opens g-file for Qh5 mating threats"
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::20": {
+      "ply": 21,
+      "san": "O-O-O",
+      "plans": [
+        "Rook on c-file attacks c4 pawn; control d-file after Rd1",
+        "Qe7 defends f6, prepares Kf7 to escape mating nets"
+      ],
+      "alternative": "Bd4 — blocks d-file, shields king from back-rank threats"
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::21": {
+      "ply": 22,
+      "san": "Qe7",
+      "plans": [
+        "Nd4 attacks queen, centralizes knight on strong outpost",
+        "Nf4 attacks g6 square, maintains kingside mating threats"
+      ],
+      "alternative": "Qe4 — pins c-bishop to king, keeps pressure on e5"
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::24": {
+      "ply": 25,
+      "san": "Nf4",
+      "plans": [
+        "Ne2 blocks d-file, forces Black rook to d-file to create threats",
+        "Nxe5 captures e-pawn, if Qxe5 then Qxe5 leaves Black's king exposed"
+      ],
+      "alternative": "Nxe5 — captures pawn, opens d-file toward Black's king"
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::27": {
+      "ply": 28,
+      "san": "Bxd1",
+      "plans": [
+        "Recapture with rook connects rooks, maintains d-file control",
+        "After Rxd1, d-file becomes White's main attacking highway"
+      ],
+      "alternative": "Qxd1 — centralizes queen, keeps pressure on d-file"
+    },
+    "vienna-game.json::Copycat Qg4 Kingside Attack::28": {
+      "ply": 29,
+      "san": "Rxd1",
+      "plans": [
+        "Rd7 invades seventh rank, attacks e7 and f7 pawns",
+        "Rf7 pins f-pawn, threatens back rank with Rxf8+ if king moves"
+      ],
+      "alternative": "Rd8+ — checks king, forces Kf7, exposes king to further attacks"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 squares to restrict Black's counterplay",
+        "Prepare Nc3 to support central pawns and develop"
+      ],
+      "alternative": "d4 — occupy center immediately, avoid Vienna setup"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's e4 control and fight for d4 square",
+        "Allow Nc3 while preparing to contest White's center"
+      ],
+      "alternative": "c5 — attack d4 pawn immediately, Sicilian-style"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support e4 pawn and prepare f4 pawn break",
+        "Restrict Nc6 from occupying d4 square"
+      ],
+      "alternative": "f4 — launch attack immediately, skip Nc3 tempo"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Develop knight and pressure e4 pawn from outpost d4",
+        "Prepare capture on f4 to weaken White's kingside"
+      ],
+      "alternative": "Nf6 — attack e4 immediately, develop toward kingside"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::4": {
+      "ply": 5,
+      "san": "f4",
+      "plans": [
+        "Gambit f4 pawn to open lines toward Black's king",
+        "Threaten e5 pawn after f4 break, create attacking chances"
+      ],
+      "alternative": "Nxe4 — eliminate e4 pawn, avoid Pierce Gambit complications"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::5": {
+      "ply": 6,
+      "san": "exf4",
+      "plans": [
+        "Capture f4 pawn and keep material, prepare Nc6-e7 escape",
+        "Control d4 square and maintain Black's structural integrity"
+      ],
+      "alternative": "d5 — counterattack center immediately, block f4 threats"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::6": {
+      "ply": 7,
+      "san": "d4",
+      "plans": [
+        "Seize d4 outpost and threaten f4 pawn capture next move",
+        "Open d-file for rook pressure and create king-hunt threats"
+      ],
+      "alternative": "exd4 — simplify center, avoid opening d-file for White"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::8": {
+      "ply": 9,
+      "san": "Ke2",
+      "plans": [
+        "Move king to e2 to escape back-rank tactics and support d4",
+        "Prepare Nxf4 or Kxf4 while keeping e-file accessible"
+      ],
+      "alternative": "Kf2 — advance king toward center aggressively, support attack"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::9": {
+      "ply": 10,
+      "san": "d5",
+      "plans": [
+        "Counterattack center with d5, challenge d4 pawn and open lines",
+        "Remove Black queen's attacking scope on h4 via pawn tension"
+      ],
+      "alternative": "Qf6 — centralize queen and continue attacking Kf4 king"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::12": {
+      "ply": 13,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight to f3, control e5 square and support kingside",
+        "Prepare Be2 to shield king and block h4 queen threats"
+      ],
+      "alternative": "exd5 — capture center pawn, stabilize position and open files"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::15": {
+      "ply": 16,
+      "san": "Bc5",
+      "plans": [
+        "Advance c6 pawn to c7, threatening b8 promotion.",
+        "Keep Black's king trapped on d8 with advanced passed pawn."
+      ],
+      "alternative": "Be3 — centralize bishop, prepare to support c6 advance"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::16": {
+      "ply": 17,
+      "san": "cxb7+",
+      "plans": [
+        "Push b7 pawn forward, forcing Black king toward edge.",
+        "Maintain Qh4+ threat while c7 pawn advances next."
+      ],
+      "alternative": "Bd3 — develop dark-squared bishop, control central squares"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::18": {
+      "ply": 19,
+      "san": "Bxf4",
+      "plans": [
+        "Capture on f4, eliminating Black's dark-squared bishop control.",
+        "Open d-file for potential rook activity against king."
+      ],
+      "alternative": "Nxf4 — reroute knight to strong outpost, remove defender"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::20": {
+      "ply": 21,
+      "san": "Nd5",
+      "plans": [
+        "Place Nd5 knight on strong central outpost near Black's king.",
+        "Knight on d5 forks Bc5 and threatens Nf6 escape square."
+      ],
+      "alternative": "Ne5 — centralize knight, control d7 and f7 squares"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::21": {
+      "ply": 22,
+      "san": "Rhe8+",
+      "plans": [
+        "Move rook to e8, giving check and seizing open e-file.",
+        "Rook on e-file cuts off Black king's escape toward e7."
+      ],
+      "alternative": "Qd4 — centralize queen, support Nd5 and eye Kc7"
+    },
+    "vienna-game.json::Pierce Gambit King Hunt::24": {
+      "ply": 25,
+      "san": "Kc4",
+      "plans": [
+        "Advance king to c4, supporting Nd5 and controlling escape squares.",
+        "King on c4 cuts off d5 square from Black's king."
+      ],
+      "alternative": "Kb3 — move king to safety, prepare b-pawn advance"
+    },
+    "vienna-game.json::Nd5 Fork Setup::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawn.",
+        "Open lines for queen and light-squared bishop development."
+      ],
+      "alternative": "d4 — different center setup, fights for d4 immediately"
+    },
+    "vienna-game.json::Nd5 Fork Setup::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, control central squares d4 and f4.",
+        "Prepare knight development to f6 or c6."
+      ],
+      "alternative": "c5 — Sicilian-style asymmetry, challenges d4 advance"
+    },
+    "vienna-game.json::Nd5 Fork Setup::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support e4 pawn and control d5 outpost square.",
+        "Open lines for queen and bishop on b1."
+      ],
+      "alternative": "f4 — aggressive f4 push, immediate center aggression"
+    },
+    "vienna-game.json::Nd5 Fork Setup::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Attack e4 pawn, prepare to challenge Nc3 from d5.",
+        "Develop knight toward outpost on d4 or e4."
+      ],
+      "alternative": "d6 — solid setup, prepares Nbd7 and e4 pressure"
+    },
+    "vienna-game.json::Nd5 Fork Setup::4": {
+      "ply": 5,
+      "san": "Bc4",
+      "plans": [
+        "Attack f7 with bishop and e4 pawn aligned.",
+        "Prepare f4 pawn break while e5 pawn is pinned."
+      ],
+      "alternative": "exf4 — accepts complications, removes center pawn"
+    },
+    "vienna-game.json::Nd5 Fork Setup::5": {
+      "ply": 6,
+      "san": "Bc5",
+      "plans": [
+        "Counter pin on f7 with bishop on c5.",
+        "Control d4 and e3 squares with bishop placement."
+      ],
+      "alternative": "d6 — defends e5, prepares Nc6 development"
+    },
+    "vienna-game.json::Nd5 Fork Setup::6": {
+      "ply": 7,
+      "san": "d3",
+      "plans": [
+        "Support e4 pawn and d4 square control.",
+        "Prepare f4 break while maintaining e4 pawn strength."
+      ],
+      "alternative": "Nxe4 — capture with tempo, forces Qe2 reply"
+    },
+    "vienna-game.json::Nd5 Fork Setup::8": {
+      "ply": 9,
+      "san": "f4",
+      "plans": [
+        "Open f-file and attack d5 outpost square.",
+        "Weaken Black's e5 pawn and d6 pawn structure."
+      ],
+      "alternative": "Bg5 — pin Nf6, prepare h4 expansion"
+    },
+    "vienna-game.json::Nd5 Fork Setup::9": {
+      "ply": 10,
+      "san": "d6",
+      "plans": [
+        "Support e5 pawn and block f-file opening.",
+        "Prepare Nbd7 and castle kingside for safety."
+      ],
+      "alternative": "Nxe4 — remove strong pawn, accept exf4 recapture"
+    },
+    "vienna-game.json::Nd5 Fork Setup::12": {
+      "ply": 13,
+      "san": "Na4",
+      "plans": [
+        "Attack Bc5 with knight, force bishop retreat or exchange.",
+        "Reroute Na4 toward c5 or d5 outpost squares."
+      ],
+      "alternative": "Bg5 — pin Nf6, prepare f4-f5 advance"
+    },
+    "vienna-game.json::Nd5 Fork Setup::15": {
+      "ply": 16,
+      "san": "dxc5",
+      "plans": [
+        "Recapture on c5, open d-file for queen pressure",
+        "Control e5 square, prepare f4xe5 breakthrough"
+      ],
+      "alternative": "fxe5 — eliminate e5 pawn immediately"
+    },
+    "vienna-game.json::Nd5 Fork Setup::16": {
+      "ply": 17,
+      "san": "fxe5",
+      "plans": [
+        "Capture e5 pawn, expose Black's f6 knight",
+        "Open f-file for rook, weaken Black's kingside"
+      ],
+      "alternative": "exf6 — trade knight for pawn, splinter Black's structure"
+    },
+    "vienna-game.json::Nd5 Fork Setup::18": {
+      "ply": 19,
+      "san": "Bg5",
+      "plans": [
+        "Pin f6 knight to queen, weaken dark squares",
+        "Create Nxe5 threat, demand Black's defensive response"
+      ],
+      "alternative": "h3 — attack g4 bishop, force it to decide"
+    },
+    "vienna-game.json::Nd5 Fork Setup::20": {
+      "ply": 21,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside, connect rooks and activate h1 rook",
+        "Prepare Nxe5 capture with rook support"
+      ],
+      "alternative": "h3 — attack g4 bishop before castling"
+    },
+    "vienna-game.json::Nd5 Fork Setup::21": {
+      "ply": 22,
+      "san": "Ndxe5",
+      "plans": [
+        "Capture e5 knight with d6 knight, eliminate defender",
+        "Keep g4 bishop trapped and under pressure"
+      ],
+      "alternative": "Nxe5 — c6 knight captures, same result"
+    },
+    "vienna-game.json::Nd5 Fork Setup::24": {
+      "ply": 25,
+      "san": "Bb5",
+      "plans": [
+        "Attack c6 knight with bishop, fork c6-e5",
+        "Force knight retreat or Black defensive concession"
+      ],
+      "alternative": "Bxc6 — eliminate defender immediately, simplify"
+    },
+    "vienna-game.json::Nd5 Fork Setup::27": {
+      "ply": 28,
+      "san": "c6",
+      "plans": [
+        "Push c6, anchor c5 bishop on critical diagonal",
+        "Prevent Bb5 check, solidify queenside structure"
+      ],
+      "alternative": "Nxc4 — capture bishop first, simplify complications"
+    },
+    "vienna-game.json::Nd5 Fork Setup::28": {
+      "ply": 29,
+      "san": "Ba4",
+      "plans": [
+        "Reroute bishop to a4, maintain c5 pawn pressure",
+        "Support b5 square control, prepare offensive repositioning"
+      ],
+      "alternative": "Bxc6 — eliminate c6 knight, reduce Black's pieces"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 central squares with pawn presence",
+        "Open lines for queen and light-squared bishop development"
+      ],
+      "alternative": "d4 — occupy center immediately instead"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Black mirrors center control with e5 pawn",
+        "Prepare knight development from g8 via f6"
+      ],
+      "alternative": "c5 — challenge e4 asymmetrically via Sicilian setup"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support e4 pawn with knight on c3",
+        "Prepare f4 pawn push to attack e5"
+      ],
+      "alternative": "g3 — fianchetto light-squared bishop on long diagonal"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Attack e4 pawn with knight on f6",
+        "Prevent f4 advance or prepare Nxe4"
+      ],
+      "alternative": "exf4 — capture pawn immediately to open center"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::4": {
+      "ply": 5,
+      "san": "f4",
+      "plans": [
+        "Push f4 to attack e5 pawn directly",
+        "Open f-file for rook and gain space"
+      ],
+      "alternative": "exd5 — capture center pawn instead of attacking e5"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Strike d5 to challenge White's center control",
+        "Create immediate tension on e4 and f4 pawns"
+      ],
+      "alternative": "Nxe4 — capture e4 pawn directly with knight"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::6": {
+      "ply": 7,
+      "san": "fxe5",
+      "plans": [
+        "Capture e5 with pawn, dominating d5 square",
+        "Open f-file for White's rook development"
+      ],
+      "alternative": "exd5 — capture d5 pawn instead, keeping f-file closed"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Support e5 pawn with knight on f3",
+        "Prepare Be2 to consolidate center control"
+      ],
+      "alternative": "Bb5+ — check king and force piece repositioning"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::9": {
+      "ply": 10,
+      "san": "Bg4",
+      "plans": [
+        "Pin knight on f3 with Bg4, attacking queen line",
+        "Prepare Nxe5 with tactical threats"
+      ],
+      "alternative": "Nxe5 — capture e5 pawn immediately before pinning"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::12": {
+      "ply": 13,
+      "san": "d3",
+      "plans": [
+        "Push d3 to support e5 pawn further and block long diagonal",
+        "Prepare Be2 without allowing Nxe5 tactics"
+      ],
+      "alternative": "Be2 — develop immediately without advancing d-pawn"
+    },
+    "vienna-game.json::Black's d5 Counterstrike::15": {
+      "ply": 16,
+      "san": "d4",
+      "plans": [
+        "Push d4 to challenge Black's center and open lines for pieces.",
+        "After d4, the e5 pawn becomes advanced and restricts Black's pieces."
+      ],
+      "alternative": "Qe1 — prepares to challenge Black's bishop on g4 with f3."
+    },
+    "vienna-game.json::Black's d5 Counterstrike::16": {
+      "ply": 17,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside to connect rooks and escape the center tactics.",
+        "From g1, the king clears f1 for the rook's mobility."
+      ],
+      "alternative": "dxc4 — eliminates Black's advanced pawn before it advances further."
+    },
+    "vienna-game.json::Black's d5 Counterstrike::18": {
+      "ply": 19,
+      "san": "Qe1",
+      "plans": [
+        "Move queen to e1 to support the d3 pawn and defend g1.",
+        "From e1, the queen can reroute via h4 to attack the bishop."
+      ],
+      "alternative": "Be3 — develops the bishop and prepares to challenge c3 later."
+    },
+    "vienna-game.json::Black's d5 Counterstrike::20": {
+      "ply": 21,
+      "san": "Bxf3",
+      "plans": [
+        "Trade bishop for the troublesome g4 bishop attacking f3.",
+        "Removing the bishop reduces Black's attacking potential on dark squares."
+      ],
+      "alternative": "Bf4 — moves the bishop to safety while maintaining pressure on d4."
+    },
+    "vienna-game.json::Black's d5 Counterstrike::21": {
+      "ply": 22,
+      "san": "Nxe5",
+      "plans": [
+        "Capture on e5 with the knight to eliminate Black's centralized piece.",
+        "The knight on e5 gives checks and disrupts Black's coordination."
+      ],
+      "alternative": "Bxe5 — trades pieces and simplifies Black's attacking setup."
+    },
+    "vienna-game.json::Black's d5 Counterstrike::24": {
+      "ply": 25,
+      "san": "Bf3",
+      "plans": [
+        "Return the bishop to f3 to pressure the c3 pawn and d5 square.",
+        "The bishop on f3 controls key dark squares in Black's position."
+      ],
+      "alternative": "Bc4 — targets f7 and increases pressure on Black's kingside."
+    },
+    "vienna-game.json::Black's d5 Counterstrike::27": {
+      "ply": 28,
+      "san": "Qd7",
+      "plans": [
+        "Black moves queen to d7 to centralize it and defend b7.",
+        "From d7, the queen supports the knight on e5 and eyes h3."
+      ],
+      "alternative": "Bf6 — improves the bishop's position and prepares rook activity on f8."
+    },
+    "vienna-game.json::Black's d5 Counterstrike::28": {
+      "ply": 29,
+      "san": "Qxc3",
+      "plans": [
+        "Capture the c3 pawn with check, forcing Black's king to move.",
+        "After Qxc3+, White's queen becomes active and threatens material or attack."
+      ],
+      "alternative": "Qb4+ — checks the king and centralizes the queen aggressively."
+    },
+    "vienna-game.json::Black's d5 Counterstrike::30": {
+      "ply": 31,
+      "san": "Qe1",
+      "plans": [
+        "Retreat the queen to e1 to consolidate and defend the bishop on f3.",
+        "From e1, the queen can later pivot to support kingside attack ideas."
+      ],
+      "alternative": "Qd4 — centralizes the queen and pressures the knight on e5."
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawn.",
+        "Prepare Nc3 and Bc4 to develop Vienna Game."
+      ],
+      "alternative": "d4 — symmetric center control"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn and control d4 square.",
+        "Allow Nc3 to follow, supporting Vienna setup."
+      ],
+      "alternative": "c5 — asymmetric Sicilian-style counterplay"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support e4 pawn and control d5, e5.",
+        "Prepare Bc4 targeting weak f7 square."
+      ],
+      "alternative": "f4 — attack e5 pawn directly"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Attack Nc3 and control central squares.",
+        "Prepare castling kingside for safety."
+      ],
+      "alternative": "Bc5 — develop immediately attacking f2"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::4": {
+      "ply": 5,
+      "san": "Bc4",
+      "plans": [
+        "Attack f7 and control long diagonal.",
+        "Pin Nf6 if Black plays d6 or g6."
+      ],
+      "alternative": "O-O — castle kingside and consolidate"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::5": {
+      "ply": 6,
+      "san": "Nxe4",
+      "plans": [
+        "Remove Nc3 defender of Bc4, expose f7.",
+        "Nxe4 removes attacker and threatens checkmate."
+      ],
+      "alternative": "d5 — counter-attack center immediately"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::6": {
+      "ply": 7,
+      "san": "Bxf7+",
+      "plans": [
+        "Win f7 pawn with check, expose Black king.",
+        "Force Kxf7; king walks into central danger."
+      ],
+      "alternative": "Nxe4 — retreat, maintain material safely"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::8": {
+      "ply": 9,
+      "san": "Nxe4",
+      "plans": [
+        "Centralize knight from e4; control key squares.",
+        "Block d5 pawn advance and eye f6."
+      ],
+      "alternative": "Nxe5 — capture pawn, accept f7 weakness"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::9": {
+      "ply": 10,
+      "san": "d5",
+      "plans": [
+        "Attack center and split White knight pair.",
+        "Push d5 pawn, advance Black's piece activity."
+      ],
+      "alternative": "c6 — solidify d5 pawn, prepare queen development"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::12": {
+      "ply": 13,
+      "san": "N1e2",
+      "plans": [
+        "Reroute Ng1 knight to e2, control f4.",
+        "Defend e1 and prepare f3 to stop e3 pawn."
+      ],
+      "alternative": "Nd2 — centralize knight, support e2 escape square"
+    },
+    "vienna-game.json::Premature Bxf7+ Backfires::33": {
+      "ply": 34,
+      "san": "Rxe3",
+      "plans": [
+        "Recapture on e3 to remove Black's active rook from second rank.",
+        "After Rxe3, White's rook controls e-file and supports queen's central dominance."
+      ],
+      "alternative": "Nf6+ — forces Kh7, but allows Re1 counterplay."
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawn",
+        "Prepare Nc3 to support central presence"
+      ],
+      "alternative": "d4 — symmetric center, equally sound"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, occupy central e5 square",
+        "Enable knight development to f6 or c6"
+      ],
+      "alternative": "c5 — asymmetric Sicilian-style counterattack"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support e4 pawn and control d5 square",
+        "Enable f4 advance or d4 push later"
+      ],
+      "alternative": "f4 — aggressive space grab, weakens kingside"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Attack e4 pawn, occupy c6 outpost",
+        "Support d4 advance or e5 pawn defense"
+      ],
+      "alternative": "Be7 — solid setup avoiding complications"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::4": {
+      "ply": 5,
+      "san": "Bc4",
+      "plans": [
+        "Pin Nc6 knight, target f7 weakness",
+        "Create dangerous attack toward f7 square"
+      ],
+      "alternative": "d4 — immediately challenge e5 center"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Develop Nf6 knight, attack e4 pawn",
+        "Enable kingside castling soon"
+      ],
+      "alternative": "Bc5 — mirror White's diagonal immediately"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::6": {
+      "ply": 7,
+      "san": "d3",
+      "plans": [
+        "Solidify e4 pawn, prepare f4 or Bg5",
+        "Enable kingside castling after Nf3"
+      ],
+      "alternative": "f4 — seize space, opens e-file immediately"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Develop Nf3, control d4 and e5 squares",
+        "Enable kingside castling, complete minor pieces"
+      ],
+      "alternative": "O-O — castle immediately, secure kingside"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::9": {
+      "ply": 10,
+      "san": "d6",
+      "plans": [
+        "Support e5 pawn, prepare Bg4 or O-O",
+        "Solidify Nc6 and d6 pawn structure"
+      ],
+      "alternative": "Be6 — develops bishop, contests White diagonal"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::12": {
+      "ply": 13,
+      "san": "Bg5",
+      "plans": [
+        "Pin Nf6 knight, threaten capture on f6",
+        "Force Black to address f6 knight tension"
+      ],
+      "alternative": "O-O — castle immediately, consolidate position"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::15": {
+      "ply": 16,
+      "san": "Be6",
+      "plans": [
+        "Black's e6 bishop supports d5 square and opens d-file for queen",
+        "White's Bxe6 exchange removes defender of d5 outpost"
+      ],
+      "alternative": "a4 — restrains c5 bishop and queenside expansion"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::16": {
+      "ply": 17,
+      "san": "Bxe6",
+      "plans": [
+        "Recapture with fxe6 doubles pawns but opens f-file",
+        "After Qxe6, centralize queen on d5 or e4 square"
+      ],
+      "alternative": "fxe6 — keeps bishop pair but creates doubled pawn"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::18": {
+      "ply": 19,
+      "san": "Nd5",
+      "plans": [
+        "Knight occupies strong d5 outpost, attacks queen and e7",
+        "White threatens Nxf6 fork winning material on board"
+      ],
+      "alternative": "Ng4 — attacks e5 and threatens d5 or f6"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::20": {
+      "ply": 21,
+      "san": "Nxf6+",
+      "plans": [
+        "Nxf6+ check forces recapture and opens g-file",
+        "After Qxf6, White's h4 bishop gains attacking scope on long diagonal"
+      ],
+      "alternative": "Nxe5 — removes center pawn and opens f-file immediately"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::21": {
+      "ply": 22,
+      "san": "Qxf6",
+      "plans": [
+        "Queen on f6 attacks h6 and controls dark squares",
+        "Nh4 threatens bishop and prepares Nf5 to attack f7"
+      ],
+      "alternative": "Kh8 — removes king from central files and escapes checks"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::24": {
+      "ply": 25,
+      "san": "Nh4",
+      "plans": [
+        "Nh4 attacks queen and threatens Nf5 forking queen and h6",
+        "Black's queen must move; Nf5 becomes devastating"
+      ],
+      "alternative": "Nf4 — attacks e6 pawn and d3 bishop simultaneously"
+    },
+    "vienna-game.json::Quiet 2...Nc6 Solid Defense::27": {
+      "ply": 28,
+      "san": "Kh7",
+      "plans": [
+        "Nf5 attacks e7 and threatens Nxg7; h7 king lacks escape squares",
+        "White's queen on d1 coordinates with Nf5 toward weak kingside"
+      ],
+      "alternative": "Qd2 — prepares Rae1 and maintains control of e-file"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawns",
+        "Prepare Nc3 and f4 advance for Vienna Gambit"
+      ],
+      "alternative": "c4 — English Opening sidestep"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's center control on e5",
+        "Keep options open for Nf6 or d6"
+      ],
+      "alternative": "c5 — Sicilian-style counterplay"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support f4 pawn push with Nc3",
+        "Prepare e5 space recapture after exf4"
+      ],
+      "alternative": "d4 — Italian Game transpose"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Attack e4 pawn and f4 target immediately",
+        "Keep knight flexible on f6 for retreat"
+      ],
+      "alternative": "d6 — solid pawn defense"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::4": {
+      "ply": 5,
+      "san": "f4",
+      "plans": [
+        "Gambit f4 pawn to open f-file",
+        "Create weak f4 square after exf4"
+      ],
+      "alternative": "Bc4 — quiet development"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::5": {
+      "ply": 6,
+      "san": "exf4",
+      "plans": [
+        "Capture f4 pawn and weaken White's kingside",
+        "Keep knight active after exf4"
+      ],
+      "alternative": "Nxe4 — take center pawn instead"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::6": {
+      "ply": 7,
+      "san": "e5",
+      "plans": [
+        "Advance e5 pawn and gain space in center",
+        "Restrict Black knight from d4 outpost"
+      ],
+      "alternative": "Nxf4 — regain gambit pawn"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::8": {
+      "ply": 9,
+      "san": "Qe2",
+      "plans": [
+        "Centralize queen on e2 supporting e5 pawn",
+        "Prepare kingside fianchetto or development"
+      ],
+      "alternative": "d4 — immediate center push"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::9": {
+      "ply": 10,
+      "san": "Ng8",
+      "plans": [
+        "Retreat knight to g8 after Qe2 pressure",
+        "Regroup and prepare f6 counterattack"
+      ],
+      "alternative": "Nh5 — probe queen and develop"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::12": {
+      "ply": 13,
+      "san": "d4",
+      "plans": [
+        "Push d4 pawn to contest Black's d5 control",
+        "Create d4-e5 space dominance after dxe5"
+      ],
+      "alternative": "Bf4 — develop dark-squared bishop"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::15": {
+      "ply": 16,
+      "san": "Bxf3",
+      "plans": [
+        "Black removes light-squared bishop; White recaptures to control d4 and f6 squares",
+        "After recapture, White's queen and bishop align on long diagonal toward a8"
+      ],
+      "alternative": "Qxf3 — develops queen immediately, avoids recapture complications"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::16": {
+      "ply": 17,
+      "san": "Qxf3",
+      "plans": [
+        "Queen on f3 eyes c6 and a8; coordinates with bishop on f4",
+        "Black's pieces remain undeveloped; knight on g8 blocks kingside escape"
+      ],
+      "alternative": "Qe2 — keeps queen centralized, preserves f3 for knight development"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::18": {
+      "ply": 19,
+      "san": "dxe5",
+      "plans": [
+        "Black eliminates White's strong e5 pawn; opens d-file for potential rooks",
+        "White's bishop on f4 and queen on f3 dominate dark squares after recapture"
+      ],
+      "alternative": "Qe7 — attacks e5 directly, avoids weakening d6 by pawn capture"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::20": {
+      "ply": 21,
+      "san": "Bb5",
+      "plans": [
+        "Bishop on b5 pins knight to king on e8; prevents Black's development",
+        "Threat of Bxc6 forces Black to respond to pin immediately"
+      ],
+      "alternative": "Be3 — develops bishop safely, maintains pressure without committing to pin"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::21": {
+      "ply": 22,
+      "san": "Qb4",
+      "plans": [
+        "Queen from b4 attacks b3 and e1; forces White king to move or defend",
+        "Black activates queen while knight remains pinned on c6"
+      ],
+      "alternative": "a6 — breaks pin, prepares Nxe5 to challenge center control"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::24": {
+      "ply": 25,
+      "san": "O-O",
+      "plans": [
+        "White castles kingside; removes king from center after Black's Qa3 harassment",
+        "Rook on f1 supports f-file; queen and bishop maintain pressure"
+      ],
+      "alternative": "Rf1 — prepares castling, keeps rook active on open f-file"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::27": {
+      "ply": 28,
+      "san": "Qa3",
+      "plans": [
+        "Queen on a3 attacks queen on b4; forces exchange or retreat",
+        "After queen trade, White's pieces dominate; Black's king still in center"
+      ],
+      "alternative": "Qg3 — attacks g7 pawn, threatens pin on bishop after Bxg7"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::28": {
+      "ply": 29,
+      "san": "Nd5",
+      "plans": [
+        "Knight from c3 to d5 attacks queen and e7 square; forces queen move",
+        "Nd5 outpost forks queen and threatens Nf6+ royal fork if king stays central"
+      ],
+      "alternative": "Qg3 — pins bishop, creates mating attack on g7 and king"
+    },
+    "vienna-game.json::Vienna Gambit Accepted (legacy tail)::30": {
+      "ply": 31,
+      "san": "Qxd5",
+      "plans": [
+        "Queen recaptures knight on d5; centralizes queen with tempo on Black pieces",
+        "White's queen on d5 controls key central and kingside squares; Black king trapped"
+      ],
+      "alternative": "Qe8+ — checks king, forces Qxe8, wins Black's queen for knight and bishop"
     }
   },
   "totals": {
-    "calls": 514,
-    "inputTokens": 544023,
-    "outputTokens": 370469,
+    "calls": 536,
+    "inputTokens": 567104,
+    "outputTokens": 386123,
     "cacheReads": 0,
     "cacheWrites": 0,
-    "costUSD": 2.396367999999997
+    "costUSD": 2.497718999999998
   }
 }
