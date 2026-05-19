@@ -2183,6 +2183,9 @@
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
           ],
+          "alternatives": [
+            "The bishop could go to other squares, but c4 maximizes its influence on the key diagonals."
+          ],
           "shortNarration": "Bishop to c4 controls the key diagonal and keeps White's pieces active."
         },
         {
@@ -2259,7 +2262,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a strong central pawn duo on d5 and d2, doubled pawns on the d-file."
+          "pawnStructure": "White has a strong central pawn duo on d5 and d2, doubled pawns on the d-file.",
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
         },
         {
           "san": "b5",
@@ -2328,6 +2334,9 @@
           "plans": [
             "Look for tactical opportunities to exploit the opponent's inaccuracy",
             "Maintain piece pressure while avoiding counter-tactics"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
           ],
           "shortNarration": "c3 supports d4, a key central advance."
         },
@@ -2405,6 +2414,9 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "alternatives": [
+            "The bishop could go to other squares, but b5 maximizes its influence on the key diagonals."
+          ],
           "shortNarration": "White captures on b5 with check, removing a pawn and keeping the bishop active on the long diagonal."
         },
         {
@@ -2480,6 +2492,9 @@
               "square": "c4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "alternatives": [
+            "The bishop could go to other squares, but c4 maximizes its influence on the key diagonals."
           ],
           "shortNarration": "Bishop to c4 controls the key diagonal and keeps active piece play."
         },

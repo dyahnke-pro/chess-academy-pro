@@ -1026,6 +1026,9 @@
           "plans": [
             "Complete piece development and prepare castling",
             "Fight for central control with pawns and pieces"
+          ],
+          "alternatives": [
+            "The bishop could go to other squares, but g2 maximizes its influence on the key diagonals."
           ]
         },
         {
@@ -1097,7 +1100,10 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d3 and e2."
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
         },
         {
           "san": "Nbd7",
@@ -1165,6 +1171,9 @@
           "plans": [
             "Look for tactical opportunities to exploit the opponent's inaccuracy",
             "Maintain piece pressure while avoiding counter-tactics"
+          ],
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
           ]
         },
         {
@@ -1237,7 +1246,10 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "alternatives": [
+            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
+          ]
         },
         {
           "san": "Bh5",
@@ -1311,6 +1323,9 @@
               "square": "h4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "alternatives": [
+            "A different knight move was possible, but h4 offers the best combination of activity and control."
           ],
           "shortNarration": "Knight to h4 improves piece coordination and flexibility."
         },
@@ -1392,6 +1407,9 @@
           "plans": [
             "Convert the positional advantages into concrete gains",
             "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
+          "alternatives": [
+            "A different knight move was possible, but c4 offers the best combination of activity and control."
           ],
           "shortNarration": "Knight to c4 reaches a powerful central outpost controlling key squares."
         },
