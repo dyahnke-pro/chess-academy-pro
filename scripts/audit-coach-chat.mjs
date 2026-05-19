@@ -45,7 +45,12 @@ const OUT_DIR = `audit-reports/coach-chat-${stamp}`;
 const BOOT_TIMEOUT_MS = 30_000;
 const SHORT_SETTLE_MS = 3500;
 const NAV_SETTLE_MS = 1500;
-const HYDRATE_SETTLE_MS = 1500;
+// CoachChatPage's handleSend silently drops clicks until the Zustand
+// store's `hydrated` flag flips. Hydration includes a Dexie read +
+// remote sync; 1500ms was too short on cold start, so chip clicks
+// got swallowed and the test reported "0 user messages appended".
+// Bumped 2026-05-19 after audit-coach-chat flake.
+const HYDRATE_SETTLE_MS = 5000;
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
@@ -233,9 +238,16 @@ async function main() {
   await record('coach-chat-direct', async () => {
     await page.goto(`${BASE_URL}/coach/chat`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
     await page.locator('[data-testid="coach-chat-page"]').waitFor({ timeout: 15000 });
-    // Wait for the session-store hydrate() to settle so the greeting
-    // surface (which is gated on chatMessages.length === 0) reflects
-    // a clean state instead of leftover messages from a prior run.
+    // Wait for BOTH activeProfile to land on the AppLayout AND the
+    // session-store to flip data-hydrated=true. handleSend silently
+    // drops clicks until BOTH are true; pre-2026-05-19 the audit
+    // only waited a fixed 1.5s sleep and lost the chip clicks.
+    await page.locator('[data-testid="app-layout"][data-profile-loaded="true"]')
+      .waitFor({ timeout: 15000 })
+      .catch(() => undefined);
+    await page.locator('[data-testid="coach-chat-page"][data-hydrated="true"]')
+      .waitFor({ timeout: 15000 })
+      .catch(() => undefined);
     await page.waitForTimeout(HYDRATE_SETTLE_MS);
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-testid="coach-chat-page"]', label: 'page root mounts' },
@@ -296,7 +308,15 @@ async function main() {
     const chip = page.locator('[data-testid="coach-starter-chip"]').filter({ hasText: /worst opening/i });
     if (await chip.count() === 0) throw new Error('worst-opening chip missing');
     await chip.first().click();
-    await page.waitForTimeout(2500);
+    // routeChatIntent → getWeakestOpenings → db.openings.filter scans
+    // all 3641 entries from the lichess seed and takes ~15-20s in
+    // headless dev (no .where index on isRepertoire). Wait for the
+    // chat-message-user testid to appear instead of a fixed sleep —
+    // resolves as soon as the dexie call returns + react re-renders.
+    await page.locator('[data-testid="chat-message-user"]').first()
+      .waitFor({ timeout: 25000 })
+      .catch(() => undefined);
+    await page.waitForTimeout(1500);
   }, NAV_SETTLE_MS, [
     { kind: 'url-not-matches', value: /\/coach\/session\//, label: 'no nav off /coach/chat' },
     { kind: 'count-gte', selector: '[data-testid="chat-message-user"]', value: 1, label: 'user message appended' },
@@ -317,11 +337,15 @@ async function main() {
     await input.click();
     await input.fill('walk me through the Italian');
     await page.locator('[data-testid="chat-send-btn"]').click();
-    // routeChatIntent navigates synchronously after the ack message
-    // is appended; the destination is /coach/session/walkthrough.
-    await page.waitForTimeout(3500);
+    // routeChatIntent emits path=/coach/session/walkthrough, which
+    // CoachSessionPage then redirects to /coach/teach as the canonical
+    // lesson surface. The expectation accepts either landing point —
+    // /coach/teach is the truth after the 2026-05 walkthrough-page
+    // unification.
+    await page.waitForURL(/\/coach\/(teach|session\/walkthrough)/, { timeout: 25000 })
+      .catch(() => undefined);
   }, NAV_SETTLE_MS, [
-    { kind: 'url-matches', value: /\/coach\/session\/walkthrough/, label: 'routed to /coach/session/walkthrough' },
+    { kind: 'url-matches', value: /\/coach\/(teach|session\/walkthrough)/, label: 'routed to walkthrough surface (canonical: /coach/teach)' },
   ]);
 
   // ── Back to /coach/chat for the next probe ─────────────────────

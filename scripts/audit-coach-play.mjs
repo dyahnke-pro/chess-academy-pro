@@ -100,6 +100,26 @@ async function main() {
 
   const report = { base: BASE_URL, startedAt: stamp, surfaces: [], expectations: [] };
 
+  // Audit-stream POST drain helper. Resolves once no audit-stream POST
+  // has hit the wire for `quietMs` consecutive milliseconds (or maxMs
+  // total). Without this, events emitted during an action can arrive
+  // in `captured` AFTER the scenario's evaluation runs — they'd be
+  // attributed to the wrong window. We track the lastAuditPostAt
+  // timestamp via page.on('request') above.
+  let lastAuditPostAt = Date.now();
+  page.on('request', (req) => {
+    if (req.url() === STREAM_URL && req.method() === 'POST') {
+      lastAuditPostAt = Date.now();
+    }
+  });
+  async function waitForAuditDrain(quietMs = 1500, maxMs = 8000) {
+    const start = Date.now();
+    while (Date.now() - start < maxMs) {
+      const sinceLast = Date.now() - lastAuditPostAt;
+      if (sinceLast >= quietMs) return;
+      await page.waitForTimeout(250);
+    }
+  }
   async function record(name, action, settleMs = SHORT_SETTLE_MS, expectations = []) {
     const before = captured.length;
     const errsBefore = pageErrors.length;
@@ -109,9 +129,31 @@ async function main() {
     try {
       await action();
       await page.waitForTimeout(settleMs);
+      // Drain any audit-stream POSTs still in flight before
+      // attributing events to this scenario's window. Belt-and-
+      // suspenders alongside the __AUDIT__.dump() fallback below.
+      await waitForAuditDrain();
     } catch (e) {
       actionErr = String(e?.message ?? e);
       console.log(`  [error] ${actionErr}`);
+    }
+    const t1 = Date.now();
+    // The network-arrival path (captured.slice + page.on('request'))
+    // is racy when many audit-stream POSTs serialize behind asset
+    // loads. Fall back to the in-page Dexie log via __AUDIT__.dump()
+    // — that's the source of truth, populated synchronously by
+    // logAppAudit, with each entry carrying its own emit-time
+    // timestamp. Network capture stays around for backward-compat
+    // / cross-check.
+    let inPageEntries = [];
+    try {
+      inPageEntries = await page.evaluate(async () => {
+        const a = window.__AUDIT__;
+        if (!a || typeof a.dump !== 'function') return [];
+        try { return await a.dump(); } catch { return []; }
+      });
+    } catch {
+      /* swallow — fall back to captured slice */
     }
     const screenshotPath = join(OUT_DIR, `${name}.png`);
     try {
@@ -119,7 +161,23 @@ async function main() {
     } catch {
       /* ignore */
     }
-    const fresh = captured.slice(before);
+    // Pre-2026-05-19 the script attributed events by network-arrival
+    // order (captured.slice(before)). That broke when audit-stream
+    // POSTs serialized behind asset loads + HMR pings: a tile-click
+    // event fired during coach-play-render would hit the wire 10s
+    // later and attribute to move-3-Bc4. Audit entries carry their
+    // own `timestamp` field; use that to attribute by emit-time, not
+    // arrival order. Falls back to the captured slice for events
+    // missing a timestamp (defensive).
+    // Prefer in-page Dexie entries (source of truth, no network
+    // race). Fall back to network-captured slice when __AUDIT__
+    // isn't available.
+    const byTimestamp = (inPageEntries.length > 0 ? inPageEntries : captured).filter((e) => {
+      const ts = typeof e?.timestamp === 'number' ? e.timestamp : null;
+      return ts != null && ts >= t0 && ts <= t1;
+    });
+    const sliceFallback = captured.slice(before).filter((e) => typeof e?.timestamp !== 'number');
+    const fresh = byTimestamp.length > 0 ? byTimestamp : [...captured.slice(before), ...sliceFallback];
     const kinds = fresh.reduce((acc, e) => {
       const k = String(e.kind ?? 'unknown');
       acc[k] = (acc[k] ?? 0) + 1;
@@ -178,6 +236,22 @@ async function main() {
   await record('boot-dashboard', async () => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
     await page.getByText('Chess Academy Pro', { exact: true }).first().waitFor({ timeout: BOOT_TIMEOUT_MS });
+    // Wait for audit-stream hydration BEFORE leaving the boot
+    // scenario. Pre-2026-05-19 the pre-hydration queue (see
+    // appAuditor.ts:782) flushed into whichever scenario was
+    // running when it resolved — usually move-2-Nc3 or later —
+    // and per-scenario expectations on coach-hub-tile-clicked /
+    // route-changed showed "absent" because the events landed in
+    // a foreign window. Gating boot-dashboard's settle on
+    // __AUDIT__.isStreamHydrated() forces the queue flush to
+    // happen here, so subsequent scenarios get clean attribution.
+    await page.waitForFunction(
+      () => {
+        const a = window.__AUDIT__;
+        return !!a && typeof a.isStreamHydrated === 'function' && a.isStreamHydrated();
+      },
+      { timeout: 15000 },
+    ).catch(() => undefined);
   }, 6000);
 
   await record('coach-hub', async () => {

@@ -84,14 +84,59 @@ const TACTIC_POSITIONS = [
   },
 ];
 
+/** Sandbox brain-reachability gate. See audit-coach-teach-interactive
+ *  for the rationale: this script drives brain-dependent narration
+ *  probes that hang 60-90s each without a reachable LLM. Probe from
+ *  the BROWSER context — node fetch sees api.* as reachable but the
+ *  headless Chrome hits ERR_CERT_AUTHORITY_INVALID. */
+async function isBrainReachableFromBrowser(page) {
+  return page.evaluate(async () => {
+    const hosts = ['https://api.anthropic.com/v1/messages', 'https://api.deepseek.com/v1/chat/completions'];
+    for (const host of hosts) {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 3000);
+        const res = await fetch(host, { method: 'POST', body: '{}', signal: ctrl.signal });
+        clearTimeout(t);
+        if (res.status > 0) return true;
+      } catch { /* try next */ }
+    }
+    return false;
+  });
+}
+
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
-  const listener = await startAuditListener();
   console.log(`[narration] base       = ${BASE_URL}`);
   console.log(`[narration] outDir     = ${OUT_DIR}`);
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ headless: !HEADED, executablePath });
+
+  // Brain-reachability gate (in-browser). Probe BEFORE setting up the
+  // full audit listener / context so we can exit cleanly when the
+  // sandbox firewall is in place.
+  {
+    const probeCtx = await browser.newContext();
+    const probePage = await probeCtx.newPage();
+    await probePage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const brainOk = await isBrainReachableFromBrowser(probePage);
+    await probeCtx.close();
+    if (!brainOk) {
+      console.log('[narration] SANDBOX-BLOCKED — brain APIs unreachable from headless browser.');
+      console.log('[narration] Skipping (every scenario requires a live LLM reply).');
+      await writeFile(join(OUT_DIR, 'report.json'), JSON.stringify({
+        status: 'sandbox-blocked',
+        reason: 'brain APIs unreachable from this network',
+        target: BASE_URL,
+        timestamp: new Date().toISOString(),
+      }, null, 2));
+      await browser.close();
+      process.exit(0);
+    }
+  }
+
+  const listener = await startAuditListener();
   const ctx = await browser.newContext({
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,

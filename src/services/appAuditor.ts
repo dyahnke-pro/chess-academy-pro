@@ -1007,6 +1007,18 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
     return;
   }
   try {
+    // keepalive bypasses the browser's per-origin connection pool
+    // queue. Without it, an audit emitted during a fast user action
+    // (tile click + immediate navigation) gets serialized behind
+    // dozens of other queued fetches (asset loads, HMR pings) and
+    // shows up on the wire 10+ seconds late. Playwright audit
+    // scripts that attribute per-scenario events miss it entirely —
+    // the audit-coach-play 2026-05-19 flake was traced to this
+    // exact pattern: coach-hub-tile-clicked fired during the
+    // coach-play-render scenario but the POST hit the wire during
+    // move-3-Bc4 ~14s later. keepalive sends the request
+    // immediately on a dedicated connection and lets it outlive
+    // the page if needed.
     const response = await fetch(cfg.url, {
       method: 'POST',
       headers: {
@@ -1014,6 +1026,7 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
         'x-audit-secret': cfg.secret,
       },
       body: JSON.stringify(entry),
+      keepalive: true,
       // Best-effort: don't block on slow networks.
       signal: AbortSignal.timeout(4000),
     });
@@ -1143,10 +1156,20 @@ export function installConsoleBackdoor(): void {
     },
     clear: async (): Promise<void> => {
       await clearAppAuditLog();
-       
+
       console.log('[appAuditor] cleared');
     },
     count: () => -1,
+    // Hydration signal exposed for Playwright audit scripts. The
+    // pre-hydration queue (line 782-806) buffers audits emitted
+    // before `loadAuditStreamConfig()` resolves; once it fires
+    // the queue flushes in one burst. Audit scripts that record
+    // per-scenario need to wait for hydration before starting
+    // captures, else the boot-window burst lands in some random
+    // later scenario's window and breaks attribution. Confirmed
+    // root cause of audit-coach-play's flaky failures 2026-05-19.
+    isStreamHydrated: () => streamConfigHydrated,
+    pendingStreamBufferSize: () => preHydrationQueue.length,
   };
   (window as unknown as { __AUDIT__: typeof api }).__AUDIT__ = api;
 }

@@ -215,6 +215,31 @@ async function gotoCoachTeach(page) {
   await page.locator('[data-testid="coach-teach-page"]').waitFor({ timeout: 15_000 });
 }
 
+/** Probe brain API reachability FROM THE BROWSER. Node's fetch can
+ *  reach api.anthropic.com / api.deepseek.com from the sandbox via a
+ *  different network stack than the headless Chrome — the sandbox
+ *  Chrome hits an ERR_CERT_AUTHORITY_INVALID and blocks the request
+ *  entirely. We need the browser's perspective. Returns true if at
+ *  least one provider returns ANY response status from the page
+ *  context. False (sandbox-blocked) when both throw network errors.
+ */
+async function isBrainReachableFromBrowser(page) {
+  return page.evaluate(async () => {
+    const hosts = ['https://api.anthropic.com/v1/messages', 'https://api.deepseek.com/v1/chat/completions'];
+    for (const host of hosts) {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 3000);
+        const res = await fetch(host, { method: 'POST', body: '{}', signal: ctrl.signal });
+        clearTimeout(t);
+        // Any HTTP response (401/404/422) means reachable.
+        if (res.status > 0) return true;
+      } catch { /* try next */ }
+    }
+    return false;
+  });
+}
+
 async function main() {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('  /coach/teach — G7 interactive failure-mode audit');
@@ -238,6 +263,29 @@ async function main() {
     ignoreHTTPSErrors: true,
   });
   const page = await ctx.newPage();
+
+  // Brain-reachability gate. This audit drives ~10 scenarios that
+  // each type to the coach and wait for an LLM reply. Without brain
+  // access every scenario hangs 60s and the whole script times out
+  // at the wrapper level. Exit cleanly with a sandbox-blocked notice
+  // instead — real-device + prod runs hit the brain normally.
+  await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+  const brainOk = await isBrainReachableFromBrowser(page);
+  if (!brainOk) {
+    console.log('\n⚠  SANDBOX-BLOCKED — brain APIs unreachable from headless browser.');
+    console.log('   api.anthropic.com + api.deepseek.com refused outbound (cert/firewall).');
+    console.log('   Skipping all scenarios (they require live LLM replies).');
+    console.log('   Re-run from real device / prod for actual coverage.\n');
+    await mkdir(OUT_DIR, { recursive: true });
+    await writeFile(join(OUT_DIR, 'report.json'), JSON.stringify({
+      status: 'sandbox-blocked',
+      reason: 'brain APIs unreachable from this network',
+      target: BASE_URL,
+      timestamp: new Date().toISOString(),
+    }, null, 2));
+    await browser.close();
+    process.exit(0);
+  }
 
   // Track every navigation so we can verify the walkthrough bounce
   // is dead.
