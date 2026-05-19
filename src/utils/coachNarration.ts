@@ -14,6 +14,7 @@
  * unified default should respect that, not regress to verbose.
  */
 import type { CoachNarration, PhaseNarrationVerbosity, UserPreferences } from '../types';
+import { stripScaffolding } from '../services/sanitizeCoachText';
 
 export function resolveCoachNarration(
   prefs: Pick<
@@ -138,7 +139,11 @@ export function applyBriefVoiceCap(
 ): { text: string; truncated: boolean; originalLength: number } {
   const originalLength = text.length;
   if (verbosity !== 'brief') return { text, truncated: false, originalLength };
-  const trimmed = text.trim();
+  // Strip leading scaffolding ("Great question — ", "Let me show you …")
+  // BEFORE the cap counts words. The LLM ignores the prompt ban; this
+  // strip recovers the chess content that would otherwise get clipped
+  // off the back when the cap fires. Live audit 2026-05-19 (Bug I).
+  const trimmed = stripScaffolding(text.trim()).text;
   if (!trimmed) return { text: trimmed, truncated: false, originalLength };
 
   // Sentence-split — split on `. ! ?` terminators followed by
