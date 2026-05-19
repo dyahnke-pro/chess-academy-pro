@@ -562,13 +562,20 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     }
 
     const dispatchOne = async (call: typeof lastResponse.toolCalls[number]): Promise<void> => {
-       
+
       const tool = getTool(call.name);
       // Existence already verified above; non-null assertion is safe
       // here because unknown tools were filtered out.
       if (!tool) return;
+      // Audit-instrumentation phase-7 (2026-05-19): tool-call latency.
+      // We log every tool call's existence + result, but until now had
+      // no time-to-result data. Slow tools (Lichess API timeout, hung
+      // Stockfish, slow DB query) are real UX bugs and we couldn't see
+      // them from the audit alone.
+      const startedAt = Date.now();
       try {
         const result = await tool.execute(call.args, ctx);
+        const latencyMs = Date.now() - startedAt;
         dispatchedIds.push(call.id);
         dispatchedToolNames.push(call.name);
         toolResults.push({
@@ -589,13 +596,14 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           kind: 'coach-brain-tool-called',
           category: 'subsystem',
           source: 'coachService.ask',
-          summary: `${call.name} ${result.ok ? 'ok' : 'error'}${summarySuffix}`,
+          summary: `${call.name} ${result.ok ? 'ok' : 'error'} latency=${latencyMs}ms${summarySuffix}`,
           details: JSON.stringify({
             id: call.id,
             name: call.name,
             ok: result.ok,
             error: result.error,
             preview: resultPreview ?? null,
+            latencyMs,
           }),
         });
         // Dedicated tool-call-error trail — captures full error text +
@@ -620,11 +628,12 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           });
         }
       } catch (err) {
+        const latencyMs = Date.now() - startedAt;
         void logAppAudit({
           kind: 'coach-brain-tool-threw',
           category: 'subsystem',
           source: 'coachService.ask',
-          summary: `${call.name} threw`,
+          summary: `${call.name} threw after ${latencyMs}ms`,
           details: err instanceof Error ? err.message : String(err),
         });
         void logAppAudit({
@@ -638,6 +647,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             args: call.args,
             error: err instanceof Error ? err.message : String(err),
             stack: err instanceof Error ? err.stack : undefined,
+            latencyMs,
           }),
         });
         toolResults.push({

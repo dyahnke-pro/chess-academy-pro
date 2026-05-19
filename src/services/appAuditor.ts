@@ -618,6 +618,21 @@ export type AuditKind =
   //   buffer drops an event. Lets exports flag "you're looking at a
   //   partial view."
   | 'audit-stream-truncated'
+  // audit-stream-post-failed: rollup event emitted every N audit-stream
+  //   POST failures (or every M minutes) so we can tell "no events
+  //   fired" from "the stream is broken" when the live-watch feed
+  //   goes quiet.
+  | 'audit-stream-post-failed'
+  // app-foreground / app-background: visibilitychange + pageshow/pagehide
+  //   lifecycle events. Real-device audits need these to correlate
+  //   "Bluetooth disconnect / ringer-switch wiped the speech queue"
+  //   with the surface state at the moment it happened.
+  | 'app-foreground'
+  | 'app-background'
+  // sw-lifecycle: service worker install / activate / update /
+  //   skip-waiting events. Today these are silent and "is the new
+  //   bundle live?" requires reading the network panel.
+  | 'sw-lifecycle'
   // pwa lifecycle events: pwa-install / notification-permission /
   //   share-target invocation — Capacitor / PWA lifecycle that today
   //   is silent.
@@ -956,8 +971,22 @@ export function isAuditStreamConfigHydrated(): boolean {
 const PREHYDRATE_QUEUE_LIMIT = 100;
 const preHydrationQueue: AuditEntry[] = [];
 
+/** Track audit-stream POST failures for the audit-stream-post-failed
+ *  rollup. Per-call logging would recurse infinitely (the failure
+ *  audit itself would try to stream). Instead we count failures and
+ *  emit a single rollup event every N failures or every M minutes —
+ *  whichever comes first. */
+let streamPostFailureCount = 0;
+let streamPostFailureLastReport = 0;
+const STREAM_FAILURE_REPORT_THRESHOLD = 5;
+const STREAM_FAILURE_REPORT_INTERVAL_MS = 60_000;
+
 async function streamAuditEntry(entry: AuditEntry): Promise<void> {
   if (typeof window === 'undefined') return;
+  // Never recurse: the rollup event itself is part of the stream;
+  // skipping it here prevents an infinite loop when the network is
+  // genuinely broken.
+  if (entry.kind === 'audit-stream-post-failed') return;
   const cfg = cachedStreamConfig;
   if (!cfg) {
     // Boot window: hydration hasn't completed yet. Queue for replay
@@ -970,7 +999,7 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
     return;
   }
   try {
-    await fetch(cfg.url, {
+    const response = await fetch(cfg.url, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -980,9 +1009,54 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
       // Best-effort: don't block on slow networks.
       signal: AbortSignal.timeout(4000),
     });
-  } catch {
-    /* silent — the local Dexie log is still the source of truth */
+    // Audit-instrumentation phase-7 (2026-05-19): audit-stream POST
+    // health. Previously we silently swallowed every failure mode
+    // (network down, server 500, secret invalid). If the live-watch
+    // feed went silent the only way to tell "no events fired" from
+    // "stream is broken" was to read this file. Track non-2xx and
+    // network errors; emit a rollup every N or every M minutes.
+    if (!response.ok) {
+      streamPostFailureCount += 1;
+      maybeEmitStreamFailureRollup(response.status, null);
+    }
+  } catch (err) {
+    streamPostFailureCount += 1;
+    maybeEmitStreamFailureRollup(null, err);
   }
+}
+
+/** Emit a rolled-up `audit-stream-post-failed` event when failure
+ *  count crosses the threshold or enough time has passed. Resets the
+ *  counter on emit. Best-effort — failures here are themselves
+ *  silent (we'd be back to the original problem). */
+function maybeEmitStreamFailureRollup(
+  lastStatus: number | null,
+  lastError: unknown,
+): void {
+  const now = Date.now();
+  const shouldEmit =
+    streamPostFailureCount >= STREAM_FAILURE_REPORT_THRESHOLD ||
+    (streamPostFailureCount > 0 && now - streamPostFailureLastReport >= STREAM_FAILURE_REPORT_INTERVAL_MS);
+  if (!shouldEmit) return;
+  streamPostFailureLastReport = now;
+  const count = streamPostFailureCount;
+  streamPostFailureCount = 0;
+  // Use logAppAudit so the failure rollup itself is in the local log
+  // and reaches the stream on the next successful POST. The early
+  // return at the top of streamAuditEntry breaks the recursion.
+  void logAppAudit({
+    kind: 'audit-stream-post-failed',
+    category: 'subsystem',
+    source: 'appAuditor.streamAuditEntry',
+    summary: `${count} audit-stream POST(s) failed in the last ${STREAM_FAILURE_REPORT_INTERVAL_MS / 1000}s`,
+    details: JSON.stringify({
+      failureCount: count,
+      lastStatus,
+      lastError: lastError instanceof Error
+        ? { message: lastError.message, name: lastError.name }
+        : (lastError == null ? null : String(lastError)),
+    }),
+  });
 }
 
 /** Flush any audits queued during the boot window. Called from
@@ -1204,9 +1278,115 @@ export function installGlobalErrorHooks(): () => void {
   window.addEventListener('error', onError);
   window.addEventListener('unhandledrejection', onRejection);
 
+  // Audit-instrumentation phase-7 (2026-05-19): app foreground /
+  // background lifecycle. Real-device audits need these so we can
+  // correlate "voice queue wiped" / "AVAudioSession route changed"
+  // with the surface state when it happened. visibilitychange covers
+  // the modern path; pageshow/pagehide are the fallback for older
+  // Safari / Capacitor.
+  const onVisibilityChange = (): void => {
+    const visible = document.visibilityState === 'visible';
+    void logAppAudit({
+      kind: visible ? 'app-foreground' : 'app-background',
+      category: 'subsystem',
+      source: 'window.visibilitychange',
+      summary: `visibility=${document.visibilityState}`,
+      details: JSON.stringify({
+        visibilityState: document.visibilityState,
+        hidden: document.hidden,
+      }),
+    });
+  };
+  const onPageHide = (e: PageTransitionEvent): void => {
+    void logAppAudit({
+      kind: 'app-background',
+      category: 'subsystem',
+      source: 'window.pagehide',
+      summary: `pagehide persisted=${e.persisted}`,
+      details: JSON.stringify({ persisted: e.persisted }),
+    });
+  };
+  const onPageShow = (e: PageTransitionEvent): void => {
+    void logAppAudit({
+      kind: 'app-foreground',
+      category: 'subsystem',
+      source: 'window.pageshow',
+      summary: `pageshow persisted=${e.persisted}`,
+      details: JSON.stringify({ persisted: e.persisted }),
+    });
+  };
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  window.addEventListener('pagehide', onPageHide);
+  window.addEventListener('pageshow', onPageShow);
+
+  // Service worker lifecycle. Each event tells us a different part
+  // of the PWA refresh story — "is the new bundle live?" answers come
+  // from `updatefound` + `controllerchange`.
+  const swListeners: Array<() => void> = [];
+  if ('serviceWorker' in navigator) {
+    const onControllerChange = (): void => {
+      void logAppAudit({
+        kind: 'sw-lifecycle',
+        category: 'subsystem',
+        source: 'navigator.serviceWorker.controllerchange',
+        summary: 'service worker controllerchange — new bundle taking over',
+        details: JSON.stringify({
+          newScriptURL: navigator.serviceWorker.controller?.scriptURL ?? null,
+        }),
+      });
+    };
+    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+    swListeners.push(() => navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange));
+
+    // Watch updatefound on each registration. We can't catch the
+    // initial `install` from here (that fires inside the SW script
+    // itself), but we can observe every UPDATE that the browser
+    // detects post-boot.
+    void navigator.serviceWorker.getRegistrations().then((regs) => {
+      for (const reg of regs) {
+        const onUpdateFound = (): void => {
+          const installing = reg.installing;
+          void logAppAudit({
+            kind: 'sw-lifecycle',
+            category: 'subsystem',
+            source: 'serviceWorker.updatefound',
+            summary: `service worker update detected (scope ${reg.scope})`,
+            details: JSON.stringify({
+              scope: reg.scope,
+              installingState: installing?.state ?? null,
+              scriptURL: installing?.scriptURL ?? null,
+            }),
+          });
+          if (installing) {
+            const onStateChange = (): void => {
+              void logAppAudit({
+                kind: 'sw-lifecycle',
+                category: 'subsystem',
+                source: 'serviceWorker.statechange',
+                summary: `service worker state → ${installing.state}`,
+                details: JSON.stringify({
+                  scope: reg.scope,
+                  state: installing.state,
+                  scriptURL: installing.scriptURL,
+                }),
+              });
+            };
+            installing.addEventListener('statechange', onStateChange);
+          }
+        };
+        reg.addEventListener('updatefound', onUpdateFound);
+        swListeners.push(() => reg.removeEventListener('updatefound', onUpdateFound));
+      }
+    }).catch(() => undefined);
+  }
+
   return () => {
     window.removeEventListener('error', onError);
     window.removeEventListener('unhandledrejection', onRejection);
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    window.removeEventListener('pagehide', onPageHide);
+    window.removeEventListener('pageshow', onPageShow);
+    for (const cleanup of swListeners) cleanup();
     bursts.clear();
   };
 }
