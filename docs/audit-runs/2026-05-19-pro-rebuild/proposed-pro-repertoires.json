@@ -1,0 +1,933 @@
+{
+  "generatedAt": "2026-05-19T18:14:03.392Z",
+  "openings": [
+    {
+      "id": "pro-naroditsky-w-nf3-nf6-c4-g6-nc3-bg7",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "E91",
+      "name": "Daniel Naroditsky — White line 1 (E91)",
+      "pgn": "Nf3 Nf6 c4 g6 Nc3 Bg7 e4 O-O d4 c5 Be2 cxd4 Nxd4 Nc6",
+      "color": "white",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "Nf3 Nf6 c4 g6 Nc3 Bg7"
+    },
+    {
+      "id": "pro-naroditsky-w-e4-e5-nf3-nc6-bb5-a6",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "C77",
+      "name": "Daniel Naroditsky — White line 2 (C77)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Bc5 c3 Nge7 d4 exd4 cxd4 Bb4+",
+      "color": "white",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 2,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 a6"
+    },
+    {
+      "id": "pro-naroditsky-w-d4-nf6-nc3-g6-e4-d6",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "B09",
+      "name": "Daniel Naroditsky — White line 3 (B09)",
+      "pgn": "d4 Nf6 Nc3 g6 e4 d6 f4 Bg7 Bd3 O-O Nf3 c5 dxc5 Nc6",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "d4 Nf6 Nc3 g6 e4 d6"
+    },
+    {
+      "id": "pro-naroditsky-b-b3-d5-bb2-bf5-g3-e6",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "A06",
+      "name": "Daniel Naroditsky — Black line 1 (A06)",
+      "pgn": "b3 d5 Bb2 Bf5 g3 e6 Bg2 Nf6 Nf3 h6 O-O Be7 d4 O-O",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "b3 d5 Bb2 Bf5 g3 e6"
+    },
+    {
+      "id": "pro-naroditsky-b-d4-nf6-c4-g6-nc3-bg7",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "E73",
+      "name": "Daniel Naroditsky — Black line 2 (E73)",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Be3 Nc6 d5 Ne5",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "d4 Nf6 c4 g6 Nc3 Bg7"
+    },
+    {
+      "id": "pro-naroditsky-b-e4-c5-nc3-d6-nf3-nc6",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "B33",
+      "name": "Daniel Naroditsky — Black line 3 (B33)",
+      "pgn": "e4 c5 Nc3 d6 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb3 Nf6 Bg5 h6",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 Nc3 d6 Nf3 Nc6"
+    },
+    {
+      "id": "pro-gothamchess-w-e4-c5-a3-g6-nc3-bg7",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "B20",
+      "name": "Levy Rozman (GothamChess) — White line 1 (B20)",
+      "pgn": "e4 c5 a3 g6 Nc3 Bg7 Bc4 Nc6 d3 e6 Ba2 Nge7 Bd2 d5",
+      "color": "white",
+      "totalGamesPlayed": 9,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 2,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 c5 a3 g6 Nc3 Bg7"
+    },
+    {
+      "id": "pro-gothamchess-w-e4-e5-nf3-nc6-c3-d5",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "C44",
+      "name": "Levy Rozman (GothamChess) — White line 2 (C44)",
+      "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Bd7 exd5 Nd4 Qd1 Nxf3+ Qxf3 Nf6",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 c3 d5"
+    },
+    {
+      "id": "pro-gothamchess-w-e4-c5-a3-nf6-e5-nd5",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "B20",
+      "name": "Levy Rozman (GothamChess) — White line 3 (B20)",
+      "pgn": "e4 c5 a3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 e6 O-O d6 exd6 Bxd6",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 a3 Nf6 e5 Nd5"
+    },
+    {
+      "id": "pro-gothamchess-b-e4-d5-exd5-qxd5-nc3-qa5",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "B01",
+      "name": "Levy Rozman (GothamChess) — Black line 1 (B01)",
+      "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bc4 Bg4 f3 Bd7 Ne2 b5",
+      "color": "black",
+      "totalGamesPlayed": 27,
+      "recordInLine": {
+        "wins": 17,
+        "draws": 0,
+        "losses": 10
+      },
+      "firstMovesSignature": "e4 d5 exd5 Qxd5 Nc3 Qa5"
+    },
+    {
+      "id": "pro-gothamchess-b-e4-d5-exd5-qxd5-nf3-bg4",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "B01",
+      "name": "Levy Rozman (GothamChess) — Black line 2 (B01)",
+      "pgn": "e4 d5 exd5 Qxd5 Nf3 Bg4 Be2 Nc6 d3 O-O-O Nc3 Qh5 Be3 e5",
+      "color": "black",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 d5 exd5 Qxd5 Nf3 Bg4"
+    },
+    {
+      "id": "pro-carlsen-w-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "B54",
+      "name": "Magnus Carlsen — White line 1 (B54)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Qe2 Nc6 Nxc6 bxc6 Nc3 Qc7",
+      "color": "white",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4"
+    },
+    {
+      "id": "pro-carlsen-w-e4-c5-nc3-nc6-g3-g6",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "B23",
+      "name": "Magnus Carlsen — White line 2 (B23)",
+      "pgn": "e4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 Be3 Nf6 Nge2 Ng4",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 Nc3 Nc6 g3 g6"
+    },
+    {
+      "id": "pro-carlsen-w-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "C50",
+      "name": "Magnus Carlsen — White line 3 (C50)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6"
+    },
+    {
+      "id": "pro-carlsen-b-e4-c5-nf3-e6-c3-d5",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "B22",
+      "name": "Magnus Carlsen — Black line 1 (B22)",
+      "pgn": "e4 c5 Nf3 e6 c3 d5 exd5 exd5 d4 Nc6 Bb5 Nf6 O-O Be7",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 c3 d5"
+    },
+    {
+      "id": "pro-carlsen-b-e4-nf6-e5-nd5-d4-d6",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "B03",
+      "name": "Magnus Carlsen — Black line 2 (B03)",
+      "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 c6 Be2 Bf5 O-O Nd7",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 Nf6 e5 Nd5 d4 d6"
+    },
+    {
+      "id": "pro-hikaru-w-e4-e5-nc3-nc6-bc4-nf6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "C28",
+      "name": "Hikaru Nakamura — White line 1 (C28)",
+      "pgn": "e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 h3 O-O Nge2 Na5 Ng3 c6",
+      "color": "white",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nc3 Nc6 Bc4 Nf6"
+    },
+    {
+      "id": "pro-hikaru-w-b3-d5-bb2-c5-nf3-f6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "A06",
+      "name": "Hikaru Nakamura — White line 2 (A06)",
+      "pgn": "b3 d5 Bb2 c5 Nf3 f6 e3 e5 c4 d4 exd4 cxd4 Bd3 Nc6",
+      "color": "white",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "b3 d5 Bb2 c5 Nf3 f6"
+    },
+    {
+      "id": "pro-hikaru-w-nf3-nf6-b3-g6-bb2-bg7",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "A04",
+      "name": "Hikaru Nakamura — White line 3 (A04)",
+      "pgn": "Nf3 Nf6 b3 g6 Bb2 Bg7 d4 b6 e3 Bb7 c4 O-O Be2 e6",
+      "color": "white",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "Nf3 Nf6 b3 g6 Bb2 Bg7"
+    },
+    {
+      "id": "pro-hikaru-b-nf3-g6-g3-bg7-bg2-d6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "A04",
+      "name": "Hikaru Nakamura — Black line 1 (A04)",
+      "pgn": "Nf3 g6 g3 Bg7 Bg2 d6 O-O Bd7 e4 Qc8 d4 Nc6 Re1 Bh3",
+      "color": "black",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 6,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "Nf3 g6 g3 Bg7 Bg2 d6"
+    },
+    {
+      "id": "pro-hikaru-b-e4-g6-d4-bg7-nf3-c6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "B06",
+      "name": "Hikaru Nakamura — Black line 2 (B06)",
+      "pgn": "e4 g6 d4 Bg7 Nf3 c6 Bc4 d5 Bb3 Bg4 h3 Bxf3 Qxf3 e6",
+      "color": "black",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 g6 d4 Bg7 Nf3 c6"
+    },
+    {
+      "id": "pro-hikaru-b-e4-g6-d4-bg7-nc3-c6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "B15",
+      "name": "Hikaru Nakamura — Black line 3 (B15)",
+      "pgn": "e4 g6 d4 Bg7 Nc3 c6 h3 d5 e5 a6 f4 f6 Be3 Nd7",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 g6 d4 Bg7 Nc3 c6"
+    },
+    {
+      "id": "pro-caruana-w-d4-g6-nf3-bg7-g3-d6",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "A41",
+      "name": "Fabiano Caruana — White line 1 (A41)",
+      "pgn": "d4 g6 Nf3 Bg7 g3 d6 Bg2 Bd7 O-O Qc8 c4 Bh3 Nc3 h5",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 0,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "d4 g6 Nf3 Bg7 g3 d6"
+    },
+    {
+      "id": "pro-caruana-w-d4-e6-nf3-nf6-g3-d5",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "E06",
+      "name": "Fabiano Caruana — White line 2 (E06)",
+      "pgn": "d4 e6 Nf3 Nf6 g3 d5 Bg2 Be7 O-O O-O c4 c6 Qc2 b6",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "d4 e6 Nf3 Nf6 g3 d5"
+    },
+    {
+      "id": "pro-caruana-w-e4-c5-nf3-e6-d4-cxd4",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "B42",
+      "name": "Fabiano Caruana — White line 3 (B42)",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3 Bc5 Nb3 Ba7 O-O Ne7",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 1,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 d4 cxd4"
+    },
+    {
+      "id": "pro-caruana-b-e4-g6-d4-bg7-nc3-d6",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "B06",
+      "name": "Fabiano Caruana — Black line 1 (B06)",
+      "pgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3 Nd7 Bc4 e6 O-O Ne7 Be3 a6",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 g6 d4 Bg7 Nc3 d6"
+    },
+    {
+      "id": "pro-caruana-b-e4-e5-nf3-nc6-bb5-a6",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "C78",
+      "name": "Fabiano Caruana — Black line 2 (C78)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Bc5 c3 b5 Bb3 d6",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 a6"
+    },
+    {
+      "id": "pro-caruana-b-e4-c5-nf3-nc6-d4-cxd4",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "B33",
+      "name": "Fabiano Caruana — Black line 3 (B33)",
+      "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 Nf3 Nc6 d4 cxd4"
+    },
+    {
+      "id": "pro-firouzja-w-e4-e5-nf3-nc6-bb5-a6",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "C77",
+      "name": "Alireza Firouzja — White line 1 (C77)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 Bxc6 dxc6 d3 Nd7 Nc3 Bd6",
+      "color": "white",
+      "totalGamesPlayed": 10,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 2,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 a6"
+    },
+    {
+      "id": "pro-firouzja-w-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "B94",
+      "name": "Alireza Firouzja — White line 2 (B94)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 Nbd7 Bc4 Qb6",
+      "color": "white",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4"
+    },
+    {
+      "id": "pro-firouzja-w-e4-c5-nf3-e6-g3-nc6",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "B40",
+      "name": "Alireza Firouzja — White line 3 (B40)",
+      "pgn": "e4 c5 Nf3 e6 g3 Nc6 Bg2 b5 O-O Bb7 Re1 Nge7 c3 d5",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 g3 Nc6"
+    },
+    {
+      "id": "pro-firouzja-b-e4-e5-nf3-nc6-bb5-nf6",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "C67",
+      "name": "Alireza Firouzja — Black line 1 (C67)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 dxe5 Nxb5 a4 Nbd4",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 2,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 Nf6"
+    },
+    {
+      "id": "pro-firouzja-b-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "B98",
+      "name": "Alireza Firouzja — Black line 2 (B98)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 h6",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4"
+    },
+    {
+      "id": "pro-firouzja-b-e4-c5-nf3-d6-bb5--nd7",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "B51",
+      "name": "Alireza Firouzja — Black line 3 (B51)",
+      "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 a4 b6",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 Bb5+ Nd7"
+    },
+    {
+      "id": "pro-dubov-w-d4-nf6-nf3-d5-c4-e6",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "E00",
+      "name": "Daniil Dubov — White line 1 (E00)",
+      "pgn": "d4 Nf6 Nf3 d5 c4 e6 g3 h6 Bg2 Bd6 O-O O-O Qc2 Nc6",
+      "color": "white",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "d4 Nf6 Nf3 d5 c4 e6"
+    },
+    {
+      "id": "pro-dubov-w-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "C55",
+      "name": "Daniil Dubov — White line 2 (C55)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 h6 h3 d6 a4 Be7 Nc3 O-O",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6"
+    },
+    {
+      "id": "pro-dubov-w-e4-c6-d4-d5-e5-bf5",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "B12",
+      "name": "Daniil Dubov — White line 3 (B12)",
+      "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 h6 Nbd2 Ne7 Nf1 Nd7",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c6 d4 d5 e5 Bf5"
+    },
+    {
+      "id": "pro-dubov-b-e4-e5-nf3-nc6-bb5-a6",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "C78",
+      "name": "Daniil Dubov — Black line 1 (C78)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O",
+      "color": "black",
+      "totalGamesPlayed": 8,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 5
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 a6"
+    },
+    {
+      "id": "pro-dubov-b-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "C55",
+      "name": "Daniil Dubov — Black line 2 (C55)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O a4 d6 Re1 Be6",
+      "color": "black",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6"
+    },
+    {
+      "id": "pro-dubov-b-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "B72",
+      "name": "Daniil Dubov — Black line 3 (B72)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 Bd7 Nxc6 Bxc6",
+      "color": "black",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 1,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4"
+    },
+    {
+      "id": "pro-praggnanandhaa-w-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "C55",
+      "name": "Rameshbabu Praggnanandhaa — White line 1 (C55)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 c3 h6 d3 d6 O-O Be7 b4 O-O",
+      "color": "white",
+      "totalGamesPlayed": 8,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6"
+    },
+    {
+      "id": "pro-praggnanandhaa-w-e4-c5-nf3-e6-d4-cxd4",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "B45",
+      "name": "Rameshbabu Praggnanandhaa — White line 2 (B45)",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 a6 Be2 Nf6 O-O Be7",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 d4 cxd4"
+    },
+    {
+      "id": "pro-praggnanandhaa-w-e4-e5-nf3-nc6-bb5-nf6",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "C67",
+      "name": "Rameshbabu Praggnanandhaa — White line 3 (C67)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 Nf6"
+    },
+    {
+      "id": "pro-praggnanandhaa-b-e4-e6-d4-d5-e5-c5",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "C02",
+      "name": "Rameshbabu Praggnanandhaa — Black line 1 (C02)",
+      "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 cxd4 cxd4 Nh6",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 e6 d4 d5 e5 c5"
+    },
+    {
+      "id": "pro-praggnanandhaa-b-d4-nf6-c4-g6-nc3-bg7",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "E73",
+      "name": "Rameshbabu Praggnanandhaa — Black line 2 (E73)",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Nge2 c5 d5 e6",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "d4 Nf6 c4 g6 Nc3 Bg7"
+    },
+    {
+      "id": "pro-praggnanandhaa-b-nf3-nf6-g3-g6-bg2-bg7",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "A49",
+      "name": "Rameshbabu Praggnanandhaa — Black line 3 (A49)",
+      "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d6 c4 Nbd7 Nc3 e5",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "Nf3 Nf6 g3 g6 Bg2 Bg7"
+    },
+    {
+      "id": "pro-niemann-w-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "C55",
+      "name": "Hans Niemann — White line 1 (C55)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 a6 O-O h6 c3 d6 Re1 Na5",
+      "color": "white",
+      "totalGamesPlayed": 15,
+      "recordInLine": {
+        "wins": 6,
+        "draws": 2,
+        "losses": 7
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6"
+    },
+    {
+      "id": "pro-niemann-w-e4-c5-nf3-d6-bb5--nd7",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "B51",
+      "name": "Hans Niemann — White line 2 (B51)",
+      "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 Bf1 b5",
+      "color": "white",
+      "totalGamesPlayed": 11,
+      "recordInLine": {
+        "wins": 7,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 Bb5+ Nd7"
+    },
+    {
+      "id": "pro-niemann-w-e4-e5-nf3-nc6-bc4-bc5",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "C50",
+      "name": "Hans Niemann — White line 3 (C50)",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a5 Re1 Ba7",
+      "color": "white",
+      "totalGamesPlayed": 9,
+      "recordInLine": {
+        "wins": 6,
+        "draws": 2,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Bc5"
+    },
+    {
+      "id": "pro-niemann-b-e4-c6-d4-d5-e5-bf5",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "B12",
+      "name": "Hans Niemann — Black line 1 (B12)",
+      "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Ne7 c3 Nd7 a4 h6",
+      "color": "black",
+      "totalGamesPlayed": 8,
+      "recordInLine": {
+        "wins": 7,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c6 d4 d5 e5 Bf5"
+    },
+    {
+      "id": "pro-niemann-b-e4-c6-d4-d5-exd5-cxd5",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "B13",
+      "name": "Hans Niemann — Black line 2 (B13)",
+      "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 h3 g6 Nf3 Bg7",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c6 d4 d5 exd5 cxd5"
+    },
+    {
+      "id": "pro-niemann-b-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "B94",
+      "name": "Hans Niemann — Black line 3 (B94)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 Nbd7 Qd2 e6",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4"
+    },
+    {
+      "id": "pro-annacramling-w-d4-nf6-c4-e6-nc3-bb4",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "E32",
+      "name": "Anna Cramling — White line 1 (E32)",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 exd5 Bg5 O-O e3 c6",
+      "color": "white",
+      "totalGamesPlayed": 10,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 1,
+        "losses": 7
+      },
+      "firstMovesSignature": "d4 Nf6 c4 e6 Nc3 Bb4"
+    },
+    {
+      "id": "pro-annacramling-w-d4-d5-c4-e6-nc3-nf6",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "D35",
+      "name": "Anna Cramling — White line 2 (D35)",
+      "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 c6",
+      "color": "white",
+      "totalGamesPlayed": 10,
+      "recordInLine": {
+        "wins": 6,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "d4 d5 c4 e6 Nc3 Nf6"
+    },
+    {
+      "id": "pro-annacramling-w-d4-nf6-c4-g6-nc3-d5",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "D85",
+      "name": "Anna Cramling — White line 3 (D85)",
+      "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 c5 Qa4+ Nc6",
+      "color": "white",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "d4 Nf6 c4 g6 Nc3 d5"
+    },
+    {
+      "id": "pro-annacramling-b-e4-c5-nf3-e6-d4-cxd4",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "B45",
+      "name": "Anna Cramling — Black line 1 (B45)",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Nxc6 bxc6 Bg5 Be7",
+      "color": "black",
+      "totalGamesPlayed": 17,
+      "recordInLine": {
+        "wins": 8,
+        "draws": 1,
+        "losses": 8
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 d4 cxd4"
+    },
+    {
+      "id": "pro-annacramling-b-d4-d5-c4-e6-nc3-c6",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "D31",
+      "name": "Anna Cramling — Black line 2 (D31)",
+      "pgn": "d4 d5 c4 e6 Nc3 c6 Nf3 Nf6 Bg5 Be7 e3 O-O Rc1 Nbd7",
+      "color": "black",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "d4 d5 c4 e6 Nc3 c6"
+    },
+    {
+      "id": "pro-annacramling-b-e4-c5-nf3-e6-c3-nf6",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "B22",
+      "name": "Anna Cramling — Black line 3 (B22)",
+      "pgn": "e4 c5 Nf3 e6 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 exd6 Bxd6",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 c3 Nf6"
+    }
+  ]
+}
