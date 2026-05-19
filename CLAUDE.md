@@ -1225,6 +1225,69 @@ Consequences:
 
 ## Post-Deploy Audit (MANDATORY — run after EVERY build)
 
+### Real-data fixture loader (use it on every audit that touches Dexie)
+
+Every audit script that reads from IndexedDB — mistake puzzles,
+weaknesses, openings, game review, /tactics/* — should hydrate
+the page's Dexie with David's real exported data BEFORE running
+scenarios. Otherwise the audit drives against a cold-cache app
+seeding a few sample games + the 5 review samples + nothing else,
+and the per-scenario assertions become "test the empty state"
+instead of "test real-world behavior."
+
+The fixture lives at `audit-reports/.fixtures/david-games.json`
+(gitignored, ~7MB, refreshable by re-running the DevTools export
+snippet in the prod app's console). The loader is a 2-line drop
+into any audit script:
+
+```js
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
+// ...after page.goto + first locator.waitFor settle:
+const fixture = await loadFixtureIntoIDB(page);
+console.log(`[fixture] ${fixture.loaded ? `${fixture.wrote} rows / ${fixture.stores.length} stores` : `skipped (${fixture.skipped})`}`);
+```
+
+Behavior contract:
+
+- **Missing file** (cold-clone, fresh contributor, fixture refresh
+  pending) → returns `{ loaded: false, skipped: 'fixture-missing' }`
+  with no side effects. The audit proceeds against whatever the
+  app seeds on its own. **Never fail the audit for fixture-missing**
+  — it's expected anytime the env doesn't have the file yet.
+- **Present file** → bulk-puts every row from `parsed.stores[name]`
+  into the matching object store. Idempotent (primary-key
+  overwrite). Returns `{ loaded: true, wrote, stores, perStore }`
+  so the audit can log how much real data populated which stores.
+
+Where this matters most:
+- `audit-weaknesses-interactive.mjs` — without fixture, /weaknesses
+  shows "you need more games" empty state every time. With fixture,
+  the patterns tab renders, opening tiles populate, mistake rows
+  appear.
+- `audit-mistakes-quality-loop.mjs` — fixture's 6 real mistake
+  puzzles cover edge cases the seed JSON misses.
+- Anything auditing /coach/review, /coach/teach intent-routing,
+  /openings drill scheduling, settings backup/export.
+
+When writing a NEW audit that touches Dexie, copy the 2-line
+pattern above into `main()` between `await page.goto(...)` and the
+first scenario. Always log the result so failures can be tied back
+to "audit ran against empty IDB" vs "audit found real bug."
+
+The DevTools snippet to refresh the fixture (paste into the prod
+app's browser console):
+
+```js
+const Dexie = (await import('https://unpkg.com/dexie@4.3.0/dist/dexie.min.mjs')).default;
+// open the live app's db, export every store, download as JSON
+// ...full snippet in audit-reports/.fixtures/refresh-snippet.txt
+```
+
+(Snippet text changes with Dexie versions; pull the canonical copy
+from David or from a recent fixture-refresh commit.)
+
+### Standard post-deploy audit ritual
+
 **Non-negotiable.** This implements gate G1 from §NON-NEGOTIABLE
 GATES at the top of this file. After every push that lands on `main`
 and triggers a Vercel deploy, run the relevant Playwright audit
