@@ -85,9 +85,12 @@ type ViewMode =
   | 'middlegame-plan'
   | 'middlegame-practice';
 
-function computeFenFromPgn(pgn: string): string {
+function computeFenFromPgn(pgn: string, setupFen?: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
-  const chess = new Chess();
+  // setupFen optional: puzzle-derived trap lines start from a
+  // middlegame position rather than move 1. See OpeningVariation
+  // type comment in src/types/index.ts.
+  const chess = setupFen ? new Chess(setupFen) : new Chess();
   for (const san of tokens) {
     try {
       chess.move(san);
@@ -324,18 +327,18 @@ export function OpeningDetailPage(): JSX.Element {
   // Precompute variation FENs for thumbnails
   const variationFens = useMemo((): string[] => {
     if (!opening?.variations) return [];
-    return opening.variations.map((v) => computeFenFromPgn(v.pgn));
+    return opening.variations.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.variations]);
 
   // Precompute trap/warning line FENs for thumbnails
   const trapLineFens = useMemo((): string[] => {
     if (!opening?.trapLines) return [];
-    return opening.trapLines.map((v) => computeFenFromPgn(v.pgn));
+    return opening.trapLines.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.trapLines]);
 
   const warningLineFens = useMemo((): string[] => {
     if (!opening?.warningLines) return [];
-    return opening.warningLines.map((v) => computeFenFromPgn(v.pgn));
+    return opening.warningLines.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.warningLines]);
 
   if (loading) {

@@ -110,6 +110,38 @@
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 Nxe4 d5 Nxd2 Qxd2 Ne7 d6 cxd6 O-O d5",
         "explanation": "In the Giuoco Piano, if Black greedily takes on e4 with the knight, White's d5 push attacks the c6 knight and after ...Nxd2 Qxd2 recovers the piece. The d6 push attempts to fix Black's queenside, but after ...cxd6 Black has a solid position. This isn't a forced material-winning trap — it's a positional setup where White has a slight edge from the more active pieces and better-coordinated rooks.",
         "shortExplanation": "Greedy ...Nxe4 in the Giuoco: d5/Qxd2 recovery + d6 cramping = small White edge, not a forced win."
+      },
+      {
+        "name": "Kingside Crush #1",
+        "pgn": "Bg5 Rxe8+ Qxe8 Bxg5",
+        "setupFen": "r2qr1k1/ppp1bppp/1nnp4/5P2/6P1/1BP5/P4P1P/RNBQR1K1 b - - 4 15",
+        "explanation": "Kingside Crush verified by Stockfish to win +360cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 1468, played 33,857 times).",
+        "source": "lichess-puzzle:0DgYW",
+        "verifiedEval": "+360cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "cxd5 Be7+ Qxe7 Rxe7 Kxe7 Qxg7+ Kd6 Qxh8",
+        "setupFen": "r1b2k1r/pp4pp/2pq4/3B2B1/3Q4/8/P4PPP/4R1K1 b - - 1 18",
+        "explanation": "Fork Win verified by Stockfish to win +470cp for the student. Tactical themes: advantage, attraction, capturingDefender, fork. Sourced from real Lichess puzzle (rating 1545, played 23,797 times).",
+        "source": "lichess-puzzle:0EXhU",
+        "verifiedEval": "+470cp"
+      },
+      {
+        "name": "Tactical Strike #3",
+        "pgn": "Nxd5 Qh5 h6 Nxf7",
+        "setupFen": "r1bq1rk1/ppp2ppp/3p1nn1/3Np1N1/2B1P3/3PP3/PPP3PP/R2Q1RK1 b - - 4 10",
+        "explanation": "Tactical Strike verified by Stockfish to win +417cp for the student. Tactical themes: advantage. Sourced from real Lichess puzzle (rating 2395, played 3,624 times).",
+        "source": "lichess-puzzle:0Ksyp",
+        "verifiedEval": "+417cp"
+      },
+      {
+        "name": "Skewer Win #4",
+        "pgn": "fxg5 Bxg5+ Kxf7 Bxd8",
+        "setupFen": "r1bq3r/ppp1kB1p/5pp1/2b1p1N1/3n3Q/3P4/PPP2PPP/RNB1K2R b KQ - 1 11",
+        "explanation": "Skewer Win verified by Stockfish to win +535cp for the student. Tactical themes: crushing, skewer. Sourced from real Lichess puzzle (rating 1409, played 11,989 times).",
+        "source": "lichess-puzzle:05Nmq",
+        "verifiedEval": "+535cp"
       }
     ],
     "warningLines": [
@@ -232,6 +264,38 @@
         "name": "Tarrasch Trap",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Na5 Bc2 c5 d4 Qc7 Nbd2 Nc6 d5 Nb8 Nf1",
         "explanation": "In the Chigorin/Breyer tabiya, after ...Nc6 and d5, White closes the center and redirects to the kingside. The Nf1-e3-f5 maneuver is the key — the knight lands on f5 with devastating effect, hitting e7 and supporting g5 attacks. After Nxe7+ Qxe7 Bg5, White pins the f6 knight and threatens to double Black's pawns or win the e5 square permanently. Black must avoid passivity and strike with ...f5 before White's grip tightens."
+      },
+      {
+        "name": "Discovered Attack #1",
+        "pgn": "Rfe8 Nf6+ gxf6 Qxd7",
+        "setupFen": "r4rk1/2pq1ppp/pbn3b1/1p1NP3/6P1/5N1P/PP3P2/R1BQR1K1 b - - 0 17",
+        "explanation": "Discovered Attack verified by Stockfish to win +560cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1246, played 25,164 times).",
+        "source": "lichess-puzzle:050qo",
+        "verifiedEval": "+560cp"
+      },
+      {
+        "name": "Pin Pressure #2",
+        "pgn": "Nc5 Qxd5 O-O Rxe6 Nxb3 Qxb3",
+        "setupFen": "r3k2r/1p4pp/p3bb2/q2p1p2/4n3/1B1Q1P1P/PP1N2P1/R1B1R1K1 b kq - 0 18",
+        "explanation": "Pin Pressure verified by Stockfish to win +395cp for the student. Tactical themes: advantage, master, pin. Sourced from real Lichess puzzle (rating 2145, played 8,793 times).",
+        "source": "lichess-puzzle:0DEHt",
+        "verifiedEval": "+395cp"
+      },
+      {
+        "name": "Pin Pressure #3",
+        "pgn": "Bd7 g4 Ne7 e6 fxe6 Ne5",
+        "setupFen": "r1bk1b1r/p1p2pp1/1pp4p/4Pn2/8/2N2N1P/PPP2PP1/R1BR2K1 b - - 1 11",
+        "explanation": "Pin Pressure verified by Stockfish to win +385cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 2673, played 1,217 times).",
+        "source": "lichess-puzzle:0Exzv",
+        "verifiedEval": "+385cp"
+      },
+      {
+        "name": "Discovered Attack #4",
+        "pgn": "Qxd4 Nxe6 fxe6 Rxc6 Qxd3 Qxd3",
+        "setupFen": "r4rk1/1p3ppp/p1n1b3/2NpP3/3P4/P1qB3P/5PP1/2RQ1RK1 b - - 6 18",
+        "explanation": "Discovered Attack verified by Stockfish to win +492cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1760, played 8,134 times).",
+        "source": "lichess-puzzle:02viV",
+        "verifiedEval": "+492cp"
       }
     ],
     "warningLines": [
@@ -356,6 +420,46 @@
         "name": "4...Qh4 Refutation",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Qxe4+ Be2 Kd8 O-O",
         "explanation": "When Black tries the aggressive 4...Qh4 in the Scotch, White refutes it with the precise Nb5 threatening Nc7+. After Qxe4+ Be2, Black must move the king as ...Kd8 is forced. White develops smoothly with O-O and N5c3 while Black's queen is pushed around. The devastating Nd5+ fork wins material, and after Nxf6 gxf6 Bh6+, Black's kingside is completely destroyed. White's queen centralizes on d4 with a winning attack against the exposed king."
+      },
+      {
+        "name": "Kingside Crush #1",
+        "pgn": "Bg4 Rxe8+ Qxe8 Qxf6",
+        "setupFen": "r1bqr1k1/ppp2p2/2np1n1p/6p1/8/2NB1QB1/PPP2PPP/R3R1K1 b - - 7 15",
+        "explanation": "Kingside Crush verified by Stockfish to win +471cp for the student. Tactical themes: crushing, kingsideAttack. Sourced from real Lichess puzzle (rating 1394, played 20,996 times).",
+        "source": "lichess-puzzle:08zQG",
+        "verifiedEval": "+471cp"
+      },
+      {
+        "name": "Pin Pressure #2",
+        "pgn": "a6 Be6 Bd6 Nxd6",
+        "setupFen": "r2k3r/pppbn1pp/5p2/1Nb1p3/2B1P3/8/PPP2PPP/R1BR2K1 b - - 7 11",
+        "explanation": "Pin Pressure verified by Stockfish to win +331cp for the student. Tactical themes: advantage, pin. Sourced from real Lichess puzzle (rating 1537, played 15,562 times).",
+        "source": "lichess-puzzle:0F84a",
+        "verifiedEval": "+331cp"
+      },
+      {
+        "name": "Discovered Attack #3",
+        "pgn": "Qxb1+ Kd2 Nh6 Rxb1",
+        "setupFen": "r1b1k1nr/pppp1ppp/2N5/8/2B1P3/4PQ2/P1P3PP/qN2K2R b Kkq - 1 9",
+        "explanation": "Discovered Attack verified by Stockfish to win +306cp for the student. Tactical themes: advantage, defensiveMove, discoveredAttack. Sourced from real Lichess puzzle (rating 1933, played 10,455 times).",
+        "source": "lichess-puzzle:0CuYW",
+        "verifiedEval": "+306cp"
+      },
+      {
+        "name": "Tactical Strike #4",
+        "pgn": "Be7 Qd5 Nh6 Bxh6",
+        "setupFen": "r1bqk1nr/pppp1ppp/2n5/2b1P1B1/2B5/2P2N2/P4PPP/RN1QK2R b KQkq - 2 8",
+        "explanation": "Tactical Strike verified by Stockfish to win +361cp for the student. Tactical themes: advantage. Sourced from real Lichess puzzle (rating 1909, played 10,415 times).",
+        "source": "lichess-puzzle:04Lnq",
+        "verifiedEval": "+361cp"
+      },
+      {
+        "name": "Pin Pressure #5",
+        "pgn": "d5 Nf6+ Kh8 Qh4 h6 Bxh6",
+        "setupFen": "r1bq1rk1/p3nppp/1bpp4/8/2P1N3/3B2Q1/PP3PPP/R1B1K2R b KQ - 1 13",
+        "explanation": "Pin Pressure verified by Stockfish to win +589cp for the student. Tactical themes: crushing, kingsideAttack, pin. Sourced from real Lichess puzzle (rating 2089, played 8,378 times).",
+        "source": "lichess-puzzle:0IZXZ",
+        "verifiedEval": "+589cp"
       }
     ],
     "warningLines": [
@@ -467,6 +571,22 @@
         "name": "Nd5 Fork Setup",
         "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 O-O f4 d6 Nf3 Nc6 Na4 Bg4 Nxc5 dxc5",
         "explanation": "White maneuvers the knight to a4 to exchange Black's strong dark-squared bishop with Nxc5. After dxc5, Black's pawn structure is weakened and the d5 square becomes available. The Bg5 pin creates tactical pressure, and after Bb5 pins the knight, White establishes a strong positional grip. Black's ...f5 push is forced to gain counterplay but further weakens the e6 and g6 squares for White to exploit."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "Nf6 Re1 Qxe1+ Nxe1",
+        "setupFen": "rn2k1nr/ppp1qppp/3b4/8/2Q2p2/2N2N2/PPPP2PP/R1B2RK1 b kq - 0 10",
+        "explanation": "Pin Pressure verified by Stockfish to win +409cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1447, played 20,308 times).",
+        "source": "lichess-puzzle:0BLgI",
+        "verifiedEval": "+409cp"
+      },
+      {
+        "name": "Deflection Win #2",
+        "pgn": "c6 Qe5+ Be7 Qxg7 Bf6 Nxf6+ Qxf6 Bh6 Qxg7 Bxg7",
+        "setupFen": "rnbqkbnr/1ppp1ppp/p7/3N3Q/3PP3/8/PPP3B1/R1B3KR b kq - 4 10",
+        "explanation": "Deflection Win verified by Stockfish to win +346cp for the student. Tactical themes: advantage, deflection, quietMove. Sourced from real Lichess puzzle (rating 2789, played 1,789 times).",
+        "source": "lichess-puzzle:0MIWi",
+        "verifiedEval": "+346cp"
       }
     ],
     "warningLines": [
@@ -592,6 +712,38 @@
         "name": "h4 Kingside Storm",
         "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 d6 Nxg4 Nf6 Nxf6+ Qxf6 Nc3 Nc6 d4",
         "explanation": "In the Kieseritzky with h4, White rips open the h-file for a devastating kingside attack. After Ne5 grabs the g4 pawn, Nxf6+ eliminates Black's best defender. White develops rapidly with Nc3, d4, and Bxf4 while Black's pieces are still tangled. After O-O-O, both sides castle queenside but White's h-file initiative and superior piece coordination create lasting pressure. The d5 push attacks the knight and opens lines for White's bishops."
+      },
+      {
+        "name": "Tactical Strike #1",
+        "pgn": "Nd5 Qh5+ g6 fxg6",
+        "setupFen": "r1bqkb1r/ppp3pp/2n2n2/4PP2/3Pp3/2N5/PPP3PP/R1BQKB1R b KQkq - 0 8",
+        "explanation": "Tactical Strike verified by Stockfish to win +383cp for the student. Tactical themes: crushing, master. Sourced from real Lichess puzzle (rating 1227, played 23,892 times).",
+        "source": "lichess-puzzle:08J1X",
+        "verifiedEval": "+383cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Bxf4 Ne7+ Kh8 Nxg6+",
+        "setupFen": "r4rk1/ppp2ppp/3p2q1/3N2b1/2BPPRb1/6P1/PPP4P/4RQK1 b - - 4 17",
+        "explanation": "Fork Win verified by Stockfish to win +528cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1117, played 21,679 times).",
+        "source": "lichess-puzzle:0MwR1",
+        "verifiedEval": "+528cp"
+      },
+      {
+        "name": "Sacrificial Attack #3",
+        "pgn": "Ke6 Qg4+ Kxe5 Bxf4+",
+        "setupFen": "r1bq2nr/pppp1kpp/8/2b1N3/3nPp2/8/PPP3PP/RNBQK2R b KQ - 1 7",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +317cp for the student. Tactical themes: crushing, sacrifice. Sourced from real Lichess puzzle (rating 1996, played 9,621 times).",
+        "source": "lichess-puzzle:0542a",
+        "verifiedEval": "+317cp"
+      },
+      {
+        "name": "King Hunt #4",
+        "pgn": "Kb6 Qd4+ Kc6 Qc3+ Kd7 Re1",
+        "setupFen": "rn5Q/ppk1np2/3B4/6N1/6b1/8/PPP1q3/2KR4 b - - 0 18",
+        "explanation": "King Hunt verified by Stockfish to win +364cp for the student. Tactical themes: crushing, exposedKing. Sourced from real Lichess puzzle (rating 2791, played 763 times).",
+        "source": "lichess-puzzle:00SWh",
+        "verifiedEval": "+364cp"
       }
     ],
     "warningLines": [
@@ -691,6 +843,46 @@
         "name": "Scotch Four Knights Fork Trick",
         "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Nxe4 Nxc6",
         "explanation": "After 4.d4 exd4 5.Nxd4, Black sometimes plays the careless 5...Nxe4 trying to win a pawn. White has the powerful 6.Nxc6 bxc6, recovering the piece with a damaged pawn structure for Black. The doubled c-pawns are a lasting weakness and White's development advantage with Bd3, O-O, and Re1 creates strong initiative. The Bg5 pin on f6 ties Black down further, and the Nf5 sacrifice leads to a forced sequence where White wins material by exploiting the pin and the weak d-pawn."
+      },
+      {
+        "name": "Fork Win #1",
+        "pgn": "Qc6 Bb5 Qxb5 Nxc7+ Kf7 Nxb5",
+        "setupFen": "r1b1k1nr/pppqb2p/5pp1/3Nn3/2B4Q/8/PPP2PPP/R1B1R1K1 b kq - 3 15",
+        "explanation": "Fork Win verified by Stockfish to win +553cp for the student. Tactical themes: attraction, crushing, deflection, exposedKing. Sourced from real Lichess puzzle (rating 2125, played 11,633 times).",
+        "source": "lichess-puzzle:0CEiN",
+        "verifiedEval": "+553cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Rfe8 Ne4 Qc6 Nxc5 Qxc5 c3",
+        "setupFen": "r4rk1/ppp2ppp/5q2/2b1p3/3n4/2NPB2P/PPP2PP1/R2QR1K1 b - - 4 14",
+        "explanation": "Fork Win verified by Stockfish to win +393cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 2126, played 9,048 times).",
+        "source": "lichess-puzzle:0KrMB",
+        "verifiedEval": "+393cp"
+      },
+      {
+        "name": "Tactical Strike #3",
+        "pgn": "Bg7 Qe2+ Qe4 Qxe4+ Nxe4 Bxg7",
+        "setupFen": "r1b1kb1r/pp1p1p1p/n1qP1np1/1NP5/3B4/8/PP3PPP/R2QKB1R b KQkq - 1 14",
+        "explanation": "Tactical Strike verified by Stockfish to win +406cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1693, played 8,127 times).",
+        "source": "lichess-puzzle:02rAh",
+        "verifiedEval": "+406cp"
+      },
+      {
+        "name": "Sacrificial Attack #4",
+        "pgn": "Nef6 Qxe8+ Nxe8 Rxf7",
+        "setupFen": "r1b1r1k1/pp3ppp/1q6/3B4/3Nn1n1/B1P5/P1P3PP/R3QRK1 b - - 0 18",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +604cp for the student. Tactical themes: crushing, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 2169, played 1,246 times).",
+        "source": "lichess-puzzle:0EIPW",
+        "verifiedEval": "+604cp"
+      },
+      {
+        "name": "Fork Win #5",
+        "pgn": "Kd8 Bg5+ Kd7 Be6+ Qxe6 Nxe6",
+        "setupFen": "r3k2r/ppp3Np/3p2pB/2b1p3/2B1P3/2NP3q/PPP2P2/R2R2K1 b - - 3 17",
+        "explanation": "Fork Win verified by Stockfish to win +369cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1703, played 5,199 times).",
+        "source": "lichess-puzzle:00lA1",
+        "verifiedEval": "+369cp"
       }
     ],
     "warningLines": [
@@ -805,6 +997,46 @@
         "name": "Najdorf: English Attack Nd5 Counter",
         "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Qd2 Nbd7 O-O-O b5 g4 b4",
         "explanation": "Against the English Attack with Be3 and f3, Black times the queenside counterattack with ...b5-b4 to evict the c3 knight. After the knight exchange on b6, Black redirects play with ...Rc8 pressuring the c-file. When White commits with Nxd6, Black exchanges down to a favorable endgame where the knight on f4 dominates from its outpost. The ...Nf4 knight attacks both e2 and g2, giving Black a clear advantage in the resulting position."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "a4 Qxb3 Bb5+ Kf8",
+        "setupFen": "2r1k2r/1p2bppp/1q1p4/p2Pp1P1/5n1P/1N3P2/PPPQ4/2KR1B1R w k - 0 17",
+        "explanation": "Pin Pressure verified by Stockfish to win +357cp for the student. Tactical themes: advantage, defensiveMove, pin. Sourced from real Lichess puzzle (rating 1489, played 32,268 times).",
+        "source": "lichess-puzzle:01Btz",
+        "verifiedEval": "+357cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Nxe7 Ne2+ Kb1 Nxg3",
+        "setupFen": "r4r1k/1p2bp1p/p4p2/2qNpP2/3n4/1B4Q1/PPP2PPP/2KR3R w - - 13 17",
+        "explanation": "Fork Win verified by Stockfish to win +348cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1446, played 14,046 times).",
+        "source": "lichess-puzzle:07eKm",
+        "verifiedEval": "+348cp"
+      },
+      {
+        "name": "Pin Pressure #3",
+        "pgn": "Qd2 Rxg5 hxg5 Bxg5 Rh8+ Kd7 Kb1 Bxd2",
+        "setupFen": "r1b1k1r1/1p2pp2/p2p1n1b/2q3B1/3NP1nP/2N1Q3/PPP3P1/2KR1B1R w q - 3 16",
+        "explanation": "Pin Pressure verified by Stockfish to win +444cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 2102, played 861 times).",
+        "source": "lichess-puzzle:0D0UN",
+        "verifiedEval": "+444cp"
+      },
+      {
+        "name": "Pin Pressure #4",
+        "pgn": "Bxd5 Bh6 Qxh6 Rxh6",
+        "setupFen": "2kr1b1r/1p3p2/pq1p1p2/3bp2p/2B1P3/1P3P2/1PPQ2PP/2KR2R1 w - - 0 16",
+        "explanation": "Pin Pressure verified by Stockfish to win +520cp for the student. Tactical themes: advantage, pin. Sourced from real Lichess puzzle (rating 1218, played 1,670 times).",
+        "source": "lichess-puzzle:06v4c",
+        "verifiedEval": "+520cp"
+      },
+      {
+        "name": "Discovered Attack #5",
+        "pgn": "O-O Nxd5 Nxd5 Bxg5",
+        "setupFen": "1n1qk2r/r3bppp/p2p1n2/1p1BpPB1/8/2N5/PPP2PPP/R2QK2R w KQk - 4 11",
+        "explanation": "Discovered Attack verified by Stockfish to win +319cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 992, played 974 times).",
+        "source": "lichess-puzzle:0P563",
+        "verifiedEval": "+319cp"
       }
     ],
     "warningLines": [
@@ -923,6 +1155,46 @@
         "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8 Bb3 Ne5 h4 h5 g4 hxg4",
         "explanation": "When White gambits the g-pawn to rip open the kingside, Black can accept with ...hxg4 and ...Nxg4, counterattacking on the newly opened g-file and exploiting the weakened light squares around White's king. After the exchange sacrifice ...Rxc3, the queen enters with ...Qf6 threatening both ...Qf2 and ...Nf2 forks while the c3 pawn falls. White's h-file attack is neutralized because Black's knight on g4 controls the critical h2 and f2 squares. This line demonstrates a core Dragon principle: sometimes the best defense is a devastating counterattack, turning White's own pawn advances into weaknesses.",
         "frequency": "uncommon"
+      },
+      {
+        "name": "Sacrificial Attack #1",
+        "pgn": "Bb2 Qxb2+ Kxb2 Nxe4+ c3 Nxd2",
+        "setupFen": "r4r1k/1p2Npbp/p2pbnp1/8/2BBP3/qP3P2/2PQ2PP/2KR3R w - - 1 16",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +364cp for the student. Tactical themes: crushing, discoveredAttack, discoveredCheck, queensideAttack. Sourced from real Lichess puzzle (rating 1753, played 2,284 times).",
+        "source": "lichess-puzzle:0FHqf",
+        "verifiedEval": "+364cp"
+      },
+      {
+        "name": "Tactical Strike #2",
+        "pgn": "Qf3 Bxd2+ Bxd2 Qxc4",
+        "setupFen": "r1b1k1nr/pp1ppp1p/6pb/4P3/1qBP4/8/PP1N1PPP/R1BQK2R w KQkq - 3 10",
+        "explanation": "Tactical Strike verified by Stockfish to win +309cp for the student. Tactical themes: advantage. Sourced from real Lichess puzzle (rating 1400, played 3,859 times).",
+        "source": "lichess-puzzle:05XlR",
+        "verifiedEval": "+309cp"
+      },
+      {
+        "name": "Sacrificial Attack #3",
+        "pgn": "h5 Qxd4 Bxd4 Nxf3+",
+        "setupFen": "2r2rk1/pp1bppbp/1q1p1np1/4n3/3NP1PP/1BN1BP2/PPPQ4/R3K2R w KQ - 1 13",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +307cp for the student. Tactical themes: capturingDefender, crushing, sacrifice. Sourced from real Lichess puzzle (rating 1688, played 572 times).",
+        "source": "lichess-puzzle:0JS5q",
+        "verifiedEval": "+307cp"
+      },
+      {
+        "name": "Discovered Attack #4",
+        "pgn": "Qh6 Bxc3+ bxc3 Qxd3",
+        "setupFen": "r2q1rk1/pp2pp2/6p1/7p/3bN1b1/2NBQ3/PP3P2/R3K2R w KQ - 2 19",
+        "explanation": "Discovered Attack verified by Stockfish to win +625cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1293, played 1,831 times).",
+        "source": "lichess-puzzle:0IKyu",
+        "verifiedEval": "+625cp"
+      },
+      {
+        "name": "Discovered Attack #5",
+        "pgn": "Qd2 Qxd2+ Kxd2 Ne4+ Ke1 Bxe5",
+        "setupFen": "5k1r/p3ppbp/5np1/qb2B3/3p1Q2/1B6/PPP2PPP/R3K2R w KQ - 2 18",
+        "explanation": "Discovered Attack verified by Stockfish to win +436cp for the student. Tactical themes: attraction, crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1323, played 770 times).",
+        "source": "lichess-puzzle:0Ewhe",
+        "verifiedEval": "+436cp"
       }
     ],
     "warningLines": [
@@ -1124,6 +1396,22 @@
         "name": "Alapin: ...e5 Counter-Thrust Trap",
         "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nc6 Nf3 e5 dxe5 Qxd1+ Kxd1",
         "explanation": "The ...e5 counter-thrust after 4...Nc6 opens the center before White can consolidate, leading to an endgame after Qxd1+ with the White king stranded. The bishop check on d6 forces Ke1, and after ...Bxe5 Black dominates the center with the bishop pair. The pin with ...Bg4 wins material while ...Rfe8 activates the rook on the open e-file, giving Black a clear advantage."
+      },
+      {
+        "name": "Tactical Strike #1",
+        "pgn": "Nc3 Nxc3 bxc3 b5 Rb1 bxc4",
+        "setupFen": "rn2kb1r/pbqp1ppp/1p2p3/3nP3/2BP4/5N2/PP2QPPP/RNB1K2R w KQkq - 0 9",
+        "explanation": "Tactical Strike verified by Stockfish to win +389cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 2342, played 1,282 times).",
+        "source": "lichess-puzzle:00u3b",
+        "verifiedEval": "+389cp"
+      },
+      {
+        "name": "Tactical Strike #2",
+        "pgn": "Be3 Na5 Bxf7+ Qxf7 Qxf7+ Kxf7",
+        "setupFen": "r3kb1r/pp1bqppp/2n2n2/8/2BN4/1QP5/PP3PPP/RNB1K2R w KQkq - 5 10",
+        "explanation": "Tactical Strike verified by Stockfish to win +302cp for the student. Tactical themes: advantage, master, masterVsMaster. Sourced from real Lichess puzzle (rating 1836, played 506 times).",
+        "source": "lichess-puzzle:0D6hc",
+        "verifiedEval": "+302cp"
       }
     ],
     "warningLines": [
@@ -1235,6 +1523,46 @@
         "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 Qd2 O-O f4 c5 Nf3 Nc6 O-O-O f6 exf6 Nxf6",
         "explanation": "White plays Qd2 with the idea of O-O-O, but this allows Black to execute the ...f6 break under favorable circumstances. After exf6 Nxf6, Black has completely dissolved White's center and the pieces flow to active squares. The half-open f-file plus active piece coordination on c5 and the central squares give Black solid equality with attacking chances on both flanks.",
         "shortExplanation": "Classical Qd2/O-O-O setup: ...c5 + ...f6 break dissolves the e5 chain; ...Nxf6 active piece play."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "Be3 Qg2 Rg1 Qxb2 Qa3 Qxa1",
+        "setupFen": "r4rk1/pp3ppp/2b1p3/2Q5/4pP2/2P3Pq/PP5P/RNB1K2R w KQ - 1 17",
+        "explanation": "Pin Pressure verified by Stockfish to win +348cp for the student. Tactical themes: advantage, pin, trappedPiece. Sourced from real Lichess puzzle (rating 1714, played 19,787 times).",
+        "source": "lichess-puzzle:0DvcD",
+        "verifiedEval": "+348cp"
+      },
+      {
+        "name": "Pin Pressure #2",
+        "pgn": "b4 Bxf2+ Qxf2 Rxe2",
+        "setupFen": "3rr1k1/pp3ppp/1qn5/2bp1b2/2P5/PP3N1P/1B1NBRP1/R4QK1 w - - 3 17",
+        "explanation": "Pin Pressure verified by Stockfish to win +425cp for the student. Tactical themes: advantage, kingsideAttack, pin. Sourced from real Lichess puzzle (rating 1671, played 19,823 times).",
+        "source": "lichess-puzzle:05bWa",
+        "verifiedEval": "+425cp"
+      },
+      {
+        "name": "Discovered Attack #3",
+        "pgn": "Ncxd4 Nfxd4 Nxd4 Rxf4",
+        "setupFen": "r4rk1/1pqbb1pp/p1n1p3/4Pn2/P2p1B2/2Q2N2/1PN1BPPP/1R3RK1 w - - 0 17",
+        "explanation": "Discovered Attack verified by Stockfish to win +376cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 1969, played 15,545 times).",
+        "source": "lichess-puzzle:0LDZf",
+        "verifiedEval": "+376cp"
+      },
+      {
+        "name": "Fork Win #4",
+        "pgn": "Nbd2 Qc5+ Kh1 Qxf5",
+        "setupFen": "r3k2r/1bqpnp2/1p3b1p/5B2/8/2P2N2/PP4PP/RN1QR1K1 w kq - 0 16",
+        "explanation": "Fork Win verified by Stockfish to win +325cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1253, played 16,908 times).",
+        "source": "lichess-puzzle:05HUb",
+        "verifiedEval": "+325cp"
+      },
+      {
+        "name": "Discovered Attack #5",
+        "pgn": "Nd4 Nxd4+ Kg1 Ne2+ Qxe2 Bxe2",
+        "setupFen": "r3k2r/pp3ppp/1B2p3/1b1pP3/1b6/1P3N2/P3nPPP/R2Q1K1R w kq - 1 15",
+        "explanation": "Discovered Attack verified by Stockfish to win +598cp for the student. Tactical themes: crushing, discoveredAttack, discoveredCheck. Sourced from real Lichess puzzle (rating 2082, played 7,632 times).",
+        "source": "lichess-puzzle:0AR06",
+        "verifiedEval": "+598cp"
       }
     ],
     "warningLines": [
@@ -1354,6 +1682,30 @@
         "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Nbd7",
         "explanation": "The Fantasy Variation with 3.f3 weakens White's kingside significantly. After ...dxe4 fxe4 e5, Black immediately challenges the center. White's gambit-style Bc4 + O-O setup is the canonical try, but Black plays ...Nf6 + Nbd7 developing safely. White has some development lead but Black's extra pawn from the dxe4-exd4 exchange settles the position with patient consolidation.",
         "shortExplanation": "Fantasy refutation: ...e5 challenges center, ...exd4 wins pawn; ...Nf6/Nbd7 consolidates extra material."
+      },
+      {
+        "name": "Sacrificial Attack #1",
+        "pgn": "Qg5 Nf3+ Bxf3 Bxf2+ Rxf2 Qxg5",
+        "setupFen": "r4rk1/pp4p1/4p1p1/q1b1n3/8/2N5/PP1QBPPP/3R1RK1 w - - 0 18",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +423cp for the student. Tactical themes: advantage, discoveredAttack, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 1879, played 16,812 times).",
+        "source": "lichess-puzzle:0CQhq",
+        "verifiedEval": "+423cp"
+      },
+      {
+        "name": "Tactical Strike #2",
+        "pgn": "Nxg6 Bxh2+ Kh1 hxg6",
+        "setupFen": "rn1qk2r/pp3ppp/3bp1b1/3p4/3Pn2N/3BB3/PPP2PPP/RN1Q1RK1 w kq - 4 10",
+        "explanation": "Tactical Strike verified by Stockfish to win +522cp for the student. Tactical themes: crushing, intermezzo. Sourced from real Lichess puzzle (rating 1992, played 15,585 times).",
+        "source": "lichess-puzzle:009XT",
+        "verifiedEval": "+522cp"
+      },
+      {
+        "name": "Discovered Attack #3",
+        "pgn": "Nxd5 Nxd5 Qxd5 Bxd4",
+        "setupFen": "5rk1/p3ppbp/bq3np1/3p4/3P4/1BN2Q2/PrPB1PPP/R3K2R w KQ - 4 15",
+        "explanation": "Discovered Attack verified by Stockfish to win +392cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 2264, played 831 times).",
+        "source": "lichess-puzzle:00oOp",
+        "verifiedEval": "+392cp"
       }
     ],
     "warningLines": [
@@ -1468,6 +1820,38 @@
         "pgn": "e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 O-O Bh6 Bxh6 Qxh6",
         "explanation": "The 150 Attack begins with Be3 and Qd2, preparing the immediate Bh6 trade to permanently weaken Black's dark squares around the castled king. After ...Bxh6 Qxh6, the dark-squared bishops are off the board and White has set up the queenside-castling plan with kingside aggression. This is the structural foundation of the 150 Attack — recognize the pattern early so you can prepare queenside counterplay with ...c6 and ...Qa5 before White's h-pawn storm arrives.",
         "shortExplanation": "150 Attack opens with Be3-Qd2 preparing Bh6 to trade dark-squared bishops; standard setup before queenside castling and h-pawn storm."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "gxf5 Qg5+ Qg4 Nxh3+ Kf1 Qxg4",
+        "setupFen": "rn1q2k1/6bp/1p1p2p1/pBpPpr2/P1N2nP1/7P/1PP2P2/R1BQR1K1 w - - 1 17",
+        "explanation": "Pin Pressure verified by Stockfish to win +471cp for the student. Tactical themes: crushing, kingsideAttack, pin. Sourced from real Lichess puzzle (rating 1498, played 22,028 times).",
+        "source": "lichess-puzzle:0FdaR",
+        "verifiedEval": "+471cp"
+      },
+      {
+        "name": "Queenside Crush #2",
+        "pgn": "Rxd8 Qa3+ Kd2 Rxd8+ Ke1 Bxc3+",
+        "setupFen": "3rr1k1/pp2qp1p/1npR1bp1/8/4P3/1PN2NP1/P1P1QP1P/2KR4 w - - 0 19",
+        "explanation": "Queenside Crush verified by Stockfish to win +437cp for the student. Tactical themes: crushing, interference, intermezzo, queensideAttack. Sourced from real Lichess puzzle (rating 1929, played 10,876 times).",
+        "source": "lichess-puzzle:0C50u",
+        "verifiedEval": "+437cp"
+      },
+      {
+        "name": "Discovered Attack #3",
+        "pgn": "Qg4 Rxf2 Rxf2 Qxg4",
+        "setupFen": "b5k1/p2qp1bp/1p1p2p1/5r2/3P4/4B3/PPP2PPP/R2Q1RK1 w - - 0 17",
+        "explanation": "Discovered Attack verified by Stockfish to win +501cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 2041, played 621 times).",
+        "source": "lichess-puzzle:0KO0n",
+        "verifiedEval": "+501cp"
+      },
+      {
+        "name": "Pin Pressure #4",
+        "pgn": "Bf2 Bh6 g4 Bxd2+",
+        "setupFen": "r1bq1rk1/pp1n1pbp/4p1p1/4Pn2/8/2N1BN2/PPPQB1PP/2KR3R w - - 3 14",
+        "explanation": "Pin Pressure verified by Stockfish to win +334cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1564, played 3,741 times).",
+        "source": "lichess-puzzle:05r44",
+        "verifiedEval": "+334cp"
       }
     ],
     "warningLines": [
@@ -1576,6 +1960,46 @@
         "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nc3 e5 d5 Bc5 Nf3 O-O Be2",
         "explanation": "When White plays d4 and c4 building a big center, Black strikes back with ...e5 immediately. After d5 closes the center, ...Bc5 develops with tempo against f2. White's Nf3-Be2 setup is the canonical defense, and from this position Black continues with ...Re8 and ...Nc6 for active piece coordination. The lesson: don't let White's center consolidate uncontested — strike with ...e5 before development crystallizes.",
         "shortExplanation": "...e5 challenges White's c4-d4 center immediately; ...Bc5 develops with tempo for active counterplay."
+      },
+      {
+        "name": "Hanging Piece #1",
+        "pgn": "Nxd4 Qxc3 Bd2 Qxd4",
+        "setupFen": "r1b1r1k1/pp3ppp/1bq5/8/3n1Q2/1PN2P2/P1P1N1PP/R1B2R1K w - - 2 16",
+        "explanation": "Hanging Piece verified by Stockfish to win +515cp for the student. Tactical themes: advantage, hangingPiece. Sourced from real Lichess puzzle (rating 1519, played 37,481 times).",
+        "source": "lichess-puzzle:05010",
+        "verifiedEval": "+515cp"
+      },
+      {
+        "name": "Sacrificial Attack #2",
+        "pgn": "Qd4 Nf3+ gxf3 Bxh2+ Kxh2 Qxd4",
+        "setupFen": "r1bq1rk1/pp3ppp/2pb4/4n3/2B3Q1/2NP4/PPP2PPP/R1B1R1K1 w - - 2 12",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +333cp for the student. Tactical themes: advantage, discoveredAttack, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 1702, played 17,953 times).",
+        "source": "lichess-puzzle:09fDR",
+        "verifiedEval": "+333cp"
+      },
+      {
+        "name": "Fork Win #3",
+        "pgn": "Qxf3 Qxb2 Rb1 Qxc3+",
+        "setupFen": "1k1r1bnr/ppp1pppp/2n5/8/1q1P4/P1N1Bb2/1PP2PPP/R2QKB1R w KQ - 0 10",
+        "explanation": "Fork Win verified by Stockfish to win +525cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1326, played 20,847 times).",
+        "source": "lichess-puzzle:08E3Z",
+        "verifiedEval": "+525cp"
+      },
+      {
+        "name": "Attraction Tactic #4",
+        "pgn": "Qd2 Nxc3 Qxc3 Nd5 Bxe7 Nxc3",
+        "setupFen": "r2q1rk1/pp2bppp/2p1pn2/3nNbB1/1P6/P1NP4/2P1BPPP/1R1Q1RK1 w - - 3 13",
+        "explanation": "Attraction Tactic verified by Stockfish to win +482cp for the student. Tactical themes: attraction, crushing. Sourced from real Lichess puzzle (rating 1829, played 13,942 times).",
+        "source": "lichess-puzzle:0Igue",
+        "verifiedEval": "+482cp"
+      },
+      {
+        "name": "Fork Win #5",
+        "pgn": "Rd1 Nxc3 Rxd8 Nxe2+ Kf2 Rxd8",
+        "setupFen": "rn1qr1k1/pp3ppp/8/3nN3/5P2/2P5/P3Q1PP/R1B2RK1 w - - 0 15",
+        "explanation": "Fork Win verified by Stockfish to win +543cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 2366, played 7,210 times).",
+        "source": "lichess-puzzle:0KeNi",
+        "verifiedEval": "+543cp"
       }
     ],
     "warningLines": [
@@ -1775,6 +2199,22 @@
         "name": "Early d5 Counter",
         "pgn": "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O dxe5 Nxe5 Nxe5 dxe5 Qxd8 Rxd8 f3 Be6 Bxe6 fxe6 Be3 b6 Rad1 Rd7 Rxd7 Nxd7 Rd1 Nc5 b3 Rd8",
         "explanation": "When White captures on e5 with dxe5, Black can equalize smoothly with ...Nxe5 and ...dxe5, reaching a favorable endgame. After the queen exchange on d8, Black's knight can reroute to c5 where it dominates the d3 square and pressures e4. The resulting endgame is slightly better for Black due to the superior knight on c5 versus White's bishop that lacks targets. This trap punishes White for the premature exchange in the center."
+      },
+      {
+        "name": "Discovered Attack #1",
+        "pgn": "Nbc3 Nxc3 bxc3 Bxc4",
+        "setupFen": "rn1q1rk1/pp3ppp/2pbb3/3n4/2BPN3/8/PPP2PPP/RNBQR1K1 w - - 0 12",
+        "explanation": "Discovered Attack verified by Stockfish to win +328cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1520, played 18,199 times).",
+        "source": "lichess-puzzle:08zf0",
+        "verifiedEval": "+328cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Nd5 Qxd2+ Kxd2 Nxe4+ Kc1 Nxd6 Nc7+ Ke7",
+        "setupFen": "r3k2r/1p1b1ppp/p1nQ1n2/q1p5/4P3/2N5/PPPBBPPP/R3K2R w KQkq - 3 11",
+        "explanation": "Fork Win verified by Stockfish to win +332cp for the student. Tactical themes: advantage, attraction, defensiveMove, fork. Sourced from real Lichess puzzle (rating 1774, played 4,461 times).",
+        "source": "lichess-puzzle:0ACFj",
+        "verifiedEval": "+332cp"
       }
     ],
     "warningLines": [
@@ -1869,6 +2309,38 @@
         "name": "Steinitz d4 Counter",
         "pgn": "e4 e5 Nf3 Nf6 d4 Nxe4 Bd3 d5 Nxe5 Nd7 Nxd7 Bxd7 O-O Bd6 c4 c6 Nc3 Nxc3 bxc3 O-O Qc2 Re8 Re1 Rxe1+",
         "explanation": "In the Steinitz Variation, Black can counter White's d4 with solid central play. After ...Nxe4 and ...d5, the position is symmetric but Black's bishop on d6 is actively placed. The knight exchange on c3 doubles White's pawns but opens the b-file for Black's counterplay. The resulting endgame is comfortable for Black with the bishop pair and pressure along the c-file. White's doubled c-pawns are a permanent structural weakness that Black can target."
+      },
+      {
+        "name": "Fork Win #1",
+        "pgn": "Qe5 Qxf2+ Kxf2 Ng4+ Kg3 Nxe5",
+        "setupFen": "rnb3k1/p1p3pp/1q3n2/7Q/2P5/3P4/PP3RPP/R1B3K1 w - - 3 15",
+        "explanation": "Fork Win verified by Stockfish to win +567cp for the student. Tactical themes: attraction, crushing, fork, sacrifice. Sourced from real Lichess puzzle (rating 1753, played 17,533 times).",
+        "source": "lichess-puzzle:0Gdmy",
+        "verifiedEval": "+567cp"
+      },
+      {
+        "name": "Discovered Attack #2",
+        "pgn": "Qf8 Rxe5+ fxe5 Qxf8",
+        "setupFen": "rnb5/pp2rQpk/3q3p/2pPN3/5P2/8/PPP3PP/R3KB1R w KQ - 1 16",
+        "explanation": "Discovered Attack verified by Stockfish to win +417cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1219, played 19,484 times).",
+        "source": "lichess-puzzle:0FqPd",
+        "verifiedEval": "+417cp"
+      },
+      {
+        "name": "Sacrificial Attack #3",
+        "pgn": "Bxd8 Bxf2+ Ke2 Bg4+ Kd3 Ne5+ Kxe4 f5+ Kd5 Rxd8",
+        "setupFen": "r1bqk2r/ppp2ppp/2np4/2b3B1/4n3/1NN5/PPP2PPP/R2QKB1R w KQkq - 0 8",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +402cp for the student. Tactical themes: attackingF2F7, crushing, sacrifice. Sourced from real Lichess puzzle (rating 2797, played 2,567 times).",
+        "source": "lichess-puzzle:09DMC",
+        "verifiedEval": "+402cp"
+      },
+      {
+        "name": "Discovered Attack #4",
+        "pgn": "Bg5 Nxe4 fxe4 Qxg5+",
+        "setupFen": "r2qrbk1/1pp2ppp/p1np1n2/8/2BPN3/5P2/PPPB1QPP/2KR3R w - - 2 15",
+        "explanation": "Discovered Attack verified by Stockfish to win +307cp for the student. Tactical themes: capturingDefender, crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1262, played 17,470 times).",
+        "source": "lichess-puzzle:0JTkd",
+        "verifiedEval": "+307cp"
       }
     ],
     "warningLines": [
@@ -2082,6 +2554,46 @@
         "name": "Jobava Kingside Pawn Storm",
         "pgn": "d4 Nf6 Nc3 d5 Bf4 e6 e3 Bd6 Bxd6 Qxd6",
         "explanation": "In the Jobava system, White trades dark-squared bishops early then launches a ferocious kingside pawn storm with g4-g5-h4-h5. After castling queenside, White's pawns roll forward relentlessly. The h6 pawn wedge severely weakens Black's kingside and creates a permanent hook for the attack. Ne4 sacrifices the knight to open lines, and after Rxd8 the queen invades on c7 with devastating threats against Black's back rank and the exposed king."
+      },
+      {
+        "name": "Fork Win #1",
+        "pgn": "Nxe4 Bxg7 Kxg7 Qd4+ Nf6 Nxf6 exf6 Qxg4",
+        "setupFen": "rn1q1rk1/pp2ppbp/3p1np1/3N4/4P1b1/2B2N2/PPP1BPPP/R2QK2R b KQ - 2 11",
+        "explanation": "Fork Win verified by Stockfish to win +361cp for the student. Tactical themes: advantage, attraction, capturingDefender, fork. Sourced from real Lichess puzzle (rating 1447, played 39,128 times).",
+        "source": "lichess-puzzle:0HIyU",
+        "verifiedEval": "+361cp"
+      },
+      {
+        "name": "Tactical Strike #2",
+        "pgn": "f6 Qh5+ g6 Nxg6 Bxg6 Qxg6+",
+        "setupFen": "rn1qkb1r/1pp2pp1/p3p2p/3pNb2/3PnB2/2P1P2P/PP1N1PP1/R2QKB1R b KQkq - 1 8",
+        "explanation": "Tactical Strike verified by Stockfish to win +552cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1653, played 27,061 times).",
+        "source": "lichess-puzzle:0BqBf",
+        "verifiedEval": "+552cp"
+      },
+      {
+        "name": "Sacrificial Attack #3",
+        "pgn": "Nxe3 Bxh7+ Kxh7 Qh5+ Kg8 Rf3 g6 Nxg6",
+        "setupFen": "r2q1rk1/pb3ppp/1p1bp3/2ppNnP1/3P1P2/2PBP3/PP1N1R1P/R2Q3K b - - 0 16",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +585cp for the student. Tactical themes: attraction, crushing, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 2373, played 658 times).",
+        "source": "lichess-puzzle:06RzD",
+        "verifiedEval": "+585cp"
+      },
+      {
+        "name": "Discovered Attack #4",
+        "pgn": "Qf6 hxg7+ Kxg7 Rh7+ Kxh7 Qxf6",
+        "setupFen": "rn1q4/pp3ppk/2p4P/3pr3/2P3P1/2P1PQ2/P4P2/R3K2R b KQ - 0 17",
+        "explanation": "Discovered Attack verified by Stockfish to win +633cp for the student. Tactical themes: advancedPawn, attraction, crushing, deflection. Sourced from real Lichess puzzle (rating 1727, played 5,486 times).",
+        "source": "lichess-puzzle:0HgKt",
+        "verifiedEval": "+633cp"
+      },
+      {
+        "name": "Attraction Tactic #5",
+        "pgn": "Kf8 hxg7+ Kxg7 Rxg5+ Qxg5 Qxg5+",
+        "setupFen": "r2qk2r/1ppn2pb/p3p2P/3pPpbQ/8/2P1P3/PP1N1P2/R3KBR1 b Qkq - 1 16",
+        "explanation": "Attraction Tactic verified by Stockfish to win +538cp for the student. Tactical themes: advancedPawn, attraction, crushing. Sourced from real Lichess puzzle (rating 1672, played 4,485 times).",
+        "source": "lichess-puzzle:0JBM2",
+        "verifiedEval": "+538cp"
       }
     ],
     "warningLines": [
@@ -2176,6 +2688,14 @@
         "name": "Qc2 Discovery on the Diagonal",
         "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 Be7 O-O O-O Qc2 a6 Qxc4 b5 Qc2 Bb7 Bf4 Nc6 Nc3 Nb4 Qb1",
         "explanation": "After Qc2 recovers the pawn, the queen and bishop on g2 create a battery on the long diagonal that targets c6, b7, and a8. When Black develops ...Nc6, the pieces block their own bishop's escape route. White plays Nc3 and if Black tries ...Nb4 harassing the queen, the retreat Qb1 maintains the diagonal pressure while ...Be4 is met by Nxe4, opening the diagonal further. The final Ne5 lands powerfully in the center, threatening discovered attacks along the g2-a8 diagonal with devastating effect."
+      },
+      {
+        "name": "Tactical Strike #1",
+        "pgn": "O-O Qxd8 Rxd8 Nc7",
+        "setupFen": "rnbqk2r/pp3ppp/4pn2/1Nb5/2p5/6P1/PP2PPBP/RNBQ1RK1 b kq - 2 8",
+        "explanation": "Tactical Strike verified by Stockfish to win +334cp for the student. Tactical themes: advantage, master. Sourced from real Lichess puzzle (rating 1064, played 5,635 times).",
+        "source": "lichess-puzzle:083C6",
+        "verifiedEval": "+334cp"
       }
     ],
     "warningLines": [
@@ -2233,6 +2753,22 @@
         "name": "d5 Premature Pin Break",
         "pgn": "d4 Nf6 Bg5 d5 Bxf6 exf6 e3 Bd6 c4 dxc4 Bxc4 O-O Nc3",
         "explanation": "After 2...d5 3.Bxf6 exf6, Black accepts doubled f-pawns in exchange for the bishop pair and open e-file. White must act quickly to exploit the structure before Black's bishops become dominant. The critical mistake is allowing Black to develop ...Bf5 and ...Re8 with strong pressure. White should aim for c4, Nc3, and Nge2 to control the center, but Black's long-term bishop pair advantage makes this a tricky line to navigate."
+      },
+      {
+        "name": "Hanging Piece #1",
+        "pgn": "Be6 Qxd6 Rd8 Qa3 Qxa3 bxa3",
+        "setupFen": "r1b1k2r/pp3p2/2nb3p/q2Q2p1/8/2N3P1/PP2NPP1/2R1KB1R b Kkq - 0 15",
+        "explanation": "Hanging Piece verified by Stockfish to win +322cp for the student. Tactical themes: crushing, hangingPiece. Sourced from real Lichess puzzle (rating 1573, played 837 times).",
+        "source": "lichess-puzzle:0Cmbe",
+        "verifiedEval": "+322cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "fxg6 Qd5+ Kg7 Qxa8",
+        "setupFen": "r1bq1rk1/3pbp1p/p5P1/1p3p2/8/2PQP3/PP3PP1/RN2K1NR b KQ - 0 14",
+        "explanation": "Fork Win verified by Stockfish to win +413cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 872, played 2,078 times).",
+        "source": "lichess-puzzle:0LRNF",
+        "verifiedEval": "+413cp"
       }
     ],
     "variations": [
@@ -2332,6 +2868,46 @@
         "name": "Cambridge Springs Queen Trap",
         "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 Nf3 c6 e3 Qa5 Nd2 Bb4 Qc2 O-O Be2 e5 O-O exd4",
         "explanation": "The Cambridge Springs sets a cunning trap with ...Qa5 pinning the Nc3 along the a5-e1 diagonal. If White plays carelessly, Black's queen and bishop create deadly threats against the pinned knight. The ...Bb4 follow-up intensifies the pressure, and White must be very precise to avoid losing material. This is one of the most practical traps in tournament play."
+      },
+      {
+        "name": "Discovered Attack #1",
+        "pgn": "Kxh2 Ng4+ Kg1 Qxg5",
+        "setupFen": "r1bqr1k1/pp3ppp/2p2nn1/6B1/3PP3/2NB4/PPQ1N1Pb/4RRK1 w - - 0 15",
+        "explanation": "Discovered Attack verified by Stockfish to win +338cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 1449, played 29,257 times).",
+        "source": "lichess-puzzle:0HipD",
+        "verifiedEval": "+338cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Nf3 Qa5+ Nc3 dxc3 Bxc6+ bxc6",
+        "setupFen": "r1bqkbnr/pp4pp/2n1p3/1B6/3p4/4P3/PP3PPP/RNBQK1NR w KQkq - 2 7",
+        "explanation": "Fork Win verified by Stockfish to win +383cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1585, played 17,519 times).",
+        "source": "lichess-puzzle:0ALrx",
+        "verifiedEval": "+383cp"
+      },
+      {
+        "name": "Fork Win #3",
+        "pgn": "f3 Rxd2 Rxd2 Bxc3 Rad1 Bxd2",
+        "setupFen": "1r1r2k1/p4ppp/2p2b2/2p5/2P3b1/1PN3P1/P2BPP1P/R2R2K1 w - - 3 19",
+        "explanation": "Fork Win verified by Stockfish to win +315cp for the student. Tactical themes: advantage, attraction, capturingDefender, fork. Sourced from real Lichess puzzle (rating 1834, played 10,767 times).",
+        "source": "lichess-puzzle:0BYfa",
+        "verifiedEval": "+315cp"
+      },
+      {
+        "name": "Fork Win #4",
+        "pgn": "Nxa6 Qc3+ Kd1 Bb3+ Qxb3 Qxb3+",
+        "setupFen": "5bnr/2Nk1p1p/pQ2p1p1/2Pp4/P1bq4/8/4PPPP/2B1KB1R w K - 0 19",
+        "explanation": "Fork Win verified by Stockfish to win +631cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1179, played 17,264 times).",
+        "source": "lichess-puzzle:0F4o9",
+        "verifiedEval": "+631cp"
+      },
+      {
+        "name": "Fork Win #5",
+        "pgn": "Kf2 Qd2+ Kg3 Qxc1 Bxa6 Qxh1",
+        "setupFen": "r4rk1/p5pp/bp2Nn2/q7/8/1Q2PP2/P3K1PP/2R2B1R w - - 1 17",
+        "explanation": "Fork Win verified by Stockfish to win +474cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 2413, played 917 times).",
+        "source": "lichess-puzzle:0B6Qc",
+        "verifiedEval": "+474cp"
       }
     ],
     "variations": [
@@ -2431,6 +3007,22 @@
         "name": "Bb7 Long Diagonal Pressure",
         "pgn": "d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Qe2 b5 Bb3 Bb7 Rd1 Nbd7 Nc3 Bd6 e4 cxd4 Rxd4",
         "explanation": "Black's bishop on b7 is the star piece in the QGA. After the standard ...a6, ...b5, ...Bb7 setup, the bishop exerts enormous pressure along the long diagonal toward g2. If White pushes e4 aggressively, Black can exploit the weakened light squares. After ...cxd4 and the exchanges, Black's centralized pieces and active bishop pair give excellent counterplay against White's overextended center."
+      },
+      {
+        "name": "Fork Win #1",
+        "pgn": "Bxc6 Nxc3 Bxd7 Ne2+ Kg2 Rxc1 Rxc1 Nxc1",
+        "setupFen": "r1r3k1/p2q1ppp/2n1p3/1B1n4/3P1B2/2Q1PP2/5P1P/R1R3K1 w - - 3 19",
+        "explanation": "Fork Win verified by Stockfish to win +400cp for the student. Tactical themes: advantage, discoveredAttack, fork. Sourced from real Lichess puzzle (rating 1733, played 1,307 times).",
+        "source": "lichess-puzzle:0ChqP",
+        "verifiedEval": "+400cp"
+      },
+      {
+        "name": "Discovered Attack #2",
+        "pgn": "Bxc5 Nxf3+ gxf3 Rxe1+ Rxe1 Qxe1+",
+        "setupFen": "r1b1q1k1/pp1nrppp/3Q4/2p1n3/2B5/4BN2/PP3PPP/R3R1K1 w - - 0 15",
+        "explanation": "Discovered Attack verified by Stockfish to win +590cp for the student. Tactical themes: crushing, discoveredAttack, kingsideAttack. Sourced from real Lichess puzzle (rating 1234, played 511 times).",
+        "source": "lichess-puzzle:0PyR8",
+        "verifiedEval": "+590cp"
       }
     ],
     "variations": [
@@ -2525,6 +3117,46 @@
         "name": "Geller Gambit Refutation",
         "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 e4 b5 e5 Nd5 a4 e6 axb5 Nxc3 bxc3 cxb5 Ng5 Bb7 Qh5 g6 Qg4 Be7",
         "explanation": "When White plays the aggressive Geller Gambit with e4-e5, Black must grab the pawn and hold on. After ...Nd5 and ...e6, the center is locked and Black's structure is solid. White tries Ng5 and Qh5 for a kingside attack, but Black calmly develops with ...Bb7, ...Be7, and castles queenside. The extra pawn gives Black long-term winning chances once the attack fizzles out."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "Nh5 Nxd4 exd4 Ba4 Qxa4+ Qxa4",
+        "setupFen": "r3k2r/pp1b1p1p/2n1pp2/q2p4/1b1P4/1QN1P1N1/PP3PPP/R3KB1R w KQkq - 6 11",
+        "explanation": "Pin Pressure verified by Stockfish to win +445cp for the student. Tactical themes: clearance, crushing, pin, sacrifice. Sourced from real Lichess puzzle (rating 1975, played 142,076 times).",
+        "source": "lichess-puzzle:0KE1r",
+        "verifiedEval": "+445cp"
+      },
+      {
+        "name": "Pin Pressure #2",
+        "pgn": "Qd2 Bb4 a3 Bxd2+",
+        "setupFen": "rn2kb1r/1b3ppp/p1p1pn2/qp2N3/3P4/1P2PN2/PB3PPP/R2QKB1R w KQkq - 4 10",
+        "explanation": "Pin Pressure verified by Stockfish to win +541cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1258, played 25,173 times).",
+        "source": "lichess-puzzle:0BTSu",
+        "verifiedEval": "+541cp"
+      },
+      {
+        "name": "Fork Win #3",
+        "pgn": "Nxe4 dxe4 Bxe4 Rxe4",
+        "setupFen": "r1bqr1k1/1p3ppp/1np5/p2p4/1b1Pn3/2NBPN1P/PP1BQPP1/R1R3K1 w - - 2 13",
+        "explanation": "Fork Win verified by Stockfish to win +348cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1503, played 11,988 times).",
+        "source": "lichess-puzzle:09SFr",
+        "verifiedEval": "+348cp"
+      },
+      {
+        "name": "Tactical Strike #4",
+        "pgn": "Nb5 Bxb5 Bxb5 Qb4+",
+        "setupFen": "rn3rk1/pp1b1ppp/3qpn2/3p4/3P4/2N1PN2/PP3PPP/2RQKB1R w K - 2 10",
+        "explanation": "Tactical Strike verified by Stockfish to win +497cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1841, played 7,474 times).",
+        "source": "lichess-puzzle:0JyZG",
+        "verifiedEval": "+497cp"
+      },
+      {
+        "name": "Pin Pressure #5",
+        "pgn": "Kb1 Rxd5 Rxd5 Rxc3",
+        "setupFen": "2rrk3/p3bpp1/5pbp/3R4/4P3/2N2N2/PP3PPP/2KR4 w - - 3 18",
+        "explanation": "Pin Pressure verified by Stockfish to win +416cp for the student. Tactical themes: advantage, pin. Sourced from real Lichess puzzle (rating 2122, played 2,092 times).",
+        "source": "lichess-puzzle:0HeRL",
+        "verifiedEval": "+416cp"
       }
     ],
     "variations": [
@@ -2624,6 +3256,30 @@
         "name": "Meran Queenside Expansion Trap",
         "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 Bb7 O-O b4 Ne4 Nxe4 Bxe4",
         "explanation": "In the Meran, after ...b5 and ...Bb7, Black can push ...b4 chasing the knight and gaining space. If White plays Ne4 to maintain central presence, the exchange Nxe4 Bxe4 gives Black the chance for ...c5, striking at the center. After ...cxd4 exd4, Black has an active position with the bishop pair targeting White's isolated d-pawn. The queen centralization on d5 ties White down to the defense of d4 and creates threats along the fifth rank."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "Qd2 Bb4 a3 Bxd2+",
+        "setupFen": "rn2kb1r/1b3ppp/p1p1pn2/qp2N3/3P4/1P2PN2/PB3PPP/R2QKB1R w KQkq - 4 10",
+        "explanation": "Pin Pressure verified by Stockfish to win +541cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1258, played 25,173 times).",
+        "source": "lichess-puzzle:0BTSu",
+        "verifiedEval": "+541cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Nxe4 dxe4 Bxe4 Rxe4",
+        "setupFen": "r1bqr1k1/1p3ppp/1np5/p2p4/1b1Pn3/2NBPN1P/PP1BQPP1/R1R3K1 w - - 2 13",
+        "explanation": "Fork Win verified by Stockfish to win +348cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1503, played 11,988 times).",
+        "source": "lichess-puzzle:09SFr",
+        "verifiedEval": "+348cp"
+      },
+      {
+        "name": "Tactical Strike #3",
+        "pgn": "Nb5 Bxb5 Bxb5 Qb4+",
+        "setupFen": "rn3rk1/pp1b1ppp/3qpn2/3p4/3P4/2N1PN2/PP3PPP/2RQKB1R w K - 2 10",
+        "explanation": "Tactical Strike verified by Stockfish to win +497cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1841, played 7,474 times).",
+        "source": "lichess-puzzle:0JyZG",
+        "verifiedEval": "+497cp"
       }
     ],
     "variations": [
@@ -2723,6 +3379,46 @@
         "name": "Classical f4 Breakthrough",
         "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 Be3 f5 f3 f4 Bf2 g5 Nd3 Ng6 c5 Nf6",
         "explanation": "The Classical King's Indian sees Black lock the center with ...f5 and ...f4, then launch a kingside pawn storm with ...g5. White tries to counter on the queenside with c5, but Black reroutes knights to g6 and f6 to support the g5-g4 break. After cxd6 cxd6, Black's kingside attack arrives faster than White's queenside play because the g4 pawn advance cracks open lines directly toward White's king."
+      },
+      {
+        "name": "Discovered Attack #1",
+        "pgn": "Qc2 Bxc3+ Qxc3 Qxg5",
+        "setupFen": "rnb1r1k1/pp2Pp1p/6p1/q3b1B1/2P5/2N5/PP3PPP/R2QKB1R w KQ - 1 12",
+        "explanation": "Discovered Attack verified by Stockfish to win +425cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1427, played 35,372 times).",
+        "source": "lichess-puzzle:0DIB4",
+        "verifiedEval": "+425cp"
+      },
+      {
+        "name": "Pin Pressure #2",
+        "pgn": "Rae1 Qb8 g3 Nxg3",
+        "setupFen": "q4rk1/p3pp1p/1p4p1/2p4n/2Pb2n1/1PN5/P1QB1PPP/R4RK1 w - - 5 17",
+        "explanation": "Pin Pressure verified by Stockfish to win +504cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1957, played 594 times).",
+        "source": "lichess-puzzle:0HM65",
+        "verifiedEval": "+504cp"
+      },
+      {
+        "name": "Tactical Strike #3",
+        "pgn": "Be2 Bf5 Rxd8+ Rxd8",
+        "setupFen": "r1br2k1/1pq2pbp/2p2np1/p1n5/P1P5/2BBPN2/1PQ2PPP/RN1R2K1 w - - 5 15",
+        "explanation": "Tactical Strike verified by Stockfish to win +453cp for the student. Tactical themes: advantage. Sourced from real Lichess puzzle (rating 1946, played 501 times).",
+        "source": "lichess-puzzle:07lQK",
+        "verifiedEval": "+453cp"
+      },
+      {
+        "name": "Discovered Attack #4",
+        "pgn": "Rxb7 Nf3+ gxf3 Qxd3",
+        "setupFen": "r2q1rk1/pp3pbp/6p1/2p1p3/2PnP3/2NQB2P/P4PP1/1R3RK1 w - - 0 16",
+        "explanation": "Discovered Attack verified by Stockfish to win +493cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1154, played 7,123 times).",
+        "source": "lichess-puzzle:0816p",
+        "verifiedEval": "+493cp"
+      },
+      {
+        "name": "Kingside Crush #5",
+        "pgn": "Bg5 Nxf3+ Qxf3 Qxg5",
+        "setupFen": "r1bq1rk1/p1n2pbp/1p1p2p1/2p1n3/2P1P3/2N2NPP/PP2QPB1/R1BR2K1 w - - 0 13",
+        "explanation": "Kingside Crush verified by Stockfish to win +441cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 932, played 777 times).",
+        "source": "lichess-puzzle:08cza",
+        "verifiedEval": "+441cp"
       }
     ],
     "variations": [
@@ -2841,6 +3537,38 @@
         "name": "4.f3 Central Counter",
         "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3 O-O Bd3 b6 Ne2 Ba6 O-O Bxd3 Qxd3 Nc6",
         "explanation": "After the aggressive 4.f3, White aims for a big center with e4 but weakens the kingside. Black strikes with ...d5 and ...c5 to challenge the center before White consolidates. The key idea is ...Ba6 exchanging the light-squared bishops, which exposes the weakened light squares created by f3. After ...Nc6, Black has a harmonious setup with superior development and pressure against White's doubled c-pawns and weakened king position."
+      },
+      {
+        "name": "Kingside Crush #1",
+        "pgn": "Nxd6 Qxd4+ Be3 Rxe3",
+        "setupFen": "r3r1k1/pp3pp1/1qpb1n1p/1N1p4/3P1P2/3B1PPb/PPQB3P/2R1R1K1 w - - 4 18",
+        "explanation": "Kingside Crush verified by Stockfish to win +510cp for the student. Tactical themes: crushing, kingsideAttack. Sourced from real Lichess puzzle (rating 1183, played 11,226 times).",
+        "source": "lichess-puzzle:0M3nZ",
+        "verifiedEval": "+510cp"
+      },
+      {
+        "name": "Kingside Crush #2",
+        "pgn": "Rxf3 Ne5 Qe4 Nxf3+",
+        "setupFen": "r2qr1k1/ppp2ppp/2n5/8/3P4/P1PQPb2/6PP/R1B2RK1 w - - 0 16",
+        "explanation": "Kingside Crush verified by Stockfish to win +337cp for the student. Tactical themes: crushing, kingsideAttack. Sourced from real Lichess puzzle (rating 1282, played 1,929 times).",
+        "source": "lichess-puzzle:05Puf",
+        "verifiedEval": "+337cp"
+      },
+      {
+        "name": "Fork Win #3",
+        "pgn": "Qxd5 Qxc3+ Qd2 Qxa1+",
+        "setupFen": "rnb2rk1/pp3ppp/5q2/3p4/3Q4/2P1PN2/P4PPP/R3KB1R w KQ - 0 11",
+        "explanation": "Fork Win verified by Stockfish to win +646cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 945, played 936 times).",
+        "source": "lichess-puzzle:063Cp",
+        "verifiedEval": "+646cp"
+      },
+      {
+        "name": "Fork Win #4",
+        "pgn": "Bxf6 Qxf3+ Rg2 Qxf6",
+        "setupFen": "2r1rnk1/2p2ppp/p4n2/1p1q4/8/P2BPP2/1BQ2P1P/R5RK w - - 0 19",
+        "explanation": "Fork Win verified by Stockfish to win +327cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 923, played 814 times).",
+        "source": "lichess-puzzle:0Mf8w",
+        "verifiedEval": "+327cp"
       }
     ],
     "variations": [
@@ -2959,6 +3687,38 @@
         "name": "d5 Passed Pawn Blockade Break",
         "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O O-O Bg4 f3 Na5 Bd3 cxd4 cxd4 Be6",
         "explanation": "White pushes d5 to create a passed pawn, but Black methodically blockades and undermines it. The key is ...Bg4 pinning against the queen and forcing f3 which weakens the kingside. After ...Na5 targets the bishop, and ...cxd4 cxd4 isolates White's center pawn. The critical ...Be6 establishes a blockade on the light squares while the Bg7 rakes across the board. Black's superior piece coordination makes the d4 pawn a liability rather than an asset."
+      },
+      {
+        "name": "Sacrificial Attack #1",
+        "pgn": "Nc6 Rxc6 Qxc6 Qa5+ Kf1 Rc8 Qxc8+ Bxc8",
+        "setupFen": "2rq1rk1/p3pp1p/p5p1/2QP4/3NP1b1/P7/5PPP/1R2K2R w K - 3 17",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +428cp for the student. Tactical themes: clearance, crushing, master, sacrifice. Sourced from real Lichess puzzle (rating 2204, played 1,686 times).",
+        "source": "lichess-puzzle:0N31J",
+        "verifiedEval": "+428cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Bb5 Qa5+ Bc3 Qxb5",
+        "setupFen": "r2qk2r/pp2ppbp/2n3p1/4P3/3P4/5Q2/PB3PPP/R3KB1R w KQkq - 1 12",
+        "explanation": "Fork Win verified by Stockfish to win +490cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1204, played 2,841 times).",
+        "source": "lichess-puzzle:0Mc0H",
+        "verifiedEval": "+490cp"
+      },
+      {
+        "name": "Pin Pressure #3",
+        "pgn": "Ng3 Rxe3 Qxe3 Bd4",
+        "setupFen": "2r1r1k1/p2q1pbp/1p4p1/2pP4/b1P5/4BP2/P2QN1PP/2R2RK1 w - - 1 19",
+        "explanation": "Pin Pressure verified by Stockfish to win +482cp for the student. Tactical themes: crushing, master, pin, sacrifice. Sourced from real Lichess puzzle (rating 1245, played 1,470 times).",
+        "source": "lichess-puzzle:05Fzd",
+        "verifiedEval": "+482cp"
+      },
+      {
+        "name": "Fork Win #4",
+        "pgn": "O-O Ne2+ Kh1 Nxg3+",
+        "setupFen": "r3q2r/pp4kp/6p1/3Pp3/3nP3/6Q1/PB3PPP/R3K2R w KQ - 2 19",
+        "explanation": "Fork Win verified by Stockfish to win +443cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 924, played 1,055 times).",
+        "source": "lichess-puzzle:02h9I",
+        "verifiedEval": "+443cp"
       }
     ],
     "variations": [
@@ -3072,6 +3832,46 @@
         "name": "Anti-Dutch Bg5 Neutralization",
         "pgn": "d4 f5 Bg5 h6 Bh4 g5 Bg3 Nf6 e3 d6 Nd2",
         "explanation": "Against the Anti-Dutch 2.Bg5, Black plays ...h6 and ...g5 chasing the bishop, then fianchettoes with ...Bg7. The resulting structure resembles a favorable King's Indian where Black's g5 advance has already gained space on the kingside. After ...e5 and ...f4, Black's kingside attack is already rolling. The bishop on g3 is passive and White must be very careful not to get overrun. This shows that 2.Bg5 is more annoying than truly dangerous for a prepared player."
+      },
+      {
+        "name": "Kingside Crush #1",
+        "pgn": "b3 Be5 Ng4 Qxg4+",
+        "setupFen": "1r3rk1/p5bp/2ppb1p1/8/2P2q2/3QN3/PP2PP1P/1RB2RK1 w - - 0 19",
+        "explanation": "Kingside Crush verified by Stockfish to win +716cp for the student. Tactical themes: crushing, kingsideAttack, master, masterVsMaster. Sourced from real Lichess puzzle (rating 2110, played 8,228 times).",
+        "source": "lichess-puzzle:0DJ8X",
+        "verifiedEval": "+716cp"
+      },
+      {
+        "name": "Sacrificial Attack #2",
+        "pgn": "Ne5 Qxg2+ Kxg2 Nxe5+ Kg1 Nxc4",
+        "setupFen": "r3kb1r/pbp1p1pp/1pn2n2/3q1p2/2QP4/5NP1/PP2PPBP/RNB2RK1 w kq - 1 9",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +761cp for the student. Tactical themes: crushing, discoveredAttack, discoveredCheck, kingsideAttack. Sourced from real Lichess puzzle (rating 1982, played 7,222 times).",
+        "source": "lichess-puzzle:04DZk",
+        "verifiedEval": "+761cp"
+      },
+      {
+        "name": "Pin Pressure #3",
+        "pgn": "exd6 Qe3 Rh2 Rxf3+ Kg2 Rf2+ Kh1 Rxh2+",
+        "setupFen": "rn2k3/pp6/2pp2pp/4Prq1/2B4b/2N2N2/PPP5/R2Q1K1R w q - 2 17",
+        "explanation": "Pin Pressure verified by Stockfish to win +359cp for the student. Tactical themes: advantage, exposedKing, pin. Sourced from real Lichess puzzle (rating 2559, played 625 times).",
+        "source": "lichess-puzzle:01o5f",
+        "verifiedEval": "+359cp"
+      },
+      {
+        "name": "Trapped Piece #4",
+        "pgn": "Qd5 c6 Qxf5 gxf5",
+        "setupFen": "rn1qk2r/ppp1p1bp/3p2p1/5b2/2PPQ3/5N2/PP3PPP/R1B1KB1R w KQkq - 1 9",
+        "explanation": "Trapped Piece verified by Stockfish to win +492cp for the student. Tactical themes: crushing, trappedPiece. Sourced from real Lichess puzzle (rating 1516, played 11,004 times).",
+        "source": "lichess-puzzle:09b6c",
+        "verifiedEval": "+492cp"
+      },
+      {
+        "name": "Hanging Piece #5",
+        "pgn": "Nxg6 hxg6 Rxh8+ Qxh8",
+        "setupFen": "r1b1k2r/pppn3p/3bpqp1/3p1p2/3P3N/P3P1P1/1PPNBPP1/R2QK2R w KQkq - 4 11",
+        "explanation": "Hanging Piece verified by Stockfish to win +345cp for the student. Tactical themes: advantage, hangingPiece. Sourced from real Lichess puzzle (rating 1643, played 3,094 times).",
+        "source": "lichess-puzzle:04OYD",
+        "verifiedEval": "+345cp"
       }
     ],
     "variations": [
@@ -3166,6 +3966,38 @@
         "name": "e4 Undermining Tactic",
         "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Nf3 O-O Be2 Re8 e5 dxe5 fxe5 Ng4 Bg5 Qb6 O-O Nxe5 Nxe5 Rxe5 Bf4 Re8 d6 Nc6 Nd5",
         "explanation": "In the Four Pawns Attack, Black targets the overextended e5 pawn with the classic ...Ng4 resource. After White tries to hold with Bg5, the tactical sequence Nxe5 recovers material with interest. The d6 pawn push is White's last attempt to create complications, but after ...Nc6 and ...Qd7, Black emerges with the better minor pieces and a healthy pawn structure while White's center has evaporated."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "f3 Qh4+ g3 Nxg3 hxg3 Qxh1",
+        "setupFen": "rnbqkb1r/pp4pp/4p3/2ppP3/4n3/3B4/PPP2PPP/RNBQK1NR w KQkq - 1 7",
+        "explanation": "Pin Pressure verified by Stockfish to win +342cp for the student. Tactical themes: crushing, pin, trappedPiece. Sourced from real Lichess puzzle (rating 1387, played 27,582 times).",
+        "source": "lichess-puzzle:0InPz",
+        "verifiedEval": "+342cp"
+      },
+      {
+        "name": "Kingside Crush #2",
+        "pgn": "Qxg4 Bd4+ Nf2 fxg4",
+        "setupFen": "rnb1qk1r/1p4b1/p2p4/2pP1p2/P1B1P1np/2N5/1PP1Q1PP/R1B2RKN w - - 1 17",
+        "explanation": "Kingside Crush verified by Stockfish to win +333cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 1471, played 1,348 times).",
+        "source": "lichess-puzzle:0BwAW",
+        "verifiedEval": "+333cp"
+      },
+      {
+        "name": "Fork Win #3",
+        "pgn": "Bb5 Qa5+ c3 Qxb5",
+        "setupFen": "r2qkb1r/pp3ppp/2n1bn2/4p3/3pP3/P4NN1/1PP2PPP/R1BQKB1R w KQkq - 1 10",
+        "explanation": "Fork Win verified by Stockfish to win +509cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1085, played 1,740 times).",
+        "source": "lichess-puzzle:07q5t",
+        "verifiedEval": "+509cp"
+      },
+      {
+        "name": "Fork Win #4",
+        "pgn": "Kh1 Nxf2+ Rxf2 Rxf2",
+        "setupFen": "r2q1rk1/pp1b2bp/6p1/3p4/2pPp3/4P2n/PP2BPPP/RNBQ1RK1 w - - 3 18",
+        "explanation": "Fork Win verified by Stockfish to win +407cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 986, played 926 times).",
+        "source": "lichess-puzzle:0NOHS",
+        "verifiedEval": "+407cp"
       }
     ],
     "variations": [
@@ -3297,6 +4129,14 @@
         "name": "Exchange Sacrifice on b2",
         "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Re1 Qa5",
         "explanation": "The exchange sacrifice ...Rxb2 is a key Benko resource when the queen and rook are well-placed. After ...Rxb2, Black's queen and remaining rook dominate the open files while White struggles to coordinate. The Bg7 supports the invasion along the long diagonal."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "Bd2 Rxd2 Qxd2 Bb4 Qxb4 Qxb4+",
+        "setupFen": "2b2rk1/3pbppp/3r4/q7/2p5/6P1/PPQ1PPBP/R1B1K2R w KQ - 2 16",
+        "explanation": "Pin Pressure verified by Stockfish to win +596cp for the student. Tactical themes: crushing, master, pin, sacrifice. Sourced from real Lichess puzzle (rating 1338, played 16,833 times).",
+        "source": "lichess-puzzle:01xVK",
+        "verifiedEval": "+596cp"
       }
     ],
     "warningLines": [
@@ -3391,6 +4231,22 @@
         "name": "Petrosian Counterblow",
         "pgn": "d4 Nf6 c4 e6 Nf3 b6 a3 Bb7 Nc3 d5 cxd5 Nxd5 Qc2 Be7 e4 Nxc3 bxc3 O-O Bd3 c5 O-O Qc7 Qe2 Nc6 dxc5 bxc5 e5 Nd4 Nxd4 cxd4 Bb5 dxc3 Bf4 Qc5",
         "explanation": "In the Petrosian system, Black's thematic ...c5 counterblow undermines White's center at the critical moment. After the exchanges, Black's ...Nd4 is a devastating centralization that exploits White's loose structure. The c3 pawn becomes a powerful passed pawn that diverts White's pieces from the attack. Black's queen and bishops coordinate to create threats on both flanks while the passed pawn marches forward. This line demonstrates why White must be careful not to overextend the e4-e5 push."
+      },
+      {
+        "name": "Discovered Attack #1",
+        "pgn": "Nxd5 Bxf2+ Kxf2 Qxc2",
+        "setupFen": "r3k2r/p4ppp/1pq1p3/2bn4/8/2NR2P1/PPQ1PP1P/R1B3K1 w kq - 3 16",
+        "explanation": "Discovered Attack verified by Stockfish to win +430cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1129, played 9,750 times).",
+        "source": "lichess-puzzle:0NZwv",
+        "verifiedEval": "+430cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Bxc4 Nf3+ Ke2 Nxd2",
+        "setupFen": "3r1rk1/p4ppp/1p2pn2/4n3/2bP4/6P1/P2Q1P1P/R3KB1R w KQ - 2 17",
+        "explanation": "Fork Win verified by Stockfish to win +477cp for the student. Tactical themes: advantage, fork, master. Sourced from real Lichess puzzle (rating 1240, played 894 times).",
+        "source": "lichess-puzzle:0KqRQ",
+        "verifiedEval": "+477cp"
       }
     ],
     "warningLines": [
@@ -3485,6 +4341,14 @@
         "name": "Alekhine Center Collapse",
         "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 e4 Nxe5 f4 Ng6 Be2 Bc5 Nf3 O-O",
         "explanation": "When White overextends with 4.e4 and f4, Black systematically targets the center's soft spots. The knights reroute to pressure key squares while the bishop pin on g4 creates tactical problems. After Black's pieces converge, the f5 pawn becomes a liability rather than an asset. White's king position is weakened by the absence of the f-pawn, giving Black long-term attacking chances."
+      },
+      {
+        "name": "Trapped Piece #1",
+        "pgn": "Nc3 Bd6 Qxd6 Qxd6",
+        "setupFen": "r1b1kb1r/ppQ2ppp/1n3q2/3p4/8/1P2P3/P3BPPP/RNB2RK1 w kq - 1 12",
+        "explanation": "Trapped Piece verified by Stockfish to win +338cp for the student. Tactical themes: advantage, trappedPiece. Sourced from real Lichess puzzle (rating 1344, played 589 times).",
+        "source": "lichess-puzzle:0Adsy",
+        "verifiedEval": "+338cp"
       }
     ],
     "warningLines": [
@@ -3579,6 +4443,22 @@
         "name": "Kingside Attack with f5",
         "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 c5 a3",
         "explanation": "The f5 break is the signature attacking idea in the Old Indian closed positions. After gxf5, Black gets an open g-file and attacking chances against White's king. White's f4 response tries to block the center but the e4 pawn becomes a powerful wedge that restricts White's pieces. Black's knights find active squares in the resulting tactical melee on the kingside."
+      },
+      {
+        "name": "Sacrificial Attack #1",
+        "pgn": "Ne1 Bxf2+ Rxf2 Ne3 Nb3 Nxd1",
+        "setupFen": "r1bqk2r/ppp2ppp/2n5/2bpp3/6n1/3P1NP1/PPPNPPBP/R1BQ1RK1 w kq - 6 7",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +546cp for the student. Tactical themes: crushing, kingsideAttack, sacrifice, trappedPiece. Sourced from real Lichess puzzle (rating 1984, played 13,752 times).",
+        "source": "lichess-puzzle:0AyuM",
+        "verifiedEval": "+546cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Kd2 Qf4+ Kc2 Qxh2+",
+        "setupFen": "r3k2r/ppp2pp1/3p1qp1/2nPp3/2P1P2b/P1N4P/1P2K2R/R1BQ1B2 w kq - 5 15",
+        "explanation": "Fork Win verified by Stockfish to win +455cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1584, played 2,036 times).",
+        "source": "lichess-puzzle:0AmWM",
+        "verifiedEval": "+455cp"
       }
     ],
     "warningLines": [
@@ -3678,6 +4558,38 @@
         "name": "Botvinnik System e5 Wedge",
         "pgn": "c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 e4 f5 Nge2 Nf6 O-O O-O f4",
         "explanation": "The Botvinnik System features the powerful e4+f4 pawn center. After f4 opens the f-file, White exchanges to reach a favorable structure with Nfd5 establishing a dominant knight. The cxd5 and exd5 captures create a powerful passed d-pawn and open lines for White's pieces. Although Black gets counterplay with ...Nd4, White's bishop pair and central passed pawn provide a lasting positional advantage."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "Bg7 Re1 O-O Rxe7",
+        "setupFen": "r3kb1r/1pp1qp1p/p1n2np1/8/Q1P5/2NB1P2/P2P1P1P/R1BK3R b kq - 0 15",
+        "explanation": "Pin Pressure verified by Stockfish to win +447cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1561, played 25,539 times).",
+        "source": "lichess-puzzle:0JF4x",
+        "verifiedEval": "+447cp"
+      },
+      {
+        "name": "Pin Pressure #2",
+        "pgn": "Bh3 Rh5 Bxg2 Qxh7+ Kf7 Rg5 Bxf1 Rxg7+",
+        "setupFen": "3rr1k1/pp1q2pp/1np1bp2/2R5/3P4/P3P1P1/1PQB2BP/5RK1 b - - 0 19",
+        "explanation": "Pin Pressure verified by Stockfish to win +323cp for the student. Tactical themes: advantage, kingsideAttack, master, pin. Sourced from real Lichess puzzle (rating 2347, played 1,408 times).",
+        "source": "lichess-puzzle:07dNV",
+        "verifiedEval": "+323cp"
+      },
+      {
+        "name": "Pin Pressure #3",
+        "pgn": "Bh3 Bxh3 Qxh3 Qd5+ Kg7 Qxb7",
+        "setupFen": "rn4k1/1ppq3p/3p1rp1/p3p3/2P1P1b1/5PP1/PP2N1BP/R2Q1RK1 b - - 0 14",
+        "explanation": "Pin Pressure verified by Stockfish to win +467cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 2169, played 1,566 times).",
+        "source": "lichess-puzzle:0E9Hw",
+        "verifiedEval": "+467cp"
+      },
+      {
+        "name": "Discovered Attack #4",
+        "pgn": "Nd4 Nxd4 Bxd4 Bxg4",
+        "setupFen": "r3k2r/ppp1qppp/2np4/2b1p3/2P1P1b1/3P1N2/PP2BPPP/R1BQK2R b KQkq - 2 8",
+        "explanation": "Discovered Attack verified by Stockfish to win +467cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 1334, played 9,581 times).",
+        "source": "lichess-puzzle:022HT",
+        "verifiedEval": "+467cp"
       }
     ],
     "warningLines": [
@@ -3777,6 +4689,30 @@
         "name": "Anti-Slav Bishop Trap",
         "pgn": "Nf3 d5 c4 c6 g3 Nf6 Bg2 Bf5 cxd5 cxd5 Qb3 Qb6 Nc3 e6",
         "explanation": "In the Anti-Slav line, White plays cxd5 followed by Qb3 to force a queen trade that leaves Black with a weak pawn structure. The Nb5-d6 outpost becomes a permanent thorn that cannot be dislodged. White's advantage in the endgame is decisive because the knight on d6 paralyzes Black's entire position. The Bf4 prevents any counterplay, and Rc1 seizes the open file to invade."
+      },
+      {
+        "name": "Tactical Strike #1",
+        "pgn": "Bxb2 Bxb2 Rxb2 Qd4",
+        "setupFen": "1rbqk1nr/p2pppbp/2p3p1/8/2P5/6P1/PP2PPBP/RNBQ1RK1 b k - 2 8",
+        "explanation": "Tactical Strike verified by Stockfish to win +444cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1308, played 17,105 times).",
+        "source": "lichess-puzzle:07Ddb",
+        "verifiedEval": "+444cp"
+      },
+      {
+        "name": "Discovered Attack #2",
+        "pgn": "Qxd4 Bb5+ Bd7 Qxd4",
+        "setupFen": "r1b1kbnr/ppp1p1p1/n6p/3q1p2/3N1P2/3B2N1/PPP3PP/R1BQK2R b KQkq - 6 11",
+        "explanation": "Discovered Attack verified by Stockfish to win +476cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1162, played 16,284 times).",
+        "source": "lichess-puzzle:0IFtC",
+        "verifiedEval": "+476cp"
+      },
+      {
+        "name": "Pin Pressure #3",
+        "pgn": "e4 Bxe4 fxe4 Rxe4 b5 d6",
+        "setupFen": "r1b1kb1r/1pq1n1pp/p7/3Ppp2/2N5/1P1B1Q2/P1P2PPP/R3R1K1 b kq - 1 15",
+        "explanation": "Pin Pressure verified by Stockfish to win +347cp for the student. Tactical themes: crushing, master, pin. Sourced from real Lichess puzzle (rating 2403, played 1,418 times).",
+        "source": "lichess-puzzle:07Qve",
+        "verifiedEval": "+347cp"
       }
     ],
     "warningLines": [
@@ -3876,6 +4812,38 @@
         "name": "Fischer's Kingside Buildup",
         "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O Nh4 Re8 Nf5",
         "explanation": "The classic Fischer KIA buildup features the knight maneuver Nh4-f5, which is the cornerstone of White's kingside attack. After e4 opens the position, White gains space and redirects pieces kingward. The knight on f5 is extremely powerful, eyeing g7, h6, d6, and e3. Combined with g4 chasing the bishop and Nce3 reinforcing f5, White builds an iron grip on the light squares. Black's bishop retreats passively to f8 and White's attack practically plays itself."
+      },
+      {
+        "name": "Fork Win #1",
+        "pgn": "c5 Qe6+ Kh8 Qxa6",
+        "setupFen": "1r1q1rk1/b3n1pp/b1p2p2/p2pp3/N5Q1/PP2P1P1/1BP2PBP/R3R1K1 b - - 4 15",
+        "explanation": "Fork Win verified by Stockfish to win +480cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1464, played 24,913 times).",
+        "source": "lichess-puzzle:04r0B",
+        "verifiedEval": "+480cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Qe7 Nc6 Qd7 Nxa7",
+        "setupFen": "3q1rk1/r1p3pp/pp2ppn1/8/3N4/2P1Q3/PP3PPP/R4RK1 b - - 1 18",
+        "explanation": "Fork Win verified by Stockfish to win +349cp for the student. Tactical themes: crushing, fork, master. Sourced from real Lichess puzzle (rating 1488, played 13,924 times).",
+        "source": "lichess-puzzle:08h7Y",
+        "verifiedEval": "+349cp"
+      },
+      {
+        "name": "Sacrificial Attack #3",
+        "pgn": "g5 Qxg4 Qxd6 Nf5",
+        "setupFen": "r3r1k1/pp3pbp/2pR2p1/2n1q3/2PNpQb1/1P4P1/PB2PPBP/5RK1 b - - 3 18",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +340cp for the student. Tactical themes: crushing, master, masterVsMaster, sacrifice. Sourced from real Lichess puzzle (rating 1924, played 9,432 times).",
+        "source": "lichess-puzzle:080T4",
+        "verifiedEval": "+340cp"
+      },
+      {
+        "name": "Fork Win #4",
+        "pgn": "Bf6 Qxc6+ Kf8 Qxa8+",
+        "setupFen": "r3k2r/p4pp1/2p5/2p5/3q3b/3P1QP1/PPP2R2/R5K1 b kq - 1 19",
+        "explanation": "Fork Win verified by Stockfish to win +443cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 888, played 1,431 times).",
+        "source": "lichess-puzzle:0CPWb",
+        "verifiedEval": "+443cp"
       }
     ],
     "warningLines": [
@@ -3965,6 +4933,22 @@
         "name": "From's Gambit Refutation",
         "pgn": "f4 e5 fxe5 d6 exd6 Bxd6 Nf3 Nf6 d4",
         "explanation": "After accepting From's Gambit with fxe5, White must play energetically with d4 and Bg5 to neutralize Black's initiative. The pin on f6 and the central control with d4 give White a stable advantage. After Bxd6 Qxd6 and Nc3, White has completed development harmoniously while Black's kingside expansion with g5 has created weaknesses. White emerges with a healthy structure and the bishop pair in an open position."
+      },
+      {
+        "name": "Pin Pressure #1",
+        "pgn": "f6 Qh5+ g6 Nxg6 hxg6 Qxh8",
+        "setupFen": "r2qk1nr/p2b1ppp/2pbp3/2ppN3/5P2/1P2P2P/PBPP2P1/RN1QK2R b KQkq - 2 9",
+        "explanation": "Pin Pressure verified by Stockfish to win +389cp for the student. Tactical themes: crushing, pin, trappedPiece. Sourced from real Lichess puzzle (rating 1216, played 18,858 times).",
+        "source": "lichess-puzzle:02cdm",
+        "verifiedEval": "+389cp"
+      },
+      {
+        "name": "Fork Win #2",
+        "pgn": "Nxg2 Ne6+ Kxf7 Nxd8+",
+        "setupFen": "r2q1k1r/ppp2Pp1/8/8/5N2/3P2pP/PP2PbB1/1RB1nQ1K b - - 3 18",
+        "explanation": "Fork Win verified by Stockfish to win +450cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1989, played 794 times).",
+        "source": "lichess-puzzle:0GIFn",
+        "verifiedEval": "+450cp"
       }
     ],
     "warningLines": [
@@ -4064,6 +5048,38 @@
         "name": "Traxler f2 Attack",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kf1 Qe7 Nxh8 d5 exd5",
         "explanation": "In the Traxler, if White takes on f7 with the knight instead of the bishop, Black unleashes a furious attack with ...Bxf2+ forcing the king to f1. The Black pieces swarm the weakened White king position, and the attack builds with natural developing moves. White's extra exchange after Nxh8 is irrelevant when the king is under such siege. This trap catches many aggressive players who think Nxf7 wins material cleanly, only to discover the counterattack is overwhelming."
+      },
+      {
+        "name": "Discovered Attack #1",
+        "pgn": "Kh1 Qf1+ Kh2 Bg3+ Kxg3 Qxd1",
+        "setupFen": "r1b2rk1/ppp2Np1/7p/3B4/3P4/7P/PP3qP1/RNBQb1K1 w - - 0 14",
+        "explanation": "Discovered Attack verified by Stockfish to win +459cp for the student. Tactical themes: crushing, discoveredAttack, kingsideAttack. Sourced from real Lichess puzzle (rating 1410, played 32,238 times).",
+        "source": "lichess-puzzle:09YGV",
+        "verifiedEval": "+459cp"
+      },
+      {
+        "name": "Sacrificial Attack #2",
+        "pgn": "Nc5 Rxg2+ Kxg2 Qg5+ Kh1 Bd5+ Re4 Bxe4+",
+        "setupFen": "1k1r4/p1p1qprp/2p1b3/Q7/2p1N3/8/PPP2PPP/R3R1K1 w - - 6 19",
+        "explanation": "Sacrificial Attack verified by Stockfish to win +606cp for the student. Tactical themes: attraction, crushing, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 2485, played 1,532 times).",
+        "source": "lichess-puzzle:09yLB",
+        "verifiedEval": "+606cp"
+      },
+      {
+        "name": "Kingside Crush #3",
+        "pgn": "Qc4 Bxf3 gxf3 Rxd2 Qxc6 Rxd1+",
+        "setupFen": "3rr1k1/ppp1bpp1/2q2n2/8/6b1/4BN2/PPPNQPPP/R2R2K1 w - - 5 17",
+        "explanation": "Kingside Crush verified by Stockfish to win +428cp for the student. Tactical themes: crushing, kingsideAttack. Sourced from real Lichess puzzle (rating 1967, played 5,202 times).",
+        "source": "lichess-puzzle:04ky0",
+        "verifiedEval": "+428cp"
+      },
+      {
+        "name": "Kingside Crush #4",
+        "pgn": "g3 Bxg3 Qf3 Bh2+ Kg2 Bxg4 Qxg4 Qxg4+",
+        "setupFen": "r1b2rk1/p1p2pp1/2pb3p/3p4/6Pq/1B1P4/PPPB1PP1/RN1QR1K1 w - - 1 14",
+        "explanation": "Kingside Crush verified by Stockfish to win +372cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 2408, played 755 times).",
+        "source": "lichess-puzzle:0Hbvr",
+        "verifiedEval": "+372cp"
       }
     ],
     "warningLines": [
@@ -4178,6 +5194,22 @@
         "name": "Knight Fork Counter",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Bxd3 Nge7 Ba3 O-O Nbd2 Bb6 Rae1 d6 exd6 cxd6 Ne4 Be6 Qd1 d5 Neg5 Bd7 Bd6 Rfe8 Bxe7 Rxe7 Rxe7 Nxe7",
         "explanation": "When Black tries the tricky ...d3 counter-gambit to disrupt White's center, White calmly recaptures with the bishop and develops with tempo via Ba3 and Nbd2. The knight reroutes to e4 establishing a powerful outpost, then jumps to g5 creating dual threats. After Bd6 seizes the dark squares and forces the exchange of Black's rook, White emerges with superior piece activity and a lasting initiative against Black's weakened structure."
+      },
+      {
+        "name": "Kingside Crush #1",
+        "pgn": "Bg5 Rxe8+ Qxe8 Bxg5",
+        "setupFen": "r2qr1k1/ppp1bppp/1nnp4/5P2/6P1/1BP5/P4P1P/RNBQR1K1 b - - 4 15",
+        "explanation": "Kingside Crush verified by Stockfish to win +360cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 1468, played 33,857 times).",
+        "source": "lichess-puzzle:0DgYW",
+        "verifiedEval": "+360cp"
+      },
+      {
+        "name": "Kingside Crush #2",
+        "pgn": "dxc4 Qxf7+ Kh8 Qh5 h6 Nf7+",
+        "setupFen": "r1bqr1k1/ppp1nppp/2n5/b2p2N1/2BPP3/B4Q2/P4PPP/RN3RK1 b - - 1 11",
+        "explanation": "Kingside Crush verified by Stockfish to win +451cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 1857, played 2,209 times).",
+        "source": "lichess-puzzle:0A1Jy",
+        "verifiedEval": "+451cp"
       }
     ],
     "warningLines": [

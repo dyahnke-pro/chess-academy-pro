@@ -52,11 +52,14 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
   const activePgn = variation ? variation.pgn : opening.pgn;
+  // Puzzle-derived trap lines start from a middlegame setupFen.
+  // See OpeningVariation type comment.
+  const setupFen = variation?.setupFen;
 
   // Parse PGN into move list
   const expectedMoves = useMemo((): MoveInfo[] => {
     const tokens = activePgn.trim().split(/\s+/).filter(Boolean);
-    const chess = new Chess();
+    const chess = setupFen ? new Chess(setupFen) : new Chess();
     const moves: MoveInfo[] = [];
     for (const san of tokens) {
       try {
@@ -67,7 +70,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       }
     }
     return moves;
-  }, [activePgn]);
+  }, [activePgn, setupFen]);
 
   const playerColor = opening.color;
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
@@ -147,7 +150,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
   // Compute FEN at a given move index
   const fenAtIndex = useCallback(
     (idx: number): string => {
-      const chess = new Chess();
+      const chess = setupFen ? new Chess(setupFen) : new Chess();
       for (let i = 0; i < idx && i < expectedMoves.length; i++) {
         try {
           chess.move(expectedMoves[i].san);
@@ -157,7 +160,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       }
       return chess.fen();
     },
-    [expectedMoves],
+    [expectedMoves, setupFen],
   );
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);

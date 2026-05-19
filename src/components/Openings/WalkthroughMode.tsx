@@ -98,11 +98,17 @@ export function WalkthroughMode({
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
   const activePgn = variation ? variation.pgn : opening.pgn;
+  // Puzzle-derived trap lines start from a middlegame setupFen
+  // rather than the standard start position. When present, the
+  // chess.js instance is seeded from setupFen and `activePgn` is
+  // interpreted as moves played FROM that position. See
+  // OpeningVariation type + scripts/mine-puzzle-traps.mjs.
+  const setupFen = variation?.setupFen;
 
   // Parse PGN into move list
   const expectedMoves = useMemo((): MoveInfo[] => {
     const tokens = activePgn.trim().split(/\s+/).filter(Boolean);
-    const chess = new Chess();
+    const chess = setupFen ? new Chess(setupFen) : new Chess();
     const moves: MoveInfo[] = [];
     for (const san of tokens) {
       try {
@@ -113,7 +119,7 @@ export function WalkthroughMode({
       }
     }
     return moves;
-  }, [activePgn]);
+  }, [activePgn, setupFen]);
 
   const [annotations, setAnnotations] = useState<OpeningMoveAnnotation[] | null>(null);
 
@@ -289,7 +295,7 @@ export function WalkthroughMode({
   // Compute FEN at a given move index
   const fenAtIndex = useCallback(
     (idx: number): string => {
-      const chess = new Chess();
+      const chess = setupFen ? new Chess(setupFen) : new Chess();
       for (let i = 0; i < idx && i < expectedMoves.length; i++) {
         try {
           chess.move(expectedMoves[i].san);
@@ -299,7 +305,7 @@ export function WalkthroughMode({
       }
       return chess.fen();
     },
-    [expectedMoves],
+    [expectedMoves, setupFen],
   );
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);

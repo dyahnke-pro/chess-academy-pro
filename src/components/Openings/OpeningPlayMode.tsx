@@ -85,10 +85,12 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const [moveHistory, setMoveHistory] = useState<Array<{ fen: string; from: string; to: string }>>([]);
   const [viewedMoveIndex, setViewedMoveIndex] = useState<number | null>(null);
 
-  // Parse expected opening moves
+  // Parse expected opening moves. Puzzle-derived trap lines may
+  // start from a middlegame setupFen (see OpeningVariation type).
+  const setupFen = customLine?.setupFen;
   const openingMoves = useMemo((): Array<{ san: string; from: string; to: string }> => {
     const tokens = activePgn.trim().split(/\s+/).filter(Boolean);
-    const chess = new Chess();
+    const chess = setupFen ? new Chess(setupFen) : new Chess();
     const moves: Array<{ san: string; from: string; to: string }> = [];
     for (const san of tokens) {
       try {
@@ -99,7 +101,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       }
     }
     return moves;
-  }, [activePgn]);
+  }, [activePgn, setupFen]);
 
   const openingPhaseLength = openingMoves.length;
 

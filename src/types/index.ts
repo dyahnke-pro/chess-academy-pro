@@ -230,6 +230,17 @@ export interface OpeningVariation {
   frequency?: SidelineFrequency;
   danger?: SidelineDanger;
   deviationMove?: number;
+  /** Optional starting FEN for puzzle-derived trap lines. When set,
+   *  pgn is interpreted as moves played FROM setupFen rather than
+   *  from the standard start position. Used by Lichess-puzzle-mined
+   *  trap entries whose punishment begins from a middlegame position
+   *  rather than move 1. See scripts/mine-puzzle-traps.mjs. */
+  setupFen?: string;
+  /** Optional provenance — where the trap content originated. */
+  source?: string;
+  /** Optional Stockfish-verified final-position evaluation
+   *  ("+360cp" or "mate-in-3" from the student's perspective). */
+  verifiedEval?: string;
 }
 
 // ─── Model Games ────────────────────────────────────────────────────────────
