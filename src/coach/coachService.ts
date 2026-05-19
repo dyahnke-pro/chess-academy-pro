@@ -414,6 +414,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   });
 
   const dispatchedIds: string[] = [];
+  const dispatchedToolNames: string[] = [];
   // Cap multi-turn tool loops so a misbehaving brain can't loop forever.
   const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
 
@@ -569,6 +570,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       try {
         const result = await tool.execute(call.args, ctx);
         dispatchedIds.push(call.id);
+        dispatchedToolNames.push(call.name);
         toolResults.push({
           name: call.name,
           ok: result.ok,
@@ -753,6 +755,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   return {
     text: lastResponse.text,
     toolCallIds: dispatchedIds,
+    dispatchedToolNames,
     provider: provider.name,
   };
 }

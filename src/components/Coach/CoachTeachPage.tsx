@@ -1538,11 +1538,16 @@ export function CoachTeachPage(): JSX.Element {
       });
     };
     let lastQueuedSentence = '';
+    /** Track every line we hand to TTS so the Bug A2 post-process can
+     *  check whether the LLM honored the "Setting the board to {name}."
+     *  prompt rule on state-changing turns. */
+    const spokenForTurn: string[] = [];
     const queueSpeak = (raw: string): void => {
       const sentence = formatForSpeech(raw);
       if (!sentence) return;
       if (sentence === lastQueuedSentence) return;
       lastQueuedSentence = sentence;
+      spokenForTurn.push(sentence);
       speechChainRef.current = speechChainRef.current
         .then(() => {
           if (turnAbortRef.aborted) return;
@@ -1937,6 +1942,85 @@ export function CoachTeachPage(): JSX.Element {
       // the final response so the student isn't left in silence.
       tryExtractVoiceMarker();
       tryExtractChoicesMarker();
+
+      // Bug A2 enforcement audit (2026-05-19): when the brain called a
+      // state-changing tool (set_board_position / start_walkthrough_for_opening)
+      // its [VOICE:] block was supposed to begin with "Setting the
+      // board to {name}." (or "Starting the {name} walkthrough.") so
+      // the spoken signal matches the visual signal. Audit the
+      // violations so we can observe how often the LLM ignores the
+      // prompt rule. Active prepend is a follow-up — see
+      // docs/plans/2026-05-19-coach-audit-rerun-9bugs.md (Bug A).
+      const stateChangingTools = result.dispatchedToolNames.filter((n) =>
+        n === 'set_board_position' || n === 'start_walkthrough_for_opening',
+      );
+      if (stateChangingTools.length > 0 && spokenForTurn.length > 0) {
+        const firstSpoken = spokenForTurn[0].toLowerCase();
+        const announcedBoard =
+          firstSpoken.startsWith('setting the board') ||
+          firstSpoken.startsWith('starting the ') ||
+          firstSpoken.startsWith("let's set the board") ||
+          firstSpoken.startsWith("i'm setting the board");
+        if (!announcedBoard) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.setBoardSentenceValidator',
+            summary:
+              `state-changing tools fired (${stateChangingTools.join(', ')}) ` +
+              `but voice did NOT begin with "Setting the board to…": "${spokenForTurn[0].slice(0, 60)}"`,
+            details: JSON.stringify({
+              tools: stateChangingTools,
+              firstSpoken: spokenForTurn[0].slice(0, 200),
+              allSpokenForTurn: spokenForTurn.map((s) => s.slice(0, 80)),
+            }),
+            fen,
+          });
+        }
+      }
+
+      // Bug A spoken-vs-displayed divergence audit (audit-improvement
+      // #1 from the 2026-05-19 discussion). Compares what the LLM
+      // SPOKE (first voice line) against what the BOARD now shows
+      // (walkthrough opening name) — when they don't both reference
+      // the same opening, the student hears one thing and sees
+      // another. Audit-only first cut; the data tells us how often
+      // it happens before we decide on active fix-up.
+      if (spokenForTurn.length > 0) {
+        const boardOpeningName =
+          walkthrough.tree?.openingName ?? null;
+        if (boardOpeningName) {
+          // Normalize for substring containment: drop punctuation,
+          // lower-case. The spoken text mentions the opening name if
+          // any meaningful token from the name appears in the voice.
+          const norm = (s: string) =>
+            s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+          const spokenNorm = norm(spokenForTurn.join(' '));
+          const nameTokens = norm(boardOpeningName)
+            .split(' ')
+            .filter((t) => t.length >= 4); // ≥4 chars per Bug D guard
+          const mentionedOnVoice =
+            nameTokens.length === 0 ||
+            nameTokens.some((t) => spokenNorm.includes(t));
+          if (!mentionedOnVoice) {
+            void logAppAudit({
+              kind: 'claim-validator-trip',
+              category: 'subsystem',
+              source: 'CoachTeachPage.voiceDisplayedDivergence',
+              summary:
+                `voice did NOT mention the board opening "${boardOpeningName}" — ` +
+                `student hears one thing, sees another. ` +
+                `Spoken: "${spokenForTurn[0].slice(0, 60)}"`,
+              details: JSON.stringify({
+                boardOpeningName,
+                spokenPreview: spokenForTurn[0].slice(0, 200),
+                allSpokenForTurn: spokenForTurn.map((s) => s.slice(0, 80)),
+              }),
+              fen,
+            });
+          }
+        }
+      }
       if (!voiceSpokenForTurn) {
         const finalText = sanitizeCoachText(result.text);
         const firstSentenceMatch = SENTENCE_END_RE.exec(finalText);
