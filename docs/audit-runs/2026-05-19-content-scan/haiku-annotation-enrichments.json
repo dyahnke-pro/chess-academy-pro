@@ -894,12 +894,1557 @@
       "ply": 7,
       "san": "e5",
       "annotation": "White advances e5, fixing Black's d5 pawn and locking the center. This move supports the knight on c3 and opens lines for White's light-squared bishop to develop actively."
+    },
+    "gr-nfeld-defense-exchange-variation-larsen-variation.json::__main__::15": {
+      "ply": 16,
+      "san": "Qd7",
+      "annotation": "Qd7 prepares to reroute the queen toward the queenside while keeping options open. The move also supports potential pressure on White's c3 pawn."
+    },
+    "gr-nfeld-defense-exchange-variation-larsen-variation.json::__main__::16": {
+      "ply": 17,
+      "san": "O-O",
+      "annotation": "Castling kingside removes the king from the center and connects White's rooks. The move locks in White's control of the long diagonal via Bc4."
+    },
+    "gr-nfeld-defense-exchange-variation-larsen-variation.json::__main__::17": {
+      "ply": 18,
+      "san": "b6",
+      "annotation": "This fianchetto setup on the queenside eyes the long diagonal and prepares to contest White's bishop on c4. Black creates tactical flexibility with Bb7 to follow."
+    },
+    "gr-nfeld-defense-pachman-variation.json::__main__::9": {
+      "ply": 10,
+      "san": "dxc4",
+      "annotation": "Black recaptures on c4, forcing White's queen to make a decision. This pawn trade opens lines while keeping White's center strong."
+    },
+    "gr-nfeld-defense-pachman-variation.json::__main__::11": {
+      "ply": 12,
+      "san": "O-O",
+      "annotation": "Castling kingside connects the rooks and moves the king to safety before White pushes the d-pawn forward to increase pressure."
+    },
+    "gr-nfeld-defense-three-knights-variation-burille-variation-reversed-tarrasch.json::__main__::15": {
+      "ply": 16,
+      "san": "Nc6",
+      "annotation": "Black attacks the d4 pawn and contests the center, a typical Grünfeld counter-strategy that prepares to challenge White's space advantage with piece pressure."
+    },
+    "hungarian-opening-asten-gambit.json::__main__::5": {
+      "ply": 6,
+      "san": "e5",
+      "annotation": "Black challenges the d4 pawn immediately, seeking counterplay in the center before White consolidates the fianchetto setup."
+    },
+    "hungarian-opening-asten-gambit.json::__main__::6": {
+      "ply": 7,
+      "san": "dxe5",
+      "annotation": "Capturing on e5 secures the pawn and opens lines for White's pieces, especially the bishop aimed at the long diagonal."
+    },
+    "hungarian-opening-asten-gambit.json::__main__::7": {
+      "ply": 8,
+      "san": "d4",
+      "annotation": "Pushing the d-pawn creates a strong central presence on e5 and d4, while the d4 square becomes a natural outpost for White's knight."
+    },
+    "hungarian-opening-asten-gambit.json::__main__::8": {
+      "ply": 9,
+      "san": "Ne4",
+      "annotation": "The knight lands on e4, a dominant square where it attacks multiple targets and forces Black to address the immediate pressure."
+    },
+    "hungarian-opening-asten-gambit.json::__main__::9": {
+      "ply": 10,
+      "san": "f5",
+      "annotation": "Black counterattacks by supporting the d-pawn and preparing to challenge White's e5 strongpoint with concrete threats."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Normal Variation with d5 Push::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White pushes d4, challenging Black's e5 pawn and opening lines toward the bishop on c4. This d4 break is the thematic Evans Gambit idea—forcing Black to decide whether to defend the center or allow White central dominance."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Normal Variation with d5 Push::11": {
+      "ply": 12,
+      "san": "exd4",
+      "annotation": "Black recaptures with the e-pawn, accepting the central tension. White's pawn on e4 now stands alone in the middle, but c3 and cxd4 to follow will restore a strong pawn duo."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Normal Variation with d5 Push::14": {
+      "ply": 15,
+      "san": "cxd4",
+      "annotation": "White recaptures with the c-pawn, rebuilding the classic d4–e4 pawn center. This solid two-pawn duo supports the bishop on c4 and prepares to dominate the board."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Normal Variation with d5 Push::16": {
+      "ply": 17,
+      "san": "d5",
+      "annotation": "Black strikes at e4 with d5, the critical counterattack. White must now decide whether to exchange, defend, or push forward—each choice reshapes the game's strategic balance."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Slow Variation with Be7 Retreat::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White strikes at the center with d4, challenging Black's e5 pawn and opening lines for the bishop pair. This advance threatens to expose cracks in Black's setup before piece development completes."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Slow Variation with Be7 Retreat::13": {
+      "ply": 14,
+      "san": "exd4",
+      "annotation": "Black recaptures toward the center, but d4 is now firmly occupied by a White pawn—a key outpost that White's knight will target on the next move. This centralization pressures Black's exposed king."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Slow Variation with Be7 Retreat::16": {
+      "ply": 17,
+      "san": "e5",
+      "annotation": "The e5 advance pins Black's f6-knight to the king and opens the fifth rank for White's queen. Black's pieces are now cramped and poorly coordinated, giving White a sharp attacking position."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit Declined: Bb6 System::14": {
+      "ply": 15,
+      "san": "exd5",
+      "annotation": "Recapturing on d5 opens the e-file for White's potential rook activity while establishing a strong central pawn that cramps Black's kingside development."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit Declined: Bb6 System::22": {
+      "ply": 23,
+      "san": "d4",
+      "annotation": "Pushing to d4 creates a powerful pawn duo that pressures e5 and limits Black's piece coordination, especially the knight on f6."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit Declined: Bb6 System::23": {
+      "ply": 24,
+      "san": "exd4",
+      "annotation": "Black recaptures with the pawn, but this surrenders control of d4 and allows White's bishop on c4 to dominate the long diagonal toward Black's kingside."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Compromised Defense (dxc3)::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White pushes the central pawn to d4, challenging Black's e5 and opening the long diagonal for the bishop on c4. This aggressively reopens the center after Black's defensive setup."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Compromised Defense (dxc3)::11": {
+      "ply": 12,
+      "san": "exd4",
+      "annotation": "Black recaptures on d4, but the pawn is now undefended and sits on a light square where White's bishop exerts pressure. The capture opens lines that favor White's attack."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Compromised Defense (dxc3)::16": {
+      "ply": 17,
+      "san": "e5",
+      "annotation": "White advances the e-pawn to e5, attacking Black's queen on f6 and cutting off the f6 square—a critical escape square. The pawn advance also supports White's piece coordination for the incoming assault."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Waller Attack with Qb3::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White pushes through the center, challenging Black's e5 pawn and opening lines toward Black's king on e8. This aggressive thrust is the hallmark of the Morphy Attack."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Waller Attack with Qb3::11": {
+      "ply": 12,
+      "san": "exd4",
+      "annotation": "Black recaptures on d4, but White's bishop on c4 now bears down on the weak f7 square. The diagonal opens as Black's pieces remain undeveloped."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Evans Gambit: Waller Attack with Qb3::14": {
+      "ply": 15,
+      "san": "cxd4",
+      "annotation": "White recaptures and anchors a pawn on d4, solidifying control of the center while keeping pressure on f7. Black's bishop on c5 and undeveloped kingside make this square sequence decisively favorable."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Lasker Defense: Black Equalizes::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White advances to d4, meeting Black's e5 pawn and opening the long diagonal for the bishop on c4 to aim at f7."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Lasker Defense: Black Equalizes::11": {
+      "ply": 12,
+      "san": "d5",
+      "annotation": "Black counters with d5, challenging White's center and forcing an immediate decision about how to maintain pressure on f7."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Compromised Defense: Black Consolidates::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White pushes to d4, opening lines toward Black's exposed king on e8. The pawn breaks Black's central control and threatens to support a kingside attack."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Compromised Defense: Black Consolidates::16": {
+      "ply": 17,
+      "san": "e5",
+      "annotation": "Black advances to e5, but this move weakens d5 and d6, allowing White's queen on c3 to target the king. The pawn sacrifice becomes a liability rather than a strength."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Central Counter with d5 exd5 Nxd5::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White strikes at e5 with the central pawn, forcing Black to decide whether to defend or capture. The d4 advance opens lines toward Black's king and supports the bishop on c4."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Central Counter with d5 exd5 Nxd5::14": {
+      "ply": 15,
+      "san": "e5",
+      "annotation": "Black pushes e5 to challenge White's pawn chain and create luft for the king. This gains space on the kingside but allows White's pieces to target the weakened d5 square."
+    },
+    "italian-game-evans-gambit-morphy-attack.json::Central Counter with d5 exd5 Nxd5::15": {
+      "ply": 16,
+      "san": "d5",
+      "annotation": "Black blocks White's e-pawn and occupies d5 with tempo, attacking the light-squared bishop. This counterattack is critical: Black must act now before White consolidates control of the center."
+    },
+    "italian-game-evans-gambit.json::Evans Gambit: Compromised Defence::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White pushes to d4, exploiting Black's somewhat exposed light-squared bishop on a5. This central break forces Black to make an immediate decision about the pawn tension."
+    },
+    "italian-game-evans-gambit.json::Evans Gambit: Compromised Defence::11": {
+      "ply": 12,
+      "san": "exd4",
+      "annotation": "Black recaptures on d4, but White's c3 pawn now supports a strong follow-up. This recapture leaves Black's pieces slightly uncoordinated for the coming attack."
+    },
+    "italian-game-evans-gambit.json::Evans Gambit: Stone-Ware Variation::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "The d4 advance opens lines for White's bishop on c4 toward the kingside and creates a central wedge that Black must address immediately, setting up tactical pressure on f7."
+    },
+    "italian-game-evans-gambit.json::Evans Gambit: Stone-Ware Variation::12": {
+      "ply": 13,
+      "san": "dxe5",
+      "annotation": "Capturing on e5 centralizes White's pawn and seizes space, while the d-file opens for White's rooks—a key asset in this sharp, position where piece activity matters more than material."
+    },
+    "italian-game-evans-gambit.json::Evans Gambit: Lasker Defence::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White attacks e5 immediately, forcing Black to decide whether to defend or abandon the pawn. This strike opens lines toward Black's exposed king and supports the bishop on c4."
+    },
+    "italian-game-evans-gambit.json::Evans Gambit: Lasker Defence::14": {
+      "ply": 15,
+      "san": "dxe5",
+      "annotation": "Black recaptures toward the center, but White's e4 pawn now sits advanced and supported. This pawn becomes a permanent outpost that cramps Black's pieces."
+    },
+    "italian-game-evans-gambit.json::Evans Gambit: Lasker Defence::15": {
+      "ply": 16,
+      "san": "dxe5",
+      "annotation": "White recaptures and solidifies a dominant e5 pawn. Black's knight on d6 is now restricted and vulnerable, while White's pawn controls critical squares."
+    },
+    "italian-game-evans-gambit.json::d3 Counter Blockade::7": {
+      "ply": 8,
+      "san": "Bxb4",
+      "annotation": "Black captures on b4, but White's bishop on c4 remains aggressively posted. The d5 square is now a tactical weakness in Black's position that White can exploit."
+    },
+    "italian-game-evans-gambit.json::d3 Counter Blockade::11": {
+      "ply": 12,
+      "san": "exd4",
+      "annotation": "Recapturing with the e-pawn opens the e-file toward Black's king and reinforces control of the center. White's lead in development becomes the critical factor."
+    },
+    "italian-game-evans-gambit.json::Evans Declined Preparation::7": {
+      "ply": 8,
+      "san": "Bxb4",
+      "annotation": "Black captures the bishop, but White gains time and space while the b4-square remains weak. This tactical concession aims to exploit Black's exposed king-side."
+    },
+    "italian-game-evans-gambit.json::Evans Declined Preparation::12": {
+      "ply": 13,
+      "san": "Nxe5",
+      "annotation": "White's knight seizes the central outpost on e5, forking the queen on d8 and the bishop on e7. Black must recapture to avoid material loss."
+    },
+    "italian-game-evans-gambit.json::Evans Declined Preparation::13": {
+      "ply": 14,
+      "san": "Nxc4",
+      "annotation": "Black removes the dangerous knight from e5 before it establishes a permanent grip. Allowing it to remain risks a cramped, passive position."
+    },
+    "italian-game-evans-gambit.json::Evans Declined Preparation::14": {
+      "ply": 15,
+      "san": "Nxc4",
+      "annotation": "White recaptures with the queen, centralizing it and maintaining pressure on Black's development. The queen dominates from c4, eyeing f7 and d5."
+    },
+    "italian-game-evans-gambit.json::Evans Declined Preparation::16": {
+      "ply": 17,
+      "san": "exd5",
+      "annotation": "Black captures toward the center, but the d5 pawn becomes a long-term White asset controlling key squares. White's space advantage consolidates."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Fried Liver Defence::7": {
+      "ply": 8,
+      "san": "d5",
+      "annotation": "Black challenges White's center immediately, forcing a decision: White can capture and launch an attack down the a2–g8 diagonal, or allow Black's pawn tension to persist."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Fried Liver Defence::8": {
+      "ply": 9,
+      "san": "exd5",
+      "annotation": "White recaptures on d5, centralizing the pawn and opening the e-file for a potential discovered attack when the knight moves. This tempo is crucial for the Fried Liver attack."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Fried Liver Defence::17": {
+      "ply": 18,
+      "san": "e4",
+      "annotation": "White pushes forward to trap the knight on e4 and seize space after Black's defensive maneuvers. This advance signals the shift from tactics to positional pressure."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Traxler Counterattack::16": {
+      "ply": 17,
+      "san": "d4",
+      "annotation": "The d4 push opens the e-file for White's rook and attacks Black's e5 pawn, forcing a decision: Black must either capture, allowing White's center to solidify, or allow the pawns to trade and release central tension."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Max Lange Attack::6": {
+      "ply": 7,
+      "san": "d4",
+      "annotation": "White pushes through the center, challenging Black's e5 pawn and opening lines toward Black's kingside. This aggressive continuance defines the Max Lange Attack."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Max Lange Attack::7": {
+      "ply": 8,
+      "san": "exd4",
+      "annotation": "Black recaptures and maintains central presence, but White's next move will exploit the d4 square's weakness with tempo threats against Black's pieces."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Max Lange Attack::10": {
+      "ply": 11,
+      "san": "e5",
+      "annotation": "White advances with tempo, attacking the bishop on d4 and gaining space. The pawn on e5 cramps Black's knight and prepares f4 to splinter Black's kingside."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Max Lange Attack::11": {
+      "ply": 12,
+      "san": "d5",
+      "annotation": "Black counterattacks the bishop and opens the d-file, fighting for activity. This counterstrike is essential to avoid passive defense after White's space advantage."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Polerio Defence::7": {
+      "ply": 8,
+      "san": "d5",
+      "annotation": "Black counterattacks the center, forcing White to decide whether to maintain the e4 pawn or recapture and accept a symmetrical pawn structure."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Polerio Defence::8": {
+      "ply": 9,
+      "san": "exd5",
+      "annotation": "White recaptures and opens the e-file, where the rook will soon pressure Black's position along with the advanced d5 pawn."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Never Play 5...Nxd5::8": {
+      "ply": 9,
+      "san": "exd5",
+      "annotation": "White opens the center and exposes Black's king by eliminating the e5 pawn. This sets up the tactical blow on f7, which becomes critically weak without the central shield."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Never Play 5...Nxd5::9": {
+      "ply": 10,
+      "san": "Nxd5",
+      "annotation": "Black recaptures to maintain material, but the knight on d5 is poorly placed and will be attacked. White's bishop on c4 and knight on g5 now coordinate to threaten f7 directly."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Never Play 5...Nxd5::14": {
+      "ply": 15,
+      "san": "Nxf7",
+      "annotation": "White sacrifices the knight on f7 to rip open Black's king. The king must move, abandoning castling rights and leaving the back rank dangerously exposed to follow-up tactics."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Never Play 5...Nxd5::15": {
+      "ply": 16,
+      "san": "Kxf7",
+      "annotation": "Black's king steps into the center and loses the right to castle. White's queen and bishop now dominate the exposed king; Black's pieces cannot coordinate quickly enough to defend."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Max Lange Attack (legacy tail)::6": {
+      "ply": 7,
+      "san": "d4",
+      "annotation": "White pushes through the center, opening lines toward Black's kingside and preparing to attack the weakened f7 square with threats like Ng5."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Max Lange Attack (legacy tail)::7": {
+      "ply": 8,
+      "san": "exd4",
+      "annotation": "Black recaptures and maintains central presence, but the d4 pawn now sits on an outpost where White's pieces can target it with tempo."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Max Lange Attack (legacy tail)::10": {
+      "ply": 11,
+      "san": "e5",
+      "annotation": "White advances aggressively, pinning the knight to the king and gaining space; Black's pieces become cramped while f7 grows more vulnerable."
+    },
+    "italian-game-two-knights-defense-modern-bishop-s-opening.json::Two Knights: Max Lange Attack (legacy tail)::11": {
+      "ply": 12,
+      "san": "d5",
+      "annotation": "Black counterattacks the bishop and opens escape squares, but White's advanced e-pawn and control of key central files give White dangerous compensation."
+    },
+    "italian-game.json::Evans Gambit::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White breaks the pawn tension immediately, opening the d-file toward Black's king and forcing Black to make a critical recapture decision."
+    },
+    "italian-game.json::Evans Gambit::11": {
+      "ply": 12,
+      "san": "exd4",
+      "annotation": "Black recaptures toward the center, but this creates a backward d-pawn that White can target with pieces like the knight on f3 or the bishop on c4."
+    },
+    "italian-game.json::Two Knights Defense::6": {
+      "ply": 7,
+      "san": "d4",
+      "annotation": "White pushes the d-pawn to challenge Black's e5 stronghold and open lines toward the bishop on c4. This aggressive thrust forces Black to make an immediate decision about the center."
+    },
+    "italian-game.json::Two Knights Defense::7": {
+      "ply": 8,
+      "san": "exd4",
+      "annotation": "Black captures on d4, accepting a central tension while keeping White's pieces under pressure. The knight on e4 becomes a potent attacking piece aimed at White's kingside."
+    },
+    "italian-game.json::Two Knights Defense::11": {
+      "ply": 12,
+      "san": "d5",
+      "annotation": "White advances d5 to attack the undefended knight on c6, forcing it to move and disrupting Black's coordination. This pawn thrust also opens the long diagonal for White's bishop on c4."
+    },
+    "italian-game.json::Max Lange Attack Gone Wrong::7": {
+      "ply": 8,
+      "san": "exd4",
+      "annotation": "White recaptures on d4, opening the e-file and keeping the center fluid. Black's knight on c6 now faces immediate pressure from the bishop on c4."
+    },
+    "italian-game.json::Max Lange Attack Gone Wrong::12": {
+      "ply": 13,
+      "san": "exf6",
+      "annotation": "White's pawn reaches f6, attacking g7 and threatening the back rank. This advance forces Black into a critical defensive choice with the king still in the center."
+    },
+    "italian-game.json::Max Lange Attack Gone Wrong::13": {
+      "ply": 14,
+      "san": "dxc4",
+      "annotation": "Black captures toward the center, but the bishop on c4 remains a powerful attacking piece aimed at f7. White's f6 pawn controls key dark squares around Black's king."
+    },
+    "italian-game.json::Max Lange Attack Gone Wrong::14": {
+      "ply": 15,
+      "san": "fxg7",
+      "annotation": "White's pawn captures on g7, demolishing Black's kingside shelter. The exposed king and weakened f7 square create an overwhelming mating attack."
+    },
+    "k-das-opening-schneider-gambit.json::__main__::1": {
+      "ply": 2,
+      "san": "g5",
+      "annotation": "Black accepts the gambit and seizes space on the kingside. This aggressive response commits to a sharp, tactical game where White's compensation for the h-pawn depends on rapid piece activity."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::King's Gambit Accepted: Knight Gambit Main Line::12": {
+      "ply": 13,
+      "san": "d4",
+      "annotation": "White plants a pawn on d4, attacking Black's centralized knight on e5 and forcing it to make a critical decision while White's bishop on c4 bears down on f7."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::King's Gambit Accepted: Knight Gambit Main Line::21": {
+      "ply": 22,
+      "san": "d5",
+      "annotation": "Black advances to d5, challenging White's center and creating a passed pawn threat, but this also opens the long diagonal where White's bishop on c4 now has dangerous influence."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::King's Gambit Accepted: Bishop Gambit (Fischer's Favorite)::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White opens the d-file toward Black's king and seizes space before Black can consolidate. The d4 pawn, supported by the e4 pawn, creates a formidable pawn duo that limits Black's counterplay."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::King's Gambit Declined: Classical with Bc5::20": {
+      "ply": 21,
+      "san": "fxe5",
+      "annotation": "Capturing on e5 opens the f-file toward Black's king and eliminates Black's mobile central pawn, giving White's rooks potential along the newly opened file."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::Falkbeer Countergambit::3": {
+      "ply": 4,
+      "san": "d5",
+      "annotation": "Black counters with a central thrust, attacking the e4 pawn and opening lines for piece development. This is the Falkbeer Countergambit—a principled rejection of the King's Gambit sacrifice."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::Falkbeer Countergambit::4": {
+      "ply": 5,
+      "san": "exd5",
+      "annotation": "White accepts the counterattack by recapturing on d5. The resulting pawn on d5 is advanced but exposed, requiring careful play to justify the extra material commitment."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::Falkbeer Countergambit::5": {
+      "ply": 6,
+      "san": "e4",
+      "annotation": "Black strikes back at f4, creating an immediate tactical problem. White's kingside weakens as both the f-file and the long diagonal become targets for Black's pieces."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::Falkbeer Countergambit::8": {
+      "ply": 9,
+      "san": "dxe4",
+      "annotation": "White recaptures, but Black's knight on f6 pressures the center and eyes d4. This position rewards Black's active piece placement over White's extra space."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::King's Gambit Accepted: Kieseritzky Gambit::16": {
+      "ply": 17,
+      "san": "d4",
+      "annotation": "White pushes d4 to open lines and seize space before Black consolidates around the exposed king. This break exploits the weakened kingside and prevents Black's queen from defending both flanks."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::Cunningham Defense::13": {
+      "ply": 14,
+      "san": "d5",
+      "annotation": "Black's d5 strike challenges your e4 pawn and opens the long diagonal toward your king—a concrete threat you must address immediately in this sharp, opposite-flanks attack."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::Fischer Defense: Black Holds Solidly::6": {
+      "ply": 7,
+      "san": "d4",
+      "annotation": "White plants a pawn on d4, establishing a classical two-pawn center and gaining space to support the knight on f3. Black's light-squared bishop on f8 now faces a cramped diagonal."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::Modern Defense: Black Declines Cleanly::3": {
+      "ply": 4,
+      "san": "d5",
+      "annotation": "Black counterattacks the center immediately with d5, challenging your e4 pawn before you can consolidate. This forces you to decide whether to defend, exchange, or advance."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::Modern Defense: Black Declines Cleanly::12": {
+      "ply": 13,
+      "san": "d4",
+      "annotation": "Pushing d4 establishes a strong pawn duo and opens the long diagonal for your bishop on c1. This advance pressures Black's knight on d5 and gains space in the middle."
+    },
+    "king-s-gambit-accepted-greco-gambit.json::Modern Defense: Black Declines Cleanly::18": {
+      "ply": 19,
+      "san": "d5",
+      "annotation": "Your d5 pawn is now a deep, passed pawn threatening to advance further. Black's pieces lack effective coordination to stop or blockade it, giving you a powerful spatial advantage."
+    },
+    "king-s-gambit.json::King's Gambit: Fischer Defense::6": {
+      "ply": 7,
+      "san": "d4",
+      "annotation": "Pushing to d4 opens lines for the queen and light-squared bishop while gaining space; Black's d6 pawn now blocks the e5 square, limiting piece mobility."
+    },
+    "king-s-gambit.json::Black Holds the Pawn::3": {
+      "ply": 4,
+      "san": "exf4",
+      "annotation": "Black accepts the gambit pawn. White has traded the f-pawn for Black's center pawn—a key space-gaining trade that opens lines toward Black's kingside."
+    },
+    "king-s-gambit.json::Black Holds the Pawn::10": {
+      "ply": 11,
+      "san": "Nxg4",
+      "annotation": "White's knight captures on g4, removing Black's advanced pawn and opening the h-file toward Black's exposed king on e8."
+    },
+    "king-s-gambit.json::Black Holds the Pawn::12": {
+      "ply": 13,
+      "san": "Nxf6+",
+      "annotation": "This check forces Black's hand decisively. The knight forks king and queen on f6, winning material by force after the queen moves."
+    },
+    "king-s-gambit.json::Black Holds the Pawn::13": {
+      "ply": 14,
+      "san": "Qxf6",
+      "annotation": "Black recaptures with the queen to recover the knight, but White has won the e4 pawn and Black's king remains vulnerable in the center."
+    },
+    "king-s-indian-attack.json::KIA vs Sicilian Structure::10": {
+      "ply": 11,
+      "san": "e4",
+      "annotation": "Pushing to e4 completes the KIA setup and attacks d5, preventing Black from anchoring a knight there and forcing a choice between allowing White's spatial grip or playing d5 immediately."
+    },
+    "king-s-indian-attack.json::KIA vs Caro-Kann Structure::3": {
+      "ply": 4,
+      "san": "d5",
+      "annotation": "Black contests the center immediately with d5, forcing you to decide whether to hold the e4 pawn or allow a central exchange. This move establishes a symmetrical pawn structure typical of the Caro-Kann."
+    },
+    "king-s-indian-attack.json::KIA vs Caro-Kann Structure::5": {
+      "ply": 6,
+      "san": "e5",
+      "annotation": "Black advances to e5, creating a central tension and preventing your knight from developing naturally to f3. You now face a choice: capture on e5 or maintain flexibility by retreating the pawn."
+    },
+    "king-s-indian-attack.json::KIA: Botvinnik Setup::7": {
+      "ply": 8,
+      "san": "e5",
+      "annotation": "Black plants a second central pawn, challenging White's Nf3 and preparing to open lines. This dual control of d4 and e5 contests White's space."
+    },
+    "king-s-indian-attack.json::KIA: Botvinnik Setup::12": {
+      "ply": 13,
+      "san": "e4",
+      "annotation": "White punches at the heart of Black's center, fixing the d5 and e5 pawns as targets. This break threatens to isolate or win material on the next move."
+    },
+    "king-s-indian-attack.json::KIA: Botvinnik Setup::13": {
+      "ply": 14,
+      "san": "d4",
+      "annotation": "Black captures toward the center with tempo, forcing White to recapture and release the pressure. This counterattack keeps White from consolidating control."
+    },
+    "king-s-indian-attack.json::KIA: Fischer Attack::3": {
+      "ply": 4,
+      "san": "d5",
+      "annotation": "Black advances to challenge White's e4 pawn immediately. This d5 thrust forces White to commit to a central strategy rather than preserve flexibility."
+    },
+    "king-s-indian-attack.json::KIA: Fischer Attack::16": {
+      "ply": 17,
+      "san": "e5",
+      "annotation": "Black strikes at e5, attacking White's knight on f3 and forcing it to make a decision. The move also opens lines for Black's rooks and bishops while maintaining central tension."
+    },
+    "king-s-indian-attack.json::Premature e4 Rush::13": {
+      "ply": 14,
+      "san": "dxe4",
+      "annotation": "Black captures on e4, removing White's advanced pawn and opening the d-file where Black's queen and rook align—a critical tactical asset White must respect."
+    },
+    "king-s-indian-attack.json::Premature e4 Rush::14": {
+      "ply": 15,
+      "san": "dxe4",
+      "annotation": "White recaptures, but now the d-file pressure persists; Black's queen on d8 and rook on d8 create a second-rank threat if White neglects to defend accurately."
+    },
+    "king-s-indian-defense-averbakh-variation-modern-defense-burgess-line.json::__main__::10": {
+      "ply": 11,
+      "san": "Bg5",
+      "annotation": "Pinning the knight to the queen pressures Black's kingside and prepares to support the e4 pawn's space advantage. This pin forces Black to make a decision about piece placement."
+    },
+    "king-s-indian-defense-averbakh-variation-modern-defense.json::__main__::6": {
+      "ply": 7,
+      "san": "e4",
+      "annotation": "Completing the Averbakh setup with e4 stakes the center immediately. White now controls d5 and e5, preventing Black's pieces from occupying those key squares."
+    },
+    "king-s-indian-defense-fianchetto-variation-classical-main-line.json::__main__::7": {
+      "ply": 8,
+      "san": "O-O",
+      "annotation": "Castling kingside completes White's fianchetto setup and connects the rooks, preparing to pressure Black's center with moves like e4 or Nc3."
+    },
+    "king-s-indian-defense-fianchetto-variation-classical-variation.json::__main__::12": {
+      "ply": 13,
+      "san": "Nc3",
+      "annotation": "Nc3 guards e4 and prepares to support White's central pawns while keeping options open on the queenside."
+    },
+    "king-s-indian-defense-fianchetto-variation-classical-variation.json::__main__::13": {
+      "ply": 14,
+      "san": "e5",
+      "annotation": "Black strikes at the center with e5, challenging the d4 pawn and preventing White from playing e4 with tempo."
+    },
+    "king-s-indian-defense-fianchetto-variation-classical-variation.json::__main__::14": {
+      "ply": 15,
+      "san": "e4",
+      "annotation": "White reclaims the center with e4, establishing a strong pawn duo and fixing Black's d6 pawn as a potential long-term target."
+    },
+    "king-s-indian-defense-fianchetto-variation-debrecen-defense.json::__main__::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "annotation": "The fianchettoed bishop on g2 controls the long diagonal, exerting quiet pressure on Black's center and d5 square from afar."
+    },
+    "king-s-indian-defense-fianchetto-variation-debrecen-defense.json::__main__::7": {
+      "ply": 8,
+      "san": "O-O",
+      "annotation": "Castling kingside tucks the king to safety and connects the rooks, preparing to coordinate pressure along the back rank and center files."
+    },
+    "king-s-indian-defense-fianchetto-variation-debrecen-defense.json::__main__::8": {
+      "ply": 9,
+      "san": "Nc3",
+      "annotation": "The knight on c3 supports the d4 pawn and eyes e4, a key square to contest once Black commits to a plan."
+    },
+    "king-s-indian-defense-fianchetto-variation-debrecen-defense.json::__main__::9": {
+      "ply": 10,
+      "san": "d6",
+      "annotation": "Pushing the d-pawn to d6 solidifies Black's grip on e5 and prepares to reroute the queen or knight while supporting the fianchetto structure."
+    },
+    "king-s-indian-defense-fianchetto-variation-debrecen-defense.json::__main__::10": {
+      "ply": 11,
+      "san": "Nf3",
+      "annotation": "Nf3 completes White's minor-piece setup, enabling potential e4 advances and ready flexibility in the center battle."
+    },
+    "king-s-indian-defense-fianchetto-variation-debrecen-defense.json::__main__::11": {
+      "ply": 12,
+      "san": "Nbd7",
+      "annotation": "Nbd7 supports e5 and prepares f6-e5 maneuvers, while keeping the queen's escape route open on the queenside."
+    },
+    "king-s-indian-defense-fianchetto-variation-delayed-fianchetto.json::__main__::0": {
+      "ply": 1,
+      "san": "d4",
+      "annotation": "White plants the pawn on d4, staking a strong claim in the center before committing the kingside bishop to the fianchetto setup. This move order keeps flexibility—White can still fianchetto or develop along classical lines depending on Black's response."
+    },
+    "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json::__main__::6": {
+      "ply": 7,
+      "san": "g3",
+      "annotation": "Fianchettoing the kingside bishop completes White's long-diagonal strategy, preparing to control the center and key dark squares from g2."
+    },
+    "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json::__main__::7": {
+      "ply": 8,
+      "san": "d6",
+      "annotation": "Black supports the center and opens lines for the fianchettoed bishop. This modest advance gives Black space to maneuver pieces flexibly."
+    },
+    "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json::__main__::8": {
+      "ply": 9,
+      "san": "Bg2",
+      "annotation": "The bishop locks onto the long diagonal, where it will exert pressure on d4 and eye the queenside. This placement is the key to White's setup."
+    },
+    "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json::__main__::9": {
+      "ply": 10,
+      "san": "O-O",
+      "annotation": "Black secures the king early, avoiding tactics on the back rank and freeing the rook to shift toward the center or queenside."
+    },
+    "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json::__main__::10": {
+      "ply": 11,
+      "san": "O-O",
+      "annotation": "White completes kingside safety and prepares to centralize the rook. This also opens the f-file for potential pressure if needed later."
+    },
+    "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json::__main__::11": {
+      "ply": 12,
+      "san": "Nbd7",
+      "annotation": "The knight heads to d7, a flexible square that supports e5 advances and keeps options open for rerouting to f6 or c5 later."
+    },
+    "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json::__main__::12": {
+      "ply": 13,
+      "san": "Nc3",
+      "annotation": "The knight joins the center with tempo, pressuring d5 and supporting the d4 pawn. This controls key central squares and limits Black's expansion."
+    },
+    "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json::__main__::13": {
+      "ply": 14,
+      "san": "e5",
+      "annotation": "Black strikes at the center, challenging White's pawn on d4 and gaining space. This counterattack is Black's main fighting resource against White's setup."
+    },
+    "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json::__main__::14": {
+      "ply": 15,
+      "san": "b3",
+      "annotation": "Rerouting the knight to d2 or e4 via b3 keeps White's pieces flexible while preparing to contest the central tension on d4 and e5."
+    },
+    "king-s-indian-defense-fianchetto-variation-hungarian-variation.json::__main__::6": {
+      "ply": 7,
+      "san": "g3",
+      "annotation": "White fianchettoes the kingside bishop, preparing to plant it on the long diagonal where it pressures Black's center and queenside."
+    },
+    "king-s-indian-defense-fianchetto-variation-hungarian-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "d6",
+      "annotation": "Black anchors the center with d6, supporting a future e5 advance and preparing to reroute the knight via e6 or c6."
+    },
+    "king-s-indian-defense-fianchetto-variation-hungarian-variation.json::__main__::8": {
+      "ply": 9,
+      "san": "Bg2",
+      "annotation": "The bishop settles on g2, where it dominates the long diagonal and exerts lasting control over c6 and d5."
+    },
+    "king-s-indian-defense-fianchetto-variation-hungarian-variation.json::__main__::9": {
+      "ply": 10,
+      "san": "O-O",
+      "annotation": "Black castles kingside to safety, removing the king from the center before White's pieces coordinate around the d5 square."
+    },
+    "king-s-indian-defense-fianchetto-variation-hungarian-variation.json::__main__::10": {
+      "ply": 11,
+      "san": "O-O",
+      "annotation": "White castles kingside, stabilizing the king and connecting the rooks in preparation for central play."
+    },
+    "king-s-indian-defense-fianchetto-variation-hungarian-variation.json::__main__::11": {
+      "ply": 12,
+      "san": "Nbd7",
+      "annotation": "The knight heads toward the center via d7, readying supports for a potential e5 pawn break or reinforcing the c5 square."
+    },
+    "king-s-indian-defense-fianchetto-variation-hungarian-variation.json::__main__::12": {
+      "ply": 13,
+      "san": "Nc3",
+      "annotation": "White adds a defender to d5 and prepares to challenge Black's position with potential Nd5 or Nd4 ideas in the near future."
+    },
+    "king-s-indian-defense-fianchetto-variation-hungarian-variation.json::__main__::13": {
+      "ply": 14,
+      "san": "a6",
+      "annotation": "Black secures the queenside with a6, preventing White's knight from landing on b5 and preparing potential b5 counterplay later."
+    },
+    "king-s-indian-defense-fianchetto-variation-panno-variation-korchnoi-line.json::__main__::12": {
+      "ply": 13,
+      "san": "Nc3",
+      "annotation": "Nc3 supports the center and prepares to reroute the knight to d5 or e4, controlling critical squares in Black's position."
+    },
+    "king-s-indian-defense-fianchetto-variation-panno-variation-korchnoi-line.json::__main__::13": {
+      "ply": 14,
+      "san": "a6",
+      "annotation": "The pawn advance to a6 prevents White's b-pawn from advancing to b5, which would cramp Black's queenside."
+    },
+    "king-s-indian-defense-fianchetto-variation-panno-variation-korchnoi-line.json::__main__::14": {
+      "ply": 15,
+      "san": "h3",
+      "annotation": "Spacing the h-pawn to h3 stops Black's g-pawn from advancing to h4 and prepares to support kingside expansion if needed."
+    },
+    "king-s-indian-defense-fianchetto-variation-panno-variation-korchnoi-line.json::__main__::15": {
+      "ply": 16,
+      "san": "Rb8",
+      "annotation": "Swinging the rook to b8 targets the weak b4-square and signals Black's plan to pressure the queenside via b5."
+    },
+    "king-s-indian-defense-fianchetto-variation-panno-variation-korchnoi-line.json::__main__::16": {
+      "ply": 17,
+      "san": "Be3",
+      "annotation": "Be3 completes White's piece setup, stationing the bishop on a long diagonal where it supports d4 and eyes the a1–h8 axis."
+    },
+    "king-s-indian-defense-fianchetto-variation-panno-variation-korchnoi-line.json::__main__::17": {
+      "ply": 18,
+      "san": "b5",
+      "annotation": "Black pushes b5 to challenge White's center and create immediate queenside tension, forcing White to decide on cxb5 or allowing pressure on d4."
+    },
+    "king-s-indian-defense-fianchetto-variation-panno-variation-korchnoi-line.json::__main__::18": {
+      "ply": 19,
+      "san": "Nd2",
+      "annotation": "Nd2 regroups the knight toward f3 or f4, maintaining flexibility while keeping the center intact and avoiding premature capture on b5."
+    },
+    "king-s-indian-defense-fianchetto-variation-yugoslav-variation-exchange-line.json::__main__::9": {
+      "ply": 10,
+      "san": "d6",
+      "annotation": "Black plants the pawn on d6, supporting the long diagonal fianchetto setup while keeping central flexibility. This move keeps pieces coordinated without committing to e5 immediately."
+    },
+    "king-s-indian-defense-fianchetto-variation-yugoslav-variation-exchange-line.json::__main__::10": {
+      "ply": 11,
+      "san": "O-O",
+      "annotation": "White castles kingside to safety, completing piece development before engaging in the center. The rook on f1 prepares to pressure Black's position along open files."
+    },
+    "king-s-indian-defense-fianchetto-variation-yugoslav-variation-exchange-line.json::__main__::11": {
+      "ply": 12,
+      "san": "c5",
+      "annotation": "Black strikes at the center with c5, the thematic break in this structure. This challenges White's d4 pawn and opens lines for Black's pieces to become active."
+    },
+    "king-s-indian-defense-fianchetto-variation-yugoslav-variation-exchange-line.json::__main__::12": {
+      "ply": 13,
+      "san": "Nc3",
+      "annotation": "White adds support to the d4 pawn and controls key central squares. The knight on c3 also eyes d5 and e4 as springboards for tactics."
+    },
+    "king-s-indian-defense-fianchetto-variation-yugoslav-variation-exchange-line.json::__main__::13": {
+      "ply": 14,
+      "san": "Nc6",
+      "annotation": "Black develops the queenside knight to a natural square, eyeing e5 and d4. This move prepares to contest White's center while maintaining piece harmony."
+    },
+    "king-s-indian-defense-fianchetto-variation-yugoslav-variation-exchange-line.json::__main__::14": {
+      "ply": 15,
+      "san": "dxc5",
+      "annotation": "White captures on c5, removing Black's central tension. This exchange isolates Black's d6 pawn and gives White spatial control in the center."
+    },
+    "king-s-indian-defense-fianchetto-variation-yugoslav-variation-exchange-line.json::__main__::15": {
+      "ply": 16,
+      "san": "dxc5",
+      "annotation": "Black recaptures, maintaining material balance while accepting a slightly passive pawn structure. The d6 square becomes a potential outpost for White's pieces."
+    },
+    "king-s-indian-defense-fianchetto-variation.json::__main__::4": {
+      "ply": 5,
+      "san": "Nf3",
+      "annotation": "Nf3 controls e5 and d4, preventing Black's knight from settling on aggressive central squares while supporting White's pawn chain."
+    },
+    "king-s-indian-defense-fianchetto-variation.json::__main__::5": {
+      "ply": 6,
+      "san": "Bg7",
+      "annotation": "Bg7 seats the bishop on the long diagonal to pressure d4 and exert influence along the major diagonal—the thematic placement in Black's fianchetto setup."
+    },
+    "king-s-indian-defense-fianchetto-variation.json::__main__::6": {
+      "ply": 7,
+      "san": "g3",
+      "annotation": "White fianchettoes on g3, preparing Bg2 to control the long diagonal and create a flexible kingside structure that supports the d4 pawn."
+    },
+    "king-s-indian-defense-four-pawns-attack.json::__main__::8": {
+      "ply": 9,
+      "san": "Be2",
+      "annotation": "Be2 keeps the position flexible, avoiding early commitments on d3 or f4 while maintaining control of the long diagonal and preparing to support the e4 pawn."
+    },
+    "king-s-indian-defense-four-pawns-attack.json::__main__::9": {
+      "ply": 10,
+      "san": "O-O",
+      "annotation": "Castling kingside removes Black's king to safety and connects the rooks, essential before White's pawn storm intensifies on the kingside."
+    },
+    "king-s-indian-defense-four-pawns-attack.json::__main__::10": {
+      "ply": 11,
+      "san": "f4",
+      "annotation": "The f4 thrust defines the Four Pawns Attack: White establishes a pawn chain (e4–d4–c4) and threatens to open lines against Black's fianchettoed bishop on g7."
+    },
+    "king-s-indian-defense-s-misch-variation-closed-variation-main-line.json::__main__::11": {
+      "ply": 12,
+      "san": "e5",
+      "annotation": "Black strikes at the center with e5, challenging your d4 pawn and preparing to contest the d-file while keeping piece tension alive."
+    },
+    "king-s-indian-defense.json::Petrosian System (d5 without e4)::6": {
+      "ply": 7,
+      "san": "e4",
+      "annotation": "White plants a pawn on e4, completing the classical setup. This advance supports d4 and prepares to dominate the central dark squares where Black's fianchettoed bishop on g7 has limited scope."
+    },
+    "king-s-indian-defense.json::Petrosian System (d5 without e4)::11": {
+      "ply": 12,
+      "san": "e5",
+      "annotation": "Black's e5 strike attacks d4 and opens lines for the g7-bishop along the long diagonal. This counterplay challenges White's space advantage before it becomes too restrictive."
+    },
+    "king-s-indian-defense.json::Petrosian System (d5 without e4)::12": {
+      "ply": 13,
+      "san": "d5",
+      "annotation": "White recaptures on d5, fixing Black's pawn structure and ensuring d4 remains a strong outpost. The position now favors White's centralized pieces over Black's passive setup."
+    },
+    "king-s-indian-defense.json::Ignoring the Queenside::26": {
+      "ply": 27,
+      "san": "cxd6",
+      "annotation": "White opens the c-file and forces Black's queen away from d8, disrupting coordination between Black's pieces on the queenside and center."
+    },
+    "king-s-indian-defense.json::Ignoring the Queenside::27": {
+      "ply": 28,
+      "san": "cxd6",
+      "annotation": "Black recaptures, but now the d6 pawn becomes a fixed target that White's pieces can pressure—particularly the e4 knight and future Bf2."
+    },
+    "king-s-indian-defense.json::Premature ...f5 Without Ne7::22": {
+      "ply": 23,
+      "san": "gxf5",
+      "annotation": "White opens the g-file and exposes Black's kingside by capturing toward the center. This tactical blow exploits Black's weakened pawn structure after the premature f5 push."
+    },
+    "king-s-indian-defense.json::Premature ...f5 Without Ne7::23": {
+      "ply": 24,
+      "san": "gxf5",
+      "annotation": "Black recaptures to restore material balance, but White now has a powerful central pawn on d5 and open lines pointing at Black's king. The position has shifted decisively in White's favor."
+    },
+    "king-s-pawn-game.json::__main__::1": {
+      "ply": 2,
+      "san": "e5",
+      "annotation": "Black mirrors your central pawn, securing e5 as an outpost and preparing to develop while maintaining tension in the center."
+    },
+    "lemming-defense.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central pawn advance stakes immediate ground in the middle and opens lines for the queen and light-squared bishop, the standard first move of classical opening strategy."
+    },
+    "marienbad-system.json::__main__::7": {
+      "ply": 8,
+      "san": "c5",
+      "annotation": "Black strikes at the center with c5, challenging your d4 pawn and forcing you to decide whether to capture or maintain tension. This pawn break is the critical test of White's setup."
+    },
+    "modern-defense-randspringer-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "f5",
+      "annotation": "Black strikes at e4 immediately, testing whether White can maintain the centre. This e4 pawn becomes a critical target Black will pressure throughout the middlegame."
+    },
+    "modern-defense-two-knights-variation-suttles-variation-tal-gambit.json::__main__::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "annotation": "The knight supports the d4 pawn and prepares to reroute to e2 or d5 depending on Black's setup, controlling key central squares."
+    },
+    "modern-defense-two-knights-variation-suttles-variation-tal-gambit.json::__main__::5": {
+      "ply": 6,
+      "san": "d6",
+      "annotation": "Black establishes a solid pawn on d6, supporting the fianchettoed bishop and keeping White's center from expanding further."
+    },
+    "modern-defense-two-knights-variation-suttles-variation-tal-gambit.json::__main__::6": {
+      "ply": 7,
+      "san": "Nf3",
+      "annotation": "Completing the knight pair on f3 attacks the e5 square and prepares castling while maintaining flexible piece placement."
+    },
+    "modern-defense-two-knights-variation-suttles-variation-tal-gambit.json::__main__::7": {
+      "ply": 8,
+      "san": "c6",
+      "annotation": "The c6 pawn props up d5 and prevents White's knight from landing there, restricting White's space advantage."
+    },
+    "modern-defense-two-knights-variation-suttles-variation-tal-gambit.json::__main__::8": {
+      "ply": 9,
+      "san": "Bg5",
+      "annotation": "The bishop targets the c1–h6 diagonal, pinning a future knight on f6 and adding pressure toward the kingside."
+    },
+    "modern-defense-two-knights-variation-suttles-variation-tal-gambit.json::__main__::9": {
+      "ply": 10,
+      "san": "Qb6",
+      "annotation": "Black's queen attacks b2 and threatens White's queenside structure, forcing White to address the pin on the long diagonal."
+    },
+    "modern-defense-two-knights-variation-suttles-variation-tal-gambit.json::__main__::10": {
+      "ply": 11,
+      "san": "Qd2",
+      "annotation": "Defending b2 and preparing to reroute the queen, White sidesteps the capture threat while keeping central control intact."
+    },
+    "modern-defense-two-knights-variation-suttles-variation-tal-gambit.json::__main__::11": {
+      "ply": 12,
+      "san": "Qxb2",
+      "annotation": "Black seizes the loose pawn on b2, exploiting White's commitment to the center and winning material in the opening."
+    },
+    "modern-defense-two-knights-variation.json::__main__::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "annotation": "Nc3 supports the d4 pawn and prepares to contest the long diagonal where Black's fianchettoed bishop bears down. This centralization opens lines for White's pieces."
+    },
+    "modern-defense-two-knights-variation.json::__main__::5": {
+      "ply": 6,
+      "san": "d6",
+      "annotation": "Black props up e5 with d6, stabilizing the center against White's space advantage. This solid setup lets Black prepare queenside counterplay without immediate tactical concessions."
+    },
+    "modern-defense-two-knights-variation.json::__main__::6": {
+      "ply": 7,
+      "san": "Nf3",
+      "annotation": "Nf3 completes White's opening setup by controlling e5 and d4 simultaneously. The knight eyes d5, a key outpost if Black's center weakens later."
+    },
+    "neo-gr-nfeld-defense-classical-variation.json::__main__::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "annotation": "The bishop fianchetto on g2 controls the long diagonal, exerting pressure on Black's center and d5-square where Black will naturally want to advance."
+    },
+    "neo-gr-nfeld-defense-classical-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "O-O",
+      "annotation": "Castling kingside removes the king to safety and connects White's rooks, preparing to support the central tension with the f-rook if needed."
+    },
+    "neo-gr-nfeld-defense-classical-variation.json::__main__::8": {
+      "ply": 9,
+      "san": "O-O",
+      "annotation": "Black castles kingside to match White's king safety while maintaining flexibility in the center—delaying the d5 break until White commits more pieces."
+    },
+    "neo-gr-nfeld-defense-classical-variation.json::__main__::9": {
+      "ply": 10,
+      "san": "d5",
+      "annotation": "The d5 push challenges White's center immediately; Black gains space and forces White to decide whether to capture, advance, or solidify on c4."
+    },
+    "neo-gr-nfeld-defense-classical-variation.json::__main__::10": {
+      "ply": 11,
+      "san": "c4",
+      "annotation": "Playing c4 attacks Black's d5 pawn, offering a classical pawn-tension choice: Black can exchange, advance, or retreat, each leading to distinct middlegame structures."
+    },
+    "neo-gr-nfeld-defense-ultra-delayed-exchange-variation.json::__main__::12": {
+      "ply": 13,
+      "san": "cxd5",
+      "annotation": "Capturing on d5 fixes Black's pawn structure and opens the c-file, where White may later exploit the weakness on c6 after piece exchanges."
+    },
+    "nimzo-indian-defense-normal-variation-bernstein-defense.json::__main__::15": {
+      "ply": 16,
+      "san": "c5",
+      "annotation": "Black strikes at the center with c5, attacking the d4 square and forcing White to decide whether to maintain the pawn or open lines. This thematic break prevents White's space advantage from solidifying."
+    },
+    "nimzo-indian-defense-normal-variation-gligoric-system-bernstein-defense.json::__main__::3": {
+      "ply": 4,
+      "san": "e6",
+      "annotation": "Black stakes a claim to the d5 square and prepares Bb4, the hallmark move of the Nimzo-Indian. This setup forces White to make an immediate strategic choice about the center."
+    },
+    "nimzo-indian-defense-romanishin-variation.json::__main__::8": {
+      "ply": 9,
+      "san": "g3",
+      "annotation": "Fianchettoing the kingside bishop prepares a long diagonal attack while sidestepping Black's pin on the c3 knight—a key strategic choice in this variation."
+    },
+    "nimzo-indian-defense-romanishin-variation.json::__main__::9": {
+      "ply": 10,
+      "san": "O-O",
+      "annotation": "Castling kingside removes the king to safety while completing development; Black must now decide whether to release the bishop pair by playing Bxc3 or retreat it."
+    },
+    "nimzo-indian-defense-romanishin-variation.json::__main__::10": {
+      "ply": 11,
+      "san": "Bg2",
+      "annotation": "The fianchettoed bishop lands on g2, dominating the long diagonal toward a6 and applying constant pressure on Black's center and queenside."
+    },
+    "nimzo-indian-defense-simagin-variation.json::__main__::0": {
+      "ply": 1,
+      "san": "d4",
+      "annotation": "The queen's pawn controls the central d4 square and opens lines for the bishop and queen, establishing the foundation for White's central strategy."
+    },
+    "nimzo-indian-defense-spielmann-variation-stahlberg-variation.json::__main__::14": {
+      "ply": 15,
+      "san": "Qc2",
+      "annotation": "Qc2 unpins the d2-bishop and prepares to reroute it to e3, controlling key central squares while keeping the queenside flexible."
+    },
+    "nimzo-indian-defense-spielmann-variation-stahlberg-variation.json::__main__::15": {
+      "ply": 16,
+      "san": "f5",
+      "annotation": "Black strikes at e4's defender with f5, initiating counterplay on the kingside and forcing White to clarify the knight's placement."
+    },
+    "nimzo-indian-defense-spielmann-variation-stahlberg-variation.json::__main__::16": {
+      "ply": 17,
+      "san": "g3",
+      "annotation": "White fianchettoes the kingside bishop, cementing control of the long diagonal and preparing castling while the center remains tense."
+    },
+    "nimzowitsch-defense-scandinavian-variation-bogoljubow-variation-brandics-gambit.json::__main__::5": {
+      "ply": 6,
+      "san": "a6",
+      "annotation": "Black secures the queenside and prepares ...e6, preventing White's d5 pawn from advancing with tempo while keeping the knight on c6 flexible for future rerouting."
+    },
+    "nimzowitsch-defense-scandinavian-variation-bogoljubow-variation-erben-gambit.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central push e4 claims space and opens diagonals for the queen and light-squared bishop, establishing White's classical first move in this opening."
+    },
+    "nimzowitsch-defense-scandinavian-variation-bogoljubow-variation.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central e-pawn claims the middle immediately, seizing space and preparing to support a kingside or queenside build-up depending on Black's response."
+    },
+    "nimzowitsch-defense-scandinavian-variation-exchange-variation-marshall-gambit.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central e4 pawn stakes White's claim to the board and invites Black's counterplay from the flanks, a hallmark of the Scandinavian structures."
+    },
+    "petrov-s-defense-stafford-gambit.json::Stafford Gambit: Ng4 Direct Attack::22": {
+      "ply": 23,
+      "san": "e5",
+      "annotation": "Pushing to e5 seizes space and prevents Black's bishop on f2 from retreating to safety via e3 or d4, keeping White's initiative alive despite the material deficit."
+    },
+    "petrov-s-defense-stafford-gambit.json::Stafford Gambit: h5 Pawn Storm::22": {
+      "ply": 23,
+      "san": "dxe4",
+      "annotation": "Black recaptures toward the center, but White's e4 pawn now stands alone and advanced—a potential target if Black cannot generate enough counterplay."
+    },
+    "petrov-s-defense-stafford-gambit.json::Stafford Gambit: h5 Pawn Storm::24": {
+      "ply": 25,
+      "san": "e5",
+      "annotation": "White pushes e5, seizing space and cutting off Black's bishop on c5 from retreating to e7. This gain of ground supports the upcoming kingside assault."
+    },
+    "petrov-s-defense-stafford-gambit.json::Stafford Gambit: e5 Push Line::8": {
+      "ply": 9,
+      "san": "e5",
+      "annotation": "Pushing the e-pawn to e5 establishes a powerful advanced outpost that cramps Black's pieces, especially the knight on f6, while keeping central space under White's control."
+    },
+    "petrov-s-defense-stafford-gambit.json::Stafford Gambit: e5 Push Line::12": {
+      "ply": 13,
+      "san": "dxe4",
+      "annotation": "Black recaptures on e4, but this leaves the c6 pawn isolated and the d-file half-open—White's pieces will have better access to pressure Black's kingside and center."
+    },
+    "petrov-s-defense-stafford-gambit.json::White Plays d3-Be2-O-O Accurately::4": {
+      "ply": 5,
+      "san": "Nxe5",
+      "annotation": "White seizes the e5 pawn with tempo, forcing Black to respond to the knight threat while White retains space in the center."
+    },
+    "petrov-s-defense-stafford-gambit.json::White Plays d3-Be2-O-O Accurately::6": {
+      "ply": 7,
+      "san": "Nxc6",
+      "annotation": "White forks the queen and f7 weakness, exploiting Black's undefended queenside pieces and gaining material advantage."
+    },
+    "petrov-s-defense-stafford-gambit.json::White Plays d3-Be2-O-O Accurately::7": {
+      "ply": 8,
+      "san": "dxc6",
+      "annotation": "Black recaptures toward the center, but the doubled c-pawns weaken the dark squares and leave Black's king safety compromised."
+    },
+    "petrov-s-defense-stafford-gambit.json::White Plays d3-Be2-O-O Accurately::16": {
+      "ply": 17,
+      "san": "Bxg4",
+      "annotation": "White's bishop captures on g4, removing Black's fianchettoed bishop and opening the h-file toward Black's king."
+    },
+    "petrov-s-defense-stafford-gambit.json::White Plays d3-Be2-O-O Accurately::17": {
+      "ply": 18,
+      "san": "hxg4",
+      "annotation": "Black recaptures with the h-pawn, but this move shatters kingside pawn shelter and exposes the g-file dangerously."
+    },
+    "petrov-s-defense-stafford-gambit.json::White Plays d3-Be2-O-O Accurately::18": {
+      "ply": 19,
+      "san": "Qxg4",
+      "annotation": "White's queen seizes the g4 square with menace, pinning the bishop on g4 while aiming directly at Black's exposed king."
+    },
+    "petrov-s-defense-stafford-gambit.json::White Plays d3-Be2-O-O Accurately::19": {
+      "ply": 20,
+      "san": "Bxg4",
+      "annotation": "Black's bishop recaptures, but White maintains overwhelming pressure on the light squares and g-file with superior piece coordination."
+    },
+    "petrov-s-defense-stafford-gambit.json::Endgame Collapse: Black Has Nothing::4": {
+      "ply": 5,
+      "san": "Nxe5",
+      "annotation": "White's knight seizes the central pawn, but this aggressive grab leaves the knight on e5 exposed to harassment—Black's knight on f6 and queen both eye it immediately."
+    },
+    "petrov-s-defense-stafford-gambit.json::Endgame Collapse: Black Has Nothing::6": {
+      "ply": 7,
+      "san": "Nxc6",
+      "annotation": "White eliminates Black's knight, but the recapture will damage Black's pawn structure decisively, giving White a long-term advantage in the resulting position."
+    },
+    "petrov-s-defense-stafford-gambit.json::Endgame Collapse: Black Has Nothing::7": {
+      "ply": 8,
+      "san": "dxc6",
+      "annotation": "Black recaptures with the d-pawn, creating a doubled c-pawn that will become a chronic weakness and limit Black's piece mobility throughout the middlegame."
+    },
+    "petrov-s-defense-stafford-gambit.json::Endgame Collapse: Black Has Nothing::23": {
+      "ply": 24,
+      "san": "Bxf2+",
+      "annotation": "Black's bishop sacrifices itself on f2 with check, forcing White's king to move and allowing Black counterplay—but White's pieces are too coordinated to let this tactic survive."
+    },
+    "petrov-s-defense-stafford-gambit.json::Endgame Collapse: Black Has Nothing::24": {
+      "ply": 25,
+      "san": "Bxf2",
+      "annotation": "White recaptures the bishop, consolidating material and removing Black's most active piece while keeping the king safe on g1."
+    },
+    "petrov-s-defense-stafford-gambit.json::Endgame Collapse: Black Has Nothing::25": {
+      "ply": 26,
+      "san": "cxd5",
+      "annotation": "Black captures the d5 pawn, but White's pawn is replaced by an even stronger one, and Black's center collapses under White's spatial advantage."
+    },
+    "petrov-s-defense-stafford-gambit.json::Endgame Collapse: Black Has Nothing::26": {
+      "ply": 27,
+      "san": "exd5",
+      "annotation": "White recaptures with the e-pawn, positioning a far-advanced passed pawn on d5 that Black cannot blockade and Black's pieces cannot dislodge—the decisive breakthrough."
+    },
+    "petrov-s-defense-stafford-gambit.json::Endgame Collapse: Black Has Nothing::28": {
+      "ply": 29,
+      "san": "Bxf3",
+      "annotation": "Black exchanges the bishop for White's f3 bishop in desperation, but this only simplifies toward an endgame where White's d5 pawn is unstoppable."
+    },
+    "petrov-s-defense-stafford-gambit.json::Endgame Collapse: Black Has Nothing::29": {
+      "ply": 30,
+      "san": "Qxd5",
+      "annotation": "White recaptures on d5, centralizing the queen and exploiting Black's exposed back rank—the rook on e8 and undefended pieces create tactical vulnerabilities White can now hunt."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::4": {
+      "ply": 5,
+      "san": "Nxe5",
+      "annotation": "White seizes the central pawn and activates the knight to e5, a powerful outpost where it pressures Black's pieces and controls critical squares."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::6": {
+      "ply": 7,
+      "san": "Nxc6",
+      "annotation": "The knight strikes at c6, removing Black's defender and forcing Black to recapture with the d-pawn, which weakens the queenside structure."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::7": {
+      "ply": 8,
+      "san": "dxc6",
+      "annotation": "Black recaptures with the d-pawn, creating a doubled c-pawn and leaving the d-file exposed for White's rooks and queen."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::17": {
+      "ply": 18,
+      "san": "Qxd5",
+      "annotation": "White's queen captures on d5, centralizing with tempo and forcing Black's knight to abandon defense of critical squares."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::19": {
+      "ply": 20,
+      "san": "Qxg2+",
+      "annotation": "Black's queen checks from g2, threatening immediate mate on g1 and forcing White's king into the open where it becomes a target."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::20": {
+      "ply": 21,
+      "san": "Kxg2",
+      "annotation": "The king must move to g2, placing it on an exposed square surrounded by Black's attacking pieces with no safe retreat."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::22": {
+      "ply": 23,
+      "san": "Bxf4",
+      "annotation": "White's light-squared bishop captures on f4, reducing Black's attacking potential and preparing to defend the exposed king."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::24": {
+      "ply": 25,
+      "san": "Kxh3",
+      "annotation": "The king captures on h3, stepping away from immediate threats but remaining far from safety while Black's pieces coordinate for the kill."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::26": {
+      "ply": 27,
+      "san": "Bxf7+",
+      "annotation": "The bishop sacrifice on f7 forces the king into the open; Black's king must capture, abandoning kingside safety for the endgame ahead."
+    },
+    "petrov-s-defense-stafford-gambit.json::Aggressive e5 Refutation::27": {
+      "ply": 28,
+      "san": "Kxf7",
+      "annotation": "White's rooks and queen now dominate Black's exposed king on f7, which cannot return to shelter—the pawn on e5 controls escape squares."
+    },
+    "philidor-defense.json::Early exd4 Mistake::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black's central capture on d4 abandons the d6 pawn's support, leaving it vulnerable to tactics on the long diagonal and permitting White's knight to centralize with tempo."
+    },
+    "philidor-defense.json::Early exd4 Mistake::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "annotation": "Recapturing with the knight plants White's piece on d4, the board's strongest square, where it pressures both d6 and f5 while keeping Black's development restricted."
+    },
+    "pirc-defense-austrian-attack-weiss-variation.json::__main__::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "annotation": "Nf3 completes White's setup, stationing the knight on an ideal square where it supports the e4–d4 pawn chain and controls key central squares like e5 and d4."
+    },
+    "pirc-defense-austrian-attack-weiss-variation.json::__main__::9": {
+      "ply": 10,
+      "san": "O-O",
+      "annotation": "Black castles kingside to tuck the king to safety before White launches the Austrian Attack's typical kingside assault with Bd3 and likely h4–h5."
+    },
+    "pirc-defense-austrian-attack-weiss-variation.json::__main__::10": {
+      "ply": 11,
+      "san": "Bd3",
+      "annotation": "Bd3 aims the bishop at h7, preparing the hallmark h4–h5 pawn storm that defines White's attacking plan in the Weiss Variation."
+    },
+    "pirc-defense-classical-variation-schlechter-variation.json::__main__::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "annotation": "The knight settles on c3, supporting the d4 pawn and preparing to reroute toward e2 or g4 depending on Black's setup."
+    },
+    "pirc-defense-classical-variation-schlechter-variation.json::__main__::5": {
+      "ply": 6,
+      "san": "g6",
+      "annotation": "Black fianchettoes the kingside bishop, preparing to aim it along the long diagonal and control key central squares from afar."
+    },
+    "pirc-defense-classical-variation-schlechter-variation.json::__main__::6": {
+      "ply": 7,
+      "san": "Nf3",
+      "annotation": "White places the knight on f3, reinforcing d4 and keeping options open to support a kingside attack or advance e5 later."
+    },
+    "pirc-defense-classical-variation-schlechter-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "Bg7",
+      "annotation": "The bishop completes Black's fianchetto setup, now exerting pressure on the long diagonal and eyeing White's potentially weak light squares."
+    },
+    "pirc-defense-classical-variation-schlechter-variation.json::__main__::8": {
+      "ply": 9,
+      "san": "h3",
+      "annotation": "A prophylactic move that prevents Black's knight from jumping to g4 and prepares to secure g3 for the bishop or knight later."
+    },
+    "pirc-defense-kholmov-system.json::__main__::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "annotation": "Nc3 supports the d4 pawn and prepares f4, amplifying central pressure before Black completes the fianchetto setup."
+    },
+    "pirc-defense-kholmov-system.json::__main__::5": {
+      "ply": 6,
+      "san": "g6",
+      "annotation": "Black fianchettoes the kingside bishop to challenge White's d4 pawn from the long diagonal and prepare flexible piece placement."
+    },
+    "pirc-defense-kholmov-system.json::__main__::6": {
+      "ply": 7,
+      "san": "Bc4",
+      "annotation": "Bc4 seizes control of f7, the weakest square in Black's kingside once the bishop lands on g7, creating lasting tactical pressure."
+    },
+    "pirc-defense.json::__main__::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "annotation": "Nc3 supports the d4 pawn and prepares f4, a key plan to control the center before Black's fianchetto setup solidifies."
+    },
+    "pirc-defense.json::__main__::5": {
+      "ply": 6,
+      "san": "g6",
+      "annotation": "Black completes the fianchetto, positioning the bishop on the long diagonal to pressure White's center from afar."
+    },
+    "polish-opening-rooks-swap-line.json::__main__::6": {
+      "ply": 7,
+      "san": "a4",
+      "annotation": "White advances the a-pawn to support the b5 outpost and threaten Black's a6 pawn, forcing a critical decision on whether to allow further queenside pressure."
+    },
+    "polish-opening-rooks-swap-line.json::__main__::7": {
+      "ply": 8,
+      "san": "axb5",
+      "annotation": "Black captures on b5, accepting the trade and simplifying the queenside while keeping the position structurally balanced."
+    },
+    "polish-opening-rooks-swap-line.json::__main__::8": {
+      "ply": 9,
+      "san": "axb5",
+      "annotation": "White recaptures with the a-pawn, maintaining a strong pawn on b5 and controlling key central files while keeping material equal."
+    },
+    "polish-opening-rooks-swap-line.json::__main__::9": {
+      "ply": 10,
+      "san": "Rxa1",
+      "annotation": "Black exchanges rooks immediately, eliminating White's potential attacking piece and steering toward a quieter position with queens still on."
+    },
+    "polish-opening-rooks-swap-line.json::__main__::10": {
+      "ply": 11,
+      "san": "Bxa1",
+      "annotation": "White recaptures with the bishop, placing it actively on a1 and completing the characteristic rook trade that defines this line's strategic framework."
+    },
+    "polish-opening-with-d5.json::__main__::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "annotation": "Black's knight move controls e4 and supports the d5 pawn, preventing White from easily establishing a strong central outpost after b4."
+    },
+    "polish-opening-with-d5.json::__main__::4": {
+      "ply": 5,
+      "san": "Nf3",
+      "annotation": "White develops the kingside knight to support the b2 bishop's long diagonal while keeping options open for central play or a kingside assault."
+    },
+    "pterodactyl-defense-eastern-anhanguera.json::__main__::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "annotation": "Nc3 supports the d4 pawn and prepares f4, a key plan to reinforce White's central space advantage before Black can consolidate with d6."
+    },
+    "pterodactyl-defense-eastern-anhanguera.json::__main__::5": {
+      "ply": 6,
+      "san": "c5",
+      "annotation": "Black strikes at d4 immediately with c5, the typical counterattack in this structure. White must now decide whether to maintain the pawn or trade it away."
+    },
+    "pterodactyl-defense-eastern-anhanguera.json::__main__::6": {
+      "ply": 7,
+      "san": "Be3",
+      "annotation": "Be3 keeps d4 defended and readies the kingside. This flexible setup preserves White's option to advance f4 or meet d6 depending on Black's next move."
+    },
+    "pterodactyl-defense-sicilian-siroccopteryx.json::__main__::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "annotation": "The knight controls d5 and e4, preventing Black from pushing the center pawn and seizing critical squares in the middlegame."
+    },
+    "pterodactyl-defense-sicilian-siroccopteryx.json::__main__::5": {
+      "ply": 6,
+      "san": "c5",
+      "annotation": "Black strikes at the center's weak point immediately, attacking d4 and forcing White to clarify the pawn tension early."
+    },
+    "pterodactyl-defense-sicilian-siroccopteryx.json::__main__::6": {
+      "ply": 7,
+      "san": "Nf3",
+      "annotation": "Completing development while keeping d5 blockaded, Nf3 supports the d4 pawn and prepares to castle before Black can create threats."
+    },
+    "pterodactyl-defense-sicilian-siroccopteryx.json::__main__::7": {
+      "ply": 8,
+      "san": "Qa5",
+      "annotation": "The queen move to the rim pins the Nc3 to the king, pressuring White's coordination and threatening tactical complications if the knight shifts."
+    },
+    "pterodactyl-defense-sicilian-siroccopteryx.json::__main__::8": {
+      "ply": 9,
+      "san": "Bc4",
+      "annotation": "The bishop targets f7, Black's softest square, and secures kingside attacking chances while maintaining pressure on Black's position."
+    },
+    "queen-s-gambit-accepted-alekhine-defense-haberditz-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "b5",
+      "annotation": "Black pushes the b-pawn to gain space and prepare c3, attacking White's center while the c4 pawn remains undefended."
+    },
+    "queen-s-gambit-accepted-classical-defense-normal-line.json::__main__::9": {
+      "ply": 10,
+      "san": "c5",
+      "annotation": "Black strikes at the d4 pawn's support, forcing White to clarify the center's balance before launching kingside threats."
+    },
+    "queen-s-gambit-declined-albin-countergambit-balogh-variation.json::__main__::3": {
+      "ply": 4,
+      "san": "e5",
+      "annotation": "Black strikes at the center with e5, creating immediate tension and forcing White to decide whether to accept the central challenge or maintain the gambit setup."
+    },
+    "queen-s-gambit-declined-baltic-defense-argentinian-gambit.json::__main__::9": {
+      "ply": 10,
+      "san": "Nxc6",
+      "annotation": "The knight recaptures on c6, eliminating Black's defender and leaving White a piece up—the bishop on b1 remains trapped with no escape squares."
+    },
+    "queen-s-gambit-declined-charousek-variation-miladinovic-gambit.json::__main__::7": {
+      "ply": 8,
+      "san": "dxe4",
+      "annotation": "Black captures on e4, removing White's pawn and opening the center. This forces White to decide whether to recapture immediately or maintain tension with pieces."
+    },
+    "queen-s-gambit-declined-chigorin-defense-janowski-variation.json::__main__::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "annotation": "Nc3 supports the center and prepares to recapture on c4 if Black exchanges pawns, keeping White's pawn structure intact while developing."
+    },
+    "queen-s-gambit-declined-chigorin-defense-janowski-variation.json::__main__::5": {
+      "ply": 6,
+      "san": "dxc4",
+      "annotation": "Black captures on c4, forcing White to decide whether to recapture immediately or develop first, testing White's preference between material security and tempo."
+    },
+    "queen-s-gambit-declined-chigorin-defense-janowski-variation.json::__main__::6": {
+      "ply": 7,
+      "san": "Nf3",
+      "annotation": "Nf3 develops with tempo by threatening the c4 pawn, pushing Black to commit to defending or surrendering the gambit pawn."
+    },
+    "queen-s-gambit-declined-chigorin-defense-tartakower-gambit.json::__main__::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "annotation": "Nc6 attacks your d4 pawn directly and prepares the Chigorin setup. Black will contest the center with c5, forcing you to decide whether to defend d4 or advance with cxd5."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::2": {
+      "ply": 3,
+      "san": "c4",
+      "annotation": "The gambit pawn advances, staking a claim on d5 and opening the long diagonal for the queen. This move defines White's plan to dominate the center despite being down material."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::3": {
+      "ply": 4,
+      "san": "e6",
+      "annotation": "Black solidifies the center and prevents d5 from becoming an outpost. The e6 pawn also prepares to support the d5 advance, securing Black's counterplay."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::4": {
+      "ply": 5,
+      "san": "Nf3",
+      "annotation": "White develops naturally while keeping an eye on d5. The knight also opens lines for the bishop pair and supports a potential d5 push in the future."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::5": {
+      "ply": 6,
+      "san": "d5",
+      "annotation": "Black strikes at the center before White consolidates. This d5 move directly challenges White's pawn duo and forces a decision about the gambit pawn's fate."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::6": {
+      "ply": 7,
+      "san": "Nc3",
+      "annotation": "The c3 knight joins the defense of the center and prepares to recapture on d5 if needed. This move also opens b1 for the queen and solidifies White's spatial grip."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::7": {
+      "ply": 8,
+      "san": "Nbd7",
+      "annotation": "Black develops the queenside knight to a natural square, supporting d5 and preparing to reroute if White pushes. The d7 knight also eyes e5 and c5 as future outposts."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::8": {
+      "ply": 9,
+      "san": "Bg5",
+      "annotation": "White pins the f6 knight and pressures e6, threatening to undermine Black's pawn shield. This pin forces Black to make a decision about managing the tension on the kingside."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::9": {
+      "ply": 10,
+      "san": "h6",
+      "annotation": "Black immediately challenges the pin before White can exploit it further. The h6 move weakens the kingside slightly but gives Black flexibility to unpin and continue development."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::10": {
+      "ply": 11,
+      "san": "Bh4",
+      "annotation": "Retreating the bishop to h4 keeps pressure on the knight while avoiding the pin on f6. This move preserves White's fianchetto setup and prepares c5, a key pawn break in this structure."
+    },
+    "queen-s-gambit-declined-knight-defense-alekhine-gambit.json::__main__::11": {
+      "ply": 12,
+      "san": "dxc4",
+      "annotation": "Black captures on c4, accepting White's gambit pawn. This opens the d-file toward Black's king and allows White rapid piece activity—the hallmark of White's compensation in this line."
+    },
+    "queen-s-gambit-declined-lasker-defense-bernstein-variation-mar-del-plata-gambit.json::__main__::16": {
+      "ply": 17,
+      "san": "cxd5",
+      "annotation": "Capturing on d5 opens the c-file and solidifies White's central control, forcing Black to recapture and commit to the pawn structure."
+    },
+    "queen-s-gambit-declined-orthodox-defense-classical-variation.json::__main__::27": {
+      "ply": 28,
+      "san": "Qxe5",
+      "annotation": "Recapturing on e5 with the queen centralizes White's heavy piece while controlling key light squares. This move completes the exchange sequence and prepares to exploit Black's slightly passive setup."
+    },
+    "queen-s-gambit-declined-orthodox-defense-janowski-variation.json::__main__::15": {
+      "ply": 16,
+      "san": "dxc4",
+      "annotation": "Recapturing on c4 opens the c-file for White's rook and centralizes the pawn, supporting the d4 strongpoint while preparing to challenge Black's knight on d7."
+    },
+    "queen-s-gambit-declined-pseudo-tarrasch-variation-primitive-pillsbury-variation.json::__main__::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "annotation": "Nf3 prepares to support the center and enable kingside castling while keeping the bishop pair advantage intact."
+    },
+    "queen-s-gambit-declined-pseudo-tarrasch-variation-primitive-pillsbury-variation.json::__main__::9": {
+      "ply": 10,
+      "san": "cxd4",
+      "annotation": "Black captures on d4 to simplify the center and relieve pressure from the advanced c5 pawn."
+    },
+    "queen-s-gambit-declined-pseudo-tarrasch-variation-primitive-pillsbury-variation.json::__main__::10": {
+      "ply": 11,
+      "san": "Qxd4",
+      "annotation": "The queen recaptures with tempo, centralizing on d4 where it controls key squares and keeps the bishop pair advantage."
+    },
+    "queen-s-gambit-declined-ragozin-defense.json::__main__::7": {
+      "ply": 8,
+      "san": "Bb4",
+      "annotation": "The bishop pins the knight to the king, forcing White to make an immediate decision: allow the pin or commit to a central break with cxd5."
+    },
+    "queen-s-gambit-declined-semi-tarrasch-defense-exchange-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "c5",
+      "annotation": "Black strikes at the center with c5, challenging White's d4 pawn and preparing to dissolve the tension on favorable terms rather than allow a centralized white pawn."
+    },
+    "queen-s-gambit-declined-vienna-variation-quiet-variation.json::__main__::6": {
+      "ply": 7,
+      "san": "Nc3",
+      "annotation": "Nc3 adds control over d5 and e4, reinforcing White's central grip while preparing to develop the light-squared bishop."
+    },
+    "queen-s-gambit-declined-vienna-variation-quiet-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "dxc4",
+      "annotation": "Black captures on c4, accepting the gambit pawn and creating space for the light-squared bishop's development on the long diagonal."
+    },
+    "queen-s-gambit-declined-vienna-variation-quiet-variation.json::__main__::8": {
+      "ply": 9,
+      "san": "e3",
+      "annotation": "E3 supports the d4 center and prepares Bxc4, which will regain the pawn while placing the bishop on an active square targeting f7."
+    },
+    "queen-s-gambit.json::Slav Bf5 Headache::7": {
+      "ply": 8,
+      "san": "dxc4",
+      "annotation": "Black captures on c4, accepting a loose pawn that White can pressure with moves like e3 and Bxc4, shifting to a race between Black's piece activity and White's central control."
+    },
+    "queen-s-gambit.json::Slav Bf5 Headache::14": {
+      "ply": 15,
+      "san": "Bxc4",
+      "annotation": "White recaptures on c4 with the bishop, establishing a powerful diagonal toward f7 while Black's kingside remains underdeveloped—this bishop becomes the long-term asset in the resulting endgame structure."
+    },
+    "queen-s-indian-defense-fianchetto-variation-nimzowitsch-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "Ba6",
+      "annotation": "Ba6 pins the c4 pawn to your queen, forcing you to decide whether to defend it or accept the pin—a critical moment in this fianchetto setup."
+    },
+    "queen-s-pawn-game-barry-attack-tarzan-attack.json::__main__::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "annotation": "Black's knight move prepares to contest the center and supports potential ...e6 or ...c5 breaks. This flexible setup avoids committing the pawn structure early."
+    },
+    "queen-s-pawn-game-colle-system.json::__main__::1": {
+      "ply": 2,
+      "san": "d5",
+      "annotation": "Black mirrors your center pawn, establishing a symmetrical pawn structure that invites you to build the Colle System setup with Nf3, e3, and c3."
+    },
+    "queen-s-pawn-game-liedmann-gambit.json::__main__::4": {
+      "ply": 5,
+      "san": "e3",
+      "annotation": "Playing e3 supports the d4 pawn and prepares to recapture on d4 with the queen, keeping Black's center pawn contested rather than allowing it to sit unchallenged."
+    },
+    "queen-s-pawn-game-torre-attack-gr-nfeld-variation-main-line.json::__main__::9": {
+      "ply": 10,
+      "san": "O-O",
+      "annotation": "Castling kingside secures the king before the center opens. This move prepares to reroute the knight from d2 to c4, where it pressures e5 and d6."
+    },
+    "ruy-lopez-closed-balla-variation.json::__main__::11": {
+      "ply": 12,
+      "san": "b5",
+      "annotation": "Black attacks the bishop on a4, forcing it to make a decision. This move is the hallmark of the Balla Variation, immediately challenging White's setup."
+    },
+    "ruy-lopez-closed-breyer-defense.json::__main__::23": {
+      "ply": 24,
+      "san": "c5",
+      "annotation": "Black strikes at the center with c5, challenging White's d4 pawn and forcing a critical decision: allow the tension or resolve it, each path reshaping the pawn structure decisively."
+    },
+    "ruy-lopez-closed-center-attack-basque-gambit.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The e4 pawn seizes the center and opens lines for the queen and light-squared bishop, the foundational move of all Ruy Lopez theory."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::14": {
+      "ply": 15,
+      "san": "c3",
+      "annotation": "White reinforces the center with c3, preparing d4 while preventing Black's knight from landing on d4. This solid pawn structure supports the e4 outpost."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::15": {
+      "ply": 16,
+      "san": "O-O",
+      "annotation": "Black castles kingside to complete piece development and secure the king. This prepares the rook on f8 to potentially contest the e-file."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::16": {
+      "ply": 17,
+      "san": "h3",
+      "annotation": "White gains space on the kingside and prevents Black's knight from jumping to g4, which could harass the f3-knight and bishop on c1."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::17": {
+      "ply": 18,
+      "san": "Na5",
+      "annotation": "Black's knight retreats to a5, pressuring the bishop on b3 and forcing White to decide whether to retreat or allow the knight to reach c4."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::18": {
+      "ply": 19,
+      "san": "Bc2",
+      "annotation": "The bishop slides to c2, stepping aside from pressure while maintaining central influence and preparing to support the queenside with rook maneuvers."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::19": {
+      "ply": 20,
+      "san": "c5",
+      "annotation": "Black strikes at d4, seeking to open lines and reduce White's space advantage. This move forces White into concrete calculation."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::20": {
+      "ply": 21,
+      "san": "d4",
+      "annotation": "White captures and opens the center immediately. The d4 pawn now attacks e5, and White gains space to coordinate pieces toward the center and Black's exposed king."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::21": {
+      "ply": 22,
+      "san": "Qc7",
+      "annotation": "Black's queen reaches c7 to support the weak d6-pawn and eye the a5-knight's defensive role. This centralizes Black's major piece before recapturing on d4."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::22": {
+      "ply": 23,
+      "san": "Nbd2",
+      "annotation": "The knight from b1 completes development while keeping pressure on Black's scattered pieces on a5 and c5. This flexible setup prepares to support the center or shift to the kingside."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::23": {
+      "ply": 24,
+      "san": "cxd4",
+      "annotation": "Black resolves the tension on d4, trading pawns to ease cramped piece placement. Accepting the recapture on d4 avoids allowing White to establish a strong pawn center unopposed."
+    },
+    "ruy-lopez-closed-chigorin-defense-panov-system.json::__main__::24": {
+      "ply": 25,
+      "san": "cxd4",
+      "annotation": "White recaptures with the c-pawn, keeping the d4 outpost centralized and maintaining flexibility for the rooks. The pawn on d4 now anchors White's space advantage in the middlegame."
     }
   },
   "totals": {
-    "calls": 60,
-    "inputTokens": 41204,
-    "outputTokens": 11379,
-    "costUSD": 0.098099
+    "calls": 180,
+    "inputTokens": 121847,
+    "outputTokens": 31286,
+    "costUSD": 0.27827699999999983
   }
 }
