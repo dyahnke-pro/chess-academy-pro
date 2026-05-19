@@ -237,11 +237,12 @@ const GENERIC_ANNOTATION_PATTERNS: RegExp[] = [
   /\bContinuing\s+[A-Z][\w\s'-]+:\s+[A-Za-z][\w+#=!?-]*\s+is a known theory move in this line\b/i,
   // Same fallback variant without the "Continuing" prefix
   /\b[A-Za-z][\w+#=!?-]*\s+is a known theory move in this line\b/i,
-  // ─── Sister fallback: 'stakes a claim in the center' first sentence ───
-  // Second sentence ("Central pawns control space...") is already
-  // suppressed above; the first sentence on its own showed up in
-  // some annotations.
-  /\b[A-Za-z][\w+#=!?-]*\s+stakes a claim in the center\b/i,
+  // NOTE: "stakes a claim in the center" pattern was REJECTED — it
+  // appears in 144+ legitimate hand-authored annotations as natural
+  // chess metaphor (e.g. "Black stakes a claim in the center with
+  // e5"). The original template's second sentence
+  // ("Central pawns control space...") is already suppressed above
+  // and catches the formulaic instances on its own.
 ];
 
 /**
