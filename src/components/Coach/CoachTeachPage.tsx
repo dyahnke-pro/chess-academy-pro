@@ -3494,8 +3494,41 @@ function WalkthroughControls({
     const findMoveCount = tree?.findMove?.length ?? 0;
     const drillCount = tree?.drill?.length ?? 0;
     const punishCount = tree?.punish?.length ?? 0;
+    const pendingJump = walkthrough.pendingStageJump;
+    const pendingLabel: Record<string, string> = {
+      punish: 'trap lines',
+      findMove: 'find-the-move puzzles',
+      concepts: 'quiz questions',
+      drill: 'drill lines',
+    };
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-stage-menu">
+        {pendingJump && (
+          <div
+            className="rounded-lg border border-theme-border bg-theme-surface/80 px-3 py-3 flex items-center gap-3"
+            data-testid="walkthrough-stage-pending"
+            data-pending-stage={pendingJump}
+          >
+            <Loader2 size={16} className="animate-spin shrink-0 text-theme-accent" />
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-semibold text-theme-text">
+                Loading {pendingLabel[pendingJump] ?? pendingJump}…
+              </div>
+              <div className="text-[11px] text-theme-text-muted leading-snug">
+                Hang tight — your pick will open the moment they finish generating.
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => walkthrough.cancelPendingStageJump()}
+              className="text-xs text-theme-text-muted hover:text-theme-text px-2 py-1 rounded-md hover:bg-theme-bg transition-colors shrink-0"
+              data-testid="walkthrough-stage-pending-cancel"
+              aria-label="Cancel and pick a different stage"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
         <div className="text-xs font-medium text-theme-text-muted px-1">
           What's next?
         </div>

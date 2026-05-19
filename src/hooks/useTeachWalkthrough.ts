@@ -369,6 +369,17 @@ export interface UseTeachWalkthroughReturn {
   // ─── Stage 2-5 state (post-walkthrough pedagogy) ────────────
   /** Which stage is active. null when in walkthrough/leaf/menu. */
   activeStage: StageKind | null;
+  /** Set when the student picked a stage whose entries hadn't
+   *  finished generating yet. Surface uses this to render a
+   *  "Loading the X stage…" indicator on the stage menu. The
+   *  wait-for-load effect inside the hook resolves the jump
+   *  automatically when the stage merges in. null = no pending
+   *  jump. */
+  pendingStageJump: StageKind | null;
+  /** Cancel a pending stage jump (UI's "back" / "cancel" affordance
+   *  on the loading indicator). The student returns to the regular
+   *  stage menu and can pick a different stage. */
+  cancelPendingStageJump: () => void;
   /** Index into the active stage's question/line array. */
   stageIndex: number;
   /** For 'quiz' phase: which choice the student picked, or null
@@ -565,6 +576,18 @@ function findLastForkIndex(pathNodes: WalkthroughTreeNode[]): number {
   return -1;
 }
 
+/** Does the requested stage have any entries on the given tree? Used
+ *  by stage-pick paths to decide between "jump now" and "wait for
+ *  background gen to fill it, then jump". */
+function stageHasEntries(
+  stage: StageKind,
+  t: WalkthroughTree | null,
+): boolean {
+  if (!t) return false;
+  const arr = t[stage];
+  return Array.isArray(arr) && arr.length > 0;
+}
+
 export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const [tree, setTree] = useState<WalkthroughTree | null>(null);
   const [phase, setPhase] = useState<WalkthroughPhase>('idle');
@@ -596,6 +619,16 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     { tried: string; expected: string } | null
   >(null);
   const [drillComplete, setDrillComplete] = useState(false);
+  // Pending stage jump — set when the student picks a stage whose
+  // entries haven't generated yet. The polling effect on tree
+  // (mergeStagesFromCache cadence) refreshes the tree from cache; an
+  // effect below watches for the pending stage to fill and then auto-
+  // executes the jump. Production audit (David, 2026-05-19): picking
+  // "punish" via the picker chip the moment the walkthrough started
+  // landed at phase='quiz' with an empty punish[] for 50+ seconds.
+  // Now: stay at 'stage-menu' (where polling is active) until the
+  // stage's data is ready, then jump.
+  const [pendingStageJump, setPendingStageJump] = useState<StageKind | null>(null);
 
   // ─── Inline trap-prompt state (offered at fork nodes) ────────
   // When the walkthrough reaches a fork whose pathSans matches one
@@ -1166,6 +1199,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setTrapQueue([]);
     setTrapIndex(0);
     setTrapFen(null);
+    setPendingStageJump(null);
     deferredTransitionRef.current = null;
   }, [cleanupNarration]);
 
@@ -1262,7 +1296,15 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
    *  menu (or a specific stage if autoSelectStage is provided). Used
    *  by the surface routing's stage-keyword detection ("drill Vienna"
    *  / "Vienna punish" / etc.) so a returning student doesn't have
-   *  to sit through the walkthrough to access drills/punishes/etc. */
+   *  to sit through the walkthrough to access drills/punishes/etc.
+   *
+   *  When autoSelectStage is given but the requested stage's
+   *  entries are still being generated (background gen in flight),
+   *  the call lands at 'stage-menu' with `pendingStageJump` set;
+   *  the wait-for-load effect below executes the jump once the
+   *  stage merges in. This means a user can pick "punish" the
+   *  moment the lesson starts and the surface waits + jumps
+   *  cleanly instead of dropping them in an empty quiz phase. */
   const startAtStageMenu = useCallback(
     (newTree: WalkthroughTree, autoSelectStage?: StageKind): void => {
       cleanupNarration();
@@ -1278,12 +1320,30 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         summary: `skipped walkthrough; landed at ${autoSelectStage ?? 'stage-menu'} for "${newTree.openingName}"`,
       });
       if (autoSelectStage) {
-        setActiveStage(autoSelectStage);
-        setStageIndex(0);
-        setQuizSelected(null);
-        setQuizShowingFeedback(false);
-        setPhase(autoSelectStage === 'drill' ? 'drill' : 'quiz');
+        const hasEntries = stageHasEntries(autoSelectStage, newTree);
+        if (hasEntries) {
+          setActiveStage(autoSelectStage);
+          setStageIndex(0);
+          setQuizSelected(null);
+          setQuizShowingFeedback(false);
+          setPendingStageJump(null);
+          setPhase(autoSelectStage === 'drill' ? 'drill' : 'quiz');
+        } else {
+          // Background gen still running for this stage. Land at
+          // the stage menu (polling is active there) and queue the
+          // jump for when mergeStagesFromCache fills the stage.
+          setPendingStageJump(autoSelectStage);
+          setPhase('stage-menu');
+          void mergeStagesFromCache();
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'useTeachWalkthrough.startAtStageMenu',
+            summary: `queued auto-jump to "${autoSelectStage}" — stage not yet generated for "${newTree.openingName}"`,
+          });
+        }
       } else {
+        setPendingStageJump(null);
         setPhase('stage-menu');
         void mergeStagesFromCache();
       }
@@ -1308,12 +1368,40 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setQuizShowingFeedback(false);
     setDrillWrongMove(null);
     setDrillComplete(false);
+    setPendingStageJump(null);
     setPhase('stage-menu');
   }, [cleanupNarration]);
+
+  const cancelPendingStageJump = useCallback((): void => {
+    setPendingStageJump(null);
+  }, []);
 
   const startStage = useCallback(
     (stage: StageKind): void => {
       cleanupNarration();
+      // Wait-for-load: if the requested stage's entries haven't
+      // generated yet, queue the jump and stay on the stage menu
+      // (where polling is active) until mergeStagesFromCache fills
+      // it in. Production audit (David, 2026-05-19): clicking the
+      // punish stage cold dropped the user into an empty quiz phase
+      // for 50+ seconds. Now: visible wait + clean jump when ready.
+      if (!stageHasEntries(stage, treeRef.current)) {
+        setPendingStageJump(stage);
+        setActiveStage(null);
+        setStageIndex(0);
+        setQuizSelected(null);
+        setQuizShowingFeedback(false);
+        setPhase('stage-menu');
+        void mergeStagesFromCache();
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'useTeachWalkthrough.startStage',
+          summary: `queued auto-jump to "${stage}" — stage not yet generated`,
+        });
+        return;
+      }
+      setPendingStageJump(null);
       setActiveStage(stage);
       setStageIndex(0);
       setQuizSelected(null);
@@ -1330,8 +1418,39 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         setPhase('quiz');
       }
     },
-    [cleanupNarration],
+    [cleanupNarration, mergeStagesFromCache],
   );
+
+  // Wait-for-load effect: when a stage jump is pending and the
+  // stage's entries become available (via mergeStagesFromCache
+  // polling that fires from CoachTeachPage's interval), execute the
+  // queued jump. This is what completes the David-flagged
+  // freedom-of-choice flow: pick punish cold → see "loading the
+  // punish lessons…" → board jumps to punish the instant they merge.
+  useEffect(() => {
+    if (!pendingStageJump) return;
+    if (!stageHasEntries(pendingStageJump, tree)) return;
+    const stage = pendingStageJump;
+    setPendingStageJump(null);
+    setActiveStage(stage);
+    setStageIndex(0);
+    setQuizSelected(null);
+    setQuizShowingFeedback(false);
+    if (stage === 'drill') {
+      setDrillMoveIndex(0);
+      setDrillFen(STARTING_FEN);
+      setDrillComplete(false);
+      setPhase('drill');
+    } else {
+      setPhase('quiz');
+    }
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'useTeachWalkthrough.pendingStageJump.resolved',
+      summary: `pending stage "${stage}" filled — executing auto-jump`,
+    });
+  }, [pendingStageJump, tree]);
 
   const selectDrillLine = useCallback(
     (lineIndex: number): void => {
@@ -1560,6 +1679,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     drillFen,
     drillWrongMove,
     drillComplete,
+    pendingStageJump,
+    cancelPendingStageJump,
     start,
     pause,
     resume,
