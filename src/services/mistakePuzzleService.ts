@@ -63,10 +63,36 @@ async function resolveGameContext(
 // tactical shot worth drilling.
 const CP_LOSS_THRESHOLD = 150;
 const MASTERY_REPETITIONS = 3;
-const MIN_PV_MOVES = 3;
-const MAX_PV_MOVES = 5;
 const PV_EXTENSION_DEPTH = 14;
 const BATCH_GAME_LIMIT = 100;
+
+/** Adaptive PV-length banding by rating. David's directive
+ *  2026-05-19: weaker players see shorter puzzles (1-3 player
+ *  moves), intermediate 4-6, advanced 6+. Was a flat 3-5
+ *  regardless of rating.
+ *
+ *  The bands target *player moves* (= half the UCI PV length since
+ *  every player move alternates with an engine reply). Stockfish
+ *  often returns a 10-12 move PV; we trim to the band's MAX. */
+interface DepthBand { min: number; max: number; label: string; }
+const RATING_BANDS: { upTo: number; band: DepthBand }[] = [
+  { upTo: 1200, band: { min: 1, max: 3, label: 'beginner (1-3)' } },
+  { upTo: 1700, band: { min: 4, max: 6, label: 'intermediate (4-6)' } },
+  { upTo: Infinity, band: { min: 6, max: 10, label: 'advanced (6+)' } },
+];
+function pvBandForRating(rating: number): DepthBand {
+  for (const { upTo, band } of RATING_BANDS) {
+    if (rating <= upTo) return band;
+  }
+  return RATING_BANDS[RATING_BANDS.length - 1].band;
+}
+
+/** Backward-compat constants for any existing callers that still
+ *  reference the old flat range. Picks the BROAD union so the
+ *  default behavior covers all bands until callers migrate to
+ *  pvBandForRating. */
+const MIN_PV_MOVES = 1;
+const MAX_PV_MOVES = 10;
 
 function generateId(): string {
   const timestamp = Date.now().toString(36);
@@ -131,10 +157,15 @@ function classifyGamePhase(fen: string, moveNumber: number): MistakeGamePhase {
 
 /**
  * Extend a PV line by iteratively playing moves and analyzing responses.
- * Targets MIN_PV_MOVES..MAX_PV_MOVES UCI moves (3–5 player moves).
+ * Targets [min..max] UCI moves — defaults to the wide 1..10 band but
+ * callers pass the rating-banded range via pvBandForRating().
+ *
+ * The PV is in UCI half-moves (alternating player/engine). A 3-move
+ * PV is 1.5 player moves; we hold the band at PLAYER-move count by
+ * targeting max = playerMaxMoves * 2.
  */
-async function extendPvLine(fen: string, pvMoves: string[]): Promise<string[]> {
-  if (pvMoves.length >= MIN_PV_MOVES) return pvMoves.slice(0, MAX_PV_MOVES);
+async function extendPvLine(fen: string, pvMoves: string[], min = MIN_PV_MOVES, max = MAX_PV_MOVES): Promise<string[]> {
+  if (pvMoves.length >= max) return pvMoves.slice(0, max);
 
   const extended = [...pvMoves];
   const chess = new Chess(fen);
@@ -148,8 +179,8 @@ async function extendPvLine(fen: string, pvMoves: string[]): Promise<string[]> {
     }
   }
 
-  // Keep extending until we reach MIN_PV_MOVES or MAX_PV_MOVES
-  while (extended.length < MAX_PV_MOVES) {
+  // Keep extending until we reach min or max
+  while (extended.length < max) {
     if (chess.isGameOver()) break;
     try {
       const analysis = await stockfishEngine.analyzePosition(chess.fen(), PV_EXTENSION_DEPTH);
@@ -158,7 +189,7 @@ async function extendPvLine(fen: string, pvMoves: string[]): Promise<string[]> {
 
       // Add moves from the continuation
       for (const move of topLine.moves) {
-        if (extended.length >= MAX_PV_MOVES) break;
+        if (extended.length >= max) break;
         extended.push(move);
         try {
           chess.move({ from: move.slice(0, 2), to: move.slice(2, 4), promotion: move.length > 4 ? move[4] : undefined });
@@ -167,7 +198,7 @@ async function extendPvLine(fen: string, pvMoves: string[]): Promise<string[]> {
         }
       }
 
-      if (extended.length >= MIN_PV_MOVES) break;
+      if (extended.length >= min) break;
     } catch {
       break;
     }
@@ -220,7 +251,17 @@ function determinePlayerColor(
 export async function generateMistakePuzzlesFromGame(
   gameId: string,
   username?: string,
+  /** Player's current rating — used to band the PV length per
+   *  pvBandForRating. Defaults to 1200 (beginner band) when
+   *  unknown. David's directive 2026-05-19: weaker players get
+   *  1-3 move puzzles, intermediate 4-6, advanced 6+. */
+  playerRating = 1200,
 ): Promise<number> {
+  const band = pvBandForRating(playerRating);
+  // UCI PV is half-moves (alternating player/engine); player-move
+  // count is half. Targets are in player-moves, so double for UCI.
+  const uciMin = Math.max(1, band.min * 2 - 1);
+  const uciMax = band.max * 2;
   const metaKey = `mistakes_generated_${gameId}`;
   const existing = await db.meta.get(metaKey);
   if (existing?.value === 'true') return 0;
@@ -239,10 +280,10 @@ export async function generateMistakePuzzlesFromGame(
 
   // If no annotations exist, run Stockfish analysis to find mistakes
   if (!game.annotations || game.annotations.length === 0) {
-    return analyzeGameWithStockfish(game, gameId, sourceMode, playerColor, fens);
+    return analyzeGameWithStockfish(game, gameId, sourceMode, playerColor, fens, uciMin, uciMax);
   }
 
-  return generateFromAnnotations(game, gameId, sourceMode, playerColor, fens);
+  return generateFromAnnotations(game, gameId, sourceMode, playerColor, fens, uciMin, uciMax);
 }
 
 const ANALYSIS_DEPTH = 12;
@@ -257,6 +298,8 @@ async function analyzeGameWithStockfish(
   sourceMode: MistakePuzzleSourceMode,
   playerColor: 'white' | 'black',
   fens: string[],
+  uciMin: number,
+  uciMax: number,
 ): Promise<number> {
   const metaKey = `mistakes_generated_${gameId}`;
   const srsDefaults = createDefaultSrsFields();
@@ -338,12 +381,13 @@ async function analyzeGameWithStockfish(
     }
     if (!bestMove) continue;
 
-    // Extend PV to 3–5 player moves
-    if (pvMoves.length < MIN_PV_MOVES) {
+    // Extend PV to the rating-banded UCI range (player-moves
+    // mapped to UCI half-moves; see pvBandForRating).
+    if (pvMoves.length < uciMin) {
       pvMoves = pvMoves.length > 0 ? pvMoves : [bestMove];
-      pvMoves = await extendPvLine(fen, pvMoves);
-    } else if (pvMoves.length > MAX_PV_MOVES) {
-      pvMoves = pvMoves.slice(0, MAX_PV_MOVES);
+      pvMoves = await extendPvLine(fen, pvMoves, uciMin, uciMax);
+    } else if (pvMoves.length > uciMax) {
+      pvMoves = pvMoves.slice(0, uciMax);
     }
 
     const bestMoveSan = uciToSan(fen, bestMove);
@@ -479,6 +523,8 @@ async function generateFromAnnotations(
   sourceMode: MistakePuzzleSourceMode,
   playerColor: 'white' | 'black',
   fens: string[],
+  uciMin = MIN_PV_MOVES,
+  uciMax = MAX_PV_MOVES,
 ): Promise<number> {
   const metaKey = `mistakes_generated_${gameId}`;
   const srsDefaults = createDefaultSrsFields();
@@ -558,12 +604,13 @@ async function generateFromAnnotations(
 
     if (!bestMove) continue;
 
-    // Extend PV to 3–5 player moves
-    if (pvMoves.length < MIN_PV_MOVES) {
+    // Extend PV to the rating-banded UCI range (player-moves
+    // mapped to UCI half-moves; see pvBandForRating).
+    if (pvMoves.length < uciMin) {
       pvMoves = pvMoves.length > 0 ? pvMoves : [bestMove];
-      pvMoves = await extendPvLine(fen, pvMoves);
-    } else if (pvMoves.length > MAX_PV_MOVES) {
-      pvMoves = pvMoves.slice(0, MAX_PV_MOVES);
+      pvMoves = await extendPvLine(fen, pvMoves, uciMin, uciMax);
+    } else if (pvMoves.length > uciMax) {
+      pvMoves = pvMoves.slice(0, uciMax);
     }
 
     // Tactical quality gate — same filter as the imported-game path.
@@ -674,12 +721,13 @@ async function generateFromAnnotations(
 export async function generateMistakePuzzlesForBatch(
   gameIds: string[],
   username: string,
+  playerRating?: number,
 ): Promise<number> {
   // Limit to most recent games to avoid bogging down the system
   const limitedIds = gameIds.slice(-BATCH_GAME_LIMIT);
   let total = 0;
   for (const id of limitedIds) {
-    total += await generateMistakePuzzlesFromGame(id, username);
+    total += await generateMistakePuzzlesFromGame(id, username, playerRating);
   }
   return total;
 }
@@ -863,6 +911,7 @@ export async function gradeMistakePuzzle(
   id: string,
   grade: SrsGrade,
   correct: boolean,
+  solveTimeMs?: number,
 ): Promise<void> {
   const puzzle = await db.mistakePuzzles.get(id);
   if (!puzzle) return;
@@ -888,7 +937,12 @@ export async function gradeMistakePuzzle(
     newStatus = puzzle.successes > 0 ? 'solved' : 'unsolved';
   }
 
-  await db.mistakePuzzles.update(id, {
+  // Solve-time aggregation for /weaknesses. We track lastSolveTimeMs
+  // (most recent), bestSolveTimeMs (fastest correct only), and a
+  // rolling history capped at the last 10 attempts. Best stays null
+  // until the puzzle is solved correctly so a fast wrong attempt
+  // doesn't poison the "best" metric.
+  const updates: Partial<MistakePuzzle> = {
     srsInterval: srs.interval,
     srsEaseFactor: srs.easeFactor,
     srsRepetitions: srs.repetitions,
@@ -897,7 +951,21 @@ export async function gradeMistakePuzzle(
     status: newStatus,
     attempts: newAttempts,
     successes: newSuccesses,
-  });
+  };
+
+  if (typeof solveTimeMs === 'number' && solveTimeMs > 0) {
+    updates.lastSolveTimeMs = solveTimeMs;
+    const history = [solveTimeMs, ...(puzzle.solveTimes ?? [])].slice(0, 10);
+    updates.solveTimes = history;
+    if (correct) {
+      const prevBest = puzzle.bestSolveTimeMs;
+      updates.bestSolveTimeMs = typeof prevBest === 'number'
+        ? Math.min(prevBest, solveTimeMs)
+        : solveTimeMs;
+    }
+  }
+
+  await db.mistakePuzzles.update(id, updates);
 
   // Invalidate the tactical profile cache so it recomputes with fresh data
   await db.meta.delete('tactical_profile');

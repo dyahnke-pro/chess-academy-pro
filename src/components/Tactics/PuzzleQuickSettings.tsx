@@ -28,6 +28,8 @@ export function PuzzleQuickSettings(): JSX.Element {
 
   const puzzleTimerOn = useAppStore((s) => s.puzzleTimerOn);
   const togglePuzzleTimer = useAppStore((s) => s.togglePuzzleTimer);
+  const puzzleClockTargetSec = useAppStore((s) => s.puzzleClockTargetSec);
+  const setPuzzleClockTargetSec = useAppStore((s) => s.setPuzzleClockTargetSec);
   const puzzleShowTacticName = useAppStore((s) => s.puzzleShowTacticName);
   const togglePuzzleShowTacticName = useAppStore((s) => s.togglePuzzleShowTacticName);
   const coachVoiceOn = useAppStore((s) => s.coachVoiceOn);
@@ -56,12 +58,40 @@ export function PuzzleQuickSettings(): JSX.Element {
         <div className="px-3 pb-3 space-y-1.5" data-testid="puzzle-quick-settings-panel">
           <Toggle
             icon={<Timer size={14} />}
-            label="Puzzle timer"
-            sublabel="Elapsed time counter on each puzzle"
+            label="Countdown clock"
+            sublabel={
+              puzzleTimerOn
+                ? `Visible countdown — adds time pressure (target ${puzzleClockTargetSec}s)`
+                : 'Off: timer runs hidden and logs solve time to weaknesses'
+            }
             checked={puzzleTimerOn}
             onChange={() => togglePuzzleTimer()}
             testId="qs-toggle-timer"
           />
+          {puzzleTimerOn && (
+            <div className="pl-7 pr-2 pb-1" data-testid="qs-clock-target-row">
+              <div className="flex items-center justify-between text-[11px] text-theme-text-muted mb-1">
+                <span>Target time</span>
+                <span className="tabular-nums font-semibold text-theme-text">
+                  {puzzleClockTargetSec}s
+                </span>
+              </div>
+              <input
+                type="range"
+                min={15}
+                max={180}
+                step={15}
+                value={puzzleClockTargetSec}
+                onChange={(e) => setPuzzleClockTargetSec(Number(e.target.value))}
+                className="w-full accent-theme-accent"
+                data-testid="qs-clock-target-slider"
+              />
+              <div className="flex justify-between text-[10px] text-theme-text-muted mt-0.5">
+                <span>15s</span>
+                <span>3:00</span>
+              </div>
+            </div>
+          )}
           <Toggle
             icon={<Eye size={14} />}
             label="Show tactic name"

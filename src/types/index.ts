@@ -86,6 +86,18 @@ export interface MistakePuzzle {
   attempts: number;
   successes: number;
   tacticType?: TacticType | null;
+  /** Last solve-attempt duration in ms. Populated by gradeMistakePuzzle
+   *  from the board's elapsedMs timer. Drives /weaknesses aggregation:
+   *  "slow on skewers" / "fast on forks". Always recorded regardless
+   *  of the visible-clock toggle — that's the whole point of the
+   *  background-mode default. */
+  lastSolveTimeMs?: number;
+  /** Best (fastest correct) solve time in ms across all attempts.
+   *  Null if never solved correctly. */
+  bestSolveTimeMs?: number;
+  /** Rolling history of solve times in ms (most-recent first, capped
+   *  at the last 10 attempts to keep the record small). */
+  solveTimes?: number[];
 }
 
 // ─── Opening Annotations ────────────────────────────────────────────────────
@@ -512,10 +524,19 @@ export interface UserPreferences {
    *  student can find the tactic blind. Toggle lives next to the
    *  chip itself. Defaults to true (named-tactic shown). */
   puzzleShowTacticName?: boolean;
-  /** Show an elapsed-time badge on each puzzle. Counts up from 0
-   *  on every new puzzle. Toggle lives in the /tactics Quick
-   *  Settings panel. Defaults to true (timer on). */
+  /** When ON: show a visible countdown chip from puzzleClockTargetSec
+   *  → 0 (time-pressure mode, opt-in). When OFF (default): clock
+   *  runs silently in the background, count-up only, and gets
+   *  logged into the puzzle record as solveTimeMs so /weaknesses
+   *  can aggregate "slow on X tactic" insights. David's design
+   *  2026-05-19: "count up if no setting is chosen but run in
+   *  background. this information will be sent to weaknesses. if
+   *  user selects a timer then it shows on page and counts down
+   *  to add time pressure." */
   puzzleTimerOn?: boolean;
+  /** Target seconds for the visible countdown mode. Defaults to 60.
+   *  Ignored when puzzleTimerOn is false (background mode). */
+  puzzleClockTargetSec?: number;
   dailySessionMinutes: number;
   aiProvider: AiProvider;
   apiKeyEncrypted: string | null;

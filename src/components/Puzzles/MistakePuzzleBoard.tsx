@@ -86,7 +86,13 @@ function extractReplayMoves(pgn: string, _mistakeFen: string, playerColor: 'whit
 
 interface MistakePuzzleBoardProps {
   puzzle: MistakePuzzle;
-  onComplete: (correct: boolean) => void;
+  /** Called when the student finishes the puzzle (either correct
+   *  or after revealing). solveTimeMs is the elapsed playing time
+   *  in ms — hosts pipe it to gradeMistakePuzzle for /weaknesses
+   *  aggregation. Optional so legacy callers that don't care still
+   *  work; the board always tracks it regardless of the visible-
+   *  clock toggle (per David's 2026-05-19 background-mode design). */
+  onComplete: (correct: boolean, solveTimeMs?: number) => void;
   /** Skip the internal game replay — use when the caller already showed context */
   skipReplayContext?: boolean;
 }
@@ -146,9 +152,12 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const puzzleShowTacticName = useAppStore((s) => s.puzzleShowTacticName);
   const togglePuzzleShowTacticName = useAppStore((s) => s.togglePuzzleShowTacticName);
   const puzzleTimerOn = useAppStore((s) => s.puzzleTimerOn);
-  // Elapsed-time counter for this puzzle. Starts ticking when state
-  // transitions to 'playing' (after the replay context clears).
-  // Freezes on 'correct' / 'incorrect'. Resets on puzzle change.
+  const puzzleClockTargetSec = useAppStore((s) => s.puzzleClockTargetSec);
+  // Elapsed-time counter for this puzzle. Always runs (regardless of
+  // puzzleTimerOn) — when the chip is hidden, we still need the value
+  // to log into the mistakePuzzle record for /weaknesses aggregation.
+  // David's design 2026-05-19: "count up if no setting is chosen but
+  // run in background. this information will be sent to weaknesses."
   const [elapsedMs, setElapsedMs] = useState(0);
   const elapsedStartRef = useRef<number | null>(null);
   useEffect(() => {
@@ -157,7 +166,6 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     elapsedStartRef.current = null;
   }, [puzzle.id]);
   useEffect(() => {
-    if (!puzzleTimerOn) return;
     if (state !== 'playing') {
       // Freeze on non-playing states (replay / correct / incorrect /
       // loading). Resume on next play.
@@ -176,7 +184,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     // elapsedMs intentionally omitted — would reset the interval on
     // every tick.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, puzzleTimerOn]);
+  }, [state]);
   const [whyLoading, setWhyLoading] = useState(false);
   const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
   // Coach chat — visible after the puzzle is solved (state === 'correct').
@@ -246,8 +254,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     chessRef.current = chess;
     movesRef.current = parseUciMoves(puzzle.moves);
     if (movesRef.current.length === 0) {
-      // No moves in puzzle — skip it
-      onComplete(false);
+      // No moves in puzzle — skip it. No elapsed value to report since
+      // the student never had a chance to play.
+      onComplete(false, 0);
       return;
     }
 
@@ -659,8 +668,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           } catch {
             // Invalid opponent move — puzzle data is corrupted, fail gracefully
             setState('incorrect');
+            const elapsedAtFail = Math.round(elapsedMs);
             completionTimerRef.current = setTimeout(() => {
-              onComplete(false);
+              onComplete(false, elapsedAtFail);
             }, 1200);
             return;
           }
@@ -752,22 +762,37 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
             {puzzle.openingName}
           </span>
         )}
-        {/* Elapsed-time badge — toggleable via /tactics Quick
-            Settings (puzzleTimerOn). Resets per puzzle, freezes on
-            correct/incorrect/replay states. */}
+        {/* Countdown chip — visible only when puzzleTimerOn (opt-in
+            time pressure). Counts down from puzzleClockTargetSec → 0
+            and turns red in the final 10s / when expired. When OFF
+            the timer still runs silently in the background and gets
+            logged to the mistake-puzzle record for /weaknesses.
+            David's design 2026-05-19: "if user selects a timer then
+            it shows on page and counts down to add time pressure." */}
         {puzzleTimerOn && (
-          <span
-            className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded bg-theme-surface text-theme-text-muted border border-theme-border tabular-nums"
-            data-testid="puzzle-elapsed-timer"
-          >
-            <Clock size={10} />
-            {(() => {
-              const totalSec = Math.floor(elapsedMs / 1000);
-              const m = Math.floor(totalSec / 60);
-              const s = totalSec % 60;
-              return `${m}:${s.toString().padStart(2, '0')}`;
-            })()}
-          </span>
+          (() => {
+            const remainingMs = Math.max(0, puzzleClockTargetSec * 1000 - elapsedMs);
+            const remainingSec = Math.ceil(remainingMs / 1000);
+            const expired = remainingMs <= 0;
+            const urgent = remainingMs > 0 && remainingMs <= 10_000;
+            const m = Math.floor(remainingSec / 60);
+            const s = remainingSec % 60;
+            const cls = expired
+              ? 'border-red-500/60 bg-red-500/15 text-red-400'
+              : urgent
+                ? 'border-amber-500/60 bg-amber-500/15 text-amber-300'
+                : 'border-theme-border bg-theme-surface text-theme-text-muted';
+            return (
+              <span
+                className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded border tabular-nums ${cls}`}
+                data-testid="puzzle-countdown-clock"
+                data-expired={expired ? 'true' : 'false'}
+              >
+                <Clock size={10} />
+                {`${m}:${s.toString().padStart(2, '0')}`}
+              </span>
+            );
+          })()
         )}
         {/* Tactic-name chip — surfaces the named pattern (Skewer /
             Fork / Pin / etc.) so the student can target their
@@ -996,7 +1021,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
               outro narration. */}
           <button
             type="button"
-            onClick={() => onComplete(!hasMadeMistakeRef.current)}
+            onClick={() => onComplete(!hasMadeMistakeRef.current, Math.round(elapsedMs))}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
             data-testid="puzzle-next-btn"
           >

@@ -160,9 +160,9 @@ export function MyMistakesPage(): JSX.Element {
     void loadData();
   }, [activePuzzle, loadData]);
 
-  const handlePuzzleComplete = useCallback((correct: boolean): void => {
+  const handlePuzzleComplete = useCallback((correct: boolean, solveTimeMs?: number): void => {
     if (!activePuzzle) return;
-    void gradeMistakePuzzle(activePuzzle.id, correct ? 'good' : 'again', correct).then(() => {
+    void gradeMistakePuzzle(activePuzzle.id, correct ? 'good' : 'again', correct, solveTimeMs).then(() => {
       setActivePuzzle(null);
       void loadData();
     });

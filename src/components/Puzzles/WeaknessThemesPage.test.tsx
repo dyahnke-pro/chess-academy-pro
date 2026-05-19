@@ -225,7 +225,7 @@ describe('WeaknessThemesPage', () => {
 
     await user.click(screen.getByTestId('solve-correct'));
 
-    expect(mockGradeMistakePuzzle).toHaveBeenCalledWith('mp1', 'good', true);
+    expect(mockGradeMistakePuzzle).toHaveBeenCalledWith('mp1', 'good', true, undefined);
   });
 
   it('shows summary with no drills when session is empty', async () => {

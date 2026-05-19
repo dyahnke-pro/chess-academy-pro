@@ -89,7 +89,7 @@ export function WeaknessThemesPage(): JSX.Element {
     }
   }, [completedSet]);
 
-  const handleComplete = useCallback(async (correct: boolean): Promise<void> => {
+  const handleComplete = useCallback(async (correct: boolean, solveTimeMs?: number): Promise<void> => {
     const item = drillItems.at(currentIndex);
     if (!item) return;
     if (completedSet.has(currentIndex)) return;
@@ -102,7 +102,7 @@ export function WeaknessThemesPage(): JSX.Element {
     }
 
     const grade = correct ? 'good' : 'again';
-    await gradeMistakePuzzle(item.mistakePuzzle.id, grade, correct);
+    await gradeMistakePuzzle(item.mistakePuzzle.id, grade, correct, solveTimeMs);
   }, [drillItems, currentIndex, completedSet]);
 
   const goNext = useCallback((): void => {
@@ -294,7 +294,7 @@ export function WeaknessThemesPage(): JSX.Element {
           <MistakePuzzleBoard
             key={currentItem.mistakePuzzle.id}
             puzzle={currentItem.mistakePuzzle}
-            onComplete={(correct) => void handleComplete(correct)}
+            onComplete={(correct, solveTimeMs) => void handleComplete(correct, solveTimeMs)}
           />
 
           {/* Next button */}
