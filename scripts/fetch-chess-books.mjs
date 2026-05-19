@@ -1,141 +1,183 @@
 #!/usr/bin/env node
 /**
- * Fetches public-domain chess instruction books from Project Gutenberg.
+ * Fetches public-domain chess instruction books from Project Gutenberg
+ * by SEARCHING the catalog — no hardcoded IDs (the previous version
+ * had memory-guessed IDs that turned out to be unrelated books).
  *
- * Run from David's laptop (NOT the Claude sandbox — gutenberg.org is
- * blocked). The fetched .txt files commit to
- * docs/audit-runs/2026-05-19-chess-books-raw/ and a subsequent
- * sandbox-side script parses + tags them into
- * src/data/chess-concepts.json.
+ * Uses gutendex.com, a stable open JSON API mirror of Gutenberg's
+ * catalog (https://gutendex.com/). Searches by author+title, picks
+ * the best match, fetches the .txt body from Gutenberg.
  *
+ * Run on David's laptop:
  *   node scripts/fetch-chess-books.mjs
  *
- * All books are confirmed US public domain (pre-1929) and freely
- * mirrored by Project Gutenberg. URLs use Gutenberg's stable
- * /cache/epub/<id>/pg<id>.txt pattern; falls back to /files/<id>/
- * if the cache URL 404s.
+ * Output:
+ *   docs/audit-runs/2026-05-19-chess-books-raw/<slug>.txt
+ *   docs/audit-runs/2026-05-19-chess-books-raw/manifest.json
+ *
+ * The script LOGS each match — verify the fetched title/author
+ * before relying on the content.
  */
 
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, rm } from 'node:fs/promises';
 
 const OUT_DIR = 'docs/audit-runs/2026-05-19-chess-books-raw';
 
 const BOOKS = [
-  // Capablanca — World Champion 1921-1927, considered the most natural
-  // positional player ever. Chess Fundamentals (1921) is THE classic
-  // intro to positional principles + endgame technique.
   {
-    id: 45474,
-    slug: 'capablanca-chess-fundamentals-1921',
-    author: 'José Raúl Capablanca',
-    title: 'Chess Fundamentals',
-    year: 1921,
-    focus: 'positional principles, endgame technique, pawn structures',
+    slug: 'capablanca-chess-fundamentals',
+    searchTerms: ['Chess Fundamentals'],
+    authorMatch: /capablanca/i,
+    focus: 'positional principles, endgame technique',
   },
-  // Lasker — World Champion 1894-1921. Common Sense in Chess is his
-  // 1895 London lecture series, distilled. Carries the "fight for the
-  // initiative, every move has a purpose" ethos.
   {
-    id: 25888,
-    slug: 'lasker-common-sense-in-chess-1896',
-    author: 'Emanuel Lasker',
-    title: 'Common Sense in Chess',
-    year: 1896,
-    focus: 'opening principles, middlegame strategy, tempo',
+    slug: 'capablanca-my-chess-career',
+    searchTerms: ['My Chess Career'],
+    authorMatch: /capablanca/i,
+    focus: 'annotated games, attacking + positional play',
   },
-  // Edward Lasker — strong master + popularizer. Chess Strategy is a
-  // very practical 1915 book; covers opening + middlegame planning at
-  // a level a student can actually use.
   {
-    id: 1564,
-    slug: 'edward-lasker-chess-strategy-1915',
-    author: 'Edward Lasker',
-    title: 'Chess Strategy',
-    year: 1915,
-    focus: 'opening systems, planning, classical principles',
+    slug: 'emanuel-lasker-common-sense-in-chess',
+    searchTerms: ['Common Sense in Chess'],
+    authorMatch: /^(?!.*edward).*lasker/i,
+    focus: 'opening principles, middlegame strategy',
   },
-  // Mason — late-1800s strong master, instructional writer. Principles
-  // of Chess (1894) carries Steinitz-era positional theory in plain
-  // prose; a good source for early formulations of "centre", "weak
-  // squares", "open files".
   {
-    id: 50469,
-    slug: 'mason-principles-of-chess-1894',
-    author: 'James Mason',
-    title: 'The Principles of Chess in Theory and Practice',
-    year: 1894,
+    slug: 'edward-lasker-chess-strategy',
+    searchTerms: ['Chess Strategy'],
+    authorMatch: /edward.*lasker/i,
+    focus: 'opening systems, planning',
+  },
+  {
+    slug: 'mason-principles-of-chess',
+    searchTerms: ['Principles of Chess'],
+    authorMatch: /mason/i,
     focus: 'classical positional principles',
   },
-  // Pillsbury — American master, brilliant attacker. Pillsbury's Chess
-  // Career (1922 ed.) collects his attacking games with notes.
   {
-    id: 38445,
-    slug: 'pillsbury-chess-career-1922',
-    author: 'Harry Nelson Pillsbury / P. W. Sergeant',
-    title: "Pillsbury's Chess Career",
-    year: 1922,
+    slug: 'pillsbury-chess-career',
+    searchTerms: ['Pillsbury'],
+    authorMatch: /sergeant|pillsbury/i,
     focus: 'attacking play, sacrificial themes',
+  },
+  {
+    slug: 'staunton-chess-players-handbook',
+    searchTerms: ["Chess Player's Handbook"],
+    authorMatch: /staunton/i,
+    focus: 'classical opening theory',
+  },
+  {
+    slug: 'morphy-paul-chess-of-paul-morphy',
+    searchTerms: ['Morphy', 'chess'],
+    authorMatch: /morphy|lange/i,
+    focus: 'attacking play, romantic era',
   },
 ];
 
-async function fetchOne(book) {
-  const urls = [
-    `https://www.gutenberg.org/cache/epub/${book.id}/pg${book.id}.txt`,
-    `https://www.gutenberg.org/files/${book.id}/${book.id}-0.txt`,
-    `https://www.gutenberg.org/files/${book.id}/${book.id}.txt`,
-  ];
-  for (const url of urls) {
-    try {
-      const r = await fetch(url, {
-        headers: { 'user-agent': 'chess-academy-pro/1.0 (research; david@yahnke.pro)' },
-      });
-      if (!r.ok) {
-        console.log(`  ${url} -> ${r.status}, trying next`);
-        continue;
-      }
-      const text = await r.text();
-      if (text.length < 10000) {
-        console.log(`  ${url} -> too short (${text.length} bytes), trying next`);
-        continue;
-      }
-      return { text, url };
-    } catch (e) {
-      console.log(`  ${url} -> error ${e.message}, trying next`);
-    }
-  }
+async function searchGutendex(terms, authorMatch) {
+  const query = terms.join(' ');
+  const url = `https://gutendex.com/books?search=${encodeURIComponent(query)}&languages=en`;
+  const r = await fetch(url, { headers: { 'user-agent': 'chess-academy-pro/1.0' } });
+  if (!r.ok) throw new Error(`gutendex ${r.status}`);
+  const data = await r.json();
+  if (!data.results || data.results.length === 0) return null;
+  // Match results by author
+  const matches = data.results.filter(b => {
+    const authors = (b.authors || []).map(a => a.name).join(' ');
+    return authorMatch.test(authors);
+  });
+  if (matches.length === 0) return null;
+  // Sort by download count (popularity proxy)
+  matches.sort((a, b) => (b.download_count || 0) - (a.download_count || 0));
+  return matches[0];
+}
+
+function pickTextUrl(formats) {
+  // Gutenberg formats include text/plain in multiple encodings.
+  // Prefer plain UTF-8.
+  const keys = Object.keys(formats);
+  const utf8 = keys.find(k => k === 'text/plain; charset=utf-8');
+  if (utf8) return formats[utf8];
+  const ascii = keys.find(k => k === 'text/plain; charset=us-ascii');
+  if (ascii) return formats[ascii];
+  const plain = keys.find(k => k.startsWith('text/plain'));
+  if (plain) return formats[plain];
   return null;
 }
 
+async function fetchBookText(book) {
+  console.log(`\n[${book.slug}] searching "${book.searchTerms.join(' / ')}" by ${book.authorMatch}`);
+  const match = await searchGutendex(book.searchTerms, book.authorMatch);
+  if (!match) {
+    console.log(`  NO MATCH FOUND on gutendex`);
+    return null;
+  }
+  const authors = (match.authors || []).map(a => a.name).join('; ');
+  console.log(`  MATCH: #${match.id} "${match.title}" — ${authors}`);
+  console.log(`  downloads: ${match.download_count}, subjects: ${(match.subjects || []).slice(0, 3).join(' / ')}`);
+  const textUrl = pickTextUrl(match.formats || {});
+  if (!textUrl) {
+    console.log(`  NO PLAIN-TEXT FORMAT on this book`);
+    return null;
+  }
+  const tr = await fetch(textUrl, { headers: { 'user-agent': 'chess-academy-pro/1.0' } });
+  if (!tr.ok) {
+    console.log(`  fetch ${textUrl} -> ${tr.status}`);
+    return null;
+  }
+  const text = await tr.text();
+  console.log(`  fetched ${(text.length / 1024).toFixed(0)}KB`);
+  return { match, textUrl, text, authors };
+}
+
 async function main() {
+  // Wipe the previous wrong fetch
+  try {
+    await rm(OUT_DIR, { recursive: true, force: true });
+  } catch {}
   await mkdir(OUT_DIR, { recursive: true });
-  console.log(`Fetching ${BOOKS.length} chess books to ${OUT_DIR}/\n`);
+  console.log(`Fetching chess books via gutendex.com search → ${OUT_DIR}/`);
   const manifest = [];
   for (const book of BOOKS) {
-    console.log(`[${book.slug}] ${book.author} — ${book.title} (${book.year})`);
-    const result = await fetchOne(book);
-    if (!result) {
-      console.log(`  FAILED — could not fetch from any URL`);
-      manifest.push({ ...book, status: 'failed' });
-      continue;
+    try {
+      const result = await fetchBookText(book);
+      if (!result) {
+        manifest.push({ ...book, status: 'no-match' });
+        continue;
+      }
+      const path = `${OUT_DIR}/${book.slug}.txt`;
+      await writeFile(path, result.text, 'utf-8');
+      manifest.push({
+        slug: book.slug,
+        gutenbergId: result.match.id,
+        title: result.match.title,
+        authors: result.authors,
+        searchTerms: book.searchTerms,
+        focus: book.focus,
+        textUrl: result.textUrl,
+        bytes: result.text.length,
+        path: path.replace(`${OUT_DIR}/`, ''),
+        subjects: (result.match.subjects || []).slice(0, 5),
+        status: 'fetched',
+      });
+    } catch (e) {
+      console.log(`  ERROR: ${e.message}`);
+      manifest.push({ ...book, status: 'error', error: e.message });
     }
-    const path = `${OUT_DIR}/${book.slug}.txt`;
-    await writeFile(path, result.text, 'utf-8');
-    console.log(`  ✓ ${(result.text.length / 1024).toFixed(0)}KB from ${result.url}`);
-    manifest.push({
-      ...book,
-      status: 'fetched',
-      sourceUrl: result.url,
-      bytes: result.text.length,
-      path: path.replace(`${OUT_DIR}/`, ''),
-    });
   }
   await writeFile(
     `${OUT_DIR}/manifest.json`,
     JSON.stringify({ fetchedAt: new Date().toISOString(), books: manifest }, null, 2)
   );
+  console.log(`\n=== SUMMARY ===`);
+  const ok = manifest.filter(b => b.status === 'fetched');
+  console.log(`fetched: ${ok.length}/${BOOKS.length}`);
+  for (const b of ok) console.log(`  #${b.gutenbergId.toString().padEnd(6)} ${b.title} — ${b.authors}`);
+  const failed = manifest.filter(b => b.status !== 'fetched');
+  if (failed.length) {
+    console.log(`\nNOT fetched (re-check on gutenberg.org and update searchTerms/authorMatch):`);
+    for (const b of failed) console.log(`  ${b.slug}: ${b.status}`);
+  }
   console.log(`\nManifest at ${OUT_DIR}/manifest.json`);
-  const ok = manifest.filter(b => b.status === 'fetched').length;
-  console.log(`Done: ${ok}/${BOOKS.length} books fetched.`);
 }
-
 main().catch(e => { console.error(e); process.exit(1); });
