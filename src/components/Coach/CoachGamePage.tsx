@@ -4030,7 +4030,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           {/* Row 1: Back + title + color selector + analysis toggles */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3">
-              <button onClick={() => void navigate('/coach')} className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center">
+              <button
+                onClick={() => void navigate('/coach')}
+                className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label="Back to coach hub"
+              >
                 <ArrowLeft size={20} className="text-theme-text" />
               </button>
               <div>
