@@ -1,0 +1,65 @@
+{
+  "fetchedAt": "2026-05-19T18:33:04.603Z",
+  "books": [
+    {
+      "id": 45474,
+      "slug": "capablanca-chess-fundamentals-1921",
+      "author": "José Raúl Capablanca",
+      "title": "Chess Fundamentals",
+      "year": 1921,
+      "focus": "positional principles, endgame technique, pawn structures",
+      "status": "fetched",
+      "sourceUrl": "https://www.gutenberg.org/cache/epub/45474/pg45474.txt",
+      "bytes": 295251,
+      "path": "capablanca-chess-fundamentals-1921.txt"
+    },
+    {
+      "id": 25888,
+      "slug": "lasker-common-sense-in-chess-1896",
+      "author": "Emanuel Lasker",
+      "title": "Common Sense in Chess",
+      "year": 1896,
+      "focus": "opening principles, middlegame strategy, tempo",
+      "status": "fetched",
+      "sourceUrl": "https://www.gutenberg.org/cache/epub/25888/pg25888.txt",
+      "bytes": 378643,
+      "path": "lasker-common-sense-in-chess-1896.txt"
+    },
+    {
+      "id": 1564,
+      "slug": "edward-lasker-chess-strategy-1915",
+      "author": "Edward Lasker",
+      "title": "Chess Strategy",
+      "year": 1915,
+      "focus": "opening systems, planning, classical principles",
+      "status": "fetched",
+      "sourceUrl": "https://www.gutenberg.org/cache/epub/1564/pg1564.txt",
+      "bytes": 1258985,
+      "path": "edward-lasker-chess-strategy-1915.txt"
+    },
+    {
+      "id": 50469,
+      "slug": "mason-principles-of-chess-1894",
+      "author": "James Mason",
+      "title": "The Principles of Chess in Theory and Practice",
+      "year": 1894,
+      "focus": "classical positional principles",
+      "status": "fetched",
+      "sourceUrl": "https://www.gutenberg.org/cache/epub/50469/pg50469.txt",
+      "bytes": 140826,
+      "path": "mason-principles-of-chess-1894.txt"
+    },
+    {
+      "id": 38445,
+      "slug": "pillsbury-chess-career-1922",
+      "author": "Harry Nelson Pillsbury / P. W. Sergeant",
+      "title": "Pillsbury's Chess Career",
+      "year": 1922,
+      "focus": "attacking play, sacrificial themes",
+      "status": "fetched",
+      "sourceUrl": "https://www.gutenberg.org/cache/epub/38445/pg38445.txt",
+      "bytes": 280067,
+      "path": "pillsbury-chess-career-1922.txt"
+    }
+  ]
+}
