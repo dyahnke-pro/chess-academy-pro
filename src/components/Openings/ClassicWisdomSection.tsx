@@ -83,27 +83,45 @@ export function ClassicWisdomSection({ openingName, renderNarrationButton }: Cla
           className="border-l-2 border-amber-400/40 pl-3"
           data-testid="classic-wisdom-definition"
         >
-          <p className="text-sm text-theme-text-muted leading-relaxed">
+          <p className="text-sm text-theme-text-muted leading-relaxed whitespace-pre-wrap">
             {definition.description}
           </p>
-          <div className="mt-2 flex flex-wrap items-center gap-1.5">
-            <span className="text-[10px] uppercase tracking-wider text-amber-400/80">Character</span>
-            <span className="text-xs text-theme-text-muted">{definition.character}</span>
-          </div>
-          <ul className="mt-1.5 space-y-1">
-            {definition.keyIdeas.map((idea, i) => (
-              <li
-                key={i}
-                className="text-xs text-theme-text-muted flex gap-2"
-                data-testid="classic-wisdom-idea"
-              >
-                <span className="text-amber-400/70 mt-0.5 shrink-0">·</span>
-                <span>{idea}</span>
-              </li>
-            ))}
-          </ul>
+          {definition.character ? (
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              <span className="text-[10px] uppercase tracking-wider text-amber-400/80">Character</span>
+              <span className="text-xs text-theme-text-muted">{definition.character}</span>
+            </div>
+          ) : null}
+          {definition.keyIdeas.length > 0 ? (
+            <ul className="mt-1.5 space-y-1">
+              {definition.keyIdeas.map((idea, i) => (
+                <li
+                  key={i}
+                  className="text-xs text-theme-text-muted flex gap-2"
+                  data-testid="classic-wisdom-idea"
+                >
+                  <span className="text-amber-400/70 mt-0.5 shrink-0">·</span>
+                  <span>{idea}</span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
           <footer className="text-[10px] text-theme-text-muted/60 mt-2">
-            Modern definition
+            {definition.sourceUrl ? (
+              <>
+                {definition.sourceAttribution ?? 'External source'} —{' '}
+                <a
+                  href={definition.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-amber-400/80 hover:text-amber-300 underline"
+                >
+                  read more
+                </a>
+              </>
+            ) : (
+              'Modern definition'
+            )}
           </footer>
         </div>
       ) : null}

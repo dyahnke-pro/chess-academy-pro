@@ -50,7 +50,7 @@ const OPENINGS = [
   { id: 'scandinavian-defence', wikipediaTitle: 'Scandinavian_Defense' },
   { id: 'scotch-game', wikipediaTitle: 'Scotch_Game' },
   { id: 'semi-slav', wikipediaTitle: 'Semi-Slav_Defense' },
-  { id: 'sicilian-alapin', wikipediaTitle: 'Alapin_Variation' },
+  { id: 'sicilian-alapin', wikipediaTitle: 'Sicilian_Defence,_Alapin_Variation' },
   { id: 'sicilian-dragon', wikipediaTitle: 'Sicilian_Defence,_Dragon_Variation' },
   { id: 'sicilian-najdorf', wikipediaTitle: 'Sicilian_Defence,_Najdorf_Variation' },
   { id: 'sicilian-sveshnikov', wikipediaTitle: 'Sicilian_Defence,_Sveshnikov_Variation' },

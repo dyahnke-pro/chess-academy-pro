@@ -50,8 +50,14 @@ export interface ConceptEntry {
 
 export interface OpeningDefinition {
   description: string;
-  character: string;
+  character: string | null;
   keyIdeas: string[];
+  /** Optional source URL (Wikipedia link, etc.) — present when the
+   *  description was fetched from an external CC source. */
+  sourceUrl?: string;
+  /** Required attribution string for CC-licensed sources. e.g.
+   *  "CC BY-SA 4.0 — Wikipedia". */
+  sourceAttribution?: string;
 }
 
 interface ConceptsBundle {
