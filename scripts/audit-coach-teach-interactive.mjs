@@ -49,7 +49,35 @@ async function clearAllStorage(page) {
     try { localStorage.clear(); } catch (e) { /* sandbox */ }
     try { sessionStorage.clear(); } catch (e) { /* sandbox */ }
   });
+  // Re-set the audit-mode provider override after the wipe so
+  // subsequent scenarios still pin DeepSeek. Without this the second
+  // scenario onwards falls back to whichever provider the app would
+  // pick by default — usually fine but defeats the audit-mode flag.
+  if (typeof FORCE_PROVIDER !== 'undefined' && FORCE_PROVIDER !== 'none') {
+    await page.evaluate(async (provider) => {
+      try {
+        const dbReq = indexedDB.open('ChessAcademyDB');
+        await new Promise((resolve, reject) => {
+          dbReq.onsuccess = () => resolve(dbReq.result);
+          dbReq.onerror = () => reject(dbReq.error);
+        });
+        const db = dbReq.result;
+        const tx = db.transaction('meta', 'readwrite');
+        tx.objectStore('meta').put({ key: 'auditForceProvider', value: provider });
+        await new Promise((resolve, reject) => {
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
+        db.close();
+      } catch {
+        /* sandbox / first-run race — next scenario will set it */
+      }
+    }, FORCE_PROVIDER);
+  }
 }
+
+// Hoist FORCE_PROVIDER so clearAllStorage can read it.
+const FORCE_PROVIDER = process.env.AUDIT_FORCE_PROVIDER ?? 'deepseek';
 
 async function typeAndSend(page, text) {
   const input = page.locator('[data-testid="chat-text-input"]');
@@ -74,15 +102,16 @@ async function waitForCoachResponse(page, timeoutMs = 30_000) {
 }
 
 async function lastAssistantText(page) {
-  const msgs = page.locator('[data-testid^="chat-message-"]');
+  // The chat surface tags every message with
+  // `data-testid="chat-message-${role}"` (role is "user" or
+  // "assistant"). Audit script previously checked a separate
+  // `data-role` attribute that doesn't exist, so every welcome-line
+  // assertion failed against a brand-new render. Look up by testid
+  // suffix instead.
+  const msgs = page.locator('[data-testid="chat-message-assistant"]');
   const count = await msgs.count();
   if (count === 0) return '';
-  for (let i = count - 1; i >= 0; i--) {
-    const m = msgs.nth(i);
-    const role = await m.getAttribute('data-role');
-    if (role === 'assistant') return (await m.textContent()) ?? '';
-  }
-  return '';
+  return (await msgs.nth(count - 1).textContent()) ?? '';
 }
 
 async function gotoCoachTeach(page) {
@@ -122,12 +151,8 @@ async function main() {
   // Audit-mode provider override (2026-05-19): force the coach to
   // route through DeepSeek for the duration of this audit run.
   // David: "i just didnt want to bur anthropic API tokens on audits.
-  // deepseek is much cheaper." The flag is set in Dexie's meta table;
-  // getProviderConfig reads it and honors the override without
-  // touching real user preferences. Set this AFTER the initial goto
-  // so Dexie is open. Default: force deepseek; opt out with
-  // AUDIT_FORCE_PROVIDER=anthropic to test the production path.
-  const FORCE_PROVIDER = process.env.AUDIT_FORCE_PROVIDER ?? 'deepseek';
+  // deepseek is much cheaper." The flag is set in Dexie's meta table
+  // here at boot AND in clearAllStorage so wipes don't drop it.
   if (FORCE_PROVIDER !== 'none') {
     await page.evaluate(async (provider) => {
       try {
