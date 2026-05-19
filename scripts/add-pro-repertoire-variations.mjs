@@ -146,14 +146,31 @@ for (const entry of proposal.openings) {
   }
   // Take top 3 variations
   const finalVars = variations.slice(0, 3);
-  // Disambiguate duplicate names — same canonical name + different sub-line
+  // Disambiguate duplicate parent-names by labeling with the FIRST
+  // divergent move between the two variations' PGNs — far more
+  // informative than "(continuation 1/2/3)".
   const nameCounts = {};
   for (const v of finalVars) nameCounts[v.name] = (nameCounts[v.name] || 0) + 1;
-  const nameSeen = {};
-  for (const v of finalVars) {
-    if (nameCounts[v.name] > 1) {
-      nameSeen[v.name] = (nameSeen[v.name] || 0) + 1;
-      v.name = `${v.name} (continuation ${nameSeen[v.name]})`;
+  const dupedNames = new Set(Object.keys(nameCounts).filter(n => nameCounts[n] > 1));
+  if (dupedNames.size > 0) {
+    // For each duped group, find the FIRST ply where ANY pair diverges.
+    for (const dupName of dupedNames) {
+      const group = finalVars.filter(v => v.name === dupName);
+      const allSans = group.map(v => v.pgn.split(' '));
+      // Find smallest i where any two sans arrays differ at i
+      let diverge = 0;
+      const maxLen = Math.min(...allSans.map(s => s.length));
+      for (let i = 0; i < maxLen; i++) {
+        const first = allSans[0][i];
+        if (allSans.some(s => s[i] !== first)) { diverge = i; break; }
+      }
+      for (const v of group) {
+        const sans = v.pgn.split(' ');
+        const moveNum = Math.floor(diverge / 2) + 1;
+        const dot = diverge % 2 === 0 ? '.' : '...';
+        const tag = `${moveNum}${dot}${sans[diverge]}`;
+        v.name = `${dupName} — ${tag} line`;
+      }
     }
   }
   entry.variations = finalVars;

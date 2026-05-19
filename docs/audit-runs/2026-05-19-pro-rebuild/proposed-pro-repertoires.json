@@ -78,7 +78,7 @@
       "canonicalEcoPgn": "d4 Nf6",
       "variations": [
         {
-          "name": "Indian Defense (continuation 1)",
+          "name": "Indian Defense — 4.Bd3 line",
           "eco": "A45",
           "pgn": "d4 Nf6 Nc3 g6 e4 d6 Bd3 Bg7 Nf3 O-O O-O Bg4 h3 Bxf3",
           "gamesPlayed": 1,
@@ -87,7 +87,7 @@
           "losses": 1
         },
         {
-          "name": "Indian Defense (continuation 2)",
+          "name": "Indian Defense — 4.f4 line",
           "eco": "A45",
           "pgn": "d4 Nf6 Nc3 g6 e4 d6 f4 Bg7 Bd3 O-O Nf3 c5 dxc5 dxc5",
           "gamesPlayed": 1,
@@ -96,7 +96,7 @@
           "losses": 0
         },
         {
-          "name": "Indian Defense (continuation 3)",
+          "name": "Indian Defense — 4.Be2 line",
           "eco": "A45",
           "pgn": "d4 Nf6 Nc3 g6 e4 d6 Be2 Bg7 Nf3 O-O O-O Nc6 a4 e5",
           "gamesPlayed": 1,
@@ -125,7 +125,7 @@
       "canonicalEcoPgn": "b3 d5",
       "variations": [
         {
-          "name": "Nimzo-Larsen Attack: Classical Variation (continuation 1)",
+          "name": "Nimzo-Larsen Attack: Classical Variation — 5...h6 line",
           "eco": "A01",
           "pgn": "b3 d5 Bb2 Bf5 g3 e6 Bg2 Nf6 Nf3 h6 O-O Be7 d3 O-O",
           "gamesPlayed": 1,
@@ -134,7 +134,7 @@
           "losses": 0
         },
         {
-          "name": "Nimzo-Larsen Attack: Classical Variation (continuation 2)",
+          "name": "Nimzo-Larsen Attack: Classical Variation — 5...Be4 line",
           "eco": "A01",
           "pgn": "b3 d5 Bb2 Bf5 g3 e6 Bg2 Nf6 Nf3 Be4 O-O Bxf3 Bxf3 Be7",
           "gamesPlayed": 1,
@@ -143,7 +143,7 @@
           "losses": 0
         },
         {
-          "name": "Nimzo-Larsen Attack: Classical Variation (continuation 3)",
+          "name": "Nimzo-Larsen Attack: Classical Variation — 5...h6 line",
           "eco": "A01",
           "pgn": "b3 d5 Bb2 Bf5 g3 e6 Bg2 Nf6 Nf3 h6 O-O Be7 c4 Bh7",
           "gamesPlayed": 1,
@@ -210,7 +210,7 @@
       "canonicalEcoPgn": "e4 c5 Nc3",
       "variations": [
         {
-          "name": "Sicilian Defense: Closed (continuation 1)",
+          "name": "Sicilian Defense: Closed — 4.d4 line",
           "eco": "B23",
           "pgn": "e4 c5 Nc3 d6 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb3 h6 Bc4 Nf6",
           "gamesPlayed": 1,
@@ -219,7 +219,7 @@
           "losses": 0
         },
         {
-          "name": "Sicilian Defense: Closed (continuation 2)",
+          "name": "Sicilian Defense: Closed — 4.Bb5 line",
           "eco": "B23",
           "pgn": "e4 c5 Nc3 d6 Nf3 Nc6 Bb5 Bd7 d4 cxd4 Nxd4 e5 Nf5 Nf6",
           "gamesPlayed": 1,
@@ -315,7 +315,7 @@
       "canonicalEcoPgn": "e4 c5 a3",
       "variations": [
         {
-          "name": "Sicilian Defense: Mengarini Variation (continuation 1)",
+          "name": "Sicilian Defense: Mengarini Variation — 4...d6 line",
           "eco": "B20",
           "pgn": "e4 c5 a3 Nf6 e5 Nd5 Nf3 d6 exd6 e6 Bc4 Bxd6 O-O O-O",
           "gamesPlayed": 1,
@@ -324,7 +324,7 @@
           "losses": 0
         },
         {
-          "name": "Sicilian Defense: Mengarini Variation (continuation 2)",
+          "name": "Sicilian Defense: Mengarini Variation — 4...Nc6 line",
           "eco": "B20",
           "pgn": "e4 c5 a3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nc7 O-O d5 exd6 Qxd6",
           "gamesPlayed": 1,
@@ -353,7 +353,7 @@
       "canonicalEcoPgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6",
       "variations": [
         {
-          "name": "Scandinavian Defense: Classical Variation (continuation 1)",
+          "name": "Scandinavian Defense: Classical Variation — 6.Bc4 line",
           "eco": "B01",
           "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6",
           "gamesPlayed": 5,
@@ -362,7 +362,7 @@
           "losses": 1
         },
         {
-          "name": "Scandinavian Defense: Classical Variation (continuation 2)",
+          "name": "Scandinavian Defense: Classical Variation — 6.Ne5 line",
           "eco": "B01",
           "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Ne5 c6",
           "gamesPlayed": 4,
@@ -371,7 +371,7 @@
           "losses": 2
         },
         {
-          "name": "Scandinavian Defense: Classical Variation (continuation 3)",
+          "name": "Scandinavian Defense: Classical Variation — 6.Bd2 line",
           "eco": "B01",
           "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bd2 e6",
           "gamesPlayed": 2,
@@ -496,7 +496,7 @@
           "losses": 0
         },
         {
-          "name": "Italian Game: Giuoco Pianissimo, Normal (continuation 1)",
+          "name": "Italian Game: Giuoco Pianissimo, Normal — 5.O-O line",
           "eco": "C50",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 O-O d6 c3 O-O h3 a5",
           "gamesPlayed": 1,
@@ -505,7 +505,7 @@
           "losses": 0
         },
         {
-          "name": "Italian Game: Giuoco Pianissimo, Normal (continuation 2)",
+          "name": "Italian Game: Giuoco Pianissimo, Normal — 5.Nc3 line",
           "eco": "C50",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 Nc3 a6 a4 h6 Be3 Bxe3",
           "gamesPlayed": 1,
@@ -534,7 +534,7 @@
       "canonicalEcoPgn": "e4 c5 Nf3 e6 c3",
       "variations": [
         {
-          "name": "Sicilian Defense: Delayed Alapin Variation, with e6 (continuation 1)",
+          "name": "Sicilian Defense: Delayed Alapin Variation, with e6 — 4.e5 line",
           "eco": "B40",
           "pgn": "e4 c5 Nf3 e6 c3 d5 e5 Nc6 d4 Bd7 Be2 cxd4 cxd4 Nge7",
           "gamesPlayed": 1,
@@ -543,7 +543,7 @@
           "losses": 0
         },
         {
-          "name": "Sicilian Defense: Delayed Alapin Variation, with e6 (continuation 2)",
+          "name": "Sicilian Defense: Delayed Alapin Variation, with e6 — 4.e5 line",
           "eco": "B40",
           "pgn": "e4 c5 Nf3 e6 c3 d5 e5 Nc6 g3 Nge7 Bg2 Nf5 d3 Be7",
           "gamesPlayed": 1,
@@ -552,7 +552,7 @@
           "losses": 0
         },
         {
-          "name": "Sicilian Defense: Delayed Alapin Variation, with e6 (continuation 3)",
+          "name": "Sicilian Defense: Delayed Alapin Variation, with e6 — 4.exd5 line",
           "eco": "B40",
           "pgn": "e4 c5 Nf3 e6 c3 d5 exd5 exd5 d4 Nc6 Bb5 Bd6 O-O Nf6",
           "gamesPlayed": 1,
@@ -773,7 +773,7 @@
           "losses": 0
         },
         {
-          "name": "Modern Defense: Standard Line (continuation 1)",
+          "name": "Modern Defense: Standard Line — 4.Be3 line",
           "eco": "B06",
           "pgn": "e4 g6 d4 Bg7 Nc3 c6 Be3 d5 Nf3 Nf6 e5 Ne4 Bd3 Nxc3",
           "gamesPlayed": 1,
@@ -782,7 +782,7 @@
           "losses": 1
         },
         {
-          "name": "Modern Defense: Standard Line (continuation 2)",
+          "name": "Modern Defense: Standard Line — 4.Nf3 line",
           "eco": "B06",
           "pgn": "e4 g6 d4 Bg7 Nc3 c6 Nf3 d5 h3 dxe4 Nxe4 Nf6 Nxf6+ exf6",
           "gamesPlayed": 1,
@@ -897,7 +897,7 @@
       "canonicalEcoPgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3",
       "variations": [
         {
-          "name": "Modern Defense: Two Knights Variation (continuation 1)",
+          "name": "Modern Defense: Two Knights Variation — 4...b6 line",
           "eco": "B06",
           "pgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3 b6 Bd3 e6 Qe2 Bb7 O-O Nd7",
           "gamesPlayed": 1,
@@ -906,7 +906,7 @@
           "losses": 0
         },
         {
-          "name": "Modern Defense: Two Knights Variation (continuation 2)",
+          "name": "Modern Defense: Two Knights Variation — 4...Nd7 line",
           "eco": "B06",
           "pgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3 Nd7 Be2 e6 O-O Ne7 Be3 b6",
           "gamesPlayed": 1,
@@ -915,7 +915,7 @@
           "losses": 0
         },
         {
-          "name": "Modern Defense: Two Knights Variation (continuation 3)",
+          "name": "Modern Defense: Two Knights Variation — 4...Nd7 line",
           "eco": "B06",
           "pgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3 Nd7 Be3 a6 a4 b6 Bd3 Bb7",
           "gamesPlayed": 1,
@@ -1029,7 +1029,7 @@
           "losses": 0
         },
         {
-          "name": "Ruy Lopez: Morphy Defense, Anderssen Variation (continuation 1)",
+          "name": "Ruy Lopez: Morphy Defense, Anderssen Variation — 5...Bc5 line",
           "eco": "C77",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 d3 Bc5",
           "gamesPlayed": 2,
@@ -1038,7 +1038,7 @@
           "losses": 1
         },
         {
-          "name": "Ruy Lopez: Morphy Defense, Anderssen Variation (continuation 2)",
+          "name": "Ruy Lopez: Morphy Defense, Anderssen Variation — 5...d6 line",
           "eco": "C77",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 d3 d6",
           "gamesPlayed": 2,
@@ -1096,7 +1096,7 @@
       "canonicalEcoPgn": "e4 c5 Nf3 e6",
       "variations": [
         {
-          "name": "Sicilian Defense: French Variation (continuation 1)",
+          "name": "Sicilian Defense: French Variation — 5...d5 line",
           "eco": "B40",
           "pgn": "e4 c5 Nf3 e6 g3 Nc6 Bg2 Nf6 Qe2 d5 d3 Be7 O-O O-O",
           "gamesPlayed": 1,
@@ -1105,7 +1105,7 @@
           "losses": 0
         },
         {
-          "name": "Sicilian Defense: French Variation (continuation 2)",
+          "name": "Sicilian Defense: French Variation — 5...d6 line",
           "eco": "B40",
           "pgn": "e4 c5 Nf3 e6 g3 Nc6 Bg2 Nf6 Qe2 d6 O-O Be7 c3 e5",
           "gamesPlayed": 1,
@@ -1228,7 +1228,7 @@
       "canonicalEcoPgn": "e4 c5 Nf3 d6 Bb5+",
       "variations": [
         {
-          "name": "Sicilian Defense: Moscow Variation (continuation 1)",
+          "name": "Sicilian Defense: Moscow Variation — 4.d4 line",
           "eco": "B51",
           "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 d4 cxd4 Qxd4 a6 Be2 Ngf6 c4 e6",
           "gamesPlayed": 1,
@@ -1237,7 +1237,7 @@
           "losses": 0
         },
         {
-          "name": "Sicilian Defense: Moscow Variation (continuation 2)",
+          "name": "Sicilian Defense: Moscow Variation — 4.O-O line",
           "eco": "B51",
           "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 Bf1 b6",
           "gamesPlayed": 1,
@@ -1266,7 +1266,7 @@
       "canonicalEcoPgn": "d4 Nf6 Nf3",
       "variations": [
         {
-          "name": "Indian Defense: Knights Variation (continuation 1)",
+          "name": "Indian Defense: Knights Variation — 4...Bb4+ line",
           "eco": "A46",
           "pgn": "d4 Nf6 Nf3 d5 c4 e6 g3 Bb4+ Bd2 Be7 Bg2 O-O O-O Nbd7",
           "gamesPlayed": 1,
@@ -1275,7 +1275,7 @@
           "losses": 1
         },
         {
-          "name": "Indian Defense: Knights Variation (continuation 2)",
+          "name": "Indian Defense: Knights Variation — 4...Bb4+ line",
           "eco": "A46",
           "pgn": "d4 Nf6 Nf3 d5 c4 e6 g3 Bb4+ Nbd2 dxc4 Bg2 b5 Ne5 Nd5",
           "gamesPlayed": 1,
@@ -1284,7 +1284,7 @@
           "losses": 0
         },
         {
-          "name": "Indian Defense: Knights Variation (continuation 3)",
+          "name": "Indian Defense: Knights Variation — 4...dxc4 line",
           "eco": "A46",
           "pgn": "d4 Nf6 Nf3 d5 c4 e6 g3 dxc4 Bg2 Bb4+ Nbd2 O-O Qc2 b5",
           "gamesPlayed": 1,
@@ -1322,7 +1322,7 @@
           "losses": 1
         },
         {
-          "name": "Italian Game: Giuoco Pianissimo, Normal (continuation 1)",
+          "name": "Italian Game: Giuoco Pianissimo, Normal — 5.c3 line",
           "eco": "C50",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 c3 d6 Bg5 h6 Bh4 a5",
           "gamesPlayed": 1,
@@ -1331,7 +1331,7 @@
           "losses": 1
         },
         {
-          "name": "Italian Game: Giuoco Pianissimo, Normal (continuation 2)",
+          "name": "Italian Game: Giuoco Pianissimo, Normal — 5.Nc3 line",
           "eco": "C50",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 Nc3 h6 Be3 Be7 a4 Bb4",
           "gamesPlayed": 1,
@@ -1360,7 +1360,7 @@
       "canonicalEcoPgn": "e4 c6 d4 d5 e5 Bf5 Nf3",
       "variations": [
         {
-          "name": "Caro-Kann Defense: Advance Variation, Short Variation (continuation 1)",
+          "name": "Caro-Kann Defense: Advance Variation, Short Variation — 5...Ne7 line",
           "eco": "B12",
           "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Ne7 Nbd2 Ng6 Nf1 f6",
           "gamesPlayed": 1,
@@ -1369,7 +1369,7 @@
           "losses": 0
         },
         {
-          "name": "Caro-Kann Defense: Advance Variation, Short Variation (continuation 2)",
+          "name": "Caro-Kann Defense: Advance Variation, Short Variation — 5...Nd7 line",
           "eco": "B12",
           "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 Nbd2 Ne7 O-O h6",
           "gamesPlayed": 1,
@@ -1639,7 +1639,7 @@
       "canonicalEcoPgn": "Nf3 Nf6 g3 g6",
       "variations": [
         {
-          "name": "King's Indian Attack: Symmetrical Defense (continuation 1)",
+          "name": "King's Indian Attack: Symmetrical Defense — 6.Nc3 line",
           "eco": "A05",
           "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d6 Nc3 Nbd7 Qd3 c5",
           "gamesPlayed": 1,
@@ -1648,7 +1648,7 @@
           "losses": 1
         },
         {
-          "name": "King's Indian Attack: Symmetrical Defense (continuation 2)",
+          "name": "King's Indian Attack: Symmetrical Defense — 6.Nbd2 line",
           "eco": "A05",
           "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d6 Nbd2 a5 a4 Nc6",
           "gamesPlayed": 1,
@@ -1686,7 +1686,7 @@
           "losses": 2
         },
         {
-          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening (continuation 1)",
+          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening — 5.c3 line",
           "eco": "C55",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 h6 c3 Be7",
           "gamesPlayed": 2,
@@ -1695,7 +1695,7 @@
           "losses": 0
         },
         {
-          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening (continuation 2)",
+          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening — 5.a4 line",
           "eco": "C55",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 h6 a4 d6",
           "gamesPlayed": 2,
@@ -1724,7 +1724,7 @@
       "canonicalEcoPgn": "e4 c5 Nf3 d6 Bb5+",
       "variations": [
         {
-          "name": "Sicilian Defense: Moscow Variation (continuation 1)",
+          "name": "Sicilian Defense: Moscow Variation — 4...Nf6 line",
           "eco": "B51",
           "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 e6 c3 a6 Bf1 b5",
           "gamesPlayed": 1,
@@ -1733,7 +1733,7 @@
           "losses": 0
         },
         {
-          "name": "Sicilian Defense: Moscow Variation (continuation 2)",
+          "name": "Sicilian Defense: Moscow Variation — 4...a6 line",
           "eco": "B51",
           "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 Bf1 Be7",
           "gamesPlayed": 1,
@@ -1742,7 +1742,7 @@
           "losses": 0
         },
         {
-          "name": "Sicilian Defense: Moscow Variation (continuation 3)",
+          "name": "Sicilian Defense: Moscow Variation — 4...a6 line",
           "eco": "B51",
           "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 Bf1 Ne5",
           "gamesPlayed": 1,
@@ -1829,7 +1829,7 @@
       "canonicalEcoPgn": "e4 c6 d4 d5 exd5",
       "variations": [
         {
-          "name": "Caro-Kann Defense: Exchange Variation (continuation 1)",
+          "name": "Caro-Kann Defense: Exchange Variation — 5.h3 line",
           "eco": "B13",
           "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nf6 h3 Nc6 c3 g6 Nf3 Bg7",
           "gamesPlayed": 1,
@@ -1838,7 +1838,7 @@
           "losses": 0
         },
         {
-          "name": "Caro-Kann Defense: Exchange Variation (continuation 2)",
+          "name": "Caro-Kann Defense: Exchange Variation — 5.c3 line",
           "eco": "B13",
           "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nf6 c3 Bg4 Qb3 Qc7 h3 Bd7",
           "gamesPlayed": 1,
