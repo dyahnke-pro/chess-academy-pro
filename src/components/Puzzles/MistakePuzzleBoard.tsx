@@ -9,7 +9,7 @@ import { getCoachCommentary } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
-import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle, Eye, EyeOff, Target } from 'lucide-react';
+import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle, Eye, EyeOff, Target, ChevronRight, Send, MessageCircle } from 'lucide-react';
 import { ShowMeButton } from '../Coach/ShowMeButton';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { detectTacticType } from '../../services/missedTacticService';
@@ -147,6 +147,13 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const togglePuzzleShowTacticName = useAppStore((s) => s.togglePuzzleShowTacticName);
   const [whyLoading, setWhyLoading] = useState(false);
   const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
+  // Coach chat — visible after the puzzle is solved (state === 'correct').
+  // Lets the student ask follow-up questions about the position without
+  // leaving the puzzle. David's directive 2026-05-19: "maybe add a chat
+  // bar to talk to coach! see, now we are creating!"
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatReply, setChatReply] = useState<string>('');
 
   // Derive the tactic type for coaching (sub-millisecond, pure pattern matching)
   const tacticType = useMemo(() => detectTacticType(puzzle.fen, puzzle.bestMove), [puzzle.fen, puzzle.bestMove]);
@@ -499,6 +506,49 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     });
   }, [state, puzzle, activeProfile?.currentRating, tacticType]);
 
+  // Ask Coach — chat handler for the post-solve chat bar. Sends the
+  // student's question + position context to the LLM, displays the
+  // reply inline + speaks it.
+  const handleAskCoach = useCallback(async (): Promise<void> => {
+    const question = chatInput.trim();
+    if (!question || chatLoading) return;
+    setChatLoading(true);
+    setChatReply('');
+    voiceService.stop();
+    const rating = activeProfile?.currentRating ?? 1200;
+    try {
+      const analysis = await stockfishEngine.analyzePosition(puzzle.fen, 14);
+      const reply = await getCoachCommentary('puzzle_feedback', {
+        fen: puzzle.fen,
+        lastMoveSan: puzzle.bestMoveSan,
+        moveNumber: puzzle.moveNumber,
+        pgn: '',
+        openingName: puzzle.openingName,
+        stockfishAnalysis: analysis,
+        playerMove: puzzle.playerMoveSan,
+        moveClassification: null,
+        playerProfile: { rating, weaknesses: [] },
+        additionalContext: [
+          `The student is reviewing a mistake puzzle from one of their own games.`,
+          `Position: FEN ${puzzle.fen}`,
+          `They originally played ${puzzle.playerMoveSan}; the best move was ${puzzle.bestMoveSan}.`,
+          puzzle.tacticType ? `Tactic type: ${puzzle.tacticType}` : '',
+          ``,
+          `The student is asking: "${question}"`,
+          ``,
+          `Answer their question directly. Be specific about pieces, squares, and lines. Keep it tight — 2-4 sentences.`,
+        ].filter(Boolean).join('\n'),
+      });
+      setChatReply(reply);
+      void voiceService.speak(reply);
+      setChatInput('');
+    } catch {
+      setChatReply('Coach is unavailable right now — try again in a moment.');
+    } finally {
+      setChatLoading(false);
+    }
+  }, [chatInput, chatLoading, puzzle, activeProfile?.currentRating]);
+
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
 
@@ -529,7 +579,6 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
 
       // Check if puzzle is fully solved
       if (nextIndex >= allMoves.length) {
-        const solvedCleanly = !hasMadeMistakeRef.current;
         setState('correct');
         playCelebration();
         // Record outcome for cross-session coaching
@@ -539,23 +588,22 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           wasCoached: hasMadeMistakeRef.current,
           context: skipReplayContext ? 'create' : 'drill',
         });
-        // Speak outro after celebration sound, then signal completion.
-        // Delay onComplete so the parent doesn't advance to the next
-        // puzzle while the outro is still playing. Stop any in-flight
-        // per-move narration before the outro so the two don't overlap
-        // when the move narration runs longer than the 800ms delay.
+        // Speak outro after celebration sound. NO auto-advance —
+        // student taps "Next puzzle" themselves when they're done
+        // analyzing the position. David's directive 2026-05-19:
+        // "i want the user to push next when they are done analyzing
+        // the position. it cuts away before i can identify the
+        // deeper meaning behind the puzzle/tactic." Previously the
+        // 4000ms auto-onComplete clipped the outro and rushed the
+        // student through.
         if (puzzle.narration.outro) {
           outroTimerRef.current = setTimeout(() => {
             voiceService.stop();
             setSubtitle(puzzle.narration.outro);
             void voiceService.speak(puzzle.narration.outro);
           }, 800);
-          completionTimerRef.current = setTimeout(() => {
-            onComplete(solvedCleanly);
-          }, 4000);
-        } else {
-          onComplete(solvedCleanly);
         }
+        // Stay on 'correct' state until the user taps Next.
         return;
       }
 
@@ -837,11 +885,75 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
 
       {/* Status feedback */}
       {state === 'correct' && (
-        <div className="flex items-center gap-2 text-green-500" data-testid="puzzle-correct">
-          <CheckCircle size={18} />
-          <span className="text-sm font-medium">
-            Correct!{isMultiMove ? ` You found all ${Math.ceil(totalMoves / 2)} moves.` : ` The best move was ${puzzle.bestMoveSan}.`}
-          </span>
+        <div className="space-y-3" data-testid="puzzle-correct">
+          <div className="flex items-center gap-2 text-green-500">
+            <CheckCircle size={18} />
+            <span className="text-sm font-medium">
+              Correct!{isMultiMove ? ` You found all ${Math.ceil(totalMoves / 2)} moves.` : ` The best move was ${puzzle.bestMoveSan}.`}
+            </span>
+          </div>
+
+          {/* Coach chat — ask follow-up questions about the position
+              without leaving the puzzle. Sends FEN + best move + tactic
+              type as context. David's directive 2026-05-19. */}
+          <div className="flex flex-col gap-1.5" data-testid="puzzle-coach-chat">
+            <label htmlFor="puzzle-chat-input" className="text-xs text-theme-text-muted flex items-center gap-1">
+              <MessageCircle size={12} />
+              Ask the coach
+            </label>
+            <div className="flex items-stretch gap-2">
+              <input
+                id="puzzle-chat-input"
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !chatLoading && chatInput.trim()) {
+                    e.preventDefault();
+                    void handleAskCoach();
+                  }
+                }}
+                placeholder="Why did this work? What about ...?"
+                disabled={chatLoading}
+                className="flex-1 px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text placeholder:text-theme-text-muted border border-theme-border focus:outline-none focus:border-theme-accent disabled:opacity-50"
+                data-testid="puzzle-chat-input"
+              />
+              <button
+                type="button"
+                onClick={() => void handleAskCoach()}
+                disabled={chatLoading || !chatInput.trim()}
+                className="px-3 rounded-lg bg-theme-accent text-white disabled:opacity-40 hover:opacity-90 transition-opacity"
+                data-testid="puzzle-chat-send"
+                aria-label="Send question to coach"
+              >
+                <Send size={16} />
+              </button>
+            </div>
+            {chatLoading && (
+              <p className="text-xs text-theme-text-muted italic" data-testid="puzzle-chat-loading">
+                Coach is thinking…
+              </p>
+            )}
+            {chatReply && !chatLoading && (
+              <p className="text-sm text-theme-text bg-theme-accent/5 border border-theme-accent/30 rounded-lg p-3 mt-1" data-testid="puzzle-chat-reply">
+                {chatReply}
+              </p>
+            )}
+          </div>
+
+          {/* Next puzzle — manual advance. No auto-timeout: student
+              taps when they're done analyzing. David's directive
+              2026-05-19: prior 4000ms auto-onComplete clipped the
+              outro narration. */}
+          <button
+            type="button"
+            onClick={() => onComplete(!hasMadeMistakeRef.current)}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
+            data-testid="puzzle-next-btn"
+          >
+            <span>Next puzzle</span>
+            <ChevronRight size={18} />
+          </button>
         </div>
       )}
       {state === 'incorrect' && (
