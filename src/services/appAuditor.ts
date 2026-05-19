@@ -567,7 +567,64 @@ export type AuditKind =
   //   brain calls) and hard errors.
   | 'opening-play-eval-updated'
   | 'opening-play-eval-prefetch-dropped'
-  | 'opening-play-eval-error';
+  | 'opening-play-eval-error'
+  // Audit-instrumentation phase-1 (2026-05-19): new event kinds added
+  // alongside the audit fixes for the 9-bug rerun. Each one closes a
+  // visibility gap surfaced while triaging the live audit log.
+  //
+  // chip-tap-resolved: emitted on every chip / picker-tile tap.
+  //   Carries the chip text, the resolved opening name, and the
+  //   resolution path (alias / fuzzy / canonical / context-aware /
+  //   conversational). Was buried inside `coach-surface-migrated`
+  //   before; standalone kind makes it queryable.
+  | 'chip-tap-resolved'
+  // user-retry-detected: when the same user types two semantically
+  //   similar inputs within a short window, the previous turn
+  //   probably mis-resolved. Surfaces the "I wanted the danish
+  //   gambit" → second-try pattern from the live audit.
+  | 'user-retry-detected'
+  // followup-context-check: short follow-ups (< 5 words) after a
+  //   state-changing turn. Compares the prior opening on the board
+  //   against the opening the brain's reply assumes. Mismatch =
+  //   context lost across turns.
+  | 'followup-context-check'
+  // scaffolding-stripped: every time sanitizeCoachText strips an
+  //   opener like "Great question — " from the LLM response. Tracks
+  //   the rate at which the LLM ignores the no-filler ban.
+  | 'scaffolding-stripped'
+  // san-to-speech: every sanitizeForTTS call that mutated SAN tokens
+  //   into spoken text. Captures the SAN inputs and the rendered
+  //   spoken outputs so bugs like Bug F's "Nb4 → knight to b" surface
+  //   the moment they happen, not after the user reports them.
+  | 'san-to-speech'
+  // verbosity-response-length: per-turn rolling p50/p90 of response
+  //   length per verbosity tier. When `brief` is averaging 250+ chars
+  //   the LLM is ignoring the prompt and we know to strengthen rules.
+  | 'verbosity-response-length'
+  // voice-fallover: Polly → Web Speech / native voice transition.
+  //   Today this is silent except for tts-failure entries; explicit
+  //   kind makes the rate observable directly.
+  | 'voice-fallover'
+  // opening-cache: hit / miss / invalidated for the Dexie
+  //   cachedOpenings store. Generation is the most expensive
+  //   operation in the app; cache hit rate matters.
+  | 'opening-cache-hit'
+  | 'opening-cache-miss'
+  | 'opening-cache-invalidated'
+  // llm-token-usage: per LLM call — input tokens, output tokens,
+  //   model, provider. Per-turn cost trend without reading invoices.
+  | 'llm-token-usage'
+  // audit-stream-truncated: emitted when the rolling 1000-entry
+  //   buffer drops an event. Lets exports flag "you're looking at a
+  //   partial view."
+  | 'audit-stream-truncated'
+  // pwa lifecycle events: pwa-install / notification-permission /
+  //   share-target invocation — Capacitor / PWA lifecycle that today
+  //   is silent.
+  | 'pwa-install-prompt'
+  | 'pwa-installed'
+  | 'notification-permission-changed'
+  | 'share-target-invoked';
 
 export interface AuditEntry {
   timestamp: number;
@@ -590,6 +647,20 @@ export interface AuditEntry {
    *  Production reports answer "which build was the user on?" by
    *  reading this field instead of guessing from timestamps. */
   buildId?: string;
+  /** Audit-instrumentation phase-1 (2026-05-19): correlates every
+   *  event that fires inside one conversational turn — user message
+   *  → brain ask → tool calls → answer → voice → chips. Optional
+   *  because not every event is part of a turn (boot-time, route
+   *  changes, surface mounts). Callers that know they're inside a
+   *  turn pass `turnId`; deeper non-turn-aware callers omit it.
+   *  Tying events by turnId makes 300-event audit logs pivotable. */
+  turnId?: string;
+  /** Audit-instrumentation phase-1: auto-stamped by `logAppAudit`
+   *  from a per-tab session identifier set at app boot. Lets us tell
+   *  "all 300 events in one continuous session" vs "300 events
+   *  scattered across 7 app launches" — important context when
+   *  reading historical exports. */
+  sessionId?: string;
 }
 
 /** Build identifier injected at vite-build time. Falls back to
@@ -598,10 +669,77 @@ export interface AuditEntry {
  *  display the running bundle hash without rummaging in audit rows. */
 export function getBuildId(): string {
   try {
-     
+
     return typeof __BUILD_ID__ !== 'undefined' ? __BUILD_ID__ : 'unknown';
   } catch {
     return 'unknown';
+  }
+}
+
+/** Per-tab session identifier set once at module load (= app boot in
+ *  practice, since the JS bundle re-evaluates on every reload). Every
+ *  audit event auto-stamps this so a 300-event export can be sliced
+ *  into "events from one continuous session" buckets without guessing
+ *  from timestamps. Cleared by full page reload (intentionally —
+ *  reload starts a new session). */
+const SESSION_ID: string = (() => {
+  try {
+    // Web Crypto preferred for unguessable session IDs; fall back to
+    // Math.random in non-browser test contexts.
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+  } catch {
+    /* fall through to fallback */
+  }
+  return `s-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+})();
+/** Exported so debug surfaces / about-this-app screens can display the
+ *  current session id (matches the field stamped on each event). */
+export function getSessionId(): string {
+  return SESSION_ID;
+}
+
+/** Monotonic per-tab turn counter. The chat surface bumps this once
+ *  at the start of every `handleSubmit` to get a fresh turn id, then
+ *  threads the id through every audit event in that turn. Stays in
+ *  this module so multiple surfaces (CoachTeachPage, CoachGamePage,
+ *  CoachReviewPage, etc.) can share the counter without coordinating
+ *  through Zustand or React state. */
+let nextTurnSeq = 0;
+export function mintTurnId(prefix: string = 't'): string {
+  nextTurnSeq += 1;
+  return `${prefix}-${SESSION_ID.slice(0, 8)}-${nextTurnSeq}`;
+}
+
+/** Module-global "current turn id" — when a surface sets this at the
+ *  start of a turn, every `logAppAudit` fire from any module during
+ *  that turn picks it up automatically. Saves plumbing the turn id
+ *  through every helper / service / hook. Cleared when the surface
+ *  calls `clearCurrentTurnId()` at turn end.
+ *
+ *  Single-threaded by design: chat surfaces gate `handleSubmit` on a
+ *  busy flag, so only one turn is "current" per surface at a time.
+ *  If two surfaces overlap (unusual but possible during cross-surface
+ *  voice fallover), the most recent caller wins — which is correct
+ *  for the dominant audit consumer (the active surface). */
+let currentTurnId: string | null = null;
+export function setCurrentTurnId(id: string | null): void {
+  currentTurnId = id;
+}
+export function getCurrentTurnId(): string | null {
+  return currentTurnId;
+}
+/** Run a callback with a turn id auto-stamped on every audit event
+ *  fired from any code reached during the callback. Restores the
+ *  previous turn id afterwards so nested calls behave sensibly. */
+export async function runInTurn<T>(turnId: string, fn: () => Promise<T>): Promise<T> {
+  const prev = currentTurnId;
+  currentTurnId = turnId;
+  try {
+    return await fn();
+  } finally {
+    currentTurnId = prev;
   }
 }
 
@@ -630,12 +768,38 @@ export async function logAppAudit(
     timestamp: Date.now(),
     route: typeof window !== 'undefined' ? window.location?.pathname : undefined,
     buildId: getBuildId(),
+    // sessionId is auto-stamped here — callers never pass it. Stays
+    // stable for the lifetime of the JS module (per-tab session).
+    sessionId: SESSION_ID,
+    // turnId — caller-passed wins; otherwise inherit the current
+    // turn id set by the surface (via setCurrentTurnId / runInTurn).
+    turnId: entry.turnId ?? currentTurnId ?? undefined,
   };
   const next = auditWriteChain.then(async () => {
     try {
       const current = await readLog();
       current.push(filled);
       const trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
+      // Audit-instrumentation phase-1 (2026-05-19): when the rolling
+      // buffer drops entries, emit a marker so exports flag "you're
+      // looking at a partial view". Only emit when DROP transitions
+      // (no marker for every new entry past the cap — that'd flood).
+      const dropped = current.length - trimmed.length;
+      if (dropped > 0 && filled.kind !== 'audit-stream-truncated') {
+        // Append the truncation marker directly to the trimmed array
+        // so it survives this write and lands AFTER the entries that
+        // displaced the dropped ones. Avoids recursive logAppAudit
+        // calls (would re-enter the chain).
+        trimmed.push({
+          timestamp: Date.now(),
+          kind: 'audit-stream-truncated',
+          category: 'subsystem',
+          source: 'appAuditor.rollingBuffer',
+          summary: `${dropped} oldest entries dropped (cap ${APP_AUDIT_LOG_MAX_ENTRIES})`,
+          buildId: getBuildId(),
+          sessionId: SESSION_ID,
+        });
+      }
       await db.meta.put({
         key: APP_AUDIT_LOG_META_KEY,
         value: JSON.stringify(trimmed),

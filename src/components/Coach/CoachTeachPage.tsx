@@ -52,7 +52,7 @@ import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
-import { logAppAudit } from '../../services/appAuditor';
+import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
@@ -800,6 +800,13 @@ export function CoachTeachPage(): JSX.Element {
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
+    // Audit-instrumentation phase-1 (2026-05-19): mint a turn id and
+    // make it the module-default for the duration of this handleSubmit.
+    // Every logAppAudit call from any code reached during this turn
+    // (chat surface, brain, tools, voice service, etc.) auto-stamps
+    // the id, so the audit log is pivotable by turn.
+    const turnAuditId = mintTurnId('teach');
+    setCurrentTurnId(turnAuditId);
     // Any new turn invalidates an outstanding [CHOICES:] prompt —
     // the brain's previous question has been answered (or
     // superseded), so clear the chips before the new response
@@ -2223,6 +2230,10 @@ export function CoachTeachPage(): JSX.Element {
       setStreaming(null);
       setBusy(false);
       setKickoffStatus(null);
+      // Audit-instrumentation phase-1: clear the per-turn id so
+      // out-of-turn events (route changes, background tasks) don't
+      // get mis-tagged with the just-finished turn.
+      setCurrentTurnId(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; current deps cover the live callers.
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough]);
