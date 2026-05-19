@@ -1,0 +1,11 @@
+{
+  "id": "alekhine-defence",
+  "status": "fetched",
+  "wikipediaTitle": "Alekhine's Defence",
+  "extract": "Alekhine's Defence is a chess opening that begins with the moves:1. e4 Nf6",
+  "extractHtml": "<p><b>Alekhine's Defence</b> is a chess opening that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">e4</span> <span class=\"extiw\">Nf6</span></dd></dl>",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Alekhine's_Defence",
+  "pageId": 960702,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:32:39.444Z"
+}

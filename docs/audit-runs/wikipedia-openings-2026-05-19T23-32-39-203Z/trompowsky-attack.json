@@ -1,0 +1,11 @@
+{
+  "id": "trompowsky-attack",
+  "status": "fetched",
+  "wikipediaTitle": "Trompowsky Attack",
+  "extract": "The Trompowsky Attack is a chess opening that begins with the moves:1. d4 Nf6\n2. Bg5",
+  "extractHtml": "<p>The <b>Trompowsky Attack</b> is a chess opening that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">Bg5</span></dd></dl>",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+  "pageId": 1691274,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:33:03.619Z"
+}

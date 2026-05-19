@@ -1,0 +1,11 @@
+{
+  "id": "sicilian-najdorf",
+  "status": "fetched",
+  "wikipediaTitle": "Sicilian Defence, Najdorf Variation",
+  "extract": "The Najdorf Variation is a variation of the Sicilian Defence that begins with the moves:1. e4 c5\n2. Nf3 d6\n3. d4 cxd4\n4. Nxd4 Nf6\n5. Nc3 a6",
+  "extractHtml": "<p>The <b>Najdorf Variation</b> is a variation of the Sicilian Defence that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">e4</span> <span class=\"extiw\">c5</span></dd>\n<dd>2. <span class=\"extiw\">Nf3</span> <span class=\"extiw\">d6</span></dd>\n<dd>3. <span class=\"extiw\">d4</span> <span class=\"extiw\">cxd4</span></dd>\n<dd>4. <span class=\"extiw\">Nxd4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>5. <span class=\"extiw\">Nc3</span> <span class=\"extiw\">a6</span></dd></dl>",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Sicilian_Defence%2C_Najdorf_Variation",
+  "pageId": 906517,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:33:00.461Z"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "benko-gambit",
+  "status": "fetched",
+  "wikipediaTitle": "Benko Gambit",
+  "extract": "The Benko Gambit is a chess opening characterised by the move 3...b5 in the Benoni Defence arising after:1. d4 Nf6\n2. c4 c5\n3. d5 b5",
+  "extractHtml": "<p>The <b>Benko Gambit</b> is a chess opening characterised by the move 3...b5 in the Benoni Defence arising after:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">c5</span></dd>\n<dd>3. <span class=\"extiw\">d5</span> <span class=\"extiw\">b5</span></dd></dl>",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Benko_Gambit",
+  "pageId": 1220424,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:32:40.490Z"
+}

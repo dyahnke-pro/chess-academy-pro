@@ -1,0 +1,11 @@
+{
+  "id": "kings-indian-defence",
+  "status": "fetched",
+  "wikipediaTitle": "King's Indian Defence",
+  "extract": "The King's Indian Defence is a common chess opening. It is defined by the following moves:1. d4 Nf6\n2. c4 g6",
+  "extractHtml": "<p>The <b>King's Indian Defence</b> is a common chess opening. It is defined by the following moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">g6</span></dd></dl>",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/King's_Indian_Defence",
+  "pageId": 498021,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:32:49.012Z"
+}
