@@ -1,0 +1,1208 @@
+[
+  {
+    "id": "italian-game",
+    "name": "Italian Game",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 5,
+    "warnCount": 3
+  },
+  {
+    "id": "ruy-lopez",
+    "name": "Ruy Lopez",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 9,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "scotch-game",
+    "name": "Scotch Game",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 5,
+    "warnCount": 3
+  },
+  {
+    "id": "vienna-game",
+    "name": "Vienna Game",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 5,
+    "warnCount": 3
+  },
+  {
+    "id": "kings-gambit",
+    "name": "King's Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 6,
+    "warnCount": 3
+  },
+  {
+    "id": "four-knights-game",
+    "name": "Four Knights Game",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "sicilian-najdorf",
+    "name": "Sicilian: Najdorf",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 9,
+    "trapCount": 5,
+    "warnCount": 3
+  },
+  {
+    "id": "sicilian-dragon",
+    "name": "Sicilian: Dragon",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "sicilian-sveshnikov",
+    "name": "Sicilian: Sveshnikov",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "sicilian-alapin",
+    "name": "Sicilian: Alapin",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "french-defence",
+    "name": "French Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "caro-kann",
+    "name": "Caro-Kann Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 4,
+    "warnCount": 3
+  },
+  {
+    "id": "pirc-defence",
+    "name": "Pirc Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 2
+  },
+  {
+    "id": "scandinavian-defence",
+    "name": "Scandinavian Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 4,
+    "warnCount": 3
+  },
+  {
+    "id": "alekhine-defence",
+    "name": "Alekhine's Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 2
+  },
+  {
+    "id": "philidor-defence",
+    "name": "Philidor Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "petrov-defence",
+    "name": "Petrov Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "queens-gambit",
+    "name": "Queen's Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "london-system",
+    "name": "London System",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 6,
+    "warnCount": 3
+  },
+  {
+    "id": "catalan-opening",
+    "name": "Catalan Opening",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "trompowsky-attack",
+    "name": "Trompowsky Attack",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "qgd",
+    "name": "Queen's Gambit Declined",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "qga",
+    "name": "Queen's Gambit Accepted",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "slav-defence",
+    "name": "Slav Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "semi-slav",
+    "name": "Semi-Slav Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "kings-indian-defence",
+    "name": "King's Indian Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 4,
+    "warnCount": 3
+  },
+  {
+    "id": "nimzo-indian",
+    "name": "Nimzo-Indian Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 4,
+    "warnCount": 3
+  },
+  {
+    "id": "grunfeld-defence",
+    "name": "Grünfeld Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 4,
+    "warnCount": 3
+  },
+  {
+    "id": "dutch-defence",
+    "name": "Dutch Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "benoni-defence",
+    "name": "Benoni Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "benko-gambit",
+    "name": "Benko Gambit",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "queens-indian",
+    "name": "Queen's Indian Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "budapest-gambit",
+    "name": "Budapest Gambit",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "old-indian-defence",
+    "name": "Old Indian Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "english-opening",
+    "name": "English Opening",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "reti-opening",
+    "name": "Reti Opening",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "kings-indian-attack",
+    "name": "King's Indian Attack",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "birds-opening",
+    "name": "Bird's Opening",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 7,
+    "trapCount": 2,
+    "warnCount": 3
+  },
+  {
+    "id": "two-knights-defence",
+    "name": "Two Knights Defence",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 3,
+    "warnCount": 3
+  },
+  {
+    "id": "evans-gambit",
+    "name": "Evans Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 6,
+    "warnCount": 3
+  },
+  {
+    "id": "pro-naroditsky-scotch",
+    "name": "Scotch Game (Naroditsky)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-naroditsky-alapin",
+    "name": "Alapin Sicilian (Naroditsky)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-naroditsky-fantasy-caro",
+    "name": "Fantasy Caro-Kann (Naroditsky)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-naroditsky-najdorf",
+    "name": "Sicilian Najdorf (Naroditsky)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-naroditsky-kid",
+    "name": "King's Indian Defense (Naroditsky)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-naroditsky-grunfeld",
+    "name": "Grunfeld Defense (Naroditsky)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 4,
+    "trapCount": 3,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-naroditsky-vienna",
+    "name": "Vienna Game (Naroditsky)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-naroditsky-semi-slav",
+    "name": "Semi-Slav Defense (Naroditsky)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-naroditsky-jobava-london",
+    "name": "Jobava London (Naroditsky)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 8,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gothamchess-italian",
+    "name": "Italian Game (GothamChess)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 3,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gothamchess-london",
+    "name": "London System (GothamChess)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gothamchess-stafford-refute",
+    "name": "Stafford Gambit Refutation (GothamChess)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gothamchess-caro-kann",
+    "name": "Caro-Kann Defense (GothamChess)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 9,
+    "trapCount": 1,
+    "warnCount": 2
+  },
+  {
+    "id": "pro-gothamchess-scandinavian",
+    "name": "Scandinavian Defense (GothamChess)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 3,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gothamchess-qgd",
+    "name": "Queen's Gambit Declined (GothamChess)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 3,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gothamchess-ponziani",
+    "name": "Ponziani Opening (GothamChess)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gothamchess-fantasy-caro",
+    "name": "Fantasy Variation vs Caro-Kann (GothamChess)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gothamchess-milner-barry",
+    "name": "Milner-Barry Gambit vs French (GothamChess)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gothamchess-anti-sicilian",
+    "name": "Anti-Sicilian Rossolimo (GothamChess)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 3,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-carlsen-ruy-lopez",
+    "name": "Ruy Lopez (Carlsen)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-carlsen-catalan",
+    "name": "Catalan Opening (Carlsen)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-carlsen-english",
+    "name": "English Opening (Carlsen)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-carlsen-sveshnikov",
+    "name": "Sicilian Sveshnikov (Carlsen)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-carlsen-berlin",
+    "name": "Berlin Defense (Carlsen)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-carlsen-qgd",
+    "name": "Queen's Gambit Declined (Carlsen)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-carlsen-london-d4",
+    "name": "Queen's Pawn London (Carlsen)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-carlsen-sicilian-najdorf",
+    "name": "Sicilian Najdorf (Carlsen)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-hikaru-kia",
+    "name": "King's Indian Attack (Hikaru)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-hikaru-scotch",
+    "name": "Scotch Game (Hikaru)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-hikaru-london",
+    "name": "London System (Hikaru)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-hikaru-najdorf",
+    "name": "Sicilian Najdorf (Hikaru)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-hikaru-kid",
+    "name": "King's Indian Defense (Hikaru)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-hikaru-nimzo",
+    "name": "Nimzo-Indian Defense (Hikaru)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-hikaru-benko",
+    "name": "Benko Gambit (Hikaru)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-hikaru-english",
+    "name": "English Opening (Hikaru)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-caruana-ruy-lopez",
+    "name": "Ruy Lopez Anti-Marshall (Caruana)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-caruana-italian",
+    "name": "Giuoco Piano (Caruana)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-caruana-anti-berlin",
+    "name": "Anti-Berlin (Caruana)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-caruana-petroff",
+    "name": "Petroff Defense (Caruana)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-caruana-qgd",
+    "name": "Queen's Gambit Declined (Caruana)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-caruana-nimzo",
+    "name": "Nimzo-Indian Defense (Caruana)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-caruana-catalan",
+    "name": "Catalan Opening (Caruana)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-caruana-berlin",
+    "name": "Berlin Defense (Caruana)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-firouzja-italian",
+    "name": "Italian Game (Firouzja)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-firouzja-rossolimo",
+    "name": "Sicilian Rossolimo (Firouzja)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-firouzja-vienna",
+    "name": "Vienna Game (Firouzja)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-firouzja-najdorf",
+    "name": "Sicilian Najdorf (Firouzja)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-firouzja-grunfeld",
+    "name": "Grunfeld Defense (Firouzja)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 1
+  },
+  {
+    "id": "pro-firouzja-french",
+    "name": "French Defense (Firouzja)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-firouzja-ruy-lopez",
+    "name": "Ruy Lopez (Firouzja)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-firouzja-kid",
+    "name": "King's Indian Defense (Firouzja)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-dubov-italian",
+    "name": "The Loud Italian / Dubov Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-dubov-catalan",
+    "name": "Catalan Opening (Dubov)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-dubov-anti-marshall",
+    "name": "Anti-Marshall Ruy Lopez (Dubov)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-dubov-tarrasch-french",
+    "name": "Tarrasch French (Dubov)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-dubov-sveshnikov",
+    "name": "Sicilian Sveshnikov (Dubov)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-dubov-tarrasch-defense",
+    "name": "Tarrasch Defense (Dubov)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 2,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-dubov-benoni",
+    "name": "Modern Benoni (Dubov)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-dubov-scotch",
+    "name": "Scotch Game (Dubov)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-dubov-dutch",
+    "name": "Dutch Defense (Dubov)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gukesh-italian",
+    "name": "Italian Game (Gukesh)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gukesh-catalan",
+    "name": "Catalan Opening (Gukesh)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-gukesh-najdorf",
+    "name": "Sicilian Najdorf (Gukesh)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-praggnanandhaa-ruy-lopez",
+    "name": "Ruy Lopez (Praggnanandhaa)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-praggnanandhaa-catalan",
+    "name": "Catalan Opening (Praggnanandhaa)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-praggnanandhaa-najdorf",
+    "name": "Sicilian Najdorf (Praggnanandhaa)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-niemann-anti-marshall",
+    "name": "Ruy Lopez Anti-Marshall (Niemann)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-niemann-najdorf",
+    "name": "Sicilian Najdorf (Niemann)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-niemann-grunfeld",
+    "name": "Grunfeld Defense (Niemann)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-ericrosen-london",
+    "name": "London System (Rosen)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-ericrosen-stafford",
+    "name": "Stafford Gambit (Rosen)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-ericrosen-englund",
+    "name": "Englund Gambit (Rosen)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 1
+  },
+  {
+    "id": "pro-annacramling-qgd",
+    "name": "Queen's Gambit (Cramling)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 4,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-annacramling-london",
+    "name": "London System (Cramling)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-annacramling-cow",
+    "name": "The Cow (Cramling)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-chesswithakeem-italian",
+    "name": "Italian Game (Akeem)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-chesswithakeem-scotch",
+    "name": "Scotch Game (Akeem)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 1,
+    "warnCount": 1
+  },
+  {
+    "id": "pro-chesswithakeem-kings-gambit",
+    "name": "King's Gambit (Akeem)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-chesswithakeem-caro-kann",
+    "name": "Caro-Kann Defense (Akeem)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 4,
+    "trapCount": 1,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-samayraina-italian",
+    "name": "Italian Game (Samay)",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-samayraina-najdorf",
+    "name": "Sicilian Najdorf (Samay)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "pro-samayraina-nimzo",
+    "name": "Nimzo-Indian Defense (Samay)",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 2,
+    "warnCount": 0
+  },
+  {
+    "id": "gambit-kings-gambit",
+    "name": "King's Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 6,
+    "warnCount": 3
+  },
+  {
+    "id": "gambit-evans-gambit",
+    "name": "Evans Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 4,
+    "warnCount": 3
+  },
+  {
+    "id": "scotch-gambit",
+    "name": "Scotch Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 4,
+    "warnCount": 3
+  },
+  {
+    "id": "vienna-gambit",
+    "name": "Vienna Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 1,
+    "warnCount": 2
+  },
+  {
+    "id": "danish-gambit",
+    "name": "Danish Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 5,
+    "warnCount": 3
+  },
+  {
+    "id": "smith-morra-gambit",
+    "name": "Smith-Morra Gambit",
+    "color": "white",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 4,
+    "warnCount": 3
+  },
+  {
+    "id": "stafford-gambit",
+    "name": "Stafford Gambit",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 6,
+    "warnCount": 3
+  },
+  {
+    "id": "marshall-attack",
+    "name": "Marshall Attack",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 4,
+    "warnCount": 3
+  },
+  {
+    "id": "englund-gambit",
+    "name": "Englund Gambit",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 5,
+    "trapCount": 0,
+    "warnCount": 0
+  },
+  {
+    "id": "gambit-budapest-gambit",
+    "name": "Budapest Gambit",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 4,
+    "trapCount": 0,
+    "warnCount": 3
+  },
+  {
+    "id": "albin-countergambit",
+    "name": "Albin Countergambit",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 2
+  },
+  {
+    "id": "gambit-benko-gambit",
+    "name": "Benko Gambit",
+    "color": "black",
+    "hasPGN": true,
+    "varCount": 3,
+    "trapCount": 0,
+    "warnCount": 2
+  }
+]
