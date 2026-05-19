@@ -1,8 +1,8 @@
 {
   "round": 2,
-  "generatedAt": "2026-05-19T14:25:27.451Z",
+  "generatedAt": "2026-05-19T14:28:01.910Z",
   "inProgress": true,
-  "openingsCompleted": 65,
+  "openingsCompleted": 75,
   "results": [
     {
       "round": 2,
@@ -4675,6 +4675,674 @@
       ],
       "auditEvents": [],
       "finishedAt": "2026-05-19T14:25:27.451Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-carlsen-london-d4",
+      "name": "Queen's Pawn London (Carlsen)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:25:27.455Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Queens Pawn London (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queen's Pawn Lndon (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queen's",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Queens Pawn London (Carlsen)",
+            "Queen's Pawn Lndon (Carlsen)",
+            "Queen's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:25:43.696Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-carlsen-sicilian-najdorf",
+      "name": "Sicilian Najdorf (Carlsen)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:25:43.696Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Najdrf (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Najdrf (Carlsen)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:25:59.402Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-hikaru-kia",
+      "name": "King's Indian Attack (Hikaru)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:25:59.402Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Kings Indian Attack (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King's Indian ttack (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King's",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Kings Indian Attack (Hikaru)",
+            "King's Indian ttack (Hikaru)",
+            "King's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:26:15.188Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-hikaru-scotch",
+      "name": "Scotch Game (Hikaru)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:26:15.188Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Scotch Gam (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Scotch",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Scotch Gam (Hikaru)",
+            "Scotch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:26:29.920Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-hikaru-london",
+      "name": "London System (Hikaru)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:26:29.920Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "London Systm (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "London",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "London Systm (Hikaru)",
+            "London"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:26:44.568Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-hikaru-najdorf",
+      "name": "Sicilian Najdorf (Hikaru)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:26:44.571Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Najorf (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Najorf (Hikaru)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:26:59.995Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-hikaru-kid",
+      "name": "King's Indian Defense (Hikaru)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:26:59.996Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "King's Indian Defence (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Kings Indian Defense (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King's Indian Dfense (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "King's Indian Defence (Hikaru)",
+            "Kings Indian Defense (Hikaru)",
+            "King's Indian Dfense (Hikaru)"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:27:15.784Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-hikaru-nimzo",
+      "name": "Nimzo-Indian Defense (Hikaru)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:27:15.785Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Nimzo-Indian Defence (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Nimzo-Indian Dfense (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Nimzo",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Nimzo-Indian Defence (Hikaru)",
+            "Nimzo-Indian Dfense (Hikaru)",
+            "Nimzo"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:27:31.918Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-hikaru-benko",
+      "name": "Benko Gambit (Hikaru)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:27:31.918Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Benko Gambt (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Benko",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Benko Gambt (Hikaru)",
+            "Benko"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:27:46.486Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-hikaru-english",
+      "name": "English Opening (Hikaru)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:27:46.487Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "English Openng (Hikaru)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "English",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "English Openng (Hikaru)",
+            "English"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:28:01.910Z"
     }
   ]
 }
