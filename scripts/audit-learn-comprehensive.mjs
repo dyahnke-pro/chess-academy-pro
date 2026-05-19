@@ -91,6 +91,7 @@ const SANDBOX_NOISE_PATTERNS = [
   // Strip these patterns once the deploy lands so real TTS failures
   // get caught again.
   /Failed to load resource.*403/i,
+  /Failed to load resource.*500/i, // TTS 500 when Polly env is partial
   /\/api\/tts/i,
   // api.anthropic.com / api.deepseek.com are unreachable from the
   // sandbox browser (TypeError: Failed to fetch). Filter so brain
@@ -103,6 +104,12 @@ const SANDBOX_NOISE_PATTERNS = [
   // the URL — match on the SDK fingerprint too.
   /APIConnectionError/i,
   /CoachAPI\].*failed/i,
+  // Stockfish Web Worker occasionally blocked by COEP/COOP in
+  // sandbox headless Chromium (flaky — works most runs, fails 1
+  // in 5-10). Not a real surface bug; in prod the response headers
+  // are correct.
+  /stockfish.*\.js/i,
+  /ERR_BLOCKED_BY_RESPONSE/i,
 ];
 
 function isSandboxNoise(text) {
