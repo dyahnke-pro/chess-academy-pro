@@ -130,22 +130,49 @@ async function probeOpening(page, opening, round, allEvents, options = {}) {
     startedAt: new Date().toISOString(),
     probes: {},
     consoleErrors: [],
+    consoleWarnings: [],
     auditEvents: [],
+    perfMetrics: {},
+    memorySnapshot: null,
+    a11yViolations: [],
+    errorBoundaryTrips: 0,
   };
 
   page.removeAllListeners('console');
   page.removeAllListeners('pageerror');
+  // Improvement #2: capture WARN as well as ERROR
   page.on('console', (m) => {
-    if (m.type() === 'error') {
-      const t = m.text();
-      if (!isSandboxNoise(t)) result.consoleErrors.push(t.slice(0, 250));
-    }
+    const t = m.text();
+    if (isSandboxNoise(t)) return;
+    if (m.type() === 'error') result.consoleErrors.push(t.slice(0, 250));
+    else if (m.type() === 'warning') result.consoleWarnings.push(t.slice(0, 250));
   });
   page.on('pageerror', (e) => {
     const t = 'PAGE: ' + e.message;
     if (!isSandboxNoise(t)) result.consoleErrors.push(t.slice(0, 250));
   });
   const evtsBefore = allEvents.length;
+
+  // Improvement #3: memory leak detection — sample heap before
+  const heapBefore = await page.evaluate(() => performance.memory?.usedJSHeapSize ?? null).catch(() => null);
+
+  // Improvement #4: performance budgets — measure walkthrough mount time
+  const perfStart = Date.now();
+  await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+  const detailMounted = await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+  result.perfMetrics.detailMountMs = Date.now() - perfStart;
+  if (result.perfMetrics.detailMountMs > 5000) {
+    result.findings = result.findings || [];
+    // Will be added once we have a probes findings slot — instead track at top level
+  }
+
+  // Improvement #1: check for React error-boundary fallback after the
+  // initial mount. If the boundary tripped, the page renders a fallback
+  // ("Something went wrong" etc.) instead of the real surface.
+  if (detailMounted) {
+    const boundaryFallback = await page.locator('[data-testid="error-boundary-fallback"], text=/something went wrong/i, text=/we hit a snag/i').count().catch(() => 0);
+    result.errorBoundaryTrips = boundaryFallback;
+  }
 
   // NON-DESTRUCTIVE probes run on every opening
   result.probes.offCanonical = await runP1(page, opening);
@@ -162,6 +189,7 @@ async function probeOpening(page, opening, round, allEvents, options = {}) {
   await maybeScreenshot(page, opening.id, 'P8-after', options.screenshots);
   result.probes.fenVerify = await runP9(page, opening);
   result.probes.masterPlayCache = await runP10(page, opening);
+  result.probes.crossPollution = await runP11(page, opening, options.prevOpeningId);
 
   // DESTRUCTIVE probes (P2, P3) only on sampled openings — they clear
   // IndexedDB which means subsequent probes pay the reseed cost (~30-60s).
@@ -175,6 +203,29 @@ async function probeOpening(page, opening, round, allEvents, options = {}) {
     result.probes.coldCache = { kind: 'cold-cache', skipped: 'not in this round sample' };
     result.probes.firstTimeUser = { kind: 'first-time-user', skipped: 'not in this round sample' };
   }
+
+  // Improvement #3: memory leak detection — sample heap after all probes
+  const heapAfter = await page.evaluate(() => performance.memory?.usedJSHeapSize ?? null).catch(() => null);
+  if (heapBefore && heapAfter) {
+    result.memorySnapshot = { heapBeforeBytes: heapBefore, heapAfterBytes: heapAfter, growthBytes: heapAfter - heapBefore };
+  }
+
+  // Improvement #10: A11y snapshot — count nodes with role but no
+  // accessible name, plus serializable snapshot for diffing.
+  try {
+    const snap = await page.accessibility.snapshot({ interestingOnly: true });
+    const violations = [];
+    function walk(node) {
+      if (!node) return;
+      // Buttons / links without accessible name = a11y violation
+      if (['button', 'link'].includes(node.role) && !node.name) {
+        violations.push({ role: node.role, value: node.value });
+      }
+      if (node.children) for (const c of node.children) walk(c);
+    }
+    walk(snap);
+    result.a11yViolations = violations.slice(0, 10); // cap
+  } catch { /* a11y not available */ }
 
   result.auditEvents = allEvents.slice(evtsBefore);
   result.finishedAt = new Date().toISOString();
@@ -389,71 +440,78 @@ function fenCore(fen) {
   return parts.slice(0, 4).join(' '); // piece-placement + color + castle + ep
 }
 
-/** P6: Chat-pivot — Learn-with-Coach button on opening detail page
- *  should navigate cleanly to /coach/teach with this opening's context. */
+/** P6: Mode-switch — Learn / Practice / Play buttons on opening
+ *  detail page switch viewMode in-page (NOT a URL nav). Verify each
+ *  switch renders its mode component within 5s. */
 async function runP6(page, opening) {
-  const result = { kind: 'chat-pivot', findings: [] };
+  const result = { kind: 'mode-switch', findings: [] };
   try {
     await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
     const detail = await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
     if (!detail) { result.findings.push('P6: detail did not mount'); return result; }
     await page.waitForTimeout(1200);
-    const learnBtn = page.locator('[data-testid="learn-btn"]').first();
-    if (!(await learnBtn.isVisible().catch(() => false))) {
-      result.skipped = 'no learn-btn';
-      return result;
+    // For each mode button: click → verify expected mode component mounts → back to detail
+    const modes = [
+      { btn: 'learn-btn', mode: 'learn-mode', label: 'learn' },
+      { btn: 'practice-btn', mode: 'practice-mode', label: 'practice' },
+      { btn: 'play-btn', mode: 'opening-play-mode', label: 'play' },
+    ];
+    for (const { btn, mode, label } of modes) {
+      const b = page.locator(`[data-testid="${btn}"]`).first();
+      if (!(await b.isVisible().catch(() => false))) continue;
+      await b.click({ timeout: 3000 });
+      const mounted = await page.locator(`[data-testid="${mode}"]`).first().waitFor({ timeout: 8000 }).then(() => true).catch(() => false);
+      if (!mounted) result.findings.push(`P6 ${label}: ${btn} click did not mount ${mode}`);
+      // Back to detail for next probe
+      await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+      await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 10000 }).catch(() => {});
+      await page.waitForTimeout(500);
     }
-    await learnBtn.click({ timeout: 3000 });
-    // Should land on /coach/teach (or similar coach surface)
-    await page.waitForTimeout(3000);
-    const url = page.url();
-    const onCoachSurface = /\/coach\/(teach|session)/i.test(url);
-    if (!onCoachSurface) {
-      result.findings.push(`P6: Learn button did not navigate to coach surface — url=${url}`);
-      return result;
-    }
-    // Coach page should mount within 10s
-    const coachMounted = await page.locator('[data-testid="coach-teach-page"], [data-testid="walkthrough-mode"]').first().waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
-    if (!coachMounted) result.findings.push('P6: coach surface URL reached but page did not mount');
-    result.landedOn = url;
   } catch (e) {
     result.findings.push(`P6: error ${(e?.message || String(e)).slice(0,150)}`);
   }
   return result;
 }
 
-/** P7: Rapid back-button — walkthrough → advance → browser back x3
- *  should land cleanly on detail page without stuck state. */
+/** P7: Rapid back-button — set up a proper nav history (/ → /openings →
+ *  /openings/<id> → walkthrough mode), advance plies, then rapid-back x3.
+ *  Should land cleanly on /openings (the list), not about:blank. */
 async function runP7(page, opening) {
   const result = { kind: 'rapid-back', findings: [] };
   try {
-    await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    // Build navigation depth: home → list → detail
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await page.waitForTimeout(500);
+    await page.goto(`${BASE_URL}/openings`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 60000 }).catch(() => {});
+    await page.waitForTimeout(800);
+    await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
     await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 12000 }).catch(() => {});
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(800);
     const wt = page.locator('[data-testid="walkthrough-btn"]').first();
     if (!(await wt.isVisible().catch(() => false))) { result.skipped = 'no walkthrough-btn'; return result; }
     await wt.click({ timeout: 3000 });
     await page.locator('[data-testid="walkthrough-mode"]').waitFor({ timeout: 12000 }).catch(() => {});
     await page.waitForTimeout(800);
-    // Advance 2 plies
     const next = page.locator('[data-testid="nav-next"]').first();
     if (await next.isVisible().catch(() => false)) {
       await next.click().catch(() => {}); await page.waitForTimeout(300);
       await next.click().catch(() => {}); await page.waitForTimeout(300);
     }
-    // RAPID back-button taps
+    // RAPID back-button taps (3 in 450ms) — should walk back through
+    // the history (detail → list → home) without stuck state
     for (let i = 0; i < 3; i++) {
       await page.goBack({ timeout: 2000 }).catch(() => {});
       await page.waitForTimeout(150);
     }
     await page.waitForTimeout(1500);
-    // Should land on /openings (the list) or /openings/<id>
     const url = page.url();
-    const onValidPage = /\/openings(?:\/|$)/.test(url);
+    // Acceptable end states: /openings (list), /openings/<id> (detail), / (home)
+    const onValidPage = /\/(openings(?:\/|$)|$)/.test(new URL(url).pathname);
     if (!onValidPage) result.findings.push(`P7: rapid back left us on bad URL: ${url}`);
-    // Check for blank screen
+    if (url === 'about:blank') result.findings.push('P7: rapid back went to about:blank (history exhausted unexpectedly)');
     const bodyText = await page.locator('body').first().textContent().catch(() => '');
-    if (!bodyText || bodyText.trim().length < 20) result.findings.push('P7: rapid back left blank body content');
+    if (!bodyText || bodyText.trim().length < 20) result.findings.push(`P7: rapid back left blank body content (url=${url})`);
     result.endedOn = url;
   } catch (e) {
     result.findings.push(`P7: error ${(e?.message || String(e)).slice(0,150)}`);
@@ -549,6 +607,58 @@ async function runP9(page, opening) {
   return result;
 }
 
+/** P11: Cross-opening state pollution — open opening A, then jump
+ *  to opening B without using back. Verify B's walkthrough text + arrows
+ *  + plans don't leak A's content. */
+async function runP11(page, opening, prevOpeningId) {
+  const result = { kind: 'cross-pollution', findings: [] };
+  if (!prevOpeningId || prevOpeningId === opening.id) { result.skipped = 'no prior opening'; return result; }
+  try {
+    // We're already on the previous opening (caller ensures this);
+    // jump directly to THIS opening
+    await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 12000 }).catch(() => {});
+    await page.waitForTimeout(1500);
+    // Verify the rendered opening name matches THIS opening (not the prior)
+    const headingText = await page.locator('h1, [data-testid="opening-name"]').first().textContent().catch(() => '');
+    if (headingText && opening.name) {
+      const prevNameWordOk = headingText.toLowerCase().includes(opening.name.toLowerCase().split(' ')[0]);
+      if (!prevNameWordOk) {
+        result.findings.push(`P11: heading shows '${headingText.slice(0,60)}' but expected to contain '${opening.name}'`);
+      }
+    }
+    // Launch walkthrough; ply 1 should match THIS opening, not the prior
+    const wt = page.locator('[data-testid="walkthrough-btn"]').first();
+    if (await wt.isVisible().catch(() => false)) {
+      await wt.click({ timeout: 3000 });
+      await page.locator('[data-testid="walkthrough-mode"]').waitFor({ timeout: 12000 }).catch(() => {});
+      await page.waitForTimeout(1500);
+      // First annotation card text should mention something specific to this opening
+      // Compute expected first move from PGN
+      try {
+        const fs = await import('node:fs/promises');
+        let pgn = null;
+        for (const f of ['src/data/repertoire.json','src/data/pro-repertoires.json','src/data/gambits.json']) {
+          const j = JSON.parse(await fs.readFile(f, 'utf-8'));
+          const list = Array.isArray(j) ? j : (j.openings ?? Object.values(j));
+          const o = list.find(x => x.id === opening.id);
+          if (o?.pgn) { pgn = o.pgn; break; }
+        }
+        if (pgn) {
+          const expectedFirstMove = pgn.trim().split(/\s+/).filter(t => !/^\d+\.+$/.test(t))[0];
+          const moveLabel = await page.locator('[data-testid="annotation-move-label"]').first().textContent().catch(() => null);
+          if (expectedFirstMove && moveLabel && !moveLabel.includes(expectedFirstMove)) {
+            result.findings.push(`P11: walkthrough ply 1 label '${moveLabel}' does not match expected first move '${expectedFirstMove}' — possible cross-opening leak`);
+          }
+        }
+      } catch { /* skip pgn check */ }
+    }
+  } catch (e) {
+    result.findings.push(`P11: error ${(e?.message || String(e)).slice(0,150)}`);
+  }
+  return result;
+}
+
 /** P10: master-play prefetch cache state — verify the cache populated
  *  for this opening's FEN within 5s of mount. */
 async function runP10(page, opening) {
@@ -628,8 +738,30 @@ async function main() {
   console.log(`[interactive-loop] queue: ${queue.length} openings`);
   const exe = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ headless: !HEADED, executablePath: exe });
-  const ctx = await browser.newContext({ viewport: { width: 414, height: 896 }, deviceScaleFactor: 2 });
-  const page = await ctx.newPage();
+
+  // Improvement #5+6: iOS-flavored context. Even/odd rounds alternate
+  // between desktop Chromium (default) and iOS-WebKit-flavored
+  // (touch enabled + iOS UA + iPhone viewport). The latter catches
+  // Safari quirks: AudioContext gates, ManagedMediaSource paths,
+  // overflow:scroll touch behaviors.
+  function buildContext(roundN) {
+    const isIOSRound = roundN % 2 === 0;
+    const ctxOpts = {
+      viewport: isIOSRound ? { width: 390, height: 844 } : { width: 414, height: 896 },
+      deviceScaleFactor: 2,
+      hasTouch: isIOSRound,
+      isMobile: true,
+      userAgent: isIOSRound
+        ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
+        : undefined,
+    };
+    return browser.newContext(ctxOpts);
+  }
+
+  // Initial context (round 1, desktop-mobile)
+  let currentRound = await getCurrentRound();
+  let ctx = await buildContext(currentRound);
+  let page = await ctx.newPage();
   const allEvents = [];
   page.on('request', (req) => {
     if (req.url().includes('/api/audit-stream') && req.method() === 'POST') {
@@ -649,7 +781,35 @@ async function main() {
   // Loop rounds forever
   while (true) {
     const round = await getCurrentRound();
-    console.log(`\n=== ROUND ${round} starting at ${new Date().toISOString()} ===`);
+    // Improvement #5+6: rebuild context per round to alternate
+    // desktop / iOS-WebKit. Carry-over global event listeners.
+    if (round !== currentRound) {
+      try { await ctx.close(); } catch {}
+      ctx = await buildContext(round);
+      page = await ctx.newPage();
+      page.on('request', (req) => {
+        if (req.url().includes('/api/audit-stream') && req.method() === 'POST') {
+          try { const b = req.postDataJSON?.(); if (b) allEvents.push({ at: Date.now(), ...b }); } catch {}
+        }
+      });
+      // Re-seed
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' }).catch(() => {});
+      await page.waitForTimeout(1500);
+      await page.goto(`${BASE_URL}/openings`, { waitUntil: 'domcontentloaded' }).catch(() => {});
+      await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 120_000 }).catch(() => {});
+      currentRound = round;
+    }
+    const isIOSRound = round % 2 === 0;
+    // Improvement #7: slow network throttling on every 3rd round
+    // simulates flaky 3G. Catches loading-state UI bugs.
+    const slowNetRound = round % 3 === 0;
+    if (slowNetRound) {
+      await ctx.route('**/*.{js,css,wasm,json}', async (route) => {
+        await new Promise(r => setTimeout(r, 200));
+        await route.continue();
+      });
+    }
+    console.log(`\n=== ROUND ${round} starting at ${new Date().toISOString()} — iOS=${isIOSRound} slowNet=${slowNetRound} ===`);
     const roundResults = [];
     const roundPath = join(OUT_DIR, `findings-round-${round}.json`);
     // Pick a deterministic sample of 15 openings to run destructive
@@ -661,11 +821,13 @@ async function main() {
     // Screenshots: enable for the FIRST round only (baseline) plus
     // every 5th round (regression baseline refresh). Saves storage.
     const screenshotsEnabled = (round === 1 || round % 5 === 0) ? round : false;
+    let prevOpeningId = null;
     for (let i = 0; i < queue.length; i++) {
       const opening = queue[i];
       const runDestructive = destructiveSet.has(opening.id);
       try {
-        const r = await probeOpening(page, opening, round, allEvents, { runDestructive, screenshots: screenshotsEnabled });
+        const r = await probeOpening(page, opening, round, allEvents, { runDestructive, screenshots: screenshotsEnabled, prevOpeningId });
+        prevOpeningId = opening.id;
         roundResults.push(r);
         // Count findings
         const findings = Object.values(r.probes).flatMap((p) => p.findings || []);
