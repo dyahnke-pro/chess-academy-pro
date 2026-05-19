@@ -1,0 +1,225 @@
+{
+  "entries": {
+    "alekhine-defense-exchange-variation-voronezh-variation.json::__main__::14": {
+      "ply": 15,
+      "san": "Rc1",
+      "annotation": "The rook moves to the c-file to pressure Black's potential queenside weaknesses and support the center's control after the d6 pawn is fixed."
+    },
+    "alekhine-defense-exchange-variation-voronezh-variation.json::__main__::15": {
+      "ply": 16,
+      "san": "O-O",
+      "annotation": "Castling kingside connects the rooks and removes the king from the center before White's queenside expansion begins."
+    },
+    "alekhine-defense-exchange-variation-voronezh-variation.json::__main__::16": {
+      "ply": 17,
+      "san": "b3",
+      "annotation": "This advance prepares a5, attacking the Nb6 and forcing it to make a decision while White controls d4 and c4."
+    },
+    "alekhine-defense-exchange-variation.json::__main__::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "annotation": "Black challenges the e4 pawn immediately with the knight, forcing you to make a critical choice about how to defend or advance your center."
+    },
+    "alekhine-defense-modern-variation-alekhine-variation.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The classical central stronghold. White claims e4 immediately, establishing the foundational pawn presence that Black will challenge with the knight from the flank in Alekhine's Defense."
+    },
+    "alekhine-defense-welling-variation.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central pawn advance stakes space immediately and invites Black's knight to jump to the rim, where it can be harassed before finding a good square."
+    },
+    "benoni-defense-benoni-staunton-gambit.json::__main__::4": {
+      "ply": 5,
+      "san": "e4",
+      "annotation": "White supports the d5 pawn and gains space in the center, making Black's f5 advance less effective since e4 controls key dark squares."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::6": {
+      "ply": 7,
+      "san": "Nc3",
+      "annotation": "Nc3 supports d5 and prepares Be2, keeping White's space advantage while allowing flexible piece placement."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::7": {
+      "ply": 8,
+      "san": "exd5",
+      "annotation": "Black captures on d5, forcing White to recapture and establishing a central tension that defines the resulting pawn structure."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::8": {
+      "ply": 9,
+      "san": "cxd5",
+      "annotation": "White recaptures with the c-pawn, creating an isolated d5 pawn that becomes a target for the rest of the game."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::9": {
+      "ply": 10,
+      "san": "d6",
+      "annotation": "Black plants a second pawn on d6, reinforcing the center and preventing immediate pressure on the e6 square."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::10": {
+      "ply": 11,
+      "san": "e4",
+      "annotation": "White pushes e4, controlling key central squares and gaining space while preventing Black's counterplay on e5."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::11": {
+      "ply": 12,
+      "san": "g6",
+      "annotation": "Black fianchettoes the kingside bishop, aiming it at the long diagonal to challenge White's central control."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::12": {
+      "ply": 13,
+      "san": "Nf3",
+      "annotation": "Nf3 completes White's solid setup, preparing Be2 and castling while keeping the center locked and secure."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::13": {
+      "ply": 14,
+      "san": "Bg7",
+      "annotation": "Bg7 completes Black's fianchetto setup, exerting pressure along the long diagonal and preparing kingside castling."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::14": {
+      "ply": 15,
+      "san": "Be2",
+      "annotation": "Be2 prepares kingside castling while keeping the bishop flexible on the long diagonal, avoiding early commitments that Black might exploit."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::15": {
+      "ply": 16,
+      "san": "O-O",
+      "annotation": "Castling kingside secures White's king and connects the rooks, establishing a stable setup to support the d5 pawn and control central tensions."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::16": {
+      "ply": 17,
+      "san": "O-O",
+      "annotation": "Black castles to safety as well, mirroring White's setup. Both sides now have secured kings and can focus on the middlegame struggle for d5 and the c5 pawn."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::17": {
+      "ply": 18,
+      "san": "Re8",
+      "annotation": "The rook moves to e8 to pressure the e4 pawn and prepare potential exchanges, increasing Black's pressure along the e-file against White's center."
+    },
+    "benoni-defense-classical-variation-czerniak-defense-tal-line.json::__main__::18": {
+      "ply": 19,
+      "san": "Nd2",
+      "annotation": "Nd2 retreats the knight to support e4 and prepare potential f3 or c4 moves, while maintaining flexibility to reroute the knight toward critical squares like f3 or b3."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::6": {
+      "ply": 7,
+      "san": "Nc3",
+      "annotation": "Nc3 reinforces the center and prepares to support the d5 pawn while controlling key squares like e4 and d5."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::7": {
+      "ply": 8,
+      "san": "exd5",
+      "annotation": "Black captures on d5 to relieve the pressure on the center and simplify White's pawn tension."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::8": {
+      "ply": 9,
+      "san": "cxd5",
+      "annotation": "Recapturing with the c-pawn keeps the d5 pawn advanced and dangerous, maintaining space advantage in the center."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::9": {
+      "ply": 10,
+      "san": "d6",
+      "annotation": "Pushing d6 solidifies Black's structure and prevents White from easily advancing e5, while supporting the fianchettoed bishop."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::10": {
+      "ply": 11,
+      "san": "e4",
+      "annotation": "e4 expands White's space and establishes a powerful pawn chain from d5 to e4, restricting Black's pieces."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::11": {
+      "ply": 12,
+      "san": "g6",
+      "annotation": "Black fianchettoes the kingside bishop to target the long diagonal and exert pressure on White's center."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::12": {
+      "ply": 13,
+      "san": "f4",
+      "annotation": "f4 locks in White's pawn center and prevents Black from undermining with f5, creating a formidable space advantage."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::13": {
+      "ply": 14,
+      "san": "Bg7",
+      "annotation": "The bishop on g7 commands the long diagonal and prepares to contest White's dominance by attacking the d4 and e4 squares."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::14": {
+      "ply": 15,
+      "san": "Nf3",
+      "annotation": "Nf3 completes the knight placement and prepares to support the e4–d5 pawn chain. This keeps Black's queenside counterplay (on c5) under observation."
+    },
+    "benoni-defense-four-pawns-attack.json::__main__::15": {
+      "ply": 16,
+      "san": "O-O",
+      "annotation": "Castling kingside removes the king from the center before Black can launch an attack along the half-open c-file. White is now ready to advance the kingside pawns."
+    },
+    "benoni-defense-king-s-pawn-line.json::__main__::3": {
+      "ply": 4,
+      "san": "g6",
+      "annotation": "Black prepares to fianchetto the kingside bishop on g7, controlling the long diagonal and eyeing White's center pawns from afar."
+    },
+    "blackmar-diemer-gambit-declined-brombacher-countergambit.json::__main__::7": {
+      "ply": 8,
+      "san": "c5",
+      "annotation": "Black strikes at the center with c5, challenging your d4 pawn and preventing you from solidifying the gambit setup. This counterattack is the key resource in Black's defense."
+    },
+    "blackmar-diemer-gambit-lemberger-countergambit-sneiders-attack.json::__main__::5": {
+      "ply": 6,
+      "san": "e5",
+      "annotation": "Black pushes to e5, attacking your d4 pawn and seizing space in the center before you can consolidate your pieces."
+    },
+    "bogo-indian-defense-gr-nfeld-variation.json::__main__::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "annotation": "Black attacks your central pawn immediately, forcing you to decide whether to defend it, advance it, or allow a trade. This knight jump defines the Bogo-Indian's flexible approach."
+    },
+    "bogo-indian-defense-haiti-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "Nc6",
+      "annotation": "Black reinforces the center and prepares to support the bishop on b4 with added pressure on d4, a critical square in this structure."
+    },
+    "bogo-indian-defense-monticelli-trap.json::__main__::15": {
+      "ply": 16,
+      "san": "Ne4",
+      "annotation": "Ne4 centralizes the knight and attacks d6, preparing to reroute to f6 or g5 depending on Black's setup. This move exploits the temporary placement of Black's pieces before solid development."
+    },
+    "bogo-indian-defense.json::__main__::5": {
+      "ply": 6,
+      "san": "Bb4+",
+      "annotation": "The bishop check on b4 forces White to clarify the queenside immediately: blocking with the knight commits it to c3, or playing c-pawn pushes open the center before development is complete."
+    },
+    "caro-kann-defense-advance-variation-prins-attack.json::__main__::6": {
+      "ply": 7,
+      "san": "b4",
+      "annotation": "White pushes on the queenside to disrupt Black's coordination and prepare c4, attacking the d5 pawn from a second direction while the bishop on f5 remains undefended."
+    },
+    "caro-kann-defense-campomanes-attack.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central pawn stake claims e4, the most controlling square on the board. This aggressive setup invites Black to contest the center immediately."
+    },
+    "caro-kann-defense-classical-variation-spassky-variation.json::__main__::4": {
+      "ply": 5,
+      "san": "Nd2",
+      "annotation": "The knight reroutes via d2 to reach f3 and c4, sidestepping early ...dxe4 exchanges while keeping central tension alive."
+    },
+    "caro-kann-defense-mar-czy-variation-mar-czy-gambit.json::__main__::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "annotation": "Nf3 prepares to solidify the center and readies kingside castling while the e4 pawn controls key central squares."
+    },
+    "caro-kann-defense-mar-czy-variation-mar-czy-gambit.json::__main__::9": {
+      "ply": 10,
+      "san": "exd4",
+      "annotation": "Black captures on d4, forcing White to recapture and committing the pawn structure. This trades off Black's cramped position."
+    },
+    "caro-kann-defense-mar-czy-variation-mar-czy-gambit.json::__main__::10": {
+      "ply": 11,
+      "san": "Bc4",
+      "annotation": "Bc4 pins the d-pawn to the king and targets f7, the weakest square in Black's position, creating immediate tactical pressure."
+    }
+  },
+  "totals": {
+    "calls": 20,
+    "inputTokens": 12312,
+    "outputTokens": 2692,
+    "costUSD": 0.025772
+  }
+}
