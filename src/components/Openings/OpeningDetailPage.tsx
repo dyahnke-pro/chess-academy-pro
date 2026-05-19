@@ -55,6 +55,8 @@ import {
   Volume2,
   Square as StopIcon,
   Crosshair,
+  GitBranch,
+  GraduationCap,
   Heart,
   PlayCircle,
   Loader2,
@@ -735,6 +737,18 @@ export function OpeningDetailPage(): JSX.Element {
         </p>
       )}
 
+      {/* ═══ ZONE 2 — UNDERSTAND ═══════════════════════════════════════
+          "Here's what this opening IS and what masters have said
+          about it." Contains: Overview + Key Ideas + Classic Wisdom.
+          See docs/plans/2026-05-19-narration-tone-rewrite.md for the
+          full teaching arc design. */}
+      <OpeningZoneHeader
+        color="cyan"
+        icon={BookOpen}
+        title="Understand"
+        tagline="What this opening is and what masters have said about it."
+      />
+
       {/* Overview */}
       {opening.overview && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4">
@@ -776,6 +790,16 @@ export function OpeningDetailPage(): JSX.Element {
         )}
       />
 
+      {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
+          "Test what you grasped. See the plans. Study one complete
+          game." Contains: Quiz + Middlegame Plans + Model Games. */}
+      <OpeningZoneHeader
+        color="blue"
+        icon={GraduationCap}
+        title="Master"
+        tagline="Test what you grasped. See the plans. Study one complete game."
+      />
+
       {/* Checkpoint Quiz — after Key Ideas */}
       {currentQuiz && !quizCompleted && (
         <CheckpointQuiz
@@ -805,13 +829,24 @@ export function OpeningDetailPage(): JSX.Element {
         onSelectGame={handleSelectModelGame}
       />
 
-      {/* Common Mistakes */}
-      {mistakes.length > 0 && (
-        <CommonMistakesSection
-          mistakes={mistakes}
-          boardOrientation={opening.color}
-        />
-      )}
+      {/* ═══ ZONE 4 — WEAPONS ══════════════════════════════════════════
+          "Sharp lines where YOU win material. Drill these." Contains:
+          Trap Lines + Trap Bullets. (Common Mistakes moved to Zone 5
+          Pitfalls below — they describe what NOT to do, not what to
+          weaponize.) */}
+      <OpeningZoneHeader
+        color="emerald"
+        icon={Crosshair}
+        title="Weapons"
+        tagline="Sharp lines where YOU win material. Drill these."
+        aside={
+          opening.trapLines && opening.trapLines.length > 0 ? (
+            <span className="text-xs font-semibold text-emerald-400">
+              {opening.trapLines.length} lines
+            </span>
+          ) : undefined
+        }
+      />
 
       {/* Traps */}
       {opening.traps && opening.traps.length > 0 && (
@@ -906,6 +941,24 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
+      {/* ═══ ZONE 5 — PITFALLS ═════════════════════════════════════════
+          "Don't fall into these. Avoid these moves." Contains:
+          Warning Lines (specific PGNs that punish the student) +
+          Common Mistakes (move-by-move corrections). */}
+      <OpeningZoneHeader
+        color="amber"
+        icon={AlertTriangle}
+        title="Pitfalls"
+        tagline="Don't fall into these. Avoid these moves."
+        aside={
+          (opening.warningLines?.length ?? 0) + mistakes.length > 0 ? (
+            <span className="text-xs font-semibold text-amber-400">
+              {(opening.warningLines?.length ?? 0) + mistakes.length} items
+            </span>
+          ) : undefined
+        }
+      />
+
       {/* Warnings */}
       {opening.warnings && opening.warnings.length > 0 && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4">
@@ -998,6 +1051,31 @@ export function OpeningDetailPage(): JSX.Element {
           )}
         </div>
       )}
+
+      {/* Common Mistakes — Pitfalls zone tail (moved from above
+          Traps section so the teaching arc reads Weapons → Pitfalls). */}
+      {mistakes.length > 0 && (
+        <CommonMistakesSection
+          mistakes={mistakes}
+          boardOrientation={opening.color}
+        />
+      )}
+
+      {/* ═══ ZONE 6 — DEPTH ════════════════════════════════════════════
+          "Full named sub-line list — go deeper if you want." */}
+      <OpeningZoneHeader
+        color="slate"
+        icon={GitBranch}
+        title="Depth"
+        tagline="Full named sub-line list. Browse all variations if you want to go deeper."
+        aside={
+          opening.variations && opening.variations.length > 0 ? (
+            <span className="text-xs font-semibold text-slate-400">
+              {opening.variations.length} variations
+            </span>
+          ) : undefined
+        }
+      />
 
       {/* Variations (lines) */}
       {opening.variations && opening.variations.length > 0 && (
