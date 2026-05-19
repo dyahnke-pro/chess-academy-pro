@@ -148,3 +148,63 @@ function extractDestinationSquare(san: string): string | null {
   const m = stripped.match(/([a-h][1-8])$/);
   return m ? m[1] : null;
 }
+
+/** Enforcement layer — when the validator finds violations, synthesise
+ *  arrow markers for the mentioned SANs and append them to the
+ *  response. The synthesised markers play through `parseBoardTags` the
+ *  same as LLM-emitted ones, so the board renders them just like any
+ *  other coach arrow. The chat bubble still shows the original prose
+ *  (the brackets get stripped by sanitizeCoachText after).
+ *
+ *  Promoted from audit-only after the live 2026-05-19 audit (Bug E):
+ *  the brain repeatedly mentioned SANs in walkthrough chat with no
+ *  arrow markers despite the NON-NEGOTIABLE G6 rule. The validator
+ *  catches them; the synthesizer now closes the loop.
+ *
+ *  Strategy: replay the violations IN SEQUENCE through chess.js starting
+ *  from `fen`. This matches the common failure mode where the coach
+ *  describes a multi-move continuation ("dxc3 Nxc3 — White is busted")
+ *  — each SAN is the next move in the line. If a SAN is illegal at
+ *  the current chess state (e.g., the prose mentioned a hypothetical
+ *  out of order), it's skipped and reported in `failed`.
+ *
+ *  Pure function — never mutates `response`. Callers receive a new
+ *  string with arrows appended. */
+export function synthesizeMissingArrows(
+  response: string,
+  fen: string,
+  violations: ArrowViolation[],
+  // chess.js Chess constructor — passed in so this module stays a
+  // pure utility module without a hard dep on chess.js (the caller
+  // already imports it).
+  ChessCtor: new (fen?: string) => {
+    move: (san: string, opts?: { strict?: boolean }) => { from: string; to: string } | null;
+  },
+  color: 'green' | 'blue' | 'red' | 'yellow' = 'green',
+): { text: string; synthesized: string[]; failed: string[] } {
+  if (violations.length === 0) return { text: response, synthesized: [], failed: [] };
+  let chess: ReturnType<() => InstanceType<typeof ChessCtor>>;
+  try {
+    chess = new ChessCtor(fen);
+  } catch {
+    return { text: response, synthesized: [], failed: violations.map((v) => v.san) };
+  }
+  const arrows: string[] = [];
+  const synthesized: string[] = [];
+  const failed: string[] = [];
+  for (const v of violations) {
+    try {
+      const move = chess.move(v.san, { strict: false });
+      if (move) {
+        arrows.push(`[BOARD: arrow:${move.from}-${move.to}:${color}]`);
+        synthesized.push(v.san);
+      } else {
+        failed.push(v.san);
+      }
+    } catch {
+      failed.push(v.san);
+    }
+  }
+  if (arrows.length === 0) return { text: response, synthesized: [], failed };
+  return { text: `${response} ${arrows.join(' ')}`, synthesized, failed };
+}

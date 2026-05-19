@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { validateArrowClaims } from './arrowClaimValidator';
+import { Chess } from 'chess.js';
+import { validateArrowClaims, synthesizeMissingArrows } from './arrowClaimValidator';
 
 describe('validateArrowClaims', () => {
   it('returns empty when the response has no SAN and no arrow', () => {
@@ -85,5 +86,59 @@ describe('validateArrowClaims', () => {
       'e4 grabs the center. [BOARD: arrow:e2-e4:green]',
     );
     expect(r.violations).toHaveLength(0);
+  });
+});
+
+describe('synthesizeMissingArrows (Bug E enforcement)', () => {
+  // Live audit 2026-05-19 Finding 70: at the Danish Gambit FEN
+  // (Black to move after 1.e4 e5 2.d4 exd4 3.c3), the coach mentioned
+  // "dxc3 Nxc3" in prose with no arrow markers. The validator caught
+  // it; the synthesizer now appends arrows for both moves.
+  const DANISH_FEN =
+    'rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3';
+
+  it('appends arrow markers for the live-audit Danish Gambit failure', () => {
+    const response = 'After **dxc3 Nxc3**, White has open lines and a tempo.';
+    const v = validateArrowClaims(response);
+    expect(v.violations.length).toBeGreaterThan(0);
+    const syn = synthesizeMissingArrows(response, DANISH_FEN, v.violations, Chess, 'green');
+    expect(syn.synthesized).toContain('dxc3');
+    expect(syn.synthesized).toContain('Nxc3');
+    expect(syn.text).toContain('[BOARD: arrow:d4-c3:green]');
+    expect(syn.text).toContain('[BOARD: arrow:b1-c3:green]');
+  });
+
+  it('returns the response unchanged when no violations', () => {
+    const response = 'A position with no SAN mentions.';
+    const syn = synthesizeMissingArrows(response, DANISH_FEN, [], Chess, 'green');
+    expect(syn.text).toBe(response);
+    expect(syn.synthesized).toEqual([]);
+  });
+
+  it('reports failed-to-synthesize SANs when they are illegal at the given FEN', () => {
+    // At the starting position, "Bxh7" is illegal — no bishop can
+    // reach h7 in one move.
+    const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const response = 'You could play Bxh7 here for the Greek gift sacrifice.';
+    const v = validateArrowClaims(response);
+    expect(v.violations.length).toBeGreaterThan(0);
+    const syn = synthesizeMissingArrows(response, startFen, v.violations, Chess, 'green');
+    expect(syn.failed).toContain('Bxh7');
+    expect(syn.synthesized).not.toContain('Bxh7');
+  });
+
+  it('survives an invalid FEN by reporting every SAN as failed', () => {
+    const response = 'dxc3 then Nxc3.';
+    const v = validateArrowClaims(response);
+    const syn = synthesizeMissingArrows(response, 'NOT A FEN', v.violations, Chess, 'green');
+    expect(syn.synthesized).toEqual([]);
+    expect(syn.failed.length).toBeGreaterThan(0);
+  });
+
+  it('uses the requested arrow color', () => {
+    const response = 'After dxc3 the c-file opens.';
+    const v = validateArrowClaims(response);
+    const syn = synthesizeMissingArrows(response, DANISH_FEN, v.violations, Chess, 'blue');
+    expect(syn.text).toContain('[BOARD: arrow:d4-c3:blue]');
   });
 });
