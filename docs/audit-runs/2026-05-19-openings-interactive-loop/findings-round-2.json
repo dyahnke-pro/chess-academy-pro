@@ -1,8 +1,8 @@
 {
   "round": 2,
-  "generatedAt": "2026-05-19T13:53:50.958Z",
+  "generatedAt": "2026-05-19T14:11:36.073Z",
   "inProgress": true,
-  "openingsCompleted": 30,
+  "openingsCompleted": 40,
   "results": [
     {
       "round": 2,
@@ -2046,6 +2046,878 @@
       ],
       "auditEvents": [],
       "finishedAt": "2026-05-19T13:53:50.958Z"
+    },
+    {
+      "round": 2,
+      "openingId": "benko-gambit",
+      "name": "Benko Gambit",
+      "color": "black",
+      "startedAt": "2026-05-19T13:53:50.961Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Benko ambit",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Benko",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Benko ambit",
+            "Benko"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T13:55:33.828Z"
+    },
+    {
+      "round": 2,
+      "openingId": "queens-indian",
+      "name": "Queen's Indian Defence",
+      "color": "black",
+      "startedAt": "2026-05-19T13:55:33.828Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Queen's Indian Defense",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queens Indian Defence",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queen's Indan Defence",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Queen's Indian Defense",
+            "Queens Indian Defence",
+            "Queen's Indan Defence"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T13:57:21.776Z"
+    },
+    {
+      "round": 2,
+      "openingId": "budapest-gambit",
+      "name": "Budapest Gambit",
+      "color": "black",
+      "startedAt": "2026-05-19T13:57:21.776Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Budapes Gambit",
+              "cardCount": 1,
+              "dropdownCount": 3,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Budapest",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Budapes Gambit",
+            "Budapest"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T13:59:07.781Z"
+    },
+    {
+      "round": 2,
+      "openingId": "old-indian-defence",
+      "name": "Old Indian Defence",
+      "color": "black",
+      "startedAt": "2026-05-19T13:59:07.781Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Old Indian Defense",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Old India Defence",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Old",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Old Indian Defense",
+            "Old India Defence",
+            "Old"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:00:55.889Z"
+    },
+    {
+      "round": 2,
+      "openingId": "english-opening",
+      "name": "English Opening",
+      "color": "white",
+      "startedAt": "2026-05-19T14:00:55.889Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "EnglishOpening",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "English",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "EnglishOpening",
+            "English"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:02:37.071Z"
+    },
+    {
+      "round": 2,
+      "openingId": "reti-opening",
+      "name": "Reti Opening",
+      "color": "white",
+      "startedAt": "2026-05-19T14:02:37.074Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Reti Oening",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Reti",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Reti Oening",
+            "Reti"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:04:27.014Z"
+    },
+    {
+      "round": 2,
+      "openingId": "kings-indian-attack",
+      "name": "King's Indian Attack",
+      "color": "white",
+      "startedAt": "2026-05-19T14:04:27.014Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Kings Indian Attack",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King's Indan Attack",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King's",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Kings Indian Attack",
+            "King's Indan Attack",
+            "King's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:06:16.633Z"
+    },
+    {
+      "round": 2,
+      "openingId": "birds-opening",
+      "name": "Bird's Opening",
+      "color": "white",
+      "startedAt": "2026-05-19T14:06:16.633Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Birds Opening",
+              "cardCount": 1,
+              "dropdownCount": 7,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Bird's pening",
+              "cardCount": 1,
+              "dropdownCount": 3,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Bird's",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Birds Opening",
+            "Bird's pening",
+            "Bird's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:07:59.039Z"
+    },
+    {
+      "round": 2,
+      "openingId": "two-knights-defence",
+      "name": "Two Knights Defence",
+      "color": "black",
+      "startedAt": "2026-05-19T14:07:59.039Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Two Knights Defense",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Two Knighs Defence",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Two",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Two Knights Defense",
+            "Two Knighs Defence",
+            "Two"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:09:48.213Z"
+    },
+    {
+      "round": 2,
+      "openingId": "evans-gambit",
+      "name": "Evans Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:09:48.214Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Evans ambit",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Evans",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Evans ambit",
+            "Evans"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:11:36.073Z"
     }
   ]
 }
