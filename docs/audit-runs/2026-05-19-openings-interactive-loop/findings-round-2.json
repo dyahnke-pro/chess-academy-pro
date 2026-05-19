@@ -1,8 +1,8 @@
 {
   "round": 2,
-  "generatedAt": "2026-05-19T14:11:36.073Z",
+  "generatedAt": "2026-05-19T14:24:10.812Z",
   "inProgress": true,
-  "openingsCompleted": 40,
+  "openingsCompleted": 60,
   "results": [
     {
       "round": 2,
@@ -2918,6 +2918,1429 @@
       ],
       "auditEvents": [],
       "finishedAt": "2026-05-19T14:11:36.073Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-naroditsky-scotch",
+      "name": "Scotch Game (Naroditsky)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:11:36.076Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Scotch Game Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Scotch",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Scotch Game Naroditsky)",
+            "Scotch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:13:22.676Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-naroditsky-alapin",
+      "name": "Alapin Sicilian (Naroditsky)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:13:22.676Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Alapin Sicilia (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Alapin",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Alapin Sicilia (Naroditsky)",
+            "Alapin"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:15:04.915Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-naroditsky-fantasy-caro",
+      "name": "Fantasy Caro-Kann (Naroditsky)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:15:04.915Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Fantasy Caro-Kan (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Fantasy",
+              "cardCount": 0,
+              "dropdownCount": 2,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Fantasy Caro-Kan (Naroditsky)",
+            "Fantasy"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:16:45.412Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-naroditsky-najdorf",
+      "name": "Sicilian Najdorf (Naroditsky)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:16:45.413Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Najdof (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Najdof (Naroditsky)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:18:35.090Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-naroditsky-kid",
+      "name": "King's Indian Defense (Naroditsky)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:18:35.090Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "King's Indian Defence (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Kings Indian Defense (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King's Indian Defnse (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "King's Indian Defence (Naroditsky)",
+            "Kings Indian Defense (Naroditsky)",
+            "King's Indian Defnse (Naroditsky)"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "findings": [],
+          "detailMounted": true,
+          "walkthroughMounted": true,
+          "firstPlyAdvanced": true
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "findings": [],
+          "advanced": 5
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:20:17.229Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-naroditsky-grunfeld",
+      "name": "Grunfeld Defense (Naroditsky)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:20:17.238Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Grunfeld Defence (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Grunfeld Defene (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Grunfeld",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Grunfeld Defence (Naroditsky)",
+            "Grunfeld Defene (Naroditsky)",
+            "Grunfeld"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "[CoachAPI] Fallback also failed: APIConnectionError: Connection error.\n    at OpenAI.makeRequest (http://localhost:5173/node_modules/.vite/deps/openai.js?v=e531fed6:6726:13)\n    at async callDeepSeek (http://localhost:5173/src/services/coachApi.ts:29",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:20:33.848Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-naroditsky-vienna",
+      "name": "Vienna Game (Naroditsky)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:20:33.849Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Vienna Game Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Vienna",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Vienna Game Naroditsky)",
+            "Vienna"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:20:49.093Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-naroditsky-semi-slav",
+      "name": "Semi-Slav Defense (Naroditsky)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:20:49.093Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Semi-Slav Defence (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Semi-Slav Defene (Naroditsky)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Semi",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Semi-Slav Defence (Naroditsky)",
+            "Semi-Slav Defene (Naroditsky)",
+            "Semi"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:21:04.831Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-naroditsky-jobava-london",
+      "name": "Jobava London (Naroditsky)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:21:04.832Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Jobava London(Naroditsky)",
+              "cardCount": 0,
+              "dropdownCount": 1,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Jobava",
+              "cardCount": 0,
+              "dropdownCount": 3,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Jobava London(Naroditsky)",
+            "Jobava"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:21:19.948Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-italian",
+      "name": "Italian Game (GothamChess)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:21:19.948Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Italian Game GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Italian",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Italian Game GothamChess)",
+            "Italian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:21:35.766Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-london",
+      "name": "London System (GothamChess)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:21:35.770Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "London System(GothamChess)",
+              "cardCount": 0,
+              "dropdownCount": 1,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "London",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "London System(GothamChess)",
+            "London"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:21:50.787Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-stafford-refute",
+      "name": "Stafford Gambit Refutation (GothamChess)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:21:50.787Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Stafford Gambit Refuation (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Stafford",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Stafford Gambit Refuation (GothamChess)",
+            "Stafford"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:22:05.572Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-caro-kann",
+      "name": "Caro-Kann Defense (GothamChess)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:22:05.572Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Caro-Kann Defence (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Caro-Kann Defene (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Caro",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Caro-Kann Defence (GothamChess)",
+            "Caro-Kann Defene (GothamChess)",
+            "Caro"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:22:22.994Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-scandinavian",
+      "name": "Scandinavian Defense (GothamChess)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:22:22.994Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Scandinavian Defence (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Scandinavian Defese (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Scandinavian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Scandinavian Defence (GothamChess)",
+            "Scandinavian Defese (GothamChess)",
+            "Scandinavian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:22:39.158Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-qgd",
+      "name": "Queen's Gambit Declined (GothamChess)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:22:39.159Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Queens Gambit Declined (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queen's Gambit Decined (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queen's",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Queens Gambit Declined (GothamChess)",
+            "Queen's Gambit Decined (GothamChess)",
+            "Queen's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:22:55.088Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-ponziani",
+      "name": "Ponziani Opening (GothamChess)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:22:55.091Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Ponziani Openin (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Ponziani",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Ponziani Openin (GothamChess)",
+            "Ponziani"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:23:10.462Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-fantasy-caro",
+      "name": "Fantasy Variation vs Caro-Kann (GothamChess)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:23:10.462Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Fantasy Variation vs Cro-Kann (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Fantasy",
+              "cardCount": 0,
+              "dropdownCount": 2,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Fantasy Variation vs Cro-Kann (GothamChess)",
+            "Fantasy"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:23:25.972Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-milner-barry",
+      "name": "Milner-Barry Gambit vs French (GothamChess)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:23:25.972Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Milner-Barry Gambit v French (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Milner",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Milner-Barry Gambit v French (GothamChess)",
+            "Milner"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:23:40.835Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gothamchess-anti-sicilian",
+      "name": "Anti-Sicilian Rossolimo (GothamChess)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:23:40.835Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Anti-Sicilian Rosslimo (GothamChess)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Anti",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Anti-Sicilian Rosslimo (GothamChess)",
+            "Anti"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:23:55.400Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-carlsen-ruy-lopez",
+      "name": "Ruy Lopez (Carlsen)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:23:55.400Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Ruy Lopez(Carlsen)",
+              "cardCount": 0,
+              "dropdownCount": 1,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Ruy",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Ruy Lopez(Carlsen)",
+            "Ruy"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:24:10.812Z"
     }
   ]
 }
