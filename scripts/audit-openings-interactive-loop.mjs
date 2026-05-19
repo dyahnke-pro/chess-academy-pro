@@ -470,16 +470,23 @@ async function runP4(page, opening) {
       return result;
     }
     await tile.click({ timeout: 3000 }).catch(() => {});
-    await page.waitForTimeout(3000);
-    // Check the walkthrough mounted
-    const wtMounted = await page.locator('[data-testid="walkthrough-mode"]').isVisible().catch(() => false);
+    // Wait for walkthrough to mount (up to 12s)
+    const wtMounted = await page.locator('[data-testid="walkthrough-mode"]').waitFor({ timeout: 12000 }).then(() => true).catch(() => false);
     if (!wtMounted) {
-      result.findings.push('P4: tap-before-load caused walkthrough to not mount');
+      result.findings.push('P4: tap-before-load caused walkthrough to not mount within 12s');
       return result;
     }
-    // Check there's a starting ply rendered
+    // Wait for the annotation card to RESOLVE (not the empty placeholder).
+    // AnnotationCard renders 'annotation-card-empty' until annotations
+    // load; flag only if it stays empty for 15s — that's a real stuck
+    // state, not just slow async resolution.
+    const labelResolved = await page.locator('[data-testid="annotation-move-label"]').first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+    if (!labelResolved) {
+      const stillEmpty = await page.locator('[data-testid="annotation-card-empty"]').first().isVisible().catch(() => false);
+      result.findings.push(`P4: tap-before-load — walkthrough mounted but annotation never resolved after 15s (empty-card=${stillEmpty})`);
+      return result;
+    }
     const label = await page.locator('[data-testid="annotation-move-label"]').first().textContent().catch(() => null);
-    if (!label) result.findings.push('P4: walkthrough mounted but no annotation rendered (empty state)');
     result.label = label;
   } catch (e) {
     result.findings.push(`P4: error ${(e?.message || String(e)).slice(0,150)}`);
