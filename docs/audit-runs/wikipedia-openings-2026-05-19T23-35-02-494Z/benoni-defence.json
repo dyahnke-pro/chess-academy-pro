@@ -1,0 +1,10 @@
+{
+  "id": "benoni-defence",
+  "status": "fetched",
+  "wikipediaTitle": "Benoni Defense",
+  "extract": "The Benoni Defense, or simply the Benoni, is a chess opening characterized by an early reply of ...c5 against White's opening move 1.d4. \nThe original form of the Benoni, now known as the Old Benoni, is characterized by \n\n1. d4 c5\nThis leaves Black a few options such as an early ...f5 and an early dark-squared bishop trade by ...Be7–g5. However, because White has not played c4 yet, White also has more options, and often plays Nc3 while the pawn remains on c2, allowing White to play an earlier e4.\nMore commonly, the Benoni is reached by the sequence:\n\n1. d4 Nf6\n2. c4 c5\n3. d5\nThe most common following moves for Black are either to then play 3...e6, leading to the Modern Benoni, or to offer a pawn sacrifice with 3...b5 in exchange for a queenside attack, known as the Benko Gambit. 3...d6 or 3...g6 are also seen, typically transposing to main lines, or to lines of the King's Indian Defense.\nIf White plays 2.Nf3 instead of 2.c4, Black can still play 2...c5. White usually responds by pushing by with 3.d5, just as in the Benoni. If White later plays c4, the positions transpose into the Benoni. Otherwise, Nc3 is usually played (while the c pawn remains on the second rank), and leads to the Spielmann-Indian Variation, which has many similar patterns to the Benoni. White's early committal of Nf3 distinguishes it from the Old Benoni, where White avoids or delays Nf3.",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Benoni_Defense",
+  "pageId": 1512923,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:35:08.834Z"
+}

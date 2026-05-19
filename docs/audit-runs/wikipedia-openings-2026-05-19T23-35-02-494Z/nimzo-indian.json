@@ -1,0 +1,10 @@
+{
+  "id": "nimzo-indian",
+  "status": "fetched",
+  "wikipediaTitle": "Nimzo-Indian Defence",
+  "extract": "The Nimzo-Indian Defence is a chess opening characterised by the moves:\n\n1. d4 Nf6\n2. c4 e6\n3. Nc3 Bb4\nOther move orders, such as 1.c4 e6 2.Nc3 Nf6 3.d4 Bb4, are also feasible. In the Encyclopaedia of Chess Openings, the Nimzo-Indian is classified as E20–E59.\nThis hypermodern opening was developed by Aron Nimzowitsch who introduced it to master-level chess in the early 20th century. Unlike most Indian openings, the Nimzo-Indian does not involve an immediate fianchetto, although Black often follows up with ...b6 and ...Bb7. By pinning White's knight, Black prevents the threatened 4.e4 and seeks to inflict doubled pawns on White. White will attempt to create a pawn centre and develop their pieces to prepare for an assault on the Black position.\nBlack's delay in committing to a pawn structure makes the Nimzo-Indian (sometimes colloquially referred to as the \"Nimzo\") a very flexible defence to 1.d4. It can also transpose into lines of the Queen's Gambit or Queen's Indian Defence. The Nimzo-Indian is a highly respected defence to 1.d4, is played at all levels and has been played by every world champion since Capablanca. White often plays 3.g3 or 3.Nf3 to avoid the Nimzo-Indian, allowing them to meet 3.Nf3 Bb4+ (the Bogo-Indian Defence) with 4.Bd2 or 4.Nbd2, rather than 4.Nc3.",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence",
+  "pageId": 306663,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:35:36.590Z"
+}

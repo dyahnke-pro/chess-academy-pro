@@ -1,0 +1,10 @@
+{
+  "id": "semi-slav",
+  "status": "fetched",
+  "wikipediaTitle": "Semi-Slav Defense",
+  "extract": "The Semi-Slav Defense is a variation of the Queen's Gambit Declined chess opening defined by the position reached after the moves:\n\n1. d4 d5\n2. c4 c6\n3. Nf3 Nf6\n4. Nc3 e6\nThe position may readily be reached by a number of different move orders. Black's supporting pawns resemble a mixture of the Orthodox Queen's Gambit Declined, e6, and the Slav Defense, c6.\nBlack is threatening to capture the white pawn on c4 and hold it with ...b7–b5. White can avoid this in a number of ways. About 80% of games continue 5.Bg5 or 5.e3: the former constitutes a sharp pawn sacrifice, while the latter restricts the dark-squared bishop from its natural development to g5. Other possible moves are 5.Qb3, 5.g3 and 5.cxd5, the last of which, after 5...exd5, leads to a line of the QGD Exchange Variation where White's early Nf3 enables Black's queen bishop to freely develop, which should give equality (ECO codes D43 and D45). 5.Bf4 is considered somewhat inaccurate, as 5...dxc4 is favorable for Black.\nThe Semi-Slav is designated by codes D43 through D49 in Encyclopaedia of Chess Openings.",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Semi-Slav_Defense",
+  "pageId": 1967710,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:35:55.044Z"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "kings-indian-defence",
+  "status": "fetched",
+  "wikipediaTitle": "King's Indian Defence",
+  "extract": "The King's Indian Defence (or KID) is a common chess opening. It is defined by the following  moves:\n\n1. d4 Nf6\n2. c4 g6\nBlack intends to follow up with 3...Bg7 and 4...d6 (the Grünfeld Defence arises when Black plays 3...d5 instead and is considered a separate opening). White's major third move options are 3.Nc3, 3.Nf3, or 3.g3, with both the King's Indian and Grünfeld playable against these moves. \nThe King's Indian is a hypermodern opening, where Black deliberately allows White control of the centre with pawns, with a view to subsequently challenging it. In the most critical lines of the King's Indian, White erects an imposing pawn centre with Nc3 followed by e4. Black stakes out their own claim to the centre with the Benoni-style ...c5, or ...e5. If White resolves the central pawn tension with d5, then Black follows with either ...b5 and queenside play, or ...f5 and an eventual kingside attack. Meanwhile, White attempts to expand on the opposite wing. The resulting unbalanced positions offer scope for both sides to play for a win.\nThe Encyclopaedia of Chess Openings classifies the King's Indian Defence under the codes E60 through E99.\n\n",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
+  "pageId": 498021,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:35:30.382Z"
+}

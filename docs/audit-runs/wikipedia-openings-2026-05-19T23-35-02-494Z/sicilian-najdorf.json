@@ -1,0 +1,10 @@
+{
+  "id": "sicilian-najdorf",
+  "status": "fetched",
+  "wikipediaTitle": "Sicilian Defence, Najdorf Variation",
+  "extract": "The Najdorf Variation ( NY-dorf) is a variation of the Sicilian Defence that begins with the moves:\n\n1. e4 c5\n2. Nf3 d6\n3. d4 cxd4\n4. Nxd4 Nf6\n5. Nc3 a6\nBlack's 5...a6 aims to deny the b5-square to White's knights and light-square bishop while maintaining flexible development. Games in the Najdorf frequently feature opposite-side castling, where White castles long and both sides launch simultaneous attacks on their opponents' kings, with Black often planning a queenside minority attack. This is often carried out by means of ...b5, ...Bb7, and placing a knight on d5, or c4 via b6.\nThe Najdorf is one of the most popular, reputable, and deeply studied of all chess openings. Modern Chess Openings calls it the \"Cadillac\" or \"Rolls-Royce\" of chess openings. The opening is named after the Polish-Argentine grandmaster Miguel Najdorf, although he was not the first strong player to play the variation. Many players have relied on the Najdorf, including Bobby Fischer and Garry Kasparov, although Kasparov would often transpose into a Scheveningen.",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",
+  "pageId": 906517,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:36:04.304Z"
+}
