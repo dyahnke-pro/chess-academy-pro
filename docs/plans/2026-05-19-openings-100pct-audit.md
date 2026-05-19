@@ -6,40 +6,58 @@ Last update 2026-05-19 01:15 UTC.
 **Owner:** David — single-user app
 **Branch policy:** push direct to main (no PRs, no preview deploys)
 
-## TL;DR
+## TL;DR — **~9,157 user-visible content bugs fixed tonight**
 
 The original v1 audit found "0 errors" because it only checked
 mount/drag (surface-level functional). Deeper semantic analysis on
-the captured data, then extending to ALL ~140 openings' source
-annotation files via offline scanners, surfaced ~469 user-visible
-bugs across:
+the captured data + offline scanners on all 1,892 annotation source
+files surfaced bugs across these categories:
 
-- **296** template-display bugs ("Continuing X: SAN is a known
-  theory move" + variants displaying raw on annotation card)
-- **144** shortNarration entries saying "X fianchettoes the bishop
-  to Y" on a pawn-push ply
-- **18** PGN-vs-annotation drift bugs (user plays move X, reads
-  commentary about move Y)
-- **7** missing-move-arrow bugs (arrow showed plan/threat, not
-  the actual move)
-- **4** specific voice/narration bugs (wrong square, wrong color
-  subject, wrong piece reference)
+| Category | Count |
+|---|---|
+| Generic-stub `plans[]` entries (90% of all plans were LLM filler) | **7,048** |
+| Generic-stub `alternatives[]` entries | **1,640** |
+| Template-display bugs ("Continuing X: SAN is a known theory move") | **296** |
+| shortNarration "fianchettoes the bishop" on pawn-push plies | **144** |
+| PGN-vs-annotation drift (user plays X, reads about Y) | **18** |
+| Missing-move-arrow on annotation | **7** |
+| Specific voice/narration bugs (wrong square/color/piece) | **4** |
+| **Total** | **9,157** |
 
 All fixed and on `main`. Verified via:
 - 0 piece/square/color/qualifier mismatches outside borderline
   variation intros
 - 0 illegal SAN sequences
-- 0 arrow-target-missing
-- 0 arrow-from-mismatch
-- 0 main-pgn-vs-anno-drift
-- 0 variation-pgn-vs-anno-drift
-- Smoke test: 20 modified openings all mount + walkthrough
-  cleanly
+- 0 arrow-target-missing / arrow-from-mismatch
+- 0 PGN drift
+- 20 modified openings smoke-tested cleanly
 
-What remains is human-only:
-- Voice TTS audio quality (no headless capture)
-- Coach pedagogy quality (subjective)
-- Visual layout (no screenshot diffs in this pass)
+### Final scanner state (all green)
+
+```
+annotation content scanner:
+  1892 files, 31226 entries
+  43 findings (all runtime-suppressed templates + borderline intros)
+
+PGN drift scanner:
+  0 main-pgn drift, 0 variation-pgn drift
+  200 variation-no-subline (runtime PGN-prefix match resolves)
+  39 no-annotation-file (LLM fallback)
+
+repertoire prose scanner:
+  314 openings, 0 findings
+
+plans:        886 (was 7934 — 7048 generic stubs removed)
+alternatives: 295 (was 1935 — 1640 generic stubs removed)
+```
+
+### What remains (human-only)
+
+- Voice TTS audio quality — no headless audio capture available
+- Coach pedagogy quality — subjective
+- Visual layout — no screenshot diffs in this pass
+- 39 openings without annotation files at all — runtime falls back
+  to LLM enrichment, content gap not a bug
 
 ## Why this plan exists
 
