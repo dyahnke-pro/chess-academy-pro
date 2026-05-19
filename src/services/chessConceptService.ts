@@ -48,11 +48,18 @@ export interface ConceptEntry {
   fallbackKind?: 'modern-definition';
 }
 
+export interface OpeningDefinition {
+  description: string;
+  character: string;
+  keyIdeas: string[];
+}
+
 interface ConceptsBundle {
   generatedAt: string;
   sources: { slug: string; gutenbergId: number; title: string; author: string }[];
   concepts: ConceptEntry[];
   openings: Record<string, BookPassage[]>;
+  openingDefinitions?: Record<string, OpeningDefinition>;
   totalTaggedPassages: number;
 }
 
@@ -120,6 +127,17 @@ export function getOpeningPassages(name: string): BookPassage[] {
   const id = resolveOpeningIdFromName(name);
   if (!id) return [];
   return DATA.openings[id] ?? [];
+}
+
+/** Returns the static modern opening definition for a named opening.
+ *  Used as the fallback when no book passages match — so the Classic
+ *  Wisdom card can render on every opening, not just the 16 the
+ *  public-domain books covered. Returns null when the opening name
+ *  doesn't resolve to a known opening at all. */
+export function getOpeningDefinition(name: string): OpeningDefinition | null {
+  const id = resolveOpeningIdFromName(name);
+  if (!id) return null;
+  return DATA.openingDefinitions?.[id] ?? null;
 }
 
 export function getConcept(conceptId: string): ConceptEntry | null {
