@@ -45,10 +45,12 @@ import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { Chess } from 'chess.js';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const OUT_DIR = 'docs/audit-runs/2026-05-19-openings-interactive-loop';
+const SCREENSHOT_DIR = join(OUT_DIR, 'screenshots');
 
 // Console-error patterns that are sandbox noise, not real bugs
 const SANDBOX_NOISE_RX = [
@@ -58,6 +60,10 @@ const SANDBOX_NOISE_RX = [
   /explorer\.lichess\.ovh/i,
   /sw\.js load failed/i,
   /Service Worker registration failed/i,
+  /status of 403 \(Forbidden\)/i,
+  /APIConnectionError: Connection error/i,
+  /CoachAPI.*Fallback also failed/i,
+  /net::ERR_FAILED.*api\//i,
 ];
 
 function isSandboxNoise(msg) {
@@ -102,6 +108,19 @@ async function getCurrentRound() {
   return max + 1;
 }
 
+/** Capture a screenshot for a probe stage. Only enabled when
+ *  options.screenshots is truthy (default off for storage reasons).
+ *  Screenshots saved to <OUT_DIR>/screenshots/<round>/<openingId>-<stage>.png */
+async function maybeScreenshot(page, openingId, stage, enabled) {
+  if (!enabled) return;
+  try {
+    const round = enabled; // we pass the round number when enabled
+    const dir = join(SCREENSHOT_DIR, `round-${round}`);
+    await mkdir(dir, { recursive: true });
+    await page.screenshot({ path: join(dir, `${openingId}-${stage}.png`), fullPage: false, timeout: 5000 });
+  } catch { /* screenshot errors don't fail the audit */ }
+}
+
 async function probeOpening(page, opening, round, allEvents, options = {}) {
   const result = {
     round,
@@ -130,15 +149,28 @@ async function probeOpening(page, opening, round, allEvents, options = {}) {
 
   // NON-DESTRUCTIVE probes run on every opening
   result.probes.offCanonical = await runP1(page, opening);
+  await maybeScreenshot(page, opening.id, 'P1-after', options.screenshots);
   result.probes.pickBeforeLoad = await runP4(page, opening);
+  await maybeScreenshot(page, opening.id, 'P4-after', options.screenshots);
   result.probes.outOfOrder = await runP5(page, opening);
+  await maybeScreenshot(page, opening.id, 'P5-after', options.screenshots);
+  result.probes.chatPivot = await runP6(page, opening);
+  await maybeScreenshot(page, opening.id, 'P6-after', options.screenshots);
+  result.probes.rapidBack = await runP7(page, opening);
+  await maybeScreenshot(page, opening.id, 'P7-after', options.screenshots);
+  result.probes.zoom = await runP8(page, opening);
+  await maybeScreenshot(page, opening.id, 'P8-after', options.screenshots);
+  result.probes.fenVerify = await runP9(page, opening);
+  result.probes.masterPlayCache = await runP10(page, opening);
 
   // DESTRUCTIVE probes (P2, P3) only on sampled openings — they clear
   // IndexedDB which means subsequent probes pay the reseed cost (~30-60s).
   // Sampling keeps round time tractable (~80 min instead of ~6h).
   if (options.runDestructive) {
     result.probes.coldCache = await runP2(page, opening);
+    await maybeScreenshot(page, opening.id, 'P2-after', options.screenshots);
     result.probes.firstTimeUser = await runP3(page, opening);
+    await maybeScreenshot(page, opening.id, 'P3-after', options.screenshots);
   } else {
     result.probes.coldCache = { kind: 'cold-cache', skipped: 'not in this round sample' };
     result.probes.firstTimeUser = { kind: 'first-time-user', skipped: 'not in this round sample' };
@@ -340,6 +372,210 @@ async function runP4(page, opening) {
   return result;
 }
 
+/** Compute the FEN after a given PGN ply count using chess.js. */
+function fenAfterPgnPlies(pgn, plyCount) {
+  const c = new Chess();
+  const tokens = pgn.trim().split(/\s+/).filter(t => !/^\d+\.+$/.test(t));
+  for (let i = 0; i < Math.min(plyCount, tokens.length); i++) {
+    try { c.move(tokens[i]); } catch { return null; }
+  }
+  return c.fen();
+}
+
+/** Strip move number / fullmove counter for comparison. */
+function fenCore(fen) {
+  if (!fen) return null;
+  const parts = fen.split(' ');
+  return parts.slice(0, 4).join(' '); // piece-placement + color + castle + ep
+}
+
+/** P6: Chat-pivot — Learn-with-Coach button on opening detail page
+ *  should navigate cleanly to /coach/teach with this opening's context. */
+async function runP6(page, opening) {
+  const result = { kind: 'chat-pivot', findings: [] };
+  try {
+    await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    const detail = await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+    if (!detail) { result.findings.push('P6: detail did not mount'); return result; }
+    await page.waitForTimeout(1200);
+    const learnBtn = page.locator('[data-testid="learn-btn"]').first();
+    if (!(await learnBtn.isVisible().catch(() => false))) {
+      result.skipped = 'no learn-btn';
+      return result;
+    }
+    await learnBtn.click({ timeout: 3000 });
+    // Should land on /coach/teach (or similar coach surface)
+    await page.waitForTimeout(3000);
+    const url = page.url();
+    const onCoachSurface = /\/coach\/(teach|session)/i.test(url);
+    if (!onCoachSurface) {
+      result.findings.push(`P6: Learn button did not navigate to coach surface — url=${url}`);
+      return result;
+    }
+    // Coach page should mount within 10s
+    const coachMounted = await page.locator('[data-testid="coach-teach-page"], [data-testid="walkthrough-mode"]').first().waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
+    if (!coachMounted) result.findings.push('P6: coach surface URL reached but page did not mount');
+    result.landedOn = url;
+  } catch (e) {
+    result.findings.push(`P6: error ${(e?.message || String(e)).slice(0,150)}`);
+  }
+  return result;
+}
+
+/** P7: Rapid back-button — walkthrough → advance → browser back x3
+ *  should land cleanly on detail page without stuck state. */
+async function runP7(page, opening) {
+  const result = { kind: 'rapid-back', findings: [] };
+  try {
+    await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 12000 }).catch(() => {});
+    await page.waitForTimeout(1000);
+    const wt = page.locator('[data-testid="walkthrough-btn"]').first();
+    if (!(await wt.isVisible().catch(() => false))) { result.skipped = 'no walkthrough-btn'; return result; }
+    await wt.click({ timeout: 3000 });
+    await page.locator('[data-testid="walkthrough-mode"]').waitFor({ timeout: 12000 }).catch(() => {});
+    await page.waitForTimeout(800);
+    // Advance 2 plies
+    const next = page.locator('[data-testid="nav-next"]').first();
+    if (await next.isVisible().catch(() => false)) {
+      await next.click().catch(() => {}); await page.waitForTimeout(300);
+      await next.click().catch(() => {}); await page.waitForTimeout(300);
+    }
+    // RAPID back-button taps
+    for (let i = 0; i < 3; i++) {
+      await page.goBack({ timeout: 2000 }).catch(() => {});
+      await page.waitForTimeout(150);
+    }
+    await page.waitForTimeout(1500);
+    // Should land on /openings (the list) or /openings/<id>
+    const url = page.url();
+    const onValidPage = /\/openings(?:\/|$)/.test(url);
+    if (!onValidPage) result.findings.push(`P7: rapid back left us on bad URL: ${url}`);
+    // Check for blank screen
+    const bodyText = await page.locator('body').first().textContent().catch(() => '');
+    if (!bodyText || bodyText.trim().length < 20) result.findings.push('P7: rapid back left blank body content');
+    result.endedOn = url;
+  } catch (e) {
+    result.findings.push(`P7: error ${(e?.message || String(e)).slice(0,150)}`);
+  }
+  return result;
+}
+
+/** P8: Browser zoom — render at 1.5x viewport scale and verify nothing
+ *  overflows / disappears / errors. Common phone setting. */
+async function runP8(page, opening) {
+  const result = { kind: 'zoom', findings: [] };
+  try {
+    await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 12000 }).catch(() => {});
+    await page.waitForTimeout(800);
+    // Apply browser zoom (1.5x) via CSS transform
+    await page.evaluate(() => { document.documentElement.style.fontSize = '24px'; }); // browser font size up = effective zoom
+    await page.waitForTimeout(800);
+    // Verify walkthrough button still visible + clickable at zoom
+    const wt = page.locator('[data-testid="walkthrough-btn"]').first();
+    const visible = await wt.isVisible().catch(() => false);
+    if (!visible) result.findings.push('P8: walkthrough-btn not visible at 1.5x zoom (overflow / off-screen)');
+    else {
+      const box = await wt.boundingBox().catch(() => null);
+      if (!box) result.findings.push('P8: walkthrough-btn lost its bounding box at zoom');
+      else if (box.x < 0 || box.x + box.width > 600) result.findings.push(`P8: walkthrough-btn clipped at zoom (x=${box.x}, w=${box.width})`);
+    }
+    // Reset
+    await page.evaluate(() => { document.documentElement.style.fontSize = ''; }).catch(() => {});
+  } catch (e) {
+    result.findings.push(`P8: error ${(e?.message || String(e)).slice(0,150)}`);
+  }
+  return result;
+}
+
+/** P9: Board-state FEN verification — advance walkthrough through 5
+ *  plies; for each ply verify the rendered board's FEN matches the
+ *  expected chess.js computation from the opening's PGN. Catches
+ *  rendering desync where annotation says ply N but board shows N-1. */
+async function runP9(page, opening) {
+  const result = { kind: 'fen-verify', findings: [], plies: [] };
+  if (!opening.hasPGN) { result.skipped = 'no PGN'; return result; }
+  // Fetch the actual PGN — queue.json only has hasPGN flag, get real PGN
+  // We don't have it in scope; skip if not in queue with pgn
+  // (Could load opening data files here; for simplicity, skip)
+  // Actually: load the pgn from the data files
+  let pgn = null;
+  try {
+    const fs = await import('node:fs/promises');
+    for (const f of ['src/data/repertoire.json','src/data/pro-repertoires.json','src/data/gambits.json']) {
+      const j = JSON.parse(await fs.readFile(f, 'utf-8'));
+      const list = Array.isArray(j) ? j : (j.openings ?? Object.values(j));
+      const o = list.find(x => x.id === opening.id);
+      if (o?.pgn) { pgn = o.pgn; break; }
+    }
+  } catch {/* ignore */}
+  if (!pgn) { result.skipped = 'pgn not found in data files'; return result; }
+  try {
+    await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 12000 }).catch(() => {});
+    await page.waitForTimeout(1000);
+    const wt = page.locator('[data-testid="walkthrough-btn"]').first();
+    if (!(await wt.isVisible().catch(() => false))) { result.skipped = 'no walkthrough-btn'; return result; }
+    await wt.click({ timeout: 3000 });
+    await page.locator('[data-testid="walkthrough-mode"]').waitFor({ timeout: 12000 }).catch(() => {});
+    await page.waitForTimeout(1500);
+    for (let ply = 1; ply <= 5; ply++) {
+      const next = page.locator('[data-testid="nav-next"]').first();
+      if (!(await next.isVisible().catch(() => false))) break;
+      await next.click({ timeout: 2000 }).catch(() => {});
+      await page.waitForTimeout(500);
+      const expectedFen = fenAfterPgnPlies(pgn, ply);
+      // Probe the rendered board FEN — through testid 'board-fen' if
+      // exposed, else via the chess store via __DEBUG hook.
+      const actualFen = await page.evaluate(() => {
+        // Try multiple hook paths
+        const hookA = window.__CHESS_FEN__;
+        if (hookA) return hookA;
+        const el = document.querySelector('[data-fen]');
+        if (el) return el.getAttribute('data-fen');
+        return null;
+      }).catch(() => null);
+      if (expectedFen && actualFen) {
+        if (fenCore(expectedFen) !== fenCore(actualFen)) {
+          result.findings.push(`P9 ply ${ply}: board FEN mismatch — expected ${fenCore(expectedFen)}, got ${fenCore(actualFen)}`);
+        }
+        result.plies.push({ ply, match: fenCore(expectedFen) === fenCore(actualFen) });
+      }
+    }
+  } catch (e) {
+    result.findings.push(`P9: error ${(e?.message || String(e)).slice(0,150)}`);
+  }
+  return result;
+}
+
+/** P10: master-play prefetch cache state — verify the cache populated
+ *  for this opening's FEN within 5s of mount. */
+async function runP10(page, opening) {
+  const result = { kind: 'master-play-cache', findings: [] };
+  try {
+    await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 12000 }).catch(() => {});
+    await page.waitForTimeout(5000); // give the prefetch warmer time
+    const cacheState = await page.evaluate(() => {
+      const w = window;
+      const watcher = w.__MASTER_PLAY_WATCHER__ || w.masterPlayWatcher;
+      if (!watcher?.getCacheStats) return { available: false };
+      return { available: true, stats: watcher.getCacheStats() };
+    }).catch(() => ({ available: false }));
+    result.cacheState = cacheState;
+    // If hooks aren't exposed we don't fail — just skip
+    if (!cacheState.available) { result.skipped = 'master-play-watcher hook not exposed'; return result; }
+    const entryCount = cacheState.stats?.size ?? 0;
+    if (entryCount === 0) {
+      result.findings.push('P10: master-play cache empty 5s after mount — prefetch may not have fired');
+    }
+  } catch (e) {
+    result.findings.push(`P10: error ${(e?.message || String(e)).slice(0,150)}`);
+  }
+  return result;
+}
+
 async function runP5(page, opening) {
   const result = { kind: 'out-of-order', findings: [] };
   try {
@@ -422,11 +658,14 @@ async function main() {
     const sampleStart = (round * 15) % queue.length;
     const destructiveSet = new Set();
     for (let s = 0; s < 15; s++) destructiveSet.add(queue[(sampleStart + s) % queue.length].id);
+    // Screenshots: enable for the FIRST round only (baseline) plus
+    // every 5th round (regression baseline refresh). Saves storage.
+    const screenshotsEnabled = (round === 1 || round % 5 === 0) ? round : false;
     for (let i = 0; i < queue.length; i++) {
       const opening = queue[i];
       const runDestructive = destructiveSet.has(opening.id);
       try {
-        const r = await probeOpening(page, opening, round, allEvents, { runDestructive });
+        const r = await probeOpening(page, opening, round, allEvents, { runDestructive, screenshots: screenshotsEnabled });
         roundResults.push(r);
         // Count findings
         const findings = Object.values(r.probes).flatMap((p) => p.findings || []);

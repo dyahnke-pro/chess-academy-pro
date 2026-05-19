@@ -1,8 +1,10 @@
 {
   "round": 2,
-  "generatedAt": "2026-05-19T14:28:01.910Z",
-  "inProgress": true,
-  "openingsCompleted": 75,
+  "generatedAt": "2026-05-19T14:30:54.538Z",
+  "inProgress": false,
+  "openingsCompleted": 134,
+  "totalFindings": 153,
+  "totalConsoleErrors": 1269,
   "results": [
     {
       "round": 2,
@@ -5343,6 +5345,2837 @@
       ],
       "auditEvents": [],
       "finishedAt": "2026-05-19T14:28:01.910Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-caruana-ruy-lopez",
+      "name": "Ruy Lopez Anti-Marshall (Caruana)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:28:01.917Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Ruy Lopez Anti-Mrshall (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Ruy",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Ruy Lopez Anti-Mrshall (Caruana)",
+            "Ruy"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:28:16.414Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-caruana-italian",
+      "name": "Giuoco Piano (Caruana)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:28:16.414Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Giuoco Pian (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Giuoco",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Giuoco Pian (Caruana)",
+            "Giuoco"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:28:31.841Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-caruana-anti-berlin",
+      "name": "Anti-Berlin (Caruana)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:28:31.841Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Anti-Berli (Caruana)",
+              "cardCount": 0,
+              "dropdownCount": 1,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Anti",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Anti-Berli (Caruana)",
+            "Anti"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:28:46.588Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-caruana-petroff",
+      "name": "Petroff Defense (Caruana)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:28:46.588Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Petroff Defence (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Petroff Defese (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Petroff",
+              "cardCount": 1,
+              "dropdownCount": 2,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Petroff Defence (Caruana)",
+            "Petroff Defese (Caruana)",
+            "Petroff"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:29:02.255Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-caruana-qgd",
+      "name": "Queen's Gambit Declined (Caruana)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:29:02.255Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Queens Gambit Declined (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queen's Gambit Dclined (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queen's",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Queens Gambit Declined (Caruana)",
+            "Queen's Gambit Dclined (Caruana)",
+            "Queen's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:29:18.520Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-caruana-nimzo",
+      "name": "Nimzo-Indian Defense (Caruana)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:29:18.532Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Nimzo-Indian Defence (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Nimzo-Indian Deense (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Nimzo",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Nimzo-Indian Defence (Caruana)",
+            "Nimzo-Indian Deense (Caruana)",
+            "Nimzo"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:29:34.492Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-caruana-catalan",
+      "name": "Catalan Opening (Caruana)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:29:34.492Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Catalan Openng (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Catalan",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Catalan Openng (Caruana)",
+            "Catalan"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:29:49.423Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-caruana-berlin",
+      "name": "Berlin Defense (Caruana)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:29:49.423Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Berlin Defence (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Berlin Defene (Caruana)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Berlin",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Berlin Defence (Caruana)",
+            "Berlin Defene (Caruana)",
+            "Berlin"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:05.271Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-firouzja-italian",
+      "name": "Italian Game (Firouzja)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:05.273Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Italian Gam (Firouzja)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Italian",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Italian Gam (Firouzja)",
+            "Italian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:20.112Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-firouzja-rossolimo",
+      "name": "Sicilian Rossolimo (Firouzja)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:20.112Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Rossoimo (Firouzja)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Rossoimo (Firouzja)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:34.784Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-firouzja-vienna",
+      "name": "Vienna Game (Firouzja)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:34.789Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Vienna Game(Firouzja)",
+              "cardCount": 0,
+              "dropdownCount": 2,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Vienna",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Vienna Game(Firouzja)",
+            "Vienna"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:49.592Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-firouzja-najdorf",
+      "name": "Sicilian Najdorf (Firouzja)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:49.592Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Najdrf (Firouzja)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Najdrf (Firouzja)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/openings/pro-firouzja-najdorf\", wait"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.440Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-firouzja-grunfeld",
+      "name": "Grunfeld Defense (Firouzja)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.440Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Grunfeld Defence (Firouzja)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Grunfeld Defese (Firouzja)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Grunfeld]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Grunfeld Defence (Firouzja)",
+            "Grunfeld Defese (Firouzja)",
+            "Grunfeld"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.444Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-firouzja-french",
+      "name": "French Defense (Firouzja)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.444Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[French Defence (Firouzja)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[French Defene (Firouzja)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[French]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "French Defence (Firouzja)",
+            "French Defene (Firouzja)",
+            "French"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.445Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-firouzja-ruy-lopez",
+      "name": "Ruy Lopez (Firouzja)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.445Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Ruy Lopez Firouzja)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Ruy]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Ruy Lopez Firouzja)",
+            "Ruy"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.446Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-firouzja-kid",
+      "name": "King's Indian Defense (Firouzja)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.449Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[King's Indian Defence (Firouzja)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Kings Indian Defense (Firouzja)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[King's Indian Deense (Firouzja)]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "King's Indian Defence (Firouzja)",
+            "Kings Indian Defense (Firouzja)",
+            "King's Indian Deense (Firouzja)"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.451Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-dubov-italian",
+      "name": "The Loud Italian / Dubov Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.451Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[The Loud Italia / Dubov Gambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[The]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "The Loud Italia / Dubov Gambit",
+            "The"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.452Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-dubov-catalan",
+      "name": "Catalan Opening (Dubov)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.453Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Catalan Opeing (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Catalan]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Catalan Opeing (Dubov)",
+            "Catalan"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.453Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-dubov-anti-marshall",
+      "name": "Anti-Marshall Ruy Lopez (Dubov)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.453Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Anti-Marshall Ry Lopez (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Anti]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Anti-Marshall Ry Lopez (Dubov)",
+            "Anti"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.454Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-dubov-tarrasch-french",
+      "name": "Tarrasch French (Dubov)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.454Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Tarrasch Frnch (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Tarrasch]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Tarrasch Frnch (Dubov)",
+            "Tarrasch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.455Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-dubov-sveshnikov",
+      "name": "Sicilian Sveshnikov (Dubov)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.458Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Sicilian Svesnikov (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Sicilian]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Sicilian Svesnikov (Dubov)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.459Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-dubov-tarrasch-defense",
+      "name": "Tarrasch Defense (Dubov)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.459Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Tarrasch Defence (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Tarrasch Defnse (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Tarrasch]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Tarrasch Defence (Dubov)",
+            "Tarrasch Defnse (Dubov)",
+            "Tarrasch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.460Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-dubov-benoni",
+      "name": "Modern Benoni (Dubov)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.461Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Modern Benni (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Modern]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Modern Benni (Dubov)",
+            "Modern"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.461Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-dubov-scotch",
+      "name": "Scotch Game (Dubov)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.461Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Scotch Gae (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Scotch]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Scotch Gae (Dubov)",
+            "Scotch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.462Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-dubov-dutch",
+      "name": "Dutch Defense (Dubov)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.462Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Dutch Defence (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Dutch Defese (Dubov)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Dutch]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Dutch Defence (Dubov)",
+            "Dutch Defese (Dubov)",
+            "Dutch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.463Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gukesh-italian",
+      "name": "Italian Game (Gukesh)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.466Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Italian Gae (Gukesh)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Italian]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Italian Gae (Gukesh)",
+            "Italian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.467Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gukesh-catalan",
+      "name": "Catalan Opening (Gukesh)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.468Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Catalan Openng (Gukesh)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Catalan]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Catalan Openng (Gukesh)",
+            "Catalan"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.468Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-gukesh-najdorf",
+      "name": "Sicilian Najdorf (Gukesh)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.469Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Sicilian Najorf (Gukesh)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Sicilian]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Sicilian Najorf (Gukesh)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.469Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-praggnanandhaa-ruy-lopez",
+      "name": "Ruy Lopez (Praggnanandhaa)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.469Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Ruy Lopez (Prggnanandhaa)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Ruy]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Ruy Lopez (Prggnanandhaa)",
+            "Ruy"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.476Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-praggnanandhaa-catalan",
+      "name": "Catalan Opening (Praggnanandhaa)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.476Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Catalan Opening Praggnanandhaa)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Catalan]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Catalan Opening Praggnanandhaa)",
+            "Catalan"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.477Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-praggnanandhaa-najdorf",
+      "name": "Sicilian Najdorf (Praggnanandhaa)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.481Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Sicilian Najdorf(Praggnanandhaa)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Sicilian]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Sicilian Najdorf(Praggnanandhaa)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.482Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-niemann-anti-marshall",
+      "name": "Ruy Lopez Anti-Marshall (Niemann)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.482Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Ruy Lopez Anti-Mrshall (Niemann)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Ruy]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Ruy Lopez Anti-Mrshall (Niemann)",
+            "Ruy"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.482Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-niemann-najdorf",
+      "name": "Sicilian Najdorf (Niemann)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.483Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Sicilian Najdrf (Niemann)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Sicilian]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Sicilian Najdrf (Niemann)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.483Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-niemann-grunfeld",
+      "name": "Grunfeld Defense (Niemann)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.483Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Grunfeld Defence (Niemann)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Grunfeld Defese (Niemann)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Grunfeld]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Grunfeld Defence (Niemann)",
+            "Grunfeld Defese (Niemann)",
+            "Grunfeld"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.484Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-ericrosen-london",
+      "name": "London System (Rosen)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.485Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[London Sysem (Rosen)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[London]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "London Sysem (Rosen)",
+            "London"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.485Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-ericrosen-stafford",
+      "name": "Stafford Gambit (Rosen)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.490Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Stafford Gabit (Rosen)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Stafford]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Stafford Gabit (Rosen)",
+            "Stafford"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.501Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-ericrosen-englund",
+      "name": "Englund Gambit (Rosen)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.502Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Englund Gamit (Rosen)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Englund]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Englund Gamit (Rosen)",
+            "Englund"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.504Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-annacramling-qgd",
+      "name": "Queen's Gambit (Cramling)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.504Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Queens Gambit (Cramling)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Queen's Gambt (Cramling)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Queen's]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Queens Gambit (Cramling)",
+            "Queen's Gambt (Cramling)",
+            "Queen's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.505Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-annacramling-london",
+      "name": "London System (Cramling)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.505Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[London Syste (Cramling)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[London]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "London Syste (Cramling)",
+            "London"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.506Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-annacramling-cow",
+      "name": "The Cow (Cramling)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.506Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[The Cow (ramling)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[The]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "The Cow (ramling)",
+            "The"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.506Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-chesswithakeem-italian",
+      "name": "Italian Game (Akeem)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.509Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Italian Gae (Akeem)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Italian]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Italian Gae (Akeem)",
+            "Italian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.510Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-chesswithakeem-scotch",
+      "name": "Scotch Game (Akeem)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.510Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Scotch Gae (Akeem)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Scotch]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Scotch Gae (Akeem)",
+            "Scotch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.511Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-chesswithakeem-kings-gambit",
+      "name": "King's Gambit (Akeem)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.511Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Kings Gambit (Akeem)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[King's Gamit (Akeem)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[King's]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Kings Gambit (Akeem)",
+            "King's Gamit (Akeem)",
+            "King's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.512Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-chesswithakeem-caro-kann",
+      "name": "Caro-Kann Defense (Akeem)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.513Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Caro-Kann Defence (Akeem)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Caro-Kann Deense (Akeem)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Caro]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Caro-Kann Defence (Akeem)",
+            "Caro-Kann Deense (Akeem)",
+            "Caro"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.514Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-samayraina-italian",
+      "name": "Italian Game (Samay)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.514Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Italian Gae (Samay)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Italian]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Italian Gae (Samay)",
+            "Italian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.514Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-samayraina-najdorf",
+      "name": "Sicilian Najdorf (Samay)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.518Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Sicilian Najorf (Samay)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Sicilian]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Sicilian Najorf (Samay)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.519Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-samayraina-nimzo",
+      "name": "Nimzo-Indian Defense (Samay)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.519Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Nimzo-Indian Defence (Samay)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Nimzo-Indian Dfense (Samay)]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Nimzo]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Nimzo-Indian Defence (Samay)",
+            "Nimzo-Indian Dfense (Samay)",
+            "Nimzo"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.520Z"
+    },
+    {
+      "round": 2,
+      "openingId": "gambit-kings-gambit",
+      "name": "King's Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.520Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Kings Gambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[King'sGambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[King's]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Kings Gambit",
+            "King'sGambit",
+            "King's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.521Z"
+    },
+    {
+      "round": 2,
+      "openingId": "gambit-evans-gambit",
+      "name": "Evans Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.521Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Evans ambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Evans]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Evans ambit",
+            "Evans"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.522Z"
+    },
+    {
+      "round": 2,
+      "openingId": "scotch-gambit",
+      "name": "Scotch Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.522Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[ScotchGambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Scotch]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "ScotchGambit",
+            "Scotch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.523Z"
+    },
+    {
+      "round": 2,
+      "openingId": "vienna-gambit",
+      "name": "Vienna Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.526Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[ViennaGambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Vienna]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "ViennaGambit",
+            "Vienna"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.527Z"
+    },
+    {
+      "round": 2,
+      "openingId": "danish-gambit",
+      "name": "Danish Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.527Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[DanishGambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Danish]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "DanishGambit",
+            "Danish"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.528Z"
+    },
+    {
+      "round": 2,
+      "openingId": "smith-morra-gambit",
+      "name": "Smith-Morra Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:30:54.528Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Smith-Mora Gambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Smith]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Smith-Mora Gambit",
+            "Smith"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.529Z"
+    },
+    {
+      "round": 2,
+      "openingId": "stafford-gambit",
+      "name": "Stafford Gambit",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.529Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Staffor Gambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Stafford]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Staffor Gambit",
+            "Stafford"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.530Z"
+    },
+    {
+      "round": 2,
+      "openingId": "marshall-attack",
+      "name": "Marshall Attack",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.530Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Marshal Attack]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Marshall]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Marshal Attack",
+            "Marshall"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.531Z"
+    },
+    {
+      "round": 2,
+      "openingId": "englund-gambit",
+      "name": "Englund Gambit",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.533Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[EnglundGambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Englund]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "EnglundGambit",
+            "Englund"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.534Z"
+    },
+    {
+      "round": 2,
+      "openingId": "gambit-budapest-gambit",
+      "name": "Budapest Gambit",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.535Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Budapes Gambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Budapest]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Budapes Gambit",
+            "Budapest"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.535Z"
+    },
+    {
+      "round": 2,
+      "openingId": "albin-countergambit",
+      "name": "Albin Countergambit",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.536Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Albin Coutergambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Albin]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Albin Coutergambit",
+            "Albin"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.536Z"
+    },
+    {
+      "round": 2,
+      "openingId": "gambit-benko-gambit",
+      "name": "Benko Gambit",
+      "color": "black",
+      "startedAt": "2026-05-19T14:30:54.537Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [],
+          "findings": [
+            "P1[Benko ambit]: /openings did not reseed within 90s — seed pipeline broken",
+            "P1[Benko]: /openings did not reseed within 90s — seed pipeline broken"
+          ],
+          "attemptedVariants": [
+            "Benko ambit",
+            "Benko"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": [
+            "P5: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:30:54.537Z"
     }
   ]
 }
