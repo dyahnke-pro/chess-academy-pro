@@ -41,6 +41,7 @@ import { logAppAudit } from './appAuditor';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
 import { getOpeningMasterContext, formatBestCounterAsNarration, formatRepGameRef } from './bestCounterService';
+import { buildCoachChatContext } from './chessConceptService';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -1301,6 +1302,29 @@ export async function getCoachChatResponse(
     ? renderMasterPlayContextBlock(masterPlayContext)
     : '';
 
+  // Book grounding — pulls relevant passages from the 7 Gutenberg
+  // classics for any opening / concept named in the latest user
+  // message. Empty string when nothing matched; otherwise a compact
+  // reference block keyed off the same opening/concept vocabulary
+  // the narration generator uses. The brain grounds its prose in
+  // Capablanca / Lasker / Staunton rather than inventing stock
+  // explanations. See chessConceptService.ts for the data shape.
+  const latestUserMsg = (() => {
+    for (let i = messages.length - 1; i >= 0; i -= 1) {
+      if (messages[i].role === 'user') return messages[i].content;
+    }
+    return '';
+  })();
+  const bookGroundingBlock = buildCoachChatContext(latestUserMsg);
+  if (bookGroundingBlock) {
+    void logAppAudit({
+      kind: 'book-grounding-injected',
+      category: 'subsystem',
+      source: 'coachApi.bookGrounding',
+      summary: `coach chat grounded with book passages (${bookGroundingBlock.length} chars)`,
+    });
+  }
+
   const buildSystemPromptFor = (extraAddendum: string = ''): string => {
     return buildSystemPromptWithVerbosity(
       SYSTEM_PROMPT,
@@ -1309,6 +1333,7 @@ export async function getCoachChatResponse(
         personalityAddition,
         responseLengthAddition,
         groundingBlock,
+        bookGroundingBlock,
         systemPromptAddition,
         extraAddendum,
       ]

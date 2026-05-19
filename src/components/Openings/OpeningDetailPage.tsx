@@ -16,6 +16,7 @@ import { MiddlegamePlansSection } from './MiddlegamePlansSection';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { CheckpointQuiz } from './CheckpointQuiz';
+import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { SidelineExplainer } from './SidelineExplainer';
 import commonMistakesData from '../../data/common-mistakes.json';
@@ -760,6 +761,16 @@ export function OpeningDetailPage(): JSX.Element {
           </ul>
         </div>
       )}
+
+      {/* Classic Wisdom — passages from Capablanca / Lasker / Staunton /
+          Young / Edge / Bird (Project Gutenberg, public domain) that
+          mention this opening. Renders nothing if no passages matched. */}
+      <ClassicWisdomSection
+        openingName={opening.name}
+        renderNarrationButton={(text) => (
+          <NarrationButton sectionId="classic-wisdom" text={text} />
+        )}
+      />
 
       {/* Checkpoint Quiz — after Key Ideas */}
       {currentQuiz && !quizCompleted && (

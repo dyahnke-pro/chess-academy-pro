@@ -42,6 +42,7 @@ import {
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
 import { logAppAudit } from './appAuditor';
+import { buildOpeningNarrationContext } from './chessConceptService';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -1879,7 +1880,20 @@ ${branches.length > 0 ? `- branchIdeas: ONE sentence (max 20 words) for EACH bra
       (a) THREATS — squares the moved piece NOW attacks/pressures (Bc4 → f7), or
       (b) LOOK-AHEAD — the next critical square on the line you're walking (Re1 → e8 if the rook is going to lift, Nc3 → d5 if the knight is heading to d5 next).
     Do NOT draw the move's own from→to (the board animates that). Skip arrows when nothing useful to show.
-  Example: for "English Attack" with extension "Ng4 Bg5 Qa5+", emit 3 idea objects narrating those three plies.` : ''}`;
+  Example: for "English Attack" with extension "Ng4 Bg5 Qa5+", emit 3 idea objects narrating those three plies.` : ''}
+
+${(() => {
+  const block = buildOpeningNarrationContext(entry.canonicalName);
+  if (block) {
+    void logAppAudit({
+      kind: 'book-grounding-injected',
+      category: 'subsystem',
+      source: 'openingGenerator.bookGrounding',
+      summary: `narration grounded with book passages for "${entry.canonicalName}" (${block.length} chars)`,
+    });
+  }
+  return block;
+})()}`;
   const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
 Student plays: ${studentSide}
 Total moves in spine: ${positions.length}
