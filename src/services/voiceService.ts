@@ -647,7 +647,17 @@ class VoiceService {
             category: 'subsystem',
             source: 'voiceService.speakInternal.briefCap',
             summary: `brief-cap applied: ${cap.originalLength}→${cap.text.length} chars`,
-            details: `original (first 80): "${text.slice(0, 80)}"; clipped: "${cap.text}"`,
+            // Audit-instrumentation phase-1 (2026-05-19, Bug I): log
+            // the FULL original text and the FULL clipped output so
+            // we can review exactly what got lost without re-running
+            // the surface. The previous 80-char preview hid the
+            // critical end of long responses.
+            details: JSON.stringify({
+              originalLength: cap.originalLength,
+              clippedLength: cap.text.length,
+              fullOriginal: text,
+              fullClipped: cap.text,
+            }),
           });
         }).catch(() => undefined);
       }
