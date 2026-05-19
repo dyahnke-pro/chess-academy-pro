@@ -23561,14 +23561,3011 @@
         "Create kingside attacking potential with Be3 bishop support"
       ],
       "alternative": "O-O — stabilize king, consolidate bishop on e3"
+    },
+    "scotch-game.json::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)::15": {
+      "ply": 16,
+      "san": "d6",
+      "plans": [
+        "Support e4 pawn and prepare e5 square for knight repositioning.",
+        "Keep c5 bishop controlled while maintaining d4 knight centralization."
+      ],
+      "alternative": "Nf3 — develops knight to attack e5 square directly"
+    },
+    "scotch-game.json::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)::16": {
+      "ply": 17,
+      "san": "Nd2",
+      "plans": [
+        "Reroute knight from d4 to support e4 pawn and control c4.",
+        "Keep queen on f6 pressured while defending d-file and c3."
+      ],
+      "alternative": "Nf5 — immediately activates knight to attack d6 square"
+    },
+    "scotch-game.json::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)::18": {
+      "ply": 19,
+      "san": "f4",
+      "plans": [
+        "Create f4-e5 pawn chain threatening to advance and close kingside.",
+        "Attack g7 square indirectly; support d4 knight blockade of d6."
+      ],
+      "alternative": "Nf5 — attacks d6 pawn and g7 square simultaneously"
+    },
+    "scotch-game.json::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)::20": {
+      "ply": 21,
+      "san": "Nf5",
+      "plans": [
+        "Post knight on f5 to attack d6 pawn and dominate dark squares.",
+        "Threaten Nxd6 forcing black to address weakened kingside structure."
+      ],
+      "alternative": "exf5 — simplify and relieve central tension"
+    },
+    "scotch-game.json::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)::21": {
+      "ply": 22,
+      "san": "Nxf5",
+      "plans": [
+        "Eliminate knight on f5 attacking d6 pawn; recapture with bishop.",
+        "Maintain Be3 control of long diagonal and d4 knight support."
+      ],
+      "alternative": "Qxf5 — queen captures and centralizes on f5"
+    },
+    "scotch-game.json::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)::24": {
+      "ply": 25,
+      "san": "Bxb6",
+      "plans": [
+        "Remove b6 knight before it reroutes; damage queenside pawn structure.",
+        "Exploit weakened d6 square and open b-file toward black king."
+      ],
+      "alternative": "Nd2 — reposition knight to support f4 or g4 advance"
+    },
+    "scotch-game.json::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)::27": {
+      "ply": 28,
+      "san": "Ne5",
+      "plans": [
+        "Activate knight on e5 to centralize and attack c6 bishop.",
+        "Control key central squares d7, c6, f7 from advanced outpost."
+      ],
+      "alternative": "Nd4 — reposition knight to challenge e5 and d6"
+    },
+    "scotch-game.json::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)::28": {
+      "ply": 29,
+      "san": "Be2",
+      "plans": [
+        "Move bishop from c4 to e2 removing it from f7 diagonal pressure.",
+        "Maintain piece coordination while preparing to defend against e5 knight threats."
+      ],
+      "alternative": "Bd5 — pin bishop to rook on a8 if ne5 knight moves"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 central squares for next moves",
+        "Prepare Nf3 to support center and eye f7"
+      ],
+      "alternative": "c4 — English opening, flexible setup"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's center, contest e4 square control",
+        "Enable Nc6 development to pressure d4"
+      ],
+      "alternative": "c5 — Sicilian Defense, active counterplay"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Support e4 pawn and prepare d4 advance",
+        "Develop knight to natural f3 square"
+      ],
+      "alternative": "Bc4 — Attack f7, enter Italian Game"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Occupy c6 square, pressure White's d4 plan",
+        "Block central d-file for White's pieces"
+      ],
+      "alternative": "Bc5 — Immediate development with threats"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Strike e5 center, force Black's recapture decision",
+        "Open d-file potential for future rook placement"
+      ],
+      "alternative": "Bb5 — Attack Nc6, enter Ruy Lopez patterns"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture toward center with d4 pawn gone",
+        "Create d4 outpost for White's knight jump"
+      ],
+      "alternative": "dxe5 — Keep central tension, retain pawn"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Recentralize knight to d4, hitting c6 and e6",
+        "Maintain piece coordination against Nc6"
+      ],
+      "alternative": "Qxd4 — Activate queen early, invite exchanges"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::8": {
+      "ply": 9,
+      "san": "Nxc6",
+      "plans": [
+        "Eliminate Nc6 defender, crack Black's queenside",
+        "Force Black's b-pawn recapture, weaken c6 structure"
+      ],
+      "alternative": "Nf3 — Retreat knight, ease pressure"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::9": {
+      "ply": 10,
+      "san": "bxc6",
+      "plans": [
+        "Recapture with b-pawn, create isolated c6 pawn",
+        "Open b-file for rook and bishop pair advantage"
+      ],
+      "alternative": "axc6 — Keep a-file open, different pawn structure"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::12": {
+      "ply": 13,
+      "san": "Qe2",
+      "plans": [
+        "Post queen on e2, prepare kingside castling safety",
+        "Defend along e-file, support e5 pawn advance ideas"
+      ],
+      "alternative": "Bf4 — Activate bishop, pressure c7 later"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::15": {
+      "ply": 16,
+      "san": "Ba6",
+      "plans": [
+        "Ba6 attacks c4 pawn and controls long diagonal toward g1",
+        "Nd5 blockades c4 and prepares reroute to b4 or f4"
+      ],
+      "alternative": "Nf4 — attacks e2 queen, forcing retreat or exchange"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::16": {
+      "ply": 17,
+      "san": "b3",
+      "plans": [
+        "b3 supports Ba3 and prepares solid queenside structure",
+        "Ba3 pins d-file against king, controls long diagonal"
+      ],
+      "alternative": "Nc3 — develops knight, defends against Nf4 threats"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::18": {
+      "ply": 19,
+      "san": "Ba3",
+      "plans": [
+        "Ba3 pressures f8-h2 diagonal, restricts Black's bishop",
+        "Nf3 solidifies development and defends e5 pawn"
+      ],
+      "alternative": "Nf5 — attacks e7 and g7, forces awkward queen move"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::20": {
+      "ply": 21,
+      "san": "f4",
+      "plans": [
+        "f4 breaks e5-d5 center, opens f-file toward Black's king",
+        "e6 break threatens to isolate c6 pawn permanently"
+      ],
+      "alternative": "Qe4 — centralized queen, eyes g6 and c6 weaknesses"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::21": {
+      "ply": 22,
+      "san": "Bg7",
+      "plans": [
+        "Bg7 fianchettoed bishop defends long diagonal, pressures c3",
+        "O-O activates king safety, prepares f-file rook lift"
+      ],
+      "alternative": "Nf6 — defends g4, attacks e4 queen, improves piece"
+    },
+    "scotch-game.json::Scotch: Mieses Variation 4...Nf6 (e5 Push)::24": {
+      "ply": 25,
+      "san": "Qe4",
+      "plans": [
+        "Qe4 centralizes queen, threatens c6 and attacks g6 weak pawn",
+        "Nf3 completes piece coordination, eyes d5 via c3 route"
+      ],
+      "alternative": "Bd3 — develops bishop, targets h7 weakness, opens castling"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares for future piece placement",
+        "Open e-file and long diagonal for development"
+      ],
+      "alternative": "c4 — English Opening setup with different pawn structure"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror center control; prepare Nc6 to challenge e4",
+        "Keep central tension before committing pieces"
+      ],
+      "alternative": "c5 — Sicilian-style counterattack against e4 pawn"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn and prepare d4 central push",
+        "Support future Bc4 development on long diagonal"
+      ],
+      "alternative": "Bc4 — Gambit move sacrificing d4 pawn immediately"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn; prepare to capture on d4",
+        "Knight controls d4 and f4 squares from c6"
+      ],
+      "alternative": "Nf6 — Attack e4 and e5 pawns simultaneously"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Challenge e5; threaten Nxd4 after capture",
+        "Nf3 and d4 create aggressive center gambit setup"
+      ],
+      "alternative": "Bc4 — Immediate bishop placement on aggressive diagonal"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Nxd4 will win material; Nc6 cannot recapture yet",
+        "Black accepts gambit pawn but loses tempo"
+      ],
+      "alternative": "Nxd4 — Recapture immediately with knight instead"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::6": {
+      "ply": 7,
+      "san": "Bc4",
+      "plans": [
+        "Bishop on c4 targets f7 weakness and long diagonal",
+        "Threaten Nxd4 next; maintain initiative with tempo"
+      ],
+      "alternative": "Nxd4 — Capture pawn immediately instead of developing"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::8": {
+      "ply": 9,
+      "san": "e5",
+      "plans": [
+        "e5 pawn attacks Nf3; force knight decision immediately",
+        "Advance pawn threatens f4; control central space"
+      ],
+      "alternative": "Qh5 — Aggressive queen sortie toward f7 weakness"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::9": {
+      "ply": 10,
+      "san": "d5",
+      "plans": [
+        "d5 attacks Bc4 bishop; counterattack against center",
+        "Pawn breaks through; force White bishop retreat decision"
+      ],
+      "alternative": "exf3 — Capture knight; avoid bishop pin on d5"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::12": {
+      "ply": 13,
+      "san": "Nxd4",
+      "plans": [
+        "Nxd4 recapture; eliminate Black's strong centralized knight",
+        "Queen on d1 regains material; simplify position"
+      ],
+      "alternative": "Bxd5 — Trade bishop for pawn; weaken Black's center"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::15": {
+      "ply": 16,
+      "san": "bxc6",
+      "plans": [
+        "Recapture with b-pawn to open queenside after Black's damaged pawn structure",
+        "Center control with d4 knight while Black's king remains in middle"
+      ],
+      "alternative": "exd5 — push e-pawn to create passed pawn"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::16": {
+      "ply": 17,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside to safeguard king before tactical complications escalate",
+        "Free rook on f1 to defend e5 pawn and monitor e-file"
+      ],
+      "alternative": "Nc3 — develop queen's knight and defend e5"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::18": {
+      "ply": 19,
+      "san": "Be3",
+      "plans": [
+        "Place bishop on e3 to support d4 knight and control c5 square",
+        "Prepare f4 advance to expand space around e5 passed pawn"
+      ],
+      "alternative": "f4 — immediately advance to secure e5 pawn's space"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::20": {
+      "ply": 21,
+      "san": "Bxd4",
+      "plans": [
+        "Remove d4 knight with bishop trade to simplify Black's counterplay",
+        "Trade relieves pressure on e5 and keeps c6 pawn isolated"
+      ],
+      "alternative": "Nf3 — retreat knight to attack d5 and support center"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::21": {
+      "ply": 22,
+      "san": "O-O",
+      "plans": [
+        "Complete king safety by castling before White captures on d4",
+        "Connect rooks and prepare defense of back rank"
+      ],
+      "alternative": "Bf6 — place bishop aggressively to pin g7 pawn"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::24": {
+      "ply": 25,
+      "san": "Qxd2",
+      "plans": [
+        "Resolve d4 bishop and centralize queen on d2 controlling key squares",
+        "Support f4 push by placing queen behind bishop advance"
+      ],
+      "alternative": "Qe2 — centralize queen while keeping f4 option open"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::27": {
+      "ply": 28,
+      "san": "Bf5",
+      "plans": [
+        "Push f4 to attack d5 pawn and restrict Black's dark squares",
+        "Gain space on kingside and threaten f6 square for knight"
+      ],
+      "alternative": "Bd4 — reposition bishop to control long diagonal and c5"
+    },
+    "scotch-game.json::Scotch Gambit (4.Bc4)::28": {
+      "ply": 29,
+      "san": "Rfe1",
+      "plans": [
+        "Activate rook on e1 to support e5 pawn and control e-file",
+        "Prepare doubling on e-file if Black trades on e5"
+      ],
+      "alternative": "Rf2 — defend f2 and prepare to double rooks vertically"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with central pawn",
+        "Create space for kingside knight development to f3"
+      ],
+      "alternative": "d4 — advance center immediately, risking early exchanges"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, claim central space and symmetry",
+        "Open d6 and f6 squares for piece development later"
+      ],
+      "alternative": "c5 — Sicilian structure, fighting d4 control asymmetrically"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn, force Black knight to c6 or decision",
+        "Prepare d4 pawn push with knight safely positioned"
+      ],
+      "alternative": "Bc4 — bishop attacks f7, skipping knight development"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn, prepare to recapture on d4",
+        "Position knight on central outpost c6, eyeing d4"
+      ],
+      "alternative": "Nf6 — challenge e4 immediately, transpose to Ruy Lopez"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Strike e5 with d4 pawn, force d4-e5 tension resolution",
+        "Open lines for Bc1 and queen after pawn exchanges"
+      ],
+      "alternative": "Bc4 — bishop targets f7 before committing center"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture d4 with knight, activate Nc3 piece tempo",
+        "Eliminate e5 pawn, open d-file for potential rook pressure"
+      ],
+      "alternative": "Qxd4 — queen recaptures, but hangs to Nc6 fork immediately"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Centralize knight on d4 outpost, attack f5 and b5",
+        "Prepare Nc3 support, solidify central knight on strong square"
+      ],
+      "alternative": "exd4 — keep pawn center, but knight on f3 less active"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::8": {
+      "ply": 9,
+      "san": "Nc3",
+      "plans": [
+        "Support d4 knight and control c5 via Nc3 placement",
+        "Prepare O-O castling while defending e4 pawn indirectly"
+      ],
+      "alternative": "Bd3 — develop bishop immediately, transpose to Scotch Four Knights"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::9": {
+      "ply": 10,
+      "san": "Bb4",
+      "plans": [
+        "Pin Nc3 knight to king via Bb4 pin, force decision",
+        "Threaten Nxc3 fork if Nc3 moves, gain tempo pressure"
+      ],
+      "alternative": "Be7 — flexible bishop, avoids Nc3 pin entirely"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::12": {
+      "ply": 13,
+      "san": "Bd3",
+      "plans": [
+        "Develop dark-squared bishop to d3, support e4 and g6",
+        "Prepare O-O castling, connect rooks with queen on e1"
+      ],
+      "alternative": "Be2 — bishop on e2, avoids Nxe4 tactic discovered by pin"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::15": {
+      "ply": 16,
+      "san": "cxd5",
+      "plans": [
+        "Recapture on d5, opening e-file for rook pressure",
+        "Prepare castling kingside while Black's bishop on b4 remains unplaced"
+      ],
+      "alternative": "exd5 — keeps e-file closed, blocks potential rook activity"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::16": {
+      "ply": 17,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside, connecting rooks and safeguarding king",
+        "Support Bd3 and prepare central pressure with developed pieces"
+      ],
+      "alternative": "Qe2 — delays castling, misses tempo for king safety"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::18": {
+      "ply": 19,
+      "san": "Bg5",
+      "plans": [
+        "Pin Nf6 to queen, forcing Black to address piece pressure",
+        "Reinforce Bd3 and d5 square control with two bishops"
+      ],
+      "alternative": "Be3 — develops but leaves Nf6 unpinned, less aggressive"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::20": {
+      "ply": 21,
+      "san": "Qf3",
+      "plans": [
+        "Attack f7 weakness with queen on third rank",
+        "Coordinate Bg5-pinned Nf6 with Qf3 aimed at kingside"
+      ],
+      "alternative": "Qd2 — centralizes queen but abandons f7 pressure"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::21": {
+      "ply": 22,
+      "san": "Be7",
+      "plans": [
+        "Block f7 weakness, reducing Qf3 and Bg5 threats",
+        "Develop bishop from back rank to active square Be7"
+      ],
+      "alternative": "Bxc3 — trades bishop but relieves pressure on kingside"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::24": {
+      "ply": 25,
+      "san": "Bxf6",
+      "plans": [
+        "Exchange dark-squared bishop defending f7, exposing king",
+        "Force Black to recapture, weakening pawn structure around f6"
+      ],
+      "alternative": "Bxe7 — trades but removes pin on Nf6 prematurely"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::27": {
+      "ply": 28,
+      "san": "Bxd5",
+      "plans": [
+        "Recapture on d5, centralizing Bd3 to dominate light squares",
+        "Threaten back-rank tactics with rooks via d-file control"
+      ],
+      "alternative": "cxd5 — blocks c-file but opens d5 for Black's pieces"
+    },
+    "scotch-game.json::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)::28": {
+      "ply": 29,
+      "san": "Qxd5",
+      "plans": [
+        "Centralize queen on d5, attacking c6 pawn and coordinating rooks",
+        "Dominate light squares with queen-bishop coordination from center"
+      ],
+      "alternative": "Qe2 — retreats queen, cedes central d5 control prematurely"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawn support.",
+        "Prepare Nf3 and d4 to build strong pawn center."
+      ],
+      "alternative": "c4 — English opening transposition, solid setup"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, contest d4 square immediately.",
+        "Support e5 pawn with Nc6 or Nf6 knight."
+      ],
+      "alternative": "c5 — Sicilian Defense, fight for central control"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Nf3 controls e5 pawn, prevents Black's d5 advance.",
+        "Prepare d4 advance to challenge e5 pawn directly."
+      ],
+      "alternative": "c4 — English Scotch, sidestep main-line complications"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Nc6 knight blocks d4 square, eyes e4 pawn.",
+        "Support center with Nc6, prepare Nf6 development."
+      ],
+      "alternative": "Nf6 — develop knight immediately, keep flexible"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "d4 pawn offers gambit, forces Black's response on e5.",
+        "Sacrifice d4 pawn to open lines for bishops quickly."
+      ],
+      "alternative": "cxd4 — recapture immediately, avoid complications"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "exd4 maintains pawn center, opens e-file for rook.",
+        "d4 pawn becomes isolated but activates light-squared bishop."
+      ],
+      "alternative": "dxc3 — keep material, avoid sharp tactics"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::6": {
+      "ply": 7,
+      "san": "c3",
+      "plans": [
+        "c3 pawn supports d4, prevents Nc6 takes on d4.",
+        "Prepare b2 bishop activation on long diagonal after c3."
+      ],
+      "alternative": "Bc4 — immediate bishop attack on f7, create threats"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::8": {
+      "ply": 9,
+      "san": "Nxc3",
+      "plans": [
+        "Nc3 knight joins battle, controls d5 and e4 squares.",
+        "Knight on c3 supports d4 pawn, pressures Black's position."
+      ],
+      "alternative": "bxc3 — double c-pawns but keep material advantage"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::9": {
+      "ply": 10,
+      "san": "Bb4",
+      "plans": [
+        "Bb4 pins c3 knight to king, threatens d4 pawn.",
+        "Black's Bb4 attacks c3 knight, forces king-side decisions."
+      ],
+      "alternative": "dxc3 — grab pawn, remove defender of d4"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::12": {
+      "ply": 13,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside, connect rooks and secure king safely.",
+        "O-O removes king from center, prepares f-file pressure."
+      ],
+      "alternative": "a3 — immediately expel Bb4, avoid pin complications"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::15": {
+      "ply": 16,
+      "san": "Nf6",
+      "plans": [
+        "Black develops knight to f6, attacking e4 pawn and supporting d-file pressure",
+        "Prepare to challenge Bc4 bishop by advancing d6-d5 after consolidating kingside"
+      ],
+      "alternative": "Nbd7 — supports d6 advance and c-file defense"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::16": {
+      "ply": 17,
+      "san": "Nd4",
+      "plans": [
+        "Nd4 centralizes White's knight, attacking d6 pawn and controlling key squares",
+        "Support Bc4 bishop's diagonal by fixing Black's d-pawn on light square"
+      ],
+      "alternative": "Bg5 — pins Nf6 and pressures f7 before Black consolidates"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::18": {
+      "ply": 19,
+      "san": "f3",
+      "plans": [
+        "f3 supports e4 pawn and prepares Kh1, securing kingside against tactics",
+        "Control e3 square for potential rook lift via f2-f3-e3"
+      ],
+      "alternative": "Re1 — connects rooks and pressures e5 square immediately"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::20": {
+      "ply": 21,
+      "san": "Bb3",
+      "plans": [
+        "Bb3 retreats bishop away from Nxb3 exchanges, maintaining light-square control",
+        "Support Nd4 knight and prepare doubling on d-file via Rd1"
+      ],
+      "alternative": "Bf4 — keeps bishop active and eyes d6 pawn directly"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::21": {
+      "ply": 22,
+      "san": "c5",
+      "plans": [
+        "c5 attacks Nd4 knight, forcing decision on d4 while opening d-file",
+        "Advance queenside majority and create Ne5-c4 outpost possibility"
+      ],
+      "alternative": "Nh5 — attacks f4-square and prepares f6-f5 space-gaining break"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::24": {
+      "ply": 25,
+      "san": "exf5",
+      "plans": [
+        "exf5 removes Nf6 defender of e5 square and opens e-file for Qd1",
+        "Secure strong e5 outpost and prevent Black's Ne5-d3 fork"
+      ],
+      "alternative": "Nf3 — retreats knight and maintains central support without opening e-file"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::27": {
+      "ply": 28,
+      "san": "Re8",
+      "plans": [
+        "Re8 activates rook on open file, pressures e4 pawn and prepares g5-g4",
+        "Support g5 advance by controlling g7-g6 squares and backing Ne5"
+      ],
+      "alternative": "Nxb3 — eliminates Bb3 bishop and forces White's axb3 doubled pawns"
+    },
+    "scotch-game.json::Scotch: Göring Gambit (4.c3)::28": {
+      "ply": 29,
+      "san": "Qd2",
+      "plans": [
+        "Qd2 centralizes queen, supports Bb3 bishop and threatens Nxf5 capture",
+        "Connect rooks on first rank and prepare Rac1 pressure on c5 pawn"
+      ],
+      "alternative": "Rac1 — immediately attacks c5 pawn before Black consolidates rook placement"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawn advance.",
+        "Open lines for queen and light-squared bishop."
+      ],
+      "alternative": "d4 — advance in center immediately"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, occupy center and attack White's e4.",
+        "Prepare Nf6 knight development."
+      ],
+      "alternative": "c5 — challenge e4 with Sicilian structure"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn with developed knight from f3.",
+        "Support future d4 break in center."
+      ],
+      "alternative": "Bc4 — develop bishop toward f7 quickly"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn, activate queen's knight to c6.",
+        "Prepare counterplay against White's center."
+      ],
+      "alternative": "Nf6 — develop kingside knight before defending e5"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Challenge e5 pawn, open lines with d4 advance.",
+        "Force Black's e5 pawn capture or advance."
+      ],
+      "alternative": "Bc4 — develop bishop to active diagonal toward f7"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture d4 pawn, activate knight to f6 after.",
+        "Avoid doubled c-pawns by capturing toward center."
+      ],
+      "alternative": "Qxd4 — centralize queen immediately after capture"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Recapture d4 with knight, occupy central square.",
+        "Prepare Nxc6 or Nf3 reroute based on Black's play."
+      ],
+      "alternative": "exd4 — keep pawn in center, open e-file"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::8": {
+      "ply": 9,
+      "san": "Nb5",
+      "plans": [
+        "Attack c7 and e6 squares with b5 knight fork threat.",
+        "Exploit pin on c6 knight with Nxc6 threat."
+      ],
+      "alternative": "a4 — prevent Bb4+ check, control dark squares"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::9": {
+      "ply": 10,
+      "san": "Bb4+",
+      "plans": [
+        "Pin c1 bishop with Bb4+ check, force king move.",
+        "Disrupt White's kingside castling safety."
+      ],
+      "alternative": "a6 — attack b5 knight, gain space on queenside"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::12": {
+      "ply": 13,
+      "san": "Bc4",
+      "plans": [
+        "Attack f7 weakness with c4 bishop on long diagonal.",
+        "Prepare Nxc6 capture, opening c-file for rook."
+      ],
+      "alternative": "Be2 — complete development, prepare kingside castling"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::15": {
+      "ply": 16,
+      "san": "Kd8",
+      "plans": [
+        "Castle kingside to connect rooks and centralize king away from e4 queen",
+        "Knight on b5 attacks a7 and d6 outpost squares after castling"
+      ],
+      "alternative": "Nc3 — develop immediately, contest e4-queen centralization"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::16": {
+      "ply": 17,
+      "san": "O-O",
+      "plans": [
+        "Rook on f1 opens f-file for potential pressure down the board",
+        "King on g1 escapes center; prepare Nc3 to challenge e4-queen"
+      ],
+      "alternative": "Nf3 — attack e4-queen, force it to commit"
+    },
+    "scotch-game.json::Scotch: 4...Qh4 (Steinitz Variation)::18": {
+      "ply": 19,
+      "san": "a4",
+      "plans": [
+        "a4-pawn attacks Ba5, forcing it to retreat or abandon long diagonal",
+        "Nc3 move becomes stronger after bishop retreats from a5"
+      ],
+      "alternative": "Nf3 — develop knight, attack e4-queen directly"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares for rapid piece deployment",
+        "Prepare Nf3 and Bc4 to dominate light squares"
+      ],
+      "alternative": "d4 — immediately challenge center symmetry"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's center; support potential d5 counterattack",
+        "Allow Nf3 without immediate d4 pressure"
+      ],
+      "alternative": "c5 — asymmetrical Sicilian-style counterattack on d4"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight to f3, supporting d4 advance and e5 control",
+        "Prepare Bc4 targeting the f7 weakness"
+      ],
+      "alternative": "Bc4 — attack f7 immediately, delay Nc3"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Attack d4 and contest center with Nc6",
+        "Prepare Nf6, developing toward kingside"
+      ],
+      "alternative": "Nf6 — develop immediately, delay Nc6"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Strike d4-e5 center; open lines for bishop development",
+        "Force Black to recapture and clarify piece placement"
+      ],
+      "alternative": "Bc4 — attack f7 before committing d4"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture with knight; occupy central d4 outpost",
+        "Prepare Nc3 and Bd3 for kingside attack"
+      ],
+      "alternative": "dxe5 — keep pawn, occupy d4 with bishop later"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Occupy d4 square with knight after forcing e5 recapture",
+        "Centralize knight; support Nc3 and Bd3 setup"
+      ],
+      "alternative": "Nxd4 — same move, already played"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::8": {
+      "ply": 9,
+      "san": "Nc3",
+      "plans": [
+        "Add second defender to knight; prevent Nxc3 without recapture",
+        "Prepare Be3 and castle kingside with solid center"
+      ],
+      "alternative": "Be3 — develop bishop, delay Nc3 move"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::9": {
+      "ply": 10,
+      "san": "Bb4",
+      "plans": [
+        "Pin c3-knight to king; force Bd3 or Qd2 to unpin",
+        "Disrupt White's kingside attack plans by pinning defender"
+      ],
+      "alternative": "Nxd4 — exchange central knight, simplify position"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::12": {
+      "ply": 13,
+      "san": "Bd3",
+      "plans": [
+        "Station bishop on d3; support kingside attack on f7-h7",
+        "Prepare O-O with bishop defending h7 via d3-h7 diagonal"
+      ],
+      "alternative": "Be3 — develop bishop while keeping pressure on c5"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::15": {
+      "ply": 16,
+      "san": "cxd5",
+      "plans": [
+        "Recapture on d5, opening c-file for Black's rook",
+        "Trade queen's bishop for Bb4, simplifying Black's counterplay"
+      ],
+      "alternative": "Nxd5 — centralizes knight, avoids opening c-file"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::16": {
+      "ply": 17,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside, connect rooks and safeguard king",
+        "Prepare Bg5 pin against Nf6, controlling weak f7"
+      ],
+      "alternative": "Re1 — activate rook immediately, delay castling"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::18": {
+      "ply": 19,
+      "san": "Bg5",
+      "plans": [
+        "Pin knight to queen on f6, restrict Black's options",
+        "Support d3 bishop and eye weakness on f7"
+      ],
+      "alternative": "Bf4 — develop bishop away, avoid pin complications"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::20": {
+      "ply": 21,
+      "san": "Ne2",
+      "plans": [
+        "Knight supports d4 and protects g1 from back-rank tricks",
+        "Reroute knight from c3, prepare f4 push if needed"
+      ],
+      "alternative": "Nxd5 — force trade, eliminate Black's d5 pawn"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::21": {
+      "ply": 22,
+      "san": "Bd6",
+      "plans": [
+        "Black's dark-squared bishop retreats from aggressive b4 square",
+        "Bd6 supports c5 advance, targets weak h2 diagonal"
+      ],
+      "alternative": "Be6 — occupy different diagonal, less tension on h2"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::24": {
+      "ply": 25,
+      "san": "Bh4",
+      "plans": [
+        "Move Bh4 attacks f6 knight, force it or exchange",
+        "Prepare g4 pawn storm targeting Black's kingside weaknesses"
+      ],
+      "alternative": "Be3 — retreat bishop safely, consolidate position"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::27": {
+      "ply": 28,
+      "san": "Rxe1+",
+      "plans": [
+        "Black sacrifices exchange with Rxe1+, forcing white queen recapture",
+        "Rook on e1 invades weak back rank despite material deficit"
+      ],
+      "alternative": "Nxe1 — knight recaptures, keeps queen from e1"
+    },
+    "scotch-game.json::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)::28": {
+      "ply": 29,
+      "san": "Qxe1",
+      "plans": [
+        "Queen recaptures on e1, centralize queen on open file",
+        "Maintain material advantage, prepare defense against Bd6 pressure"
+      ],
+      "alternative": "Kxe1 — king recaptures, slightly awkward king on e1"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Occupy central e4 square; prepare d4 advance",
+        "Control d5 and f5 squares from e4"
+      ],
+      "alternative": "c4 — English Opening structure"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 with e5; contest central control",
+        "Keep options open for knight development to f6"
+      ],
+      "alternative": "c5 — Sicilian counterplay"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Develop Nf3; support e4 and eye d4",
+        "Prepare d4 central break by controlling key squares"
+      ],
+      "alternative": "Nc3 — immediate development before d4"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn; occupy c6 outpost",
+        "Support potential d6 or e5 counterthrust"
+      ],
+      "alternative": "Nf6 — immediate attack on e4"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Strike center with d4; challenge e5 pawn",
+        "Open lines for Bc1 and queen development"
+      ],
+      "alternative": "Bc4 — Italian setup attacking f7"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture on d4; maintain piece activity",
+        "Prepare Nf6 or Bb4+ check continuation"
+      ],
+      "alternative": "Qxd4 — capture with queen immediately"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Centralize knight on d4; occupy strong square",
+        "Force Black knight decision: Nf6 or other moves"
+      ],
+      "alternative": "exd4 — open e-file for queen later"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::8": {
+      "ply": 9,
+      "san": "Nb3",
+      "plans": [
+        "Reroute Nb3 away from d4; support c5 square",
+        "Prevent Nxe4 recapture; maintain piece flexibility"
+      ],
+      "alternative": "exf6 — open center, expose king"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::9": {
+      "ply": 10,
+      "san": "Bb6",
+      "plans": [
+        "Retreat Bc5 to b6; avoid Nd4 knight",
+        "Reposition light-squared bishop away from tactics"
+      ],
+      "alternative": "Ba4 — keep bishop active on diagonal"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::12": {
+      "ply": 13,
+      "san": "Qe2",
+      "plans": [
+        "Center queen on e2; support kingside attack f4",
+        "Connect rooks; prepare 0-0 castling safety"
+      ],
+      "alternative": "Qf3 — eye f7 weakness directly"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::15": {
+      "ply": 16,
+      "san": "Bxe3",
+      "plans": [
+        "Black removes light-squared bishop, forcing White queen to e3.",
+        "White recaptures on e3, centralizing queen on key square."
+      ],
+      "alternative": "Nxe3 — keeps bishop pair, slightly awkward queen placement"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::16": {
+      "ply": 17,
+      "san": "Qxe3",
+      "plans": [
+        "Queen repositions to e3, controlling d4 and h6 squares.",
+        "White consolidates with castling queenside soon, launching kingside attack."
+      ],
+      "alternative": "Qxe3 — centralizes queen immediately on dominant square"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::18": {
+      "ply": 19,
+      "san": "O-O-O",
+      "plans": [
+        "White castles queenside, moving king to c1 for safety.",
+        "Rook on d1 supports center control and potential d-file pressure."
+      ],
+      "alternative": "O-O — slower; kingside castling less suitable here"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::20": {
+      "ply": 21,
+      "san": "f3",
+      "plans": [
+        "Pawn to f3 prepares g4 pawn storm attacking Black's kingside.",
+        "Bolster e4 pawn; prepare Nd5 penetration with support."
+      ],
+      "alternative": "h4 — more direct kingside expansion, slower preparation"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::21": {
+      "ply": 22,
+      "san": "d5",
+      "plans": [
+        "Black strikes center with d5, challenging White's e4 pawn.",
+        "Open d-file potential emerges if d5 captures e4."
+      ],
+      "alternative": "Bg4 — pins queen, but allows exd5 opening e-file"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::24": {
+      "ply": 25,
+      "san": "Nxd5",
+      "plans": [
+        "Knight from b3 lands on d5, forking queen and f6 knight.",
+        "Centralized Nd5 dominates board; Black must respond to double threat."
+      ],
+      "alternative": "exd5 — recaptures but allows Qxd5, Black centralizes"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::27": {
+      "ply": 28,
+      "san": "Qe7",
+      "plans": [
+        "Black queen repositions to e7, escaping d5 knight fork.",
+        "Retreat maintains queen on active square; supports remaining pieces."
+      ],
+      "alternative": "Qf6 — challenges White's setup but blocks f-file"
+    },
+    "scotch-game.json::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)::28": {
+      "ply": 29,
+      "san": "Qe2",
+      "plans": [
+        "White queen retreats to e2, regrouping after d5 knight exchange.",
+        "Queen on e2 eyes b5 square and maintains kingside attack setup."
+      ],
+      "alternative": "Nxe7+ — trades knight but loses tempo with check"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with pawn on e4",
+        "Prepare Nf3 to support center and develop kingside"
+      ],
+      "alternative": "d4 — immediate central occupation, avoiding Scotch setup"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's e4 pawn, occupy e5 outpost",
+        "Prepare Nc6 to challenge d4 and e4"
+      ],
+      "alternative": "c5 — Sicilian structure, avoid symmetrical positions"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Nf3 supports e4 and prepares d4 thrust",
+        "Keep knight flexible for d4 or e5 pressure"
+      ],
+      "alternative": "Bc4 — Two Knights opening, target f7 weakness"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Nc6 blocks d4 square and prepares exd4",
+        "Knight contests e4 pawn, eyes d4 outpost"
+      ],
+      "alternative": "Nf6 — Petroff Defense, challenge e4 immediately"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "d4 opens center and forces exd4 response",
+        "Commit to Scotch Game: d4 creates tension"
+      ],
+      "alternative": "Bc4 — Italian Game setup, avoid Scotch complications"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Black must recapture on d4, accept isolated pawn structure",
+        "exd4 locks Black's e-file, opens queenside for Nc6"
+      ],
+      "alternative": "Nxe4 — activate knight instead, challenge e4"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Nxd4 recaptures and centralizes knight on d4 outpost",
+        "Knight on d4 attacks c6 and eyes f5, e6 squares"
+      ],
+      "alternative": "Qxd4 — queen recapture, but blocks development"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::8": {
+      "ply": 9,
+      "san": "Nxc6",
+      "plans": [
+        "Nxc6 removes Black's defender, forces bxc6 weakness",
+        "Exchange knight for Nc6, damage Black's pawn structure"
+      ],
+      "alternative": "Nf3 — retreat, preserve knight on d4 outpost"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::9": {
+      "ply": 10,
+      "san": "bxc6",
+      "plans": [
+        "bxc6 creates doubled c-pawns, weakens queenside",
+        "Black's doubled c6 pawns block queenside, impair piece activity"
+      ],
+      "alternative": "dxc6 — capture toward center, cleaner pawn structure"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::12": {
+      "ply": 13,
+      "san": "Qe2",
+      "plans": [
+        "Qe2 pins Nf6 to Ke8, prepare e5 pawn advance",
+        "Queen on e2 supports e4 pawn, controls key squares"
+      ],
+      "alternative": "Bg5 — pin Nf6, threaten Nxe5 or Nxf7"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::15": {
+      "ply": 16,
+      "san": "Nb6",
+      "plans": [
+        "Knight retreats from d5; prepare to challenge e5 pawn via c7-d6",
+        "White controls d4 and c4; continue expanding center grip"
+      ],
+      "alternative": "Nf6 — reroute knight via d7 to challenge e5"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::16": {
+      "ply": 17,
+      "san": "Nc3",
+      "plans": [
+        "Knight on c3 guards e4 and eyes d5 outpost",
+        "Stabilize queen on e2; prepare bishop development on c1"
+      ],
+      "alternative": "Bg5 — pin f6 knight and accelerate king-side pressure"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::18": {
+      "ply": 19,
+      "san": "Qe4",
+      "plans": [
+        "Queen on e4 dominates center and threatens f7",
+        "King still in center; Bd3 and kingside castle complete setup"
+      ],
+      "alternative": "Bg5 — pin queen on e7 to king on e8"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::20": {
+      "ply": 21,
+      "san": "Bd3",
+      "plans": [
+        "Bd3 trains on h7 and controls long diagonal",
+        "Prepare 0-0; e5 pawn locks Black's structure"
+      ],
+      "alternative": "Bg5 — pin e7 queen and maintain aggressive tempo"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::21": {
+      "ply": 22,
+      "san": "g6",
+      "plans": [
+        "g6 weakens f6 and dark squares around Black king",
+        "Castle kingside; Black queen on e6 lacks ideal squares"
+      ],
+      "alternative": "Bf5 — challenge dark-squared control immediately"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::24": {
+      "ply": 25,
+      "san": "Re1",
+      "plans": [
+        "Re1 pins e6 square and supports e5 pawn advance",
+        "Kingside rook connects with queen; Black queen under pressure"
+      ],
+      "alternative": "f4 — lock center and prevent Black counterplay on d4"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::27": {
+      "ply": 28,
+      "san": "d6",
+      "plans": [
+        "d6 strikes at e7 and opens f7 to attack",
+        "f4 pawn supports e5; Black king exposed on back rank"
+      ],
+      "alternative": "exd6 — win material; f7 hangs to Qxf7 if king moves"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::28": {
+      "ply": 29,
+      "san": "f5",
+      "plans": [
+        "f5 closes board; Black queen has no escape via e5",
+        "e5 and f5 pawns dominate; prepare back-rank assault"
+      ],
+      "alternative": "Kh1 — step king from back-rank; prevent perpetual threats"
+    },
+    "scotch-game.json::Mieses Center Domination Trap::30": {
+      "ply": 31,
+      "san": "e6",
+      "plans": [
+        "e6 pawn forks queen on e7 and rook on a8 next move",
+        "e7 square falls; Black king cannot defend both pieces"
+      ],
+      "alternative": "Bxh7 — remove kingside defender; queen still dominates"
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares; prepare Nf3 and d4 thrust.",
+        "Build tension in center; threaten Black's e5 pawn."
+      ],
+      "alternative": "c4 — English opening approach; sidestep Scotch theory."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Support center pawn on e5; prepare Nf6 development.",
+        "Mirror White's control; enable c6 or Nf6."
+      ],
+      "alternative": "c5 — Sicilian counter; fight for d4 early."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn; coordinate with d4 advance.",
+        "Place knight on strong f3 outpost; control key squares."
+      ],
+      "alternative": "d4 — open center immediately; transpose to Italian Game."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5; prepare d5 strike or Nf6 development.",
+        "Position knight on c6; support center defense."
+      ],
+      "alternative": "Nf6 — challenge e4 directly; delay c6 defense."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Strike center with d4; force Black's pawn capture.",
+        "Open lines toward c6 knight; enable Bc4 diagonal."
+      ],
+      "alternative": "Bc4 — attack f7; defer d4 gambit."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture d4 pawn; centralize and develop pieces.",
+        "Retain bishop pair; prepare Bc4 or Bg5 threat."
+      ],
+      "alternative": "Nxd4 — knight recapture; active piece placement."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::6": {
+      "ply": 7,
+      "san": "Bc4",
+      "plans": [
+        "Dominate diagonal toward f7; threaten weak f7 square.",
+        "Coordinate Bc4 with Nf3; build attacking setup."
+      ],
+      "alternative": "Nxd4 — recapture centrally; delay bishop development."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::8": {
+      "ply": 9,
+      "san": "e5",
+      "plans": [
+        "Advance e5 pawn; cramp Black's position; restrict knight.",
+        "Solidify space advantage; limit Black counterplay on d4."
+      ],
+      "alternative": "Nxd4 — simplify; recapture with tempo against d4 knight."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::9": {
+      "ply": 10,
+      "san": "Ne4",
+      "plans": [
+        "Attack e4 knight; force White decision on Qd4 queen.",
+        "Centralize Ne4; attack undefended queen on d1."
+      ],
+      "alternative": "Nxe5 — exchange knight; reduce White's attacking force."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::12": {
+      "ply": 13,
+      "san": "Bg5",
+      "plans": [
+        "Pin c6 knight to e8 bishop; threaten knight removal.",
+        "Reinforce attack on c6; prepare Bxc6 capture threat."
+      ],
+      "alternative": "Qxd4 — recapture d4 pawn; simplify with material equality."
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::15": {
+      "ply": 16,
+      "san": "Qxe7",
+      "plans": [
+        "Queen captures e7, removing Black's developed bishop and opening e-file pressure",
+        "Prepare Nc3 to centralize knight and control d5 outpost square"
+      ],
+      "alternative": "Qe4 — keeps piece flexibility, avoids queen trade"
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::16": {
+      "ply": 17,
+      "san": "Nc3",
+      "plans": [
+        "Centralize knight on c3, control d5 and e4 squares against knight forks",
+        "Prepare kingside castling while maintaining bishop on c4 aimed at f7"
+      ],
+      "alternative": "Be3 — develops bishop safely, covers c5 square"
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::18": {
+      "ply": 19,
+      "san": "Nd5",
+      "plans": [
+        "Knight d5 attacks c7 and e7, forces Black queen to awkward square",
+        "Threaten Nxc7+ royal fork if queen moves away from defense"
+      ],
+      "alternative": "Qe4 — centralizes queen, keeps piece mobility"
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::20": {
+      "ply": 21,
+      "san": "Nf6+",
+      "plans": [
+        "Knight f6 gives check, forces king move and opens f7 weakness",
+        "After king moves, Nxe8 wins the queen on e8"
+      ],
+      "alternative": "Ne7+ — simpler check, forces king move without immediate threat"
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::21": {
+      "ply": 22,
+      "san": "gxf6",
+      "plans": [
+        "Recapture on f6, open g-file toward exposed Black king on e8",
+        "Threatening Qd5+, skewering king and rook on a8"
+      ],
+      "alternative": "exf6 — opens e-file, pushes pawn closer to promotion"
+    },
+    "scotch-game.json::Scotch Gambit Nd5 Fork Trap::24": {
+      "ply": 25,
+      "san": "O-O-O",
+      "plans": [
+        "Castle queenside, move king to safety while rook supports d-file pressure",
+        "Centralize rook on d-file against Black's weak d6 or backward pieces"
+      ],
+      "alternative": "Ke2 — keeps king flexible, maintains rook on open d-file"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4, prepare rapid piece development",
+        "Open central files for queen and rooks"
+      ],
+      "alternative": "d4 — fight for center immediately"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's center, prepare knight to c6",
+        "Keep d4 and e4 squares contested"
+      ],
+      "alternative": "c5 — counterattack White's e4 pawn"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Support d4 push, control e5 square",
+        "Prepare to challenge Black's e5 pawn"
+      ],
+      "alternative": "c4 — support d4 advance immediately"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn, block d4 square",
+        "Prepare counterplay on queenside"
+      ],
+      "alternative": "Nf6 — develop knight, challenge e4 pawn"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Create tension on d4 and e5",
+        "Open lines if Black captures on d4"
+      ],
+      "alternative": "Bc4 — attack f7 immediately"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture on d4 with c-pawn to gain space",
+        "Keep d4 pawn tension, prepare c3 pawn advance"
+      ],
+      "alternative": "Nxd4 — centralize knight quickly"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::6": {
+      "ply": 7,
+      "san": "c3",
+      "plans": [
+        "Support d4 square after Black recapture, threaten d5",
+        "Open line for dark-squared bishop on c1"
+      ],
+      "alternative": "Nxd4 — seize central square with knight"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::8": {
+      "ply": 9,
+      "san": "Nxc3",
+      "plans": [
+        "Recapture on c3 to maintain central control",
+        "Prepare Bc4 attack on f7 weakness"
+      ],
+      "alternative": "bxc3 — open b-file for rook"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::9": {
+      "ply": 10,
+      "san": "Bb4",
+      "plans": [
+        "Pin Nc3 knight to king, threaten d2 square",
+        "Force White to address pin immediately"
+      ],
+      "alternative": "Nxe4 — win center pawn, attack c3 knight"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::12": {
+      "ply": 13,
+      "san": "O-O",
+      "plans": [
+        "Connect rooks, activate dark-squared bishop from f1",
+        "Prepare f4 pawn storm against Black king"
+      ],
+      "alternative": "Bd3 — support f4 pawn advance"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::15": {
+      "ply": 16,
+      "san": "Nxe4",
+      "plans": [
+        "Knight from e4 captures on e4, centralizing and forcing White's queen move.",
+        "White's Bc4 targets f7 weakness after Black's knight retreats."
+      ],
+      "alternative": "Nxe4 — unpins c3 bishop, attacks queen immediately"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::16": {
+      "ply": 17,
+      "san": "Qb3",
+      "plans": [
+        "Queen to b3 attacks f7 and pins Black's e4 knight to king.",
+        "Threaten back-rank vulnerabilities with Bc4-f7 breakthrough setup."
+      ],
+      "alternative": "dxe5 — recapture center, simplify Black's compensation"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::18": {
+      "ply": 19,
+      "san": "Bb5",
+      "plans": [
+        "Bb5 pins the knight on c6, removes defender of d5 pawn.",
+        "White threatens Bxc6 followed by Qxb7, stripping Black's queenside."
+      ],
+      "alternative": "d4 — reclaim center, open lines for rooks"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::20": {
+      "ply": 21,
+      "san": "Ba3",
+      "plans": [
+        "Ba3 controls long diagonal to g1, supports rook on f-file invasion.",
+        "Rook entry on f7 becomes catastrophic with Ba3 preventing counterplay."
+      ],
+      "alternative": "Bxc6 — simplify structure, weaken Black's dark squares"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::21": {
+      "ply": 22,
+      "san": "Re8",
+      "plans": [
+        "Black connects rooks and shields king on back rank from threats.",
+        "Re8 prepares d5-d4 counterattack, activates queen into center."
+      ],
+      "alternative": "Nxe4 — eliminate dangerous knight, reduce White's attacking force"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::24": {
+      "ply": 25,
+      "san": "Bxc6",
+      "plans": [
+        "Bxc6 removes defender of e4 square, isolates Black's d5 pawn.",
+        "White's rooks dominate open e-file and long diagonal to b1."
+      ],
+      "alternative": "dxe4 — recapture, open e-file fully for rook pressure"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::27": {
+      "ply": 28,
+      "san": "cxd6",
+      "plans": [
+        "cxd6 creates passed d-pawn, splits Black's king from queen defense.",
+        "d6 pawn advances with tempo, d7 breakthrough threatens promotion."
+      ],
+      "alternative": "bxc6 — capture with rook, support passed c-pawn advance"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::28": {
+      "ply": 29,
+      "san": "Rxe8+",
+      "plans": [
+        "Rxe8+ forces king move, removes Black's last rook defender.",
+        "d7 advances unstoppable after rook trade, threatens d8=Q"
+      ],
+      "alternative": "Nxe4 — trade off attacking piece, maintain d6 strongpoint"
+    },
+    "scotch-game.json::Goring Gambit Kingside Storm::30": {
+      "ply": 31,
+      "san": "Re1",
+      "plans": [
+        "Re1 pins queen to king on e-file, controls e8 queening square.",
+        "d7-d8 promotion threat forces Black's pieces into defensive bind."
+      ],
+      "alternative": "d7 — push passed pawn immediately, threaten d8 promotion"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with central pawn",
+        "Prepare Nf3 and d4 to dominate center"
+      ],
+      "alternative": "d4 — immediate central break"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's pawn, control d4 and f4",
+        "Support e5 pawn against Nf3 and d4 thrust"
+      ],
+      "alternative": "c5 — counterattack d4 before White establishes it"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn, prepare d4 gambit push",
+        "Support Bc4 development and f7 weakness"
+      ],
+      "alternative": "d4 — open position immediately rather than allow Nc6"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn and contest d4 square",
+        "Prepare castling kingside with flexible piece placement"
+      ],
+      "alternative": "d6 — solidify e5 pawn defense instead"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Offer d4 pawn to expose Black's center",
+        "Threaten f7 weakness with Bc4 pinning"
+      ],
+      "alternative": "Nxe5 — win center pawn directly without gambit"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Capture d4 pawn, develop pieces actively",
+        "Prepare Bc4 strike at weakened f7"
+      ],
+      "alternative": "Qxd4 — centralize queen immediately after capture"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::6": {
+      "ply": 7,
+      "san": "Bc4",
+      "plans": [
+        "Attack f7 directly, Black king safety endangered",
+        "Retain attacking momentum with Bc4 targeting weakness"
+      ],
+      "alternative": "Nxd4 — stabilize center before Bc4 sacrifice setup"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::8": {
+      "ply": 9,
+      "san": "Bxf7+",
+      "plans": [
+        "Sacrifice bishop on f7 to expose Black king permanently",
+        "King must move, White gains tempo for attack build"
+      ],
+      "alternative": "O-O — castle early and prepare quiet pressure"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::9": {
+      "ply": 10,
+      "san": "Kxf7",
+      "plans": [
+        "Black king on f7 is exposed and vulnerable",
+        "White rook to f1 and queen to d5 will dominate"
+      ],
+      "alternative": "Kd8 — king retreats avoiding immediate threats"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::12": {
+      "ply": 13,
+      "san": "O-O",
+      "plans": [
+        "Rook occupies f1 file, checks and tactics follow",
+        "Queen can jump to d5 or g4, controlling light squares"
+      ],
+      "alternative": "Rf2 — keep rook flexible on second rank defense"
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::15": {
+      "ply": 16,
+      "san": "Re8",
+      "plans": [
+        "Black's king on f7 is exposed; prepare Nc3 to centralize and threaten checks.",
+        "Control d5 square with knight; prevent Black's bishop pair coordination."
+      ],
+      "alternative": "Bg5 — pin Nf6 immediately and force decisions."
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::16": {
+      "ply": 17,
+      "san": "Nc3",
+      "plans": [
+        "Nc3 completes development and opens lines for rook activity.",
+        "Knights on c3 and d4 dominate center; Black's king still unsafe on f7."
+      ],
+      "alternative": "exd5 — capture and open e-file toward exposed king."
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::18": {
+      "ply": 19,
+      "san": "fxe4",
+      "plans": [
+        "After fxe4, knight on d4 becomes even stronger with support.",
+        "Seize d5 square with Ne5 check; harass king further."
+      ],
+      "alternative": "Ne5 — check king, centralize knight, threaten f7 directly."
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::20": {
+      "ply": 21,
+      "san": "Bg5",
+      "plans": [
+        "Bg5 pins Nf6 to the queen and exposes Black's weak king position.",
+        "After Bg5, Nxe4 or Ne5 both threaten devastating knight jumps."
+      ],
+      "alternative": "Be3 — develop bishop and maintain central control solidly."
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::21": {
+      "ply": 22,
+      "san": "Be7",
+      "plans": [
+        "White's bishop pair and Black's exposed king f7 ensure lasting pressure.",
+        "Qf1 next prepares to redirect queen toward kingside weaknesses."
+      ],
+      "alternative": "Bf4 — retain tension, keep f6-knight pinned, eye e5."
+    },
+    "scotch-game.json::Scotch Gambit Bxf7+ Sacrifice::24": {
+      "ply": 25,
+      "san": "Qf1",
+      "plans": [
+        "Qf1 moves toward kingside attack; threatens Ne5 with check.",
+        "Black's king lacks shelter on f7; one move separates mate threats."
+      ],
+      "alternative": "Qg4 — offer queen trade, simplify and activate with pressure."
+    },
+    "scotch-game.json::4...Qh4 Refutation::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with central pawn",
+        "Prepare Nf3 to support e4 pawn and develop"
+      ],
+      "alternative": "d4 — immediate central tension"
+    },
+    "scotch-game.json::4...Qh4 Refutation::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, occupy e5 central outpost",
+        "Prepare Nc6 to challenge White's d4 advance"
+      ],
+      "alternative": "c5 — Sicilian-style counterplay against e4"
+    },
+    "scotch-game.json::4...Qh4 Refutation::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn and prepare d4 break",
+        "Connect rooks and position queen's knight ideally"
+      ],
+      "alternative": "Bc4 — aggressive pin on f7 weakness"
+    },
+    "scotch-game.json::4...Qh4 Refutation::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn with knight, prepare Qh4",
+        "Control d4 square where White will recapture"
+      ],
+      "alternative": "Nf6 — challenge White's center immediately"
+    },
+    "scotch-game.json::4...Qh4 Refutation::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Challenge e5 pawn and open center lines",
+        "Force Black to recapture toward d-file"
+      ],
+      "alternative": "Bc4 — bypass center tension, target f7"
+    },
+    "scotch-game.json::4...Qh4 Refutation::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture on d4, eliminate White's hanging pawn",
+        "Keep d-file semi-open for rook activity"
+      ],
+      "alternative": "Nxd4 — support center, prepare development"
+    },
+    "scotch-game.json::4...Qh4 Refutation::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Recapture d4 knight with tempo on Nc6",
+        "Centralize knight on d4, threaten f5 and b5"
+      ],
+      "alternative": "Qxd4 — aggressive queen placement but blocks bishop"
+    },
+    "scotch-game.json::4...Qh4 Refutation::8": {
+      "ply": 9,
+      "san": "Nb5",
+      "plans": [
+        "Attack Nc6 knight and threaten d7 square",
+        "White's Nb5 prepares Nxd6+ or supports Bf4"
+      ],
+      "alternative": "Nf3 — complete development, accept symmetry"
+    },
+    "scotch-game.json::4...Qh4 Refutation::9": {
+      "ply": 10,
+      "san": "Qxe4+",
+      "plans": [
+        "Black's queen captures e4 with check, tempo",
+        "White king must move, losing castling synchronization"
+      ],
+      "alternative": "a6 — attack Nb5, force knight decision"
+    },
+    "scotch-game.json::4...Qh4 Refutation::12": {
+      "ply": 13,
+      "san": "O-O",
+      "plans": [
+        "White castles kingside, move rook to f-file",
+        "Black queen remains centralized on e4 without support"
+      ],
+      "alternative": "Bf4 — pre-emptively develop, avoid queen threats"
+    },
+    "scotch-game.json::4...Qh4 Refutation::15": {
+      "ply": 16,
+      "san": "Qg6",
+      "plans": [
+        "Attack queen on g6; prepare Nd5 fork on f6 and e7.",
+        "Control dark squares around Black's exposed king on d8."
+      ],
+      "alternative": "Qf3 — centralize queen, maintain piece pressure"
+    },
+    "scotch-game.json::4...Qh4 Refutation::16": {
+      "ply": 17,
+      "san": "Nd5",
+      "plans": [
+        "Nd5 forks queen on g6 and f6-knight if it moves there.",
+        "Threaten Ne7+ discovered check via bishop on e2."
+      ],
+      "alternative": "Nc3 — develop rook's knight, support center"
+    },
+    "scotch-game.json::4...Qh4 Refutation::18": {
+      "ply": 19,
+      "san": "Bg5",
+      "plans": [
+        "Bg5 pins f6-knight to queen, forces Black decision.",
+        "Threaten Ne7+ fork after g6-queen moves."
+      ],
+      "alternative": "Nf3 — attack g6-queen, open e-file for rook"
+    },
+    "scotch-game.json::4...Qh4 Refutation::20": {
+      "ply": 21,
+      "san": "Nxe7",
+      "plans": [
+        "Nxe7 discovers check from Bg5; queen must move.",
+        "Coordinate Nxe7 check with Bg5 pin on f6-knight."
+      ],
+      "alternative": "Nxf6+ — discover check, eliminate defender of king"
+    },
+    "scotch-game.json::4...Qh4 Refutation::21": {
+      "ply": 22,
+      "san": "Kxe7",
+      "plans": [
+        "King on e7 exposed; Bg5 still attacks f6-knight.",
+        "Prepare Nxf6+ check or Qd5 centralization on dark squares."
+      ],
+      "alternative": "Kf8 — move king toward safety on kingside"
+    },
+    "scotch-game.json::4...Qh4 Refutation::24": {
+      "ply": 25,
+      "san": "Nxd5+",
+      "plans": [
+        "Nxd5+ checks king on e7; centralizes knight with tempo.",
+        "After king moves, Bg5 pins knight to queen."
+      ],
+      "alternative": "Nf3 — develop queen's rook, pressure f6"
+    },
+    "scotch-game.json::4...Qh4 Refutation::27": {
+      "ply": 28,
+      "san": "gxf6",
+      "plans": [
+        "gxf6 opens g-file toward Black's king on f7.",
+        "Remove defender of e7 square; threaten back-rank motifs."
+      ],
+      "alternative": "Qe1 — centralize queen, keep f6-knight under pressure"
+    },
+    "scotch-game.json::4...Qh4 Refutation::28": {
+      "ply": 29,
+      "san": "Bh6+",
+      "plans": [
+        "Bh6+ checks king on f7; forces g8 or e8 move.",
+        "After Kg8, Bg7 threatens discovered attacks via Bg5."
+      ],
+      "alternative": "Qe1 — centralize queen, maintain dark-square control"
+    },
+    "scotch-game.json::4...Qh4 Refutation::30": {
+      "ply": 31,
+      "san": "Bf3",
+      "plans": [
+        "Bf3 pins queen to rook on f8; control long diagonal.",
+        "Centralize bishop on f3; queen on e5 loses g7."
+      ],
+      "alternative": "Qe1 — reposition queen toward f6 and d8"
+    },
+    "scotch-game.json::4...Qh4 Refutation::32": {
+      "ply": 33,
+      "san": "Bxc6",
+      "plans": [
+        "Bxc6 removes defender; threatens Qb4+ or Qd6 on back rank.",
+        "Eliminate knight blocking e-file to f8-rook."
+      ],
+      "alternative": "Qd6 — attack f8-rook, control a1-h8 diagonal"
+    },
+    "scotch-game.json::4...Qh4 Refutation::33": {
+      "ply": 34,
+      "san": "bxc6",
+      "plans": [
+        "Recapture with b-pawn to open b-file toward Black's queenside.",
+        "Keep rook on a1 aligned with weakened a6 and c6 pawns."
+      ],
+      "alternative": "Nxc6 — centralizes knight, but allows Black counterplay on f-file."
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 squares for central support",
+        "Prepare Nf3 to develop and reinforce center"
+      ],
+      "alternative": "d4 — immediately stake claim to center"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's center control on e5",
+        "Enable Nf6 or Nc6 development next move"
+      ],
+      "alternative": "c5 — attack d4 pawn and control center"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Support d4 advance with knight on f3",
+        "Enable Bc4 attack on f7 weakness"
+      ],
+      "alternative": "Bc4 — immediately threaten f7 pawn"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn with knight on c6",
+        "Prepare d7-d6 or Nf6 to complete piece setup"
+      ],
+      "alternative": "Nf6 — develop knight toward center control"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Exchange on e5 to open lines after recapture",
+        "Attack Nc6 and probe Black's center stability"
+      ],
+      "alternative": "Bc4 — skip d4 and immediately target f7"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture on d4 and clear e5 square",
+        "Allow White's Nxd4 to centralize knight powerfully"
+      ],
+      "alternative": "Nxd4 — centralize knight immediately after exchange"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Place knight on d4 outpost attacking multiple squares",
+        "Threaten Nf5 jump to pressure f7 and e7"
+      ],
+      "alternative": "exd4 — accept central pawn tension instead"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::8": {
+      "ply": 9,
+      "san": "Nb5",
+      "plans": [
+        "Attack Nc6 with Nb5, threatening Nxd6+ fork",
+        "Force Black's bishop to move by pinning knight"
+      ],
+      "alternative": "a3 — restrict Bb4 advance preemptively"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::9": {
+      "ply": 10,
+      "san": "Bb4+",
+      "plans": [
+        "Give check with Bb4 and disrupt White's king safety",
+        "Force c3 or Nbd2 to block, delaying coordination"
+      ],
+      "alternative": "Bd6 — develop bishop to solid square instead"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::12": {
+      "ply": 13,
+      "san": "N1a3",
+      "plans": [
+        "Reroute queen's knight to c2 after c3 block",
+        "Clear d-file and support potential d5 breakthrough later"
+      ],
+      "alternative": "Bd2 — pin the queen's knight from long diagonal"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::15": {
+      "ply": 16,
+      "san": "Kd8",
+      "plans": [
+        "Nxd8 forces Kxd8, opening d-file for rook pressure",
+        "Nxc6 removes defender, threatens bxc6 doubling pawns"
+      ],
+      "alternative": "Nxc6 — simpler, removes key defender immediately"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::16": {
+      "ply": 17,
+      "san": "O-O",
+      "plans": [
+        "Bring rook from a1 to d-file via d1, attack d-file weaknesses",
+        "Play Nxd8 capturing undefended knight on d8"
+      ],
+      "alternative": "Nxd8 — immediately captures hanging knight on d8"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::18": {
+      "ply": 19,
+      "san": "Nb1",
+      "plans": [
+        "Restart Nb3-d4 centralization, eye f5 outpost square",
+        "Rook to d-file pressures d6 pawn and king position"
+      ],
+      "alternative": "Nd4 — centralizes immediately, more forcing"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::20": {
+      "ply": 21,
+      "san": "Re1",
+      "plans": [
+        "Nd4-f5 outpost attacks g7 and e7 squares",
+        "Connect rooks, threaten f5-e7 fork pattern"
+      ],
+      "alternative": "Nd4 — centralizes knight toward f5 outpost"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::21": {
+      "ply": 22,
+      "san": "Qg6",
+      "plans": [
+        "Nxf6 removes defender, damages Black's king safety",
+        "N5f4 attacks queen and eyes e6 invasion square"
+      ],
+      "alternative": "Nxf6 — simplifies, weakens Black's kingside defenses"
+    },
+    "scotch-game.json::Scotch: Steinitz Trap (4...Qh4 Full Line)::24": {
+      "ply": 25,
+      "san": "N5a3",
+      "plans": [
+        "Nc4 attacks e5 and controls central light squares firmly",
+        "Rook to d-file punishes d6 pawn after Nc4 setup"
+      ],
+      "alternative": "Nc4 — attacks e5 pawn, dominates central squares"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares; prepare Nf3 and d4 push.",
+        "Occupy center with pawn; restrict Black's pieces from d5."
+      ],
+      "alternative": "d4 — fight for center immediately, but allows e4xd4"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror center control; prepare Nc6 and counterplay on d4.",
+        "Support e5 pawn; enable future knight and bishop development."
+      ],
+      "alternative": "d5 — strike center at once, but e4xd5 costs tempo"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn; prepare d4 break after Nc6.",
+        "Place knight on active f3 square; control d4 and h4."
+      ],
+      "alternative": "Bc4 — target f7 weakness early, but delays d4 push"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5; prepare d5 counterbreak or Nxe4 tactics.",
+        "Support center; ready Nd4 jump or Nxe4 exchange."
+      ],
+      "alternative": "Nf6 — develop actively, but allows d4xе5 and tempo loss"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Challenge e5 center; force exd4 or allow central tension.",
+        "Open d-file potential; prepare Nxd4 after exd4 recapture."
+      ],
+      "alternative": "Bc4 — attack f7 and d5, but delays central push"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Recapture on d4 with knight tempo; centralize Nd4.",
+        "Accept e5 pawn trade; keep Nc6 pinned on knight move."
+      ],
+      "alternative": "Qxd4 — recapture with queen, but exposes it to Nc6 attacks"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Plant Nd4 in center; control c6, e6, f5, b5 squares.",
+        "Prepare Nc3 support and Bd3 bishop alignment."
+      ],
+      "alternative": "Qxd4 — centralize queen, but blocks c-file and invites Nc6"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::8": {
+      "ply": 9,
+      "san": "Nc3",
+      "plans": [
+        "Support Nd4 knight; open c-file and prepare castling kingside.",
+        "Link knights on c3 and d4; pressure f5 and e6 squares."
+      ],
+      "alternative": "O-O — castle kingside early, but Bb4 pin becomes annoying"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::9": {
+      "ply": 10,
+      "san": "Bb4",
+      "plans": [
+        "Pin Nc3 to king; force Bd2 or a3 response.",
+        "Attack c3 knight; gain tempo for d5 counterbreak."
+      ],
+      "alternative": "d5 — strike center at once, but e4xd5 and Nxd5 favor White"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::12": {
+      "ply": 13,
+      "san": "Bd3",
+      "plans": [
+        "Support Nd4 knight; target Bb4 via a3 or c2 route.",
+        "Align Bd3 with h7 diagonal; prepare O-O kingside castling."
+      ],
+      "alternative": "O-O — castle kingside immediately, but Bxc3 removes key defender"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::15": {
+      "ply": 16,
+      "san": "cxd5",
+      "plans": [
+        "Recapture on d5, opening c-file for rook on a1",
+        "Center control with pawn on d5, blocking Black's piece coordination"
+      ],
+      "alternative": "exd5 — keeps tension, maintains e-file pressure"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::16": {
+      "ply": 17,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside, connect rooks and move king to safety",
+        "Prepare f4 push to contest e5 square and open lines"
+      ],
+      "alternative": "Re1 — pin bishop immediately, support center pressure"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::18": {
+      "ply": 19,
+      "san": "Bg5",
+      "plans": [
+        "Bg5 pins knight on f6, threatens to remove Black's key defender",
+        "Attack f7 weakness with queen and bishop battery forming"
+      ],
+      "alternative": "Bxh7+ — sacrificial gambit, risky without clear continuation"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::20": {
+      "ply": 21,
+      "san": "Qf3",
+      "plans": [
+        "Queen to f3 supports Bg5, attacks f7 and c6 pawn",
+        "Threaten Bxf6, forcing Black's dark-squared bishop exchange"
+      ],
+      "alternative": "dxc6 — simplify position, reduce Black's pawn compensation"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::21": {
+      "ply": 22,
+      "san": "Be7",
+      "plans": [
+        "Black builds kingside safety with Be7, defends f6 knight",
+        "Prepare f6 square evacuation and reroute dark-squared bishop"
+      ],
+      "alternative": "Bf5 — challenge bishop on g5, maintain f6 pressure"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::24": {
+      "ply": 25,
+      "san": "Rae1",
+      "plans": [
+        "Rook to e1 controls central e-file, pins f7 square",
+        "Threaten Rxe6 on f6 square after bishop moves away"
+      ],
+      "alternative": "Bxf6 — trade dark-squared bishop, weaken Black's kingside"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::27": {
+      "ply": 28,
+      "san": "Qb6",
+      "plans": [
+        "Queen to b6 attacks c6 pawn, pressures queenside pawns",
+        "Prevent Black's queen checks on c3, activate queen's influence"
+      ],
+      "alternative": "Qe4 — centralize queen, maintain e-file penetration threat"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::28": {
+      "ply": 29,
+      "san": "b3",
+      "plans": [
+        "Push b3 pawn, support Bb3 reroute and control c4",
+        "Prepare bishop move to b3, prevent Black's knight jump to d3"
+      ],
+      "alternative": "Qxc6 — capture pawn immediately, simplify material count"
+    },
+    "scotch-game.json::Scotch Four Knights: Black's Equalizing ...d5 Break::30": {
+      "ply": 31,
+      "san": "Nxd4",
+      "plans": [
+        "Knight recaptures on d4, centralizes knight with tempo on queen",
+        "Nxd4 opens d-file for rook, attacks Black's f5 bishop"
+      ],
+      "alternative": "Qxd4 — queen recaptures, maintains centralization and pressure"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with central pawn",
+        "Open lines for queen and light-squared bishop"
+      ],
+      "alternative": "d4 — immediate center occupation"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's center and block d4 advance",
+        "Support e5 pawn with knight development"
+      ],
+      "alternative": "c5 — Sicilian-style counterattack"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight toward d4 and f5 outpost squares",
+        "Prepare d4 pawn push with tempo"
+      ],
+      "alternative": "Bc4 — immediate kingside attack setup"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn and control d4 square",
+        "Prevent White's d4 advance without loss"
+      ],
+      "alternative": "Nf6 — Classical setup with flexible development"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Strike e5 with d4 pawn and expose opponent's center",
+        "Open lines and activate White's pieces immediately"
+      ],
+      "alternative": "exd4 — accept symmetrical pawn structure early"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::5": {
+      "ply": 6,
+      "san": "exd4",
+      "plans": [
+        "Eliminate White's e4 pawn with recapture",
+        "Force White knight to d4, centralizing it"
+      ],
+      "alternative": "Bc5 — develop and threaten d4 knight"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "plans": [
+        "Centralize knight on d4 with tempo and control",
+        "Dominate center and prepare rapid piece coordination"
+      ],
+      "alternative": "exd4 — keep pawn, avoid knight activity"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::8": {
+      "ply": 9,
+      "san": "Nf5",
+      "plans": [
+        "Attack e4 pawn and weaken Black's kingside",
+        "Reroute knight away from natural Nf5 outpost"
+      ],
+      "alternative": "Bc4 — develop bishop with kingside attack threat"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::9": {
+      "ply": 10,
+      "san": "d5",
+      "plans": [
+        "Strike e4 pawn and open diagonal toward a1",
+        "Expose White's center and activate dark-squared bishop"
+      ],
+      "alternative": "exd4 — simplify and stop Nxf7 discovery threat"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::12": {
+      "ply": 13,
+      "san": "dxc6",
+      "plans": [
+        "Capture c6 knight and create passed pawn on c-file",
+        "Eliminate defender and promote b7 pawn threats"
+      ],
+      "alternative": "exd4 — recapture and develop with tempo"
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::15": {
+      "ply": 16,
+      "san": "Rb8",
+      "plans": [
+        "Push b7 pawn to b8=Q, promoting with check on the back rank.",
+        "Rook on b8 becomes trapped after promotion; White gains material advantage."
+      ],
+      "alternative": "Qe2+ — forces king move before consolidating the passed pawn."
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::16": {
+      "ply": 17,
+      "san": "Qe2+",
+      "plans": [
+        "Check on e2 forces Black king to d7 or f8, disrupting piece coordination.",
+        "After king moves, White's b7 pawn advances unstoppably toward promotion."
+      ],
+      "alternative": "b8=Q+ — promotes immediately with check, simplifying the position."
+    },
+    "scotch-game.json::Scotch Classical: Premature Nf5 Refutation::18": {
+      "ply": 19,
+      "san": "Nc3",
+      "plans": [
+        "Knight on c3 controls d5 and e4, supporting central piece activity.",
+        "Nc3 prepares Bf4 or Bg5, completing kingside attacking piece setup."
+      ],
+      "alternative": "Bf4 — develops with tempo, attacking the bishop on c5 directly."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with central pawn",
+        "Prepare knight development via f3 and c3"
+      ],
+      "alternative": "d4 — immediate center tension"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::1": {
+      "ply": 2,
+      "san": "c5",
+      "plans": [
+        "Attack e4 pawn, force White's setup decision",
+        "Occupy c5 outpost against c3 support pawn"
+      ],
+      "alternative": "e6 — prepare d5 break symmetrically"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::2": {
+      "ply": 3,
+      "san": "c3",
+      "plans": [
+        "Support d4 break, prevent Black d5 advance",
+        "Prepare Nf3 with solid pawn structure"
+      ],
+      "alternative": "d4 — immediate center confrontation"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Attack e4 pawn from f6, control d5",
+        "Develop knight to active square with tempo"
+      ],
+      "alternative": "d6 — solid setup without immediate pressure"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::4": {
+      "ply": 5,
+      "san": "e5",
+      "plans": [
+        "Gain space, push Nf6 away from center",
+        "Support d4 push, fix Black's knight"
+      ],
+      "alternative": "Nf3 — develop flexibly without committing e5"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::5": {
+      "ply": 6,
+      "san": "Nd5",
+      "plans": [
+        "Centralize knight to d5, challenge White's setup",
+        "Attack c3 pawn and prepare Nxc3 exchange"
+      ],
+      "alternative": "Nh5 — reroute toward f6 or g7"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::6": {
+      "ply": 7,
+      "san": "d4",
+      "plans": [
+        "Open d-file and c-file with pawn tension",
+        "Prepare cxd4 recapture to ease Black's position"
+      ],
+      "alternative": "Nf3 — develop with tempo on c5 pawn"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::8": {
+      "ply": 9,
+      "san": "cxd4",
+      "plans": [
+        "Recapture on d4, accept d6 weakness afterward",
+        "Prepare Nxd4 or keep d4 pawn tension"
+      ],
+      "alternative": "exd6 — open e-file, weaken Black's king"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::9": {
+      "ply": 10,
+      "san": "d6",
+      "plans": [
+        "Block e5 pawn, prepare Nxd4 exchange",
+        "Support Nd5 knight, control e4 square"
+      ],
+      "alternative": "Nxd4 — simplify immediately via piece trade"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::12": {
+      "ply": 13,
+      "san": "Bc4",
+      "plans": [
+        "Develop bishop to aggressive diagonal toward f7",
+        "Combine Bc4 threat with Nf3 piece activity"
+      ],
+      "alternative": "Bf4 — develop more flexibly on light squares"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::15": {
+      "ply": 16,
+      "san": "dxe5",
+      "plans": [
+        "Capture e5 pawn, opening d-file for rook pressure",
+        "After dxe5, threaten Nc6 with advanced pawn"
+      ],
+      "alternative": "Nxe5 — develops knight while capturing"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::16": {
+      "ply": 17,
+      "san": "dxe5",
+      "plans": [
+        "Black recaptures e5, accepting isolated d-pawn structure",
+        "Prepare Nc6 fork threat against queen and bishop"
+      ],
+      "alternative": "exd4 — keeps symmetric pawn structure"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::18": {
+      "ply": 19,
+      "san": "Kxd1",
+      "plans": [
+        "Recapture on d1, simplifying after rook check",
+        "King on d1 controls center before castling"
+      ],
+      "alternative": "Qxd1 — recaptures with queen instead"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::20": {
+      "ply": 21,
+      "san": "Ke1",
+      "plans": [
+        "Move king to e1, preparing kingside castling",
+        "Maintain central control after bishop takes f3"
+      ],
+      "alternative": "Kf1 — king moves away from center"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::21": {
+      "ply": 22,
+      "san": "O-O-O",
+      "plans": [
+        "Queenside castle, connecting rooks and securing king",
+        "Rook moves to d-file, pressuring d6 pawn"
+      ],
+      "alternative": "Kf2 — king marches forward instead"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::24": {
+      "ply": 25,
+      "san": "Bxe6+",
+      "plans": [
+        "Bishop checks from e6, forcing black king move",
+        "After Kf8, bishop controls dark squares deeply"
+      ],
+      "alternative": "Bf4 — develops bishop without check"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::27": {
+      "ply": 28,
+      "san": "Nd5",
+      "plans": [
+        "Knight from c3 to d5, attacking e7 and c7",
+        "Nd5 creates threat of Nxe7+ fork on king"
+      ],
+      "alternative": "Nc7+ — knight forks king and rook immediately"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 Main Line (Endgame)::28": {
+      "ply": 29,
+      "san": "Nxd5",
+      "plans": [
+        "Capture on d5 with knight from f3",
+        "Nxd5 maintains knight outpost on d5"
+      ],
+      "alternative": "cxd5 — c-pawn recaptures instead"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares for rapid piece deployment",
+        "Prepare advance to e5 supporting central space"
+      ],
+      "alternative": "d4 — immediately contest center with tension"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::1": {
+      "ply": 2,
+      "san": "c5",
+      "plans": [
+        "Attack e4 pawn forcing White's response and tempo",
+        "Maintain Sicilian flexibility with c5 tension"
+      ],
+      "alternative": "e6 — solid setup with c5 follow-up"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::2": {
+      "ply": 3,
+      "san": "c3",
+      "plans": [
+        "Support d4 advance and control c3-d4 axis",
+        "Prepare Alapin attack on c5 Black pawn"
+      ],
+      "alternative": "Nf3 — classic development delaying Alapin setup"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::3": {
+      "ply": 4,
+      "san": "d5",
+      "plans": [
+        "Counter e4 pawn and challenge White's center grip",
+        "Force exd5 creating isolated d-pawn for White"
+      ],
+      "alternative": "cxd4 — simplify and accept isolated d-pawn"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::4": {
+      "ply": 5,
+      "san": "exd5",
+      "plans": [
+        "Eliminate Black's d5 counterattack immediately",
+        "Force Black queen to d5 creating centralized target"
+      ],
+      "alternative": "cxd4 — accept doubled pawns for open lines"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::5": {
+      "ply": 6,
+      "san": "Qxd5",
+      "plans": [
+        "Centralize queen on d5 attacking weak c3 pawn",
+        "Maintain pressure on White's compromised pawn structure"
+      ],
+      "alternative": "Qxd5 — recapture with queen for central activity"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::6": {
+      "ply": 7,
+      "san": "d4",
+      "plans": [
+        "Attack c5 pawn and control d4 outpost square",
+        "Open lines for dark-squared bishop development"
+      ],
+      "alternative": "Nc3 — develop knight and defend against tactics"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight controlling e5 and d4 squares",
+        "Support d4 pawn and prepare kingside castling"
+      ],
+      "alternative": "Nc3 — develop knight while supporting d4 pawn"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::9": {
+      "ply": 10,
+      "san": "e6",
+      "plans": [
+        "Support f6 knight and prepare queen-side castling",
+        "Control d5 and d4 squares with e6 pawn"
+      ],
+      "alternative": "Be7 — simplify position and reduce White pressure"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::12": {
+      "ply": 13,
+      "san": "O-O",
+      "plans": [
+        "Relocate king from center and connect rooks safely",
+        "Prepare Bd6 or Bc7 to challenge White's bishop"
+      ],
+      "alternative": "a6 — prevent White Nb5 and gain queenside space"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::15": {
+      "ply": 16,
+      "san": "cxd4",
+      "plans": [
+        "Recapture on d4 to eliminate Black's central counter-pawn",
+        "Solidify d4 outpost after recapture for knight placement"
+      ],
+      "alternative": "Nxd4 — centralizes knight immediately, avoids d-pawn"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::16": {
+      "ply": 17,
+      "san": "cxd4",
+      "plans": [
+        "Black's queen on d5 now faces Nc3 and Nf3 pressure",
+        "Control light squares around Black's king after castle"
+      ],
+      "alternative": "Nbd2 — develops toward f4, avoids early queen harassment"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::18": {
+      "ply": 19,
+      "san": "Nc3",
+      "plans": [
+        "Nc3 attacks queen on d5, forces it to move",
+        "Complete kingside development while pressuring center"
+      ],
+      "alternative": "Bf4 — develops bishop to active diagonal before Nc3"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::20": {
+      "ply": 21,
+      "san": "a3",
+      "plans": [
+        "Pawn on a3 prevents Black knight jump to b4",
+        "Prepares b4 advance to gain queenside space"
+      ],
+      "alternative": "Nbd2 — develops before queenside expansion, eyes f3-e5"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 Central Counter (IQP Play)::21": {
+      "ply": 22,
+      "san": "Bd7",
+      "plans": [
+        "Bd7 prepares rook-to-c8 for c-file pressure",
+        "Dark-squared bishop on d7 supports kingside if needed"
+      ],
+      "alternative": "Rc8 — attacks c-file immediately, forces White commitment"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawns",
+        "Prepare to support d4 advance with c2-c3"
+      ],
+      "alternative": "d4 — immediate center control, sidesteps Sicilian"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::1": {
+      "ply": 2,
+      "san": "c5",
+      "plans": [
+        "Attack e4 pawn; force White's c2-c3 support move",
+        "Occupy c5 to restrict White's center expansion"
+      ],
+      "alternative": "d6 — solid setup avoiding early complications"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::2": {
+      "ply": 3,
+      "san": "c3",
+      "plans": [
+        "Defend e4 pawn and prepare d4 advance with c3",
+        "Keep Black's c5 knight blocked from natural squares"
+      ],
+      "alternative": "d4 — immediate center resolution instead of c3"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::3": {
+      "ply": 4,
+      "san": "e6",
+      "plans": [
+        "Build French-like structure with e6 pawn on dark square",
+        "Prepare d5 break to contest White's center"
+      ],
+      "alternative": "cxd4 — capture and simplify center immediately"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Strike d4 with d5, testing White's pawn center",
+        "Create tension between d4 and d5 pawns"
+      ],
+      "alternative": "exd4 — open e-file for Black's pieces"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Meet d4 with d5, creating isolated e4 pawn weakness",
+        "Force exd5 or dxc5 resolution; control d4 square"
+      ],
+      "alternative": "Nc6 — develop knight before committing center"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::6": {
+      "ply": 7,
+      "san": "e5",
+      "plans": [
+        "Advance e5, seizing space and blocking f6 development",
+        "Create advanced pawn on e5; restrict knight routes"
+      ],
+      "alternative": "exd4 — simplify and eliminate Black's d5 tension"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Develop Nf3, controlling d4 and e5 squares",
+        "Support advanced e5 pawn with knight on f3"
+      ],
+      "alternative": "Nc3 — develop queen's knight, support e5 space"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::9": {
+      "ply": 10,
+      "san": "Bd7",
+      "plans": [
+        "Complete kingside setup with Bd7 for potential Be8",
+        "Connect rooks; prepare f6 or Be7 development"
+      ],
+      "alternative": "Nxe5 — capture center pawn immediately"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::12": {
+      "ply": 13,
+      "san": "O-O",
+      "plans": [
+        "Kingside castle; remove king from center files d, e, f",
+        "Connect rooks on f1-h1; activate queen's rook"
+      ],
+      "alternative": "Bf4 — develop bishop before castling; control e5"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::15": {
+      "ply": 16,
+      "san": "cxd4",
+      "plans": [
+        "Recapture on d4 to solidify center and open c-file for rook",
+        "Knight from a3 can reroute to c2 supporting d4 pawn"
+      ],
+      "alternative": "exd5 — simplify, but allows Qxd5 active centralization"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::16": {
+      "ply": 17,
+      "san": "cxd4",
+      "plans": [
+        "Black knight on f5 pressures d4 and eyes e3 square",
+        "Queen controls long diagonal after White's d4 solidification"
+      ],
+      "alternative": "Nxd4 — exchange knight but hands White better pawn structure"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::18": {
+      "ply": 19,
+      "san": "Nc2",
+      "plans": [
+        "Rook on e8 pins knight to king, White must address tension",
+        "Bishop pair advantage demands Black exchange one light-squared bishop"
+      ],
+      "alternative": "Nxd4 — eliminate pawn but Nxd4 recapture improves White's piece"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::20": {
+      "ply": 21,
+      "san": "Be3",
+      "plans": [
+        "Be3 prepares f4 advance, opening e-file for White's rook",
+        "Black's knight on f5 now attacked, must retreat or exchange"
+      ],
+      "alternative": "Bf4 — contest dark squares but blocks c1-rook immediately"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::21": {
+      "ply": 22,
+      "san": "f6",
+      "plans": [
+        "f6 attacks e5 pawn and opens e6 square for rook",
+        "Black seizes space on kingside, loosens White's pawn chain"
+      ],
+      "alternative": "a6 — prophylactic but ignores e5 pawn under attack"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::24": {
+      "ply": 25,
+      "san": "Qd2",
+      "plans": [
+        "Qd2 adds defender to d4, prepares potential f4 pawn break",
+        "Black rook on c8 pressures c2 square, White queen defends"
+      ],
+      "alternative": "h3 — prevents Ng3 trick but wastes tempo on kingside"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 Solid (French Structure)::27": {
+      "ply": 28,
+      "san": "Rac8",
+      "plans": [
+        "Rac8 doubles rooks on c-file, attacks weak c2 square",
+        "White knight on c2 becomes target, d4 pawn loses defender"
+      ],
+      "alternative": "a5 — control queenside space but ignores c-file pressure"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with center pawns",
+        "Prepare c3 support for d4 advance"
+      ],
+      "alternative": "d4 — immediate central tension"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::1": {
+      "ply": 2,
+      "san": "c5",
+      "plans": [
+        "Attack e4 pawn with c5 counterplay",
+        "Challenge White's central space claim"
+      ],
+      "alternative": "d6 — solid setup avoiding d4 confrontation"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::2": {
+      "ply": 3,
+      "san": "c3",
+      "plans": [
+        "Support d4 advance with c3 pawn",
+        "Prevent d4 capture with pawn defender"
+      ],
+      "alternative": "d4 — immediate central break"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::3": {
+      "ply": 4,
+      "san": "g6",
+      "plans": [
+        "Fianchetto dark-squared bishop on long diagonal",
+        "Control e4 and d5 from g7"
+      ],
+      "alternative": "d6 — classical Sicilian setup"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::4": {
+      "ply": 5,
+      "san": "d4",
+      "plans": [
+        "Open center with d4 break against c5",
+        "Create d4 outpost after cxd4 recapture"
+      ],
+      "alternative": "Nf3 — develop knight before d4"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "plans": [
+        "Recapture with c3 pawn to maintain d4 presence",
+        "Keep d4 as strong outpost square"
+      ],
+      "alternative": "exd4 — simplify but lose d4 control"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::6": {
+      "ply": 7,
+      "san": "cxd4",
+      "plans": [
+        "Occupy d4 square with protected pawn",
+        "Block Black's d-file counterplay"
+      ],
+      "alternative": "exd4 — open e-file but weaken center"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::8": {
+      "ply": 9,
+      "san": "e5",
+      "plans": [
+        "Advance e5 pawn to attack d6 square",
+        "Cramp Black's fianchettoed bishop on g7"
+      ],
+      "alternative": "Nf3 — develop before advancing e5"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::9": {
+      "ply": 10,
+      "san": "Bg7",
+      "plans": [
+        "Fianchetto bishop controls long diagonal toward a1",
+        "Pressure White's d4 pawn indirectly"
+      ],
+      "alternative": "d6 — reinforce center instead"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::12": {
+      "ply": 13,
+      "san": "Nf3",
+      "plans": [
+        "Develop Nf3 controlling e5 outpost",
+        "Support e5 pawn and prepare kingside attack"
+      ],
+      "alternative": "Bc4 — aggressive bishop placement"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::15": {
+      "ply": 16,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside to connect rooks and secure king on safe square",
+        "Prepare Bxc6 to eliminate Black's knight attacking d4 center pawn"
+      ],
+      "alternative": "Re1 — supports e5 pawn and opens a-file for rook"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::16": {
+      "ply": 17,
+      "san": "Bxc6",
+      "plans": [
+        "Remove Black's knight from c6 before it pressures d4 pawn",
+        "Damage Black's pawn structure with doubled b-pawns after recapture"
+      ],
+      "alternative": "a3 — prevents Nb4 harassing move attacking d4"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::18": {
+      "ply": 19,
+      "san": "O-O",
+      "plans": [
+        "Connect rooks and defend against back-rank threats on f8",
+        "Maintain strong e5 pawn and monitor Nf5 outpost availability"
+      ],
+      "alternative": "Re1 — supports e5 pawn, prepares Bf4 development"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::20": {
+      "ply": 21,
+      "san": "h3",
+      "plans": [
+        "Attack g6 pawn and prevent Bxf3 simplification of piece pressure",
+        "Keep bishop pair advantage by discouraging Black's dark-squared bishop"
+      ],
+      "alternative": "Re1 — supports e5 pawn, prepares Bf4 centralization"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::21": {
+      "ply": 22,
+      "san": "Bxf3",
+      "plans": [
+        "Recapture with queen to maintain piece pressure on Black's position",
+        "Keep queen active on f3, attacking weak squares near Black's king"
+      ],
+      "alternative": "Qxf3 — consolidates queen control of long diagonal and center"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::24": {
+      "ply": 25,
+      "san": "Rd1",
+      "plans": [
+        "Place rook on open d-file targeting d5 pawn and back rank",
+        "Improve rook from a1, supporting center and controlling weak squares"
+      ],
+      "alternative": "Bf4 — attacks a6 diagonal, centralizes bishop from e1"
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 Fianchetto::27": {
+      "ply": 28,
+      "san": "Qb6",
+      "plans": [
+        "Attack b6 square with queen, threatening to invade Black's queenside",
+        "Reposition queen from f3 to create new tactical threats near b7"
+      ],
+      "alternative": "Nxd5 — captures central pawn, trades knight for strong outpost"
     }
   },
   "totals": {
-    "calls": 314,
-    "inputTokens": 330916,
-    "outputTokens": 227065,
+    "calls": 354,
+    "inputTokens": 373037,
+    "outputTokens": 255529,
     "cacheReads": 0,
     "cacheWrites": 0,
-    "costUSD": 1.4662410000000001
+    "costUSD": 1.6506820000000004
   }
 }
