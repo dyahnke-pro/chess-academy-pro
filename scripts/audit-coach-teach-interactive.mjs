@@ -80,38 +80,63 @@ async function clearAllStorage(page) {
 const FORCE_PROVIDER = process.env.AUDIT_FORCE_PROVIDER ?? 'deepseek';
 
 async function typeAndSend(page, text) {
+  // Capture the message count BEFORE we type — for inputs that route
+  // synchronously (e.g. local picker for broad opening names), both
+  // the user message AND the coach reply land before this function
+  // returns, and a post-click count would already include the reply.
+  // Returning the pre-input count lets `waitForCoachResponse` wait
+  // for ANY growth past that baseline.
+  const beforeCount = await page.locator('[data-testid^="chat-message-"]').count();
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.waitFor({ state: 'visible', timeout: 10_000 });
   await input.click();
   await input.fill(text);
   await page.locator('[data-testid="chat-send-btn"]').click();
+  return beforeCount;
 }
 
-async function waitForCoachResponse(page, timeoutMs = 30_000) {
-  // The assistant's reply renders as a chat-message with role=assistant.
-  // Wait for the message count to grow OR for the typing indicator to
-  // disappear.
-  const before = await page.locator('[data-testid^="chat-message-"]').count();
+async function waitForCoachResponse(page, beforeCount, timeoutMs = 30_000) {
+  // `beforeCount` is the count BEFORE the user typed. Need to wait
+  // for both the user message AND the coach response to land — i.e.
+  // count grew by ≥ 2. (Synchronous picker routes can add both in
+  // one tick; brain trips add them sequentially.)
   await page.waitForFunction(
-    (prev) => document.querySelectorAll('[data-testid^="chat-message-"]').length > prev,
-    before,
+    (prev) => document.querySelectorAll('[data-testid^="chat-message-"]').length >= prev + 2,
+    beforeCount,
     { timeout: timeoutMs },
   );
-  // Give the stream a beat to settle.
-  await page.waitForTimeout(800);
+  // ALSO wait for the newest assistant bubble to have non-trivial
+  // content. The chat surface adds an empty placeholder bubble for
+  // streaming responses; the message count fires before the
+  // streamed text arrives (~20s for some inputs). Without this
+  // gate, scenarios that check "did the brain say something
+  // sensible?" race the stream and read just the avatar character.
+  await page.waitForFunction(
+    () => {
+      const bubble = document.querySelector('[data-testid="chat-message-assistant"]');
+      const text = bubble?.textContent ?? '';
+      // Trim and ignore the leading avatar character so we measure
+      // actual chess content. > 8 chars is the minimum sensible reply.
+      return text.replace(/^[A-Za-z]\s*/, '').trim().length > 8;
+    },
+    null,
+    { timeout: timeoutMs },
+  );
+  // Settle: let the rest of the stream land.
+  await page.waitForTimeout(1200);
 }
 
 async function lastAssistantText(page) {
   // The chat surface tags every message with
-  // `data-testid="chat-message-${role}"` (role is "user" or
-  // "assistant"). Audit script previously checked a separate
-  // `data-role` attribute that doesn't exist, so every welcome-line
-  // assertion failed against a brand-new render. Look up by testid
-  // suffix instead.
+  // `data-testid="chat-message-${role}"`. Messages render in REVERSE
+  // chronological order (newest at the top of the panel; the layout
+  // uses flex-direction: column-reverse so old messages scroll down).
+  // DOM order matches the paint order — newest assistant message
+  // is `nth(0)`, oldest is `nth(count-1)`.
   const msgs = page.locator('[data-testid="chat-message-assistant"]');
   const count = await msgs.count();
   if (count === 0) return '';
-  return (await msgs.nth(count - 1).textContent()) ?? '';
+  return (await msgs.nth(0).textContent()) ?? '';
 }
 
 async function gotoCoachTeach(page) {
@@ -131,9 +156,15 @@ async function main() {
   const browser = await chromium.launch({
     headless: !HEADED,
     executablePath,
+    // Sandbox's chromium doesn't trust the CA chain for the public
+    // DeepSeek / Anthropic API hosts. Real-device browsers (and the
+    // production deploy) don't have this issue. Pass the flag so the
+    // audit can actually exercise the brain in the sandbox.
+    args: ['--ignore-certificate-errors'],
   });
   const ctx = await browser.newContext({
     viewport: { width: 1280, height: 800 },
+    ignoreHTTPSErrors: true,
   });
   const page = await ctx.newPage();
 
@@ -188,8 +219,8 @@ async function main() {
 
   // ── Scenario 2: off-canonical British spelling. ────────────
   console.log('\n[2] off-canonical input: "Philidor Defence" (British)');
-  await typeAndSend(page, 'Philidor Defence');
-  await waitForCoachResponse(page, 60_000);
+  { const before = await typeAndSend(page, 'Philidor Defence');
+    await waitForCoachResponse(page, before, 60_000); }
   await page.waitForTimeout(1500);
   const route2 = page.url();
   const bounced2 = route2.includes('/coach/session/walkthrough');
@@ -204,8 +235,8 @@ async function main() {
   await page.reload({ waitUntil: 'domcontentloaded' });
   await gotoCoachTeach(page);
   await page.waitForTimeout(2500);
-  await typeAndSend(page, 'Najdorff');
-  await waitForCoachResponse(page, 60_000);
+  { const before = await typeAndSend(page, 'Najdorff');
+    await waitForCoachResponse(page, before, 60_000); }
   await page.waitForTimeout(1500);
   const route3 = page.url();
   record('Najdorff stays on /coach/teach', !route3.includes('/coach/session/walkthrough'), route3);
@@ -221,8 +252,8 @@ async function main() {
   await page.reload({ waitUntil: 'domcontentloaded' });
   await gotoCoachTeach(page);
   await page.waitForTimeout(2500);
-  await typeAndSend(page, 'Caro Cann');
-  await waitForCoachResponse(page, 60_000);
+  { const before = await typeAndSend(page, 'Caro Cann');
+    await waitForCoachResponse(page, before, 60_000); }
   await page.waitForTimeout(1500);
   const route4 = page.url();
   record('Caro Cann stays on /coach/teach', !route4.includes('/coach/session/walkthrough'), route4);
@@ -233,8 +264,8 @@ async function main() {
 
   // ── Scenario 5: garbage input ──────────────────────────────
   console.log('\n[5] garbage input: "asdfghjklqwerty"');
-  await typeAndSend(page, 'asdfghjklqwerty');
-  await waitForCoachResponse(page, 60_000);
+  { const before = await typeAndSend(page, 'asdfghjklqwerty');
+    await waitForCoachResponse(page, before, 60_000); }
   await page.waitForTimeout(1500);
   const route5 = page.url();
   record('garbage input does NOT bounce', !route5.includes('/coach/session/walkthrough'), route5);
@@ -288,8 +319,8 @@ async function main() {
   for (const ask of ['teach me Philidor Defence', 'walkthrough Najdorff', 'teach the KID', 'show me the Caro Cann']) {
     await gotoCoachTeach(page);
     await page.waitForTimeout(1500);
-    await typeAndSend(page, ask);
-    await waitForCoachResponse(page, 60_000);
+    const before = await typeAndSend(page, ask);
+    await waitForCoachResponse(page, before, 60_000);
     await page.waitForTimeout(1500);
     const u = page.url();
     record(`"${ask}" stays on /coach/teach`, !u.includes('/coach/session/walkthrough'), u);
