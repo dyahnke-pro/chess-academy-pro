@@ -18,6 +18,7 @@ import { MiddlegamePractice } from './MiddlegamePractice';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { CommonMistakesSection } from './CommonMistakesSection';
+import { OpeningZoneHeader } from './OpeningZoneHeader';
 import { SidelineExplainer } from './SidelineExplainer';
 import commonMistakesData from '../../data/common-mistakes.json';
 import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
