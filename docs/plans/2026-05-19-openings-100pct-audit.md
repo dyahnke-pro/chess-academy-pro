@@ -1,8 +1,45 @@
 # Openings tab — 100% no-errors audit & fix plan
 
-**Status:** Phase 1 in progress (2026-05-19 00:15 UTC)
+**Status:** Phases 1-4 complete. ~469 user-visible bugs fixed.
+Offline-detectable bug surface is essentially clean.
+Last update 2026-05-19 01:15 UTC.
 **Owner:** David — single-user app
 **Branch policy:** push direct to main (no PRs, no preview deploys)
+
+## TL;DR
+
+The original v1 audit found "0 errors" because it only checked
+mount/drag (surface-level functional). Deeper semantic analysis on
+the captured data, then extending to ALL ~140 openings' source
+annotation files via offline scanners, surfaced ~469 user-visible
+bugs across:
+
+- **296** template-display bugs ("Continuing X: SAN is a known
+  theory move" + variants displaying raw on annotation card)
+- **144** shortNarration entries saying "X fianchettoes the bishop
+  to Y" on a pawn-push ply
+- **18** PGN-vs-annotation drift bugs (user plays move X, reads
+  commentary about move Y)
+- **7** missing-move-arrow bugs (arrow showed plan/threat, not
+  the actual move)
+- **4** specific voice/narration bugs (wrong square, wrong color
+  subject, wrong piece reference)
+
+All fixed and on `main`. Verified via:
+- 0 piece/square/color/qualifier mismatches outside borderline
+  variation intros
+- 0 illegal SAN sequences
+- 0 arrow-target-missing
+- 0 arrow-from-mismatch
+- 0 main-pgn-vs-anno-drift
+- 0 variation-pgn-vs-anno-drift
+- Smoke test: 20 modified openings all mount + walkthrough
+  cleanly
+
+What remains is human-only:
+- Voice TTS audio quality (no headless capture)
+- Coach pedagogy quality (subjective)
+- Visual layout (no screenshot diffs in this pass)
 
 ## Why this plan exists
 
