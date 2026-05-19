@@ -1277,7 +1277,7 @@ export function CoachTeachPage(): JSX.Element {
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-            summary: `pre-flight rejected non-opening: "${text.slice(0, 60)}"`,
+            summary: `pre-flight: input doesn't resolve to an opening — routing to brain (conversational): "${text.slice(0, 60)}"`,
           });
           // Don't take over the chat flow — fall through to the
           // brain so the user gets a normal coach reply. Setting
