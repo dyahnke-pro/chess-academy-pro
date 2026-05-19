@@ -40,7 +40,6 @@ import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
-import { getOpeningMasterContext, formatBestCounterAsNarration, formatRepGameRef } from './bestCounterService';
 import { buildCoachChatContext } from './chessConceptService';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 
