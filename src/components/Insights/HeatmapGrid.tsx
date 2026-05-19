@@ -11,6 +11,7 @@
  * what's "empty") are decided by the caller via the color function.
  */
 import type { ReactNode } from 'react';
+import { severityTokens, type Severity } from '../../services/severityScale';
 
 export interface HeatmapCell {
   /** Raw value used by the color function. null = "no data". */
@@ -19,6 +20,9 @@ export interface HeatmapCell {
   display: string;
   /** Optional tooltip-style label (rendered as title attribute). */
   hint?: string;
+  /** Optional severity tier — when 'severe' or 'critical', the cell
+   *  renders a warning icon overlay and a red glow. */
+  severity?: Severity;
 }
 
 export interface HeatmapRow {
@@ -26,6 +30,10 @@ export interface HeatmapRow {
   /** Optional secondary label rendered under the main one. */
   sublabel?: string;
   cells: HeatmapCell[];
+  /** When set, the row label becomes clickable. Drives the "click an
+   *  opening name to drill in" rule (the broader counterpart to
+   *  `onCellClick`'s per-color-slice filter). */
+  onLabelClick?: () => void;
 }
 
 export interface HeatmapGridProps {
@@ -86,27 +94,68 @@ export function HeatmapGrid({
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, rowIndex) => (
-              <tr key={row.label}>
-                <td
-                  className="text-[11px] font-medium pr-2 align-middle"
-                  style={{ width: labelColumnWidth, color: 'var(--color-text)' }}
-                >
+            {rows.map((row, rowIndex) => {
+              const labelContent = (
+                <>
                   <div className="truncate" title={row.label}>{row.label}</div>
                   {row.sublabel && (
                     <div className="text-[9px]" style={{ color: 'var(--color-text-muted)' }}>
                       {row.sublabel}
                     </div>
                   )}
-                </td>
+                </>
+              );
+              return (
+              <tr key={row.label}>
+                {row.onLabelClick ? (
+                  <td style={{ width: labelColumnWidth, padding: 0 }}>
+                    <button
+                      type="button"
+                      onClick={row.onLabelClick}
+                      className="text-[11px] font-medium pr-2 align-middle w-full text-left underline-offset-2 hover:underline hover:opacity-80 transition-opacity"
+                      style={{ color: 'var(--color-text)' }}
+                      data-testid={`heatmap-row-label-${rowIndex}`}
+                    >
+                      {labelContent}
+                    </button>
+                  </td>
+                ) : (
+                  <td
+                    className="text-[11px] font-medium pr-2 align-middle"
+                    style={{ width: labelColumnWidth, color: 'var(--color-text)' }}
+                  >
+                    {labelContent}
+                  </td>
+                )}
                 {row.cells.map((cell, i) => {
+                  // Severity overlay applies on top of the heatmap
+                  // background color — keeps the existing green-yellow-
+                  // red scale visible while adding the warning glyph +
+                  // glow for severe / critical cells.
+                  const sevTokens = cell.severity && cell.severity !== 'healthy' && cell.severity !== 'caution' && cell.severity !== 'weak'
+                    ? severityTokens(cell.severity)
+                    : null;
                   const sharedStyle = {
                     background: cellColor(cell.value),
                     color: cell.value === null ? 'var(--color-text-muted)' : '#0a0a0a',
                     minHeight: cellMinHeight,
                     height: cellMinHeight,
                     padding: '4px 6px',
+                    boxShadow: sevTokens?.glow ? `inset ${sevTokens.glow}` : undefined,
                   } as const;
+                  const cellInner = (
+                    <span className={`inline-flex items-center justify-center gap-1 ${sevTokens?.animationClass ?? ''}`}>
+                      {sevTokens?.icon && (
+                        <span
+                          aria-label={sevTokens.ariaLabel}
+                          style={{ color: sevTokens.color }}
+                        >
+                          {sevTokens.icon}
+                        </span>
+                      )}
+                      <span>{cell.display}</span>
+                    </span>
+                  );
                   if (onCellClick) {
                     return (
                       <td key={`${row.label}-${i}`} style={{ padding: 0 }}>
@@ -117,7 +166,7 @@ export function HeatmapGrid({
                           className="w-full h-full text-center font-semibold rounded-md tabular-nums hover:opacity-80 transition-opacity"
                           style={sharedStyle}
                         >
-                          {cell.display}
+                          {cellInner}
                         </button>
                       </td>
                     );
@@ -129,12 +178,13 @@ export function HeatmapGrid({
                       className="text-center font-semibold rounded-md tabular-nums"
                       style={sharedStyle}
                     >
-                      {cell.display}
+                      {cellInner}
                     </td>
                   );
                 })}
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>
