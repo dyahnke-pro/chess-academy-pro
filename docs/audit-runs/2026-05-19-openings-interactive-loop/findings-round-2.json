@@ -1,8 +1,8 @@
 {
   "round": 2,
-  "generatedAt": "2026-05-19T14:24:10.812Z",
+  "generatedAt": "2026-05-19T14:25:27.451Z",
   "inProgress": true,
-  "openingsCompleted": 60,
+  "openingsCompleted": 65,
   "results": [
     {
       "round": 2,
@@ -4341,6 +4341,340 @@
       ],
       "auditEvents": [],
       "finishedAt": "2026-05-19T14:24:10.812Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-carlsen-catalan",
+      "name": "Catalan Opening (Carlsen)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:24:10.815Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Catalan Openng (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Catalan",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Catalan Openng (Carlsen)",
+            "Catalan"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:24:25.646Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-carlsen-english",
+      "name": "English Opening (Carlsen)",
+      "color": "white",
+      "startedAt": "2026-05-19T14:24:25.646Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "English Openng (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "English",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "English Openng (Carlsen)",
+            "English"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:24:40.202Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-carlsen-sveshnikov",
+      "name": "Sicilian Sveshnikov (Carlsen)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:24:40.202Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Sveshikov (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Sveshikov (Carlsen)",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:24:54.724Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-carlsen-berlin",
+      "name": "Berlin Defense (Carlsen)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:24:54.724Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Berlin Defence (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Berlin Defene (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Berlin",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Berlin Defence (Carlsen)",
+            "Berlin Defene (Carlsen)",
+            "Berlin"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:25:11.243Z"
+    },
+    {
+      "round": 2,
+      "openingId": "pro-carlsen-qgd",
+      "name": "Queen's Gambit Declined (Carlsen)",
+      "color": "black",
+      "startedAt": "2026-05-19T14:25:11.243Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Queens Gambit Declined (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queen's Gambit Dclined (Carlsen)",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Queen's",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Queens Gambit Declined (Carlsen)",
+            "Queen's Gambit Dclined (Carlsen)",
+            "Queen's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+        "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      ],
+      "auditEvents": [],
+      "finishedAt": "2026-05-19T14:25:27.451Z"
     }
   ]
 }
