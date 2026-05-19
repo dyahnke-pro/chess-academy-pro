@@ -1,0 +1,801 @@
+{
+  "generatedAt": "2026-05-19T18:37:26.200Z",
+  "totalMainOpenings": 40,
+  "totalProEntries": 58,
+  "totalProLinks": 31,
+  "mainWithAnyPro": 15,
+  "mainWithNoPro": 25,
+  "annotations": [
+    {
+      "mainId": "italian-game",
+      "mainName": "Italian Game",
+      "mainEco": "C50",
+      "mainColor": "white",
+      "playedByPros": [
+        {
+          "proId": "niemann",
+          "proName": "Hans Niemann",
+          "proEntryId": "pro-niemann-w-e4-e5-nf3-nc6-bc4-bc5",
+          "proEntryName": "Hans Niemann as White: Italian Game: Giuoco Pianissimo",
+          "proColor": "white",
+          "proEco": "C50",
+          "sharedPlies": 6,
+          "matchTier": "exact",
+          "proGamesPlayed": 9,
+          "proRecord": {
+            "wins": 6,
+            "draws": 2,
+            "losses": 1
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "ruy-lopez",
+      "mainName": "Ruy Lopez",
+      "mainEco": "C60",
+      "mainColor": "white",
+      "playedByPros": [
+        {
+          "proId": "dubov",
+          "proName": "Daniil Dubov",
+          "proEntryId": "pro-dubov-b-e4-e5-nf3-nc6-bb5-a6",
+          "proEntryName": "Daniil Dubov as Black: Ruy Lopez: Closed",
+          "proColor": "black",
+          "proEco": "C88",
+          "sharedPlies": 13,
+          "matchTier": "exact",
+          "proGamesPlayed": 8,
+          "proRecord": {
+            "wins": 3,
+            "draws": 0,
+            "losses": 5
+          }
+        },
+        {
+          "proId": "caruana",
+          "proName": "Fabiano Caruana",
+          "proEntryId": "pro-caruana-b-e4-e5-nf3-nc6-bb5-a6",
+          "proEntryName": "Fabiano Caruana as Black: Ruy Lopez: Morphy Defense, Neo-Arkhangelsk Variation",
+          "proColor": "black",
+          "proEco": "C78",
+          "sharedPlies": 9,
+          "matchTier": "exact",
+          "proGamesPlayed": 5,
+          "proRecord": {
+            "wins": 2,
+            "draws": 0,
+            "losses": 3
+          }
+        },
+        {
+          "proId": "firouzja",
+          "proName": "Alireza Firouzja",
+          "proEntryId": "pro-firouzja-w-e4-e5-nf3-nc6-bb5-a6",
+          "proEntryName": "Alireza Firouzja as White: Ruy Lopez: Morphy Defense, Bayreuth Variation",
+          "proColor": "white",
+          "proEco": "C77",
+          "sharedPlies": 8,
+          "matchTier": "family",
+          "proGamesPlayed": 10,
+          "proRecord": {
+            "wins": 5,
+            "draws": 2,
+            "losses": 3
+          }
+        },
+        {
+          "proId": "naroditsky",
+          "proName": "Daniel Naroditsky",
+          "proEntryId": "pro-naroditsky-w-e4-e5-nf3-nc6-bb5-a6",
+          "proEntryName": "Daniel Naroditsky as White: Ruy Lopez: Morphy Defense, Classical Defense Deferred",
+          "proColor": "white",
+          "proEco": "C70",
+          "sharedPlies": 7,
+          "matchTier": "family",
+          "proGamesPlayed": 5,
+          "proRecord": {
+            "wins": 3,
+            "draws": 2,
+            "losses": 0
+          }
+        },
+        {
+          "proId": "firouzja",
+          "proName": "Alireza Firouzja",
+          "proEntryId": "pro-firouzja-b-e4-e5-nf3-nc6-bb5-nf6",
+          "proEntryName": "Alireza Firouzja as Black: Ruy Lopez: Open Berlin Defense, l'Hermet Variation",
+          "proColor": "black",
+          "proEco": "C67",
+          "sharedPlies": 5,
+          "matchTier": "family",
+          "proGamesPlayed": 5,
+          "proRecord": {
+            "wins": 3,
+            "draws": 2,
+            "losses": 0
+          }
+        },
+        {
+          "proId": "praggnanandhaa",
+          "proName": "Rameshbabu Praggnanandhaa",
+          "proEntryId": "pro-praggnanandhaa-w-e4-e5-nf3-nc6-bb5-nf6",
+          "proEntryName": "Rameshbabu Praggnanandhaa as White: Ruy Lopez: Berlin Defense, l'Hermet Variation",
+          "proColor": "white",
+          "proEco": "C67",
+          "sharedPlies": 5,
+          "matchTier": "family",
+          "proGamesPlayed": 3,
+          "proRecord": {
+            "wins": 1,
+            "draws": 0,
+            "losses": 2
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "scotch-game",
+      "mainName": "Scotch Game",
+      "mainEco": "C45",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "vienna-game",
+      "mainName": "Vienna Game",
+      "mainEco": "C25",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "kings-gambit",
+      "mainName": "King's Gambit",
+      "mainEco": "C30",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "four-knights-game",
+      "mainName": "Four Knights Game",
+      "mainEco": "C46",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "sicilian-najdorf",
+      "mainName": "Sicilian: Najdorf",
+      "mainEco": "B90",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "firouzja",
+          "proName": "Alireza Firouzja",
+          "proEntryId": "pro-firouzja-w-e4-c5-nf3-d6-d4-cxd4",
+          "proEntryName": "Alireza Firouzja as White: Sicilian Defense: Najdorf Variation",
+          "proColor": "white",
+          "proEco": "B94",
+          "sharedPlies": 10,
+          "matchTier": "exact",
+          "proGamesPlayed": 7,
+          "proRecord": {
+            "wins": 3,
+            "draws": 1,
+            "losses": 3
+          }
+        },
+        {
+          "proId": "firouzja",
+          "proName": "Alireza Firouzja",
+          "proEntryId": "pro-firouzja-b-e4-c5-nf3-d6-d4-cxd4",
+          "proEntryName": "Alireza Firouzja as Black: Sicilian Defense: Najdorf Variation",
+          "proColor": "black",
+          "proEco": "B96",
+          "sharedPlies": 10,
+          "matchTier": "exact",
+          "proGamesPlayed": 4,
+          "proRecord": {
+            "wins": 4,
+            "draws": 0,
+            "losses": 0
+          }
+        },
+        {
+          "proId": "niemann",
+          "proName": "Hans Niemann",
+          "proEntryId": "pro-niemann-b-e4-c5-nf3-d6-d4-cxd4",
+          "proEntryName": "Hans Niemann as Black: Sicilian Defense: Najdorf Variation",
+          "proColor": "black",
+          "proEco": "B94",
+          "sharedPlies": 10,
+          "matchTier": "exact",
+          "proGamesPlayed": 3,
+          "proRecord": {
+            "wins": 1,
+            "draws": 0,
+            "losses": 2
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "sicilian-dragon",
+      "mainName": "Sicilian: Dragon",
+      "mainEco": "B70",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "sicilian-sveshnikov",
+      "mainName": "Sicilian: Sveshnikov",
+      "mainEco": "B33",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "caruana",
+          "proName": "Fabiano Caruana",
+          "proEntryId": "pro-caruana-b-e4-c5-nf3-nc6-d4-cxd4",
+          "proEntryName": "Fabiano Caruana as Black: Sicilian Defense: Lasker-Pelikan Variation",
+          "proColor": "black",
+          "proEco": "B33",
+          "sharedPlies": 14,
+          "matchTier": "exact",
+          "proGamesPlayed": 5,
+          "proRecord": {
+            "wins": 4,
+            "draws": 0,
+            "losses": 1
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "sicilian-alapin",
+      "mainName": "Sicilian: Alapin",
+      "mainEco": "B22",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "french-defence",
+      "mainName": "French Defence",
+      "mainEco": "C00",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "praggnanandhaa",
+          "proName": "Rameshbabu Praggnanandhaa",
+          "proEntryId": "pro-praggnanandhaa-b-e4-e6-d4-d5-e5-c5",
+          "proEntryName": "Rameshbabu Praggnanandhaa as Black: French Defense: Advance Variation, Paulsen Attack",
+          "proColor": "black",
+          "proEco": "C02",
+          "sharedPlies": 4,
+          "matchTier": "family",
+          "proGamesPlayed": 4,
+          "proRecord": {
+            "wins": 1,
+            "draws": 1,
+            "losses": 2
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "caro-kann",
+      "mainName": "Caro-Kann Defence",
+      "mainEco": "B10",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "niemann",
+          "proName": "Hans Niemann",
+          "proEntryId": "pro-niemann-b-e4-c6-d4-d5-e5-bf5",
+          "proEntryName": "Hans Niemann as Black: Caro-Kann Defense: Advance Variation, Short Variation",
+          "proColor": "black",
+          "proEco": "B12",
+          "sharedPlies": 4,
+          "matchTier": "family",
+          "proGamesPlayed": 8,
+          "proRecord": {
+            "wins": 7,
+            "draws": 0,
+            "losses": 1
+          }
+        },
+        {
+          "proId": "niemann",
+          "proName": "Hans Niemann",
+          "proEntryId": "pro-niemann-b-e4-c6-d4-d5-exd5-cxd5",
+          "proEntryName": "Hans Niemann as Black: Caro-Kann Defense: Exchange Variation",
+          "proColor": "black",
+          "proEco": "B13",
+          "sharedPlies": 4,
+          "matchTier": "family",
+          "proGamesPlayed": 4,
+          "proRecord": {
+            "wins": 3,
+            "draws": 0,
+            "losses": 1
+          }
+        },
+        {
+          "proId": "dubov",
+          "proName": "Daniil Dubov",
+          "proEntryId": "pro-dubov-w-e4-c6-d4-d5-e5-bf5",
+          "proEntryName": "Daniil Dubov as White: Caro-Kann Defense: Advance Variation, Short Variation",
+          "proColor": "white",
+          "proEco": "B12",
+          "sharedPlies": 4,
+          "matchTier": "family",
+          "proGamesPlayed": 3,
+          "proRecord": {
+            "wins": 3,
+            "draws": 0,
+            "losses": 0
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "pirc-defence",
+      "mainName": "Pirc Defence",
+      "mainEco": "B07",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "scandinavian-defence",
+      "mainName": "Scandinavian Defence",
+      "mainEco": "B01",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "gothamchess",
+          "proName": "Levy Rozman (GothamChess)",
+          "proEntryId": "pro-gothamchess-b-e4-d5-exd5-qxd5-nc3-qa5",
+          "proEntryName": "Levy Rozman (GothamChess) as Black: Scandinavian Defense: Main Line, Mieses Variation",
+          "proColor": "black",
+          "proEco": "B01",
+          "sharedPlies": 8,
+          "matchTier": "exact",
+          "proGamesPlayed": 27,
+          "proRecord": {
+            "wins": 17,
+            "draws": 0,
+            "losses": 10
+          }
+        },
+        {
+          "proId": "gothamchess",
+          "proName": "Levy Rozman (GothamChess)",
+          "proEntryId": "pro-gothamchess-b-e4-d5-exd5-qxd5-nf3-bg4",
+          "proEntryName": "Levy Rozman (GothamChess) as Black: Scandinavian Defense: Mieses-Kotroc Variation",
+          "proColor": "black",
+          "proEco": "B01",
+          "sharedPlies": 4,
+          "matchTier": "family",
+          "proGamesPlayed": 7,
+          "proRecord": {
+            "wins": 4,
+            "draws": 1,
+            "losses": 2
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "alekhine-defence",
+      "mainName": "Alekhine's Defence",
+      "mainEco": "B02",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "carlsen",
+          "proName": "Magnus Carlsen",
+          "proEntryId": "pro-carlsen-b-e4-nf6-e5-nd5-d4-d6",
+          "proEntryName": "Magnus Carlsen as Black: Alekhine Defense: Modern Variation, Larsen Variation",
+          "proColor": "black",
+          "proEco": "B04",
+          "sharedPlies": 7,
+          "matchTier": "family",
+          "proGamesPlayed": 3,
+          "proRecord": {
+            "wins": 2,
+            "draws": 0,
+            "losses": 1
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "philidor-defence",
+      "mainName": "Philidor Defence",
+      "mainEco": "C41",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "petrov-defence",
+      "mainName": "Petrov Defence",
+      "mainEco": "C42",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "queens-gambit",
+      "mainName": "Queen's Gambit",
+      "mainEco": "D06",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "london-system",
+      "mainName": "London System",
+      "mainEco": "D00",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "catalan-opening",
+      "mainName": "Catalan Opening",
+      "mainEco": "E00",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "trompowsky-attack",
+      "mainName": "Trompowsky Attack",
+      "mainEco": "A45",
+      "mainColor": "white",
+      "playedByPros": [
+        {
+          "proId": "naroditsky",
+          "proName": "Daniel Naroditsky",
+          "proEntryId": "pro-naroditsky-w-d4-nf6-nc3-g6-e4-d6",
+          "proEntryName": "Daniel Naroditsky as White: Indian Defense",
+          "proColor": "white",
+          "proEco": "A45",
+          "sharedPlies": 2,
+          "matchTier": "same-eco",
+          "proGamesPlayed": 4,
+          "proRecord": {
+            "wins": 3,
+            "draws": 0,
+            "losses": 1
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "qgd",
+      "mainName": "Queen's Gambit Declined",
+      "mainEco": "D30",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "annacramling",
+          "proName": "Anna Cramling",
+          "proEntryId": "pro-annacramling-w-d4-d5-c4-e6-nc3-nf6",
+          "proEntryName": "Anna Cramling as White: Queen's Gambit Declined: Normal Defense",
+          "proColor": "white",
+          "proEco": "D35",
+          "sharedPlies": 6,
+          "matchTier": "family",
+          "proGamesPlayed": 10,
+          "proRecord": {
+            "wins": 6,
+            "draws": 1,
+            "losses": 3
+          }
+        },
+        {
+          "proId": "annacramling",
+          "proName": "Anna Cramling",
+          "proEntryId": "pro-annacramling-b-d4-d5-c4-e6-nc3-c6",
+          "proEntryName": "Anna Cramling as Black: Semi-Slav Defense: Accelerated Move Order",
+          "proColor": "black",
+          "proEco": "D31",
+          "sharedPlies": 5,
+          "matchTier": "family",
+          "proGamesPlayed": 6,
+          "proRecord": {
+            "wins": 3,
+            "draws": 0,
+            "losses": 3
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "qga",
+      "mainName": "Queen's Gambit Accepted",
+      "mainEco": "D20",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "slav-defence",
+      "mainName": "Slav Defence",
+      "mainEco": "D10",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "semi-slav",
+      "mainName": "Semi-Slav Defence",
+      "mainEco": "D43",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "kings-indian-defence",
+      "mainName": "King's Indian Defence",
+      "mainEco": "E60",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "naroditsky",
+          "proName": "Daniel Naroditsky",
+          "proEntryId": "pro-naroditsky-b-d4-nf6-c4-g6-nc3-bg7",
+          "proEntryName": "Daniel Naroditsky as Black: King's Indian Defense: Semi-Averbakh System",
+          "proColor": "black",
+          "proEco": "E73",
+          "sharedPlies": 8,
+          "matchTier": "family",
+          "proGamesPlayed": 3,
+          "proRecord": {
+            "wins": 1,
+            "draws": 1,
+            "losses": 1
+          }
+        },
+        {
+          "proId": "praggnanandhaa",
+          "proName": "Rameshbabu Praggnanandhaa",
+          "proEntryId": "pro-praggnanandhaa-b-d4-nf6-c4-g6-nc3-bg7",
+          "proEntryName": "Rameshbabu Praggnanandhaa as Black: King's Indian Defense: Sämisch Variation, Bobotsov-Korchnoi-Petrosian Variation",
+          "proColor": "black",
+          "proEco": "E81",
+          "sharedPlies": 8,
+          "matchTier": "family",
+          "proGamesPlayed": 3,
+          "proRecord": {
+            "wins": 3,
+            "draws": 0,
+            "losses": 0
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "nimzo-indian",
+      "mainName": "Nimzo-Indian Defence",
+      "mainEco": "E20",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "annacramling",
+          "proName": "Anna Cramling",
+          "proEntryId": "pro-annacramling-w-d4-nf6-c4-e6-nc3-bb4",
+          "proEntryName": "Anna Cramling as White: Nimzo-Indian Defense: Classical Variation, Noa Variation",
+          "proColor": "white",
+          "proEco": "E35",
+          "sharedPlies": 7,
+          "matchTier": "family",
+          "proGamesPlayed": 10,
+          "proRecord": {
+            "wins": 2,
+            "draws": 1,
+            "losses": 7
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "grunfeld-defence",
+      "mainName": "Grünfeld Defence",
+      "mainEco": "D80",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "annacramling",
+          "proName": "Anna Cramling",
+          "proEntryId": "pro-annacramling-w-d4-nf6-c4-g6-nc3-d5",
+          "proEntryName": "Anna Cramling as White: Grünfeld Defense: Exchange Variation",
+          "proColor": "white",
+          "proEco": "D85",
+          "sharedPlies": 11,
+          "matchTier": "exact",
+          "proGamesPlayed": 6,
+          "proRecord": {
+            "wins": 4,
+            "draws": 0,
+            "losses": 2
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "dutch-defence",
+      "mainName": "Dutch Defence",
+      "mainEco": "A80",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "benoni-defence",
+      "mainName": "Benoni Defence",
+      "mainEco": "A60",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "benko-gambit",
+      "mainName": "Benko Gambit",
+      "mainEco": "A57",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "queens-indian",
+      "mainName": "Queen's Indian Defence",
+      "mainEco": "E15",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "budapest-gambit",
+      "mainName": "Budapest Gambit",
+      "mainEco": "A51",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "old-indian-defence",
+      "mainName": "Old Indian Defence",
+      "mainEco": "A53",
+      "mainColor": "black",
+      "playedByPros": []
+    },
+    {
+      "mainId": "english-opening",
+      "mainName": "English Opening",
+      "mainEco": "A10",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "reti-opening",
+      "mainName": "Reti Opening",
+      "mainEco": "A04",
+      "mainColor": "white",
+      "playedByPros": [
+        {
+          "proId": "hikaru",
+          "proName": "Hikaru Nakamura",
+          "proEntryId": "pro-hikaru-b-nf3-g6-g3-bg7-bg2-d6",
+          "proEntryName": "Hikaru Nakamura as Black: Zukertort Opening: Kingside Fianchetto",
+          "proColor": "black",
+          "proEco": "A04",
+          "sharedPlies": 1,
+          "matchTier": "same-eco",
+          "proGamesPlayed": 7,
+          "proRecord": {
+            "wins": 6,
+            "draws": 0,
+            "losses": 1
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "kings-indian-attack",
+      "mainName": "King's Indian Attack",
+      "mainEco": "A07",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "birds-opening",
+      "mainName": "Bird's Opening",
+      "mainEco": "A02",
+      "mainColor": "white",
+      "playedByPros": []
+    },
+    {
+      "mainId": "two-knights-defence",
+      "mainName": "Two Knights Defence",
+      "mainEco": "C55",
+      "mainColor": "black",
+      "playedByPros": [
+        {
+          "proId": "niemann",
+          "proName": "Hans Niemann",
+          "proEntryId": "pro-niemann-w-e4-e5-nf3-nc6-bc4-nf6",
+          "proEntryName": "Hans Niemann as White: Italian Game: Two Knights Defense, Modern Bishop's Opening",
+          "proColor": "white",
+          "proEco": "C55",
+          "sharedPlies": 7,
+          "matchTier": "exact",
+          "proGamesPlayed": 15,
+          "proRecord": {
+            "wins": 6,
+            "draws": 2,
+            "losses": 7
+          }
+        },
+        {
+          "proId": "praggnanandhaa",
+          "proName": "Rameshbabu Praggnanandhaa",
+          "proEntryId": "pro-praggnanandhaa-w-e4-e5-nf3-nc6-bc4-nf6",
+          "proEntryName": "Rameshbabu Praggnanandhaa as White: Italian Game: Two Knights Defense",
+          "proColor": "white",
+          "proEco": "C55",
+          "sharedPlies": 6,
+          "matchTier": "exact",
+          "proGamesPlayed": 8,
+          "proRecord": {
+            "wins": 4,
+            "draws": 1,
+            "losses": 3
+          }
+        },
+        {
+          "proId": "dubov",
+          "proName": "Daniil Dubov",
+          "proEntryId": "pro-dubov-b-e4-e5-nf3-nc6-bc4-nf6",
+          "proEntryName": "Daniil Dubov as Black: Italian Game: Two Knights Defense, Modern Bishop's Opening",
+          "proColor": "black",
+          "proEco": "C55",
+          "sharedPlies": 10,
+          "matchTier": "exact",
+          "proGamesPlayed": 7,
+          "proRecord": {
+            "wins": 4,
+            "draws": 1,
+            "losses": 2
+          }
+        },
+        {
+          "proId": "dubov",
+          "proName": "Daniil Dubov",
+          "proEntryId": "pro-dubov-w-e4-e5-nf3-nc6-bc4-nf6",
+          "proEntryName": "Daniil Dubov as White: Italian Game: Two Knights Defense, Modern Bishop's Opening",
+          "proColor": "white",
+          "proEco": "C55",
+          "sharedPlies": 7,
+          "matchTier": "exact",
+          "proGamesPlayed": 4,
+          "proRecord": {
+            "wins": 1,
+            "draws": 0,
+            "losses": 3
+          }
+        },
+        {
+          "proId": "carlsen",
+          "proName": "Magnus Carlsen",
+          "proEntryId": "pro-carlsen-w-e4-e5-nf3-nc6-bc4-nf6",
+          "proEntryName": "Magnus Carlsen as White: Italian Game: Two Knights Defense, Polerio Defense, Bishop Check Line",
+          "proColor": "white",
+          "proEco": "C58",
+          "sharedPlies": 6,
+          "matchTier": "family",
+          "proGamesPlayed": 4,
+          "proRecord": {
+            "wins": 4,
+            "draws": 0,
+            "losses": 0
+          }
+        }
+      ]
+    },
+    {
+      "mainId": "evans-gambit",
+      "mainName": "Evans Gambit",
+      "mainEco": "C51",
+      "mainColor": "white",
+      "playedByPros": []
+    }
+  ]
+}
