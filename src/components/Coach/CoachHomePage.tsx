@@ -69,13 +69,17 @@ export function CoachHomePage(): JSX.Element {
       </div>
 
       {/* Tile grid. Primary tiles are Learn (lessons), Play (real
-          game vs engine), and Endgame (the audit-driven endgame
-          surface — now equal in visual weight). Endgame sits in
-          its own row spanning 2 columns at the same HEIGHT as the
-          aspect-square Learn/Play pair above, so the three big
-          tiles read as peers. Chat was dropped — the inline Chat
-          button on every board surface makes the dedicated tile
-          redundant. */}
+          game vs engine), and Training Plan (the rolodex of
+          favorited openings with 8 training rows per card —
+          the headline destination under Learn/Play). Training
+          Plan sits in its own row spanning 2 columns at the
+          same HEIGHT as the aspect-square Learn/Play pair above,
+          so the three big tiles read as peers. Endgame is now a
+          secondary tile — David's call (2026-05-19): Training
+          Plan deserves the big slot since it's the daily entry
+          point to the repertoire. Chat was dropped — the inline
+          Chat button on every board surface makes the dedicated
+          tile redundant. */}
       <div className="grid grid-cols-2 gap-3 flex-1 content-start max-w-lg mx-auto w-full">
         <PrimaryTile
           icon={<GraduationCap size={40} className="text-cyan-400" />}
@@ -106,23 +110,25 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-play"
         />
 
-        {/* Endgame — third primary tile, spans 2 cols at half-height
-            so its HEIGHT matches the aspect-square Learn/Play tiles
-            above. Reads as a peer of the other two big tiles. */}
+        {/* Training Plan — third primary tile, spans 2 cols at
+            half-height so its HEIGHT matches the aspect-square
+            Learn/Play tiles above. The daily headline: rolodex
+            of favorited openings with 8 training rows each
+            (Theory, Puzzles, GM Games, Traps, Blunders,
+            Walkthrough, Practice from move 1, Practice
+            middlegame). */}
         <PrimaryTile
-          icon={<Crown size={40} className="text-fuchsia-400" />}
-          label="Endgame with Coach"
-          subtitle="Mating patterns, drawn fortresses, calc skills, your own missed wins — all adaptive."
-          info={
-            "The endgame surface. 8 tabs:\n\n• Mating — named patterns (Anastasia, Boden, Smothered…) drilled via Lichess puzzles at your rating.\n• Principles / Pawn / Rook / Drawn — keystone positions with curator prose, then adaptive drills from the puzzle DB.\n• Eval Lab — recognition + find-the-move + play-it-out, three grades per puzzle.\n• Calc — six skills + an Adaptive (auto) tile. Weakness-boost biases every fifth puzzle.\n• Your Games — mined mistakes from your imports.\n\nAll surfaces share a single persistent endgame Elo (Stats page) and max-strength Stockfish on play-out."
-          }
-          rgb="217, 70, 239"
-          bgClass="bg-fuchsia-500/10"
-          textColorClass="text-fuchsia-400"
-          onClick={goTo('endgame', '/coach/endgame')}
+          icon={<Calendar size={40} className="text-amber-400" />}
+          label="Training Plan"
+          subtitle="Your favorited openings, side-by-side — pick a card, drill its rows."
+          info="Your repertoire as a rolodex. Each favorited opening becomes a card with 8 training rows:\n\n• Theory & Lines — full DB walk\n• Puzzles — tactics tagged to the opening (family-fallback if exact set is thin)\n• GM Games — ECO-filtered\n• Traps & Pitfalls — opening-specific tactical patterns\n• Your blunders — mistakes you've made in this opening\n• Coached walkthrough — animated, voice-narrated\n• Practice from move 1 — engine plays the full opening with you\n• Practice middlegame — skip the opening, drop into the critical position\n\nTap any row to deep-link straight into that drill, scoped to the opening. Drag to reorder, tap a peeking card to flip forward. Star animations from /openings push new favorites into the deck live."
+          rgb="245, 158, 11"
+          bgClass="bg-amber-500/10"
+          textColorClass="text-amber-400"
+          onClick={goTo('plan', '/coach/plan')}
           gB={gB}
           gS={gS}
-          testId="coach-action-endgame"
+          testId="coach-action-plan"
           wide
         />
 
@@ -139,16 +145,18 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-report"
         />
         <SecondaryTile
-          icon={<Calendar size={28} className="text-amber-400" />}
-          label="Training Plan"
-          info="Coach generates a daily plan based on your weaknesses and recent games — tactics sets, opening drills, endgame practice. You can ask it to adjust the plan in plain language."
-          rgb="245, 158, 11"
-          bgClass="bg-amber-500/10"
-          textColorClass="text-amber-400"
-          onClick={goTo('plan', '/coach/plan')}
+          icon={<Crown size={28} className="text-fuchsia-400" />}
+          label="Endgame"
+          info={
+            "The endgame surface. 8 tabs:\n\n• Mating — named patterns (Anastasia, Boden, Smothered…) drilled via Lichess puzzles at your rating.\n• Principles / Pawn / Rook / Drawn — keystone positions with curator prose, then adaptive drills from the puzzle DB.\n• Eval Lab — recognition + find-the-move + play-it-out, three grades per puzzle.\n• Calc — six skills + an Adaptive (auto) tile. Weakness-boost biases every fifth puzzle.\n• Your Games — mined mistakes from your imports.\n\nAll surfaces share a single persistent endgame Elo (Stats page) and max-strength Stockfish on play-out."
+          }
+          rgb="217, 70, 239"
+          bgClass="bg-fuchsia-500/10"
+          textColorClass="text-fuchsia-400"
+          onClick={goTo('endgame', '/coach/endgame')}
           gB={gB}
           gS={gS}
-          testId="coach-action-plan"
+          testId="coach-action-endgame"
         />
         <SecondaryTile
           icon={<Search size={28} className="text-sky-400" />}
@@ -281,8 +289,8 @@ function activateOnKey(onClick: () => void) {
 
 /** Primary tile. Default: aspect-square in one column (Learn /
  *  Play). With `wide`: spans 2 columns at 2:1 aspect so HEIGHT
- *  equals the aspect-square primaries above (the Endgame layout).
- *  Title + subtitle stacked. */
+ *  equals the aspect-square primaries above (the Training Plan
+ *  layout). Title + subtitle stacked. */
 function PrimaryTile({ icon, label, subtitle, info, rgb, bgClass, textColorClass, onClick, gB, gS, testId, wide }: TileProps): JSX.Element {
   const shadow = scaledShadow(rgb, gB);
   const shadowHover = scaledShadow(rgb, Math.min(200, gB * 1.4));
@@ -317,8 +325,8 @@ function PrimaryTile({ icon, label, subtitle, info, rgb, bgClass, textColorClass
   );
 }
 
-/** Smaller aspect-square secondary tile — for Game Insights, Training
- *  Plan, Analyse, Chat. Icon + label only, no subtitle. */
+/** Smaller aspect-square secondary tile — for Game Insights,
+ *  Endgame, Analyse, Review. Icon + label only, no subtitle. */
 function SecondaryTile({ icon, label, info, rgb, bgClass, textColorClass, onClick, gB, gS, testId }: TileProps): JSX.Element {
   const shadow = scaledShadow(rgb, gB);
   const shadowHover = scaledShadow(rgb, Math.min(200, gB * 1.4));
