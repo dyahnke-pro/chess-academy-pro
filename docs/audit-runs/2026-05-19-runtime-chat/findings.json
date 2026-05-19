@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-05-19T01:07:30.741Z",
+  "openings": [
+    {
+      "id": "italian-game",
+      "mounted": true,
+      "chatOpened": false,
+      "questions": [],
+      "events": []
+    },
+    {
+      "id": "sicilian-najdorf",
+      "mounted": true,
+      "chatOpened": false,
+      "questions": [],
+      "events": []
+    },
+    {
+      "id": "ruy-lopez",
+      "mounted": true,
+      "chatOpened": false,
+      "questions": [],
+      "events": []
+    },
+    {
+      "id": "french-defence",
+      "mounted": true,
+      "chatOpened": false,
+      "questions": [],
+      "events": []
+    },
+    {
+      "id": "caro-kann",
+      "mounted": true,
+      "chatOpened": false,
+      "questions": [],
+      "events": []
+    },
+    {
+      "id": "kings-gambit",
+      "mounted": true,
+      "chatOpened": false,
+      "questions": [],
+      "events": []
+    },
+    {
+      "id": "queens-gambit",
+      "mounted": true,
+      "chatOpened": false,
+      "questions": [],
+      "events": []
+    }
+  ],
+  "totalEvents": 0
+}
