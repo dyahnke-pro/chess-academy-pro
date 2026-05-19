@@ -1,0 +1,4053 @@
+{
+  "entries": {
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::0": {
+      "ply": 1,
+      "san": "d4",
+      "plans": [
+        "Control center with d4, prepare c4 pawn advance for Catalan structure",
+        "Advance c-pawn to establish long diagonal grip after fianchetto"
+      ],
+      "alternative": "Nf3 — delay d4, transpose to quieter Reti setup"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "plans": [
+        "Challenge d4 square with Nf6, force White to clarify pawn center",
+        "Prepare e6 support for d5 counterstrike in Open Catalan"
+      ],
+      "alternative": "d5 — immediately contest d4, risky in Catalan positions"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::2": {
+      "ply": 3,
+      "san": "c4",
+      "plans": [
+        "Complete pawn duo c4-d4, control d5 and e5 squares",
+        "Prepare g3 fianchetto for long diagonal bishop on c1-h6"
+      ],
+      "alternative": "Nc3 — develop knight before fianchetto, solid but slower"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::3": {
+      "ply": 4,
+      "san": "e6",
+      "plans": [
+        "Support d5 square, prepare d5 pawn break to activate pieces",
+        "Block d-file temporarily, set up kingside castling"
+      ],
+      "alternative": "c5 — attack d4 immediately, less space but aggressive"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto bishop onto long diagonal g2, pressure d5 square",
+        "Prepare Nf3-g5 knight jump via fianchetto setup"
+      ],
+      "alternative": "Bg5 — pin Nf6 immediately, delays long diagonal setup"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Strike center d5, challenge White's space advantage directly",
+        "After cxd5, prepare dxc4 to grab pawn with tempo"
+      ],
+      "alternative": "Be7 — develop quietly, avoid d5 center tension immediately"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Fianchettoed bishop lands on g2, dominates long a1-h8 diagonal",
+        "Prepare 0-0 castling, complete setup for d5 pawn tension"
+      ],
+      "alternative": "cxd5 — capture immediately, releases tension prematurely"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Nf3 activates knight, eyes e5 and d4 squares for leverage",
+        "Support e4 potential, prepare kingside pressure after Black's dxc4"
+      ],
+      "alternative": "Nc3 — develop toward queenside, less flexible than Nf3"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::9": {
+      "ply": 10,
+      "san": "Be7",
+      "plans": [
+        "Be7 completes Black's fianchetto with dark-squared bishop on g7",
+        "Prepare 0-0 castling, solidify kingside against Nf3-e5 attacks"
+      ],
+      "alternative": "dxc5 — recapture immediately, simplifies position prematurely"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::12": {
+      "ply": 13,
+      "san": "Qc2",
+      "plans": [
+        "Queen c2 attacks c4 pawn and eyes long diagonal simultaneously",
+        "Recover pawn with tempo, maintain space advantage after dxc5"
+      ],
+      "alternative": "dxc5 — recapture directly, simpler but lets Black consolidate"
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::15": {
+      "ply": 16,
+      "san": "b5",
+      "plans": [
+        "Qxb5 captures loose pawn; Black recaptures with a-pawn or knight.",
+        "Nbd2 develops queen's knight, preparing Rc1 for queenside pressure."
+      ],
+      "alternative": "a4 — stops b4 advance, restricts Black's queenside space."
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::16": {
+      "ply": 17,
+      "san": "Qc2",
+      "plans": [
+        "Nbd2 places knight on central square, supports future Rc1 thrust.",
+        "Bb2 activates bishop on long diagonal, eyes e5 square."
+      ],
+      "alternative": "a4 — prevents b4, fixes Black's pawn structure."
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::18": {
+      "ply": 19,
+      "san": "Bd2",
+      "plans": [
+        "Nc3 occupies central square, controls d5 and e4 squares.",
+        "Rc1 pressures c-file; Black's c7-pawn becomes potential target."
+      ],
+      "alternative": "Nbd2 — develops toward c4 outpost via e4."
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::20": {
+      "ply": 21,
+      "san": "Qc1",
+      "plans": [
+        "Qc2 retreats queen, abandons c4 control; prepares Rc1 instead.",
+        "Rc1 now attacks c7 pawn immediately after queen moves."
+      ],
+      "alternative": "Nc3 — develops knight, maintains c4 square surveillance."
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::21": {
+      "ply": 22,
+      "san": "Bb7",
+      "plans": [
+        "Rc1 pins c7-pawn, controls queenside; Black must defend carefully.",
+        "Nbd2 positions knight for Be4, centralizing minor piece."
+      ],
+      "alternative": "Ne4 — centralizes knight, attacks f6 and d6 squares."
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::24": {
+      "ply": 25,
+      "san": "Nc3",
+      "plans": [
+        "Ba5 bishop pins b6-knight after Nc3; controls weak squares.",
+        "Rc1 penetrates c-file, pressures c7 and b7 pawns."
+      ],
+      "alternative": "Nbd2 — develops toward e4 square via this path."
+    },
+    "catalan-opening.json::Open Catalan: dxc4 Qc2 Recovery::27": {
+      "ply": 28,
+      "san": "Bxc5",
+      "plans": [
+        "Bxc5 removes defender of b5-bishop; simplifies White's queenside attack.",
+        "Nxc5 knight grabs c5 square; threatens b7 and e6 pawns."
+      ],
+      "alternative": "Nxc5 — knight seizes active c5 square directly."
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::0": {
+      "ply": 1,
+      "san": "d4",
+      "plans": [
+        "Control central d4 square and prepare c4 advance for Catalan setup",
+        "Open diagonal for light-squared bishop on long diagonal a1-h8"
+      ],
+      "alternative": "c4 — transpose to Catalan immediately via reversed move order"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "plans": [
+        "Attack d4 pawn with knight and probe White's central control",
+        "Prepare flexible kingside fianchetto or e6 setup"
+      ],
+      "alternative": "d5 — challenge center directly before Catalan setup completes"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::2": {
+      "ply": 3,
+      "san": "c4",
+      "plans": [
+        "Complete Catalan pawn chain d4-c4 and control d5 square",
+        "Support bishop maneuver to g2 for long diagonal dominance"
+      ],
+      "alternative": "Nf3 — delay c4, keep flexible knight placement on f3"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::3": {
+      "ply": 4,
+      "san": "e6",
+      "plans": [
+        "Solidify center with e6, preparing d5 break against White's pawns",
+        "Keep light-squared bishop flexible before deciding on fianchetto"
+      ],
+      "alternative": "Be7 — develop bishop immediately and support future d5 push"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto light-squared bishop on g2 to control long diagonal",
+        "Prepare kingside castling with pawn shelter on g3"
+      ],
+      "alternative": "Nf3 — develop knight first before committing to fianchetto setup"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Strike center with d5 pawn, challenging White's d4-c4 chain",
+        "Open lines for Black's pieces and reduce White's spatial advantage"
+      ],
+      "alternative": "Be7 — develop solidly first, delay d5 for later flexibility"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Place bishop on g2 controlling long diagonal a1-h8 after d5 strike",
+        "Support fianchettoed bishop to exert pressure on Black's center"
+      ],
+      "alternative": "cxd4 — capture immediately, simplifying but allowing White's c4 recapture"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Activate knight on f3 targeting e5 and supporting d4 pawn",
+        "Control central squares and prepare pressure on Black's c4 pawn"
+      ],
+      "alternative": "Qc2 — centralize queen before knight move, supporting fianchettoed setup"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::9": {
+      "ply": 10,
+      "san": "a6",
+      "plans": [
+        "Push a6 to prepare b5 expansion and rook maneuver on queenside",
+        "Restrict White's potential a4 break and gain space on queenside"
+      ],
+      "alternative": "Be7 — develop bishop to solid square, support center and castling"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::12": {
+      "ply": 13,
+      "san": "Ne5",
+      "plans": [
+        "Centralize knight on e5 outpost, attacking f3 and controlling key squares",
+        "Force White knight from f3, potentially compromising pawn structure"
+      ],
+      "alternative": "Nxe5 — capture knight immediately, trading pieces and easing pressure"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::15": {
+      "ply": 16,
+      "san": "Bb7",
+      "plans": [
+        "Capture b5 pawn; Black's queen's rook remains trapped on a8",
+        "Ne5 controls d7 and c6; prepare to exploit weak dark squares"
+      ],
+      "alternative": "Nf3 — retreat knight, but allows Black c3 pawn to advance"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::16": {
+      "ply": 17,
+      "san": "axb5",
+      "plans": [
+        "Rook on a8 is trapped; Black must waste tempo freeing it",
+        "Control c6 square with knight; restrict Nd5 escape routes"
+      ],
+      "alternative": "bxa6 — capture backward, but opens b-file for Black's pieces"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::18": {
+      "ply": 19,
+      "san": "Rxa8",
+      "plans": [
+        "Trapped rook forces Black bishop exchange or queen movements",
+        "Nxc4 recovers pawn while keeping material advantage intact"
+      ],
+      "alternative": "Nc3 — support d-pawn, but releases pressure on a8 rook"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::20": {
+      "ply": 21,
+      "san": "Nc3",
+      "plans": [
+        "Knight on c3 defends e4 and controls d5 outpost square",
+        "Prepare bxc4; eliminate Black's advanced c4 pawn structure"
+      ],
+      "alternative": "Nd3 — attacks c4 pawn, but blocks queen's diagonal to a7"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::21": {
+      "ply": 22,
+      "san": "Nxc3",
+      "plans": [
+        "Recapture with b-pawn; open b-file toward Black's king",
+        "bxc3 doubling isolates Black's c3 knight from retreat squares"
+      ],
+      "alternative": "Qxc3 — centralize queen, but blocks c-file and weakens d4"
+    },
+    "catalan-opening.json::Open Catalan: a6-b5 with a4 Break::24": {
+      "ply": 25,
+      "san": "Kxg2",
+      "plans": [
+        "King on g2 escapes back-rank; prepare d5 pawn push",
+        "Attack f7 weak square; rook on f-file creates mating threats"
+      ],
+      "alternative": "Kh3 — sidestep g-file, but removes king from defending e2"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::0": {
+      "ply": 1,
+      "san": "d4",
+      "plans": [
+        "Control center with d4 pawn, prepare c4 expansion",
+        "Support d4 with c2-c4, build space advantage"
+      ],
+      "alternative": "Nf3 — develops knight first, delays center commitment"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "plans": [
+        "Attack d4 with Nf6, force White's setup decision",
+        "Prepare e6 and d5 pawn breaks in center"
+      ],
+      "alternative": "d5 — immediately challenge d4, avoid Catalan setup"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::2": {
+      "ply": 3,
+      "san": "c4",
+      "plans": [
+        "Play c4 to build Catalan center and space",
+        "Support d4 pawn, control d5 square firmly"
+      ],
+      "alternative": "Nc3 — develops piece before committing to c4"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::3": {
+      "ply": 4,
+      "san": "e6",
+      "plans": [
+        "Play e6 to support future d5 push",
+        "Prepare Nbd7 development, keep d5 square flexible"
+      ],
+      "alternative": "c5 — strike d4 immediately, avoid quiet setup"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto g3-Bg2 for long diagonal control",
+        "Pin d5 square after Bg2 placement strategically"
+      ],
+      "alternative": "cxd5 — simplify, capture Black's counterplay on d5"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Play d5, strike center and open e6 pawn",
+        "Challenge White's d4 pawn with central tension"
+      ],
+      "alternative": "Be7 — develop first, delay center confrontation"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Bg2 controls long diagonal a1-h8 completely",
+        "Support d4 pawn while eyeing e4 square"
+      ],
+      "alternative": "cxd5 — capture d5, resolve center tension early"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Nf3 completes Catalan development, adds d4 support",
+        "Prepare O-O, control e5 and d4 squares"
+      ],
+      "alternative": "Ne5 — reroute knight toward d5, centralizing"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::9": {
+      "ply": 10,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside, move king to safety immediately",
+        "Prepare to connect rooks along back rank"
+      ],
+      "alternative": "Nc6 — develop queen's knight toward center first"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::12": {
+      "ply": 13,
+      "san": "Qc2",
+      "plans": [
+        "Qc2 defends d1, prepares rook lift to d1",
+        "Support d4-e5 expansion via back rank"
+      ],
+      "alternative": "Rd1 — activate rook on d-file toward d4 support"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::15": {
+      "ply": 16,
+      "san": "Bd7",
+      "plans": [
+        "Develop dark-squared bishop to control long diagonal and d4 support",
+        "Prepare c4 pawn recapture with maintained central tension"
+      ],
+      "alternative": "Nbd7 — supports c5 counterattack against d4 pawn"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::16": {
+      "ply": 17,
+      "san": "Qxc4",
+      "plans": [
+        "Recapture on c4 and centralize queen to energize position",
+        "Queen on c4 eyes e6 weakness and supports kingside pressure"
+      ],
+      "alternative": "exd4 — simplify and open e-file for rook"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::18": {
+      "ply": 19,
+      "san": "Bf4",
+      "plans": [
+        "Place bishop on f4 to eye c7 and support center control",
+        "Threaten e5 knight relocation and control dark squares"
+      ],
+      "alternative": "Nxe4 — eliminate centralized knight and grab material"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::20": {
+      "ply": 21,
+      "san": "Nc3",
+      "plans": [
+        "Post knight on c3 to support d4 pawn and eye d5 square",
+        "Control c5 and e4 with additional piece presence"
+      ],
+      "alternative": "dxc5 — simplify structure and reduce Black's piece activity"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::21": {
+      "ply": 22,
+      "san": "Nb6",
+      "plans": [
+        "Attack queen on c4 and force favorable queen placement shift",
+        "Knight on b6 restricts White's piece coordination and queen tempo"
+      ],
+      "alternative": "Nxd4 — eliminate knight and simplify Black's kingside pressure"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::24": {
+      "ply": 25,
+      "san": "Nxd5",
+      "plans": [
+        "Capture on d5 with queen check to disrupt Black's coordination",
+        "Queen centralization via d5 controls critical light squares"
+      ],
+      "alternative": "exd5 — maintain pawn center and open e-file for rook"
+    },
+    "catalan-opening.json::Catalan with ...Nbd7 Line::27": {
+      "ply": 28,
+      "san": "f6",
+      "plans": [
+        "Attack bishop on e5 with f6 pawn and weaken kingside",
+        "Prepare g5 advance and open lines near Black's king"
+      ],
+      "alternative": "Qd4 — centralize queen and control dark squares c5, e5"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::0": {
+      "ply": 1,
+      "san": "d4",
+      "plans": [
+        "Control e4 and c5 with central pawn pair",
+        "Prepare fianchetto with g3 and Bg2"
+      ],
+      "alternative": "Nf3 — delays central commitment, classical approach"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::1": {
+      "ply": 2,
+      "san": "d5",
+      "plans": [
+        "Occupy d5 to challenge White's center",
+        "Support c6 advance for Slav structure"
+      ],
+      "alternative": "Nf6 — develop knight before committing pawn"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::2": {
+      "ply": 3,
+      "san": "c4",
+      "plans": [
+        "Offer c4 to transpose into Catalan proper",
+        "Create tension on d5 and control d4"
+      ],
+      "alternative": "Cxd5 — simplify to Queen's Gambit Accepted line"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::3": {
+      "ply": 4,
+      "san": "c6",
+      "plans": [
+        "Support d5 pawn and prepare ...dxc4",
+        "Restrict White's c4 pawn advance options"
+      ],
+      "alternative": "dxc4 — capture immediately, dodge theoretical lines"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::4": {
+      "ply": 5,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight to f3, eyeing e5 and d4",
+        "Prepare fianchetto with g3 next"
+      ],
+      "alternative": "cxd5 — open lines, avoid Slav complications"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Develop knight to f6 and control e4",
+        "Prepare ...dxc4 capture with tempo"
+      ],
+      "alternative": "dxc4 — capture pawn before Nf3 develops fully"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::6": {
+      "ply": 7,
+      "san": "g3",
+      "plans": [
+        "Complete fianchetto with Bg2 on long diagonal",
+        "Prepare 0-0 and pressure d5 indirectly"
+      ],
+      "alternative": "Nbd2 — develop queenside knight, maintain tension"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::8": {
+      "ply": 9,
+      "san": "Bg2",
+      "plans": [
+        "Place bishop on long diagonal toward a1-h8",
+        "Prepare 0-0 while monitoring d5 and c4 weaknesses"
+      ],
+      "alternative": "Nbd2 — develop knight, sidestep fianchetto"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::9": {
+      "ply": 10,
+      "san": "b5",
+      "plans": [
+        "Push b5 to advance passed queenside pawn",
+        "Threaten c4 pawn's escape squares"
+      ],
+      "alternative": "a4 — restrain b5 advance, lock queenside"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::12": {
+      "ply": 13,
+      "san": "Ne5",
+      "plans": [
+        "Post Ne5 knight on strong central square",
+        "Attack c6 and prepare Qc2 or Nxc6 ideas"
+      ],
+      "alternative": "axb5 — simplify material, reduce Black's activity"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::15": {
+      "ply": 16,
+      "san": "cxb5",
+      "plans": [
+        "Remove c4 pawn; Ne5 controls d7 and f7 squares",
+        "Recapture with b-pawn to support queenside expansion"
+      ],
+      "alternative": "Nxc4 — centralizes knight, avoids pawn isolation"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::16": {
+      "ply": 17,
+      "san": "b3",
+      "plans": [
+        "Attack c4 pawn; prepare Qb3 to pressure b7",
+        "Open b-file for rook; support Bg2 long diagonal"
+      ],
+      "alternative": "bxc4 — simplify, but weakens queenside structure"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::18": {
+      "ply": 19,
+      "san": "Qxb3",
+      "plans": [
+        "Queen pins knight to king via b7 bishop",
+        "Qb3 eyes f7 and e6 squares; centralize queen"
+      ],
+      "alternative": "Nxb7 — trades active piece for dark-squared bishop"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::20": {
+      "ply": 21,
+      "san": "O-O",
+      "plans": [
+        "Kingside castle; activate rook and secure king",
+        "Ne5 maintains pressure on e6 and f7 squares"
+      ],
+      "alternative": "Be6 — block Bg2 diagonal, develop instead"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::21": {
+      "ply": 22,
+      "san": "Nbd7",
+      "plans": [
+        "Connect rooks; Nbd7 prepares to challenge Ne5",
+        "Knight from d7 supports c5 pawn break later"
+      ],
+      "alternative": "Nbd7 — same move; alternative is cxd4 to open lines"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::24": {
+      "ply": 25,
+      "san": "Rd1",
+      "plans": [
+        "Activate rook on d1; control d-file after center opens",
+        "Prepare Be3 or Bf4 to complete piece placement"
+      ],
+      "alternative": "Be3 — develop bishop immediately; control long diagonal"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::27": {
+      "ply": 28,
+      "san": "O-O",
+      "plans": [
+        "Black castles kingside; activate rook and secure king",
+        "Prepare rook lift to d6 or defensive maneuvers"
+      ],
+      "alternative": "Rc8 — activate rook on open c-file first"
+    },
+    "catalan-opening.json::Catalan vs Slav Setup: ...c6 and ...dxc4::28": {
+      "ply": 29,
+      "san": "Nc3",
+      "plans": [
+        "Nc3 contests d5 square; supports d4 pawn",
+        "Knight from c3 pressures e6 and supports Qb3 tactics"
+      ],
+      "alternative": "Be3 — develop bishop, complete minor piece setup"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::0": {
+      "ply": 1,
+      "san": "d4",
+      "plans": [
+        "Control e4 and c5 squares with central pawn",
+        "Prepare c4 advance to establish Catalan structure"
+      ],
+      "alternative": "c4 — immediate Catalan setup, skipping d4"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "plans": [
+        "Attack d4 pawn; prepare e6 to support center",
+        "Develop knight from g8 to control key squares"
+      ],
+      "alternative": "d5 — challenge d4 immediately with central tension"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::2": {
+      "ply": 3,
+      "san": "c4",
+      "plans": [
+        "Complete Catalan pawn duo on d4 and c4",
+        "Prepare fianchettoed bishop on g2 for long diagonal"
+      ],
+      "alternative": "Nf3 — develop knight before committing c4"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::3": {
+      "ply": 4,
+      "san": "e6",
+      "plans": [
+        "Support d5 advance; prepare Be7 to fianchetto",
+        "Lock center with e6, avoiding cxd5 recapture"
+      ],
+      "alternative": "Be7 — develop bishop immediately on fianchetto"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto kingside bishop to pressure long diagonal d1-h5",
+        "Control e5 square and keep flexibility on kingside"
+      ],
+      "alternative": "Nf3 — develop knight before fianchetto setup"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Challenge White's d4 pawn with central tension",
+        "Prepare Be7 development while keeping c4 under observation"
+      ],
+      "alternative": "Be7 — complete fianchetto before advancing d5"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Complete fianchetto; bishop controls long diagonal a1-h8",
+        "Prepare O-O castling with solid pawn structure"
+      ],
+      "alternative": "cxd5 — capture center pawn, simplifying position"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Develop queenside knight to f3, controlling e5",
+        "Maintain flexibility before deciding between e3 or Bg5"
+      ],
+      "alternative": "e3 — solidify center immediately, prepare queenside pieces"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::9": {
+      "ply": 10,
+      "san": "O-O",
+      "plans": [
+        "Secure king on kingside; connect rooks for queenside pressure",
+        "Prepare d4-e4 pawn break or queenside expansion"
+      ],
+      "alternative": "dxc5 — capture on c5, simplify structure early"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::12": {
+      "ply": 13,
+      "san": "Qc2",
+      "plans": [
+        "Centralize queen on c2; eye e4 square and long diagonal",
+        "Support e3 advance; coordinate with fianchettoed bishop"
+      ],
+      "alternative": "Ne5 — centralize knight, attack d7 and f7"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::15": {
+      "ply": 16,
+      "san": "b6",
+      "plans": [
+        "Prepare Bb2 to control the long diagonal toward g1",
+        "Support c4-d5 tension with bishop on long diagonal"
+      ],
+      "alternative": "cxd5 — simplify structure, reduce Black's space"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::16": {
+      "ply": 17,
+      "san": "Bb2",
+      "plans": [
+        "Bishop on b2 pins Nf6 to queen on d8 along diagonal",
+        "Control long diagonal a1-h8 to pressure Black's center"
+      ],
+      "alternative": "Nbd2 — reroute knight to support e4 advance"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::18": {
+      "ply": 19,
+      "san": "Nc3",
+      "plans": [
+        "Knight on c3 supports e4 push and controls d5 square",
+        "Connect rooks and prepare e4 breakthrough in center"
+      ],
+      "alternative": "Rd1 — contest d5, align rook on open d-file"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::20": {
+      "ply": 21,
+      "san": "e4",
+      "plans": [
+        "e4 challenges d5 pawn and opens lines for Bb2",
+        "Create central tension, force Black to choose recapture method"
+      ],
+      "alternative": "Rd1 — pressure d5 directly, control d-file"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::21": {
+      "ply": 22,
+      "san": "dxe4",
+      "plans": [
+        "Recapture with queen to centralize and threaten pieces",
+        "Queen on e4 eyes h7 weakness and pins Nf6"
+      ],
+      "alternative": "Nxe4 — solidify with knight, keep queen flexible"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::24": {
+      "ply": 25,
+      "san": "Qxe4",
+      "plans": [
+        "Queen on e4 maintains pin on Nf6 to Black's queen",
+        "Centralized queen threatens f7 and controls key squares"
+      ],
+      "alternative": "Nxe4 — trade knight for queen, simplify position"
+    },
+    "catalan-opening.json::Catalan Declined: ...Be7 without ...dxc4::27": {
+      "ply": 28,
+      "san": "Qc7",
+      "plans": [
+        "Consolidate with rook on d-file, support c4 pawn",
+        "Rook penetration on d-file targets weak d7 bishop"
+      ],
+      "alternative": "Rd2 — defend second rank, prepare rook doubling"
+    },
+    "catalan-opening.json::Early Qa4+ Line::0": {
+      "ply": 1,
+      "san": "d4",
+      "plans": [
+        "Control e4 and c5 squares with the central pawn.",
+        "Prepare c4 advance to establish Catalan structure."
+      ],
+      "alternative": "Nf3 — transpose to other openings with slower setup"
+    },
+    "catalan-opening.json::Early Qa4+ Line::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "plans": [
+        "Attack d4 pawn with the knight from f6.",
+        "Restrict White's space advantage in center."
+      ],
+      "alternative": "d5 — challenge center immediately instead of moving knight"
+    },
+    "catalan-opening.json::Early Qa4+ Line::2": {
+      "ply": 3,
+      "san": "c4",
+      "plans": [
+        "Build Catalan pawn chain with c4 advance.",
+        "Control d5 square and prepare fianchetto on g2."
+      ],
+      "alternative": "Bg5 — develop with pin instead of extending pawns"
+    },
+    "catalan-opening.json::Early Qa4+ Line::3": {
+      "ply": 4,
+      "san": "e6",
+      "plans": [
+        "Support the d5 square with e6 pawn.",
+        "Prevent White's pawn chain from dominating center."
+      ],
+      "alternative": "Be7 — develop bishop immediately before d5 support"
+    },
+    "catalan-opening.json::Early Qa4+ Line::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto light-squared bishop on g2 diagonal.",
+        "Prepare kingside castling with fianchetto structure."
+      ],
+      "alternative": "Nbd2 — develop queen's knight before fianchetto setup"
+    },
+    "catalan-opening.json::Early Qa4+ Line::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Challenge d4 pawn with the d5 advance.",
+        "Create tension in the center for Black."
+      ],
+      "alternative": "Be7 — complete kingside development before d5 strike"
+    },
+    "catalan-opening.json::Early Qa4+ Line::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Position Bg2 on the long diagonal targeting d5.",
+        "Complete fianchetto setup and prepare castling."
+      ],
+      "alternative": "cxd5 — resolve d5 tension immediately instead of fianchetto"
+    },
+    "catalan-opening.json::Early Qa4+ Line::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Develop Nf3 attacking the c4 pawn.",
+        "Control e1 square and connect rooks."
+      ],
+      "alternative": "Nd2 — support c4 defense but keep c-file open"
+    },
+    "catalan-opening.json::Early Qa4+ Line::9": {
+      "ply": 10,
+      "san": "Bd7",
+      "plans": [
+        "Place Bd7 on the queenside for coordination.",
+        "Prepare queenside piece development and castling."
+      ],
+      "alternative": "Be7 — develop kingside first before queenside bishop"
+    },
+    "catalan-opening.json::Early Qa4+ Line::12": {
+      "ply": 13,
+      "san": "Qxc4",
+      "plans": [
+        "Queen captures c4, gaining the advanced pawn.",
+        "Centralize queen on c4 targeting multiple squares."
+      ],
+      "alternative": "dxc4 — recapture with pawn instead of exposing queen"
+    },
+    "catalan-opening.json::Early Qa4+ Line::15": {
+      "ply": 16,
+      "san": "c5",
+      "plans": [
+        "Black strikes d4 with c5, forcing White's pawn decision immediately",
+        "Queen on d3 must decide: defend d4 or shift to support center"
+      ],
+      "alternative": "Nbd2 — develops queenside knight, prepares e4"
+    },
+    "catalan-opening.json::Early Qa4+ Line::16": {
+      "ply": 17,
+      "san": "Nc3",
+      "plans": [
+        "Nc3 controls d5 and e4, stabilizing the d4 pawn",
+        "Rook on a1 still waiting; kingside remains uncastled"
+      ],
+      "alternative": "cxd5 — simplifies, but releases central tension"
+    },
+    "catalan-opening.json::Early Qa4+ Line::18": {
+      "ply": 19,
+      "san": "Bxf3",
+      "plans": [
+        "Bxf3 removes defender of d4, creates immediate tactical pressure",
+        "White's light-squared bishop on g2 now aims at c6 square"
+      ],
+      "alternative": "Be7 — consolidates kingside, avoids exchange"
+    },
+    "catalan-opening.json::Early Qa4+ Line::20": {
+      "ply": 21,
+      "san": "Nb5",
+      "plans": [
+        "Nb5 attacks a7 and eyes d4 outpost, forcing Black's response",
+        "Knight fork threats on d6 and a7 arise after development"
+      ],
+      "alternative": "O-O — castles kingside, abandons immediate pressure"
+    },
+    "catalan-opening.json::Early Qa4+ Line::21": {
+      "ply": 22,
+      "san": "Na6",
+      "plans": [
+        "Na6 blocks Nb5's attack route, centralizes knight poorly",
+        "Black's rook stays on a8; weak queenside structure emerges"
+      ],
+      "alternative": "c4 — pushes passed pawn, complicates White's piece placement"
+    },
+    "catalan-opening.json::Early Qa4+ Line::24": {
+      "ply": 25,
+      "san": "Nxd4",
+      "plans": [
+        "Nxd4 captures center pawn, exchanges Black's powerful knight",
+        "White controls d4 and threatens e6 weakness via queen and bishop"
+      ],
+      "alternative": "Nxa6 — removes defender, but bxa6 weakens queenside less"
+    },
+    "catalan-opening.json::Early Qa4+ Line::27": {
+      "ply": 28,
+      "san": "Bb4+",
+      "plans": [
+        "Bb4+ forces Bd2 or Nbd2 response, disrupting White's king safety",
+        "Black's bishop pins White's defender; Kf1 or Kh1 becomes necessary"
+      ],
+      "alternative": "Nxd4 — eliminates white knight, trades centralized piece"
+    },
+    "catalan-opening.json::Early Qa4+ Line::28": {
+      "ply": 29,
+      "san": "Bd2",
+      "plans": [
+        "Bd2 blocks check, forces bishop retreat from b4",
+        "White's king loses castling rights; queenside rook coordination damaged"
+      ],
+      "alternative": "Nbd2 — blocks check differently, preserves a1-rook defense"
+    },
+    "catalan-opening.json::Early Qa4+ Line::30": {
+      "ply": 31,
+      "san": "Kxd2",
+      "plans": [
+        "Kxd2 centralizes king, though it loses castling on kingside",
+        "Black's rooks on a8 and h8 still undeveloped; f7 stays weak"
+      ],
+      "alternative": "O-O — castles kingside instead, shelters king immediately"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::0": {
+      "ply": 1,
+      "san": "d4",
+      "plans": [
+        "Control e4 and e5 squares; prepare c4 advance for Catalan setup.",
+        "Support d4 pawn; open d-file for future rook pressure."
+      ],
+      "alternative": "Nf3 — delays c4, avoids immediate Catalan structure"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "plans": [
+        "Attack d4 center; prepare to contest light-squared bishop diagonal.",
+        "Develop knight toward e4 or d5 outpost squares."
+      ],
+      "alternative": "d6 — solid but passive; allows White's setup without pressure"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::2": {
+      "ply": 3,
+      "san": "c4",
+      "plans": [
+        "Complete Catalan structure with c4 pawn; limit Black's d5 break.",
+        "Prepare fianchetto on g2; control long diagonal toward a8."
+      ],
+      "alternative": "Nc3 — develops piece but delays fianchetto preparation"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::3": {
+      "ply": 4,
+      "san": "e6",
+      "plans": [
+        "Support d5 square; gain space with French-like pawn chain.",
+        "Keep e-file semi-open for future piece pressure."
+      ],
+      "alternative": "Be7 — faster development but allows immediate d5 push"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto kingside bishop on g2 targeting long diagonal a8-h1.",
+        "Prepare kingside castling; support center with g2-bishop."
+      ],
+      "alternative": "Nc3 — develops toward d5 but blocks fianchetto setup"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Strike d4 center; weaken White's pawn structure with c4xd5.",
+        "Challenge central control; open lines for Black pieces."
+      ],
+      "alternative": "Be7 — avoids tension but accepts passive setup for Black"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Complete fianchetto; unleash g2-bishop on long diagonal a8-h1.",
+        "Prepare Nf3 development while bishop controls central squares."
+      ],
+      "alternative": "cxd5 — recaptures immediately but blocks fianchetto diagonal"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Recapture d4 pawn; centralize knight from f3 to active square.",
+        "Open long diagonal for g2-bishop; stabilize center after c4 capture."
+      ],
+      "alternative": "exd5 — e-file opening but weakens d5 square significantly"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::9": {
+      "ply": 10,
+      "san": "Be7",
+      "plans": [
+        "Complete development; place dark-squared bishop on e7 defending e5.",
+        "Prepare castling kingside; solidify light-square control around king."
+      ],
+      "alternative": "Nbd7 — develops knight but delays Be7 defensive coverage"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::12": {
+      "ply": 13,
+      "san": "Qc2",
+      "plans": [
+        "Qc2 discovers g2-bishop attack on a8-h1 diagonal; add queen pressure.",
+        "Centralize queen; prepare to reroute toward g5 or h5 kingside attack."
+      ],
+      "alternative": "cxd4 — capture pawn but miss strong positional discovery"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::15": {
+      "ply": 16,
+      "san": "b5",
+      "plans": [
+        "Queen maintains c4 pressure; defend d4 pawn before developing queenside",
+        "Nf6 knight eyes e4; prepare Nc3 to support d4 and control center"
+      ],
+      "alternative": "Qxc7 — seize the c7 pawn immediately, but loses tempo"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::16": {
+      "ply": 17,
+      "san": "Qc2",
+      "plans": [
+        "Retreat queen away from b5 attack; reposition to support Bf4 setup",
+        "Black's b5 pawn is advanced; watch for Bb7 and pressure on d4"
+      ],
+      "alternative": "Qd3 — centralize queen, but d4 becomes less defended"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::18": {
+      "ply": 19,
+      "san": "Bf4",
+      "plans": [
+        "Bf4 seizes space; eyes b8-h2 diagonal, supports center control",
+        "Restrict Black's Nf6 mobility; prepare Nc3 and Rad1 for d-file pressure"
+      ],
+      "alternative": "Be3 — solid setup, but surrenders diagonal to Black's Bf8"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::20": {
+      "ply": 21,
+      "san": "Nc3",
+      "plans": [
+        "Nc3 anchors d4 and preps Rad1; watch for Nb4 attacking c2-queen fork",
+        "Nb8 must emerge soon; control c6 square to limit knight placement"
+      ],
+      "alternative": "Bf4 — complete kingside setup first, but delays Nc3 development"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::21": {
+      "ply": 22,
+      "san": "Nb4",
+      "plans": [
+        "Nb4 attacks Qc2; White must move queen or defend the pin",
+        "Ne4 knight fork threat on c2 and other pieces; advance d4-d5 to disrupt"
+      ],
+      "alternative": "Nbd7 — traditional setup, but allows Qxc7 and e5 space grab"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::24": {
+      "ply": 25,
+      "san": "Nxe4",
+      "plans": [
+        "Ne4 knight centralizes with tempo on queen; trades active knight",
+        "d4-d5 breaks opens position; queen moves and supports Bf4 pressure"
+      ],
+      "alternative": "dxe5 — simplify, but e5 pawn controls key light squares"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::27": {
+      "ply": 28,
+      "san": "Nc6",
+      "plans": [
+        "Nc6 re-enters; reinforces pressure on d4 and supports b5 advance",
+        "Watch Ne4 on e4; e-pawn still weak; Bf4 eyes c7 light squares"
+      ],
+      "alternative": "Rb8 — activate rook, but Nc6 is more forcing for piece activity"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::28": {
+      "ply": 29,
+      "san": "Qc2",
+      "plans": [
+        "Qc2 supports Bf4; prepares to defend d1-h1 diagonal if needed",
+        "Ne4 centralized; watch f2 and e3 squares; Black seeks Nxf2 tricks"
+      ],
+      "alternative": "Rad1 — seize the file, but Qc2 defends light squares immediately"
+    },
+    "catalan-opening.json::Qc2 Discovery on the Diagonal::30": {
+      "ply": 31,
+      "san": "Ne5",
+      "plans": [
+        "Ne5 outpost controls c6 and d7; pressures Bf4 and d-file weak squares",
+        "Rad1 next move; d4 pawn advanced and supported; Black's Nd6 needed"
+      ],
+      "alternative": "Nxf7 — grab pawn, but loses knight to recapture; Ne5 more durable"
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::0": {
+      "ply": 1,
+      "san": "d4",
+      "plans": [
+        "Control e4 and c4 squares with central pawn tension.",
+        "Prepare fianchetto setup with g3 and Bg2 bishop placement."
+      ],
+      "alternative": "Nf3 — develops knight before committing to full center."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "plans": [
+        "Black challenges d4 pawn; prepare c4 pawn support.",
+        "Watch for ...e5 break; keep d4 square defended firmly."
+      ],
+      "alternative": "d5 — immediately challenge center symmetrically."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::2": {
+      "ply": 3,
+      "san": "c4",
+      "plans": [
+        "Establish c4 pawn as Catalan anchor on queenside.",
+        "Prepare fianchetto bishop on g2 for long diagonal control."
+      ],
+      "alternative": "Nc3 — develops knight before committing fianchetto setup."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::3": {
+      "ply": 4,
+      "san": "e6",
+      "plans": [
+        "Solidify e6 square; prepare ...d5 counterattack in center.",
+        "Keep flexibility for bishop development via e7 or d6."
+      ],
+      "alternative": "c5 — immediately challenge c4 pawn and d4 center."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Complete fianchetto with Bg2 on long diagonal.",
+        "Prepare Nf3 development and kingside castling shortly."
+      ],
+      "alternative": "Nf3 — develop knight before fianchetto bishop move."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Black strikes center with ...d5; test c4 pawn support.",
+        "Decide cxd5 capture or allow tension; watch e6 pawn."
+      ],
+      "alternative": "Be7 — complete development before committing center."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Activate long diagonal bishop on g2; control critical squares.",
+        "Prepare kingside castling and centralize knight on f3."
+      ],
+      "alternative": "cxd5 — capture immediately; reduce Black's center presence."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Nf3 completes setup; control e5 and d4 squares.",
+        "Black's c4 pawn is advanced; prepare to challenge or blockade."
+      ],
+      "alternative": "cxc4 — eliminate Black's advanced queenside pawn immediately."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::9": {
+      "ply": 10,
+      "san": "b5",
+      "plans": [
+        "Black thrusts ...b5; attack c4 pawn and weaken queenside.",
+        "Decide axb5 or cxb5; evaluate isolated c4 pawn after."
+      ],
+      "alternative": "cxc4 — eliminate c4 pawn and avoid a4 complications."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::12": {
+      "ply": 13,
+      "san": "axb5",
+      "plans": [
+        "axb5 removes Black's queenside expansion; isolate c6 pawn.",
+        "Black faces weak c6 square; control with pieces from d4."
+      ],
+      "alternative": "cxc4 — simplify by capturing hanging black pawn on c4."
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::15": {
+      "ply": 16,
+      "san": "Bb7",
+      "plans": [
+        "Develop dark-squared bishop to b7, controlling long diagonal toward e4",
+        "Prepare queenside castling after securing b5 pawn with development"
+      ],
+      "alternative": "a6 — prevent Nxb5, support c4 pawn advance"
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::16": {
+      "ply": 17,
+      "san": "Ne5",
+      "plans": [
+        "Centralize knight on e5, attacking c4 pawn and controlling key squares",
+        "Force Black's f6 knight to recapture, weakening dark squares around king"
+      ],
+      "alternative": "Qxc4 — capture hanging pawn immediately"
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::18": {
+      "ply": 19,
+      "san": "b3",
+      "plans": [
+        "Attack b5 pawn with b3, trapping c4 pawn without immediate capture",
+        "Open a-file toward Black's king after axb4, threatening rook pressure"
+      ],
+      "alternative": "Nxc4 — capture c4 immediately, simplify position"
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::20": {
+      "ply": 21,
+      "san": "Qxb3",
+      "plans": [
+        "Queen captures b3, attacking d5 bishop and preparing c5 space control",
+        "Prepare Rd1 to contest center files, push pawn to d5 square soon"
+      ],
+      "alternative": "Qb1 — maintain tension on b5 and c4 pawns"
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::21": {
+      "ply": 22,
+      "san": "Bd5",
+      "plans": [
+        "Centralize bishop on d5, controlling e4 square and blocking d-file",
+        "Support Nf6 knight and prepare castling kingside with solid center control"
+      ],
+      "alternative": "a5 — fix b5 pawn, gain queenside space"
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::24": {
+      "ply": 25,
+      "san": "Nc3",
+      "plans": [
+        "Develop queen's knight to c3, supporting center and attacking d5 bishop",
+        "Knight on c3 prepares d5 square dominance, supports e5 knight retreat"
+      ],
+      "alternative": "Be7 — complete fianchetto, contest long diagonal"
+    },
+    "catalan-opening.json::Inaccurate a4 Timing vs ...b5::27": {
+      "ply": 28,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside to safety, activating f1 rook toward center and queenside",
+        "Connect rooks, prepare Rf1-e1 to challenge e5 knight dominance"
+      ],
+      "alternative": "Rf1 — move rook before castling, maintain flexibility"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::0": {
+      "ply": 1,
+      "san": "d4",
+      "plans": [
+        "Control e4 and c4 squares, prepare fianchetto setup",
+        "Push c4 next to build Catalan structure"
+      ],
+      "alternative": "Nf3 — develop knight before committing center"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::1": {
+      "ply": 2,
+      "san": "Nf6",
+      "plans": [
+        "Black prevents e4 advance, pins d4 pawn indirectly",
+        "Prepare e6 to contest central control"
+      ],
+      "alternative": "d5 — immediately challenge d4 pawn"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::2": {
+      "ply": 3,
+      "san": "c4",
+      "plans": [
+        "Complete pawn center with c4-d4 duo",
+        "Control d5 square and threaten c5 break"
+      ],
+      "alternative": "Nc3 — develop knight before c4"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::3": {
+      "ply": 4,
+      "san": "e6",
+      "plans": [
+        "Solidify e6 pawn, prepare d5 counter-push",
+        "Support knight on f6 from e6"
+      ],
+      "alternative": "c5 — immediately challenge White's center"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto dark-squared bishop on long diagonal",
+        "Prepare kingside castling with fianchetto pawn"
+      ],
+      "alternative": "Nf3 — develop knight to support center"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::5": {
+      "ply": 6,
+      "san": "d5",
+      "plans": [
+        "Challenge d4 pawn, prepare c5 break later",
+        "Fight for d4 and e5 central squares"
+      ],
+      "alternative": "c5 — attack d4 immediately"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Fianchettoed bishop controls long a1-h8 diagonal",
+        "Target d4 pawn and support center control"
+      ],
+      "alternative": "cxd4 — capture and simplify"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Nf3 attacks c4 pawn, forces Black decision",
+        "Support center and prepare queenside pressure"
+      ],
+      "alternative": "dxc5 — capture pawn, simplify position"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::9": {
+      "ply": 10,
+      "san": "Be7",
+      "plans": [
+        "Complete development with Be7 on long diagonal",
+        "Prepare kingside castling, control center"
+      ],
+      "alternative": "dxc5 — capture White's pawn advantage"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::12": {
+      "ply": 13,
+      "san": "Qc2",
+      "plans": [
+        "Queen on c2 supports d4 pawn, targets c5",
+        "Qc2 prepares to recapture on d5 if needed"
+      ],
+      "alternative": "dxc5 — capture pawn directly, simplify"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::15": {
+      "ply": 16,
+      "san": "b5",
+      "plans": [
+        "Queen retreats to d3, supporting d4 pawn and preparing Nc3.",
+        "After Qd3, control c5 square with Nc3 to restrict Black's pieces."
+      ],
+      "alternative": "Qb4+ — check forces Black's awkward king or rook move"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::16": {
+      "ply": 17,
+      "san": "Qd3",
+      "plans": [
+        "Play Nc3 to support d4 and pressure c5 outpost.",
+        "Consider c5 advance to isolate Black's e6 pawn next."
+      ],
+      "alternative": "dxc5 — captures pawn, simplifies position, removes Black's tension"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::18": {
+      "ply": 19,
+      "san": "dxc5",
+      "plans": [
+        "After dxc5, Black plays ...Nxc5 attacking queen on d3.",
+        "Queen must relocate; consider Qb3 or Qc2 to maintain pressure."
+      ],
+      "alternative": "Nxc5 — knight centralizes with tempo against queen on d3"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::20": {
+      "ply": 21,
+      "san": "Nc3",
+      "plans": [
+        "Nc3 defends d4, opens d-file for rook pressure.",
+        "Knight controls b5 and e4, restricting Black's knight mobility."
+      ],
+      "alternative": "Be3 — develops bishop, prepares Rad1 for d-file pressure"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::21": {
+      "ply": 22,
+      "san": "Bb7",
+      "plans": [
+        "Black's Bb7 targets long diagonal toward g2 bishop.",
+        "White continues Be3 or Bf4 to contest Black's bishop pair."
+      ],
+      "alternative": "Be6 — pins c5 knight, prepares Qd4 centralization"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::24": {
+      "ply": 25,
+      "san": "Bxf6",
+      "plans": [
+        "Bxf6 removes Black's developed knight, opens e-file for queen.",
+        "After recapture, d-file becomes weak for White's rook pressure."
+      ],
+      "alternative": "Be5 — centralizes bishop, attacks c5 knight directly, prevents f6 escape"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::27": {
+      "ply": 28,
+      "san": "Rfxd8",
+      "plans": [
+        "Rfxd8 eliminates Black's rook, maintains material after exchanges.",
+        "Simplification favors White's superior pawn structure and piece placement."
+      ],
+      "alternative": "Rcd1 — doubles rooks on d-file, increases central pressure"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::28": {
+      "ply": 29,
+      "san": "Rfd1",
+      "plans": [
+        "Black avoids back-rank issues with rook on d1.",
+        "Both rooks control d-file; White prepares endgame technique."
+      ],
+      "alternative": "Nf4 — centralizes knight to attack e6 and c5 squares"
+    },
+    "catalan-opening.json::Ignoring ...c5 Counter in Open Catalan::30": {
+      "ply": 31,
+      "san": "Nxd1",
+      "plans": [
+        "After Nxd1, Black removes d-file control, weakening position.",
+        "White recaptures with rook, maintaining pressure on weak pawns."
+      ],
+      "alternative": "Nf5 — attacks e6 pawn, forces Black's defensive adjustment"
+    },
+    "english-opening.json::English: Symmetrical Variation::0": {
+      "ply": 1,
+      "san": "c4",
+      "plans": [
+        "Control d5 and e5 squares with c4, restricting Black's center",
+        "Prepare Nc3 to support c4 pawn and contest center"
+      ],
+      "alternative": "e4 — more direct center control"
+    },
+    "english-opening.json::English: Symmetrical Variation::1": {
+      "ply": 2,
+      "san": "c5",
+      "plans": [
+        "Mirror White's c4 with c5, creating locked pawn tension",
+        "Keep d4 and e4 squares contested between knight placement"
+      ],
+      "alternative": "Nf6 — develop immediately without symmetry"
+    },
+    "english-opening.json::English: Symmetrical Variation::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support c4 pawn and prepare fianchetto with g3",
+        "Occupy c3 outpost, control d5 and e4 squares"
+      ],
+      "alternative": "g3 — fianchetto immediately"
+    },
+    "english-opening.json::English: Symmetrical Variation::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Mirror with Nc6, challenging c4 and controlling d4",
+        "Prepare e6 advance or d6 to support c5 pawn"
+      ],
+      "alternative": "e6 — support c5 pawn structure"
+    },
+    "english-opening.json::English: Symmetrical Variation::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto kingside bishop onto long diagonal toward d4",
+        "Support g2 bishop by clearing g-file, weaken f6 escape square"
+      ],
+      "alternative": "d4 — challenge c5 pawn immediately"
+    },
+    "english-opening.json::English: Symmetrical Variation::5": {
+      "ply": 6,
+      "san": "g6",
+      "plans": [
+        "Mirror fianchetto, place bishop on g7 attacking long diagonal",
+        "Control d4 and f5 squares with fianchettoed bishop"
+      ],
+      "alternative": "e6 — solidify d5 and support center"
+    },
+    "english-opening.json::English: Symmetrical Variation::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Complete kingside setup with Bg2 on long diagonal",
+        "Prepare castling kingside and control a1-h8 diagonal"
+      ],
+      "alternative": "Bg5 — pin Nf6 and pressure center"
+    },
+    "english-opening.json::English: Symmetrical Variation::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Complete knight development on f3, prepare castling kingside",
+        "Support e4 advance and d1-h5 diagonal with Nf3"
+      ],
+      "alternative": "e4 — break symmetry, open e-file"
+    },
+    "english-opening.json::English: Symmetrical Variation::9": {
+      "ply": 10,
+      "san": "Nf6",
+      "plans": [
+        "Mirror Nf3 with Nf6, maintain symmetry and prepare castling",
+        "Control d5 and e4 with knight on f6"
+      ],
+      "alternative": "d6 — prepare e6, solidify pawn center"
+    },
+    "english-opening.json::English: Symmetrical Variation::12": {
+      "ply": 13,
+      "san": "d3",
+      "plans": [
+        "Advance d3 pawn, support e4 advance and c4 pawn",
+        "Prepare e4 break, seize space in center"
+      ],
+      "alternative": "e4 — force center confrontation immediately"
+    },
+    "english-opening.json::English: Symmetrical Variation::15": {
+      "ply": 16,
+      "san": "a6",
+      "plans": [
+        "Prepare b4 break by supporting with a3 and Rb1 next.",
+        "Control d5 square against Black's knight from c6."
+      ],
+      "alternative": "Nd5 — provoke Black knight to d7 or e7 immediately"
+    },
+    "english-opening.json::English: Symmetrical Variation::16": {
+      "ply": 17,
+      "san": "Rb1",
+      "plans": [
+        "Support b4 break; rook activates along b-file after pawn advance.",
+        "Prepare queenside expansion against Black's c5 pawn."
+      ],
+      "alternative": "b4 — immediate queenside tension without rook preparation"
+    },
+    "english-opening.json::English: Symmetrical Variation::18": {
+      "ply": 19,
+      "san": "b4",
+      "plans": [
+        "Fix c5 pawn; dominate b4 square with central control.",
+        "Prevent Black c5xb4; force Black decision on queen-side structure."
+      ],
+      "alternative": "Be3 — consolidate center and prepare Nh4 reroute"
+    },
+    "english-opening.json::English: Symmetrical Variation::20": {
+      "ply": 21,
+      "san": "axb4",
+      "plans": [
+        "Recapture toward center; b4 square becomes White outpost.",
+        "Reposition a3 rook to b1 for queenside pressure."
+      ],
+      "alternative": "cxb4 — open c-file and centralize White's queen rook"
+    },
+    "english-opening.json::English: Symmetrical Variation::21": {
+      "ply": 22,
+      "san": "b5",
+      "plans": [
+        "Attack weak b4 pawn; queen-side pawns become advanced threats.",
+        "Restrict White's pieces; prepare c5 counterplay through c4."
+      ],
+      "alternative": "a5 — prevent b4 advance and fix White's queenside"
+    },
+    "english-opening.json::English: Symmetrical Variation::24": {
+      "ply": 25,
+      "san": "Bd2",
+      "plans": [
+        "Develop dark-squared bishop to support central d5 square.",
+        "Prepare e3-d4 pawn push or reroute pieces via d2."
+      ],
+      "alternative": "e4 — grab central space and advance kingside presence"
+    },
+    "english-opening.json::English: Symmetrical Variation::27": {
+      "ply": 28,
+      "san": "Nxd5",
+      "plans": [
+        "Nxd5 captures knight; recentralizes White's knight from f3.",
+        "Exchange defender of c7; open d-file for rook pressure."
+      ],
+      "alternative": "Nxe5 — grab center pawn and reroute f3 knight"
+    },
+    "english-opening.json::English: Four Knights Variation::0": {
+      "ply": 1,
+      "san": "c4",
+      "plans": [
+        "Control d5 and e5 squares; prepare fianchetto setup on kingside",
+        "Challenge Black's center; keep c-file open for rook activity"
+      ],
+      "alternative": "d4 — direct central occupation"
+    },
+    "english-opening.json::English: Four Knights Variation::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Occupy e5 center square; prevent White's d4 expansion",
+        "Create tension on e5; force White's knight placement decision"
+      ],
+      "alternative": "Nf6 — develop knight and attack c4 pawn immediately"
+    },
+    "english-opening.json::English: Four Knights Variation::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support d5 control; prepare fianchetto with g3 move",
+        "Centralize queen's knight; restrict Black's Nc6 and Nf6"
+      ],
+      "alternative": "d4 — challenge e5 pawn and open center"
+    },
+    "english-opening.json::English: Four Knights Variation::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Contest c4 and e5 squares with centralized knight on f6",
+        "Attack the c4 pawn indirectly; prepare flexible pawn structure"
+      ],
+      "alternative": "d5 — strike c4 and occupy central square immediately"
+    },
+    "english-opening.json::English: Four Knights Variation::4": {
+      "ply": 5,
+      "san": "Nf3",
+      "plans": [
+        "Complete knight development on f3; support g3-fianchetto plan",
+        "Control e5 and d4 squares; prevent ...d5 break cleanly"
+      ],
+      "alternative": "d4 — open e-file and challenge e5 pawn directly"
+    },
+    "english-opening.json::English: Four Knights Variation::5": {
+      "ply": 6,
+      "san": "Nc6",
+      "plans": [
+        "Complete knight development on c6; support e5 pawn",
+        "Prepare ...Bb4 pin or ...a6 move; keep options flexible"
+      ],
+      "alternative": "d6 — solidify e5 pawn and prepare kingside castling"
+    },
+    "english-opening.json::English: Four Knights Variation::6": {
+      "ply": 7,
+      "san": "g3",
+      "plans": [
+        "Launch fianchetto; station bishop on g2 to control long diagonal",
+        "Prepare O-O kingside castling; support bishop pair formation"
+      ],
+      "alternative": "d3 — solidify center pawn and prepare fianchetto from start"
+    },
+    "english-opening.json::English: Four Knights Variation::8": {
+      "ply": 9,
+      "san": "Bg2",
+      "plans": [
+        "Complete fianchetto development; bishop controls long diagonal from g2",
+        "Solidify kingside with fianchetto structure; prepare kingside castling"
+      ],
+      "alternative": "O-O — immediately castle kingside and activate rook"
+    },
+    "english-opening.json::English: Four Knights Variation::9": {
+      "ply": 10,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside and activate king's rook to open files",
+        "Secure king on g8; prepare rook deployment along f-file"
+      ],
+      "alternative": "exd4 — capture d3 pawn and open center files"
+    },
+    "english-opening.json::English: Four Knights Variation::12": {
+      "ply": 13,
+      "san": "d3",
+      "plans": [
+        "Solidify d3 pawn; prevent ...d4 advance and block center",
+        "Support Nc3 knight; maintain tension on e4 square"
+      ],
+      "alternative": "dxe4 — capture e4 pawn and open d-file for rook"
+    },
+    "english-opening.json::English: Four Knights Variation::15": {
+      "ply": 16,
+      "san": "Bc5",
+      "plans": [
+        "Black's Bc5 pins the f2 pawn and targets weak a7-g1 diagonal.",
+        "White's Nd5 outpost pressures f6 knight and eyes f4 or b6 jumps."
+      ],
+      "alternative": "Nxf6+ — force recapture to disrupt Black's piece coordination"
+    },
+    "english-opening.json::English: Four Knights Variation::16": {
+      "ply": 17,
+      "san": "Bg5",
+      "plans": [
+        "Bg5 attacks f6 knight and forces commitment on kingside.",
+        "If Nxd5, cxd5 opens c-file and damages Black's pawn structure."
+      ],
+      "alternative": "h3 — secure g3, prevent ...Ng4 and ...Nxe4 jumps"
+    },
+    "english-opening.json::English: Four Knights Variation::18": {
+      "ply": 19,
+      "san": "Bxf6",
+      "plans": [
+        "Bxf6 removes f6 knight defender, weakens e7 and g7 squares.",
+        "After recapture, White threatens Nd5 pressure on e7 and c7."
+      ],
+      "alternative": "Be7 — keep knight on f6 as key defender"
+    },
+    "english-opening.json::English: Four Knights Variation::20": {
+      "ply": 21,
+      "san": "Nd2",
+      "plans": [
+        "Nd2 blocks e4 pawn advance and supports c4 pawn.",
+        "Prepares Nf3-e5 jump or Nc4 to target a5 and d6."
+      ],
+      "alternative": "Rc1 — activate rook on open file, pressure c6 and c7"
+    },
+    "english-opening.json::English: Four Knights Variation::21": {
+      "ply": 22,
+      "san": "Qg6",
+      "plans": [
+        "Qg6 attacks g7 and threatens Nxc6 tactics on dark squares.",
+        "Black must defend g7 carefully and guard against back-rank ideas."
+      ],
+      "alternative": "Ne5 — centralize knight, fork queen and threaten Nf7 trap"
+    },
+    "english-opening.json::English: Four Knights Variation::24": {
+      "ply": 25,
+      "san": "b4",
+      "plans": [
+        "b4 attacks Bc5 and gains space on queenside with tempo.",
+        "After Bxb4, axb4 opens a-file and weakens Black's queenside."
+      ],
+      "alternative": "Rc1 — control c-file, pressure c6 pawn and c7 square"
+    },
+    "english-opening.json::English: Botvinnik System::0": {
+      "ply": 1,
+      "san": "c4",
+      "plans": [
+        "Control d5 and e5 squares with c4 pawn",
+        "Prepare fianchetto by supporting g3 bishop placement"
+      ],
+      "alternative": "e4 — center-first approach, different strategic setup"
+    },
+    "english-opening.json::English: Botvinnik System::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Challenge c4 pawn; occupy central e5 square",
+        "Provoke White decision on e-pawn and center tension"
+      ],
+      "alternative": "c5 — counter-attack c4 pawn immediately"
+    },
+    "english-opening.json::English: Botvinnik System::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Support c4 and control d5 with knight on c3",
+        "Prepare long fianchetto by keeping g3 and Bg2 squares available"
+      ],
+      "alternative": "Nf3 — develop knight, sidestep immediate pressure on c4"
+    },
+    "english-opening.json::English: Botvinnik System::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Place knight on c6 to defend e5 pawn and control d4",
+        "Prepare bishop development to g7 after g6"
+      ],
+      "alternative": "Nf6 — develop flexibly, keep options for center play"
+    },
+    "english-opening.json::English: Botvinnik System::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Execute fianchetto setup; place bishop on g2 after g3",
+        "Control long diagonal and maintain flexible pawn center"
+      ],
+      "alternative": "e3 — solid prophylactic setup before fianchetto"
+    },
+    "english-opening.json::English: Botvinnik System::5": {
+      "ply": 6,
+      "san": "g6",
+      "plans": [
+        "Complete fianchetto by playing g6; prepare Bg7 placement",
+        "Control long diagonal from g2-bishop and d5 outpost"
+      ],
+      "alternative": "d6 — support e5, prepare flexible center structure"
+    },
+    "english-opening.json::English: Botvinnik System::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Fianchetto bishop controls long diagonal toward a1",
+        "Prepare castling kingside with bishop on g2 secure"
+      ],
+      "alternative": "Nf3 — develop knight before committing bishop placement"
+    },
+    "english-opening.json::English: Botvinnik System::8": {
+      "ply": 9,
+      "san": "e4",
+      "plans": [
+        "Advance e4 pawn; claim central space and constrain e5",
+        "Create tension in center and prepare f-file opening for rook"
+      ],
+      "alternative": "f4 — attack e5 directly with pawn aggression"
+    },
+    "english-opening.json::English: Botvinnik System::9": {
+      "ply": 10,
+      "san": "d6",
+      "plans": [
+        "Support e5 with d6; solidify pawn structure against White center",
+        "Prepare bishop placement on e6 or f6 after d6 anchor"
+      ],
+      "alternative": "Nxe4 — capture e4, eliminate White's central outpost"
+    },
+    "english-opening.json::English: Botvinnik System::12": {
+      "ply": 13,
+      "san": "d3",
+      "plans": [
+        "Anchor d3 pawn; support e4 and control c4-b5 squares",
+        "Complete White development while maintaining flexible pawn structure"
+      ],
+      "alternative": "Nf3 — develop knight and keep tension in center"
+    },
+    "english-opening.json::English: Botvinnik System::15": {
+      "ply": 16,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside to connect rooks and shield the king",
+        "Prepare Nd5 to attack c6-knight and e7-square"
+      ],
+      "alternative": "Nh4 — reroute knight to attack f5-pawn via g6"
+    },
+    "english-opening.json::English: Botvinnik System::16": {
+      "ply": 17,
+      "san": "Nd5",
+      "plans": [
+        "Nd5 challenges c6-knight and pressures e7-square",
+        "Force Black to decide: trade knight or allow Nxc6"
+      ],
+      "alternative": "Nxe5 — capture center pawn but allows Nxe5 tactics"
+    },
+    "english-opening.json::English: Botvinnik System::18": {
+      "ply": 19,
+      "san": "cxd5",
+      "plans": [
+        "cxd5 opens c-file for future rook placement",
+        "d5-pawn becomes strong central post controlling c6 and e6"
+      ],
+      "alternative": "Nxd5 — keep knight centralized, avoid isolated pawn"
+    },
+    "english-opening.json::English: Botvinnik System::20": {
+      "ply": 21,
+      "san": "f4",
+      "plans": [
+        "f4 attacks e5-pawn and opens lines toward Black's king",
+        "Break Black's center and expose dark squares near g6"
+      ],
+      "alternative": "Nf4 — target d6-pawn and support e4-center"
+    },
+    "english-opening.json::English: Botvinnik System::21": {
+      "ply": 22,
+      "san": "exf4",
+      "plans": [
+        "exf4 recaptures and maintains central tension with d5-pawn",
+        "Half-open e-file now available for rook activation"
+      ],
+      "alternative": "gxf4 — keep fianchettoed bishop and pawn shield intact"
+    },
+    "english-opening.json::English: Botvinnik System::24": {
+      "ply": 25,
+      "san": "dxc6",
+      "plans": [
+        "dxc6 opens d-file and creates isolated c6-pawn structure",
+        "White's d-file rook will pressure Black's weak d6-pawn"
+      ],
+      "alternative": "bxc6 — maintain bishop pair and avoid c-pawn advance"
+    },
+    "english-opening.json::English: Reversed Sicilian::0": {
+      "ply": 1,
+      "san": "c4",
+      "plans": [
+        "Control d5 and e5 squares; prepare to support with Nf3.",
+        "Keep c4 pawn flexible for d4 or cxd5 exchanges later."
+      ],
+      "alternative": "1.Nf3 — develops immediately; less space-gaining than c4."
+    },
+    "english-opening.json::English: Reversed Sicilian::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Counter White's c4 by securing e5; block d4 advance.",
+        "Support e5 with Nc6 or Nf6 to maintain central presence."
+      ],
+      "alternative": "2...c6 — Caro-Kann setup; solidifies queenside control."
+    },
+    "english-opening.json::English: Reversed Sicilian::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Develop queen's knight to c3; support d4 or e4 later.",
+        "Attack e5 indirectly; prepare pressure on Nc6."
+      ],
+      "alternative": "3.g3 — fianchetto; delays Nc3 but prepares kingside setup."
+    },
+    "english-opening.json::English: Reversed Sicilian::3": {
+      "ply": 4,
+      "san": "Nf6",
+      "plans": [
+        "Develop kingside knight; defend e5 and control key squares.",
+        "Pressure d4 square and c4 pawn with Nf6."
+      ],
+      "alternative": "4...d6 — solid structure; supports e5 without Nf6."
+    },
+    "english-opening.json::English: Reversed Sicilian::4": {
+      "ply": 5,
+      "san": "Nf3",
+      "plans": [
+        "Complete kingside development; prepare to support d4 or g3 fianchetto.",
+        "Control e5 and d5 squares with both knights."
+      ],
+      "alternative": "5.d4 — direct challenge; opens lines for Bg5 or Bf4."
+    },
+    "english-opening.json::English: Reversed Sicilian::5": {
+      "ply": 6,
+      "san": "Nc6",
+      "plans": [
+        "Develop queen's knight; support d5 invasion and e5 defense.",
+        "Threaten both c4 and support e5 pawn fully."
+      ],
+      "alternative": "6...d6 — reinforce e5; prepare Bg4 or Be7 development."
+    },
+    "english-opening.json::English: Reversed Sicilian::6": {
+      "ply": 7,
+      "san": "g3",
+      "plans": [
+        "Fianchetto kingside bishop; control long diagonal toward a1.",
+        "Prepare O-O castling; strengthen king-side pawn structure."
+      ],
+      "alternative": "7.d4 — open play immediately; challenge e5 center directly."
+    },
+    "english-opening.json::English: Reversed Sicilian::8": {
+      "ply": 9,
+      "san": "cxd5",
+      "plans": [
+        "Recapture on d5; centralize knight and maintain material.",
+        "Control c3 and e3 squares after Nxd5."
+      ],
+      "alternative": "9...Qxd5 — queen recapture; activate queen toward White's kingside."
+    },
+    "english-opening.json::English: Reversed Sicilian::9": {
+      "ply": 10,
+      "san": "Nxd5",
+      "plans": [
+        "Centralize knight on d5; attack Nf3 and control c3 outpost.",
+        "Maintain pressure on d5; knight on d5 shields e4 intrusion."
+      ],
+      "alternative": "10...Qxd5 — develop queen instead; faster toward O-O."
+    },
+    "english-opening.json::English: Reversed Sicilian::12": {
+      "ply": 13,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside; secure king away from tactical sequences.",
+        "Connect rooks; prepare to challenge d4 or support center."
+      ],
+      "alternative": "13...Bg4 — pin Nf3 immediately; force White to respond."
+    },
+    "english-opening.json::English: Reversed Sicilian::15": {
+      "ply": 16,
+      "san": "O-O",
+      "plans": [
+        "Fianchettoed bishop on g2 controls long diagonal toward b7",
+        "Knights on c3 and f3 control central squares d5 and e5"
+      ],
+      "alternative": "Bf4 — develops bishop to active square outside fianchetto"
+    },
+    "english-opening.json::English: Reversed Sicilian::16": {
+      "ply": 17,
+      "san": "Be3",
+      "plans": [
+        "Bishop e3 supports d4 push and controls central light squares",
+        "Rook lift possible via a1 to c1 pressuring center"
+      ],
+      "alternative": "Nxe5 — capture e5 pawn but allows Nxe5 repetition"
+    },
+    "english-opening.json::English: Reversed Sicilian::18": {
+      "ply": 19,
+      "san": "Rc1",
+      "plans": [
+        "Rook c1 pressures c6 knight and threatens c-file tactics",
+        "Support d4 advance to dominate dark squares d5 and e5"
+      ],
+      "alternative": "a3 — prepares Nb5 fork threat against e7 bishop"
+    },
+    "english-opening.json::English: Reversed Sicilian::20": {
+      "ply": 21,
+      "san": "Na4",
+      "plans": [
+        "Knight a4 attacks b6 knight forcing it to d7 or a8",
+        "Removes defender from c6 enabling central d4 breakthrough"
+      ],
+      "alternative": "d4 — immediate central break before piece placement complete"
+    },
+    "english-opening.json::English: Reversed Sicilian::21": {
+      "ply": 22,
+      "san": "Nxa4",
+      "plans": [
+        "Recapture with knight removes b6 piece and eyes d5 outpost",
+        "Queen develops via d3 or f3 after knight repositions"
+      ],
+      "alternative": "bxa4 — retains a4 pawn but doubles b-pawns"
+    },
+    "english-opening.json::English: Reversed Sicilian::24": {
+      "ply": 25,
+      "san": "Rfd1",
+      "plans": [
+        "Rook d1 supports d3-d4 advance and controls d-file tactics",
+        "Queen a4 pressures a7 and d7 squares via diagonal"
+      ],
+      "alternative": "Rcd1 — duplicate rook placement blocks c-file control"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::0": {
+      "ply": 1,
+      "san": "c4",
+      "plans": [
+        "Control d5 and e5 squares with c4 pawn outpost",
+        "Prepare to fianchetto kingside bishop via g2"
+      ],
+      "alternative": "1.Nf3 — transpose to quieter Reti setup"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Black stakes claim to center with e5 wedge",
+        "Support e5 pawn and limit White's d4 break"
+      ],
+      "alternative": "1...c5 — fight for d4 square more directly"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::2": {
+      "ply": 3,
+      "san": "Nc3",
+      "plans": [
+        "Attack e5 pawn; prepare fianchetto on long diagonal",
+        "Nc3 supports future d3-d4 advance against wedge"
+      ],
+      "alternative": "3.d4 — challenge e5 pawn immediately, accept tension"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn with Nc6 knight on active square",
+        "Nc6 controls d4 and prevents White d3-d4 push"
+      ],
+      "alternative": "3...Bg7 — fianchetto first, delay Nc6 placement"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::4": {
+      "ply": 5,
+      "san": "g3",
+      "plans": [
+        "Fianchetto kingside bishop via g2 on long diagonal",
+        "g3 prepares solid setup targeting Black's e5 wedge"
+      ],
+      "alternative": "5.Nf3 — develop knight before g3, keep options open"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::5": {
+      "ply": 6,
+      "san": "g6",
+      "plans": [
+        "Fianchetto g6 pawn to control long diagonal f1-h8",
+        "Prepare Bg7 to pressure White's center and d4"
+      ],
+      "alternative": "5...f6 — defend e5 pawn, avoid kingside fianchetto"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::6": {
+      "ply": 7,
+      "san": "Bg2",
+      "plans": [
+        "Bg2 bishop now targets long diagonal through e4",
+        "Fianchettoed Bg2 bears down on Black's d5 square"
+      ],
+      "alternative": "7.cxe5 — capture wedge, simplify position structure"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::8": {
+      "ply": 9,
+      "san": "d3",
+      "plans": [
+        "d3 pawn solidifies center, prepares e4 break later",
+        "d3 supports e4 push to displace Black's e5 wedge"
+      ],
+      "alternative": "9.O-O — castle kingside, connect rooks first"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::9": {
+      "ply": 10,
+      "san": "d6",
+      "plans": [
+        "d6 pawn shields c6 knight and supports e5 wedge",
+        "Black stabilizes e5 pawn; prepares f5 or f6"
+      ],
+      "alternative": "9...f5 — immediately challenge White's e4 break threat"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::12": {
+      "ply": 13,
+      "san": "Nge2",
+      "plans": [
+        "Nge2 supports f4 break to attack e5-f5 pawn duo",
+        "Knight reroutes from g1 to f4 via e2 square"
+      ],
+      "alternative": "13.Nf3 — develop knight to natural square, delay f4"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::15": {
+      "ply": 16,
+      "san": "O-O",
+      "plans": [
+        "Push f4 to challenge Black's e5-f5 pawn wedge and open lines",
+        "Develop dark-squared bishop to e3, supporting f4 advance"
+      ],
+      "alternative": "Nh4 — reroute knight to f3 via h4, avoiding f5 pawn"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::16": {
+      "ply": 17,
+      "san": "f4",
+      "plans": [
+        "After fxe5, recapture with knight to centralize and attack d6",
+        "Keep f-file semi-open; monitor Black's dark-squared bishop on g7"
+      ],
+      "alternative": "exf5 — capture f5, accept doubled f-pawns for open lines"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::18": {
+      "ply": 19,
+      "san": "Nxf4",
+      "plans": [
+        "Recapture with e5, attacking d6 pawn and opening e-file",
+        "Place rook on e1 to pressure d6 and the e-file"
+      ],
+      "alternative": "gxf4 — avoid doubled f-pawns, keep kingside solid"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::20": {
+      "ply": 21,
+      "san": "Nfd5",
+      "plans": [
+        "Attack d5 knight immediately with c4-c5 or move d3-d4",
+        "Exploit d5 knight's centralized post by forcing exchanges"
+      ],
+      "alternative": "exd5 — simplify center, accept isolated d5 pawn structure"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::21": {
+      "ply": 22,
+      "san": "Nxd5",
+      "plans": [
+        "Recapture with exd5, creating isolated d5 pawn White targets",
+        "Place rook on d1, pressure the weak d5 pawn from d-file"
+      ],
+      "alternative": "cxd5 — create passed c-pawn, shift queenside imbalance"
+    },
+    "english-opening.json::Botvinnik System e5 Wedge::24": {
+      "ply": 25,
+      "san": "exd5",
+      "plans": [
+        "Black's d6 pawn falls; White's d5 pawn blocks bishop on g7",
+        "Consolidate with Nd4-e4 route, pressuring f6 square"
+      ],
+      "alternative": "Bf6 — blockade d5 pawn, trade light-squared bishops"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 squares with central pawn.",
+        "Open lines for queen and light-squared bishop development."
+      ],
+      "alternative": "d4 — symmetric central tension, different opening structure"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's e4 pawn, contest center control.",
+        "Prepare knight development to f6 and c6."
+      ],
+      "alternative": "c5 — Sicilian structure, asymmetric counterplay"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight to f3, support e4 pawn.",
+        "Prepare Bb5 pin or Nxe5 central capture."
+      ],
+      "alternative": "Nc3 — immediate four-knights setup, different move order"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Complete four-knights formation with Nc6.",
+        "Control d4, prepare f6 knight development."
+      ],
+      "alternative": "Nf6 — Ruy Lopez structure, avoid four-knights symmetry"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Develop Nc3, control d5 and open d-file.",
+        "Prepare Bb5 pin on c6 knight."
+      ],
+      "alternative": "Bb5 — immediate pin, transpose main line faster"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Develop Nf6, complete symmetrical minor piece setup.",
+        "Maintain central tension with knights on f6 and f3."
+      ],
+      "alternative": "Bc5 — Two Knights Defense structure, avoid symmetry"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::6": {
+      "ply": 7,
+      "san": "Bb5",
+      "plans": [
+        "Pin Nf6 to king with Bb5, force decision on c6.",
+        "Prepare d3 advance and Bg5 pressure on f6."
+      ],
+      "alternative": "d3 — quiet positional setup, avoid immediate pin"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::8": {
+      "ply": 9,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside, connect rooks and secure king.",
+        "Prepare Re1 pressure on e5 pawn after castling."
+      ],
+      "alternative": "d5 — counterattack center, reject solid position"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::9": {
+      "ply": 10,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside, complete king safety development.",
+        "Prepare d3 advance to support e4 and control c4."
+      ],
+      "alternative": "Nxe4 — trade center pawn, expose White's d3 preparation"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::12": {
+      "ply": 13,
+      "san": "Bg5",
+      "plans": [
+        "Pin Nf6 with Bg5, prepare h4 kingside expansion.",
+        "Create threats on f6, control weak e6 square."
+      ],
+      "alternative": "Re1 — central pressure, less commitment on kingside"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::15": {
+      "ply": 16,
+      "san": "Qe7",
+      "plans": [
+        "Black's queen eyes e4 and a3; prepare h6 to challenge Bh4.",
+        "After h6, Black forces Bh4 or Bxf6, weakening White's kingside."
+      ],
+      "alternative": "Nbd7 — develops queen's knight, prepares f5 break"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::16": {
+      "ply": 17,
+      "san": "Re1",
+      "plans": [
+        "Re1 pins e5 pawn and supports d4 central advance.",
+        "Prepare d4 to attack e5 and open lines toward Black's king."
+      ],
+      "alternative": "a4 — prevents Black's a5, prevents counterplay on queenside"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::18": {
+      "ply": 19,
+      "san": "d4",
+      "plans": [
+        "d4 breaks center; if exd4, e5 square becomes outpost for knight.",
+        "After dxe4, recapture and dominate light squares with Bf4."
+      ],
+      "alternative": "dxe4 — immediately removes e5 tension, simplifies position"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::20": {
+      "ply": 21,
+      "san": "Bh4",
+      "plans": [
+        "Bh4 moves dark-squared bishop to g3 via h4, pressures d6.",
+        "Threaten g5 fork after Bh4; Black must respond precisely."
+      ],
+      "alternative": "Nxe5 — seize central pawn, eliminate Black's key defender"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::21": {
+      "ply": 22,
+      "san": "c6",
+      "plans": [
+        "c6 advance sharpens queenside tension; if bxc6, recapture opens b-file.",
+        "c6-c5 fork threatens d4 pawn and opens lines toward Bg3."
+      ],
+      "alternative": "dxc6 — simplify structure, capture toward Black's king"
+    },
+    "four-knights-game.json::Spanish Four Knights: 4.Bb5 Bb4 Main Line::24": {
+      "ply": 25,
+      "san": "Nxg5",
+      "plans": [
+        "Nxg5 removes Black's kingside defender; threatens h7 and f7.",
+        "After Nxg5, h7 is weak; Qh5 or Qf3 creates mating attack."
+      ],
+      "alternative": "hxg5 — keep pieces on board, h-file opens for rook"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with central pawn",
+        "Open diagonal for f1-bishop and queen"
+      ],
+      "alternative": "c4 — English Opening setup, sidestep main lines"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Occupy e5 square, control d4 and f4",
+        "Prepare Nf6 development attacking e4 pawn"
+      ],
+      "alternative": "d5 — Scandinavian symmetry, trade central tension early"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn, develop knight to active square",
+        "Support potential d4 advance by controlling key squares"
+      ],
+      "alternative": "Bc4 — Two Knights Defense position, pressure f7 immediately"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn with second piece, prepare Nf6",
+        "Occupy c6 square, control d4 and e5 center"
+      ],
+      "alternative": "Nf6 — Develop immediately, avoid Nc3 setup"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Complete knight development, add pressure to e5 and d5",
+        "Control d5 square, prepare d4 central breakthrough"
+      ],
+      "alternative": "Bb5 — Spanish setup, force decision about c6 knight"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Develop knight to f6, attack e4 pawn directly",
+        "Control d5 square, prepare for central tension"
+      ],
+      "alternative": "Bc5 — Occupy long diagonal, attack f2 indirectly"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::6": {
+      "ply": 7,
+      "san": "d4",
+      "plans": [
+        "Advance d-pawn, challenge e5 center and open lines",
+        "Prepare Nxd4 recapture options, maintain e4 pawn control"
+      ],
+      "alternative": "Bg5 — Pin Nf6 knight, apply immediate pressure"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::8": {
+      "ply": 9,
+      "san": "Nxd4",
+      "plans": [
+        "Recapture on d4 with knight, centralize piece after exchange",
+        "Open c-file after Nxd4, control d4 outpost"
+      ],
+      "alternative": "Nxd4 — Same square, different piece continuation"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::9": {
+      "ply": 10,
+      "san": "Bb4",
+      "plans": [
+        "Pin Nc3 knight to e1, force response from White",
+        "Attack c-file and d4 knight with bishop pressure"
+      ],
+      "alternative": "Bc5 — Develop to active diagonal, threaten f2"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::12": {
+      "ply": 13,
+      "san": "Bd3",
+      "plans": [
+        "Develop d3 bishop, support e4 pawn and control dark squares",
+        "Prepare castling kingside, connect rooks and centralize king"
+      ],
+      "alternative": "O-O — Castle immediately, safeguard king despite loose pieces"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::15": {
+      "ply": 16,
+      "san": "cxd5",
+      "plans": [
+        "Recapture with c-pawn to open queenside files for rooks",
+        "Maintain d5 square control; prepare Bg5 pin on f6-knight"
+      ],
+      "alternative": "exd5 — keeps center closed but blocks e-file"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::16": {
+      "ply": 17,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside to connect rooks and shelter king",
+        "Prepare Bg5 immediately after castling to pin f6-knight"
+      ],
+      "alternative": "Re8 — activates rook but weakens kingside castling"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::18": {
+      "ply": 19,
+      "san": "Bg5",
+      "plans": [
+        "Pin f6-knight to queen; if Bxg5 Qxg5 gains time",
+        "Force Black's dark-squared bishop decision after pin"
+      ],
+      "alternative": "Be3 — develops bishop but misses tactical pin pressure"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::20": {
+      "ply": 21,
+      "san": "Qf3",
+      "plans": [
+        "Centralize queen on f3; threaten Nxd5 capturing center pawn",
+        "Support Bg5 and control long diagonal after c6 advance"
+      ],
+      "alternative": "Rd1 — pressures d5 but removes queen from initiative"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::21": {
+      "ply": 22,
+      "san": "Be7",
+      "plans": [
+        "Complete dark-squared bishop development after Bg5 trade threat",
+        "Prepare counterplay on queenside after castling completed"
+      ],
+      "alternative": "Nxd5 — forces exchange but allows Qxd5 centralizing queen"
+    },
+    "four-knights-game.json::Scotch Four Knights: 4.d4 exd4 5.Nxd4::24": {
+      "ply": 25,
+      "san": "Ne2",
+      "plans": [
+        "Reroute c3-knight to f4 or d4 via e2 outpost",
+        "Maintain central tension on d5 while improving knight placement"
+      ],
+      "alternative": "Nxd5 — trades but releases central pressure immediately"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 squares; prepare Nf3 and Nc3 development",
+        "Open e-file for potential queen and rook placement"
+      ],
+      "alternative": "c4 — English Opening setup, flexible pawn structure"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Match White's center control; enable knight development to f6",
+        "Support d-pawn advance or e4 pawn defense"
+      ],
+      "alternative": "c5 — Sicilian Defense, fight for d4 square control"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn; prepare Nc3 to support center pressure",
+        "Enable Bc4 or Bb5 bishop deployment on third move"
+      ],
+      "alternative": "Bc4 — Immediate kingside attacking setup versus Black king"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn; challenge d4 if White plays d4 next",
+        "Enable Nf6 to block e-file and support center"
+      ],
+      "alternative": "exf3 — Expose White's e-file and create doubled pawns"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Control d5 square; pin potential Black bishop on c8",
+        "Support aggressive Nxe5 capture on move 4"
+      ],
+      "alternative": "Bc4 — Immediate diagonal pressure on f7 weakness"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Attack White's knight on e5; control f4 outpost",
+        "Complete kingside piece development toward castling"
+      ],
+      "alternative": "Nd4 — Challenge Nc3 and centralize Black knight"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::6": {
+      "ply": 7,
+      "san": "Nxe5",
+      "plans": [
+        "Eliminate Black's actively-placed knight on e5",
+        "Force Black recapture, opening lines for White's attack"
+      ],
+      "alternative": "Nd5 — Retreat knight, maintain e5 pawn, prepare d4 advance"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::8": {
+      "ply": 9,
+      "san": "d4",
+      "plans": [
+        "Establish d5 outpost pawn; restrict Black knight moves",
+        "Open central lines for White queen and bishop activity"
+      ],
+      "alternative": "Bf4 — Develop light-squared bishop, target d6 and e5"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::9": {
+      "ply": 10,
+      "san": "Nc6",
+      "plans": [
+        "Attack d5 pawn; organize Black pieces around d6 defense",
+        "Challenge d5 pawn stability with knight pressure"
+      ],
+      "alternative": "a6 — Prevent Bb5 pin; prepare e5 pawn push later"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::12": {
+      "ply": 13,
+      "san": "f4",
+      "plans": [
+        "Open f-file toward Black king; weaken f7 dark squares",
+        "Support e5 pawn advance while attacking Black center"
+      ],
+      "alternative": "Bf4 — Develop light-squared bishop, threaten d6"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::15": {
+      "ply": 16,
+      "san": "Ng8",
+      "plans": [
+        "Push e5 pawn forward to open lines against Black's king.",
+        "Ng6 retreats knight; prepare Nf4 to reroute via d5."
+      ],
+      "alternative": "exf6 — grab pawn and open e-file toward king"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::16": {
+      "ply": 17,
+      "san": "d6",
+      "plans": [
+        "d6 fixes pawn; threaten Qxd6 and control light squares.",
+        "Prevent Black queen escape to d8; weaken kingside."
+      ],
+      "alternative": "exf6 — remove defender and expose Black king"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::18": {
+      "ply": 19,
+      "san": "exd6",
+      "plans": [
+        "Capture on d6; isolate d6 pawn from Black's pieces.",
+        "Control central light squares and threaten Qxd6 or Nb5."
+      ],
+      "alternative": "Bg4 — pin knight and avoid exchange on d6"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::20": {
+      "ply": 21,
+      "san": "Nb5",
+      "plans": [
+        "Nb5 forks queen and d6 pawn; queen must move.",
+        "After Qxd6, knight recapture opens d-file threats."
+      ],
+      "alternative": "Nxd6+ — check forces king move, simplify position"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::21": {
+      "ply": 22,
+      "san": "Qxd6",
+      "plans": [
+        "Qxd6 captures pawn; centralize queen on light squares.",
+        "Threaten Nxd6+ and dominate d-file with rook."
+      ],
+      "alternative": "Nxd6+ — remove defender, force Ke7 for check"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::24": {
+      "ply": 25,
+      "san": "Nxd6+",
+      "plans": [
+        "Nxd6+ checks king; forces Ke7 or Kf8 and splits rooks.",
+        "After recapture, knight controls c8 and e8 squares."
+      ],
+      "alternative": "Nf5 — attack queen and reroute toward kingside"
+    },
+    "four-knights-game.json::Halloween Gambit: 4.Nxe5::27": {
+      "ply": 28,
+      "san": "Rxc8",
+      "plans": [
+        "Rxc8 removes rook; d6 knight and open d-file dominate.",
+        "Simplify to endgame where d6 pawn is far advanced."
+      ],
+      "alternative": "Qxc8+ — check and capture, force king response"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 squares; prepare knight development to f3",
+        "Open e-file and long diagonal for bishop and queen"
+      ],
+      "alternative": "d4 — immediate central tension in Queen's Pawn Game"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn; occupy central e5 square",
+        "Allow Nf6 development while defending e5 square"
+      ],
+      "alternative": "c5 — Sicilian structure with counterplay on d4"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn; develop knight to natural f3 square",
+        "Prepare d4 push and support Nc3 development"
+      ],
+      "alternative": "d4 — immediate pawn thrust challenging e5 center"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn; develop knight to c6 outpost",
+        "Prepare f6 defense and maintain central presence"
+      ],
+      "alternative": "Nxe4 — seize central e4 pawn immediately"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Complete kingside knight setup; support d4 advance",
+        "Control d5 square; prepare central break with d4"
+      ],
+      "alternative": "d4 — attack e5 pawn immediately with pawn thrust"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Complete minor piece development; prepare castling kingside",
+        "Defend e5 pawn with knight; eye d4 outpost"
+      ],
+      "alternative": "Bb4 — pin the c3 knight and control long diagonal"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::6": {
+      "ply": 7,
+      "san": "Bb5",
+      "plans": [
+        "Pin Nc6 knight to e8 king; threaten capture on c6",
+        "Control long diagonal b5-e8; force Black's response"
+      ],
+      "alternative": "d4 — break center immediately; attack e5 pawn"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::8": {
+      "ply": 9,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside; secure king on g1",
+        "Connect rooks; prepare f1 rook activation on e1"
+      ],
+      "alternative": "a3 — attack the b4 bishop and force retreat"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::9": {
+      "ply": 10,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside; connect Black's rooks",
+        "Centralize king position; prepare piece coordination"
+      ],
+      "alternative": "Bxc6 — eliminate defender of e5 pawn immediately"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::12": {
+      "ply": 13,
+      "san": "Ne2",
+      "plans": [
+        "Reroute knight from f3 to g3 via e2; support d4 pawn",
+        "Maintain d3-pawn anchor; prepare kingside pressure via g3-f5"
+      ],
+      "alternative": "d4 — strike center immediately; challenge e5 defender"
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::15": {
+      "ply": 16,
+      "san": "Ba5",
+      "plans": [
+        "Reinforce e4 pawn and control c7-b6 diagonal with bishop pair.",
+        "Reroute knight from f3 to g3, preparing f4 pawn break."
+      ],
+      "alternative": "d4 — open center immediately, challenge e5 pawn."
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::16": {
+      "ply": 17,
+      "san": "Ng3",
+      "plans": [
+        "Position knight on g3 to support f4 advance and e4 center.",
+        "Prepare f4 to disrupt Black's e5 pawn support structure."
+      ],
+      "alternative": "Nh5 — attack f6 knight, force it to g8 or retreat."
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::18": {
+      "ply": 19,
+      "san": "d4",
+      "plans": [
+        "Open d-file with d4, attacking e5 pawn and creating pawn tension.",
+        "Force Black's d6 pawn backward or accept isolated d6 structure."
+      ],
+      "alternative": "f4 — immediate pawn break targeting e5 center immediately."
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::20": {
+      "ply": 21,
+      "san": "Bg5",
+      "plans": [
+        "Pin f6 knight to queen on d8 with bishop on g5.",
+        "Threaten f6 knight, limit Black's defensive resources on kingside."
+      ],
+      "alternative": "Nxe5 — capture e5 pawn, remove Black's central support."
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::21": {
+      "ply": 22,
+      "san": "h6",
+      "plans": [
+        "Attack h6 pawn with Nxe5, forcing weakening or piece trade.",
+        "Retreat bishop from g5 to f4 if h6 blocks pinning pressure."
+      ],
+      "alternative": "Bxf6 — trade light-squared bishops, simplify king position."
+    },
+    "four-knights-game.json::Symmetrical Variation: 4.Bb5 Bb4::24": {
+      "ply": 25,
+      "san": "Qd2",
+      "plans": [
+        "Connect rooks on first rank, prepare queen-bishop coordination on d2.",
+        "Centralize queen to d2, control e3 and d4 square tensions."
+      ],
+      "alternative": "Nxe5 — capture e5 pawn, force Black rook trade on e-file."
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 squares, prepare kingside attack",
+        "Open central lines for queen and light-squared bishop"
+      ],
+      "alternative": "c4 — English Opening, sidestep main-line theory"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, contest d4 square immediately",
+        "Restrict White's space advantage in center"
+      ],
+      "alternative": "c5 — Sicilian Defense, asymmetrical center control"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn, develop knight toward f3 outpost",
+        "Support d4 advance, prepare kingside pressure"
+      ],
+      "alternative": "d4 — aggressive immediate center break"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn with knight, control d4",
+        "Place knight on c6 for flexible development"
+      ],
+      "alternative": "Bc5 — Two Knights Defense, sharper counterplay"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Complete kingside knight placement, support d4",
+        "Double knights on weak f7 square near Black's king"
+      ],
+      "alternative": "Bb5 — Spanish-style pin on c6 knight"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Defend e4 pawn, prepare kingside castling",
+        "Create f6 outpost threat with doubled knights"
+      ],
+      "alternative": "Bc5 — Two Knights Defense, two bishops control"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::6": {
+      "ply": 7,
+      "san": "Bc4",
+      "plans": [
+        "Target f7 weak pawn with bishop, threaten Bxf7 tactic",
+        "Prepare mating attack via f7, align bishop on a2-g8"
+      ],
+      "alternative": "d4 — d4 advance, classic Four Knights center"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::8": {
+      "ply": 9,
+      "san": "Bxf7+",
+      "plans": [
+        "Seize f7 with check, expose Black's king to middle board",
+        "Force king to f7, activate queen and Neg5 for mating net"
+      ],
+      "alternative": "d4 — center development, avoid immediate tactics"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::9": {
+      "ply": 10,
+      "san": "Kxf7",
+      "plans": [
+        "Drive king to f7 where it faces Ne5-g4 mating threats",
+        "Expose Black king to raking bishop fire on a2-g8"
+      ],
+      "alternative": "Ke7 — retreat toward center, less exposed"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::12": {
+      "ply": 13,
+      "san": "Neg5+",
+      "plans": [
+        "Check from g5, pin queen via discovered attack from bishop",
+        "Force king move, coordinate Nf3-e5 knight maneuvers for mate"
+      ],
+      "alternative": "Nxe5 — simple material gain, less forcing"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::15": {
+      "ply": 16,
+      "san": "e4",
+      "plans": [
+        "Exd5 removes Black's central pawn and opens lines toward f7",
+        "Nxd5 centralizes knight and attacks c7 after exd4"
+      ],
+      "alternative": "Nxd5 — centralizes immediately, threatens c7"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::16": {
+      "ply": 17,
+      "san": "Nh3",
+      "plans": [
+        "Nh3 prepares f4 to drive Black's bishop from center",
+        "Develop dark-squared bishop while keeping e-file for rook pressure"
+      ],
+      "alternative": "dxe5 — simplifies and opens d-file for rook"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::18": {
+      "ply": 19,
+      "san": "Nf4",
+      "plans": [
+        "Nf4 attacks bishop on g4 and centralizes the knight",
+        "Rook moves to e1 after Nf4, pressuring e4 pawn"
+      ],
+      "alternative": "exd5 — captures toward center, simplifies Black's position"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::20": {
+      "ply": 21,
+      "san": "c3",
+      "plans": [
+        "c3 stabilizes d4 and prepares Kh1 to clear back rank",
+        "Support d4 pawn so Black cannot take with advantage"
+      ],
+      "alternative": "Be3 — develops bishop and reinforces d4 pawn"
+    },
+    "four-knights-game.json::Italian Four Knights: 4.Bc4::21": {
+      "ply": 22,
+      "san": "Qf6",
+      "plans": [
+        "Trap bishop on g4 by playing h3, forcing it to commit",
+        "Kh1 removes king from back rank, prepares kingside rook moves"
+      ],
+      "alternative": "Nxg4 — trade pieces, eliminate Black's active bishop"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with central pawn.",
+        "Prepare Nf3 and Nc3 to complete opening setup."
+      ],
+      "alternative": "d4 — alternative classical center setup"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's e4 with e5, occupy center.",
+        "Support e5 pawn and prepare Nc6 deployment."
+      ],
+      "alternative": "c5 — Sicilian Defense sidestep"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight to f3, support d4 square.",
+        "Open b1–h7 diagonal for future bishop."
+      ],
+      "alternative": "d4 — direct central challenge immediately"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Develop queen's knight to c6, control d4.",
+        "Complete minor-piece development before castling."
+      ],
+      "alternative": "Nxe4 — capture center pawn aggressively"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Complete kingside knight development to c3.",
+        "Control d5 and support center e4 pawn."
+      ],
+      "alternative": "d4 — challenge e5, open lines immediately"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Develop kingside knight to f6, attack e4.",
+        "Create central tension; White must respond."
+      ],
+      "alternative": "Nxe4 — capture center pawn directly"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::6": {
+      "ply": 7,
+      "san": "Bb5",
+      "plans": [
+        "Pin Nc6 to king on e8 with Bb5.",
+        "Force Black to address pin before development."
+      ],
+      "alternative": "d4 — central breakthrough, open lines"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::8": {
+      "ply": 9,
+      "san": "Nxd4",
+      "plans": [
+        "Recapture with exd4, maintain central pawn.",
+        "Open e-file for future rook activity."
+      ],
+      "alternative": "cxd4 — c-pawn recapture, different structure"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::9": {
+      "ply": 10,
+      "san": "exd4",
+      "plans": [
+        "White holds d4 pawn after exd4 recapture.",
+        "Black's c-pawn advances to c3, threatens d2."
+      ],
+      "alternative": "Nxd4 — knight recapture instead of pawn"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::12": {
+      "ply": 13,
+      "san": "exf6",
+      "plans": [
+        "exf6 captures knight, weakens Black's kingside.",
+        "f6 pawn advances; creates holes near Black king."
+      ],
+      "alternative": "Nxf6+ — knight capture with check"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::15": {
+      "ply": 16,
+      "san": "Qe5+",
+      "plans": [
+        "Check Black's king on e8 and force it to move or block",
+        "Centralize queen on e5 to dominate light squares and control d4"
+      ],
+      "alternative": "Qd2 — safer square, avoids immediate forcing tactics"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::16": {
+      "ply": 17,
+      "san": "Qe2",
+      "plans": [
+        "Retreat queen to e2 to defend king and avoid further checks",
+        "Support c3 pawn and prepare kingside castling"
+      ],
+      "alternative": "Qc4 — active queen placement, targets f7 and c6"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::18": {
+      "ply": 19,
+      "san": "Bxe2",
+      "plans": [
+        "Remove White's light-squared bishop from b5, easing Black's pieces",
+        "Eliminate attacker of c6 and improve king safety"
+      ],
+      "alternative": "Nxe2 — develop knight while removing bishop"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::20": {
+      "ply": 21,
+      "san": "Bf3",
+      "plans": [
+        "Fianchetto bishop on f3 to control long diagonal and e2 square",
+        "Prepare kingside castling and support e1 king"
+      ],
+      "alternative": "Bd2 — defends against Bxc3+ and keeps bishop on c1-h6 diagonal"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::21": {
+      "ply": 22,
+      "san": "d5",
+      "plans": [
+        "Advance d-pawn to d5, hitting c4 square and fighting center",
+        "Break White's pawn chain with tempo on vulnerable c3 pawn"
+      ],
+      "alternative": "Bd6 — develops bishop, defends against back-rank ideas"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::24": {
+      "ply": 25,
+      "san": "Re1+",
+      "plans": [
+        "Give check on e1 forcing white king to f2 or h1",
+        "Activate rook with tempo and assess king safety"
+      ],
+      "alternative": "c5 — block e1 check, advance queenside pawn"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::27": {
+      "ply": 28,
+      "san": "Be5",
+      "plans": [
+        "Place bishop on e5 to control central d4 and f4 squares",
+        "Attack c3 pawn indirectly and centralize dark-squared bishop"
+      ],
+      "alternative": "Bxf3 — eliminate White's active fianchettoed bishop on f3"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::28": {
+      "ply": 29,
+      "san": "c4",
+      "plans": [
+        "Advance c4 pawn attacking d5 and creating passed pawn possibility",
+        "Squeeze Black's position by controlling c4-d5 complex"
+      ],
+      "alternative": "exd5 — recapture and simplify, remove Black's central tension"
+    },
+    "four-knights-game.json::Rubinstein Variation: 4.Bb5 Nd4::30": {
+      "ply": 31,
+      "san": "Bd2",
+      "plans": [
+        "Develop queen's bishop to d2 supporting c1-h6 and e3 squares",
+        "Prepare to challenge Black's centralized pieces or support c4 advance"
+      ],
+      "alternative": "Bxd5 — eliminate Black's centralized bishop, open b-file"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawn",
+        "Enable Nf3 and Bc4 development on next moves"
+      ],
+      "alternative": "d4 — symmetrical center, less forcing than e4"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, contest central control",
+        "Prepare Nf6 and Bc5 counterplay"
+      ],
+      "alternative": "c5 — Sicilian-style asymmetry, avoids symmetry"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight to control d4 and e5",
+        "Support e4 pawn, enable Bc4 attack"
+      ],
+      "alternative": "Bc4 — immediate diagonal pressure, delays knight"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn with second piece",
+        "Pin Bb5 if it moves to attack queen"
+      ],
+      "alternative": "Nxe4 — capture center immediately, risks complications"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Complete four-knight setup with third defender",
+        "Prepare d3 or d4 pawn advance"
+      ],
+      "alternative": "Bc4 — bishop pair and attack, less solid than Nc3"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Develop final knight, attack e4 pawn",
+        "Prepare kingside castling to safety"
+      ],
+      "alternative": "Qe7 — Metzger Unpin unpins immediately, passive setup"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::6": {
+      "ply": 7,
+      "san": "Bb5",
+      "plans": [
+        "Pin Nf6 to queen on e7, pressure a6",
+        "Threaten Na4 fork if Black plays a6"
+      ],
+      "alternative": "Bc4 — direct diagonal attack, less restraining than Bb5"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::8": {
+      "ply": 9,
+      "san": "O-O",
+      "plans": [
+        "Tuck king to g1 for safety",
+        "Connect rooks on first rank"
+      ],
+      "alternative": "Nxe5 — capture central pawn immediately, risks tactics"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::9": {
+      "ply": 10,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside to secure king from threats",
+        "Prepare rook activity on f-file"
+      ],
+      "alternative": "Kh8 — sidestep back rank, weakens kingside structure"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::12": {
+      "ply": 13,
+      "san": "Bg5",
+      "plans": [
+        "Pin Nf6 with dark-squared bishop on g5",
+        "Threaten Nxe5 winning the e5 pawn"
+      ],
+      "alternative": "Nxe5 — capture immediately, but Nxe5 dxe5 loses tempo"
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::15": {
+      "ply": 16,
+      "san": "Qe7",
+      "plans": [
+        "Unpins knight on f6 and prepares e5 central defense.",
+        "Eyes potential e4 pawn weakness after Bg5 pressure."
+      ],
+      "alternative": "Nh7 — attacks Bg5 to force bishop decision early."
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::16": {
+      "ply": 17,
+      "san": "Re1",
+      "plans": [
+        "Pressures e5 pawn and supports d4 central push.",
+        "Rook on e-file controls weak squares around e4."
+      ],
+      "alternative": "Nxe4 — removes defender of e5, inviting recapture complications."
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::18": {
+      "ply": 19,
+      "san": "d4",
+      "plans": [
+        "Opens central tension and gains space on d4.",
+        "Isolates Black's e5 pawn as target for Nxe5."
+      ],
+      "alternative": "Bxf6 — removes defender of e5 but weakens dark squares."
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::20": {
+      "ply": 21,
+      "san": "Bc1",
+      "plans": [
+        "Reroutes light-squared bishop from g5 to long diagonal.",
+        "Maintains control of d4 and prepares f4 advance."
+      ],
+      "alternative": "h3 — limits knight jumps to g4 but slows tempo."
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::21": {
+      "ply": 22,
+      "san": "c6",
+      "plans": [
+        "Supports e5 pawn and prepares knight repositioning to d7.",
+        "Blocks c-file to limit rook activity after exchanges."
+      ],
+      "alternative": "Nbd7 — develops immediately but allows f4 pawn break quickly."
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::24": {
+      "ply": 25,
+      "san": "Bg5",
+      "plans": [
+        "Attacks f6 knight and forces awkward defensive decisions.",
+        "Threatens to capture on f6, damaging Black's kingside structure."
+      ],
+      "alternative": "f4 — opens lines on kingside but weakens e4 defender."
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::27": {
+      "ply": 28,
+      "san": "Qd7",
+      "plans": [
+        "Centralizes queen on d7 for defense and knight maneuvers.",
+        "Prepares Nf8-g6 reroute if Nxe5 tactics arise."
+      ],
+      "alternative": "Nh7 — removes knight from Nxh7 tactic but blocks bishop retreat."
+    },
+    "four-knights-game.json::Metger Unpin: ...Qe7 System::28": {
+      "ply": 29,
+      "san": "Qf3",
+      "plans": [
+        "Aligns queen and bishop to threaten Nxe5 fork.",
+        "Pressures f7 pawn and controls key central squares."
+      ],
+      "alternative": "Nd2 — consolidates but abandons kingside attack pressure."
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares in center",
+        "Open lines for queen and light-squared bishop"
+      ],
+      "alternative": "d4 — transposes to Queen's Pawn Game"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror e4 pawn, contest d4 square",
+        "Enable Nf6, Bc5, or f5 counterattacks"
+      ],
+      "alternative": "c5 — Sicilian Defense, immediate asymmetry"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn, prepare d4 push",
+        "Support c3 knight on developing square"
+      ],
+      "alternative": "d4 — open game, force Black's center decision"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5 pawn, block c-file for rook",
+        "Prepare Nd4 or d6 outpost threats"
+      ],
+      "alternative": "Nxe4 — immediately challenge center tension"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Pin Nf6 to e7, threaten e5 pawn",
+        "Prepare d4, control f5 square"
+      ],
+      "alternative": "d4 — force e5 pawn to commit immediately"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Attack e4 pawn, unpin from Bb5",
+        "Control d4 outpost for knight transfer"
+      ],
+      "alternative": "a6 — force Bb5 decision, prepare d5 push"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::6": {
+      "ply": 7,
+      "san": "Bb5",
+      "plans": [
+        "Pin Nf6 to king on e8, target a6-f1",
+        "Threaten Nxe5 and Nxf6 simultaneously"
+      ],
+      "alternative": "Nxe5 — win e5 pawn immediately with tempo"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::8": {
+      "ply": 9,
+      "san": "Nxe5",
+      "plans": [
+        "Centralize Nf3 to e5, dominate weak squares",
+        "Attack Nd4 knight, create loose piece tactics"
+      ],
+      "alternative": "Nxd4 — simplify, reduce Black's counterplay"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::9": {
+      "ply": 10,
+      "san": "Qe7",
+      "plans": [
+        "Attack Bb5 from e7, force bishop decision",
+        "Coordinate queen and Nf6 on long diagonal"
+      ],
+      "alternative": "a6 — attack Bb5 bishop immediately"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::12": {
+      "ply": 13,
+      "san": "Nxb5",
+      "plans": [
+        "Capture Nd4 defender, expose Nf6 to Ne5",
+        "Trade a central knight, simplify attacking chances"
+      ],
+      "alternative": "Nxe7 — eliminate defender, win material cleanly"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::15": {
+      "ply": 16,
+      "san": "Qxe4+",
+      "plans": [
+        "King must move; Kf2 centralizes while keeping d1 piece line open.",
+        "After Kf2, rook on a1 and bishop on c1 remain undefended targets."
+      ],
+      "alternative": "Kh1 — retreats to safety but loses central control"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::16": {
+      "ply": 17,
+      "san": "Kf2",
+      "plans": [
+        "Black's queen and knight on g4 coordinate threats against f2 and e4.",
+        "Develop Bf4 to trade Black's well-placed knight quickly."
+      ],
+      "alternative": "Nxe7+ — checks and wins the queen but allows Kxe7"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::18": {
+      "ply": 19,
+      "san": "Kg3",
+      "plans": [
+        "King to g3 supports f4 advance and shields queen on d1.",
+        "Nf3-e5 outpost square controls d7 and c6 key points."
+      ],
+      "alternative": "Kh3 — sidesteps checks but removes king from piece defense"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::20": {
+      "ply": 21,
+      "san": "Nbd4",
+      "plans": [
+        "Nd4 centralizes and eyes b5-c6 path, pressuring queen and d6.",
+        "Rook on a1 gains tempo once Black queen moves from c5."
+      ],
+      "alternative": "Kh3 — avoids queen checks but loses Nd4 tempo"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::21": {
+      "ply": 22,
+      "san": "Qc5",
+      "plans": [
+        "Queen from d1 to c5 attacks d6 pawn and shadows Black queen.",
+        "Nd4-b5 or Ne5 jumps next; d6 weakness becomes critical weakness."
+      ],
+      "alternative": "Qd3 — defends but allows Black queen c5-a3 harassment"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::24": {
+      "ply": 25,
+      "san": "c3",
+      "plans": [
+        "c3 secures Nd4 on center and opens d-file for rook.",
+        "d6 pawn becomes isolated; Nf3-e5 or Qc5-d5 pins and pressures."
+      ],
+      "alternative": "Bd2 — develops but allows Nf4-e2 fork threats"
+    },
+    "four-knights-game.json::Rubinstein Counter-Trap: Nd4 Nxe5 Qe7::27": {
+      "ply": 28,
+      "san": "Nxf4",
+      "plans": [
+        "Nxf4 removes Black's dangerous knight and opens g-file.",
+        "Rook on h1 gains scope; Nd4-b5 pins d6 to exposed king."
+      ],
+      "alternative": "Ne5 — centralizes but allows Nxe5 fxe5 open lines"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares, prepare knight development to f3",
+        "Open center for piece development and king safety considerations"
+      ],
+      "alternative": "c4 — English opening, sidestep symmetrical play"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Mirror White's center, prepare Nf6 and Nc6 development",
+        "Maintain central tension, avoid passive pawn structure"
+      ],
+      "alternative": "d5 — challenge center immediately, asymmetrical response"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight to f3, support e4 pawn and d4 expansion",
+        "Threaten e5 pawn, prepare d4 central break"
+      ],
+      "alternative": "Bc4 — Italian Game, target f7 weakness early"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Develop knight to c6, control d4 and e5 squares",
+        "Prepare e5 pawn defense, enable piece coordination"
+      ],
+      "alternative": "Nxe4 — capture center pawn, invite tactical complications"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Add defender to e4 pawn, control d5 outpost square",
+        "Prepare d4 advance, support center with queen's knight"
+      ],
+      "alternative": "Bc4 — Bishop pins knight, threatens f7 weakness"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Develop kingside knight, attack e4 pawn directly",
+        "Prepare castling kingside, complete minor piece setup"
+      ],
+      "alternative": "exd4 — capture center, simplify position early"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::6": {
+      "ply": 7,
+      "san": "d4",
+      "plans": [
+        "Push d-pawn to d4, challenge Black's e5 pawn center",
+        "Open lines for bishop on f1, create tactical tensions"
+      ],
+      "alternative": "Bc4 — develop bishop before d4 push, target f7"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::8": {
+      "ply": 9,
+      "san": "Nd5",
+      "plans": [
+        "Strike d4 pawn with Nd5, fork threats against multiple squares",
+        "Centralizing knight, attack e4 and c3 knight simultaneously"
+      ],
+      "alternative": "exd4 — recapture immediately, maintain pawn structure"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::9": {
+      "ply": 10,
+      "san": "Nxd5",
+      "plans": [
+        "Recapture on d5, restore material balance after Black's gambit",
+        "Knight controls central squares, supports d5 strongpoint"
+      ],
+      "alternative": "exd4 — pawn recapture instead, avoid symmetry"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::12": {
+      "ply": 13,
+      "san": "Nxd4",
+      "plans": [
+        "Knight recaptures on d4, centralizes piece and controls squares",
+        "Prepare pressure on dark-squared bishop after d5 pawn advance"
+      ],
+      "alternative": "Qxd4 — queen recapture, activate queen actively"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::15": {
+      "ply": 16,
+      "san": "Nb6",
+      "plans": [
+        "Knight retreats to b6, attacking d5 outpost and limiting bishop on c4",
+        "White maintains central control with Nb3 or Nd4, preparing kingside castling"
+      ],
+      "alternative": "Bb3 — avoids d4 knight retreat, keeps bishop active"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::16": {
+      "ply": 17,
+      "san": "Bb3",
+      "plans": [
+        "Bishop retreats to b3, securing long diagonal and avoiding knight trade",
+        "Prepare O-O kingside castling while d4 knight controls center"
+      ],
+      "alternative": "Bxf7+ — sacrificial check, but loses tempo after Kxf7"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::18": {
+      "ply": 19,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside to tuck king away, connect rooks on first rank",
+        "Support d4 knight and prepare Re1 to challenge Black's center tension"
+      ],
+      "alternative": "a4 — pushes Black knight away from b6, gains queenside space"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::20": {
+      "ply": 21,
+      "san": "Re1",
+      "plans": [
+        "Rook moves to e1, pinning Black's e7 bishop if it blocks d-pawn push",
+        "Open e-file for rook pressure down center, threaten d5 pawn advance"
+      ],
+      "alternative": "Qd3 — centralizes queen toward kingside attack on f7"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::21": {
+      "ply": 22,
+      "san": "O-O",
+      "plans": [
+        "Black castles kingside, removing king from center and preparing rook connection",
+        "White continues pressure with Nf5, attacking e7 bishop and g7 weaknesses"
+      ],
+      "alternative": "Bf6 — strengthens dark squares, blocks White's Nf5 outpost"
+    },
+    "four-knights-game.json::Belgrade Gambit Nd5 Central Bind::24": {
+      "ply": 25,
+      "san": "Nf5",
+      "plans": [
+        "Nf5 plant attacks e7 bishop and threatens g7 weaknesses simultaneously",
+        "Black bishop on e7 faces difficult choice: move or allow Nxe7+ fork"
+      ],
+      "alternative": "Nf3 — retreats aggressively but cedes f5 outpost to pressure"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 central squares with pawn presence",
+        "Open lines for queen and light-squared bishop development"
+      ],
+      "alternative": "c4 — English opening, preparing Nc3 and long-term queenside control"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Occupy center symmetrically; prepare knight development to f6",
+        "Contest d4 square before White's knight arrives there"
+      ],
+      "alternative": "c5 — Sicilian Defense, asymmetric center and queenside counterplay"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Support e4 pawn and prepare Nc3 without blocking d-pawn",
+        "Position knight for d4 or e5 outpost control later"
+      ],
+      "alternative": "d4 — immediate center tension, inviting Nxd4 or exd4"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Develop knight to defend e5 pawn and e4 square",
+        "Prepare f6 knight development for Four Knights symmetry"
+      ],
+      "alternative": "Nxe4 — capture immediately, accepting doubled knight structure"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Complete four-knight setup on c3 and f3 squares",
+        "Retain central control; prepare d4 break with pawn support"
+      ],
+      "alternative": "d4 — push immediately, forcing exd4 or Nxd4 exchanges"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Mirror White's knight development; defend e4 against Nd5 jumps",
+        "Keep pieces coordinated for e5 pawn's defense"
+      ],
+      "alternative": "exd4 — trade center pawns, simplifying position and reducing White's space"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::6": {
+      "ply": 7,
+      "san": "d4",
+      "plans": [
+        "Disrupt e5 center; force Black knight from c6 or d4",
+        "Open d-file and diagonal for queen and bishop development"
+      ],
+      "alternative": "Bb5 — pin c6 knight, applying immediate pressure on development"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::8": {
+      "ply": 9,
+      "san": "Nxd4",
+      "plans": [
+        "Recapture with knight, centralizing Nf3 to active d4 square",
+        "Maintain control of center after pawn tension resolves"
+      ],
+      "alternative": "Nxd4 — capture with c3 knight instead, keeping f3 knight flexible"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::9": {
+      "ply": 10,
+      "san": "Nxe4",
+      "plans": [
+        "Remove e4 knight before it jumps to d2 or f2 forks",
+        "Recapture with c3 knight, maintaining piece activity"
+      ],
+      "alternative": "Qe2 — retreat queen and prepare f1 bishop defense without recapture"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::12": {
+      "ply": 13,
+      "san": "Bd3",
+      "plans": [
+        "Pin e4 knight to f8 bishop; threaten capture on f2 back rank",
+        "Reposition bishop to d3, controlling h7 square and long diagonal"
+      ],
+      "alternative": "Nxe4 — capture knight with d4 knight, simplifying and removing pin threat"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::15": {
+      "ply": 16,
+      "san": "Be7",
+      "plans": [
+        "Place bishop on e7 to support f6-knight and control c5-b6 diagonal",
+        "Prepare castling kingside to remove king from center and activate rook"
+      ],
+      "alternative": "Bd6 — attacks c5 square and pressures e5-e6 advance"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::16": {
+      "ply": 17,
+      "san": "Re1",
+      "plans": [
+        "Rook to e1 pins f6-knight to e7-bishop along e-file",
+        "Control e-file to pressure Black's c6-pawn and restrict piece placement"
+      ],
+      "alternative": "Bg5 — immediately pins knight to queen on d1"
+    },
+    "four-knights-game.json::Scotch Four Knights Fork Trick::18": {
+      "ply": 19,
+      "san": "Bg5",
+      "plans": [
+        "Bishop move to g5 pins f6-knight to d8-queen, creating pressure",
+        "Force Black to defend c6-pawn with pinned knight or retreat"
+      ],
+      "alternative": "Qe2 — supports Bg5 pin and controls dark squares from center"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e4 center squares with pawn presence.",
+        "Support e4 pawn for eventual d4 advance."
+      ],
+      "alternative": "d4 — immediate center control, avoids slow setup"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::1": {
+      "ply": 2,
+      "san": "e5",
+      "plans": [
+        "Challenge White's e4 pawn with e5 symmetry.",
+        "Prepare knight development to f6 or d4."
+      ],
+      "alternative": "c5 — Sicilian asymmetry fights e4 differently"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "plans": [
+        "Attack e5 pawn; enable d4 push if Black allows.",
+        "Develop knight toward f3 for d4 support."
+      ],
+      "alternative": "d4 — break center immediately, avoid passive setup"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::3": {
+      "ply": 4,
+      "san": "Nc6",
+      "plans": [
+        "Defend e5; occupy c6 to fight d4 square.",
+        "Prepare Nd4 or Na5 piece jumps later."
+      ],
+      "alternative": "a6 — Ruy Lopez move prevents Bb5, more flexible"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Support d4 break with third piece on c3.",
+        "Control d5 and prepare Nd5 threats."
+      ],
+      "alternative": "d4 — push center now, don't wait for Nf6"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Develop queen's knight; support e5 defense.",
+        "Enable kingside castling after f6 placement."
+      ],
+      "alternative": "Nd4 — centralize immediately; exchange c3 knight"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::6": {
+      "ply": 7,
+      "san": "Bb5",
+      "plans": [
+        "Pin Nf6 to king; threaten Nxe5 removal.",
+        "Force a6 or d6 decision in Spanish structure."
+      ],
+      "alternative": "d4 — break e5 center immediately, no pin needed"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::8": {
+      "ply": 9,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside to safety; connect rooks via f-file.",
+        "Prepare d6 pawn break or rook pressure."
+      ],
+      "alternative": "d6 — solidify pawn structure, prevent d4 push"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::9": {
+      "ply": 10,
+      "san": "O-O",
+      "plans": [
+        "Castle kingside; remove king from center and pin line.",
+        "Activate rook on f-file after Ba4 exit."
+      ],
+      "alternative": "Nxe4 — remove e4 pawn, simplify cramped position"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::12": {
+      "ply": 13,
+      "san": "Bg5",
+      "plans": [
+        "Pin Nf6 on diagonal; threaten Nxe5 capture.",
+        "Control e5 square with Bg5 and prevent Nd4 tricks."
+      ],
+      "alternative": "d4 — finally break e5 center, don't delay further"
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::15": {
+      "ply": 16,
+      "san": "Bg4",
+      "plans": [
+        "Black's Bg4 pins your f3 knight; prepare to break pin with h3.",
+        "Watch e5 pawn's vulnerability after pin is resolved on f-file."
+      ],
+      "alternative": "Nh4 — retreat knight, unpins, threatens Bxe5 ideas."
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::16": {
+      "ply": 17,
+      "san": "h3",
+      "plans": [
+        "h3 ejects Bg4, forces Black's decision on dark squares.",
+        "After Bg4 retreats, recapture control of f5 square for knight."
+      ],
+      "alternative": "Ne1 — unpins knight, reroutes via f3 or d3."
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::18": {
+      "ply": 19,
+      "san": "Nd5",
+      "plans": [
+        "Your Nd5 attacks both f6 knight and d6 pawn simultaneously.",
+        "Black must respond to threat; weakens coordination around c6."
+      ],
+      "alternative": "Nxe5 — capture e5 pawn, but loses f5 control."
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::20": {
+      "ply": 21,
+      "san": "Nxb4",
+      "plans": [
+        "After Nxb4, your knight retreats but maintains pressure on e5.",
+        "Black's queen-side weakened; Bb5 no longer blockaded by bishop on b4."
+      ],
+      "alternative": "Nf4 — attacks h5 and e6 square, threatens g6."
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::21": {
+      "ply": 22,
+      "san": "Nxb5",
+      "plans": [
+        "Nxb5 wins the Bb4 and centralizes knight to b5 outpost.",
+        "Control d4 square with your advanced knight; Black's structure damaged."
+      ],
+      "alternative": "axb4 — recapture toward center, avoid knight jump to d4."
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::24": {
+      "ply": 25,
+      "san": "bxc3",
+      "plans": [
+        "After bxc3, Black damaged your pawn structure; doubled c-pawns appear.",
+        "White's queen-side broken; focus on e5 pawn and d6 weakness."
+      ],
+      "alternative": "bxc3 — White recaptures, solidifies center, threatens e5 tactics."
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::27": {
+      "ply": 28,
+      "san": "g5",
+      "plans": [
+        "Black's g5 attacks Bh4; bishop must retreat or trade.",
+        "After Bh4 moves, g5 advance weakens Black's kingside dark squares."
+      ],
+      "alternative": "h4 — stop g5, lock kingside, reinforce bishop position."
+    },
+    "four-knights-game.json::Passive Play in Spanish: Missing d4 Break::28": {
+      "ply": 29,
+      "san": "Bg3",
+      "plans": [
+        "Bg3 repositions bishop to long diagonal, eyes d6 and c7.",
+        "After g5, kingside light squares weak; Bg3 controls e5 scope."
+      ],
+      "alternative": "Bxg5 — trade bishop for g-pawn, simplify kingside."
+    },
+    "french-defense.json::Advance Variation::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Occupy d4 square to support pawn chain and control center.",
+        "Push e4 pawn forward to gain space in the center."
+      ],
+      "alternative": "d4 — immediate central presence without waiting"
+    },
+    "french-defense.json::Advance Variation::1": {
+      "ply": 2,
+      "san": "e6",
+      "plans": [
+        "Challenge White's e4 pawn; prepare d5 counterattack.",
+        "Support light-squared bishop development after e6."
+      ],
+      "alternative": "c5 — strike at d4 immediately without e6"
+    },
+    "french-defense.json::Advance Variation::2": {
+      "ply": 3,
+      "san": "d4",
+      "plans": [
+        "Build strong pawn duo on d4 and e4.",
+        "Control central squares and restrict Black's d5 advance."
+      ],
+      "alternative": "exd5 — simplify center, avoid French positions"
+    },
+    "french-defense.json::Advance Variation::3": {
+      "ply": 4,
+      "san": "d5",
+      "plans": [
+        "Attack White's d4 pawn; prepare c5 counterplay.",
+        "Establish Black's pawn on d5 to contest center control."
+      ],
+      "alternative": "Nc6 — develop knight before pushing d5"
+    },
+    "french-defense.json::Advance Variation::4": {
+      "ply": 5,
+      "san": "e5",
+      "plans": [
+        "Lock Black's d5 pawn; create space for kingside attack.",
+        "Maintain pawn tension while supporting d4."
+      ],
+      "alternative": "exd5 — open lines and simplify center"
+    },
+    "french-defense.json::Advance Variation::5": {
+      "ply": 6,
+      "san": "c5",
+      "plans": [
+        "Attack the e5 pawn and open the long diagonal.",
+        "Create tension on d4 and c3 pawns."
+      ],
+      "alternative": "Nf6 — develop kingside pieces before c5"
+    },
+    "french-defense.json::Advance Variation::6": {
+      "ply": 7,
+      "san": "c3",
+      "plans": [
+        "Defend d4 pawn and prepare Nf3 development.",
+        "Support e5 pawn and control d5 square."
+      ],
+      "alternative": "cxd4 — open c-file and simplify tension"
+    },
+    "french-defense.json::Advance Variation::8": {
+      "ply": 9,
+      "san": "Nf3",
+      "plans": [
+        "Develop knight to f3; attack e5 and prepare kingside castling.",
+        "Support c3 pawn and control key central squares d5, e5."
+      ],
+      "alternative": "Bg5 — develop bishop to put pressure on e6"
+    },
+    "french-defense.json::Advance Variation::9": {
+      "ply": 10,
+      "san": "Qb6",
+      "plans": [
+        "Attack weak c3 pawn; create immediate pressure.",
+        "Centralize queen and threaten c3 with Nc6 knight."
+      ],
+      "alternative": "cxd4 — eliminate c3 tension and open lines"
+    },
+    "french-defense.json::Advance Variation::12": {
+      "ply": 13,
+      "san": "Nbd2",
+      "plans": [
+        "Develop queenside knight and prepare to challenge Nc6.",
+        "Support c3 pawn and reinforce d4 center presence."
+      ],
+      "alternative": "Be2 — complete kingside setup before queenside development"
+    },
+    "french-defense.json::Advance Variation::15": {
+      "ply": 16,
+      "san": "Bd7",
+      "plans": [
+        "Develop light-squared bishop to control c1–h6 diagonal and support center",
+        "Prepare castling kingside while Black's Na5 remains offside on rim"
+      ],
+      "alternative": "Nbd2–f3 — supports d4 pawn and keeps queen's knight mobile"
+    },
+    "french-defense.json::Advance Variation::16": {
+      "ply": 17,
+      "san": "O-O",
+      "plans": [
+        "Connect rooks and remove king from center before Black attacks d4",
+        "Rook on f1 supports e5 outpost and pressures Black's position"
+      ],
+      "alternative": "Bf4 — develops bishop actively and supports knight jumps to e4"
+    },
+    "french-defense.json::Advance Variation::18": {
+      "ply": 19,
+      "san": "Rb1",
+      "plans": [
+        "Rook shifts to b-file targeting Black's Qb6 and pressuring queenside",
+        "Connect rooks along first rank and prepare to exploit Na5's awkward placement"
+      ],
+      "alternative": "Bf4 — develops and prepares Ne4 or Nh4 to reroute knight aggressively"
+    },
+    "french-defense.json::Classical Variation::0": {
+      "ply": 1,
+      "san": "e4",
+      "plans": [
+        "Control d4 and e5 squares with central pawns",
+        "Prepare to develop pieces behind e4 pawn"
+      ],
+      "alternative": "d4 — symmetric center, less forcing"
+    },
+    "french-defense.json::Classical Variation::1": {
+      "ply": 2,
+      "san": "e6",
+      "plans": [
+        "Challenge e4 pawn with e6, support d5 advance",
+        "Prepare d5 counterattack in center"
+      ],
+      "alternative": "c5 — Sicilian-style, attack d4 immediately"
+    },
+    "french-defense.json::Classical Variation::2": {
+      "ply": 3,
+      "san": "d4",
+      "plans": [
+        "Establish strong d4-e4 pawn duo in center",
+        "Prepare Nc3 to support d4 pawn"
+      ],
+      "alternative": "exd5 — trade, simplify into endgame"
+    },
+    "french-defense.json::Classical Variation::3": {
+      "ply": 4,
+      "san": "d5",
+      "plans": [
+        "Strike center with d5, challenge White's d4 pawn",
+        "Open lines for light-squared bishop development"
+      ],
+      "alternative": "c5 — attack d4, avoid isolated e6 pawn"
+    },
+    "french-defense.json::Classical Variation::4": {
+      "ply": 5,
+      "san": "Nc3",
+      "plans": [
+        "Support d4 pawn with Nc3, control key squares",
+        "Prepare Bg5 pin on f6 knight"
+      ],
+      "alternative": "exd5 — simplify, reduce Black's counterplay"
+    },
+    "french-defense.json::Classical Variation::5": {
+      "ply": 6,
+      "san": "Nf6",
+      "plans": [
+        "Develop knight to f6, prepare Bg5 pin",
+        "Attack d4 pawn, support e5 push later"
+      ],
+      "alternative": "Be7 — avoid pin, develop bishop first"
+    },
+    "french-defense.json::Classical Variation::6": {
+      "ply": 7,
+      "san": "Bg5",
+      "plans": [
+        "Pin Nf6 to queen with Bg5, apply pressure",
+        "Prepare e5 pawn break with tempo"
+      ],
+      "alternative": "exd5 — trade center pawns, simplify position"
+    },
+    "french-defense.json::Classical Variation::8": {
+      "ply": 9,
+      "san": "e5",
+      "plans": [
+        "Advance e5, trap light-squared bishop on g5",
+        "Open f-file for potential rook activity"
+      ],
+      "alternative": "Nxe5 — capture, but weakens d-file control"
+    },
+    "french-defense.json::Classical Variation::9": {
+      "ply": 10,
+      "san": "Nfd7",
+      "plans": [
+        "Retreat Nf6 to d7, keep pieces centralized",
+        "Prepare to develop light-squared bishop via e7"
+      ],
+      "alternative": "Nb6 — reroute to defend, pressure e4 later"
+    },
+    "french-defense.json::Classical Variation::12": {
+      "ply": 13,
+      "san": "f4",
+      "plans": [
+        "Push f4, gain space and attack e5 pawn",
+        "Open f-file for queen support"
+      ],
+      "alternative": "Qe2 — solidify center, prepare castling"
+    },
+    "french-defense.json::Classical Variation::15": {
+      "ply": 16,
+      "san": "c5",
+      "plans": [
+        "Attack d4 pawn; Black's c5 challenges White's central stronghold",
+        "After cxd4, rook on a8 remains trapped; assess space"
+      ],
+      "alternative": "a6 — prepare queenside expansion, avoid immediate d4 pressure"
+    },
+    "french-defense.json::Classical Variation::16": {
+      "ply": 17,
+      "san": "Qd2",
+      "plans": [
+        "Qd2 supports kingside pawn storm; links rook via d1",
+        "Prevents Black's light-squared bishop from reaching c6 quickly"
+      ],
+      "alternative": "cxd5 — simplify center, accept isolated e6 pawn"
+    },
+    "french-defense.json::Classical Variation::18": {
+      "ply": 19,
+      "san": "O-O-O",
+      "plans": [
+        "Castling queenside exposes Black's king to f4-f5 pawn storm",
+        "Rook on d1 supports e5 advance and monitors Black's pieces"
+      ],
+      "alternative": "Nc5 — blockade e6, disrupt Black's coordination immediately"
+    },
+    "french-defense.json::Classical Variation::20": {
+      "ply": 21,
+      "san": "exf6",
+      "plans": [
+        "exf6 weakens Black's kingside; queen recapture forces e6 weakness",
+        "Open f-file for White's rook after castling queenside"
+      ],
+      "alternative": "f5 — solidify pawn chain, prepare long-term kingside pressure"
+    },
+    "french-defense.json::Classical Variation::21": {
+      "ply": 22,
+      "san": "Qxf6",
+      "plans": [
+        "Black's queen on f6 attacked by d4 pawn; limited squares",
+        "White maintains space advantage; f6 pawn blocks Black's king escape"
+      ],
+      "alternative": "gxf6 — open g-file for rook, weaken e6 further"
+    }
+  },
+  "totals": {
+    "calls": 54,
+    "inputTokens": 57133,
+    "outputTokens": 39165,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "costUSD": 0.25295800000000007
+  }
+}
